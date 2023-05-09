@@ -119,13 +119,12 @@ class blockZen extends block
      * 添加或编辑区块时获取其他表单项。
      * Get other form items when adding or editing blocks
      *
-     * @param  string $dashboard
-     * @param  string $module
-     * @param  string $code
+     * @param  string    $module
+     * @param  string    $code
      * @access protected
      * @return array
      */
-    protected function getAvailableParams(string $dashboard, string $module = '', string $code = ''): array
+    protected function getAvailableParams(string $module = '', string $code = ''): array
     {
         if($code == 'todo' || $code == 'list' || $module == 'assigntome')
         {
@@ -748,7 +747,11 @@ class blockZen extends block
                 $project->sv = $this->weekly->getSV($project->ev, $project->pv);
                 $project->cv = $this->weekly->getCV($project->ev, $project->ac);
 
-                $progress = isset($tasks[$projectID]) ? (($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft)) ? round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100 : 0 : 0;
+                $progress = 0;
+                if(isset($tasks[$projectID]) and ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft))
+                {
+                    $progress = round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100; 
+                }
 
                 $project->current  = $current;
                 $project->progress = $progress;
@@ -1067,11 +1070,7 @@ class blockZen extends block
      */
     protected function printWaterfallIssueBlock()
     {
-        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
-        $this->session->set('issueList', $uri, 'project');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        return $this->printIssueBlock();
     }
 
     /**
@@ -1082,10 +1081,7 @@ class blockZen extends block
      */
     protected function printWaterfallRiskBlock()
     {
-        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
-        $this->session->set('riskList', $uri, 'project');
-        $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        $this->printRiskBlock();
     }
 
     /**
@@ -1217,11 +1213,7 @@ class blockZen extends block
      */
     protected function printScrumIssueBlock()
     {
-        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
-        $this->session->set('issueList', $uri, 'project');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        return $this->printIssueBlock();
     }
 
     /**
@@ -1231,6 +1223,32 @@ class blockZen extends block
      * @return void
      */
     protected function printScrumRiskBlock()
+    {
+        $this->printRiskBlock();
+    }
+
+    /**
+     * Print issue block.
+     *
+     * @access protected
+     * @return void
+     */
+    private function printIssueBlock()
+    {
+        $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
+        $this->session->set('issueList', $uri, 'project');
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+    }
+
+    /**
+     * Print risk block.
+     *
+     * @access protected
+     * @return void
+     */
+    private function printRiskBlock()
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
