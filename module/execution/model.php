@@ -366,7 +366,7 @@ class executionModel extends model
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
             foreach($_POST['products'] as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) and !isset($_POST['branch'][$index]))
+                if(isset($multipleProducts[$productID]) && !isset($_POST['branch'][$index]))
                 {
                     dao::$errors[] = $this->lang->project->emptyBranch;
                     return false;
@@ -379,11 +379,11 @@ class executionModel extends model
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
         {
             $_POST['products'] = array_filter($_POST['products']);
             if(empty($_POST['products'])) dao::$errors['products0'] = $this->lang->project->errorNoProducts;
-            if(isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $_POST['percent'], $project);
+            if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('create', $_POST['percent'], $project);
             if(dao::isError()) return false;
         }
 
@@ -391,7 +391,7 @@ class executionModel extends model
 
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
-        if(isset($_POST['days']) and $_POST['days'] > $workdays)
+        if(isset($_POST['days']) && $_POST['days'] > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
@@ -418,22 +418,22 @@ class executionModel extends model
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
-        if(!empty($sprint->parent) and ($sprint->project == $sprint->parent))
+        if(!empty($sprint->parent) && ($sprint->project == $sprint->parent))
         {
             $project = $this->loadModel('project')->getByID($sprint->parent);
             $sprint->hasProduct = $project->hasProduct;
         }
 
-        if($this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
+        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
 
         /* Check the workload format and total. */
-        if(!empty($sprint->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $sprint->percent, $sprint->project);
+        if(!empty($sprint->percent) && isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('create', $sprint->percent, $sprint->project);
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')
         {
             $sprint->planDuration = $this->loadModel('programplan')->getDuration($sprint->begin, $sprint->end);
-            if(!empty($sprint->realBegan) and !empty($sprint->realEnd)) $sprint->realDuration = $this->loadModel('programplan')->getDuration($sprint->realBegan, $sprint->realEnd);
+            if(!empty($sprint->realBegan) && !empty($sprint->realEnd)) $sprint->realDuration = $this->loadModel('programplan')->getDuration($sprint->realBegan, $sprint->realEnd);
         }
 
         $sprint = $this->loadModel('file')->processImgURL($sprint, $this->config->execution->editor->create['id'], $this->post->uid);
@@ -472,14 +472,14 @@ class executionModel extends model
         /* Add the creater to the team. */
         if(!dao::isError())
         {
-            $executionID   = $this->dao->lastInsertId();
-            $today         = helper::today();
-            $teamMembers   = array();
+            $executionID = $this->dao->lastInsertId();
+            $today       = helper::today();
+            $teamMembers = array();
 
-            if((isset($project) and $project->model != 'kanban') or empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
+            if((isset($project) && $project->model != 'kanban') || empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
 
             /* Api create infinitus stages. */
-            if(isset($sprint->parent) and ($sprint->parent != $sprint->project) and $sprint->type == 'stage')
+            if(isset($sprint->parent) && ($sprint->parent != $sprint->project) && $sprint->type == 'stage')
             {
                 $parent = $this->getByID($sprint->parent);
                 $grade  = $parent->grade + 1;
