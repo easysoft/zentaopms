@@ -59,12 +59,12 @@ function ztfRun($dir)
     }
     elseif(is_array($dir))
     {
-        foreach($dir as $model) $runTestPath .= ' ' . BASE_ROOT . "/module/$model/test/model";
+        foreach($dir as $model) $runTestPath .= ' ' . BASE_ROOT . "/module/$model/test";
     }
     else
     {
         if($dir == 'mapi') $dir = 'api';
-        $dir = BASE_ROOT . "/module/$dir/test/model";
+        $dir = BASE_ROOT . "/module/$dir/test";
     }
 
     if($runTestPath) $dir = $runTestPath;
@@ -92,6 +92,12 @@ function ztfExtract($dir)
     system($command);
 }
 
+/**
+ * Get to the directory of test cases.
+ *
+ * @access public
+ * @return viod
+ */
 function getCaseModelDir()
 {
     $moduleList = scandir(BASE_ROOT . '/module');
@@ -103,7 +109,7 @@ function getCaseModelDir()
     $dirs = array();
     foreach($moduleList as $index => $module)
     {
-        $dirs[$index] = BASE_ROOT . "/module/$module/test/model";
+        $dirs[$index] = BASE_ROOT . "/module/$module/test";
     }
 
     return $dirs;
