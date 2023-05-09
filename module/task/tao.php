@@ -33,7 +33,7 @@ class taskTao extends taskModel
         if(dao::isError()) return false;
 
         /* Get task id. */
-        $taskID = (int)$this->dao->lastInsertID();
+        $taskID = $this->dao->lastInsertID();
 
         /* Insert task desc data. */
         $taskSpec = new stdClass();
@@ -165,13 +165,13 @@ class taskTao extends taskModel
             ->beginIF($this->config->edition == 'max')->leftJoin(TABLE_DESIGN)->alias('t6')->on('t1.design= t6.id')->fi()
             ->where('t1.execution')->eq($executionID)
             ->beginIF($type == 'myinvolved')->andWhere("((t4.`account` = '{$currentAccount}') OR t1.`assignedTo` = '{$currentAccount}' OR t1.`finishedby` = '{$currentAccount}')")->fi()
-            ->beginIF($productID)->andWhere("((t5.root=" . $productID . " and t5.type='story') OR t2.product=" . $productID . ")")->fi()
+            ->beginIF($productID)->andWhere('((t5.root=' . $productID . " and t5.type='story') OR t2.product=" . $productID . ')')->fi()
             ->beginIF($type == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$currentAccount}' or (t1.mode = 'multi' and t4.`account` = '{$currentAccount}' and t1.status != 'closed' and t4.status != 'done') )")->fi()
             ->beginIF($type == 'finishedbyme')
             ->andWhere('t1.finishedby', 1)->eq($currentAccount)
-            ->orWhere('t4.status')->eq("done")
+            ->orWhere('t4.status')->eq('done')
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
@@ -212,9 +212,9 @@ class taskTao extends taskModel
 
         return $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t4.name as projectName, t2.multiple as executionMultiple, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
             ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t5.task = t1.id and t5.account = '{$account}'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -225,7 +225,7 @@ class taskTao extends taskModel
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'finishedBy')
             ->andWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t5.status')->eq("done")
+            ->orWhere('t5.status')->eq('done')
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
@@ -336,8 +336,8 @@ class taskTao extends taskModel
     {
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
 
-        $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(",story,", ',', "$requiredFields");
+        $requiredFields = ',' . $this->config->task->edit->requiredFields . ',';
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         if($task->status != 'cancel' && strpos($requiredFields, ',estimate,') !== false)
         {
