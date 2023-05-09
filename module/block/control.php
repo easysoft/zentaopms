@@ -21,7 +21,7 @@ class block extends control
     {
         parent::__construct($moduleName, $methodName);
         /* 如果为外部调用，判断密钥，如果密钥不通过，返回空字符串。 */
-        if($this->methodName != 'admin' and $this->methodName != 'dashboard' and $this->blockZen->isExternalCall() and !$this->loadModel('sso')->checkKey()) helper::end('');
+        if($this->methodName != 'admin' and $this->methodName != 'dashboard' and $this->isExternalCall() and !$this->loadModel('sso')->checkKey()) helper::end('');
     }
 
     /**
@@ -255,13 +255,15 @@ class block extends control
      */
     public function printBlock(string $blockID)
     {
-        if($this->isExternalCall())
-        {
-            if(!$this->block->checkAPI($this->get->hash)) return;
-            $this->blockZen->organizaExternalData();
-        }
         $blockID = (int)$blockID;
         $block   = $this->block->getByID($blockID);
+
+        /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */
+        if($this->blockZen->isExternalCall())
+        {
+            if(!$this->block->checkAPI($this->get->hash)) return;
+            $this->blockZen->organizaExternalData($block); // 组织外部需要返回的信息。
+        }
 
         if(empty($block)) return '';
 

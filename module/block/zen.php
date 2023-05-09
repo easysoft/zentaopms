@@ -2054,17 +2054,18 @@ class blockZen extends block
      * 组织外部数据。
      * Organiza external data.
      *
+     * @param  object $block
      * @access protected
      * @return void
      */
-    protected function organizaExternalData()
+    protected function organizaExternalData(object $block)
     {
         $lang = isset($this->get->lang) ? $this->get->lang : 'zh-cn';
         $lang = str_replace('_', '-', $lang);
         $this->app->setClientLang($lang);
         $this->app->loadLang('common');
 
-        if(!isset($block->params->account))
+        if(!isset($block->params) and !isset($block->params->account))
         {
             $this->app->user = new stdclass();
             $this->app->user->account = 'guest';
