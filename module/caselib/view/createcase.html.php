@@ -164,7 +164,7 @@
                         <span class='input-group-addon step-item-id'></span>
                         <?php echo html::textarea('steps[]', $step->desc, "rows='1' class='form-control autosize step-steps'") ?>
                         <span class='input-group-addon step-type-toggle'>
-                          <?php if(!isset($step->type)) and $step->type = 'step';?>
+                          <?php if(!isset($step->type)) $step->type = 'step';?>
                           <input type='hidden' name='stepType[]' value='<?php echo $step->type;?>' class='step-type'>
                           <div class='checkbox-primary'>
                             <input tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>>
