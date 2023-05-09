@@ -181,7 +181,7 @@ class caselibModel extends model
      * @access public
      * @return int|false
      */
-    public function create(object $lib, $uid = ''): int|false
+    public function create(object $lib, string $uid = ''): int|false
     {
         $this->lang->testsuite->name = $this->lang->caselib->name;
         $this->lang->testsuite->desc = $this->lang->caselib->desc;

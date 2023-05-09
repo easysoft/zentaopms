@@ -395,7 +395,7 @@ function getValues($value, $keys, $delimiter)
     }
     $keys = explode($delimiter, $keys);
 
-    if($object)
+    if($object !== '')
     {
         if(is_array($value))
         {

@@ -90,7 +90,7 @@ class taskModel extends model
         if(!empty($team))
         {
             /* Get members, old team and current task. */
-            $members     = array_map(function($member){return $member->account;}, $team);
+            $members     = array_column($team, 'account');
             $oldTeam     = zget($oldTask, 'team', array());
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
@@ -474,7 +474,7 @@ class taskModel extends model
     {
         /* Get old team member, and delete old task team. */
         $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
-        $oldMembers = array_map(function($team){return $team->account;}, $oldTeams);
+        $oldMembers = array_column($oldTeams, 'account');
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         /* If status of the task is doing, get the person who did not complete the task. */
@@ -1157,19 +1157,20 @@ class taskModel extends model
      * @access public
      * @return array|false
      */
-    public function assign(object $task, string $uid): array|false
+    public function assign(object $task): array|false
     {
         $oldTask = $this->getById($task->id);
 
+        /* Check task left. */
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->left);
             return false;
         }
 
+        /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $uid);
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
@@ -1216,6 +1217,7 @@ class taskModel extends model
         }
         if(empty($teams)) $task->mode = '';
 
+        /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
         $this->dao->update(TABLE_TASK)
@@ -2311,7 +2313,7 @@ class taskModel extends model
         /* Check for add effort. */
         if(empty($effort))
         {
-            $members = array_map(function($member){ return $member->account; }, $task->team);
+            $members = array_column($task->team, 'account');
             if(!in_array($this->app->user->account, $members)) return false;
             if($task->mode == 'linear' and $this->app->user->account != $task->assignedTo) return false;
             return true;
@@ -2707,6 +2709,7 @@ class taskModel extends model
     }
 
     /**
+     * 获取执行任务的报表数据。
      * Get report data of tasks per execution.
      *
      * @access public
@@ -2719,6 +2722,7 @@ class taskModel extends model
 
         $datas = $this->processData4Report($tasks, '', 'execution');
 
+        /* Get execution names for these tasks. */
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         foreach($datas as $executionID => $data) $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
         return $datas;
