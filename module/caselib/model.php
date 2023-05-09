@@ -173,34 +173,29 @@ class caselibModel extends model
     }
 
     /**
-     * Create lib.
+     * 创建用例库，插入一个用例库对象到数据库
+     * Create a lib case, insert a lib object into database.
      *
+     * @param  object $lib
+     * @param  string $uid
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function create()
+    public function create(object $lib, $uid = ''): int|false
     {
-        $lib = fixer::input('post')
-            ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
-            ->setForce('type', 'library')
-            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', (int)$this->session->project)
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', helper::now())
-            ->remove('uid')
-            ->get();
-        $lib = $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->create['id'], $this->post->uid);
-
         $this->lang->testsuite->name = $this->lang->caselib->name;
         $this->lang->testsuite->desc = $this->lang->caselib->desc;
+
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->caselib->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")
             ->checkFlow()
             ->exec();
+
         if(!dao::isError())
         {
             $libID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $libID, 'caselib');
+            $this->loadModel('file')->updateObjectID($uid, $libID, 'caselib');
             return $libID;
         }
         return false;
