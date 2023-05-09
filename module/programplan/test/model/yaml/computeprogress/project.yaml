@@ -1,0 +1,24 @@
+title: zt_project
+author: liuchenglong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-9
+    - field: project
+      range: 0, 1, 0, 3, 3, 3, 3, 3, 3
+    - field: model
+      range: 'scrum, ,waterfall, , ,scrum'
+    - field: type
+      range: 'project,sprint,project,stage,stage,stage,stage,stage,stage'
+    - field: status
+      range: 'wait,doing,closed,suspended'
+    - field: parent
+      range: 0, 1, 0, 3, 4, 4, 4, 4, 7
+    - field: path
+      range: '`,1,`, `,1,2,`, `,3,`, `,3,4,`, `,3,4,5,`, `,3,4,6,`, `,3,4,7,`, `,3,4,8,`, `,3,4,7,9,`'
+    - field: hasProduct
+      range: 1, 1, 1, 1, 1, 0
+    - field: name
+      range: '项目1, 执行1-2, 项目3, 执行3-4, 执行3-4-5, 执行3-4-6, 执行3-4-7, 执行3-4-8, 执行3-4-7-9'
+    - field: code
+      range: 'project1, sprint1-2, project3, sprint3-4, sprint3-4-5, psprint3-4-6, sprint3-4-7, sprint3-4-8, spring3-4-7-9'

@@ -489,4 +489,21 @@ class programplanTest
     {
         return $this->objectModel->printCell($col, $plan, $users, $projectID);
     }
+
+    /**
+     * 通过计算获取阶段状态。
+     * Compute stage status.
+     *
+     * @param  int    $stage
+     * @param  string $action
+     * @param  bool   $isParent
+     * @access public
+     * @return string
+     */
+    public function computeProgressTest(int $stageID, string $action = '', bool $isParent = false): string
+    {
+        $result = $this->objectModel->computeProgress($stageID, $action, $isParent);
+        if(!$result) return 'fail';
+        return 'success';
+    }
 }
