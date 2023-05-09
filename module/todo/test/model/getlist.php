@@ -52,9 +52,9 @@ if(strtotime($week)- 7*86400 <= strtotime($lastweekday)) $lastWeekNum += $last7D
 
 /* 本月上月实际待办数量 */
 $thisMonthNum = $dayNum;
-$lastMonthNum = $lastweekday == $month ? $defaultNum : $last7DayNum;
-if(strtotime($month) <= strtotime($lastday)) $thisMonthNum += $lastDayNum;
-if(date('w') == 1) $thisMonthNum += $last7DayNum;
+$lastMonthNum = strtotime($lastweekday) >= strtotime($month) ? $defaultNum : $last7DayNum;
+if(strtotime($month) <= strtotime($lastday))     $thisMonthNum += $lastDayNum;
+if(strtotime($month) <= strtotime($lastweekday)) $thisMonthNum += $last7DayNum;
 if($month == $day) $lastMonthNum += $lastDayNum;
 
 /* 本季度实际待办数量 */
