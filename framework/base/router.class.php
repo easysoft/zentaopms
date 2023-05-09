@@ -2821,7 +2821,7 @@ class baseRouter
             {
                 /* Try to repair table. */
                 header("location: {$this->config->webRoot}checktable.php");
-                exit;
+                helper::end();
             }
             static::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
