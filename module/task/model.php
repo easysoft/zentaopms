@@ -17,10 +17,10 @@ class taskModel extends model
      * 创建一个任务。
      * Create a task.
      *
-     * @param  int        $executionID
-     * @param  int        $bugID
-     * @param  object     $rawData
-     * @param  array      $data
+     * @param  object     $task
+     * @param  array      $assignedToList
+     * @param  int        $multiple
+     * @param  array      $team
      * @param  bool       $selectTestStory
      * @param  array      $teamSourceList
      * @param  array      $teamEstimateList
@@ -31,14 +31,13 @@ class taskModel extends model
      */
     public function create(object $task, array $assignedToList, int $multiple, array $team, bool $selectTestStory, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): bool|array
     {
-        $this->loadModel('action');
-
         /* Remove required fields for creating tasks based on conditions. */
         $this->taskTao->removeCreateRequiredFields($task, $selectTestStory);
 
         /* Create task. */
         $taskIdList = array();
         $taskFiles  = array();
+        $this->loadModel('action');
         foreach($assignedToList as $assignedTo)
         {
             /* If the type of task is affair and assignedTo is empty, skip it.*/
@@ -60,7 +59,7 @@ class taskModel extends model
             {
                 $task->id = $taskID;
                 $teams    = $this->manageTaskTeam($task->mode, $task, $team, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
-                if($teams) $this->computeHours4Multiple($task);
+                if($teams) $this->computeMultipleHours($task);
                 unset($task->id);
             }
 
@@ -81,7 +80,7 @@ class taskModel extends model
      * @access public
      * @return object|bool
      */
-    public function computeHours4Multiple(object $oldTask, object $task = null, array $team = array(), bool $autoStatus = true): object|bool
+    public function computeMultipleHours(object $oldTask, object $task = null, array $team = array(), bool $autoStatus = true): object|bool
     {
         if(!$oldTask) return false;
 
@@ -125,12 +124,12 @@ class taskModel extends model
             foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
 
             /* If task is not empty, the task status is computed and the task is returned. */
-            if(!empty($task)) return $this->taskTao->computeCurrentTaskStatus($currentTask, $oldTask, $task, $autoStatus, empty($efforts), $members);
+            if(!empty($task)) return $this->taskTao->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, empty($efforts), $members);
 
             /* If task is empty, update the current task. */
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
-        return true;
+        return !dao::isError();
     }
 
     /**
@@ -245,7 +244,7 @@ class taskModel extends model
         if(empty($tasks))
         {
             $this->dao->update(TABLE_TASK)->set('consumed')->eq(0)->where('id')->eq($taskID)->exec();
-            return true;
+            return !dao::isError();
         }
 
         /* Compute task estimate, consumed and left through sub-tasks. */
@@ -284,7 +283,7 @@ class taskModel extends model
     {
         /* Get estStarted realStarted and deadline of the sub-tasks. */
         $tasks = $this->dao->select('estStarted, realStarted, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
-        if(empty($tasks)) return true;
+        if(empty($tasks)) return !dao::isError();
 
         /* Compute the earliest estStarted, the earliest realStarted and the latest deadline. */
         $earliestEstStarted  = '';
@@ -695,7 +694,7 @@ class taskModel extends model
         if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
-            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), false);
+            if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
         }
         if(empty($teams)) $task->mode = '';
 
@@ -1213,7 +1212,7 @@ class taskModel extends model
         if(count(array_filter($team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
-            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task);
+            if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task);
         }
         if(empty($teams)) $task->mode = '';
 
@@ -1304,7 +1303,7 @@ class taskModel extends model
             $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
             if($oldTask->mode == 'linear' and !empty($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
 
-            $task = $this->computeHours4Multiple($oldTask, $task);
+            $task = $this->computeMultipleHours($oldTask, $task);
             if($team->status == 'done')
             {
                 $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'next');
@@ -1495,7 +1494,7 @@ class taskModel extends model
                     $currentTeam->status    = $teamStatus;
                 }
 
-                $newTask = $this->computeHours4Multiple($task, $newTask, $task->team);
+                $newTask = $this->computeMultipleHours($task, $newTask, $task->team);
             }
 
             $changes = common::createChanges($task, $newTask, 'task');
@@ -1610,7 +1609,7 @@ class taskModel extends model
         {
             $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
             if($oldTask->mode == 'linear' and isset($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
-            $task = $this->computeHours4Multiple($oldTask, $task);
+            $task = $this->computeMultipleHours($oldTask, $task);
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
@@ -1841,7 +1840,7 @@ class taskModel extends model
         if(!empty($oldTask->team))
         {
             $this->manageTaskTeam($oldTask->mode, $oldTask->id, $task->status);
-            $task = $this->computeHours4Multiple($oldTask, $task);
+            $task = $this->computeMultipleHours($oldTask, $task);
         }
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
@@ -2389,7 +2388,7 @@ class taskModel extends model
                 if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
                 $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
 
-                $data = $this->computeHours4Multiple($task, $data);
+                $data = $this->computeMultipleHours($task, $data);
             }
         }
 
@@ -2514,7 +2513,7 @@ class taskModel extends model
         }
 
         $this->dao->update(TABLE_EFFORT)->set('deleted')->eq('1')->where('id')->eq($estimateID)->exec();
-        if(!empty($task->team)) $data = $this->computeHours4Multiple($task, $data);
+        if(!empty($task->team)) $data = $this->computeMultipleHours($task, $data);
 
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->objectID)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
@@ -2579,7 +2578,7 @@ class taskModel extends model
      * Batch process tasks.
      *
      * @param  int    $tasks
-     * @access private
+     * @access public
      * @return void
      */
     public function processTasks($tasks)
@@ -2602,7 +2601,7 @@ class taskModel extends model
      * Process a task, judge it's status.
      *
      * @param  object    $task
-     * @access private
+     * @access public
      * @return object
      */
     public function processTask($task)
@@ -3647,10 +3646,10 @@ class taskModel extends model
      * @param  int     $objectID
      * @param  string  $objectType
      * @param  object  $postData
-     * @access private
+     * @access public
      * @return bool
      */
-    private function updateExecutionEsDateByGantt($objectID, $postData)
+    public function updateExecutionEsDateByGantt($objectID, $postData)
     {
         $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
         $project    = $objectData->project;
@@ -3787,7 +3786,8 @@ class taskModel extends model
      * @param  object $task
      * @param  array  $taskIdList
      * @param  int    $bugID
-     * @param  object $rawData
+     * @param  int    $todoID
+     * @param  array  $testTasks
      * @access public
      * @return bool
      */
@@ -3840,7 +3840,7 @@ class taskModel extends model
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             $this->score->create('task', 'create', $taskID);
         }
-        return true;
+        return !dao::isError();
     }
 
     /**

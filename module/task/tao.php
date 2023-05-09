@@ -339,7 +339,7 @@ class taskTao extends taskModel
      * @access protected
      * @return object
      */
-    protected function computeCurrentTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    protected function computeTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
     {
         /* If the status is not automatic, return the current task. */
         if(!$autoStatus) return $currentTask;
@@ -514,19 +514,19 @@ class taskTao extends taskModel
     protected function removeCreateRequiredFields(object $task, bool $selectTestStory): void
     {
         /* Get create required fields and the execution of the task. */
-        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
         $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
 
         /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
         if($execution and ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))))
         {
-            $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            $requiredFields = str_replace(',story,', ',', $requiredFields);
         }
 
         /* If the type of the task is test and select story is true, remove some required fields. */
         if($task->type == 'test' and $selectTestStory)
         {
-            $requiredFields = str_replace(array(",estimate,", ",story,", ",estStarted,", ",deadline,", ",module,"), ',', "$requiredFields");
+            $requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', $requiredFields);
         }
 
         $this->config->task->create->requiredFields = trim($requiredFields, ',');

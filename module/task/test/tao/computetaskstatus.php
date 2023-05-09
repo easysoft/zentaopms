@@ -61,7 +61,7 @@ $hasEfforts = array(true, false);
 
 /**
 
-title=taskModel->computeCurrentTaskStatus();
+title=taskModel->computeTaskStatus();
 timeout=0
 cid=1
 
@@ -153,18 +153,18 @@ sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file
 */
 
 $task   = new taskTest();
-$task1  = $task->computeCurrentTaskStatusTest($currentTasks[0], $oldTasks[0], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
-$task2  = $task->computeCurrentTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
-$task3  = $task->computeCurrentTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[0], $hasEfforts[0], $members[0]);
-$task4  = $task->computeCurrentTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[0], $members[0]);
-$task5  = $task->computeCurrentTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[0]);
-$task6  = $task->computeCurrentTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[1]);
-$task7  = $task->computeCurrentTaskStatusTest($currentTasks[1], $oldTasks[0], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
-$task8  = $task->computeCurrentTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
-$task9  = $task->computeCurrentTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[0], $hasEfforts[0], $members[0]);
-$task10 = $task->computeCurrentTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[0], $members[0]);
-$task11 = $task->computeCurrentTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[0]);
-$task12 = $task->computeCurrentTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[1]);
+$task1  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[0], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
+$task2  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
+$task3  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[0], $hasEfforts[0], $members[0]);
+$task4  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[0], $members[0]);
+$task5  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[0]);
+$task6  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[1]);
+$task7  = $task->computeTaskStatusTest($currentTasks[1], $oldTasks[0], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
+$task8  = $task->computeTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
+$task9  = $task->computeTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[0], $hasEfforts[0], $members[0]);
+$task10 = $task->computeTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[0], $members[0]);
+$task11 = $task->computeTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[0]);
+$task12 = $task->computeTaskStatusTest($currentTasks[1], $oldTasks[1], $tasks[1], $autoStatus[1], $hasEfforts[1], $members[1]);
 
 r($task1)  && p('status,assignedTo,estimate,left,consumed') && e('doing,user1,9,0,10'); // 查询 task1  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态自动变更 没有工时消耗 团队成员members[0]
 r($task2)  && p('status,assignedTo,estimate,left,consumed') && e('doing,user1,9,0,10'); // 查询 task2  情况的task信息 currentTask[0] taskID 1 currentTasksestimate 状态自动变更 没有工时消耗 团队成员members[0]

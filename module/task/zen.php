@@ -689,7 +689,7 @@ class taskZen extends task
             return false;
         }
 
-        return true;
+        return !dao::isError();
     }
 
     /**
@@ -798,7 +798,7 @@ class taskZen extends task
                 }
             }
         }
-        return true;
+        return !dao::isError();
     }
 
     /**
