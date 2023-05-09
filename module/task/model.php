@@ -1441,7 +1441,8 @@ class taskModel extends model
                 $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
             }
 
-            if(!$newTask->left and ((empty($currentTeam) and in_array($task->status, array('done', 'cancel', 'closed'))) or (!empty($currentTeam) and $currentTeam->status != 'done')))
+            $isFinishTask = (empty($currentTeam) && !in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
+            if(!$newTask->left && $isFinishTask)
             {
                 $newTask->status         = 'done';
                 $newTask->assignedTo     = $task->openedBy;
