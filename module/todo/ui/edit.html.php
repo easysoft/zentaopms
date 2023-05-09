@@ -65,7 +65,6 @@ function buildDateControl(object $todo): mixed
             set(array
             (
                 'label'  => $lang->todo->date,
-                'class'  => 'items-center',
                 'width'  => '1/3'
             )),
             control
@@ -517,10 +516,11 @@ formPanel
             (
                 set(array
                 (
-                    'items' => $users,
-                    'value' => $todo->assignedTo,
-                    'id'    => 'assignedTo',
-                    'name'  => 'assignedTo',
+                    'items'    => $users,
+                    'value'    => $todo->assignedTo,
+                    'id'       => 'assignedTo',
+                    'name'     => 'assignedTo',
+                    'disabled' => $todo->private
                 )),
                 on::change('changeAssignedTo()')
             )
@@ -628,10 +628,11 @@ formPanel
                 (
                     set(array
                     (
-                        'id'    => 'begin',
-                        'name'  => 'begin',
-                        'items' => $times,
-                        'value' => $todo->begin,
+                        'id'       => 'begin',
+                        'name'     => 'begin',
+                        'items'    => $times,
+                        'value'    => $todo->begin,
+                        'disabled' => $todo->begin == 2400
                     )),
                     on::change('selectNext()')
                 ),
@@ -644,10 +645,11 @@ formPanel
                 (
                     set(array
                     (
-                        'id'    => 'end',
-                        'name'  => 'end',
-                        'items' => $times,
-                        'value' => $todo->end
+                        'id'       => 'end',
+                        'name'     => 'end',
+                        'items'    => $times,
+                        'value'    => $todo->end,
+                        'disabled' => $todo->begin == 2400
                     )),
                     on::blur('selectEndTime(this)')
                 )
