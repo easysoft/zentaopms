@@ -20,18 +20,18 @@ require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
 /* Form */
 
 /**
- * html input.
+ * Html input.
  *
- * string type='text'
- * string name
- * string id?
- * string class='form-control'
- * string value?
- * bool   required?
- * string placeholder?
- * bool   autofocus?
- * bool   autocomplete=false
- * bool   disabled
+ * string  name
+ * ?string type='text'
+ * ?string id
+ * ?string class='form-control'
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   autofocus
+ * ?bool   autocomplete=false
+ * ?bool   disabled
  */
 function input()
 {
@@ -39,16 +39,16 @@ function input()
 }
 
 /**
- * html textarea.
+ * Html textarea.
  *
- * string name
- * string id?
- * string class='form-control'
- * string value?
- * bool   required?
- * string placeholder?
- * int    rows
- * int    cols
+ * string  name
+ * int     rows
+ * int     cols
+ * ?string id
+ * ?string class='form-control'
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
  */
 function textarea()
 {
@@ -56,17 +56,17 @@ function textarea()
 }
 
 /**
- * radio widget.
+ * Radio widget.
  *
- * string text?
- * bool   checked?
- * string name?
- * bool   primary=true
- * string id
- * bool   disabled?
- * string value?
- * string typeClass?
- * string rootClass?
+ * string  id
+ * ?string text
+ * ?bool   checked
+ * ?string name
+ * ?bool   primary=true
+ * ?bool   disabled
+ * ?string value
+ * ?string typeClass
+ * ?string rootClass
  */
 function radio()
 {
@@ -74,17 +74,17 @@ function radio()
 }
 
 /**
- * switcher widget.
+ * Switcher widget.
  *
- * string text?
- * bool   checked?
- * string name?
- * bool   primary=true
- * string id
- * bool   disabled?
- * string value
- * string typeClass?
- * string rootClass?
+ * string  id
+ * string  value
+ * ?string text
+ * ?bool   checked
+ * ?string name
+ * ?bool   primary=true
+ * ?bool   disabled
+ * ?string typeClass
+ * ?string rootClass
  */
 function switcher()
 {
@@ -92,17 +92,17 @@ function switcher()
 }
 
 /**
- * checkbox widget.
+ * Checkbox widget.
  *
- * string text?
- * bool   checked?
- * string name?
- * bool   primary=true
- * string id
- * bool   disabled?
- * string value?
- * string typeClass?
- * string rootClass?
+ * string  id
+ * ?string text
+ * ?bool   checked
+ * ?string name
+ * ?bool   primary=true
+ * ?bool   disabled
+ * ?string value
+ * ?string typeClass
+ * ?string rootClass
  */
 function checkbox()
 {
@@ -110,17 +110,17 @@ function checkbox()
 }
 
 /**
- * form widget.
+ * Form widget.
  *
- * string method='post'
- * string url?
- * array  actions?
- * string target?
- * array  items?
- * bool   grid?
- * int    labelWidth?
- * string submitBtnText?
- * string cancelBtnText?
+ * ?string method='post'
+ * ?string url
+ * ?array  actions
+ * ?string target
+ * ?array  items
+ * ?bool   grid
+ * ?int    labelWidth
+ * ?string submitBtnText
+ * ?string cancelBtnText
  */
 function form()
 {
@@ -128,15 +128,15 @@ function form()
 }
 
 /**
- * form panel widget.
+ * Form panel widget.
  *
- * string method?
- * string url?
- * array  actions?
- * string target?
- * array  items?
- * bool   grid?
- * int    labelWidth?
+ * ?string method
+ * ?string url
+ * ?array  actions
+ * ?string target
+ * ?array  items
+ * ?bool   grid
+ * ?int    labelWidth
  */
 function formPanel()
 {
@@ -144,18 +144,18 @@ function formPanel()
 }
 
 /**
- * control widget.
+ * Control widget.
  * Dynamically create html input.
  *
- * string type - it can be text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
- * string name
- * string id?
- * string value?
- * bool   required?
- * string placeholder?
- * bool   disabled?
- * string form?
- * array  items?
+ * string  type - it can be text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea.
+ * string  name
+ * ?string id
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   disabled
+ * ?string form
+ * ?array  items
  */
 function control()
 {
@@ -163,17 +163,17 @@ function control()
 }
 
 /**
- * html select.
+ * Html select.
  *
- * string name
- * string id?
- * string class="form-control"
- * string value?
- * bool   required?
- * bool   disabled?
- * bool   multiple?
- * array  items?
- * int    size?
+ * string  name
+ * ?string id
+ * ?string class="form-control"
+ * ?string value
+ * ?bool   required
+ * ?bool   disabled
+ * ?bool   multiple
+ * ?array  items
+ * ?int    size
  */
 function select()
 {
@@ -181,11 +181,11 @@ function select()
 }
 
 /**
- * html label which use id form.
+ * Html label which use id form.
  *
- * string text?
- * bool   required?
- * string for?
+ * ?string text
+ * ?bool   required
+ * ?string for
  */
 function formLabel()
 {
@@ -193,23 +193,22 @@ function formLabel()
 }
 
 /**
- * form group widget.
+ * Form group widget.
  *
- * string|array
- * string       name?
- * string|bool  label?
- * string       labelClass?
- * bool|string  required='auto'
- * string       tip?
- * string|array tipClass?
- * array        tipProps?
- * array|string control?
- * string       width?
- * bool         strong?
- * string|array value?
- * bool         disabled?
- * array        items?
- * string       placeholder?
+ * ?string           name
+ * ?string           labelClass
+ * ?string           tip
+ * ?array            tipProps
+ * ?string           width
+ * ?bool             strong
+ * ?bool             disabled
+ * ?array            items
+ * ?string           placeholder
+ * bool|string|null  required='auto'
+ * string|array|null tipClass
+ * string|bool|null  label
+ * string|array|null value
+ * array|string|null control
  */
 function formGroup()
 {
@@ -217,11 +216,11 @@ function formGroup()
 }
 
 /**
- * form row widget.
+ * Form row widget.
  *
- * string width?
- * array  items?
- * bool   hidden?
+ * ?string width
+ * ?array  items
+ * ?bool   hidden
  */
 function formRow()
 {
@@ -229,12 +228,12 @@ function formRow()
 }
 
 /**
- * html input with prefix or suffix.
+ * Html input with prefix or suffix.
  *
- * mixed         prefix
- * mixed         suffix
- * string|int    prefixWidth
- * string|int    suffixWidth
+ * mixed      prefix
+ * mixed      suffix
+ * string|int prefixWidth
+ * string|int suffixWidth
  */
 function inputControl()
 {
@@ -242,10 +241,10 @@ function inputControl()
 }
 
 /**
- * input group widget.
+ * Input group widget.
  *
- * array items?
- * bool  seg?
+ * ?array items
+ * ?bool  seg
  */
 function inputGroup()
 {
@@ -253,13 +252,13 @@ function inputGroup()
 }
 
 /**
- * checkbox list widget.
+ * Checkbox list widget.
  *
- * bool         primary=true
- * string       name?
- * string|array value?
- * array        items
- * bool         inline?
+ * ?string           name
+ * ?bool             primary=true
+ * ?array            items
+ * ?bool             inline
+ * string|array|null value
  */
 function checkList()
 {
@@ -267,13 +266,13 @@ function checkList()
 }
 
 /**
- * radio list widget.
+ * Radio list widget.
  *
- * bool         primary=true
- * string       name?
- * string|array value?
- * array        items
- * bool         inline?
+ * ?string           name
+ * ?bool             primary=true
+ * ?array            items
+ * ?bool             inline
+ * string|array|null value
  */
 function radioList()
 {
@@ -281,17 +280,17 @@ function radioList()
 }
 
 /**
- * color picker widget which extends input.
+ * Color picker widget which extends input.
  *
- * string name
- * string id?
- * string class?
- * string value?
- * bool   required?
- * string placeholder?
- * bool   autofocus?
- * bool   autocomplete=false
- * bool   disabled?
+ * string  name
+ * ?string id
+ * ?string class
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   autofocus
+ * ?bool   disabled
+ * ?bool   autocomplete=false
  */
 function colorPicker()
 {
@@ -299,17 +298,17 @@ function colorPicker()
 }
 
 /**
- * date picker widget which extends input.
+ * Date picker widget which extends input.
  *
- * string name
- * string id?
- * string class?
- * string value?
- * bool   required?
- * string placeholder?
- * bool   autofocus?
- * bool   autocomplete=false
- * bool   disabled?
+ * string  name
+ * ?string id
+ * ?string class
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   autofocus
+ * ?bool   disabled
+ * ?bool   autocomplete=false
  */
 function datePicker()
 {
@@ -317,17 +316,17 @@ function datePicker()
 }
 
 /**
- * datetime picker widget which extends input.
+ * Datetime picker widget which extends input.
  *
- * string name
- * string id?
- * string class?
- * string value?
- * bool   required?
- * string placeholder?
- * bool   autofocus?
- * bool   autocomplete=false
- * bool   disabled?
+ * string  name
+ * ?string id
+ * ?string class
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   autofocus
+ * ?bool   disabled
+ * ?bool   autocomplete=false
  */
 function datetimePicker()
 {
@@ -335,17 +334,17 @@ function datetimePicker()
 }
 
 /**
- * time picker widget which extends input.
+ * Time picker widget which extends input.
  *
- * string name
- * string id?
- * string class?
- * string value?
- * bool   required?
- * string placeholder?
- * bool   autofocus?
- * bool   autocomplete=false
- * bool   disabled?
+ * string  name
+ * ?string id
+ * ?string class
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   autofocus
+ * ?bool   disabled
+ * ?bool   autocomplete=false
  */
 function timePicker()
 {
@@ -353,17 +352,17 @@ function timePicker()
 }
 
 /**
- * html file input which extends input.
+ * Html file input which extends input.
  *
- * string name
- * string id?
- * string class?
- * string value?
- * bool   required?
- * string placeholder?
- * bool   autofocus?
- * bool   autocomplete=false
- * bool   disabled?
+ * string  name
+ * ?string id
+ * ?string class
+ * ?string value
+ * ?bool   required
+ * ?string placeholder
+ * ?bool   autofocus
+ * ?bool   disabled
+ * ?bool   autocomplete=false
  */
 function fileInput()
 {
@@ -371,15 +370,15 @@ function fileInput()
 }
 
 /**
- * page form widget which extends page.
+ * Page form widget which extends page.
  *
- * array        formPanel?
- * string|array metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
- * string       title?
- * array        bodyProps?
- * array|string bodyClass?
- * bool         zui=true
- * bool         display=true
+ * ?array            formPanel
+ * ?string           title
+ * ?array            bodyProps
+ * ?bool             zui=true
+ * ?bool             display=true
+ * array|string|null bodyClass
+ * string|array|null metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
  *
  * ====== blocks ======
  * head   = array()
@@ -394,10 +393,10 @@ function pageForm()
 }
 
 /**
- * icon widget.
+ * Icon widget.
  *
- * string        name
- * string|int    size?
+ * string          name
+ * string|int|null size
  */
 function icon()
 {
@@ -405,21 +404,21 @@ function icon()
 }
 
 /**
- * button widget.
+ * Button widget.
  *
- * string        icon?
- * string        text?
- * bool          square?
- * bool          disabled?
- * bool          active?
- * string        url?
- * string        target?
- * string|int    size?
- * string        trailingIcon?
- * string|bool   caret?
- * string        hint?
- * string        type?
- * string        btnType?
+ * ?string          icon
+ * ?string          text
+ * ?bool            square
+ * ?bool            disabled
+ * ?bool            active
+ * ?string          url
+ * ?string          target
+ * ?string          trailingIcon
+ * ?string          hint
+ * ?string          type
+ * ?string          btnType
+ * string|int|null  size
+ * string|bool|null caret
  */
 function btn()
 {
@@ -427,14 +426,14 @@ function btn()
 }
 
 /**
- * page base widget.
+ * Page base widget.
  *
- * string|array metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
- * string       title?
- * array        bodyProps?
- * array|string bodyClass?
- * bool         zui=false
- * bool         display=true
+ * ?string           title
+ * ?array            bodyProps
+ * ?bool             zui=false
+ * ?bool             display=true
+ * array|string|null bodyClass
+ * string|array|null metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
  */
 function pageBase()
 {
@@ -442,14 +441,14 @@ function pageBase()
 }
 
 /**
- * page widget.
+ * Page widget.
  *
- * string|array metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
- * string       title?
- * array        bodyProps?
- * array|string bodyClass?
- * bool         zui=true
- * bool         display=true
+ * ?string           title
+ * ?array            bodyProps
+ * ?array|string     bodyClass
+ * ?bool             zui=true
+ * ?bool             display=true
+ * string|array|null metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
  *
  * ====== blocks ======
  * head   = array()
@@ -464,8 +463,8 @@ function page()
 }
 
 /**
- * fragment widget.
- * lets you group elements without a wrapper node.
+ * Fragment widget.
+ * Let you group elements without a wrapper node.
  */
 function fragment()
 {
@@ -473,11 +472,11 @@ function fragment()
 }
 
 /**
- * button group widget.
+ * Button group widget.
  *
- * array  items?
- * bool   disabled?
- * string size?
+ * ?array  items
+ * ?bool   disabled
+ * ?string size
  */
 function btnGroup()
 {
@@ -485,11 +484,11 @@ function btnGroup()
 }
 
 /**
- * zentao main menu widget.
+ * Zentao main menu widget.
  *
- * array statuses?
- * array btnGroup?
- * array others?
+ * ?array statuses
+ * ?array btnGroup
+ * ?array others
  */
 function mainMenu()
 {
@@ -497,10 +496,10 @@ function mainMenu()
 }
 
 /**
- * row widget.
+ * Row widget.
  *
- * string justify?
- * string align?
+ * ?string justify
+ * ?string align
  */
 function row()
 {
@@ -508,23 +507,18 @@ function row()
 }
 
 /**
- * col widget.
+ * Col widget.
  *
- * string justify?
- * string align?
+ * ?string justify
+ * ?string align
  */
 function col()
 {
     return createWg('col', func_get_args());
 }
 
-function column()
-{
-    return createWg('column', func_get_args());
-}
-
 /**
- * center widget.
+ * Center widget.
  */
 function center()
 {
@@ -532,8 +526,8 @@ function center()
 }
 
 /**
- * cell widget.
- * flex item.
+ * Cell widget.
+ * Flex item.
  *
  * int        order
  * int        grow
@@ -548,23 +542,23 @@ function cell()
 }
 
 /**
- * action item widget.
+ * Action item widget.
  *
- * string name='action'
- * string type='item'
- * string outerTag='li'
- * string tagName='a'
- * string icon?
- * string text?
- * string url?
- * string target?
- * bool   active?
- * bool   disabled?
- * string trailingIcon?
- * array  outerProps?
- * string outerClass?
- * props  array?
- * string|array|object badge?
+ * ?string name='action'
+ * ?string type='item'
+ * ?string outerTag='li'
+ * ?string tagName='a'
+ * ?string icon
+ * ?string text
+ * ?string url
+ * ?string target
+ * ?bool   active
+ * ?bool   disabled
+ * ?string trailingIcon
+ * ?array  outerProps
+ * ?string outerClass
+ * ?props  array
+ * string|array|object|null badge
  */
 function actionItem()
 {
@@ -572,9 +566,9 @@ function actionItem()
 }
 
 /**
- * nav widget.
+ * Nav widget.
  *
- * array items?
+ * ?array items
  */
 function nav()
 {
@@ -582,9 +576,9 @@ function nav()
 }
 
 /**
- * label widget.
+ * Label widget.
  *
- * string text?
+ * ?string text
  */
 function label()
 {
@@ -592,7 +586,7 @@ function label()
 }
 
 /**
- * dtable widget.
+ * DTable widget.
  */
 function dtable()
 {
@@ -600,9 +594,9 @@ function dtable()
 }
 
 /**
- * menu widget.
+ * Menu widget.
  *
- * array items?
+ * ?array items
  */
 function menu()
 {
@@ -610,22 +604,22 @@ function menu()
 }
 
 /**
- * dropdown widget.
+ * Dropdown widget.
  *
- * array  items?
- * string placement?
- * string strategy?
- * int    offset?
- * bool   flip?
- * string subMenuTrigger?
- * string arrow?
- * string trigger?
- * array  menuProps?
- * string target?
- * string id?
- * string menuClass?
- * bool   hasIcons?
- * bool   staticMenu?
+ * ?array  items
+ * ?string placement
+ * ?string strategy
+ * ?int    offset
+ * ?bool   flip
+ * ?string subMenuTrigger
+ * ?string arrow
+ * ?string trigger
+ * ?array  menuProps
+ * ?string target
+ * ?string id
+ * ?string menuClass
+ * ?bool   hasIcons
+ * ?bool   staticMenu
  */
 function dropdown()
 {
@@ -633,7 +627,7 @@ function dropdown()
 }
 
 /**
- * header widget.
+ * Header widget.
  *
  * ====== blocks ======
  * heading = array('map' => 'toolbar')
@@ -647,10 +641,10 @@ function header()
 }
 
 /**
- * heading widget.
+ * Heading widget.
  *
  * array items
- * bool  showAppName=true
+ * ?bool showAppName=true
  */
 function heading()
 {
@@ -658,9 +652,9 @@ function heading()
 }
 
 /**
- * navbar widget.
+ * Navbar widget.
  *
- * array items?
+ * ?array items
  */
 function navbar()
 {
@@ -668,7 +662,7 @@ function navbar()
 }
 
 /**
- * main widget.
+ * Main widget.
  *
  * ====== blocks ======
  * menu    = array('map' => 'featureBar,nav,toolbar')
@@ -681,10 +675,10 @@ function main()
 }
 
 /**
- * zentao sidebar widget.
+ * Zentao sidebar widget.
  *
- * string side='left'
- * bool   showToggle=true
+ * ?string side='left'
+ * ?bool   showToggle=true
  */
 function sidebar()
 {
@@ -692,12 +686,12 @@ function sidebar()
 }
 
 /**
- * zentao feature bar widget.
+ * Zentao feature bar widget.
  *
- * array  items?
- * string current?
- * string link?
- * string linkParams?
+ * ?array  items
+ * ?string current
+ * ?string link
+ * ?string linkParams
  *
  * ====== blocks ======
  * nav      = array('map' => 'nav')
@@ -711,22 +705,22 @@ function featureBar()
 }
 
 /**
- * avatar widget.
+ * Avatar widget.
  *
- * string     className?
- * array      style?
- * int        size=32
- * bool       circle=true
- * string|int rounded?
- * string     background?
- * string     foreColor
- * string     text?
- * string     code?
- * int        maxTextLength=2
- * int        hueDistance=43
- * int        saturation=0.4
- * int        lightness=0.6
- * string     src?
+ * ?string     className
+ * ?array      style
+ * ?int        size=32
+ * ?bool       circle=true
+ * ?string|int rounded
+ * ?string     background
+ * ?string     foreColor
+ * ?string     text
+ * ?string     code
+ * ?int        maxTextLength=2
+ * ?int        hueDistance=43
+ * ?int        saturation=0.4
+ * ?int        lightness=0.6
+ * ?string     src
  */
 function avatar()
 {
@@ -734,7 +728,7 @@ function avatar()
 }
 
 /**
- * zentao user avatar widget.
+ * Zentao user avatar widget.
  *
  * string       className?
  * array        style?
@@ -761,7 +755,7 @@ function userAvatar()
 }
 
 /**
- * pager widget.
+ * Pager widget.
  */
 function pager()
 {
@@ -769,10 +763,10 @@ function pager()
 }
 
 /**
- * modal widget.
+ * Modal widget.
  *
- * string id="$GID"
- * array  modalProps=array()
+ * ?string id="$GID"
+ * ?array  modalProps=array()
  */
 function modal()
 {
@@ -780,28 +774,28 @@ function modal()
 }
 
 /**
- * modal trigger widget.
+ * Modal trigger widget.
  *
- * string                     target?
- * string|int|object|function position?
- * string|int|object          size?
- * bool|string                backdrop?
- * bool                       keyboard?
- * bool                       moveable?
- * bool                       animation?
- * int                        transTime?
- * bool                       responsive?
- * string                     type?
- * string                     loadingText?
- * int                        loadTimeout?
- * string                     failedTip?
- * string                     timeoutTip?
- * string                     title?
- * string                     content?
- * object                     custom?
- * string                     url?
- * object                     request?
- * string                     dataType?
+ * ?string  target
+ * ?bool    keyboard
+ * ?bool    moveable
+ * ?bool    animation
+ * ?int     transTime
+ * ?bool    responsive
+ * ?string  type
+ * ?string  loadingText
+ * ?int     loadTimeout
+ * ?string  failedTip
+ * ?string  timeoutTip
+ * ?string  title
+ * ?string  content
+ * ?object  custom
+ * ?string  url
+ * ?object  request
+ * ?string  dataType
+ * bool|string|null                backdrop
+ * string|int|object|null          size
+ * string|int|object|function|null position
  *
  * ====== blocks ======
  * trigger = array('map' => 'btn,a')
@@ -814,17 +808,17 @@ function modalTrigger()
 }
 
 /**
- * modal dialog widget.
+ * Modal dialog widget.
  *
- * string     title?
- * int        itemID?
- * string     headerClass?
- * array      headerProps?
- * array      actions?
- * bool|array closeBtn=true
- * array      footerActions
- * string     footerClass
- * array      footerProps
+ * ?string         title
+ * ?int            itemID
+ * ?string         headerClass
+ * ?array          headerProps
+ * ?array          actions
+ * ?array          footerActions
+ * ?string         footerClass
+ * ?array          footerProps
+ * bool|array|null closeBtn=true
  */
 function modalDialog()
 {
@@ -832,11 +826,11 @@ function modalDialog()
 }
 
 /**
- * tabs widget.
+ * Tabs widget.
  *
- * string direction='h'
- * array  items
- * string activeId?
+ * array   items
+ * ?string direction='h'
+ * ?string activeId
  */
 function tabs()
 {
@@ -844,8 +838,9 @@ function tabs()
 }
 
 /**
- * tab pane widget.
- * bool isActive?
+ * Tab pane widget.
+ *
+ * ?bool isActive
  */
 function tabPane()
 {
@@ -853,21 +848,21 @@ function tabPane()
 }
 
 /**
- * panel widget.
+ * Panel widget.
  *
- * string class='rounded shadow ring-0 canvas'
- * string size?
- * string title?
- * string titleClass?
- * array  titleProps?
- * string headingClass?
- * array  headingProps?
- * array  headingActions?
- * string bodyClass?
- * array  bodyProps?
- * array  footerActions?
- * string footerClass?
- * array  footerProps?
+ * ?string class='rounded shadow ring-0 canvas'
+ * ?string size
+ * ?string title
+ * ?string titleClass
+ * ?array  titleProps
+ * ?string headingClass
+ * ?array  headingProps
+ * ?array  headingActions
+ * ?string bodyClass
+ * ?array  bodyProps
+ * ?array  footerActions
+ * ?string footerClass
+ * ?array  footerProps
  */
 function panel()
 {
@@ -875,7 +870,7 @@ function panel()
 }
 
 /**
- * tooltip widget.
+ * Tooltip widget.
  */
 function tooltip()
 {
@@ -883,11 +878,11 @@ function tooltip()
 }
 
 /**
- * toolbar widget.
+ * Toolbar widget.
  *
- * array  items?
- * string btnClass?
- * array  btnProps?
+ * ?array  items
+ * ?string btnClass
+ * ?array  btnProps
  */
 function toolbar()
 {
@@ -895,7 +890,7 @@ function toolbar()
 }
 
 /**
- * zentao search form widget.
+ * Zentao search form widget.
  */
 function searchForm()
 {
@@ -903,9 +898,9 @@ function searchForm()
 }
 
 /**
- * zentao search toggle widget.
+ * Zentao search toggle widget.
  *
- * bool open?
+ * ?bool open
  */
 function searchToggle()
 {
@@ -913,13 +908,13 @@ function searchToggle()
 }
 
 /**
- * zentao program menu widget.
+ * Zentao program menu widget.
  *
- * array  programs?
- * string activeClass?
- * string activeIcon?
- * string activeKey?
- * string closeLink?
+ * ?array  programs
+ * ?string activeClass
+ * ?string activeIcon
+ * ?string activeKey
+ * ?string closeLink
  */
 function programMenu()
 {
@@ -927,7 +922,7 @@ function programMenu()
 }
 
 /**
- * zentao module menu widget.
+ * Zentao module menu widget.
  *
  * int    productID
  * int    activeKey
@@ -939,11 +934,11 @@ function moduleMenu()
 }
 
 /**
- * zentao history records widget.
+ * Zentao history records widget.
  *
- * array  actions?
- * array  users?
- * string methodName?
+ * ?array  actions
+ * ?array  users
+ * ?string methodName
  */
 function history()
 {
@@ -951,10 +946,12 @@ function history()
 }
 
 /**
- * zentao float toolbar widget.
- * array prefix?    btns props array.
- * array main?      btns props array.
- * array suffix?    btns props array.
+ * Zentao float toolbar widget.
+ *
+ * ?array prefix btns props array.
+ * ?array main   btns props array.
+ * ?array suffix btns props array.
+ *
  * ====== blocks ======
  * dropdowns = array()
  * ====================
@@ -965,7 +962,7 @@ function floatToolbar()
 }
 
 /**
- * zentao priority number wg.
+ * Zentao priority number wg.
  *
  * int pri
  */
@@ -973,4 +970,3 @@ function priNum()
 {
     return createWg('priNum', func_get_args());
 }
-
