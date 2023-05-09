@@ -215,7 +215,7 @@ class taskModel extends model
         $task->type         = 'devel';
         $task->project      = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
 
-        $this->dao->insert(TABLE_TASK)->data($task, $skip = 'id,product')
+        $this->dao->insert(TABLE_TASK)->data($task, 'id,product')
              ->autoCheck()
              ->batchCheck($this->config->task->create->requiredFields, 'notempty')
              ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
