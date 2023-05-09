@@ -269,7 +269,7 @@ class blockModel extends model
             $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             $block['vision']    = $this->config->vision;
 
-            $this->blockTao->insert($block);
+            $this->blockTao->insert((object)$block);
         }
         if(dao::isError()) return false;
 
