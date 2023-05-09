@@ -1311,4 +1311,23 @@ class productZen extends product
         $this->session->set('releaseList',     $this->app->getURI(true), 'product');
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
     }
+
+    /**
+     * 回复产品不存在提示消息。
+     * Response product not found message.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function responseNotFound4View(): void
+    {
+        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        {
+            $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            return;
+        }
+
+        print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        return;
+    }
 }

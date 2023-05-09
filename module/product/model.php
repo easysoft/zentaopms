@@ -349,7 +349,7 @@ class productModel extends model
      */
     public function getStatusGroups()
     {
-        $products = $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
+        return $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
     }
 
     /**
@@ -1279,7 +1279,8 @@ class productModel extends model
     }
 
     /**
-     * Get product stat by id
+     * 使用产品ID获取产品统计信息。
+     * Get product stat data by product ID.
      *
      * @param  int    $productID
      * @param  string $storyType
@@ -1288,57 +1289,24 @@ class productModel extends model
      */
     public function getStatByID($productID, $storyType = 'story')
     {
+        /* Check privilege. */
         if(!$this->checkPriv($productID)) return false;
 
+        /* Get product. */
         $product = $this->getById($productID);
         if(empty($product)) return false;
 
-        $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq($storyType)
-            ->andWhere('product')->eq($productID)
-            ->groupBy('product, status')
-            ->fetchAll('status');
-
-        /* Padding the stories to sure all status have records. */
-        foreach(array_keys($this->lang->story->statusList) as $status)
-        {
-            $stories[$status] = isset($stories[$status]) ? $stories[$status]->count : 0;
-        }
-
-        $plans    = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('end')->gt(helper::now())->fetch();
-        $builds   = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-        $cases    = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-        $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-        $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-        $releases = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-        $projects = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t2.type')->eq('project')
-            ->fetch();
-
-        $executions = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t2.type')->in('sprint,stage,kanban')
-            ->fetch();
-
-        $product->stories    = $stories;
-        $product->plans      = $plans      ? $plans->count : 0;
-        $product->releases   = $releases   ? $releases->count : 0;
-        $product->builds     = $builds     ? $builds->count : 0;
-        $product->cases      = $cases      ? $cases->count : 0;
-        $product->projects   = $projects   ? $projects->count : 0;
-        $product->executions = $executions ? $executions->count : 0;
-        $product->bugs       = $bugs       ? $bugs->count : 0;
-        $product->docs       = $docs       ? $docs->count : 0;
-
-        $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('status')->eq('closed')->fetch('count');
-        $allTotal    = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
-        $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
+        /* Attach statistic data. */
+        $product->stories    = $this->productTao->getStoryStatusCountByID($productID, $storyType);
+        $product->plans      = $this->productTao->getStatCountByID(TABLE_PRODUCTPLAN,    $productID);
+        $product->releases   = $this->productTao->getStatCountByID(TABLE_BUILD,          $productID);
+        $product->builds     = $this->productTao->getStatCountByID(TABLE_CASE,           $productID);
+        $product->cases      = $this->productTao->getStatCountByID(TABLE_BUG,            $productID);
+        $product->projects   = $this->productTao->getStatCountByID(TABLE_DOC,            $productID);
+        $product->executions = $this->productTao->getStatCountByID(TABLE_RELEASE,        $productID);
+        $product->bugs       = $this->productTao->getStatCountByID(TABLE_PROJECTPRODUCT, $productID);
+        $product->docs       = $this->productTao->getStatCountByID('executions',         $productID);
+        $product->progress   = $this->productTao->getStatCountByID('progress',           $productID);
 
         return $product;
     }

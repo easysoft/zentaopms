@@ -348,36 +348,31 @@ class product extends control
     }
 
     /**
+     * 查看产品。
      * View a product.
      *
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function view($productID)
+    public function view(string $productID)
     {
         $productID = (int)$productID;
-        $product   = $this->product->getStatByID($productID);
 
-        if(!$product)
-        {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
-        }
-
+        /* Get product. */
+        $product = $this->product->getStatByID($productID);
+        if(!$product) return $this->productZen->responseNotFound4View();
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+
+        /* Set navigation menu. */
         $this->product->setMenu($productID);
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
-
+        /* Execute hooks. */
         $this->executeHooks($productID);
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->view;
-
         $this->view->product    = $product;
         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
         $this->view->users      = $this->user->getPairs('noletter');
