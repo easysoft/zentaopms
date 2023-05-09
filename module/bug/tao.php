@@ -222,13 +222,13 @@ class bugTao extends bugModel
      * 更新相关bug。
      * Update the linked bug.
      *
-     * @param  int    $bugID
+     * @param  string $bugID
      * @param  string $linkBug
      * @param  string $oldLinkBug
      * @access protected
      * @return bool
      */
-    protected function updateLinkBug(int $bugID, string $linkBug, string $oldLinkBug): bool
+    protected function updateLinkBug(string $bugID, string $linkBug, string $oldLinkBug): bool
     {
         $linkBugs        = explode(',', $linkBug);
         $oldLinkBugs     = explode(',', $oldLinkBug);
