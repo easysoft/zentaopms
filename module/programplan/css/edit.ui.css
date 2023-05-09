@@ -1,0 +1,3 @@
+.form-row .tooltip-btn::before {background: #fff;}
+.form-row .tooltip-btn {box-shadow: none;}
+.form-row .tooltip-btn:hover:before {opacity: 0;}
