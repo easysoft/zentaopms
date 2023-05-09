@@ -18,9 +18,9 @@ class taskTao extends taskModel
      *
      * @param  object    $task
      * @access protected
-     * @return int|bool
+     * @return int|false
      */
-    protected function doCreate(object $task): int|bool
+    protected function doCreate(object $task): int|false
     {
         /* Insert task data. */
         $this->dao->insert(TABLE_TASK)->data($task)
@@ -53,9 +53,9 @@ class taskTao extends taskModel
      * 更新一个任务。
      * Update a task.
      *
-     * @param  object $task
-     * @param  object $oldTask
-     * @param  string $requiredFields
+     * @param  object    $task
+     * @param  object    $oldTask
+     * @param  string    $requiredFields
      * @access protected
      * @return bool
      */
@@ -105,7 +105,7 @@ class taskTao extends taskModel
      * @param  int       $taskID
      * @param  string    $field
      * @access protected
-     * @return object
+     * @return object|string
      */
     protected function fetchByID(int $taskID, string $field = ''): object|string
     {
@@ -119,8 +119,8 @@ class taskTao extends taskModel
      * 根据报表条件查询任务.
      * Get task list by report.
      *
-     * @param  string $field
-     * @param  string $condition
+     * @param  string    $field
+     * @param  string    $condition
      * @access protected
      * @return object[]
      */
@@ -358,7 +358,7 @@ class taskTao extends taskModel
      * 通过任务ID列表查询任务团队信息。
      * Get task team by id list.
      *
-     * @param  array      $taskIdList
+     * @param  array     $taskIdList
      * @access protected
      * @return object[]
      */
@@ -440,7 +440,7 @@ class taskTao extends taskModel
      *
      * @param  string|array $members
      * @param  object       $task
-     * @param  string       $type current|next
+     * @param  string       $type    current|next
      * @access protected
      * @return string
      */
@@ -472,7 +472,7 @@ class taskTao extends taskModel
      * 检查一个任务是否有子任务。
      * Check if a task has children.
      *
-     * @param  int    $taskID
+     * @param  int       $taskID
      * @access protected
      * @return bool
      */
@@ -487,7 +487,7 @@ class taskTao extends taskModel
      * 获取任务的进度。
      * Compute progress of a task.
      *
-     * @param  object   $task
+     * @param  object    $task
      * @access protected
      * @return float
      */
@@ -502,7 +502,7 @@ class taskTao extends taskModel
      * 计算任务列表中每个任务的进度，包括子任务。
      * Compute progress of task list, include its' children.
      *
-     * @param  object[] $tasks
+     * @param  object[]  $tasks
      * @access protected
      * @return object[]
      */
@@ -525,42 +525,44 @@ class taskTao extends taskModel
      *
      * @param  object    $parentTask
      * @access protected
-     * @return bool|int
+     * @return false|int
      */
-    protected function splitConsumedTask(object $parentTask): bool|int
+    protected function splitConsumedTask(object $parentTask): false|int
     {
         $clonedTask = clone $parentTask;
         $clonedTask->parent = $parentTask->id;
         unset($clonedTask->id);
+
         $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $clonedTaskID = $this->dao->lastInsertID();
-
         $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
             ->where('objectID')->eq($parentTask->id)
             ->andWhere('objectType')->eq('task')
             ->exec();
         if(dao::isError()) return false;
 
-        return (int)$clonedTaskID;
+        return $clonedTaskID;
     }
 
     /**
      * 拆分之后更新父任务的parent、lastEditedBy、lastEditedDate字段。
      * Update the parent's parent, lastEditedBy, and lastEditedDate fields after split.
      *
-     * @param  int        $parentID
+     * @param  int       $parentID
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function updateParentAfterSplit(int $parentID): void
+    protected function updateParentAfterSplit(int $parentID): bool
     {
         $task = new stdclass();
         $task->parent         = '-1';
         $task->lastEditedBy   = $this->app->user->account;
         $task->lastEditedDate = helper::now();
         $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -596,12 +598,12 @@ class taskTao extends taskModel
      *  计算当前任务的状态。
      *  Compute the status of the current task.
      *
-     * @param  object $currentTask
-     * @param  object $oldTask
-     * @param  object $task
-     * @param  bool   $condition  true|false
-     * @param  bool   $hasEfforts true|false
-     * @param  int    $teamCount
+     * @param  object    $currentTask
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @param  bool      $autoStatus  true|false
+     * @param  bool      $hasEfforts  true|false
+     * @param  array     $members
      * @access protected
      * @return object
      */
@@ -658,11 +660,11 @@ class taskTao extends taskModel
      * 记录任务的版本。
      * Record task version.
      *
-     * @param  object $task
+     * @param  object    $task
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function recordTaskVersion(object $task): void
+    protected function recordTaskVersion(object $task): bool
     {
         $taskSpec = new stdClass();
         $taskSpec->task       = $task->id;
@@ -671,17 +673,19 @@ class taskTao extends taskModel
         $taskSpec->estStarted = $task->estStarted;
         $taskSpec->deadline   = $task->deadline;
         $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+
+        return !dao::isError();
     }
 
     /**
      * 获取团队成员以及他的预计、消耗、剩余工时。
      * Get team account,estimate,consumed and left info.
      *
-     * @param  array $teamList
-     * @param  array $teamSourceList
-     * @param  array $teamEstimateList
-     * @param  array $teamConsumedList
-     * @param  array $teamLeftList
+     * @param  array     $teamList
+     * @param  array     $teamSourceList
+     * @param  array     $teamEstimateList
+     * @param  array     $teamConsumedList
+     * @param  array     $teamLeftList
      * @access protected
      * @return object[]
      */
@@ -709,8 +713,8 @@ class taskTao extends taskModel
      * 拼接团队成员信息，包括账号、预计、消耗、剩余，用来创建历史记录。例如：团队成员: admin, 预计: 2, 消耗: 0, 剩余: 3。
      * Concat team info for create history.
      *
-     * @param  array $teamInfoList
-     * @param  array $userPairs
+     * @param  array     $teamInfoList
+     * @param  array     $userPairs
      * @access protected
      * @return string
      */
@@ -725,7 +729,7 @@ class taskTao extends taskModel
      * 更新任务的最后修改人和最后修改日期。
      * Update lastEditedBy and lastEditedDate of a task.
      *
-     * @param  int $taskID
+     * @param  int       $taskID
      * @access protected
      * @return bool
      */
@@ -740,12 +744,12 @@ class taskTao extends taskModel
      * 通过拖动甘特图修改任务的预计开始日期和截止日期。
      * Update task estimate date and deadline through gantt.
      *
-     * @param  int     $taskID
-     * @param  object  $postData
+     * @param  int       $taskID
+     * @param  object    $postData
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function updateTaskEsDateByGantt(int $taskID, object $postData): void
+    protected function updateTaskEsDateByGantt(int $taskID, object $postData): bool
     {
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         $isChildTask = $task->parent > 0 ? true : false;
@@ -767,6 +771,8 @@ class taskTao extends taskModel
             ->set('lastEditedBy')->eq($this->app->user->account)
             ->where('id')->eq($taskID)
             ->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -777,7 +783,7 @@ class taskTao extends taskModel
      * @access protected
      * @return bool
      */
-    protected function isNoStoryExecution($execution)
+    protected function isNoStoryExecution($execution): bool
     {
         return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
     }
