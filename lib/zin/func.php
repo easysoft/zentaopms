@@ -967,10 +967,21 @@ function floatToolbar()
 /**
  * zentao data group.
  *
- * string label,
+ * string label
  * string labelClass?
  */
 function dataGroup()
 {
     return createWg('dataGroup', func_get_args());
 }
+
+/**
+ * zentao priority number wg.
+ *
+ * int pri
+ */
+function priNum()
+{
+    return createWg('priNum', func_get_args());
+}
+
