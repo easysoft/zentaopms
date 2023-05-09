@@ -473,6 +473,16 @@
         if(!data) return;
         if(data === true) return loadCurrentPage();
         if(typeof data === 'string') data = {url: data};
+
+        if(data.confirm)
+        {
+            return zui.Modal.confirm(data.confirm).then(confirmed =>
+            {
+                if(confirmed) $(document).trigger('zui.locate', data.confirmed);
+                else $(document).trigger('zui.locate', data.cancelled);
+            });
+        }
+        if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data.url, data.selector);
     });
 
