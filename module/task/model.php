@@ -1386,11 +1386,9 @@ class taskModel extends model
         }
         if(!$inTeam) return false;
 
-        $estimates    = array();
-        $earliestTime = '';
+        $estimates = array();
         foreach(array_keys($record->dates) as $id)
         {
-            $earliestTime = $record->dates[$id];
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
                 if(helper::isZeroDate($record->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
