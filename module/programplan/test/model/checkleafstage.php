@@ -23,4 +23,4 @@ global $tester;
 $tester->loadModel('programplan');
 
 r($tester->programplan->checkLeafStage($stageID = 2)) && p('') && e('0'); // 获取阶段ID为2，判断是是否为叶子节点，结果为0
-r($tester->programplan->checkLeafStage($stageID = 5)) && p('') && e('1'); // 获取阶段ID为5，判断是否为叶子节点，结果为0
+r($tester->programplan->checkLeafStage($stageID = 5)) && p('') && e('1'); // 获取阶段ID为5，判断是否为叶子节点，结果为1
