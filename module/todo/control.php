@@ -185,7 +185,7 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
     public function start(string $todoID)
     {
@@ -209,7 +209,7 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
     public function activate(string $todoID)
     {
