@@ -242,12 +242,13 @@ class todoTest
     }
 
     /**
+     * 创建周期的待办。
      * Create by cycle test.
      *
      * @access public
      * @return int
      */
-    public function createByCycleTest()
+    public function createByCycleTest(): int
     {
         $todoList = $this->objectModel->getValidCycleList();
         $this->objectModel->createByCycle($todoList);
@@ -256,7 +257,8 @@ class todoTest
         $todoIDList = array_keys($todoList);
         $count      = $tester->dao->select('count(`id`) as count')->from(TABLE_TODO)->where('objectID')->in($todoIDList)->andWhere('deleted')->eq('0')->fetch('count');
 
-        return dao::isError() ? 0 :1;
+        if(dao::isError()) return 0;
+        return $count > 0 ? 1 : 0;
     }
 
     /**
