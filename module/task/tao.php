@@ -286,7 +286,7 @@ class taskTao extends taskModel
         $requiredFields = array_filter(explode(',', $requiredFields));
 
         /* check data. */
-        foreach($data as $i => $task)
+        foreach($data as $task)
         {
             /* 检查任务是否开启了起止日期必填的配置(limitTaskDate)。 */
             if(!empty($this->config->limitTaskDate))
