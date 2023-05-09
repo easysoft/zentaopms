@@ -1974,4 +1974,27 @@ class taskTest
         if($columnID) $object = $tester->loadModel('kanban')->getColumnByID($columnID);
         return isset($object) ? $object : false;
     }
+
+    /**
+     * 测试检查执行是否有需求列表。
+     * Test check whether execution has story list.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return int|array
+     */
+    public function isNoStoryExecutionTest(int $executionID): int|array
+    {
+        global $tester;
+        $execution = $tester->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
+        $result    = $this->objectModel->isNoStoryExecution($execution);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($result) ? 1 : 0;
+        }
+    }
 }

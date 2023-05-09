@@ -66,7 +66,7 @@ class taskTao extends taskModel
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
 
         /* Update children task. */
-        if(isset($task->execution) and $task->execution != $oldTask->execution)
+        if(isset($task->execution) && $task->execution != $oldTask->execution)
         {
             $newExecution  = $this->loadModel('execution')->getByID($task->execution);
             $task->project = $newExecution->project;
@@ -76,7 +76,7 @@ class taskTao extends taskModel
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
-            ->setIF($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review', 'story', 0)
+            ->setIF($this->isNoStoryExecution($execution), 'story', 0)
             ->setIF(!empty($task->design), 'designVersion', $design->version)
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
 
@@ -84,10 +84,10 @@ class taskTao extends taskModel
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
 
-            ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
+            ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
-            ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
+            ->checkIF($task->status == 'done' && $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
@@ -175,7 +175,7 @@ class taskTao extends taskModel
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF(is_array($type) || strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($type == 'assignedbyme')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'review')
@@ -187,7 +187,7 @@ class taskTao extends taskModel
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
 
         return $tasks;
     }
@@ -220,7 +220,7 @@ class taskTao extends taskModel
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
-            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type != 'closedBy' && $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'finishedBy')
@@ -228,10 +228,10 @@ class taskTao extends taskModel
             ->orWhere('t5.status')->eq("done")
             ->markRight(1)
             ->fi()
-            ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
-            ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
+            ->beginIF($type != 'all' && $type != 'finishedBy' && $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
+            ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager, 't1.id')
@@ -254,13 +254,13 @@ class taskTao extends taskModel
         $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
 
         /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
-        if($execution and ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))))
+        if($execution && $this->isNoStoryExecution($execution))
         {
             $requiredFields = str_replace(',story,', ',', $requiredFields);
         }
 
         /* If the type of the task is test and select story is true, remove some required fields. */
-        if($task->type == 'test' and $selectTestStory)
+        if($task->type == 'test' && $selectTestStory)
         {
             $requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', $requiredFields);
         }
@@ -281,7 +281,7 @@ class taskTao extends taskModel
     {
         /* 设置必填项。 */
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
         $requiredFields = trim($requiredFields, ',');
         $requiredFields = array_filter(explode(',', $requiredFields));
 
@@ -296,14 +296,14 @@ class taskTao extends taskModel
             }
 
             /* 检查任务截止日期是否为空以及是否小于预计开始日期。 */
-            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
+            if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
             {
                 dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
                 return false;
             }
 
             /* 检查任务预计是否为数字类型。 */
-            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            if($task->estimate && !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
                 return false;
@@ -337,9 +337,9 @@ class taskTao extends taskModel
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
 
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(",story,", ',', "$requiredFields");
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(",story,", ',', "$requiredFields");
 
-        if($task->status != 'cancel' and strpos($requiredFields, ',estimate,') !== false)
+        if($task->status != 'cancel' && strpos($requiredFields, ',estimate,') !== false)
         {
             if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
             $requiredFields = str_replace(',estimate,', ',', $requiredFields);
@@ -395,11 +395,11 @@ class taskTao extends taskModel
         $member->consumed = $teamConsumedList ? zget($teamConsumedList, $row, 0) : 0;
         $member->left     = $teamLeftList ? zget($teamLeftList, $row, 0) : 0;
         $member->status   = 'wait';
-        if($task->status == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
+        if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
         if($task->status == 'done') $member->left = 0;
 
         /* Compute task status of member. */
-        if($member->left == 0 and $member->consumed > 0)
+        if($member->left == 0 && $member->consumed > 0)
         {
             $member->status = 'done';
         }
@@ -407,16 +407,16 @@ class taskTao extends taskModel
         {
             $teamSource = zget($teamSourceList, $row);
 
-            if(!empty($teamSource) and $teamSource != $account and isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
-            if(isset($undoneUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
+            if(!empty($teamSource) && $teamSource != $account && isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
+            if(isset($undoneUsers[$account]) && ($mode == 'multi' || ($mode == 'linear' && $minStatus != 'wait'))) $member->status = 'doing';
         }
 
         /* Compute multi-task status, and in a linear task, there is only one doing status. */
-        if(($mode == 'linear' and $member->status == 'doing') or $member->status == 'wait') $minStatus = 'wait';
-        if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
+        if(($mode == 'linear' && $member->status == 'doing') || $member->status == 'wait') $minStatus = 'wait';
+        if($minStatus != 'wait' && $member->status == 'doing') $minStatus = 'doing';
 
         /* Insert or update team. */
-        if($mode == 'multi' and $inTeams)
+        if($mode == 'multi' && $inTeams)
         {
             $this->dao->update(TABLE_TASKTEAM)
                 ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
@@ -446,7 +446,7 @@ class taskTao extends taskModel
      */
     protected function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
     {
-        if(empty($task->team) or $task->mode != 'linear') return $task->assignedTo;
+        if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
 
         /* Format task team members. */
         if(!is_array($members)) $members = explode(',', trim($members, ','));
@@ -457,13 +457,13 @@ class taskTao extends taskModel
         $teamHours = array_values($task->team);
         foreach($members as $i => $account)
         {
-            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
+            if(isset($teamHours[$i]) && $teamHours[$i]->status == 'done') continue;
             if($type == 'current') return $account;
             break;
         }
 
         /* Get the member of the second unfinished task. */
-        if($type == 'next' and isset($members[$i + 1])) return $members[$i + 1];
+        if($type == 'next' && isset($members[$i + 1])) return $members[$i + 1];
 
         return $task->openedBy;
     }
@@ -611,7 +611,7 @@ class taskTao extends taskModel
         if(!$autoStatus) return $currentTask;
 
         /* If consumed of the current task is empty and current task has no efforts, the current task status should be wait. */
-        if($currentTask->consumed == 0 and !$hasEfforts)
+        if($currentTask->consumed == 0 && !$hasEfforts)
         {
             if(!isset($task->status)) $currentTask->status = 'wait';
             $currentTask->finishedBy   = null;
@@ -627,13 +627,13 @@ class taskTao extends taskModel
         }
 
         /* If consumed of the current task is not empty and left of the current task is empty, the current task status should be done or doing. */
-        if($currentTask->consumed > 0 and $currentTask->left == 0)
+        if($currentTask->consumed > 0 && $currentTask->left == 0)
         {
             $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
             /* If the number of finisher is less than the number of team members , the current task status should be doing. */
             if(count($finisedUsers) != count($members))
             {
-                if(strpos('cancel,pause', $oldTask->status) === false or ($oldTask->status == 'closed' and $oldTask->reason == 'done'))
+                if(strpos('cancel,pause', $oldTask->status) === false || ($oldTask->status == 'closed' && $oldTask->reason == 'done'))
                 {
                     $currentTask->status       = 'doing';
                     $currentTask->finishedBy   = null;
@@ -767,5 +767,18 @@ class taskTao extends taskModel
             ->set('lastEditedBy')->eq($this->app->user->account)
             ->where('id')->eq($taskID)
             ->exec();
+    }
+
+    /**
+     * 检查执行是否有需求列表。
+     * Check whether execution has story list.
+     *
+     * @param  object    $execution
+     * @access protected
+     * @return bool
+     */
+    protected function isNoStoryExecution($execution)
+    {
+        return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
     }
 }
