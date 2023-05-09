@@ -148,6 +148,18 @@ class h extends wg
         return static::create('textarea', $code, ...$args);
     }
 
+    /**
+     * create a html comment tag <!--...-->
+     *
+     * @access public
+     * @param  string $comment
+     * @return directive
+     */
+    public static function comment(string $comment): directive
+    {
+        return html("<!-- $comment -->");
+    }
+
     public static function importJs($src, ...$args)
     {
         return static::create('script', prop('src', $src), ...$args);
