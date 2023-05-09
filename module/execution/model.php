@@ -5435,8 +5435,21 @@ class executionModel extends model
         $menu   = '';
         $params = "executionID=$execution->id";
 
+        $this->app->loadLang('stage');
+        $title = '';
+
+        $disabled = '';
         $menu .= "<div class='divider'></div>";
-        $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true);
+        if($this->config->systemMode == 'PLM' and in_array($execution->attribute, array_keys($this->lang->stage->ipdTypeList)))
+        {
+            $execution->ipdStage = $this->canStageStart($execution);
+            if($execution->ipdStage['canStart']) $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true, $disabled, $title);
+        }
+        else
+        {
+            $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true, $disabled, $title);
+        }
+
         $menu .= $this->buildMenu('execution', 'activate', $params, $execution, $type, '', '', 'iframe', true);
         $menu .= $this->buildMenu('execution', 'putoff',   $params, $execution, $type, '', '', 'iframe', true);
         $menu .= $this->buildMenu('execution', 'suspend',  $params, $execution, $type, '', '', 'iframe', true);
