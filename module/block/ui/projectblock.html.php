@@ -19,7 +19,7 @@ foreach($projects as $project)
 
     $project->PM        = zget($users, $project->PM, $project->PM);
     $project->status    = zget($lang->project->statusList, $project->status);
-    $project->consumed .=$lang->execution->workHourUnit;
+    $project->consumed .= $lang->execution->workHourUnit;
     $project->budget    = $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $programBudget : $lang->project->future;
 }
 
