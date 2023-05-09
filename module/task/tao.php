@@ -192,10 +192,12 @@ class taskTao extends taskModel
      * 通过任务类型查找用户的任务。
      * Fetch user tasks by type.
      *
-     * @param  string $account
-     * @param  string $type      assignedTo|finishedBy|closedBy
-     * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  string      $account
+     * @param  string      $type      assignedTo|finishedBy|closedBy
+     * @param  string      $orderBy
+     * @param  int         $projectID
+     * @param  int         $limit
+     * @param  object|null $pager
      * @access protected
      * @return object[]
      */
@@ -592,9 +594,9 @@ class taskTao extends taskModel
      *
      * @param  object    $parentTask
      * @access protected
-     * @return bool
+     * @return bool|int
      */
-    protected function splitConsumedTask(object $parentTask): bool
+    protected function splitConsumedTask(object $parentTask): bool|int
     {
         $clonedTask = clone $parentTask;
         $clonedTask->parent = $parentTask->id;
@@ -610,7 +612,7 @@ class taskTao extends taskModel
             ->exec();
         if(dao::isError()) return false;
 
-        return $clonedTaskID;
+        return (int)$clonedTaskID;
     }
 
     /**

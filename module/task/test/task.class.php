@@ -1878,4 +1878,31 @@ class taskTest
         $lastTaskID = $tester->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc')->fetch('objectID');
         return $this->objectModel->getByID($lastTaskID);
     }
+
+    /**
+     * 拆分任务后更新其他数据。
+     * Process other data after split task.
+     *
+     * @param  int    $oldParentTaskID
+     * @param  string $childTasks
+     * @param  string $testObject children|parent|parentAction
+     * @access public
+     * @return object|string
+     */
+    public function afterSplitTaskTest($oldParentTaskID = 0, $childTasks = '', $testObject = 'parent')
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+        $oldParentTask        = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTaskID)->fetch();
+
+        $this->objectModel->afterSplitTask($oldParentTask, $childTasks);
+
+        $tasks['children']       = $tester->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($oldParentTask->id)->fetchPairs('id');
+        $tasks['parent']         = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+        $tasks['parentAction']   = $tester->dao->select('id as actionID')->from(TABLE_ACTION)->where('objectID')->eq($oldParentTask->id)->andWhere('objectType')->eq('task')->fetch();
+        $tasks['parentEstStarted']     = $tasks['parent']->estStarted;
+        $tasks['parentDeadline']       = $tasks['parent']->deadline;
+
+        return $tasks[$testObject];
+    }
 }

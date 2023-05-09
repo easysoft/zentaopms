@@ -527,10 +527,10 @@ class taskZen extends task
      *
      * @param  object  $execution
      * @param  object  $formData
-     * @access private
-     * @return object[]
+     * @access protected
+     * @return object[]|false
      */
-    protected function prepareTasks4BatchCreate(object $execution, object $formData): array
+    protected function prepareTasks4BatchCreate(object $execution, object $formData): array|false
     {
         /* 去除重复数据。 */
         $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
@@ -1058,7 +1058,7 @@ class taskZen extends task
      * @param  object    $execution
      * @param  string    $action
      * @access protected
-     * return  array
+     * @return  array
      */
     protected function getCustomFields(object $execution, string $action): array
     {
@@ -1096,7 +1096,7 @@ class taskZen extends task
      */
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
-        /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。*/
+        /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。 */
         if($execution->type == 'kanban') $this->showKanbanRelatedVars($execution->id, $output);
 
         /* 任务拆解。 */

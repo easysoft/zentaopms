@@ -3855,15 +3855,16 @@ class taskModel extends model
     {
         $parentID = (int)$oldParentTask->id;
 
-        /* 当一个普通任务有消耗时，拆分子任务。 */
-        /* When common task are child tasks and the common task has consumption, create a child task. */
+        /* 当一个普通任务有消耗时，拆分子任务并更新父任务状态。 */
+        /* When a normal task is consumed, create the subtask and update the parent task status. */
         if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
         {
             $taskID = $this->taskTao->splitConsumedTask($oldParentTask);
-            if(!$taskID) return false;
+             if(!$taskID) return false;
+
+            $this->updateParentStatus($taskID);
         }
 
-        $this->updateParentStatus($taskID);
         $this->computeBeginAndEnd($parentID);
         $this->taskTao->updateParentAfterSplit($parentID);
 
@@ -3877,7 +3878,7 @@ class taskModel extends model
     }
 
     /**
-     * 批量创建任务后的其他数据处理。
+     * 批量创建任务后的看板数据处理。
      * Kanban data processing after batch create tasks.
      *
      * @param  int    $taskID
