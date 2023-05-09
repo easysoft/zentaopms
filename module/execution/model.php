@@ -5163,11 +5163,6 @@ class executionModel extends model
             if(is_array($tree)) $tree = (object)$tree;
             switch($tree->type)
             {
-                case 'module':
-                    $this->app->loadLang('tree');
-                    $html .= "<li class='item-module'>";
-                    $html .= "<a class='tree-toggle'><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
-                    break;
                 case 'task':
                     $link = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
                     $html .= '<li class="item-task">';
@@ -5189,6 +5184,11 @@ class executionModel extends model
                     $this->app->loadLang('branch');
                     $html .= "<li class='item-module'>";
                     $html .= "<a class='tree-toggle'><span class='label label-type'>{$this->lang->branch->common}</span><span class='title' title='{$tree->name}'>{$tree->name}</span></a>";
+                    break;
+                default:
+                    $this->app->loadLang('tree');
+                    $html .= "<li class='item-module'>";
+                    $html .= "<a class='tree-toggle'><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
                     break;
             }
             if(isset($tree->children))
