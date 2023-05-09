@@ -9,10 +9,7 @@ su('admin');
 title=测试 todoTao->getValidsOfBatchCreate();
 cid=1
 pid=1
- *
-- 执行todoTest模块的getValidsOfBatchCreateTest方法，参数是$todos, $loop = 1, $assignedTo @1
 
-- 执行todoTest模块的getValidsOfBatchCreateTest方法，参数是$invalidEndTodos, $loop = 1, $assignedTo @0
 */
 
 $today       = date('Y-m-d');
@@ -31,6 +28,6 @@ $invalidEndTodos = $todos;
 $invalidEndTodos['ends'] = $invalidEnds;
 
 $todoTest   = new todoTest();
-r($todoTest->getValidsOfBatchCreateTest($todos, $loop = 1, $assignedTo)) && p() && e('1');
-r($todoTest->getValidsOfBatchCreateTest($invalidEndTodos, $loop = 1, $assignedTo)) && p() && e('0');
+r($todoTest->getValidsOfBatchCreateTest($todos, $loop = 1, $assignedTo))           && p() && e('1'); // 获取批量创建有效的数据，结果为1
+r($todoTest->getValidsOfBatchCreateTest($invalidEndTodos, $loop = 1, $assignedTo)) && p() && e('0'); // 获取批量创建有效的数据，字段ends数据错误时，结果为1
 

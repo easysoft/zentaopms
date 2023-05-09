@@ -142,8 +142,6 @@ function zdRun($isDev = false)
         $dao = new dao();
         echo 'MySQL connect success' . PHP_EOL;
 
-        $dao->begin();
-
         /* Copy common to tmp. */
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
         if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
@@ -245,8 +243,6 @@ function zdRun($isDev = false)
             $count = $dao->exec($sql);
             echo $tableName . ' insert rows ' . $count . PHP_EOL;
         }
-
-        $dao->commit();
 
         $processor = new Processor();
         $processor->init();
