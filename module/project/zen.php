@@ -93,12 +93,12 @@ class projectZen extends project
     /**
      * Append $project to post data.
      *
-     * @param  int    $projectID
-     * @param  object $postData
+     * @param  int       $projectID
+     * @param  object    $postData
      * @access protected
      * @return object|false
      */
-    protected function prepareProject(int $projectID, object $postData, object $postExtras): object|false
+    protected function prepareProject(int $projectID, object $postData): object|false
     {
         $project = $postData->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -113,22 +113,26 @@ class projectZen extends project
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        /* Check if products and branch valid by project. */
-        if($postExtras->products && !$this->project->checkBranchAndProductValid($project, $postExtras)) return false;
-
         /* Check if products not empty. */
-        if(!$this->checkProductsNotEmpty($postExtras->products)) return false;
+        if(!$this->checkProductsNotEmpty($this->post->products)) return false;
+
+        $project->parent         = (int)$project->parent;
+        $this->post->teamMembers = $project->model == 'kanban' ? $this->post->teamMembers : array();
+
+        /* Check if products and branch valid. */
+        if(!$this->project->checkBranchAndProduct($project->parent, $this->post->products, $this->post->branch)) return false;
 
         /* Check if work days legtimate. */
         if(!$this->checkWorkdaysLegtimate($project)) return false;
 
-        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
+        if(!isset($this->config->setCode) || $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
+
         return $project;
     }
-
+    
     /**
      * Append extra data to postData.
      *
