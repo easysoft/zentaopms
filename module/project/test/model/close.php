@@ -27,22 +27,14 @@ cid=1
  - 第0条的old属性 @wait
  - 第0条的new属性 @closed
 
-- 执行$changes2
- - 第2条的field属性 @closedBy
- - 第2条的old属性 @~~
- - 第2条的new属性 @admin
-
 - 执行$changes3
  - 第0条的field属性 @status
  - 第0条的old属性 @suspended
  - 第0条的new属性 @closed
 
-- 执行$changes3
- - 第1条的field属性 @realEnd
- - 第1条的old属性 @0000-00-00
- - 第1条的new属性 @2022-10-10
+- 查看执行关闭后关闭者变更为admin @admin
 
-
+- 查看执行关闭后真实结束时间为'2022-10-10' @2022-10-10
 
 */
 
@@ -61,7 +53,11 @@ $changes1 = $tester->project->close(1, $data);
 $changes2 = $tester->project->close(5, $data);
 $changes3 = $tester->project->close(3, $data);
 
+$newPorject = $tester->project->getByID(3);
+$closedBy   = $newPorject->closedBy;
+$realEnd    = $newPorject->realEnd;
+
 r($changes1) && p('0:field,old,new') && e('status,wait,closed');
-r($changes2) && p('2:field,old,new') && e('closedBy,~~,admin');
 r($changes3) && p('0:field,old,new') && e('status,suspended,closed');
-r($changes3) && p('1:field,old,new') && e('realEnd,0000-00-00,2022-10-10');
+r($closedBy) && p() && e('admin');      //查看执行关闭后关闭者变更为admin
+r($realEnd)  && p() && e('2022-10-10'); //查看执行关闭后真实结束时间为'2022-10-10'
