@@ -627,28 +627,23 @@ class productModel extends model
     /**
      * Close product.
      *
-     * @param  int    $productID.
+     * @param  int    $productID
+     * @param  object $product    must have status field.
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function close($productID)
+    public function close(int $productID, object $product): array|false
     {
         $oldProduct = $this->getById($productID);
-        $product    = fixer::input('post')
-            ->add('id', $productID)
-            ->setDefault('status', 'closed')
-            ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
+        if(empty($product)) return false;
 
-        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_PRODUCT)->data($product)
-            ->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$productID)
+            ->where('id')->eq($productID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldProduct, $product);
+        if(dao::isError()) return false;
+        return common::createChanges($oldProduct, $product);
     }
 
     /**
