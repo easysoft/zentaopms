@@ -181,7 +181,7 @@ class todo extends control
     }
 
     /**
-     * 开启待办事项。
+     * 开始一个待办事项。
      * Start a todo.
      *
      * @param  string $todoID
@@ -206,7 +206,7 @@ class todo extends control
 
     /**
      * 激活待办事项。
-     * Activated a todo.
+     * Activate a todo.
      *
      * @param  string $todoID
      * @access public
@@ -286,9 +286,8 @@ class todo extends control
      * 获取待办的信息。
      * Get info of todo.
      *
-     * @param string $todoID
-     * @param string $from   my|company
-     *
+     * @param  string  $todoID
+     * @param  string  $from  my|company
      * @access public
      * @return void
      */
@@ -518,7 +517,7 @@ class todo extends control
     /**
      * AJAX: get actions of a todo. for web app.
      *
-     * @param  int    $todoID
+     * @param  string  $todoID
      * @access public
      * @return void
      */
@@ -531,8 +530,8 @@ class todo extends control
     /**
      * AJAX: get program id.
      *
-     * @param  int    $objectID
-     * @param  string $objectType
+     * @param  string  $objectID
+     * @param  string  $objectType
      * @access public
      * @return void
      */
@@ -546,7 +545,7 @@ class todo extends control
     /**
      * AJAX: get execution pairs.
      *
-     * @param  int    $projectID
+     * @param  string  $projectID
      * @access public
      * @return void
      */
@@ -566,7 +565,7 @@ class todo extends control
     /**
      * AJAX: get product pairs.
      *
-     * @param  int    $projectID
+     * @param  string  $projectID
      * @access public
      * @return void
      */
