@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
@@ -83,15 +83,15 @@ r($taskTester->createTest($errorEstimate, $assignedToList['single']))           
 r($taskTester->createTest($test,          $assignedToList['single'], $notMultiple, array(), $selectTestStory, array(), array(), false, false, $requiredFields)) && p('name,type,status,assignedTo') && e('测试任务一,test,wait,admin');           // 测试创建测试类型的任务
 
 /* Create a multiplayer task when mode is empty. */
-r($taskTester->createTest($devel, $assignedToList['single'], $multiple))                                                                                                       && p('mode') && e(''); // 测试多人任务团队数量小于2的情况
-r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList))                                                                                            && p('mode') && e(''); // 测试多人任务团队来源为空的情况
-r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList))                                                      && p('mode') && e(''); // 测试多人任务预计工时为空的情况
-r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList))                                   && p('mode') && e(''); // 测试多人任务预计工时为空的情况
-r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList))                && p('mode') && e(''); // 测试多人任务消耗工时为空的情况
-r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList)) && p('mode') && e(''); // 测试多人任务预计剩余为空的情况
+r($taskTester->createTest($devel, $assignedToList['single'], $multiple))                                                                                                       && p('mode') && e('^$'); // 测试多人任务团队数量小于2的情况
+r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList))                                                                                            && p('mode') && e('^$'); // 测试多人任务团队来源为空的情况
+r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList))                                                      && p('mode') && e('^$'); // 测试多人任务预计工时为空的情况
+r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList))                                   && p('mode') && e('^$'); // 测试多人任务预计工时为空的情况
+r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList))                && p('mode') && e('^$'); // 测试多人任务消耗工时为空的情况
+r($taskTester->createTest($devel, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList)) && p('mode') && e('^$'); // 测试多人任务预计剩余为空的情况
 
 /* Create a linear task. */
-r($taskTester->createTest($linearTask, $assignedToList['single'], $multiple))                                                                                                       && p('assignedTo,estimate,consumed,left') && e(',1,0,0');      // 测试多人任务团队数量小于2的情况
+r($taskTester->createTest($linearTask, $assignedToList['single'], $multiple))                                                                                                       && p('assignedTo,estimate,consumed,left') && e('^$,1,0,0');    // 测试多人任务团队数量小于2的情况
 r($taskTester->createTest($linearTask, $assignedToList['single'], $multiple, $teamList))                                                                                            && p('assignedTo,estimate,consumed,left') && e('admin,0,0,0'); // 测试多人任务团队来源为空的情况
 r($taskTester->createTest($linearTask, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList))                                                      && p('assignedTo,estimate,consumed,left') && e('admin,0,0,0'); // 测试多人任务预计工时为空的情况
 r($taskTester->createTest($linearTask, $assignedToList['single'], $multiple, $teamList, $notSelectTestStory, $teamSourceList, $teamEstimateList))                                   && p('assignedTo,estimate,consumed,left') && e('admin,6,0,6'); // 测试多人任务预计工时为空的情况

@@ -36,7 +36,7 @@ class taskZen extends task
         $oldTask  = $this->task->getByID($taskID);
         $postData = $postDataFixer->get();
 
-        if($postData->estimate < 0 or $postData->left < 0 or $postData->consumed < 0)
+        if($postData->estimate < 0 || $postData->left < 0 || $postData->consumed < 0)
         {
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
@@ -48,39 +48,39 @@ class taskZen extends task
             return !dao::isError();
         }
 
-        if(!empty($postData->lastEditedDate) and $oldTask->lastEditedDate != $postData->lastEditedDate)
+        if(!empty($postData->lastEditedDate) && $oldTask->lastEditedDate != $postData->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
 
         $task = $postDataFixer->add('id', $taskID)
-            ->setIF(!$postData->assignedTo and !empty($oldTask->team) and !empty($postDataFixer->rawdata->team), 'assignedTo', $this->task->getAssignedTo4Multi($postDataFixer->rawdata->team, $oldTask))
-            ->setIF(!$oldTask->mode and !$postData->assignedTo and !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
+            ->setIF(!$postData->assignedTo && !empty($oldTask->team) && !empty($postDataFixer->rawdata->team), 'assignedTo', $this->task->getAssignedTo4Multi($postDataFixer->rawdata->team, $oldTask))
+            ->setIF(!$oldTask->mode && !$postData->assignedTo && !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
             ->setIF(is_numeric($postData->estimate), 'estimate', (float)$postData->estimate)
             ->setIF(is_numeric($postData->consumed), 'consumed', (float)$postData->consumed)
             ->setIF(is_numeric($postData->left),     'left',     (float)$postData->left)
             ->setIF($oldTask->parent == 0 && $postData->parent == '', 'parent', 0)
-            ->setIF($postData->story != false and $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
+            ->setIF($postData->story != false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
 
             ->setIF($postData->mode   == 'single', 'mode', '')
             ->setIF($postData->status == 'done', 'left', 0)
-            ->setIF($postData->status == 'done'   and !$postData->finishedBy,   'finishedBy',   $this->app->user->account)
-            ->setIF($postData->status == 'done'   and !$postData->finishedDate, 'finishedDate', $now)
+            ->setIF($postData->status == 'done'   && !$postData->finishedBy,   'finishedBy',   $this->app->user->account)
+            ->setIF($postData->status == 'done'   && !$postData->finishedDate, 'finishedDate', $now)
 
-            ->setIF($postData->status == 'cancel' and !$postData->canceledBy,   'canceledBy',   $this->app->user->account)
-            ->setIF($postData->status == 'cancel' and !$postData->canceledDate, 'canceledDate', $now)
+            ->setIF($postData->status == 'cancel' && !$postData->canceledBy,   'canceledBy',   $this->app->user->account)
+            ->setIF($postData->status == 'cancel' && !$postData->canceledDate, 'canceledDate', $now)
             ->setIF($postData->status == 'cancel', 'assignedTo',   $oldTask->openedBy)
             ->setIF($postData->status == 'cancel', 'assignedDate', $now)
 
-            ->setIF($postData->status == 'closed' and !$postData->closedBy,     'closedBy',     $this->app->user->account)
-            ->setIF($postData->status == 'closed' and !$postData->closedDate,   'closedDate',   $now)
-            ->setIF($postData->consumed > 0 and $postData->left > 0 and $postData->status == 'wait', 'status', 'doing')
+            ->setIF($postData->status == 'closed' && !$postData->closedBy,     'closedBy',     $this->app->user->account)
+            ->setIF($postData->status == 'closed' && !$postData->closedDate,   'closedDate',   $now)
+            ->setIF($postData->consumed > 0 && $postData->left > 0 && $postData->status == 'wait', 'status', 'doing')
 
             ->setIF($postData->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
 
-            ->setIF($postData->status == 'wait' and $postData->left == $oldTask->left and $postData->consumed == 0 and $postData->estimate, 'left', $postData->estimate)
-            ->setIF($oldTask->parent > 0 and !$postData->parent, 'parent', 0)
+            ->setIF($postData->status == 'wait' && $postData->left == $oldTask->left && $postData->consumed == 0 && $postData->estimate, 'left', $postData->estimate)
+            ->setIF($oldTask->parent > 0 && !$postData->parent, 'parent', 0)
             ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
@@ -142,7 +142,7 @@ class taskZen extends task
 
         /* Prepare to assign to relevant parameters. */
         if(!isset($this->view->members[$task->assignedTo])) $this->view->members[$task->assignedTo] = $task->assignedTo;
-        if(isset($this->view->members['closed']) or $task->status == 'closed') $this->view->members['closed']  = 'Closed';
+        if(isset($this->view->members['closed']) || $task->status == 'closed') $this->view->members['closed'] = 'Closed';
 
         /* Get the executions of the task. */
         $executions = !empty($task->project) ? $this->execution->getByProject($task->project, 'all', 0, true) : array();
@@ -223,7 +223,7 @@ class taskZen extends task
      */
     protected function reponseAfterAssignTo(int $taskID, string $from): array|int
     {
-        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
         if(isonlybody()) return $this->reponseKanban($task, $from);
@@ -247,14 +247,14 @@ class taskZen extends task
 
         $task = $this->task->getByID($taskID);
         /* Compute next assignedTo. */
-        if(!empty($task->team) and strpos('done,cencel,closed', $task->status) === false)
+        if(!empty($task->team) && strpos('done,cencel,closed', $task->status) === false)
         {
             $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $members = $this->task->getMemberPairs($task);
         }
 
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
-        if(isset($members['closed']) or $task->status == 'closed') $members['closed'] = 'Closed';
+        if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
@@ -280,7 +280,7 @@ class taskZen extends task
         $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
-        if(($this->app->tab == 'execution' or $inLiteKanban) && $execution->type == 'kanban')
+        if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban')
         {
             $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
             $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
@@ -348,7 +348,7 @@ class taskZen extends task
             ->setIF($rawData->estimate != false, 'left', $rawData->estimate)
             ->setIF(isset($rawData->story), 'storyVersion', isset($rawData->story) ? $this->loadModel('story')->getVersion($rawData->story) : 0)
             ->setIF(empty($rawData->multiple) || count($team) < 1, 'mode', '')
-            ->setIF($execution && ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))), 'story', 0)
+            ->setIF($execution && ($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))), 'story', 0)
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
@@ -389,12 +389,12 @@ class taskZen extends task
         foreach($formData->name as $i => $name)
         {
             /* 给同上的变量赋值。 */
-            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
-            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
-            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
-            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
-            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
-            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
+            $story      = !isset($tasks->story[$i]) || $tasks->story[$i] == 'ditto'            ? $story      : $tasks->story[$i];
+            $module     = !isset($tasks->module[$i]) || $tasks->module[$i] == 'ditto'          ? $module     : $tasks->module[$i];
+            $type       = !isset($tasks->type[$i]) || $tasks->type[$i] == 'ditto'              ? $type       : $tasks->type[$i];
+            $assignedTo = !isset($tasks->assignedTo[$i]) || $tasks->assignedTo[$i] == 'ditto'  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = !isset($tasks->estStarted[$i]) || isset($tasks->estStartedDitto[$i]) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = !isset($tasks->deadline[$i]) || isset($tasks->deadlineDitto[$i])     ? $deadline   : $tasks->deadline[$i];
 
             /* 检查任务名称为空的数据。 */
             if(empty($tasks->name[$i]))
@@ -435,12 +435,12 @@ class taskZen extends task
             /* 过滤事务型和任务名称为空的数据。 */
             if(empty($tasks->name[$key])) continue;
             if($tasks->type[$key] == 'affair') continue;
-            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
 
             if($storyID == 'ditto') $storyID = $preStory;
             $preStory = $storyID;
 
-            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
+            if(!isset($tasks->story[$key - 1]) && $key > 1 && !empty($tasks->name[$key - 1]))
             {
                 $storyIDs[]  = 0;
                 $taskNames[] = $tasks->name[$key - 1];
@@ -448,7 +448,7 @@ class taskZen extends task
 
             /* 判断Post传过来的任务有没有重复数据。 */
             $hasExistsName = in_array($tasks->name[$key], $taskNames);
-            if($hasExistsName and in_array($storyID, $storyIDs))
+            if($hasExistsName && in_array($storyID, $storyIDs))
             {
                 dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
                 return false;
@@ -503,8 +503,8 @@ class taskZen extends task
         $task->version    = 1;
         if($story) $task->storyVersion = (int)$this->dao->findById($task->story)->from(TABLE_STORY)->fetch('version');
         if($assignedTo) $task->assignedDate = $now;
-        if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $task->estStarted = '';
-        if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $task->deadline   = '';
+        if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false && empty($estStarted)) $task->estStarted = '';
+        if(strpos($this->config->task->create->requiredFields, 'deadline') !== false && empty($deadline))     $task->deadline   = '';
         if(isset($tasks->lanes[$index])) $task->laneID = $tasks->lanes[$index];
 
         /* 附加工作流字段。 */
@@ -567,7 +567,7 @@ class taskZen extends task
     protected function checkDuplicateName($task): int
     {
         /* Check duplicate task. */
-        if($task->type == 'affair' or !$task->name) return 0;
+        if($task->type == 'affair' || !$task->name) return 0;
         $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$task->execution} and story=" . (int)$task->story . (isset($task->feedback) ? " and feedback=" . (int)$task->feedback : ''));
         if($result['stop']) return zget($result, 'duplicate', 0);
         return 0;
@@ -643,7 +643,7 @@ class taskZen extends task
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Return task id when call the API. */
-        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
 
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
@@ -656,7 +656,7 @@ class taskZen extends task
         if(isonlybody())
         {
             /* If it is Kanban execution, refresh the Kanban statically through callback. */
-            if($this->app->tab == 'execution' or $this->config->vision == 'lite')
+            if($this->app->tab == 'execution' || $this->config->vision == 'lite')
             {
                 $kanbanData = $this->getKanbanData($execution);
                 $response['closeModal'] = true;
@@ -747,7 +747,7 @@ class taskZen extends task
         /* Get module information. */
         $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
-        if(!$storyID and !isset($moduleOptionMenu[$task->module])) $task->module = 0;
+        if(!$storyID && !isset($moduleOptionMenu[$task->module])) $task->module = 0;
 
         /* Display relevant variables. */
         $this->assignExecution4Create($execution);
@@ -844,7 +844,7 @@ class taskZen extends task
         $projectID     = $execution ? $execution->project : 0;
         $lifetimeList  = array();
         $attributeList = array();
-        if(!empty($projectID))
+        if($projectID)
         {
             $executionKey  = 0;
             $executions    = $this->execution->getByProject($projectID, 'all', 0, true);
@@ -896,7 +896,7 @@ class taskZen extends task
         $testStories     = array();
         foreach($stories as $testStoryID => $storyTitle)
         {
-            if(empty($testStoryID) or isset($testStoryIdList[$testStoryID])) continue;
+            if(empty($testStoryID) || isset($testStoryIdList[$testStoryID])) continue;
             $testStories[$testStoryID] = $storyTitle;
         }
         $this->view->testStories     = $testStories;
@@ -1037,13 +1037,13 @@ class taskZen extends task
         $customFormField = 'custom' . ucfirst($action). 'Fields';
         foreach(explode(',', $this->config->task->{$customFormField}) as $field)
         {
-            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+            if($execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
             $customFields[$field] = $this->lang->task->$field;
         }
 
         /* 设置已勾选的自定义字段。 */
         $showFields = $this->config->task->custom->{$action . 'Fields'};
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
+        if($execution->lifetime == 'ops' || $execution->attribute == 'request' || $execution->attribute == 'review')
         {
             unset($customFields['story']);
             $showFields = str_replace(',story,', ',', ",{$showFields},");
@@ -1122,7 +1122,7 @@ class taskZen extends task
         {
             $link = $this->createLink('my', 'work', 'mode=task');
         }
-        elseif($this->app->tab == 'project' and $execution->multiple)
+        elseif($this->app->tab == 'project' && $execution->multiple)
         {
             $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         }
