@@ -635,7 +635,7 @@ class taskZen extends task
                 $this->checkEstStartedAndDeadline($task->execuiton, $task->estStarted, $task->deadline);
                 if(dao::isError())
                 {
-                    foreach(dao::getError() as $field => $error)
+                    foreach(dao::getError() as $error)
                     {
                         dao::$errors[] = "ID: {$task->story} {$error}";
                         return false;
