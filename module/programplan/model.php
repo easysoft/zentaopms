@@ -127,12 +127,12 @@ class programplanModel extends model
 
             $paths    = array_slice(explode(',', trim($plan->path, ',')), 1);
             $planName = '';
-           
+
             foreach($paths as $path)
             {
                 if(isset($plans[$path])) $planName .= '/' . $plans[$path]->name;
             }
-           
+
             $pairs[$planID] = $planName;
         }
 
@@ -512,7 +512,7 @@ class programplanModel extends model
      * 创建/设置一个项目阶段。
      * Create/Set a project plan/phase.
      *
-     * @param  array  $formData
+     * @param  form  $formData
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
@@ -524,7 +524,7 @@ class programplanModel extends model
         /* Get every value from formData without use extract(). */
         $planIDList     = $formData->get('planIDList');
         $names          = $formData->get('names');
-        $PM             = $formData->get('PM');
+        $projectManager = $formData->get('PM');
         $percents       = $formData->get('percents');
         $attributes     = $formData->get('attributes');
         $acl            = $formData->get('acl');
@@ -577,7 +577,7 @@ class programplanModel extends model
             $plan->milestone  = $milestone[$key];
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
-            $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->PM         = empty($projectManager[$key]) ? '' : $projectManager[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
             if($setCode)    $plan->code    = $codes[$key];
