@@ -173,7 +173,7 @@ class caselibModel extends model
     }
 
     /**
-     * 创建用例库，插入一个用例库对象到数据库
+     * 创建用例库，插入一个用例库对象到数据库。
      * Create a lib case, insert a lib object into database.
      *
      * @param  object $lib

@@ -23,8 +23,8 @@ class caselib extends control
     }
 
     /**
-     * 创建一个用例库
-     * Create a lib
+     * 创建一个用例库。
+     * Create a lib.
      *
      * @access public
      * @return void
@@ -33,7 +33,7 @@ class caselib extends control
     {
         if(!empty($_POST))
         {
-            /* TODO:getExtendFields */
+            /* TODO:getExtendFields. */
             $data = form::data($this->config->caselib->form->create);
             $lib  = $this->caselibZen->prepareCreateExtras($data, $this->post->uid);
 

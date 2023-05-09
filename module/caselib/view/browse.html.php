@@ -133,7 +133,7 @@ js::set('flow',          $config->global->flow);
               <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
               <?php
               $extendFields = $this->caselib->getFlowExtendFields();
-              foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
+              foreach($extendFields as $extendField) {echo "<th>{$extendField->name}</th>"};
               ?>
               <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
             </tr>
@@ -157,7 +157,7 @@ js::set('flow',          $config->global->flow);
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <td title="<?php echo zget($users, $case->openedBy);?>"><?php echo zget($users, $case->openedBy);?></td>
-              <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
+              <?php foreach($extendFields as $extendField) {echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";}?>
               <td class='c-actions'>
                 <?php echo $this->caselib->buildOperateMenu($case, 'browse');?>
               </td>
