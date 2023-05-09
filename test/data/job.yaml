@@ -123,20 +123,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: editedDate
-    note: "编辑日期"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: lastExec
-    note: "最后执行时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: lastStatus
     note: "最后执行状态"
     range: "a-z"
