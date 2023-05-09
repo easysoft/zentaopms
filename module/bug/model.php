@@ -1291,7 +1291,7 @@ class bugModel extends model
      *
      * @param  int       $executionId
      * @param  string    $extra
-     * @param  string    $extra
+     * @param  string    $from
      * @access public
      * @return viod
      */
