@@ -16,6 +16,10 @@ $config->task->edit->requiredFields        = $config->task->create->requiredFiel
 $config->task->finish->requiredFields      = 'realStarted,finishedDate,currentConsumed';
 $config->task->activate->requiredFields    = 'left';
 
+/* Default value. */
+$config->task->default  = new stdclass();
+$config->task->default->pri = 3;
+
 $config->task->editor = new stdclass();
 $config->task->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->edit     = array('id' => 'desc,comment', 'tools' => 'simpleTools');

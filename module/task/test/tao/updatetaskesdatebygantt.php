@@ -22,10 +22,6 @@ function initData()
     $project->gen(10);
 }
 
-function insertDate($taskID, $estStarted, $deadline)
-{
-}
-
 function getByID($taskID)
 {
     global $tester;

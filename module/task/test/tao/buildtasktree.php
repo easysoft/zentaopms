@@ -22,25 +22,6 @@ title=taskModel->buildTaskTree();
 timeout=0
 cid=1
 
-sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
-- 测试空数据的情况 @0
-
-- 测试数据中有父任务时，重构结构后的任务数量 @6
-
-- 测试数据中有父任务时，重构结构后子任务的数据第children[4]条的name属性 @子任务4
-
-- 测试数据中没有父任务时，重构结构后的任务数量 @6
-
-- 测试数据中没有父任务时，重构结构后的子任务中父任务的名称第4条的parentName属性 @父任务1
-
-- 测试数据中有父子任务时，重构结构后的子任务中父任务的名称第1条的name属性 @父任务1
-
-- 测试数据中有父子任务时，重构结构后的任务数量 @2
-
-- 测试数据中只有父任务时，重构结构后的父任务的名称第1条的name属性 @父任务1
-
-- 测试数据中只有父任务时，重构结构后的任务数量 @3
-
 */
 
 $taskTester = new taskTest();

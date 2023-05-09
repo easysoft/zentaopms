@@ -28,17 +28,6 @@ title=taskModel->getAssignedTo4Multi();
 timeout=0
 cid=1
 
-sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
-- 测试获取并行任务的指派人 @admin
-
-- 测试获取串行任务的当前指派人 @dev01
-
-- 测试获取并行任务的下一个指派人 @dev02
-
-- 测试获取已完成的串行任务的当前指派人 @dev01
-
-- 测试获取普通任务的指派人 @admin
-
 */
 
 $taskTester = new taskTest();

@@ -330,142 +330,6 @@ class taskZen extends task
     }
 
     /**
-     * 通过传入的对象ID设置任务信息。
-     * Set task information through the incoming object ID.
-     *
-     * @param  int       $storyID
-     * @param  int       $moduleID
-     * @param  int       $taskID
-     * @param  int       $todoID
-     * @param  int       $bugID
-     * @access protected
-     * @return object
-     */
-    protected function setTaskInfoByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
-    {
-        $task = $this->config->task->create->template;
-        $task->module = $moduleID;
-
-        /* If exist task, copy task information by task id. */
-        if($taskID)
-        {
-            /* Emptying consumed hours when copy task. */
-            $task = $this->task->getByID($taskID);
-            if($task->mode == 'multi')
-            {
-                foreach($task->team as $teamMember) $teamMember->consumed = 0;
-            }
-        }
-
-        /* If exist todo, copy todo information by todo id. */
-        if($todoID)
-        {
-            $todo = $this->loadModel('todo')->getById($todoID);
-            $task->name = $todo->name;
-            $task->pri  = $todo->pri;
-            $task->desc = $todo->desc;
-        }
-
-        /* If exist bug, copy bug information by bug id. */
-        if($bugID)
-        {
-            $bug = $this->loadModel('bug')->getById($bugID);
-            $task->name       = $bug->title;
-            $task->pri        = !empty($bug->pri) ? $bug->pri : '3';
-            $task->assignedTo = array($bug->assignedTo);
-        }
-
-        /* If exist story, copy story module by story id. */
-        if($storyID)
-        {
-            $task->story  = $storyID;
-            $task->module = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch('module');
-        }
-        elseif(!$moduleID)
-        {
-            $task->module = (int)$this->cookie->lastTaskModule;
-        }
-
-        return $task;
-    }
-
-    /**
-     * 展示看板相关变量。
-     * Show related variable about the Kanban.
-     *
-     * @param  int     $executionID
-     * @param  array   $output
-     * @access protected
-     * @return void
-     */
-    protected function showKanbanRelatedVars(int $executionID, array $output): void
-    {
-        $this->loadModel('kanban');
-
-        $regionID    = isset($output['regionID']) ? (int)$output['regionID'] : 0;
-        $laneID      = isset($output['laneID'])   ? (int)$output['laneID']   : 0;
-        $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
-        $regionID    = $regionID ? $regionID : key($regionPairs);
-        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
-        $laneID      = $laneID ? $laneID : key($lanePairs);
-
-        $this->view->regionID    = $regionID;
-        $this->view->laneID      = $laneID;
-        $this->view->regionPairs = $regionPairs;
-        $this->view->lanePairs   = $lanePairs;
-    }
-
-    /**
-     * 展示执行相关数据。
-     * Show execution related data.
-     *
-     * @param  object    $execution
-     * @access protected
-     * @return void
-     */
-    protected function showExecutionData(object $execution): void
-    {
-        $projectID     = $execution ? $execution->project : 0;
-        $lifetimeList  = array();
-        $attributeList = array();
-        if(!empty($projectID))
-        {
-            $executionKey  = 0;
-            $executions    = $this->execution->getByProject($projectID, 'all', 0, true);
-            $executionList = $this->execution->getByIdList(array_keys($executions));
-            foreach($executionList as $executionItem)
-            {
-                if(!common::canModify('execution', $executionItem)) $executionKey = $executionItem->id;
-                if($executionKey) unset($executions[$executionKey]);
-                if(!$executionKey) continue;
-
-                $lifetimeList[$executionKey]  = $executionItem->lifetime;
-                $attributeList[$executionKey] = $executionItem->attribute;
-            }
-        }
-        else
-        {
-            $executions    = $this->executionPairs;
-            $executionList = $this->execution->getByIdList(array_keys($executions));
-            foreach($executionList as $executionItem)
-            {
-                $executionKey = $executionItem->id;
-                $lifetimeList[$executionKey]  = $executionItem->lifetime;
-                $attributeList[$executionKey] = $executionItem->attribute;
-            }
-        }
-
-        $this->view->projectID     = $projectID;
-        $this->view->executions    = $executions;
-        $this->view->lifetimeList  = $lifetimeList;
-        $this->view->attributeList = $attributeList;
-        $this->view->productID     = $this->loadModel('product')->getProductIDByProject($projectID);
-        $this->view->features      = $this->execution->getExecutionFeatures($execution);
-        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $this->view->members       = $this->user->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
-    }
-
-    /**
      * 处理创建任务的请求数据。
      * Process the request data for the creation task.
      *
@@ -488,8 +352,8 @@ class taskZen extends task
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
-        if(empty($formData->estStarted)) unset($task->estStarted);
-        if(empty($formData->deadline)) unset($task->deadline);
+        if(empty($formData->estStarted)) $task->estStarted = null;
+        if(empty($formData->deadline)) $task->deadline = null;
 
         /* Processing image link. */
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $rawData->uid);
@@ -657,7 +521,7 @@ class taskZen extends task
 
     /**
      * 检查传入的创建数据是否符合要求。
-     * Check if the incoming creation data meets the requirements.
+     * Check if the input post meets the requirements.
      *
      * @param  int     $executionID
      * @param  float   $estimate
@@ -706,45 +570,7 @@ class taskZen extends task
         if($task->type == 'affair' or !$task->name) return 0;
         $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$task->execution} and story=" . (int)$task->story . (isset($task->feedback) ? " and feedback=" . (int)$task->feedback : ''));
         if($result['stop']) return zget($result, 'duplicate', 0);
-    }
-
-    /**
-     * 处理关联需求的测试子任务的请求数据。
-     * Process request data for test subtasks related to stories.
-     *
-     * @param  int       $executionID
-     * @param  object    $formData
-     * @access protected
-     * @return array|bool
-     */
-    protected function prepareTestTasks4Create(int $executionID, object $formData): array|bool
-    {
-        /* Set data for the type of test task that has linked stories. */
-        $testTasks = array();
-        $rawData   = $formData->rawdata;
-        foreach($rawData->testStory as $i => $storyID)
-        {
-            if(empty($storyID)) continue;
-
-            /* Process the ditto option as a concrete value. */
-            $estStarted = !isset($rawData->testEstStarted[$i]) || (isset($rawData->estStartedDitto[$i]) && $rawData->estStartedDitto[$i] == 'on') ? $estStarted : $rawData->testEstStarted[$i];
-            $deadline   = !isset($rawData->testDeadline[$i]) || (isset($rawData->deadlineDitto[$i]) && $rawData->deadlineDitto[$i] == 'on') ? $deadline : $rawData->testDeadline[$i];
-            $assignedTo = !isset($rawData->testAssignedTo[$i]) || $rawData->testAssignedTo[$i] == 'ditto' ? $assignedTo : $rawData->testAssignedTo[$i];
-
-            /* Set task data. */
-            $task = new stdclass();
-            $task->execution  = $executionID;
-            $task->story      = $storyID;
-            $task->pri        = $rawData->testPri[$i];
-            $task->estStarted = $estStarted;
-            $task->deadline   = $deadline;
-            $task->assignedTo = $assignedTo;
-            $task->estimate   = (float)$rawData->testEstimate[$i];
-            $task->left       = (float)$rawData->testEstimate[$i];
-
-            $testTasks[$storyID] = $task;
-        }
-        return $testTasks;
+        return 0;
     }
 
     /**
@@ -817,14 +643,13 @@ class taskZen extends task
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Return task id when call the API. */
-        $taskID = $task->id;
-        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID);
+        if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
 
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
 
         /* Send Webhook notifications. */
-        $message = $this->executeHooks($taskID);
+        $message = $this->executeHooks($task->id);
         if($message) $response['message'] = $message;
 
         /* Processing the return information of pop-up windows. */
@@ -845,12 +670,12 @@ class taskZen extends task
         /* Locate the browser. */
         if($this->app->getViewType() == 'xhtml')
         {
-            $response['locate'] = $this->createLink('task', 'view', "taskID=$taskID", 'html');
+            $response['locate'] = $this->createLink('task', 'view', "taskID={$task->id}", 'html');
             return $response;
         }
 
         /* Process the return information for selecting a jump after creation. */
-        return $this->getLocateAfterCreate($task, $execution->id, $afterChoice);
+        return $this->generalCreateResponse($task, $execution->id, $afterChoice);
     }
 
     /**
@@ -863,7 +688,7 @@ class taskZen extends task
      * @access protected
      * @return array
      */
-    protected function getLocateAfterCreate(object $task, int $executionID, string $afterChoice): array
+    protected function generalCreateResponse(object $task, int $executionID, string $afterChoice): array
     {
         /* Set the universal return value. */
         $response['result']  = 'success';
@@ -900,29 +725,6 @@ class taskZen extends task
     }
 
     /**
-     * 展示需求相关变量。
-     * Show requirements related variables.
-     *
-     * @param  int       $executionID
-     * @access protected
-     * @return void
-     */
-    protected function showStoryVars(int $executionID): void
-    {
-        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
-        $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $executionID);
-        $testStories     = array();
-        foreach($stories as $testStoryID => $storyTitle)
-        {
-            if(empty($testStoryID) or isset($testStoryIdList[$testStoryID])) continue;
-            $testStories[$testStoryID] = $storyTitle;
-        }
-        $this->view->testStories     = $testStories;
-        $this->view->testStoryIdList = $testStoryIdList;
-        $this->view->stories         = $stories;
-    }
-
-    /**
      * 展示创建任务的相关变量。
      * Show the variables associated with the creation task.
      *
@@ -936,11 +738,11 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function showCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output): void
+    protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output): void
     {
         /* Get information about the task. */
         $executionID = $execution->id;
-        $task        = $this->setTaskInfoByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $task        = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
 
         /* Get module information. */
         $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
@@ -948,9 +750,9 @@ class taskZen extends task
         if(!$storyID and !isset($moduleOptionMenu[$task->module])) $task->module = 0;
 
         /* Display relevant variables. */
-        $this->showExecutionData($execution);
-        $this->showStoryVars($executionID);
-        if($execution->type == 'kanban') $this->showKanbanRelatedVars($executionID, $output);
+        $this->assignExecution4Create($execution);
+        $this->assignStory4Create($executionID);
+        if($execution->type == 'kanban') $this->assignKanban4Create($executionID, $output);
 
         /* Set Custom fields. */
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
@@ -970,8 +772,167 @@ class taskZen extends task
     }
 
     /**
+     * 通过传入的对象ID设置任务信息。
+     * Set task through the input object ID.
+     *
+     * @param  int       $storyID
+     * @param  int       $moduleID
+     * @param  int       $taskID
+     * @param  int       $todoID
+     * @param  int       $bugID
+     * @access protected
+     * @return object
+     */
+    protected function setTaskByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
+    {
+        $task = $this->config->task->create->template;
+        $task->module = $moduleID;
+
+        /* If exist task, copy task information by task id. */
+        if($taskID)
+        {
+            /* Emptying consumed hours when copy task. */
+            $task = $this->task->getByID($taskID);
+            if($task->mode == 'multi')
+            {
+                foreach($task->team as $teamMember) $teamMember->consumed = 0;
+            }
+        }
+
+        /* If exist todo, copy todo information by todo id. */
+        if($todoID)
+        {
+            $todo = $this->loadModel('todo')->getById($todoID);
+            $task->name = $todo->name;
+            $task->pri  = $todo->pri;
+            $task->desc = $todo->desc;
+        }
+
+        /* If exist bug, copy bug information by bug id. */
+        if($bugID)
+        {
+            $bug = $this->loadModel('bug')->getById($bugID);
+            $task->name       = $bug->title;
+            $task->pri        = !empty($bug->pri) ? $bug->pri : $this->config->task->default->pri;
+            $task->assignedTo = array($bug->assignedTo);
+        }
+
+        /* If exist story, copy story module by story id. */
+        if($storyID)
+        {
+            $task->story  = $storyID;
+            $task->module = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch('module');
+        }
+        elseif(!$moduleID)
+        {
+            $task->module = (int)$this->cookie->lastTaskModule;
+        }
+
+        return $task;
+    }
+
+    /**
+     * 设置创建页面展示的执行相关数据。
+     * Set the execution-related data for the create page display.
+     *
+     * @param  object    $execution
+     * @access protected
+     * @return void
+     */
+    protected function assignExecution4Create(object $execution): void
+    {
+        $projectID     = $execution ? $execution->project : 0;
+        $lifetimeList  = array();
+        $attributeList = array();
+        if(!empty($projectID))
+        {
+            $executionKey  = 0;
+            $executions    = $this->execution->getByProject($projectID, 'all', 0, true);
+            $executionList = $this->execution->getByIdList(array_keys($executions));
+            foreach($executionList as $executionItem)
+            {
+                if(!common::canModify('execution', $executionItem)) $executionKey = $executionItem->id;
+                if($executionKey) unset($executions[$executionKey]);
+                if(!$executionKey) continue;
+
+                $lifetimeList[$executionKey]  = $executionItem->lifetime;
+                $attributeList[$executionKey] = $executionItem->attribute;
+            }
+        }
+        else
+        {
+            $executions    = $this->executionPairs;
+            $executionList = $this->execution->getByIdList(array_keys($executions));
+            foreach($executionList as $executionItem)
+            {
+                $executionKey = $executionItem->id;
+                $lifetimeList[$executionKey]  = $executionItem->lifetime;
+                $attributeList[$executionKey] = $executionItem->attribute;
+            }
+        }
+
+        $this->view->projectID     = $projectID;
+        $this->view->executions    = $executions;
+        $this->view->lifetimeList  = $lifetimeList;
+        $this->view->attributeList = $attributeList;
+        $this->view->productID     = $this->loadModel('product')->getProductIDByProject($projectID);
+        $this->view->features      = $this->execution->getExecutionFeatures($execution);
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->members       = $this->user->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
+    }
+
+    /**
+     * 设置创建页面展示的需求相关数据。
+     * Set the stories related data for the create page display.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function assignStory4Create(int $executionID): void
+    {
+        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
+        $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $executionID);
+        $testStories     = array();
+        foreach($stories as $testStoryID => $storyTitle)
+        {
+            if(empty($testStoryID) or isset($testStoryIdList[$testStoryID])) continue;
+            $testStories[$testStoryID] = $storyTitle;
+        }
+        $this->view->testStories     = $testStories;
+        $this->view->testStoryIdList = $testStoryIdList;
+        $this->view->stories         = $stories;
+    }
+
+    /**
+     * 设置创建页面展示的看板相关数据。
+     * Set Kanban related data for create page display.
+     *
+     * @param  int       $executionID
+     * @param  array     $output
+     * @access protected
+     * @return void
+     */
+    protected function assignKanban4Create(int $executionID, array $output): void
+    {
+        $this->loadModel('kanban');
+
+        $regionID    = (int)$output['regionID'];
+        $laneID      = (int)$output['laneID'];
+        $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+        $regionID    = $regionID ? $regionID : key($regionPairs);
+        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
+        $laneID      = $laneID ? $laneID : key($lanePairs);
+
+        $this->view->regionID    = $regionID;
+        $this->view->laneID      = $laneID;
+        $this->view->regionPairs = $regionPairs;
+        $this->view->lanePairs   = $lanePairs;
+    }
+
+    /**
      * 准备创建任务前的数据信息。
-     * Prepare the data information before creating the task.
+     * Prepare the data before create the task.
      *
      * @param  int       $executionID
      * @param  float     $estimate
@@ -983,7 +944,7 @@ class taskZen extends task
      */
     protected function prepareCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): bool|array
     {
-        /* Check if the incoming creation data meets the requirements. */
+        /* Check if the input post data meets the requirements. */
         $result = $this->checkCreate($executionID, $estimate, $estStarted, $deadline);
         if(!$result) return false;
 
@@ -1001,9 +962,48 @@ class taskZen extends task
         }
 
         /* Check whether a task with the same name is created within the specified time. */
-        $existTaskID = $this->checkDuplicateName($task);
+        $duplicateTaskID = $this->checkDuplicateName($task);
 
-        return array($task, $testTasks, $existTaskID);
+        return array($task, $testTasks, $duplicateTaskID);
+    }
+
+    /**
+     * 处理关联需求的测试子任务的请求数据。
+     * Process request data for test subtasks related to stories.
+     *
+     * @param  int       $executionID
+     * @param  object    $formData
+     * @access protected
+     * @return array|bool
+     */
+    protected function prepareTestTasks4Create(int $executionID, object $formData): array|bool
+    {
+        /* Set data for the type of test task that has linked stories. */
+        $testTasks = array();
+        $rawData   = $formData->rawdata;
+        foreach($rawData->testStory as $key => $storyID)
+        {
+            if(empty($storyID)) continue;
+
+            /* Process the ditto option as a concrete value. */
+            $estStarted = !isset($rawData->testEstStarted[$key]) || (isset($rawData->estStartedDitto[$key]) && $rawData->estStartedDitto[$key] == 'on') ? $estStarted : $rawData->testEstStarted[$key];
+            $deadline   = !isset($rawData->testDeadline[$key]) || (isset($rawData->deadlineDitto[$key]) && $rawData->deadlineDitto[$key] == 'on') ? $deadline : $rawData->testDeadline[$key];
+            $assignedTo = !isset($rawData->testAssignedTo[$key]) || $rawData->testAssignedTo[$key] == 'ditto' ? $assignedTo : $rawData->testAssignedTo[$key];
+
+            /* Set task data. */
+            $task = new stdclass();
+            $task->execution  = $executionID;
+            $task->story      = $storyID;
+            $task->pri        = $rawData->testPri[$key];
+            $task->estStarted = $estStarted;
+            $task->deadline   = $deadline;
+            $task->assignedTo = $assignedTo;
+            $task->estimate   = (float)$rawData->testEstimate[$key];
+            $task->left       = (float)$rawData->testEstimate[$key];
+
+            $testTasks[$storyID] = $task;
+        }
+        return $testTasks;
     }
 
     /**
@@ -1068,7 +1068,7 @@ class taskZen extends task
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。 */
-        if($execution->type == 'kanban') $this->showKanbanRelatedVars($execution->id, $output);
+        if($execution->type == 'kanban') $this->assignKanbanRelatedVars($execution->id, $output);
 
         /* 任务拆解。 */
         if($taskID)

@@ -69,8 +69,8 @@ class task extends control
             $result = $this->taskZen->prepareCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            list($task, $testTasks, $existTaskID) = $result;
-            if($existTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$existTaskID}")));
+            list($task, $testTasks, $duplicateTaskID) = $result;
+            if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$existTaskID}")));
 
             /* Create task. */
             $taskIdList = $this->task->create($task, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
@@ -80,16 +80,16 @@ class task extends control
             $task->id = current($taskIdList);
             $columnID = isset($output['columnID']) ? (int)$output['columnID'] : 0;
             $this->task->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
-            $this->task->updateKanbanData($execution, $task, (int)$_POST['lane'], $columnID);
-            setcookie('lastTaskModule', (int)$_POST['module'], $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            $this->task->updateKanbanData($execution, $task, (int)$this->post->lane, $columnID);
+            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Get the information returned after a task is created. */
-            $response = $this->taskZen->responseAfterCreate($task, $execution, $_POST['after']);
+            $response = $this->taskZen->responseAfterCreate($task, $execution, $this->post->after);
             return $this->send($response);
         }
 
         /* Shows the variables needed to create the task page. */
-        $this->taskZen->showCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output);
+        $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output);
     }
 
     /**
