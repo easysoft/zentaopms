@@ -14,6 +14,8 @@ fields:
       range: 'wait,doing,closed,suspended'
     - field: parent
       range: 0, 1, 0, 3, 3, 0
+    - field: multiple
+      range: 0
     - field: path
       range: '`,1,`, `,1,2,`, `,3,`, `,3,4,`, `,3,4,5,`, `,6,`'
     - field: hasProduct
