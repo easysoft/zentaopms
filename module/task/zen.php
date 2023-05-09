@@ -426,9 +426,9 @@ class taskZen extends task
      */
     protected function removeDuplicate4BatchCreate(object $execution, object $tasks): object|false
     {
-        $storyIDs  = array();
-        $taskNames = array();
-        $preStory  = 0;
+        $storyIdList = array();
+        $taskNames   = array();
+        $preStory    = 0;
 
         foreach($tasks->story as $key => $storyID)
         {
@@ -442,24 +442,25 @@ class taskZen extends task
 
             if(!isset($tasks->story[$key - 1]) && $key > 1 && !empty($tasks->name[$key - 1]))
             {
-                $storyIDs[]  = 0;
-                $taskNames[] = $tasks->name[$key - 1];
+                $storyIdList[] = 0;
+                $taskNames[]   = $tasks->name[$key - 1];
             }
 
             /* 判断Post传过来的任务有没有重复数据。 */
             $hasExistsName = in_array($tasks->name[$key], $taskNames);
-            if($hasExistsName && in_array($storyID, $storyIDs))
+            if($hasExistsName && in_array($storyID, $storyIdList))
             {
                 dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
                 return false;
             }
 
-            $storyIDs[]  = $storyID;
-            $taskNames[] = $tasks->name[$key];
+            $storyIdList[] = $storyID;
+            $taskNames[]   = $tasks->name[$key];
         }
 
         /* 去重并赋值。 */
-        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "execution={$execution->id} and story " . helper::dbIN($storyIDs));
+        $querySQL = "execution={$execution->id} and story "  . helper::dbIN($storyIdList);
+        $result   = $this->loadModel('common')->removeDuplicate('task', $tasks, $querySQL);
         return $result['data'];
     }
 
