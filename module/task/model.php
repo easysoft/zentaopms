@@ -90,7 +90,7 @@ class taskModel extends model
         if(!empty($team))
         {
             /* Get members, old team and current task. */
-            $members     = array_map(function($member){return $member->account;}, $team);
+            $members     = array_column($team, 'account');
             $oldTeam     = zget($oldTask, 'team', array());
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
@@ -474,7 +474,7 @@ class taskModel extends model
     {
         /* Get old team member, and delete old task team. */
         $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
-        $oldMembers = array_map(function($team){return $team->account;}, $oldTeams);
+        $oldMembers = array_column($oldTeams, 'account');
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         /* If status of the task is doing, get the person who did not complete the task. */
@@ -2311,7 +2311,7 @@ class taskModel extends model
         /* Check for add effort. */
         if(empty($effort))
         {
-            $members = array_map(function($member){ return $member->account; }, $task->team);
+            $members = array_column($task->team, 'account');
             if(!in_array($this->app->user->account, $members)) return false;
             if($task->mode == 'linear' and $this->app->user->account != $task->assignedTo) return false;
             return true;

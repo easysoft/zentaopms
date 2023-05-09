@@ -451,7 +451,7 @@ class taskTao extends taskModel
         /* Format task team members. */
         if(!is_array($members)) $members = explode(',', trim($members, ','));
         $members = array_values($members);
-        if(is_object($members[0])) $members = array_map(function($member){return $member->account;}, $members);
+        if(is_object($members[0])) $members = array_column($members, 'account');
 
         /* Get the member of the first unfinished task. */
         $teamHours = array_values($task->team);
