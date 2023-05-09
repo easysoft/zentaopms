@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 5) . "/test/lib/init.php";
 su('admin');
 
 function initData()
@@ -44,6 +44,6 @@ $tester->loadModel('block');
 
 initData();
 
-r($tester->block->getByID(2)) && p('account,vision,dashboard,module,code,title,order') && e('admin,rnd,my,project,list,区块名称2,1'); // 测试获取正常的block的内容
-r($tester->block->getByID(4)) && p('order') && e('3'); // 测试获取正常的block的内容
-r($tester->block->getByID(6)) && p('') && e('0'); // 测试获取不存在的block的内容
+r($tester->block->getByID(2)) && p('account,vision,dashboard,module,code,title,order') && e('admin,rnd,my,project,list,区块名称2,1');        // 测试获取正常的block的内容
+r($tester->block->getByID(4)) && p('order') && e('3');        // 测试获取正常的block的内容
+r($tester->block->getByID(6)) && p('') && e('0');        // 测试获取不存在的block的内容

@@ -3,13 +3,13 @@ declare(strict_types=1);
 class blockTao extends blockModel
 {
     /**
-     * 获取当前用户的区块列表。
+     * 获取当前用户的区块列表.
      * Get block list of current user.
      *
      * @param  string $dashboard
      * @param  int    $hidden 0|1
      * @access protected
-     * @return array|false
+     * @return int[]|false
      */
     protected function fetchMyBlocks(string $dashboard, int $hidden = 0): array|false
     {
@@ -23,7 +23,6 @@ class blockTao extends blockModel
     }
 
     /**
-     * 新增一个区块。
      * Insert a block data.
      *
      * @param  object $formData
@@ -37,6 +36,6 @@ class blockTao extends blockModel
             ->batchCheck($this->config->block->create->requiredFields, 'notempty')
             ->exec();
 
-        return !dao::isError();
+        return true;
     }
 }

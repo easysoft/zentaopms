@@ -16,12 +16,8 @@ class blockZen extends block
         if($dashboard != 'my') return array();
 
         $modules = $this->lang->block->moduleList;
-
         /* Unable to display the doc module on my dashboard. */
         unset($modules['doc']);
-
-        if($this->config->global->flow != 'full') unset($modules['guide']);
-        if($this->config->vision != 'rnd')        unset($modules['contribute']);
 
         /* 从配置项中取出不同模块的首页对应的控制器方法。*/
         /* Retrieve the controller method corresponding to the homepage of different modules from the configuration item.*/
@@ -30,7 +26,6 @@ class blockZen extends block
         list($projectModule, $projectMethod)     = explode('-', $this->config->projectLink);
         list($executionModule, $executionMethod) = explode('-', $this->config->executionLink);
 
-        $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
         foreach($modules as $moduleKey => $moduleName)
         {
             if($moduleKey == 'todo') continue;
@@ -45,11 +40,17 @@ class blockZen extends block
 
             /* After obtaining module permissions, it is necessary to verify whether there is permission for the module homepage. */
             if(!common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
-
-            /* 被永久关闭的区块删除对应选项。 */
-            /* Delete corresponding options for blocks that have been permanently closed. */
-            if(strpos(",$closedBlock,", ",$moduleKey|$moduleKey,") !== false) unset($modules[$moduleKey]);
         }
+
+        /* 判断区块是否被永久关闭，如果未被永久关闭则添加相应选项。*/
+        /* Determine whether the block has been permanently closed, and add corresponding options if it has not been permanently closed.*/
+        $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
+        if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
+        if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
+        if(strpos(",$closedBlock,", ",|guide,") === false and $this->config->global->flow == 'full') $modules['guide'] = $this->lang->block->guide;
+        if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
+        if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
+        if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
 
         return array('' => '') + $modules;
     }

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 su('admin');
 
@@ -38,6 +38,6 @@ $tester->loadModel('block');
 
 initData();
 
-r($tester->block->getMaxOrderByDashboard('my')) && p('') && e('4');  // 测试 my 模块下最大order 为 4
-r($tester->block->getMaxOrderByDashboard('my')) && p('') && e('4');  // 测试 my 模块下最大order 为 4
+r($tester->block->getMaxOrderByDashboard('my')) && p('') && e('4'); //  测试 my 模块下最大order 为 4
+r($tester->block->getMaxOrderByDashboard('my')) && p('') && e('4'); //  测试 my 模块下最大order 为 4
 r($tester->block->getMaxOrderByDashboard('bug')) && p('') && e('0'); // 测试数据库中不存在 模块的最大排序  为 0

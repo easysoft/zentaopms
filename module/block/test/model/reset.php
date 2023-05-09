@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/block.class.php';
 
 su('admin');
@@ -24,7 +24,7 @@ cid=39
 
 - 检查初始化后的区块初始化状态返回结果 @0
 
-- 检查初始化后是否存在区块数据属性account @0
+- 检查初始化前是否存在区块数据属性account @0
 
 */
 
@@ -36,12 +36,9 @@ $tester->block->reset('my');
 $tester->block->initBlock('my');
 
 r($tester->block->getBlockInitStatus('my')) && p('') && e('1'); // 检查初始化前的区块初始化状态返回结果
-
-$resetBeforeBlocks = $tester->block->getMyDashboard('my');
-r(reset($resetBeforeBlocks)) && p('account,dashboard,module,code,title') && e('admin,my,welcome,welcome,欢迎'); // 检查初始化前是否存在区块数据
-
+$myDashboard = $tester->block->getMyDashboard('my');
+r(reset($myDashboard)) && p('account,dashboard,module,code,title') && e('admin,my,welcome,welcome,欢迎'); // 检查初始化前是否存在区块数据
 r($tester->block->reset('my')) && p('') && e('1'); // 检查初始化后的返回结果
 r($tester->block->getBlockInitStatus('my')) && p('') && e('0'); // 检查初始化后的区块初始化状态返回结果
-
-$resetAfterBlocks = $tester->block->getMyDashboard('my');
-r(reset($resetAfterBlocks)) && p('account') && e('0'); // 检查初始化后是否存在区块数据
+$myDashboard2 = $tester->block->getMyDashboard('my');
+r(reset($myDashboard2)) && p('account') && e('0'); // 检查初始化前是否存在区块数据

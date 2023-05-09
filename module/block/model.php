@@ -13,8 +13,8 @@ declare(strict_types=1);
 class blockModel extends model
 {
     /**
-     * 检查ZDOO请求时发起的哈希值是否匹配。
-     * Check if the hash value matches when requesting ZDOO.
+     * 检查然之请求时发起的hash是否匹配。
+     * Check API for ranzhi.
      *
      * @param  string $hash
      * @access public
@@ -34,8 +34,8 @@ class blockModel extends model
     }
 
     /**
-     * 根据区块ID获取区块信息。
-     * Get a block by id.
+     * 根据区块ID获取区块信息.
+     * Get a block by blockID.
      *
      * @param  int    $blockID
      * @access public
@@ -54,68 +54,13 @@ class blockModel extends model
     }
 
     /**
-     * 获取被永久关闭的区块数据。
-     * getClosedBlockPairs 
-     * 
-     * @param  int    $closedBlock 
-     * @access public
-     * @return void
-     */
-    public function getClosedBlockPairs($closedBlock)
-    {
-        $blockPairs = array();
-        if(empty($closedBlock)) return $blockPairs;
-
-        foreach(explode(',', $closedBlock) as $block)
-        {
-            $block = trim($block);
-            if(empty($block)) continue;
-
-            list($moduleName, $blockKey) = explode('|', $block);
-            if($moduleName == $blockKey)
-            { 
-                $blockPairs[$block] = $this->lang->block->moduleList[$moduleName];
-            }
-            else
-            {
-                $blockName = $blockKey;
-                if(isset($this->lang->block->modules[$moduleName]->availableBlocks[$blockKey])) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks[$blockKey];
-                if(isset($this->lang->block->availableBlocks[$blockKey])) $blockName = $this->lang->block->availableBlocks[$blockKey];
-                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$blockName}";
-            }
-        }
-
-        return $blockPairs;
-    }
-
-    /**
-     * 获取后台信息区块参数信息。
-     *  get admin information block parameter information.
-     * 
-     * @param  string $startDate 
-     * @access public
-     * @return array|false
-     */
-    public function getAdminBlockList(string $startDate = ''): array|false
-    {
-        return $this->dao->select('code,params')->from(TABLE_BLOCK)
-            ->where('account')->eq('system')
-            ->andWhere('vision')->eq('rnd')
-            ->andWhere('dashboard')->eq('zentao')
-            ->andWhere('module')->eq('zentao')
-            ->andWhere('code')->in('plugin,patch,publicclass,news')
-            ->beginIF($startDate)->andWhere('createdDate')->ge($startDate)->fi()
-            ->fetchPairs(); 
-    }
-
-    /**
-     * 获取当前用户的区块列表。
      * Get block list of current user.
+     * 获取区块列表.
      *
      * @param  string $module
      * @param  int    $hidden
      * @access public
-     * @return array|false
+     * @return int[]|false
      */
     public function getMyDashboard(string $dashboard, int $hidden = 0): array|false
     {
@@ -123,12 +68,12 @@ class blockModel extends model
     }
 
     /**
-     * 获取隐藏的区块列表。
-     * Get hidden blocks.
+     * 获取隐藏的区块列表.
+     * Get hidden blocks
      *
      * @param  string $module
      * @access public
-     * @return array|false
+     * @return int[]|false
      */
     public function getMyHiddenBlocks(string $dashboard): array|false
     {
@@ -136,8 +81,8 @@ class blockModel extends model
     }
 
     /**
-     * 获取对应仪表盘下区块的最大排序号。
-     * Get block max order number by dashboard.
+     * 获取对应仪表盘下区块的最大排序号.
+     * Get max order number by block dashboard.
      *
      * @param  string $dashboard
      * @access public
@@ -242,11 +187,11 @@ class blockModel extends model
 
     /**
      * 根据区块索引获取排序靠后的一个区块ID。
-     * Get the last block order on the block index,
-     * 
-     * @param  string $dashboard
-     * @param  string $module
-     * @param  string $code
+     * Get my block id by block code,
+     *
+     * @param  string    $dashboard
+     * @param  string    $module
+     * @param  string    $code
      * @access public
      * @return int|false
      */
@@ -265,7 +210,7 @@ class blockModel extends model
     }
 
     /**
-     * 获取区块是否已经初始化的状态。
+     * 获取区块是否已经初始化的状态.
      * get block is initiated or not.
      *
      * @param  string $dashboard
@@ -274,7 +219,7 @@ class blockModel extends model
      */
     public function getBlockInitStatus(string $dashboard): bool
     {
-        $result = $this->dao->select('value')->from(TABLE_CONFIG)
+        $result = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('module')->eq($dashboard)
             ->andWhere('owner')->eq($this->app->user->account)
             ->andWhere('`section`')->eq('common')
@@ -282,24 +227,24 @@ class blockModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('value');
 
-        return !empty($result);
+        return $result ? true : false;
     }
 
     /**
      * 检查此区块是否为长区块。
      * Check whether long block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access public
      * @return bool
      */
     public function isLongBlock(object $block): bool
     {
-        return (!empty($block->grid) and $block->grid >= 6);
+        return (!empty($block->grid) and $block->grid >= 6) ? true : false;
     }
 
     /**
-     * 初始化用户某个仪表盘下的区块数据。
+     * 初始化用户某个仪表盘下的区块数据.
      * Init block when account use first.
      *
      * @param  string $dashboard
@@ -341,7 +286,7 @@ class blockModel extends model
      *
      * @param  object $formData
      * @access public
-     * @return int
+     * @return void
      */
     public function create(object $formData): int|false
     {
@@ -360,7 +305,7 @@ class blockModel extends model
      *
      * @param  object $formData
      * @access public
-     * @return int|false
+     * @return void
      */
     public function update(object $formData): int|false
     {
@@ -381,7 +326,7 @@ class blockModel extends model
      * 对应仪表盘删除所有区块并更新为待初始化状态。
      * Reset dashboard blocks.
      *
-     * @param  string $dashboard
+     * @param  string  $dashboard
      * @access public
      * @return bool
      */
@@ -400,33 +345,26 @@ class blockModel extends model
             ->andWhere('`key`')->eq('blockInited')
             ->exec();
 
-        return !dao::isError();
+        return true;
     }
 
     /**
-     * 根据ID删除一个区块或者根据代号删除多个区块。
-     * Delete a block based on id or multiple blocks based on code.
+     * 删除一个区块。
+     * Delete a block.
      *
      * @param  int    $blockID
      * @access public
      * @return bool
      */
-    public function deleteBlock(int $blockID = 0, string $module = '', string $code = ''): bool
+    public function deleteBlock(int $blockID): bool
     {
         $this->dao->delete()->from(TABLE_BLOCK)
-            ->where('1=1')
-            ->beginIF($blockID)
-            ->andWhere('id')->eq($blockID)
+            ->where('id')->eq($blockID)
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
-            ->fi()
-            ->beginIF($module and $code)
-            ->andWhere('module')->eq($module)
-            ->andWhere('code')->eq($code)
-            ->fi()
             ->exec();
 
-        return !dao::isError();
+        return true;
     }
 
     /**
@@ -441,7 +379,6 @@ class blockModel extends model
     public function setOrder(int $blockID, int $order): bool
     {
         $this->dao->update(TABLE_BLOCK)->set('order')->eq($order)->where('id')->eq($blockID)->exec();
-
-        return !dao::isError();
+        return true;
     }
 }
