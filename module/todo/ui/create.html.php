@@ -144,12 +144,16 @@ formPanel
                     set::class('input-group-addon justify-center'),
                     $lang->todo->from
                 ),
-                input(set(array
+                input
                 (
-                    'name'  => 'date',
-                    'type'  => 'date',
-                    'value' => date('Y-m-d')
-                ))),
+                    set(array
+                    (
+                        'name'  => 'date',
+                        'type'  => 'date',
+                        'value' => date('Y-m-d')
+                    )),
+                    on::blur('dateBlur(this)')
+                )
             )
         ),
         div
@@ -168,7 +172,8 @@ formPanel
                 input
                 (
                     set::id('everyInput'),
-                    set::name('config[day]')
+                    set::name('config[day]'),
+                    on::blur('everyInputBlur(this)')
                 )
             )
         )
@@ -467,12 +472,16 @@ formPanel
                     set::class('input-group-addon ring-0'),
                     $lang->todo->to
                 ),
-                select(set(array
+                select
                 (
-                    'id'    => 'end',
-                    'name'  => 'end',
-                    'items' => $times
-                )))
+                    set(array
+                    (
+                        'id'    => 'end',
+                        'name'  => 'end',
+                        'items' => $times
+                    )),
+                    on::blur('selectEndTime(this)')
+                )
             )
 
         ),
