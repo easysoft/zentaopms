@@ -177,7 +177,7 @@ class programplanModel extends model
 
         if($baselineID)
         {
-            $oldTasks = $oldData->task;
+            $oldTasks = isset($oldData->task) ? $oldData->task : array();
             $this->programplanTao->setTaskBaseline($oldTasks, $tasks); // Set task baseline.
         }
 
