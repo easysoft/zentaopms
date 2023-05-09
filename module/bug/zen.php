@@ -197,7 +197,7 @@ class bugZen extends bug
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
 
-        /* 如果 bug 转任务，如果 bug 的状态发生变化，提示是否更新任务状态。*/
+        /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
         /* This bug has been converted to a task, update the status of the relatedtask or not. */
         $bug = $this->bug->getByID($bugID);
         if($bug->toTask and !empty($changes))
@@ -210,7 +210,7 @@ class bugZen extends bug
             }
         }
 
-        /* 在弹窗里编辑 bug 的返回。*/
+        /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
         if(isonlybody())
         {
@@ -812,7 +812,7 @@ class bugZen extends bug
      */
     protected function buildEditForm(object $bug): void
     {
-        /* 删掉当前bug类型不属于的并且已经弃用的类型。*/
+        /* 删掉当前 bug 类型不属于的并且已经弃用的类型。*/
         /* Unset discarded types. */
         foreach($this->config->bug->discardedTypes as $type)
         {
@@ -828,7 +828,7 @@ class bugZen extends bug
         $execution = $this->execution->getByID($bug->execution);
 
         /* 获取影响版本列表和解决版本列表。*/
-        /* Get the openedBuilds and resolvedBuilds. */
+        /* Get the affected builds and resolved builds. */
         $objectType = '';
         if($bug->project)   $objectType = 'project';
         if($bug->execution) $objectType = 'execution';
@@ -859,13 +859,13 @@ class bugZen extends bug
             $branchTagOption[$bug->branch] = $branchTagName;
         }
 
-        /* 获取moduleOptionMenu。*/
-        /* Get moduleOptionMenu. */
+        /* 获取所属模块列表。*/
+        /* Get module option menu. */
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
 
         /* 获取指派给用户列表。*/
-        /* Get assigned to member. */
+        /* Get the user pairs for assign. */
         if($bug->execution)
         {
             $assignedToList = $this->user->getTeamMemberPairs($bug->execution, 'execution');
@@ -888,7 +888,7 @@ class bugZen extends bug
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
-        /* 获取该bug关联产品和分支下的bug列表。*/
+        /* 获取该 bug 关联产品和分支下的 bug 列表。*/
         /* Get bugs of current product. */
         $branch = '';
         if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
@@ -909,8 +909,8 @@ class bugZen extends bug
             $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
         }
 
-        /* 如果产品列表没有bug相关的产品，把该产品加入产品列表。*/
-        /* Add product related by the bug when it is not in the products. */
+        /* 如果产品列表没有 bug 相关的产品，把该产品加入产品列表。*/
+        /* Add product related to the bug when it is not in the products. */
         if(!isset($this->products[$bug->product]))
         {
             $this->products[$bug->product] = $product->name;

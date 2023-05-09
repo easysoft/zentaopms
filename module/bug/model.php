@@ -532,7 +532,7 @@ class bugModel extends model
     }
 
     /**
-     * 更新bug信息。
+     * 更新 bug 信息。
      * Update a bug.
      *
      * @param  object      $bug

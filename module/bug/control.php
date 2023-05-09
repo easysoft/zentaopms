@@ -658,7 +658,7 @@ class bug extends control
     }
 
     /**
-     * 更新bug信息。
+     * 更新 bug 信息。
      * Edit a bug.
      *
      * @param  string $bugID
