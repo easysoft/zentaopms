@@ -1301,10 +1301,8 @@ class docModel extends model
             }
         }
 
-        if($object->project and !$object->execution and $object->acl == 'default')
-        {
-            if($this->loadModel('project')->checkPriv($object->project)) return true;
-        }
+        $isProjectLib = $object->project && !$object->execution;
+        if($isProjectLib && $object->acl == 'default' && $this->loadModel('project')->checkPriv($object->project)) return true;
 
         if(strpos($extra, 'notdoc') !== false)
         {

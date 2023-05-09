@@ -1010,6 +1010,8 @@ class taskModel extends model
                 break;
             case 'pause':
                 $task->finishedDate = '';
+            default:
+                break;
             }
             if($task->assignedTo) $task->assignedDate = $now;
 
@@ -1388,15 +1390,7 @@ class taskModel extends model
         $earliestTime = '';
         foreach(array_keys($record->dates) as $id)
         {
-            if($earliestTime == '')
-            {
-                $earliestTime = $record->dates[$id];
-            }
-            elseif(!empty($record->dates[$id]) && (strtotime($earliestTime) > strtotime($record->dates[$id])))
-            {
-                $earliestTime = $record->dates[$id];
-            }
-
+            $earliestTime = $record->dates[$id];
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
                 if(helper::isZeroDate($record->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
@@ -2611,13 +2605,10 @@ class taskModel extends model
         $today = helper::today();
 
         /* Delayed or not?. */
-        if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
+        if(in_array($task->status, $this->config->task->unfinishedStatus) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
         {
-            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
-            {
-                $delay = helper::diffDate($today, $task->deadline);
-                if($delay > 0) $task->delay = $delay;
-            }
+            $delay = helper::diffDate($today, $task->deadline);
+            if($delay > 0) $task->delay = $delay;
         }
 
         /* Story changed or not. */
@@ -3118,14 +3109,11 @@ class taskModel extends model
      * @param string $browseType
      * @param array  $branchGroups
      * @param array  $modulePairs
-     * @param string $mode
-     * @param bool   $child
      * @param bool   $showBranch
-     *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false)
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $showBranch = false)
     {
         $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
         $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
@@ -3296,6 +3284,9 @@ class taskModel extends model
                 break;
             case 'actions':
                 echo $this->buildOperateMenu($task, 'browse');
+                break;
+            default:
+                echo '';
                 break;
             }
             echo '</td>';
@@ -3477,12 +3468,9 @@ class taskModel extends model
         $list .= '<td>';
         if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
         $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
-        if(!helper::isZeroDate($task->deadline))
+        if(!helper::isZeroDate($task->deadline) && $task->status != 'done')
         {
-            if($task->status != 'done')
-            {
-                $list .= strtotime($today) > strtotime($task->deadline) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
-            }
+            $list .= strtotime($today) > strtotime($task->deadline) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
         }
         $list .= '</td>';
         if($execution->stageBy == 'product' and $execution->hasProduct) $list .= '<td></td>';

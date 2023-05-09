@@ -670,13 +670,13 @@ class taskZen extends task
      * 处理创建任务后的返回信息。
      * The information returned after processing the creation task.
      *
-     * @param  int       $taskID
+     * @param  object    $taskID
      * @param  object    $execution
      * @param  string    $afterChoice continueAdding|toTaskList|toStoryList
      * @access protected
-     * @return array|bool
+     * @return array
      */
-    protected function responseAfterCreate(object $task, object $execution, string $afterChoice): array|bool
+    protected function responseAfterCreate(object $task, object $execution, string $afterChoice): array
     {
         /* If there is a database error, return the error message. */
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());

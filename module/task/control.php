@@ -243,7 +243,7 @@ class task extends control
                     if(empty($changes)) continue;
 
                     /* Determine whether the status of a task has been changed, if the status of a task has been changed, set $updateStatus to taskID*/
-                    if($waitTaskID == false)
+                    if($waitTaskID)
                     {
                         foreach($changes as $changeField)
                         {
@@ -263,12 +263,10 @@ class task extends control
                     {
                         foreach($changes as $change)
                         {
-                            if($change['field'] == 'status')
-                            {
-                                $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                                $cancelURL  = $this->server->HTTP_REFERER;
-                                return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
-                            }
+                            if($change['field'] != 'status') continue;
+                            $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                            $cancelURL  = $this->server->HTTP_REFERER;
+                            return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
                         }
                     }
                     if($waitTaskID !== false) $this->loadModel('common')->syncPPEStatus($waitTaskID);
@@ -856,7 +854,7 @@ class task extends control
             $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes))
             {
-                $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+                $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
@@ -1234,7 +1232,7 @@ class task extends control
             }
             if(isset($skipTasks) and empty($skipTaskIdList))
             {
-                $skipTasks  = join(',', $skipTasks);
+                $skipTasks  = implode(',', $skipTasks);
                 $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
                 $cancelURL  = $this->server->HTTP_REFERER;
                 return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
@@ -1242,7 +1240,7 @@ class task extends control
 
             if(isset($parentTasks))
             {
-                $parentTasks = join(',', $parentTasks);
+                $parentTasks = implode(',', $parentTasks);
                 return print(js::alert(sprintf($this->lang->task->error->closeParent, $parentTasks)) . js::reload('parent'));
             }
 
@@ -1595,7 +1593,7 @@ class task extends control
         $this->view->executionID   = $executionID;
         $this->view->browseType    = $browseType;
         $this->view->chartType     = $chartType;
-        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->view->checkedCharts = $this->post->charts ? implode(',', $this->post->charts) : '';
 
         $this->display();
     }
@@ -1880,9 +1878,11 @@ class task extends control
      */
     public function ajaxGetByID($taskID)
     {
-        $task     = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        $realname = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($task->assignedTo)->fetch('realname');
-        $task->assignedTo = $realname ? $realname : ($task->assignedTo == 'closed' ? 'Closed' : $task->assignedTo);
+        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $realname   = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($task->assignedTo)->fetch('realname');
+        $assignedTo = $task->assignedTo == 'closed' ? 'Closed' : $task->assignedTo;
+
+        $task->assignedTo = $realname ? $realname : $assignedTo;
         if($task->story)
         {
             $this->app->loadLang('story');
