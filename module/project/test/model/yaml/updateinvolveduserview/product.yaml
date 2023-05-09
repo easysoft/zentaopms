@@ -1,0 +1,10 @@
+title: updateinvolveduserview-product
+author: chaideqing
+version: "1.0"
+fields:
+    - field: id
+      range: '1-2'
+    - field: acl
+      range: 'private'
+    - field: whitelist
+      range: ''

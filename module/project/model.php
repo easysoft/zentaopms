@@ -2353,6 +2353,7 @@ class projectModel extends model
     }
 
     /**
+     * 更新关联的产品和执行的用户视图。
      * Update userview for involved product and execution.
      *
      * @param  int    $projectID
@@ -2360,7 +2361,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function updateInvolvedUserView($projectID, $users = array())
+    public function updateInvolvedUserView(int $projectID, array $users = array()): void
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
         $this->loadModel('user')->updateUserView($products, 'product', $users);
