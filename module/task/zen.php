@@ -354,7 +354,7 @@ class taskZen extends task
 
             $prepareTasks[] = clone $prepareTask;
         }
-        return $preTasks;
+        return $prepareTasks;
     }
 
     /**
