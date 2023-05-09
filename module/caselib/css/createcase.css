@@ -1,5 +1,5 @@
-#steps .step-id {text-align: center; vertical-align: middle;}
-#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px;}
+#steps .step-id {text-align: center; vertical-align: middle; font-weight: bold;}
+#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; text-align: right; padding-right: 8px;}
 #steps .checkbox-inline input[type="checkbox"] {top: -2px;}
 #steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
 .step-actions {width: 100px;}
@@ -8,7 +8,6 @@
 #steps .step-expects {resize: none;}
 #steps .step-item .step-item-id {display: table-cell; min-width: 40px;}
 #steps .step-item .step-id {color: transparent;}
-#steps .step-id {font-weight: bold;}
 #steps .step-actions {width: 90px; text-align: center;}
 
 #steps .btn-step-move {cursor: move;}

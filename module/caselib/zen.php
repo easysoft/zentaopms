@@ -9,7 +9,7 @@ class caselibZen extends caselib
      * @access protected
      * @return void
      */
-    protected function setCreateMenu(): void
+    protected function setCreateMenu()
     {
         $libraries = $this->caselib->getLibraries();
         $libID     = $this->caselib->saveLibState(0, $libraries);
@@ -23,7 +23,7 @@ class caselibZen extends caselib
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(): void
+    protected function buildCreateForm()
     {
         $this->view->title = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
         $this->display();

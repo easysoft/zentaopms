@@ -111,7 +111,7 @@ class caselibTest
     }
 
     /**
-     * 创建用例库单元测试方法
+     * 创建用例库单元测试方法。
      * Create case lib test function.
      *
      * @param  array $params

@@ -54,7 +54,7 @@ $(function()
       <?php foreach($caseData as $key => $case):?>
       <?php if(empty($case->title)) continue;?>
       <?php if(!empty($case->id) and !isset($cases[$case->id])) $case->id = 0;?>
-      <tr class='text-left' valign='top'>
+      <tr class='text-left'>
         <td>
           <?php
           if(!empty($case->id))
