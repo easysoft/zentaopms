@@ -2970,12 +2970,12 @@ class taskModel extends model
         if(is_array($children))
         {
             /* Remove the parent task from the tasks. */
-            foreach($children as $childTaskID => $childTask) unset($tasks[$childTask->parent]);
+            foreach($children as $childTask) unset($tasks[$childTask->parent]);
         }
 
         $fields = array();
         $datas  = array();
-        foreach($tasks as $taskID => $task)
+        foreach($tasks as $task)
         {
             if(!isset($fields[$task->$field])) $fields[$task->$field] = 0;
             $fields[$task->$field] ++;
