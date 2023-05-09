@@ -260,9 +260,9 @@ class pivot extends control
      * @return string
      */
     public function ajaxGetSysOptions($type, $object = '', $field = '')
-    {   
+    {
         $sql     = isset($_POST['sql'])     ? $_POST['sql']     : '';
-        $filters = isset($_POST['filters']) ? $_POST['filters'] : ''; 
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : '';
 
         $sql     = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql);
@@ -270,18 +270,22 @@ class pivot extends control
     }
 
     /**
-     * Ajax get pivot table. 
-     * 
+     * Ajax get pivot table.
+     *
      * @access public
      * @return void
      */
     public function ajaxGetPivot()
-    {   
-        $post = fixer::input('post')->skipSpecial('settings,filters,sql,langs')->get();
+    {
+        $post = fixer::input('post')
+            ->skipSpecial('settings,filters,sql,langs')
+            ->get();
+
+        $postFilters = isset($_POST['filters']) ? $post->filters : array();
+        $filters     = isset($_POST['searchFilters']) ? $post->searchFilters : $postFilters;
 
         $pivotID    = $post->id;
         $settings   = $post->settings;
-        $filters    = isset($_POST['searchFilters']) ? $_POST['searchFilters'] : (isset($_POST['filters']) ? $post->filters : array());    
         $filterType = 'result';
 
         $pivot = $this->pivot->getById($pivotID);
@@ -293,7 +297,8 @@ class pivot extends control
 
         $sql    = str_replace(';', '', "$post->sql");
         $fields = $post->fieldSettings;
-        $langs  = isset($post->langs) ? (is_array($post->langs) ? $post->langs : json_decode($post->langs, true)) : array();
+        $langs  = isset($_POST['langs']) ? $post->langs : array();
+        $langs  = is_array($lang) ? $lang : json_decode($lang, true);
 
         $processSqlData = $this->loadModel('chart')->getTables($sql);
         $sql = $processSqlData['sql'];
