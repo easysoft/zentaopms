@@ -1457,8 +1457,14 @@ class programplanModel extends model
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childExecution)
             {
-                $count = $statusCount[$childExecution->status];
-                $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $count ++;
+                if(empty($statusCount[$childExecution->status]))
+                {
+                    $statusCount[$childExecution->status] = 1;
+                }
+                else
+                {
+                    $statusCount[$childExecution->status] ++;
+                }
             }
 
             if(empty($statusCount)) continue;
