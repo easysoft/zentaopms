@@ -2632,7 +2632,7 @@ class taskModel extends model
                 ->on('t1.account = t2.account')
                 ->where('t2.task')->eq($task->id)
                 ->fetchPairs();
-            $task->teamMembers= join(',', array_keys($teamMembers));
+            $task->teamMembers = implode(',', array_keys($teamMembers));
         }
 
         return $task;
