@@ -2,10 +2,10 @@
 class blockZen extends block
 {
     /**
-     * 添加或编辑区块时获取可使用的模块选项
+     * 添加或编辑区块时获取可使用的模块选项。
      * Get module options when adding or editing blocks.
      *
-     * @param  string $dashboard
+     * @param  string    $dashboard
      * @access protected
      * @return string[]
      */
@@ -55,11 +55,11 @@ class blockZen extends block
     }
 
     /**
-     * 添加或编辑区块时获取可使用的区块选项
+     * 添加或编辑区块时获取可使用的区块选项。
      * Get block options when adding or editing blocks.
      *
-     * @param  string $dashboard
-     * @param  string $module
+     * @param  string        $dashboard
+     * @param  string        $module
      * @access protected
      * @return string[]|true
      */
@@ -117,7 +117,7 @@ class blockZen extends block
 
     /**
      * 添加或编辑区块时获取其他表单项。
-     * Get other form items when adding or editing blocks
+     * Get other form items when adding or editing blocks.
      *
      * @param  string    $module
      * @param  string    $code
@@ -145,8 +145,8 @@ class blockZen extends block
      * 处理每个区块以渲染 UI。
      * Process each block for render UI.
      *
-     * @param  object $blocks
-     * @param  int    $projectID
+     * @param  array     $blocks
+     * @param  int       $projectID
      * @access protected
      * @return array
      */
@@ -183,12 +183,12 @@ class blockZen extends block
      * 补全区块的加载链接。
      * Get the more link of the block.
      *
-     * @param  object $block
-     * @param  int    $projectID
+     * @param  object    $block
+     * @param  int       $projectID
      * @access protected
-     * @return void
+     * @return object
      */
-    private function createMoreLink(object $block, int $projectID)
+    private function createMoreLink(object $block, int $projectID): object
     {
         $module = empty($block->module) ? 'common' : $block->module;
 
@@ -225,13 +225,14 @@ class blockZen extends block
         {
             $block->moreLink = $this->createLink('company', 'dynamic');
         }
+        return $block;
     }
 
     /**
      * 将区块数组拆分为短区块数组和长区块数组。
      * Split blocks array into short blocks and long blocks.
      *
-     * @param  array  $blocks
+     * @param  array     $blocks
      * @access protected
      * @return array
      */
@@ -257,7 +258,7 @@ class blockZen extends block
      * 生成 HTML 区块。
      * Generate HTML block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
      * @return string
      */
@@ -272,10 +273,10 @@ class blockZen extends block
     }
 
     /**
-     * 根据来源生成默认区块
+     * 根据来源生成默认区块。
      * Generate default block by source.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
      * @return string
      */
@@ -294,7 +295,7 @@ class blockZen extends block
      * 生成指派给我的区块。
      * Generate assign to me block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
      * @return string
      */
@@ -309,7 +310,7 @@ class blockZen extends block
      * 去掉待定和已暂停的任务。
      * Remove undetermined and suspended tasks.
      *
-     * @param  array  $todos
+     * @param  array     $todos
      * @access protected
      * @return array
      */
@@ -2041,19 +2042,19 @@ class blockZen extends block
      * @access protected
      * @return bool
      */
-    protected function isExternalCall():bool
+    protected function isExternalCall(): bool
     {
         return isset($_GET['hash']);
     }
 
     /**
-     * 为control 层 printBlock 方法返回json 格式数据
+     * 为control 层 printBlock 方法返回json 格式数据。
      * Return json data for printBlock.
      *
      * @access protected
      * @return string
      */
-    protected function printBlock4Json():string
+    protected function printBlock4Json(): string
     {
         unset($this->view->app);
         unset($this->view->config);
@@ -2072,7 +2073,7 @@ class blockZen extends block
      * 组织外部数据。
      * Organiza external data.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
      * @return void
      */

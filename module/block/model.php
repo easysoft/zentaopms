@@ -37,7 +37,7 @@ class blockModel extends model
      * 根据区块ID获取区块信息。
      * Get a block by id.
      *
-     * @param  int    $blockID
+     * @param  int          $blockID
      * @access public
      * @return object|false
      */
@@ -55,13 +55,13 @@ class blockModel extends model
 
     /**
      * 获取被永久关闭的区块数据。
-     * getClosedBlockPairs 
+     * Get closed block pairs.
      * 
-     * @param  int    $closedBlock 
+     * @param  string $closedBlock
      * @access public
-     * @return void
+     * @return array
      */
-    public function getClosedBlockPairs($closedBlock)
+    public function getClosedBlockPairs(string $closedBlock): array
     {
         $blockPairs = array();
         if(empty($closedBlock)) return $blockPairs;
@@ -112,8 +112,8 @@ class blockModel extends model
      * 获取当前用户的区块列表。
      * Get block list of current user.
      *
-     * @param  string $module
-     * @param  int    $hidden
+     * @param  string      $module
+     * @param  int         $hidden
      * @access public
      * @return array|false
      */
@@ -126,7 +126,7 @@ class blockModel extends model
      * 获取隐藏的区块列表。
      * Get hidden blocks.
      *
-     * @param  string $module
+     * @param  string      $module
      * @access public
      * @return array|false
      */
@@ -358,7 +358,7 @@ class blockModel extends model
      * 修改一个区块。
      * Update a block.
      *
-     * @param  object $formData
+     * @param  object    $formData
      * @access public
      * @return int|false
      */

@@ -6,8 +6,8 @@ class blockTao extends blockModel
      * 获取当前用户的区块列表。
      * Get block list of current user.
      *
-     * @param  string $dashboard
-     * @param  int    $hidden 0|1
+     * @param  string      $dashboard
+     * @param  int         $hidden 0|1
      * @access protected
      * @return array|false
      */
@@ -26,7 +26,7 @@ class blockTao extends blockModel
      * 新增一个区块。
      * Insert a block data.
      *
-     * @param  object $formData
+     * @param  object    $formData
      * @access protected
      * @return bool
      */

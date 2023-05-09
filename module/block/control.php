@@ -104,6 +104,7 @@ class block extends control
     }
 
     /**
+     * 根据区块ID删除一个区块。
      * Delete a block by id.
      *
      * @param  string $blockID
@@ -121,6 +122,7 @@ class block extends control
     }
 
     /**
+     * 排序区块。
      * Sort dashboard blocks.
      *
      * @param  string $orders
@@ -140,7 +142,7 @@ class block extends control
 
 
     /**
-     * 设置一个区块的大小
+     * 设置一个区块的大小。
      * Resize a block.
      * 
      * @param  string $blockID 

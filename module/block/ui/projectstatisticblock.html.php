@@ -173,7 +173,7 @@ function getProjectStatisticItems($project): array
     global $config, $lang;
 
     $cells = array();
-    foreach($config->block->projectstatistic->dtable as $module => $items)
+    foreach($config->block->projectstatistic->items as $module => $items)
     {
         $cellItems = array();
         foreach($items as $item)
