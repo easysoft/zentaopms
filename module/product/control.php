@@ -446,6 +446,7 @@ class product extends control
     }
 
     /**
+     * 产品动态。
      * Product dynamic.
      *
      * @param  int    $productID
@@ -453,66 +454,52 @@ class product extends control
      * @param  string $param
      * @param  int    $recTotal
      * @param  string $date
-     * @param  string $direction    next|pre
+     * @param  string $direction next|pre
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(string $productID = '0', string $type = 'today', string $param = '', string $recTotal = '0', string $date = '', string $direction = 'next')
     {
-        /* Save session. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri, 'product');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
-        $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
-        $this->session->set('taskList',        $uri, 'execution');
-        $this->session->set('buildList',       $uri, 'execution');
-        $this->session->set('bugList',         $uri, 'qa');
-        $this->session->set('caseList',        $uri, 'qa');
-        $this->session->set('testtaskList',    $uri, 'qa');
+        $productID = (int)$productID;
+        $recTotal  = (int)$recTotal;
+        $param     = (int)$param;
 
-        $this->product->setMenu($productID, 0, 0, '', $type);
+        $this->loadModel('action');
+        $this->productZen->saveBackUriInSession4Dynamic();
+        $this->product->setMenu($productID, 0, $type);
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
-        /* Set the user and type. */
+        /* Get user account. */
         $account = 'all';
         if($type == 'account')
         {
-            $user = $this->loadModel('user')->getById((int)$param, 'id');
+            $user = $this->loadModel('user')->getById($param, 'id');
             if($user) $account = $user->account;
         }
-        $period  = $type == 'account' ? 'all'  : $type;
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
+
+        /* Get actions. */
+        list($actions, $pager) = $this->getActions4Dynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
         if(empty($recTotal)) $recTotal = count($actions);
 
-        /* The header and position. */
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
-        $this->view->position[] = $this->lang->product->dynamic;
-
+        /* Assign. */
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+        $this->view->position[]   = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
+        $this->view->position[]   = $this->lang->product->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
+        $this->view->productID    = $productID;
+        $this->view->type         = $type;
+        $this->view->orderBy      = $orderBy;
+        $this->view->account      = $account;
+        $this->view->user         = isset($user) ? $user : '';
+        $this->view->param        = $param;
+        $this->view->pager        = $pager;
+        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $type);
+        $this->view->direction    = $direction;
+        $this->view->recTotal     = $recTotal;
 
-        /* Assign. */
-        $this->view->productID  = $productID;
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->account    = $account;
-        $this->view->user       = isset($user) ? $user : '';
-        $this->view->param      = $param;
-        $this->view->pager      = $pager;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction  = $direction;
-        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 

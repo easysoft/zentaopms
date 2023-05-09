@@ -1330,4 +1330,56 @@ class productZen extends product
         print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
         return;
     }
+
+    /**
+     * 将返回链接保存到session中。
+     * Save back uri in session.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function saveBackUriInSession4Dynamic(): void
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
+    }
+
+    /**
+     * 获取操作记录。
+     * Get actions of the product.
+     *
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  int    $productID
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  string $date
+     * @param  string $direction next|pre
+     * @access public
+     * @return void
+     */
+    protected function getActions4Dynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+
+        /* Build parameters. */
+        $pager  = new pager($recTotal, 50, 1);
+        $period = $type == 'account' ? 'all'  : $type;
+        $date   = empty($date) ? '' : date('Y-m-d', empty($date) ? null : (int)$date);
+
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
+
+        return array($actions, $pager);
+    }
 }
