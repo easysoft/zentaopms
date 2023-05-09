@@ -21,7 +21,7 @@ $testtaskModel = $tester->loadModel('testtask');
 zdTable('todo')->config('settodonamebytype')->gen(4);
 
 /* Create a simple story. */
-$story = new stdclass;
+$story = new stdclass();
 $story->id       = 1;
 $story->title    = 'simplestory';
 $story->estimate = '1';
@@ -29,7 +29,7 @@ $tester->dao->exec('TRUNCATE TABLE ' . TABLE_STORY);
 $tester->dao->insert(TABLE_STORY)->data($story)->exec();
 
 /* Create a simple task. */
-$task = new stdclass;
+$task = new stdclass();
 $task->id       = 1;
 $task->name     = 'simpletask';
 $task->estimate = '1';
@@ -38,14 +38,14 @@ $tester->dao->exec('TRUNCATE TABLE ' . TABLE_TASK);
 $tester->dao->insert(TABLE_TASK)->data($task)->exec();
 
 /* Create a simple bug. */
-$bug = new stdclass;
+$bug = new stdclass();
 $bug->id    = 1;
 $bug->title = 'simplebug';
 $tester->dao->exec('TRUNCATE TABLE ' . TABLE_BUG);
 $tester->dao->insert(TABLE_BUG)->data($bug)->exec();
 
 /* Create a simple testtask. */
-$testtask = new stdclass;
+$testtask = new stdclass();
 $testtask->id   = 1;
 $testtask->name = 'simpletesttask';
 $tester->dao->exec('TRUNCATE TABLE ' . TABLE_TESTTASK);

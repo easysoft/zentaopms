@@ -20,24 +20,24 @@ cid=1
 initData();
 
 $todos = array();
-$todos[1] = new stdClass();
-$todos[2] = new stdClass();
-$todos[3] = new stdClass();
+$todos[1] = new stdclass();
+$todos[2] = new stdclass();
+$todos[3] = new stdclass();
 $changeType = $todos;
 $changeType[1]->type     = 'bug';
 $changeType[1]->objectID = 1;
 
 $todos = array();
-$todos[1] = new stdClass();
-$todos[2] = new stdClass();
-$todos[3] = new stdClass();
+$todos[1] = new stdclass();
+$todos[2] = new stdclass();
+$todos[3] = new stdclass();
 $changePri = $todos;
 $changePri[2]->pri = 1;
 
 $todos = array();
-$todos[1] = new stdClass();
-$todos[2] = new stdClass();
-$todos[3] = new stdClass();
+$todos[1] = new stdclass();
+$todos[2] = new stdclass();
+$todos[3] = new stdclass();
 $changeStatus = $todos;
 $changeStatus[3]->status = 'doing';
 

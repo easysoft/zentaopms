@@ -29,7 +29,7 @@ initData();
 global $tester;
 $tester->loadModel('todo');
 
-$todo = new stdClass();
+$todo = new stdclass();
 $todo->account = 'admin';
 $todo->date         = date('Y-m-d');
 $todo->begin        = '1000';

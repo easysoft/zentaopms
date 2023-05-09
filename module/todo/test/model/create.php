@@ -23,7 +23,7 @@ global $tester;
 $tester->loadModel('todo');
 $today = date('Y-m-d');
 
-$todo = new stdclass;
+$todo = new stdclass();
 $todo->name         = 'TODO Create Test';
 $todo->account      = 'admin';
 $todo->date         = $today;

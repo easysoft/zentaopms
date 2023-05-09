@@ -487,7 +487,7 @@ class todo extends control
 
             $times = date::buildTimeList((int)$configTime->begin, (int)$configTime->end, (int)$configTime->delta);
 
-            $assemble = new stdClass();
+            $assemble = new stdclass();
             $assemble->users     = $users;
             $assemble->bugs      = $bugs;
             $assemble->stories   = $stories;

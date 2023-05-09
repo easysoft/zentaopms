@@ -52,7 +52,7 @@ class todoTest
         global $tester;
         $object = $tester->dbh->query("SELECT * FROM " . TABLE_TODO ." WHERE id = $todoID")->fetch();
 
-        $todo = new stdClass();
+        $todo = new stdclass();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
@@ -306,7 +306,7 @@ class todoTest
      */
     public function assignToTest(int $todoID, object $param = new stdclass()): object
     {
-        $todo = new stdClass();
+        $todo = new stdclass();
         $todo->assignedDate = helper::now();
         $todo->date         = '';
         $todo->begin        = 0;
@@ -432,7 +432,7 @@ class todoTest
         $isClosed = $this->objectModel->closeTodo($todoID);
         $newTodo  = $this->objectModel->getById($todoID);
 
-        $testResult = new stdclass;
+        $testResult = new stdclass();
         $testResult->oldStatus = $oldTodo->status;
         $testResult->newStatus = $newTodo->status;
         $testResult->isClosed  = $isClosed;

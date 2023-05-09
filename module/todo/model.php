@@ -171,7 +171,7 @@ class todoModel extends model
      */
     public function finish(int $todoID): bool
     {
-        $todo = new stdClass();
+        $todo = new stdclass();
         $todo->id           = $todoID;
         $todo->status       = 'done';
         $todo->finishedBy   = $this->app->user->account;

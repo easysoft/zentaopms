@@ -20,7 +20,7 @@ $config->todo->create->form['desc']         = array('required' => false, 'type' 
 $config->todo->create->form['cycle']        = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->create->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
 
-$config->todo->batchCreate = new stdClass;
+$config->todo->batchCreate = new stdclass();
 $config->todo->batchCreate->form = array();
 $config->todo->batchCreate->form['types']       = array('required' => false, 'type' => 'array');
 $config->todo->batchCreate->form['pris']        = array('required' => false, 'type' => 'array');
@@ -36,7 +36,7 @@ $config->todo->batchCreate->form['switchDate']  = array('required' => false, 'ty
 $config->todo->edit->form = array();
 $config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
 
-$config->todo->assignTo = new stdClass();
+$config->todo->assignTo = new stdclass();
 $config->todo->assignTo->form = array();
 $config->todo->assignTo->form['assignedBy']   = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->assignTo->form['assignedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
@@ -46,23 +46,23 @@ $config->todo->assignTo->form['end']          = array('required' => false, 'type
 
 $config->todo->assignTo->form['assignedTo']   = array('required' => true,  'type' => 'string');
 
-$config->todo->batchClose = new stdclass;
+$config->todo->batchClose = new stdclass();
 $config->todo->batchClose->form = array();
 $config->todo->batchClose->form['todoIDList'] = array('required' => true, 'type' => 'array');
 
-$config->todo->batchEdit = new stdClass;
+$config->todo->batchEdit = new stdclass();
 $config->todo->batchEdit->form = array();
 $config->todo->batchEdit->form['todoIDList'] = array('required' => true, 'type' => 'array');
 
-$config->todo->batchFinish = new stdclass;
+$config->todo->batchFinish = new stdclass();
 $config->todo->batchFinish->form = array();
 $config->todo->batchFinish->form['todoIDList'] = array('required' => true, 'type' => 'array');
 
-$config->todo->editDate = new stdClass;
+$config->todo->editDate = new stdclass();
 $config->todo->editDate->form = array();
 $config->todo->editDate->form['date']       = array('required' => true, 'type' => 'string');
 $config->todo->editDate->form['todoIDList'] = array('required' => true, 'type' => 'array');
 
-$config->todo->export = new stdClass;
+$config->todo->export = new stdclass();
 $config->todo->export->form = array();
 $config->todo->export->form['exportType'] = array('required' => true, 'type' => 'string');

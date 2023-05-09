@@ -33,15 +33,15 @@ $todo = new todoTest();
 
 $action = array('finish', 'start', 'done');
 
-$todoData1 = new stdClass;
+$todoData1 = new stdclass();
 $todoData1->cycle  = 'click';
 $todoData1->status = 'wait';
 
-$todoData2 = new stdClass;
+$todoData2 = new stdclass();
 $todoData2->cycle  = '';
 $todoData2->status = 'done';
 
-$todoData3 = new stdClass;
+$todoData3 = new stdclass();
 $todoData3->cycle  = '';
 $todoData3->status = 'wait';
 
