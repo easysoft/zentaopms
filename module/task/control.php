@@ -174,41 +174,38 @@ class task extends control
     }
 
     /**
-     * 编辑任务。
+     * 编辑一个任务。
      * Edit a task.
      *
      * @param  string $taskID
-     * @param  string $comment
      * @param  string $from        ''|taskkanban
      * @access public
      * @return void
      */
-    public function edit(string $taskID, string $comment = '', string $from = '')
+    public function edit(string $taskID, string $from = '')
     {
         $taskID = (int)$taskID;
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = array();
-
+            $changes       = array();
             $postDataFixer = form::data($this->config->task->form->edit);
             $rawData       = $postDataFixer->rawdata;
 
+            /* Prepare and check data. */
+            $task = $this->taskZen->prepareEdit($postDataFixer, $taskID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             /* Update task. */
-            if(empty($comment))
-            {
-                $task    = $this->taskZen->prepareEdit($postDataFixer, $taskID);
-                $changes = $this->task->update($task, $rawData);
-                if(dao::isError()) return print(js::error(dao::getError()));
-            }
+            $changes = $this->task->update($task, $rawData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
             if($rawData->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $rawData->comment);
+                $actionID = $this->loadModel('action')->create('task', $taskID, $action, $rawData->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
@@ -216,8 +213,8 @@ class task extends control
             $this->executeHooks($taskID);
             if($task->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
 
-            $reponse = $this->taskZen->reponseAfterEdit($taskID, $from, $changes);
-            return is_array($reponse) ? $this->send($reponse) : $reponse;
+            $response = $this->taskZen->responseAfterEdit($taskID, $from, $changes);
+            return $this->send($response);
         }
 
         $this->taskZen->buildEditForm($taskID);
@@ -384,12 +381,8 @@ class task extends control
 
             /* Assign task. */
             $task    = $this->taskZen->prepareAssignTo($postDataFixer, $taskID);
-            $changes = $this->task->assign($task, $this->post->uid);
-            if(dao::isError())
-            {
-                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            $changes = $this->task->assign($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $task->assignedTo);
@@ -397,8 +390,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            $reponse = $this->taskZen->reponseAfterAssignTo($taskID, $from);
-            return is_array($reponse) ? $this->send($reponse) : $reponse;
+            $response = $this->taskZen->responseAfterAssignTo($taskID, $from);
+            return $this->send($response);
         }
 
         $this->taskZen->buildAssignToForm($executionID, $taskID);
@@ -432,37 +425,33 @@ class task extends control
     }
 
     /**
+     * 批量指派任务。
      * Batch update assign of task.
      *
-     * @param  int    $execution
+     * @param  string    $execution
      * @access public
      * @return void
      */
-    public function batchAssignTo($execution)
+    public function batchAssignTo(string $executionID)
     {
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $taskIDList = $this->post->taskIDList;
-            $taskIDList = array_unique($taskIDList);
-            unset($_POST['taskIDList']);
-            if(!is_array($taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID=$execution"), 'parent'));
-            $taskIDList = array_unique($taskIDList);
+            $executionID = (int)$executionID;
+            if(!is_array($this->post->taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}"), 'parent'));
 
-            $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIDList)->fetchGroup('task', 'account');
-            $tasks          = $this->task->getByList($taskIDList);
             $this->loadModel('action');
+            $tasks = $this->taskZen->prepareBatchAssignedTasks($this->post->taskIDList, $this->post->assignedTo);
             foreach($tasks as $taskID => $task)
             {
-                if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account and $task->mode == 'linear') continue;
-                if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
-                if($task->status == 'closed') continue;
-
-                $changes = $this->task->assign($taskID);
+                /* Assign task. */
+                $changes = $this->task->assign($task);
                 if(dao::isError()) return print(js::error(dao::getError()));
+
+                /* Record log. */
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
+
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             return print(js::reload('parent'));
         }
@@ -1921,32 +1910,26 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-
             /* Update assign of multi task. */
             $postData = form::data($this->config->task->form->manageTeam);
             $task     = $this->taskZen->prepareManageTeam($postData, $taskID);
             $changes  = $this->task->updateTeam($task, $this->post->team, $this->post->teamSouce, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
 
-            if(dao::isError())
-            {
-                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
-            $actionID = $this->action->create('task', $taskID, 'Edited');
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
-            $reponse = $this->taskZen->reponseAfterAssignTo($taskID, $from);
-            return is_array($reponse) ? $this->send($reponse) : $reponse;
+            $response = $this->taskZen->responseAfterAssignTo($taskID, $from);
+            return $this->send($response);
         }
 
         $this->view->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs();
-        $this->display('', 'editteam');
+        $this->display();
     }
 
     /**

@@ -1157,19 +1157,20 @@ class taskModel extends model
      * @access public
      * @return array|false
      */
-    public function assign(object $task, string $uid): array|false
+    public function assign(object $task): array|false
     {
         $oldTask = $this->getById($task->id);
 
+        /* Check task left. */
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->left);
             return false;
         }
 
+        /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $uid);
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
@@ -1216,6 +1217,7 @@ class taskModel extends model
         }
         if(empty($teams)) $task->mode = '';
 
+        /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
         $this->dao->update(TABLE_TASK)
@@ -2707,6 +2709,7 @@ class taskModel extends model
     }
 
     /**
+     * 获取执行任务的报表数据。
      * Get report data of tasks per execution.
      *
      * @access public
@@ -2719,6 +2722,7 @@ class taskModel extends model
 
         $datas = $this->processData4Report($tasks, '', 'execution');
 
+        /* Get execution names for these tasks. */
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         foreach($datas as $executionID => $data) $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
         return $datas;

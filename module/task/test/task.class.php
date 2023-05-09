@@ -316,7 +316,8 @@ class taskTest
         unset($_POST);
         if(dao::isError())
         {
-            return dao::getError();
+            $errors = dao::getError();
+            return array_shift($errors);
         }
         else
         {
@@ -336,7 +337,7 @@ class taskTest
      * @access public
      * @return object
      */
-    public function updateTeamTest($taskID, $status, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft)
+    public function updateTeamTest($taskID, $status, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft, $getTeam = false)
     {
         global $tester;
 
@@ -345,6 +346,8 @@ class taskTest
         $task->status       = $status;
         $task->lastEditedBy = $tester->app->user->account;
         $object = $this->objectModel->updateTeam($task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
+
+        if($getTeam) return $this->objectModel->getTeamMembers($taskID);
         if(dao::isError())
         {
             $errors = dao::getError();

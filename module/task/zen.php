@@ -28,38 +28,24 @@ class taskZen extends task
      * @param  form $postDataFixer
      * @param  int  $taskID
      * @access protected
-     * @return object
+     * @return object|false
      */
-    protected function prepareEdit(form $postDataFixer, int $taskID): object
+    protected function prepareEdit(form $postDataFixer, int $taskID): object|false
     {
         $now      = helper::now();
         $oldTask  = $this->task->getByID($taskID);
         $postData = $postDataFixer->get();
 
-        if($postData->estimate < 0 || $postData->left < 0 || $postData->consumed < 0)
-        {
-            dao::$errors[] = $this->lang->task->error->recordMinus;
-            return false;
-        }
-
-        if(!empty($this->config->limitTaskDate))
-        {
-            $this->task->checkEstStartedAndDeadline($oldTask->execution, $postData->estStarted, $postData->deadline);
-            return !dao::isError();
-        }
-
-        if(!empty($postData->lastEditedDate) && $oldTask->lastEditedDate != $postData->lastEditedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
+        /* Check that the data is reasonable. */
+        if($postData->estimate < 0 or $postData->left < 0 or $postData->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
+        if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, $postData->estStarted, $postData->deadline);
+        if(!empty($postData->lastEditedDate) && $oldTask->lastEditedDate != $postData->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if(dao::isError()) return false;
 
         $task = $postDataFixer->add('id', $taskID)
             ->setIF(!$postData->assignedTo && !empty($oldTask->team) && !empty($postDataFixer->rawdata->team), 'assignedTo', $this->task->getAssignedTo4Multi($postDataFixer->rawdata->team, $oldTask))
             ->setIF(!$oldTask->mode && !$postData->assignedTo && !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
-            ->setIF(is_numeric($postData->estimate), 'estimate', (float)$postData->estimate)
-            ->setIF(is_numeric($postData->consumed), 'consumed', (float)$postData->consumed)
-            ->setIF(is_numeric($postData->left),     'left',     (float)$postData->left)
+
             ->setIF($oldTask->parent == 0 && $postData->parent == '', 'parent', 0)
             ->setIF($postData->story != false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
 
@@ -91,7 +77,7 @@ class taskZen extends task
             ->join('mailto', ',')
             ->get();
 
-        return $task;
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $postDataFixer->rawData->uid);
     }
 
     /**
@@ -102,10 +88,16 @@ class taskZen extends task
      * @param  string  $from        ''|taskkanban
      * @param  array[] $changes
      * @access protected
-     * @return array|int
+     * @return array
      */
-    protected function reponseAfterEdit(int $taskID, string $from, array $changes): array|int
+    protected function responseAfterEdit(int $taskID, string $from, array $changes): array
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
+
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->saveSuccess;
+        $response['closeModal'] = true;
+
         $task = $this->task->getById($taskID);
         if($task->fromBug != 0)
         {
@@ -113,17 +105,16 @@ class taskZen extends task
             {
                 if($change['field'] == 'status')
                 {
-                    $confirmURL = $this->createLink('bug', 'view', "id={$task->fromBug}");
-                    $cancelURL  = $this->server->HTTP_REFERER;
-                    return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
+                    $response['callback']   = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
+                    return $response;
                 }
             }
         }
 
-        if(isonlybody()) return $this->reponseKanban($task, $from);
+        if(isonlybody()) return $this->responseKanban($task, $from);
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
-        return print(js::locate($this->createLink('task', 'view', "{taskID=$taskID}"), 'parent'));
+        $response['locate'] = $this->createLink('task', 'view', "taskID=$taskID");
+        return $response;
     }
 
     /**
@@ -137,6 +128,8 @@ class taskZen extends task
     protected function buildEditForm(int $taskID): void
     {
         $task  = $this->view->task;
+
+        /* Get the task parent id,name pairs. */
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
@@ -187,7 +180,6 @@ class taskZen extends task
      */
     protected function prepareManageTeam(form $postData, int $taskID): object
     {
-        $now  = helper::now();
         $task = $postData->add('id', $taskID)
             ->add('lastEditedBy', $this->app->user->account)
             ->get();
@@ -219,16 +211,16 @@ class taskZen extends task
      * @param  int    $taskID
      * @param  string $from        ''|taskkanban
      * @access protected
-     * @return array|int
+     * @return array
      */
-    protected function reponseAfterAssignTo(int $taskID, string $from): array|int
+    protected function responseAfterAssignTo(int $taskID, string $from): array
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
-        if(isonlybody()) return $this->reponseKanban($task, $from);
+        if(isonlybody()) return $this->responseKanban($task, $from);
 
-        return print(js::locate($this->createLink('task', 'view', "{taskID=$taskID}"), 'parent'));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => $this->createLink('task', 'view', "taskID=$taskID"));
     }
 
     /**
@@ -271,10 +263,14 @@ class taskZen extends task
      * @param  object $task
      * @param  string $from        ''|taskkanban
      * @access protected
-     * @return int
+     * @return array
      */
-    protected function reponseKanban(object $task, string $from): int
+    protected function responseKanban(object $task, string $from): array
     {
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->saveSuccess;
+        $response['closeModal'] = true;
+
         $execution    = $this->execution->getByID($task->execution);
         $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
         $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
@@ -286,7 +282,8 @@ class taskZen extends task
             $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
             $kanbanData    = json_encode($kanbanData);
 
-            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban({$kanbanData})"));
+            $response['callback'] = "parent.parent.updateKanban($kanbanData)";
+            return $response;
         }
         if($from == 'taskkanban')
         {
@@ -296,9 +293,50 @@ class taskZen extends task
             $kanbanData      = $kanbanData[$kanbanType];
             $kanbanData      = json_encode($kanbanData);
 
-            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", {$kanbanData})"));
+            $response['callback'] = "parent.parent.updateKanban(\"task\", $kanbanData)";
+            return $response;
         }
-        return print(js::closeModal('parent.parent', 'this'));
+        $response['locate'] = 'parent';
+        return $response;
+    }
+
+    /**
+     * 准备批量指派的任务数据。
+     * Prepare batch assigned tasks.
+     *
+     * @param  string[] $taskIdList
+     * @param  string   $assignedTo
+     * @access protected
+     * @return object[]
+     */
+    protected function prepareBatchAssignedTasks(array $taskIdList, string $assignedTo): array
+    {
+        $taskIdList     = array_unique($taskIdList);
+        $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'account');
+        $tasks          = $this->task->getByList($taskIdList);
+        /* Filter tasks. */
+        foreach($tasks as $taskID => $task)
+        {
+            if(isset($muletipleTasks[$taskID]) && $task->assignedTo != $this->app->user->account && $task->mode == 'linear') unset($tasks[$taskID]);
+            if(isset($muletipleTasks[$taskID]) && !isset($muletipleTasks[$taskID][$this->post->assignedTo])) unset($tasks[$taskID]);
+            if($task->status == 'closed') unset($tasks[$taskID]);
+        }
+
+        /* Prepare data. */
+        $now      = helper::now();
+        $preTasks = array();
+        foreach($tasks as $task)
+        {
+            $preTask = new stdclass();
+            $preTask->id             = $task->id;
+            $preTask->lastEditedBy   = $this->app->user->account;
+            $preTask->lastEditedDate = $now;
+            $preTask->assignedDate   = $now;
+            $preTask->assignedTo     = $assignedTo;
+
+            $preTasks[] = clone $preTask;
+        }
+        return $preTasks;
     }
 
     /**
