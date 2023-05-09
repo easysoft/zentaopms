@@ -2814,9 +2814,9 @@ class baseRouter
 
             return $dbh;
         }
-        catch (PDOException $exception)
+        catch (EndResponseException $exception)
         {
-            $message = $exception->getMessage();
+            $message = $exception->getContent();
             if(empty($message))
             {
                 /* Try to repair table. */
