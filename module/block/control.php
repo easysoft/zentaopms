@@ -103,17 +103,16 @@ class block extends control
     }
 
     /**
-     * Delete or hidd block by blockid.
+     * Delete a block by id.
      *
-     * @param  int    $id
-     * @param  string $type
+     * @param  string $blockID
      * @access public
      * @return void
      */
-    public function delete($blockID, $type = 'delete')
+    public function delete(string $blockID)
     {
         $blockID = (int)$blockID;
-        if($type == 'delete') $this->block->deleteBlock($blockID);
+        $this->block->deleteBlock($blockID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('score')->create('block', 'set');
@@ -123,7 +122,7 @@ class block extends control
     /**
      * Sort dashboard blocks.
      *
-     * @param  string  $orders
+     * @param  string $orders
      * @access public
      * @return void
      */
@@ -138,13 +137,18 @@ class block extends control
         return $this->send(array('result' => 'success'));
     }
 
+
     /**
-     * Resize block
-     * @param  integer $id
+     * 设置一个区块的大小
+     * Resize a block.
+     * 
+     * @param  string $blockID 
+     * @param  string $type 
+     * @param  string $data 
      * @access public
      * @return void
      */
-    public function resize($blockID, $type, $data)
+    public function resize(string $blockID, string $type, string $data)
     {
         $block = $this->block->getByID($blockID);
         if(!$block) return $this->send(array('result' => 'fail', 'code' => 404));
@@ -166,7 +170,7 @@ class block extends control
      * 永久关闭区块。
      * Close block forever.
      *
-     * @param  string    $blockID
+     * @param  string $blockID
      * @access public
      * @return void
      */
@@ -185,14 +189,14 @@ class block extends control
     }
 
     /**
-     * 将一个区块恢复默认。
+     * 将当前仪表盘下的区块恢复默认。
      * Reset dashboard blocks.
      *
      * @param  string $dashboard
      * @access public
      * @return void
      */
-    public function reset($dashboard)
+    public function reset(string $dashboard)
     {
         $this->block->reset($dashboard);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -201,11 +205,11 @@ class block extends control
     }
 
     /**
-     * 展示应用的仪表盘。
-     * Display dashboard for app.
+     * 展示当前仪表盘下的区块列表。
+     * Display blocks for dashboard.
      *
-     * @param  string  $dashboard
-     * @param  string  $projectID
+     * @param  string $dashboard
+     * @param  string $projectID
      * @access public
      * @return void
      */
@@ -242,14 +246,14 @@ class block extends control
     }
 
     /**
-     * 输出区块。
-     * Print block.
+     * 输出一个区块信息。
+     * Print a block.
      *
-     * @param  int     $blockID
+     * @param  string $blockID
      * @access public
      * @return string
      */
-    public function printBlock($blockID)
+    public function printBlock(string $blockID)
     {
         if($this->isExternalCall())
         {

@@ -63,7 +63,7 @@ class blockZen extends block
      * @access protected
      * @return string[]|true
      */
-    protected function getAvailableCodes($dashboard, $module): array|bool
+    protected function getAvailableCodes(string $dashboard, string $module): array|bool
     {
         if($this->isExternalCall())
         {
@@ -146,9 +146,10 @@ class blockZen extends block
      * 处理每个区块以渲染 UI。
      * Process each block for render UI.
      *
-     * @param  object[] $blocks
-     * @param  int      $projectID
-     * @return object[]
+     * @param  object $blocks
+     * @param  int    $projectID
+     * @access protected
+     * @return array
      */
     protected function processBlockForRender(array $blocks, int $projectID): array
     {
@@ -185,9 +186,10 @@ class blockZen extends block
      *
      * @param  object $block
      * @param  int    $projectID
+     * @access protected
      * @return void
      */
-    private function createMoreLink(object $block, int $projectID): void
+    private function createMoreLink(object $block, int $projectID)
     {
         $module = empty($block->module) ? 'common' : $block->module;
 
@@ -230,8 +232,9 @@ class blockZen extends block
      * 将区块数组拆分为短区块数组和长区块数组。
      * Split blocks array into short blocks and long blocks.
      *
-     * @param  array   $blocks
-     * @return array[]
+     * @param  array  $blocks
+     * @access protected
+     * @return array
      */
     protected function splitBlocksByLen(array $blocks): array
     {
@@ -256,6 +259,7 @@ class blockZen extends block
      * Generate HTML block.
      *
      * @param  object $block
+     * @access protected
      * @return string
      */
     protected function generateHtmlBlock(object $block): string
@@ -273,6 +277,7 @@ class blockZen extends block
      * Generate default block by source.
      *
      * @param  object $block
+     * @access protected
      * @return string
      */
     protected function generateDefaultBlockBySource(object $block): string
@@ -291,6 +296,7 @@ class blockZen extends block
      * Generate assign to me block.
      *
      * @param  object $block
+     * @access protected
      * @return string
      */
     protected function generateAssignToMeBlock(object $block): string
@@ -304,7 +310,8 @@ class blockZen extends block
      * 去掉待定和已暂停的任务。
      * Remove undetermined and suspended tasks.
      *
-     * @param array $todos
+     * @param  array  $todos
+     * @access protected
      * @return array
      */
     protected function unsetTodos(array $todos): array
