@@ -61,6 +61,11 @@ class taskTao extends taskModel
      */
     protected function doUpdate(object $task, object $oldTask, string $requiredFields): bool
     {
+        if(!empty($task->design)) $design = $this->dao->select('version')->from(TABLE_DESIGN)->where('id')->eq($task->design)->fetch();
+
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+
+        /* Update children task. */
         if(isset($task->execution) and $task->execution != $oldTask->execution)
         {
             $newExecution  = $this->loadModel('execution')->getByID($task->execution);
@@ -71,6 +76,8 @@ class taskTao extends taskModel
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
+            ->setIF($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review', 'story', 0)
+            ->setIF(!empty($task->design), 'designVersion', $design->version)
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
 
             ->checkIF($task->estimate != false, 'estimate', 'float')
@@ -478,13 +485,12 @@ class taskTao extends taskModel
      * @access protected
      * @return void
      */
-    protected function updateTaskEsDateByGantt(int $taskID, object $postData)
+    protected function updateTaskEsDateByGantt(int $taskID, object $postData): void
     {
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         $isChildTask = $task->parent > 0 ? true : false;
 
         if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
-
         $stage  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
 
         $start = $isChildTask ? $parentTask->estStarted   : $stage->begin;
@@ -494,6 +500,7 @@ class taskTao extends taskModel
         if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
         if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
 
+        /* Update estimate started and deadline of a task. */
         $this->dao->update(TABLE_TASK)
             ->set('estStarted')->eq($postData->startDate)
             ->set('deadline')->eq($postData->endDate)
@@ -697,5 +704,68 @@ class taskTao extends taskModel
         }
 
         return $minStatus;
+    }
+
+    /**
+     * 获取团队成员以及他的预计、消耗、剩余工时。
+     * Get team account,estimate,consumed and left info.
+     *
+     * @param  array $teamList
+     * @param  array $teamSourceList
+     * @param  array $teamEstimateList
+     * @param  array $teamConsumedList
+     * @param  array $teamLeftList
+     * @access protected
+     * @return object[]
+     */
+    protected function getTeamInfoList(array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
+    {
+        $teamInfoList = array();
+        foreach($teamList as $index => $account)
+        {
+            if(empty($account)) continue;
+
+            $teamInfo = new stdClass();
+            $teamInfo->account  = $account;
+            $teamInfo->source   = $teamSourceList[$index];
+            $teamInfo->estimate = $teamEstimateList[$index];
+            $teamInfo->consumed = $teamConsumedList[$index];
+            $teamInfo->left     = $teamLeftList[$index];
+
+            $teamInfoList[$index] = $teamInfo;
+        }
+
+        return $teamInfoList;
+    }
+
+    /**
+     * 拼接团队成员信息，包括账号、预计、消耗、剩余，用来创建历史记录。例如：团队成员: admin, 预计: 2, 消耗: 0, 剩余: 3。
+     * Concat team info for create history.
+     *
+     * @param  array $teamInfoList
+     * @param  array $userPairs
+     * @access protected
+     * @return string
+     */
+    protected function concatTeamInfo(array $teamInfoList, array $userPairs): string
+    {
+        $teamInfo = '';
+        foreach($teamInfoList as $info) $teamInfo .= "{$this->lang->task->teamMember}: " . zget($userPairs, $info->account) . ", {$this->lang->task->estimateAB}: " . (float)$info->estimate . ", {$this->lang->task->consumedAB}: " . (float)$info->consumed . ", {$this->lang->task->leftAB}: " . (float)$info->left . "\n";
+        return $teamInfo;
+    }
+
+    /**
+     * 更新任务的最后修改人和最后修改日期。
+     * Update lastEditedBy and lastEditedDate of a task.
+     *
+     * @param  int $taskID
+     * @access protected
+     * @return bool
+     */
+    protected function updateLastEdited(int $taskID): bool
+    {
+        /* Set lastEditedBy to current user, set lastEditedDate to now. */
+        $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($taskID)->exec();
+        return !dao::isError();
     }
 }
