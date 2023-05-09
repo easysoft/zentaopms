@@ -16,12 +16,10 @@ title=测试 todoModel->getValidCycleList();
 timeout=0
 cid=1
 
-- 执行todo模块的getValidCycleList方法第1条的id属性 @1
-
 */
 
 initData();
 
 global $tester;
 $tester->loadModel('todo');
-r($tester->todo->getValidCycleList()) && p('1:id') && e('1');
+r($tester->todo->getValidCycleList()) && p('1:id') && e('1'); // 获取有效的周期待办列表的第一条数据的ID，结果为1

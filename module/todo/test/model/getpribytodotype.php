@@ -20,10 +20,6 @@ title=测试 todoModel->getPriByTodoType();
 timeout=0
 cid=1
 
-- 执行todoTest模块的getPriByTodoTypeTest方法，参数是$type, $objectID @1
-
-- 执行todoTest模块的getPriByTodoTypeTest方法，参数是$inValidType, $inValidObjectID @1
-
 */
 
 initData();
@@ -36,5 +32,5 @@ $inValidType       = 'invalidType';
 $inValidObjectID   = 0;
 
 $todoTest = new todoTest();
-r($todoTest->getPriByTodoTypeTest($type, $objectID))               && p() && e('1');
-r($todoTest->getPriByTodoTypeTest($inValidType, $inValidObjectID)) && p() && e('1');
+r($todoTest->getPriByTodoTypeTest($type, $objectID))               && p() && e('1'); // 获取有效数据的待办关联数据的优先级，结果为1
+r($todoTest->getPriByTodoTypeTest($inValidType, $inValidObjectID)) && p() && e('1'); // 获取无效数据的待办关联数据的优先级，结果为1
