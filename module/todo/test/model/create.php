@@ -51,7 +51,7 @@ $todoWithCycle->config   = json_encode(array('day' => 1, 'specify' => array('mon
 $todoWithCycle->objectID = 0;
 
 $todoTest = new todoTest();
-r($todoTest->createTest($todoWithoutName))     && p() && e('0'); // 判断创建的待办数据name字段为空，返回结果为0
-r($todoTest->createTest($todoInvalidObjectID)) && p() && e('0'); // 判断创建的待办数据objectID字段错误，返回结果为0
-r($todoTest->createTest($todo))                && p() && e('6'); // 判断创建待办，返回结果为1
-r($todoTest->createTest($todoWithCycle))       && p() && e('7'); // 判断创建周期待办，返回结果为1
+r($todoTest->createTest($todoWithoutName))     && p() && e('0'); // 判断创建的待办数据name字段为空，返回结果id为0
+r($todoTest->createTest($todoInvalidObjectID)) && p() && e('0'); // 判断创建的待办数据objectID字段错误，返回结果id为0
+r($todoTest->createTest($todo))                && p() && e('6'); // 判断创建待办，返回结果id为6
+r($todoTest->createTest($todoWithCycle))       && p() && e('7'); // 判断创建周期待办，返回结果id为7
