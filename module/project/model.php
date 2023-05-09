@@ -881,14 +881,18 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目与执行的键值对
      * Get project and execution pairs.
      *
      * @access public
      * @return array
      */
-    public function getProjectExecutionPairs()
+    public function getProjectExecutionPairs(): array
     {
-        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)
+            ->where('multiple')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
     }
 
     /**
