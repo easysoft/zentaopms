@@ -40,7 +40,7 @@ class dom
      * @param  array|string|object $selectors
      * @access public
      */
-    public function __construct($wg, $children, $selectors = NULL, $renderType = NULL, $dataCommands = NULL)
+    public function __construct($wg, $children, $selectors = null, $renderType = null, $dataCommands = null)
     {
         $this->wg           = $wg;
         $this->renderType   = $renderType;
@@ -58,6 +58,7 @@ class dom
             'count'        => count($this->children),
             'renderInner'  => $this->renderInner,
             'renderType'   => $this->renderType,
+            'dataCommands' => $this->dataCommands,
             'selectors'    => stringifyWgSelectors($this->selectors)
         );
     }
@@ -81,7 +82,7 @@ class dom
         if(is_string($commands))
         {
             $commandList = explode(',', $commands);
-            $commands    = [];
+            $commands    = array();
             foreach($commandList as $command)
             {
                 $parts = explode(':', $command, 2);
@@ -89,7 +90,7 @@ class dom
             }
         }
 
-        if($this->dataCommands === NULL) $this->dataCommands = [];
+        if($this->dataCommands === null) $this->dataCommands = array();
         $index = 0;
         foreach($commands as $key => $command)
         {
@@ -102,7 +103,7 @@ class dom
     {
         if(empty($selectors)) return;
 
-        if($this->selectors === NULL) $this->selectors = [];
+        if($this->selectors === null) $this->selectors = array();
         $selectors = parseWgSelectors($selectors);
         foreach($selectors as $selector)
         {
@@ -124,7 +125,7 @@ class dom
     {
         if(empty($this->selectors) && !empty($this->dataCommands)) return [];
 
-        $list     = [];
+        $list     = array();
         $children = $this->renderInner ? $this->wg->children() : $this->children;
 
         if(empty($children)) return $list;

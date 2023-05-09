@@ -142,7 +142,6 @@ class wg
     public function display($options = [])
     {
         zin::disableGlobalRender();
-
         $this->renderOptions = $options;
 
         echo $this->render();

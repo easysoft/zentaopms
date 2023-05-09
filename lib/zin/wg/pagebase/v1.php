@@ -80,7 +80,7 @@ class pageBase extends wg
                 $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
                 h::jsVar('window.config', $jsConfig, set::id('configJS')),
                 $zui ? h::importJs($app->getWebRoot() . 'js/zui3/zin.js', set::id('zinJS')) : null,
-                $head,
+                $head
             ),
             h::body
             (

@@ -70,10 +70,7 @@ class context extends \zin\utils\dataset
         $codes = [];
         foreach($wgs as $wg)
         {
-            if(!method_exists($wg, 'buildEvents'))
-            {
-                continue;
-            }
+            if(!method_exists($wg, 'buildEvents')) continue;
             $code = $wg->buildEvents();
             if(!empty($code)) $codes[] = $code;
         }
@@ -119,10 +116,12 @@ class context extends \zin\utils\dataset
     }
 
     /**
-     * Get current context
+     * Get current context.
+     *
+     * @access public
      * @return context
      */
-    public static function current()
+    public static function current(): context
     {
         if(empty(static::$map)) static::$map['current'] = new context(NULL);
         return static::$map['current'];
