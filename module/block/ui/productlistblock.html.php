@@ -23,7 +23,7 @@ $cols = array
     ),
     array
     (
-        'name'     => 'POName',
+        'name'     => 'poName',
         'title'    => '负责人',
         'width'    => 200,
         'type'     => 'avatarBtn',
@@ -79,13 +79,11 @@ foreach($productStats as $product)
 {
     if(!empty($product->PO))
     {
-        $product->POName    = zget($users, $product->PO);
-        $product->POAvatar  = $usersAvatar[$product->PO];
-        $product->POAccount = $product->PO;
+        $product->poName    = zget($users, $product->PO);
+        $product->poAvatar  = $usersAvatar[$product->PO];
+        $product->poAccount = $product->PO;
     }
 }
-
-$table = array();
 
 panel
 (
