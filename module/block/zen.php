@@ -66,7 +66,7 @@ class blockZen extends block
      */
     protected function getAvailableCodes($dashboard, $module): array|bool
     {
-        if(!$this->selfCall)
+        if($this->isExternalCall())
         {
             $lang = str_replace('_', '-', $this->get->lang);
             $this->app->setClientLang($lang);
@@ -107,7 +107,7 @@ class blockZen extends block
             }
         }
 
-        if(!$this->selfCall)
+        if($this->isExternalCall())
         {
             echo json_encode($blocks);
             return true;
@@ -117,7 +117,7 @@ class blockZen extends block
     }
 
     /**
-     * 添加或编辑区块时获取其他表单项
+     * 添加或编辑区块时获取其他表单项。
      * Get other form items when adding or editing blocks
      *
      * @param  string $dashboard
@@ -174,8 +174,8 @@ class blockZen extends block
             $block->params = json_decode($block->params);
             if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
-            /* 补全加载链接。 */
-            $this->computeMoreLink($block, $projectID);
+            /* 生成更多链接。 */
+            $this->createMoreLink($block, $projectID);
         }
         return $blocks;
     }
@@ -188,9 +188,9 @@ class blockZen extends block
      * @param  int    $projectID
      * @return void
      */
-    private function computeMoreLink(object $block, int $projectID): void
+    private function createMoreLink(object $block, int $projectID): void
     {
-        $module = $block->module ? $block->module : 'common';
+        $module = empty($block->module) ? 'common' : $block->module;
 
         $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
         $block->moreLink  = '';
@@ -1719,10 +1719,10 @@ class blockZen extends block
             }
         }
 
-        $this->view->selfCall    = $this->selfCall;
-        $this->view->hasViewPriv = $hasViewPriv;
-        $this->view->count       = $count;
-        $this->view->longBlock   = $longBlock;
+        $this->view->isExternalCall = $this->isExternalCall();
+        $this->view->hasViewPriv    = $hasViewPriv;
+        $this->view->count          = $count;
+        $this->view->longBlock      = $longBlock;
     }
 
     /**
@@ -2008,5 +2008,79 @@ class blockZen extends block
         $this->view->productLink   = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
         $this->view->projectLink   = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
         $this->view->executionLink = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+    }
+
+    /**
+     * 判断是否为内部调用。
+     * Check request client is chandao or not.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function isExternalCall():bool
+    {
+        return isset($_GET['hash']);
+    }
+
+    /**
+     * 为control 层 printBlock 方法返回json 格式数据
+     * Return json data for printBlock.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function printBlock4Json():string
+    {
+        unset($this->view->app);
+        unset($this->view->config);
+        unset($this->view->lang);
+        unset($this->view->header);
+        unset($this->view->position);
+        unset($this->view->moduleTree);
+
+        $output['status'] = is_object($this->view) ? 'success' : 'fail';
+        $output['data']   = json_encode($this->view);
+        $output['md5']    = md5(json_encode($this->view));
+        return print(json_encode($output));
+    }
+
+    /**
+     * 组织外部数据。
+     * Organiza external data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function organizaExternalData()
+    {
+        $lang = isset($this->get->lang) ? $this->get->lang : 'zh-cn';
+        $lang = str_replace('_', '-', $lang);
+        $this->app->setClientLang($lang);
+        $this->app->loadLang('common');
+
+        if(!isset($block->params->account))
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = 'guest';
+            $this->app->user->realname= 'guest';
+        }
+        else
+        {
+            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($block->params->account)->fetch();
+            if(empty($this->app->user))
+            {
+                $this->app->user = new stdclass();
+                $this->app->user->account = 'guest';
+                $this->app->user->realname= 'guest';
+            }
+        }
+        $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
+        $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
+        $this->app->user->groups = $this->user->getGroups($this->app->user->account);
+        $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
+
+        $sso = isset($this->get->sso) ? base64_decode($this->get->sso) : '';
+        $this->view->sso  = $sso;
+        $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
     }
 }

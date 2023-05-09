@@ -188,7 +188,7 @@ class blockModel extends model
     /**
      * 根据区块索引获取排序靠后的一个区块ID。
      * Get my block id by block code,
-     * 
+     *
      * @param  string    $dashboard
      * @param  string    $module
      * @param  string    $code

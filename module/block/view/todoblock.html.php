@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-if(!$selfCall) die(include('./todolist.html.php'));
+if($isExternalCall) die(include('./todolist.html.php'));
 ?>
 <style>
 .block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible !important; padding-bottom: 0;}
