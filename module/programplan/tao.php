@@ -478,7 +478,7 @@ class programplanTao extends programplanModel
 
     /**
      * 获取阶段信息。
-     * Get stage listt.
+     * Get stage list.
      *
      * @param  int       $executionID
      * @param  int       $productID
