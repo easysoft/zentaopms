@@ -25,8 +25,8 @@ class taskZen extends task
      * 准备编辑数据。
      * Prepare edit data.
      *
-     * @param  form $postDataFixer
-     * @param  int  $taskID
+     * @param  form      $postDataFixer
+     * @param  int       $taskID
      * @access protected
      * @return object|false
      */
@@ -84,9 +84,9 @@ class taskZen extends task
      * 编辑任务后返回响应.
      * Reponse after edit.
      *
-     * @param  int     $taskID
-     * @param  string  $from        ''|taskkanban
-     * @param  array[] $changes
+     * @param  int       $taskID
+     * @param  string    $from    ''|taskkanban
+     * @param  array[]   $changes
      * @access protected
      * @return array
      */
@@ -121,7 +121,7 @@ class taskZen extends task
      * 构建任务编辑表格
      * Build task edit form.
      *
-     * @param  int $taskID
+     * @param  int       $taskID
      * @access protected
      * @return void
      */
@@ -173,43 +173,41 @@ class taskZen extends task
      * 准备管理团队的数据。
      * Prepare manage team data.
      *
-     * @param  form $postData
-     * @param  int  $taskID
+     * @param  form      $postData
+     * @param  int       $taskID
      * @access protected
      * @return object
      */
     protected function prepareManageTeam(form $postData, int $taskID): object
     {
-        $task = $postData->add('id', $taskID)
+        return $postData->add('id', $taskID)
             ->add('lastEditedBy', $this->app->user->account)
             ->get();
-        return $task;
     }
 
     /**
      * 准备指派给的数据.
      * Prepare assignto data.
      *
-     * @param  form $postDataFixer
-     * @param  int  $taskID
+     * @param  form      $postDataFixer
+     * @param  int       $taskID
      * @access protected
      * @return object
      */
     protected function prepareAssignTo(form $postDataFixer, int $taskID): object
     {
-        $task = $postDataFixer->add('id', $taskID)
+        return $postDataFixer->add('id', $taskID)
             ->add('lastEditedBy', $this->app->user->account)
             ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
             ->get();
-        return $task;
     }
 
     /**
      * 指派后返回响应.
      * Reponse after assignto.
      *
-     * @param  int    $taskID
-     * @param  string $from        ''|taskkanban
+     * @param  int       $taskID
+     * @param  string    $from   ''|taskkanban
      * @access protected
      * @return array
      */
@@ -227,8 +225,8 @@ class taskZen extends task
      * 构建指派给表格。
      * Build AssignTo Form.
      *
-     * @param  int $executionID
-     * @param  int $taskID
+     * @param  int       $executionID
+     * @param  int       $taskID
      * @access protected
      * @return void
      */
@@ -260,8 +258,8 @@ class taskZen extends task
      * 返回看板下响应。
      * Reposn from kanban.
      *
-     * @param  object $task
-     * @param  string $from        ''|taskkanban
+     * @param  object    $task
+     * @param  string    $from ''|taskkanban
      * @access protected
      * @return array
      */
@@ -304,8 +302,8 @@ class taskZen extends task
      * 准备批量指派的任务数据。
      * Prepare batch assigned tasks.
      *
-     * @param  string[] $taskIdList
-     * @param  string   $assignedTo
+     * @param  string[]  $taskIdList
+     * @param  string    $assignedTo
      * @access protected
      * @return object[]
      */
@@ -371,8 +369,8 @@ class taskZen extends task
      * 处理创建任务的请求数据。
      * Process the request data for the creation task.
      *
-     * @param  int     $executionID
-     * @param  object  $formData
+     * @param  int       $executionID
+     * @param  object    $formData
      * @access protected
      * @return object
      */
@@ -401,8 +399,8 @@ class taskZen extends task
      * 处理批量创建任务的请求数据。
      * Process the request data for batch create tasks.
      *
-     * @param  object  $execution
-     * @param  object  $formData
+     * @param  object    $execution
+     * @param  object    $formData
      * @access protected
      * @return object[]|false
      */
@@ -457,8 +455,8 @@ class taskZen extends task
      * 在批量创建之前移除post数据中重复的数据。
      * Remove the duplicate data before batch create tasks.
      *
-     * @param  object      $execution
-     * @param  object      $tasks
+     * @param  object    $execution
+     * @param  object    $tasks
      * @access protected
      * @return object|false
      */
@@ -506,11 +504,11 @@ class taskZen extends task
      * 批量创建任务之前构造数据。
      * Construct data before batch create tasks.
      *
-     * @param  object     $execution
-     * @param  object     $tasks
-     * @param  int        $index
-     * @param  array      $dittoFields
-     * @param  array      $extendFields
+     * @param  object    $execution
+     * @param  object    $tasks
+     * @param  int       $index
+     * @param  array     $dittoFields
+     * @param  array     $extendFields
      * @access protected
      * @return object
      */
@@ -562,10 +560,10 @@ class taskZen extends task
      * 检查传入的创建数据是否符合要求。
      * Check if the input post meets the requirements.
      *
-     * @param  int     $executionID
-     * @param  float   $estimate
-     * @param  string  $estStarted
-     * @param  string  $deadline
+     * @param  int       $executionID
+     * @param  float     $estimate
+     * @param  string    $estStarted
+     * @param  string    $deadline
      * @access protected
      * @return bool
      */
@@ -979,9 +977,9 @@ class taskZen extends task
      * @param  string    $deadline
      * @param  bool      $selectTestStory
      * @access protected
-     * @return bool|array
+     * @return false|array
      */
-    protected function prepareCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): bool|array
+    protected function prepareCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): false|array
     {
         /* Check if the input post data meets the requirements. */
         $result = $this->checkCreate($executionID, $estimate, $estStarted, $deadline);
@@ -1013,9 +1011,9 @@ class taskZen extends task
      * @param  int       $executionID
      * @param  object    $formData
      * @access protected
-     * @return array|bool
+     * @return array
      */
-    protected function prepareTestTasks4Create(int $executionID, object $formData): array|bool
+    protected function prepareTestTasks4Create(int $executionID, object $formData): array
     {
         /* Set data for the type of test task that has linked stories. */
         $testTasks = array();
@@ -1068,7 +1066,7 @@ class taskZen extends task
      * @param  object    $execution
      * @param  string    $action
      * @access protected
-     * @return  array
+     * @return array
      */
     protected function getCustomFields(object $execution, string $action): array
     {
@@ -1177,7 +1175,7 @@ class taskZen extends task
      * 任务的数据更新之后，获取对应看板的数据。
      * Get R&D kanban's or task kanban's data after task's data is updated.
      *
-     * @param  object     $execution
+     * @param  object    $execution
      * @access protected
      * @return string
      */
