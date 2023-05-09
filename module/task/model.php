@@ -646,7 +646,7 @@ class taskModel extends model
             ->setIF(strpos($this->config->task->edit->requiredFields, 'left') !== false,     'left',     $this->post->left)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'consumed') !== false, 'consumed', $this->post->consumed)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'story') !== false,    'story',    $this->post->story)
-            ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF($this->post->story !== false && $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
 
             ->setIF($this->post->mode   == 'single', 'mode', '')
             ->setIF($this->post->status == 'done', 'left', 0)
@@ -725,9 +725,9 @@ class taskModel extends model
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
 
-            ->checkIF($task->estimate != false, 'estimate', 'float')
-            ->checkIF($task->left     != false, 'left',     'float')
-            ->checkIF($task->consumed != false, 'consumed', 'float')
+            ->checkIF($task->estimate !== false, 'estimate', 'float')
+            ->checkIF($task->left     !== false, 'left',     'float')
+            ->checkIF($task->consumed !== false, 'consumed', 'float')
 
             ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -1022,7 +1022,7 @@ class taskModel extends model
         foreach($tasks as $taskID => $task)
         {
             if($task->status == 'cancel') continue;
-            if($task->status == 'done' and $task->consumed == false)
+            if($task->status == 'done' and $task->consumed === false)
             {
                 dao::$errors[] = 'Task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
                 return false;
@@ -1062,9 +1062,9 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
 
-                ->checkIF($task->estimate != false, 'estimate', 'float')
-                ->checkIF($task->consumed != false, 'consumed', 'float')
-                ->checkIF($task->left     != false, 'left',     'float')
+                ->checkIF($task->estimate !== false, 'estimate', 'float')
+                ->checkIF($task->consumed !== false, 'consumed', 'float')
+                ->checkIF($task->left     !== false, 'left',     'float')
 
                 ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -1084,7 +1084,7 @@ class taskModel extends model
 
             if($task->status == 'done' and $task->closedReason) $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('id')->eq($taskID)->exec();
 
-            if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
+            if($oldTask->story !== false) $this->loadModel('story')->setStage($oldTask->story);
             if(!dao::isError())
             {
                 /* Record version change history. */
