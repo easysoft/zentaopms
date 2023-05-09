@@ -95,7 +95,7 @@ class todoModel extends model
 
         if(!$this->todoTao->updateRow($todoID, $todo)) return false;
 
-        $this->loadModel('file')->updateObjectID($todo->uid, $todoID, 'todo');
+        if(!empty($todo->uid)) $this->loadModel('file')->updateObjectID($todo->uid, $todoID, 'todo');
         if(!empty($oldTodo->cycle)) $this->createByCycle(array($todoID => $todo));
         if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
         return common::createChanges($oldTodo, (array)$todo);
