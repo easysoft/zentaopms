@@ -158,7 +158,7 @@ class taskModel extends model
         $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
 
         $taskIdList = array();
-        foreach($tasks as $i => $task)
+        foreach($tasks as $task)
         {
             /* 获取当前任务所属泳道并移除laneID属性。 */
             $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
