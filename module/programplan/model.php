@@ -671,6 +671,7 @@ class programplanModel extends model
     }
 
     /**
+     * 获取时间间隔。
      * Get duration.
      *
      * @param  int    $begin
@@ -678,7 +679,7 @@ class programplanModel extends model
      * @access public
      * @return int
      */
-    public function getDuration($begin, $end)
+    public function getDuration(int $begin, int $end): int
     {
         $duration = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         return count($duration);
@@ -1052,13 +1053,14 @@ class programplanModel extends model
     }
 
     /**
+     * 设置阶段在层级中路径。
      * Set stage tree path.
      *
      * @param  int    $planID
      * @access public
      * @return bool
      */
-    public function setTreePath($planID)
+    public function setTreePath($planID): bool
     {
         $stage  = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
         $parent = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($stage->parent)->fetch();
@@ -1083,6 +1085,8 @@ class programplanModel extends model
         {
             foreach($children as $id => $child) $this->setTreePath($id);
         }
+
+        return (!dao::isError());
     }
 
     /**
@@ -1095,13 +1099,13 @@ class programplanModel extends model
      * @access public
      * @return bool|array
      */
-    public function update(int $planID = 0, int $projectID = 0, object $plan = new stdClass()): bool|array
+    public function update(int $planID = 0, int $projectID = 0, $plan = null): bool|array
     {
         $oldPlan = $this->getByID($planID);
 
         /* 判断提交数据是否正确。 */
         /* Judgment of required items. */
-        if(!$this->checkRequiredItems($oldPlan, $plan, $projectID)) return false;
+        if(!$this->programplanTao->checkRequiredItems($oldPlan, $plan, $projectID)) return false;
 
         $setCode     = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
@@ -1359,10 +1363,11 @@ class programplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('begin_desc,path')
             ->fetchPairs();
-        return $this->formatMilestones($milestones, $projectID);
+        return $this->programplanTao->formatMilestones($milestones, $projectID);
     }
 
     /**
+     * 根据product获取里程碑。
      * Get milestone by product.
      *
      * @param  int    $productID
@@ -1370,7 +1375,7 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getMilestoneByProduct($productID, $projectID)
+    public function getMilestoneByProduct(int $productID, int $projectID): array
     {
         $milestones = $this->dao->select('t1.id, t1.path')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
@@ -1381,38 +1386,12 @@ class programplanModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin asc,path')
             ->fetchPairs();
-        return $this->formatMilestones($milestones, $projectID);
+
+        return $this->programplanTao->formatMilestones($milestones, $projectID);
     }
 
     /**
-     * Format milestones use '/'.
-     *
-     * @param  array  $milestones
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    private function formatMilestones($milestones, $projectID)
-    {
-        $allStages = $this->dao->select('id,name')->from(TABLE_EXECUTION)
-            ->where('project')->eq($projectID)
-            ->andWhere('type')->notin('program,project')
-            ->fetchPairs();
-        foreach($milestones as $id => $path)
-        {
-            $paths = explode(',', trim($path, ','));
-            $stageName = '';
-            foreach($paths as $stage)
-            {
-                if(isset($allStages[$stage])) $stageName .= '/' . $allStages[$stage];
-            }
-            $milestones[$id] = trim($stageName, '/');
-        }
-
-        return $milestones;
-    }
-
-    /**
+     * 获取父阶段列表。
      * Get parent stage list.
      *
      * @param  int    $executionID
@@ -1421,28 +1400,20 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getParentStageList($executionID, $planID, $productID)
+    public function getParentStageList(int $executionID, int $planID, int $productID): array
     {
-        $parentStage = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
-            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.project')->eq($executionID)
-            ->andWhere('t2.type')->eq('stage')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.path')->notlike("%,$planID,%")
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->orderBy('t2.id desc')
-            ->fetchPairs();
+        $parentStage = $this->programplanTao->getParentStages($executionID, $planID, $productID);
+        if(!$parentStage) return array();
 
         $plan = $this->getByID($planID);
         foreach($parentStage as $key => $stage)
         {
-            $isCreate = $this->isCreateTask($key);
-            if($isCreate === false and $key != $plan->parent) unset($parentStage[$key]);
-
+            $isCreate    = $this->isCreateTask($key);
             $parentTypes = $this->getParentChildrenTypes($key);
-            if($plan->type == 'stage' and (isset($parentTypes['sprint']) or isset($parentTypes['kanban']))) unset($parentStage[$key]);
-            if(($plan->type == 'sprint' or $plan->type == 'kanban') and isset($parentTypes['stage'])) unset($parentStage[$key]);
+
+            if($isCreate === false && $key != $plan->parent) unset($parentStage[$key]);
+            if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
+            if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
         $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
@@ -1451,15 +1422,16 @@ class programplanModel extends model
     }
 
     /**
+     * 通过计算获取阶段状态。
      * Compute stage status.
      *
      * @param  int    $stage
      * @param  string $action
      * @param  bool   $isParent
      * @access public
-     * @return void
+     * @return bool
      */
-    public function computeProgress(int $stageID, string $action = '', bool $isParent = false)
+    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
     {
         $this->loadModel('execution');
         $this->loadModel('project');
@@ -1477,54 +1449,34 @@ class programplanModel extends model
             $parent = $this->execution->getByID($id);
             if(empty($this->lang->execution->typeList[$parent->type]) || (!$isParent && $id == $stageID)) continue;
 
+            /** 获取子阶段关联开始任务数以及状态下子阶段数量。  */
+            /** Get the number of sub-stage associated start tasks and the number of sub-stages under the state. */
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
             $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
-            foreach($children as $childExecution) $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $statusCount[$childExecution->status] ++;
+            foreach($children as $childExecution)
+            {
+                $count = $statusCount[$childExecution->status];
+                $statusCount[$childExecution->status] = empty($statusCount[$childExecution->status]) ? 1 : $count ++;
+            }
 
             if(empty($statusCount)) continue;
-            $count = count($statusCount);
-            if(isset($statusCount['wait']) && $count == 1 && helper::isZeroDate($parent->realBegan) && $startTasks == 0)
-            {
-                if($parent->status != 'wait')
-                {
-                    $newParent    = $this->execution->buildExecutionByStatus('wait');
-                    $parentAction = 'waitbychild';
-                }
-            }
-            elseif(isset($statusCount['closed']) && $count == 1)
-            {
-                if($parent->status != 'closed')
-                {
-                    $newParent    = $this->execution->buildExecutionByStatus('closed');
-                    $parentAction = 'closedbychild';
-                }
-            }
-            elseif(isset($statusCount['suspended']) && ($count == 1 || (isset($statusCount['closed']) && $count == 2)))
-            {
-                if($parent->status != 'suspended')
-                {
-                    $newParent    = $this->execution->buildExecutionByStatus('suspended');
-                    $parentAction = 'suspendedbychild';
-                }
-            }
-            else
-            {
-                if($parent->status != 'doing')
-                {
-                    $newParent    = $this->execution->buildExecutionByStatus('doing');
-                    $parentAction = $parent->status == 'wait' ?'startbychildstart' : 'startbychild' . $action;
-                }
-            }
 
-            if(isset($newParent))
+            $result       = $this->programplanTao->getNewParentAndAction($statusCount, $parent, (int)$startTasks, $action);
+            $newParent    = $result['newParent'] ?? null;
+            $parentAction = $result['parentAction'] ?? '';
+
+            /** 更新状态以及记录日志。 */
+            /** Update status and save log. */
+            if(isset($newParent) && $newParent)
             {
                 $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($id)->exec();
                 $this->action->create('execution', $id, $parentAction, '', $parentAction);
             }
             unset($newParent, $parentAction);
         }
+        return true;
     }
 
     /**
@@ -1644,84 +1596,6 @@ class programplanModel extends model
     }
 
     /**
-     * 校验提交数据是否必须。
-     * Check required items.
-     *
-     * @param  object $oldPlan
-     * @param  object $plan
-     * @param  int $projectID
-     * @access private
-     * @return bool
-     */
-    private function checkRequiredItems(object $oldPlan, object $plan, int $projectID): bool
-    {
-        /* 校验开始结束时间是否正确。 */
-        /* check begin and end date.  */
-        if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
-        if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
-        if(dao::isError()) return false;
-
-        if($plan->parent) $parentStage = $this->getByID($plan->parent);
-        if(isset($parentStage) && $plan->begin < $parentStage->begin)
-        {
-            dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
-            return false;
-        }
-        if(isset($parentStage) && $plan->end > $parentStage->end)
-        {
-            dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
-            return false;
-        }
-
-        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
-        if(dao::isError()) return false;
-
-        $setCode = (isset($this->config->setCode) && $this->config->setCode == 1) ? true : false;
-        if($setCode && empty($plan->code))
-        {
-            dao::$errors['code'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
-            return false;
-        }
-
-        /* 对于是否有子阶段进行判断处理。 */
-        /* check parent stage. */
-        $setPercent = isset($this->config->setPercent) && $this->config->setPercent == 1 ? true : false;
-        if($plan->parent > 0)
-        {
-            $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;
-            $plan->acl       = $parentStage->acl;
-            if($setPercent)
-            {
-                $childrenTotalPercent = $this->getTotalPercent($parentStage, true);
-                $childrenTotalPercent = $plan->parent == $oldPlan->parent ? ($childrenTotalPercent - $oldPlan->percent + $plan->percent) : ($childrenTotalPercent + $plan->percent);
-                if($childrenTotalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
-            }
-
-            /* 如果子阶段有里程碑，那么父阶段的更新为0。 */
-            /* If child plan has milestone, update parent plan set milestone eq 0 . */
-            if($plan->milestone && $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($oldPlan->parent)->exec();
-        }
-        else
-        {
-            /* Synchronously update sub-phase permissions. */
-            $childrenIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetchAll('id');
-            if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childrenIDList))->exec();
-
-            /* 父阶段不能那个超过100。 */
-            /* The workload of the parent plan cannot exceed 100%. */
-            $oldPlan->parent = $plan->parent;
-            if($setPercent)
-            {
-                $totalPercent    = $this->getTotalPercent($oldPlan);
-                $totalPercent    = $totalPercent + $plan->percent;
-                if($totalPercent > 100) return dao::$errors['percent'][] = $this->lang->programplan->error->percentOver;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * 获取阶段ID的属性。
      * Get stageID attribute.
      *
@@ -1737,5 +1611,4 @@ class programplanModel extends model
 
         return $stageAttribute;
     }
-
 }
