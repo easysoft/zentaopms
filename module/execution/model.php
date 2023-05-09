@@ -603,10 +603,7 @@ class executionModel extends model
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType')
             ->get();
 
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
-        {
-            if(!$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
-        }
+        if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
@@ -839,30 +836,27 @@ class executionModel extends model
             $nameList[$executionName][] = $executionID;
 
             /* Attribute check. */
-            if(isset($data->attributes))
+            if(isset($data->attributes) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
-                if(isset($project->model) and ($project->model == 'waterfall' or  $project->model == 'waterfallplus'))
+                $this->app->loadLang('stage');
+                $attribute = $executions[$executionID]->attribute;
+
+                if(isset($attributeList[$parentID]))
                 {
-                    $this->app->loadLang('stage');
-                    $attribute = $executions[$executionID]->attribute;
-
-                    if(isset($attributeList[$parentID]))
-                    {
-                        $parentAttr = $attributeList[$parentID];
-                    }
-                    else
-                    {
-                        $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
-                    }
-
-                    if($parentAttr and $parentAttr != $attribute and $parentAttr != 'mix')
-                    {
-                        $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
-                        dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
-                    }
-
-                    $attributeList[$executionID] = $attribute;
+                    $parentAttr = $attributeList[$parentID];
                 }
+                else
+                {
+                    $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
+                }
+
+                if($parentAttr && $parentAttr != $attribute && $parentAttr != 'mix')
+                {
+                    $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
+                    dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
+                }
+
+                $attributeList[$executionID] = $attribute;
             }
 
             /* Judge workdays is legitimate. */
