@@ -1,0 +1,24 @@
+title: zt_project
+author: guofeilong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-6
+    - field: project
+      range: 0, 1, 0, 3, 3, 0
+    - field: model
+      range: 'scrum, ,waterfall, , ,scrum'
+    - field: type
+      range: 'project,sprint,project,stage,stage,project'
+    - field: status
+      range: 'wait,doing,closed,suspended'
+    - field: parent
+      range: 1, 1, 0, 3, 3, 0
+    - field: path
+      range: '`,1,`, `,1,2,`, `,3,`, `,3,4,`, `,3,4,5,`, `,6,`'
+    - field: hasProduct
+      range: 1, 1, 1, 1, 1, 0
+    - field: name
+      range: '项目1, 执行1-2, 项目3, 执行3-4, 执行3-5, 无迭代无产品项目6'
+    - field: code
+      range: 'project1, sprint1-2, project3, sprint3-4, sprint3-5, project6'
