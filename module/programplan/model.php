@@ -1318,7 +1318,7 @@ class programplanModel extends model
      */
     public function checkLeafStage(int $stageID): bool
     {
-        $subStageNumbers = $this->dao->select('count(`id`) as total')->from(TABLE_EXECUTION)
+        $subStageNumbers = $this->dao->select('COUNT(`id`) as total')->from(TABLE_EXECUTION)
             ->where('parent')->eq($stageID)
             ->andWhere('deleted')->eq(0)
             ->fetch('total');
