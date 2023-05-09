@@ -1475,44 +1475,11 @@ class bug extends control
             $this->bug->afterClose($bug, $oldBug);
 
             $this->executeHooks($bugID);
+            $this->bug->handleOnlyBodyAfterClose($oldBug->execution, $extra);
 
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-            if(isonlybody())
-            {
-                $execution    = $this->loadModel('execution')->getByID($oldBug->execution);
-                $execLaneType = $this->session->execLaneType ?: 'all';
-                $execGroupBy  = $this->session->execGroupBy ?: 'default';
-                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ?: '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($oldBug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                elseif($from == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($oldBug->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                    $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this', "typeof(parent.parent.setTitleWidth) == 'function' ? parent.parent.setTitleWidth() : parent.parent.location.reload()"));
-                }
-            }
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('status' => 'success', 'data' => $bugID));
-            }
-            else
-            {
-                return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
-            }
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+
+            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
         $this->bug->checkBugExecutionPriv($oldBug);

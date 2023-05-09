@@ -2100,7 +2100,7 @@ class projectModel extends model
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
         $id           = $col->id;
-        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id);
+        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', false, $project->id);
 
         $title = '';
         $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
