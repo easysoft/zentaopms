@@ -505,13 +505,6 @@ class project extends control
      */
     public function edit(string $projectID, string $from = '')
     {
-        $this->loadModel('action');
-        $this->loadModel('custom');
-        $this->loadModel('productplan');
-        $this->loadModel('user');
-        $this->loadModel('program');
-        $this->loadModel('execution');
-
         $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
@@ -526,31 +519,31 @@ class project extends control
         $linkedBranchList    = array();
         $productPlans        = array();
         $withProgram         = $this->config->systemMode == 'ALM';
+        $parentProject       = $this->loadModel('program')->getByID($project->parent);
+        $projectStories      = $this->project->getStoriesByProject($projectID);
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
-        $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
-        $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
-        $parentProject       = $this->program->getByID($project->parent);
-        $projectStories      = $this->project->getStoriesByProject($projectID);
         $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
+        $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
 
         if($_POST)
         {
             $postData   = form::data($this->config->project->form->edit);
-            $postExtras = $this->projectZen->prepareEditExtras($postData);
-            $project    = $this->projectZen->prepareProject($projectID, $postData, $postExtras);
+            $newProject = $this->projectZen->prepareProject($projectID, $postData);
 
-            $project->products = isset($project->products) ? array_filter($project->products) : $linkedProducts;
-
-            $changes = $this->project->update($projectID, $project, $postExtras);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
+            $changes = $this->project->update($newProject, $project);
             if($changes)
             {
-                $actionID = $this->action->create('project', $projectID, 'edited');
+                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->project->updatePlans($projectID, $this->post->plans);                                                        // 更新关联的计划列表。
+            $this->project->updateProducts($projectID, $this->post->products);                                                  // 更新关联的项目列表。
+            $this->project->updateTeamMembers($newProject, $project, $this->post->teamMembers); // 更新关联的用户信息。
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
@@ -603,23 +596,23 @@ class project extends control
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
 
-        $this->view->PMUsers                  = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->PMUsers                  = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                    = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project                  = $project;
         $this->view->programList              = $this->program->getParentPairs();
         $this->view->program                  = $this->program->getByID($project->parent);
         $this->view->projectID                = $projectID;
         $this->view->allProducts              = array('0' => '') + $allProducts;
-        $this->view->multiBranchProducts      = $this->loadModel('product')->getMultiBranchPairs();
+        $this->view->multiBranchProducts      = $this->product->getMultiBranchPairs();
         $this->view->productPlans             = array_filter($productPlansOrder);
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->branches                 = $branches;
-        $this->view->executions               = $this->execution->getPairs($projectID);
+        $this->view->executions               = $this->loadModel('execution')->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed', $linkedBranchList);
-        $this->view->URSRPairs                = $this->custom->getURSRPairs();
+        $this->view->URSRPairs                = $this->loadModel('custom')->getURSRPairs();
         $this->view->parentProject            = $parentProject;
         $this->view->parentProgram            = $this->program->getByID($project->parent);
         $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
