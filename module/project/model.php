@@ -1926,39 +1926,39 @@ class projectModel extends model
         $canOrder     = common::hasPriv('project', 'updateOrder');
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
-        $id           = $col->id;
+        $field        = $col->id;
         $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', false, $project->id);
 
         if($col->show)
         {
             $title = '';
-            $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
+            $class = "c-$field" . (in_array($field, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
-            if($id == 'id') $class .= ' cell-id';
+            if($field == 'id') $class .= ' cell-id';
 
-            if($id == 'code')
+            if($field == 'code')
             {
                 $class .= ' c-name';
                 $title  = "title={$project->code}";
             }
-            elseif($id == 'name')
+            elseif($field == 'name')
             {
                 $class .= ' text-left';
                 $title  = "title='{$project->name}'";
             }
-            elseif($id == 'PM')
+            elseif($field == 'PM')
             {
                 $class .= ' c-manager';
             }
 
-            if($id == 'end')
+            if($field == 'end')
             {
                 $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
                 $class .= ' c-name';
                 $title  = "title='{$project->end}'";
             }
 
-            if($id == 'budget')
+            if($field == 'budget')
             {
                 $projectBudget = $this->getBudgetWithUnit($project->budget);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
@@ -1966,13 +1966,13 @@ class projectModel extends model
                 $title = "title='$budgetTitle'";
             }
 
-            if($id == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
-            if($id == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
-            if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
+            if($field == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
+            if($field == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
+            if($field == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
 
             echo "<td class='$class' $title>";
-            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('project', $project, $id);
-            switch($id)
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('project', $project, $field);
+            switch($field)
             {
                 case 'id':
                     if($canBatchEdit)
@@ -2043,6 +2043,9 @@ class projectModel extends model
                     $project->programID = $programID;
                     echo $this->buildOperateMenu($project, 'browse');
                     break;
+                default:
+                    echo $project->$field;
+                    break;
             }
             echo '</td>';
         }
@@ -2066,37 +2069,37 @@ class projectModel extends model
         $canOrder     = common::hasPriv('project', 'updateOrder');
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
-        $id           = $col->id;
+        $field        = $col->id;
         $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', false, $project->id);
 
         $title = '';
-        $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
+        $class = "c-$field" . (in_array($field, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
-        if($id == 'id') $class .= ' cell-id';
+        if($field == 'id') $class .= ' cell-id';
 
-        if($id == 'code')
+        if($field == 'code')
         {
             $class .= ' c-name';
             $title  = "title={$project->code}";
         }
-        elseif($id == 'name')
+        elseif($field == 'name')
         {
             $class .= ' text-left';
             $title  = "title='{$project->name}'";
         }
-        elseif($id == 'PM')
+        elseif($field == 'PM')
         {
             $class .= ' c-manager';
         }
 
-        if($id == 'end')
+        if($field == 'end')
         {
             $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
             $class .= ' c-name';
             $title  = "title='{$project->end}'";
         }
 
-        if($id == 'budget')
+        if($field == 'budget')
         {
             $projectBudget = $this->getBudgetWithUnit($project->budget);
             $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
@@ -2104,13 +2107,12 @@ class projectModel extends model
             $title = "title='$budgetTitle'";
         }
 
-        if($id == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
-        if($id == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
-        if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
+        if($field == 'estimate') $title = "title='{$project->hours->totalEstimate} {$this->lang->execution->workHour}'";
+        if($field == 'consume')  $title = "title='{$project->hours->totalConsumed} {$this->lang->execution->workHour}'";
+        if($field == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
 
-        /* TODO attach flow cells. */
-        /* if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('project', $project, $id); */
-        switch($id)
+        /* if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('project', $project, $field); */
+        switch($field)
         {
             case 'id':
                 $item->id = sprintf('%03d', $project->id);
@@ -2150,7 +2152,7 @@ class projectModel extends model
                 $item->consume = $project->hours->totalConsumed . $this->lang->execution->workHourUnit;
                 break;
             case 'surplus':
-                $item->surplus = $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
+                $item->surplus = $project->hours->totalLeft . $this->lang->execution->workHourUnit;
                 break;
             case 'progress':
                 $item->progress = $project->hours->progress;
@@ -2158,6 +2160,9 @@ class projectModel extends model
             case 'actions':
                 $project->programID = $programID;
                 $this->buildOperateMenuZin($project, $item, 'browse');
+                break;
+            default:
+                $item->$field = $project->$field;
                 break;
         }
 
@@ -2313,10 +2318,13 @@ class projectModel extends model
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus') and ($project->stageBy == 'project') and !empty($executions))
+            if(!empty($project) && !empty($executions))
             {
-                $this->loadModel('execution');
-                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
+                if(in_array($project->model, array('waterfall', 'waterfallplus')) && $project->stageBy == 'project')
+                {
+                    $this->loadModel('execution');
+                    foreach($executions as $executionID) $this->execution->updateProducts($executionID);
+                }
             }
         }
 
@@ -2496,20 +2504,23 @@ class projectModel extends model
             }
             $hours[$executionID] = $hour;
 
-            if(isset($executions[$executionID]) and $executions[$executionID]->grade > 1 and isset($projects[$executionID]) and ($projects[$executionID] == 'waterfall' or $projects[$executionID] == 'waterfallplus'))
+            if(isset($executions[$executionID]) and $executions[$executionID]->grade > 1)
             {
-                $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
-                foreach($stageParents as $stageParent)
+                if(isset($projects[$executionID]) and in_array($projects[$executionID], array('waterfall', 'waterfallplus')))
                 {
-                    if(!isset($hours[$stageParent]))
+                    $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
+                    foreach($stageParents as $stageParent)
                     {
-                        $hours[$stageParent] = clone $hour;
-                        continue;
-                    }
+                        if(!isset($hours[$stageParent]))
+                        {
+                            $hours[$stageParent] = clone $hour;
+                            continue;
+                        }
 
-                    $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
-                    $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
-                    $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                        $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                        $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                        $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                    }
                 }
             }
         }
@@ -2766,14 +2777,14 @@ class projectModel extends model
             {
                 switch($model)
                 {
-                case 'scrum':
-                    $type = 'sprint';
-                    break;
                 case 'waterfall':
                     $type = 'stage';
                     break;
                 case 'kanban':
                     $type = 'kanban';
+                    break;
+                default:
+                    $type = 'sprint';
                     break;
                 }
             }
@@ -2875,15 +2886,26 @@ class projectModel extends model
         $moduleName    = 'project';
 
         if($project->status == 'wait' || $project->status == 'suspended') $item->actions[] = 'start';
-        if($project->status == 'doing')  $item->actions[] = 'close';
-        if($project->status == 'closed') $item->actions[] = 'active';
 
-        if(common::hasPriv($moduleName, 'suspend') || (common::hasPriv($moduleName, 'close') && $project->status != 'doing') || (common::hasPriv($moduleName, 'activate') && $project->status != 'closed'))
+        $closePriv = common::hasPriv($moduleName, 'close');
+        if($project->status == 'doing')
         {
-            $menu  = 'pause';
-            $comma = ',';
-            if($project->status != 'doing')  $menu .= $comma . 'close';
-            if($project->status != 'closed') $menu .= $comma . 'active';
+            $item->actions[] = 'close';
+            $closePriv       = false;
+        }
+
+        $activatePriv = common::hasPriv($moduleName, 'activate');
+        if($project->status == 'closed')
+        {
+            $item->actions[] = 'active';
+            $activatePriv    = false;
+        }
+
+        if(common::hasPriv($moduleName, 'suspend') || $closePriv || $activatePriv)
+        {
+            $menu = 'pause';
+            if($project->status != 'doing')  $menu .= ',close';
+            if($project->status != 'closed') $menu .= ',active';
 
             $item->actions[] = 'other:' . $menu;
         }
@@ -2924,10 +2946,20 @@ class projectModel extends model
         {
             $menu .= $this->buildMenu($moduleName, 'start', $params, $project, 'browse', 'play', '', 'iframe', true);
         }
-        if($project->status == 'doing')  $menu .= $this->buildMenu($moduleName, 'close',    $params, $project, 'browse', 'off',   '', 'iframe', true);
-        if($project->status == 'closed') $menu .= $this->buildMenu($moduleName, 'activate', $params, $project, 'browse', 'magic', '', 'iframe', true);
 
-        if(common::hasPriv($moduleName, 'suspend') || (common::hasPriv($moduleName, 'close') && $project->status != 'doing') || (common::hasPriv($moduleName, 'activate') && $project->status != 'closed'))
+        $closePriv = common::hasPriv($moduleName, 'close');
+        if($project->status == 'doing')
+        {
+            $menu .= $this->buildMenu($moduleName, 'close', params, $project, 'browse', 'off',   '', 'iframe', true);
+        }
+
+        $activatePriv = common::hasPriv($moduleName, 'activate');
+        if($project->status == 'closed')
+        {
+            $menu .= $this->buildMenu($moduleName, 'activate', $params, $project, 'browse', 'magic', '', 'iframe', true);
+        }
+
+        if(common::hasPriv($moduleName, 'suspend') || $closePriv || $activatePriv)
         {
             $menu .= "<div class='btn-group'>";
             $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
