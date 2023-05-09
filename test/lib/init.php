@@ -105,7 +105,6 @@ if(!empty($config->test->account) and !empty($config->test->password) and !empty
     $token = $token->body;
 }
 
-
 /**
  * Save variable to $_result.
  *
