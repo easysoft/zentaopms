@@ -198,7 +198,7 @@ class bugZen extends bug
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
 
         /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
-        /* This bug has been converted to a task, update the status of the relatedtask or not. */
+        /* This bug has been converted to a task, update the status of the related task or not. */
         $bug = $this->bug->getByID($bugID);
         if($bug->toTask and !empty($changes))
         {
