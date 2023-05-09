@@ -96,24 +96,21 @@ class projectTao extends projectModel
     }
 
     /**
+     * 更新项目主表。
      * Update project table when edit a project.
      *
-     * @param  int    $projectID
-     * @param  object $project
-     * @param  object $oldProject
+     * @param  int       $projectID
+     * @param  object    $project
      * @access protected
      * @return bool
      */
-    protected function doUpdate(int $projectID ,object $project, object $oldProject): bool
+    protected function doUpdate(int $projectID, object $project): bool
     {
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck('begin,end')
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF($project->begin != '', 'begin', 'date')
-            ->checkIF($project->end != '', 'end', 'date')
-            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$oldProject->parent' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
+            ->check('end',  'gt', $project->begin)
+            ->check('name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '{$project->parent}' and `model`   = '{$project->model}' and `deleted` = '0'")
+            ->check('code', 'unique', "id != $projectID and `type` = 'project' and `model`  = '{$project->model}'  and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
