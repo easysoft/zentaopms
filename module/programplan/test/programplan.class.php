@@ -389,22 +389,6 @@ class programplanTest
     }
 
     /**
-     * Test check if the stage is a leaf stage.
-     *
-     * @param  int     $planID
-     * @access public
-     * @return string
-     */
-    public function checkLeafStageTest($planID)
-    {
-        $objects = $this->objectModel->checkLeafStage($planID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Test check whether it is the top stage.
      *
      * @param  int     $planID
