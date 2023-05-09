@@ -805,6 +805,26 @@ class projectTao extends projectModel
     }
 
     /**
+     * 修改无迭代项目下执行的状态。
+     * Modify the execution status when changing the status of no execution project.
+     *
+     * @param  int    $projectID
+     * @param  string $status
+     *
+     * @access public
+     * @return array|false
+     */
+    protected function changeExecutionStatus(int $projectID, string $status): array|false
+    {
+        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
+
+        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
+        if(!$executionID) return false;
+
+        return $this->loadModel('execution')->$status($executionID);
+    }
+
+    /**
      * 通过项目ID获取Bug数量统计。
      * Get the number of bugs associated with the project.
      *

@@ -1608,7 +1608,7 @@ class projectModel extends model
             return false;
         }
 
-        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
+        if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'start');
         return common::createChanges($oldProject, $project);
     }
 
@@ -1633,7 +1633,7 @@ class projectModel extends model
 
         $this->projectTao->doSuspend($projectID, $project);
 
-        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'suspend');
+        if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'suspend');
         return common::createChanges($oldProject, $project);
     }
 
@@ -1696,7 +1696,7 @@ class projectModel extends model
            if(count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
            return false;
         }
-        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'close');
+        if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'close');
 
         /* Close the shadow product of the project. */
         if(!$oldProject->hasProduct)
@@ -1707,22 +1707,6 @@ class projectModel extends model
 
         $this->loadModel('score')->create('project', 'close', $oldProject);
         return common::createChanges($oldProject, $project);
-    }
-
-    /**
-     * Modify the execution status when changing the status of no execution project.
-     *
-     * @param  int    $projectID
-     * @param  string $status
-     * @access public
-     * @return array
-     */
-    public function changeExecutionStatus($projectID, $status)
-    {
-        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
-        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
-        if(!$executionID) return false;
-        return $this->loadModel('execution')->$status($executionID);
     }
 
     /**
