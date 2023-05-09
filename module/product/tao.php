@@ -400,14 +400,14 @@ class productTao extends productModel
      * 获取用于统计的产品列表。
      * Get products list for statistic.
      *
-     * @param  int[]     $roductIDs
-     * @param  int       $programID
-     * @param  string    $orderBy
-     * @param  object    $pager
+     * @param  int[]       $roductIDs
+     * @param  int         $programID
+     * @param  string      $orderBy
+     * @param  object|null $pager
      * @access protected
      * @return array
      */
-    protected function getStatsProducts(array $productIDs, int $programID, string $orderBy, object $pager): array
+    protected function getStatsProducts(array $productIDs, int $programID, string $orderBy, object|null $pager = null): array
     {
         if($orderBy == static::OB_PROGRAM) $products = $this->getPagerProductsWithProgramIn($productIDs, $pager);
         else $products = $this->getPagerProductsIn($productIDs, $pager, $orderBy);

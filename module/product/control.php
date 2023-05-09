@@ -794,135 +794,71 @@ class product extends control
      * @access public
      * @return void
      */
-    public function export($status, $orderBy)
+    public function export(string $status, string $orderBy)
     {
         if($_POST)
         {
-            $productLang   = $this->lang->product;
-            $productConfig = $this->config->product;
+            /* 获取导出字段和数据。 */
+            $fields       = $this->productZen->getExportFields();
+            $productStats = $this->productZen->getExportData($status, $orderBy);
+            $rowspan      = $this->productZen->getExportRowspan($productStats);
 
-            /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
-            foreach($fields as $key => $fieldName)
+            /* 如果只导出选中产品，删除非选中产品。 */
+            if($this->post->exportType == 'selected')
             {
-                $fieldName = trim($fieldName);
-                $fields[$fieldName] = zget($productLang, $fieldName);
-
-                unset($fields[$key]);
-                if($this->config->systemMode == 'light' and ($fieldName == 'line' or $fieldName == 'program')) unset($fields[$fieldName]);
-            }
-
-            $lastProgram  = $lastLine = '';
-            $lines        = $this->product->getLinePairs();
-            $users        = $this->user->getPairs('noletter');
-            $productStats = $this->product->getStats($orderBy, null, $status);
-            foreach($productStats as $i => $product)
-            {
-                $product->line              = zget($lines, $product->line, '');
-                $product->manager           = zget($users, $product->PO, '');
-                $product->draftStories      = (int)$product->stories['draft'];
-                $product->activeStories     = (int)$product->stories['active'];
-                $product->changedStories    = (int)$product->stories['changing'];
-                $product->reviewingStories  = (int)$product->stories['reviewing'];
-                $product->closedStories     = (int)$product->stories['closed'];
-                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories + $product->reviewingStories;
-                $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
-                $product->unResolvedBugs    = (int)$product->unResolved;
-                $product->assignToNullBugs  = (int)$product->assignToNull;
-                $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
-                $product->program           = $product->programName;
-
-                /* get rowspan data */
-                if($lastProgram == '' or $product->program != $lastProgram)
+                $checkedItem = $this->cookie->checkedItem;
+                foreach($productStats as $i => $product)
                 {
-                    $rowspan[$i]['rows']['program'] = 1;
-                    $programI = $i;
-                }
-                else
-                {
-                    $rowspan[$programI]['rows']['program'] ++;
-                }
-                if($lastLine == '' or $product->line != $lastLine)
-                {
-                    $rowspan[$i]['rows']['line'] = 1;
-                    $lineI = $i;
-                }
-                else
-                {
-                    $rowspan[$lineI]['rows']['line'] ++;
-                }
-                $lastProgram = $product->program;
-                $lastLine    = $product->line;
-
-                if($this->post->exportType == 'selected')
-                {
-                    $checkedItem = $this->cookie->checkedItem;
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
                 }
             }
             if($this->config->edition != 'open') list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
 
-            if(isset($rowspan)) $this->post->set('rowspan', $rowspan);
+            $this->post->set('rowspan', $rowspan);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $productStats);
             $this->post->set('kind', 'product');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
+
         $this->display();
     }
 
     /**
      * Story track.
      *
-     * @param  int         $productID
+     * @param  string      $productID
      * @param  int|string  $branch
-     * @param  int         $projectID
-     * @param  int         $recTotal
-     * @param  int         $recPerPage
-     * @param  int         $pageID
+     * @param  string      $projectID
+     * @param  string      $recTotal
+     * @param  string      $recPerPage
+     * @param  string      $pageID
      * @access public
      * @return void
      */
-    public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track(string $productID, string $branch = '', string $projectID = '0', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
     {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        $productID = (int)$productID;
+        $projectID = (int)$projectID;
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
 
         /* Set menu. The projectstory module does not execute. */
-        if(!$projectID)
-        {
-            $products  = $this->product->getPairs();
-            $productID = $this->product->saveVisitState($productID, $products);
-            $this->product->products = $this->product->saveVisitState($productID, $products);
-            $this->product->setMenu($productID, $branch);
-        }
-
-        /* Save session. */
-        $this->session->set('storyList',    $this->app->getURI(true), 'product');
-        $this->session->set('taskList',     $this->app->getURI(true), 'execution');
-        $this->session->set('designList',   $this->app->getURI(true), 'project');
-        $this->session->set('bugList',      $this->app->getURI(true), 'qa');
-        $this->session->set('caseList',     $this->app->getURI(true), 'qa');
-        $this->session->set('revisionList', $this->app->getURI(true), 'repo');
+        $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
 
-        if($projectID)
-        {
-            $this->loadModel('project')->setMenu($projectID);
-            $projectProducts = $this->product->getProducts($projectID);
-        }
+        /* Get project products. */
+        $projectProducts = array();
+        if($projectID) $projectProducts = $this->product->getProducts($projectID);
 
-        $this->view->title      = $this->lang->story->track;
-        $this->view->position[] = $this->lang->story->track;
-
+        $this->view->title           = $this->lang->story->track;
         $this->view->tracks          = $tracks;
         $this->view->pager           = $pager;
         $this->view->productID       = $productID;
-        $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
+        $this->view->projectProducts = $projectProducts;
         $this->display();
     }
 

@@ -86,6 +86,35 @@ class productZen extends product
     }
 
     /**
+     * 设置跟踪矩阵导航
+     * Set menu for track
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $projectID
+     * @access protected
+     * @return void
+     */
+    protected function setTrackMenu(int $productID, string $branch, int $projectID)
+    {
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        /* Save session. */
+        $uri = $this->app->getURI(true);
+        $this->session->set('storyList',    $uri, 'product');
+        $this->session->set('taskList',     $uri, 'execution');
+        $this->session->set('designList',   $uri, 'project');
+        $this->session->set('bugList',      $uri, 'qa');
+        $this->session->set('caseList',     $uri, 'qa');
+        $this->session->set('revisionList', $uri, 'repo');
+
+        if($projectID) return $this->loadModel('project')->setMenu($projectID);
+
+        $productID = $this->product->saveVisitState($productID, $this->products);
+        $this->product->setMenu($productID, $branch);
+    }
+
+    /**
      * 为showErrorNone方法，根据不同模块，设置不同的二级或三级导航配置。
      * Set menu for showErrorNone page.
      *
@@ -319,6 +348,102 @@ class productZen extends product
         foreach($productLines as $programID => $line) $linePairs[$programID][$line->id] = $line->name;
 
         return array($productLines, $linePairs);
+    }
+
+    /**
+     * 获取产品导出字段。
+     * Get export fields.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getExportFields(): array
+    {
+        $productLang   = $this->lang->product;
+        $productConfig = $this->config->product;
+
+        /* 获取字段语言项。 */
+        $fields     = explode(',', $productConfig->list->exportFields);
+        $fieldPairs = array();
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fieldPairs[$fieldName] = zget($productLang, $fieldName);
+
+            if($this->config->systemMode == 'light' and ($fieldName == 'line' or $fieldName == 'program')) unset($fieldPairs[$fieldName]);
+        }
+
+        return $fieldPairs;
+    }
+
+    /**
+     * 获取导出产品数据。
+     * Get export product data.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @access protected
+     * @return array
+     */
+    protected function getExportData(string $status, string $orderBy): array
+    {
+        $lines        = $this->product->getLinePairs();
+        $users        = $this->user->getPairs('noletter');
+        $productStats = $this->product->getStats($orderBy, null, $status);
+
+        foreach($productStats as $i => $product)
+        {
+            $product->line              = zget($lines, $product->line, '');
+            $product->manager           = zget($users, $product->PO, '');
+            $product->draftStories      = (int)$product->stories['draft'];
+            $product->activeStories     = (int)$product->stories['active'];
+            $product->changedStories    = (int)$product->stories['changing'];
+            $product->reviewingStories  = (int)$product->stories['reviewing'];
+            $product->closedStories     = (int)$product->stories['closed'];
+            $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories + $product->reviewingStories;
+            $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
+            $product->unResolvedBugs    = (int)$product->unResolved;
+            $product->assignToNullBugs  = (int)$product->assignToNull;
+            $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
+            $product->program           = $product->programName;
+        }
+
+        return $productStats;
+    }
+
+    /**
+     * 获取导出的合并单元格信息。
+     * Get rowspan for export.
+     *
+     * @param  array $products
+     * @access protected
+     * @return array
+     */
+    protected function getExportRowspan(array $products): array
+    {
+        $lastRecord = array('program' => '', 'line' => '');
+        $colIndexs  = array('program' => 0,  'line' => 0);
+        $rowspan    = array();
+
+        foreach($products as $i => $product)
+        {
+            foreach($lastRecord as $field => $lastID)
+            {
+                if($product->{$field} !== $lastID)
+                {
+                    $rowspan[$i]['rows'][$field] = 1;
+                    $colIndexs[$field] = $i;
+                }
+                else
+                {
+                    $colIndex = $colIndexs[$field];
+                    $rowspan[$colIndex]['rows'][$field] ++;
+                }
+                $lastRecord[$field] = $product->{$field};
+            }
+        }
+
+        return $rowspan;
     }
 
     /**

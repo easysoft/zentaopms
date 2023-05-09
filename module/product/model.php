@@ -275,7 +275,6 @@ class productModel extends model
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         /* 初始化变量。 */
-        $projectID       = (int)$projectID;
         $views           = $this->app->user->view->products . (empty($append) ? '' : ",$append");
         $projectProducts = $this->productTao->getProductsByProjectID($projectID, $views, $status, $orderBy, $noDeleted);
         $products        = array();
@@ -1316,17 +1315,17 @@ class productModel extends model
      * 获取产品统计信息。
      * Get product stats.
      *
-     * @param  string $orderBy order_asc|program_asc
-     * @param  object $pager
-     * @param  string $status
-     * @param  int    $line
-     * @param  string $storyType requirement|story
-     * @param  int    $programID
-     * @param  int    $param
+     * @param  string      $orderBy order_asc|program_asc
+     * @param  object|null $pager
+     * @param  string      $status
+     * @param  int         $line
+     * @param  string      $storyType requirement|story
+     * @param  int         $programID
+     * @param  int         $param
      * @access public
      * @return array
      */
-    public function getStats(string $orderBy = 'order_asc', object $pager = null, string $status = 'noclosed', int $line = 0, string $storyType = 'story', int $programID = 0, int $param = 0): array
+    public function getStats(string $orderBy = 'order_asc', object|null $pager = null, string $status = 'noclosed', int $line = 0, string $storyType = 'story', int $programID = 0, int $param = 0): array
     {
         /* Fetch products list. */
         $products = strtolower($status) == static::ST_BYSEARCH ? $this->getListBySearch($param) : $this->productTao->getList($programID, $status, 0, $line);
