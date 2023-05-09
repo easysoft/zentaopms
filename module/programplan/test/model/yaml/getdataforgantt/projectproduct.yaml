@@ -1,0 +1,8 @@
+title: zt_projectproduct
+author: lanzongjun
+version: '1.0'
+fields:
+    - field: project
+      range: 1, 2, 3, 4, 5
+    - field: product
+      range: 1{5}

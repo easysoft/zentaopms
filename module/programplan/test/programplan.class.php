@@ -489,4 +489,25 @@ class programplanTest
     {
         return $this->objectModel->printCell($col, $plan, $users, $projectID);
     }
+
+    /**
+     * 测试获取甘特图相关数据。
+     * Test get data for gantt view.
+     *
+     * @param  int     $executionID
+     * @param  int     $productID
+     * @param  int     $baselineID
+     * @param  string  $selectCustom
+     * @param  bool    $returnJson
+     * @access public
+     * @return array
+     */
+    public function getDataForGanttTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true)
+    {
+        $objects = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+
+        if($returnJson) $objects = json_decode($objects, true);
+
+        return $objects['data'];
+    }
 }
