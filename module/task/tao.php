@@ -80,9 +80,9 @@ class taskTao extends taskModel
             ->setIF(!empty($task->design), 'designVersion', $design->version)
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
 
-            ->checkIF($task->estimate != false, 'estimate', 'float')
-            ->checkIF($task->left     != false, 'left',     'float')
-            ->checkIF($task->consumed != false, 'consumed', 'float')
+            ->checkIF($task->estimate !== false, 'estimate', 'float')
+            ->checkIF($task->left     !== false, 'left',     'float')
+            ->checkIF($task->consumed !== false, 'consumed', 'float')
 
             ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 

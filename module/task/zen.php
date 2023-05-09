@@ -47,7 +47,7 @@ class taskZen extends task
             ->setIF(!$oldTask->mode && !$postData->assignedTo && !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
 
             ->setIF($oldTask->parent == 0 && $postData->parent == '', 'parent', 0)
-            ->setIF($postData->story != false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
+            ->setIF($postData->story !== false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
 
             ->setIF($postData->mode   == 'single', 'mode', '')
             ->setIF($postData->status == 'done', 'left', 0)
@@ -381,7 +381,7 @@ class taskZen extends task
         $team      = !empty($rawData->team) ? array_filter($rawData->team) : array();
         $task      = $formData->setDefault('execution', $executionID)
             ->setDefault('project', $this->task->getProjectID($executionID))
-            ->setIF($rawData->estimate != false, 'left', $rawData->estimate)
+            ->setIF($rawData->estimate !== false, 'left', $rawData->estimate)
             ->setIF(isset($rawData->story), 'storyVersion', isset($rawData->story) ? $this->loadModel('story')->getVersion($rawData->story) : 0)
             ->setIF(empty($rawData->multiple) || count($team) < 1, 'mode', '')
             ->setIF($execution && ($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))), 'story', 0)
