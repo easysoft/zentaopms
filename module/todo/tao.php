@@ -24,8 +24,8 @@ class todoTao extends todoModel
     }
 
     /**
-     * 获取多条待办。
-     * Get a todo.
+     * 获取一个或多个待办。
+     * Get a or more todo.
      *
      * @param  array     $todoIdList
      * @access protected
