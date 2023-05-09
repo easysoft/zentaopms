@@ -347,12 +347,10 @@ class taskZen extends task
         $task->module = $moduleID;
 
         /* If exist task, copy task information by task id. */
-        if($taskID > 0)
+        if($taskID)
         {
-            $task        = $this->task->getByID($taskID);
-            $executionID = $task->execution;
-
             /* Emptying consumed hours when copy task. */
+            $task = $this->task->getByID($taskID);
             if($task->mode == 'multi')
             {
                 foreach($task->team as $teamMember) $teamMember->consumed = 0;
@@ -360,7 +358,7 @@ class taskZen extends task
         }
 
         /* If exist todo, copy todo information by todo id. */
-        if($todoID > 0)
+        if($todoID)
         {
             $todo = $this->loadModel('todo')->getById($todoID);
             $task->name = $todo->name;
@@ -369,7 +367,7 @@ class taskZen extends task
         }
 
         /* If exist bug, copy bug information by bug id. */
-        if($bugID > 0)
+        if($bugID)
         {
             $bug = $this->loadModel('bug')->getById($bugID);
             $task->name       = $bug->title;
@@ -418,6 +416,7 @@ class taskZen extends task
     }
 
     /**
+<<<<<<< HEAD
      * 展示地盘待处理区块的ID。
      * Show the ID of the block to be processed on the my.
      *
@@ -442,6 +441,8 @@ class taskZen extends task
     }
 
     /**
+=======
+>>>>>>> * Add test case for updatekanbandata method and modify comment for task
      * 展示执行相关数据。
      * Show execution related data.
      *
@@ -977,7 +978,6 @@ class taskZen extends task
         if(!$storyID and !isset($moduleOptionMenu[$task->module])) $task->module = 0;
 
         /* Display relevant variables. */
-        $this->showAssignedToMeBlockID();
         $this->showExecutionData($execution);
         $this->showStoryVars($executionID);
         if($execution->type == 'kanban') $this->showKanbanRelatedVars($executionID, $output);
@@ -994,6 +994,7 @@ class taskZen extends task
         $this->view->execution        = $execution;
         $this->view->task             = $task;
         $this->view->storyID          = $storyID;
+        $this->view->blockID          = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
 
         $this->display();
     }

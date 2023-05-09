@@ -22,7 +22,7 @@ class taskTest
      * @param  array|bool $teamLeftList
      * @param  string     $requiredFields
      * @access public
-     * @return object
+     * @return array|object
      */
     public function createTest($param, $assignedToList = array(), $multiple = 0, $team = array(), $selectTestStory = false, $teamSourceList = array(), $teamEstimateList = array(), $teamConsumedList = false, $teamLeftList = false, $requiredFields = '')
     {
@@ -32,7 +32,7 @@ class taskTest
         if($requiredFields) $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredFields;
 
         $task         = new stdclass();
-        $createFields = array('mailto' => '');
+        $createFields = array('mailto' => '', 'mode' => '', 'status' => 'wait');
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
         foreach($param as $key => $value) $task->$key = $value;
         $taskIdList = $this->objectModel->create($task, $assignedToList, $multiple, $team, $selectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
@@ -41,8 +41,7 @@ class taskTest
         if(dao::isError()) return dao::getError();
 
         if(!$taskIdList) return false;
-        $object = $this->objectModel->getByID(current($taskIdList));
-        return $object;
+        return $this->objectModel->getByID(current($taskIdList));
     }
 
     /**
@@ -858,7 +857,8 @@ class taskTest
         else
         {
             $object = $this->objectModel->getById($taskID);
-            return $object;
+            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
+            return isset($parentObject) ? $parentObject : $object;
         }
     }
 
@@ -882,7 +882,13 @@ class taskTest
             $object = $this->objectModel->getById($taskID);
 
             if(empty($object)) return 0;
-            return $object;
+
+            if($object->parent > 0) $object = $this->objectModel->getById($object->parent);
+
+
+            $estStartedDiff = date_diff(date_create($object->estStarted), date_create(helper::now()));
+            $deadlineDiff   = date_diff(date_create($object->deadline), date_create(helper::now()));
+            return array('estStartedDiff' => $estStartedDiff->d, 'deadlineDiff' => $deadlineDiff->d);
         }
     }
 
@@ -1869,7 +1875,7 @@ class taskTest
      * @param  int   $taskID
      * @param  array $testTasks
      * @access public
-     * @return void
+     * @return array|object
      */
     public function createTestChildTasksTest($taskID = 0, $testTasks = array())
     {
@@ -1893,7 +1899,7 @@ class taskTest
      * @access public
      * @return object|string
      */
-    public function afterSplitTaskTest($oldParentTaskID = 0, $childTasks = '', $testObject = 'parent')
+    public function afterSplitTaskTest(int $oldParentTaskID = 0, string $childTasks = '', string $testObject = 'parent'): object|string
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
@@ -1908,5 +1914,30 @@ class taskTest
         $tasks['parentDeadline']       = $tasks['parent']->deadline;
 
         return $tasks[$testObject];
+    }
+
+    /**
+     * 更新看板中的任务泳道数据。
+     * Update the task lane data in Kanban.
+     *
+     * @param  int    $executionID
+     * @param  int    $taskID
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @access public
+     * @return object|bool
+     */
+    public function updateKanbanDataTest(int $executionID, int $taskID, int $laneID, int $columnID): object|bool
+    {
+        global $tester;
+        $execution = $task = new stdclass();
+        if($executionID) $execution = $tester->loadModel('execution')->getByID($executionID);
+        if($taskID) $task = $this->objectModel->getByID($taskID);
+        $result = $this->objectModel->updateKanbanData($execution, $task, $laneID, $columnID);
+        if(!$result) return false;
+
+        if($laneID) $object = $tester->loadModel('kanban')->getLaneByID($laneID);
+        if($columnID) $object = $tester->loadModel('kanban')->getColumnByID($columnID);
+        return isset($object) ? $object : false;
     }
 }

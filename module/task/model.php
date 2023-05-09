@@ -3910,13 +3910,16 @@ class taskModel extends model
      * Update the task lane data in Kanban.
      *
      * @param  object $execution
-     * @param  object $rawData
-     * @param  int    $taskID
+     * @param  object $task
+     * @param  int    $laneID
+     * @param  int    $oldColumnID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateKanbanData(object $execution, object $task, int $laneID, int $oldColumnID): void
+    public function updateKanbanData(object $execution, object $task, int $laneID, int $oldColumnID): bool
     {
+        if(!isset($execution->id) or !isset($task->execution)) return false;
+
         $this->loadModel('kanban');
 
         /* Get kanban id, lane id and column id. */
@@ -3930,6 +3933,7 @@ class taskModel extends model
 
         /* If lane id or column id is empty, update the task type lane of the kanban. */
         if(!$laneID or !$columnID) $this->kanban->updateLane($kanbanID, 'task');
+        return true;
     }
 
     /**
