@@ -372,6 +372,7 @@ $filter->user->login->cookie['keepLogin']    = 'equal::on';
 $filter->user->export->cookie['checkedItem'] = 'reg::any';
 
 $filter->block->default->get['hash']    = 'reg::md5';
+$filter->block->default->get['lang']    = 'reg::lang';
 $filter->block->create->get['blockid']    = 'code';
 $filter->block->create->get['blockTitle'] = 'reg::any';
 $filter->block->create->get['entry']      = 'code';
@@ -384,7 +385,6 @@ $filter->block->create->get['module']     = 'code';
 $filter->block->edit->get['blockid']    = 'code';
 $filter->block->edit->get['blockTitle'] = 'reg::any';
 $filter->block->edit->get['entry']      = 'code';
-$filter->block->edit->get['lang']       = 'reg::lang';
 $filter->block->edit->get['mode']       = 'code';
 $filter->block->edit->get['dashboard']  = 'code';
 $filter->block->edit->get['param']      = 'reg::base64';
