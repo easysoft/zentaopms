@@ -558,7 +558,7 @@ class bugZen extends bug
             $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
         }
 
-        return $this->updateBugTemplete($bugTpl, array('stories' => $stories, 'builds' => $builds));
+        return $this->updateBugTemplete($bugTpl, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
     }
 
     /**
@@ -633,10 +633,7 @@ class bugZen extends bug
         $projectID = $bugTpl->projectID;
         $project   = $bugTpl->project;
 
-        if($projectID and $project)
-        {
-            if(!$bugID or $this->app->tab != 'qa') $projects += array($projectID => $project->name);
-        }
+        if($projectID and $project and (!$bugID or $this->app->tab != 'qa')) $projects += array($projectID => $project->name);
 
         /* Link all projects to product when copying bug under qa.*/
         if($bugID and $this->app->tab == 'qa') $projects += $this->product->getProjectPairsByProduct($productID, $branch);

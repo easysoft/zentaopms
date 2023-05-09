@@ -1254,11 +1254,10 @@ class bugModel extends model
      * Close a bug.
      *
      * @param  object $bug
-     * @param  string $extra
      * @access public
      * @return void
      */
-    public function close(object $bug, string $extra = '')
+    public function close(object $bug)
     {
         $this->dao->update(TABLE_BUG)
             ->data($bug, 'comment')
@@ -1290,12 +1289,13 @@ class bugModel extends model
      * 处理弹窗关闭bug的情况。
      * Handle close bug from only body.
      *
-     * @param  int    $executionId
-     * @param  int    $extra
+     * @param  int       $executionId
+     * @param  string    $extra
+     * @param  string    $extra
      * @access public
      * @return viod
      */
-    public function handleOnlyBodyAfterClose($executionId, $extra)
+    public function handleOnlyBodyAfterClose($executionId, $extra, $from)
     {
         if(!isonlybody()) return;
 
