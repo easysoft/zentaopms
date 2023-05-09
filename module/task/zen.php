@@ -654,7 +654,7 @@ class taskZen extends task
             $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($this->config->task->create->requiredFields, 'notempty');
             if(dao::isError())
             {
-                foreach(dao::getError() as $field => $error)
+                foreach(dao::getError() as $error)
                 {
                     dao::$errors[] = "ID: {$task->story} {$error}";
                     return false;
