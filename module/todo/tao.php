@@ -203,7 +203,7 @@ class todoTao extends todoModel
             if(strpos(",{$todo->config->week},", ",{$week},") !== false)
             {
                 if(empty($lastCycle)) $date = $today;
-                if($lastCycle and $lastCycle->date < $today) $date = $today;
+                if($lastCycle && $lastCycle->date < $today) $date = $today;
             }
         }
         elseif($todo->config->type == 'month')
@@ -211,8 +211,8 @@ class todoTao extends todoModel
             $day = date('j', strtotime($today));
             if(strpos(",{$todo->config->month},", ",{$day},") !== false)
             {
-                if(empty($lastCycle))         $date = $today;
-                if($lastCycle and $lastCycle->date < $today) $date = $today;
+                if(empty($lastCycle)) $date = $today;
+                if($lastCycle && $lastCycle->date < $today) $date = $today;
             }
         }
 
