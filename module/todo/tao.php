@@ -368,6 +368,8 @@ class todoTao extends todoModel
      */
     protected function setTodoNameByType(object $todo): object
     {
+        $savedTodoName = $todo->name;
+
         if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
@@ -382,6 +384,8 @@ class todoTao extends todoModel
         }
 
         if($this->config->edition != 'open' && $todo->type == 'feedback') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_FEEDBACK)->fetch('title');
+
+        if(empty($todo->name)) $todo->name = $savedTodoName;
 
         return $todo;
     }
