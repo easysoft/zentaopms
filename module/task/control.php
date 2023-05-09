@@ -56,10 +56,10 @@ class task extends control
         /* Check whether the execution has permission to create tasks. */
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
-        if(strpos(",{$limitedExecutions},", ",$executionID,") !== false)
+        if(strpos(",{$limitedExecutions},", ",{$executionID},") !== false)
         {
             echo js::alert($this->lang->task->createDenied);
-            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
+            return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}")));
         }
 
         /* Submit the data processing after creating the task form. */
@@ -70,7 +70,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             list($task, $testTasks, $duplicateTaskID) = $result;
-            if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$existTaskID}")));
+            if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
             /* Create task. */
             $taskIdList = $this->task->create($task, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
