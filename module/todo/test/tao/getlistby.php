@@ -29,4 +29,4 @@ $orderBy = 'date_desc';
 $result = $tester->todo->getListBy($type, $account, $status, $begin, $end, $limit, $orderBy);
 
 r(count($result)) && p() && e('5'); //获取待办列表数量
-r($result[0]) && p('name,status') && e('待办5,doing'); //获取待办列表第一条的名称和状态
+r($result[0]) && p('name,status') && e('待办5,doing'); //获取待办列表第1条的name和status
