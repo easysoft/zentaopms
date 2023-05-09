@@ -1,0 +1,31 @@
+title: table zt_project
+author: Hu Fangzhou
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    note: "名称"
+    fields:
+      - field: name1
+        range: rnd{9},lite
+      - field: name2
+        range: 项目,迭代{4},阶段{3},看板{2}
+  - field: project
+    range: 0,1{9}
+  - field: type
+    range: project,sprint{4},stage{3},kanban{2}
+  - field: lifetime
+    range: "[],short{2},long{1},ops{1},[]{5}"
+  - field: attribute
+    range: "[]{5},request,review,dev,[]{2}"
+  - field: begin
+    range: "20220101 000000:3M"
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: end
+    range: "20230101 000000:1M"
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: vision
+    range: rnd{9},lite

@@ -2000,4 +2000,64 @@ class taskTest
             return !empty($result) ? 1 : 0;
         }
     }
+
+    /**
+     * checkRequired4BatchCreateTest 
+     * 
+     * @param  int    $executionID 
+     * @param  int    $data 
+     * @param  int    $checkRequiredItem 
+     * @param  int    $checkLimitTaskDate 
+     * @access public
+     * @return void
+     */
+    public function checkRequired4BatchCreateTest($executionID, $data, $checkRequiredItem = false, $checkLimitTaskDate = false)
+    {
+        global $tester;
+
+        $execution = $tester->loadModel('execution')->getById($executionID);
+
+        if($checkRequiredItem)
+        {
+            $originRequiredFields = $tester->config->task->create->requiredFields;
+            $tester->config->task->create->requiredFields .= ',story';
+            $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
+            $tester->config->task->create->requiredFields = $originRequiredFields;
+
+            if(dao::isError())
+            {
+                return dao::getError();
+            }
+
+            return $result;
+        }
+        elseif($checkLimitTaskDate)
+        {
+            $tester->loadModel('setting');
+
+            $this->objectModel->config->limitTaskDate = 1;
+
+            $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
+
+            $this->objectModel->config->limitTaskDate = 0;
+
+            if(dao::isError())
+            {
+                return dao::getError();
+            }
+
+            return $result;
+        }
+        else
+        {
+            $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
+            if(dao::isError())
+            {
+                return dao::getError();
+            }
+
+            return $result;
+        }
+
+    }
 }
