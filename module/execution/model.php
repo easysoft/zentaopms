@@ -4863,7 +4863,6 @@ class executionModel extends model
         $chartData['baseLine'] = $baselineJSON;
 
         $execution = $this->getById($executionID);
-        $isClosed  = strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end;
 
         /*
          * 1. Execution status is not closed and suspended, end date less than today;
