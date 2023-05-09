@@ -176,7 +176,7 @@ class block extends control
 
         /* 永久关闭区块。 */
         $block = $this->block->getByID($blockID);
-        $this->block->deleteBlock($blockID);
+        $this->block->deleteBlock(0, $block->module, $block->code);
 
         /* 将关闭的区块保存到配置信息。 */
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
