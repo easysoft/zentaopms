@@ -1,0 +1,20 @@
+---
+title: Create todos for todoTao::setTodoNameByType.
+desc: Create todos for todoModel::close.
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1-4
+  - field: date
+    range: '`2023-04-23`'
+  - field: type
+    range: story,task,bug,testtask
+  - field: objectID
+    range: 1
+  - field: status
+    range: wait
+  - field: finishedDate
+    range: '`2023-04-23`'
+  - field: closedDate
+    range: '`2023-04-23`'
