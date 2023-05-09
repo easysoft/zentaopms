@@ -18,6 +18,6 @@ $lib_noname = array('name' => '');
 $lib_normal = array('name' => 'lib name', 'desc' => 'lib desc');
 $lib_repeat = array('name' => 'lib_name');
 
-r($caselib->createTest($lib_noname)) && p('name:0') && e('『名称』不能为空。'); //测试名称是空时候添加
-r($caselib->createTest($lib_normal)) && p('name')   && e('lib name');     //测试添加的名称信息
-r($caselib->createTest($lib_repeat)) && p('name:0') && e('『名称』已经有『lib name』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); //测试名称是空时候添加
+r($caselib->createTest($lib_noname)) && p('name:0') && e('『名称』不能为空。'); // 测试名称是空时候添加
+r($caselib->createTest($lib_normal)) && p('name')   && e('lib name');           // 测试添加的名称信息
+r($caselib->createTest($lib_repeat)) && p('name:0') && e('『名称』已经有『lib name』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试名称是空时候添加
