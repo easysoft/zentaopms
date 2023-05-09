@@ -457,4 +457,34 @@ class todoTest
 
         return dao::isError() ? 0 : 1;
     }
+
+    /**
+     * 根据配置类型获取周期待办的日期。
+     * Get cycle todo date by config type.
+     *
+     * @param  string   $configType
+     * @access public
+     * @return bool|string
+     */
+    public function getCycleTodoDateTest(string $configType): bool|string
+    {
+        global $tester;
+        $typeMap  = array('day' => 1, 'week' => 2, 'month' => 3);
+        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($typeMap[$configType])->fetchAll('id');
+
+        $todo = current($todoList);
+        $todo->config = json_decode($todo->config);
+
+        $today     = date('Y-m-d');
+        $cycleList = $this->objectModel->getCycleList($todoList);
+        $lastCycle = zget($cycleList, $todo->id, '');
+
+        $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
+
+        if($configType == 'day') return $date == false;
+        if($configType == 'week') return $date == $today;
+        if($configType == 'month') return $date == $today;
+
+        return $date;
+    }
 }
