@@ -2974,30 +2974,6 @@ class projectModel extends model
     }
 
     /**
-     * Get linked repo pairs by project id.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function linkedRepoPairs($projectID)
-    {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)
-            ->where('deleted')->eq(0)
-            ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
-            ->fetchAll();
-
-        $repoPairs = array();
-        foreach($repos as $repo)
-        {
-            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
-            $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
-        }
-
-        return $repoPairs;
-    }
-
-    /**
      * Update plans.
      *
      * @param  int    $projectID
