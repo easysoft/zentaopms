@@ -587,7 +587,8 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
+        $projectID = isset($execution) ? $execution->project : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : $projectID;
         $project   = $this->loadModel('project')->getByID($projectID);
         if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
 
@@ -847,7 +848,8 @@ class bug extends control
             if(!isset($modules[$bug->product][$bug->branch]) and isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
 
             $bugProduct  = isset($productList) ? $productList[$bug->product] : $product;
-            $branch      = $bugProduct->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+            $branch      = $bug->branch > 0 ? $bug->branch . ',0' : '0';
+            $branch      = $bugProduct->type == 'branch' ? $branch : '';
             if(!isset($productBugList[$bug->product][$bug->branch])) $productBugList[$bug->product][$bug->branch] = $this->bug->getProductBugPairs($bug->product, $branch);
         }
 
@@ -1475,7 +1477,7 @@ class bug extends control
             $this->bug->afterClose($bug, $oldBug);
 
             $this->executeHooks($bugID);
-            $this->bug->handleOnlyBodyAfterClose($oldBug->execution, $extra);
+            $this->bug->handleOnlyBodyAfterClose($oldBug->execution, $extra, $from);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
@@ -1879,7 +1881,9 @@ class bug extends control
     {
         $bug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
         $realname = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($bug->assignedTo)->fetch('realname');
-        $bug->assignedTo = $realname ? $realname : ($bug->assignedTo == 'closed' ? 'Closed' : $bug->assignedTo);
+
+        $bug->assignedTo = $bug->assignedTo == 'closed' ? 'Closed' : $bug->assignedTo;
+        $bug->assignedTo = $realname ?: $bug->assignedTo;
         return print(json_encode($bug));
     }
 
@@ -1963,7 +1967,8 @@ class bug extends control
     {
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
-        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $branch      = $bug->branch > 0 ? $bug->branch . ',0' : '0';
+        $branch      = $product->type == 'branch' ? $branch : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
         unset($productBugs[$bugID]);
 

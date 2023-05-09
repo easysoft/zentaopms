@@ -241,7 +241,6 @@ class bugTao extends bugModel
         {
             if(in_array($changedBugID, $addedLinkBugs))
             {
-                $currentLinkBug = $bugID;
                 $linkBugs = explode(',', $linkBugs);
                 if(!empty($linkBugs) && !in_array($bugID, $linkBugs)) $linkBugs[] = $bugID;
             }
