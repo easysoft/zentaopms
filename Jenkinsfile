@@ -35,7 +35,7 @@ pipeline {
               withSonarQubeEnv('sonarqube') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%an)'
+                  sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%ae)'
                 }
               }
             }
@@ -44,13 +44,13 @@ pipeline {
             success {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
               }
             }
             failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
               }
             }
           }
@@ -70,7 +70,7 @@ pipeline {
             failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "Build unit test image failure" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "Build unit test image failure" --debug --custom'
               }
             }
           }
@@ -106,7 +106,7 @@ pipeline {
                 failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "Unit test database initialization failed" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "Unit test database initialization failed" --debug --custom'
               }
                 }
               }
@@ -150,13 +150,13 @@ pipeline {
             success {
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
               }
             }
             failure {
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
               }
             }
           }
