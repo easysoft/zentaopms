@@ -87,48 +87,52 @@ class taskTest
     /**
      * Test batch create tasks.
      *
-     * @param  array  $param
+     * @param  array  $data
      * @param  int    $executionID
+     * @param  int    $taskID
+     * @param  int    $storyID
+     * @param  bool   $verifyScore
+     * @param  array  $output
      * @access public
-     * @return object
+     * @return object|int
      */
-    public function batchCreateObject($param = array(), $executionID = '')
+    public function batchCreateObject($data = array(), $executionID = 0, $taskID = 0, $storyID = 0, $verifyScore = false, $output = array())
     {
-        $modul = array('','','');
-        $parent = array('0','0','0');
-        $name = array('','','');
-        $type = array('','','');
-        $assignedTo = array('','','');
-        $story =array('','','');
-        $pri = array('3','3','3');
-        $color = array('','','');
-        $desc = array('','','');
-        $estimate = array('','','');
-        $createFields = array('parent' => $parent, 'module' => $modul, 'name' => $name, 'type' => $type, 'assignedTo' => $assignedTo,
-            'pri' => $pri, 'story' => $story, 'color' => $color, 'desc' => $desc ,'estimate' => $estimate);
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        global $tester;
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
 
-        $object = $this->objectModel->batchCreate($executionID);
-        if (in_array('批量任务三', $_POST['name'], true))
-        {
-            $objectID = $object[2]->taskID;
-        }
-        else
-        {
-            $objectID = $object[0];
-        }
-        unset($_POST);
+        $execution = $tester->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+
+        $lastScore = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
+
+        $objectIdList = $this->objectModel->batchCreate($execution, $data, $output);
+
+        $childTask = array();
+        if(!dao::isError()) $childTask = $this->objectModel->getById(current($objectIdList));
 
         if(dao::isError())
         {
             return dao::getError();
         }
+        elseif(!empty($taskID))
+        {
+            $parentTask = $this->objectModel->getById($childTask->parent);
+            return $parentTask;
+        }
+        elseif(!empty($storyID))
+        {
+            $releatedStory = $tester->loadModel('story')->getById($childTask->story);
+            return $releatedStory;
+        }
+        elseif($verifyScore)
+        {
+            $score = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
+            return $score == $lastScore + 1;
+        }
         else
         {
-            $object = $this->objectModel->getByID($objectID);
-            return $object;
+            return count($objectIdList);
         }
     }
 
@@ -1729,7 +1733,7 @@ class taskTest
      * @param  int    $columnID
      * @param  string $vision
      * @access public
-     * @return void
+     * @return string
      */
     public function updateKanban4BatchCreateTest($taskID, $executionID, $laneID, $columnID, $vision = 'rnd')
     {

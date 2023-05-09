@@ -533,7 +533,7 @@ class taskTao extends taskModel
     }
 
     /**
-     * 批量创建前检查必填项
+     * 批量创建前检查必填项。
      * Check required fields before batch create tasks.
      *
      * @param  object    $execution

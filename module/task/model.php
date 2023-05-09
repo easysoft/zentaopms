@@ -154,7 +154,7 @@ class taskModel extends model
         $this->loadModel('action');
 
         /* Judge whether the current task is a parent. */
-        $parentID      = !empty($tasks->parent[1]) ? $tasks->parent[1] : 0;
+        $parentID      = !empty($tasks[1]->parent) ? $tasks[1]->parent : 0;
         $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
 
         $taskIdList = array();
@@ -178,7 +178,7 @@ class taskModel extends model
             $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->score->create('task', 'create', $taskID);
 
-            /* 将taskID和actionID存入数组中。 */
+            /* 将taskID存入数组中。 */
             $taskIdList[$taskID] = $taskID;
         }
         if(!dao::isError()) $this->score->create('ajax', 'batchCreate');
@@ -3860,7 +3860,7 @@ class taskModel extends model
         if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
         {
             $taskID = $this->taskTao->splitConsumedTask($oldParentTask);
-             if(!$taskID) return false;
+            if(!$taskID) return false;
 
             $this->updateParentStatus($taskID);
         }
