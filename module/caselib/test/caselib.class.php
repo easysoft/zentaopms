@@ -111,23 +111,22 @@ class caselibTest
     }
 
     /**
-     * Create test.
+     * 创建用例库单元测试方法
+     * Create case lib test function.
      *
-     * @param mixed $param
+     * @param  array $params
      * @access public
-     * @return void
+     * @return array|object
      */
-    public function createTest($param)
+    public function createTest($params = array()): array|object
     {
-        foreach($param as $k => $v) $_POST[$k] = $v;
-        $libID = $this->objectModel->create();
-        unset($_POST);
+        $lib = new stdclass();
+        foreach($params as $key => $value) $lib->$key = $value;
+
+        $libID = $this->objectModel->create($lib);
 
         if(dao::isError()) return dao::getError();
-
-        $objects = $this->objectModel->getById($libID);
-
-        return $objects;
+        return $this->objectModel->getById($libID);
     }
 
     /**
