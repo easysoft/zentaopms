@@ -695,17 +695,14 @@ class programplanModel extends model
         }
 
         $linkProducts = array();
-        $linkBranches = array();
         $productList  = $this->loadModel('product')->getProducts($projectID);
         if($project->stageBy == 'product')
         {
             $linkProducts = array(0 => $productID);
-            $linkBranches = array(0 => $productList[$productID]->branches);
         }
         else
         {
             $linkProducts = array_keys($productList);
-            foreach($linkProducts as $index => $productID) $linkBranches[$index] = $productList[$productID]->branches;
         }
 
         foreach($plans as $plan)
