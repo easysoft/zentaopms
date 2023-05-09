@@ -242,12 +242,13 @@ class todoTest
     }
 
     /**
+     * 创建周期的待办。
      * Create by cycle test.
      *
      * @access public
      * @return int
      */
-    public function createByCycleTest()
+    public function createByCycleTest(): int
     {
         $todoList = $this->objectModel->getValidCycleList();
         $this->objectModel->createByCycle($todoList);
@@ -256,7 +257,8 @@ class todoTest
         $todoIDList = array_keys($todoList);
         $count      = $tester->dao->select('count(`id`) as count')->from(TABLE_TODO)->where('objectID')->in($todoIDList)->andWhere('deleted')->eq('0')->fetch('count');
 
-        return dao::isError() ? 0 :1;
+        if(dao::isError()) return 0;
+        return $count > 0 ? 1 : 0;
     }
 
     /**
@@ -454,5 +456,35 @@ class todoTest
         $this->objectModel->getValidsOfBatchCreate($todos, $loop, $assignedTo);
 
         return dao::isError() ? 0 : 1;
+    }
+
+    /**
+     * 根据配置类型获取周期待办的日期。
+     * Get cycle todo date by config type.
+     *
+     * @param  string   $configType
+     * @access public
+     * @return bool|string
+     */
+    public function getCycleTodoDateTest(string $configType): bool|string
+    {
+        global $tester;
+        $typeMap  = array('day' => 1, 'week' => 2, 'month' => 3);
+        $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq($typeMap[$configType])->fetchAll('id');
+
+        $todo = current($todoList);
+        $todo->config = json_decode($todo->config);
+
+        $today     = date('Y-m-d');
+        $cycleList = $this->objectModel->getCycleList($todoList);
+        $lastCycle = zget($cycleList, $todo->id, '');
+
+        $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
+
+        if($configType == 'day') return $date == false;
+        if($configType == 'week') return $date == $today;
+        if($configType == 'month') return $date == $today;
+
+        return $date;
     }
 }

@@ -45,7 +45,7 @@ class productZen extends product
     protected function setProjectMenu(int $productID, string $branch, string $preBranch)
     {
         $branch = ($preBranch !== '' and $branch === '') ? $preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setCookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
 
         $this->product->setMenu($productID, $branch);
@@ -284,6 +284,22 @@ class productZen extends product
     }
 
     /**
+     * 获取关闭产品页面的表单配置。
+     * Get form fields for close product page.
+     *
+     * @access private
+     * @return array
+     */
+    private function getFormFields4Close(): array
+    {
+        /* Init fields. */
+        $fields = $this->appendFlowFields($this->config->product->form->close);
+        $fields['comment'] = array('type' => 'string',  'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+
+        return $fields;
+    }
+
+    /**
      * Get product lines and product lines of program.
      *
      * @param  array  $programIdList
@@ -469,11 +485,30 @@ class productZen extends product
         $this->view->title          = $this->lang->product->batchEdit;
         $this->view->lines          = $lines;
         $this->view->products       = $products;
+        $this->view->fields         = $this->getFormFields4BatchEdit();
         $this->view->programID      = $programID;
         $this->view->authPrograms   = array('' => '') + $authPrograms;
         $this->view->unauthPrograms = $unauthPrograms;
 
         unset($this->lang->product->typeList['']);
+        $this->display();
+    }
+
+    /**
+     * 构建关闭产品页面数据。
+     * Build close product form.
+     *
+     * @param  int $productID
+     * @access protected
+     * @return void
+     */
+    protected function buildCloseForm(int $productID)
+    {
+        $this->view->title   = $this->view->product->name . $this->lang->colon .$this->lang->close;
+        $this->view->product = $this->product->getById($productID);
+        $this->view->actions = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->fields  = $this->getFormFields4Close();
         $this->display();
     }
 
@@ -598,6 +633,23 @@ class productZen extends product
     }
 
     /**
+     * 预处理关闭产品数据。
+     * Prepare close product extras.
+     *
+     * @param  form $data
+     * @access protected
+     * @return object
+     */
+    protected function prepareCloseExtras(form $data): object
+    {
+        $product = $data->setDefault('status', 'closed')
+            ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
+            ->get();
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
+        return $product;
+    }
+
+    /**
      * 成功插入产品数据后，其他的额外操作。
      * Process after create product.
      *
@@ -670,6 +722,28 @@ class productZen extends product
             $this->action->logHistory($actionID, $changes);
         }
         return $response;
+    }
+
+    /**
+     * 成功关闭产品数据后，后续操作。
+     * Response after close product
+     *
+     * @param  int    $productID
+     * @param  array  $changes
+     * @param  string $comment
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterClose(int $productID, array $changes = array(), string $comment = '')
+    {
+        if(!empty($comment) or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $this->executeHooks($productID);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()');
     }
 
     /**
@@ -885,25 +959,25 @@ class productZen extends product
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('storyModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('storyModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('storyModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* The module ID from project app. */
-            if($this->app->tab == 'project') setcookie('storyModuleParam', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($this->app->tab == 'project') setcookie('storyModuleParam', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Re-init the story branch. */
             $_COOKIE['storyBranch'] = 'all';
-            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* For rendering module tree. */
-            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
-        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Save sort order of product stories list. */
         setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -1236,5 +1310,76 @@ class productZen extends product
     {
         $this->session->set('releaseList',     $this->app->getURI(true), 'product');
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+    }
+
+    /**
+     * 回复产品不存在提示消息。
+     * Response product not found message.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function responseNotFound4View(): void
+    {
+        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        {
+            $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            return;
+        }
+
+        print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        return;
+    }
+
+    /**
+     * 将返回链接保存到session中。
+     * Save back uri in session.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function saveBackUriInSession4Dynamic(): void
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri, 'product');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+        $this->session->set('storyList',       $uri, 'product');
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('executionList',   $uri, 'execution');
+        $this->session->set('taskList',        $uri, 'execution');
+        $this->session->set('buildList',       $uri, 'execution');
+        $this->session->set('bugList',         $uri, 'qa');
+        $this->session->set('caseList',        $uri, 'qa');
+        $this->session->set('testtaskList',    $uri, 'qa');
+    }
+
+    /**
+     * 获取操作记录。
+     * Get actions of the product.
+     *
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  int    $productID
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  string $date
+     * @param  string $direction next|pre
+     * @access public
+     * @return void
+     */
+    protected function getActions4Dynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+
+        /* Build parameters. */
+        $pager  = new pager($recTotal, 50, 1);
+        $period = $type == 'account' ? 'all'  : $type;
+        $date   = empty($date) ? '' : date('Y-m-d', empty($date) ? null : (int)$date);
+
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
+
+        return array($actions, $pager);
     }
 }

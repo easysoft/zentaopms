@@ -35,7 +35,7 @@ pipeline {
               withSonarQubeEnv('sonarqube') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%an)'
+                  sh 'sonar-scanner -Dsonar.analysis.user=$(git show -s --format=%ae)'
                 }
               }
             }
@@ -44,13 +44,13 @@ pipeline {
             success {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner success" --debug --custom'
               }
             }
             failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "sonar scanner" --url "https://sonar.qc.oop.cc/dashboard?id=zentaopms&branch=${GIT_BRANCH}" --content "sonar scanner failure" --debug --custom'
               }
             }
           }
@@ -70,7 +70,7 @@ pipeline {
             failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "Build unit test image failure" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "build image" --url "${RUN_DISPLAY_URL}" --content "Build unit test image failure" --debug --custom'
               }
             }
           }
@@ -96,7 +96,7 @@ pipeline {
 
               steps {
             container('zentao') {
-              sh '/etc/s6/s6-init/run ; php --ini ; cat /usr/bin/initdb.php; initdb.php ; /apps/zentao/test/ztest init'
+              sh 'initdb.php ; /apps/zentao/test/ztest init'
             }
               }
               post {
@@ -106,7 +106,7 @@ pipeline {
                 failure {
               container('xuanimbot') {
                 sh 'git config --global --add safe.directory $(pwd)'
-                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "Unit test database initialization failed" --debug --custom'
+                sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest init" --url "${RUN_DISPLAY_URL}" --content "Unit test database initialization failed" --debug --custom'
               }
                 }
               }
@@ -138,9 +138,8 @@ pipeline {
               stage('Run') {
                 steps {
                   container('zentao') {
-                    sh '/etc/s6/s6-init/run ; php --ini ; initdb.php config'
+                    sh 'initdb.php config'
                     sh '/apps/zentao/test/ztest extract ; /apps/zentao/test/ztest ${SEQUENCE} | tee /apps/zentao/test/${SEQUENCE}.log'
-                    sh 'ls /apps/zentao/www ; cat /apps/zentao/www/coverage.php'
                     sh 'pipeline-unittest.sh /apps/zentao/test/${SEQUENCE}.log'
                   }
                 }
@@ -151,13 +150,13 @@ pipeline {
             success {
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/pangu_pangu_xuanimbot_master'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test passed" --debug --custom'
               }
             }
             failure {
               container('xuanimbot') {
                   sh 'git config --global --add safe.directory $(pwd)'
-                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%an)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
+                  sh '/usr/local/bin/xuanimbot  --users "$(git show -s --format=%ae)" --title "unittest" --url "${RUN_DISPLAY_URL}" --content "Unit test failed" --debug --custom'
               }
             }
           }

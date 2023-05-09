@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 
 $execution = zdTable('project');
@@ -9,6 +9,7 @@ $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');
 $execution->status->range('doing{3},closed,doing');
 $execution->parent->range('0,0,1,1,2');
+$execution->project->range('0');
 $execution->grade->range('2{2},1{3}');
 $execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
 $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
@@ -17,6 +18,7 @@ $execution->gen(5);
 
 $task = zdTable('task');
 $task->id->range('1-20');
+$task->project->range('0');
 $task->name->range('1-20')->prefix('任务');
 $task->module->range('1-5');
 $task->parent->range('0{15},1{5}');
@@ -33,6 +35,7 @@ $task->gen(20);
 
 $story = zdTable('story');
 $story->id->range('1-20');
+$story->project->range('0');
 $story->title->range('1-20')->prefix('需求');
 $story->product->range('1-20');
 $story->branch->range('0');
@@ -52,6 +55,7 @@ $taskTeam->status->range('wait{2},doing{3}');
 $taskTeam->gen(5);
 
 $module = zdTable('module');
+$module->project->range('0');
 $module->root->range('1-5');
 $module->type->range('story');
 $module->gen(5);
@@ -64,163 +68,6 @@ title=taskModel->fetchExecutionTasks();
 timeout=0
 cid=1
 
-sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
-- 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @10
-
-- 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 1 product 1 type assignedbyme module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 1 product 1 type assignedbyme module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 1 type myinvolved module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type myinvolved module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 1 product 1 type undone module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type undone module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 1 product 1 type needconfirm module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 1 product 1 type needconfirm module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 1 type assignedtome module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type assignedtome module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 1 product 1 type finishedbyme module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type finishedbyme module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 1 product 1 type delayed module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type delayed module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 1 product 1 type wait module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type wait module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 1 product 1 type doing module 空 orederBy 'status_asc, id_desc' 的任务第11条的name属性 @任务11
-
-- 测试获取执行ID 1 product 1 type doing module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 1 product 1 type done module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 1 product 1 type done module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 1 type pause module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 1 product 1 type pause module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 1 type cancel module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 1 product 1 type cancel module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 1 type array('wait', 'doing', 'done', 'pause', 'cancel') module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 1 type array('wait', 'doing', 'done', 'pause', 'cancel') module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 1 product 0 type all module array(2) orederBy 'status_asc, id_desc' 的任务第17条的name属性 @任务17
-
-- 测试获取执行ID 1 product 0 type all module array(2) orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 1 product 0 type all module array(8) orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 1 product 0 type all module array(8) orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 1 product 0 type all module array(2,8) orederBy 'status_asc, id_desc' 的任务第17条的name属性 @任务17
-
-- 测试获取执行ID 1 product 0 type all module array(2,8) orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 1 product 0 type all module 空 orederBy 'pri_desc' 的任务第1条的name属性 @任务1
-
-- 测试获取执行ID 1 product 0 type all module 空 orederBy 'pri_desc' 的任务数量 @10
-
-- 测试获取执行ID 2 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务第18条的name属性 @任务18
-
-- 测试获取执行ID 2 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @10
-
-- 测试获取执行ID 2 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 1 type assignedbyme module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 1 type assignedbyme module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 1 type myinvolved module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type myinvolved module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 1 type undone module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type undone module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 2 product 1 type needconfirm module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type needconfirm module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 1 type assignedtome module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type assignedtome module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 1 type finishedbyme module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type finishedbyme module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 1 type delayed module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 1 type delayed module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 1 type wait module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 1 type wait module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 1 type doing module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 1 type doing module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 1 type done module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 1 type done module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 1 type pause module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type pause module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 2 product 1 type cancel module 空 orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 1 type cancel module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 1 type array('wait', 'doing', 'done', 'pause', 'cancel') module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
-
-- 测试获取执行ID 2 product 1 type array('wait', 'doing', 'done', 'pause', 'cancel') module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
-
-- 测试获取执行ID 2 product 0 type all module array(2) orederBy 'status_asc, id_desc' 的任务第2条的name属性 @任务2
-
-- 测试获取执行ID 2 product 0 type all module array(2) orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 0 type all module array(8) orederBy 'status_asc, id_desc' 的任务 @0
-
-- 测试获取执行ID 2 product 0 type all module array(8) orederBy 'status_asc, id_desc' 的任务数量 @0
-
-- 测试获取执行ID 2 product 0 type all module array(2,8) orederBy 'status_asc, id_desc' 的任务第2条的name属性 @任务2
-
-- 测试获取执行ID 2 product 0 type all module array(2,8) orederBy 'status_asc, id_desc' 的任务数量 @2
-
-- 测试获取执行ID 2 product 0 type all module 空 orederBy 'pri_desc' 的任务第20条的name属性 @任务20
-
-- 测试获取执行ID 2 product 0 type all module 空 orederBy 'pri_desc' 的任务数量 @10
-
 */
 
 $executionIdList = array(0, 1, 2);
@@ -228,7 +75,7 @@ $productIdList   = array(0, 1, 8);
 $type            = array('all', 'assignedbyme', 'myinvolved', 'undone', 'needconfirm', 'assignedtome', 'finishedbyme', 'delayed', 'wait', 'doing', 'done', 'pause', 'cancel', array('wait', 'doing', 'done', 'pause', 'cancel'));
 $modules         = array(array(), array(2), array(8), array(2,8));
 $orderBy         = array('status_asc, id_desc', 'pri_desc');
-$count           = array('0','1');
+$count           = array(0, 1);
 
 $task = new taskTest();
 

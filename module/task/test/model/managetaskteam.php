@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 
 zdTable('effort')->config('effort_managetaskteam')->gen(10);

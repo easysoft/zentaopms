@@ -8,7 +8,7 @@
       <form method='post' enctype='multipart/form-data' target='hiddenwin' style="padding:30px">
         <table class='table table-form'>
           <tr>
-            <td align='center'>
+            <td>
               <input type='file' name='file' class='form-control'/>
             </td>
             <td class="w-150px">

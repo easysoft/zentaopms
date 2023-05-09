@@ -23,8 +23,8 @@ fi
 src=$1/
 dest=$2/
 
-# Rsync when the shell load first. 
-rsync -aqP --exclude="db/" $src $dest
+# Rsync when the shell load first.
+rsync -aqP --exclude="db/" --exclude=".git*" $src $dest
 echo `date "+%H:%M:%S"` sync $src to $dest succssfully.
 
 # Watch the $src directory, and sync files to destination.
@@ -56,7 +56,7 @@ while read watcher event file ; do
   else
 
     echo `date "+%H:%M:%S"` $path2process copied.
-    rsync -aqP --exclude='db/'  $src/ $dest
+    rsync -aqP --exclude="db/" --exclude=".git*" $src/ $dest
   fi
 
 done

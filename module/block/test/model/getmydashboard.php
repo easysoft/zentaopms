@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/block.class.php';
 
 su('admin');
@@ -41,8 +41,8 @@ $tester->loadModel('block');
 
 initData();
 
-r(count($tester->block->getMyDashboard('my')))     && p('')         && e('1');       // 查询admin用户在我的地盘仪表盘的区块列表数量
-r($tester->block->getMyDashboard('my'))            && p('2:title')  && e('区块2');   // 查询admin用户在我的地盘仪表盘的区块标题第2条的title属性
-r(count($tester->block->getMyDashboard('my', 1)))  && p('')         && e('0');       // 查询admin用户在我的地盘仪表盘的隐藏区块列表数量
-r(count($tester->block->getMyDashboard('asdas?'))) && p('')         && e('0');       // 查询admin用户在不存在仪表盘的区块列表数量
-r($tester->block->getMyDashboard('my'))            && p('2:vision') && e('rnd');     // 查询admin用户在我的地盘仪表盘区块的vision第2条的vision属性
+r(count($tester->block->getMyDashboard('my')))     && p('')         && e('1');     // 查询admin用户在我的地盘仪表盘的区块列表数量
+r($tester->block->getMyDashboard('my'))            && p('2:title')  && e('区块2'); // 查询admin用户在我的地盘仪表盘的区块标题第2条的title属性
+r(count($tester->block->getMyDashboard('my', 1)))  && p('')         && e('0');     // 查询admin用户在我的地盘仪表盘的隐藏区块列表数量
+r(count($tester->block->getMyDashboard('asdas?'))) && p('')         && e('0');     // 查询admin用户在不存在仪表盘的区块列表数量
+r($tester->block->getMyDashboard('my'))            && p('2:vision') && e('rnd');   // 查询admin用户在我的地盘仪表盘区块的vision第2条的vision属性

@@ -1,0 +1,26 @@
+title: table zt_kanbancell
+desc: "看板单元格"
+author: Hu Fangzhou
+version: "1.0"
+fields:
+    - field: kanban
+      range: 2-5
+    - field: lane
+      range: 1-10
+    - field: column
+      range: 1-10
+    - field: type
+      range: task{4},common{4},story,bug
+    - field: cards
+      fields:
+        - field: card1
+          prefix: ","
+          postfix: ","
+          range: 1-1000:2
+        - field: card2
+          postfix: ","
+          range: 2-1000:2
+        - field: card3
+          postfix: ","
+          range: 801-1000:2
+

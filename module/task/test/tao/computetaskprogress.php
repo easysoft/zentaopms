@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 function initData()
 {
@@ -18,17 +18,6 @@ function initData()
 title=测试computeTaskProgress
 timeout=0
 cid=1
-
-sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
-- 测试任务消耗工时为0，剩余工时为0的情况 @0
-
-- 测试任务消耗工时不为0，剩余工时为0的情况 @100
-
-- 测试任务消耗工时为15，剩余工时为1的情况 @94
-
-- 测试任务消耗工时为20，剩余工时为5的情况 @80
-
-- 测试任务消耗工时为25，剩余工时为10的情况 @71
 
 */
 initData();

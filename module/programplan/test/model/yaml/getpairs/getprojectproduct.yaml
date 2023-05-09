@@ -1,0 +1,13 @@
+title: zt_getprojectproduct
+author: shenshulong
+version: '1.0'
+fields:
+    - field: project
+      range: 11-15
+    - field: product
+      range: 11-15
+    - field: branch
+      range: 31-49
+    - field: plan
+      range: 11-15
+      prefix: '计划'

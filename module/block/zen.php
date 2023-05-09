@@ -16,8 +16,12 @@ class blockZen extends block
         if($dashboard != 'my') return array();
 
         $modules = $this->lang->block->moduleList;
+
         /* Unable to display the doc module on my dashboard. */
         unset($modules['doc']);
+
+        if($this->config->global->flow != 'full') unset($modules['guide']);
+        if($this->config->vision != 'rnd')        unset($modules['contribute']);
 
         /* 从配置项中取出不同模块的首页对应的控制器方法。*/
         /* Retrieve the controller method corresponding to the homepage of different modules from the configuration item.*/
@@ -26,6 +30,7 @@ class blockZen extends block
         list($projectModule, $projectMethod)     = explode('-', $this->config->projectLink);
         list($executionModule, $executionMethod) = explode('-', $this->config->executionLink);
 
+        $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
         foreach($modules as $moduleKey => $moduleName)
         {
             if($moduleKey == 'todo') continue;
@@ -40,17 +45,11 @@ class blockZen extends block
 
             /* After obtaining module permissions, it is necessary to verify whether there is permission for the module homepage. */
             if(!common::hasPriv($moduleKey, $method)) unset($modules[$moduleKey]);
-        }
 
-        /* 判断区块是否被永久关闭，如果未被永久关闭则添加相应选项。*/
-        /* Determine whether the block has been permanently closed, and add corresponding options if it has not been permanently closed.*/
-        $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-        if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
-        if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
-        if(strpos(",$closedBlock,", ",|guide,") === false and $this->config->global->flow == 'full') $modules['guide'] = $this->lang->block->guide;
-        if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
-        if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
-        if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
+            /* 被永久关闭的区块删除对应选项。 */
+            /* Delete corresponding options for blocks that have been permanently closed. */
+            if(strpos(",$closedBlock,", ",$moduleKey|$moduleKey,") !== false) unset($modules[$moduleKey]);
+        }
 
         return array('' => '') + $modules;
     }
@@ -64,9 +63,9 @@ class blockZen extends block
      * @access protected
      * @return string[]|true
      */
-    protected function getAvailableCodes($dashboard, $module): array|bool
+    protected function getAvailableCodes(string $dashboard, string $module): array|bool
     {
-        if(!$this->selfCall)
+        if($this->isExternalCall())
         {
             $lang = str_replace('_', '-', $this->get->lang);
             $this->app->setClientLang($lang);
@@ -107,7 +106,7 @@ class blockZen extends block
             }
         }
 
-        if(!$this->selfCall)
+        if($this->isExternalCall())
         {
             echo json_encode($blocks);
             return true;
@@ -117,7 +116,7 @@ class blockZen extends block
     }
 
     /**
-     * 添加或编辑区块时获取其他表单项
+     * 添加或编辑区块时获取其他表单项。
      * Get other form items when adding or editing blocks
      *
      * @param  string $dashboard
@@ -147,9 +146,10 @@ class blockZen extends block
      * 处理每个区块以渲染 UI。
      * Process each block for render UI.
      *
-     * @param  object[] $blocks
-     * @param  int      $projectID
-     * @return object[]
+     * @param  object $blocks
+     * @param  int    $projectID
+     * @access protected
+     * @return array
      */
     protected function processBlockForRender(array $blocks, int $projectID): array
     {
@@ -174,8 +174,8 @@ class blockZen extends block
             $block->params = json_decode($block->params);
             if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
-            /* 补全加载链接。 */
-            $this->computeMoreLink($block, $projectID);
+            /* 生成更多链接。 */
+            $this->createMoreLink($block, $projectID);
         }
         return $blocks;
     }
@@ -186,11 +186,12 @@ class blockZen extends block
      *
      * @param  object $block
      * @param  int    $projectID
+     * @access protected
      * @return void
      */
-    private function computeMoreLink(object $block, int $projectID): void
+    private function createMoreLink(object $block, int $projectID)
     {
-        $module = $block->module ? $block->module : 'common';
+        $module = empty($block->module) ? 'common' : $block->module;
 
         $block->blockLink = $this->createLink('block', 'printBlock', "id=$block->id&module=$block->module");
         $block->moreLink  = '';
@@ -231,8 +232,9 @@ class blockZen extends block
      * 将区块数组拆分为短区块数组和长区块数组。
      * Split blocks array into short blocks and long blocks.
      *
-     * @param  array   $blocks
-     * @return array[]
+     * @param  array  $blocks
+     * @access protected
+     * @return array
      */
     protected function splitBlocksByLen(array $blocks): array
     {
@@ -257,6 +259,7 @@ class blockZen extends block
      * Generate HTML block.
      *
      * @param  object $block
+     * @access protected
      * @return string
      */
     protected function generateHtmlBlock(object $block): string
@@ -274,6 +277,7 @@ class blockZen extends block
      * Generate default block by source.
      *
      * @param  object $block
+     * @access protected
      * @return string
      */
     protected function generateDefaultBlockBySource(object $block): string
@@ -292,6 +296,7 @@ class blockZen extends block
      * Generate assign to me block.
      *
      * @param  object $block
+     * @access protected
      * @return string
      */
     protected function generateAssignToMeBlock(object $block): string
@@ -305,7 +310,8 @@ class blockZen extends block
      * 去掉待定和已暂停的任务。
      * Remove undetermined and suspended tasks.
      *
-     * @param array $todos
+     * @param  array  $todos
+     * @access protected
      * @return array
      */
     protected function unsetTodos(array $todos): array
@@ -1719,10 +1725,10 @@ class blockZen extends block
             }
         }
 
-        $this->view->selfCall    = $this->selfCall;
-        $this->view->hasViewPriv = $hasViewPriv;
-        $this->view->count       = $count;
-        $this->view->longBlock   = $longBlock;
+        $this->view->isExternalCall = $this->isExternalCall();
+        $this->view->hasViewPriv    = $hasViewPriv;
+        $this->view->count          = $count;
+        $this->view->longBlock      = $longBlock;
     }
 
     /**
@@ -2008,5 +2014,80 @@ class blockZen extends block
         $this->view->productLink   = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
         $this->view->projectLink   = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
         $this->view->executionLink = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+    }
+
+    /**
+     * 判断是否为内部调用。
+     * Check request client is chandao or not.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function isExternalCall():bool
+    {
+        return isset($_GET['hash']);
+    }
+
+    /**
+     * 为control 层 printBlock 方法返回json 格式数据
+     * Return json data for printBlock.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function printBlock4Json():string
+    {
+        unset($this->view->app);
+        unset($this->view->config);
+        unset($this->view->lang);
+        unset($this->view->header);
+        unset($this->view->position);
+        unset($this->view->moduleTree);
+
+        $output['status'] = is_object($this->view) ? 'success' : 'fail';
+        $output['data']   = json_encode($this->view);
+        $output['md5']    = md5(json_encode($this->view));
+        return print(json_encode($output));
+    }
+
+    /**
+     * 组织外部数据。
+     * Organiza external data.
+     *
+     * @param  object $block
+     * @access protected
+     * @return void
+     */
+    protected function organizaExternalData(object $block)
+    {
+        $lang = isset($this->get->lang) ? $this->get->lang : 'zh-cn';
+        $lang = str_replace('_', '-', $lang);
+        $this->app->setClientLang($lang);
+        $this->app->loadLang('common');
+
+        if(!isset($block->params) and !isset($block->params->account))
+        {
+            $this->app->user = new stdclass();
+            $this->app->user->account = 'guest';
+            $this->app->user->realname= 'guest';
+        }
+        else
+        {
+            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($block->params->account)->fetch();
+            if(empty($this->app->user))
+            {
+                $this->app->user = new stdclass();
+                $this->app->user->account = 'guest';
+                $this->app->user->realname= 'guest';
+            }
+        }
+        $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
+        $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
+        $this->app->user->groups = $this->user->getGroups($this->app->user->account);
+        $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
+
+        $sso = isset($this->get->sso) ? base64_decode($this->get->sso) : '';
+        $this->view->sso  = $sso;
+        $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
     }
 }

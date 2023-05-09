@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 function initData()
@@ -42,21 +42,6 @@ function getCondition($executionID)
 title=taskModel->getDataOfTasksPerExecution();
 timeout=0
 cid=1
-
-sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
-- 获取任务id，execution列表信息在执行2中
- - 第2条的id属性 @2
- - 第2条的execution属性 @2
-
-- 获取任务id，execution列表信息在执行4中
- - 第5条的id属性 @5
- - 第5条的execution属性 @4
-
-- 获取任务id，execution列表信息在执行5中
- - 第5条的id属性 @0
- - 第5条的execution属性 @0
-
-- 获取执行3的任务个数 @2
 
 */
 

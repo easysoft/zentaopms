@@ -965,12 +965,12 @@ function floatToolbar()
 }
 
 /**
- * zentao data group.
+ * zentao priority number wg.
  *
- * string label,
- * string labelClass?
+ * int pri
  */
-function dataGroup()
+function priNum()
 {
-    return createWg('dataGroup', func_get_args());
+    return createWg('priNum', func_get_args());
 }
+

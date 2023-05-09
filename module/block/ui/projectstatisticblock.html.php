@@ -23,7 +23,7 @@ namespace zin;
 function getProjectTabs($projects, $blockNavCode): array
 {
     $navTabs  = array();
-    $selected =  key($projects);
+    $selected = key($projects);
     foreach($projects as $project)
     {
         $navTabs[] = li
@@ -63,7 +63,7 @@ function getProjectTabs($projects, $blockNavCode): array
  */
 function getProjectInfo($projects, $blockNavID): array
 {
-    $selected =  key($projects);
+    $selected = key($projects);
     $tabItems = array();
     foreach($projects as $project)
     {

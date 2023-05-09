@@ -832,13 +832,15 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目ID获取关联产品及分支
      * Get branches by project id.
      *
-     * @param  int    $projectID
+     * @param  int $projectID
+     *
      * @access public
      * @return array
      */
-    public function getBranchesByProject($projectID)
+    public function getBranchesByProject(int $projectID): array
     {
         return $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
@@ -879,14 +881,18 @@ class projectModel extends model
     }
 
     /**
+     * 获取项目与执行的键值对
      * Get project and execution pairs.
      *
      * @access public
      * @return array
      */
-    public function getProjectExecutionPairs()
+    public function getProjectExecutionPairs(): array
     {
-        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)
+            ->where('multiple')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
     }
 
     /**
@@ -2094,7 +2100,7 @@ class projectModel extends model
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
         $id           = $col->id;
-        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id);
+        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', false, $project->id);
 
         $title = '';
         $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
@@ -2353,6 +2359,7 @@ class projectModel extends model
     }
 
     /**
+     * 更新关联的产品和执行的用户视图。
      * Update userview for involved product and execution.
      *
      * @param  int    $projectID
@@ -2360,7 +2367,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function updateInvolvedUserView($projectID, $users = array())
+    public function updateInvolvedUserView(int $projectID, array $users = array()): void
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product', 'product');
         $this->loadModel('user')->updateUserView($products, 'product', $users);
@@ -3094,18 +3101,16 @@ class projectModel extends model
      * @param  int $objectID
      *
      * @access public
-     * @return object
+     * @return string
      */
-    public function getProgramMinBegin(int $objectID): object
+    public function getProgramMinBegin(int $objectID): string
     {
-        $a = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+        return $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
             ->where('id')->ne($objectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("%,{$objectID},%")
             ->orderBy('begin_asc')
             ->fetch('minBegin');
-        return $a;
-
     }
 
     /**
@@ -3115,15 +3120,15 @@ class projectModel extends model
      * @param  int $objectID
      *
      * @access public
-     * @return object
+     * @return string
      */
-    public function getProgramMaxEnd(int $objectID): object
+    public function getProgramMaxEnd(int $objectID): string
     {
         return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
             ->where('id')->ne($objectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("%,{$objectID},%")
-            ->andWhere('end')->ne('0000-00-00')
+            ->andWhere("`end` is true")
             ->orderBy('end_desc')
             ->fetch('maxEnd');
     }

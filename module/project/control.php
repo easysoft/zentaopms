@@ -202,16 +202,18 @@ class project extends control
     }
 
     /**
+     * 产品关联项目时获取被关联产品的分支数量
      * AJAX: Get linked products with branch.
      *
-     * @param  int    $projectID
+     * @param  string $projectID
+     *
      * @access public
-     * @return void
+     * @return string
      */
-    public function ajaxGetLinkedProducts($projectID)
+    public function ajaxGetLinkedProducts(string $projectID): string
     {
         $productsWithBranch = array();
-        $linkedProducts     = $this->project->getBranchesByProject($projectID);
+        $linkedProducts     = $this->project->getBranchesByProject((int)$projectID);
         foreach($linkedProducts as $productID => $branches)
         {
             foreach($branches as $branchID => $branchInfo) $productsWithBranch[$productID][$branchID] = $branchID;
@@ -1710,9 +1712,11 @@ class project extends control
     }
 
     /**
+     * 挂起一个项目
      * Suspend a project.
      *
      * @param  string $projectID
+     *
      * @access public
      * @return void
      */
@@ -1720,16 +1724,17 @@ class project extends control
     {
         $projectID = (int)$projectID;
 
+        /* Processing parameter passing while suspend project. */
         if(!empty($_POST))
         {
             $postData = form::data($this->config->project->form->suspend);
-
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 
+            /* Update the database status to suspended. */
             $changes = $this->project->suspend($projectID, $postData);
-
             if(dao::isError()) return print(js::error(dao::getError()));
 
+            /* Process the data returned after the suspended. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterSuspend($projectID, $changes, $comment);
             return print(js::reload('parent.parent'));
@@ -1739,6 +1744,7 @@ class project extends control
     }
 
     /**
+     * 关闭一个项目
      * Close a project.
      *
      * @param  string $projectID
@@ -1750,15 +1756,17 @@ class project extends control
     {
         $projectID = (int)$projectID;
 
+        /* Processing parameter passing while close project. */
         if(!empty($_POST))
         {
             $postData = form::data($this->config->project->form->close);
-
             $postData = $this->projectZen->prepareClosedExtras($projectID, $postData);
 
+            /* Update the database status to closed. */
             $changes = $this->project->close($projectID, $postData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
+            /* Process the data returned after the closed. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
             return print(js::reload('parent.parent'));
@@ -1784,7 +1792,6 @@ class project extends control
         if(!empty($_POST))
         {
             $postData = form::data($this->config->project->form->activate);
-
             $postData = $this->projectZen->prepareActivateExtras($projectID, $postData);
 
             $changes = $this->project->activate($projectID, $postData);
@@ -1826,9 +1833,7 @@ class project extends control
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
-            $this->projectZen->removeAssociatedProducts($project);
-
-            /* Delete the execution under the project. */
+            /* Delete the execution and product under the project. */
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
             if(empty($executionIdList))
             {
@@ -1837,6 +1842,7 @@ class project extends control
                 return print(js::reload('parent'));
             }
             $this->projectZen->removeAssociatedExecutions($executionIdList);
+            $this->projectZen->removeAssociatedProducts($project);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
@@ -1855,8 +1861,8 @@ class project extends control
      */
     public function updateOrder()
     {
-        $idList   = explode(',', trim($this->post->projects, ','));
-        $orderBy  = $this->post->orderBy;
+        $idList  = explode(',', trim($this->post->projects, ','));
+        $orderBy = $this->post->orderBy;
 
         if(strpos($orderBy, 'order') === false) return false;
 
@@ -1972,6 +1978,7 @@ class project extends control
         /* Extract cannot be removed product and branch. */
         $this->projectZen->extractUnModifyForm($projectID, $project);
 
+        /* Organizing render pages requires data. */
         $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
         $this->view->project    = $project;
         $this->view->executions = $executions;
@@ -1989,9 +1996,9 @@ class project extends control
      * @param  string $type all|sprint|stage|kanban
      *
      * @access public
-     * @return int
+     * @return string
      */
-    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all')
+    public function ajaxGetExecutions(string $projectID, string $executionID = '0', string $mode = '', string $type = 'all'): string
     {
         $disabled   = '';
         $executions = array('' => '');

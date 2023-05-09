@@ -23,7 +23,8 @@ class caselib extends control
     }
 
     /**
-     * Create lib
+     * 创建一个用例库。
+     * Create a lib.
      *
      * @access public
      * @return void
@@ -32,37 +33,19 @@ class caselib extends control
     {
         if(!empty($_POST))
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $libID = $this->caselib->create();
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-            $this->loadModel('action')->create('caselib', $libID, 'opened');
+            /* TODO:getExtendFields. */
+            $data = form::data($this->config->caselib->form->create);
+            $lib  = $this->caselibZen->prepareCreateExtras($data, $this->post->uid);
 
-            /* Return lib id when call the API. */
-            if($this->viewType == 'json')
-            {
-                $response['id'] = $libID;
-                return $this->send($response);
-            }
+            $libID = $this->caselib->create($lib, $this->post->uid);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response['locate']  = $this->createLink('caselib', 'browse', "libID=$libID");
+            $response = $this->caselibZen->responseAfterCreate($libID);
             return $this->send($response);
         }
 
-        /* Set menu. */
-        $libraries = $this->caselib->getLibraries();
-        $libID     = $this->caselib->saveLibState(0, $libraries);
-        $this->caselib->setLibMenu($libraries, $libID);
-
-        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
-        $this->view->position[] = $this->lang->caselib->common;
-        $this->view->position[] = $this->lang->caselib->create;
-        $this->display();
+        $this->caselibZen->setCreateMenu();
+        $this->caselibZen->buildCreateForm();
     }
 
     /**

@@ -3,6 +3,8 @@ desc: programplanModel::checkLeafStage UTC.
 author: xushenjie
 version: '1.0'
 fields:
+    - field: id
+      range: 1-10
     - field: name
       range: '瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b'
     - field: type

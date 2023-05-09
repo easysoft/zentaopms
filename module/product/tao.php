@@ -742,12 +742,13 @@ class productTao extends productModel
      * @param  string $branch    all|0|1
      * @param  int    $count
      * @access protected
-     * @return array
+     * @return [array, bool]
      */
     protected function getGroupRoadmapData(int $productID, string $branch, int $count): array
     {
-        $roadmap      = array();
-        $total        = 0;
+        $roadmap = array();
+        $total   = 0;
+        $return  = false;
 
         /* Get product plans. */
         $plans = $this->loadModel('productplan')->getList($productID, $branch);
@@ -757,12 +758,12 @@ class productTao extends productModel
 
         /* Get roadmaps of product plans. */
         list($roadmap, $total, $return) = $this->getRoadmapsOfPlans($orderedPlans, $parents, $branch, $count);
-        if($return) return $roadmap;
+        if($return) return array($roadmap, $return);
 
         /* Get roadmpas of product releases. */
         $releases = $this->loadModel('release')->getList($productID, $branch);
         list($roadmap, $subTotal, $return) = $this->getRoadmapsOfReleases($roadmap, $releases, $branch, $count);
-        if($return) return $roadmap;
+        if($return) return array($roadmap, $return);
         $total += $subTotal;
 
         $groupRoadmap = array();
@@ -779,7 +780,7 @@ class productTao extends productModel
             }
         }
 
-        return $groupRoadmap;
+        return array($groupRoadmap, $return);
     }
 
     /**
@@ -890,7 +891,7 @@ class productTao extends productModel
             krsort($releases);
             foreach($releases as $release)
             {
-                $year = substr($release->date, 0, 4);
+                $year         = substr($release->date, 0, 4);
                 $branchIdList = explode(',', trim($release->branch, ','));
                 $branchIdList = array_unique($branchIdList);
                 foreach($branchIdList as $branchID)
@@ -917,5 +918,98 @@ class productTao extends productModel
         }
 
         return array($roadmaps, $total, $return);
+    }
+
+    /**
+     * 通过产品ID查询产品关联需求的各状态统计总数。
+     * Get stories total count of each status by product ID.
+     *
+     * @param  int       $productID
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function getStoryStatusCountByID(int $productID, string $storyType = 'story'): array
+    {
+        /* TODO move to story module. */
+        $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('product')->eq($productID)
+            ->groupBy('product, status')
+            ->fetchAll('status');
+
+        /* Padding the stories to sure all status have records. */
+        foreach(array_keys($this->lang->story->statusList) as $status)
+        {
+            $stories[$status] = isset($stories[$status]) ? $stories[$status]->count : 0;
+        }
+
+        return $stories;
+    }
+
+    /**
+     * 通过产品ID查询产品关联的统计数据。
+     * Get stat count by product ID.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return int
+     */
+    protected function getStatCountByID(string $tableName, int $productID): int
+    {
+        switch ($tableName)
+        {
+        case TABLE_PRODUCTPLAN:
+            /* Get unclosed plans count. */
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('end')->gt(helper::now())->fetch();
+            break;
+        case TABLE_BUILD:
+            /* Get builds count. */
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+            break;
+        case TABLE_CASE:
+            /* Get cases count. */
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+            break;
+        case TABLE_BUG:
+            /* Get bugs count. */
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+            break;
+        case TABLE_DOC:
+            /* Get docs count. */
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+            break;
+        case TABLE_RELEASE:
+            /* Get releases count. */
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+            break;
+        case TABLE_PROJECTPRODUCT:
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t2.deleted')->eq(0)
+                ->andWhere('t1.product')->eq($productID)
+                ->andWhere('t2.type')->eq('project')
+                ->fetch();
+            break;
+        case 'executions':
+            $record = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t2.deleted')->eq(0)
+                ->andWhere('t1.product')->eq($productID)
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
+                ->fetch();
+            break;
+        case 'progress':
+            $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('status')->eq('closed')->fetch('count');
+            if(empty($closedTotal)) return 0;
+
+            $allTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
+            return round($closedTotal / $allTotal * 100, 1);
+        default:
+            return 0;
+        }
+
+        return $record ? $record->count : 0;
     }
 }

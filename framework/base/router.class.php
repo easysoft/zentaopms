@@ -2814,14 +2814,14 @@ class baseRouter
 
             return $dbh;
         }
-        catch (PDOException $exception)
+        catch (EndResponseException $exception)
         {
-            $message = $exception->getMessage();
+            $message = $exception->getContent();
             if(empty($message))
             {
                 /* Try to repair table. */
                 header("location: {$this->config->webRoot}checktable.php");
-                exit;
+                helper::end();
             }
             static::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
@@ -2984,7 +2984,7 @@ class baseRouter
 
             $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
             $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
-            helper::end($htmlError);
+            echo $htmlError;
         }
     }
 
@@ -3003,8 +3003,9 @@ class baseRouter
         $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log.php';
         if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?" . ">\n");
 
-        $fh = @fopen($sqlLog, 'a');
-        if(!$fh) return false;
+        if(!is_writable($sqlLog)) return false;
+
+        $fh = fopen($sqlLog, 'a');
         fwrite($fh, date('Ymd H:i:s') . ": " . $this->getURI() . "\n");
         foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
         fwrite($fh, "\n");
@@ -3492,7 +3493,7 @@ class ztSessionHandler
         $time = time();
         foreach(glob("$this->sessSavePath/sess_*") as $fileName)
         {
-            if(filemtime($fileName) + $maxlifeTime < $time) @unlink($fileName);
+            if(is_writable($fileName) and filemtime($fileName) + $maxlifeTime < $time) unlink($fileName);
         }
         return true;
     }

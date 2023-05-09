@@ -17,3 +17,5 @@ $config->caselib->datatable->defaultField = array('id', 'pri', 'title', 'type', 
 $config->caselib->custom = new stdclass();
 $config->caselib->custom->createFields = 'stage,pri,keywords';
 $config->caselib->customCreateFields   = 'stage,pri,keywords';
+
+include dirname(__FILE__) . DS . 'config' . DS . 'form.php';

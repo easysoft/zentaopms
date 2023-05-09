@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 function initData()
@@ -20,10 +20,6 @@ function initData()
     $project->project->range('0,0,0,0,0,1,2,3,4,5');
 
     $project->gen(10);
-}
-
-function insertDate($taskID, $estStarted, $deadline)
-{
 }
 
 function getByID($taskID)

@@ -47,7 +47,7 @@ class task extends control
         parse_str($extra, $output);
 
         /* If you do not have permission to access any execution, go to the create execution page. */
-        if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
+        if(empty($this->app->user->view->sprints) && !$executionID) $this->locate($this->createLink('execution', 'create'));
 
         /* Set menu and get execution information. */
         $executionID = $this->taskZen->setMenu($executionID);
@@ -56,10 +56,10 @@ class task extends control
         /* Check whether the execution has permission to create tasks. */
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
-        if(strpos(",{$limitedExecutions},", ",$executionID,") !== false)
+        if(strpos(",{$limitedExecutions},", ",{$executionID},") !== false)
         {
             echo js::alert($this->lang->task->createDenied);
-            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
+            return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}")));
         }
 
         /* Submit the data processing after creating the task form. */
@@ -69,8 +69,8 @@ class task extends control
             $result = $this->taskZen->prepareCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            list($task, $testTasks, $existTaskID) = $result;
-            if($existTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$existTaskID}")));
+            list($task, $testTasks, $duplicateTaskID) = $result;
+            if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'locate' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
             /* Create task. */
             $taskIdList = $this->task->create($task, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
@@ -80,16 +80,16 @@ class task extends control
             $task->id = current($taskIdList);
             $columnID = isset($output['columnID']) ? (int)$output['columnID'] : 0;
             $this->task->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
-            $this->task->updateKanbanData($execution, $task, (int)$_POST['lane'], $columnID);
-            setcookie('lastTaskModule', (int)$_POST['module'], $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            $this->task->updateKanbanData($execution, $task, (int)$this->post->lane, $columnID);
+            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Get the information returned after a task is created. */
-            $response = $this->taskZen->responseAfterCreate($task, $execution, $_POST['after']);
+            $response = $this->taskZen->responseAfterCreate($task, $execution, $this->post->after);
             return $this->send($response);
         }
 
         /* Shows the variables needed to create the task page. */
-        $this->taskZen->showCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output);
+        $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output);
     }
 
     /**
@@ -132,7 +132,7 @@ class task extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Return task id list when call the API. */
-            if($this->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
             /* 生成链接。 TODO: 写配置项。 */
             $redirectedLink = $this->taskZen->getRedirectedLink($execution);

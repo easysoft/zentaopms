@@ -1,29 +1,33 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
 
 /**
 
 title=测试 programplanModel->getPairs();
+timeout=0
 cid=1
-pid=1
 
-测试获取执行41 产品21的计划键值对 >> ,阶段31,阶段31/子阶段1,阶段121,阶段211,阶段301,阶段391,阶段481,阶段571
-测试获取执行42 产品22的计划键值对 >> ,阶段32,阶段32/子阶段2,阶段122,阶段212,阶段302,阶段392,阶段482,阶段572
-测试获取执行43 产品23的计划键值对 >> ,阶段33,阶段33/子阶段3,阶段123,阶段213,阶段303,阶段393,阶段483,阶段573
-测试获取执行44 产品24的计划键值对 >> ,阶段34,阶段34/子阶段4,阶段124,阶段214,阶段304,阶段394,阶段484,阶段574
-测试获取执行45 产品25的计划键值对 >> ,阶段35,阶段35/子阶段5,阶段125,阶段215,阶段305,阶段395,阶段485,阶段575
+- 测试获取执行11 产品11的计划键值对 @,/项目11
+
+- 测试获取执行12 产品12的计划键值对 @,/项目12
 
 */
-$executionIDList = array(41, 42, 43, 44, 45);
-$productIDList   = array(21, 22, 23, 24, 25);
+
+function initData()
+{
+    zdTable('project')->config('getpairs')->gen(10);
+    zdTable('projectproduct')->config('getprojectproduct')->gen(20);
+}
+
+initData();
+
+$executionIDList = array(11, 12, 13, 14, 15);
+$productIDList   = array(11, 12, 13, 14, 15);
 
 $programplan = new programplanTest();
 
-r($programplan->getPairsTest($executionIDList[0], $productIDList[0])) && p() && e(',阶段31,阶段31/子阶段1,阶段121,阶段211,阶段301,阶段391,阶段481,阶段571'); // 测试获取执行41 产品21的计划键值对
-r($programplan->getPairsTest($executionIDList[1], $productIDList[1])) && p() && e(',阶段32,阶段32/子阶段2,阶段122,阶段212,阶段302,阶段392,阶段482,阶段572'); // 测试获取执行42 产品22的计划键值对
-r($programplan->getPairsTest($executionIDList[2], $productIDList[2])) && p() && e(',阶段33,阶段33/子阶段3,阶段123,阶段213,阶段303,阶段393,阶段483,阶段573'); // 测试获取执行43 产品23的计划键值对
-r($programplan->getPairsTest($executionIDList[3], $productIDList[3])) && p() && e(',阶段34,阶段34/子阶段4,阶段124,阶段214,阶段304,阶段394,阶段484,阶段574'); // 测试获取执行44 产品24的计划键值对
-r($programplan->getPairsTest($executionIDList[4], $productIDList[4])) && p() && e(',阶段35,阶段35/子阶段5,阶段125,阶段215,阶段305,阶段395,阶段485,阶段575'); // 测试获取执行45 产品25的计划键值对
+r($programplan->getPairsTest($executionIDList[0], $productIDList[0])) && p() && e(',/项目11'); // 测试获取执行11 产品11的计划键值对
+r($programplan->getPairsTest($executionIDList[1], $productIDList[1], 'leaf')) && p() && e(',/项目12'); // 测试获取执行12 产品12的计划键值对

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/block.class.php';
 
 su('admin');
@@ -32,6 +32,12 @@ cid=39
 
 - 测试ID为2的区块的是否存在属性id @0
 
+- 测试ID为3的区块的是否存在属性id @3
+
+- 测试根据代号删除区块后的返回结果 @1
+
+- 测试ID为3的区块的是否存在属性id @0
+
 - 测试ID为22的区块删除后的返回结果 @1
 
 */
@@ -42,7 +48,10 @@ $tester->loadModel('block');
 initData();
 
 $blockTest = new blockTest();
-r($tester->block->getByID(2)) && p('id') && e("2"); // 测试ID为2的区块是否存在
-r($tester->block->deleteBlock(2)) && p('') && e('1'); // 测试ID为2的区块删除后的返回结果
-r($tester->block->getByID(2)) && p('id') && e("0"); // 测试ID为2的区块的是否存在
+r($tester->block->getByID(2)) && p('id') && e('2');    // 测试ID为2的区块是否存在
+r($tester->block->deleteBlock(2, '', '')) && p('') && e('1');  // 测试ID为2的区块删除后的返回结果
+r($tester->block->getByID(2)) && p('id') && e('0');    // 测试ID为2的区块的是否存在
+r($tester->block->getByID(3)) && p('id') && e('3');    // 测试ID为3的区块的是否存在
+r($tester->block->deleteBlock(0, 'project', 'statistic')) && p('') && e('1');  // 测试根据代号删除区块后的返回结果
+r($tester->block->getByID(3)) && p('id') && e('0');    // 测试ID为3的区块的是否存在
 r($tester->block->deleteBlock(22)) && p('') && e('1'); // 测试ID为22的区块删除后的返回结果

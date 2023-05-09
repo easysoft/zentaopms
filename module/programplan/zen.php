@@ -168,13 +168,13 @@ class programplanZen extends programplan
      *
      * @param  int      $projectID
      * @param  int      $productID
-     * @param  array    $plans
+     * @param  int      $baselineID
      * @param  string   $type
      * @param  string   $orderBy
      * @access protected
      * @return array
      */
-    protected function buildStages(int $projectID, int $productID, array $baselineID, string $type, string $orderBy): array
+    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy): array
     {
         $stages = array();
         $selectCustom = 0; // Display date and task settings.
@@ -233,7 +233,7 @@ class programplanZen extends programplan
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->zooming     = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';;
+        $this->view->zooming     = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
 
         $this->display();
     }

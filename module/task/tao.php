@@ -61,7 +61,12 @@ class taskTao extends taskModel
      */
     protected function doUpdate(object $task, object $oldTask, string $requiredFields): bool
     {
-        if(isset($task->execution) and $task->execution != $oldTask->execution)
+        if(!empty($task->design)) $design = $this->dao->select('version')->from(TABLE_DESIGN)->where('id')->eq($task->design)->fetch();
+
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+
+        /* Update children task. */
+        if(isset($task->execution) && $task->execution != $oldTask->execution)
         {
             $newExecution  = $this->loadModel('execution')->getByID($task->execution);
             $task->project = $newExecution->project;
@@ -71,16 +76,18 @@ class taskTao extends taskModel
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
+            ->setIF($this->isNoStoryExecution($execution), 'story', 0)
+            ->setIF(!empty($task->design), 'designVersion', $design->version)
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
 
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
 
-            ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
+            ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
-            ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
+            ->checkIF($task->status == 'done' && $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
@@ -92,39 +99,36 @@ class taskTao extends taskModel
     }
 
     /**
-     * 获取任务的进度。
-     * Compute progress of a task.
+     * 根据任务编号查询任务数据。
+     * Fetch a task by id.
      *
-     * @param  object   $task
+     * @param  int       $taskID
+     * @param  string    $field
      * @access protected
-     * @return float
+     * @return object
      */
-    protected function computeTaskProgress(object $task): float
+    protected function fetchByID(int $taskID, string $field = ''): object|string
     {
-        if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        if($task->consumed == 0) return 0;
-        return 100;
+        if(empty($field)) return $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+
+        $taskObj = $this->dao->select(trim($field))->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        return (string)$taskObj->$field;
     }
 
     /**
-     * 计算任务列表中每个任务的进度，包括子任务。
-     * Compute progress of task list, include its' children.
+     * 根据报表条件查询任务.
+     * Get task list by report.
      *
-     * @param  object[] $tasks
+     * @param  string $field
+     * @param  string $condition
      * @access protected
      * @return object[]
      */
-    protected function batchComputeProgress(array $tasks): array
+    protected function getListByReportCondition(string $field, string $condition): array
     {
-        foreach($tasks as $task)
-        {
-            $task->progress = $this->computeTaskProgress($task);
-            if(empty($task->children)) continue;
-
-            $task->children = $this->batchComputeProgress($task->children);
-        }
-
-        return $tasks;
+        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
+                ->where($condition)
+                ->fetchAll('id');
     }
 
     /**
@@ -171,7 +175,7 @@ class taskTao extends taskModel
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF(is_array($type) || strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($type == 'assignedbyme')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'review')
@@ -183,7 +187,7 @@ class taskTao extends taskModel
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
 
         return $tasks;
     }
@@ -192,10 +196,12 @@ class taskTao extends taskModel
      * 通过任务类型查找用户的任务。
      * Fetch user tasks by type.
      *
-     * @param  string $account
-     * @param  string $type      assignedTo|finishedBy|closedBy
-     * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  string      $account
+     * @param  string      $type      assignedTo|finishedBy|closedBy
+     * @param  string      $orderBy
+     * @param  int         $projectID
+     * @param  int         $limit
+     * @param  object|null $pager
      * @access protected
      * @return object[]
      */
@@ -214,7 +220,7 @@ class taskTao extends taskModel
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
-            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type != 'closedBy' && $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'finishedBy')
@@ -222,14 +228,130 @@ class taskTao extends taskModel
             ->orWhere('t5.status')->eq("done")
             ->markRight(1)
             ->fi()
-            ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
-            ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
+            ->beginIF($type != 'all' && $type != 'finishedBy' && $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
+            ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager, 't1.id')
             ->fetchAll('id');
+    }
+
+    /**
+     * 根据条件移除创建任务的必填项。
+     * Remove required fields for creating tasks based on conditions.
+     *
+     * @param  object    $task
+     * @param  bool      $selectTestStory
+     * @access protected
+     * @return void
+     */
+    protected function removeCreateRequiredFields(object $task, bool $selectTestStory): void
+    {
+        /* Get create required fields and the execution of the task. */
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
+
+        /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
+        if($execution && $this->isNoStoryExecution($execution))
+        {
+            $requiredFields = str_replace(',story,', ',', $requiredFields);
+        }
+
+        /* If the type of the task is test and select story is true, remove some required fields. */
+        if($task->type == 'test' && $selectTestStory)
+        {
+            $requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', $requiredFields);
+        }
+
+        $this->config->task->create->requiredFields = trim($requiredFields, ',');
+    }
+
+    /**
+     * 批量创建前检查必填项。
+     * Check required fields before batch create tasks.
+     *
+     * @param  object    $execution
+     * @param  object[]  $data
+     * @access protected
+     * @return object[]|false
+     */
+    protected function checkRequired4BatchCreate(object $execution, array $data): array|false
+    {
+        /* 设置必填项。 */
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
+        $requiredFields = trim($requiredFields, ',');
+        $requiredFields = array_filter(explode(',', $requiredFields));
+
+        /* check data. */
+        foreach($data as $i => $task)
+        {
+            /* 检查任务是否开启了起止日期必填的配置(limitTaskDate)。 */
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->checkEstStartedAndDeadline($execution->id, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
+            /* 检查任务截止日期是否为空以及是否小于预计开始日期。 */
+            if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
+            /* 检查任务预计是否为数字类型。 */
+            if($task->estimate && !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            /* 验证必填字段。 */
+            foreach($requiredFields as $field)
+            {
+                if(empty($task->$field))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                    return false;
+                }
+            }
+            if($task->estimate) $task->estimate = (float)$task->estimate;
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取edit方法的必填项。
+     * Get required fields for edit method.
+     *
+     * @param  object    $task
+     * @access protected
+     * @return string
+     */
+    protected function getRequiredFields4Edit(object $task): string
+    {
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+
+        $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(",story,", ',', "$requiredFields");
+
+        if($task->status != 'cancel' && strpos($requiredFields, ',estimate,') !== false)
+        {
+            if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
+            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+        }
+
+        if(strpos(',doing,pause,', $task->status) && empty($task->left))
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
+            return false;
+        }
+
+        return trim($requiredFields, ',');
     }
 
     /**
@@ -246,19 +368,70 @@ class taskTao extends taskModel
     }
 
     /**
-     * 根据报表条件查询任务.
-     * Get task list by report.
+     * Manage multi task team member.
      *
-     * @param  string $field
-     * @param  string $condition
+     * @param  string     $mode
+     * @param  object     $task
+     * @param  int        $row
+     * @param  string     $account
+     * @param  string     $minStatus
+     * @param  array      $undoneUsers
+     * @param  array      $teamSourceList
+     * @param  array      $teamEstimateList
+     * @param  array|bool $teamConsumedList
+     * @param  array|bool $teamLeftList
+     * @param  bool       $inTeams
      * @access protected
-     * @return object[]
+     * @return string
      */
-    protected function getListByReportCondition(string $field, string $condition): array
+    protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
     {
-        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
-                ->where($condition)
-                ->fetchAll('id');
+        /* Set member information. */
+        $member = new stdClass();
+        $member->task     = $task->id;
+        $member->order    = $row;
+        $member->account  = $account;
+        $member->estimate = zget($teamEstimateList, $row, 0);
+        $member->consumed = $teamConsumedList ? zget($teamConsumedList, $row, 0) : 0;
+        $member->left     = $teamLeftList ? zget($teamLeftList, $row, 0) : 0;
+        $member->status   = 'wait';
+        if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
+        if($task->status == 'done') $member->left = 0;
+
+        /* Compute task status of member. */
+        if($member->left == 0 && $member->consumed > 0)
+        {
+            $member->status = 'done';
+        }
+        elseif($task->status == 'doing')
+        {
+            $teamSource = zget($teamSourceList, $row);
+
+            if(!empty($teamSource) && $teamSource != $account && isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
+            if(isset($undoneUsers[$account]) && ($mode == 'multi' || ($mode == 'linear' && $minStatus != 'wait'))) $member->status = 'doing';
+        }
+
+        /* Compute multi-task status, and in a linear task, there is only one doing status. */
+        if(($mode == 'linear' && $member->status == 'doing') || $member->status == 'wait') $minStatus = 'wait';
+        if($minStatus != 'wait' && $member->status == 'doing') $minStatus = 'doing';
+
+        /* Insert or update team. */
+        if($mode == 'multi' && $inTeams)
+        {
+            $this->dao->update(TABLE_TASKTEAM)
+                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
+                ->where('task')->eq($member->task)
+                ->andWhere('account')->eq($member->account)
+                ->exec();
+        }
+        else
+        {
+            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
+        }
+
+        return $minStatus;
     }
 
     /**
@@ -273,7 +446,7 @@ class taskTao extends taskModel
      */
     protected function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
     {
-        if(empty($task->team) or $task->mode != 'linear') return $task->assignedTo;
+        if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
 
         /* Format task team members. */
         if(!is_array($members)) $members = explode(',', trim($members, ','));
@@ -284,15 +457,110 @@ class taskTao extends taskModel
         $teamHours = array_values($task->team);
         foreach($members as $i => $account)
         {
-            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
+            if(isset($teamHours[$i]) && $teamHours[$i]->status == 'done') continue;
             if($type == 'current') return $account;
             break;
         }
 
         /* Get the member of the second unfinished task. */
-        if($type == 'next' and isset($members[$i + 1])) return $members[$i + 1];
+        if($type == 'next' && isset($members[$i + 1])) return $members[$i + 1];
 
         return $task->openedBy;
+    }
+
+    /**
+     * 检查一个任务是否有子任务。
+     * Check if a task has children.
+     *
+     * @param  int    $taskID
+     * @access protected
+     * @return bool
+     */
+    protected function checkHasChildren(int $taskID): bool
+    {
+        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
+        if(!$childrenCount) return false;
+        return true;
+    }
+
+    /**
+     * 获取任务的进度。
+     * Compute progress of a task.
+     *
+     * @param  object   $task
+     * @access protected
+     * @return float
+     */
+    protected function computeTaskProgress(object $task): float
+    {
+        if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+        if($task->consumed == 0) return 0;
+        return 100;
+    }
+
+    /**
+     * 计算任务列表中每个任务的进度，包括子任务。
+     * Compute progress of task list, include its' children.
+     *
+     * @param  object[] $tasks
+     * @access protected
+     * @return object[]
+     */
+    protected function batchComputeProgress(array $tasks): array
+    {
+        foreach($tasks as $task)
+        {
+            $task->progress = $this->computeTaskProgress($task);
+            if(empty($task->children)) continue;
+
+            $task->children = $this->batchComputeProgress($task->children);
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * 拆分已消耗的任务。
+     * Split the consumed task.
+     *
+     * @param  object    $parentTask
+     * @access protected
+     * @return bool|int
+     */
+    protected function splitConsumedTask(object $parentTask): bool|int
+    {
+        $clonedTask = clone $parentTask;
+        $clonedTask->parent = $parentTask->id;
+        unset($clonedTask->id);
+        $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        $clonedTaskID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
+            ->where('objectID')->eq($parentTask->id)
+            ->andWhere('objectType')->eq('task')
+            ->exec();
+        if(dao::isError()) return false;
+
+        return (int)$clonedTaskID;
+    }
+
+    /**
+     * 拆分之后更新父任务的parent、lastEditedBy、lastEditedDate字段。
+     * Update the parent's parent, lastEditedBy, and lastEditedDate fields after split.
+     *
+     * @param  int        $parentID
+     * @access protected
+     * @return void
+     */
+    protected function updateParentAfterSplit(int $parentID): void
+    {
+        $task = new stdclass();
+        $task->parent         = '-1';
+        $task->lastEditedBy   = $this->app->user->account;
+        $task->lastEditedDate = helper::now();
+        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
     }
 
     /**
@@ -337,13 +605,13 @@ class taskTao extends taskModel
      * @access protected
      * @return object
      */
-    protected function computeCurrentTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    protected function computeTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
     {
         /* If the status is not automatic, return the current task. */
         if(!$autoStatus) return $currentTask;
 
         /* If consumed of the current task is empty and current task has no efforts, the current task status should be wait. */
-        if($currentTask->consumed == 0 and !$hasEfforts)
+        if($currentTask->consumed == 0 && !$hasEfforts)
         {
             if(!isset($task->status)) $currentTask->status = 'wait';
             $currentTask->finishedBy   = null;
@@ -359,13 +627,13 @@ class taskTao extends taskModel
         }
 
         /* If consumed of the current task is not empty and left of the current task is empty, the current task status should be done or doing. */
-        if($currentTask->consumed > 0 and $currentTask->left == 0)
+        if($currentTask->consumed > 0 && $currentTask->left == 0)
         {
             $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
             /* If the number of finisher is less than the number of team members , the current task status should be doing. */
             if(count($finisedUsers) != count($members))
             {
-                if(strpos('cancel,pause', $oldTask->status) === false or ($oldTask->status == 'closed' and $oldTask->reason == 'done'))
+                if(strpos('cancel,pause', $oldTask->status) === false || ($oldTask->status == 'closed' && $oldTask->reason == 'done'))
                 {
                     $currentTask->status       = 'doing';
                     $currentTask->finishedBy   = null;
@@ -406,65 +674,66 @@ class taskTao extends taskModel
     }
 
     /**
-     * 检查一个任务是否有子任务。
-     * Check if a task has children.
+     * 获取团队成员以及他的预计、消耗、剩余工时。
+     * Get team account,estimate,consumed and left info.
      *
-     * @param  int    $taskID
+     * @param  array $teamList
+     * @param  array $teamSourceList
+     * @param  array $teamEstimateList
+     * @param  array $teamConsumedList
+     * @param  array $teamLeftList
      * @access protected
-     * @return bool
+     * @return object[]
      */
-    protected function checkHasChildren(int $taskID): bool
+    protected function getTeamInfoList(array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
     {
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
-        if(!$childrenCount) return false;
-        return true;
+        $teamInfoList = array();
+        foreach($teamList as $index => $account)
+        {
+            if(empty($account)) continue;
+
+            $teamInfo = new stdClass();
+            $teamInfo->account  = $account;
+            $teamInfo->source   = $teamSourceList[$index];
+            $teamInfo->estimate = $teamEstimateList[$index];
+            $teamInfo->consumed = $teamConsumedList[$index];
+            $teamInfo->left     = $teamLeftList[$index];
+
+            $teamInfoList[$index] = $teamInfo;
+        }
+
+        return $teamInfoList;
     }
 
     /**
-     * 根据任务编号查询任务数据。
-     * Fetch a task by id.
+     * 拼接团队成员信息，包括账号、预计、消耗、剩余，用来创建历史记录。例如：团队成员: admin, 预计: 2, 消耗: 0, 剩余: 3。
+     * Concat team info for create history.
      *
-     * @param  int       $taskID
-     * @param  string    $field
-     * @access protected
-     * @return object
-     */
-    protected function fetchByID(int $taskID, string $field = ''): object|string
-    {
-        if(empty($field)) return $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-
-        $taskObj = $this->dao->select(trim($field))->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        return (string)$taskObj->$field;
-    }
-
-    /**
-     * 获取edit方法的必填项。
-     * Get required fields for edit method.
-     *
-     * @param  object    $task
+     * @param  array $teamInfoList
+     * @param  array $userPairs
      * @access protected
      * @return string
      */
-    protected function getRequiredFields4Edit(object $task): string
+    protected function concatTeamInfo(array $teamInfoList, array $userPairs): string
     {
-        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+        $teamInfo = '';
+        foreach($teamInfoList as $info) $teamInfo .= "{$this->lang->task->teamMember}: " . zget($userPairs, $info->account) . ", {$this->lang->task->estimateAB}: " . (float)$info->estimate . ", {$this->lang->task->consumedAB}: " . (float)$info->consumed . ", {$this->lang->task->leftAB}: " . (float)$info->left . "\n";
+        return $teamInfo;
+    }
 
-        $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(",story,", ',', "$requiredFields");
-
-        if($task->status != 'cancel' and strpos($requiredFields, ',estimate,') !== false)
-        {
-            if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
-            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
-        }
-
-        if(strpos(',doing,pause,', $task->status) && empty($task->left))
-        {
-            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
-            return false;
-        }
-
-        return trim($requiredFields, ',');
+    /**
+     * 更新任务的最后修改人和最后修改日期。
+     * Update lastEditedBy and lastEditedDate of a task.
+     *
+     * @param  int $taskID
+     * @access protected
+     * @return bool
+     */
+    protected function updateLastEdited(int $taskID): bool
+    {
+        /* Set lastEditedBy to current user, set lastEditedDate to now. */
+        $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($taskID)->exec();
+        return !dao::isError();
     }
 
     /**
@@ -476,13 +745,12 @@ class taskTao extends taskModel
      * @access protected
      * @return void
      */
-    protected function updateTaskEsDateByGantt(int $taskID, object $postData)
+    protected function updateTaskEsDateByGantt(int $taskID, object $postData): void
     {
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         $isChildTask = $task->parent > 0 ? true : false;
 
         if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
-
         $stage  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();
 
         $start = $isChildTask ? $parentTask->estStarted   : $stage->begin;
@@ -492,6 +760,7 @@ class taskTao extends taskModel
         if(helper::diffDate($start, $postData->startDate) > 0) dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
         if(helper::diffDate($end, $postData->endDate) < 0)     dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
 
+        /* Update estimate started and deadline of a task. */
         $this->dao->update(TABLE_TASK)
             ->set('estStarted')->eq($postData->startDate)
             ->set('deadline')->eq($postData->endDate)
@@ -501,199 +770,15 @@ class taskTao extends taskModel
     }
 
     /**
-     * 根据条件移除创建任务的必填项。
-     * Remove required fields for creating tasks based on conditions.
-     *
-     * @param  object    $task
-     * @param  bool      $selectTestStory
-     * @access protected
-     * @return void
-     */
-    protected function removeCreateRequiredFields(object $task, bool $selectTestStory): void
-    {
-        /* Get create required fields and the execution of the task. */
-        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
-        $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
-
-        /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
-        if($execution and ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))))
-        {
-            $requiredFields = str_replace(",story,", ',', "$requiredFields");
-        }
-
-        /* If the type of the task is test and select story is true, remove some required fields. */
-        if($task->type == 'test' and $selectTestStory)
-        {
-            $requiredFields = str_replace(array(",estimate,", ",story,", ",estStarted,", ",deadline,", ",module,"), ',', "$requiredFields");
-        }
-
-        $this->config->task->create->requiredFields = trim($requiredFields, ',');
-    }
-
-    /**
-     * 批量创建前检查必填项
-     * Check required fields before batch create tasks.
+     * 检查执行是否有需求列表。
+     * Check whether execution has story list.
      *
      * @param  object    $execution
-     * @param  object[]  $data
-     * @access protected
-     * @return object[]|false
-     */
-    protected function checkRequired4BatchCreate(object $execution, array $data): array|false
-    {
-        /* 设置必填项。 */
-        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(',story,', ',', $requiredFields);
-        $requiredFields = trim($requiredFields, ',');
-        $requiredFields = array_filter(explode(',', $requiredFields));
-
-        /* check data. */
-        foreach($data as $i => $task)
-        {
-            /* 检查任务是否开启了起止日期必填的配置(limitTaskDate)。 */
-            if(!empty($this->config->limitTaskDate))
-            {
-                $this->checkEstStartedAndDeadline($execution->id, $task->estStarted, $task->deadline);
-                if(dao::isError()) return false;
-            }
-
-            /* 检查任务截止日期是否为空以及是否小于预计开始日期。 */
-            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
-            {
-                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
-                return false;
-            }
-
-            /* 检查任务预计是否为数字类型。 */
-            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
-            {
-                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
-                return false;
-            }
-
-            /* 验证必填字段。 */
-            foreach($requiredFields as $field)
-            {
-                if(empty($task->$field))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                    return false;
-                }
-            }
-            if($task->estimate) $task->estimate = (float)$task->estimate;
-        }
-
-        return $data;
-    }
-
-    /**
-     * 拆分已消耗的任务。
-     * Split the consumed task.
-     *
-     * @param  object    $parentTask
      * @access protected
      * @return bool
      */
-    protected function splitConsumedTask(object $parentTask): bool
+    protected function isNoStoryExecution($execution)
     {
-        $clonedTask = clone $parentTask;
-        $clonedTask->parent = $parentTask->id;
-        unset($clonedTask->id);
-        $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
-        if(dao::isError()) return false;
-
-        $clonedTaskID = $this->dao->lastInsertID();
-
-        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
-            ->where('objectID')->eq($parentTask->id)
-            ->andWhere('objectType')->eq('task')
-            ->exec();
-        if(dao::isError()) return false;
-
-        return $clonedTaskID;
-    }
-
-    /**
-     * 拆分之后更新父任务的parent、lastEditedBy、lastEditedDate字段。
-     * Update the parent's parent, lastEditedBy, and lastEditedDate fields after split.
-     *
-     * @param  int        $parentID
-     * @access protected
-     * @return void
-     */
-    protected function updateParentAfterSplit(int $parentID): void
-    {
-        $task = new stdclass();
-        $task->parent         = '-1';
-        $task->lastEditedBy   = $this->app->user->account;
-        $task->lastEditedDate = helper::now();
-        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
-    }
-
-    /**
-     * Manage multi task team member.
-     *
-     * @param  string     $mode
-     * @param  object     $task
-     * @param  int        $row
-     * @param  string     $account
-     * @param  string     $minStatus
-     * @param  array      $undoneUsers
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
-     * @param  bool       $inTeams
-     * @access protected
-     * @return string
-     */
-    protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
-    {
-        /* Set member information. */
-        $member = new stdClass();
-        $member->task     = $task->id;
-        $member->order    = $row;
-        $member->account  = $account;
-        $member->estimate = zget($teamEstimateList, $row, 0);
-        $member->consumed = $teamConsumedList ? zget($teamConsumedList, $row, 0) : 0;
-        $member->left     = $teamLeftList ? zget($teamLeftList, $row, 0) : 0;
-        $member->status   = 'wait';
-        if($task->status == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
-        if($task->status == 'done') $member->left = 0;
-
-        /* Compute task status of member. */
-        if($member->left == 0 and $member->consumed > 0)
-        {
-            $member->status = 'done';
-        }
-        elseif($task->status == 'doing')
-        {
-            $teamSource = zget($teamSourceList, $row);
-
-            if(!empty($teamSource) and $teamSource != $account and isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
-            if(isset($undoneUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
-        }
-
-        /* Compute multi-task status, and in a linear task, there is only one doing status. */
-        if(($mode == 'linear' and $member->status == 'doing') or $member->status == 'wait') $minStatus = 'wait';
-        if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
-
-        /* Insert or update team. */
-        if($mode == 'multi' and $inTeams)
-        {
-            $this->dao->update(TABLE_TASKTEAM)
-                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
-                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
-                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
-                ->where('task')->eq($member->task)
-                ->andWhere('account')->eq($member->account)
-                ->exec();
-        }
-        else
-        {
-            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
-        }
-
-        return $minStatus;
+        return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
     }
 }

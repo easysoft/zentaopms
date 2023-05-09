@@ -10,6 +10,7 @@ function changeCycleType()
 {
     var cycleType = $('#cycleType input[type=radio]:checked').val();
     toggleCycleConfig(cycleType);
+    $('.type-day .input-group, .config-day .input-control').removeClass('has-error');
 }
 
 /**
@@ -47,7 +48,16 @@ function togglePrivate(switcher)
 function changeAssignedTo()
 {
     var assignedTo = $('#assignedTo').val();
-    $('#private').prop('disabled', assignedTo !== userAccount);
+    if(assignedTo !== userAccount)
+    {
+        $('#private').prop('disabled', true);
+        $('#private').closest('.checkbox-primary').addClass('disabled');
+    }
+    else
+    {
+        $('#private').prop('disabled', false);
+        $('#private').closest('.checkbox-primary').removeClass('disabled');
+    }
 }
 
 /**
@@ -155,24 +165,6 @@ function switchDateFeature(switcher)
 }
 
 /**
- * 周期待办切换指定复选框时的交互展示。
- * Interactive display when switching the specified checkbox for cycle.
- *
- * @param  object switcher
- * @return void
- */
-function showSpecifiedDate(switcher)
-{
-    if(switcher.checked)
-    {
-        $('#everyInput').attr('disabled','disabled');
-        $('.specify').removeClass('hidden');
-        $('.every').addClass('hidden')
-        $('#configEvery').prop('checked', false);
-    }
-}
-
-/**
  * 切换周期复选框的回调函数，用于页面交互展示。
  * Switch the cycle checkbox for page interactive display.
  *
@@ -226,6 +218,41 @@ function setDays(specifiedMonth)
  */
 function changeDate(dateInput)
 {
-    console.log(dateInput);
     $('#switchDate').prop('checked', !$(dateInput).val());
+}
+
+/**
+ * 间隔输入控件失焦。
+ * The input control of the every is blur.
+ *
+ * @param  object everyInput
+ * @return void
+ */
+function everyInputBlur(everyInput)
+{
+    if(!$(everyInput).val()) $(everyInput).closest('.input-control').addClass('has-error');
+}
+
+/**
+ * 周期类型为天的日期控件失焦。
+ * Date control with cycle type of day is blur.
+ *
+ * @param  object dateInput
+ * @return void
+ */
+function dateBlur(dateInput)
+{
+    if(!$(dateInput).val()) $(dateInput).closest('.input-group').addClass('has-error');
+}
+
+/**
+ * 结束时间失焦。
+ * The end time control is blur.
+ *
+ * @param  object time
+ * @return void
+ */
+function selectEndTime(time)
+{
+    if($(time).val() < $('#begin').val()) $(time).addClass('has-error');
 }

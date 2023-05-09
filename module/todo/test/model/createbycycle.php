@@ -20,4 +20,4 @@ pid=1
 initData();
 
 $todo = new todoTest();
-r($todo->createByCycleTest()) && p() && e('1');
+r($todo->createByCycleTest()) && p() && e('1'); // 判断创建周期的待办数据创建成功，返回结果为1

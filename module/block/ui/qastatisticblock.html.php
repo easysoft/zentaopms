@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
-* The product statistic block view file of block module of ZenTaoPMS.
+* The qa statistic block view file of block module of ZenTaoPMS.
 * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
 * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Wangyuting <wangyuting@easycorp.ltd>
@@ -23,7 +23,7 @@ namespace zin;
 function getProductTabs($products, $blockNavCode): array
 {
     $navTabs  = array();
-    $selected =  key($products);
+    $selected = key($products);
     foreach($products as $product)
     {
         $navTabs[] = li
@@ -65,7 +65,7 @@ function getProductInfo($products, $blockNavID): array
 {
     global $lang;
 
-    $selected =  key($products);
+    $selected = key($products);
     $tabItems = array();
     foreach($products as $product)
     {

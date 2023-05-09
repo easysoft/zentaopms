@@ -123,16 +123,16 @@ class bug extends control
         if($this->cookie->preProductID != $productID or ($this->cookie->preBranch != $branch and $product->type != 'normal' and $branch != 'all') or $browseType == 'bybranch')
         {
             $_COOKIE['bugModule'] = 0;
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $_COOKIE['bugBranch'] = 0;
-            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
-        if($browseType == 'bybranch') setcookie('bugBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bybranch') setcookie('bugBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -144,7 +144,7 @@ class bug extends control
         /* Set moduleTree. */
         if($browseType == '')
         {
-            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $browseType = 'unclosed';
         }
         else
@@ -347,7 +347,7 @@ class bug extends control
             if($hasError) return $this->send($response);
 
             /* Set from param if there is a object to transfer bug. */
-            setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             $bugID = $bugResult['id'];
             $bug   = $this->bug->getByID($bugID);
@@ -482,7 +482,7 @@ class bug extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
             }
 
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* If link from no head then reload. */
             if(isonlybody() and $executionID)
@@ -680,7 +680,7 @@ class bug extends control
             if(!$comment)
             {
                 $changes = $this->bug->update($bug, $oldBug);
-                if(!$changes) return $this->send($this->bugZen->errorEdit());
+                if($changes === false) return $this->send($this->bugZen->errorEdit());
             }
 
             $this->bugZen->processAfterEdit($bugID, $this->post->comment, $changes);
@@ -1475,44 +1475,11 @@ class bug extends control
             $this->bug->afterClose($bug, $oldBug);
 
             $this->executeHooks($bugID);
+            $this->bug->handleOnlyBodyAfterClose($oldBug->execution, $extra);
 
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-            if(isonlybody())
-            {
-                $execution    = $this->loadModel('execution')->getByID($oldBug->execution);
-                $execLaneType = $this->session->execLaneType ?: 'all';
-                $execGroupBy  = $this->session->execGroupBy ?: 'default';
-                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ?: '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($oldBug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                elseif($from == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($oldBug->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                    $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this', "typeof(parent.parent.setTitleWidth) == 'function' ? parent.parent.setTitleWidth() : parent.parent.location.reload()"));
-                }
-            }
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('status' => 'success', 'data' => $bugID));
-            }
-            else
-            {
-                return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
-            }
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+
+            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
         $this->bug->checkBugExecutionPriv($oldBug);

@@ -21,7 +21,7 @@
     </div>
   </div>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
-    <table align='center' class='table table-form' id="tableBody">
+    <table class='table table-form' id="tableBody">
       <thead>
         <tr class='text-center'>
           <th class='c-id'><?php echo $lang->idAB;?></th>

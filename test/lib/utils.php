@@ -59,12 +59,12 @@ function ztfRun($dir)
     }
     elseif(is_array($dir))
     {
-        foreach($dir as $model) $runTestPath .= ' ' . BASE_ROOT . "/module/$model/test/model";
+        foreach($dir as $model) $runTestPath .= ' ' . BASE_ROOT . "/module/$model/test";
     }
     else
     {
         if($dir == 'mapi') $dir = 'api';
-        $dir = BASE_ROOT . "/module/$dir/test/model";
+        $dir = BASE_ROOT . "/module/$dir/test";
     }
 
     if($runTestPath) $dir = $runTestPath;
@@ -92,6 +92,12 @@ function ztfExtract($dir)
     system($command);
 }
 
+/**
+ * Get to the directory of test cases.
+ *
+ * @access public
+ * @return viod
+ */
 function getCaseModelDir()
 {
     $moduleList = scandir(BASE_ROOT . '/module');
@@ -103,7 +109,7 @@ function getCaseModelDir()
     $dirs = array();
     foreach($moduleList as $index => $module)
     {
-        $dirs[$index] = BASE_ROOT . "/module/$module/test/model";
+        $dirs[$index] = BASE_ROOT . "/module/$module/test";
     }
 
     return $dirs;
@@ -119,7 +125,6 @@ function zdRun($isDev = false)
 {
     global $config, $dao;
 
-    $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
     include LIB_ROOT . 'spyc.php';
 
     $zdRoot = dirname(dirname(__FILE__)) . '/data/';
@@ -142,8 +147,6 @@ function zdRun($isDev = false)
         /* Connect to MySQL. */
         $dao = new dao();
         echo 'MySQL connect success' . PHP_EOL;
-
-        $dao->begin();
 
         /* Copy common to tmp. */
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
@@ -247,14 +250,12 @@ function zdRun($isDev = false)
             echo $tableName . ' insert rows ' . $count . PHP_EOL;
         }
 
-        $dao->commit();
-
         $processor = new Processor();
         $processor->init();
     }
-    catch (PDOException $e)
+    catch (EndResponseException $e)
     {
-        die('Error!: ' . $e->getMessage() . PHP_EOL);
+        die('Error!: ' . $e->getContent() . PHP_EOL);
     }
 }
 

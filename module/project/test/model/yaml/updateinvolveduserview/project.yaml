@@ -1,0 +1,10 @@
+title: updateinvolveduserview-project
+author: chaideqing
+version: "1.0"
+fields:
+    - field: id
+      range: '1-4'
+    - field: project
+      range: '0,0,1,2'
+    - field: type
+      range: 'project{2},sprint{2}'

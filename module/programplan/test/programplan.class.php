@@ -389,22 +389,6 @@ class programplanTest
     }
 
     /**
-     * Test check if the stage is a leaf stage.
-     *
-     * @param  int     $planID
-     * @access public
-     * @return string
-     */
-    public function checkLeafStageTest($planID)
-    {
-        $objects = $this->objectModel->checkLeafStage($planID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Test check whether it is the top stage.
      *
      * @param  int     $planID
@@ -505,5 +489,25 @@ class programplanTest
         $result = $this->objectModel->computeProgress($stageID, $action, $isParent);
         if(!$result) return 'fail';
         return 'success';
+    }
+
+    /** 测试获取甘特图相关数据。
+     * Test get data for gantt view.
+     *
+     * @param  int     $executionID
+     * @param  int     $productID
+     * @param  int     $baselineID
+     * @param  string  $selectCustom
+     * @param  bool    $returnJson
+     * @access public
+     * @return array
+     */
+    public function getDataForGanttTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
+    {
+        $objects = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+
+        if($returnJson) $objects = json_decode($objects, true);
+
+        return $objects['data'];
     }
 }

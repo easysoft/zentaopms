@@ -2,15 +2,12 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
+su('admin');
 
 function initData()
 {
-    zdTable('user')->gen(5);
     zdTable('project')->config('checkleafstage')->gen(5);
 }
-
-su('admin');
-
 
 /**
 
@@ -18,13 +15,12 @@ title=测试programplanModel->checkLeafStage();
 cid=1
 pid=1
 
-- 测试id为2判断是否为叶子节点 @0
-
-- 测试id为5判断是否为叶子节点 @1
-
 */
 
-$plan = new programplanTest();
+initData();
 
-r($plan->checkLeafStageTest(2)) && p('') && e(0); // 测试id为2判断是否为叶子节点
-r($plan->checkLeafStageTest(5)) && p('') && e(1); // 测试id为5判断是否为叶子节点
+global $tester;
+$tester->loadModel('programplan');
+
+r($tester->programplan->checkLeafStage($stageID = 2)) && p('') && e('0'); // 获取阶段ID为2，判断是是否为叶子节点，结果为0
+r($tester->programplan->checkLeafStage($stageID = 5)) && p('') && e('1'); // 获取阶段ID为5，判断是否为叶子节点，结果为0

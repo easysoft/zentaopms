@@ -383,7 +383,7 @@ class bugZen extends bug
         }
         else
         {
-            setcookie('bugModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $location = $this->createLink('bug', 'browse', "productID={$formData->data->product}&branch=$branch&browseType=byModule&param={$formData->data->module}&orderBy=id_desc");
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');

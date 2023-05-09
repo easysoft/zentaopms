@@ -10,7 +10,7 @@ $config->task->form->create['story']        = array('type' => 'int', 'required' 
 $config->task->form->create['mode']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->create['color']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->create['name']         = array('type' => 'string', 'required' => true, 'default' => '');
-$config->task->form->create['pri']          = array('type' => 'int', 'required' => false, 'default' => 3);
+$config->task->form->create['pri']          = array('type' => 'int', 'required' => false, 'default' => $config->task->default->pri);
 $config->task->form->create['estimate']     = array('type' => 'float', 'required' => false, 'default' => 0);
 $config->task->form->create['desc']         = array('type' => 'string', 'required' => false);
 $config->task->form->create['estStarted']   = array('type' => 'string', 'required' => false, 'default' => '');

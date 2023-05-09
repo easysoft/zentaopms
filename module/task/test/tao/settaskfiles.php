@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 
 $task = zdTable('task');
@@ -20,17 +20,6 @@ $file->gen(10);
 title=taskModel->setTaskFiles();
 timeout=0
 cid=1
-
-sed: can't read /home/tianshujie/repo/zentaopms/test/config/my.php: No such file or directory
-- 测试空数据 @0
-
-- 测试传入的任务ID @0
-
-- 测试插入任务附件的数量 @10
-
-- 测试插入附件数据的对象ID第1条的objectID属性 @6
-
-- 测试获取任务ID为5的附件数据的数量 @0
 
 */
 

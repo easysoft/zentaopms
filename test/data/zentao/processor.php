@@ -30,30 +30,8 @@ class Processor
      */
     public function init()
     {
-        $this->dao->begin();
-
-        //$this->initBassicSql();
         $this->initDept();
         $this->initUser();
-        $this->initProgram();
-        //$this->initProduct();
-        //$this->initPlan();
-        $this->initProject();
-        //$this->initBuild();
-        //$this->initTask();
-        $this->initExecution();
-        //$this->initRelease();
-        //$this->initStakeholder();
-        //$this->initUserquery();
-        //$this->initMessage();
-        //$this->initUpdateKanban();
-        //$this->initStory();
-        //$this->initBug();
-        //$this->initTest();
-        //$this->initTodo();
-        //$this->initSonPlan();
-
-        $this->dao->commit();
     }
 
     /**
@@ -120,7 +98,7 @@ class Processor
         $userViews->products = $products;
         $userViews->projects = $projects;
         $userViews->sprints  = $sprints;
-        $this->dao->insert(TABLE_USERVIEW)->data($userViews)->exec();
+        $this->dao->replace(TABLE_USERVIEW)->data($userViews)->exec();
 
         $guestViews = new stdclass();
         $guestViews->account  = 'guest';
@@ -128,7 +106,7 @@ class Processor
         $guestViews->products = '';
         $guestViews->projects = '';
         $guestViews->sprints  = '';
-        $this->dao->insert(TABLE_USERVIEW)->data($guestViews)->exec();
+        $this->dao->replace(TABLE_USERVIEW)->data($guestViews)->exec();
     }
 
     /**

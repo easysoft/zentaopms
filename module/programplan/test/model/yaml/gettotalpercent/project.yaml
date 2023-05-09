@@ -1,0 +1,28 @@
+title: zt_project
+author: jukui
+version: '1.0'
+fields:
+    - field: id
+      range: 1-6
+    - field: project
+      range: '1,2,3,4,1,1'
+    - field: name
+      range: '瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b,阶段c'
+    - field: parent
+      range: '0,1,2,3,1,1'
+    - field: type
+      range: 'stage'
+    - field: percent
+      range: 1-6
+      prefix: '2'
+    - field: grade
+      range: 1
+    - field: days
+      range: 1
+    - field: status
+      range: 'doing,doing,doing,closed,suspended'
+    - field: desc
+      range: 1-6
+      prefix: '项目描述'
+    - field: path
+      range: "`,1,`,`,1,2,`,`,1,2,3,`,`,1,2,3,4,`,`,1,5,`,`,1,6,`"

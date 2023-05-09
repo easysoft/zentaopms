@@ -20,13 +20,12 @@ class block extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        /* Mark the call from zentao or ranzhi. */
-        $this->selfCall = !isset($_GET['hash']);
-        if($this->methodName != 'admin' and $this->methodName != 'dashboard' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) helper::end('');
+        /* 如果为外部调用，判断密钥，如果密钥不通过，返回空字符串。 */
+        if($this->methodName != 'admin' and $this->methodName != 'dashboard' and $this->isExternalCall() and !$this->loadModel('sso')->checkKey()) helper::end('');
     }
 
     /**
-     * 创建区块
+     * 创建区块。
      * Create a block under a dashboard.
      *
      * @param  string $dashboard
@@ -62,7 +61,7 @@ class block extends control
     }
 
     /**
-     * 编辑区块
+     * 编辑区块。
      * Update a block.
      *
      * @param  string $dashboard
@@ -104,17 +103,16 @@ class block extends control
     }
 
     /**
-     * Delete or hidd block by blockid.
+     * Delete a block by id.
      *
-     * @param  int    $id
-     * @param  string $type
+     * @param  string $blockID
      * @access public
      * @return void
      */
-    public function delete($blockID, $type = 'delete')
+    public function delete(string $blockID)
     {
         $blockID = (int)$blockID;
-        if($type == 'delete') $this->block->deleteBlock($blockID);
+        $this->block->deleteBlock($blockID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('score')->create('block', 'set');
@@ -124,7 +122,7 @@ class block extends control
     /**
      * Sort dashboard blocks.
      *
-     * @param  string  $orders
+     * @param  string $orders
      * @access public
      * @return void
      */
@@ -139,13 +137,18 @@ class block extends control
         return $this->send(array('result' => 'success'));
     }
 
+
     /**
-     * Resize block
-     * @param  integer $id
+     * 设置一个区块的大小
+     * Resize a block.
+     * 
+     * @param  string $blockID 
+     * @param  string $type 
+     * @param  string $data 
      * @access public
      * @return void
      */
-    public function resize($blockID, $type, $data)
+    public function resize(string $blockID, string $type, string $data)
     {
         $block = $this->block->getByID($blockID);
         if(!$block) return $this->send(array('result' => 'fail', 'code' => 404));
@@ -167,7 +170,7 @@ class block extends control
      * 永久关闭区块。
      * Close block forever.
      *
-     * @param  string    $blockID
+     * @param  string $blockID
      * @access public
      * @return void
      */
@@ -177,7 +180,7 @@ class block extends control
 
         /* 永久关闭区块。 */
         $block = $this->block->getByID($blockID);
-        $this->block->deleteBlock($blockID);
+        $this->block->deleteBlock(0, $block->module, $block->code);
 
         /* 将关闭的区块保存到配置信息。 */
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
@@ -186,14 +189,14 @@ class block extends control
     }
 
     /**
-     * 将一个区块恢复默认。
+     * 将当前仪表盘下的区块恢复默认。
      * Reset dashboard blocks.
      *
      * @param  string $dashboard
      * @access public
      * @return void
      */
-    public function reset($dashboard)
+    public function reset(string $dashboard)
     {
         $this->block->reset($dashboard);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -202,11 +205,11 @@ class block extends control
     }
 
     /**
-     * 展示应用的仪表盘。
-     * Display dashboard for app.
+     * 展示当前仪表盘下的区块列表。
+     * Display blocks for dashboard.
      *
-     * @param  string  $dashboard
-     * @param  string  $projectID
+     * @param  string $dashboard
+     * @param  string $projectID
      * @access public
      * @return void
      */
@@ -225,10 +228,10 @@ class block extends control
             $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
         }
 
-        /* 处理页面需要的数据格式。  */
+        /* 处理页面需要的数据格式。 */
         $blocks = $this->blockZen->processBlockForRender($blocks, $projectID);
 
-        /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给 app 提供数据。 */
+        /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给应用提供数据。 */
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
         /* 将区块列表分为长区块和短区块。 */
@@ -243,31 +246,28 @@ class block extends control
     }
 
     /**
-     * Print block.
-     * 输出区块
+     * 输出一个区块信息。
+     * Print a block.
      *
-     * @param  int     $blockID
+     * @param  string $blockID
      * @access public
      * @return string
      */
-    public function printBlock($blockID)
+    public function printBlock(string $blockID)
     {
-        if(!$this->selfCall)
-        {
-            $lang = str_replace('_', '-', $this->get->lang);
-            $this->app->setClientLang($lang);
-            $this->app->loadLang('common');
-            $this->app->loadLang('block');
-
-            if(!$this->block->checkAPI($this->get->hash)) return;
-        }
-
-        $html    = '';
         $blockID = (int)$blockID;
         $block   = $this->block->getByID($blockID);
 
-        if(empty($block)) return $html;
+        /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */
+        if($this->blockZen->isExternalCall())
+        {
+            if(!$this->block->checkAPI($this->get->hash)) return;
+            $this->blockZen->organizaExternalData($block); // 组织外部需要返回的信息。
+        }
 
+        if(empty($block)) return '';
+
+        /* 根据 block 的 code 值，选择性调用 zen 中 print + $code + Block 方法获取区块数据。 */
         if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
 
         $code = $block->code;
@@ -276,29 +276,7 @@ class block extends control
         $function = 'print' . ucfirst($code) . 'Block';
         if(method_exists('blockZen', $function)) $this->blockZen->$function($block);
 
-        if(!$this->selfCall)
-        {
-            $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($block->params->account)->fetch();
-            if(empty($this->app->user))
-            {
-                $this->app->user = new stdclass();
-                $this->app->user->account = 'guest';
-            }
-            $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
-            $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
-            $this->app->user->groups = $this->user->getGroups($this->app->user->account);
-            $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
-
-            $sso = base64_decode($this->get->sso);
-            $this->view->sso  = $sso;
-            $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
-        }
-
-        $this->view->title     = $block->title;
-        $this->view->block     = $block;
-        $this->view->longBlock = $this->block->isLongBlock($block);
-        $this->view->selfCall  = $this->selfCall;
-
+        /* 补全 moreLink 信息。 */
         $module   = $block->module;
         $moreLink = '';
         if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
@@ -306,23 +284,17 @@ class block extends control
             list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($block->params->type) ? $block->params->type : ''));
             $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
         }
-        $this->view->moreLink = $moreLink;
 
+        /* 组织渲染页面需要的数据。*/
+        $this->view->moreLink       = $moreLink;
+        $this->view->title          = $block->title;
+        $this->view->block          = $block;
+        $this->view->longBlock      = $this->block->isLongBlock($block);
+        $this->view->isExternalCall = $this->blockZen->isExternalCall();
+
+        /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
         $viewType = (isset($block->params->viewType) and $block->params->viewType == 'json') ? 'json' : 'html';
-        if($viewType == 'json')
-        {
-            unset($this->view->app);
-            unset($this->view->config);
-            unset($this->view->lang);
-            unset($this->view->header);
-            unset($this->view->position);
-            unset($this->view->moduleTree);
-
-            $output['status'] = is_object($this->view) ? 'success' : 'fail';
-            $output['data']   = json_encode($this->view);
-            $output['md5']    = md5(json_encode($this->view));
-            return print(json_encode($output));
-        }
+        if($viewType == 'json') return $this->blockZen->printBlock4Json();
 
         $this->display('block', strtolower($code) . 'block');
     }

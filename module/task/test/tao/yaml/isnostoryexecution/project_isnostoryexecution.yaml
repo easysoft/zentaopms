@@ -1,0 +1,13 @@
+---
+title: zt_project
+author: auto_isnostoryexecution
+version: "1.0"
+fields:
+- field: id
+  range: 1-9
+- field: lifetime
+  range: short{3},long{3},ops{3}
+- field: attribute
+  range: mix,request,review
+...
+

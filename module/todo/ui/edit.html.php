@@ -26,14 +26,14 @@ jsVar('userAccount', $app->user->account);
 if($todo->cycle && $todo->config)
 {
     $todo->config = json_decode($todo->config);
-    jsVar('cycleType', $todo->config->type);
+    jsVar('cycleType', isset($todo->config->type) ? $todo->config->type : '');
 
-    if($todo->config->month)
+    if(isset($todo->config->month))
     {
         $todo->config->month = explode(',', $todo->config->month);
         $todo->config->month = array_map('intval', $todo->config->month);
     }
-    if($todo->config->week)
+    if(isset($todo->config->week))
     {
         $todo->config->week = explode(',', $todo->config->week);
         $todo->config->week = array_map('intval', $todo->config->week);
@@ -49,8 +49,9 @@ else
  * Build date control for off-cycle todo display.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildDateControl(object $todo)
+function buildDateControl(object $todo): mixed
 {
     global $lang;
 
@@ -64,7 +65,6 @@ function buildDateControl(object $todo)
             set(array
             (
                 'label'  => $lang->todo->date,
-                'class'  => 'items-center',
                 'width'  => '1/3'
             )),
             control
@@ -88,10 +88,11 @@ function buildDateControl(object $todo)
             (
                 set(array
                 (
-                    'id'    => 'switchDate',
-                    'name'  => 'switchDate',
-                    'text'  => $lang->todo->periods['future'],
-                    'width' => '100px'
+                    'id'      => 'switchDate',
+                    'name'    => 'switchDate',
+                    'text'    => $lang->todo->periods['future'],
+                    'width'   => '100px',
+                    'checked' => !isset($todo->date)
                 )),
                 on::change('togglePending(this)')
             )
@@ -105,8 +106,9 @@ function buildDateControl(object $todo)
  * Build setting with cycle of day.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildCycleOfDayConfig(object $todo)
+function buildCycleOfDayConfig(object $todo): mixed
 {
     global $lang;
     return formRow
@@ -130,13 +132,17 @@ function buildCycleOfDayConfig(object $todo)
                     set::class('input-group-addon justify-center'),
                     $lang->todo->from
                 ),
-                input(set(array
+                input
                 (
-                    'id'    => 'date',
-                    'name'  => 'date',
-                    'type'  => 'date',
-                    'value' => $todo->date
-                ))),
+                    set(array
+                    (
+                        'id'    => 'date',
+                        'name'  => 'date',
+                        'type'  => 'date',
+                        'value' => $todo->date
+                    )),
+                    on::blur('dateBlur(this)')
+                )
             )
         ),
         div
@@ -157,7 +163,8 @@ function buildCycleOfDayConfig(object $todo)
                 (
                     set::id('everyInput'),
                     set::name('config[day]'),
-                    set::value(isset($todo->config->day) ? $todo->config->day : '')
+                    set::value(isset($todo->config->day) ? $todo->config->day : ''),
+                    on::blur('everyInputBlur(this)')
                 )
             )
         )
@@ -169,8 +176,9 @@ function buildCycleOfDayConfig(object $todo)
  * Build setting with cycle of week.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildCycleOfWeekConfig(object $todo)
+function buildCycleOfWeekConfig(object $todo): mixed
 {
     global $lang;
 
@@ -196,10 +204,9 @@ function buildCycleOfWeekConfig(object $todo)
                 ),
                 select(set(array
                 (
-                    'id'    => 'config[week]',
                     'name'  => 'config[week]',
                     'items' => $lang->todo->dayNames,
-                    'value' => $todo->config->week
+                    'value' => isset($todo->config->week) ? $todo->config->week : 1
                 )))
             )
         )
@@ -211,8 +218,9 @@ function buildCycleOfWeekConfig(object $todo)
  * Build setting with cycle of month.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildCycleOfMonthConfig(object $todo)
+function buildCycleOfMonthConfig(object $todo): mixed
 {
     global $lang;
 
@@ -245,7 +253,7 @@ function buildCycleOfMonthConfig(object $todo)
                     'id'    => 'config[month]',
                     'name'  => 'config[month]',
                     'items' => $days,
-                    'value' => $todo->config->month
+                    'value' => isset($todo->config->month) ? $todo->config->month : ''
                 )))
             )
         )
@@ -257,8 +265,9 @@ function buildCycleOfMonthConfig(object $todo)
  * Build setting with cycle of year.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildCycleOfYearConfig(object $todo)
+function buildCycleOfYearConfig(object $todo): mixed
 {
     global $lang;
 
@@ -316,8 +325,9 @@ function buildCycleOfYearConfig(object $todo)
  * Build generating todo control.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildBeforeDays($todo)
+function buildBeforeDays($todo): mixed
 {
     global $lang;
 
@@ -355,8 +365,9 @@ function buildBeforeDays($todo)
  * Build deadline control.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildDeadline($todo)
+function buildDeadline($todo): mixed
 {
     global $lang;
     return formRow
@@ -373,7 +384,7 @@ function buildDeadline($todo)
             (
                 'type'  => 'date',
                 'name'  => 'config[end]',
-                'value' => $todo->config->end
+                'value' => isset($todo->config->end) ? $todo->config->end : 0
             )))
         )
 
@@ -385,6 +396,7 @@ function buildDeadline($todo)
  * Build cycle type.
  *
  * @param  object $todo
+ * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
 function buildCycleType(object $todo)
 {
@@ -408,9 +420,9 @@ function buildCycleType(object $todo)
             (
                 set(array
                 (
-                    'name'   => 'cycleType',
+                    'name'   => 'config[type]',
                     'id'     => 'cycleType',
-                    'value'  => $todo->config->type,
+                    'value'  => isset($todo->config->type) ? $todo->config->type : '',
                     'inline' => true,
                     'items'  => $cycleTypeOptions
                 )),
@@ -428,7 +440,7 @@ function buildCycleType(object $todo)
  * @param  object $todo
  * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildCycleConfig(object $todo)
+function buildCycleConfig(object $todo): mixed
 {
     global $lang;
 
@@ -452,7 +464,7 @@ function buildCycleConfig(object $todo)
  * @param  object $todo
  * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
  */
-function buildTodoType(object $todo): mixed
+function buildTodoType(object $todo)
 {
     global $lang;
 
@@ -465,7 +477,8 @@ function buildTodoType(object $todo): mixed
             'label'  => $lang->todo->type,
             'name'   => 'type',
             'width'  => '1/3',
-            'items'  => $lang->todo->typeList
+            'items'  => $lang->todo->typeList,
+            'value'  => $todo->type
         )),
         on::change('changeType(this)')
     );
@@ -499,13 +512,18 @@ formPanel
                 'width' => '1/3',
                 'label' => $lang->todo->assignTo,
             )),
-            select(set(array
+            select
             (
-                'items' => $users,
-                'value' => $todo->assignedTo,
-                'id'    => 'assignedTo',
-                'name'  => 'assignedTo',
-            )))
+                set(array
+                (
+                    'items'    => $users,
+                    'value'    => $todo->assignedTo,
+                    'id'       => 'assignedTo',
+                    'name'     => 'assignedTo',
+                    'disabled' => $todo->private
+                )),
+                on::change('changeAssignedTo()')
+            )
         ),
 
         formGroup
@@ -610,10 +628,11 @@ formPanel
                 (
                     set(array
                     (
-                        'id'    => 'begin',
-                        'name'  => 'begin',
-                        'items' => $times,
-                        'value' => $todo->begin,
+                        'id'       => 'begin',
+                        'name'     => 'begin',
+                        'items'    => $times,
+                        'value'    => $todo->begin,
+                        'disabled' => $todo->begin == 2400
                     )),
                     on::change('selectNext()')
                 ),
@@ -622,13 +641,18 @@ formPanel
                     set::class('input-group-addon ring-0'),
                     $lang->todo->to
                 ),
-                select(set(array
+                select
                 (
-                    'id'    => 'end',
-                    'name'  => 'end',
-                    'items' => $times,
-                    'value' => $todo->end
-                )))
+                    set(array
+                    (
+                        'id'       => 'end',
+                        'name'     => 'end',
+                        'items'    => $times,
+                        'value'    => $todo->end,
+                        'disabled' => $todo->begin == 2400
+                    )),
+                    on::blur('selectEndTime(this)')
+                )
             ),
 
         ),
