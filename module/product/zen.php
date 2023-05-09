@@ -45,7 +45,7 @@ class productZen extends product
     protected function setProjectMenu(int $productID, string $branch, string $preBranch)
     {
         $branch = ($preBranch !== '' and $branch === '') ? $preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setCookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
 
         $this->product->setMenu($productID, $branch);
@@ -959,25 +959,25 @@ class productZen extends product
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('storyModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('storyModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('storyModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* The module ID from project app. */
-            if($this->app->tab == 'project') setcookie('storyModuleParam', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($this->app->tab == 'project') setcookie('storyModuleParam', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Re-init the story branch. */
             $_COOKIE['storyBranch'] = 'all';
-            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* For rendering module tree. */
-            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
-        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Save sort order of product stories list. */
         setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);

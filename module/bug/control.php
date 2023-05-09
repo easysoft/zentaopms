@@ -123,16 +123,16 @@ class bug extends control
         if($this->cookie->preProductID != $productID or ($this->cookie->preBranch != $branch and $product->type != 'normal' and $branch != 'all') or $browseType == 'bybranch')
         {
             $_COOKIE['bugModule'] = 0;
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $_COOKIE['bugBranch'] = 0;
-            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
-        if($browseType == 'bybranch') setcookie('bugBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bybranch') setcookie('bugBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -144,7 +144,7 @@ class bug extends control
         /* Set moduleTree. */
         if($browseType == '')
         {
-            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $browseType = 'unclosed';
         }
         else
@@ -347,7 +347,7 @@ class bug extends control
             if($hasError) return $this->send($response);
 
             /* Set from param if there is a object to transfer bug. */
-            setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             $bugID = $bugResult['id'];
             $bug   = $this->bug->getByID($bugID);
@@ -482,7 +482,7 @@ class bug extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
             }
 
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* If link from no head then reload. */
             if(isonlybody() and $executionID)
