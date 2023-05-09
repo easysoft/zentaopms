@@ -502,7 +502,7 @@ class programplanTest
      * @access public
      * @return array
      */
-    public function getDataForGanttTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true)
+    public function getDataForGanttTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
     {
         $objects = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
 
