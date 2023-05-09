@@ -232,7 +232,11 @@
             {
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
-                try{data = JSON.parse(data);}catch(e){data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];}
+                try{data = JSON.parse(data);}catch(e)
+                {
+                    if(!isInAppTab && config.zin) return;
+                    data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
+                }
                 if(options.updateUrl !== false) currentAppUrl = url;
                 data.forEach((item, idx) => item.selector = selectors[idx]);
                 updatePerfInfo(options, 'renderBegin');
