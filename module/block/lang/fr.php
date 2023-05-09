@@ -141,6 +141,7 @@ $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
 $lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
+$lang->block->default['ipd']           = $lang->block->default['waterfall'];
 
 $lang->block->default['scrum']['project']['1']['title'] = $lang->projectCommon . ' Overall';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
@@ -425,6 +426,7 @@ $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt = '
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
 $lang->block->modules['waterfallplus']['index'] = $lang->block->modules['waterfall']['index'];
+$lang->block->modules['ipd']['index']           = $lang->block->modules['waterfall']['index'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
