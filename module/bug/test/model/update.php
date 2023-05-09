@@ -60,7 +60,7 @@ cid=1
 
 initData();
 
-$bugIdList = array('1', '2');
+$bugIdList = array(1, 2);
 
 $t_uptitle         = array('title'       => 'john');
 $t_uptype          = array('type'        => 'config');

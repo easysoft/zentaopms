@@ -38,13 +38,11 @@ cid=1
 
 - 测试关联bug3的关联bug同步更新为1,2属性3 @1,2
 
-
-
 */
 
 initData();
 
-$bugIDList = array('1', '2', '3');
+$bugIDList = array(1, 2, 3);
 
 $bug = new bugTest();
 r($bug->updateLinkBugTest($bugIDList[0], '2', ''))    && p('2', ';')   && e('1');    //测试关联bug2的关联bug同步更新为1

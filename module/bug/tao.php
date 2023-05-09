@@ -170,26 +170,26 @@ class bugTao extends bugModel
     }
 
     /**
-     * 更新完bug后的相关处理。
+     * 更新完 bug 后的相关处理。
      * Relevant processing after updating bug.
      *
-     * @param  object $bug
-     * @param  object $oldBug
+     * @param  object    $bug
+     * @param  object    $oldBug
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function afterUpdate(object $bug, object $oldBug)
+    protected function afterUpdate(object $bug, object $oldBug): bool
     {
         /* 解除旧的版本关联关系，关联新的版本。*/
-        /* Link bug to build and release. */
+        /* Unlink old resolved build and link new resolved build. */
         if($bug->resolution == 'fixed' && !empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
         {
             if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, $bug->id);
             $this->linkBugToBuild($bug->id, $bug->resolvedBuild);
         }
 
-        /* 解除旧的计划关联关系，关联新的计划。*/
-        /* Link new plan, unlink old plan. */
+        /* 记录解除旧的计划关联关系和关联新的计划的历史。*/
+        /* Create actions for linking new plan and unlinking old plan. */
         if($bug->plan != $oldBug->plan)
         {
             $this->loadModel('action');
@@ -199,11 +199,11 @@ class bugTao extends bugModel
 
         $this->updateLinkBug($bug->id, $bug->linkBug, $oldBug->linkBug);
 
-        /* 给bug解决者积分奖励。*/
-        /* Add score to resolvedby. */
+        /* 给 bug 解决者积分奖励。*/
+        /* Add score to the user who resolved the bug. */
         if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug->id);
 
-        /* 更新bug所属看板的泳道。*/
+        /* 更新 bug 所属看板的泳道。*/
         /* Update the lane of the bug kanban. */
         if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
@@ -211,7 +211,7 @@ class bugTao extends bugModel
         /* Update the status of feedback. */
         if(($this->config->edition != 'open') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-        /* 更新bug的附件。*/
+        /* 更新 bug 的附件。*/
         /* Update the files of bug. */
         $this->loadModel('file')->processFile4Object('bug', $oldBug, $bug);
 
@@ -219,16 +219,16 @@ class bugTao extends bugModel
     }
 
     /**
-     * 更新相关bug。
+     * 更新相关 bug。
      * Update the linked bug.
      *
-     * @param  string $bugID
-     * @param  string $linkBug
-     * @param  string $oldLinkBug
+     * @param  int       $bugID
+     * @param  string    $linkBug
+     * @param  string    $oldLinkBug
      * @access protected
      * @return bool
      */
-    protected function updateLinkBug(string $bugID, string $linkBug, string $oldLinkBug): bool
+    protected function updateLinkBug(int $bugID, string $linkBug, string $oldLinkBug): bool
     {
         $linkBugs        = explode(',', $linkBug);
         $oldLinkBugs     = explode(',', $oldLinkBug);

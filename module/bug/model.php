@@ -397,7 +397,7 @@ class bugModel extends model
      * @access public
      * @return object|false
      */
-    public function getByID(string $bugID, bool $setImgSize = false): object|false
+    public function getByID(int $bugID, bool $setImgSize = false): object|false
     {
         $bug = $this->bugTao->fetchBugInfo($bugID);
         if(!$bug) return false;
@@ -532,11 +532,11 @@ class bugModel extends model
     }
 
     /**
-     * 更新bug信息。
+     * 更新 bug 信息。
      * Update a bug.
      *
-     * @param  object $bug
-     * @param  object $oldBug
+     * @param  object      $bug
+     * @param  object      $oldBug
      * @access public
      * @return array|false
      */
