@@ -1,10 +1,11 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
 zdTable('project')->config('project')->gen('10');
+zdTable('kanbancell')->config('kanbancell')->gen('10');
 
 $story = zdTable('story');
 $story->id->range('1');
@@ -165,10 +166,29 @@ $verifyScoreTask[1]->desc       = $desc[1];
 $verifyScoreTask[1]->pri        = $pri[1];
 $verifyScoreTask[1]->mailto     = '';
 
+$kanbanTask = array();
+$kanbanTask[1] = new stdclass();
+$kanbanTask[1]->execution  = $executionIdList[0];
+$kanbanTask[1]->parent     = $parent[4];
+$kanbanTask[1]->module     = $module[1];
+$kanbanTask[1]->story      = $story[1];
+$kanbanTask[1]->name       = $name[3];
+$kanbanTask[1]->color      = $color[1];
+$kanbanTask[1]->type       = $type[1];
+$kanbanTask[1]->version    = 1;
+$kanbanTask[1]->assignedTo = $assignedTo[1];
+$kanbanTask[1]->estimate   = $estimate[1];
+$kanbanTask[1]->estStarted = $estStarted[1];
+$kanbanTask[1]->deadline   = $deadline[2];
+$kanbanTask[1]->desc       = $desc[1];
+$kanbanTask[1]->pri        = $pri[1];
+$kanbanTask[1]->mailto     = '';
+
 $task = new taskTest();
 
-r($task->batchCreateObject($withoutNameTask, $executionIdList[0]))             && p('message:0') && e('『任务名称』不能为空。'); // 测试任务名称为空的情况
-r($task->batchCreateObject($normalTaskList, $executionIdList[0]))              && p('')          && e('2'); // 测试正常任务批量创建成功
-r($task->batchCreateObject($hasParentTask, $executionIdList[0], $parent[4]))   && p('name')      && e('任务1'); // 测试拆分任务
-r($task->batchCreateObject($hasStoryTask, $executionIdList[0], 0, $story[0]))  && p('title')     && e('需求1'); // 测试关联需求的情况
-r($task->batchCreateObject($verifyScoreTask, $executionIdList[0], 0, 0, true)) && p('')          && e('1'); // 测试是否正常创建积分记录
+r($task->batchCreateObject($withoutNameTask, $executionIdList[0]))                                                                            && p('message:0') && e('『任务名称』不能为空。'); // 测试任务名称为空的情况
+r($task->batchCreateObject($normalTaskList, $executionIdList[0]))                                                                             && p('')          && e('2');                      // 测试正常任务批量创建成功
+r($task->batchCreateObject($hasParentTask, $executionIdList[0], $parent[4]))                                                                  && p('name')      && e('任务1');                  // 测试拆分任务
+r($task->batchCreateObject($hasStoryTask, $executionIdList[0], 0, $story[0]))                                                                 && p('title')     && e('需求1');                  // 测试关联需求的情况
+r($task->batchCreateObject($verifyScoreTask, $executionIdList[0], 0, 0, true))                                                                && p('')          && e('1');                      // 测试是否正常创建积分记录
+r($task->batchCreateObject($kanbanTask, $executionIdList[0], 0, 0, false, array('laneID' => $laneIdList[0], 'columnID' => $columnIdList[0]))) && p('name')      && e('task4');                  // 测试在看板的泳道列批量创建任务

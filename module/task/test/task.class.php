@@ -129,6 +129,23 @@ class taskTest
             $score = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
             return $score == $lastScore + 1;
         }
+        elseif(!empty($output))
+        {
+            $laneID   = isset($output['laneID'])   ? $output['laneID']   : 0;
+            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+            $cards    = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
+                ->where('kanban')->eq($executionID)
+                ->andWhere('lane')->eq($laneID)
+                ->andWhere('column')->eq($columnID)
+                ->andWhere('type')->eq('task')
+                ->fetch('cards');
+            $taskIdList   = trim($cards, ',');
+            $taskIdList   = explode(',', $taskIdList);
+            $latestTaskID = current($taskIdList);
+            $task         = $this->objectModel->getById($latestTaskID);
+
+            return $task ? $task : false;
+        }
         else
         {
             return count($objectIdList);
