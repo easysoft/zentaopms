@@ -134,6 +134,7 @@ class taskModel extends model
     }
 
     /**
+     * 批量创建任务。
      * Batch create tasks.
      *
      * @param  object $execution
@@ -188,7 +189,7 @@ class taskModel extends model
         if($parentID) $this->afterSplitTask($oldParentTask, $childTasks);
 
         /* 更新当前执行下的任务泳道。 */
-        if(!isset($output['laneID']) or !isset($output['columnID']) or !isset($lanes)) $this->kanban->updateLane($execution->id, 'task');
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
         return $taskIdList;
     }
 
