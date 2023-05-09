@@ -83,7 +83,7 @@ $config->block->params['testtask']->type['options'] = $lang->block->typeList->te
 $config->block->params['testtask']->type['control'] = 'select';
 $config->block->params['testtask']->count = $config->block->params['default']->count;
 
-$config->block->params['story'] = new stdclass();;
+$config->block->params['story'] = new stdclass();
 $config->block->params['story']->type['name']       = $lang->block->type;
 $config->block->params['story']->type['options']    = $lang->block->typeList->story;
 $config->block->params['story']->type['control']    = 'select';
