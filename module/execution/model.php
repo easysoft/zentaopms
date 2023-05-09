@@ -344,12 +344,10 @@ class executionModel extends model
     /**
      * Create a execution.
      *
-     * @param int $copyExecutionID
-     *
      * @access public
      * @return bool|int
      */
-    public function create($copyExecutionID = '')
+    public function create()
     {
         $this->lang->execution->team = $this->lang->execution->teamname;
 
@@ -426,10 +424,7 @@ class executionModel extends model
             $sprint->hasProduct = $project->hasProduct;
         }
 
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
-        {
-            if(!$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
-        }
+        if($this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
 
         /* Check the workload format and total. */
         if(!empty($sprint->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('create', $sprint->percent, $sprint->project);
