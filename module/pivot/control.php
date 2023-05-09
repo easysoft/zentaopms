@@ -298,7 +298,7 @@ class pivot extends control
         $sql    = str_replace(';', '', "$post->sql");
         $fields = $post->fieldSettings;
         $langs  = isset($_POST['langs']) ? $post->langs : array();
-        $langs  = is_array($lang) ? $lang : json_decode($lang, true);
+        $langs  = is_array($langs) ? $langs : json_decode($langs, true);
 
         $processSqlData = $this->loadModel('chart')->getTables($sql);
         $sql = $processSqlData['sql'];
