@@ -26,6 +26,18 @@ title=测试 block 模块的update 方法
 timeout=0
 cid=39
 
+- 测试ID为2的区块变更排序后的返回结果 @1
+
+- 测试ID为2的区块的序号
+ - 属性id @2
+ - 属性order @3
+
+- 测试ID为2的区块变更排序后的返回结果 @1
+
+- 测试ID为3的区块的序号
+ - 属性id @3
+ - 属性order @1
+
 */
 
 global $tester;
@@ -47,4 +59,3 @@ r($tester->block->getByID($block1->id)) && p('id,order') && e("2,3"); // 测试I
 
 r($tester->block->setOrder($block2->id, $block2->order)) && p('') && e('1'); // 测试ID为2的区块变更排序后的返回结果
 r($tester->block->getByID($block2->id)) && p('id,order') && e("3,1"); // 测试ID为3的区块的序号
-
