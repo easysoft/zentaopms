@@ -680,7 +680,7 @@ class bug extends control
             if(!$comment)
             {
                 $changes = $this->bug->update($bug, $oldBug);
-                if(!$changes) return $this->send($this->bugZen->errorEdit());
+                if($changes === false) return $this->send($this->bugZen->errorEdit());
             }
 
             $this->bugZen->processAfterEdit($bugID, $this->post->comment, $changes);
