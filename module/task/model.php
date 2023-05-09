@@ -2800,7 +2800,7 @@ class taskModel extends model
 
         $datas    = $this->processData4Report($tasks, '', 'pri');
 
-        foreach($datas as $index => $pri) $pri->name = $this->lang->task->priList[$pri->name];
+        foreach($datas as $pri) $pri->name = $this->lang->task->priList[$pri->name];
         return $datas;
     }
 
