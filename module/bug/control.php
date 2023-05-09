@@ -31,10 +31,10 @@ class bug extends control
 
     /**
      * 构造函数
-
+     *
      * 1.加载其他模块model类。
      * 2.获取产品，并输出到视图
-
+     *
      * The construct function.
      *
      * 1. Load model of other modules.
@@ -671,8 +671,7 @@ class bug extends control
     {
         if(!empty($_POST))
         {
-            $oldBug = $this->bug->getByID($bugID);
-
+            $oldBug   = $this->bug->getByID($bugID);
             $formData = form::data($this->config->bug->form->edit);
             $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
             if(!$bug) return $this->send($this->bugZen->errorEdit());
