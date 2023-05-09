@@ -24,9 +24,9 @@ $testWhere2 = " `deleted` = '0' and `status` IN ('closed') ";
 $testResult  = $todo->getByExportListTest("date_desc", $testWhere,  $selectedItem = '');
 $testResult2 = $todo->getByExportListTest("date_desc", $testWhere2, $selectedItem = '');
 
-r(count($testResult)) && p() && e('1');
-r($testResult[1]) && p('name,status') && e('待办1,wait');
+r(count($testResult)) && p() && e('1'); //获取导出待办的数量
+r($testResult[1]) && p('name,status') && e('待办1,wait'); //获取id为1的待办名称和状态
 
-r(count($testResult2)) && p() && e('2');
-r($testResult2[4]) && p('name,status') && e('待办4,closed');
-r($testResult2[5]) && p('name,status') && e('待办5,closed');
+r(count($testResult2)) && p() && e('2'); //获取导出待办的数量
+r($testResult2[4]) && p('name,status') && e('待办4,closed'); //获取id为1的待办名称和状态
+r($testResult2[5]) && p('name,status') && e('待办5,closed'); //获取id为5的待办名称和状态

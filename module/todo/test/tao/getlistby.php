@@ -18,9 +18,9 @@ global $tester;
 $tester->loadModel('todo')->todoTao;
 
 
-$type    = 'before';
+$type    = 'before'; // assignedtoother, cycle
 $account = 'admin';
-$status  = 'all';
+$status  = 'all'; // done,closed,wait,doing
 $begin   = '2021-02-03';
 $end     = '2024-04-04';
 $limit   = 5;
@@ -28,5 +28,5 @@ $orderBy = 'date_desc';
 
 $result = $tester->todo->getListBy($type, $account, $status, $begin, $end, $limit, $orderBy);
 
-r(count($result)) && p() && e('5');
-r($result[0]) && p('name,status') && e('待办5,doing');
+r(count($result)) && p() && e('5'); //获取待办列表数量
+r($result[0]) && p('name,status') && e('待办5,doing'); //获取待办列表第一条的名称和状态
