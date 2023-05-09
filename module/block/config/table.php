@@ -2,7 +2,8 @@
 global $lang, $app;
 $app->loadLang('project');
 $app->loadLang('task');
-$config->block->dtable = new stdclass();
+
+if(!isset($config->block->dtable)) $config->block->dtable = new stdclass();
 $config->block->dtable->project = new stdclass();
 $config->block->dtable->project->fieldList['name']['name']            = 'name';
 $config->block->dtable->project->fieldList['name']['title']           = $lang->project->name;

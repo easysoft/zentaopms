@@ -562,12 +562,14 @@ class blockZen extends block
     }
 
     /**
+     * 打印产品发布列表区块数据。
      * Print releases block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printReleaseBlock()
+    protected function printReleaseBlock($block)
     {
         $uri = $this->createLink('my', 'index');
         $this->session->set('releaseList', $uri, 'product');
@@ -579,10 +581,10 @@ class blockZen extends block
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
-            ->beginIF($this->view->block->module != 'my' and $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
+            ->beginIF($block->module != 'my' and $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
             ->fetchAll();
     }
 
