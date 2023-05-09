@@ -2932,7 +2932,7 @@ class storyModel extends model
         }
         else
         {
-            $linkedStories = $this->getRelation($storyID, $story->type);
+            $linkedStories = $this->storyTao->getRelation($storyID, $story->type);
             $linkedStories = empty($linkedStories) ? array() : $linkedStories;
             $storyIDList   = array_keys($linkedStories);
         }
@@ -3470,25 +3470,25 @@ class storyModel extends model
     /**
      * Get stories list of a execution.
      *
-     * @param  int    $executionID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $orderBy
-     * @param  string $type
-     * @param  int    $param
-     * @param  string $storyType
-     * @param  string $excludeStories
-     * @param  object $pager
+     * @param  array|int $executionID
+     * @param  int       $productID
+     * @param  int       $branch
+     * @param  string    $orderBy
+     * @param  string    $type
+     * @param  int       $param
+     * @param  string    $storyType
+     * @param  string    $excludeStories
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getExecutionStories($executionID = 0, $productID = 0, $branch = 0, $orderBy = 't1.`order`_desc', $type = 'byModule', $param = 0, $storyType = 'story', $excludeStories = '', $pager = null)
+    public function getExecutionStories(array|int $executionID = 0, int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', string $excludeStories = '', object|null $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
 
         if(!$executionID) return array();
-        $executions = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($executionID)->fetchAll('id');
-        $hasProject = false;
+        $executions   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($executionID)->fetchAll('id');
+        $hasProject   = false;
         $hasExecution = false;
         foreach($executions as $execution)
         {
@@ -5405,192 +5405,70 @@ class storyModel extends model
     }
 
     /**
-     * Get tracks.
+     * 根据产品或项目，获取需求跟踪矩阵。
+     * Get tracks by producr or project.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $projectID
-     * @param  object $pager
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  int        $projectID
+     * @param  object     $pager
      * @access public
-     * @return bool|array
+     * @return array|false
      */
-    public function getTracks($productID = 0, $branch = 0, $projectID = 0, $pager = null)
+    public function getTracks(int $productID = 0, string|int $branch = 0, int $projectID = 0, object|null $pager = null): array|false
     {
-        $tracks         = array();
-        $sourcePageID   = $pager->pageID;
-        $excludeStories = false;
+        /* 获取从用户需求开始的跟踪矩阵信息。 */
+        $tracks = $this->storyTao->getRequirements4Track($productID, $branch, $projectID, $pager);
+        if(count($tracks) >= $pager->recPerPage) return $tracks;
 
-        if($this->config->URAndSR)
+        /* 如果没有用户需求，或者需求不满一页，用非细分的研发需求补充。 */
+        $excludeStories = $this->storyTao->getSubdividedStoriesByProduct($productID);
+        if($projectID)
         {
-            $projectStories = array();
-            if($projectID)
-            {
-                $requirements = $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
-                    ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement' && t3.deleted='0'")
-                    ->where('t1.project')->eq($projectID)
-                    ->andWhere('t1.product')->eq($productID)
-                    ->andWhere('t3.id')->ne('')
-                    ->page($pager, 't3.id')
-                    ->fetchAll('id');
-                $projectStories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story');
-            }
-            else
-            {
-                $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
-            }
-
-            if($pager->pageID != $sourcePageID)
-            {
-                $requirements  = array();
-                $pager->pageID = $sourcePageID;
-            }
-
-            foreach($requirements as $requirement)
-            {
-                $stories = $this->getRelation($requirement->id, 'requirement', array('id', 'title', 'parent'));
-                $stories = empty($stories) ? array() : $stories;
-                foreach($stories as $id => $story)
-                {
-                    if($projectStories and !isset($projectStories[$id]))
-                    {
-                        unset($stories[$id]);
-                        continue;
-                    }
-
-                    $stories[$id] = new stdclass();
-                    $stories[$id]->parent = $story->parent;
-                    $stories[$id]->title  = $story->title;
-                    $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
-                    $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
-                    $stories[$id]->tasks  = $this->loadModel('task')->getListByStory($id);
-                    if($this->config->edition == 'max')
-                    {
-                        $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
-                            ->where('story')->eq($id)
-                            ->andWhere('deleted')->eq('0')
-                            ->fetchAll('id');
-                        $stories[$id]->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
-                            ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
-                            ->where('t1.AType')->eq('design')
-                            ->andWhere('t1.BType')->eq('commit')
-                            ->andWhere('t1.AID')->in(array_keys($stories[$id]->designs))
-                            ->fetchPairs();
-                    }
-                }
-
-                $requirement->track = $stories;
-            }
-
-            $tracks = $requirements;
-
-            /* Get no requirements story. */
-            $excludeStories = $this->dao->select('t1.BID')->from(TABLE_RELATION)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on("t1.AID=t2.id")
-                ->where('t2.deleted')->eq('0')
-                ->andWhere('t1.AType')->eq('requirement')
-                ->andWhere('t1.BType')->eq('story')
-                ->andWhere('t1.relation')->eq('subdivideinto')
-                ->andWhere('t1.product')->eq($productID)
-                ->fetchPairs('BID', 'BID');
-            if($projectID)
-            {
-                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories);
-            }
-            else
-            {
-                $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories);
-            }
+            $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $this->config->URAndSR ? null : $pager);
         }
         else
         {
-            if($projectID)
-            {
-                $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $pager);
-            }
-            else
-            {
-                $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories, $pager);
-            }
+            $stories = $this->getProductStories($productID, $branch, 0, 'all', 'story', 'id_desc', true, $excludeStories, $this->config->URAndSR ? null : $pager);
         }
+        if(empty($stories)) return $tracks;
 
-        if(count($tracks) < $pager->recPerPage)
+        /* 展开子需求。 */
+        $expandedStories = array();
+        foreach($stories as $id => $story)
         {
-            /* Show sub stories. */
-            $storiesCopy = array();
-            foreach($stories as $id => $story)
-            {
-                $storiesCopy[$id] = $story;
+            $expandedStories[$id] = $story;
 
-                if(!isset($story->children) or count($story->children) == 0) continue;
-                foreach($story->children as $childID => $children)
-                {
-                    $storiesCopy[$childID] = $children;
-                }
-            }
-            $stories = $storiesCopy;
-
-            foreach($stories as $id => $story)
-            {
-                $stories[$id] = new stdclass();
-                $stories[$id]->parent = $story->parent;
-                $stories[$id]->title  = $story->title;
-                $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
-                $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
-                $stories[$id]->tasks  = $this->loadModel('task')->getListByStory($id, 0, $projectID);
-                if($this->config->edition == 'max')
-                {
-                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
-                        ->where('story')->eq($id)
-                        ->andWhere('deleted')->eq('0')
-                        ->fetchAll('id');
-                    $stories[$id]->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
-                        ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
-                        ->where('t1.AType')->eq('design')
-                        ->andWhere('t1.BType')->eq('commit')
-                        ->andWhere('t1.AID')->in(array_keys($stories[$id]->designs))
-                        ->fetchPairs();
-                }
-            }
-
-            $tracks['noRequirement'] = $stories;
-            if($this->config->URAndSR) $pager->recTotal += 1;
+            if(!isset($story->children) or count($story->children) == 0) continue;
+            foreach($story->children as $childID => $child) $expandedStories[$childID] = $child;
         }
+
+        /* 获取需求的跟踪矩阵信息。 */
+        foreach($expandedStories as $id => $story) $expandedStories[$id] = $this->storyTao->buildStoryTrack($story, $projectID);
+
+        /* 跟踪列表中追加 noRequirement 项。如果设置了用户需求，跟踪总条目加1。 */
+        $tracks['noRequirement'] = $expandedStories;
+        if($this->config->URAndSR) $pager->recTotal += 1;
 
         return $tracks;
     }
 
     /**
+     * 获取单个用户需求的跟踪矩阵
      * Get track by id.
      *
      * @param  int  $storyID
      * @access public
-     * @return bool|array
+     * @return array
      */
-    public function getTrackByID($storyID)
+    public function getTrackByID(int $storyID): array
     {
         $requirement = $this->getByID($storyID);
 
-        $stories = $this->getRelation($requirement->id, 'requirement');
+        /* 获取该用户需求细分的研发需求，并构造跟踪矩阵信息。 */
+        $stories = $this->storyTao->getRelation($requirement->id, 'requirement', array('id', 'title', 'parent'));
         $track   = array();
-        $stories = empty($stories) ? array() : $stories;
-        foreach($stories as $id => $title)
-        {
-            $track[$id] = new stdclass();
-            $track[$id]->title = $title;
-            $track[$id]->case  = $this->loadModel('testcase')->getStoryCases($id);
-            $track[$id]->bug   = $this->loadModel('bug')->getStoryBugs($id);
-            $track[$id]->story = $this->getByID($id);
-            $track[$id]->task  = $this->loadModel('task')->getListByStory($id);
-            if($this->config->edition == 'max')
-            {
-                $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)
-                    ->where('story')->eq($id)
-                    ->andWhere('deleted')->eq('0')
-                    ->fetchAll('id');
-                $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
-            }
-        }
+        foreach($stories as $id => $story) $track[$id] = $this->storyTao->buildStoryTrack($story);
 
         return $track;
     }
@@ -5735,34 +5613,6 @@ class storyModel extends model
             ->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * Get associated requirements.
-     *
-     * @param  int     $storyID
-     * @param  string  $storyType
-     * @param  array   $fields
-     * @access public
-     * @return array
-     */
-    public function getRelation($storyID, $storyType, $fields = array())
-    {
-        $BType    = $storyType == 'story' ? 'requirement' : 'story';
-        $relation = $storyType == 'story' ? 'subdividedfrom' : 'subdivideinto';
-
-        $relations = $this->dao->select('BID')->from(TABLE_RELATION)
-            ->where('AType')->eq($storyType)
-            ->andWhere('BType')->eq($BType)
-            ->andWhere('relation')->eq($relation)
-            ->andWhere('AID')->eq($storyID)
-            ->fetchPairs();
-
-        if(empty($relations)) return array();
-
-        $queryFields = empty($fields) ? 'id,title' : implode(',', $fields);
-        if(!empty($fields)) return $this->dao->select($queryFields)->from(TABLE_STORY)->where('id')->in($relations)->andWhere('deleted')->eq(0)->fetchAll('id');
-        return $this->dao->select($queryFields)->from(TABLE_STORY)->where('id')->in($relations)->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**
