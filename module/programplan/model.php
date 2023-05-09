@@ -415,6 +415,7 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段百分比。
      * Get total percent.
      *
      * @param  object $stage
@@ -422,11 +423,11 @@ class programplanModel extends model
      * @access public
      * @return int
      */
-    public function getTotalPercent(object $stage, bool $parent = false)
+    public function getTotalPercent(object $stage, bool $parent = false) : int
     {
         /* When parent is equal to true, query the total workload of the subphase. */
         $executionID = $parent ? $stage->id : $stage->project;
-        $plans = $this->getStage($executionID, $stage->product, 'parent');
+        $plans = $this->programplanTao->getStageListBy((int)$executionID, (int)$stage->product, $browseType = 'parent');
 
         $totalPercent = 0;
         $stageID      = $stage->id;

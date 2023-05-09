@@ -287,4 +287,33 @@ class programplanTao extends programplanModel
 
         return $datas;
     }
+
+    /**
+     * 获取阶段信息。
+     * Get stage listt.
+     *
+     * @param  int       $executionID
+     * @param  int       $productID
+     * @param  string    $browseType
+     * @param  string    $orderBy
+     * @access protected
+     * @return array
+     */
+    protected function getStageListBy(int $executionID, int $productID, string $browseType, $orderBy = 'id_asc')
+    {
+        if(empty($executionID)) return array();
+        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
+
+        return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('1 = 1')
+            ->beginIF($projectModel != 'waterfallplus')->andWhere('t1.type')->eq('stage')->fi()
+            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
+            ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
+            ->beginIF($this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+    }
 }
