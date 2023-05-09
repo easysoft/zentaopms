@@ -4863,9 +4863,19 @@ class executionModel extends model
         $chartData['baseLine'] = $baselineJSON;
 
         $execution = $this->getById($executionID);
-        if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+        $isClosed  = strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end;
+
+        /*
+         * 1. Execution status is not closed and suspended, end date less than today;
+         * 2. Execution status is closed, end date less than closed date;
+         * 3. Execution status is suspended, end date less than suspended date;
+         * Processing burn down chart Information.
+         */
+        $endDate = helper::today();
+        if($execution->status == 'closed')    $endDate = substr($execution->closedDate, 0, 10);
+        if($execution->status == 'suspended') $endDate = $execution->suspendedDate;
+
+        if($endDate > $execution->end)
         {
             $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true, $dateList);
             $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);
@@ -5598,6 +5608,9 @@ class executionModel extends model
                 {
                     common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
                 }
+                break;
+            default:
+                echo $execution->$id;
                 break;
             }
             echo '</td>';
