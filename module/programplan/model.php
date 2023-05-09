@@ -100,7 +100,8 @@ class programplanModel extends model
     }
 
     /**
-     * Get pairs.
+     * 获取项目中的阶段数据键值对。
+     * Get stade pairs for project.
      *
      * @param  int    $executionID
      * @param  int    $productID
@@ -108,7 +109,7 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getPairs($executionID, $productID = 0, $type = 'all')
+    public function getPairs(int $executionID, int $productID = 0, string $type = 'all'): array
     {
         $plans = $this->getStage($executionID, $productID, $type);
 
@@ -124,12 +125,14 @@ class programplanModel extends model
         {
             if(strpos($type, 'leaf') !== false and isset($parents[$plan->id])) continue;
 
-            $paths = array_slice(explode(',', trim($plan->path, ',')), 1);
+            $paths    = array_slice(explode(',', trim($plan->path, ',')), 1);
             $planName = '';
+           
             foreach($paths as $path)
             {
                 if(isset($plans[$path])) $planName .= '/' . $plans[$path]->name;
             }
+           
             $pairs[$planID] = $planName;
         }
 
