@@ -1,6 +1,6 @@
-title: zt_getbyid
-author: jukui
-version: "1.0"
+title: zt_gettodosbyidlist
+author: lanzongjun
+version: '1.0'
 fields:
     - field: id
       range: 1-5
@@ -33,5 +33,3 @@ fields:
     - field: closedDate
       range: 1-9
       prefix: '2023-04-2'
-    - field: feedback
-      range: '123'
