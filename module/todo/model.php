@@ -105,8 +105,8 @@ class todoModel extends model
      * 更新批量编辑待办数据。
      * Update batch edit todo data.
      *
-     * @param array      $todos
-     * @param array      $todoIdList
+     * @param  array  $todos
+     * @param  array  $todoIdList
      * @access public
      * @return array|int
      */
@@ -146,7 +146,7 @@ class todoModel extends model
     }
 
     /**
-     * 开启待办事项。
+     * 开始一个待办事项。
      * Start a todo.
      *
      * @param  int    $todoID
@@ -395,7 +395,7 @@ class todoModel extends model
 
     /**
      * 激活待办事项。
-     * Activated a todo.
+     * Activate a todo.
      *
      * @param  int    $todoID
      * @access public
