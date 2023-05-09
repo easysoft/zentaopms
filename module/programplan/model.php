@@ -197,7 +197,7 @@ class programplanModel extends model
         }
 
         $datas = $this->setRelationTask($planIdList, $datas);
-        
+
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -1070,6 +1070,8 @@ class programplanModel extends model
                     common::printIcon('execution', 'delete', "planID=$plan->id&confirm=no", $plan, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
                 }
                 break;
+            default:
+                break;
             }
             echo '</td>';
         }
@@ -1363,13 +1365,14 @@ class programplanModel extends model
     }
 
     /**
+     * 检查是否为顶级。
      * Check whether it is the top stage.
      *
      * @param  int    $planID
      * @access public
      * @return bool
      */
-    public function checkTopStage($planID)
+    public function checkTopStage(int $planID): bool
     {
         $parentID   = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($planID)->fetch('parent');
         $parentType = $this->dao->select('type')->from(TABLE_EXECUTION)->where('id')->eq($parentID)->fetch('type');
