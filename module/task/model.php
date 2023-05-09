@@ -2142,11 +2142,11 @@ class taskModel extends model
      *
      * @param  string $account
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getUserSuspendedTasks($account)
+    public function getUserSuspendedTasks($account): array
     {
-        $tasks = $this->dao->select('t1.*')
+        return $this->dao->select('t1.*')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t1.project = t3.id")
@@ -2159,7 +2159,6 @@ class taskModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
             ->fetchAll('id');
-        return $tasks;
     }
 
     /**
