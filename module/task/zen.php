@@ -548,7 +548,7 @@ class taskZen extends task
         foreach($extendFields as $extendField)
         {
             $task->{$extendField->field} = $tasks->{$extendField->field}[$index];
-            if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
+            if(is_array($task->{$extendField->field})) $task->{$extendField->field} = implode(',', $task->{$extendField->field});
 
             $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
         }
