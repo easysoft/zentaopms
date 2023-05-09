@@ -68,10 +68,10 @@ class todoZen extends todo
     protected function buildEditView(object $todo): void
     {
         $todo->date = date("Y-m-d", strtotime($todo->date));
-        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
-        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->todo       = $todo;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
+        $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->todo  = $todo;
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
 
         $this->display();
     }
@@ -296,7 +296,7 @@ class todoZen extends todo
     {
         /* Initialize vars. */
         $editedTodos = $objectIdList = $reviews = array();
-        $columns      = 7;
+        $columns     = 7;
         unset($this->lang->todo->typeList['cycle']);
 
         if(empty($userID)) $userID = $this->app->user->id;
@@ -324,9 +324,9 @@ class todoZen extends todo
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-        $this->view->bugs   = $bugs;
-        $this->view->tasks  = $tasks;
-        $this->view->storys = $storys;
+        $this->view->bugs        = $bugs;
+        $this->view->tasks       = $tasks;
+        $this->view->storys      = $storys;
         $this->view->reviews     = $reviews;
         $this->view->testtasks   = $testtasks;
         $this->view->editedTodos = $editedTodos;
