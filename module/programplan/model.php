@@ -152,7 +152,7 @@ class programplanModel extends model
     /**
      * Get gantt data.
      *
-     * @param  int     $executionID
+     * @param  int     $projectID
      * @param  int     $productID
      * @param  int     $baselineID
      * @param  string  $selectCustom
@@ -160,12 +160,12 @@ class programplanModel extends model
      * @access public
      * @return string
      */
-    public function getDataForGantt($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
+    public function getDataForGantt($projectID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
         $this->loadModel('execution');
 
-        $plans = $this->getStage($executionID, $productID, 'all', 'order');
+        $plans = $this->getStage($projectID, $productID, 'all', 'order');
         if($baselineID)
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
@@ -182,6 +182,7 @@ class programplanModel extends model
             }
         }
 
+        $project     = $this->loadModel('project')->getByID($projectID);
         $today       = helper::today();
         $datas       = array();
         $planIdList  = array();
@@ -346,6 +347,57 @@ class programplanModel extends model
                         $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
                         $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
                         $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
+                    }
+                }
+            }
+        }
+
+        /* Build review points tree for ipd project. */
+        if($project->model == 'ipd')
+        {
+            $reviewPoints = $this->dao->select('*')->from(TABLE_OBJECT)
+                ->where('deleted')->eq('0')
+                ->andWhere('project')->eq($projectID)
+                ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+                ->fetchAll('id');
+
+            foreach($datas['data'] as $plan)
+            {
+                if($plan->type != 'plan') continue;
+
+                foreach($reviewPoints as $id => $point)
+                {
+                    if(!isset($this->config->stage->ipdReviewPoint->{$plan->attribute})) continue;
+
+                    $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
+                    if(in_array($point->category, $categories))
+                    {
+                        $data = new stdclass();
+                        $data->id            = $plan->id . '-' . $point->category . '-' . $point->id;
+                        $data->type          = 'point';
+                        $data->text          = $point->title;
+                        $data->name          = $point->title;
+                        $data->attribute     = '';
+                        $data->milestone     = '';
+                        $data->owner_id      = '';
+                        $data->status        = '';
+                        $data->begin         = helper::today();
+                        $data->deadline      = '';
+                        $data->realBegan     = $point->createdDate;
+                        $data->realEnd       = '';;
+                        $data->parent        = $plan->id;
+                        $data->open          = true;
+                        $data->start_date    = helper::today();
+                        $data->endDate       = helper::today(); 
+                        $data->duration      = 1;
+                        $data->color         = '#FC913F';
+                        $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
+                        $data->textColor     = $this->lang->execution->gantt->stage->textColor;
+                        $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+                        if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
+
+                        $datas['data'][$data->id] = $data;
                     }
                 }
             }
@@ -878,7 +930,6 @@ class programplanModel extends model
             $data->days     = helper::diffDate($data->end, $data->begin) + 1;
             $data->order    = current($orders);
 
-
             if($data->id)
             {
                 $stageID = $data->id;
@@ -954,6 +1005,10 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+
+                    /* Ipd project create default review points. */
+                    if($project->model == 'ipd' && $this->config->edition == 'ipd') $this->loadModel('review')->createDefaultPoint($projectID, $productID, $data->attribute);
+
                     if($data->type == 'kanban')
                     {
                         $execution = $this->execution->getByID($stageID);
