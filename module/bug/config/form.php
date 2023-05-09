@@ -72,9 +72,9 @@ $config->bug->form->edit['os']             = array('required' => false, 'type' =
 $config->bug->form->edit['browser']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['linkBug']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
-$config->bug->form->edit['deadline']       = array('required' => false, 'type' => 'date',   'default' => NULL);
-$config->bug->form->edit['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => NULL);
-$config->bug->form->edit['closedDate']     = array('required' => false, 'type' => 'date',   'default' => NULL);
+$config->bug->form->edit['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
+$config->bug->form->edit['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => null);
+$config->bug->form->edit['closedDate']     = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->edit['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 
 global $app;
