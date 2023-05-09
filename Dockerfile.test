@@ -1,4 +1,4 @@
-FROM hub.qucheng.com/ci/zentao-ztf:php8-2023050903
+FROM hub.qucheng.com/ci/zentao-ztf
 
 # Install zentao
 ARG VERSION
