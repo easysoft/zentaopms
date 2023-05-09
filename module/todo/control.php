@@ -29,8 +29,8 @@ class todo extends control
      * 创建待办。
      * Create a todo.
      *
-     * @param  string  $date
-     * @param  string  $from todo|feedback|block
+     * @param  string $date
+     * @param  string $from todo|feedback|block
      * @access public
      * @return void
      */
@@ -161,6 +161,7 @@ class todo extends control
      * @param  string $userID
      * @param  string $status
      * @access public
+     * @return void
      */
     public function batchEdit(string $from = '', string $type = 'today', string $userID = '', string $status = 'all')
     {
@@ -283,7 +284,7 @@ class todo extends control
 
     /**
      * 获取待办的信息。
-     * Get info of todo .
+     * Get info of todo.
      *
      * @param string $todoID
      * @param string $from   my|company
@@ -352,10 +353,10 @@ class todo extends control
     }
 
     /**
-     * 完成待办.
+     * 完成待办。
      * Finish a todo.
      *
-     * @param  string  $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
@@ -395,7 +396,7 @@ class todo extends control
     }
 
     /**
-     * 批量完成待办.
+     * 批量完成待办。
      * Batch finish todos.
      *
      * @access public
@@ -421,7 +422,7 @@ class todo extends control
      * Batch close todos. The status of todo which need to close should be done.
      *
      * @access public
-     * @return int
+     * @return void
      */
     public function batchClose()
     {
@@ -530,8 +531,8 @@ class todo extends control
     /**
      * AJAX: get program id.
      *
-     * @param  int     $objectID
-     * @param  string  $objectType
+     * @param  int    $objectID
+     * @param  string $objectType
      * @access public
      * @return void
      */
@@ -545,7 +546,7 @@ class todo extends control
     /**
      * AJAX: get execution pairs.
      *
-     * @param  int     $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -565,7 +566,7 @@ class todo extends control
     /**
      * AJAX: get product pairs.
      *
-     * @param  int     $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */

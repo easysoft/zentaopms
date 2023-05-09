@@ -14,7 +14,7 @@ class todoZen extends todo
      * 生成创建待办视图数据。
      * Build create form data.
      *
-     * @param  string $date
+     * @param  string    $date
      * @access protected
      * @return void
      */
@@ -33,7 +33,7 @@ class todoZen extends todo
      * 生成批量创建待办视图数据。
      * Build batch create form data.
      *
-     * @param  string $date
+     * @param  string    $date
      * @access protected
      * @return void
      */
@@ -80,7 +80,7 @@ class todoZen extends todo
      * 生成指派待办视图数据。
      * Build assignTo form data.
      *
-     * @param  int        $todoID
+     * @param  int       $todoID
      * @access protected
      * @return void
      */
@@ -97,10 +97,10 @@ class todoZen extends todo
     }
 
     /**
-     * 处理创建待办的请求数据
+     * 处理创建待办的请求数据。
      * Processing request data of create.
      *
-     * @param  object $formData
+     * @param  object    $formData
      * @access protected
      * @return object
      */
@@ -135,8 +135,8 @@ class todoZen extends todo
      * 准备要创建的todo的数据。
      * Prepare the creation data.
      *
-     * @param  object $todo
-     * @param  string $uid
+     * @param  object       $todo
+     * @param  string       $uid
      * @access protected
      * @return object|false
      */
@@ -181,8 +181,8 @@ class todoZen extends todo
      * 创建完成待办后数据处理。
      * Create a todo after data processing.
      *
-     * @param  object $todo
-     * @param  object $formData
+     * @param  object    $todo
+     * @param  object    $formData
      * @access protected
      * @return object
      */
@@ -203,7 +203,7 @@ class todoZen extends todo
      * 处理批量创建待办的请求数据。
      * Processing request data of batch create todo.
      *
-     * @param  object $formData
+     * @param  object    $formData
      * @access protected
      * @return object
      */
@@ -216,8 +216,8 @@ class todoZen extends todo
      * 处理编辑待办的请求数据。
      * Processing edit request data.
      *
-     * @param  int    $todoID
-     * @param  object $formData
+     * @param  int          $todoID
+     * @param  object       $formData
      * @access protected
      * @return object|false
      */
@@ -269,7 +269,7 @@ class todoZen extends todo
      * 编辑完成待办后数据处理。
      * Handle data after edit todo.
      *
-     * @param  object $todo
+     * @param  object    $todo
      * @access protected
      * @return void
      */
@@ -285,10 +285,10 @@ class todoZen extends todo
      * 批量编辑页面渲染。
      * Batch edit view display.
      *
-     * @param object $formData
-     * @param string $type
-     * @param int    $userID
-     * @param string $status
+     * @param  object    $formData
+     * @param  string    $type
+     * @param  int       $userID
+     * @param  string    $status
      * @access protected
      * @return void
      */
@@ -346,10 +346,10 @@ class todoZen extends todo
      * 获取批量编辑页面初始化待办数据。
      * Get batch edit page initialization todo data.
      *
-     * @param object $formData
-     * @param string $type
-     * @param string $account
-     * @param string $status
+     * @param  object    $formData
+     * @param  string    $type
+     * @param  string    $account
+     * @param  string    $status
      * @access protected
      * @return array
      */
@@ -403,7 +403,7 @@ class todoZen extends todo
      * 处理批量编辑待办数据。
      * Build batch edit view.
      *
-     * @param  object $formData
+     * @param  object    $formData
      * @access protected
      * @return array
      */
@@ -448,7 +448,7 @@ class todoZen extends todo
      * 批量编辑完成待办后数据处理。
      * After Batch edit todo data.
      *
-     * @param array $allChanges
+     * @param  array     $allChanges
      * @access protected
      * @return void
      */
@@ -467,7 +467,7 @@ class todoZen extends todo
      * 处理周期待办的配置值。
      * Handle cycle config.
      *
-     * @param  object $todo
+     * @param  object  $todo
      * @access private
      * @return void
      */
@@ -496,7 +496,7 @@ class todoZen extends todo
      * 设置周期待办数据。
      * Set cycle todo data.
      *
-     * @param  object $todoData
+     * @param  object       $todoData
      * @access private
      * @return false|object
      */
@@ -547,7 +547,7 @@ class todoZen extends todo
      * 输出开启待办事项的确认弹框。
      * Output start todo confirm alert.
      *
-     * @param  object $todo
+     * @param  object    $todo
      * @access protected
      * @return int
      */
@@ -565,8 +565,8 @@ class todoZen extends todo
     }
 
     /**
-     * Get product pairs id=>name by model.
      * 根据模型获取项目， 以键值对格式返回。
+     * Get product pairs id=>name by model.
      *
      * @param  string $model
      * @return array
@@ -614,7 +614,7 @@ class todoZen extends todo
      * 处理指派待办请求数据。
      * Process assign todo request data.
      *
-     * @param  object     $formData
+     * @param  object    $formData
      * @access protected
      * @return object
      */
@@ -636,9 +636,9 @@ class todoZen extends todo
      * 指派待办。
      * Assign a todo.
      *
-     * @param   object     $todo
-     * @access  protected
-     * @return  bool
+     * @param  object    $todo
+     * @access protected
+     * @return bool
      */
     protected function doAssignTo(object $todo): bool
     {
@@ -650,7 +650,7 @@ class todoZen extends todo
      * 获取用户信息。
      * Get user info.
      *
-     * @param  int       $userID
+     * @param  int          $userID
      * @access protected
      * @return object|false
      */
@@ -702,8 +702,8 @@ class todoZen extends todo
      * 获取待办关联的信息。
      * Get associated info for export todo.
      *
-     * @param  string $type
-     * @param  string $account
+     * @param  string    $type
+     * @param  string    $account
      * @access protected
      * @return array
      */
@@ -737,10 +737,10 @@ class todoZen extends todo
      * 处理导出数据。
      * Deal with export data.
      *
-     * @param array      $todos
-     * @param object     $assemble
-     * @param object     $todoLang
-     * @param array      $times
+     * @param  array     $todos
+     * @param  object    $assemble
+     * @param  object    $todoLang
+     * @param  array     $times
      * @access protected
      * @return array
      */

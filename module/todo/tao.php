@@ -14,7 +14,7 @@ class todoTao extends todoModel
      * 获取单条待办。
      * Get a todo.
      *
-     * @param  int     $todoID
+     * @param  int       $todoID
      * @access protected
      * @return object
      */
@@ -27,7 +27,7 @@ class todoTao extends todoModel
      * 获取多条待办。
      * Get a todo.
      *
-     * @param  array  $todoIdList
+     * @param  array     $todoIdList
      * @access protected
      * @return array
      */
@@ -62,8 +62,8 @@ class todoTao extends todoModel
      * 获取各模块project列表。
      * Get project list.
      *
-     * @param  string $table
-     * @param  array $idList
+     * @param  string    $table
+     * @param  array     $idList
      * @access protected
      * @return array
      */
@@ -76,7 +76,7 @@ class todoTao extends todoModel
      * 插入待办数据。
      * Insert todo data.
      *
-     * @param  object $todo
+     * @param  object    $todo
      * @access protected
      * @return int
      */
@@ -95,8 +95,8 @@ class todoTao extends todoModel
      * 更新待办数据。
      * Update todo data.
      *
-     * @param  int    $todoID
-     * @param  object $todo
+     * @param  int       $todoID
+     * @param  object    $todo
      * @access protected
      * @return bool
      */
@@ -116,7 +116,7 @@ class todoTao extends todoModel
      * 关闭一个待办。
      * Close one todo.
      *
-     * @param int $todoID
+     * @param  int       $todoID
      * @access protected
      * @return bool
      */
@@ -138,8 +138,8 @@ class todoTao extends todoModel
      * 获取周期待办列表。
      * Get cycle list.
      *
-     * @param  array  $todoList
-     * @param  string $orderBy
+     * @param  array     $todoList
+     * @param  string    $orderBy
      * @access protected
      * @return array
      */
@@ -157,7 +157,7 @@ class todoTao extends todoModel
      * 通过待办构建周期待办数据。
      * Build cycle todo.
      *
-     * @param  object $todo
+     * @param  object    $todo
      * @access protected
      * @return object
      */
@@ -223,9 +223,9 @@ class todoTao extends todoModel
      * 获取批量创建待办的有效数据。
      * Get valid todos of batch create.
      *
-     * @param  object $todos
-     * @param  int    $loop
-     * @param  string $assignedTo
+     * @param  object    $todos
+     * @param  int       $loop
+     * @param  string    $assignedTo
      * @access protected
      * @return object
      */
@@ -273,9 +273,9 @@ class todoTao extends todoModel
      * 通过周期待办，获取要生成每日待办的日期。
      * Gets the daily todo date by the cycle todo.
      *
-     * @param  object $todo
+     * @param  object        $todo
      * @param  object|string $lastCycle
-     * @param  string $today
+     * @param  string        $today
      * @access protected
      * @return false|string
      */
@@ -341,7 +341,7 @@ class todoTao extends todoModel
      * 获取用户的待办事项数量。
      * Get todo count on the account.
      *
-     * @param  string $account
+     * @param  string    $account
      * @access protected
      * @return int
      */
@@ -394,14 +394,14 @@ class todoTao extends todoModel
      * 获取待办列表数据。
      * Get the todo list data.
      *
-     * @param string       $type
-     * @param string       $account
-     * @param string|array $status
-     * @param string       $begin
-     * @param string       $end
-     * @param int          $limit
-     * @param string       $orderBy
-     * @param object       $pager
+     * @param  string       $type
+     * @param  string       $account
+     * @param  string|array $status
+     * @param  string       $begin
+     * @param  string       $end
+     * @param  int          $limit
+     * @param  string       $orderBy
+     * @param  object       $pager
      * @access protected
      * @return array
      */

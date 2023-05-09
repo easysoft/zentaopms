@@ -12,10 +12,10 @@ declare(strict_types=1);
 class todoModel extends model
 {
     /**
-     * 创建待办
+     * 创建待办。
      * Create todo data.
      *
-     * @param  object $todo
+     * @param  object    $todo
      * @access public
      * @return int|false
      */
@@ -31,7 +31,7 @@ class todoModel extends model
      * 批量创建待办。
      * Batch create todo.
      *
-     * @param  object $todos
+     * @param  object      $todos
      * @access public
      * @return array|false
      */
@@ -84,8 +84,8 @@ class todoModel extends model
      * 更新待办数据。
      * update a todo.
      *
-     * @param  int    $todoID
-     * @param  object $todo
+     * @param  int         $todoID
+     * @param  object      $todo
      * @access public
      * @return array|false
      */
@@ -105,8 +105,8 @@ class todoModel extends model
      * 更新批量编辑待办数据。
      * Update batch edit todo data.
      *
-     * @param array $todos
-     * @param array $todoIdList
+     * @param array      $todos
+     * @param array      $todoIdList
      * @access public
      * @return array|int
      */
@@ -146,10 +146,10 @@ class todoModel extends model
     }
 
     /**
-     * 开启待办事项
+     * 开启待办事项。
      * Start a todo.
      *
-     * @param  int   $todoID
+     * @param  int    $todoID
      * @access public
      * @return bool
      */
@@ -165,7 +165,7 @@ class todoModel extends model
      * 完成一个待办。
      * Finish one todo.
      *
-     * @param  int     $todoID
+     * @param  int    $todoID
      * @access public
      * @return bool
      */
@@ -195,7 +195,7 @@ class todoModel extends model
      * 批量完成待办。
      * Batch finish todos.
      *
-     * @param  int[]   $todoIdList
+     * @param  int[]  $todoIdList
      * @access public
      * @return bool
      */
@@ -213,8 +213,8 @@ class todoModel extends model
      * 获取待办事项详情数据。
      * Get info of a todo.
      *
-     * @param  int    $todoID
-     * @param  bool   $setImgSize true|false
+     * @param  int          $todoID
+     * @param  bool         $setImgSize true|false
      * @access public
      * @return object|false
      */
@@ -341,7 +341,7 @@ class todoModel extends model
      * 根据周期待办创建待办。
      * Create todo by cycle.
      *
-     * @param  array   $todoList
+     * @param  array  $todoList
      * @access public
      * @return void
      */
@@ -397,7 +397,7 @@ class todoModel extends model
      * 激活待办事项。
      * Activated a todo.
      *
-     * @param  int $todoID
+     * @param  int    $todoID
      * @access public
      * @return bool
      */
@@ -437,7 +437,7 @@ class todoModel extends model
      * 指派待办。
      * Assign todo.
      *
-     * @param  object  $todo
+     * @param  object $todo
      * @access public
      * @return bool
      */
@@ -471,7 +471,7 @@ class todoModel extends model
      * 根据类型获取各个模块的列表。
      * Gets the project ID of the to-do object.
      *
-     * @param  array $todoList
+     * @param  array  $todoList
      * @access public
      * @return array
      */
@@ -533,7 +533,7 @@ class todoModel extends model
      * 根据待办ID获取多条待办。
      * Get todo data by id list.
      *
-     * @param  array $todoIdList
+     * @param  array  $todoIdList
      * @access public
      * @return array
      */
