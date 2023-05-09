@@ -475,7 +475,8 @@ class programplanTest
     }
 
     /**
-     * print CellTest
+     * 输出表格单元 <td></td>。
+     * Print cell.
      *
      * @param  object $col
      * @param  object $plan
