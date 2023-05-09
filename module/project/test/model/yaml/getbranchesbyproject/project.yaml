@@ -1,0 +1,10 @@
+title: zt_project
+author: liuhong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-3
+    - field: type
+      range: 'project'
+    - field: status
+      range: 'wait,doing,suspended'

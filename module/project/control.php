@@ -202,16 +202,18 @@ class project extends control
     }
 
     /**
+     * 产品关联项目时获取被关联产品的分支数量
      * AJAX: Get linked products with branch.
      *
-     * @param  int    $projectID
+     * @param  string $projectID
+     *
      * @access public
-     * @return void
+     * @return string
      */
-    public function ajaxGetLinkedProducts($projectID)
+    public function ajaxGetLinkedProducts(string $projectID): string
     {
         $productsWithBranch = array();
-        $linkedProducts     = $this->project->getBranchesByProject($projectID);
+        $linkedProducts     = $this->project->getBranchesByProject((int)$projectID);
         foreach($linkedProducts as $productID => $branches)
         {
             foreach($branches as $branchID => $branchInfo) $productsWithBranch[$productID][$branchID] = $branchID;

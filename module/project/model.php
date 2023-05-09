@@ -832,13 +832,15 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目ID获取关联产品及分支
      * Get branches by project id.
      *
-     * @param  int    $projectID
+     * @param  int $projectID
+     *
      * @access public
      * @return array
      */
-    public function getBranchesByProject($projectID)
+    public function getBranchesByProject(int $projectID): array
     {
         return $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
