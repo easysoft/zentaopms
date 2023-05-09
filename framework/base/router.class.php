@@ -2980,11 +2980,17 @@ class baseRouter
         if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
         {
             if(empty($this->config->debug)) helper::end();
-            if(PHP_SAPI == 'cli') helper::end($errorLog);
 
-            $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
-            $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
-            echo $htmlError;
+            if(PHP_SAPI == 'cli')
+            {
+                echo $errorLog;
+            }
+            else
+            {
+                $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
+                $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
+                echo $htmlError;
+            }
         }
     }
 
