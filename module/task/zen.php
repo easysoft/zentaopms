@@ -279,8 +279,8 @@ class taskZen extends task
         $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
         $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
 
-        $inLiteKanban = $this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban';
-        if(($this->app->tab == 'execution' or $inLiteKanban) and $execution->type == 'kanban')
+        $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
+        if(($this->app->tab == 'execution' or $inLiteKanban) && $execution->type == 'kanban')
         {
             $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
             $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
@@ -416,33 +416,6 @@ class taskZen extends task
     }
 
     /**
-<<<<<<< HEAD
-     * 展示地盘待处理区块的ID。
-     * Show the ID of the block to be processed on the my.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function showAssignedToMeBlockID(): void
-    {
-        /* Get block id of assinge to me. */
-        $blockID = 0;
-        if(isonlybody())
-        {
-            $blockID = $this->dao->select('id')->from(TABLE_BLOCK)
-                ->where('block')->eq('assingtome')
-                ->andWhere('module')->eq('my')
-                ->andWhere('account')->eq($this->app->user->account)
-                ->orderBy('order_desc')
-                ->fetch('id');
-        }
-
-        $this->view->blockID = $blockID;
-    }
-
-    /**
-=======
->>>>>>> * Add test case for updatekanbandata method and modify comment for task
      * 展示执行相关数据。
      * Show execution related data.
      *
@@ -511,7 +484,7 @@ class taskZen extends task
             ->setIF($rawData->estimate != false, 'left', $rawData->estimate)
             ->setIF(isset($rawData->story), 'storyVersion', isset($rawData->story) ? $this->loadModel('story')->getVersion($rawData->story) : 0)
             ->setIF(empty($rawData->multiple) || count($team) < 1, 'mode', '')
-            ->setIF($execution and ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))), 'story', 0)
+            ->setIF($execution && ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))), 'story', 0)
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
@@ -710,7 +683,7 @@ class taskZen extends task
         }
 
         /* Check start and end date. */
-        if(!helper::isZeroDate($deadline) and $estStarted > $deadline)
+        if(!helper::isZeroDate($deadline) && $estStarted > $deadline)
         {
             dao::$errors['deadline'] = $this->lang->task->error->deadlineSmall;
             return false;
@@ -730,12 +703,9 @@ class taskZen extends task
     protected function checkDuplicateName($task): int
     {
         /* Check duplicate task. */
-        if($task->type != 'affair' and $task->name)
-        {
-            $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$task->execution} and story=" . (int)$task->story . (isset($task->feedback) ? " and feedback=" . (int)$task->feedback : ''));
-            if($result['stop']) return zget($result, 'duplicate', 0);
-        }
-        return 0;
+        if($task->type == 'affair' or !$task->name) return 0;
+        $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$task->execution} and story=" . (int)$task->story . (isset($task->feedback) ? " and feedback=" . (int)$task->feedback : ''));
+        if($result['stop']) return zget($result, 'duplicate', 0);
     }
 
     /**
@@ -781,7 +751,7 @@ class taskZen extends task
      * 检查关联需求的测试类型任务数据格式是否符合要求。
      * Check if the test type task data format of the linked stories meets the requirements.
      *
-     * @param  object[] $tasks
+     * @param  object[]  $tasks
      * @access protected
      * @return bool
      */
@@ -990,7 +960,7 @@ class taskZen extends task
         $this->view->showAllModule    = $showAllModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->showFields       = $this->config->task->custom->createFields;
-        $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
+        $this->view->gobackLink       = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
         $this->view->task             = $task;
         $this->view->storyID          = $storyID;
@@ -1023,7 +993,7 @@ class taskZen extends task
 
         /* Prepare to create the data for the test subtask and to check the data format. */
         $testTasks = array();
-        if($selectTestStory and $task->type == 'test')
+        if($selectTestStory && $task->type == 'test')
         {
             $testTasks = $this->prepareTestTasks4Create($executionID, $formData);
             $result    = $this->checkTestTasks($testTasks);

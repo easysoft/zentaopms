@@ -47,7 +47,7 @@ class task extends control
         parse_str($extra, $output);
 
         /* If you do not have permission to access any execution, go to the create execution page. */
-        if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
+        if(empty($this->app->user->view->sprints) && !$executionID) $this->locate($this->createLink('execution', 'create'));
 
         /* Set menu and get execution information. */
         $executionID = $this->taskZen->setMenu($executionID);
@@ -132,7 +132,7 @@ class task extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Return task id list when call the API. */
-            if($this->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
             /* 生成链接。 TODO: 写配置项。 */
             $redirectedLink = $this->taskZen->getRedirectedLink($execution);
