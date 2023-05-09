@@ -2923,9 +2923,9 @@ class taskModel extends model
      * Get report data of finished tasks per day
      *
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getDataOffinishedTasksPerDay()
+    public function getDataOffinishedTasksPerDay(): array
     {
         $tasks = $this->dao->select("id, DATE_FORMAT(`finishedDate`, '%Y-%m-%d') AS `date`")->from(TABLE_TASK)
             ->where($this->reportCondition())
@@ -2934,8 +2934,7 @@ class taskModel extends model
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $datas    = $this->processData4Report($tasks, '', 'date');
-        return $datas;
+        return $this->processData4Report($tasks, '', 'date');
     }
 
     /**
