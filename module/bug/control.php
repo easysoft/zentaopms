@@ -669,6 +669,8 @@ class bug extends control
      */
     public function edit(string $bugID, bool $comment = false, string $kanbanGroup = 'default')
     {
+        $bugID = (int)$bugID;
+
         if(!empty($_POST))
         {
             $oldBug   = $this->bug->getByID($bugID);

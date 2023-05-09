@@ -103,8 +103,8 @@ class bugZen extends bug
      * 处理更新请求数据。
      * Processing request data.
      *
-     * @param  string $bugID
-     * @param  form   $formData
+     * @param  form         $formData
+     * @param  object       $oldBug
      * @access protected
      * @return object|false
      */
@@ -148,15 +148,14 @@ class bugZen extends bug
         return $bug;
     }
 
-
     /**
      * 返回错误信息。
      * return error.
      *
      * @access protected
-     * @return array|viod
+     * @return array
      */
-    protected function errorEdit()
+    protected function errorEdit(): array
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'error', 'message' => dao::getError());
 
@@ -167,13 +166,13 @@ class bugZen extends bug
      * 更新成功后的相关处理。
      * Relevant processing after updating bug.
      *
-     * @param  int    $bugID
-     * @param  string $comment
-     * @param  array  $changes
+     * @param  int       $bugID
+     * @param  string    $comment
+     * @param  array     $changes
      * @access protected
      * @return void
      */
-    protected function processAfterEdit(int $bugID, string $comment, array $changes)
+    protected function processAfterEdit(int $bugID, string $comment, array $changes): void
     {
         if($this->post->comment || !empty($changes))
         {
@@ -186,19 +185,19 @@ class bugZen extends bug
 
     /**
      * 返回不同的结果。
-     * Response after updating bug.
+     * Respond after updating bug.
      *
-     * @param  string $bugID
-     * @param  array  $changes
-     * @param  string $kanbanGroup
+     * @param  int       $bugID
+     * @param  array     $changes
+     * @param  string    $kanbanGroup
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit(string $bugID, array $changes, string $kanbanGroup): array
+    protected function responseAfterEdit(int $bugID, array $changes, string $kanbanGroup): array
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
 
-        /* 如果bug转任务，如果bug的状态发生变化，提示是否更新任务状态。*/
+        /* 如果 bug 转任务，如果 bug 的状态发生变化，提示是否更新任务状态。*/
         /* This bug has been converted to a task, update the status of the relatedtask or not. */
         $bug = $this->bug->getByID($bugID);
         if($bug->toTask and !empty($changes))
@@ -211,12 +210,12 @@ class bugZen extends bug
             }
         }
 
-        /* 弹窗里编辑bug的返回。*/
-        /* Response when edit in modal. */
+        /* 在弹窗里编辑 bug 的返回。*/
+        /* Respond after updating in modal. */
         if(isonlybody())
         {
-            /* 在执行应用下，编辑看板中的bug数据时，更新看板数据。*/
-            /* Update kanban data after edited bug in kanban. */
+            /* 在执行应用下，编辑看板中的 bug 数据时，更新看板数据。*/
+            /* Update kanban data after updating bug in kanban. */
             if($this->app->tab == 'execution')
             {
                 $this->loadModel('kanban');
@@ -224,8 +223,8 @@ class bugZen extends bug
                 $execution    = $this->loadModel('execution')->getByID($bug->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
 
-                /* 1.看板类型的执行。*/
-                /* 1.The kanban exectuion. */
+                /* 看板类型的执行。*/
+                /* The kanban exectuion. */
                 if(isset($execution->type) && $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -233,8 +232,8 @@ class bugZen extends bug
                     $kanbanData    = json_encode($kanbanData);
                     return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)");
                 }
-                /* 2.执行中的看板。*/
-                /* 2.The kanban of execution. */
+                /* 执行中的看板。*/
+                /* The kanban of execution. */
                 else
                 {
                     $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
@@ -783,16 +782,15 @@ class bugZen extends bug
      * 设置编辑页面的导航。
      * Set edit menu.
      *
-     * @param  object $bug
+     * @param  object    $bug
      * @access protected
      * @return void
      */
-    protected function setEditMenu(object $bug)
+    protected function setEditMenu(object $bug): void
     {
         if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
         if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-        /* 是否有用？*/
         if($this->app->tab == 'devops')
         {
             session_write_close();
@@ -808,11 +806,11 @@ class bugZen extends bug
      * 获取页面所需的变量, 并输出到前台。
      * Get the data required by the view page and output.
      *
-     * @param  object $bug
+     * @param  object    $bug
      * @access protected
      * @return void
      */
-    protected function buildEditForm(object $bug)
+    protected function buildEditForm(object $bug): void
     {
         /* 删掉当前bug类型不属于的并且已经弃用的类型。*/
         /* Unset discarded types. */
