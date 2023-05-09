@@ -14,4 +14,4 @@ zdTable('todo')->config('close')->gen(1);
 
 global $tester;
 $todo = new todoTest();
-r($todo->closeTodoTest(1)) && p('oldStatus,newStatus,isClosed') && e('wait,closed,1');
+r($todo->closeTodoTest(1)) && p('oldStatus,newStatus,isClosed') && e('wait,closed,1'); // 将wait状态更新为close状态并判断是否关闭成功
