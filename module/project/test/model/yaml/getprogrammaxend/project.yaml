@@ -3,24 +3,24 @@ author: liuhong
 version: "1.0"
 fields:
     - field: id
-      range: 1-6
+      range: 1-11
     - field: project
       range: 0
     - field: model
-      range: ', , ,scrum, ,scrum,scrum'
+      range: ', , ,scrum, ,scrum,scrum,scrum, , ,scrum,scrum'
     - field: type
-      range: 'program,program,project,program,project,project'
+      range: 'program,program,project,program,project,project,project,program,program,project,project'
     - field: status
       range: 'wait,doing,closed,suspended'
     - field: parent
-      range: 0, 1, 2, 0, 3, 0
+      range: 0, 1, 2, 0, 3, 3, 3, 0, 8, 9, 9
     - field: grade
-      range: 1, 2, 3, 1, 2, 1
+      range: 1, 2, 3, 1, 2, 2, 2, 1, 2, 3, 3
     - field: path
-      range: '`,1,`, `,1,2,`, `,1,2,3,`, `,4,`, `,4,5,`, `,6,`'
+      range: '`,1,`, `,1,2,`, `,1,2,3,`, `,4,`, `,4,5,`, `,4,6,`, `,4,7,`, `,8,`, `,8,9,`, `,8,9,10,`, `,8,9,11,`'
     - field: name
-      range: '项目集1, 项目集1-1, 项目1-1-2, 项目集3, 项目3-4, 无迭代无产品项目6'
-    - field: code
-      range: 'program1, program1-1, project1-1-2, program3, project3-4, project6'
+      range: '项目集1, 项目集1-2, 项目1-2-3, 项目集4, 项目4-5, 项目4-6, 项目4-7, 项目集8, 项目集8-9, 项目8-9-10, 项目8-9-11'
+    - field: begin
+      range: "`2023-05-01`, `2023-05-07`, `2023-05-20`, `2023-05-01`, `2023-04-22`, `2023-04-28`, `2023-05-15`, `2023-05-08`, `2023-05-01`, `2023-05-07`, `2023-05-20`, `2023-05-01`"
     - field: end
-      range: '2023-06-01', '2023-05-19', '2023-06-12', '2023-07-03', '2023-06-03', '2023-05-08'
+      range: "`2023-06-01`, `2023-05-19`, `2023-06-12`, `2023-07-03`, `2023-06-03`, `2023-07-21`, `2023-05-23`, `2023-05-08`, `2023-05-01`, `2023-05-07`, `2023-05-20`, `2023-05-01`"
