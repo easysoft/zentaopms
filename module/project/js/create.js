@@ -1,6 +1,6 @@
 $(function()
 {
-    $('[name=hasProduct]').change(function()
+    $(document).on('change', '[name=hasProduct]', function()
     {
         const hasProduct = $('[name=hasProduct]:checked').val();
 
@@ -17,7 +17,7 @@ $(function()
             });
             if(chosenProducts > 1) $('.division').removeClass('hide');
         }
-    });
+    })
 
     $('[name=hasProduct]').change();
 

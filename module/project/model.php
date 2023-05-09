@@ -2836,7 +2836,6 @@ class projectModel extends model
 
         if(empty($project->hasProduct) or $model == 'ipd')
         {
-            unset($lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
@@ -2860,8 +2859,6 @@ class projectModel extends model
                     $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
                     $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
                 }
-
-                unset($lang->project->menu->settings['subMenu']->products);
             }
         }
         else
@@ -2870,8 +2867,9 @@ class projectModel extends model
             unset($lang->project->menu->projectplan);
         }
 
-        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
-        if($model == 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
+        if(isset($lang->project->menu->storyGroup))  unset($lang->project->menu->storyGroup);
+        if($model != 'ipd' and $project->hasProduct) unset($lang->project->menu->settings['subMenu']->module);
+        if(empty($project->hasProduct))              unset($lang->project->menu->settings['subMenu']->products);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
