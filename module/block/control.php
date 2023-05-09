@@ -177,7 +177,7 @@ class block extends control
 
         /* 永久关闭区块。 */
         $block = $this->block->getByID($blockID);
-        $this->block->closeBlock($block);
+        $this->block->deleteBlock($blockID);
 
         /* 将关闭的区块保存到配置信息。 */
         $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
@@ -216,7 +216,7 @@ class block extends control
 
         /* 获取传入应用对应的区块列表 以及 获取当前应用下区块启用状态。 */
         $blocks      = $this->block->getMyDashboard($dashboard);
-        $isInitiated = $this->block->fetchBlockInitStatus($dashboard);
+        $isInitiated = $this->block->getBlockInitStatus($dashboard);
 
         /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
         if(empty($blocks) and !$isInitiated and !defined('TUTORIAL'))

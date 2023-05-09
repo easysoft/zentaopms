@@ -13,7 +13,8 @@ declare(strict_types=1);
 class blockModel extends model
 {
     /**
-     * Check API for ranzhi
+     * 检查然之请求时发起的hash是否匹配。
+     * Check API for ranzhi.
      *
      * @param  string $hash
      * @access public
@@ -33,8 +34,8 @@ class blockModel extends model
     }
 
     /**
-     * Get a block by blockID.
      * 根据区块ID获取区块信息.
+     * Get a block by blockID.
      *
      * @param  int    $blockID
      * @access public
@@ -47,51 +48,9 @@ class blockModel extends model
 
         $block->params = json_decode($block->params);
         if(empty($block->params)) $block->params = new stdclass();
+
         if($block->code == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
         return $block;
-    }
-
-    /**
-     * Get closed block pairs.
-     *
-     * @param  string $closedBlock
-     * @access public
-     * @return array
-     */
-    public function getClosedBlockPairs(string $closedBlock): array
-    {
-        $blockPairs = array();
-        if(empty($closedBlock)) return $blockPairs;
-
-        foreach(explode(',', $closedBlock) as $block)
-        {
-            $block = trim($block);
-            if(empty($block)) continue;
-
-            list($moduleName, $blockKey) = explode('|', $block);
-            if(empty($moduleName))
-            {
-                if(isset($this->lang->block->$blockKey)) $blockPairs[$block] = $this->lang->block->$blockKey;
-                if($blockKey == 'html')    $blockPairs[$block] = 'HTML';
-                if($blockKey == 'guide')   $blockPairs[$block] = $this->lang->block->guide;
-                if($blockKey == 'dynamic') $blockPairs[$block] = $this->lang->block->dynamic;
-                if($blockKey == 'welcome') $blockPairs[$block] = $this->lang->block->welcome;
-            }
-            else
-            {
-                $blockName = $blockKey;
-                if(isset($this->lang->block->modules[$moduleName]->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks->$blockKey;
-                if(isset($this->lang->block->modules[$moduleName]->availableBlocks[$blockKey])) $blockName = $this->lang->block->modules[$moduleName]->availableBlocks[$blockKey];
-                if(isset($this->lang->block->availableBlocks->$blockKey)) $blockName = $this->lang->block->availableBlocks->$blockKey;
-                if(isset($this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['scrum']['index']->availableBlocks->$blockKey;
-                if(isset($this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey)) $blockName = $this->lang->block->modules['waterfall']['index']->availableBlocks->$blockKey;
-
-                $blockPairs[$block]  = isset($this->lang->block->moduleList[$moduleName]) ? "{$this->lang->block->moduleList[$moduleName]}|" : '';
-                $blockPairs[$block] .= $blockName;
-            }
-        }
-
-        return $blockPairs;
     }
 
     /**
@@ -109,8 +68,8 @@ class blockModel extends model
     }
 
     /**
-     * Get hidden blocks
      * 获取隐藏的区块列表.
+     * Get hidden blocks
      *
      * @param  string $module
      * @access public
@@ -122,8 +81,8 @@ class blockModel extends model
     }
 
     /**
-     * Get max order number by block dashboard.
      * 获取对应仪表盘下区块的最大排序号.
+     * Get max order number by block dashboard.
      *
      * @param  string $dashboard
      * @access public
@@ -227,36 +186,6 @@ class blockModel extends model
     }
 
     /**
-     * Get the total estimated man hours required.
-     *
-     * @param  array $storyID
-     * @access public
-     * @return string
-     */
-    public function getStorysEstimateHours($storyID)
-    {
-        return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
-    }
-
-    /**
-     * Get zentao.net data.
-     *
-     * @param  string $minTime
-     * @access public
-     * @return array
-     */
-    public function getZentaoData($minTime = '')
-    {
-        return $this->dao->select('type,params')->from(TABLE_BLOCK)
-            ->where('account')->eq('system')
-            ->andWhere('vision')->eq('rnd')
-            ->andWhere('module')->eq('zentao')
-            ->beginIF($minTime)->andWhere('source')->ge($minTime)->fi()
-            ->andWhere('type')->in('plugin,patch,publicclass,news')
-            ->fetchPairs('type');
-    }
-
-    /**
      * 根据区块索引获取排序靠后的一个区块ID。
      * Get my block id by block code,
      * 
@@ -281,140 +210,42 @@ class blockModel extends model
     }
 
     /**
-     * Create a block.
+     * 获取区块是否已经初始化的状态.
+     * get block is initiated or not.
      *
-     * @param  object $formData
-     * @access public
-     * @return void
-     */
-    public function create(object $formData): int|false
-    {
-        $this->blockTao->insert($formData);
-        if(dao::isError()) return false;
-
-        $blockID = $this->dao->lastInsertID();
-        $this->loadModel('score')->create('block', 'set');
-
-        return (int)$blockID;
-    }
-
-    /**
-     * Update a block.
-     *
-     * @param  object $formData
-     * @access public
-     * @return void
-     */
-    public function update(object $formData): int|false
-    {
-        $this->dao->update(TABLE_BLOCK)->data($formData)
-            ->where('id')->eq($formData->id)
-            ->autoCheck()
-            ->batchCheck($this->config->block->edit->requiredFields, 'notempty')
-            ->exec();
-
-        if(dao::isError()) return false;
-
-        $this->loadModel('score')->create('block', 'set');
-
-        return (int)$formData->id;
-    }
-
-    /**
-     * Reset dashboard blocks.
-     *
-     * @param  string  $dashboard
+     * @param  string $dashboard
      * @access public
      * @return bool
      */
-    public function reset(string $dashboard): bool
+    public function getBlockInitStatus(string $dashboard): bool
     {
-        $this->dao->delete()->from(TABLE_BLOCK)
-            ->where('dashboard')->eq($dashboard)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->exec();
-
-        $this->dao->delete()->from(TABLE_CONFIG)
+        $result = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('module')->eq($dashboard)
-            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`section`')->eq('common')
             ->andWhere('`key`')->eq('blockInited')
-            ->exec();
-
-        return true;
-    }
-
-    /**
-     * Hidden a block.
-     *
-     * @param  int $blockID
-     * @access public
-     * @return bool
-     */
-    public function hidden(int $blockID): bool
-    {
-        $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)
-            ->where('id')->eq($blockID)
-            ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
-            ->exec();
+            ->fetch('value');
 
-        return true;
+        return $result ? true : false;
     }
 
     /**
-     * 关闭一个区块。
-     * Close a block.
+     * 检查此区块是否为长区块。
+     * Check whether long block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access public
      * @return bool
      */
-    public function closeBlock(object $block): bool
+    public function isLongBlock(object $block): bool
     {
-        $this->dao->delete()->from(TABLE_BLOCK)
-            ->where('module')->eq($block->module)
-            ->andWhere('code')->eq($block->code)
-            ->exec();
-        return true;
+        return (!empty($block->grid) and $block->grid >= 6) ? true : false;
     }
 
     /**
-     * Delete a block.
-     *
-     * @param  int    $blockID
-     * @access public
-     * @return bool
-     */
-    public function deleteBlock(int $blockID = 0): bool
-    {
-        $this->dao->delete()->from(TABLE_BLOCK)
-            ->where('id')->eq($blockID)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->exec();
-
-        return true;
-    }
-
-    /**
-     * Set block order.
-     *
-     * @param  int    $blockID
-     * @param  int    $order
-     * @access public
-     * @return bool
-     */
-    public function setOrder(int $blockID, int $order): bool
-    {
-        $this->dao->update(TABLE_BLOCK)->set('order')->eq($order)->where('id')->eq($blockID)->exec();
-        return true;
-    }
-
-    /**
+     * 初始化用户某个仪表盘下的区块数据.
      * Init block when account use first.
-     * 用户首次加载时初始化区块数据.
      *
      * @param  string $dashboard
      * @access public
@@ -450,53 +281,104 @@ class blockModel extends model
     }
 
     /**
-     * Check whether long block.
+     * 新增一个区块。
+     * Create a block.
      *
-     * @param  object    $block
-     * @access public
-     * @return bool
-     */
-    public function isLongBlock(object $block): bool
-    {
-        return (!empty($block->grid) and $block->grid >= 6) ? true : false;
-    }
-
-    /**
-     * Set zentao data.
-     *
-     * @param  string $type
-     * @param  string $params
+     * @param  object $formData
      * @access public
      * @return void
      */
-    public function setZentaoData($type = 'patch', $params = '')
+    public function create(object $formData): int|false
     {
-        $data = new stdclass();
-        $data->account = 'system';
-        $data->vision  = 'rnd';
-        $data->module  = 'zentao';
-        $data->type    = $type;
-        $data->source  = date('Y-m-d');
-        $data->params  = json_encode($params);
+        $this->blockTao->insert($formData);
+        if(dao::isError()) return false;
 
-        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
+        $blockID = $this->dao->lastInsertID();
+        $this->loadModel('score')->create('block', 'set');
+
+        return (int)$blockID;
     }
 
     /**
-     * 获取区块是否已经初始化.
-     * Fetch block is initiated or not.
+     * 修改一个区块。
+     * Update a block.
      *
-     * @param  string $dashboard
-     * @return string
+     * @param  object $formData
+     * @access public
+     * @return void
      */
-    public function fetchBlockInitStatus(string $dashboard): string
+    public function update(object $formData): int|false
     {
-        return $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('module')->eq($dashboard)
-            ->andWhere('owner')->eq($this->app->user->account)
-            ->andWhere('`section`')->eq('common')
-            ->andWhere('`key`')->eq('blockInited')
+        $this->dao->update(TABLE_BLOCK)->data($formData)
+            ->where('id')->eq($formData->id)
+            ->autoCheck()
+            ->batchCheck($this->config->block->edit->requiredFields, 'notempty')
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $this->loadModel('score')->create('block', 'set');
+
+        return (int)$formData->id;
+    }
+
+    /**
+     * 对应仪表盘删除所有区块并更新为待初始化状态。
+     * Reset dashboard blocks.
+     *
+     * @param  string  $dashboard
+     * @access public
+     * @return bool
+     */
+    public function reset(string $dashboard): bool
+    {
+        $this->dao->delete()->from(TABLE_BLOCK)
+            ->where('dashboard')->eq($dashboard)
             ->andWhere('vision')->eq($this->config->vision)
-            ->fetch('value');
+            ->andWhere('account')->eq($this->app->user->account)
+            ->exec();
+
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('module')->eq($dashboard)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`key`')->eq('blockInited')
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * 删除一个区块。
+     * Delete a block.
+     *
+     * @param  int    $blockID
+     * @access public
+     * @return bool
+     */
+    public function deleteBlock(int $blockID): bool
+    {
+        $this->dao->delete()->from(TABLE_BLOCK)
+            ->where('id')->eq($blockID)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * 更新区块的排序号。
+     * Set block order.
+     *
+     * @param  int    $blockID
+     * @param  int    $order
+     * @access public
+     * @return bool
+     */
+    public function setOrder(int $blockID, int $order): bool
+    {
+        $this->dao->update(TABLE_BLOCK)->set('order')->eq($order)->where('id')->eq($blockID)->exec();
+        return true;
     }
 }
