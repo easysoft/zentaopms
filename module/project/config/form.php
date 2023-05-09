@@ -10,7 +10,7 @@ $config->project->form->activate =  array();
 
 $config->project->form->manageProducts = array();
 
-$config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => '');
+$config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['name']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
 $config->project->form->create['code']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
 $config->project->form->create['multiple']   = array('type' => 'string', 'required' => false, 'default' => '');
