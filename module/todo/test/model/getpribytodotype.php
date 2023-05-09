@@ -25,7 +25,7 @@ cid=1
 initData();
 
 $validTypeList     = array('bug','task','story','testtask');
-$validObjectIdList = array_combine(range(1,10), range(1,10));
+$validObjectIdList = array_combine(range(1, 10), range(1, 10));
 $type              = $validTypeList[array_rand($validTypeList, 1)];
 $objectID          = $validObjectIdList[array_rand($validObjectIdList, 1)];
 $inValidType       = 'invalidType';
