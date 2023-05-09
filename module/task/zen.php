@@ -22,6 +22,26 @@ class taskZen extends task
     private $executionPairs = array();
 
     /**
+     * 任务模块的一些常用操作。
+     * Common actions of task module.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    protected function commonAction(int $taskID): void
+    {
+        $this->view->task      = $this->loadModel('task')->getByID($taskID);
+        $this->view->execution = $this->execution->getById($this->view->task->execution);
+        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
+        $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
+
+        /* Set menu. */
+        $this->execution->setMenu($this->view->execution->id);
+        $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
+    }
+
+    /**
      * 准备编辑数据。
      * Prepare edit data.
      *
@@ -204,7 +224,7 @@ class taskZen extends task
 
     /**
      * 指派后返回响应.
-     * Reponse after assignto.
+     * Response after assignto.
      *
      * @param  int       $taskID
      * @param  string    $from   ''|taskkanban
@@ -321,18 +341,18 @@ class taskZen extends task
         }
 
         /* Prepare data. */
-        $now      = helper::now();
-        $preTasks = array();
+        $now          = helper::now();
+        $prepareTasks = array();
         foreach($tasks as $task)
         {
-            $preTask = new stdclass();
-            $preTask->id             = $task->id;
-            $preTask->lastEditedBy   = $this->app->user->account;
-            $preTask->lastEditedDate = $now;
-            $preTask->assignedDate   = $now;
-            $preTask->assignedTo     = $assignedTo;
+            $prepareTask = new stdclass();
+            $prepareTask->id             = $task->id;
+            $prepareTask->lastEditedBy   = $this->app->user->account;
+            $prepareTask->lastEditedDate = $now;
+            $prepareTask->assignedDate   = $now;
+            $prepareTask->assignedTo     = $assignedTo;
 
-            $preTasks[] = clone $preTask;
+            $prepareTasks[] = clone $prepareTask;
         }
         return $preTasks;
     }

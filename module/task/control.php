@@ -155,25 +155,6 @@ class task extends control
     }
 
     /**
-     * Common actions of task module.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return void
-     */
-    public function commonAction($taskID)
-    {
-        $this->view->task      = $this->loadModel('task')->getByID($taskID);
-        $this->view->execution = $this->execution->getById($this->view->task->execution);
-        $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
-        $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
-
-        /* Set menu. */
-        $this->execution->setMenu($this->view->execution->id);
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
-    }
-
-    /**
      * 编辑一个任务。
      * Edit a task.
      *
@@ -185,7 +166,7 @@ class task extends control
     public function edit(string $taskID, string $from = '')
     {
         $taskID = (int)$taskID;
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         if(!empty($_POST))
         {
@@ -359,7 +340,7 @@ class task extends control
 
     /**
      * 指派任务。
-     * Update assign of task
+     * Update assign of task.
      *
      * @param  stirng $executionID
      * @param  string $taskID
@@ -371,7 +352,7 @@ class task extends control
     {
         $executionID = (int)$executionID;
         $taskID      = (int)$taskID;
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         if(!empty($_POST))
         {
@@ -474,7 +455,7 @@ class task extends control
 
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $execution = $this->execution->getById($task->execution);
@@ -561,7 +542,7 @@ class task extends control
      */
     public function start($taskID, $extra = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -655,7 +636,7 @@ class task extends control
      */
     public function recordEstimate($taskID, $from = '', $orderBy = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         if(!empty($_POST))
         {
@@ -835,7 +816,7 @@ class task extends control
      */
     public function finish($taskID, $extra = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -943,7 +924,7 @@ class task extends control
      */
     public function pause($taskID, $extra = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -1010,7 +991,7 @@ class task extends control
      */
     public function restart($taskID, $from = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $task = $this->task->getById($taskID);
 
@@ -1074,7 +1055,7 @@ class task extends control
      */
     public function close($taskID, $extra = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -1260,7 +1241,7 @@ class task extends control
      */
     public function cancel($taskID, $extra = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -1326,7 +1307,7 @@ class task extends control
      */
     public function activate($taskID, $extra = '')
     {
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -1906,7 +1887,7 @@ class task extends control
     {
         $executionID = (int)$executionID;
         $taskID      = (int)$taskID;
-        $this->commonAction($taskID);
+        $this->taskZen->commonAction($taskID);
 
         if(!empty($_POST))
         {
