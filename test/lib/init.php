@@ -205,7 +205,7 @@ function printSteps()
     foreach($rpeList as $rpe)
     {
         list($moduleName, $methodName, $methodParam) = $rpe[0];
-        $expectStr = trim($rpe[1], '"\'');
+        $expectStr = trim($rpe[1], substr($rpe[1], 0, 1));
         $pParam    = $rpe[2];
         $userStep  = trim(str_replace('//', '', $rpe[3]));
         $keys      = $pParam[0];
@@ -346,7 +346,7 @@ function genModuleAndMethod($rParams)
  */
 function genParamsByRPE($rpe)
 {
-    preg_match_all("/r\((.*?)\)\s*&&\s*p\((.*?)\)\s*&&\s*e\((.*?)\);(.*)/", $rpe, $matches);
+    preg_match_all("/\nr\((.*?)\)\s*&&\s*p\((.*?)\)\s*&&\s*e\((.*?)\);(.*)/", $rpe, $matches);
     $rParams  = !empty($matches[1]) ? $matches[1] : array();
     $pParams  = !empty($matches[2]) ? $matches[2] : array();
     $eParams  = !empty($matches[3]) ? $matches[3] : array();
