@@ -55,14 +55,7 @@ class todoTest
         $todo = new stdclass();
         foreach($object as $field => $value)
         {
-            if(in_array($field, array_keys($param)))
-            {
-                $todo->$field = $param[$field];
-            }
-            else
-            {
-                $todo->$field = $value;
-            }
+            if(in_array($field, array_keys($param))) $todo->$field = $param[$field];
         }
 
         $change = $this->objectModel->update($todoID, $todo);
