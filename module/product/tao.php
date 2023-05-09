@@ -742,12 +742,13 @@ class productTao extends productModel
      * @param  string $branch    all|0|1
      * @param  int    $count
      * @access protected
-     * @return array
+     * @return [array, bool]
      */
     protected function getGroupRoadmapData(int $productID, string $branch, int $count): array
     {
-        $roadmap      = array();
-        $total        = 0;
+        $roadmap = array();
+        $total   = 0;
+        $return  = false;
 
         /* Get product plans. */
         $plans = $this->loadModel('productplan')->getList($productID, $branch);
@@ -757,12 +758,12 @@ class productTao extends productModel
 
         /* Get roadmaps of product plans. */
         list($roadmap, $total, $return) = $this->getRoadmapsOfPlans($orderedPlans, $parents, $branch, $count);
-        if($return) return $roadmap;
+        if($return) return array($roadmap, $return);
 
         /* Get roadmpas of product releases. */
         $releases = $this->loadModel('release')->getList($productID, $branch);
         list($roadmap, $subTotal, $return) = $this->getRoadmapsOfReleases($roadmap, $releases, $branch, $count);
-        if($return) return $roadmap;
+        if($return) return array($roadmap, $return);
         $total += $subTotal;
 
         $groupRoadmap = array();
@@ -779,7 +780,7 @@ class productTao extends productModel
             }
         }
 
-        return $groupRoadmap;
+        return array($groupRoadmap, $return);
     }
 
     /**
@@ -890,7 +891,7 @@ class productTao extends productModel
             krsort($releases);
             foreach($releases as $release)
             {
-                $year = substr($release->date, 0, 4);
+                $year         = substr($release->date, 0, 4);
                 $branchIdList = explode(',', trim($release->branch, ','));
                 $branchIdList = array_unique($branchIdList);
                 foreach($branchIdList as $branchID)

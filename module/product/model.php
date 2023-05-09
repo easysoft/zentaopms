@@ -1190,7 +1190,8 @@ class productModel extends model
     public function getRoadmap(int $productID, string $branch = '0', int $count = 0): array
     {
         /* Get group roadmap data. */
-        $groupRoadmap = $this->productTao->getGroupRoadmapData($productID, $branch, $count);
+        list($groupRoadmap, $return) = $this->productTao->getGroupRoadmapData($productID, $branch, $count);
+        if($return) return $groupRoadmap;
 
         /* Get last 5 roadmap. */
         $lastKeys    = array_slice(array_keys($groupRoadmap), 0, 5);
@@ -1221,7 +1222,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function processRoadmap($roadmapGroups, $branch): array
+    public function processRoadmap(array $roadmapGroups, string $branch): array
     {
         $newRoadmap = array();
         foreach($roadmapGroups as $year => $branchRoadmaps)
