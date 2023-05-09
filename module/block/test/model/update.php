@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/block.class.php';
 
 su('admin');
@@ -85,7 +85,7 @@ $emptyTitleBlock->title = '';
 $blockTest = new blockTest();
 $newBlockID = $blockTest->updateTest($block);
 
-r($tester->block->getByID($newBlockID)) && p('account,vision,dashboard,module,code,title,order') && e("admin2,lite,scrumproject,project,statistic,项目统计区块,1"); // 测试获取正常的block的内容
+r($tester->block->getByID($newBlockID)) && p('account,vision,dashboard,module,code,title,order') && e('admin2,lite,scrumproject,project,statistic,项目统计区块,1'); // 测试获取正常的block的内容
 r($blockTest->updateTest($emptyModuleBlock)) && p('module:0') && e('『所属模块』不能为空。'); // 测试所属模块为空
 r($blockTest->updateTest($emptyCodeBlock)) && p('code:0') && e('『区块』不能为空。'); // 测试所属区块为空
 r($blockTest->updateTest($emptyTitleBlock)) && p('title:0') && e('『区块名称』不能为空。'); // 测试区块名称为空

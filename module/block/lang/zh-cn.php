@@ -34,6 +34,7 @@ $lang->block->lblModule    = '模块';
 $lang->block->lblBlock     = '区块';
 $lang->block->lblNum       = '条数';
 $lang->block->lblHtml      = 'HTML内容';
+$lang->block->html         = 'HTML';
 $lang->block->dynamic      = '最新动态';
 $lang->block->assignToMe   = '待处理';
 $lang->block->wait         = '未开始';
@@ -421,12 +422,18 @@ $lang->block->availableBlocks['meeting']     = '会议';
 $lang->block->availableBlocks['feedback']    = '反馈';
 $lang->block->availableBlocks['ticket']      = '工单';
 
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['project']   = $lang->projectCommon;
-$lang->block->moduleList['execution'] = $lang->execution->common;
-$lang->block->moduleList['qa']        = '测试';
-$lang->block->moduleList['todo']      = '待办';
-$lang->block->moduleList['doc']       = '文档';
+$lang->block->moduleList['product']    = $lang->productCommon;
+$lang->block->moduleList['project']    = $lang->projectCommon;
+$lang->block->moduleList['execution']  = $lang->execution->common;
+$lang->block->moduleList['qa']         = '测试';
+$lang->block->moduleList['todo']       = '待办';
+$lang->block->moduleList['doc']        = '文档';
+$lang->block->moduleList['assigntome'] = $lang->block->assignToMe;
+$lang->block->moduleList['dynamic']    = $lang->block->dynamic;
+$lang->block->moduleList['guide']      = $lang->block->guide;
+$lang->block->moduleList['welcome']    = $lang->block->welcome;
+$lang->block->moduleList['html']       = $lang->block->html;
+$lang->block->moduleList['contribute'] = $lang->block->contribute;
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
@@ -445,8 +452,8 @@ $lang->block->modules['waterfallProject'] = new stdclass();
 $lang->block->modules['waterfallProject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon}计划";
 $lang->block->modules['waterfallProject']->availableBlocks['projectdynamic'] = '最新动态';
 
-$lang->block->modules['agileplus']['index']     = $lang->block->modules['scrumProject'];
-$lang->block->modules['waterfallplus']['index'] = $lang->block->modules['waterfallProject'];
+$lang->block->modules['agileplus']     = $lang->block->modules['scrumProject'];
+$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallProject'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks['statistic'] = $lang->productCommon . '统计';

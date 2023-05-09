@@ -22,6 +22,12 @@ title=测试 blockModel->getBlockInitStatus();
 timeout=0
 cid=1
 
+- 测试 my 模块下返回为 1 @1
+
+- 测试 product 模块下返回为 0 @0
+
+- 测试不存在模块返回为 0 @0
+
 */
 
 global $tester;

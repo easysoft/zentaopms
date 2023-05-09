@@ -23,7 +23,7 @@ namespace zin;
 function getProductTabs($products, $blockNavCode): array
 {
     $navTabs  = array();
-    $selected =  key($products);
+    $selected = key($products);
     foreach($products as $product)
     {
         $navTabs[] = li
@@ -65,7 +65,7 @@ function getProductInfo($products, $blockNavID): array
 {
     global $lang;
 
-    $selected =  key($products);
+    $selected = key($products);
     $tabItems = array();
     foreach($products as $product)
     {

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/block.class.php';
 
 su('admin');
@@ -55,7 +55,7 @@ $block2->order = '1';
 
 $blockTest = new blockTest();
 r($tester->block->setOrder($block1->id, $block1->order)) && p('') && e('1'); // 测试ID为2的区块变更排序后的返回结果
-r($tester->block->getByID($block1->id)) && p('id,order') && e("2,3"); // 测试ID为2的区块的序号
+r($tester->block->getByID($block1->id)) && p('id,order') && e('2,3');        // 测试ID为2的区块的序号
 
 r($tester->block->setOrder($block2->id, $block2->order)) && p('') && e('1'); // 测试ID为2的区块变更排序后的返回结果
-r($tester->block->getByID($block2->id)) && p('id,order') && e("3,1"); // 测试ID为3的区块的序号
+r($tester->block->getByID($block2->id)) && p('id,order') && e('3,1');        // 测试ID为3的区块的序号

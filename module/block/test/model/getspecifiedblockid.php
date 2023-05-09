@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/block.class.php';
 
 su('admin');
@@ -40,5 +40,5 @@ $tester->loadModel('block');
 initData();
 
 r($tester->block->getSpecifiedBlockID('my', 'assingtome', 'assingtome'))  && p('') && e('2'); // 测试 assingtome 区块的 区块ID是否为2
-r($tester->block->getSpecifiedBlockID('qa', 'bug', 'list'))  && p('') && e('3'); // 测试 buglist 区块的 区块ID是否为2
-r($tester->block->getSpecifiedBlockID('my', 'welcome', 'welcome'))  && p('') && e('0'); // 测试 找不到的区块的 区块ID 是否为 false
+r($tester->block->getSpecifiedBlockID('qa', 'bug', 'list'))  && p('') && e('3');              // 测试 buglist 区块的 区块ID是否为2
+r($tester->block->getSpecifiedBlockID('my', 'welcome', 'welcome'))  && p('') && e('0');       // 测试 找不到的区块的 区块ID 是否为 false
