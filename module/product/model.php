@@ -1207,7 +1207,7 @@ class productModel extends model
                 $lastRoadmap[$key] = $groupRoadmap[$key];
             }
 
-            foreach($groupRoadmap[$key] as $branchRoadmaps) $lastRoadmap['total'] += (count($branchRoadmaps, 1) - count($branchRoadmaps));
+            foreach($groupRoadmap[$key] as $branchRoadmap) $lastRoadmap['total'] += (count($branchRoadmap, 1) - count($branchRoadmap));
         }
 
         return $lastRoadmap;
@@ -1224,12 +1224,12 @@ class productModel extends model
     public function processRoadmap(array $roadmapGroups, string $branch): array
     {
         $newRoadmap = array();
-        foreach($roadmapGroups as $year => $branchRoadmaps)
+        foreach($roadmapGroups as $branchRoadmap)
         {
-            foreach($branchRoadmaps as $branchID => $roadmaps)
+            foreach($branchRoadmap as $branchID => $roadmap)
             {
                 if($branch != $branchID) continue;
-                foreach($roadmaps as $roadmap) $newRoadmap[] = $roadmap;
+                foreach($roadmap as $roadmapItem) $newRoadmap[] = $roadmapItem;
             }
         }
         krsort($newRoadmap);
