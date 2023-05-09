@@ -45,16 +45,15 @@ class pageBase extends wg
         $head = $this->buildHead();
         $body = $this->buildBody();
 
-        $context   = context::current();
-        $css       = array_merge([data('pageCSS') ?? ''], $context->getCssList());
-        $js        = array_merge($context->getJsList(), [data('pageJS') ?? '']);
-        $imports   = $context->getImportList();
         $jsConfig  = \js::getJSConfigVars();
         $bodyProps = $this->prop('bodyProps');
         $bodyClass = $this->prop('bodyClass');
         $metas     = $this->prop('metas');
         $title     = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
         $attrs     = $this->props->skip(array_keys(static::getDefinedProps()));
+        $css       = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
+        $js        = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
+        $imports   = context::current()->getImportList();
 
         $jsConfig->zin = true;
         if($config->debug)
@@ -84,12 +83,12 @@ class pageBase extends wg
             ),
             h::body
             (
-                empty($imports) ? NULL : h::import($imports),
                 set($bodyProps),
                 set::class($bodyClass),
-                empty($css) ? NULL : h::css($css, set::id('pageCSS')),
+                empty($imports) ? NULL : h::import($imports),
+                h::css($css, set::id('pageCSS')),
                 $body,
-                empty($js) ? NULL : h::js($js, set::id('pageJS')),
+                h::js($js, set::id('pageJS'))
             )
         );
     }

@@ -11,6 +11,8 @@
 
 namespace zin;
 
+use stdClass;
+
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
 require_once __DIR__ . DS . 'selector.func.php';
 
@@ -21,17 +23,19 @@ class dom
      */
     public $wg;
 
-    public $children = [];
+    public $children = array();
 
-    public $selectors = NULL;
+    public $selectors = null;
 
     public $renderInner = false;
 
     public $renderType;
 
-    public $dataGetters = NULL;
+    public $dataGetters = null;
 
     public $dataCommands;
+
+    public $buildList = null;
 
     /**
      * Construct the dom object.
@@ -123,22 +127,24 @@ class dom
      */
     public function build()
     {
-        if(empty($this->selectors) && !empty($this->dataCommands)) return [];
+        if($this->buildList !== null) return $this->buildList;
+
+        if(empty($this->selectors) && !empty($this->dataCommands))
+        {
+            $this->buildList = array();
+            return $this->buildList;
+        }
 
         $list     = array();
         $children = $this->renderInner ? $this->wg->children() : $this->children;
 
         if(empty($children)) return $list;
 
-        foreach($children as $child)
-        {
-            $list[] = ($child instanceof wg) ? $child->buildDom() : $child;
-        }
+        foreach($children as $child) $list[] = ($child instanceof wg) ? $child->buildDom() : $child;
 
-        if(!empty($this->selectors))
-        {
-            $list = static::filter($list, $this->selectors);
-        }
+        if(!empty($this->selectors)) $list = static::filter($list, $this->selectors);
+
+        $this->buildList = $list;
         return $list;
     }
 
@@ -149,34 +155,46 @@ class dom
         return $this->renderHtml();
     }
 
-    public function renderJson()
+    /**
+     * Render dom to json object.
+     *
+     * @access public
+     * @return object
+     */
+    public function renderJson(): object
     {
         $list   = $this->build();
-        $output = [];
+        $output = new stdClass();
         foreach($list as $name => $item)
         {
-            $output[$name] = static::renderItemToJson($item);
+            $output->$name = static::renderItemToJson($item);
         }
 
         if(!empty($this->dataCommands))
         {
-            $data = [];
+            $data = array();
             foreach($this->dataCommands as $name => $command)
             {
                 $data[$name] = data($command);
             }
-            $output['data'] = $data;
+            $output->data = $data;
         }
 
-        return json_encode($output);
+        return $output;
     }
 
-    public function renderHtml()
+    /**
+     * Render dom to html string.
+     *
+     * @access public
+     * @return string
+     */
+    public function renderHtml(): string
     {
         $list = $this->build();
         if(empty($list)) return '';
 
-        $output = [];
+        $output = array();
         foreach($list as $item)
         {
             $result = static::renderItemToHtml($item);
@@ -186,25 +204,33 @@ class dom
         return implode('', $output);
     }
 
-    public function renderList()
+    /**
+     * Render dom to list by given selector.
+     *
+     * @access public
+     * @return array
+     */
+    public function renderList(): array
     {
         $list   = $this->build();
-        $output = [];
+        $output = array();
         foreach($list as $name => $item)
         {
             if(is_array($item) && count($item) === 1) $item = $item[0];
-            $output[] = ['name' => $name, 'data' => static::renderDomItem($item)];
+            $renderType = $item instanceof dom ? $item->renderType : 'html';
+            if(empty($renderType)) $renderType = 'html';
+            $output[] = array('name' => $name, 'data' => static::renderDomItem($item, $renderType), 'type' => $renderType);
         }
 
         if(!empty($this->dataCommands))
         {
             foreach($this->dataCommands as $name => $command)
             {
-                $output[] = ['name' => $name, 'data' => data($command)];
+                $output[] = array('name' => $name, 'data' => data($command));
             }
         }
 
-        return json_encode($output);
+        return $output;
     }
 
     public static function renderDomItem($item, $defaultType = 'html')
@@ -224,11 +250,11 @@ class dom
 
     public static function renderItemToJson($item)
     {
-        if($item === NULL || is_bool($item)) return NULL;
+        if($item === null || is_bool($item)) return null;
 
         if(is_array($item))
         {
-            $output = [];
+            $output = array();
             foreach($item as $subItem) $output[] = static::renderItemToJson($subItem);
             return $output;
         }
@@ -238,7 +264,7 @@ class dom
             $json = $item->wg->toJsonData();
             if(!empty($item->dataGetters))
             {
-                $output = [];
+                $output = array();
                 $props  = explode(',', $item->dataGetters);
                 foreach($props as $prop)
                 {
@@ -271,11 +297,11 @@ class dom
 
     public static function renderItemToHtml($item)
     {
-        if($item === NULL || is_bool($item)) return '';
+        if($item === null || is_bool($item)) return '';
 
         if(is_array($item))
         {
-            $output = [];
+            $output = array();
             foreach($item as $subItem) $output[] = static::renderItemToHtml($subItem);
             return implode('', $output);
         }
@@ -308,7 +334,7 @@ class dom
     {
         if(empty($list) || empty($selector)) return [];
 
-        $results = [];
+        $results = array();
         foreach($list as $item)
         {
             if(!($item instanceof dom) || in_array($item->wg->gid, $filteredList)) continue;
@@ -316,8 +342,8 @@ class dom
             if($item->wg->isMatch($selector))
             {
                 $item->renderInner  = $selector->inner ?? false;
-                $item->renderType   = $selector->type ?? NULL;
-                $item->dataGetters  = $selector->data ?? NULL;
+                $item->renderType   = $selector->type ?? null;
+                $item->dataGetters  = $selector->data ?? null;
                 $filteredList[]     = $item->wg->gid;
                 $results[]          = $item;
             }
@@ -339,8 +365,8 @@ class dom
     {
         if(empty($selectors)) return $domList;
 
-        $list         = [];
-        $filteredList = [];
+        $list         = array();
+        $filteredList = array();
         foreach($selectors as $selector)
         {
             $results = static::filterList($domList, $selector, $filteredList);

@@ -5,18 +5,14 @@ class fragment extends wg
 {
     protected function build()
     {
-        $context = context::current();
-        $css     = array_merge([data('pageCSS') ?? ''], $context->getCssList());
-        $js      = array_merge($context->getJsList(), [data('pageJS') ?? '']);
-
-        $imports = $context->getImportList();
+        $css = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
+        $js  = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
 
         return array
         (
-            empty($css) ? NULL : h::css($css),
-            empty($imports) ? NULL : h::import($imports),
+            h::css($css, set::id('pageCSS')),
             $this->children(),
-            empty($js) ? NULL : h::js($js)
+            h::js($js, set::id('pageJS'))
         );
     }
 }

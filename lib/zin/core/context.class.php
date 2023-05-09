@@ -127,18 +127,31 @@ class context extends \zin\utils\dataset
         return static::$map['current'];
     }
 
-    public static function create($wg)
+    /**
+     * Create widget context.
+     *
+     * @access public
+     * @param string $gid  The widget gid.
+     * @return context
+     */
+    public static function create(string $gid): context
     {
-        $gid = $wg->gid;
         if(isset(static::$map[$gid])) return static::$map[$gid];
-        $context = new context($wg);
+        $context = new context();
         static::$map[$gid] = $context;
         return $context;
     }
 
-    public static function destroy($gid)
+    /**
+     * Destroy widget context.
+     *
+     * @access public
+     * @param string $gid  The widget gid.
+     * @return void
+     */
+    public static function destroy(string $gid = null): void
     {
-        if($gid instanceof wg) $gid = $gid->gid;
-        if(isset(static::$map[$gid])) unset(static::$map[$gid]);
+        if($gid === null) unset(static::$map['current']);
+        elseif(isset(static::$map[$gid])) unset(static::$map[$gid]);
     }
 }

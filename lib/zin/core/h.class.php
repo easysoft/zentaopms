@@ -41,7 +41,7 @@ class h extends wg
     {
         if($this->isSelfClose()) return array($this->buildSelfCloseTag());
 
-        return array($this->buildTagBegin(), parent::build(), $this->getPortals(), $this->buildTagEnd());
+        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
     public function toJsonData()
