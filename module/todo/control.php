@@ -12,7 +12,7 @@ declare(strict_types=1);
 class todo extends control
 {
     /**
-     * Construct function
+     * Construct function, load class of date, lang of my.
      *
      * @access public
      * @return void
@@ -185,7 +185,7 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
     public function start(string $todoID)
     {
@@ -209,7 +209,7 @@ class todo extends control
      *
      * @param  string $todoID
      * @access public
-     * @return int
+     * @return void
      */
     public function activate(string $todoID)
     {

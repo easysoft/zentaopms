@@ -119,7 +119,6 @@ function zdRun($isDev = false)
 {
     global $config, $dao;
 
-    $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
     include LIB_ROOT . 'spyc.php';
 
     $zdRoot = dirname(dirname(__FILE__)) . '/data/';
@@ -252,9 +251,9 @@ function zdRun($isDev = false)
         $processor = new Processor();
         $processor->init();
     }
-    catch (PDOException $e)
+    catch (EndResponseException $e)
     {
-        die('Error!: ' . $e->getMessage() . PHP_EOL);
+        die('Error!: ' . $e->getContent() . PHP_EOL);
     }
 }
 

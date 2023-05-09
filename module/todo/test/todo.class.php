@@ -430,12 +430,12 @@ class todoTest
         $isClosed = $this->objectModel->closeTodo($todoID);
         $newTodo  = $this->objectModel->getById($todoID);
 
-        $testResut = new stdclass;
-        $testResut->oldStatus = $oldTodo->status;
-        $testResut->newStatus = $newTodo->status;
-        $testResut->isClosed  = $isClosed;
+        $testResult = new stdclass;
+        $testResult->oldStatus = $oldTodo->status;
+        $testResult->newStatus = $newTodo->status;
+        $testResult->isClosed  = $isClosed;
 
-        return $testResut;
+        return $testResult;
     }
 
     /**

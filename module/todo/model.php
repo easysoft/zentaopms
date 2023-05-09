@@ -231,14 +231,15 @@ class todoModel extends model
     }
 
     /**
+     * 获取用户的待办事项列表。
      * Get todo list of a user.
      *
-     * @param  string  $type
-     * @param  string  $account
+     * @param  string       $type
+     * @param  string       $account
      * @param  string|array $status   all|today|thisweek|lastweek|before, or a date.
-     * @param  int     $limit
-     * @param  ?object $pager
-     * @param  string  $orderBy
+     * @param  int          $limit
+     * @param  ?object      $pager
+     * @param  string       $orderBy
      * @access public
      * @return array
      */
@@ -303,11 +304,11 @@ class todoModel extends model
      * Get a array with todos which todoID as key, todo object as value by todo id list.
      * Return all todos if the todo id list is empty.
      *
-     * @param  array $todoIdList
+     * @param  array|string $todoIdList
      * @access public
      * @return array
      */
-    public function getByList($todoIdList = 0): array
+    public function getByList(array|string $todoIdList = ''): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIdList)->where('id')->in($todoIdList)->fi()

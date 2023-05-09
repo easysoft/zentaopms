@@ -473,4 +473,20 @@ class programplanTest
 
         return $objects;
     }
+
+    /**
+     * 输出表格单元 <td></td>。
+     * Print cell.
+     *
+     * @param  object $col
+     * @param  object $plan
+     * @param  array  $users
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function printCellTest(object $col, object $plan, array $users, int $projectID)
+    {
+        return $this->objectModel->printCell($col, $plan, $users, $projectID);
+    }
 }

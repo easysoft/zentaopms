@@ -13,36 +13,9 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
-require_once __DIR__ . DS . 'portal.class.php';
 
 class context extends \zin\utils\dataset
 {
-    /**
-     * @var object
-     */
-    public $root;
-
-    public function __construct($root)
-    {
-        $this->root = $root;
-    }
-
-    public function isRoot($root)
-    {
-        if(is_string($root)) return $root === $this->root->gid;
-        return $root->gid === $this->root->gid;
-    }
-
-    public function getPortals()
-    {
-        return $this->getList('portals');
-    }
-
-    public function addPortal($portal)
-    {
-        return $this->addToList('portals', $portal);
-    }
-
     public function addImport()
     {
         return $this->addToList('import', func_get_args());
@@ -97,10 +70,7 @@ class context extends \zin\utils\dataset
         $codes = [];
         foreach($wgs as $wg)
         {
-            if(!method_exists($wg, 'buildEvents'))
-            {
-                continue;
-            }
+            if(!method_exists($wg, 'buildEvents')) continue;
             $code = $wg->buildEvents();
             if(!empty($code)) $codes[] = $code;
         }
@@ -113,15 +83,6 @@ class context extends \zin\utils\dataset
     }
 
     public static $map = array();
-
-    public static function portal(/* string $name, mixed ...$children */)
-    {
-        $args    = func_get_args();
-        $name    = array_shift($args);
-        $context = static::current();
-        $portal  = new portal(set::target($name), $args);
-        $context->addPortal($portal);
-    }
 
     public static function js(/* string ...$code */)
     {
@@ -155,27 +116,42 @@ class context extends \zin\utils\dataset
     }
 
     /**
-     * Get current context
+     * Get current context.
+     *
+     * @access public
      * @return context
      */
-    public static function current()
+    public static function current(): context
     {
         if(empty(static::$map)) static::$map['current'] = new context(NULL);
         return static::$map['current'];
     }
 
-    public static function create($wg)
+    /**
+     * Create widget context.
+     *
+     * @access public
+     * @param string $gid  The widget gid.
+     * @return context
+     */
+    public static function create(string $gid): context
     {
-        $gid = $wg->gid;
         if(isset(static::$map[$gid])) return static::$map[$gid];
-        $context = new context($wg);
+        $context = new context();
         static::$map[$gid] = $context;
         return $context;
     }
 
-    public static function destroy($gid)
+    /**
+     * Destroy widget context.
+     *
+     * @access public
+     * @param string $gid  The widget gid.
+     * @return void
+     */
+    public static function destroy(string $gid = null): void
     {
-        if($gid instanceof wg) $gid = $gid->gid;
-        if(isset(static::$map[$gid])) unset(static::$map[$gid]);
+        if($gid === null) unset(static::$map['current']);
+        elseif(isset(static::$map[$gid])) unset(static::$map[$gid]);
     }
 }

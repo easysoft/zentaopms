@@ -3094,18 +3094,16 @@ class projectModel extends model
      * @param  int $objectID
      *
      * @access public
-     * @return object
+     * @return string
      */
-    public function getProgramMinBegin(int $objectID): object
+    public function getProgramMinBegin(int $objectID): string
     {
-        $a = $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
+        return $this->dao->select('`begin` as minBegin')->from(TABLE_PROGRAM)
             ->where('id')->ne($objectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("%,{$objectID},%")
             ->orderBy('begin_asc')
             ->fetch('minBegin');
-        return $a;
-
     }
 
     /**
@@ -3115,15 +3113,15 @@ class projectModel extends model
      * @param  int $objectID
      *
      * @access public
-     * @return object
+     * @return string
      */
-    public function getProgramMaxEnd(int $objectID): object
+    public function getProgramMaxEnd(int $objectID): string
     {
         return $this->dao->select('`end` as maxEnd')->from(TABLE_PROGRAM)
             ->where('id')->ne($objectID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("%,{$objectID},%")
-            ->andWhere('end')->ne('0000-00-00')
+            ->andWhere("`end` is true")
             ->orderBy('end_desc')
             ->fetch('maxEnd');
     }

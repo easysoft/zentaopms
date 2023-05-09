@@ -587,20 +587,17 @@ class productTest
      *
      * @param  int    $productID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function closeTest($productID)
+    public function closeTest(int $productID): array|false
     {
-        $changes = $this->objectModel->close($productID);
+        $data = new stdclass();
+        $data->status = 'closed';
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $changes;
-        }
+        $changes = $this->objectModel->close($productID, $data);
+
+        if(dao::isError()) return dao::getError();
+        return $changes;
     }
 
     /**

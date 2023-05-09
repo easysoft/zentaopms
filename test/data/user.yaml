@@ -150,7 +150,7 @@ fields:
     type: timestamp
   - field: fails
     note: "失败次数"
-    range: 1-10000
+    range: 1-5
   - field: locked
     note: "锁定时间"
     range: "`2023-01-02 10:00:00`"

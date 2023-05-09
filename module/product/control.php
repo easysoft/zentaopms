@@ -322,39 +322,29 @@ class product extends control
     /**
      * Close product.
      *
-     * @param  int    $productID
+     * @param  string $productID
      * @access public
      * @return void
      */
-    public function close($productID)
+    public function close(string $productID)
     {
-        $product = $this->product->getById($productID);
-        $actions = $this->loadModel('action')->getList('product', $productID);
+        $productID = (int)$productID;
 
         if(!empty($_POST))
         {
-            $changes = $this->product->close($productID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->close);
+            $data       = form::data($formConfig);
+            $product    = $this->productZen->prepareCloseExtras($data);
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create('product', $productID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $changes = $this->product->close($productID, $product);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->executeHooks($productID);
-
-            return print(js::reload('parent.parent'));
+            $response = $this->productZen->responseAfterClose($productID, $changes, $this->post->comment);
+            $this->send($response);
         }
 
         $this->product->setMenu($productID);
-
-        $this->view->product    = $product;
-        $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
-        $this->view->position[] = $this->lang->close;
-        $this->view->actions    = $actions;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->display();
+        $this->productZen->buildCloseForm($productID);
     }
 
     /**
@@ -1202,27 +1192,10 @@ class product extends control
     public function ajaxGetDropMenu(string $productID, string $module, string $method, string $extra = '', string $from = '')
     {
         $productID = (int)$productID;
-        $shadow    = 0;
-        if($from == 'qa')
-        {
-            $shadow = 'all';
-            $this->app->loadConfig('qa');
-            foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
-        }
+        $shadow    = '0';
+        if($from == 'qa') $shadow = 'all';
 
-        if($this->app->tab == 'project')
-        {
-            $products = $this->product->getProducts($this->session->project);
-        }
-        elseif($this->app->tab == 'feedback')
-        {
-            $products = $this->loadModel('feedback')->getGrantProducts(false);
-        }
-        else
-        {
-            $products = $this->product->getList(0, 'all', 0, 0, $shadow);
-        }
-
+        $products        = $this->productZen->getProducts4DropMenu($shadow);
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
 

@@ -22,7 +22,6 @@ title=测试 blockModel->checkAPI();
 timeout=0
 cid=1
 
-sed: can't read /home/liuruogu/git/zentaopms/test/config/my.php: No such file or directory
 - 测试空哈希值 @0
 
 - 测试正确的哈希值 @1

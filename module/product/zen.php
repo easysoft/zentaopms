@@ -284,6 +284,22 @@ class productZen extends product
     }
 
     /**
+     * 获取关闭产品页面的表单配置。
+     * Get form fields for close product page.
+     *
+     * @access private
+     * @return array
+     */
+    private function getFormFields4Close(): array
+    {
+        /* Init fields. */
+        $fields = $this->appendFlowFields($this->config->product->form->close);
+        $fields['comment'] = array('type' => 'string',  'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+
+        return $fields;
+    }
+
+    /**
      * Get product lines and product lines of program.
      *
      * @param  array  $programIdList
@@ -325,6 +341,21 @@ class productZen extends product
         if($programIdList) $unauthPrograms = $this->program->getPairsByList($programIdList);
 
         return $unauthPrograms;
+    }
+
+    /**
+     * 获取在ajaxGetDropMenu方法中使用的产品。
+     * Get products for ajaxGetDropMenu method.
+     *
+     * @param  string $shadow  0|all
+     * @access protected
+     * @return array
+     */
+    protected function getProducts4DropMenu(string $shadow = '0'): array
+    {
+        if($this->app->tab == 'project')  return $this->product->getProducts($this->session->project);
+        if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false);
+        return $this->product->getList(0, 'all', 0, 0, $shadow);
     }
 
     /**
@@ -454,11 +485,30 @@ class productZen extends product
         $this->view->title          = $this->lang->product->batchEdit;
         $this->view->lines          = $lines;
         $this->view->products       = $products;
+        $this->view->fields         = $this->getFormFields4BatchEdit();
         $this->view->programID      = $programID;
         $this->view->authPrograms   = array('' => '') + $authPrograms;
         $this->view->unauthPrograms = $unauthPrograms;
 
         unset($this->lang->product->typeList['']);
+        $this->display();
+    }
+
+    /**
+     * 构建关闭产品页面数据。
+     * Build close product form.
+     *
+     * @param  int $productID
+     * @access protected
+     * @return void
+     */
+    protected function buildCloseForm(int $productID)
+    {
+        $this->view->title   = $this->view->product->name . $this->lang->colon .$this->lang->close;
+        $this->view->product = $this->product->getById($productID);
+        $this->view->actions = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->fields  = $this->getFormFields4Close();
         $this->display();
     }
 
@@ -583,6 +633,23 @@ class productZen extends product
     }
 
     /**
+     * 预处理关闭产品数据。
+     * Prepare close product extras.
+     *
+     * @param  form $data
+     * @access protected
+     * @return object
+     */
+    protected function prepareCloseExtras(form $data): object
+    {
+        $product = $data->setDefault('status', 'closed')
+            ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
+            ->get();
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
+        return $product;
+    }
+
+    /**
      * 成功插入产品数据后，其他的额外操作。
      * Process after create product.
      *
@@ -655,6 +722,28 @@ class productZen extends product
             $this->action->logHistory($actionID, $changes);
         }
         return $response;
+    }
+
+    /**
+     * 成功关闭产品数据后，后续操作。
+     * Response after close product
+     *
+     * @param  int    $productID
+     * @param  array  $changes
+     * @param  string $comment
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterClose(int $productID, array $changes = array(), string $comment = '')
+    {
+        if(!empty($comment) or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $this->executeHooks($productID);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()');
     }
 
     /**

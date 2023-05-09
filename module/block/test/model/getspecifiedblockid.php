@@ -25,6 +25,13 @@ function initData()
 title=测试 block 模块 model下的 getMyDashboard 方法
 timeout=0
 cid=39
+
+- 测试 assingtome 区块的 区块ID是否为2 @2
+
+- 测试 buglist 区块的 区块ID是否为2 @3
+
+- 测试 找不到的区块的 区块ID 是否为 false @0
+
 */
 
 global $tester;

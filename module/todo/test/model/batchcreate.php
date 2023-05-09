@@ -15,10 +15,6 @@ title=测试 todoModel->batchCreate();
 cid=1
 pid=1
 
-- 执行todo模块的batchCreateTest方法，参数是$todos属性7 @13
-
-- 执行todo模块的batchCreateTest方法，参数是$invalidEndTodos @0
-
 */
 
 initData();
@@ -38,6 +34,6 @@ $invalidEndTodos = $todos;
 $invalidEndTodos['ends'] = $invalidEnds;
 
 $todo = new todoTest();
-r($todo->batchCreateTest($todos)) && p('7') && e('13');
-r($todo->batchCreateTest($invalidEndTodos)) && p() && e('0');
+r($todo->batchCreateTest($todos))           && p('7') && e('13'); // 判断批量创建8条待办，返回结果的第7个值为13
+r($todo->batchCreateTest($invalidEndTodos)) && p()    && e('0');  // 判断批量创建待办，字段ends值错误的情况，返回结果为0
 

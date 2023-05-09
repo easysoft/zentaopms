@@ -168,13 +168,13 @@ class programplanZen extends programplan
      *
      * @param  int      $projectID
      * @param  int      $productID
-     * @param  array    $plans
-     * @param  string   $projectID
-     * @param  string   $projectID
+     * @param  int      $baselineID
+     * @param  string   $type
+     * @param  string   $orderBy
      * @access protected
      * @return array
      */
-    protected function buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy): array
+    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy): array
     {
         $stages = array();
         $selectCustom = 0; // Display date and task settings.
@@ -215,8 +215,8 @@ class programplanZen extends programplan
      * @param  int    $projectID
      * @param  int    $productID
      * @param  array  $stages
-     * @param  string $projectID
-     * @param  string $projectID
+     * @param  string $type
+     * @param  string $orderBy
      * @access protected
      * @return void
      */

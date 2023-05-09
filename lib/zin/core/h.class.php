@@ -41,7 +41,7 @@ class h extends wg
     {
         if($this->isSelfClose()) return array($this->buildSelfCloseTag());
 
-        return array($this->buildTagBegin(), parent::build(), $this->getPortals(), $this->buildTagEnd());
+        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
     }
 
     public function toJsonData()
@@ -146,6 +146,18 @@ class h extends wg
     {
         list($code, $args) = h::splitRawCode($args);
         return static::create('textarea', $code, ...$args);
+    }
+
+    /**
+     * create a html comment tag <!--...-->
+     *
+     * @access public
+     * @param  string $comment
+     * @return directive
+     */
+    public static function comment(string $comment): directive
+    {
+        return html("<!-- $comment -->");
     }
 
     public static function importJs($src, ...$args)

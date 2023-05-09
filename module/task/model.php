@@ -134,6 +134,7 @@ class taskModel extends model
     }
 
     /**
+     * 批量创建任务。
      * Batch create tasks.
      *
      * @param  object $execution
@@ -154,7 +155,7 @@ class taskModel extends model
         $this->loadModel('action');
 
         /* Judge whether the current task is a parent. */
-        $parentID      = !empty($tasks->parent[1]) ? $tasks->parent[1] : 0;
+        $parentID      = !empty($tasks[1]->parent) ? $tasks[1]->parent : 0;
         $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
 
         $taskIdList = array();
@@ -178,7 +179,7 @@ class taskModel extends model
             $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->score->create('task', 'create', $taskID);
 
-            /* 将taskID和actionID存入数组中。 */
+            /* 将taskID存入数组中。 */
             $taskIdList[$taskID] = $taskID;
         }
         if(!dao::isError()) $this->score->create('ajax', 'batchCreate');
@@ -188,7 +189,7 @@ class taskModel extends model
         if($parentID) $this->afterSplitTask($oldParentTask, $childTasks);
 
         /* 更新当前执行下的任务泳道。 */
-        if(!isset($output['laneID']) or !isset($output['columnID']) or !isset($lanes)) $this->kanban->updateLane($execution->id, 'task');
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
         return $taskIdList;
     }
 
@@ -3855,15 +3856,16 @@ class taskModel extends model
     {
         $parentID = (int)$oldParentTask->id;
 
-        /* 当一个普通任务有消耗时，拆分子任务。 */
-        /* When common task are child tasks and the common task has consumption, create a child task. */
+        /* 当一个普通任务有消耗时，拆分子任务并更新父任务状态。 */
+        /* When a normal task is consumed, create the subtask and update the parent task status. */
         if($oldParentTask->parent == 0 and $oldParentTask->consumed > 0)
         {
             $taskID = $this->taskTao->splitConsumedTask($oldParentTask);
             if(!$taskID) return false;
+
+            $this->updateParentStatus($taskID);
         }
 
-        $this->updateParentStatus($taskID);
         $this->computeBeginAndEnd($parentID);
         $this->taskTao->updateParentAfterSplit($parentID);
 
@@ -3877,7 +3879,7 @@ class taskModel extends model
     }
 
     /**
-     * 批量创建任务后的其他数据处理。
+     * 批量创建任务后的看板数据处理。
      * Kanban data processing after batch create tasks.
      *
      * @param  int    $taskID
@@ -3908,13 +3910,16 @@ class taskModel extends model
      * Update the task lane data in Kanban.
      *
      * @param  object $execution
-     * @param  object $rawData
-     * @param  int    $taskID
+     * @param  object $task
+     * @param  int    $laneID
+     * @param  int    $oldColumnID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateKanbanData(object $execution, object $task, int $laneID, int $oldColumnID): void
+    public function updateKanbanData(object $execution, object $task, int $laneID, int $oldColumnID): bool
     {
+        if(!isset($execution->id) or !isset($task->execution)) return false;
+
         $this->loadModel('kanban');
 
         /* Get kanban id, lane id and column id. */
@@ -3928,6 +3933,7 @@ class taskModel extends model
 
         /* If lane id or column id is empty, update the task type lane of the kanban. */
         if(!$laneID or !$columnID) $this->kanban->updateLane($kanbanID, 'task');
+        return true;
     }
 
     /**

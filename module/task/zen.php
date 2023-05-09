@@ -270,10 +270,10 @@ class taskZen extends task
      *
      * @param  object $task
      * @param  string $from        ''|taskkanban
-     * @access private
+     * @access protected
      * @return int
      */
-    private function reponseKanban(object $task, string $from): int
+    protected function reponseKanban(object $task, string $from): int
     {
         $execution    = $this->execution->getByID($task->execution);
         $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
@@ -338,21 +338,19 @@ class taskZen extends task
      * @param  int       $taskID
      * @param  int       $todoID
      * @param  int       $bugID
-     * @access private
+     * @access protected
      * @return object
      */
-    private function setTaskInfoByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
+    protected function setTaskInfoByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
     {
         $task = $this->config->task->create->template;
         $task->module = $moduleID;
 
         /* If exist task, copy task information by task id. */
-        if($taskID > 0)
+        if($taskID)
         {
-            $task        = $this->task->getByID($taskID);
-            $executionID = $task->execution;
-
             /* Emptying consumed hours when copy task. */
+            $task = $this->task->getByID($taskID);
             if($task->mode == 'multi')
             {
                 foreach($task->team as $teamMember) $teamMember->consumed = 0;
@@ -360,7 +358,7 @@ class taskZen extends task
         }
 
         /* If exist todo, copy todo information by todo id. */
-        if($todoID > 0)
+        if($todoID)
         {
             $todo = $this->loadModel('todo')->getById($todoID);
             $task->name = $todo->name;
@@ -369,7 +367,7 @@ class taskZen extends task
         }
 
         /* If exist bug, copy bug information by bug id. */
-        if($bugID > 0)
+        if($bugID)
         {
             $bug = $this->loadModel('bug')->getById($bugID);
             $task->name       = $bug->title;
@@ -397,10 +395,10 @@ class taskZen extends task
      *
      * @param  int     $executionID
      * @param  array   $output
-     * @access private
+     * @access protected
      * @return void
      */
-    private function showKanbanRelatedVars(int $executionID, array $output): void
+    protected function showKanbanRelatedVars(int $executionID, array $output): void
     {
         $this->loadModel('kanban');
 
@@ -418,13 +416,14 @@ class taskZen extends task
     }
 
     /**
+<<<<<<< HEAD
      * 展示地盘待处理区块的ID。
      * Show the ID of the block to be processed on the my.
      *
-     * @access private
+     * @access protected
      * @return void
      */
-    private function showAssignedToMeBlockID(): void
+    protected function showAssignedToMeBlockID(): void
     {
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -442,14 +441,16 @@ class taskZen extends task
     }
 
     /**
+=======
+>>>>>>> * Add test case for updatekanbandata method and modify comment for task
      * 展示执行相关数据。
      * Show execution related data.
      *
      * @param  object    $execution
-     * @access private
+     * @access protected
      * @return void
      */
-    private function showExecutionData(object $execution): void
+    protected function showExecutionData(object $execution): void
     {
         $projectID     = $execution ? $execution->project : 0;
         $lifetimeList  = array();
@@ -497,10 +498,10 @@ class taskZen extends task
      *
      * @param  int     $executionID
      * @param  object  $formData
-     * @access private
+     * @access protected
      * @return object
      */
-    private function prepareTask4Create(int $executionID, object $formData): object
+    protected function prepareTask4Create(int $executionID, object $formData): object
     {
         $rawData   = $formData->rawdata;
         $execution = $this->dao->findById($rawData->execution)->from(TABLE_EXECUTION)->fetch();
@@ -527,10 +528,10 @@ class taskZen extends task
      *
      * @param  object  $execution
      * @param  object  $formData
-     * @access private
-     * @return object[]
+     * @access protected
+     * @return object[]|false
      */
-    protected function prepareTasks4BatchCreate(object $execution, object $formData): array
+    protected function prepareTasks4BatchCreate(object $execution, object $formData): array|false
     {
         /* 去除重复数据。 */
         $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
@@ -583,10 +584,10 @@ class taskZen extends task
      *
      * @param  object      $execution
      * @param  object      $tasks
-     * @access private
+     * @access protected
      * @return object|false
      */
-    private function removeDuplicate4BatchCreate(object $execution, object $tasks): object|false
+    protected function removeDuplicate4BatchCreate(object $execution, object $tasks): object|false
     {
         $storyIDs  = array();
         $taskNames = array();
@@ -634,10 +635,10 @@ class taskZen extends task
      * @param  int        $index
      * @param  array      $dittoFields
      * @param  array      $extendFields
-     * @access private
+     * @access protected
      * @return object
      */
-    private function constructData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
+    protected function constructData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
     {
         extract($dittoFields);
         $now = helper::now();
@@ -689,10 +690,10 @@ class taskZen extends task
      * @param  float   $estimate
      * @param  string  $estStarted
      * @param  string  $deadline
-     * @access private
+     * @access protected
      * @return bool
      */
-    private function checkCreate(int $executionID, float $estimate, string $estStarted, string $deadline): bool
+    protected function checkCreate(int $executionID, float $estimate, string $estStarted, string $deadline): bool
     {
         /* Check if the estimate is positive. */
         if($estimate < 0)
@@ -723,10 +724,10 @@ class taskZen extends task
      * Check whether a task with the same name is created within the specified time.
      *
      * @param  object    $task
-     * @access private
+     * @access protected
      * @return int
      */
-    private function checkDuplicateName($task): int
+    protected function checkDuplicateName($task): int
     {
         /* Check duplicate task. */
         if($task->type != 'affair' and $task->name)
@@ -743,10 +744,10 @@ class taskZen extends task
      *
      * @param  int       $executionID
      * @param  object    $formData
-     * @access private
+     * @access protected
      * @return array|bool
      */
-    private function prepareTestTasks4Create(int $executionID, object $formData): array|bool
+    protected function prepareTestTasks4Create(int $executionID, object $formData): array|bool
     {
         /* Set data for the type of test task that has linked stories. */
         $testTasks = array();
@@ -781,10 +782,10 @@ class taskZen extends task
      * Check if the test type task data format of the linked stories meets the requirements.
      *
      * @param  object[] $tasks
-     * @access private
+     * @access protected
      * @return bool
      */
-    private function checkTestTasks(array $tasks): bool
+    protected function checkTestTasks(array $tasks): bool
     {
         foreach($tasks as $task)
         {
@@ -889,10 +890,10 @@ class taskZen extends task
      * @param  object    $task
      * @param  int       $executionID
      * @param  string    $afterChoice
-     * @access private
+     * @access protected
      * @return array
      */
-    private function getLocateAfterCreate(object $task, int $executionID, string $afterChoice): array
+    protected function getLocateAfterCreate(object $task, int $executionID, string $afterChoice): array
     {
         /* Set the universal return value. */
         $response['result']  = 'success';
@@ -977,7 +978,6 @@ class taskZen extends task
         if(!$storyID and !isset($moduleOptionMenu[$task->module])) $task->module = 0;
 
         /* Display relevant variables. */
-        $this->showAssignedToMeBlockID();
         $this->showExecutionData($execution);
         $this->showStoryVars($executionID);
         if($execution->type == 'kanban') $this->showKanbanRelatedVars($executionID, $output);
@@ -994,6 +994,7 @@ class taskZen extends task
         $this->view->execution        = $execution;
         $this->view->task             = $task;
         $this->view->storyID          = $storyID;
+        $this->view->blockID          = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
 
         $this->display();
     }
@@ -1058,7 +1059,7 @@ class taskZen extends task
      * @param  object    $execution
      * @param  string    $action
      * @access protected
-     * return  array
+     * @return  array
      */
     protected function getCustomFields(object $execution, string $action): array
     {
@@ -1096,7 +1097,7 @@ class taskZen extends task
      */
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
-        /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。*/
+        /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。 */
         if($execution->type == 'kanban') $this->showKanbanRelatedVars($execution->id, $output);
 
         /* 任务拆解。 */

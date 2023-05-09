@@ -50,6 +50,48 @@ class taskTao extends taskModel
     }
 
     /**
+     * 更新一个任务。
+     * Update a task.
+     *
+     * @param  object $task
+     * @param  object $oldTask
+     * @param  string $requiredFields
+     * @access protected
+     * @return bool
+     */
+    protected function doUpdate(object $task, object $oldTask, string $requiredFields): bool
+    {
+        if(isset($task->execution) and $task->execution != $oldTask->execution)
+        {
+            $newExecution  = $this->loadModel('execution')->getByID($task->execution);
+            $task->project = $newExecution->project;
+            $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
+        }
+
+        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
+            ->autoCheck()
+            ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
+            ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
+
+            ->checkIF($task->estimate != false, 'estimate', 'float')
+            ->checkIF($task->left     != false, 'left',     'float')
+            ->checkIF($task->consumed != false, 'consumed', 'float')
+
+            ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
+
+            ->checkIF($task->status == 'done', 'consumed', 'notempty')
+            ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
+            ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
+
+            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+            ->checkFlow()
+            ->where('id')->eq((int)$task->id)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * 获取任务的进度。
      * Compute progress of a task.
      *
@@ -150,10 +192,12 @@ class taskTao extends taskModel
      * 通过任务类型查找用户的任务。
      * Fetch user tasks by type.
      *
-     * @param  string $account
-     * @param  string $type      assignedTo|finishedBy|closedBy
-     * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  string      $account
+     * @param  string      $type      assignedTo|finishedBy|closedBy
+     * @param  string      $orderBy
+     * @param  int         $projectID
+     * @param  int         $limit
+     * @param  object|null $pager
      * @access protected
      * @return object[]
      */
@@ -489,7 +533,7 @@ class taskTao extends taskModel
     }
 
     /**
-     * 批量创建前检查必填项
+     * 批量创建前检查必填项。
      * Check required fields before batch create tasks.
      *
      * @param  object    $execution
@@ -550,9 +594,9 @@ class taskTao extends taskModel
      *
      * @param  object    $parentTask
      * @access protected
-     * @return bool
+     * @return bool|int
      */
-    protected function splitConsumedTask(object $parentTask): bool
+    protected function splitConsumedTask(object $parentTask): bool|int
     {
         $clonedTask = clone $parentTask;
         $clonedTask->parent = $parentTask->id;
@@ -568,7 +612,7 @@ class taskTao extends taskModel
             ->exec();
         if(dao::isError()) return false;
 
-        return $clonedTaskID;
+        return (int)$clonedTaskID;
     }
 
     /**

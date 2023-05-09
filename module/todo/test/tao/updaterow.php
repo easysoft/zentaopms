@@ -52,7 +52,7 @@ $todoTask->type     = 'task';
 $todoTask->name     = 'TASK待办';
 $todoTask->objectID = 1;
 
-r($tester->todo->updateRow(1, $todo)) && p() && e('1');         // 正常更新待办数据
-r($tester->todo->updateRow(2, $todoTask)) && p() && e('1');     // 正常更新task类型待办数据
-r($tester->todo->updateRow(3, $todoNoName)) && p() && e('0');   // 更新没有名称的待办数据
-r($tester->todo->updateRow(4, $todoBug)) && p() && e('0');      // 更新bug类型待办，没有bugID的情况
+r($tester->todo->updateRow(1, $todo))       && p() && e('1'); // 正常更新待办数据
+r($tester->todo->updateRow(2, $todoTask))   && p() && e('1'); // 正常更新task类型待办数据
+r($tester->todo->updateRow(3, $todoNoName)) && p() && e('0'); // 更新没有名称的待办数据
+r($tester->todo->updateRow(4, $todoBug))    && p() && e('0'); // 更新bug类型待办，没有bugID的情况

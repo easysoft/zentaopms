@@ -1,0 +1,7 @@
+title: table zt_action
+author: mayue
+version: "1.0"
+fields:
+  - field: objectType
+    note: "对象类型"
+    range: task

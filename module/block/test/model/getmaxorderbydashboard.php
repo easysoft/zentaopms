@@ -25,6 +25,12 @@ title=测试 blockModel->getMaxOrderByDashboard();
 timeout=0
 cid=1
 
+- 测试 my 模块下最大order 为 4 @4
+
+- 测试 my 模块下最大order 为 4 @4
+
+- 测试数据库中不存在 模块的最大排序  为 0 @0
+
 */
 
 global $tester;

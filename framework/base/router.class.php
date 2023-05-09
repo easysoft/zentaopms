@@ -2814,9 +2814,9 @@ class baseRouter
 
             return $dbh;
         }
-        catch (PDOException $exception)
+        catch (EndResponseException $exception)
         {
-            $message = $exception->getMessage();
+            $message = $exception->getContent();
             if(empty($message))
             {
                 /* Try to repair table. */
@@ -2984,7 +2984,7 @@ class baseRouter
 
             $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
             $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
-            helper::end($htmlError);
+            echo $htmlError;
         }
     }
 

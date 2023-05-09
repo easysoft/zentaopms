@@ -74,7 +74,7 @@
     function updatePerfInfo(options, stage, info)
     {
         if(!DEBUG) return;
-            
+
         const perf = {id: options.id, url: options.url || currentAppUrl};
         perf[stage] = performance.now();
         if(stage === 'requestBegin') $.extend(perf, {requestEnd: undefined, renderBegin: undefined, renderEnd: undefined});
@@ -214,7 +214,7 @@
         const target    = options.target || '#main';
         const selectors = Array.isArray(options.selectors) ? options.selectors : options.selectors.split(',');
         const url       = options.url;
-        
+
         if(DEBUG) console.log('[APP]', 'request', options);
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
@@ -222,7 +222,7 @@
         {
             url:      url,
             headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
-            beforeSend: () => 
+            beforeSend: () =>
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
@@ -232,7 +232,11 @@
             {
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
-                try{data = JSON.parse(data);}catch(e){data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];}
+                try{data = JSON.parse(data);}catch(e)
+                {
+                    if(!isInAppTab && config.zin) return;
+                    data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
+                }
                 if(options.updateUrl !== false) currentAppUrl = url;
                 data.forEach((item, idx) => item.selector = selectors[idx]);
                 updatePerfInfo(options, 'renderBegin');
@@ -469,6 +473,16 @@
         if(!data) return;
         if(data === true) return loadCurrentPage();
         if(typeof data === 'string') data = {url: data};
+
+        if(data.confirm)
+        {
+            return zui.Modal.confirm(data.confirm).then(confirmed =>
+            {
+                if(confirmed) $(document).trigger('zui.locate', data.confirmed);
+                else $(document).trigger('zui.locate', data.cancelled);
+            });
+        }
+        if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data.url, data.selector);
     });
 

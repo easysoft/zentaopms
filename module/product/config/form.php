@@ -46,3 +46,6 @@ $config->product->form->batchEdit['status']        = array('type' => 'array', 'c
 $config->product->form->batchEdit['desc']          = array('type' => 'array', 'control' => 'textarea', 'required' => false, 'default' => '');
 $config->product->form->batchEdit['acl']           = array('type' => 'array', 'control' => 'radio',    'required' => false, 'default' => 'private', 'options' => $lang->product->aclList);
 if($config->systemMode != 'ALM') unset($config->product->form->batchEdit['program'], $config->product->form->batchEdit['line']);
+
+$config->product->form->close = array();
+$config->product->form->close['status'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');

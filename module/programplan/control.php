@@ -23,9 +23,11 @@ class programplan extends control
      */
     public function commonAction(int $projectID, int $productID = 0)
     {
-        $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $productID = $this->loadModel('product')->saveVisitState($productID, $products);
-        $project   = $this->loadModel('project')->getByID($projectID);
+        $this->loadModel('product');
+        $this->loadModel('project');
+        $products  = $this->product->getProductPairsByProject($projectID);
+        $productID = $this->product->saveVisitState($productID, $products);
+        $project   = $this->project->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
         $this->project->setMenu($projectID);
@@ -54,12 +56,12 @@ class programplan extends control
 
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
-        /* 获取项目下产品并调整三级导航操作按钮。 */
+        /* Get the product under the project and adjust the three-level navigation action button. */
         $products = $this->loadModel('product')->getProducts($projectID);
         if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, false);
 
-        /* 生成阶段列表页阶段数据。 */
-        $stages = $this->programplanZen->buildBrowseStages($projectID, $productID, $baselineID, $type, $orderBy);
+        /* Generate stage list page data. */
+        $stages = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy);
 
         $this->programplanZen->buildBrowseView($projectID, $productID, $stages, $type, $orderBy);
     }
@@ -216,10 +218,10 @@ class programplan extends control
      */
     public function ajaxResponseGanttDragEvent()
     {
-        if(empty($_POST['id']) || empty($_POST['type'])) return $this->send(array('result' => 'fail', 'message' => ''));
+        if(!$this->post->id || !$this->post->type) return $this->send(array('result' => 'fail', 'message' => ''));
 
-        $objectID   = $_POST['id'];
-        $objectType = $_POST['type'];
+        $objectID   = $this->post->id;
+        $objectType = $this->post->type;
         $this->loadModel('task')->updateEsDateByGantt($objectID, $objectType);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -234,9 +236,9 @@ class programplan extends control
      */
     public function ajaxResponseGanttMoveEvent()
     {
-        if(empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
+        if(!$this->post->id) return $this->send(array('result' => 'fail', 'message' => ''));
 
-        $idList = explode('-', $_POST['id']);
+        $idList = explode('-', $this->post->id);
         $taskID = !empty($idList[1]) ? $idList[1] : 0;
         if(empty($taskID)) return $this->send(array('result' => 'fail', 'message' => ''));
 
