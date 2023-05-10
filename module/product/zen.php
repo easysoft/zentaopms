@@ -1462,7 +1462,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function saveBackUriInSession4Dynamic(): void
+    protected function saveBackUriSession4Dynamic(): void
     {
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri, 'product');
@@ -1482,15 +1482,15 @@ class productZen extends product
      * 获取操作记录。
      * Get actions of the product.
      *
-     * @param  string $account
-     * @param  string $orderBy
-     * @param  int    $productID
-     * @param  string $type
-     * @param  int    $recTotal
-     * @param  string $date
-     * @param  string $direction next|pre
-     * @access public
-     * @return void
+     * @param  string    $account
+     * @param  string    $orderBy
+     * @param  int       $productID
+     * @param  string    $type
+     * @param  int       $recTotal
+     * @param  string    $date
+     * @param  string    $direction next|pre
+     * @access protected
+     * @return [array, object]
      */
     protected function getActions4Dynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
     {
@@ -1505,5 +1505,36 @@ class productZen extends product
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
 
         return array($actions, $pager);
+    }
+
+    /**
+     * 获取产品仪表盘操作记录。
+     * Get actions of the product for dashboard.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function getActions4Dashboard(int $productID): array
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 30, 1);
+
+        return $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
+    }
+
+    /**
+     * 将返回链接保存到session中。
+     * Save back uri in session.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function saveBackUriSession4Dashboard(): void
+    {
+        $uri = $this->app->getURI(true);
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
     }
 }

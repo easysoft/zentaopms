@@ -465,7 +465,7 @@ class product extends control
         $param     = (int)$param;
 
         $this->loadModel('action');
-        $this->productZen->saveBackUriInSession4Dynamic();
+        $this->productZen->saveBackUriSession4Dynamic();
         $this->product->setMenu($productID, 0, $type);
 
         /* Append id for secend sort. */
@@ -513,31 +513,29 @@ class product extends control
     public function dashboard(string $productID = '0')
     {
         $productID = (int)$productID;
-        $uri = $this->app->getURI(true);
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('releaseList',     $uri, 'product');
 
+        /* Check and get product ID. */
         $productID = $this->product->saveVisitState($productID, $this->products);
+
+        /* Get product. */
         $product   = $this->product->getStatByID($productID);
         if(!$product) return print(js::locate('product', 'all'));
-
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+
+        /* Save env data. */
+        $this->productZen->saveBackUriSession4Dashboard();
         $this->product->setMenu($productID);
 
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 30, 1);
-
+        /* Assign. */
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->view;
-
-        $this->view->product  = $product;
-        $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->lines    = array('') + $this->product->getLinePairs();
-        $this->view->dynamics = $this->action->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->product    = $product;
+        $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->lines      = array('') + $this->product->getLinePairs();
+        $this->view->dynamics   = $this->productZen->getActions4Dashboard($productID);
+        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
     }
