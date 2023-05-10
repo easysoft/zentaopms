@@ -152,7 +152,7 @@ $lang->kanban->type['story'] = "{$lang->SRCommon}看板";
 $lang->kanban->type['task']  = "任务看板";
 $lang->kanban->type['bug']   = "Bug看板";
 
-$lang->kanban->group = new stdClass();
+$lang->kanban->group = new stdclass();
 
 $lang->kanban->group->all = array();
 $lang->kanban->group->story = array();
@@ -428,7 +428,7 @@ $lang->kanbancard->colorList['#b10b0b'] = '阻塞';
 $lang->kanbancard->colorList['#cfa227'] = '警告';
 $lang->kanbancard->colorList['#2a5f29'] = '加急';
 
-$lang->kanbancard->error = new stdClass();
+$lang->kanbancard->error = new stdclass();
 $lang->kanbancard->error->recordMinus     = '预计不能为负数!';
 $lang->kanbancard->error->endSmall        = '"截止日期"不能小于"预计开始"!';
 $lang->kanbancard->error->progressIllegal = '请输入正确的进度';

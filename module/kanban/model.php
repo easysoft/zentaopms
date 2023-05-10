@@ -543,7 +543,7 @@ class kanbanModel extends model
         $targetLaneID = $data->targetLane;
         $cardList     = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchAll('id');
 
-        $updateData = new stdClass();
+        $updateData = new stdclass();
         $updateData->kanban = $kanbanID;
         $updateData->region = $regionID;
         $updateData->group  = $groupID;
@@ -607,7 +607,7 @@ class kanbanModel extends model
         $now         = helper::now();
         foreach($objectIDList as $objectID)
         {
-            $cardData = new stdClass();
+            $cardData = new stdclass();
             $cardData->kanban      = $kanbanID;
             $cardData->region      = $regionID;
             $cardData->group       = $groupID;
@@ -2524,7 +2524,7 @@ class kanbanModel extends model
         {
             foreach($this->lang->kanban->storyColumn as $colType => $name)
             {
-                $data = new stdClass();
+                $data = new stdclass();
                 $data->name   = $name;
                 $data->color  = '#333';
                 $data->type   = $colType;
@@ -2554,7 +2554,7 @@ class kanbanModel extends model
         {
             foreach($this->lang->kanban->bugColumn as $colType => $name)
             {
-                $data = new stdClass();
+                $data = new stdclass();
                 $data->name   = $name;
                 $data->color  = '#333';
                 $data->type   = $colType;
@@ -2583,7 +2583,7 @@ class kanbanModel extends model
         {
             foreach($this->lang->kanban->taskColumn as $colType => $name)
             {
-                $data = new stdClass();
+                $data = new stdclass();
                 $data->name   = $name;
                 $data->color  = '#333';
                 $data->type   = $colType;
@@ -2796,7 +2796,7 @@ class kanbanModel extends model
 
         foreach($columnList as $type => $name)
         {
-            $data = new stdClass();
+            $data = new stdclass();
             $data->name   = $name;
             $data->color  = '#333';
             $data->type   = $type;

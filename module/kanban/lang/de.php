@@ -152,7 +152,7 @@ $lang->kanban->type['story'] = "Story KanBan";
 $lang->kanban->type['task']  = "Task KanBan";
 $lang->kanban->type['bug']   = "Bug KanBan";
 
-$lang->kanban->group = new stdClass();
+$lang->kanban->group = new stdclass();
 
 $lang->kanban->group->all = array();
 $lang->kanban->group->story = array();
@@ -428,7 +428,7 @@ $lang->kanbancard->colorList['#b10b0b'] = 'Blocking';
 $lang->kanbancard->colorList['#cfa227'] = 'Warning';
 $lang->kanbancard->colorList['#2a5f29'] = 'Urgent';
 
-$lang->kanbancard->error = new stdClass();
+$lang->kanbancard->error = new stdclass();
 $lang->kanbancard->error->recordMinus     = 'Estimate cannot be negative!';
 $lang->kanbancard->error->endSmall        = '"End Date" cannot be less than "Begin Date"';
 $lang->kanbancard->error->progressIllegal = 'Please input correct progress.';
