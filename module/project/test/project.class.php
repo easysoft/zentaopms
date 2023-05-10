@@ -221,8 +221,7 @@ class Project
      */
     public function testFetchProjectList($status, $involved = false)
     {
-        $projects = $this->project->fetchProjectList($status, 'id_desc', $involved, null);
-        return $projects;
+        return $this->project->fetchProjectList($status, 'id_desc', $involved, null);
     }
 
     /**
@@ -235,8 +234,7 @@ class Project
      */
     public function testGetList($status, $involved = false)
     {
-        $projects = $this->project->fetchProjectList($status, 'id_desc', $involved, null);
-        return $projects;
+        return $this->project->fetchProjectList($status, 'id_desc', $involved, null);
     }
 
     /**
@@ -249,8 +247,7 @@ class Project
      */
     public function testFetchProjectListByQuery($queryType, $param, $orderBy = 'id_desc')
     {
-        $projects = $this->project->fetchProjectListByQuery($queryType, $param, $orderBy, 15, '');
-        return $projects;
+        return $this->project->fetchProjectListByQuery($queryType, $param, $orderBy, 15, '');
     }
 
     /**
@@ -261,13 +258,13 @@ class Project
      * @param  object $postData
      * @param  object $program
      * @access public
-     * @return string|array
+     * @return true|array
      */
     public function testCreateProduct($projectID, $project, $postData, $program)
     {
         $result = $this->project->createProduct($projectID, $project, $postData, $program);
         if(!$result) return dao::getError();
 
-        return '1';
+        return true;
     }
 }
