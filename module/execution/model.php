@@ -4622,8 +4622,9 @@ class executionModel extends model
         {
             $groupKey = $type == 'finishedBy' ? $bug->resolvedBy : $bug->$type;
 
-            $status  = $bug->status;
-            $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
+            $status = $bug->status == 'active' ? 'wait' : $bug->status;
+            if($status == 'resolved') $status = $bug->resolution == 'postponed' ? 'cancel' : 'done';
+
             if(!empty($groupKey) and (($type == 'story' and isset($stories[$groupKey])) or $type != 'story'))
             {
                 if($type == 'assignedTo' and $groupKey == 'closed')
