@@ -13,6 +13,8 @@
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
 <style>
+.submitBtn{display:none}
+.gantt_row_task:hover .submitBtn{ display: inline-block;}
 #ganttView {height: 600px;}
 #mainContent:before {background: #fff;}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
@@ -22,6 +24,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 .gantt_link_arrow_right {border-left-color: #2196F3;}
 .gantt_link_arrow_left {border-right-color: #2196F3;}
+.icon-confirm {color: #18a6fd}
 .gantt_task_link .gantt_line_wrapper div{background-color: #2196F3;}
 .gantt_critical_link .gantt_line_wrapper>div {background-color: #e63030 !important;}
 .gantt_critical_link.start_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
@@ -40,6 +43,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_link.start_to_finish .gantt_line_wrapper div { background-color: #975000; }
 .gantt_task_link.start_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #975000; }
 .gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
+.gantt_grid_head_owner_id {text-align: left}
 .gantt_critical_task{background:#e63030 !important; border-color:#9d3a3a !important;}
 .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
 .gantt_row.task-item{cursor: pointer;}
@@ -597,7 +601,8 @@ $(function()
 
     gantt.config.columns = [];
     gantt.config.columns.push({name: 'text', width: '*', tree: true, resize: true, min_width:120, width:200});
-    if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'center', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
+    gantt.config.columns.push({name:"custom", label:"", align: "left", width: 40, template: getSubmitBtn});
+    if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'left', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
     if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
     gantt.config.columns.push({name: 'start_date', align: 'center', resize: true, width: 80});
     if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 80});
@@ -611,10 +616,16 @@ $(function()
     if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
 
+    function getSubmitBtn(task)
+    {
+        if(task.type == 'point') return '<button class="btn btn-link submitBtn" title="<?php echo $lang->review->submit;?>"><i class="icon-confirm"></i></button>';
+    }
+
     gantt.templates.task_end_date = function(data)
     {
         return gantt.templates.task_date(new Date(date.valueOf() - 1));
     }
+
     var gridDateToStr = gantt.date.date_to_str("%Y-%m-%d");
     gantt.templates.grid_date_format = function(date, column)
     {
