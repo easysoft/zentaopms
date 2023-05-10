@@ -11,14 +11,20 @@ declare(strict_types=1);
 
 namespace zin;
 
+foreach($stories as $story)
+{
+    $story->status = zget($this->lang->story->statusList, $story->status);
+    $story->stage  = zget($this->lang->story->stageList, $story->stage);
+}
+
 panel
 (
     dtable
     (
         set::width('100%'),
         set::height('auto'),
-        set::cols(array_values($config->block->dtable->project->fieldList)),
-        set::data(array_values($projects))
+        set::cols(array_values($config->block->dtable->stories->fieldList)),
+        set::data(array_values($stories))
     )
 );
 

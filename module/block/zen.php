@@ -521,19 +521,20 @@ class blockZen extends block
     /**
      * Print story block.
      *
+     * @params object     $block
      * @access protected
      * @return void
      */
-    protected function printStoryBlock()
+    protected function printStoryBlock($block) :void
     {
         $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->app->loadClass('pager', true);
-        $count   = isset($this->params->count) ? (int)$this->params->count : 0;
+        $count   = isset($block->params->count) ? (int)$block->params->count : 0;
         $pager   = pager::init(0, $count , 1);
-        $type    = isset($this->params->type) ? $this->params->type : 'assignedTo';
-        $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
+        $type    = isset($block->params->type) ? $block->params->type : 'assignedTo';
+        $orderBy = isset($block->params->type) ? $block->params->orderBy : 'id_asc';
 
         $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $this->viewType != 'json' ? $pager : '', 'story');
     }
@@ -753,7 +754,7 @@ class blockZen extends block
                 $progress = 0;
                 if(isset($tasks[$projectID]) && ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft))
                 {
-                    $progress = round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100; 
+                    $progress = round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100;
                 }
 
                 $project->current  = $current;
