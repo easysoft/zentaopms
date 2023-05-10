@@ -925,13 +925,13 @@ class projectModel extends model
 
     /**
      * 根据项目类型生成权限数据。
-     * Get project priv data according to the project type.
+     * Get project priv data according by the project type.
      *
      * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
      * @access public
      * @return object|false
      */
-    public function getProjectPrivs(string $model = 'waterfall'): object|false
+    public function getPrivsByModel(string $model = 'waterfall'): object|false
     {
         if(!in_array($model, array_keys((array)$this->config->programPriv))) return false;
 

@@ -1417,7 +1417,7 @@ class project extends control
             }
 
             $this->view->project  = $project;
-            $this->lang->resource = $this->project->getProjectPrivs($project->multiple ? $project->model : 'noSprint');
+            $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint');
         }
 
         $this->display();

@@ -2658,7 +2658,7 @@ EOF;
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
-            $projectPrivs = $this->loadModel('project')->getProjectPrivs($program->multiple ? $program->model : 'noSprint');
+            $projectPrivs = $this->loadModel('project')->getPrivsByModel($program->multiple ? $program->model : 'noSprint');
             foreach($projectPrivs as $module => $methods)
             {
                 foreach($methods as $method => $label)
