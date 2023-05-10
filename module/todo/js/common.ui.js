@@ -73,7 +73,13 @@ function togglePending(switcher)
     {
         $('.date').removeAttr('disabled');
         $('.date').prop('value','');
-        if($('#cycle')) $('#cycle').prop('checked', false);
+        $('.cycle-date').prop('value', '');
+        $('#type').closest('.form-row').removeClass('hidden');
+        if($('#cycle').length)
+        {
+            $('#cycle').prop('checked', false);
+            $('.cycle-config').addClass('hidden');
+        }
     }
 }
 
