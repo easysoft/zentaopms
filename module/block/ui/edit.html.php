@@ -13,7 +13,7 @@ namespace zin;
 
 set::title($title);
 jsVar('blockID', $block->id);
-jsVar('of', $lang->block->of);
+jsVar('blockTitle', $lang->block->blockTitle);
 
 $paramsRows  = array();
 $showModules = ($dashboard == 'my' && $modules);

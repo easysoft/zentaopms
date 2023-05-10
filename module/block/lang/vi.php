@@ -70,7 +70,7 @@ $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->month               = 'Month';
 $lang->block->selectProduct       = 'Product selection';
-$lang->block->of                  = ' thực ';
+$lang->block->blockTitle          = '%1$s thực %2$s';
 $lang->block->remain              = 'Left';
 
 $lang->block->createBlock        = 'Thêm Block';

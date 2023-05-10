@@ -13,7 +13,7 @@ namespace zin;
 
 set::title($title);
 jsVar('dashboard', $dashboard);
-jsVar('of', $lang->block->of);
+jsVar('blockTitle', $lang->block->blockTitle);
 
 $paramsRows  = array();
 $showModules = ($dashboard == 'my' && $modules);
@@ -26,7 +26,12 @@ if($module == 'scrumtest' && $code != 'all')
 else
 {
     $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
-    $blockTitle  = (count($typeOptions) ? $typeOptions[array_keys($typeOptions)[0]] . $lang->block->of : '') . zget($codes, $code);
+    $blockTitle  = zget($codes, $code);
+    if(!empty($typeOptions))
+    {
+        $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
+        $blockTitle = vsprintf($lang->block->blockTitle, array($typeName, $blockTitle));
+    }
 }
 
 foreach($params as $key => $row)

@@ -77,7 +77,7 @@ $lang->block->time                = '第';
 $lang->block->week                = '周';
 $lang->block->month               = '月';
 $lang->block->selectProduct       = "选择{$lang->productCommon}";
-$lang->block->of                  = '的';
+$lang->block->blockTitle          = '%1$s的%2$s';
 $lang->block->remain              = '剩余工时';
 $lang->block->allStories          = '总需求';
 

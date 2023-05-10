@@ -75,7 +75,7 @@ $lang->block->time                = '第';
 $lang->block->week                = '周';
 $lang->block->month               = '月';
 $lang->block->selectProduct       = '選擇產品';
-$lang->block->of                  = '的';
+$lang->block->blockTitle          = '%1$s的%2$s';
 $lang->block->remain              = '剩餘工時';
 
 $lang->block->createBlock        = '添加區塊';

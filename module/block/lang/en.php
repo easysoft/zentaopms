@@ -76,7 +76,7 @@ $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->month               = 'Month';
 $lang->block->selectProduct       = "{$lang->productCommon} selection";
-$lang->block->of                  = ' of ';
+$lang->block->blockTitle          = '%2$s of %1$s';
 $lang->block->remain              = 'Left';
 $lang->block->allStories          = 'All';
 

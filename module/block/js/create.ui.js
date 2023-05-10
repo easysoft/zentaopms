@@ -8,7 +8,7 @@ function getForm(event)
 }
 
 /**
- * Get block title.
+ * Updates the blockTitle when the type is changed.
  *
  * @return void
  */
@@ -26,17 +26,6 @@ function onParamsTypeChange()
     }
 
     const $paramstype = $('#paramstype')[0];
-    let blockTitle = '';
 
-    /* Chinese attributives come first, while other language items have attributives placed after. */
-    if(lang.indexOf('zh') >= 0)
-    {
-        blockTitle = $paramstype.options[$paramstype.selectedIndex].text + of + $code.options[$code.selectedIndex].text;
-    }
-    else
-    {
-        blockTitle = $code.options[$code.selectedIndex].text + of + $paramstype.options[$paramstype.selectedIndex].text;
-    }
-
-    $('#title').val(blockTitle);
+    $('#title').val(blockTitle.replace('%1$s', $paramstype.options[$paramstype.selectedIndex].text).replace('%2$s', $code.options[$code.selectedIndex].text));
 }

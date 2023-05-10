@@ -86,14 +86,15 @@ class block extends control
 
         /* 如果没传 $code 说明是首次进入页面，直接使用待编辑 $block 的 $code。 */
         /* If no $code is passed, it indicates that you are entering the page for the first time, and you can directly use the $code of the $block to be edited. */
-        $block = $this->block->getByID($blockID);
-        $code  = $code ? $code : $block->code;
-        $codes = $this->blockZen->getAvailableCodes($block->dashboard, $this->view->module);
+        $block  = $this->block->getByID($blockID);
+        $module = $module ? $module : $block->module;
+        $code   = $code ? $code : $block->code;
+        $codes  = $this->blockZen->getAvailableCodes($block->dashboard, $module);
 
         $this->view->title     = $this->lang->block->editBlock;
         $this->view->block     = $block;
         $this->view->dashboard = $block->dashboard;
-        $this->view->module    = $module ? $module : $block->module;
+        $this->view->module    = $module;
         $this->view->modules   = $this->blockZen->getAvailableModules($block->dashboard);
         $this->view->codes     = $codes;
         /* $codes 包含 $code 时，页面才选中对应的 $code，否则为空。 */
