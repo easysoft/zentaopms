@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * The model file of programplan module of ZenTaoPMS.
  *
@@ -9,8 +11,6 @@
  * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class programplanModel extends model
 {
     /**
