@@ -2173,20 +2173,21 @@ class projectModel extends model
     }
 
     /**
+     * 将数字转换成带单位的数字。
      * Convert budget unit.
      *
-     * @param  int        $budget
+     * @param  float        $budget
      * @access public
-     * @return int|string $projectBudget
+     * @return float|string $projectBudget
      */
-    public function getBudgetWithUnit($budget)
+    public function getBudgetWithUnit(float $budget): float|string
     {
         if($budget < 10000)
         {
             $budget = round((float)$budget, 2);
             $unit   = '';
         }
-        elseif($budget < 100000000 and $budget >= 10000)
+        elseif($budget < 100000000 && $budget >= 10000)
         {
             $budget = round((float)$budget/10000, 2);
             $unit   = $this->lang->project->tenThousand;
