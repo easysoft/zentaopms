@@ -1,0 +1,24 @@
+title: zt_project
+author: liuhong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-7
+    - field: model
+      range: 'scrum, ,waterfall, , ,scrum, ,'
+    - field: type
+      range: 'project,sprint,project,stage,stage,project,sprint'
+    - field: status
+      range: 'wait,doing{2},suspended'
+    - field: grade
+      range: '2{2},1{5}'
+    - field: parent
+      range: 0, 1, 0, 2, 2, 0, 1
+    - field: path
+      range: '`1,2`, `1,3`, `2,4`, `2,5`, 6, `6,7`'
+      prefix: ','
+      postfix: ','
+    - field: openedBy
+      range: 'admin,user1'
+    - field: name
+      range: '项目1,迭代1-2,项目2,迭代2-4,迭代2-5,项目6,迭代6-7'

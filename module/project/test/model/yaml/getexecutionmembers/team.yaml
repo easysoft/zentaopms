@@ -1,0 +1,16 @@
+title: zt_team
+author: liuhong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-4
+    - field: root
+      range: 2, 4, 5, 7
+    - field: type
+      range: 'execution'
+    - field: account
+      range: 'admin,user1,user2'
+    - field: role
+      range: '研发,测试{5}'
+    - field: hours
+      range: 7
