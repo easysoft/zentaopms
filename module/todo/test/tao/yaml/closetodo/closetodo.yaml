@@ -1,0 +1,18 @@
+title: Create a todo for todoTao::closeTodo UTC.
+desc: Create a todo for todoTao::closeTodo UTC.
+author: dingguodong
+version: 1.0.0
+
+fields:
+  - field: id
+    range: 1
+  - field: date
+    range: '`2023-04-23`'
+  - field: type
+    range: custom
+  - field: status
+    range: wait
+  - field: finishedDate
+    range: '`2023-04-23`'
+  - field: closedDate
+    range: '`2023-04-23`'
