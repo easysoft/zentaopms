@@ -1,5 +1,6 @@
 <?php
 $config->task->form = new stdclass();
+$config->task->form->team = new stdclass();
 
 global $app;
 $config->task->form->create = array();
@@ -64,12 +65,13 @@ $config->task->form->edit['closedBy']     = array('type' => 'string', 'required'
 $config->task->form->edit['closedReason'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['closedDate']   = array('type' => 'string', 'required' => false, 'default' => '');
 
-$config->task->form->edit['team']         = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamSource']   = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamEstimate'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamConsumed'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->edit = array();
+$config->task->form->team->edit['team']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->edit['teamSource']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->edit['teamEstimate'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->edit['teamConsumed'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->edit['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->task->form->batchCreate = array();
 $config->task->form->batchCreate['module']        = array('type' => 'array', 'required' => false, 'default' => array());
