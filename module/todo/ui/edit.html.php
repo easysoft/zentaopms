@@ -26,18 +26,11 @@ jsVar('userAccount', $app->user->account);
 if($todo->cycle && $todo->config)
 {
     $todo->config = json_decode($todo->config);
-    jsVar('cycleType', isset($todo->config->type) ? $todo->config->type : '');
 
-    if(isset($todo->config->month))
-    {
-        $todo->config->month = explode(',', $todo->config->month);
-        $todo->config->month = array_map('intval', $todo->config->month);
-    }
-    if(isset($todo->config->week))
-    {
-        $todo->config->week = explode(',', $todo->config->week);
-        $todo->config->week = array_map('intval', $todo->config->week);
-    }
+    $type = '';
+    if(isset($todo->config->type)) $type = $todo->config->type == 'day' && isset($todo->config->cycleYear) ? 'year' : $todo->config->type;
+    jsVar('cycleType', $type);
+
     if(isset($todo->config->type) && $todo->config->type == 'day' && isset($todo->config->cycleYear)) $todo->date = '';
     if(isset($todo->config->month) || isset($todo->config->week)) $todo->date = '';
 }
