@@ -10,7 +10,7 @@ timeout=0
 cid=1
 */
 
-zdTable('todo')->config('close')->gen(1);
+zdTable('todo')->config('closetodo')->gen(1);
 
 global $tester;
 $todo = new todoTest();
