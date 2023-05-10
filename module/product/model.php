@@ -1058,7 +1058,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0, $mode = '')
+    public function getExecutionPairsByProduct($productID, $branch = 0, $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
 

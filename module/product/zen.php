@@ -1500,7 +1500,7 @@ class productZen extends product
         /* Build parameters. */
         $pager  = new pager($recTotal, 50, 1);
         $period = $type == 'account' ? 'all'  : $type;
-        $date   = empty($date) ? '' : date('Y-m-d', empty($date) ? null : (int)$date);
+        $date   = empty($date) ? '' : date('Y-m-d', (int)$date);
 
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
 

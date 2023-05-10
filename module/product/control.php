@@ -465,10 +465,12 @@ class product extends control
         $param     = (int)$param;
 
         $this->loadModel('action');
+
+        /* Save env data. */
         $this->productZen->saveBackUriSession4Dynamic();
         $this->product->setMenu($productID, 0, $type);
 
-        /* Append id for secend sort. */
+        /* Generate order by string. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
         /* Get user account. */
@@ -750,7 +752,7 @@ class product extends control
         $this->product->setMenu($productID, 0);
         $this->lang->modulePageNav = '';
 
-        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -968,7 +970,7 @@ class product extends control
         if($projectID) $project = $this->loadModel('project')->getById($projectID);
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
-        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
+        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
@@ -999,7 +1001,7 @@ class product extends control
     public function ajaxGetExecutionsByProject($productID, $projectID = 0, $branch = 0, $number = 0)
     {
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, 'multiple,stagefilter');
+        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, 'multiple,stagefilter');
 
         $disabled = $noMultipleExecutionID ? "disabled='disabled'" : '';
         $html = html::select("executions[{$number}]", array('' => '') + $executions, 0, "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)' $disabled");
