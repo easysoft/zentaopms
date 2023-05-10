@@ -5244,22 +5244,17 @@ class executionModel extends model
         if(empty($execution->children))
         {
             echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name, '', "class='text-ellipsis' title='{$execution->name}'");
-            if(!helper::isZeroDate($execution->end) && $execution->status != 'closed')
-            {
-                echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
-            }
         }
         else
         {
             echo "<span class='text-ellipsis'>" . $execution->name . '</span>';
-            if(!helper::isZeroDate($execution->end))
-            {
-                if($execution->status != 'closed')
-                {
-                    echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
-                }
-            }
         }
+
+        if(!helper::isZeroDate($execution->end) && $execution->status != 'closed')
+        {
+            echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
+        }
+
         if(($execution->stageBy == 'project') and $execution->hasProduct) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
