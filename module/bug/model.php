@@ -1286,56 +1286,6 @@ class bugModel extends model
     }
 
     /**
-     * 处理弹窗关闭bug的情况。
-     * Handle close bug from only body.
-     *
-     * @param  int       $executionId
-     * @param  string    $extra
-     * @param  string    $from
-     * @access public
-     * @return viod
-     */
-    public function handleOnlyBodyAfterClose($executionId, $extra, $from)
-    {
-        if(!isonlybody()) return;
-
-        $this->loadModel('execution');
-        $this->loadModel('kanban');
-
-        /* 解析extra参数。*/
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        /* 获取bug关联的执行信息。*/
-        $execution    = $this->execution->getByID($executionId);
-        $execLaneType = $this->session->execLaneType ?: 'all';
-        $execGroupBy  = $this->session->execGroupBy ?: 'default';
-
-        /* 看板类型。*/
-        if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
-        {
-            $rdSearchValue = $this->session->rdSearchValue ?: '';
-            $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-            $kanbanData    = $this->kanban->getRDKanban($executionId, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-            $kanbanData    = json_encode($kanbanData);
-            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-        }
-
-        /* 执行中的看板视图。*/
-        if($from == 'taskkanban')
-        {
-            $taskSearchValue = $this->session->taskSearchValue ?: '';
-            $kanbanData      = $this->kanban->getExecutionKanban($executionId, $execLaneType, $execGroupBy, $taskSearchValue);
-            $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-            $kanbanData      = $kanbanData[$kanbanType];
-            $kanbanData      = json_encode($kanbanData);
-            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-        }
-
-        return print(js::closeModal('parent.parent', 'this', "typeof(parent.parent.setTitleWidth) == 'function' ? parent.parent.setTitleWidth() : parent.parent.location.reload()"));
-    }
-
-    /**
      * 更新bug的抄送给状态为已关闭。
      * Update bug assigned to value to closed.
      *

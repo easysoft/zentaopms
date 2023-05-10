@@ -212,43 +212,54 @@ class bugZen extends bug
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isonlybody())
-        {
-            /* 在执行应用下，编辑看板中的 bug 数据时，更新看板数据。*/
-            /* Update kanban data after updating bug in kanban. */
-            if($this->app->tab == 'execution')
-            {
-                $this->loadModel('kanban');
-
-                $execution    = $this->loadModel('execution')->getByID($bug->execution);
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-
-                /* 看板类型的执行。*/
-                /* The kanban exectuion. */
-                if(isset($execution->type) && $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->kanban->getRDKanban($bug->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-                    return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)");
-                }
-                /* 执行中的看板。*/
-                /* The kanban of execution. */
-                else
-                {
-                    $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->kanban->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $taskSearchValue);
-                    $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                    $kanbanData      = json_encode($kanbanData[$kanbanType]);
-                    return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
-                }
-            }
-
-            return array('result' => 'success', 'closeModal' => true);
-        }
+        if(isonlybody()) $this->responseInModal($bug->execution, $kanbanGroup);
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('bug', 'view', "bugID=$bugID"));
+    }
+
+    /**
+     * 在弹窗中操作后的返回。
+     * Respond after operating in modal.
+     *
+     * @param  int       $executionID
+     * @param  string    $kanbanGroup
+     * @param  int       $regionID
+     * @access protected
+     * @return array
+     */
+    protected function responseInModal(int $executionID, string $kanbanGroup = '', int $regionID = 0): array
+    {
+        /* 在执行应用下，编辑看板中的 bug 数据时，更新看板数据。*/
+        /* Update kanban data after updating bug in kanban. */
+        if($this->app->tab == 'execution')
+        {
+            $this->loadModel('kanban');
+
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            $laneType  = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+            $groupBy   = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+
+            /* 看板类型的执行。*/
+            /* The kanban exectuion. */
+            if(isset($execution->type) && $execution->type == 'kanban')
+            {
+                $groupBy       = $kanbanGroup ? $kanbanGroup : $groupBy;
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                $kanbanData    = $this->kanban->getRDKanban($executionID, $laneType, 'id_desc', $regionID, $groupBy, $rdSearchValue);
+                $kanbanData    = json_encode($kanbanData);
+                return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)");
+            }
+
+            /* 执行中的看板。*/
+            /* The kanban of execution. */
+            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+            $kanbanData      = $this->kanban->getExecutionKanban($executionID, $laneType, $groupBy, $taskSearchValue);
+            $kanbanType      = $laneType == 'all' ? 'bug' : key($kanbanData);
+            $kanbanData      = json_encode($kanbanData[$kanbanType]);
+            return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
+        }
+
+        return array('result' => 'success', 'closeModal' => true, 'load' => 'parent');
     }
 
     /**
@@ -322,33 +333,7 @@ class bugZen extends bug
     {
         $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
         $executionID = $formData->data->execution ? $formData->data->execution : $executionID;
-        $execution   = $this->loadModel('execution')->getByID($executionID);
-        if($this->app->tab == 'execution')
-        {
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-
-            if($execution->type == 'kanban')
-            {
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
-                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)");
-            }
-            else
-            {
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
-                $kanbanType      = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                $kanbanData      = $kanbanData[$kanbanType];
-                $kanbanData      = json_encode($kanbanData);
-                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban(\"bug\", $kanbanData)");
-            }
-        }
-        else
-        {
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => 'parent');
-        }
+        $this->responseInModal($executionID);
     }
 
     /**
