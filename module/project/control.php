@@ -111,13 +111,10 @@ class project extends control
     /**
      * Ajax get project drop menu.
      *
-     * @param  int     $projectID
-     * @param  string  $module
-     * @param  string  $method
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($projectID, $module, $method)
+    public function ajaxGetDropMenu()
     {
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
@@ -1152,7 +1149,7 @@ class project extends control
         $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
         if($hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
 
-        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
+        echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
     /**
