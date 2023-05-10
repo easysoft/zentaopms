@@ -16,8 +16,8 @@ jsVar('blockID', $block->id);
 jsVar('of', $lang->block->of);
 
 $paramsRows  = array();
-$showModules = ($dashboard == 'my' and $modules);
-$showCodes   = (($showModules and $module and $codes) or $dashboard != 'my');
+$showModules = ($dashboard == 'my' && $modules);
+$showCodes   = (($showModules && $module && $codes) || $dashboard != 'my');
 
 foreach($params as $key => $row)
 {
@@ -87,7 +87,7 @@ form
             formGroup
             (
                 set::label($lang->block->grid),
-                set::name("grid"),
+                set::name('grid'),
                 set::class('form-row'),
                 set::value($block->grid),
                 set::control(array

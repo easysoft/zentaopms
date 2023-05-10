@@ -21,7 +21,7 @@ class block extends control
     {
         parent::__construct($moduleName, $methodName);
         /* 如果为外部调用，判断密钥，如果密钥不通过，返回空字符串。 */
-        if($this->methodName != 'admin' and $this->methodName != 'dashboard' and $this->isExternalCall() and !$this->loadModel('sso')->checkKey()) helper::end('');
+        if($this->methodName != 'admin' && $this->methodName != 'dashboard' && $this->isExternalCall() && !$this->loadModel('sso')->checkKey()) helper::end('');
     }
 
     /**
@@ -225,7 +225,7 @@ class block extends control
         $isInitiated = $this->block->getBlockInitStatus($dashboard);
 
         /* 判断用户是否为首次登录 ，判断条件 当前用户没有该 app 下的区块数据 且 没有设置过该 app 下的区块启用状态 且不是演示模式。 */
-        if(empty($blocks) and !$isInitiated and !defined('TUTORIAL'))
+        if(empty($blocks) && !$isInitiated && !defined('TUTORIAL'))
         {
             $this->block->initBlock($dashboard); // 初始化该 app 下区块数据。
             $blocks = $this->block->getMyDashboard($dashboard); // 获取初始化后的区块列表。
@@ -271,10 +271,10 @@ class block extends control
         if(empty($block)) return '';
 
         /* 根据 block 的 code 值，选择性调用 zen 中 print + $code + Block 方法获取区块数据。 */
-        if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
+        if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
 
         $code = $block->code;
-        if($code == 'statistic' or $code == 'list' or $code == 'overview') $code = $block->module . ucfirst($code);
+        if($code == 'statistic' || $code == 'list' || $code == 'overview') $code = $block->module . ucfirst($code);
 
         $function = 'print' . ucfirst($code) . 'Block';
         if(method_exists('blockZen', $function)) $this->blockZen->$function($block);
@@ -296,7 +296,7 @@ class block extends control
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
-        $viewType = (isset($block->params->viewType) and $block->params->viewType == 'json') ? 'json' : 'html';
+        $viewType = (isset($block->params->viewType) && $block->params->viewType == 'json') ? 'json' : 'html';
         if($viewType == 'json') return $this->blockZen->printBlock4Json();
 
         $this->display('block', strtolower($code) . 'block');

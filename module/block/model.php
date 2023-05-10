@@ -295,7 +295,7 @@ class blockModel extends model
      */
     public function isLongBlock(object $block): bool
     {
-        return (!empty($block->grid) and $block->grid >= 6);
+        return (!empty($block->grid) && $block->grid >= 6);
     }
 
     /**
@@ -420,7 +420,7 @@ class blockModel extends model
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->fi()
-            ->beginIF($module and $code)
+            ->beginIF($module && $code)
             ->andWhere('module')->eq($module)
             ->andWhere('code')->eq($code)
             ->fi()

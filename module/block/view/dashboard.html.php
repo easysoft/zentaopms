@@ -18,7 +18,7 @@ $useGuest = $this->app->user->account == 'guest';
 ?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard auto-fade-in fade' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
-  <?php if(empty($longBlocks) and empty($shortBlocks)):?>
+  <?php if(empty($longBlocks) && empty($shortBlocks)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->block->noData;?></span>
@@ -30,7 +30,7 @@ $useGuest = $this->app->user->account == 'guest';
   <div class="row">
     <div class='col-main'>
       <?php foreach($longBlocks as $index => $block):?>
-      <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
+      <?php if(isset($config->block->closed) && strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-order='<?php echo $block->order?>' data-url='<?php echo $block->blockLink?>'>
         <?php $hasHeading = ($block->block != 'welcome');?>
         <?php if($hasHeading):?>
@@ -38,7 +38,7 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if($this->config->vision == 'rnd' and $block->block == 'guide' and !defined('TUTORIAL')) echo '<li>' . html::a($this->createLink('tutorial', 'start'), $lang->block->tutorial, '', "title='{$lang->block->tutorial}' class='iframe tutorialBtn'") . '</li>'; ?>
+            <?php if($this->config->vision == 'rnd' && $block->block == 'guide' && !defined('TUTORIAL')) echo '<li>' . html::a($this->createLink('tutorial', 'start'), $lang->block->tutorial, '', "title='{$lang->block->tutorial}' class='iframe tutorialBtn'") . '</li>'; ?>
             <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>'; ?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
@@ -66,7 +66,7 @@ $useGuest = $this->app->user->account == 'guest';
     </div>
     <div class='col-side'>
       <?php foreach($shortBlocks as $index => $block):?>
-      <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
+      <?php if(isset($config->block->closed) && strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='panel block-sm block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-order='<?php echo $block->order?>' data-url='<?php echo $block->blockLink?>'>
         <?php $hasHeading = ($block->block != 'welcome');?>
         <?php if($hasHeading):?>

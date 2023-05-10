@@ -39,11 +39,11 @@ foreach($longBlocks as $index => $block)
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->hidden, 'url' => $this->createLink("block", "delete", "blockID=$block->id")],
-                        ['text' => $lang->block->closeForever, 'url' => $this->createLink("block", "close", "blockID=$block->id")],// todo 这里少了一个 confirm 框，待于浩哥沟通写法后补充
-                        ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => $this->createLink("block", "reset", "dashboard=$dashboard")],
+                        ['text' => $lang->edit, 'url' => $this->createLink('block', 'edit', "blockID=$block->id"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->hidden, 'url' => $this->createLink('block', 'delete', "blockID=$block->id")],
+                        ['text' => $lang->block->closeForever, 'url' => $this->createLink('block', 'close', "blockID=$block->id")],
+                        ['text' => $lang->block->createBlock, 'url' => $this->createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->reset, 'url' => $this->createLink('block', 'reset', "dashboard=$dashboard")],
                     ]),
                 )
             )
@@ -88,10 +88,10 @@ foreach($shortBlocks as $index => $block)
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink("block", "edit", "blockID=$block->id"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->hidden, 'url' => $this->createLink("block", "delete", "blockID=$block->id&type=hidden")],
-                        ['text' => $lang->block->createBlock, 'url' => $this->createLink("block", "create", "dashboard=$dashboard"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => $this->createLink("block", "reset", "dashboard=$dashboard")],
+                        ['text' => $lang->edit, 'url' => $this->createLink('block', 'edit', "blockID=$block->id"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->hidden, 'url' => $this->createLink('block', 'delete', "blockID=$block->id&type=hidden")],
+                        ['text' => $lang->block->createBlock, 'url' => $this->createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal'],
+                        ['text' => $lang->block->reset, 'url' => $this->createLink('block', 'reset', "dashboard=$dashboard")],
                     ]),
                 )
             )

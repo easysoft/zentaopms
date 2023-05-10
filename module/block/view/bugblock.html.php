@@ -39,7 +39,7 @@
     $hasCustomSeverity = false;
     foreach($lang->bug->severityList as $severityKey => $severityValue)
     {
-        if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
+        if(!empty($severityKey) && (string)$severityKey != (string)$severityValue)
         {
             $hasCustomSeverity = true;
             break;

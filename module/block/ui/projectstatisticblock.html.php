@@ -134,7 +134,7 @@ function getScrumProjectInfo($project)
                     )
                 )
             ),
-            (!empty($project->executions) and $project->multiple) ? cell
+            (!empty($project->executions) && $project->multiple) ? cell
             (
                 /* 项目最近的一次执行。 */
                 set('class', 'flex-1 text-right'),

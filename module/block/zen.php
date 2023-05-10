@@ -77,7 +77,7 @@ class blockZen extends block
 
         if($dashboard == 'my')
         {
-            if($module and isset($this->lang->block->modules[$module]))
+            if($module && isset($this->lang->block->modules[$module]))
             {
                 $blocks = $this->lang->block->modules[$module]->availableBlocks;
             }
@@ -88,7 +88,7 @@ class blockZen extends block
         }
         else
         {
-            if($dashboard and isset($this->lang->block->modules[$dashboard]))
+            if($dashboard && isset($this->lang->block->modules[$dashboard]))
             {
                 $blocks = $this->lang->block->modules[$dashboard]->availableBlocks;
             }
@@ -157,13 +157,13 @@ class blockZen extends block
         foreach($blocks as $key => $block)
         {
             /* 将没有开启功能区块过虑。 */
-            if($block->code == 'waterfallrisk' and !helper::hasFeature("waterfall_risk"))   continue;
-            if($block->code == 'waterfallissue' and !helper::hasFeature("waterfall_issue")) continue;
-            if($block->code == 'scrumrisk' and !helper::hasFeature("scrum_risk"))           continue;
-            if($block->code == 'scrumissue' and !helper::hasFeature("scrum_issue"))         continue;
+            if($block->code == 'waterfallrisk' && !helper::hasFeature('waterfall_risk'))   continue;
+            if($block->code == 'waterfallissue' && !helper::hasFeature('waterfall_issue')) continue;
+            if($block->code == 'scrumrisk' && !helper::hasFeature('scrum_risk'))           continue;
+            if($block->code == 'scrumissue' && !helper::hasFeature('scrum_issue'))         continue;
 
             /* 将没有视图权限的区块过滤。 */
-            if(!empty($block->module) and $block->module != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->module]))
+            if(!empty($block->module) && $block->module != 'todo' && !empty($acls['views']) && !isset($acls['views'][$block->module]))
             {
                 unset($blocks[$key]);
                 continue;
@@ -171,7 +171,7 @@ class blockZen extends block
 
             /* 处理 params 信息中  count 的值，当没有  count 字段时 ，将 num 字段赋值给 count。 */
             $block->params = json_decode($block->params);
-            if(isset($block->params->num) and !isset($block->params->count)) $block->params->count = $block->params->num;
+            if(isset($block->params->num) && !isset($block->params->count)) $block->params->count = $block->params->num;
 
             /* 生成更多链接。 */
             $this->createMoreLink($block, $projectID);
@@ -200,25 +200,25 @@ class blockZen extends block
 
             /* The list assigned to me jumps to the work page when click more button. */
             $block->moreLink = $this->createLink($moduleName, $method, $vars);
-            if($moduleName == 'my' and strpos($this->config->block->workMethods, $method) !== false)
+            if($moduleName == 'my' && strpos($this->config->block->workMethods, $method) !== false)
             {
                 $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
             }
-            elseif($moduleName == 'project' and $method == 'dynamic')
+            elseif($moduleName == 'project' && $method == 'dynamic')
             {
                 $block->moreLink = $this->createLink('project', 'dynamic', "projectID=$projectID&type=all");
             }
-            elseif($moduleName == 'project' and $method == 'execution')
+            elseif($moduleName == 'project' && $method == 'execution')
             {
                 $block->moreLink = $this->createLink('project', 'execution', "status=all&projectID=$projectID");
             }
-            elseif($moduleName == 'project' and $method == 'testtask')
+            elseif($moduleName == 'project' && $method == 'testtask')
             {
                 $block->moreLink = $this->createLink('project', 'testtask', "projectID=$projectID");
             }
-            elseif($moduleName == 'testtask' and $method == 'browse')
+            elseif($moduleName == 'testtask' && $method == 'browse')
             {
-                $block->moreLink = $this->createLink('testtask', 'browse', "productID=0&branch=0&type=all,totalStatus");
+                $block->moreLink = $this->createLink('testtask', 'browse', 'productID=0&branch=0&type=all,totalStatus');
             }
         }
         elseif($block->code == 'dynamic')
@@ -266,7 +266,7 @@ class blockZen extends block
     {
         if(empty($block->params->html))
         {
-            return "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
+            return "<div class='empty-tip'>" . $this->lang->block->emptyTip . '</div>';
         }
 
         return "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
@@ -394,7 +394,7 @@ class blockZen extends block
      */
     protected function printTodoListBlock()
     {
-        $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
+        $limit = ($this->viewType == 'json' || !isset($this->params->count)) ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
         $uri   = $this->createLink('my', 'index');
 
@@ -581,7 +581,7 @@ class blockZen extends block
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
-            ->beginIF($block->module != 'my' and $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
+            ->beginIF($block->module != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
@@ -604,7 +604,7 @@ class blockZen extends block
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($this->view->block->module != 'my' and $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
+            ->beginIF($this->view->block->module != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
             ->fetchAll();
@@ -692,7 +692,7 @@ class blockZen extends block
      */
     protected function printProjectStatisticBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         /* Load models and langs. */
         $this->loadModel('project');
@@ -751,7 +751,7 @@ class blockZen extends block
                 $project->cv = $this->weekly->getCV($project->ev, $project->ac);
 
                 $progress = 0;
-                if(isset($tasks[$projectID]) and ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft))
+                if(isset($tasks[$projectID]) && ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft))
                 {
                     $progress = round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100; 
                 }
@@ -871,7 +871,7 @@ class blockZen extends block
      */
     protected function printExecutionStatisticBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadLang('task');
         $this->app->loadLang('story');
@@ -893,7 +893,7 @@ class blockZen extends block
 
         /* Get tasks. Fix bug #2918.*/
         $yesterday  = date('Y-m-d', strtotime('-1 day'));
-        $taskGroups = $this->dao->select("id,parent,execution,status,finishedDate,estimate,consumed,`left`")->from(TABLE_TASK)
+        $taskGroups = $this->dao->select('id,parent,execution,status,finishedDate,estimate,consumed,`left`')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
@@ -916,7 +916,7 @@ class blockZen extends block
 
                 $totalConsumed += $task->consumed;
                 $totalEstimate += $task->estimate;
-                if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
+                if($task->status != 'cancel' && $task->status != 'closed') $totalLeft += $task->left;
             }
 
             $executions[$executionID]->totalTasks        = count($taskGroup);
@@ -1019,7 +1019,7 @@ class blockZen extends block
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $left     = (float)$this->weekly->getLeft($this->session->project, $today);
-        $progress = (!empty($this->view->ac) or !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
+        $progress = (!empty($this->view->ac) || !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
         $this->view->progress = $progress > 100 ? 100 : $progress;
         $this->view->current  = $current;
     }
@@ -1044,7 +1044,7 @@ class blockZen extends block
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $left     = (float)$data['left'];
-        $progress = (!empty($this->view->ac) or !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
+        $progress = (!empty($this->view->ac) || !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
         $this->view->progress = $progress > 100 ? 100 : $progress;
     }
 
@@ -1169,7 +1169,7 @@ class blockZen extends block
      */
     protected function printScrumListBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'undone';
 
@@ -1383,7 +1383,7 @@ class blockZen extends block
      */
     protected function printQaStatisticBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadLang('bug');
         $status = isset($this->params->type)  ? $this->params->type : '';
@@ -1522,7 +1522,7 @@ class blockZen extends block
     {
         $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
             ->where('1=1')
-            ->beginIF($this->view->block->module != 'my' and $this->session->project)->andWhere('project')->eq((int)$this->session->project)->fi()
+            ->beginIF($this->view->block->module != 'my' && $this->session->project)->andWhere('project')->eq((int)$this->session->project)->fi()
             ->groupBy('lastRunResult')
             ->fetchPairs();
 
@@ -1553,7 +1553,7 @@ class blockZen extends block
      */
     protected function printExecutionBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
         $status = isset($this->params->type)  ? $this->params->type : 'all';
@@ -1581,16 +1581,16 @@ class blockZen extends block
         $hasMeeting = helper::hasFeature('meeting');
 
         $hasViewPriv = array();
-        if(common::hasPriv('todo',  'view'))                                                                                          $hasViewPriv['todo']        = true;
-        if(common::hasPriv('task',  'view'))                                                                                          $hasViewPriv['task']        = true;
-        if(common::hasPriv('bug',   'view') and $this->config->vision != 'lite')                                                      $hasViewPriv['bug']         = true;
-        if(common::hasPriv('story', 'view') and $this->config->vision != 'lite')                                                      $hasViewPriv['story']       = true;
-        if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite')                           $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasRisk)      $hasViewPriv['risk']        = true;
-        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasIssue)     $hasViewPriv['issue']       = true;
-        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
-        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')))                             $hasViewPriv['feedback']    = true;
-        if(common::hasPriv('ticket', 'view') and in_array($this->config->edition, array('max', 'biz')))                               $hasViewPriv['ticket']      = true;
+        if(common::hasPriv('todo',  'view'))                                                                                        $hasViewPriv['todo']        = true;
+        if(common::hasPriv('task',  'view'))                                                                                        $hasViewPriv['task']        = true;
+        if(common::hasPriv('bug',   'view') && $this->config->vision != 'lite')                                                     $hasViewPriv['bug']         = true;
+        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                                     $hasViewPriv['story']       = true;
+        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['requirement'] = true;
+        if(common::hasPriv('risk',  'view') && $this->config->edition == 'max' && $this->config->vision != 'lite' && $hasRisk)      $hasViewPriv['risk']        = true;
+        if(common::hasPriv('issue', 'view') && $this->config->edition == 'max' && $this->config->vision != 'lite' && $hasIssue)     $hasViewPriv['issue']       = true;
+        if(common::hasPriv('meeting', 'view') && $this->config->edition == 'max' && $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
+        if(common::hasPriv('feedback', 'view') && in_array($this->config->edition, array('max', 'biz')))                            $hasViewPriv['feedback']    = true;
+        if(common::hasPriv('ticket', 'view') && in_array($this->config->edition, array('max', 'biz')))                              $hasViewPriv['ticket']      = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
@@ -1627,24 +1627,24 @@ class blockZen extends block
             if(!isset($hasViewPriv[$objectType])) continue;
 
             $table      = $objectType == 'requirement' ? TABLE_STORY : $this->config->objectTables[$objectType];
-            $orderBy    = $objectType == 'todo' ? "`date` desc" : 'id_desc';
+            $orderBy    = $objectType == 'todo' ? '`date` desc' : 'id_desc';
             $limitCount = isset($params->{$objectCount}) ? $params->{$objectCount} : 0;
             $objects    = $this->dao->select('t1.*')->from($table)->alias('t1')
-                ->beginIF($objectType == 'story' or $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
+                ->beginIF($objectType == 'story' || $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
-                ->beginIF($objectType == 'issue' or $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
+                ->beginIF($objectType == 'issue' || $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
-                ->beginIF($objectType == 'story' or $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
-                ->beginIF($objectType == 'issue' or $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
+                ->beginIF($objectType == 'issue' || $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($objectType == 'ticket')->andWhere('t1.status')->in('wait,doing,done')->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
@@ -1656,12 +1656,12 @@ class blockZen extends block
                 $this->app->loadLang('todo');
                 foreach($objects as $key => $todo)
                 {
-                    if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
+                    if($todo->status == 'done' && $todo->finishedBy == $this->app->user->account)
                     {
                         unset($objects[$key]);
                         continue;
                     }
-                    if($todo->type == 'task' and isset($tasks[$todo->idvalue]))
+                    if($todo->type == 'task' && isset($tasks[$todo->idvalue]))
                     {
                         unset($objects[$key]);
                         continue;
@@ -1690,7 +1690,7 @@ class blockZen extends block
             if($objectType == 'risk')  $this->app->loadLang('risk');
             if($objectType == 'issue') $this->app->loadLang('issue');
 
-            if($objectType == 'feedback' or $objectType == 'ticket')
+            if($objectType == 'feedback' || $objectType == 'ticket')
             {
                 $this->app->loadLang('feedback');
                 $this->app->loadLang('ticket');
@@ -1925,7 +1925,7 @@ class blockZen extends block
         $hasDataProducts = $hasDataInvolveds = array();
         foreach($products as $productID => $product)
         {
-            if(isset($docGroup[$productID]) and count($docGroup[$productID]) > 0)
+            if(isset($docGroup[$productID]) && count($docGroup[$productID]) > 0)
             {
                 $hasDataProducts[$productID] = $product;
                 if(isset($involveds[$productID])) $hasDataInvolveds[$productID] = $product;
@@ -2000,7 +2000,7 @@ class blockZen extends block
         $hasDataProjects = $hasDataInvolveds = array();
         foreach($projects as $projectID => $project)
         {
-            if(isset($docGroup[$projectID]) and count($docGroup[$projectID]) > 0)
+            if(isset($docGroup[$projectID]) && count($docGroup[$projectID]) > 0)
             {
                 $hasDataProjects[$projectID] = $project;
                 if(isset($involveds[$projectID])) $hasDataInvolveds[$projectID] = $project;
@@ -2086,7 +2086,7 @@ class blockZen extends block
         $this->app->setClientLang($lang);
         $this->app->loadLang('common');
 
-        if(!isset($block->params) and !isset($block->params->account))
+        if(!isset($block->params) && !isset($block->params->account))
         {
             $this->app->user = new stdclass();
             $this->app->user->account = 'guest';
