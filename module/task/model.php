@@ -639,14 +639,14 @@ class taskModel extends model
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
             if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
             $this->loadModel('action');
-            $changed = $task->parent != $oldTask->parent;
+            $isParentChanged = $task->parent != $oldTask->parent;
             if($oldTask->parent > 0)
             {
                 $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
-                $this->updateParentStatus($taskID, $oldTask->parent, !$changed);
+                $this->updateParentStatus($taskID, $oldTask->parent, !$isParentChanged);
                 $this->computeBeginAndEnd($oldTask->parent);
 
-                if($changed)
+                if($isParentChanged)
                 {
                     $oldChildCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
                     if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
@@ -666,10 +666,10 @@ class taskModel extends model
             {
                 $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
                 $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
-                $this->updateParentStatus($taskID, $task->parent, !$changed);
+                $this->updateParentStatus($taskID, $task->parent, !$isParentChanged);
                 $this->computeBeginAndEnd($task->parent);
 
-                if($changed)
+                if($isParentChanged)
                 {
                     $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($task->parent)->exec();
                     $this->action->create('task', $taskID, 'linkParentTask', '', $task->parent, '', false);
