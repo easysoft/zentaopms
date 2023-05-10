@@ -594,7 +594,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function update($taskID)
+    public function update($task)
     {
         if($taskID <= 0) return;
 
@@ -628,56 +628,6 @@ class taskModel extends model
             $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
             if($taskConsumed > 0) return print(js::error($this->lang->task->error->alreadyConsumed));
         }
-
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setDefault('story, estimate, left, consumed', 0)
-            ->setDefault('realStarted', '0000-00-00 00:00:00')
-            ->setDefault('mailto', '')
-            ->setDefault('deleteFiles', array())
-            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
-            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
-            ->setIF($oldTask->parent == 0 && $this->post->parent == '', 'parent', 0)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'estimate') !== false, 'estimate', $this->post->estimate)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'left') !== false,     'left',     $this->post->left)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'consumed') !== false, 'consumed', $this->post->consumed)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'story') !== false,    'story',    $this->post->story)
-            ->setIF($this->post->story !== false && $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-
-            ->setIF($this->post->mode   == 'single', 'mode', '')
-            ->setIF($this->post->status == 'done', 'left', 0)
-            ->setIF($this->post->status == 'done'   and !$this->post->finishedBy,   'finishedBy',   $this->app->user->account)
-            ->setIF($this->post->status == 'done'   and !$this->post->finishedDate, 'finishedDate', $now)
-
-            ->setIF($this->post->status == 'cancel' and !$this->post->canceledBy,   'canceledBy',   $this->app->user->account)
-            ->setIF($this->post->status == 'cancel' and !$this->post->canceledDate, 'canceledDate', $now)
-            ->setIF($this->post->status == 'cancel', 'assignedTo',   $oldTask->openedBy)
-            ->setIF($this->post->status == 'cancel', 'assignedDate', $now)
-
-            ->setIF($this->post->status == 'closed' and !$this->post->closedBy,     'closedBy',     $this->app->user->account)
-            ->setIF($this->post->status == 'closed' and !$this->post->closedDate,   'closedDate',   $now)
-            ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
-
-            ->setIF($this->post->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
-
-            ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
-            ->setIF($oldTask->parent > 0 and !$this->post->parent, 'parent', 0)
-            ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
-            ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
-
-            ->setIF($oldTask->name != $this->post->name || $oldTask->estStarted != $this->post->estStarted || $oldTask->deadline != $this->post->deadline, 'version', $oldTask->version + 1)
-
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
-            ->cleanINT('execution,story,module')
-            ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,teamSource,contactListMenu')
-            ->get();
 
         if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
 
