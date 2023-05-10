@@ -528,7 +528,7 @@ class project extends control
         if($_POST)
         {
             $postData   = form::data($this->config->project->form->edit);
-            $newProject = $this->projectZen->prepareProject($projectID, $postData);
+            $newProject = $this->projectZen->prepareProject($postData);
 
             $changes = $this->project->update($newProject, $project);
             if($changes)
