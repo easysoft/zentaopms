@@ -542,10 +542,11 @@ class blockZen extends block
     /**
      * Print plan block.
      *
+     * @param  object    $block
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function printPlanBlock()
+    protected function printPlanBlock(object $block): bool
     {
         $uri = $this->createLink('my', 'index');
         $this->session->set('productList', $uri, 'product');
@@ -558,8 +559,10 @@ class blockZen extends block
             ->andWhere('t2.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.begin desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+            ->beginIF($this->viewType != 'json')->limit($block->params->count)->fi()
             ->fetchAll();
+
+        return !dao::getError();
     }
 
     /**
