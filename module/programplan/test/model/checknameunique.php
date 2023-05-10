@@ -4,12 +4,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
 
-$programplan = zdTable('project');
-$programplan->id->range('10-15');
-$programplan->name->range('1-5')->prefix('name');
-$programplan->deleted->range('0-1');
-$programplan->gen(5);
-
 /**
 
 title=测试 programplanModel->checkNameUnique();
