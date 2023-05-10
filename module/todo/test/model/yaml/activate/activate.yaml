@@ -1,6 +1,6 @@
 title: zt_activate
 author: shenshulong
-version: "1.0"
+version: '1.0'
 fields:
   - field: id
     range: '1-3'
@@ -8,9 +8,9 @@ fields:
     range: '1-3'
     prefix: 'admin'
   - field: begin
-    range: "1710"
+    range: '1710'
   - field: end
-    range: "1740"
+    range: '1740'
   - field: type
     range: 'custom'
   - field: pri
@@ -35,5 +35,4 @@ fields:
     range: '1-3'
     prefix: 'admin'
   - field: vision
-    range: "1.0"
-
+    range: '1.0'
