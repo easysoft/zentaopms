@@ -829,7 +829,7 @@ class bugZen extends bug
 
         /* 获取影响版本列表和解决版本列表。*/
         /* Get the affected builds and resolved builds. */
-        list($affectedBuildPairs, $resolvedBuildPairs) = $this->getEditBuildPairs($bug);
+        list($openedBuildPairs, $resolvedBuildPairs) = $this->getEditBuildPairs($bug);
 
         /* 获取分支列表。*/
         /* Get the branch options. */
@@ -890,7 +890,7 @@ class bugZen extends bug
         $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->cases                 = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
         $this->view->productBugs           = $productBugs;
-        $this->view->affectedBuildPairs    = $affectedBuildPairs;
+        $this->view->openedBuildPairs      = $openedBuildPairs;
         $this->view->resolvedBuildPairs    = array('') + $resolvedBuildPairs;
         $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->assignedToPairs       = $assignedToPairs;
@@ -912,13 +912,13 @@ class bugZen extends bug
         if($bug->project)   $objectType = 'project';
         if($bug->execution) $objectType = 'execution';
 
-        $objectID       = $bug->execution ? $bug->execution : $bug->project;
-        $allBuilds      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
-        $affectedBuilds = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
-        $resolvedBuilds = $affectedBuilds;
-        if(($bug->resolvedBuild) && isset($allBuilds[$bug->resolvedBuild])) $resolvedBuilds[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
+        $objectID           = $bug->execution ? $bug->execution : $bug->project;
+        $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
+        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
+        $resolvedBuildPairs = $openedBuildPairs;
+        if(($bug->resolvedBuild) && isset($allBuildPairs[$bug->resolvedBuild])) $resolvedBuildPairs[$bug->resolvedBuild] = $allBuildPairs[$bug->resolvedBuild];
 
-        return array($affectedBuilds, $resolvedBuilds);
+        return array($openedBuildPairs, $resolvedBuildPairs);
     }
 
     /**
