@@ -1243,10 +1243,8 @@ class projectModel extends model
 
         /* If $_POST has product name, create it. */
         $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
-        if(!$project->hasProduct or isset($postData->rawdata->newProduct) or (!$project->parent and empty($linkedProductsCount)))
-        {
-            if(!$this->createProduct($projectID, $project, $postData, $program)) return false;
-        }
+        $needCreateProduct   = !$project->hasProduct || isset($postData->rawdata->newProduct) || (!$project->parent && empty($linkedProductsCount));
+        if($needCreateProduct && !$this->createProduct($projectID, $project, $postData, $program)) return false;
 
         /* Save order. */
         $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
@@ -2343,13 +2341,10 @@ class projectModel extends model
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) && !empty($executions))
+            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
-                if(in_array($project->model, array('waterfall', 'waterfallplus')) && $project->stageBy == 'project')
-                {
-                    $this->loadModel('execution');
-                    foreach($executions as $executionID) $this->execution->updateProducts($executionID);
-                }
+                $this->loadModel('execution');
+                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
             }
         }
 
@@ -2529,23 +2524,20 @@ class projectModel extends model
             }
             $hours[$executionID] = $hour;
 
-            if(isset($executions[$executionID]) and $executions[$executionID]->grade > 1)
+            if(isset($executions[$executionID]) && $executions[$executionID]->grade > 1 && isset($projects[$executionID]) && in_array($projects[$executionID], array('waterfall', 'waterfallplus')))
             {
-                if(isset($projects[$executionID]) and in_array($projects[$executionID], array('waterfall', 'waterfallplus')))
+                $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
+                foreach($stageParents as $stageParent)
                 {
-                    $stageParents = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in(trim($executions[$executionID]->path, ','))->andWhere('type')->eq('stage')->andWhere('id')->ne($executions[$executionID]->id)->orderBy('grade')->fetchPairs();
-                    foreach($stageParents as $stageParent)
+                    if(!isset($hours[$stageParent]))
                     {
-                        if(!isset($hours[$stageParent]))
-                        {
-                            $hours[$stageParent] = clone $hour;
-                            continue;
-                        }
-
-                        $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
-                        $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
-                        $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+                        $hours[$stageParent] = clone $hour;
+                        continue;
                     }
+
+                    $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                    $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                    $hours[$stageParent]->totalLeft     += $hour->totalLeft;
                 }
             }
         }
@@ -2722,16 +2714,13 @@ class projectModel extends model
         $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
 
         /* Single execution and has no product project menu. */
-        if(!$project->hasProduct and !$project->multiple and !empty($this->config->URAndSR))
+        if(!$project->hasProduct && !$project->multiple && !empty($this->config->URAndSR) && isset($this->lang->$navGroup->menu->storyGroup))
         {
-            if(isset($this->lang->$navGroup->menu->storyGroup))
-            {
-                $this->lang->$navGroup->menu->story = $this->lang->$navGroup->menu->storyGroup;
-                $this->lang->$navGroup->menu->story['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['link'], '%s', $projectID);
+            $this->lang->$navGroup->menu->story = $this->lang->$navGroup->menu->storyGroup;
+            $this->lang->$navGroup->menu->story['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['link'], '%s', $projectID);
 
-                $this->lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $projectID);
-                $this->lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectID);
-            }
+            $this->lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $projectID);
+            $this->lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectID);
         }
 
         if(isset($this->lang->$navGroup->menu->storyGroup)) unset($this->lang->$navGroup->menu->storyGroup);
@@ -2744,6 +2733,7 @@ class projectModel extends model
                 $objectID = $executionID;
                 $this->lang->$navGroup->menu->{$label}['subModule'] = 'project';
             }
+
             $this->lang->$navGroup->menu->$label = commonModel::setMenuVarsEx($menu, $objectID);
             if(isset($menu['subMenu']))
             {
