@@ -7,7 +7,7 @@ fields:
     - field: account
       range: 'admin,user1,user2'
     - field: objectID
-      range: 10-20
+      range: 1-10
     - field: date
       range: 1-9
       prefix: '2023-04-2'
