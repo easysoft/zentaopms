@@ -1131,7 +1131,6 @@ class productZen extends product
     /**
      * 获取模块的树形数据结构。
      * Get the tree structure of modules.
-     * TODO return pure HTML string, we need array.
      *
      * @param  int       $projectID
      * @param  int       $productID
@@ -1142,7 +1141,7 @@ class productZen extends product
      * @access protected
      * @return string
      */
-    protected function getModuleTree4BrowseTODO(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): string
+    protected function getModuleTree4Browse(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): string
     {
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';

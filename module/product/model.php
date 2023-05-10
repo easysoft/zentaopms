@@ -1331,11 +1331,13 @@ class productModel extends model
         $products = strtolower($status) == static::ST_BYSEARCH ? $this->getListBySearch($param) : $this->productTao->getList($programID, $status, 0, $line);
         if(empty($products)) return array();
 
+        $this->loadModel('story');
+
         /* Get stats data. */
         $productIDs           = array_keys($products);
         $products             = $this->productTao->getStatsProducts($productIDs,$programID, $orderBy, $pager);
-        $finishClosedStory    = $this->productTao->getFinishClosedStoryTODO();
-        $unclosedStory        = $this->productTao->getUnClosedStoryTODO();
+        $finishClosedStory    = $this->story->getFinishClosedTotal();
+        $unclosedStory        = $this->story->getUnClosedTotal();
         $plans                = $this->productTao->getPlansTODO($productIDs);
         $releases             = $this->productTao->getReleasesTODO($productIDs);
         $bugs                 = $this->productTao->getBugsTODO($productIDs);

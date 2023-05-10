@@ -130,7 +130,6 @@ class product extends control
 
         /* Generate data. */
         $showModule              = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
-        $productName             = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
         $productID               = $this->app->tab != 'project' ? $this->product->saveVisitState($productID, $this->products) : $productID;
         $product                 = $this->productZen->getBrowseProduct($productID);
         $project                 = $this->loadModel('project')->getByID($projectID);
@@ -143,7 +142,7 @@ class product extends control
 
         /* Generate data. */
         $moduleID              = $this->productZen->getModuleId4Browse($param, $browseType);
-        $moduleTree            = $this->productZen->getModuleTree4BrowseTODO($projectID, $productID, $branch, $param, $storyType, $browseType);
+        $moduleTree            = $this->productZen->getModuleTree4Browse($projectID, $productID, $branch, $param, $storyType, $browseType);
         $showBranch            = $this->productZen->getShowBranch4Browse($projectID, $productID, $storyType, $isProjectStory);
         $projectProducts       = $this->productZen->getProjectProducts4Browse($projectID, $storyType, $isProjectStory);
         $productPlans          = $this->productZen->getProductPlans4Browse($projectProducts, $projectID, $storyType, $isProjectStory);
@@ -162,6 +161,7 @@ class product extends control
         $storyTasks                     = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $storyBugs                      = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases                     = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+        $productName                    = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
         /* Save session. */
         $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);

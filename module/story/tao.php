@@ -213,4 +213,82 @@ class storyTao extends storyModel
 
         return $relationGroup;
     }
+
+    /**
+     * 批量获取产品所有状态对应的需求总数。
+     * Get stories count of each status by product ID.
+     *
+     * @param  array     $productIDs
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function getStoriesCountByProductIDs(array $productIDs, string $storyType = 'requirement'): array
+    {
+        return $this->dao->select('product, status, count(status) AS count')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('product')->in($productIDs)
+            ->groupBy('product, status')
+            ->fetchGroup('product', 'status');
+    }
+
+    /**
+     * 获取产品所有状态对应的需求总数。
+     * Get stories count of each status by product ID.
+     *
+     * @param  int       $productID
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function getStoriesCountByProductID(int $productID, string $storyType = 'requirement'): array
+    {
+        return $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('product')->eq($productID)
+            ->groupBy('product, status')
+            ->fetchAll('status');
+    }
+
+    /**
+     * 获取所有完成的需求数量。
+     * Get the count of closed stories.
+     *
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function getFinishClosedTotal(string $storyType = 'story'): array
+    {
+        return $this->dao->select('product, count(1) AS finish')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('closedReason')->eq('done')
+            ->groupBy('product')
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取所有未完成的需求数量。
+     * Get the count of unclosed stories.
+     *
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function getUnClosedTotal(string $storyType = 'story'): array
+    {
+        return $this->dao->select('product, count(1) AS unclosed')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('status')->ne('closed')
+            ->groupBy('product')
+            ->fetchPairs();
+    }
 }

@@ -218,60 +218,6 @@ class productTao extends productModel
         return $products;
     }
 
-    /* TODO move to story module. */
-    protected function getStoriesTODO(array $productIDs): array
-    {
-        $stories = $this->dao->select('product, status, count(status) AS count')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('story')
-            ->andWhere('product')->in($productIDs)
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
-
-        return $stories;
-    }
-
-    /* TODO move to story module. */
-    protected function getRequirementsTODO(array $productIDs): array
-    {
-        $requirements = $this->dao->select('product, status, count(status) AS count')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('requirement')
-            ->andWhere('product')->in($productIDs)
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
-
-        return $requirements;
-    }
-
-    /* TODO move to story module. */
-    protected function getFinishClosedStoryTODO(): array
-    {
-        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('closed')
-            ->andWhere('type')->eq('story')
-            ->andWhere('closedReason')->eq('done')
-            ->groupBy('product')
-            ->fetchPairs();
-
-        return $finishClosedStory;
-    }
-
-    /* TODO move to story module. */
-    protected function getUnClosedStoryTODO(): array
-    {
-        $unclosedStory = $this->dao->select('product, count(1) as unclosed')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('story')
-            ->andWhere('status')->ne('closed')
-            ->groupBy('product')
-            ->fetchPairs();
-
-        return $unclosedStory;
-    }
 
     /* TODO move to productplan module. */
     protected function getPlansTODO(array $productIDs): array
@@ -386,16 +332,6 @@ class productTao extends productModel
         return $assignToNull;
     }
 
-    /* TODO move to program module. */
-    protected function getProgramsInTODO(array $programIDs): array
-    {
-        $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
-            ->where('id')->in($programIDs)
-            ->fetchAll('id');
-
-        return $programs;
-    }
-
     /**
      * 获取用于统计的产品列表。
      * Get products list for statistic.
@@ -409,6 +345,8 @@ class productTao extends productModel
      */
     protected function getStatsProducts(array $productIDs, int $programID, string $orderBy, object|null $pager = null): array
     {
+        $this->loadModel('program');
+
         if($orderBy == static::OB_PROGRAM) $products = $this->getPagerProductsWithProgramIn($productIDs, $pager);
         else $products = $this->getPagerProductsIn($productIDs, $pager, $orderBy);
 
@@ -420,7 +358,7 @@ class productTao extends productModel
 
         $programKeys = array(0 => 0);
         foreach($products as $product) $programKeys[] = $product->program;
-        $programs = $this->getProgramsInTODO(array_unique($programKeys));
+        $programs = $this->program->getBaseDataIn(array_unique($programKeys));
 
         foreach($products as $product)
         {
@@ -442,8 +380,9 @@ class productTao extends productModel
      */
     protected function getStatsStoriesAndRequirements(array $productIDs, string $storyType): array
     {
-        $stories      = $this->getStoriesTODO($productIDs);
-        $requirements = $this->getRequirementsTODO($productIDs);
+        $this->loadModel('story');
+        $stories      = $this->story->getStoriesCountByProductIDs($productIDs, 'story');
+        $requirements = $this->story->getStoriesCountByProductIDs($productIDs);
 
         /* Padding the stories to sure all products have records. */
         $emptyStory = array_keys($this->lang->story->statusList);
@@ -933,13 +872,9 @@ class productTao extends productModel
      */
     protected function getStoryStatusCountByID(int $productID, string $storyType = 'story'): array
     {
-        /* TODO move to story module. */
-        $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq($storyType)
-            ->andWhere('product')->eq($productID)
-            ->groupBy('product, status')
-            ->fetchAll('status');
+        $this->loadModel('story');
+
+        $stories = $this->story->getStoriesCountByProductID($productID, $storyType);
 
         /* Padding the stories to sure all status have records. */
         foreach(array_keys($this->lang->story->statusList) as $status)
