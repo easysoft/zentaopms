@@ -2196,29 +2196,30 @@ class projectModel extends model
      * 将数字转换成带单位的数字。
      * Convert budget unit.
      *
-     * @param  float        $budget
+     * @param  float|string $budget
      * @access public
      * @return float|string $projectBudget
      */
-    public function getBudgetWithUnit(float $budget): float|string
+    public function getBudgetWithUnit(float|string $budget): float|string
     {
+        $budget = (float)$budget;
         if($budget < 10000)
         {
-            $budget = round((float)$budget, 2);
+            $budget = round($budget, 2);
             $unit   = '';
         }
         elseif($budget < 100000000 && $budget >= 10000)
         {
-            $budget = round((float)$budget/10000, 2);
+            $budget = round($budget/10000, 2);
             $unit   = $this->lang->project->tenThousand;
         }
         else
         {
-            $budget = round((float)$budget/100000000, 2);
+            $budget = round($budget/100000000, 2);
             $unit   = $this->lang->project->hundredMillion;
         }
 
-        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round((float)$budget, 2);
+        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, 2);
         return $projectBudget;
     }
 
