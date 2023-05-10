@@ -820,9 +820,7 @@ class bugZen extends bug
         }
 
         $this->loadModel('project');
-        $this->loadModel('branch');
         $this->loadModel('execution');
-        $this->loadModel('build');
 
         $product   = $this->product->getByID($bug->product);
         $execution = $this->execution->getByID($bug->execution);
@@ -831,18 +829,10 @@ class bugZen extends bug
         /* Get the affected builds and resolved builds. */
         list($openedBuildPairs, $resolvedBuildPairs) = $this->getEditBuildPairs($bug);
 
-        /* 获取分支列表。*/
-        /* Get the branch options. */
-        $branchPairs = $this->getEditBranchPairs($bug);
-
         /* 获取所属模块列表。*/
         /* Get module option menu. */
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
-
-        /* 获取指派给用户列表。*/
-        /* Get the user pairs for assign. */
-        $assignedToPairs = $this->getEditAssignedToPairs($bug);
 
         /* 获取该 bug 关联产品和分支下的 bug 列表。*/
         /* Get bugs of current product. */
@@ -879,7 +869,7 @@ class bugZen extends bug
         $this->view->bug                   = $bug;
         $this->view->product               = $product;
         $this->view->execution             = $execution;
-        $this->view->branchPairs           = $branchPairs;
+        $this->view->branchPairs           = $this->getEditBranchPairs($bug);
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->projects              = $projects;
@@ -893,7 +883,7 @@ class bugZen extends bug
         $this->view->openedBuildPairs      = $openedBuildPairs;
         $this->view->resolvedBuildPairs    = array('') + $resolvedBuildPairs;
         $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->view->assignedToPairs       = $assignedToPairs;
+        $this->view->assignedToPairs       = $this->getEditAssignedToPairs($bug);
         $this->view->actions               = $this->action->getList('bug', $bug->id);
         $this->display();
     }
