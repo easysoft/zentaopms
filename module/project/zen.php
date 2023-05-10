@@ -90,9 +90,9 @@ class projectZen extends project
     }
 
     /**
-     * Append $project to post data.
+     * Validate $postData and prepare $project for update.
      *
-     * @param  object    $postData
+     * @param  object       $postData
      * @access protected
      * @return object|false
      */
@@ -111,14 +111,15 @@ class projectZen extends project
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        /* Check if products not empty. */
-        if(!$this->checkProductsNotEmpty($this->post->products)) return false;
+        if($oldProject->hasProduct)
+        {
+            /* Check if products not empty. */
+            if(!$this->checkProductsNotEmpty($this->post->products)) return false;
 
-        $project->parent         = (int)$project->parent;
-        $this->post->teamMembers = $project->model == 'kanban' ? $this->post->teamMembers : array();
-
-        /* Check if products and branch valid. */
-        if(!$this->project->checkBranchAndProduct($project->parent, $this->post->products, $this->post->branch)) return false;
+            $project->parent         = (int)$project->parent;
+            /* Check if products and branch valid. */
+            if(!$this->project->checkBranchAndProduct($project->parent, $this->post->products, $this->post->branch)) return false;
+        }
 
         /* Check if work days legtimate. */
         if(!$this->checkWorkdaysLegtimate($project)) return false;
