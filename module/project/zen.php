@@ -133,25 +133,6 @@ class projectZen extends project
     }
 
     /**
-     * Append extra data to postData.
-     *
-     * @param  object $project
-     * @param  object $rawdata
-     * @access protected
-     * @return bool
-     */
-    protected function prepareEditExtras(object $postData): object
-    {
-        $postExtras = new stdclass();
-        $postExtras->plans       = $postData->rawdata->plans;
-        $postExtras->model       = $postData->rawdata->model;
-        $postExtras->products    = $postData->rawdata->products;
-        $postExtras->teamMembers = $postExtras->model == 'kanban' ? $postData->rawdata->teamMembers : array();
-
-        return $postExtras;
-    }
-
-    /**
      * Check product and branch not empty.
      *
      * @param  object $project
