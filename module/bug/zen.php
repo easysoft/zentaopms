@@ -968,6 +968,60 @@ class bugZen extends bug
     }
 
     /**
+     * 确认是否更新 bug 状态。
+     * Confirm to update task.
+     *
+     * @param  int        $bugID
+     * @param  int        $taskID
+     * @access protected
+     * @return array|true
+     */
+    protected function confirm2UpdateTask(int $bugID, int $taskID): array
+    {
+        $task = $this->task->getByID($taskID);
+        if($task->deleted) return true;
+
+        $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+        unset($_GET['onlybody']);
+        $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+        return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+    }
+
+    /**
+     * 删除 bug 后不同的返回结果。
+     * respond after deleting.
+     *
+     * @param  object    $bug
+     * @param  string    $from
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterDelete(object $bug, string $from): array
+    {
+        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess);
+
+        /* 在弹窗中删除 bug 时的返回。*/
+        /* Respond when delete bug in modal.。*/
+        if(isonlybody()) return array('result' => 'success', 'load' => true);
+
+        /* 在任务看板中删除 bug 时的返回。*/
+        /* Respond when delete in task kanban. */
+        if($from == 'taskkanban')
+        {
+            $laneType    = $this->session->executionLaneType ?: 'all';
+            $groupBy     = $this->session->executionGroupBy  ?: 'default';
+            $searchValue = $this->session->taskSearchValue   ?: '';
+            $kanbanData  = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $searchValue);
+            $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
+            $kanbanData  = json_encode($kanbanData[$kanbanType]);
+
+            return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
+        }
+
+        return array('result' => 'success', 'load' => $this->session->bugList ?: inlink('browse', "productID={$bug->product}"));
+    }
+
+    /**
      * 如果不是弹窗，调用该方法为查看bug设置导航。
      * If it's not a iframe, call this method to set menu for view bug page.
      *
