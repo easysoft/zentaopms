@@ -13,8 +13,9 @@ namespace zin;
 
 foreach($stories as $story)
 {
-    $story->status = zget($this->lang->story->statusList, $story->status);
-    $story->stage  = zget($this->lang->story->stageList, $story->stage);
+    $story->status   = zget($this->lang->story->statusList, $story->status);
+    $story->stage    = zget($this->lang->story->stageList, $story->stage);
+    $story->category = zget($this->lang->story->categoryList, $story->category);
 }
 
 panel

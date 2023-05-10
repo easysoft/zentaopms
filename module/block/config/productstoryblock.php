@@ -36,3 +36,9 @@ $config->block->dtable->stories->fieldList['stage']['title']    = $this->lang->s
 $config->block->dtable->stories->fieldList['stage']['width']    = 80;
 $config->block->dtable->stories->fieldList['stage']['align']    = 'center';
 $config->block->dtable->stories->fieldList['stage']['sortType'] = true;
+
+$config->block->dtable->stories->fieldList['category']['name']     = 'category';
+$config->block->dtable->stories->fieldList['category']['title']    = $this->lang->story->category;
+$config->block->dtable->stories->fieldList['category']['width']    = 80;
+$config->block->dtable->stories->fieldList['category']['align']    = 'center';
+$config->block->dtable->stories->fieldList['category']['sortType'] = true;
