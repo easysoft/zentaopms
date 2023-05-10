@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
@@ -16,14 +16,6 @@ title=测试 projectTao::doClosed();
 timeout=0
 cid=1
 
-- 执行project模块的doClosed方法，参数是1, $project, $oldProject1属性 @1
-
-- 执行project模块的doClosed方法，参数是2, $project, $oldProject2属性 @1
-
-- 执行project模块的doClosed方法，参数是3, $project, $oldProject3属性 @1
-
-
-
 */
 
 global $tester;
@@ -37,6 +29,6 @@ $oldProject1 = $tester->project->getByID(1);
 $oldProject2 = $tester->project->getByID(2);
 $oldProject3 = $tester->project->getByID(3);
 
-r($tester->project->doClosed(1, $project, $oldProject1)) && p() && e(1); #测试项目关闭时间realEnd小于今天 返回值1
-r($tester->project->doClosed(2, $project, $oldProject2)) && p() && e(1); #测试项目关闭时间realEnd大于项目开始时间realBegin 返回值1
-r($tester->project->doClosed(3, $project, $oldProject3)) && p() && e(1); #测试项目关闭必填字段不为空
+r($tester->project->doClosed(1, $project, $oldProject1)) && p() && e('1'); #测试项目关闭时间realEnd小于今天 返回值1
+r($tester->project->doClosed(2, $project, $oldProject2)) && p() && e('1'); #测试项目关闭时间realEnd大于项目开始时间realBegin 返回值1
+r($tester->project->doClosed(3, $project, $oldProject3)) && p() && e('1'); #测试项目关闭必填字段不为空

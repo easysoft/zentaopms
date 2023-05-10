@@ -10,13 +10,6 @@ $project = zdTable('project')->config('project')->gen(11);
 title=测试 projectModel->getProgramMaxEnd();
 timeout=0
 cid=1
-pid=1
-
-- 获取二级项目集下唯一项目最大结束时间属性maxEnd @2023-06-12
-
-- 获取一级项目集下项目最大结束时间属性maxEnd @2023-07-21
-
-- 获取二级项目集下多个项目最大结束时间属性maxEnd @2023-05-20
 
 */
 

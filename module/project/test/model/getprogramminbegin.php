@@ -10,13 +10,6 @@ $project = zdTable('project')->config('project')->gen(11);
 title=测试 projectModel->getProgramMinBegin();
 timeout=0
 cid=1
-pid=1
-
-- 获取二级项目集下唯一项目最小开始时间属性maxBegin @2023-05-07
-
-- 获取一级项目集下项目最小开始时间属性maxBegin @2023-04-22
-
-- 获取二级项目集下多个项目最小开始时间属性maxBegin @2023-05-01
 
 */
 

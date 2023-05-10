@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/project.class.php';
 su('admin');
 
@@ -27,18 +27,6 @@ title=测试 projectModel->deleteByTableName();
 timeout=0
 cid=1
 
-- #删除项目编号为1，同时删除项目下文档库 @1
-
-- #删除项目编号为1，同时删除项目下的一个执行1-2 @1
-
-- #删除项目编号为3，同时删除项目下的全部执行3-4 3-5 @1
-
-- #删除项目编号为1，同时删除项目下关联的第一个产品 @1
-
-- #删除项目编号为1，同时删除项目下关联的全部产品 @1
-
-
-
 */
 
 global $tester;
@@ -56,8 +44,8 @@ $project3   = $tester->project->deleteByTableName('zt_project', array_keys($exec
 $project4   = $tester->project->deleteByTableName('zt_product', $product);
 $project5   = $tester->project->deleteByTableName('zt_product', $products);
 
-r($project1) && p() && e(1); #删除项目编号为1，同时删除项目下文档库
-r($project2) && p() && e(1); #删除项目编号为1，同时删除项目下的一个执行1-2
-r($project3) && p() && e(1); #删除项目编号为3，同时删除项目下的全部执行3-4 3-5
-r($project4) && p() && e(1); #删除项目编号为1，同时删除项目下关联的第一个产品
-r($project5) && p() && e(1); #删除项目编号为1，同时删除项目下关联的全部产品
+r($project1) && p() && e('1'); #删除项目编号为1，同时删除项目下文档库
+r($project2) && p() && e('1'); #删除项目编号为1，同时删除项目下的一个执行1-2
+r($project3) && p() && e('1'); #删除项目编号为3，同时删除项目下的全部执行3-4 3-5
+r($project4) && p() && e('1'); #删除项目编号为1，同时删除项目下关联的第一个产品
+r($project5) && p() && e('1'); #删除项目编号为1，同时删除项目下关联的全部产品

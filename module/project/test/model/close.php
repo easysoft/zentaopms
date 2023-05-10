@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 function initData()
@@ -8,10 +8,10 @@ function initData()
     $project = zdTable('project');
     $project->id->range('1-5');
     $project->project->range('1-5');
-    $project->name->prefix("项目")->range('1-5');
-    $project->code->prefix("project")->range('1-5');
-    $project->type->range("project");
-    $project->status->range("wait,doing,suspended,closed");
+    $project->name->prefix('项目')->range('1-5');
+    $project->code->prefix('project')->range('1-5');
+    $project->type->range('project');
+    $project->status->range('wait,doing,suspended,closed');
 
     $project->gen(5);
 }
@@ -21,20 +21,6 @@ function initData()
 title=测试 projectModel->close();
 timeout=0
 cid=1
-
-- 执行$changes1
- - 第0条的field属性 @status
- - 第0条的old属性 @wait
- - 第0条的new属性 @closed
-
-- 执行$changes3
- - 第0条的field属性 @status
- - 第0条的old属性 @suspended
- - 第0条的new属性 @closed
-
-- 查看执行关闭后关闭者变更为admin @admin
-
-- 查看执行关闭后真实结束时间为'2022-10-10' @2022-10-10
 
 */
 
