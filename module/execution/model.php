@@ -4025,17 +4025,14 @@ class executionModel extends model
 
         foreach($dateList as $date)
         {
-            if(!isset($burnData[$date]))
+            if(!isset($burnData[$date]) && ($showDelay ? $date >= $execution->end : $date <= $execution->end))
             {
-                if(($showDelay and $date < $execution->end) or (!$showDelay and $date > $execution->end))
-                {
-                    $set = new stdClass();
-                    $set->name    = $date;
-                    $set->value   = 'null';
-                    $set->$burnBy = 0;
+                $set = new stdclass();
+                $set->name    = $date;
+                $set->value   = 'null';
+                $set->$burnBy = 0;
 
-                    $burnData[$date] = $set;
-                }
+                $burnData[$date] = $set;
             }
         }
 
