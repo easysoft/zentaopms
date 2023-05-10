@@ -7,6 +7,8 @@ su('admin');
 function initData()
 {
     zdTable('todo')->config('getprojectlist')->gen(10);
+    zdTable('task')->gen(0);
+    zdTable('taskspec')->gen(0);
 }
 
 /**
@@ -24,10 +26,10 @@ initData();
 global $tester;
 $tester->loadModel('todo');
 
-$taskData1 = array('id' => 10, 'name' => '开发任务一', 'type' => 'devel', 'execution' => 101);
-$taskData2 = array('id' => 11, 'name' => '开发任务二', 'type' => 'devel', 'execution' => 102);
-$taskData3 = array('id' => 12, 'name' => '开发任务三', 'type' => 'devel', 'execution' => 103);
-$taskData4 = array('id' => 13, 'name' => '开发任务四', 'type' => 'devel', 'execution' => 104);
+$taskData1 = array('id' => 10, 'name' => '开发任务一', 'type' => 'devel', 'execution' => 101, 'estimate' => 0, 'left' => 0);
+$taskData2 = array('id' => 11, 'name' => '开发任务二', 'type' => 'devel', 'execution' => 102, 'estimate' => 0, 'left' => 0);
+$taskData3 = array('id' => 12, 'name' => '开发任务三', 'type' => 'devel', 'execution' => 103, 'estimate' => 0, 'left' => 0);
+$taskData4 = array('id' => 13, 'name' => '开发任务四', 'type' => 'devel', 'execution' => 104, 'estimate' => 0, 'left' => 0);
 
 $task = new taskTest();
 $task->doCreateObject($taskData1);
