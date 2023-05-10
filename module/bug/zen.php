@@ -1008,9 +1008,9 @@ class bugZen extends bug
         /* Respond when delete in task kanban. */
         if($from == 'taskkanban')
         {
-            $laneType    = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-            $groupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-            $searchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+            $laneType    = $this->session->executionLaneType ?: 'all';
+            $groupBy     = $this->session->executionGroupBy  ?: 'default';
+            $searchValue = $this->session->taskSearchValue   ?: '';
             $kanbanData  = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $searchValue);
             $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
             $kanbanData  = json_encode($kanbanData[$kanbanType]);
@@ -1018,7 +1018,7 @@ class bugZen extends bug
             return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
         }
 
-        return array('result' => 'success', 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}"));
+        return array('result' => 'success', 'load' => $this->session->bugList ?: inlink('browse', "productID={$bug->product}"));
     }
 
     /**
