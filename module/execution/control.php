@@ -1445,7 +1445,7 @@ class execution extends control
         list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, $interval, 'Y-m-d', $execution->end);
 
         $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-        $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy, $executionEnd);
+        $chartData    = $this->execution->buildBurnData($executionID, $dateList, $burnBy, $executionEnd);
 
         $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
@@ -2582,7 +2582,7 @@ class execution extends control
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
 
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData    = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
+            $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
         }
 
         /* Load pager. */
@@ -3063,7 +3063,7 @@ class execution extends control
                 /* Get date list. */
                 $executionInfo    = $this->execution->getByID($executionID);
                 list($dateList) = $this->execution->getDateList($executionInfo->begin, $executionInfo->end, 'noweekend');
-                $chartData      = $this->execution->buildBurnData($executionID, $dateList, 'noweekend');
+                $chartData      = $this->execution->buildBurnData($executionID, $dateList);
             }
 
             $this->view->hasBurn    = $hasBurn;

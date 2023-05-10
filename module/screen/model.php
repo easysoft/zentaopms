@@ -1529,7 +1529,7 @@ class screenModel extends model
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
 
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
+            $chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
 
             $execution->chartData = $chartData;
             $executionData[$executionID] = $execution;

@@ -751,7 +751,6 @@ class executionModel extends model
         $oldExecutions = $this->getByIdList($this->post->executionIDList);
         $nameList      = array();
         $codeList      = array();
-        $projectModel  = 'scrum';
 
         $parents = array();
         foreach($oldExecutions as $oldExecution) $parents[$oldExecution->id] = $oldExecution->parent;
@@ -1032,7 +1031,7 @@ class executionModel extends model
 
             if($status == 'wait' and $execution->status != 'wait')
             {
-                $pointOutStages .= $this->changeStatus2Wait($executionID, $selfAndChildren, $siblingList);
+                $pointOutStages .= $this->changeStatus2Wait($executionID, $selfAndChildren);
             }
 
             if($status == 'doing' and $execution->status != 'doing')
@@ -1042,7 +1041,7 @@ class executionModel extends model
 
             if(($status == 'suspended' and $execution->status != 'suspended') or ($status == 'closed' and $execution->status != 'closed'))
             {
-                $pointOutStages .= $this->changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingList);
+                $pointOutStages .= $this->changeStatus2Inactived($executionID, $status, $selfAndChildren);
             }
         }
 
@@ -1054,11 +1053,10 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  array  $selfAndChildren
-     * @param  array  $siblingStages
      * @access public
      * @return string
      */
-    public function changeStatus2Wait($executionID, $selfAndChildren, $siblingStages)
+    public function changeStatus2Wait($executionID, $selfAndChildren)
     {
         $this->loadModel('programplan');
         $this->loadModel('action');
@@ -1122,11 +1120,10 @@ class executionModel extends model
      * @param  int    $executionID
      * @param  strint $status
      * @param  array  $selfAndChildren
-     * @param  array  $siblingStages
      * @access public
      * @return string
      */
-    public function changeStatus2Inactived($executionID, $status, $selfAndChildren, $siblingStages)
+    public function changeStatus2Inactived($executionID, $status, $selfAndChildren)
     {
         $this->loadModel('programplan');
         $this->loadModel('action');
@@ -4821,25 +4818,24 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  array  $dateList
-     * @param  string $type
      * @param  string $burnBy
      * @param  string $executionEnd
      * @access public
      * @return array
      */
-    public function buildBurnData($executionID, $dateList, $type, $burnBy = 'left', $executionEnd = '')
+    public function buildBurnData($executionID, $dateList, $burnBy = 'left', $executionEnd = '')
     {
         $this->loadModel('report');
         $burnBy = $burnBy ? $burnBy : 'left';
 
-        $sets         = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
-        $limitJSON    = '[]';
-        $baselineJSON = '[]';
+        $sets      = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
+        $limitJSON = '[]';
 
-        $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : 0;
-        $firstTime    = !$firstTime && !empty($firstBurn->value) ? $firstBurn->value : 0;
-        $firstTime    = $firstTime == 'null' ? 0 : $firstTime;
+        $firstBurn = empty($sets) ? 0 : reset($sets);
+        $firstTime = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : 0;
+        $firstTime = !$firstTime && !empty($firstBurn->value) ? $firstBurn->value : 0;
+        $firstTime = $firstTime == 'null' ? 0 : $firstTime;
+
         /* If the $executionEnd  is passed, the guide should end of execution. */
         $days         = $executionEnd ? array_search($executionEnd, $dateList) : count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';

@@ -100,7 +100,7 @@ class executionEntry extends entry
                     break;
                 case 'chartdata':
                     list($dateList, $interval) = $this->loadModel('execution')->getDateList($execution->begin, $execution->end, 'noweekend', '0', 'Y-m-d');
-                    $execution->chartData = $this->execution->buildBurnData($executionID, $dateList, 'noweekend', 'left');
+                    $execution->chartData = $this->execution->buildBurnData($executionID, $dateList, 'left');
                     break;
             }
         }
