@@ -3296,7 +3296,7 @@ class executionModel extends model
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
 
-            (int)$lastOrder ++;
+            $lastOrder ++;
 
             $data = new stdclass();
             $data->project = $executionID;
