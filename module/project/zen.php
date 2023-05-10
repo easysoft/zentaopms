@@ -50,28 +50,6 @@ class projectZen extends project
     }
 
     /**
-     * Judge products not empty.
-     *
-     * @param  array   $products
-     * @access protected
-     * @return bool
-     */
-    protected function checkProductsNotEmpty($products): bool
-    {
-        $linkedProductsCount = 0;
-        foreach($products as $product)
-        {
-            if(!empty($product)) $linkedProductsCount++;
-        }
-        if(empty($linkedProductsCount))
-        {
-            dao::$errors[] = $this->lang->project->errorNoProducts;
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Check work days legtimate.
      *
      * @param  object $project
@@ -115,11 +93,11 @@ class projectZen extends project
         if($hasProduct)
         {
             /* Check if products not empty. */
-            if(!$this->checkProductsNotEmpty($this->post->products)) return false;
+            if(!count(array_filter($this->post->products))) return false;
 
-            $project->parent         = (int)$project->parent;
+            $project->parent = (int)$project->parent;
             /* Check if products and branch valid. */
-            if(!$this->project->checkBranchAndProduct($project->parent, $this->post->products, $this->post->branch)) return false;
+            if(!$this->project->checkBranchAndProduct($project->parent, (array)$this->post->products, (array)$this->post->branch)) return false;
         }
 
         /* Check if work days legtimate. */
