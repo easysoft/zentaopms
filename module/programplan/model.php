@@ -182,15 +182,17 @@ class programplanModel extends model
             }
         }
 
-        $project     = $this->loadModel('project')->getByID($projectID);
-        $today       = helper::today();
-        $datas       = array();
-        $planIdList  = array();
-        $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
-        $stageIndex  = array();
+        $project        = $this->loadModel('project')->getByID($projectID);
+        $today          = helper::today();
+        $datas          = array();
+        $planIdList     = array();
+        $isMilestone    = "<icon class='icon icon-flag icon-sm red'></icon> ";
+        $stageIndex     = array();
+        $reviewDeadline = array();
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
+            $reviewDeadline[$plan->id]['stageEnd'] = $plan->end;
 
             $start     = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
             $end       = helper::isZeroDate($plan->end)   ? '' : $plan->end;
@@ -275,6 +277,16 @@ class programplanModel extends model
             $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
             $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
 
+            /* Get lastest task deadline. */
+            if(isset($reviewDeadline[$task->execution]['taskEnd']))
+            {
+                $reviewDeadline[$task->execution]['taskEnd'] = $task->deadline > $reviewDeadline[$task->execution]['taskEnd'] ? $task->deadline : $reviewDeadline[$task->execution]['taskEnd'];
+            }
+            else
+            {
+                $reviewDeadline[$task->execution]['taskEnd'] = $task->deadline;
+            }
+
             $start = $realBegan ? $realBegan : $estStart;
             $end   = $realEnd   ? $realEnd   : $estEnd;
             if(empty($start) and $execution) $start = $execution->begin;
@@ -353,8 +365,9 @@ class programplanModel extends model
         }
 
         /* Build review points tree for ipd project. */
-        if($project->model == 'ipd')
+        if($project->model == 'ipd' and $datas)
         {
+            $this->loadModel('review');
             $reviewPoints = $this->dao->select('*')->from(TABLE_OBJECT)
                 ->where('deleted')->eq('0')
                 ->andWhere('project')->eq($projectID)
@@ -372,6 +385,23 @@ class programplanModel extends model
                     $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
                     if(in_array($point->category, $categories))
                     {
+                        $end = $reviewDeadline[$plan->id]['stageEnd'];
+                        if(strpos($point->category, "TR") !== false)
+                        {
+                            if(isset($reviewDeadline[$plan->id]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$plan->id]['taskEnd']))
+                            {
+                                $end = $reviewDeadline[$plan->id]['taskEnd'];
+                            }
+                            else
+                            {
+                                $end = $this->getReviewDeadline($end);
+                            }
+                        }
+                        elseif(strpos($point->category, "DCP") !== false)
+                        {
+                            $end = $this->getReviewDeadline($end, 2);
+                        }
+
                         $data = new stdclass();
                         $data->id            = $plan->id . '-' . $point->category . '-' . $point->id;
                         $data->type          = 'point';
@@ -380,15 +410,15 @@ class programplanModel extends model
                         $data->attribute     = '';
                         $data->milestone     = '';
                         $data->owner_id      = '';
-                        $data->status        = '';
-                        $data->begin         = helper::today();
-                        $data->deadline      = '';
+                        $data->status        = isset($point->status) ? zget($this->lang->review->statusList, $point->status) : $this->lang->review->wait;
+                        $data->begin         = $end;
+                        $data->deadline      = $end;
                         $data->realBegan     = $point->createdDate;
                         $data->realEnd       = '';;
                         $data->parent        = $plan->id;
                         $data->open          = true;
-                        $data->start_date    = helper::today();
-                        $data->endDate       = helper::today(); 
+                        $data->start_date    = $end;
+                        $data->endDate       = $end; 
                         $data->duration      = 1;
                         $data->color         = '#FC913F';
                         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
@@ -1745,5 +1775,35 @@ class programplanModel extends model
         }
 
         return $siblingStages;
+    }
+
+    /**
+     * Get five days ago.
+     *
+     * @param  string $date
+     * @access public
+     * @return void
+     */
+    public function getReviewDeadline($date, $counter = 5)
+    {
+        if(helper::isZeroDate($date)) return '';
+
+        $weekend_days = [6, 7];
+
+        $timestamp = strtotime($date);
+        $counter   = 0;
+        $this->loadModel('holiday');
+        while($counter < 5)
+        {
+            $timestamp   = strtotime('-1 day', $timestamp);
+            $weekday     = date('N', $timestamp);
+            $currentDate = date('Y-m-d', $timestamp);
+            if(!in_array($weekday, $weekend_days) and !$this->holiday->isHoliday($currentDate))
+            {
+                $counter ++;
+            }
+        }
+
+        return date('Y-m-d', $timestamp);
     }
 }
