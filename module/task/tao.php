@@ -105,14 +105,15 @@ class taskTao extends taskModel
      * @param  int       $taskID
      * @param  string    $field
      * @access protected
-     * @return object|string
+     * @return object|string|false
      */
-    protected function fetchByID(int $taskID, string $field = ''): object|string
+    protected function fetchByID(int $taskID, string $field = ''): object|string|false
     {
-        if(empty($field)) return $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(empty($field)) return $task;
 
-        $taskObj = $this->dao->select(trim($field))->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        return (string)$taskObj->$field;
+        $value = isset($task->$field) ? $task->$field : false;
+        return (string)$value;
     }
 
     /**
