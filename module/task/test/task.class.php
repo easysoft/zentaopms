@@ -2002,12 +2002,12 @@ class taskTest
     }
 
     /**
-     * checkRequired4BatchCreateTest 
-     * 
-     * @param  int    $executionID 
-     * @param  int    $data 
-     * @param  int    $checkRequiredItem 
-     * @param  int    $checkLimitTaskDate 
+     * checkRequired4BatchCreateTest
+     *
+     * @param  int    $executionID
+     * @param  int    $data
+     * @param  int    $checkRequiredItem
+     * @param  int    $checkLimitTaskDate
      * @access public
      * @return void
      */
@@ -2059,5 +2059,24 @@ class taskTest
             return $result;
         }
 
+    }
+
+    /**
+     * 测试更新任务的最后编辑日期和最后编辑者。
+     * Test update last edited date and last edited account of a task.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return object|string
+     */
+    public function updateLastEditedTest(int $taskID): object|string
+    {
+        global $tester;
+        $this->objectModel->updateLastEdited($taskID);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->dao->select('id,lastEditedDate,lastEditedBy')->from(TABLE_TASK)
+            ->where('id')->eq($taskID)
+            ->fetch();
     }
 }
