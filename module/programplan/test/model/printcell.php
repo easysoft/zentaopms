@@ -26,7 +26,7 @@ function call($programplan, $col, $plan, $users, $productID)
 
 $programplan = new programplanTest();
 
-$colIDList = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'output', 'version', 'editedBy');
+$colIDList = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'output', 'version', 'editedBy', 'openedBy', 'actions');
 
 $col = new stdClass();
 $col->id   = $colIDList[0];
@@ -46,25 +46,26 @@ $plan->editedBy  = 'id_desc';
 $users = array();
 
 $matches= call($programplan, $col, $plan, $users, 1);
-r(isset($matches[1][0]) ? $matches[1][0] : 0) && p() && e('001');
+r(isset($matches[1][0]) ? $matches[1][0] : 0) && p() && e('001'); // 验证类型为id 的输出td
 
 $col->id = $colIDList[1];
 $matches = call($programplan, $col, $plan, $users, 1);
 $result  = isset($matches[1][0]) && str_contains($matches[1][0], $plan->name)? 1 : 0;
-r($result) && p() && e('1');
+r($result) && p() && e('1'); // 验证类型为name 的输出td
 
 $col->id = $colIDList[2];
 $matches = call($programplan, $col, $plan, $users, 1);
 $result  = isset($matches[1][0]) && $matches[1][0] == '10%' ? 1 : 0;
-r($result) && p() && e('1');
+r($result) && p() && e('1'); // 验证类型为percent 的输出td
 
 /* $colIDList key 4-9验证方法一致 */
 $col->id = $colIDList[4];
 $matches = call($programplan, $col, $plan, $users, 1);
 $result  = isset($matches[1][0]) && $matches[1][0] == $plan->begin ? 1 : 0;
-r($result) && p() && e('1');
+r($result) && p() && e('1'); // 验证类型为begin 的输出td
 
+/* $colIDList key 10-11验证方法一致 */
 $col->id = $colIDList[10];
 $matches = call($programplan, $col, $plan, $users, 1);
 $result  = isset($matches[1][0]) && $matches[1][0] == $plan->editedBy ? 1 : 0;
-r($result) && p() && e('1');
+r($result) && p() && e('1'); // 验证类型为editedBy 的输出td
