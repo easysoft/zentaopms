@@ -2956,7 +2956,7 @@ class executionModel extends model
 
         /* Link stories. */
         $executionStories = $this->loadModel('story')->getExecutionStoryPairs($executionID);
-        $lastOrder        = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $lastOrder        = (int)$this->dao->select('`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
         $stories          = $this->dao->select("id as story, product, version")->from(TABLE_STORY)->where('id')->in(array_keys($taskStories))->fetchAll('story');
         foreach($taskStories as $storyID)
         {
@@ -2965,8 +2965,10 @@ class executionModel extends model
                 $story = zget($stories, $storyID, '');
                 if(empty($story)) continue;
 
+                $lastOrder ++;
+
                 $story->project = $executionID;
-                $story->order   = ++$lastOrder;
+                $story->order   = $lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
                 if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, 'linked2execution', '', $executionID);
             }
@@ -3294,13 +3296,15 @@ class executionModel extends model
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
 
+            (int)$lastOrder ++;
+
             $data = new stdclass();
             $data->project = $executionID;
             $data->product = (int)$products[$storyID];
             $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
-            $data->order   = (int)++$lastOrder;
+            $data->order   = $lastOrder;
             $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
@@ -3334,12 +3338,14 @@ class executionModel extends model
         {
             if(isset($linkedCases[$caseID])) continue;
 
+            $lastCaseOrder ++;
+
             $object = new stdclass();
             $object->project = $executionID;
             $object->product = $productID;
             $object->case    = $caseID;
             $object->version = $version;
-            $object->order   = ++$lastCaseOrder;
+            $object->order   = $lastCaseOrder;
 
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
