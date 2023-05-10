@@ -206,7 +206,9 @@ class bugZen extends bug
             {
                 if($change['field'] != 'status') continue;
 
-                return array('result' => 'success', 'confirm' => array('note' => $this->lang->bug->remindTask, 'confirmURL' => $this->createLink('task', 'view', "taskID=$bug->toTask"), 'cancelURL' => $this->server->HTTP_REFERER));
+                $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                $cancelURL    = $this->server->http_referer;
+                return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
             }
         }
 
@@ -214,7 +216,7 @@ class bugZen extends bug
         /* Respond after updating in modal. */
         if(isonlybody()) $this->responseInModal($bug->execution, $kanbanGroup);
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('bug', 'view', "bugID=$bugID"));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID=$bugID"));
     }
 
     /**
@@ -259,7 +261,7 @@ class bugZen extends bug
             return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
         }
 
-        return array('result' => 'success', 'closeModal' => true, 'load' => 'parent');
+        return array('result' => 'success', 'closeModal' => true, 'load' => true);
     }
 
     /**
