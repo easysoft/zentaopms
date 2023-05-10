@@ -5766,37 +5766,26 @@ class executionModel extends model
 
         if($status == 'wait')
         {
-            $execution->realBegan     = '';
-            $execution->realEnd       = '';
             $execution->closedBy      = '';
-            $execution->closedDate    = '';
             $execution->canceledBy    = '';
-            $execution->canceledDate  = '';
-            $execution->suspendedDate = '';
         }
 
         if($status == 'doing')
         {
             $execution->realBegan     = helper::today();
-            $execution->realEnd       = '';
             $execution->closedBy      = '';
-            $execution->closedDate    = '';
             $execution->canceledBy    = '';
-            $execution->canceledDate  = '';
-            $execution->suspendedDate = '';
         }
 
         if($status == 'suspended')
         {
             $execution->suspendedDate = helper::now();
             $execution->closedBy      = '';
-            $execution->closedDate    = '';
         }
 
         if($status == 'closed')
         {
             $execution->closedBy   = $this->app->user->account;
-            $execution->closedDate = helper::now();
         }
 
         return $execution;

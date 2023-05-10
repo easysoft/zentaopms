@@ -3,22 +3,22 @@ author: liuchenglong
 version: "1.0"
 fields:
     - field: id
-      range: 1-9
+      range: 1-20
     - field: project
-      range: 0, 1, 0, 3, 3, 3, 3, 3, 3
+      range: 0, 1, 1, 0, 4, 4, 0, 7, 7, 0, 10, 10, 10
     - field: model
-      range: 'scrum, ,waterfall, , ,scrum'
+      range: 'waterfall, , ,waterfall, , ,waterfall, , ,waterfall, , , ,'
     - field: type
-      range: 'project,sprint,project,stage,stage,stage,stage,stage,stage'
+      range: 'project,stage,stage,project,stage,stage,project,stage,stage,project,stage,status,stage'
     - field: status
-      range: 'wait,doing,closed,suspended'
+      range: 'suspended,suspended,wait,suspended,suspended,closed,doing,doing,suspended,wait,wait,wait,wait'
     - field: parent
-      range: 0, 1, 0, 3, 4, 4, 4, 4, 7
+      range: 0, 1, 2, 0, 4, 5, 0, 7, 8, 0, 10, 11, 11
     - field: path
-      range: '`,1,`, `,1,2,`, `,3,`, `,3,4,`, `,3,4,5,`, `,3,4,6,`, `,3,4,7,`, `,3,4,8,`, `,3,4,7,9,`'
+      range: '`,1,`, `,1,2,`, `,1,2,3`, `,4,`, `,4,5,`, `,4,5,6,`, `,7,`, `,7,8,`, `,7,8,9,`, `,10,`, `,10,11,`, `,10,11,12,`, `,10,11,13,`'
     - field: hasProduct
       range: 1, 1, 1, 1, 1, 0
     - field: name
-      range: '项目1, 执行1-2, 项目3, 执行3-4, 执行3-4-5, 执行3-4-6, 执行3-4-7, 执行3-4-8, 执行3-4-7-9'
+      range: '项目1, 执行1-1, 执行1-1-1, 项目2, 执行2-1, 执行2-1-1, 项目3, 执行3-1, 执行3-1-1'
     - field: code
-      range: 'project1, sprint1-2, project3, sprint3-4, sprint3-4-5, psprint3-4-6, sprint3-4-7, sprint3-4-8, spring3-4-7-9'
+      range: 'sprint1, sprint1-1, sprint1-1-1, sprint2, sprint2-1, sprint2-1-1, sprint3, sprint3-1, sprint3-1-1'

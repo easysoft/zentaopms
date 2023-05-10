@@ -1268,7 +1268,9 @@ class programplanModel extends model
 
         $stage   = $this->execution->getByID($stageID);
         $project = $this->project->getByID($stage->project);
-        if(empty($stage) || empty($stage->path) || ($project->model != 'waterfall' && $project->model != 'waterfallplus')) return false;
+
+        if(isset($project->model) && $project->model != 'waterfall' && $project->model != 'waterfallplus') return false;
+        if(empty($stage) || empty($stage->path)) return false;
 
         $action       = strtolower($action);
         $parentIdList = explode(',', trim($stage->path, ','));

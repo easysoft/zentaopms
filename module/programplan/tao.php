@@ -92,7 +92,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'wait')
             {
-                $newParent    = $this->execution->buildExecutionByStatus('wait');
+                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('wait');
                 $parentAction = 'waitbychild';
             }
         }
@@ -100,7 +100,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'closed')
             {
-                $newParent    = $this->execution->buildExecutionByStatus('closed');
+                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('closed');
                 $parentAction = 'closedbychild';
             }
         }
@@ -108,7 +108,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'suspended')
             {
-                $newParent    = $this->execution->buildExecutionByStatus('suspended');
+                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('suspended');
                 $parentAction = 'suspendedbychild';
             }
         }

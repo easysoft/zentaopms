@@ -6,8 +6,8 @@ su('admin');
 
 function initData()
 {
-    zdTable('project')->config('project')->gen(9);
-    zdTable('task')->config('task')->gen(9);
+    zdTable('project')->config('project')->gen(13);
+    zdTable('task')->config('task')->gen(13);
 }
 
 /**
@@ -16,20 +16,18 @@ title=测试 programplanModel->computeProgress();
 timeout=0
 cid=1
 
-- 测试参数=项目id直接返回false @fail
-
-- 测试阶段有子阶段 @success
-
-- 测试阶段有子阶段状态更新为donging属性status @doing
-
 */
 
 initData();
 
 $programplan = new programplanTest();
 
-r($programplan->computeProgressTest('3', 'edit', false))   && p() && e('fail'); // 测试参数=项目id直接返回false
-r($programplan->computeProgressTest('4', 'edit', true))    && p() && e('success'); // 测试阶段有子阶段
-r($programplan->getByIdTest(4))                            && p('status') && e('doing'); // 测试阶段有子阶段状态更新为donging
-r($programplan->computeProgressTest('9', 'edit', true))    && p() && e('success'); // 测试子阶段有子阶段
-r($programplan->getByIdTest(7))                            && p('status') && e('doing'); // 测试子阶段有子阶段状态更新为donging
+r($programplan->computeProgressTest('1', 'edit', false))   && p() && e('success');           // 测试参数=项目id直接continue
+r($programplan->computeProgressTest('2', 'edit', true))    && p() && e('success');           // 测试阶段status=suspended子阶段status=wait
+r($programplan->getByIdTest(2))                            && p('status') && e('wait');      // 测试阶段status:suspended=>wait
+r($programplan->computeProgressTest('5', 'edit', true))    && p() && e('success');           // 测试阶段status=suspended子阶段status=closed
+r($programplan->getByIdTest(5))                            && p('status') && e('closed');    // 测试阶段status:suspended=>closed
+r($programplan->computeProgressTest('8', 'edit', true))    && p() && e('success');           // 测试阶段status=doing子阶段status=suspended
+r($programplan->getByIdTest(8))                            && p('status') && e('suspended'); // 测试阶段status:doing=>suspended
+r($programplan->computeProgressTest('11', 'edit', true))   && p() && e('success');           // 测试阶段status更新为doing
+r($programplan->getByIdTest(11))                           && p('status') && e('doing');     // 测试阶段状态更新为donging
