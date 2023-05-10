@@ -375,19 +375,16 @@ class programplanTest
     }
 
     /**
+     * 测试检查名称唯一性
      * Test check name unique.
      *
-     * @param array $names
+     * @param  array  $names
      * @access public
-     * @return string
+     * @return bool
      */
-    public function checkNameUniqueTest($names)
+    public function checkNameUniqueTest(array $names): bool
     {
-        $objects = $this->objectModel->checkNameUnique($names);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $this->objectModel->checkNameUnique($names);
     }
 
     /**
