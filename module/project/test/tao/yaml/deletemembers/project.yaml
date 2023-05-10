@@ -13,7 +13,7 @@ fields:
     - field: status
       range: 'wait,doing,closed,suspended'
     - field: parent
-      range: 0, 1, 0, 3, 3, 0
+      range: 1, 1, 0, 3, 3, 0
     - field: path
       range: '`,1,`, `,1,2,`, `,3,`, `,3,4,`, `,3,4,5,`, `,6,`'
     - field: hasProduct
@@ -22,3 +22,5 @@ fields:
       range: '项目1, 执行1-2, 项目3, 执行3-4, 执行3-5, 无迭代无产品项目6'
     - field: code
       range: 'project1, sprint1-2, project3, sprint3-4, sprint3-5, project6'
+    - field: openedBy
+      range: 'member1'

@@ -1347,7 +1347,7 @@ class projectModel extends model
         if($oldProject->model == 'kanban')
         {
             $deleteMembers = array_diff(array_keys($oldMembers), array_values($newMembers));
-            $this->projectTao->deleteExtraMembersByProject($projectID, $oldProject->openedBy, $deleteMembers);
+            $this->projectTao->deleteMembers($projectID, $oldProject->openedBy, $deleteMembers);
         }
 
         /* Init member default for update members. */

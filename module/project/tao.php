@@ -773,6 +773,28 @@ class projectTao extends projectModel
     }
 
     /**
+     * 删除团队成员。
+     * Delete Members.
+     *
+     * @param  int       $projectID
+     * @param  int       $openedBy
+     * @param  array     $deleteMembers
+     * @access protected
+     * @return bool
+     */
+    protected function deleteMembers(int $projectID, int $openedBy, array $deleteMembers): bool
+    {
+        $this->dao->delete()->from(TABLE_TEAM)
+            ->where('root')->eq($projectID)
+            ->andWhere('type')->eq('project')
+            ->andWhere('account')->in($deleteMembers)
+            ->andWhere('account')->ne($openedBy)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * 通过项目ID获取任务数量统计。
      * Get the number of tasks associated with the project.
      *

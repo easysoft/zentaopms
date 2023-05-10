@@ -1,0 +1,10 @@
+title: zt_team
+author: guofeilong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-6
+    - field: root
+      range: 1-6
+    - field: account
+      range: 'member1, member2, member3, member4, member5, member6,'
