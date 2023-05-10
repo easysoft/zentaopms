@@ -600,27 +600,6 @@ class taskModel extends model
         if($taskID <= 0) return;
 
         $oldTask = $this->getByID($taskID);
-        if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
-        {
-            dao::$errors[] = $this->lang->task->error->recordMinus;
-            return false;
-        }
-
-        if(!empty($this->config->limitTaskDate))
-        {
-            $this->checkEstStartedAndDeadline($oldTask->execution, $this->post->estStarted, $this->post->deadline);
-            if(dao::isError()) return false;
-        }
-
-        if(!empty($_POST['lastEditedDate']) and $oldTask->lastEditedDate != $this->post->lastEditedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
-
-        /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
-        if(!$this->post->assignedTo and !empty($oldTask->team) and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
-        if(!$oldTask->mode and !$this->post->assignedTo and !empty($_POST['team'])) $_POST['assignedTo'] = $_POST['team'][0];
 
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)
@@ -631,8 +610,6 @@ class taskModel extends model
         }
 
         if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
-
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
