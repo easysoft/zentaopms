@@ -2428,10 +2428,7 @@ class executionModel extends model
         /* Set modules and $browseType. */
         $modules = array();
         if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
-        if($browseType == 'bymodule' or $browseType == 'byproduct')
-        {
-            if(($this->session->taskBrowseType) and ($this->session->taskBrowseType != 'bysearch')) $browseType = $this->session->taskBrowseType;
-        }
+        if(in_array($browseType, array('bymodule', 'byproduct')) && $this->session->taskBrowseType && $this->session->taskBrowseType != 'bysearch') $browseType = $this->session->taskBrowseType;
 
         /* Get tasks. */
         $tasks = array();
