@@ -1409,7 +1409,6 @@ class projectModel extends model
         return !dao::isError();
     }
 
-
     /**
      * 更新项目的影子产品的状态。
      * Update shadow product's status.
