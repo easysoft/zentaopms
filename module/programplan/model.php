@@ -1171,13 +1171,15 @@ class programplanModel extends model
     }
 
     /**
-     * Get the stage set to milestone.
+     *
+     * 通过项目ID获取里程碑信息。
+     * Get milestones by projetc id.
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getMilestones($projectID = 0)
+    public function getMilestones(int $projectID = 0): array
     {
         $milestones = $this->dao->select('id, path')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
@@ -1186,6 +1188,7 @@ class programplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('begin_desc,path')
             ->fetchPairs();
+
         return $this->programplanTao->formatMilestones($milestones, $projectID);
     }
 

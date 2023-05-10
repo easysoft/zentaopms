@@ -219,7 +219,7 @@ class programplanTao extends programplanModel
 
         foreach($milestones as $id => $path)
         {
-            $paths = explode(',', trim($path, ','));
+            $paths     = explode(',', trim($path, ','));
             $stageName = '';
             foreach($paths as $stage)
             {
