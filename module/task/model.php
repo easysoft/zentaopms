@@ -145,7 +145,7 @@ class taskModel extends model
     public function batchCreate(object $execution, array $tasks, array $output): array|false
     {
         /* 检查必填项。 */
-        $tasks = $this->taskTao->checkRequired4BatchCreate($execution, $tasks);
+        $tasks = $this->checkRequired4BatchCreate($execution, $tasks);
         if(!$tasks) return false;
 
         /* Load module and init vars. */
