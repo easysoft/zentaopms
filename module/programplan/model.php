@@ -1112,23 +1112,25 @@ class programplanModel extends model
     }
 
     /**
+     * 是否可以点击.
      * Is clickable.
      *
-     * @param  int    $plan
-     * @param  int    $action
+     * @param  object  $plan
+     * @param  string  $action
      * @static
      * @access public
      * @return bool
      */
-    public static function isClickable($plan, $action)
+    public static function isClickable(object $plan, string $action): bool
     {
-        $action = strtolower($action);
-
-        if($action == 'create')
+        if(strtolower($action) == 'create')
         {
             global $dao;
-            $task = !empty($plan->id) ? $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch() : '';
-            return empty($task) ? true : false;
+
+            $task = '';
+            if(!empty($plan->id)) $task = $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+
+            return empty($task);
         }
 
         return true;
