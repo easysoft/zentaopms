@@ -3353,50 +3353,51 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function linkStories($executionID)
+    public function linkStories($executionID): bool
     {
         $plans = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
             ->fetchPairs('product', 'plan');
 
+        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        $this->session->set('project', $projectID);
+
+        if(!empty($plans)) return false;
+
         $planStories  = array();
         $planProducts = array();
         $this->loadModel('story');
-        if(!empty($plans))
+        $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
+        foreach($plans as $productID => $planIdList)
         {
-            $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
-            foreach($plans as $productID => $planIdList)
+            if(empty($planIdList)) continue;
+            $planIdList = explode(',', $planIdList);
+            $executionBranches = zget($executionProducts, $productID, array());
+            foreach($planIdList as $planID)
             {
-                if(empty($planIdList)) continue;
-                $planIdList = explode(',', $planIdList);
-                $executionBranches = zget($executionProducts, $productID, array());
-                foreach($planIdList as $planID)
+                $planStory = $this->story->getPlanStories($planID);
+                if(!empty($planStory))
                 {
-                    $planStory = $this->story->getPlanStories($planID);
-                    if(!empty($planStory))
+                    foreach($planStory as $id => $story)
                     {
-                        foreach($planStory as $id => $story)
+                        if($story->status != 'active' or (!empty($story->branch) and !empty($executionBranches) and !isset($executionBranches[$story->branch])))
                         {
-                            if($story->status != 'active' or (!empty($story->branch) and !empty($executionBranches) and !isset($executionBranches[$story->branch])))
-                            {
-                                unset($planStory[$id]);
-                                continue;
-                            }
-                            $planProducts[$story->id] = $story->product;
+                            unset($planStory[$id]);
+                            continue;
                         }
-                        $planStories = array_merge($planStories, array_keys($planStory));
+                        $planProducts[$story->id] = $story->product;
                     }
+                    $planStories = array_merge($planStories, array_keys($planStory));
                 }
             }
         }
 
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-        $this->session->set('project', $projectID);
         $this->linkStory($projectID, $planStories, $planProducts);
-
         $this->linkStory($executionID, $planStories, $planProducts);
+
+        return true;
     }
 
     /**
