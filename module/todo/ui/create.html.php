@@ -89,7 +89,7 @@ formPanel
         ),
         formGroup
         (
-            set::class('items-center ml-3'),
+            set::class('items-center ml-4'),
             checkbox
             (
                 set(array
@@ -162,7 +162,7 @@ formPanel
             set::class('config-day flex items-center highlight-suffix'),
             span
             (
-                set::class('input-group-addon ring-0 bg-white'),
+                set::class('input-group-addon pl-4 ring-0 bg-white'),
                 $lang->todo->every
             ),
 
@@ -363,7 +363,7 @@ formPanel
         ),
         formGroup
         (
-            set::class('items-center ml-3'),
+            set::class('items-center ml-4'),
             checkbox
             (
                 set(array
@@ -417,7 +417,7 @@ formPanel
                 ),
                 div
                 (
-                    set::class('input-group-addon fix-border br-0'),
+                    set::class('input-group-addon pl-4 bg-white fix-border br-0'),
                     $lang->todo->pri
                 ),
                 select(set(array
@@ -488,7 +488,7 @@ formPanel
         ),
         div
         (
-            set::class('ml-3 flex items-center'),
+            set::class('ml-4 flex items-center'),
             checkbox
             (
                 set(array
