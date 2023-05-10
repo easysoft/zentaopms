@@ -34,11 +34,12 @@ switch($type)
         break;
 }
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="zh-cn" xml:lang="zh-cn">
 <head>
   <meta charset="UTF-8">
-    <title>单元测试行覆盖率报告</title>
-  </head>
+  <title>单元测试行覆盖率报告</title>
+</head>
 <style>
 body {font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin: 0; padding: 20px; }
 table {border-collapse: collapse; max-width: 100%; width: 100%; margin: 20px 0; }
