@@ -361,7 +361,7 @@ class screenModel extends model
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name; 
+                $fieldName = $field->name;
                 if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
@@ -514,7 +514,7 @@ class screenModel extends model
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name; 
+                $fieldName = $field->name;
 
                 if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
@@ -946,9 +946,6 @@ class screenModel extends model
                 break;
             case 'radar':
                 return $this->buildRadarChart($component, $chart);
-                break;
-            case 'org':
-                return $this->buildOrgChart($component, $chart);
                 break;
             case 'funnel':
                 return $this->buildFunnelChart($component, $chart);
@@ -1474,19 +1471,6 @@ class screenModel extends model
 
             return $this->setComponentDefaults($component);
         }
-    }
-
-    /**
-     * Build org chart.
-     *
-     * @param  object $component
-     * @param  object $chart
-     * @access public
-     * @return object
-     */
-    public function buildOrgChart($component, $chart)
-    {
-        //TODO
     }
 
     /**
