@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 su('admin');
 
-zdTable('project')->config('project')->gen(8);
+zdTable('project')->config('project')->gen(5);
 
 /**
 
@@ -18,5 +18,4 @@ global $tester;
 $tester->loadModel('project');
 $executions = $tester->project->getLatestExecutions();
 
-r($executions[3]->name) && p() && e('项目3');
-r($executions[3]->code) && p() && e('project3');
+r($executions[5]) && p('name,code') && e('项目5,project5');
