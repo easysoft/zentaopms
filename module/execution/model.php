@@ -5329,7 +5329,14 @@ class executionModel extends model
         $disabled = !empty($execution->children) ? ' disabled' : '';
         if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
         {
-            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->close);
+            $ipdDisabled = '';
+            $title = $this->lang->execution->close;
+            if(isset($execution->ipdStage['canClose']) and !$execution->ipdStage['canClose'])
+            {
+                $ipdDisabled = ' disabled ';
+                $title       = $execution->attribute == 'launch' ? $this->lang->execution->disabledTip->launchTip : $this->lang->execution->disabledTip->closeTip;
+            }
+            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . $ipdDisabled . ' iframe', true, '', $title);
         }
         elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
         {
@@ -5453,7 +5460,10 @@ class executionModel extends model
         $menu .= $this->buildMenu('execution', 'activate', $params, $execution, $type, '', '', 'iframe', true);
         $menu .= $this->buildMenu('execution', 'putoff',   $params, $execution, $type, '', '', 'iframe', true);
         $menu .= $this->buildMenu('execution', 'suspend',  $params, $execution, $type, '', '', 'iframe', true);
-        $menu .= $this->buildMenu('execution', 'close',    $params, $execution, $type, '', '', 'iframe', true);
+
+        $canClose = true;
+        if($this->config->systemMode == 'PLM' and in_array($execution->attribute, array_keys($this->lang->stage->ipdTypeList))) $canClose = $this->canStageClose($execution->id);
+        if($canClose) $menu .= $this->buildMenu('execution', 'close',    $params, $execution, $type, '', '', 'iframe', true);
 
         $menu .= "<div class='divider'></div>";
         $menu .= $this->buildFlowMenu('execution', $execution, 'view', 'direct');
