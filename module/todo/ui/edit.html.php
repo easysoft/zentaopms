@@ -38,6 +38,8 @@ if($todo->cycle && $todo->config)
         $todo->config->week = explode(',', $todo->config->week);
         $todo->config->week = array_map('intval', $todo->config->week);
     }
+    if(isset($todo->config->type) && $todo->config->type == 'day' && isset($todo->config->cycleYear)) $todo->date = '';
+    if(isset($todo->config->month) || isset($todo->config->week)) $todo->date = '';
 }
 else
 {
@@ -73,7 +75,7 @@ function buildDateControl(object $todo): mixed
                 (
                     'name'  => 'date',
                     'class' => 'date',
-                    'value' => $todo->date,
+                    'value' => $todo->date == '2030-01-01' ? '' : $todo->date,
                     'type'  => 'date',
                     'width' => '1/4'
                 )),
@@ -92,7 +94,7 @@ function buildDateControl(object $todo): mixed
                     'name'    => 'switchDate',
                     'text'    => $lang->todo->periods['future'],
                     'width'   => '100px',
-                    'checked' => !isset($todo->date)
+                    'checked' => $todo->date == '2030-01-01'
                 )),
                 on::change('togglePending(this)')
             )
@@ -136,7 +138,6 @@ function buildCycleOfDayConfig(object $todo): mixed
                 (
                     set(array
                     (
-                        'id'    => 'date',
                         'name'  => 'date',
                         'type'  => 'date',
                         'value' => $todo->date
@@ -409,6 +410,10 @@ function buildCycleType(object $todo)
         array('text' => $lang->todo->cycleMonth, 'value' => 'month'),
         array('text' => $lang->todo->cycleYear,  'value' => 'year')
     );
+
+    $type = '';
+    if(isset($todo->config->type)) $type = $todo->config->type == 'day' && isset($todo->config->cycleYear) ? 'year' : $todo->config->type;
+
     return formRow
     (
         set::class('cycle-config'),
@@ -422,7 +427,7 @@ function buildCycleType(object $todo)
                 (
                     'name'   => 'config[type]',
                     'id'     => 'cycleType',
-                    'value'  => isset($todo->config->type) ? $todo->config->type : '',
+                    'value'  => $type,
                     'inline' => true,
                     'items'  => $cycleTypeOptions
                 )),
