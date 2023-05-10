@@ -14,11 +14,13 @@ fields:
     - field: end
       range: 1200-1300
     - field: type
-      range: 'custom'
+      range: custom{4},cycle{1}
     - field: cycle
       range: 0
     - field: pri
       range: 3
+    - field: config
+      range: '[]{4},`{"specify":{"month":"0","day":"1"},"month":"14,15,25,26","type":"month","beforeDays":2,"end":"2023-05-31","begin":"2023-05-05"}`'
     - field: name
       range: 1-5
       prefix: '我的待办'
