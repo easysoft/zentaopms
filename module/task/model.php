@@ -3769,6 +3769,62 @@ class taskModel extends model
     }
 
     /**
+     * 批量创建前检查必填项。
+     * Check required fields before batch create tasks.
+     *
+     * @param  object    $execution
+     * @param  object[]  $data
+     * @access protected
+     * @return object[]|false
+     */
+    protected function checkRequired4BatchCreate(object $execution, array $data): array|false
+    {
+        /* 设置必填项。 */
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
+        $requiredFields = trim($requiredFields, ',');
+        $requiredFields = array_filter(explode(',', $requiredFields));
+
+        /* check data. */
+        foreach($data as $task)
+        {
+            /* 检查任务是否开启了起止日期必填的配置(limitTaskDate)。 */
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->checkEstStartedAndDeadline($execution->id, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
+            /* 检查任务截止日期是否为空以及是否小于预计开始日期。 */
+            if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
+            /* 检查任务预计是否为数字类型。 */
+            if($task->estimate && !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            /* 验证必填字段。 */
+            foreach($requiredFields as $field)
+            {
+                if(empty($task->$field))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                    return false;
+                }
+            }
+            if($task->estimate) $task->estimate = (float)$task->estimate;
+        }
+
+        return $data;
+    }
+
+    /**
      * 创建任务后的其他数据处理。
      * Other data processing after task creation.
      *
