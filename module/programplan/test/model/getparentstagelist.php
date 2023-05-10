@@ -1,8 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
+
+function initData()
+{
+    zdTable('project')->config('project')->gen(10);
+    zdTable('projectproduct')->config('projectproduct')->gen(10);
+}
 
 /**
 
@@ -10,21 +15,13 @@ title=测试 programplanModel->getParentStageList();
 cid=1
 pid=1
 
-测试查询项目41 计划701 产品21的父阶段信息 >> 无,阶段31
-测试查询项目42 计划702 产品22的父阶段信息 >> 无,阶段32
-测试查询项目43 计划703 产品23的父阶段信息 >> 无,阶段33
-测试查询项目44 计划704 产品24的父阶段信息 >> 无,阶段34
-测试查询项目45 计划705 产品25的父阶段信息 >> 无,阶段35
-
 */
-$projectIDList = array(41, 42, 43, 44, 45);
-$planIDList    = array(701, 702, 703, 704, 705);
-$productIDList = array(21, 22, 23, 24, 25);
 
-$programplan = new programplanTest();
+initData();
 
-r($programplan->getParentStageListTest($projectIDList[0], $planIDList[0], $productIDList[0])) && p() && e('无,阶段31'); // 测试查询项目41 计划701 产品21的父阶段信息
-r($programplan->getParentStageListTest($projectIDList[1], $planIDList[1], $productIDList[1])) && p() && e('无,阶段32'); // 测试查询项目42 计划702 产品22的父阶段信息
-r($programplan->getParentStageListTest($projectIDList[2], $planIDList[2], $productIDList[2])) && p() && e('无,阶段33'); // 测试查询项目43 计划703 产品23的父阶段信息
-r($programplan->getParentStageListTest($projectIDList[3], $planIDList[3], $productIDList[3])) && p() && e('无,阶段34'); // 测试查询项目44 计划704 产品24的父阶段信息
-r($programplan->getParentStageListTest($projectIDList[4], $planIDList[4], $productIDList[4])) && p() && e('无,阶段35'); // 测试查询项目45 计划705 产品25的父阶段信息
+global $tester;
+$tester->loadModel('programplan');
+
+r($tester->programplan->getParentStageList(1, 10, 2)[2]) && p() && e('执行1-1');   // 测试查询项目1产品2阶段10父阶段信息
+r($tester->programplan->getParentStageList(1, 10, 3)[3]) && p() && e('执行1-1-1'); // 测试查询项目1产品3阶段10父阶段信息
+r($tester->programplan->getParentStageList(4, 10, 6)[6]) && p() && e('执行2-1-1'); // 测试查询项目4产品6阶段10父阶段信息

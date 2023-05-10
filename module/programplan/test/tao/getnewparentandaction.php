@@ -12,7 +12,7 @@ function initData()
 
 /**
 
-title=测试 programplanModel->computeProgress();
+title=测试 programplanTao->computeNewParenAndAction();
 timeout=0
 cid=1
 

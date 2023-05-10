@@ -46,7 +46,7 @@ class programplanTao extends programplanModel
     }
 
     /**
-     * 获取父阶段列表。
+     * 获取父阶段键值对。
      * Get parent stage list.
      *
      * @param  int    $executionID
