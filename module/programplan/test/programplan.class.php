@@ -289,13 +289,14 @@ class programplanTest
     }
 
     /**
-     * Test get the stage set to milestone.
+     * 测试根据项目ID获取里程碑信息。
+     * Test get milestone of project id.
      *
      * @param  int    $projectID
      * @access public
      * @return string
      */
-    public function getMilestonesTest($projectID = 0)
+    public function getMilestonesTest(int $projectID = 0): string
     {
         $objects = $this->objectModel->getMilestones($projectID);
 
