@@ -24,7 +24,7 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuildPairs, $bug->resolvedBuild)));
 js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
@@ -103,7 +103,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <td>
                     <div class='input-group'>
                       <?php echo html::select('product', $products, $product->id, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                      <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
+                      <?php if($product->type != 'normal') echo html::select('branch', $branchPairs, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
                     </div>
                   </td>
                 </tr>
@@ -163,7 +163,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     <?php echo ucfirst($bug->assignedTo);?>
                     <?php else:?>
                     <div class='input-group'>
-                      <?php echo html::select('assignedTo', $assignedToList, $bug->assignedTo, "class='form-control chosen'");?>
+                      <?php echo html::select('assignedTo', $assignedToPairs, $bug->assignedTo, "class='form-control chosen'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
                     </div>
                     <?php endif;?>
@@ -242,7 +242,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->openedBuild;?></th>
                   <td>
                     <div id='openedBuildBox' class='input-group'>
-                      <?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class="picker-select form-control"');?>
+                      <?php echo html::select('openedBuild[]', $openedBuildPairs, $bug->openedBuild, 'size=4 multiple=multiple class="picker-select form-control"');?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
@@ -259,7 +259,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->resolvedBuild;?></th>
                   <td>
                     <div id='resolvedBuildBox' class='input-group'>
-                      <?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control picker-select'");?>
+                      <?php echo html::select('resolvedBuild', $resolvedBuildPairs, $bug->resolvedBuild, "class='form-control picker-select'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
