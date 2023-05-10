@@ -1,0 +1,12 @@
+title: zt_projectproduct
+author: jukui
+version: '1.0'
+fields:
+    - field: project
+      range: 1-10
+    - field: product
+      range: '2'
+    - field: branch
+      range: 0
+    - field: plan
+      range: 0

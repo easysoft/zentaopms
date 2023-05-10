@@ -27,6 +27,7 @@ class programplanTest
     }
 
     /**
+     * 获取阶段列表，并拼接阶段名称返回。
      * Test get plans list.
      *
      * @param  int    $executionID
@@ -36,7 +37,7 @@ class programplanTest
      * @access public
      * @return string
      */
-    public function getStageTest($executionID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
+    public function getStageTest(int $executionID = 0, int $productID = 0, string $browseType = 'all', string $orderBy = 'id_asc'): string
     {
         $objects = $this->objectModel->getStage($executionID, $productID, $browseType, $orderBy);
 

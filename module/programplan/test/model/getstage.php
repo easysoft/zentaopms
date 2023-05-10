@@ -1,8 +1,13 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
+
+zdTable('project')->config('project')->gen(10);
+zdTable('projectproduct')->config('projectproduct')->gen(10);
 
 /**
 
@@ -10,34 +15,19 @@ title=测试 programplanModel->getStage();
 cid=1
 pid=1
 
-测试获取执行41 产品21 browse all的计划键值对 >> ,阶段31,阶段121,阶段211,阶段301,阶段391,阶段481,阶段571,子阶段1
-测试获取执行41 产品21 browse parent的计划键值对 >> ,阶段31,阶段121,阶段211,阶段301,阶段391,阶段481,阶段571
-测试获取执行41 产品21 browse all id desc的计划键值对 >> ,子阶段1,阶段571,阶段481,阶段391,阶段301,阶段211,阶段121,阶段31
-测试获取执行42 产品22 browse all的计划键值对 >> ,阶段32,阶段122,阶段212,阶段302,阶段392,阶段482,阶段572,子阶段2
-测试获取执行42 产品22 browse parent的计划键值对 >> ,阶段32,阶段122,阶段212,阶段302,阶段392,阶段482,阶段572
-测试获取执行43 产品23 browse all的计划键值对 >> ,阶段33,阶段123,阶段213,阶段303,阶段393,阶段483,阶段573,子阶段3
-测试获取执行43 产品23 browse parent的计划键值对 >> ,阶段33,阶段123,阶段213,阶段303,阶段393,阶段483,阶段573
-测试获取执行44 产品24 browse all的计划键值对 >> ,阶段34,阶段124,阶段214,阶段304,阶段394,阶段484,阶段574,子阶段4
-测试获取执行44 产品24 browse parent的计划键值对 >> ,阶段34,阶段124,阶段214,阶段304,阶段394,阶段484,阶段574
-测试获取执行45 产品25 browse all的计划键值对 >> ,阶段35,阶段125,阶段215,阶段305,阶段395,阶段485,阶段575,子阶段5
-测试获取执行45 产品25 browse parent的计划键值对 >> ,阶段35,阶段125,阶段215,阶段305,阶段395,阶段485,阶段575
-
 */
-$executionIDList = array(41, 42, 43, 44, 45);
-$productIDList   = array(21, 22, 23, 24, 25);
-$browseTypeList  = array('all', 'parent');
-$order           = 'id_desc';
+$IDList        = array(2, 3, 5);
+$productIDList = array(2, 2, 2, 2);
+$typeList      = array('all', 'parent');
+$order         = 'id_desc';
 
 $programplan = new programplanTest();
 
-r($programplan->getStageTest($executionIDList[0], $productIDList[0], $browseTypeList[0]))         && p() && e(',阶段31,阶段121,阶段211,阶段301,阶段391,阶段481,阶段571,子阶段1'); // 测试获取执行41 产品21 browse all的计划键值对
-r($programplan->getStageTest($executionIDList[0], $productIDList[0], $browseTypeList[1]))         && p() && e(',阶段31,阶段121,阶段211,阶段301,阶段391,阶段481,阶段571');         // 测试获取执行41 产品21 browse parent的计划键值对
-r($programplan->getStageTest($executionIDList[0], $productIDList[0], $browseTypeList[0], $order)) && p() && e(',子阶段1,阶段571,阶段481,阶段391,阶段301,阶段211,阶段121,阶段31'); // 测试获取执行41 产品21 browse all id desc的计划键值对
-r($programplan->getStageTest($executionIDList[1], $productIDList[1], $browseTypeList[0]))         && p() && e(',阶段32,阶段122,阶段212,阶段302,阶段392,阶段482,阶段572,子阶段2'); // 测试获取执行42 产品22 browse all的计划键值对
-r($programplan->getStageTest($executionIDList[1], $productIDList[1], $browseTypeList[1]))         && p() && e(',阶段32,阶段122,阶段212,阶段302,阶段392,阶段482,阶段572');         // 测试获取执行42 产品22 browse parent的计划键值对
-r($programplan->getStageTest($executionIDList[2], $productIDList[2], $browseTypeList[0]))         && p() && e(',阶段33,阶段123,阶段213,阶段303,阶段393,阶段483,阶段573,子阶段3'); // 测试获取执行43 产品23 browse all的计划键值对
-r($programplan->getStageTest($executionIDList[2], $productIDList[2], $browseTypeList[1]))         && p() && e(',阶段33,阶段123,阶段213,阶段303,阶段393,阶段483,阶段573');         // 测试获取执行43 产品23 browse parent的计划键值对
-r($programplan->getStageTest($executionIDList[3], $productIDList[3], $browseTypeList[0]))         && p() && e(',阶段34,阶段124,阶段214,阶段304,阶段394,阶段484,阶段574,子阶段4'); // 测试获取执行44 产品24 browse all的计划键值对
-r($programplan->getStageTest($executionIDList[3], $productIDList[3], $browseTypeList[1]))         && p() && e(',阶段34,阶段124,阶段214,阶段304,阶段394,阶段484,阶段574');         // 测试获取执行44 产品24 browse parent的计划键值对
-r($programplan->getStageTest($executionIDList[4], $productIDList[4], $browseTypeList[0]))         && p() && e(',阶段35,阶段125,阶段215,阶段305,阶段395,阶段485,阶段575,子阶段5'); // 测试获取执行45 产品25 browse all的计划键值对
-r($programplan->getStageTest($executionIDList[4], $productIDList[4], $browseTypeList[1]))         && p() && e(',阶段35,阶段125,阶段215,阶段305,阶段395,阶段485,阶段575');         // 测试获取执行45 产品25 browse parent的计划键值对
+r($programplan->getStageTest($IDList[0], $productIDList[0], $typeList[0]))         && p() && e(',新阶段a子1,新阶段a子2,新阶段a子3'); // 测试获取阶段2 产品2 all的名称
+r($programplan->getStageTest($IDList[0], $productIDList[0], $typeList[1]))         && p() && e(',新阶段a子1,新阶段a子3'); // 测试获取阶段2 产品2 parent的名称
+r($programplan->getStageTest($IDList[0], $productIDList[0], $typeList[0], $order)) && p() && e(',新阶段a子3,新阶段a子2,新阶段a子1'); // 测试获取阶段2 产品2 parent id倒叙的名称
+r($programplan->getStageTest($IDList[1], $productIDList[1], $typeList[0]))         && p() && e(',新阶段a子1子1'); // 测试获取阶段3 产品2 all的名称
+r($programplan->getStageTest($IDList[1], $productIDList[1], $typeList[1]))         && p() && e(',新阶段a子1子2'); // 测试获取阶段3 产品2 parent的名称
+r($programplan->getStageTest($IDList[2], $productIDList[2], $typeList[0]))         && p() && e(',新阶段b子1,新阶段b子2'); // 测试获取阶段5 产品2 all的名称
+r($programplan->getStageTest($IDList[2], $productIDList[2], $typeList[1]))         && p() && e(',新阶段b子1'); // 测试获取阶段5 产品2 parent的名称
+r($programplan->getStageTest($IDList[2], $productIDList[2], $typeList[0], $order)) && p() && e(',新阶段b子2,新阶段b子1'); // 测试获取阶段2 产品2 all id倒叙的名称

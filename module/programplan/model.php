@@ -28,32 +28,19 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段列表。
      * Get plans list.
      *
-     * @param  int     $executionID
-     * @param  int     $productID
-     * @param  string  $browseType all|parent
-     * @param  string  $orderBy
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $browseType all|parent
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getStage($executionID = 0, $productID = 0, $browseType = 'all', $orderBy = 'id_asc')
+    public function getStage(int $executionID = 0, int $productID = 0, string $browseType = 'all', string $orderBy = 'id_asc'): array
     {
-        if(empty($executionID)) return array();
-        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
-
-        $plans = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('1 = 1')
-            ->beginIF($projectModel != 'waterfallplus')->andWhere('t1.type')->eq('stage')->fi()
-            ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
-            ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->fetchAll('id');
-
+        $plans = $this->programplanTao->getStageListBy($executionID, $productID, $browseType, $orderBy);
         return $this->processPlans($plans);
     }
 
@@ -445,7 +432,7 @@ class programplanModel extends model
      *
      * @param  array  $plans
      * @access public
-     * @return object
+     * @return array
      */
     private function processPlans(array $plans)
     {
