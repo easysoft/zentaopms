@@ -1502,7 +1502,7 @@ class projectModel extends model
         /* Update relation info of this project. */
         $this->updateUserView($projectID, $project->acl);                     // 更新用户视图。
         $this->updateShadowProduct($project, $oldProject);                    // 更新影子产品关联信息。
-        $this->updateWhitelist($project, $oldProject);                        // 更新关联的白名单列表
+        $this->updateWhitelist($project, $oldProject);                        // 更新关联的白名单列表。
         $this->updateProductStage($projectID, $oldProject->stageBy);          // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
