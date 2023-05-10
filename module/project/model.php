@@ -1217,7 +1217,7 @@ class projectModel extends model
         if($postData->rawdata->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $postData->rawdata->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')

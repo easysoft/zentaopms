@@ -19,16 +19,15 @@ class projectZen extends project
      */
     protected function prepareCreateExtras(object $postData): object|false
     {
-        $rawdata = $postData->rawdata;
         $project = $postData->setDefault('status', 'wait')
-            ->setIF($rawdata->delta == 999, 'end', LONG_TIME)
-            ->setIF($rawdata->delta == 999, 'days', 0)
-            ->setIF($rawdata->acl   == 'open', 'whitelist', '')
-            ->setIF(!isset($rawdata->whitelist), 'whitelist', '')
-            ->setIF(!isset($rawdata->multiple), 'multiple', '1')
+            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
+            ->setIF($this->post->delta == 999, 'days', 0)
+            ->setIF($this->post->acl   == 'open', 'whitelist', '')
+            ->setIF(!isset($this->post->whitelist), 'whitelist', '')
+            ->setIF(!isset($this->post->multiple), 'multiple', '1')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
-            ->setDefault('team', $rawdata->name)
+            ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
@@ -43,9 +42,9 @@ class projectZen extends project
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
 
-        if(!$this->checkProductAndBranch($project, $rawdata))  return false;
-        if(!$this->checkDaysAndBudget($project, $rawdata))     return false;
-        if(!$this->checkProductNameUnqiue($project, $rawdata)) return false;
+        if(!$this->checkProductAndBranch($project, $this->post))  return false;
+        if(!$this->checkDaysAndBudget($project, $this->post))     return false;
+        if(!$this->checkProductNameUnqiue($project, $this->post)) return false;
 
         return $project;
     }
