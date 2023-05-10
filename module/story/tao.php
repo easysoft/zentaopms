@@ -12,57 +12,6 @@ declare(strict_types=1);
 class storyTao extends storyModel
 {
     /**
-     * 获取产品或项目关联的用户需求跟踪矩阵。
-     * Get requirements track.
-     *
-     * @param  int         $productID
-     * @param  string|int  $branch
-     * @param  int         $projectID
-     * @param  object|null $pager
-     * @access protected
-     * @return int[]
-     */
-    protected function getRequirements4Track(int $productID, string|int $branch, int $projectID, object|null $pager = null): array
-    {
-        if(empty($this->config->URAndSR)) return array();
-
-        /* 获取关联产品或项目的用户需求。 */
-        $rawPageID = $pager->pageID;
-        if(empty($projectID))  $requirements = $this->getProductStories($productID, $branch, 0, 'all', 'requirement', 'id_desc', true, '', $pager);
-        if(!empty($projectID)) $requirements = $this->getProjectRequirements($productID, $project, $pager);
-
-        /* 如果页码发生变化，说明查出的用户需求还是上一页的数据。当前页没有用户需求数据。 */
-        if($pager->pageID != $rawPageID)
-        {
-            $pager->pageID = $rawPageID;
-            return array();
-        }
-
-        /* 获取关联项目的研发需求。*/
-        $projectStories = array();
-        if($projectID) $projectStories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story');
-
-        /* 获取用户需求细分的研发需求。 */
-        $requirementStories = $this->batchGetRelations(array_keys($requirements), 'requirement', array('id', 'title', 'parent'));
-
-        /* 根据用户需求，构造跟踪矩阵信息。*/
-        foreach($requirements as $requirement)
-        {
-            $stories      = zget($requirementStories, $requirement->id, array());
-            $trackStories = array();
-            foreach($stories as $id => $story)
-            {
-                if($projectStories and !isset($projectStories[$id])) continue;
-                $trackStories[$id] = $this->buildStoryTrack($story, $projectID);
-            }
-
-            $requirement->track = $trackStories;
-        }
-
-        return $requirements;
-    }
-
-    /**
      * 获取项目研发需求关联的用户需求。
      * Get project requirements.
      *
@@ -115,7 +64,7 @@ class storyTao extends storyModel
      * @access public
      * @return array
      */
-    public function getRelation($storyID, $storyType, $fields = array()): array
+    public function getRelation(int $storyID, string $storyType, array $fields = array()): array
     {
         /* 初始化查询条件变量。*/
         $BType       = $storyType == 'story' ? 'requirement' : 'story';
@@ -271,6 +220,8 @@ class storyTao extends storyModel
      */
     protected function buildStoryTrack(object $story, int $projectID = 0): object
     {
+        if(count(get_object_vars($story)) == 0) return $story;
+
         /* 获取关联需求的用例、Bug、任务。 */
         $track = new stdclass();
         $track->parent = $story->parent;
@@ -301,11 +252,11 @@ class storyTao extends storyModel
      * @access protected
      * @return string
      */
-    protected function buildProductsCondition(string|int $productIdList, array|string|int $branch): string
+    protected function buildProductsCondition(string|int $productIdList, array|string|int $branch = 'all'): string
     {
         /* 如果查询所有分支，直接用 idList 条件。 */
-        if(empty($productIdList)) return '1=1';
-        if($branch === 'all') return '`product` ' . helper::dbIN($productIdList);
+        if(is_int($productIdList)) $productIdList = (string)$productIdList;
+        if(empty($productIdList) or $branch === 'all' or $branch === '') return '`product` ' . helper::dbIN($productIdList);
 
         /* 将产品分类为正常产品和多分支产品。 */
         $branchProducts = array();
@@ -339,7 +290,7 @@ class storyTao extends storyModel
     {
         /* For requirement children. */
         $relationGroups = array();
-        if($type == 'requirement') $relationGroups = $this->storyTao->batchGetRelations(array_keys($stories), $type, array('*'));
+        if($type == 'requirement') $relationGroups = $this->batchGetRelations(array_keys($stories), $type, array('*'));
 
         foreach($stories as $storyID => $story)
         {

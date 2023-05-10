@@ -3,18 +3,14 @@
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 su('admin');
 
+zdTable('product')->gen(50);
+zdTable('story')->gen(100);
+
 /**
 
 title=测试 storyModel->getProductStories();
 cid=1
 pid=1
-
-获取产品1下的所有软件需求数量 >> 2
-获取产品1下的所有用户需求数量 >> 2
-获取产品2可关联的需求数量 >> 1
-查看通过产品1获取的软件需求的type、product、module字段 >> story,1,1822
-查看通过产品1获取的用户需求的type、product、module字段 >> requirement,1,1821
-查看通过产品3获取的软件需求的type、product、module字段 >> story,3,1830
 
 */
 

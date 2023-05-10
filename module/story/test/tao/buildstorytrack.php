@@ -1,0 +1,76 @@
+#!/usr/bin/env php
+<?php
+include dirname(__FILE__, 5) . "/test/lib/init.php";
+
+$case = zdTable('case');
+$case->story->range(1);
+$case->gen(5);
+
+$bug = zdTable('bug');
+$bug->story->range(1);
+$bug->gen(5);
+
+$task = zdTable('task');
+$task->story->range(1);
+$task->gen(5);
+
+$design = zdTable('design');
+$design->story->range(1);
+$design->gen(5);
+
+$relation = zdTable('relation');
+$relation->AID->range('1-5');
+$relation->AType->range('design');
+$relation->BID->range('1-5');
+$relation->BType->range('commit');
+$relation->gen(5);
+
+zdTable('repohistory')->gen(5);
+
+/**
+
+title=测试 storyModel->buildStoryTrack();
+cid=1
+pid=1
+
+*/
+
+global $tester;
+$storyModel = $tester->loadModel('story');
+
+$track = $storyModel->buildStoryTrack(new stdclass());
+r(count(get_object_vars($track))) && p() && e('0');
+
+$storyModel->config->edition = 'open';
+$story = new stdclass();
+$story->id     = 1;
+$story->parent = 0;
+$story->title  = 'test';
+$track = $storyModel->buildStoryTrack($story);
+r(count($track->cases))     && p() && e('5');
+r(count($track->bugs))      && p() && e('5');
+r(count($track->tasks))     && p() && e('5');
+r(isset($track->designs))   && p() && e('0');
+r(isset($track->revisions)) && p() && e('0');
+
+$track = $storyModel->buildStoryTrack($story, 11);
+r(count($track->cases))     && p() && e('5');
+r(count($track->bugs))      && p() && e('5');
+r(count($track->tasks))     && p() && e('1');
+r(isset($track->designs))   && p() && e('0');
+r(isset($track->revisions)) && p() && e('0');
+
+$storyModel->config->edition = 'max';
+$track = $storyModel->buildStoryTrack($story);
+r(count($track->cases))     && p() && e('5');
+r(count($track->bugs))      && p() && e('5');
+r(count($track->tasks))     && p() && e('5');
+r(count($track->designs))   && p() && e('5');
+r(count($track->revisions)) && p() && e('5');
+
+$track = $storyModel->buildStoryTrack($story, 11);
+r(count($track->cases))     && p() && e('5');
+r(count($track->bugs))      && p() && e('5');
+r(count($track->tasks))     && p() && e('1');
+r(count($track->designs))   && p() && e('5');
+r(count($track->revisions)) && p() && e('5');

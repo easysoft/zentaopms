@@ -3450,7 +3450,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = NULL, $type = '', $topIdList = array(), $browseType, &$executionSql = NULL)
+    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = NULL, $type = '', $topIdList = array(), $browseType = '', &$executionSql = NULL)
     {
         /* Get list of module and its children module. */
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';

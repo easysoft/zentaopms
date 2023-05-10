@@ -66,11 +66,9 @@ fields:
     format: ""
   - field: editedDate
     note: "编辑者"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: assignedTo
     note: "指派给"
     range: ""
@@ -87,11 +85,9 @@ fields:
     format: ""
   - field: assignedDate
     note: "指派日期"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: deleted
     note: "是否删除"
     range: 0
