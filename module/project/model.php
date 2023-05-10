@@ -873,16 +873,19 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目ID获取分支分组。
      * Get branch group by project id.
      *
-     * @param  int          $projectID
-     * @param  array|string $productIdList
+     * @param  int   $projectID
+     * @param  array $productIdList
+     *
      * @access public
      * @return array
      */
-    public function getBranchGroupByProject($projectID, $productIdList)
+    public function getBranchGroupByProject(int $projectID, array $productIdList): array
     {
-        return $this->dao->select('t1.product as productID, t1.branch as branchID, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('t1.product as productID, t1.branch as branchID, t2.*')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t2.deleted')->eq(0)

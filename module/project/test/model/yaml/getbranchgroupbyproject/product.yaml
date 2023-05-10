@@ -1,0 +1,8 @@
+title: zt_product
+author: liuhong
+version: "1.0"
+fields:
+    - field: id
+      range: 1, 2, 3
+    - field: type
+      range: 'branch'
