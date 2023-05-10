@@ -5244,12 +5244,9 @@ class executionModel extends model
         if(empty($execution->children))
         {
             echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name, '', "class='text-ellipsis' title='{$execution->name}'");
-            if(!helper::isZeroDate($execution->end))
+            if(!helper::isZeroDate($execution->end) && $execution->status != 'closed')
             {
-                if($execution->status != 'closed')
-                {
-                    echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
-                }
+                echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
             }
         }
         else
