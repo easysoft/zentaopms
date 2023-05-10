@@ -1957,7 +1957,7 @@ class taskTest
      * 拆分已消耗的任务。
      * split the consumed task.
      *
-     * @param  object $parentTaskID
+     * @param  int    $parentTaskID
      * @param  string $testType     subTaskEffort|childrenTask
      * @access public
      * @return object
