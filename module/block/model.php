@@ -56,7 +56,7 @@ class blockModel extends model
     /**
      * 获取被永久关闭的区块数据。
      * Get closed block pairs.
-     * 
+     *
      * @param  string $closedBlock
      * @access public
      * @return array
@@ -73,7 +73,7 @@ class blockModel extends model
 
             list($moduleName, $blockKey) = explode('|', $block);
             if($moduleName == $blockKey)
-            { 
+            {
                 $blockPairs[$block] = $this->lang->block->moduleList[$moduleName];
             }
             else
@@ -91,8 +91,8 @@ class blockModel extends model
     /**
      * 获取后台信息区块参数信息。
      *  get admin information block parameter information.
-     * 
-     * @param  string $startDate 
+     *
+     * @param  string $startDate
      * @access public
      * @return array|false
      */
@@ -105,7 +105,7 @@ class blockModel extends model
             ->andWhere('module')->eq('zentao')
             ->andWhere('code')->in('plugin,patch,publicclass,news')
             ->beginIF($startDate)->andWhere('createdDate')->ge($startDate)->fi()
-            ->fetchPairs(); 
+            ->fetchPairs();
     }
 
     /**

@@ -145,10 +145,10 @@ class block extends control
     /**
      * 设置一个区块的大小。
      * Resize a block.
-     * 
-     * @param  string $blockID 
-     * @param  string $type 
-     * @param  string $data 
+     *
+     * @param  string $blockID
+     * @param  string $type
+     * @param  string $data
      * @access public
      * @return void
      */
@@ -281,16 +281,10 @@ class block extends control
         if(method_exists('blockZen', $function)) $this->blockZen->$function($block);
 
         /* 补全 moreLink 信息。 */
-        $module   = $block->module;
-        $moreLink = '';
-        if(isset($this->config->block->modules[$module]->moreLinkList->{$code}))
-        {
-            list($moduleName, $method, $vars) = explode('|', sprintf($this->config->block->modules[$module]->moreLinkList->{$code}, isset($block->params->type) ? $block->params->type : ''));
-            $this->view->moreLink = $this->createLink($moduleName, $method, $vars);
-        }
+        $this->blockZen->createMoreLink($block, 0);
 
         /* 组织渲染页面需要的数据。*/
-        $this->view->moreLink       = $moreLink;
+        $this->view->moreLink       = $block->moreLink;
         $this->view->title          = $block->title;
         $this->view->block          = $block;
         $this->view->longBlock      = $this->block->isLongBlock($block);

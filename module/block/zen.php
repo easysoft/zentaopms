@@ -188,7 +188,7 @@ class blockZen extends block
      * @access protected
      * @return object
      */
-    private function createMoreLink(object $block, int $projectID): object
+    protected function createMoreLink(object $block, int $projectID): object
     {
         $module = empty($block->module) ? 'common' : $block->module;
 
@@ -202,7 +202,15 @@ class blockZen extends block
             $block->moreLink = $this->createLink($moduleName, $method, $vars);
             if($moduleName == 'my' && strpos($this->config->block->workMethods, $method) !== false)
             {
-                $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
+                /* 处理研发需求列表区块点击更多后的跳转连接。 */
+                if($moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo')
+                {
+                    $block->moreLink = $this->createLink('my', 'contribute', 'module=story&type=' . $block->params->type); // 当指派给我时跳转到贡献中由我创建。
+                }
+                else
+                {
+                    $block->moreLink = $this->createLink($moduleName, 'work', 'mode=' . $method . '&' . $vars);
+                }
             }
             elseif($moduleName == 'project' && $method == 'dynamic')
             {
