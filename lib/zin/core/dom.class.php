@@ -37,8 +37,11 @@ class dom
 
     public $buildList = null;
 
+    public $buildListInner = false;
+
     /**
      * Construct the dom object.
+     *
      * @param  wg                  $wg
      * @param  array               $children
      * @param  array|string|object $selectors
@@ -120,6 +123,7 @@ class dom
     {
         return $this->wg->isMatch($selector);
     }
+
     /**
      * Build the children dom list.
      * @access public
@@ -127,7 +131,7 @@ class dom
      */
     public function build()
     {
-        if($this->buildList !== null) return $this->buildList;
+        if($this->buildList !== null && $this->buildListInner === $this->renderInner) return $this->buildList;
 
         if(empty($this->selectors) && !empty($this->dataCommands))
         {
@@ -144,7 +148,8 @@ class dom
 
         if(!empty($this->selectors)) $list = static::filter($list, $this->selectors);
 
-        $this->buildList = $list;
+        $this->buildList      = $list;
+        $this->buildListInner = $this->renderInner;
         return $list;
     }
 
@@ -226,7 +231,7 @@ class dom
         {
             foreach($this->dataCommands as $name => $command)
             {
-                $output[] = array('name' => $name, 'data' => data($command));
+                $output[] = array('name' => $name, 'data' => data($command), 'type' => 'command');
             }
         }
 
@@ -324,6 +329,7 @@ class dom
 
     /**
      * Filter the dom list with selector.
+     *
      * @param  array  $list
      * @param  object $selector
      * @param  array  $filteredList
@@ -341,11 +347,13 @@ class dom
 
             if($item->wg->isMatch($selector))
             {
-                $item->renderInner  = $selector->inner ?? false;
-                $item->renderType   = $selector->type ?? null;
-                $item->dataGetters  = $selector->data ?? null;
-                $filteredList[]     = $item->wg->gid;
-                $results[]          = $item;
+                $item->selector    = $selector;
+                $item->renderInner = isset($selector->inner) ? $selector->inner : false;
+                $item->renderType  = isset($selector->type) ? $selector->type : null;
+                $item->dataGetters = isset($selector->data) ? $selector->data : null;
+
+                $filteredList[]    = $item->wg->gid;
+                $results[]         = $item;
             }
             else
             {
@@ -361,6 +369,14 @@ class dom
         return $results;
     }
 
+    /**
+     * Filter the dom list with selectors.
+     *
+     * @param  array  $domList
+     * @param  array  $selectors
+     * @access public
+     * @return array
+     */
     public static function filter(&$domList, $selectors)
     {
         if(empty($selectors)) return $domList;
@@ -370,7 +386,7 @@ class dom
         foreach($selectors as $selector)
         {
             $results = static::filterList($domList, $selector, $filteredList);
-            if(!empty($results)) $list[$selector->name] = $results;
+            $list[$selector->name] = $results;
         }
 
         return $list;

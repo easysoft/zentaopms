@@ -68,14 +68,15 @@ $thismonth  = $todo->getListTest($typeList[4]) == $thisMonthNum  ? '1' : '0';
 $lastmonth  = $todo->getListTest($typeList[5]) == $lastMonthNum  ? '1' : '0';
 $thisseason = $todo->getListTest($typeList[6]) == $thisSeasonNum ? '1' : '0';
 
-r($thisweek)  && p() && e('1'); // 获取type为thisweek 当前用户的代办数量
-r($lastweek)  && p() && e('1'); // 获取type为lastweek 当前用户的代办数量
-r($thismonth) && p() && e('1'); // 获取type为thismonth 当前用户的代办数量
-r($lastmonth) && p() && e('1'); // 获取type为lastmonth 当前用户的代办数量
+r($thisweek)   && p() && e('1'); // 获取type为thisweek   当前用户的待办数量
+r($lastweek)   && p() && e('1'); // 获取type为lastweek   当前用户的待办数量
+r($thismonth)  && p() && e('1'); // 获取type为thismonth  当前用户的待办数量
+r($lastmonth)  && p() && e('1'); // 获取type为lastmonth  当前用户的待办数量
+r($thisseason) && p() && e('1'); // 获取type为thisseason 当前用户的待办数量
 
-r($todo->getListTest($typeList[0]))  && p() && e('1'); // 获取type为today 当前用户的代办数量
-r($todo->getListTest($typeList[1]))  && p() && e('2'); // 获取type为yesterday 当前用户的代办数量
-r($todo->getListTest($typeList[7]))  && p() && e('9'); // 获取type为thisyear 当前用户的代办数量
-r($todo->getListTest($typeList[8]))  && p() && e('0'); // 获取type为future 当前用户的代办数量
-r($todo->getListTest($typeList[9]))  && p() && e('9'); // 获取type为before 当前用户的代办数量
-r($todo->getListTest($typeList[10])) && p() && e('0'); // 获取type为cycle 当前用户的代办数量
+r($todo->getListTest($typeList[0]))  && p() && e('1'); // 获取type为today 当前用户的待办数量
+r($todo->getListTest($typeList[1]))  && p() && e('2'); // 获取type为yesterday 当前用户的待办数量
+r($todo->getListTest($typeList[7]))  && p() && e('9'); // 获取type为thisyear 当前用户的待办数量
+r($todo->getListTest($typeList[8]))  && p() && e('0'); // 获取type为future 当前用户的待办数量
+r($todo->getListTest($typeList[9]))  && p() && e('9'); // 获取type为before 当前用户的待办数量
+r($todo->getListTest($typeList[10])) && p() && e('0'); // 获取type为cycle 当前用户的待办数量

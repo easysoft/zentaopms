@@ -90,8 +90,8 @@ formPanel
         set::label($lang->project->code),
         set::strong(true),
         set::placeholder($lang->project->inputProjectCode)
-    ) : NULL,
-    ($model == 'waterfall') ? NULL : formGroup
+    ) : null,
+    ($model == 'waterfall') ? null : formGroup
     (
         set::width('1/2'),
         set::name('multiple'),
@@ -99,7 +99,7 @@ formPanel
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
         set::value($multiple),
-        empty($copyProjectID) ? NULL : formHidden('multiple', $multiple)
+        empty($copyProjectID) ? null : formHidden('multiple', $multiple)
     ),
     formGroup
     (
@@ -144,7 +144,7 @@ formPanel
                 'suffix'      => $lang->project->tenThousandYuan,
                 'suffixWidth' => 60,
             )),
-            $parentProgram ? NULL : formHidden('budgetUnit', $config->project->defaultCurrency)
+            $parentProgram ? null : formHidden('budgetUnit', $config->project->defaultCurrency)
         ),
         formGroup
         (
@@ -167,6 +167,7 @@ formPanel
                 (
                     set::name('begin'),
                     set::type('date'),
+                    set('id', 'begin'),
                     set::value(date('Y-m-d')),
                     set::placeholder($lang->project->begin),
                     set::required(true),
@@ -177,6 +178,7 @@ formPanel
                 input
                 (
                     set::name('end'),
+                    set('id', 'end'),
                     set::type('date'),
                     set::placeholder($lang->project->end),
                     set::required(true),
@@ -187,33 +189,37 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/4'),
-            inputGroup
+            set::width('1/2'),
+            radioList
             (
-                $lang->execution->days,
-                setClass('has-suffix'),
-                input
-                (
-                    set::name('days'),
-                    set::required(true),
-                ),
-                div
-                (
-                    setClass('input-control-suffix z-50'),
-                    $lang->project->day
-                )
+                on::change('setDate'),
+                set::name('delta'),
+                set::inline(true),
+                set::items($lang->project->endList)
             )
         ),
-        formGroup
+    ),
+    formGroup
+    (
+        set::label($lang->project->days),
+        set::width('1/2'),
+        inputGroup
         (
-            set::width('1/4'),
-            set::name('delta'),
-            set::control(array('type' => 'checkList', 'inline' => true)),
-            set::items(array('999' => $lang->project->endList['999']))
-        ),
+            setClass('has-suffix'),
+            input
+            (
+                set::name('days'),
+                set::required(true),
+            ),
+            div
+            (
+                setClass('input-control-suffix z-50'),
+                $lang->project->day
+            )
+        )
     ),
     /* TODO handle !empty($products) */
-    $products ? NULL :
+    $products ? null :
     formRow
     (
         formGroup
@@ -253,7 +259,7 @@ formPanel
                 select
                 (
                     set::name('plans[][]'),
-                    set::items(NULL),
+                    set::items(null),
                     set::multiple(false)
                 )
             )

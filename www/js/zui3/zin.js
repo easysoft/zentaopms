@@ -304,7 +304,7 @@
     function loadTable(url, id)
     {
         url = url || currentAppUrl;
-        id = id || $('.dtable').attr('id') || 'dtable';
+        id  = id || $('.dtable').attr('id') || 'dtable';
         if(!id) return;
 
         fetchContent(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', {id: '#' + id, target: '#' + id});
@@ -316,7 +316,7 @@
         if (!selector && url.includes(' '))
         {
             const parts = url.split(' ', 2);
-            url = parts[0];
+            url      = parts[0];
             selector = parts[1];
         }
         if(DEBUG) console.log('[APP] ', 'load:', url);
@@ -442,8 +442,8 @@
         if(!result.name.length)
         {
             if(result.id.length) result.name = result.id;
-            else if(result.tag) result.name = result.tag;
-            else               result.name = selector;
+            else if(result.tag)  result.name = result.tag;
+            else                 result.name = selector;
         }
         result.select = [result.tag, result.id.length ? '#' + result.id : '', result.class.length ? '.' + result.class.join('.') : ''].join('');
 
