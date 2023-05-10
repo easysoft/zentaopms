@@ -384,6 +384,7 @@ class product extends control
     }
 
     /**
+     * 删除产品。
      * Delete a product.
      *
      * @param  int    $productID
@@ -391,23 +392,29 @@ class product extends control
      * @access public
      * @return void
      */
-    public function delete($productID, $confirm = 'no')
+    public function delete(string $productID, string $confirm = 'no')
     {
+        $productID = (int)$productID;
+
+        /* Not confirm. */
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
+            print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
+            return;
         }
-        else
-        {
-            $this->product->delete(TABLE_PRODUCT, $productID);
-            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
-            $this->session->set('product', '');
-            $message = $this->executeHooks($productID);
-            if($message) $this->lang->saveSuccess = $message;
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            return print(js::locate($this->createLink('product', 'all'), 'parent'));
-        }
+        /* Delete product. */
+        $this->product->deleteById($productID);
+
+        /* Reset session. */
+        $this->session->set('product', '');
+
+        /* Response JSON message. */
+        $message = $this->executeHooks($productID);
+        if($message) $this->lang->saveSuccess = $message;
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+
+        print(js::locate($this->createLink('product', 'all'), 'parent'));
     }
 
     /**
@@ -419,7 +426,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function roadmap(string $productID,  string $branch = 'all'): void
+    public function roadmap(string $productID,  string $branch = 'all')
     {
         $productID = (int)$productID;
 
@@ -586,7 +593,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', string $objectID = ''): void
+    public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', string $objectID = '')
     {
         $objectID = (int)$objectID;
         $this->productZen->setShowErrorNoneMenu($moduleName, $activeMenu, $objectID);
@@ -846,7 +853,7 @@ class product extends control
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
         /* Load pager and get tracks. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
 

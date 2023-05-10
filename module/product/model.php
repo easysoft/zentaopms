@@ -2120,4 +2120,18 @@ class productModel extends model
         $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
         $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
     }
+
+    /**
+     * 删除产品。
+     * Delete product by ID.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return void
+     */
+    protected function deleteByID(int $productID): void
+    {
+        $this->delete(TABLE_PRODUCT, $productID);
+        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
+    }
 }
