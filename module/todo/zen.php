@@ -142,11 +142,11 @@ class todoZen extends todo
     protected function addCycleYearConfig(object $formData): object
     {
         $rowData = $formData->rawdata;
-        if(empty($rowData->cycle)) return $formData;
         if(!empty($rowData->config) && $rowData->config['type'] != 'year') return $formData;
 
+        $formData->data->config['type']          = 'day';
         $formData->data->config['specifiedDate'] = 1;
-        $formData->data->config['cycleYear'] = 1;
+        $formData->data->config['cycleYear']     = 1;
 
         return $formData;
     }
@@ -247,18 +247,18 @@ class todoZen extends todo
 
         $objectID   = 0;
         $rowData    = $formData->rawdata;
-        $objectType = $rowData->type;
+        $objectType = $oldTodo->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
         if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
 
         $todo = $formData->add('account', $oldTodo->account)
             ->cleanInt('pri, begin, end, private')
-            ->setIF(in_array($rowData->type, array('bug', 'task', 'story')), 'name', '')
+            ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
             ->setIF(!$rowData->date, 'date', '2030-01-01')
             ->setIF(!$rowData->begin, 'begin', '2400')
             ->setIF(!$rowData->end, 'end', '2400')
-            ->setIF(!$rowData->type, 'type', $oldTodo->type)
+            ->setDefault('type', $objectType)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
@@ -282,7 +282,7 @@ class todoZen extends todo
 
         if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);
 
-        return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $rowData->uid);
+        return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
     }
 
     /**
@@ -508,7 +508,7 @@ class todoZen extends todo
             $todo->config['month'] = implode(',', $todo->config['month']);
         }
 
-        $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
+        $todo->config['beforeDays'] = !empty($todo->config['beforeDays']) ? $todo->config['beforeDays'] : 0;
         $todo->config = json_encode($todo->config);
     }
 

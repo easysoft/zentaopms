@@ -365,6 +365,7 @@ class todoModel extends model
             if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
             if($today < $begin || (!empty($end) && $today > $end)) continue;
 
+            if(empty($todo->id)) $todo->id = $todoID;
             $newTodo = $this->todoTao->buildCycleTodo($todo);
             if(isset($todo->assignedTo) && $todo->assignedTo) $newTodo->assignedDate = $now;
 

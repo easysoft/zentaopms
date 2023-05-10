@@ -2,11 +2,10 @@
 declare(strict_types=1);
 
 $config->todo->create->form = array();
-$config->todo->create->form['type']       = array('required' => true, 'type' => 'string');
-$config->todo->create->form['name']       = array('required' => true, 'type' => 'string');
-$config->todo->create->form['status']     = array('required' => true, 'type' => 'string');
-$config->todo->create->form['pri']        = array('required' => true, 'type' => 'int');
-
+$config->todo->create->form['type']         = array('required' => true,  'type' => 'string');
+$config->todo->create->form['name']         = array('required' => true,  'type' => 'string');
+$config->todo->create->form['status']       = array('required' => true,  'type' => 'string');
+$config->todo->create->form['pri']          = array('required' => true,  'type' => 'int');
 $config->todo->create->form['date']         = array('required' => false, 'type' => 'string',  'default' => helper::today());
 $config->todo->create->form['begin']        = array('required' => false, 'type' => 'int',     'default' => 2400);
 $config->todo->create->form['end']          = array('required' => false, 'type' => 'int',     'default' => 2400);
@@ -35,7 +34,21 @@ $config->todo->batchCreate->form['date']        = array('required' => false, 'ty
 $config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->todo->edit->form = array();
-$config->todo->edit->form['name'] = array('required' => true, 'type' => 'string');
+$config->todo->edit->form['name']         = array('required' => true,  'type' => 'string');
+$config->todo->edit->form['status']       = array('required' => true,  'type' => 'string');
+$config->todo->edit->form['pri']          = array('required' => true,  'type' => 'int');
+$config->todo->edit->form['date']         = array('required' => false, 'type' => 'string',  'default' => helper::today());
+$config->todo->edit->form['begin']        = array('required' => false, 'type' => 'int',     'default' => 2400);
+$config->todo->edit->form['end']          = array('required' => false, 'type' => 'int',     'default' => 2400);
+$config->todo->edit->form['private']      = array('required' => false, 'type' => 'int',     'default' => 0);
+$config->todo->edit->form['assignedDate'] = array('required' => false, 'type' => 'string',  'default' => helper::now());
+$config->todo->edit->form['assignedTo']   = array('required' => false, 'type' => 'string',  'default' => '');
+$config->todo->edit->form['assignedBy']   = array('required' => false, 'type' => 'string',  'default' => '');
+$config->todo->edit->form['vision']       = array('required' => false, 'type' => 'string',  'default' => $this->config->vision);
+$config->todo->edit->form['objectID']     = array('required' => false, 'type' => 'int',     'default' => 0);
+$config->todo->edit->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
+$config->todo->edit->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
+$config->todo->edit->form['config']       = array('required' => false, 'type' => 'array',   'default' => array());
 
 $config->todo->assignTo = new stdclass();
 $config->todo->assignTo->form = array();

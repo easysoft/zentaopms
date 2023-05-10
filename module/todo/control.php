@@ -124,6 +124,7 @@ class todo extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->edit->form);
+            $formData = $this->todoZen->addCycleYearConfig($formData);
 
             $todo = $this->todoZen->beforeEdit($todoID, $formData);
             if(dao::isError())
