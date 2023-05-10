@@ -21,5 +21,9 @@ foreach($statusList as $status)
 {
     $tester->loadModel('project')->changeExecutionStatus(1, $status);
     $$status = $tester->project->getByID(2);
-    r($$status) && p('status') && e("$status");
 }
+
+r($suspend)  && p('status') && e("suspended");
+r($start)    && p('status') && e("doing");
+r($activate) && p('status') && e("wait");
+r($close)    && p('status') && e("closed");
