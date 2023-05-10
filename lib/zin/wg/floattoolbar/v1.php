@@ -38,11 +38,11 @@ class floatToolbar extends wg
         $main      = $this->prop('main');
         $suffix    = $this->prop('suffix');
 
-        $dropdowns = $this->block('dropdowns');
-        $mainBtns = $this->buildBtns($main);
-        if(!empty($dropdowns)) $mainBtns = array_merge($mainBtns, $dropdowns);
         $prefixBtns = $this->buildBtns($prefix);
+        $mainBtns   = $this->buildBtns($main);
         $suffixBtns = $this->buildBtns($suffix);
+        $dropdowns  = $this->block('dropdowns');
+        if(!empty($dropdowns)) $mainBtns = array_merge($mainBtns, $dropdowns);
 
         return div
         (
