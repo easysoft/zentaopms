@@ -1,0 +1,76 @@
+title: table zt_project
+author: xushenjie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: type
+    range: sprint,stage,kanban
+  - field: model
+    range:
+  - field: name
+    range: 1-100
+    prefix: '项目'
+  - field: desc
+    prefix: '项目描述'
+    range: 1-100
+  - field: status
+    range: wait,doing,suspended,closed
+  - field: lifetime
+    range:
+  - field: budget
+    range: 900000-1:100
+  - field: budgetUnit
+    range: CNY,USD
+  - field: attribute
+    range:
+  - field: percent
+    range: 1-100:R
+  - field: milestone
+    range: 0
+  - field: output
+    range:
+  - field: auth
+    range: "extend"
+  - field: parent
+    range: 1-10
+  - field: grade
+    range: "2"
+  - field: code
+    range: 1-5
+    prefix: "code"
+  - field: begin
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+5w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: PO
+    range:
+  - field: PM
+    range:
+  - field: QD
+    range:
+  - field: RD
+    range:
+  - field: team
+    range:
+  - field: acl
+    range: open,private,program
+  - field: order
+    range: 5-10000:5
+  - field: openedBy
+    range: "admin"
+  - field: openedVersion
+    range: "18.4"
+  - field: openedDate
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: deleted
+    range: 0
