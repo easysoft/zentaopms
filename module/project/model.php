@@ -249,7 +249,7 @@ class projectModel extends model
      */
     public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
     {
-        /* Get projec list by status. */
+        /* Get project list by status. */
         $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
         if(empty($projects)) return array();
 
