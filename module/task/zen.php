@@ -291,7 +291,7 @@ class taskZen extends task
 
         $execution    = $this->execution->getByID($task->execution);
         $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-        $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+        $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
         if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban')
@@ -1204,7 +1204,7 @@ class taskZen extends task
         $this->loadModel('kanban');
 
         $execLaneType    = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-        $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+        $execGroupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
         $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
 

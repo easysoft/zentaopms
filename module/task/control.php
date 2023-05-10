@@ -588,7 +588,7 @@ class task extends control
             {
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -665,7 +665,7 @@ class task extends control
             {
                 $execution     = $this->execution->getByID($task->execution);
                 $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy   = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -861,7 +861,7 @@ class task extends control
             {
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == "kanban")
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -948,7 +948,7 @@ class task extends control
                 $task         = $this->task->getById($taskID);
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -1012,7 +1012,7 @@ class task extends control
                 $task         = $this->task->getById($taskID);
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -1093,7 +1093,7 @@ class task extends control
                 }
 
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -1265,7 +1265,7 @@ class task extends control
                 $task         = $this->task->getById($taskID);
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -1331,7 +1331,7 @@ class task extends control
                 $task         = $this->task->getById($taskID);
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == "kanban")
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
@@ -1410,7 +1410,7 @@ class task extends control
             if($from == 'taskkanban')
             {
                 $execLaneType    = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $execGroupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                 $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $taskSearchValue);
                 $kanbanType      = $execLaneType == 'all' ? 'task' : key($kanbanData);
