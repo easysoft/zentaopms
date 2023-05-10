@@ -577,6 +577,23 @@ class taskZen extends task
     }
 
     /**
+     * 检查当前用户在该执行中是否是受限用户。
+     * Checks if the current user is a limited user in this execution.
+     *
+     * @param  string $executionID
+     * @access public
+     * @return bool
+     */
+    public function isLimitedInExecution(string $executionID): bool
+    {
+        $this->execution->getLimitedExecution();
+        $limitedExecutions = !empty($this->session->limitedExecutions) ? $this->session->limitedExecutions : '';
+
+        if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) return true;
+        return false;
+    }
+
+    /**
      * 检查传入的创建数据是否符合要求。
      * Check if the input post meets the requirements.
      *

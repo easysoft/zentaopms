@@ -115,7 +115,7 @@ class task extends control
         parse_str($extra, $output);
 
         /* 判断不能访问的执行。 TODO: 提示语应改为执行。 */
-        if($this->checkLimitedExecution($executionID))
+        if($this->taskZen->isLimitedInExecution($executionID))
         {
             echo js::alert($this->lang->task->createDenied);
             return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
@@ -1911,22 +1911,5 @@ class task extends control
         $this->view->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display('', 'editteam');
-    }
-
-    /**
-     * 检查当前用户在该执行中是否是受限用户。
-     * Checks if the current user is a limited user in this execution.
-     *
-     * @param  string  $executionID
-     * @access public
-     * @return bool
-     */
-    public function checkLimitedExecution(string $executionID): bool
-    {
-        $this->execution->getLimitedExecution();
-        $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
-
-        if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) return true;
-        return false;
     }
 }
