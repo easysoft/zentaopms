@@ -596,6 +596,7 @@ class taskModel extends model
      */
     public function update($task)
     {
+        $taskID = $task->id;
         if($taskID <= 0) return;
 
         $oldTask = $this->getByID($taskID);
@@ -631,14 +632,6 @@ class taskModel extends model
 
         if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
 
-        /* Fix bug#1388, Check children task executionID and moduleID. */
-        if(isset($task->execution) and $task->execution != $oldTask->execution)
-        {
-            $newExecution  = $this->loadModel('execution')->getByID($task->execution);
-            $task->project = $newExecution->project;
-            $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($taskID)->exec();
-        }
-
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         if($this->post->team and count(array_filter($this->post->team)) > 1)
@@ -649,35 +642,10 @@ class taskModel extends model
         if(empty($teams)) $task->mode = '';
 
         $requiredFields = $this->taskTao->getRequiredFields4Edit($task);
-
-        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
-            ->autoCheck()
-            ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
-            ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
-
-            ->checkIF($task->estimate !== false, 'estimate', 'float')
-            ->checkIF($task->left     !== false, 'left',     'float')
-            ->checkIF($task->consumed !== false, 'consumed', 'float')
-
-            ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
-
-            ->checkIF($task->status == 'done', 'consumed', 'notempty')
-            ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
-            ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
-
-            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
-            ->checkFlow()
-            ->where('id')->eq((int)$taskID)->exec();
+        $this->taskTao->doUpdate($task, $oldTask, $requiredFields);
 
         if(!dao::isError())
         {
-            /* Mark design version.*/
-            if(isset($task->design) && !empty($task->design))
-            {
-                $design = $this->loadModel('design')->getByID($task->design);
-                $this->dao->update(TABLE_TASK)->set('designVersion')->eq($design->version)->where('id')->eq($taskID)->exec();
-            }
-
             if($_POST['mode'] == 'single')
             {
                 $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
