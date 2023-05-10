@@ -2965,7 +2965,7 @@ class projectModel extends model
         $closePriv = common::hasPriv($moduleName, 'close');
         if($project->status == 'doing')
         {
-            $menu .= $this->buildMenu($moduleName, 'close', params, $project, 'browse', 'off',   '', 'iframe', true);
+            $menu .= $this->buildMenu($moduleName, 'close', $params, $project, 'browse', 'off',   '', 'iframe', true);
         }
 
         $activatePriv = common::hasPriv($moduleName, 'activate');
