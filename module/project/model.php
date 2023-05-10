@@ -933,7 +933,7 @@ class projectModel extends model
      */
     public function getPrivsByModel(string $model = 'waterfall'): object|false
     {
-        if(!in_array($model, array_keys((array)$this->config->programPriv))) return false;
+        if(!isset($this->config->programPriv->$model)) return false;
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
 
