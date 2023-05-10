@@ -5624,7 +5624,7 @@ class executionModel extends model
             {
                 $id  = $value;
                 $set = new stdclass();;
-                $set->order = $order++;
+                $set->order = $order;
                 $set->show  = true;
                 $set->name  = $value;
                 $set->title = $fieldList[$id]['title'];
@@ -5650,6 +5650,7 @@ class executionModel extends model
                 if($sortType) $set->sortType = $sortType;
 
                 $setting[$key] = $set;
+                $order ++;
             }
         }
         else
