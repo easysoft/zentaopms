@@ -1931,24 +1931,24 @@ class taskTest
      * Process other data after split task.
      *
      * @param  int    $oldParentTaskID
-     * @param  string $childTasks
+     * @param  string $children
      * @param  string $testObject children|parent|parentAction
      * @access public
      * @return object|string
      */
-    public function afterSplitTaskTest(int $oldParentTaskID = 0, string $childTasks = '', string $testObject = 'parent'): object|string
+    public function afterSplitTaskTest(int $oldParentTaskID = 0, string $children = '', string $testObject = 'parent'): object|string
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
         $oldParentTask        = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTaskID)->fetch();
 
-        $this->objectModel->afterSplitTask($oldParentTask, $childTasks);
+        $this->objectModel->afterSplitTask($oldParentTask, $children);
 
-        $tasks['children']       = $tester->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($oldParentTask->id)->fetchPairs('id');
-        $tasks['parent']         = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
-        $tasks['parentAction']   = $tester->dao->select('id as actionID')->from(TABLE_ACTION)->where('objectID')->eq($oldParentTask->id)->andWhere('objectType')->eq('task')->fetch();
-        $tasks['parentEstStarted']     = $tasks['parent']->estStarted;
-        $tasks['parentDeadline']       = $tasks['parent']->deadline;
+        $tasks['children']         = $tester->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($oldParentTask->id)->fetchPairs('id');
+        $tasks['parent']           = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+        $tasks['parentAction']     = $tester->dao->select('id as actionID')->from(TABLE_ACTION)->where('objectID')->eq($oldParentTask->id)->andWhere('objectType')->eq('task')->fetch();
+        $tasks['parentEstStarted'] = $tasks['parent']->estStarted;
+        $tasks['parentDeadline']   = $tasks['parent']->deadline;
 
         return $tasks[$testObject];
     }

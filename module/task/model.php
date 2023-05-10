@@ -183,8 +183,8 @@ class taskModel extends model
         if(!dao::isError()) $this->score->create('ajax', 'batchCreate'); // Updating scores for the first batch creation operation.
 
         /* 拆分任务后更新其他数据。 Process other data after split task. */
-        $childTasks = !empty($parentID) ? implode(',', $taskIdList) : '';
-        if($parentID) $this->afterSplitTask($oldParentTask, $childTasks);
+        $children = !empty($parentID) ? implode(',', $taskIdList) : '';
+        if($parentID) $this->afterSplitTask($oldParentTask, $children);
 
         /* 更新当前执行下的任务泳道。 Update the task lane under current execution. */
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
@@ -3774,11 +3774,11 @@ class taskModel extends model
      * Process other data after split task.
      *
      * @param  object $oldParentTask
-     * @param  string $childTasks
+     * @param  string $children
      * @access public
      * @return bool
      */
-    public function afterSplitTask(object $oldParentTask, string $childTasks = ''): bool
+    public function afterSplitTask(object $oldParentTask, string $children = ''): bool
     {
         $parentID = (int)$oldParentTask->id;
 
@@ -3798,7 +3798,7 @@ class taskModel extends model
         /* 记录父任务日志。 */
         $newParentTask = $this->dao->findById($parentID)->from(TABLE_TASK)->fetch();
         $changes       = common::createChanges($oldParentTask, $newParentTask);
-        $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
+        $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($children, ','));
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
         return true;
