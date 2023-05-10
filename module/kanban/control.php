@@ -603,9 +603,9 @@ class kanban extends control
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
 
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
                 $kanbanData   = json_encode($kanbanData);
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
@@ -696,9 +696,9 @@ class kanban extends control
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
 
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
                 $kanbanData   = json_encode($kanbanData);
                 return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
             }
@@ -1619,8 +1619,8 @@ class kanban extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $kanbanID    = $regionID ? $this->kanban->getKanbanIDByRegion($regionID) : $this->session->execution;
-        $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->execLaneType;
-        $groupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+        $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->executionLaneType;
+        $groupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
         $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType, 'id_desc', 0, $groupBy);
 
         return print(json_encode($kanbanGroup));
@@ -1650,9 +1650,9 @@ class kanban extends control
                 if(dao::isError()) return $this->sendError(dao::getError());
 
                 $regionID     = $column->region;
-                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
                 $kanbanData   = json_encode($kanbanData);
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
