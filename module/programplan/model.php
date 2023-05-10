@@ -1149,25 +1149,28 @@ class programplanModel extends model
     }
 
     /**
-     * Check code unique.
+     * 根据计划ID列表，检查code的唯一性。
+     * Check code unique by plan id list.
      *
-     * @param array $codes
-     * @param array $planIDList
+     * @param  array  $codes
+     * @param  array  $planIDList
      * @access public
-     * @return mix
+     * @return array|bool
      */
-    public function checkCodeUnique($codes, $planIDList)
+    public function checkCodeUnique(array $codes, array $planIDList): array|bool
     {
         $codes = array_filter($codes);
 
         $sameCodes = $this->dao->select('code')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage,kanban')
-            ->andWhere('deleted')->eq('0')
             ->andWhere('code')->in($codes)
-            ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!empty($planIDList))->andWhere('id')->notin($planIDList)->fi()
             ->fetchPairs('code');
+
         if(count(array_unique($codes)) != count($codes)) $sameCodes += array_diff_assoc($codes, array_unique($codes));
-        return $sameCodes ? $sameCodes : true;
+
+        return $sameCodes ?: true;
     }
 
     /**
