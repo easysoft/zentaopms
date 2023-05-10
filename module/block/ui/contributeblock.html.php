@@ -17,7 +17,7 @@ foreach($data as $code => $value)
 {
     $blocks[] = cell
     (
-        set('flex', '0 0 33.33%'),
+        set('class', 'w-1/3'),
         col
         (
             set('justify', 'around'),
@@ -25,7 +25,7 @@ foreach($data as $code => $value)
             span(zget($lang->block, $code)),
             a
             (
-                set('class', 'font-bold text-2xl text-darker leading-loose'), // TODO:zu1
+                set('class', 'font-bold text-2xl text-darker leading-loose'),
                 $value
             )
         )

@@ -31,42 +31,42 @@ $cols = array
     ),
     array
     (
-        'name'     => 'TODO:zu1',
+        'name'     => 'feedback',
         'title'    => '未关闭反馈',
         'width'    => 100,
         'sortType' => 1,
     ),
     array
     (
-        'name'     => 'TODO:zu1',
+        'name'     => 'story',
         'title'    => '激活需求',
         'width'    => 100,
         'sortType' => 1,
     ),
     array
     (
-        'name'     => 'TODO:zu1',
+        'name'     => 'storyCompletionRate',
         'title'    => '需求完成率',
         'width'    => 100,
         'sortType' => 1,
     ),
     array
     (
-        'name'     => 'TODO:zu1',
+        'name'     => 'plan',
         'title'    => '计划',
         'width'    => 100,
         'sortType' => 1,
     ),
     array
     (
-        'name'     => 'TODO:zu1',
+        'name'     => 'bug',
         'title'    => '激活BUG',
         'width'    => 100,
         'sortType' => 1,
     ),
     array
     (
-        'name'     => 'TODO:zu1',
+        'name'     => 'release',
         'title'    => '发布',
         'width'    => 100,
         'sortType' => 1,
