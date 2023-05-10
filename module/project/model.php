@@ -2078,13 +2078,12 @@ class projectModel extends model
      *
      * @param  object $col
      * @param  object $project
-     * @param  array  $users
      * @param  object $item
      * @param  int    $programID
      * @access public
      * @return void
      */
-    public function printCellZin($col, $project, $users, &$item, $programID = 0)
+    public function printCellZin($col, $project, &$item, $programID = 0)
     {
         if(!$col->show) return;
 
