@@ -12,6 +12,7 @@ declare(strict_types=1);
 class todo extends control
 {
     /**
+     * 构造函数，日期的加载类，配置语言项。
      * Construct function, load class of date, lang of my.
      *
      * @access public
@@ -286,8 +287,8 @@ class todo extends control
      * 获取待办的信息。
      * Get info of todo.
      *
-     * @param  string  $todoID
-     * @param  string  $from  my|company
+     * @param  string $todoID
+     * @param  string $from  my|company
      * @access public
      * @return void
      */
@@ -322,8 +323,8 @@ class todo extends control
      * 删除待办。
      * Delete a todo.
      *
-     * @param  string  $todoID
-     * @param  string  $confirm yes|no
+     * @param  string $todoID
+     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
@@ -515,9 +516,10 @@ class todo extends control
     }
 
     /**
+     * ajax请求：获得 todo 的动作。 用于 web 应用程序。
      * AJAX: get actions of a todo. for web app.
      *
-     * @param  string  $todoID
+     * @param  string $todoID
      * @access public
      * @return void
      */
@@ -528,10 +530,11 @@ class todo extends control
     }
 
     /**
+     * ajax请求：获取程序id。
      * AJAX: get program id.
      *
-     * @param  string  $objectID
-     * @param  string  $objectType
+     * @param  string $objectID
+     * @param  string $objectType
      * @access public
      * @return void
      */
@@ -543,9 +546,10 @@ class todo extends control
     }
 
     /**
+     * ajax请求：获取执行对。
      * AJAX: get execution pairs.
      *
-     * @param  string  $projectID
+     * @param  string $projectID
      * @access public
      * @return void
      */
@@ -563,9 +567,10 @@ class todo extends control
     }
 
     /**
+     * ajax请求：获取产品对。
      * AJAX: get product pairs.
      *
-     * @param  string  $projectID
+     * @param  string $projectID
      * @access public
      * @return void
      */
