@@ -1542,55 +1542,36 @@ class bug extends control
     }
 
     /**
+     * 删除 bug。
      * Delete a bug.
      *
-     * @param  int    $bugID
-     * @param  string $confirm  yes|no
+     * @param  string $bugID
+     * @param  string $confirm yes|no
+     * @param  string $from    taskkanban
      * @access public
      * @return void
      */
-    public function delete($bugID, $confirm = 'no', $from = '')
+    public function delete(string $bugID, string $confirm = 'no', string $from = '')
     {
-        $bug = $this->bug->getById($bugID);
-        if($confirm == 'no')
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' =>inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
+
+        $bug = $this->bug->getByID($bugID);
+
+        $this->bug->delete(TABLE_BUG, $bugID);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
+        /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
+        if($bug->toTask)
         {
-            return print(js::confirm($this->lang->bug->confirmDelete, inlink('delete', "bugID=$bugID&confirm=yes&from=$from")));
+            $result = $this->bugZen->confirm2UpdateTask($bugID, $bug->toTask);
+            if(is_array($result)) return $this->send($result);
         }
-        else
-        {
-            $this->bug->delete(TABLE_BUG, $bugID);
-            if($bug->toTask != 0)
-            {
-                $task = $this->task->getById($bug->toTask);
-                if(!$task->deleted)
-                {
-                    $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                    unset($_GET['onlybody']);
-                    $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                    return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
-                }
-            }
 
-            $this->executeHooks($bugID);
+        $this->executeHooks($bugID);
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-
-            if(isonlybody()) return print(js::reload('parent.parent'));
-
-            if($from == 'taskkanban')
-            {
-                $laneType        = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $groupBy         = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $taskSearchValue);
-                $kanbanType      = $laneType == 'all' ? 'bug' : key($kanbanData);
-                $kanbanData      = json_encode($kanbanData[$kanbanType]);
-                return print(js::closeModal('parent', '', "parent.updateKanban(\"bug\", $kanbanData)"));
-            }
-
-            $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
-            return print(js::locate($locateLink, 'parent'));
-        }
+        return $this->send($this->bugZen->responseAfterDelete($bug, $from));
     }
 
     /**
