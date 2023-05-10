@@ -10,7 +10,7 @@ class bugTao extends bugModel
      * @access protected
      * @return object|false
      */
-    protected function fetchBugInfo(string $bugID): object|false
+    protected function fetchBugInfo(int $bugID): object|false
     {
         return $this->dao->select('t1.*, t2.name AS executionName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName, t5.title AS planName')
             ->from(TABLE_BUG)->alias('t1')
@@ -136,7 +136,7 @@ class bugTao extends bugModel
      * @access protected
      * @return array
      */
-    protected function getCasesFromBug(string $bugID): array
+    protected function getCasesFromBug(int $bugID): array
     {
         return $this->dao->select('id, title')->from(TABLE_CASE)->where('`fromBug`')->eq($bugID)->fetchPairs();
     }
