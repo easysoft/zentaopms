@@ -14,18 +14,6 @@ title=测试 todoModel->getCount();
 timeout=0
 cid=1
 
-- 获取用户admin的所有待办个数 @4
-
-- 获取用户user1的所有待办个数 @3
-
-- 获取用户user2的所有待办个数 @3
-
-- 获取不存在的用户所有待办个数 @0
-
-- 获取用户admin的vision=>rand所有待办个数 @4
-
-
-
 */
 
 initData();

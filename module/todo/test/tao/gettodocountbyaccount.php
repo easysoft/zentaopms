@@ -9,14 +9,6 @@ title=测试 todoTao::getTodoCountByAccount();
 timeout=0
 cid=1
 
-- 判断用户为user1的待办事项数量为1 @1
-
-- 判断用户为admin的待办事项数量为1 @1
-
-- 判断用户为user2的待办事项数量为1 @1
-
-- 判断用户为user3的待办事项数量为0 @0
-
 */
 
 function initData ()

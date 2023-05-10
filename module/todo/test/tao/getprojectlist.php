@@ -17,8 +17,6 @@ title=测试 todoModel->getCount();
 timeout=0
 cid=1
 
-- 验证task获得的键值对的个数 @4
-
 */
 
 initData();

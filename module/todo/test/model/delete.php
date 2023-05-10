@@ -15,14 +15,6 @@ title=测试删除todo todoModel->delete();
 timeout=0
 cid=1
 
-- 删除指定id的待办，取消确认
- - 属性id @8
- - 属性deleted @0
-
-- 验证删除id不存在的todo信息属性deleted @1
-
-
-
 */
 
 initData();

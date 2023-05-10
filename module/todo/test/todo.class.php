@@ -301,7 +301,6 @@ class todoTest
     {
         $todo = new stdclass();
         $todo->assignedDate = helper::now();
-        $todo->date         = '';
         $todo->begin        = 0;
         $todo->end          = 0;
 

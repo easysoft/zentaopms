@@ -15,36 +15,6 @@ title=测试 todoModel->assignTo();
 timeout=0
 cid=1
 
-- 指派todo 1给test1 选择待定
- - 属性assignedTo @test1
- - 属性date @20300101
- - 属性begin @1000
- - 属性end @1400
-
-- 指派todo 2给test1 暂时不设定时间
- - 属性assignedTo @test1
- - 属性begin @2400
- - 属性end @2400
-
-- 指派todo 3给test1
- - 属性assignedTo @test1
- - 属性begin @1002
- - 属性end @1402
-
-- 指派todo 4给admin future=on 验证 date默认值
- - 属性assignedTo @admin
- - 属性date @20300101
- - 属性begin @1200
- - 属性end @1502
-
-- 指派todo 5给admin future=on lblDisableDate=on 验证date,begin,end默认值
- - 属性assignedTo @admin
- - 属性date @20300101
- - 属性begin @2400
- - 属性end @2400
-
-
-
 */
 
 initData();

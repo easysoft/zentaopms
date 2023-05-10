@@ -15,14 +15,6 @@ title=测试完成待办 todoModel->finish();
 timeout=0
 cid=1
 
-- 查询id=1的todo并且验证状态
- - 属性id @1
- - 属性status @wait
-
-- 查询id=9的todo并且验证状态
- - 属性id @9
- - 属性status @done
-
 */
 
 initData();

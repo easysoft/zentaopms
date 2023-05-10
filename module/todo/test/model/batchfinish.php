@@ -15,14 +15,6 @@ title=测试批量完成待办 todoModel->batchFinish();
 timeout=0
 cid=1
 
-- 批量完成todo验证状态wait->done属性status @done
-
-- 批量完成todo验证状态donging->done属性status @done
-
-- 批量完成todo验证状态done属性status @done
-
-
-
 */
 
 initData();
