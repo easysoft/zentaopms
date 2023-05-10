@@ -624,9 +624,9 @@ class projectTao extends projectModel
      * 根据项目集ID查询所有项目集的层级。
      * Get all program level of a program.
      *
-     * @param  int    $program
-     * @param  string $path
-     * @param  int    $grade
+     * @param  int       $program
+     * @param  string    $path
+     * @param  int       $grade
      * @access protected
      * @return string
      */
@@ -648,10 +648,10 @@ class projectTao extends projectModel
      * 根据状态和和我参与的查询项目列表。
      * Get project list by status and with my participation.
      *
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  bool   $involved
-     * @param  object $pager
+     * @param  string    $status
+     * @param  string    $orderBy
+     * @param  bool      $involved
+     * @param  object    $pager
      * @access protected
      * @return array
      */
