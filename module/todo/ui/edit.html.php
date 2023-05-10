@@ -131,7 +131,8 @@ function buildCycleOfDayConfig(object $todo): mixed
                 (
                     set(array
                     (
-                        'name'  => 'date',
+                        'class' => 'cycle-date',
+                        'name'  => 'config[date]',
                         'type'  => 'date',
                         'value' => $todo->date
                     )),
