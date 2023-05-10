@@ -648,27 +648,7 @@ class taskModel extends model
         }
         if(empty($teams)) $task->mode = '';
 
-        $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
-        $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
-        {
-            $requiredFields = str_replace(",story,", ',', "$requiredFields");
-            $task->story = 0;
-        }
-
-        if($task->status != 'cancel' and strpos($requiredFields, ',estimate,') !== false)
-        {
-            if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
-            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
-        }
-
-        if(strpos(',doing,pause,', $task->status) && empty($task->left))
-        {
-            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
-            return false;
-        }
-
-        $requiredFields = trim($requiredFields, ',');
+        $requiredFields = $this->taskTao->getRequiredFields4Edit($task);
 
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
