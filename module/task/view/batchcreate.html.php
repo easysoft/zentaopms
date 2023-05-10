@@ -19,7 +19,7 @@
 <?php
 $visibleFields  = array();
 $requiredFields = array();
-foreach(explode(',', $showFields) as $field)
+foreach(explode(',', $checkedFields) as $field)
 {
     if($field) $visibleFields[$field] = '';
 }
@@ -34,7 +34,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
 }
 $colspan = count($visibleFields) + 3;
 ?>
-<?php js::set('showFields', $showFields);?>
+<?php js::set('checkedFields', $checkedFields);?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header clearfix">
     <h2 class="pull-left">

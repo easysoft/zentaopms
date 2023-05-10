@@ -1156,21 +1156,21 @@ class taskZen extends task
         $story         = $this->story->getByID($storyID);
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
 
-        list($customFields, $showFields) = $this->getCustomFields($execution, 'batchCreate');
+        list($customFields, $checkedFields) = $this->getCustomFields($execution, 'batchCreate');
 
-        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
-        $this->view->execution    = $execution;
-        $this->view->modules      = $modules;
-        $this->view->parent       = $taskID;
-        $this->view->storyID      = $storyID;
-        $this->view->story        = $story;
-        $this->view->moduleID     = $story ? $story->module : $moduleID;
-        $this->view->stories      = $stories;
-        $this->view->storyTasks   = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
-        $this->view->members      = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
-        $this->view->taskConsumed = isset($task) ? $task->consumed : 0;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $showFields;
+        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
+        $this->view->execution     = $execution;
+        $this->view->modules       = $modules;
+        $this->view->parent        = $taskID;
+        $this->view->storyID       = $storyID;
+        $this->view->story         = $story;
+        $this->view->moduleID      = $story ? $story->module : $moduleID;
+        $this->view->stories       = $stories;
+        $this->view->storyTasks    = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
+        $this->view->members       = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
+        $this->view->taskConsumed  = isset($task) ? $task->consumed : 0;
+        $this->view->customFields  = $customFields;
+        $this->view->checkedFields = $checkedFields;
 
         $this->display();
     }
