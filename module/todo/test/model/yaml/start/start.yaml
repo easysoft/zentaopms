@@ -35,5 +35,4 @@ fields:
     range: '1-3'
     prefix: 'admin'
   - field: vision
-    range: "1.0"
-
+    range: '1.0'
