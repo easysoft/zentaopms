@@ -121,9 +121,9 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF(!$rowData->date,  'date', '2030-01-01')
-            ->setIF(!$rowData->begin, 'begin', '2400')
-            ->setIF(!$rowData->begin || !$rowData->end, 'end', '2400')
+            ->setIF(empty($rowData->date),  'date', '2030-01-01')
+            ->setIF(empty($rowData->begin), 'begin', '2400')
+            ->setIF(empty($rowData->begin) || empty($rowData->end), 'end', '2400')
             ->setIF($rowData->status == 'done', 'finishedBy', $this->app->user->account)
             ->setIF($rowData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
@@ -255,9 +255,9 @@ class todoZen extends todo
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF(!$rowData->date, 'date', '2030-01-01')
-            ->setIF(!$rowData->begin, 'begin', '2400')
-            ->setIF(!$rowData->end, 'end', '2400')
+            ->setIF(empty($rowData->date), 'date', '2030-01-01')
+            ->setIF(empty($rowData->begin), 'begin', '2400')
+            ->setIF(empty($rowData->end), 'end', '2400')
             ->setDefault('type', $objectType)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
@@ -500,11 +500,13 @@ class todoZen extends todo
         if($todo->config['type'] == 'week')
         {
             unset($todo->config['day'], $todo->config['month']);
+            if(!is_array($todo->config['week'])) $todo->config['week'] = (array)$todo->config['week'];
             $todo->config['week'] = implode(',', $todo->config['week']);
         }
         if($todo->config['type'] == 'month')
         {
             unset($todo->config['day'], $todo->config['week']);
+            if(!is_array($todo->config['month'])) $todo->config['month'] = (array)$todo->config['month'];
             $todo->config['month'] = implode(',', $todo->config['month']);
         }
 
@@ -557,7 +559,7 @@ class todoZen extends todo
             dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->beforeDaysLabel);
             return false;
         }
-        $todoData->config['beforeDays'] = (int)$todoData->config['beforeDays'];
+        $todoData->config['beforeDays'] = !empty($todoData->config['beforeDays']) ? $todoData->config['beforeDays'] : 0;
 
         $todoData->config = json_encode($todoData->config);
         $todoData->type   = 'cycle';
