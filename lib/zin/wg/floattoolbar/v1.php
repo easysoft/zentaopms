@@ -25,13 +25,10 @@ class floatToolbar extends wg
 
     private function buildBtns(array $items)
     {
-        $btns = array();
-        if(empty($items)) return $btns;
+        if(empty($items)) return null;
 
-        foreach ($items as $item)
-        {
-            $btns[] = btn(set($item), setClass('ghost text-white'));
-        }
+        $btns = array();
+        foreach ($items as $item) $btns[] = btn(set($item), setClass('ghost text-white'));
         return $btns;
     }
 
@@ -43,22 +40,18 @@ class floatToolbar extends wg
 
         $dropdowns = $this->block('dropdowns');
         $mainBtns = $this->buildBtns($main);
-        if(!empty($dropdowns))
-        {
-            foreach($dropdowns as $key => $dropdown)
-            {
-                array_splice($mainBtns, $key, 0, array($dropdown));
-            }
-        }
+        if(!empty($dropdowns)) $mainBtns = array_merge($mainBtns, $dropdowns);
+        $prefixBtns = $this->buildBtns($prefix);
+        $suffixBtns = $this->buildBtns($suffix);
 
         return div
         (
             setClass('float-toolbar inline-flex rounded p-1.5 items-center'),
-            $this->buildBtns($prefix),
-            $this->divider(),
+            $prefixBtns,
+            empty($prefixBtns) ? null : $this->divider(),
             $mainBtns,
-            $this->divider(),
-            $this->buildBtns($suffix),
+            empty($suffixBtns) ? null : $this->divider(),
+            $suffixBtns,
         );
     }
 }
