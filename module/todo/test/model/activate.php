@@ -4,11 +4,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/todo.class.php';
 su('admin');
 
-function initData()
-{
-    zdTable('todo')->config('activate')->gen(3);
-}
-
 /**
 
 title=测试 todoModel->activate();
@@ -25,11 +20,16 @@ cid=1
 
 */
 
+function initData()
+{
+    zdTable('todo')->config('activate')->gen(3);
+}
+
+initData();
+
 $todoIDList = array('1', '2', '3');
 
 $todo = new todoTest();
-
-initData();
 
 r($todo->activateTest($todoIDList[0])) && p('status') && e('wait'); // 激活一个状态为wait的todo
 r($todo->activateTest($todoIDList[1])) && p('status') && e('wait'); // 激活一个状态为doing的todo
