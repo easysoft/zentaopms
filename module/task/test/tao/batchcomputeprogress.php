@@ -2,16 +2,12 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-function initData()
-{
-    $task = zdTable('task');
-    $task->id->range('1-5');
-    $task->name->prefix('任务')->range('1-5');
-    $task->consumed->range('0,10,15,20,25');
-    $task->left->range('0,0,1,5,10');
-
-    $task->gen(5);
-}
+$task = zdTable('task');
+$task->id->range('1-5');
+$task->name->prefix('任务')->range('1-5');
+$task->consumed->range('0,10,15,20,25');
+$task->left->range('0,0,1,5,10');
+$task->gen(5);
 
 /**
 
@@ -21,8 +17,6 @@ cid=2
 
 */
 $tester->loadModel('task');
-
-initData();
 
 $taskIDList = range(1,5);
 $taskList   = $tester->task->getByList($taskIDList);
