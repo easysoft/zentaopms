@@ -1065,24 +1065,24 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
 
         /* Check team data. */
+        $team = array_filter($team);
         foreach($team as $i => $account)
         {
-            if(!$account) continue;
-
             if($teamConsumed[$i] == 0 and $teamLeft[$i] == 0)
             {
                 dao::$errors[] = $this->lang->task->noticeTaskStart;
                 return false;
             }
         }
+        if(count($team) <= 1)
+        {
+            dao::$errors[] = $this->lang->task->error->teamMember;
+            return false;
+        }
 
         /* Manage the team and calculate task work information. */
-        if(count(array_filter($team)) > 1)
-        {
-            $teams = $this->manageTaskTeam($oldTask->mode, $task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
-            if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task);
-        }
-        if(empty($teams)) $task->mode = '';
+        $teams = $this->manageTaskTeam($oldTask->mode, $task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
+        !empty($teams) ? $task = $this->computeMultipleHours($oldTask, $task) : $task->mode = '';
 
         /* Update parent task status. */
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);

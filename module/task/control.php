@@ -1894,7 +1894,7 @@ class task extends control
             /* Update assign of multi task. */
             $postData = form::data($this->config->task->form->manageTeam);
             $task     = $this->taskZen->prepareManageTeam($postData, $taskID);
-            $changes  = $this->task->updateTeam($task, $this->post->team, $this->post->teamSouce, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
+            $changes  = $this->task->updateTeam($task, $this->post->team, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1910,7 +1910,7 @@ class task extends control
 
         $this->view->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs();
-        $this->display();
+        $this->display('', 'editteam');
     }
 
     /**
