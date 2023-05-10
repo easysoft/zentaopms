@@ -73,7 +73,7 @@ class pageBase extends wg
             h::head
             (
                 html($metas),
-                h::title($title),
+                html("<title>$title</title>"),
                 $this->block('headBefore'),
                 $zui ? h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS')) : null,
                 $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
