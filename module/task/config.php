@@ -251,3 +251,12 @@ $config->task->create->template->estStarted = null;
 $config->task->create->template->deadline   = null;
 $config->task->create->template->mailto     = '';
 $config->task->create->template->color      = '';
+
+$config->task->modeOptions = array();
+$config->task->modeOptions[] = array('text' => $lang->task->modeList['linear'], 'value' => 'linear');
+$config->task->modeOptions[] = array('text' => $lang->task->modeList['multi'], 'value' => 'multi');
+
+$config->task->afterOptions = array();
+$config->task->afterOptions[] = array('text' => $lang->task->afterChoices['continueAdding'], 'value' => 'continueAdding');
+$config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toTaskList'], 'value' => 'toTaskList');
+$config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toStoryList'], 'value' => 'toStoryList');

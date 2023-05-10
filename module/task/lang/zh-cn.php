@@ -164,6 +164,7 @@ $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = "测试{$lang->SRCommon}";
 $lang->task->teamMember        = '团队成员';
+$lang->task->to                = '至';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';

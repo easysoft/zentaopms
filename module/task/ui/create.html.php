@@ -68,7 +68,7 @@ formPanel
         (
             set::width('1/4'),
             set::id('selectTestStoryBox'),
-            set::class('hidden'),
+            setClass('hidden items-center'),
             checkbox(
                 set::name('selectTestStory'),
                 set::text($lang->task->selectTestStory),
@@ -91,11 +91,12 @@ formPanel
         (
             set::width('1/10'),
             set::id('multipleBox'),
+            setClass('items-center'),
             checkbox(
                 set::name('multiple'),
                 set::text($lang->task->multiple),
                 set::rootClass('ml-4'),
-                on::change('showTeamBox')
+                on::change('showTeamBox'),
             )
         ),
         formGroup
@@ -124,15 +125,14 @@ formPanel
         formGroup
         (
             set::label($lang->task->name),
-            set::width('3/4'),
-            set::name('name'),
-            set::value($task->name),
-        ),
-        formGroup
-        (
-            set::width('1/4'),
             inputGroup
             (
+                input
+                (
+                    set::name('name'),
+                    set::value($task->name),
+                    setClass('flex-none w-3/4'),
+                ),
                 $lang->task->pri,
                 select
                 (
