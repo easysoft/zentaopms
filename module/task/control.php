@@ -159,7 +159,7 @@ class task extends control
      * Edit a task.
      *
      * @param  string $taskID
-     * @param  string $from        ''|taskkanban
+     * @param  string $from   ''|taskkanban
      * @access public
      * @return void
      */

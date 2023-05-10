@@ -1054,6 +1054,8 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  array  $team
+     * @param  array  $teamSource
+     * @param  array  $teamEstimate
      * @param  array  $teamConsumed
      * @param  array  $teamLeft
      * @access public

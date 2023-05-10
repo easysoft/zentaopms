@@ -7,34 +7,41 @@ $(function()
     {
         $('#consumedSpan').parent().find('button').attr('disabled','disabled')
     }
+})
 
-    $('#mode').change(function()
+/**
+ * Change mode event.
+ *
+ * @param  string $mode
+ * @access public
+ * @return viod
+ */
+function changeMode(mode)
+{
+  console.log(mode);
+    if(mode != 'single')
     {
-        var mode = $(this).val();
-        if(mode != 'single')
+        if(mode != 'multi')
         {
-            if(mode != 'multi')
-            {
-                $('#assignedTo').attr('disabled', 'disabled').trigger('chosen:updated')
-            }
-            else
-            {
-                $('#assignedTo').removeAttr('disabled').trigger('chosen:updated')
-            }
-
-            $('.team-group').removeClass('hidden');
-            $('#estimate').attr('readonly', 'readonly');
-            $('#left').attr('readonly', 'readonly');
+            $('#assignedTo').attr('disabled', 'disabled').trigger('chosen:updated')
         }
         else
         {
             $('#assignedTo').removeAttr('disabled').trigger('chosen:updated')
-            $('.team-group').addClass('hidden');
-            $('#estimate').removeAttr('readonly');
-            $('#left').removeAttr('readonly');
         }
-    })
-})
+
+        $('.team-group').removeClass('hidden');
+        $('#estimate').attr('readonly', 'readonly');
+        $('#left').attr('readonly', 'readonly');
+    }
+    else
+    {
+        $('#assignedTo').removeAttr('disabled').trigger('chosen:updated')
+        $('.team-group').addClass('hidden');
+        $('#estimate').removeAttr('readonly');
+        $('#left').removeAttr('readonly');
+    }
+}
 
 /**
  * Load module, stories and members.

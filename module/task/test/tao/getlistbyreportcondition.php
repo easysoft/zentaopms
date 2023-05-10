@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
-title=taskModel->getDataOfTasksPerExecution();
+title=taskModel->getListByReportCondition();
 timeout=0
 cid=1
 
