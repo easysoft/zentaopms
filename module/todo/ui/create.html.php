@@ -150,7 +150,7 @@ formPanel
                     set(array
                     (
                         'class' => 'cycle-date',
-                        'name'  => 'date',
+                        'name'  => 'config[date]',
                         'type'  => 'date',
                     )),
                     on::blur('dateBlur(this)')
