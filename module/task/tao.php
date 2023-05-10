@@ -488,7 +488,7 @@ class taskTao extends taskModel
             ->exec();
         if(dao::isError()) return false;
 
-        return $clonedTaskID;
+        return (int)$clonedTaskID;
     }
 
     /**

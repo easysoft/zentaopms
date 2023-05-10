@@ -1954,6 +1954,28 @@ class taskTest
     }
 
     /**
+     * 拆分已消耗的任务。
+     * split the consumed task.
+     *
+     * @param  object $parentTaskID
+     * @param  string $testType     subTaskEffort|childrenTask
+     * @access public
+     * @return object
+     */
+    public function splitConsumedTaskTest(int $parentTaskID, string $testType): object
+    {
+        global $tester;
+
+        $parentTask = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentTaskID)->fetch();
+        $taskID     = $this->objectModel->splitConsumedTask($parentTask);
+
+        $testResult['subTaskEffort'] = $tester->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
+        $testResult['childrenTask']  = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+
+        return $testResult[$testType];
+    }
+
+    /**
      * 更新看板中的任务泳道数据。
      * Update the task lane data in Kanban.
      *

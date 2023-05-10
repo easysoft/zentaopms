@@ -1,0 +1,8 @@
+title: table zt_task
+author: mayue
+version: "1.0"
+fields:
+  - field: id
+    range: 1-9
+  - field: consumed
+    range: 1-3

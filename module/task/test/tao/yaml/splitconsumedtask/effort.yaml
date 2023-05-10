@@ -1,0 +1,14 @@
+title: table zt_effort
+desc: "任务工时记录"
+author: mayue
+version: "1.0"
+fields:
+  - field: id
+    range: 1-3
+  - field: objectType
+    note: "对象类型"
+    range: task
+  - field: objectID
+    range: 1-3
+  - field: consumed
+    range: 1-3
