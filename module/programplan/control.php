@@ -345,7 +345,15 @@ class programplan extends control
             if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
             $objectID =  $_POST['id'];
 
-            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+            if($_POST['type'] == 'point')
+            {
+                $this->loadModel('review')->updateReviewDate($objectID, $_POST['type']);
+            }
+            else
+            {
+                $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+            }
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success'));

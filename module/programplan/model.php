@@ -381,25 +381,33 @@ class programplanModel extends model
                 foreach($reviewPoints as $id => $point)
                 {
                     if(!isset($this->config->stage->ipdReviewPoint->{$plan->attribute})) continue;
+                    if(!isset($point->status)) $point->status = '';
 
                     $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
                     if(in_array($point->category, $categories))
                     {
-                        $end = $reviewDeadline[$plan->id]['stageEnd'];
-                        if(strpos($point->category, "TR") !== false)
+                        if($point->end)
                         {
-                            if(isset($reviewDeadline[$plan->id]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$plan->id]['taskEnd']))
-                            {
-                                $end = $reviewDeadline[$plan->id]['taskEnd'];
-                            }
-                            else
-                            {
-                                $end = $this->getReviewDeadline($end);
-                            }
+                            $end = $point->end;
                         }
-                        elseif(strpos($point->category, "DCP") !== false)
+                        else
                         {
-                            $end = $this->getReviewDeadline($end, 2);
+                            $end = $reviewDeadline[$plan->id]['stageEnd'];
+                            if(strpos($point->category, "TR") !== false)
+                            {
+                                if(isset($reviewDeadline[$plan->id]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$plan->id]['taskEnd']))
+                                {
+                                    $end = $reviewDeadline[$plan->id]['taskEnd'];
+                                }
+                                else
+                                {
+                                    $end = $this->getReviewDeadline($end);
+                                }
+                            }
+                            elseif(strpos($point->category, "DCP") !== false)
+                            {
+                                $end = $this->getReviewDeadline($end, 2);
+                            }
                         }
 
                         $data = new stdclass();
@@ -410,7 +418,7 @@ class programplanModel extends model
                         $data->attribute     = '';
                         $data->milestone     = '';
                         $data->owner_id      = '';
-                        $data->status        = isset($point->status) ? zget($this->lang->review->statusList, $point->status) : $this->lang->review->wait;
+                        $data->status        = $point->status ? zget($this->lang->review->statusList, $point->status) : $this->lang->review->wait;
                         $data->begin         = $end;
                         $data->deadline      = $end;
                         $data->realBegan     = $point->createdDate;
@@ -420,7 +428,7 @@ class programplanModel extends model
                         $data->start_date    = $end;
                         $data->endDate       = $end; 
                         $data->duration      = 1;
-                        $data->color         = '#FC913F';
+                        $data->color         = isset($this->lang->program->gantt->reviewColorList[$point->status]) ? $this->lang->program->gantt->reviewColorList[$point->status] : '#FC913F';
                         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
                         $data->textColor     = $this->lang->execution->gantt->stage->textColor;
                         $data->bar_height    = $this->lang->execution->gantt->bar_height;

@@ -484,7 +484,7 @@ function validateResources(id)
     flag = true;
 
     /* Check status. */
-    if(status !== statusLang)
+    if(status !== statusLang && type != 'point')
     {
         if(type == 'task')
         {
@@ -502,9 +502,23 @@ function validateResources(id)
         return false;
     }
 
+    var itemID;
+    if(type == 'task')
+    {
+        itemID = task.id.split("-")[1];
+    }
+    else if(type == 'plan')
+    {
+        itemID = task.id;
+    }
+    else if(type == 'point')
+    {
+        itemID = task.id.split("-")[2];
+    }
+
     /* Check data. */
     var postData = {
-        'id'        : type == 'task' ? task.id.split("-")[1] : task.id,
+        'id'        : itemID,
         'startDate' : from.toLocaleDateString('en-CA'),
         'endDate'   : to.toLocaleDateString('en-CA'),
         'type'      : type
