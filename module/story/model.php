@@ -98,22 +98,23 @@ class storyModel extends model
     /**
      * Get stories by idList.
      *
-     * @param  int|array|string    $storyIdList
-     * @param  string $type requirement|story
-     * @param  string $mode all
+     * @param  array|string $storyIdList
+     * @param  string       $type     requirement|story
+     * @param  string       $mode     all
      * @access public
      * @return array
      */
-    public function getByList($storyIdList = 0, $type = 'story', $mode = '')
+    public function getByList(array|string $storyIdList, string $type = 'story', string $mode = ''): array
     {
+        if(empty($storyIdList)) return array();
         return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.version=t2.version')
+            ->andWhere('t1.id')->in($storyIdList)
+            ->andWhere('t1.type')->eq($type)
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq(0)->fi()
-            ->beginIF($storyIdList)->andWhere('t1.id')->in($storyIdList)->fi()
-            ->beginIF(!$storyIdList)->andWhere('t1.type')->eq($type)->fi()
             ->fetchAll('id');
     }
 
@@ -2961,57 +2962,26 @@ class storyModel extends model
     /**
      * Get stories list of a product.
      *
-     * @param  int          $productID
-     * @param  int          $branch
-     * @param  array|string $moduleIdList
-     * @param  string       $status
-     * @param  string       $type    requirement|story
-     * @param  string       $orderBy
-     * @param  array|string $excludeStories
-     * @param  object       $pager
-     * @param  bool         $hasParent
+     * @param  string|int       $productID
+     * @param  array|string|int $branch
+     * @param  array|string     $moduleIdList
+     * @param  string           $status
+     * @param  string           $type    requirement|story
+     * @param  string           $orderBy
+     * @param  array|string     $excludeStories
+     * @param  object|null      $pager
+     * @param  bool             $hasParent
      *
      * @access public
      * @return array
      */
-    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $hasParent = true, $excludeStories = '', $pager = null)
+    public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
-        $stories        = array();
-        $branchProducts = array();
-        $normalProducts = array();
-        $productList    = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productID)->fetchAll('id');
-        foreach($productList as $product)
-        {
-            if($product->type != 'normal')
-            {
-                $branchProducts[$product->id] = $product->id;
-                continue;
-            }
-
-            $normalProducts[$product->id] = $product->id;
-        }
-
-        $productQuery = '(';
-        if(!empty($normalProducts)) $productQuery .= '`product` ' . helper::dbIN(array_keys($normalProducts));
-        if(!empty($branchProducts))
-        {
-            if(!empty($normalProducts)) $productQuery .= " OR ";
-            $productQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts));
-
-            if($branch !== 'all')
-            {
-                if(is_array($branch)) $branch = join(',', $branch);
-                $productQuery .= " AND `branch` " . helper::dbIN($branch);
-            }
-            $productQuery .= ')';
-        }
-        if(empty($normalProducts) and empty($branchProducts)) $productQuery .= '1 = 1';
-        $productQuery .= ') ';
-
-        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
-            ->where('product')->in($productID)
+        $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
+        $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
             ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
@@ -3019,12 +2989,11 @@ class storyModel extends model
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
 
-        return $this->mergePlanTitle($productID, $stories, $branch, $type);
+        return $this->mergePlanTitle($productID, $stories, $type);
     }
 
     /**
@@ -3245,7 +3214,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $branch, $type);
+        return $this->mergePlanTitle($productID, $stories, $type);
     }
 
     /**
@@ -3274,7 +3243,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $branch, $type);
+        return $this->mergePlanTitle($productID, $stories, $type);
     }
 
     /**
@@ -3643,7 +3612,7 @@ class storyModel extends model
         }
 
         $this->dao->sqlobj->sql = $query;
-        return $this->mergePlanTitle($productID, $stories, $branch, $storyType);
+        return $this->mergePlanTitle($productID, $stories, $storyType);
     }
 
     /**
@@ -3841,7 +3810,7 @@ class storyModel extends model
         $productIdList = array();
         foreach($stories as $story) $productIdList[$story->product] = $story->product;
 
-        return $this->mergePlanTitle($productIdList, $stories, 0, $storyType);
+        return $this->mergePlanTitle($productIdList, $stories, $storyType);
     }
 
     /**
@@ -4838,83 +4807,38 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function mergePlanTitle($productID, $stories, $branch = 0, $type = 'story')
+    public function mergePlanTitle(string|int $productID, array $stories, string $type = 'story'): array
     {
-        $query = $this->dao->get();
-        if(is_array($branch))
+        $rawQuery = $this->dao->get();
+
+        /* Get plans. */
+        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
+
+        /* Get parent stories and children. */
+        $stories = $this->storyTao->mergeChildren($stories, $type);
+        $parents = $this->storyTao->extractParents($stories);
+        if($parents)
         {
-            unset($branch[0]);
-            $branch = join(',', $branch);
-            if($branch) $branch = "0,$branch";
+            $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $children = $this->dao->select('id,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
         }
-        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
-            ->Where('deleted')->eq(0)
-            ->beginIF($productID)->andWhere('product')->in($productID)->fi()
-            ->fetchPairs('id', 'title');
-
-        /* For requirement children. */
-        if($type == 'requirement')
-        {
-            $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
-              ->where('AType')->eq('requirement')
-              ->andWhere('BType')->eq('story')
-              ->andWhere('relation')->eq('subdivideinto')
-              ->andWhere('AID')->in(array_keys($stories))
-              ->fetchAll();
-
-            $group = array();
-            foreach($relations as $relation) $group[$relation->AID][] = $relation->BID;
-            foreach($stories as $story)
-            {
-                if(!isset($group[$story->id])) continue;
-                $story->children = $this->getByList($group[$story->id]);
-
-                /* export requirement linkstories. */
-                foreach($story->children as $child) $story->linkStories .= $child->title . ',';
-            }
-        }
-
-        $parents      = array();
-        $tmpStories   = array();
-        $childStories = array();
-        foreach($stories as $story)
-        {
-            $tmpStories[$story->id] = $story;
-            if($story->parent > 0) $parents[$story->parent] = $story->parent;
-        }
-        $parents = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($parents)->fetchAll('id');
 
         foreach($stories as $storyID => $story)
         {
-            /* export story linkstories. */
-            if($story->parent == -1)
-            {
-                $childrenTitle      = $this->dao->select('title')->from(TABLE_STORY)->where('parent')->eq($story->id)->fetchAll();
-                $childrenTitle      = array_column($childrenTitle, 'title');
-                $story->linkStories = implode(',', $childrenTitle);
-            }
+            /* Export story linkstories. */
+            if(isset($children[$story->id])) $story->linkStories = implode(',', array_column($children[$story->id], 'title'));
 
-            if($story->parent > 0)
-            {
-                if(isset($stories[$story->parent]))
-                {
-                    $stories[$story->parent]->children[$story->id] = $story;
-                    unset($stories[$storyID]);
-                }
-                else
-                {
-                    $parent = $parents[$story->parent];
-                    $story->parentName = $parent->title;
-                }
-            }
+            /* Merge parent story title. */
+            if($story->parent > 0 and isset($parents[$story->parent]) $story->parentName = $parents[$story->parent]->title;
 
+            /* Merge plan title. */
             $story->planTitle = '';
-            $storyPlans = explode(',', trim($story->plan, ','));
+            $storyPlans       = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
         }
 
         /* For save session query. */
-        $this->dao->sqlobj->sql = $query;
+        $this->dao->sqlobj->sql = $rawQuery;
         return $stories;
     }
 

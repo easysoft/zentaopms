@@ -106,38 +106,6 @@ class storyTao extends storyModel
     }
 
     /**
-     * 构建研发需求的跟踪矩阵信息。
-     * Build story track.
-     *
-     * @param  object    $story
-     * @param  int       $projectID
-     * @access protected
-     * @return object
-     */
-    protected function buildStoryTrack(object $story, int $projectID = 0): object
-    {
-        /* 获取关联需求的用例、Bug、任务。 */
-        $track = new stdclass();
-        $track->parent = $story->parent;
-        $track->title  = $story->title;
-        $track->cases  = $this->loadModel('testcase')->getStoryCases($story->id);
-        $track->bugs   = $this->loadModel('bug')->getStoryBugs($story->id);
-        $track->tasks  = $this->loadModel('task')->getListByStory($story->id, 0, $projectID);
-        if($this->config->edition != 'max') return $track;
-
-        /* 获取关联需求的设计、关联版本库提交。 */
-        $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
-        $track->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
-            ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
-            ->where('t1.AType')->eq('design')
-            ->andWhere('t1.BType')->eq('commit')
-            ->andWhere('t1.AID')->in(array_keys($track->designs))
-            ->fetchPairs();
-
-        return $track;
-    }
-
-    /**
      * 获取用户需求细分的研发需求，或者研发需求关联的用户需求。
      * Get associated requirements.
      *
@@ -290,5 +258,124 @@ class storyTao extends storyModel
             ->andWhere('status')->ne('closed')
             ->groupBy('product')
             ->fetchPairs();
+    }
+
+    /**
+     * 构建研发需求的跟踪矩阵信息。
+     * Build story track.
+     *
+     * @param  object    $story
+     * @param  int       $projectID
+     * @access protected
+     * @return object
+     */
+    protected function buildStoryTrack(object $story, int $projectID = 0): object
+    {
+        /* 获取关联需求的用例、Bug、任务。 */
+        $track = new stdclass();
+        $track->parent = $story->parent;
+        $track->title  = $story->title;
+        $track->cases  = $this->loadModel('testcase')->getStoryCases($story->id);
+        $track->bugs   = $this->loadModel('bug')->getStoryBugs($story->id);
+        $track->tasks  = $this->loadModel('task')->getListByStory($story->id, 0, $projectID);
+        if($this->config->edition != 'max') return $track;
+
+        /* 获取关联需求的设计、关联版本库提交。 */
+        $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $track->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
+            ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
+            ->where('t1.AType')->eq('design')
+            ->andWhere('t1.BType')->eq('commit')
+            ->andWhere('t1.AID')->in(array_keys($track->designs))
+            ->fetchPairs();
+
+        return $track;
+    }
+
+    /**
+     * 根据产品 ID 列表和分支参数，构建查询条件。
+     * Build products condition.
+     *
+     * @param  string|int       $productIdList
+     * @param  array|string|int $branch
+     * @access protected
+     * @return string
+     */
+    protected function buildProductsCondition(string|int $productIdList, array|string|int $branch): string
+    {
+        /* 如果查询所有分支，直接用 idList 条件。 */
+        if(empty($productIdList)) return '1=1';
+        if($branch === 'all') return '`product` ' . helper::dbIN($productIdList);
+
+        /* 将产品分类为正常产品和多分支产品。 */
+        $branchProducts = array();
+        $normalProducts = array();
+        $productList    = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
+        foreach($productList as $product)
+        {
+            if($product->type != 'normal') $branchProducts[$product->id] = $product->id;
+            if($product->type == 'normal') $normalProducts[$product->id] = $product->id;
+        }
+
+        /* 如果没有多分支产品，直接返回正常产品 ID 列表。*/
+        if(empty($branchProducts)) return '`product` ' . helper::dbIN($normalProducts);
+
+        /* 构造多分支产品和正常产品的复合条件。 */
+        $productQuery = "(`product` " . helper::dbIN($branchProducts) . " AND `branch` " . helper::dbIN($branch) . ')';
+        if(!empty($normalProducts)) $productQuery .= ' OR `product` ' . helper::dbIN($normalProducts);
+        return "({$productQuery}) ";
+    }
+
+    /**
+     * 将需求列表中的子需求合并到列表中的父需求下。
+     * Merge children to parent.
+     *
+     * @param  array     $stories
+     * @param  string    $type
+     * @access protected
+     * @return int[]
+     */
+    protected function mergeChildren(array $stories, string $type = 'story'): array
+    {
+        /* For requirement children. */
+        $relationGroups = array();
+        if($type == 'requirement') $relationGroups = $this->storyTao->batchGetRelations(array_keys($stories), $type, array('*'));
+
+        foreach($stories as $storyID => $story)
+        {
+            /* Merge to parent and unset in list. */
+            if($story->parent > 0 and isset($stories[$story->parent]))
+            {
+                $stories[$story->parent]->children[$story->id] = $story;
+                unset($stories[$storyID]);
+            }
+
+            /* Merge subdivided stories for requirement. */
+            if(!empty($relationGroups[$story->id]))
+            {
+                $story->children    = $relationGroups[$story->id];
+                $story->linkStories = implode(',', array_column($story->children, 'title'));
+            }
+        }
+        return $stories;
+    }
+
+    /**
+     * 提取需求列表中的父需求 ID 列表。
+     * Extract parents from stories.
+     *
+     * @param  array     $stories
+     * @access protected
+     * @return int[]
+     */
+    protected function extractParents(array $stories): array
+    {
+        $parent = array_map(function($story)
+        {
+            if($story->parent == '-1') return $story->id;
+            if($story->parent > '0')   return $story->parent;
+            return false;
+        }, $stories);
+        return array_values(array_unique(array_filter($parent)));
     }
 }
