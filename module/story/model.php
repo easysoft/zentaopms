@@ -3439,19 +3439,19 @@ class storyModel extends model
     /**
      * Get stories list of a execution.
      *
-     * @param  array|int $executionID
-     * @param  int       $productID
-     * @param  int       $branch
-     * @param  string    $orderBy
-     * @param  string    $type
-     * @param  int       $param
-     * @param  string    $storyType
-     * @param  string    $excludeStories
-     * @param  object    $pager
+     * @param  array|int    $executionID
+     * @param  int          $productID
+     * @param  int          $branch
+     * @param  string       $orderBy
+     * @param  string       $type
+     * @param  int          $param
+     * @param  string       $storyType
+     * @param  array|string $excludeStories
+     * @param  object       $pager
      * @access public
      * @return array
      */
-    public function getExecutionStories(array|int $executionID = 0, int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', string $excludeStories = '', object|null $pager = null)
+    public function getExecutionStories(array|int $executionID = 0, int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
 
@@ -4800,18 +4800,19 @@ class storyModel extends model
     /**
      * Merge plan title.
      *
-     * @param  int|array $productID
-     * @param  array     $stories
-     * @param  int       $branch
+     * @param  int|array|string $productID
+     * @param  array            $stories
+     * @param  string           $type          story|requirement
      *
      * @access public
      * @return array
      */
-    public function mergePlanTitle(string|int $productID, array $stories, string $type = 'story'): array
+    public function mergePlanTitle(array|string|int $productID, array $stories, string $type = 'story'): array
     {
         $rawQuery = $this->dao->get();
 
         /* Get plans. */
+        if(is_int($productID))$productID = (string)$productID;
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
         /* Get parent stories and children. */
@@ -4819,8 +4820,8 @@ class storyModel extends model
         $parents = $this->storyTao->extractParents($stories);
         if($parents)
         {
+            $children = $this->dao->select('id,parent,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
             $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
-            $children = $this->dao->select('id,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
         }
 
         foreach($stories as $storyID => $story)
@@ -5342,7 +5343,7 @@ class storyModel extends model
     public function getTracks(int $productID = 0, string|int $branch = 0, int $projectID = 0, object|null $pager = null): array|false
     {
         /* 获取从用户需求开始的跟踪矩阵信息。 */
-        $tracks = $this->storyTao->getRequirements4Track($productID, $branch, $projectID, $pager);
+        $tracks = $this->getRequirements4Track($productID, $branch, $projectID, $pager);
         if(count($tracks) >= $pager->recPerPage) return $tracks;
 
         /* 如果没有用户需求，或者需求不满一页，用非细分的研发需求补充。 */
