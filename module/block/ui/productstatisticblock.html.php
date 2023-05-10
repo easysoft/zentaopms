@@ -31,7 +31,7 @@ function getProductTabs($products, $blockNavCode): array
             set('class', 'nav-item' . ($product->id == $selected ? ' active' : '')),
             a
             (
-                set('class', 'ellipsis'),
+                set('class', 'ellipsis text-dark'),
                 set('data-toggle', 'tab'),
                 set('href', "#tab3{$blockNavCode}Content{$product->id}"),
                 $product->name
@@ -71,24 +71,26 @@ function getProductInfo($products, $blockNavID): array
     {
         $tabItems[] = div
         (
-            set('class', 'tab-pane' . ($product->id == $selected ? ' active' : '')),
+            set('class', 'h-full' . ($product->id == $selected ? ' active' : '')),
             set('id', "tab3{$blockNavID}Content{$product->id}"),
             div
             (
-                set('class', 'flex'),
+                set('class', 'flex h-full'),
                 cell
                 (
-                    set('width', '68%'),
+                    set('class', 'flex-1'),
+                    set('width', '70%'),
                     div
                     (
-                        set('class', 'flex'),
+                        set('class', 'flex h-full'),
                         cell
                         (
-                            set('width', '45%'),
-                            set('class', 'px-3 py-2'),
+                            set('width', '40%'),
+                            set('class', 'p-4'),
                             div
                             (
-                                set('class', 'mx-6 my-4 bg-primary aspect-square')
+                                set('class', 'py-6'),
+                                div(set('class', 'bg-primary aspect-square w-28 chart'))
                             ),
                             div
                             (
@@ -97,52 +99,107 @@ function getProductInfo($products, $blockNavID): array
                                 (
                                     set('class', 'flex-1 text-center'),
                                     div(span('8073')),
-                                    div(span('BUG总数'))
+                                    div
+                                    (
+                                        span
+                                        (
+                                            set('class', 'text-sm text-gray'),
+                                            'BUG总数'
+                                        )
+                                    )
                                 ),
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
                                     div(span('6549')),
-                                    div(span('已关闭'))
+                                    div
+                                    (
+                                        span
+                                        (
+                                            set('class', 'text-sm text-gray'),
+                                            '已关闭'
+                                        )
+                                    )
                                 ),
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
                                     div(span('1542')),
-                                    div(span('未关闭'))
+                                    div
+                                    (
+                                        span
+                                        (
+                                            set('class', 'text-sm text-gray'),
+                                            '未关闭'
+                                        )
+                                    )
                                 )
                             )
                         ),
                         cell
                         (
-                            set('width', '55%'),
-                            set('class', 'py-2 border-r'),
+                            set('width', '60%'),
+                            set('class', 'py-4'),
                             div
                             (
-                                set('class', 'py-2'),
-                                span('未完成的需求统计')
-                            ),
-                            div
-                            (
-                                set('class', 'py-1'),
-                                span('本周完成 12 | '),
-                                span('本周新增 35')
-                            ),
-                            div
-                            (
-                                set('class', 'mr-4 bg-primary aspect-video'),
+                                set('class', 'border-r'),
+                                div
+                                (
+                                    set('class', 'px-2 pb-2'),
+                                    span('未完成的需求统计')
+                                ),
+                                div
+                                (
+                                    set('class', 'px-2'),
+                                    span
+                                    (
+                                        set('class', 'border-r pr-2 text-sm text-gray'),
+                                        html('本周完成 <span class="text-success font-bold">12</span>')
+                                    ),
+                                    span
+                                    (
+                                        set('class', 'pl-2 text-sm text-gray'),
+                                        html('本周新增 <span class="text-black font-bold">35</span>')
+                                    )
+                                ),
+                                div
+                                (
+                                    set('class', 'pr-4 py-2'),
+                                    div
+                                    (
+                                        set('class', 'bg-primary h-44 w-full'),
+                                    )
+                                )
                             )
                         )
                     )
                 ),
                 cell
                 (
-                    set('width', '32%'),
-                    set('class', 'py-2 px-6'),
+                    set('width', '189'),
+                    set('class', 'p-4'),
+                    div
+                    (
+                        set('class', 'pb-2'),
+                        span('产品最新推进')
+                    ),
                     div
                     (
                         set('class', 'py-2'),
-                        span('产品最新推进')
+                        div(span(set('class', 'text-sm'), '最新计划')),
+                        div(set('class', 'py-1'), a('18.8.stabe'), span(set('class', 'label light-pale rounded-xl ml-2 px-1'), '未开始'))
+                    ),
+                    div
+                    (
+                        set('class', 'py-2'),
+                        div(span(set('class', 'text-sm'), '最新执行')),
+                        div(set('class', 'py-1'), a('18.8.stabe'), span(set('class', 'label important-pale rounded-xl ml-2'), '进行中'))
+                    ),
+                    div
+                    (
+                        set('class', 'py-2'),
+                        div(span(set('class', 'text-sm'), '最新发布')),
+                        div(set('class', 'py-1'), a('18.8.stabe'), span(set('class', 'label success-pale rounded-xl ml-2'), '正常'))
                     ),
                 )
             )
@@ -154,24 +211,24 @@ function getProductInfo($products, $blockNavID): array
 $blockNavCode = 'nav-' . uniqid();
 div
 (
-    set('class', 'productstatistic-block'),
+    set('class', 'productstatistic-block of-hidden ' . ($longBlock ? '' : 'block-sm')),
     div
     (
-        set('class', 'flex'),
+        set('class', "flex h-full" . ($longBlock ? '' : 'col')),
         cell
         (
-            set('width', '25%'),
+            set('width', '22%'),
             set('class', 'of-hidden bg-secondary-pale'),
             ul
             (
-                set('class', 'nav nav-tabs nav-stacked'),
+                set('class', 'nav nav-tabs nav-stacked h-full of-y-auto of-x-hidden'),
                 getProductTabs($products, $blockNavCode)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
-            set('width', '75%'),
+            set('width', '78%'),
             getProductInfo($products, $blockNavCode)
         )
     )
