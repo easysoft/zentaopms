@@ -93,10 +93,11 @@ class projectZen extends project
      * Validate $postData and prepare $project for update.
      *
      * @param  object       $postData
+     * @param  int          $hasProduct
      * @access protected
      * @return object|false
      */
-    protected function prepareProject(object $postData): object|false
+    protected function prepareProject(object $postData, int $hasProduct): object|false
     {
         $project = $postData->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -111,7 +112,7 @@ class projectZen extends project
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        if($oldProject->hasProduct)
+        if($hasProduct)
         {
             /* Check if products not empty. */
             if(!$this->checkProductsNotEmpty($this->post->products)) return false;
