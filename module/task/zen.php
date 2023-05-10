@@ -380,7 +380,7 @@ class taskZen extends task
 
         /* Set Menu. */
         $this->execution->setMenu($executionID);
-        if($this->app->tab == 'project') $this->project->setMenu($this->session->project);
+        if($this->app->tab == 'project') $this->project->setMenu($execution->project);
 
         return $executionID;
     }
@@ -1076,22 +1076,6 @@ class taskZen extends task
             $testTasks[$storyID] = $task;
         }
         return $testTasks;
-    }
-
-    /**
-     * 根据一级菜单设置任务模块的导航。
-     * According to the main menu, set the navbar of the task module.
-     *
-     * @param  int       $executionID
-     * @param  int       $projectID
-     * @access protected
-     * @return void
-     */
-    protected function setMenuByTab(int $executionID, int $projectID = 0): void
-    {
-        $this->execution->setMenu($executionID);
-
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
     }
 
     /**

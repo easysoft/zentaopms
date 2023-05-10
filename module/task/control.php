@@ -149,7 +149,7 @@ class task extends control
             return print(js::reload('parent.parent'));
         }
 
-        $this->taskZen->setMenuByTab($executionID, $execution->project);
+        $this->taskZen->setMenu($executionID);
 
         $this->taskZen->buildBatchCreateForm($execution, $storyID, $moduleID, $taskID, $output);
     }
