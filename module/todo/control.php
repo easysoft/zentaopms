@@ -523,8 +523,10 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDetail($todoID)
+    public function ajaxGetDetail(string $todoID)
     {
+        $todoID = (int)$todoID;
+
         $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
         $this->display();
     }
@@ -538,8 +540,10 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProgramID($objectID, $objectType)
+    public function ajaxGetProgramID(string $objectID, string $objectType)
     {
+        $objectID = (int)$objectID;
+
         $table = $objectType == 'project' ? TABLE_PROJECT : TABLE_PRODUCT;
         $field = $objectType == 'project' ? 'parent' : 'program';
         echo $this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch($field);
@@ -553,7 +557,7 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionPairs($projectID)
+    public function ajaxGetExecutionPairs(string $projectID)
     {
         $projectID = (int)$projectID;
         $this->session->set('project', $projectID);
@@ -574,8 +578,9 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductPairs($projectID)
+    public function ajaxGetProductPairs(string $projectID)
     {
+        $projectID = (int)$projectID;
         $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
