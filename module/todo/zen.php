@@ -132,6 +132,26 @@ class todoZen extends todo
     }
 
     /**
+     * 添加按年循环待办的配置项。
+     * Adds a yearly cycle of configuration items.
+     *
+     * @param  object    $formData
+     * @access protected
+     * @return object
+     */
+    protected function addCycleYearConfig(object $formData): object
+    {
+        $rowData = $formData->rawdata;
+        if(empty($rowData->cycle)) return $formData;
+        if(!empty($rowData->config) && $rowData->config['type'] != 'year') return $formData;
+
+        $formData->data->config['specifiedDate'] = 1;
+        $formData->data->config['cycleYear'] = 1;
+
+        return $formData;
+    }
+
+    /**
      * 准备要创建的todo的数据。
      * Prepare the creation data.
      *

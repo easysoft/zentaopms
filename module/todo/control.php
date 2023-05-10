@@ -43,6 +43,7 @@ class todo extends control
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->create->form);
+            $formData = $this->todoZen->addCycleYearConfig($formData);
             $todoData = $this->todoZen->beforeCreate($formData);
 
             $uid  = isset($formData->rawdata->uid) ? $formData->rawdata->uid : '';
@@ -55,7 +56,7 @@ class todo extends control
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo, $formData);
 
-            if(!empty($_POST['objectID'])) return $this->send(array('result' => 'success'));
+            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success'));
 
             if($from == 'block')
             {
