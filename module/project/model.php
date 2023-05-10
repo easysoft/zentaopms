@@ -1214,7 +1214,7 @@ class projectModel extends model
     public function create(object $project, object $postData): int|bool
     {
         $requiredFields = $this->config->project->create->requiredFields;
-        if($postData->rawdata->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
+        if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
