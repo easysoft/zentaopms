@@ -357,14 +357,15 @@ class programplanTest
     }
 
     /**
+     * 测试检查code的唯一性，
      * Test check code unique.
      *
-     * @param array $codes
-     * @param array $planIDList
+     * @param  array  $codes
+     * @param  array  $planIDList
      * @access public
-     * @return string
+     * @return array|bool
      */
-    public function checkCodeUniqueTest($codes, $planIDList = array())
+    public function checkCodeUniqueTest(array $codes, array $planIDList = array()): array|bool
     {
         $objects = $this->objectModel->checkCodeUnique($codes, $planIDList);
 
