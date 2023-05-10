@@ -24,6 +24,7 @@ jsVar('start', key($times));
 jsVar('userID', $app->user->id);
 jsVar('defaultType', '');
 jsVar('userAccount', $app->user->account);
+jsVar('defaultDate', date('Y-m-d'));
 
 $cycleTypeOptions = array
 (
@@ -148,9 +149,9 @@ formPanel
                 (
                     set(array
                     (
+                        'class' => 'cycle-date',
                         'name'  => 'date',
                         'type'  => 'date',
-                        'value' => date('Y-m-d')
                     )),
                     on::blur('dateBlur(this)')
                 )

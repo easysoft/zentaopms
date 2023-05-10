@@ -11,8 +11,9 @@ function toggleCycle(switcher)
 {
     if(switcher.checked)
     {
-        $('.date').attr('disabled','disabled');
-        $('.date').prop('value','');
+        $('.date').attr('disabled', 'disabled');
+        $('.date').prop('value', '');
+        $('.cycle-date').prop('value', defaultDate);
         $('.cycle-config:not(.type-week,.type-month,.type-year)').removeClass('hidden');
         $('#switchDate').prop('checked', false);
         $('#type').closest('.form-row').addClass('hidden');
@@ -21,6 +22,7 @@ function toggleCycle(switcher)
     }
     else
     {
+        $('.cycle-date').prop('value', '');
         $('.date').removeAttr('disabled');
         $('.cycle-config').addClass('hidden');
         $('#type').closest('.form-row').removeClass('hidden');
