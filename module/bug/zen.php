@@ -207,7 +207,7 @@ class bugZen extends bug
                 if($change['field'] != 'status') continue;
 
                 $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                $cancelURL    = $this->server->http_referer;
+                $canceledURL  = $this->server->http_referer;
                 return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
             }
         }
@@ -981,10 +981,10 @@ class bugZen extends bug
         $task = $this->task->getByID($taskID);
         if($task->deleted) return true;
 
-        $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+        $confirmedURL = $this->createLink('task', 'view', "taskID=$taskID");
         unset($_GET['onlybody']);
-        $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-        return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+        $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+        return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
     }
 
     /**
