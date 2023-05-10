@@ -628,17 +628,7 @@ class taskModel extends model
                 $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
             }
 
-            /* Record task version. */
-            if(isset($task->version) and $task->version > $oldTask->version)
-            {
-                $taskSpec = new stdClass();
-                $taskSpec->task       = $taskID;
-                $taskSpec->version    = $task->version;
-                $taskSpec->name       = $task->name;
-                $taskSpec->estStarted = $task->estStarted;
-                $taskSpec->deadline   = $task->deadline;
-                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
-            }
+            if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
 
             if($this->post->story != $oldTask->story)
             {
