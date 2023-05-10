@@ -1482,14 +1482,14 @@ class projectModel extends model
      */
     public function update(object $project, object $oldProject): array|false
     {
-        /* 通过id查老项目信息, 处理parent和图片字段。*/
-        /* Fetch oldProject's info and get parent and file info. */
+        /* 通过主键查老项目信息, 处理父节点和图片字段。*/
+        /* Fetch old project's info and dispose parent and file info. */
         $projectID = $oldProject->id;
         if(!isset($project->parent)) $project->parent = $oldProject->parent;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
 
         /* 若此项目为多迭代项目， 检查起止日期不得小于迭代的起止日期。*/
-        /* If this project has multiStage, check if execution's start and end dates in project's start and end dates. */
+        /* If this project has multiple stage, check if execution's start and end dates in project's start and end dates. */
         if($oldProject->multiple && !$this->checkDates($projectID, $project)) return false;
 
         /* 更新项目表。*/
