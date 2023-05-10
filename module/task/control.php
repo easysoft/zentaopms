@@ -114,7 +114,7 @@ class task extends control
         $extra       = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        /* 判断不能访问的执行。 TODO: 提示语应改为执行。 */
+        /* 判断不能访问的执行。 Judge execution without access. */
         if($this->taskZen->isLimitedInExecution($executionID))
         {
             echo js::alert($this->lang->task->createDenied);
@@ -125,20 +125,21 @@ class task extends control
 
         if(!empty($_POST))
         {
-            /* 批量创建任务。 */
+            /* 批量创建任务。 Batch create tasks. */
             $postData   = form::data($this->config->task->form->batchCreate);
             $tasks      = $this->taskZen->prepareTasks4BatchCreate($execution, $postData->rawdata);
             $taskIdList = $this->task->batchCreate($execution, $tasks, $output);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            /* Return task id list when call the API. */
+            /* 接口调用返回任务编号列表。 Return task id list when call the API. */
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
-            /* 生成链接。 TODO: 写配置项。 */
-            $redirectedLink = $this->taskZen->getRedirectedLink($execution);
-            if(!isonlybody()) return print(js::locate($redirectedLink, 'parent'));
+            /* 生成跳转链接。 Generate jump link. */
+            $jumpLink = $this->taskZen->getJumpLink($execution);
+            if(!isonlybody()) return print(js::locate($jumpLink, 'parent'));
 
-            /* If link from no head then reload. */
+            /* 执行应用下或者在运营管理界面下更新看板数据。 */
+            /* Update kanban data under the execution application or under the operation management interface. */
             if($this->app->tab == 'execution' or $this->config->vision == 'lite')
             {
                 $kanbanData = $this->taskZen->getKanbanData($execution);
@@ -148,7 +149,6 @@ class task extends control
             return print(js::reload('parent.parent'));
         }
 
-        /* Set menu. */
         $this->taskZen->setMenuByTab($executionID, $execution->project);
 
         $this->taskZen->buildBatchCreateForm($execution, $storyID, $moduleID, $taskID, $output);

@@ -426,7 +426,7 @@ class taskZen extends task
      */
     protected function prepareTasks4BatchCreate(object $execution, object $formData): array|false
     {
-        /* 去除重复数据。 */
+        /* 去除重复数据。 Deduplicated data. */
         $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
         if(!$tasks) return false;
 
@@ -444,7 +444,7 @@ class taskZen extends task
         $data         = array();
         foreach($formData->name as $i => $name)
         {
-            /* 给同上的变量赋值。 */
+            /* 给同上的变量赋值。 Assign values to ditto fields. */
             $story      = !isset($tasks->story[$i]) || $tasks->story[$i] == 'ditto'            ? $story      : $tasks->story[$i];
             $module     = !isset($tasks->module[$i]) || $tasks->module[$i] == 'ditto'          ? $module     : $tasks->module[$i];
             $type       = !isset($tasks->type[$i]) || $tasks->type[$i] == 'ditto'              ? $type       : $tasks->type[$i];
@@ -452,7 +452,7 @@ class taskZen extends task
             $estStarted = !isset($tasks->estStarted[$i]) || isset($tasks->estStartedDitto[$i]) ? $estStarted : $tasks->estStarted[$i];
             $deadline   = !isset($tasks->deadline[$i]) || isset($tasks->deadlineDitto[$i])     ? $deadline   : $tasks->deadline[$i];
 
-            /* 检查任务名称为空的数据。 */
+            /* 检查任务名称为空的数据。 Check the data whick task's name. */
             if(empty($tasks->name[$i]))
             {
                 if($this->common->checkValidRow('task', $tasks, $i))
@@ -463,9 +463,8 @@ class taskZen extends task
                 continue;
             }
 
-            /* 构建任务数据。 */
             $dittoFields = array('story' => $story, 'module' => $module, 'type' => $type, 'assignedTo' => $assignedTo, 'estStarted' => $estStarted, 'deadline' => $deadline);
-            $data[$i]    = $this->constructData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields);
+            $data[$i]    = $this->buildData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields);
         }
 
         return $data;
@@ -488,7 +487,7 @@ class taskZen extends task
 
         foreach($tasks->story as $key => $storyID)
         {
-            /* 过滤事务型和任务名称为空的数据。 */
+            /* 过滤事务型和任务名称为空的数据。 Filter affair type tasks and empty task name data. */
             if(empty($tasks->name[$key])) continue;
             if($tasks->type[$key] == 'affair') continue;
             if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
@@ -502,7 +501,7 @@ class taskZen extends task
                 $taskNames[]   = $tasks->name[$key - 1];
             }
 
-            /* 判断Post传过来的任务有没有重复数据。 */
+            /* 检查Post传过来的任务有没有重复数据。 Check whether the task passed by Post has duplicate data. */
             $hasExistsName = in_array($tasks->name[$key], $taskNames);
             if($hasExistsName && in_array($storyID, $storyIdList))
             {
@@ -514,7 +513,6 @@ class taskZen extends task
             $taskNames[]   = $tasks->name[$key];
         }
 
-        /* 去重并赋值。 */
         $querySQL = "execution={$execution->id} and story "  . helper::dbIN($storyIdList);
         $result   = $this->loadModel('common')->removeDuplicate('task', $tasks, $querySQL);
         return $result['data'];
@@ -522,7 +520,7 @@ class taskZen extends task
 
     /**
      * 批量创建任务之前构造数据。
-     * Construct data before batch create tasks.
+     * Build data before batch create tasks.
      *
      * @param  object    $execution
      * @param  object    $tasks
@@ -532,7 +530,7 @@ class taskZen extends task
      * @access protected
      * @return object
      */
-    protected function constructData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
+    protected function buildData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
     {
         extract($dittoFields);
         $now = helper::now();
@@ -564,7 +562,7 @@ class taskZen extends task
         if(strpos($this->config->task->create->requiredFields, 'deadline') !== false && empty($deadline))     $task->deadline   = '';
         if(isset($tasks->lanes[$index])) $task->laneID = $tasks->lanes[$index];
 
-        /* 附加工作流字段。 */
+        /* 处理工作流字段。 Process workflow fields. */
         foreach($extendFields as $extendField)
         {
             $task->{$extendField->field} = $tasks->{$extendField->field}[$index];
@@ -1107,7 +1105,7 @@ class taskZen extends task
      */
     protected function getCustomFields(object $execution, string $action): array
     {
-        /* 设置自定义字段列表。 */
+        /* 设置自定义字段列表。 Set custom field list. */
         $customFormField = 'custom' . ucfirst($action). 'Fields';
         foreach(explode(',', $this->config->task->{$customFormField}) as $field)
         {
@@ -1115,16 +1113,16 @@ class taskZen extends task
             $customFields[$field] = $this->lang->task->$field;
         }
 
-        /* 设置已勾选的自定义字段。 */
-        $showFields = $this->config->task->custom->{$action . 'Fields'};
+        /* 设置已勾选的自定义字段。 Set checked custom fields. */
+        $checkedFields = $this->config->task->custom->{$action . 'Fields'};
         if($execution->lifetime == 'ops' || $execution->attribute == 'request' || $execution->attribute == 'review')
         {
             unset($customFields['story']);
-            $showFields = str_replace(',story,', ',', ",{$showFields},");
-            $showFields = trim($showFields, ',');
+            $checkedFields = str_replace(',story,', ',', ",{$checkedFields},");
+            $checkedFields = trim($checkedFields, ',');
         }
 
-        return array($customFields, $showFields);
+        return array($customFields, $checkedFields);
     }
 
     /**
@@ -1142,9 +1140,9 @@ class taskZen extends task
     protected function buildBatchCreateForm(object $execution, int $storyID, int $moduleID, int $taskID, array $output): void
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。 */
+        /* Get region and lane dropdown data and set default values for regions and lanes. */
         if($execution->type == 'kanban') $this->assignKanbanRelatedVars($execution->id, $output);
 
-        /* 任务拆解。 */
         if($taskID)
         {
             $task = $this->dao->findById($taskID)->from(TABLE_TASK)->fetch();
@@ -1152,13 +1150,12 @@ class taskZen extends task
             $this->view->parentPri    = $task->pri;
         }
 
-        /* 获取模块下拉数据。 */
+        /* 获取模块和需求下拉数据。 Get module and story dropdown data. */
         $showAllModule = !empty($this->config->execution->task->allModule) ? 'allModule' : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule);
         $story         = $this->story->getByID($storyID);
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
 
-        /* Set Custom. */
         list($customFields, $showFields) = $this->getCustomFields($execution, 'batchCreate');
 
         $this->view->title        = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
@@ -1179,14 +1176,14 @@ class taskZen extends task
     }
 
     /**
-     * 获取重定向链接。
-     * Get redirected link.
+     * 获取跳转链接。
+     * Get jump link.
      *
      * @param  object    $execution
      * @access protected
      * @return string
      */
-    protected function getRedirectedLink(object $execution): string
+    protected function getJumpLink(object $execution): string
     {
         if($this->app->tab == 'my')
         {
@@ -1216,25 +1213,21 @@ class taskZen extends task
     {
         $this->loadModel('kanban');
 
-        $executionLaneType    = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-        $execGroupBy     = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-        $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+        $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+        $execGroupBy       = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+        $rdSearchValue     = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+        $taskSearchValue   = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
 
-        /* 处理专业研发看板。 */
+        /* 处理专业研发看板。 Handling professional R&D kanban. */
         if($execution->type == 'kanban')
         {
-            $kanbanData    = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-            $kanbanData    = json_encode($kanbanData);
-
-            return $kanbanData;
+            $kanbanData = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            return json_encode($kanbanData);
         }
 
-        /* 处理任务看板。 */
+        /* 处理任务看板。 Handling task kanban. */
         $kanbanData = $this->kanban->getExecutionKanban($execution->id, $executionLaneType, $execGroupBy, $taskSearchValue);
         $kanbanType = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-        $kanbanData = json_encode($kanbanData[$kanbanType]);
-
-        return $kanbanData;
+        return json_encode($kanbanData[$kanbanType]);
     }
 }

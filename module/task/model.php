@@ -144,32 +144,32 @@ class taskModel extends model
      */
     public function batchCreate(object $execution, array $tasks, array $output): array|false
     {
-        /* 检查必填项。 */
+        /* 检查必填项。 Check required fields. */
         $tasks = $this->checkRequired4BatchCreate($execution, $tasks);
         if(!$tasks) return false;
 
-        /* Load module and init vars. */
+        /* 加载模块。 Load module. */
         $this->loadModel('story');
         $this->loadModel('score');
         $this->loadModel('action');
 
-        /* Judge whether the current task is a parent. */
+        /* 判断创建的任务是不是由任务拆分而来。 Judge whether the created task is split from the task. */
         $parentID      = !empty($tasks[1]->parent) ? $tasks[1]->parent : 0;
         $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
 
         $taskIdList = array();
         foreach($tasks as $task)
         {
-            /* 获取当前任务所属泳道并移除laneID属性。 */
+            /* 获取当前任务所属泳道并移除laneID属性。 Get the current laneID and remove the laneID from task object. */
             $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
             $laneID = isset($task->laneID) ? $task->laneID : $laneID;
             if(isset($task->laneID)) unset($task->laneID);
 
-            /* 将数据插入到任务表中。 */
+            /* 将数据插入到任务表中。 Insert the tasks. */
             $taskID = $this->taskTao->doCreate($task);
             if(!$taskID) return false;
 
-            /* 更新任务相关信息。 */
+            /* 更新任务相关对象信息。 Update the related objects' info, such as story, kanban and so on. */
             if($task->story) $this->story->setStage($task->story);
             $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
             $this->updateKanban4BatchCreate($taskID, $execution->id, $laneID, $columnID);
@@ -178,16 +178,15 @@ class taskModel extends model
             $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->score->create('task', 'create', $taskID);
 
-            /* 将taskID存入数组中。 */
             $taskIdList[$taskID] = $taskID;
         }
-        if(!dao::isError()) $this->score->create('ajax', 'batchCreate');
+        if(!dao::isError()) $this->score->create('ajax', 'batchCreate'); // Updating scores for the first batch creation operation.
 
-        /* 处理任务拆分的情况。 */
+        /* 拆分任务后更新其他数据。 Process other data after split task. */
         $childTasks = !empty($parentID) ? implode(',', $taskIdList) : '';
         if($parentID) $this->afterSplitTask($oldParentTask, $childTasks);
 
-        /* 更新当前执行下的任务泳道。 */
+        /* 更新当前执行下的任务泳道。 Update the task lane under current execution. */
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
         return $taskIdList;
     }
@@ -3820,7 +3819,6 @@ class taskModel extends model
     {
         $this->loadModel('kanban');
 
-        /* 更新看板数据。 */
         if($this->config->vision == 'lite')
         {
             $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);

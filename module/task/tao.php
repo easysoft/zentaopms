@@ -474,21 +474,25 @@ class taskTao extends taskModel
      */
     protected function splitConsumedTask(object $parentTask): false|int
     {
-        $clonedTask = clone $parentTask;
-        $clonedTask->parent = $parentTask->id;
-        unset($clonedTask->id);
+        /* 复制当前任务信息。 */
+        /* Copy the current task to child task, and change the parent field value. */
+        $childTask = clone $parentTask;
+        $childTask->parent = $parentTask->id;
+        unset($childTask->id);
 
-        $this->dao->insert(TABLE_TASK)->data($clonedTask)->autoCheck()->exec();
+        $this->dao->insert(TABLE_TASK)->data($childTask)->autoCheck()->exec();
         if(dao::isError()) return false;
 
-        $clonedTaskID = $this->dao->lastInsertID();
-        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
+        /* 将父任务的日志记录更新到子任务下。 */
+        /* Update the logs of the parent task under the subtask. */
+        $childTaskID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($childTaskID)
             ->where('objectID')->eq($parentTask->id)
             ->andWhere('objectType')->eq('task')
             ->exec();
         if(dao::isError()) return false;
 
-        return (int)$clonedTaskID;
+        return (int)$childTaskID;
     }
 
     /**
