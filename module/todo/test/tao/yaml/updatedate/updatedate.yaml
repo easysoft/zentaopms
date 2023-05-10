@@ -1,6 +1,6 @@
 title: zt_updatedate
 author: shenshulong
-version: "1.0"
+version: '1.0'
 fields:
     - field: id
       range: 1-100
@@ -37,6 +37,3 @@ fields:
     - field: closedDate
       range: 1-9
       prefix: '2023-04-2'
-
-
-
