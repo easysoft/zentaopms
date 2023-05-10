@@ -146,10 +146,12 @@ class project extends control
     }
 
     /**
+     * 获取解除项目团队成员提示。
      * Ajax get unlink tips when unlink team member.
      *
      * @param  string $projectID
      * @param  string $account
+     *
      * @access public
      * @return void
      */
@@ -159,34 +161,24 @@ class project extends control
         $project = $this->project->getByID($projectID);
         if(!$project->multiple) return;
 
+        /* Get execution members. */
         $executions       = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
-        $executionMembers = $this->dao->select('t1.root,t2.name')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
-            ->where('t1.root')->in(array_keys($executions))
-            ->andWhere('t1.type')->eq('execution')
-            ->andWhere('t1.account')->eq($account)
-            ->fetchPairs();
+        $executionMembers = $this->project->getExecutionMembers($account, array_keys($executions));
         if(empty($executionMembers)) return;
 
-        $executionNames = '';
-        $count          = 0;
-        foreach($executionMembers as $executionName)
-        {
-            if($count == 0) $executionNames  = $executionName;
-            if($count == 1) $executionNames .= ',' . $executionName;
-            if($count > 1) break;
-            $count++;
-        }
-        if(count($executionMembers) <= 2) $this->lang->project->etc = ' ';
+        /* Echo tips based on the number of user executions. */
+        $count          = count($executionMembers);
+        $executionNames = $count != 0 ? current($executionMembers) : '';
+        if($count > 1) $executionNames .= ',' . next($executionMembers);
+        if($count <= 2) $this->lang->project->etc = ' ';
         if(strpos($this->app->getClientLang(), 'zh') !== false)
         {
-            $this->lang->project->unlinkExecutionMember = sprintf($this->lang->project->unlinkExecutionMember, $executionNames, $this->lang->project->etc, count($executionMembers));
+            echo sprintf($this->lang->project->unlinkExecutionMember, $executionNames, $this->lang->project->etc, $count);
         }
         else
         {
-            $this->lang->project->unlinkExecutionMember = sprintf($this->lang->project->unlinkExecutionMember, count($executionMembers), $executionNames, $this->lang->project->etc);
+            echo sprintf($this->lang->project->unlinkExecutionMember, $count, $executionNames, $this->lang->project->etc);
         }
-        echo $this->lang->project->unlinkExecutionMember;
     }
 
     /**

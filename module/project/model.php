@@ -3144,4 +3144,24 @@ class projectModel extends model
             ->orderBy('end_desc')
             ->fetch('maxEnd');
     }
+
+    /**
+     * 获取执行的团队成员。
+     * get execution members.
+     *
+     * @param  string $account
+     * @param  array $executions
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getExecutionMembers(string $account, array $executions): array
+    {
+        return $this->dao->select('t1.root,t2.name')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.root')->in($executions)
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t1.account')->eq($account)
+            ->fetchPairs();
+    }
 }
