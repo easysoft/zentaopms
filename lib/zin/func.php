@@ -776,23 +776,23 @@ function modal()
 /**
  * Modal trigger widget.
  *
- * ?string  target
- * ?bool    keyboard
- * ?bool    moveable
- * ?bool    animation
- * ?int     transTime
- * ?bool    responsive
- * ?string  type
- * ?string  loadingText
- * ?int     loadTimeout
- * ?string  failedTip
- * ?string  timeoutTip
- * ?string  title
- * ?string  content
- * ?object  custom
- * ?string  url
- * ?object  request
- * ?string  dataType
+ * ?string                         target
+ * ?bool                           keyboard
+ * ?bool                           moveable
+ * ?bool                           animation
+ * ?int                            transTime
+ * ?bool                           responsive
+ * ?string                         type
+ * ?string                         loadingText
+ * ?int                            loadTimeout
+ * ?string                         failedTip
+ * ?string                         timeoutTip
+ * ?string                         title
+ * ?string                         content
+ * ?object                         custom
+ * ?string                         url
+ * ?object                         request
+ * ?string                         dataType
  * bool|string|null                backdrop
  * string|int|object|null          size
  * string|int|object|function|null position
