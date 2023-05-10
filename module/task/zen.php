@@ -484,7 +484,7 @@ class taskZen extends task
     {
         $storyIdList = array();
         $taskNames   = array();
-        $preStory    = 0;
+        $prevStory   = 0;
 
         foreach($tasks->story as $key => $storyID)
         {
@@ -493,8 +493,8 @@ class taskZen extends task
             if($tasks->type[$key] == 'affair') continue;
             if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
 
-            if($storyID == 'ditto') $storyID = $preStory;
-            $preStory = $storyID;
+            if($storyID == 'ditto') $storyID = $prevStory;
+            $prevStory = $storyID;
 
             if(!isset($tasks->story[$key - 1]) && $key > 1 && !empty($tasks->name[$key - 1]))
             {
