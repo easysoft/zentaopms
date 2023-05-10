@@ -112,6 +112,7 @@ class todoZen extends todo
 
         $objectID = 0;
         if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
+        $rowData->date = !empty($rowData->config['date']) ? $rowData->config['date'] : $rowData->date;
 
         return $formData->add('account', $this->app->user->account)
             ->setDefault('objectID', 0)
@@ -249,7 +250,9 @@ class todoZen extends todo
         $rowData    = $formData->rawdata;
         $objectType = $oldTodo->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
+        
         if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
+        $rowData->date = !empty($rowData->config['date']) ? $rowData->config['date'] : $rowData->date;
 
         $todo = $formData->add('account', $oldTodo->account)
             ->cleanInt('pri, begin, end, private')
