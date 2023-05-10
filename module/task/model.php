@@ -259,7 +259,7 @@ class taskModel extends model
         }
 
         /* Initialize task data to update. */
-        $newTask = new stdClass();
+        $newTask = new stdclass();
         $newTask->estimate       = $estimate;
         $newTask->consumed       = $consumed;
         $newTask->left           = $left;
@@ -297,7 +297,7 @@ class taskModel extends model
         }
 
         /* Initialize task data and update it. */
-        $newTask = new stdClass();
+        $newTask = new stdclass();
         $newTask->estStarted  = $earliestEstStarted;
         $newTask->realStarted = $earliestRealStarted;
         $newTask->deadline    = $latestDeadline;
@@ -955,7 +955,7 @@ class taskModel extends model
                 /* Record version change history. */
                 if($task->version > $oldTask->version)
                 {
-                    $taskSpec = new stdClass();
+                    $taskSpec = new stdclass();
                     $taskSpec->task       = $taskID;
                     $taskSpec->version    = $task->version;
                     $taskSpec->name       = $task->name;
@@ -2222,7 +2222,7 @@ class taskModel extends model
         $left     = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
 
         $now  = helper::now();
-        $data = new stdClass();
+        $data = new stdclass();
         $data->consumed       = $consumed;
         $data->left           = $left;
         $data->status         = $task->status;
@@ -2241,7 +2241,7 @@ class taskModel extends model
             $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('order' => $oldEstimate->order));
             if($currentTeam)
             {
-                $newTeamInfo = new stdClass();
+                $newTeamInfo = new stdclass();
                 $newTeamInfo->consumed = $currentTeam->consumed + $estimate->consumed - $oldEstimate->consumed;
                 if($currentTeam->status != 'done') $newTeamInfo->left = $left;
                 if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
@@ -2257,12 +2257,12 @@ class taskModel extends model
             if($task->parent > 0) $this->updateParentStatus($task->id);
             if($task->story)  $this->loadModel('story')->setStage($task->story);
 
-            $oldTask = new stdClass();
+            $oldTask = new stdclass();
             $oldTask->consumed = $task->consumed;
             $oldTask->left     = $task->left;
             $oldTask->status   = $task->status;
 
-            $newTask = new stdClass();
+            $newTask = new stdclass();
             $newTask->consumed = $data->consumed;
             $newTask->left     = $data->left;
             $newTask->status   = $data->status;
@@ -2355,7 +2355,7 @@ class taskModel extends model
                     }
                 }
 
-                $newTeamInfo = new stdClass();
+                $newTeamInfo = new stdclass();
                 $newTeamInfo->consumed = $currentTeam->consumed - $estimate->consumed;
                 if($currentTeam->status != 'done') $newTeamInfo->left = $left;
                 if($currentTeam->status == 'done' and $left > 0 and $task->mode == 'multi') $newTeamInfo->left = $left;
@@ -2378,12 +2378,12 @@ class taskModel extends model
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
 
-        $oldTask = new stdClass();
+        $oldTask = new stdclass();
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
         $oldTask->status   = $task->status;
 
-        $newTask = new stdClass();
+        $newTask = new stdclass();
         $newTask->consumed = $data->consumed;
         $newTask->left     = $data->left;
         $newTask->status   = $data->status;

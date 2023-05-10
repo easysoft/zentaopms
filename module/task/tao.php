@@ -36,7 +36,7 @@ class taskTao extends taskModel
         $taskID = (int)$this->dao->lastInsertID();
 
         /* Insert task desc data. */
-        $taskSpec = new stdClass();
+        $taskSpec = new stdclass();
         $taskSpec->task       = $taskID;
         $taskSpec->version    = $task->version;
         $taskSpec->name       = $task->name;
@@ -332,7 +332,7 @@ class taskTao extends taskModel
     protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
     {
         /* Set member information. */
-        $member = new stdClass();
+        $member = new stdclass();
         $member->task     = $task->id;
         $member->order    = $row;
         $member->account  = $account;
@@ -611,7 +611,7 @@ class taskTao extends taskModel
      */
     protected function recordTaskVersion(object $task): bool
     {
-        $taskSpec = new stdClass();
+        $taskSpec = new stdclass();
         $taskSpec->task       = $task->id;
         $taskSpec->version    = $task->version;
         $taskSpec->name       = $task->name;
@@ -641,7 +641,7 @@ class taskTao extends taskModel
         {
             if(empty($account)) continue;
 
-            $teamInfo = new stdClass();
+            $teamInfo = new stdclass();
             $teamInfo->account  = $account;
             $teamInfo->source   = $teamSourceList[$index];
             $teamInfo->estimate = $teamEstimateList[$index];
