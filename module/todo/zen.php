@@ -528,12 +528,12 @@ class todoZen extends todo
         if($todoData->config['type'] == 'day')
         {
             unset($todoData->config['week'], $todoData->config['month']);
-            if(!$todoData->config['day'])
+            if(!$todoData->config['day'] && empty($todoData->config['specifiedDate']))
             {
                 dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->todo->cycleDaysLabel);
                 return false;
             }
-            if(!validater::checkInt($todoData->config['day']))
+            if(!validater::checkInt($todoData->config['day']) && empty($todoData->config['specifiedDate']))
             {
                 dao::$errors[] = sprintf($this->lang->error->int[0], $this->lang->todo->cycleDaysLabel);
                 return false;
@@ -542,11 +542,13 @@ class todoZen extends todo
         if($todoData->config['type'] == 'week')
         {
             unset($todoData->config['day'], $todoData->config['month']);
+            if(!is_array($todoData->config['week'])) $todoData->config['week'] = (array)$todoData->config['week'];
             $todoData->config['week'] = implode(',', $todoData->config['week']);
         }
         if($todoData->config['type'] == 'month')
         {
             unset($todoData->config['day'], $todoData->config['week']);
+            if(!is_array($todoData->config['month'])) $todoData->config['month'] = (array)$todoData->config['month'];
             $todoData->config['month'] = implode(',', $todoData->config['month']);
         }
 
