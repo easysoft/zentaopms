@@ -4833,7 +4833,8 @@ class executionModel extends model
         $baselineJSON = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
+        $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : 0;
+        $firstTime    = !$firstTime && !empty($firstBurn->value) ? $firstBurn->value : 0;
         $firstTime    = $firstTime == 'null' ? 0 : $firstTime;
         /* If the $executionEnd  is passed, the guide should end of execution. */
         $days         = $executionEnd ? array_search($executionEnd, $dateList) : count($dateList) - 1;
