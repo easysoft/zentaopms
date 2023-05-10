@@ -1135,17 +1135,17 @@ class programplanModel extends model
     }
 
     /**
+     * 检查名称唯一性.
      * Check name unique.
      *
      * @param  array  $names
      * @access public
      * @return bool
      */
-    public function checkNameUnique($names)
+    public function checkNameUnique(array $names): bool
     {
         $names = array_filter($names);
-        if(count(array_unique($names)) != count($names)) return false;
-        return true;
+        return count(array_unique($names)) == count($names);
     }
 
     /**
