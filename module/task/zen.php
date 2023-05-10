@@ -133,7 +133,7 @@ class taskZen extends task
 
         if(isonlybody()) return $this->responseKanban($task, $from);
 
-        $response['locate'] = $this->createLink('task', 'view', "taskID=$taskID");
+        $response['load'] = $this->createLink('task', 'view', "taskID=$taskID");
         return $response;
     }
 
@@ -238,7 +238,7 @@ class taskZen extends task
         $task = $this->task->getById($taskID);
         if(isonlybody()) return $this->responseKanban($task, $from);
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => $this->createLink('task', 'view', "taskID=$taskID"));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID"));
     }
 
     /**
@@ -314,7 +314,7 @@ class taskZen extends task
             $response['callback'] = "parent.parent.updateKanban(\"task\", $kanbanData)";
             return $response;
         }
-        $response['locate'] = 'parent';
+        $response['load'] = true;
         return $response;
     }
 
@@ -720,14 +720,14 @@ class taskZen extends task
                 $response['callback']   = $execution->type == 'kanban' ? "parent.updateKanban({$kanbanData}, 0)" : "parent.updateKanban(\"task\", {$kanbanData})";
                 return $response;
             }
-            $response['locate'] = 'parent';
+            $response['load'] = true;
             return $response;
         }
 
         /* Locate the browser. */
         if($this->app->getViewType() == 'xhtml')
         {
-            $response['locate'] = $this->createLink('task', 'view', "taskID={$task->id}", 'html');
+            $response['load'] = $this->createLink('task', 'view', "taskID={$task->id}", 'html');
             return $response;
         }
 
@@ -750,7 +750,7 @@ class taskZen extends task
         /* Set the universal return value. */
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
-        $response['locate']  = $this->createLink('execution', 'browse', "executionID={$executionID}&tab=task");
+        $response['load']    = $this->createLink('execution', 'browse', "executionID={$executionID}&tab=task");
 
         /* Set the response to continue adding task to story. */
         $executionID = $task->execution;
@@ -759,22 +759,22 @@ class taskZen extends task
             $storyID  = $task->story ? $task->story : 0;
             $moduleID = $task->module ? $task->module : 0;
             $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
-            $response['locate']  = $this->createLink('task', 'create', "executionID={$executionID}&storyID={$storyID}&moduleID={$moduleID}");
+            $response['load']    = $this->createLink('task', 'create', "executionID={$executionID}&storyID={$storyID}&moduleID={$moduleID}");
         }
         /* Set the response to return task list. */
         elseif($afterChoice == 'toTaskList')
         {
             setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            $response['locate'] = $this->createLink('execution', 'task', "executionID={$executionID}&status=unclosed&param=0&orderBy=id_desc");
+            $response['load'] = $this->createLink('execution', 'task', "executionID={$executionID}&status=unclosed&param=0&orderBy=id_desc");
         }
         /* Set the response to return story list. */
         elseif($afterChoice == 'toStoryList')
         {
-            $response['locate'] = $this->createLink('execution', 'story', "executionID={$executionID}");
+            $response['load'] = $this->createLink('execution', 'story', "executionID={$executionID}");
             if($this->config->vision == 'lite')
             {
                 $projectID = $this->execution->getProjectID($executionID);
-                $response['locate'] = $this->createLink('projectstory', 'story', "projectID={$projectID}");
+                $response['load'] = $this->createLink('projectstory', 'story', "projectID={$projectID}");
             }
         }
 
