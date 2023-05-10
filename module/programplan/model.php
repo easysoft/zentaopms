@@ -413,7 +413,7 @@ class programplanModel extends model
                         $data = new stdclass();
                         $data->id            = $plan->id . '-' . $point->category . '-' . $point->id;
                         $data->type          = 'point';
-                        $data->text          = $point->title;
+                        $data->text          = "<i class='icon-seal'></i> " . $point->title;
                         $data->name          = $point->title;
                         $data->attribute     = '';
                         $data->milestone     = '';

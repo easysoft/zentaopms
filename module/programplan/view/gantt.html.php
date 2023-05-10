@@ -24,7 +24,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 .gantt_link_arrow_right {border-left-color: #2196F3;}
 .gantt_link_arrow_left {border-right-color: #2196F3;}
-.icon-confirm {color: #18a6fd}
+.icon-confirm {color: #18a6fd; font-size: 18px;}
+.icon-seal{font-size: 18px;}
 .gantt_task_link .gantt_line_wrapper div{background-color: #2196F3;}
 .gantt_critical_link .gantt_line_wrapper>div {background-color: #e63030 !important;}
 .gantt_critical_link.start_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
