@@ -1152,15 +1152,11 @@ class taskZen extends task
             $this->view->parentPri    = $task->pri;
         }
 
-        /* 需求批量分解任务。 */
-        $story       = $this->story->getByID($storyID);
-        $moduleID    = $story ? $story->module : $moduleID;
-        $moduleParam = $story ? $moduleID : 0;
-
         /* 获取模块下拉数据。 */
-        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule ? 'allModule' : '');
-        $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $moduleParam, 'short', 'active');
+        $showAllModule = !empty($this->config->execution->task->allModule) ? 'allModule' : '';
+        $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, 0, $showAllModule);
+        $story         = $this->story->getByID($storyID);
+        $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
 
         /* Set Custom. */
         list($customFields, $showFields) = $this->getCustomFields($execution, 'batchCreate');
@@ -1171,7 +1167,7 @@ class taskZen extends task
         $this->view->parent       = $taskID;
         $this->view->storyID      = $storyID;
         $this->view->story        = $story;
-        $this->view->moduleID     = $moduleID;
+        $this->view->moduleID     = $story ? $story->module : $moduleID;
         $this->view->stories      = $stories;
         $this->view->storyTasks   = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
         $this->view->members      = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
