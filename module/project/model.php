@@ -244,7 +244,7 @@ class projectModel extends model
             ->groupBy('t1.root')
             ->fetchAll('root');
 
-        $estimates = $this->dao->select("t2.project as project, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
+        $estimates = $this->dao->select("t2.project as project, sum(t1.estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.parent')->lt(1)
             ->andWhere('t2.project')->in($projectIdList)
