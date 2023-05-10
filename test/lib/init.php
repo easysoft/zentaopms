@@ -204,7 +204,7 @@ function printSteps()
     foreach($rpeList as $rpe)
     {
         list($moduleName, $methodName, $methodParam) = $rpe[0];
-        $expectStr = trim($rpe[1], substr($rpe[1], 0, 1));
+        $expectStr = is_numeric($rpe[1]) ? $rpe[1] : trim($rpe[1], substr($rpe[1], 0, 1));
         $pParam    = $rpe[2];
         $userStep  = trim(str_replace('//', '', $rpe[3]));
         $keys      = $pParam[0];
