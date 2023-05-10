@@ -183,8 +183,8 @@ class projectTao extends projectModel
     }
 
     /**
-     * Get project details, including all contents of the project.
      * 获取项目的详情，包含project表的所有内容。
+     * Get project details, including all contents of the project.
      *
      * @param  int       $projectID
      * @access protected
@@ -718,7 +718,7 @@ class projectTao extends projectModel
      * 根据项目ID列表查询团队成员数量。
      * Get project team member count by project id list.
      *
-     * @param  array $projectIdList
+     * @param  array     $projectIdList
      * @access protected
      * @return array
      */
@@ -736,8 +736,8 @@ class projectTao extends projectModel
      * 根据项目ID列表查询任务的总预计工时。
      * Get task all estimate by project id list.
      *
-     * @param  array  $projectIdList
-     * @param  string $fields
+     * @param  array     $projectIdList
+     * @param  string    $fields
      * @access protected
      * @return array
      */
@@ -757,7 +757,7 @@ class projectTao extends projectModel
      * 通过项目ID列表查询需求的数量。
      * Get the number of stories associated with the project.
      *
-     * @param  array   $projectIdList
+     * @param  array     $projectIdList
      * @access protected
      * @return array
      */
@@ -776,7 +776,7 @@ class projectTao extends projectModel
      * 通过项目ID获取任务数量统计。
      * Get the number of tasks associated with the project.
      *
-     * @param  array  $projectIdList
+     * @param  array     $projectIdList
      * @access protected
      * @return array
      */
@@ -828,7 +828,7 @@ class projectTao extends projectModel
      * 通过项目ID获取Bug数量统计。
      * Get the number of bugs associated with the project.
      *
-     * @param  array  $projectIdList
+     * @param  array     $projectIdList
      * @access protected
      * @return array
      */
