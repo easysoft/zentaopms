@@ -11,10 +11,10 @@ $config->task->start    = new stdclass();
 $config->task->finish   = new stdclass();
 $config->task->activate = new stdclass();
 
-$config->task->create->requiredFields      = 'execution,name,type';
-$config->task->edit->requiredFields        = $config->task->create->requiredFields;
-$config->task->finish->requiredFields      = 'realStarted,finishedDate,currentConsumed';
-$config->task->activate->requiredFields    = 'left';
+$config->task->create->requiredFields   = 'execution,name,type';
+$config->task->edit->requiredFields     = $config->task->create->requiredFields;
+$config->task->finish->requiredFields   = 'realStarted,finishedDate,currentConsumed';
+$config->task->activate->requiredFields = 'left';
 
 /* Default value. */
 $config->task->default  = new stdclass();
