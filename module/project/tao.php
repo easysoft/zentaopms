@@ -638,10 +638,7 @@ class projectTao extends projectModel
             ->orderBy('grade asc')
             ->fetchPairs();
 
-        $programName = '';
-        foreach($programList as $program) $programName .= $program . '/';
-
-        return rtrim($programName, '/');
+        return implode('/', $programList);
     }
 
     /**
