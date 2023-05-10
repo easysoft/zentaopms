@@ -421,9 +421,9 @@ class programplanModel extends model
      * @param  object $stage
      * @param  bool   $parent
      * @access public
-     * @return int
+     * @return int|float
      */
-    public function getTotalPercent(object $stage, bool $parent = false) : int
+    public function getTotalPercent(object $stage, bool $parent = false) : int|float
     {
         /* When parent is equal to true, query the total workload of the subphase. */
         $executionID = $parent ? $stage->id : $stage->project;
@@ -1004,7 +1004,7 @@ class programplanModel extends model
             $class  = 'c-' . $id;
             $title  = '';
             $idList = array('id','name','output','percent','attribute','version','begin','end','realBegan','realEnd', 'openedBy', 'openedDate');
-            if(in_array($id,$idList))
+            if(in_array($id, $idList))
             {
                 $class .= ' text-left';
                 $title  = "title='{$plan->$id}'";
@@ -1021,62 +1021,62 @@ class programplanModel extends model
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('programplan', $plan, $id);
             switch($id)
             {
-            case 'id':
-                echo sprintf('%03d', $plan->id);
-                break;
-            case 'name':
-                $milestoneFlag = $plan->milestone ? " <i class='icon icon-flag red' title={$this->lang->programplan->milestone}'></i>" : '';
-                if($plan->grade > 1) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
-                echo $plan->name . $milestoneFlag;
-                if(!empty($plan->children)) echo '<a class="plan-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
-                break;
-            case 'percent':
-                echo $plan->percent . '%';
-                break;
-            case 'attribute':
-                echo zget($this->lang->stage->typeList, $plan->attribute, '');
-                break;
-            case 'begin':
-            case 'end':
-            case 'realBegan':
-            case 'realEnd':
-            case 'output':
-            case 'version':
-                echo $plan->{$id};
-                break;
-            case 'editedBy':
-            case 'openedBy':
-                echo zget($users, $plan->{$id});
-                break;
-            case 'editedDate':
-            case 'openedDate':
-                echo substr($plan->{$id}, 5, 11);
-                break;
-            case 'actions':
-                common::printIcon('execution', 'start', "executionID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
-                $class = !empty($plan->children) ? 'disabled' : '';
-                common::printIcon('task', 'create', "executionID={$plan->id}", $plan, 'list', '', '', $class, false, "data-app='execution'");
+                case 'id':
+                    echo sprintf('%03d', $plan->id);
+                    break;
+                case 'name':
+                    $milestoneFlag = $plan->milestone ? " <i class='icon icon-flag red' title={$this->lang->programplan->milestone}'></i>" : '';
+                    if($plan->grade > 1) echo '<span class="label label-badge label-light" title="' . $this->lang->programplan->children . '">' . $this->lang->programplan->childrenAB . '</span> ';
+                    echo $plan->name . $milestoneFlag;
+                    if(!empty($plan->children)) echo '<a class="plan-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+                    break;
+                case 'percent':
+                    echo $plan->percent . '%';
+                    break;
+                case 'attribute':
+                    echo zget($this->lang->stage->typeList, $plan->attribute, '');
+                    break;
+                case 'begin':
+                case 'end':
+                case 'realBegan':
+                case 'realEnd':
+                case 'output':
+                case 'version':
+                    echo $plan->{$id};
+                    break;
+                case 'editedBy':
+                case 'openedBy':
+                    echo zget($users, $plan->{$id});
+                    break;
+                case 'editedDate':
+                case 'openedDate':
+                    echo substr($plan->{$id}, 5, 11);
+                    break;
+                case 'actions':
+                    common::printIcon('execution', 'start', "executionID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
+                    $class = !empty($plan->children) ? 'disabled' : '';
+                    common::printIcon('task', 'create', "executionID={$plan->id}", $plan, 'list', '', '', $class, false, "data-app='execution'");
 
-                if($plan->grade == 1 && $this->isCreateTask($plan->id))
-                {
-                    common::printIcon('programplan', 'create', "program={$plan->parent}&productID=$plan->product&planID=$plan->id", $plan, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
-                }
-                else
-                {
-                    $disabled = ($plan->grade == 2) ? ' disabled' : '';
-                    echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"');
-                }
+                    if($plan->grade == 1 && $this->isCreateTask($plan->id))
+                    {
+                        common::printIcon('programplan', 'create', "program={$plan->parent}&productID=$plan->product&planID=$plan->id", $plan, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+                    }
+                    else
+                    {
+                        $disabled = ($plan->grade == 2) ? ' disabled' : '';
+                        echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"');
+                    }
 
-                common::printIcon('programplan', 'edit', "planID=$plan->id&projectID=$projectID", $plan, 'list', '', '', 'iframe', true);
+                    common::printIcon('programplan', 'edit', "planID=$plan->id&projectID=$projectID", $plan, 'list', '', '', 'iframe', true);
 
-                $disabled = !empty($plan->children) ? ' disabled' : '';
-                if(common::hasPriv('execution', 'delete', $plan))
-                {
-                    common::printIcon('execution', 'delete', "planID=$plan->id&confirm=no", $plan, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
-                }
-                break;
-            default:
-                break;
+                    $disabled = !empty($plan->children) ? ' disabled' : '';
+                    if(common::hasPriv('execution', 'delete', $plan))
+                    {
+                        common::printIcon('execution', 'delete', "planID=$plan->id&confirm=no", $plan, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
+                    }
+                    break;
+                default:
+                    break;
             }
             echo '</td>';
         }
