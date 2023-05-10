@@ -314,14 +314,14 @@ function genModuleAndMethod($rParams)
             $method      = $rParamsStructureList[1];
             $methodName  = substr(explode('(', $method)[0], 0);
             $methodParam = substr(explode('(', $method)[1], 0);
-            $methodParam = trim($methodParam, "'()");
+            $methodParam = trim($methodParam, "()");
         }
         elseif($objArrowCount == 2)
         {
             $moduleName  = $rParamsStructureList[1];
             $method      = $rParamsStructureList[2];
             $methodName  = explode('(', $method)[0];
-            $methodParam = trim(substr(explode('(', $method)[1], 0), "'()");
+            $methodParam = trim(substr(explode('(', $method)[1], 0), "()");
         }
         else
         {
@@ -329,7 +329,7 @@ function genModuleAndMethod($rParams)
             continue;
         }
 
-        $methodParam = preg_replace("/,\s*'/", ', ', $methodParam);
+        $methodParam = preg_replace("/,\s*/", ', ', $methodParam);
         $newParams[] = array($moduleName, $methodName, $methodParam);
     }
 
