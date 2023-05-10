@@ -3,11 +3,6 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-function initData ()
-{
-    zdTable('todo')->config('updatedate')->gen(5);
-}
-
 /**
 
 title=测试 todoTao::updateDate();
@@ -21,6 +16,11 @@ cid=1
 - 判断是否更新为当前的时间 @1
 
 */
+
+function initData ()
+{
+    zdTable('todo')->config('updatedate')->gen(5);
+}
 
 initData();
 
