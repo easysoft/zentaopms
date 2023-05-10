@@ -662,23 +662,7 @@ class taskModel extends model
                 }
             }
 
-            if($task->parent > 0)
-            {
-                $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
-                $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
-                $this->updateParentStatus($taskID, $task->parent, !$isParentChanged);
-                $this->computeBeginAndEnd($task->parent);
-
-                if($isParentChanged)
-                {
-                    $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($task->parent)->exec();
-                    $this->action->create('task', $taskID, 'linkParentTask', '', $task->parent, '', false);
-                    $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $taskID, '', false);
-                    $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
-                    $changes = common::createChanges($parentTask, $newParentTask);
-                    if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-                }
-            }
+            if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
 
             unset($oldTask->parent);
             unset($task->parent);
@@ -700,6 +684,37 @@ class taskModel extends model
 
             $this->file->processFile4Object('task', $oldTask, $task);
             return common::createChanges($oldTask, $task);
+        }
+    }
+
+    /**
+     * 编辑任务时更新父任务的信息。
+     * Update parent of a task.
+     *
+     * @param  object $task
+     * @param  bool   $isParentChanged
+     * @access public
+     * @return void
+     */
+    public function updateParent(object $task, bool $isParentChanged): void
+    {
+        $parentTask = $this->taskTao->fetchByID($task->parent);
+
+        $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
+
+        $this->updateParentStatus($task->id, $task->parent, !$isParentChanged);
+        $this->computeBeginAndEnd($task->parent);
+
+        if($isParentChanged)
+        {
+            $this->taskTao->updateLastEdited();
+
+            $this->action->create('task', $task->id, 'linkParentTask', '', $task->parent, '', false);
+            $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $task->id, '', false);
+
+            $newParentTask = $this->taskTao->fetchByID($task->parent);
+            $changes = common::createChanges($parentTask, $newParentTask);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
     }
 
