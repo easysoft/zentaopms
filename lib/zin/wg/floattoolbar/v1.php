@@ -13,17 +13,17 @@ class floatToolbar extends wg
         'dropdowns' => array()
     );
 
-    public static function getPageCSS()
+    public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function divider()
+    private function divider(): wg
     {
         return div(setClass('divider w-px h-6 mx-2'));
     }
 
-    private function buildBtns(array $items)
+    private function buildBtns(array|null $items): array|null
     {
         if(empty($items)) return null;
 
@@ -32,7 +32,7 @@ class floatToolbar extends wg
         return $btns;
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $prefix    = $this->prop('prefix');
         $main      = $this->prop('main');
