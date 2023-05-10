@@ -1,21 +1,37 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
+
 su('admin');
+
+zdTable('project')->config('project')->gen(4);
 
 /**
 
 title=测试 projectModel->checkCanChangeModel();
+timeout=0
 cid=1
-pid=1
 
-查看ID为11的敏捷项目是否可切换项目管理模型 >> 0
-查看ID为41的瀑布项目是否可切换项目管理模型 >> 0
+- 执行project模块的checkCanChangeModel方法，参数是1, scrum @0
+
+- 执行project模块的checkCanChangeModel方法，参数是1, agileplus @0
+
+- 执行project模块的checkCanChangeModel方法，参数是1, kanban @0
+
+- 执行project模块的checkCanChangeModel方法，参数是1, waterfall @1
+
+- 执行project模块的checkCanChangeModel方法，参数是1, waterfallplus @1
+
+- 执行project模块的checkCanChangeModel方法，参数是1,  @0
 
 */
 
 global $tester;
 $tester->loadModel('project');
 
-r($tester->project->checkCanChangeModel(11,  'scrum'))     && p() && e('0'); // 查看ID为11的敏捷项目是否可切换项目管理模型
-r($tester->project->checkCanChangeModel(41,  'waterfall')) && p() && e('0'); // 查看ID为41的瀑布项目是否可切换项目管理模型
+r($tester->project->checkCanChangeModel(1, 'scrum'))         && p() && e('0');
+r($tester->project->checkCanChangeModel(1, 'agileplus'))     && p() && e('0');
+r($tester->project->checkCanChangeModel(1, 'kanban'))        && p() && e('0');
+r($tester->project->checkCanChangeModel(1, 'waterfall'))     && p() && e('1');
+r($tester->project->checkCanChangeModel(1, 'waterfallplus')) && p() && e('1');
+r($tester->project->checkCanChangeModel(1, ''))              && p() && e('0');

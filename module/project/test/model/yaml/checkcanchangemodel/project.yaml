@@ -1,0 +1,14 @@
+title: checkcanchangemodel-project
+author: chaideqing
+version: "1.0"
+fields:
+    - field: PM
+      range: 'admin'
+    - field: id
+      range: '1-8'
+    - field: project
+      range: '1'
+    - field: model
+      range: ', ,scrum,agileplus,kanban,waterfall,waterfallplus'
+    - field: type
+      range: 'project,sprint{2},kanban,stage{2}'

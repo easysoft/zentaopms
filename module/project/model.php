@@ -2774,6 +2774,7 @@ class projectModel extends model
     }
 
     /**
+     * 检查是否可以修改model字段
      * Check if the project model can be changed.
      *
      * @param  int    $projectID
@@ -2781,8 +2782,10 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkCanChangeModel($projectID, $model)
+    public function checkCanChangeModel(int $projectID, string $model): bool
     {
+        if(empty($model)) return false;
+
         $checkList = $this->config->project->checkList->$model;
         if($this->config->edition == 'max') $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
@@ -2795,18 +2798,23 @@ class projectModel extends model
             {
                 switch($model)
                 {
-                case 'waterfall':
-                    $type = 'stage';
-                    break;
-                case 'kanban':
-                    $type = 'kanban';
-                    break;
-                default:
-                    $type = 'sprint';
-                    break;
+                    case 'waterfall':
+                        $type = 'stage';
+                        break;
+                    case 'waterfallplus':
+                        $type = 'stage';
+                        break;
+                    case 'kanban':
+                        $type = 'kanban';
+                        break;
+                    default:
+                        $type = 'sprint';
+                        break;
                 }
             }
 
+            /* 检查对应类型的数据是否已经存在。 */
+            /* Check if the data of the type already exists. */
             $object = $this->getDataByProject($table, $projectID, $type);
             if(!empty($object)) return false;
         }
