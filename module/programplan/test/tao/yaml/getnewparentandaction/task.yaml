@@ -1,0 +1,20 @@
+title: zt_task
+author: liuchenglong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-20
+    - field: execution
+      range: 1-20
+    - field: type
+      range: design,devel,test,study,discuss,ui,affair,misc
+    - field: status
+      range: wait{20}
+    - field: deleted
+      range: 0,1,1,0
+    - field: vision
+      range: rnd,rnd,rnd,lite
+    - field: openedDate
+      range: "20220101 000000:1W"   # 生成从2021年1月1日0时0分0秒到当前时间的数据，步长为1周
+      type: timestamp
+      format: "YY/MM/DD hh:mm:ss"
