@@ -2523,28 +2523,10 @@ EOF;
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
-        $module = $this->app->getModuleName();
-        $method = $this->app->getMethodName();
-
-        if($module == 'index' ||
-           $module == 'tutorial' ||
-           $module == 'install' ||
-           $module == 'upgrade' ||
-           $module == 'sso' ||
-           $module == 'cron' ||
-           $module == 'misc' ||
-          ($module == 'user' && strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) ||
-          ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
-          ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
-          ($module == 'report' && $method == 'annualdata') ||
-          ($module == 'misc' && $method == 'captcha') ||
-          ($module == 'bug' && $method == 'create') ||
-          ($module == 'execution' && $method == 'printkanban') ||
-          ($module == 'traincourse' && $method == 'ajaxuploadlargefile') ||
-          ($module == 'traincourse' && $method == 'playvideo'))
-        {
-            return;
-        }
+        $module    = $this->app->getModuleName();
+        $method    = $this->app->getMethodName();
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|';
+        if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return;
 
         /**
          * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
