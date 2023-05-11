@@ -554,3 +554,15 @@ $lang->block->flowchart['product']   = array($lang->productCommon, $lang->produc
 $lang->block->flowchart['execution'] = array('Scrum Master',$lang->executionCommon, 'Đội nhóm', $lang->productCommon, 'Câu chuyện', 'Nhiệm vụ');
 $lang->block->flowchart['dev']       = array('Dev Team', 'Nhiệm vụ/Bugs', 'Tình trạng');
 $lang->block->flowchart['tester']    = array('QA Team', 'Tình huống', 'Báo cáo Bugs', 'Kiểm tra Bugs', 'Đóng Bugs');
+
+$lang->block->productstatistic = new stdclass();
+$lang->block->productstatistic->totalStory      = 'Total Story';
+$lang->block->productstatistic->closed          = 'Closed';
+$lang->block->productstatistic->notClosed       = 'Not Closed';
+$lang->block->productstatistic->storyStatistics = 'Story Statistics';
+$lang->block->productstatistic->monthDone       = 'Completed this month <span class="text-success font-bold">%s</span>';
+$lang->block->productstatistic->monthOpened     = 'Added this month <span class="text-black font-bold">%s</span>';
+$lang->block->productstatistic->news            = 'Latest product advancements';
+$lang->block->productstatistic->newPlan         = 'Latest Plan';
+$lang->block->productstatistic->newExecution    = 'Latest Execution';
+$lang->block->productstatistic->newRelease      = 'Latest Release';

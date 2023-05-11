@@ -769,101 +769,109 @@ class blockZen extends block
     }
 
     /**
+     * 打印产品统计区块。
      * Print product statistic block.
      *
-     * @param  object $block
+     * @param  object    $block
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function printProductStatisticBlock($block)
+    protected function printProductStatisticBlock(object $block): bool
     {
-        $status = isset($block->params->type)  ? $block->params->type  : '';
-        $count  = isset($block->params->count) ? $block->params->count : '';
+        /* 获取需要统计的产品列表。 */
+        /* Obtain a list of products that require statistics. */
+        $status         = isset($block->params->type)  ? $block->params->type  : '';
+        $count          = isset($block->params->count) ? $block->params->count : '';
+        $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
+        $productIdList  = array_keys($products);
 
-        $products      = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
-        $productIdList = array_keys($products);
-
-        if(empty($products))
-        {
-            $this->view->products = $products;
-            return false;
-        }
-
-        /* Get stories. */
-        $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
+        /* 根据产品列表获取产品下不同阶段的需求数量。 */
+        /* Obtain the required quantity for different stages of the product based on the product list. */
+        $productStories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->andWhere('type')->eq('story')
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
 
-        /* Padding the stories to sure all status have records. */
-        foreach($stories as $product => $story)
+        /* 计算出各产品总需求数、关闭的需求数、未关闭的需求数。 */
+        /* Calculate the total demand, closed demand, and unclosed demand for each product. */
+        $stories = array();
+        foreach($productStories as $product => $stageStories)
         {
-            foreach(array_keys($this->lang->story->stageList) as $stage)
+            $stories[$product] = array('closed' => 0, 'notClosed' => 0, 'total' => 0);
+            foreach($stageStories as $stage => $story)
             {
-                $story[$stage] = isset($story[$stage]) ? $story[$stage]->count : 0;
+                if($stage == 'closed') $stories[$product]['closed']    += $story->count;
+                if($stage != 'closed') $stories[$product]['notClosed'] += $story->count;
+                $stories[$product]['total'] += $story->count;
             }
-            $stories[$product] = $story;
         }
 
-        /* Get plans. */
-        $plans = $this->dao->select('product, end')->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
+        /* 根据产品列表获取前6个月的数据，数据按照年月分组。 */
+        /* Obtain data from the first 6 months based on the product list, and group the data by month, month, and year. */
+        $monthStories = $this->dao->select("DATE_FORMAT(openedDate, '%Y-%m') AS date, product, COUNT(id) as opened, COUNT(IF(stage = 'closed' and closedReason = 'done', 1, null)) AS done")->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->fetchGroup('product');
-        foreach($plans as $product => $productPlans)
-        {
-            $expired   = 0;
-            $unexpired = 0;
+            ->andWhere('type')->eq('story')
+            ->andWhere('openedDate')->ge(date('Y-m', strtotime('-5 month')))
+            ->groupBy('date', 'product')
+            ->fetchGroup('date', 'product');
 
-            foreach($productPlans as $plan)
+        /* 将按照年月分组的需求列表调整为按照产品和年月分组。 */
+        /* Adjust the demand list grouped by year and year to be grouped by product and year and year. */
+        foreach($monthStories as $month => $productStories)
+        {
+            foreach($productStories as $product => $story)
             {
-                if($plan->end <  helper::today()) $expired++;
-                if($plan->end >= helper::today()) $unexpired++;
+                $monthStories[$product][$month] = $story;
             }
-
-            $plan = array();
-            $plan['expired']   = $expired;
-            $plan['unexpired'] = $unexpired;
-
-            $plans[$product] = $plan;
+            unset($monthvoidStories[$month]);
         }
 
-        /* Get releases. */
-        $releases = $this->dao->select('product, status, COUNT(*) AS count')->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
+        /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
+        /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
+        $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
-        foreach($releases as $product => $release)
-        {
-            $release['normal']    = isset($release['normal'])    ? $release['normal']->count    : 0;
-            $release['terminate'] = isset($release['terminate']) ? $release['terminate']->count : 0;
+            ->andWhere('begin')->gt(date('Y-m'))
+            ->andWhere('status')->eq('wait')
+            ->orderBy('begin_desc')
+            ->fetchGroup('product', 'product');
 
-            $releases[$product] = $release;
-        }
+        /* 根据产品列表获取实际开始日期距离当前最近的进行中状态的执行。 */
+        /* Obtain the execution of the current in progress status closest to the actual start date based on the product list. */
+        $newExecution = $this->dao->select('execution.*,relation.product')->from(TABLE_EXECUTION)->alias('execution')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('relation')->on('execution.id=relation.project')
+            ->where('execution.deleted')->eq('0')
+            ->andWhere('execution.type')->eq('sprint')
+            ->andWhere('relation.product')->in($productIdList)
+            ->andWhere('execution.status')->eq('doing')
+            ->orderBy('realBegan_asc')
+            ->fetchGroup('product', 'product');
 
-        /* Get last releases. */
-        $lastReleases = $this->dao->select('product, COUNT(*) AS count')->from(TABLE_RELEASE)
-            ->where('date')->eq(date('Y-m-d', strtotime('-1 day')))
+        /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
+        /* Retrieve releases with the latest release date from the product list and a release date earlier than the current date. */
+        $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->groupBy('product')
-            ->fetchPairs();
+            ->andWhere('date')->lt(date('Y-m'))
+            ->orderBy('date_asc')
+            ->fetchGroup('product', 'product');
 
+        /* 将按照产品分组的统计数据放入产品列表中。 */
+        /* Place statistical data grouped by product into the product list. */
         foreach($products as $productID => $product)
         {
-            $product->stories     = isset($stories[$productID])      ? $stories[$productID]      : 0;
-            $product->plans       = isset($plans[$productID])        ? $plans[$productID]        : 0;
-            $product->releases    = isset($releases[$productID])     ? $releases[$productID]     : 0;
-            $product->lastRelease = isset($lastReleases[$productID]) ? $lastReleases[$productID] : 0;
+            $product->stories      = isset($stories[$productID]) ? $stories[$productID] : 0;
+            $product->monthStories = isset($monthStories[$productID]) ? $monthStories[$productID] : '';
+            $product->newPlan      = isset($newPlan[$productID][$productID]) ? $newPlan[$productID][$productID] : '';
+            $product->newExecution = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
+            $product->newRelease   = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
         }
 
-        $this->app->loadLang('story');
-        $this->app->loadLang('productplan');
-        $this->app->loadLang('release');
-
         $this->view->products = $products;
+        return true;
     }
 
     /**

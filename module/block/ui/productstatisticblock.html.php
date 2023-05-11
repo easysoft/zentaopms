@@ -10,6 +10,7 @@ declare(strict_types=1);
 */
 
 namespace zin;
+$app->loadLang('execution');
 
 /**
  * 获取区块左侧的产品列表.
@@ -53,7 +54,7 @@ function getProductTabs($products, $blockNavCode): array
 }
 
 /**
- * 获取区块右侧显示的项目信息.
+ * 获取区块右侧显示的产品信息.
  * Get product statistical information.
  *
  * @param  object   $products
@@ -69,9 +70,11 @@ function getProductInfo($products, $blockNavID): array
     $tabItems = array();
     foreach($products as $product)
     {
+        $stories      = $product->stories;
+        $monthStories = $product->monthStories;
         $tabItems[] = div
         (
-            set('class', 'h-full' . ($product->id == $selected ? ' active' : '')),
+            set('class', 'tab-pane h-full' . ($product->id == $selected ? ' active' : '')),
             set('id', "tab3{$blockNavID}Content{$product->id}"),
             div
             (
@@ -98,39 +101,39 @@ function getProductInfo($products, $blockNavID): array
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
-                                    div(span('8073')),
+                                    div(a(set('href', helper::createLink('index')), set('class', 'text-black') , $stories ? $stories['total'] : 0)),
                                     div
                                     (
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            'BUG总数'
+                                            $lang->block->productstatistic->totalStory
                                         )
                                     )
                                 ),
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
-                                    div(span('6549')),
+                                    div(a(set('href', helper::createLink('index')), set('class', 'text-black') , $stories ? $stories['closed'] : 0)),
                                     div
                                     (
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            '已关闭'
+                                            $lang->block->productstatistic->closed
                                         )
                                     )
                                 ),
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
-                                    div(span('1542')),
+                                    div(a(set('href', helper::createLink('index')), set('class', 'text-black') , $stories ? $stories['notClosed'] : 0)),
                                     div
                                     (
                                         span
                                         (
                                             set('class', 'text-sm text-gray'),
-                                            '未关闭'
+                                            $lang->block->productstatistic->notClosed
                                         )
                                     )
                                 )
@@ -146,7 +149,7 @@ function getProductInfo($products, $blockNavID): array
                                 div
                                 (
                                     set('class', 'px-2 pb-2'),
-                                    span('未完成的需求统计')
+                                    $lang->block->productstatistic->storyStatistics
                                 ),
                                 div
                                 (
@@ -154,12 +157,12 @@ function getProductInfo($products, $blockNavID): array
                                     span
                                     (
                                         set('class', 'border-r pr-2 text-sm text-gray'),
-                                        html('本周完成 <span class="text-success font-bold">12</span>')
+                                        html(sprintf($lang->block->productstatistic->monthDone, !empty($monthStories[date('Y-m')]) ? $monthStories[date('Y-m')]->done : 0))
                                     ),
                                     span
                                     (
                                         set('class', 'pl-2 text-sm text-gray'),
-                                        html('本周新增 <span class="text-black font-bold">35</span>')
+                                        html(sprintf($lang->block->productstatistic->monthOpened, !empty($monthStories[date('Y-m')]) ? $monthStories[date('Y-m')]->opened : 0))
                                     )
                                 ),
                                 div
@@ -174,34 +177,61 @@ function getProductInfo($products, $blockNavID): array
                         )
                     )
                 ),
-                cell
+                ($product->newPlan || $product->newExecution || $product->newRelease) ? cell
                 (
-                    set('width', '189'),
+                    set('width', '30%'),
                     set('class', 'p-4'),
                     div
                     (
                         set('class', 'pb-2'),
-                        span('产品最新推进')
+                        span($lang->block->productstatistic->news)
                     ),
-                    div
+                    $product->newPlan ? div
                     (
                         set('class', 'py-2'),
-                        div(span(set('class', 'text-sm'), '最新计划')),
-                        div(set('class', 'py-1'), a('18.8.stabe'), span(set('class', 'label light-pale rounded-xl ml-2 px-1'), '未开始'))
-                    ),
-                    div
+                        div(span(set('class', 'text-sm'), $lang->block->productstatistic->newPlan)),
+                        div
+                        (
+                            set('class', 'py-1'),
+                            a(set('href', helper::createLink('productplan', 'view', "planID={$product->newPlan->id}")), $product->newPlan->title),
+                            span
+                            (
+                                set('class', 'label lighter-pale rounded-full ml-2 px-1'),
+                                zget($lang->productplan->statusList, $product->newPlan->status)
+                            )
+                        )
+                    ) : null,
+                    $product->newExecution ? div
                     (
                         set('class', 'py-2'),
-                        div(span(set('class', 'text-sm'), '最新执行')),
-                        div(set('class', 'py-1'), a('18.8.stabe'), span(set('class', 'label important-pale rounded-xl ml-2'), '进行中'))
-                    ),
-                    div
+                        div(span(set('class', 'text-sm'), $lang->block->productstatistic->newExecution)),
+                        div
+                        (
+                            set('class', 'py-1'),
+                            a(set('href', helper::createLink('execution', 'task', "executionID={$product->newExecution->id}")), $product->newExecution->name),
+                            span
+                            (
+                                set('class', 'label important-pale rounded-full ml-2'),
+                                zget($lang->execution->statusList, $product->newExecution->status)
+                            )
+                        )
+                    ) : null,
+                    $product->newRelease ? div
                     (
                         set('class', 'py-2'),
-                        div(span(set('class', 'text-sm'), '最新发布')),
-                        div(set('class', 'py-1'), a('18.8.stabe'), span(set('class', 'label success-pale rounded-xl ml-2'), '正常'))
-                    ),
-                )
+                        div(span(set('class', 'text-sm'), $lang->block->productstatistic->newRelease)),
+                        div
+                        (
+                            set('class', 'py-1'),
+                            a(set('href', helper::createLink('release', 'view', "releaseID={$product->newRelease->id}")), $product->newRelease->name),
+                            span
+                            (
+                                set('class', 'label rounded-full ml-2 ' . ($product->newRelease->status == 'normal' ? 'success-pale' : 'lighter-pale')),
+                                zget($lang->release->statusList, $product->newRelease->status)
+                            )
+                        )
+                    ) : null
+                ) : null
             )
         );
     }

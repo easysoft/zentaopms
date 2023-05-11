@@ -2,13 +2,14 @@
 .productstatistic-block.block-sm {height: 640px;}
 
 .productstatistic-block .tab-content {width: 100%;}
+.productstatistic-block .tab-pane {padding: 0;}
 .productstatistic-block .bg-secondary-pale {background: #F3F6FA;}
 .productstatistic-block .chart {margin: auto;}
 
-.productstatistic-block .nav-tabs .nav-item {height:36px; line-height: 36px}
+.productstatistic-block .nav-tabs .nav-item {height:36px; line-height: 36px;}
 .productstatistic-block .nav-tabs .nav-item:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
 .productstatistic-block .nav-tabs .nav-item.active {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
-.productstatistic-block .nav-tabs .nav-item > a {color: #5E626D}
+.productstatistic-block .nav-tabs .nav-item > a {color: #5E626D;}
 .productstatistic-block .nav-tabs .nav-item > a:before {background: transparent;}
 .productstatistic-block .nav-tabs .nav-item.active > a {color: #0B0F18;}
 .productstatistic-block .nav-tabs .nav-item:hover > a {color: #0B0F18;}

@@ -689,3 +689,15 @@ $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = 'There are 2 running modes of ZenTao:  Light Mode and ALM Mode.';
 $lang->block->customModeTip->ALM    = 'The concept is more complete and rigorous, and the function is more abundant. It is suitable for medium and large R&D teams.';
 $lang->block->customModeTip->light  = "Provides the core function of {$lang->projectCommon} management, suitable for small R&D teams.";
+
+$lang->block->productstatistic = new stdclass();
+$lang->block->productstatistic->totalStory      = 'Total Story';
+$lang->block->productstatistic->closed          = 'Closed';
+$lang->block->productstatistic->notClosed       = 'Not Closed';
+$lang->block->productstatistic->storyStatistics = 'Story Statistics';
+$lang->block->productstatistic->monthDone       = 'Completed this month <span class="text-success font-bold">%s</span>';
+$lang->block->productstatistic->monthOpened     = 'Added this month <span class="text-black font-bold">%s</span>';
+$lang->block->productstatistic->news            = 'Latest product advancements';
+$lang->block->productstatistic->newPlan         = 'Latest Plan';
+$lang->block->productstatistic->newExecution    = 'Latest Execution';
+$lang->block->productstatistic->newRelease      = 'Latest Release';

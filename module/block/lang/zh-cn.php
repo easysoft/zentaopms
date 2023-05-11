@@ -733,3 +733,15 @@ $lang->block->projectstatistic->SP          = 'SP';
 $lang->block->projectstatistic->personDay   = '人天';
 $lang->block->projectstatistic->day         = '天';
 $lang->block->projectstatistic->hour        = 'h';
+
+$lang->block->productstatistic = new stdclass();
+$lang->block->productstatistic->totalStory      = '需求总数';
+$lang->block->productstatistic->closed          = '已关闭';
+$lang->block->productstatistic->notClosed       = '未关闭';
+$lang->block->productstatistic->storyStatistics = '需求统计';
+$lang->block->productstatistic->monthDone       = '本月完成 <span class="text-success font-bold">%s</span>';
+$lang->block->productstatistic->monthOpened     = '本月新增 <span class="text-black font-bold">%s</span>';
+$lang->block->productstatistic->news            = '产品最新推进';
+$lang->block->productstatistic->newPlan         = '最新计划';
+$lang->block->productstatistic->newExecution    = '最新执行';
+$lang->block->productstatistic->newRelease      = '最新发布';
