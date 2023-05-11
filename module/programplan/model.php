@@ -977,6 +977,7 @@ class programplanModel extends model
     }
 
     /**
+     * 输出表格单元 <td></td>。
      * Print cell.
      *
      * @param  object $col
@@ -988,28 +989,28 @@ class programplanModel extends model
      */
     public function printCell(object $col, object $plan, array $users, int $projectID)
     {
-        $id = $col->id;
+        $labelType = $col->id;
         if($col->show)
         {
-            $class  = 'c-' . $id;
+            $class  = 'c-' . $labelType;
             $title  = '';
             $idList = array('id','name','output','percent','attribute','version','begin','end','realBegan','realEnd', 'openedBy', 'openedDate');
-            if(in_array($id, $idList))
+            if(in_array($labelType, $idList))
             {
                 $class .= ' text-left';
-                $title  = "title='{$plan->$id}'";
-                if($id == 'output') $class .= ' text-ellipsis';
+                $title  = "title='{$plan->$labelType}'";
+                if($labelType == 'output') $class .= ' text-ellipsis';
                 if(!empty($plan->children)) $class .= ' has-child';
             }
             else
             {
                 $class .= ' text-center';
             }
-            if($id == 'actions') $class .= ' c-actions';
+            if($labelType == 'actions') $class .= ' c-actions';
 
             echo "<td class='{$class}' {$title}>";
-            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('programplan', $plan, $id);
-            switch($id)
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('programplan', $plan, $labelType);
+            switch($labelType)
             {
                 case 'id':
                     echo sprintf('%03d', $plan->id);
@@ -1032,15 +1033,15 @@ class programplanModel extends model
                 case 'realEnd':
                 case 'output':
                 case 'version':
-                    echo $plan->{$id};
+                    echo $plan->{$labelType};
                     break;
                 case 'editedBy':
                 case 'openedBy':
-                    echo zget($users, $plan->{$id});
+                    echo zget($users, $plan->{$labelType});
                     break;
                 case 'editedDate':
                 case 'openedDate':
-                    echo substr($plan->{$id}, 5, 11);
+                    echo substr($plan->{$labelType}, 5, 11);
                     break;
                 case 'actions':
                     common::printIcon('execution', 'start', "executionID={$plan->id}", $plan, 'list', '', '', 'iframe', true);
