@@ -293,26 +293,36 @@ class bugZen extends bug
      * 为create方法添加动态。
      * Add action for create function.
      *
-     * @param  int    $bugID
-     * @param  string $from
+     * @param  object $bug
      * @param  array  $output
+     * @param  string $from
      * @return void
      */
-    protected function addAction4Create(int $bugID, string $from, array $output)
+    protected function addAction4Create(object $bug, array $output, string $from): void
     {
-        $createAction = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
-        $actionID     = $this->action->create('bug', $bugID, $createAction);
+        $bugID    = $bug->id;
+        $todoID   = isset($output['todoID']) ? $output['todoID'] : 0;
 
-        if(isset($output['todoID']))
+        $action   = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
+        $actionID = $this->action->create('bug', $bugID, $action);
+
+        /* Add score for create. */
+        if(empty($bug->case))
         {
-            $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
-            $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
+            $this->loadModel('score')->create('bug', 'create', $bugID);
+        }
+        else
+        {
+            $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+        }
 
-            if($this->config->edition == 'biz' || $this->config->edition == 'max')
-            {
-                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($output['todoID'])->fetch();
-                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-            }
+        if(!$todoID) return;
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
         }
     }
 

@@ -352,13 +352,13 @@ class bug extends control
             setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             $bug = $this->bug->getByID($bugID);
-            $this->bugZen->updateFileAfterCreate($bugID, $data->rawdata);
 
+            $this->bugZen->updateFileAfterCreate($bugID, $data->rawdata);
             list($laneID, $columnID) = $this->bugZen->getKanbanVariable($data->rawdata, $output);
             $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
-            $this->bugZen->addAction4Create($bugID, $from, $output);
-            empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+            $this->bugZen->addAction4Create($bug, $output, $from);
+
             $message = $this->executeHooks($bugID);
             if($message) $this->lang->saveSuccess = $message;
 
