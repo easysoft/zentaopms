@@ -737,9 +737,13 @@ class projectTao extends projectModel
      * @access protected
      * @return array
      */
-    protected function fetchTaskEstimateByIdList(array $projectIdList, string $fields = 't2.project as project, sum(estimate) as estimate'): array
+    protected function fetchTaskEstimateByIdList(array $projectIdList, string $fields = 'estimate'): array
     {
-        return $this->dao->select($fields)->from(TABLE_TASK)->alias('t1')
+        $fields       = explode(',', $fields);
+        $selectFields = 't2.project';
+        foreach($fields as $field) $selectFields .= ", ROUND(SUM(t1.{$field}), 1) AS {$field}";
+
+        return $this->dao->select($selectFields)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.parent')->lt(1)
             ->andWhere('t2.project')->in($projectIdList)

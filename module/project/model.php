@@ -256,7 +256,7 @@ class projectModel extends model
         /* Get team members and estimates under the project. */
         $projectIdList = array_keys($projects);
         $teamCount     = $this->projectTao->fetchMemberCountByIdList($projectIdList);
-        $estimates     = $this->projectTao->fetchTaskEstimateByIdList($projectIdList);
+        $estimates     = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, 'estimate');
 
         /* Set project attribute. */
         $this->app->loadClass('pager', true);
@@ -294,8 +294,7 @@ class projectModel extends model
         $teamCount     = $this->projectTao->fetchMemberCountByIdList($projectIdList);
 
         /* Get all consumed and all estimate under the project. */
-        $fields = 't2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate';
-        $hours  = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, $fields);
+        $hours  = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, 'consumed,estimate');
 
         /* Get bug, task and story summary under the project. */
         $bugSummary   = $this->projectTao->getTotalBugByProject($projectIdList);
