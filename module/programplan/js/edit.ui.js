@@ -1,10 +1,9 @@
 /**
  * 父阶段更改值操作。
- * change parent stage.
+ * Change parent stage.
  *
- * @param  stageID $stageID
- * @access public
- * @return viod
+ * @param  stageID stageID
+ * @return void
  */
 function changeParentStage(stageID)
 {
@@ -22,10 +21,9 @@ function changeParentStage(stageID)
 
 /**
  * 编辑阶段提交操作。
- * edit stage.
+ * Submit form for edit stage.
  *
- * @access public
- * @return viod
+ * @return void
  */
 function editStage()
 {
