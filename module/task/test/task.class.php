@@ -93,9 +93,9 @@ class taskTest
      * @param  bool   $verifyScore
      * @param  array  $output
      * @access public
-     * @return object|int
+     * @return array|object|int|false
      */
-    public function batchCreateObject($data = array(), $executionID = 0, $taskID = 0, $storyID = 0, $verifyScore = false, $output = array())
+    public function batchCreateObject(array $data = array(), int $executionID = 0, int $taskID = 0, int $storyID = 0, bool $verifyScore = false, array $output = array()): array|object|int|false
     {
         global $tester;
 
@@ -105,7 +105,7 @@ class taskTest
 
         $lastScore = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
 
-        $objectIdList = $this->objectModel->batchCreate($execution, $data, $output);
+        $objectIdList = $this->objectModel->batchCreate($execution, $data, $taskID, $output);
 
         $childTask = array();
         if(!dao::isError()) $childTask = $this->objectModel->getById(current($objectIdList));
@@ -114,22 +114,26 @@ class taskTest
         {
             return dao::getError();
         }
-        elseif(!empty($taskID))
+
+        if(!empty($taskID))
         {
             $parentTask = $this->objectModel->getById($childTask->parent);
             return $parentTask;
         }
-        elseif(!empty($storyID))
+
+        if(!empty($storyID))
         {
             $releatedStory = $tester->loadModel('story')->getById($childTask->story);
             return $releatedStory;
         }
-        elseif($verifyScore)
+
+        if($verifyScore)
         {
             $score = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
             return $score == $lastScore + 1;
         }
-        elseif(!empty($output))
+
+        if(!empty($output))
         {
             $laneID   = isset($output['laneID'])   ? $output['laneID']   : 0;
             $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
@@ -146,10 +150,8 @@ class taskTest
 
             return $task ? $task : false;
         }
-        else
-        {
-            return count($objectIdList);
-        }
+
+        return count($objectIdList);
     }
 
     /**
@@ -1756,7 +1758,7 @@ class taskTest
      * @access public
      * @return string
      */
-    public function updateKanban4BatchCreateTest($taskID, $executionID, $laneID, $columnID, $vision = 'rnd')
+    public function updateKanban4BatchCreateTest(int $taskID, int $executionID, int $laneID, int $columnID, string $vision = 'rnd'): string
     {
         global $tester;
 
@@ -1827,7 +1829,6 @@ class taskTest
      * @param array      $teamEstimateList
      * @param array|bool $teamConsumedList
      * @param array|bool $teamLeftList
-
      * @access public
      * @return array
      */
@@ -1999,13 +2000,13 @@ class taskTest
      * checkRequired4BatchCreateTest
      *
      * @param  int    $executionID
-     * @param  int    $data
-     * @param  int    $checkRequiredItem
-     * @param  int    $checkLimitTaskDate
+     * @param  array  $data
+     * @param  bool   $checkRequiredItem
+     * @param  bool   $checkLimitTaskDate
      * @access public
-     * @return void
+     * @return array
      */
-    public function checkRequired4BatchCreateTest($executionID, $data, $checkRequiredItem = false, $checkLimitTaskDate = false)
+    public function checkRequired4BatchCreateTest(int $executionID, array $data, bool $checkRequiredItem = false, bool $checkLimitTaskDate = false): array
     {
         global $tester;
 
@@ -2025,10 +2026,9 @@ class taskTest
 
             return $result;
         }
-        elseif($checkLimitTaskDate)
-        {
-            $tester->loadModel('setting');
 
+        if($checkLimitTaskDate)
+        {
             $this->objectModel->config->limitTaskDate = 1;
 
             $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
@@ -2042,16 +2042,14 @@ class taskTest
 
             return $result;
         }
-        else
-        {
-            $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
-            if(dao::isError())
-            {
-                return dao::getError();
-            }
 
-            return $result;
+        $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
+        if(dao::isError())
+        {
+            return dao::getError();
         }
+
+        return $result;
 
     }
 }

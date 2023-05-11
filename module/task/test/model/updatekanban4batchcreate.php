@@ -25,9 +25,9 @@ $columnIdList    = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0');
 
 $task = new taskTest();
 
-r($task->updateKanban4BatchCreateTest($taskIdList[1], $executionIdList[2], $laneIdList[1], $columnIdList[1])) && p() && e(',2,'); // 综合研发界面下看板项目的任务泳道未开始列无卡片的情况。
-r($task->updateKanban4BatchCreateTest($taskIdList[1], $executionIdList[2], $laneIdList[2], $columnIdList[2])) && p() && e(',2,5,6,805,'); // 综合研发界面下看板项目的任务泳道未开始列有卡片的情况。
-r($task->updateKanban4BatchCreateTest($taskIdList[2], $executionIdList[2], $laneIdList[9], $columnIdList[2])) && p() && e('0'); // 综合研发界面下看板项目任务泳道为空未开始列的情况。
-r($task->updateKanban4BatchCreateTest($taskIdList[2], $executionIdList[2], $laneIdList[9], $columnIdList[2])) && p() && e('0'); // 综合研发界面下看板项目任务泳道列为空的情况。
-r($task->updateKanban4BatchCreateTest($taskIdList[5], $executionIdList[3], $laneIdList[1], $columnIdList[2], 'lite')) && p() && e(',6,'); // 运营管理界面下看板项目任务泳道未开始列无卡片的情况。
+r($task->updateKanban4BatchCreateTest($taskIdList[1], $executionIdList[2], $laneIdList[1], $columnIdList[1]))         && p() && e(',2,');         // 综合研发界面下看板项目的任务泳道未开始列无卡片的情况。
+r($task->updateKanban4BatchCreateTest($taskIdList[1], $executionIdList[2], $laneIdList[2], $columnIdList[2]))         && p() && e(',2,5,6,805,'); // 综合研发界面下看板项目的任务泳道未开始列有卡片的情况。
+r($task->updateKanban4BatchCreateTest($taskIdList[2], $executionIdList[2], $laneIdList[9], $columnIdList[2]))         && p() && e('0');           // 综合研发界面下看板项目任务泳道为空未开始列的情况。
+r($task->updateKanban4BatchCreateTest($taskIdList[2], $executionIdList[2], $laneIdList[9], $columnIdList[2]))         && p() && e('0');           // 综合研发界面下看板项目任务泳道列为空的情况。
+r($task->updateKanban4BatchCreateTest($taskIdList[5], $executionIdList[3], $laneIdList[1], $columnIdList[2], 'lite')) && p() && e(',6,');         // 运营管理界面下看板项目任务泳道未开始列无卡片的情况。
 r($task->updateKanban4BatchCreateTest($taskIdList[5], $executionIdList[3], $laneIdList[3], $columnIdList[3], 'lite')) && p() && e(',6,7,8,807,'); // 运营管理界面下看板项目任务泳道未开始列有卡片的情况。

@@ -194,5 +194,5 @@ r($task->checkRequired4BatchCreateTest($executionIdList[6], $devStageTask, true)
 r($task->checkRequired4BatchCreateTest($executionIdList[0], $conformLimitedTask, false, true))   && p('deadline:0') && e('任务截止日期应小于等于执行的结束日期：2023-02-01。'); // 测试开启起止日期限制，创建的任务截止日期大于执行的截止日期
 r($task->checkRequired4BatchCreateTest($executionIdList[0], $unConformLimitedTask, false, true)) && p('1:name')     && e('task1');                                              // 测试开启起止日期限制，创建的任务截止日期小于执行的截止日期
 r($task->checkRequired4BatchCreateTest($executionIdList[0], $deadlineSmallTask))                 && p('message:0')  && e('"截止日期"必须大于"预计开始"');                       // 测试任务截止日期小于任务的截止日期
-r($task->checkRequired4BatchCreateTest($executionIdList[0], $estimateNumberTask))                && p('message:0')  && e('"最初预计"必须为数字');                               // 测试任务预计工时不为数字的情况
-r($task->checkRequired4BatchCreateTest($executionIdList[0], $negativeNumberTask))                && p('message:0')  && e('"最初预计"必须为数字');                               // 测试任务预计工时为负数的情况
+r($task->checkRequired4BatchCreateTest($executionIdList[0], $estimateNumberTask))                && p('message:0')  && e('"最初预计"必须为正数');                               // 测试任务预计工时不为数字的情况
+r($task->checkRequired4BatchCreateTest($executionIdList[0], $negativeNumberTask))                && p('message:0')  && e('"最初预计"必须为正数');                               // 测试任务预计工时为负数的情况
