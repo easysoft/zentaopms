@@ -42,7 +42,7 @@ class programplanModel extends model
      */
     public function getStage(int $executionID = 0, int $productID = 0, string $browseType = 'all', string $orderBy = 'id_asc'): array
     {
-        $plans = $this->programplanTao->getStageListBy($executionID, $productID, $browseType, $orderBy);
+        $plans = $this->programplanTao->getStageList($executionID, $productID, $browseType, $orderBy);
         return $this->processPlans($plans);
     }
 
@@ -416,7 +416,7 @@ class programplanModel extends model
     {
         /* When parent is equal to true, query the total workload of the subphase. */
         $executionID = $parent ? $stage->id : $stage->project;
-        $plans = $this->programplanTao->getStageListBy((int)$executionID, (int)$stage->product, $browseType = 'parent');
+        $plans = $this->programplanTao->getStageList((int)$executionID, (int)$stage->product, $browseType = 'parent');
 
         $totalPercent = 0;
         $stageID      = $stage->id;

@@ -488,7 +488,7 @@ class programplanTao extends programplanModel
      * @access protected
      * @return array
      */
-    protected function getStageListBy(int $executionID, int $productID, string $browseType, $orderBy = 'id_asc')
+    protected function getStageList(int $executionID, int $productID, string $browseType, $orderBy = 'id_asc')
     {
         if(empty($executionID)) return array();
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
