@@ -37,17 +37,11 @@ function render(string $wgName = 'page', string|array $options = null)
     $isFullPage = str_starts_with($wgName, 'page');
     if($isFullPage) $args[] = set::display(false);
 
-    if($options === null)
+    if($options === null && isset($_SERVER['HTTP_X_ZIN_OPTIONS']) && !empty($_SERVER['HTTP_X_ZIN_OPTIONS']))
     {
-        if(isset($_SERVER['HTTP_X_ZIN_OPTIONS']) && !empty($_SERVER['HTTP_X_ZIN_OPTIONS']))
-        {
-            $setting = $_SERVER['HTTP_X_ZIN_OPTIONS'];
-            $options = $setting[0] === '{' ? json_decode($setting, true) : array('selector' => $setting);
-        }
+        $setting = $_SERVER['HTTP_X_ZIN_OPTIONS'];
+        $options = $setting[0] === '{' ? json_decode($setting, true) : array('selector' => $setting);
     }
-
-    global $app;
-    data('zinDebug.errors', isset($app->zinErrors) ? $app->zinErrors : array());
 
     $wg = createWg($wgName, $args);
     if(!$isFullPage) $wg = fragment($wg);

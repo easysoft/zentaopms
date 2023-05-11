@@ -71,6 +71,7 @@ class wg
 
         zin::renderInGlobal($this);
         static::checkPageResources();
+        $this->checkProps();
     }
 
     public function __debugInfo()
@@ -146,8 +147,17 @@ class wg
         $css     = implode("\n", $context->getCssList());
         $js      = implode("\n", $context->getJsList());
 
+        global $app, $config;
+        $zinDebug = null;
+        if($config->debug)
+        {
+            $zinDebug = data('zinDebug');
+            if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
+        }
+
         if(is_object($result))
         {
+            if($zinDebug && isset($result['zinDebug'])) $result['zinDebug'] = $zinDebug;
             $result = json_encode($result);
         }
         elseif(is_array($result))
@@ -160,10 +170,12 @@ class wg
                 $item['data'] = str_replace('/*{{ZIN_PAGE_JS}}*/', $js, $item['data']);
                 $result[$name]['data'] = $item['data'];
             }
+            if($zinDebug && isset($result['zinDebug'])) $result['zinDebug'] = $zinDebug;
             $result = json_encode($result);
         }
         else
         {
+            if($zinDebug) $js .= h::createJsVarCode('window.zinDebug', $zinDebug);
             $result = str_replace('/*{{ZIN_PAGE_CSS}}*/', $css, $result);
             $result = str_replace('/*{{ZIN_PAGE_JS}}*/', $js, $result);
         }
@@ -500,6 +512,25 @@ class wg
         if(!empty($this->parent)) $data['parent'] = $this->parent->gid;
 
         return $data;
+    }
+
+    /**
+     * Check properties in debug mode
+     *
+     * @access protected
+     * @return void
+     */
+    protected function checkProps()
+    {
+        global $config;
+        if(!isset($config->debug) || !$config->debug) return;
+
+        $definedProps = static::getDefinedProps();
+        foreach($definedProps as $name => $definition)
+        {
+            if($this->hasProp($name) || (isset($definition['default']) && $definition['default'] !== null) || (isset($definition['optional']) && $definition['optional'])) continue;
+            trigger_error("[ZIN] The property \"$name: {$definition['type']}\" of widget \"{$this->type()}#$this->gid\" is required.", E_USER_ERROR);
+        }
     }
 
     protected static function getDefaultProps()

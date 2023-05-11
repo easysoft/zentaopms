@@ -365,6 +365,14 @@ class baseRouter
     public $startTime;
 
     /**
+     * zin 请求时发生的错误信息。
+     * The errors occurred when zin request.
+     *
+     * @var array
+     */
+    public $zinErrors = array();
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -2950,26 +2958,26 @@ class baseRouter
         if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
 
         /*
-         * 如果debug > 1，显示warning, notice级别的错误。
-         * If the debug > 1, show warning, notice error.
+         * 如果debug > 1，直接在页面显示非严重错误。
+         * If the debug > 1, show non-serious errors on page directly.
          **/
-        if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192) // 8192: E_DEPRECATED
+        if(!empty($this->config->debug) && $this->config->debug > 1)
         {
-            if(!empty($this->config->debug) and $this->config->debug > 1)
+            /* Send non-serious errors to page in zin mode. */
+            if((isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS'])) && ($level !== E_ERROR && $level !== E_PARSE && $level !== E_CORE_ERROR && $level !== E_COMPILE_ERROR))
             {
-                if(isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']))
-                {
-                    if(!isset($this->zinErrors)) $this->zinErrors = array();
-                    $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level);
-                }
-                else
-                {
-                    $cmd  = "vim +$line $file";
-                    $size = strlen($cmd);
+                $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level);
+                return;
+            }
 
-                    echo "<pre class='alert alert-danger'>$message: ";
-                    echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
-                }
+            /* Show non-serious errors to classic page. */
+            if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192)
+            {
+                $cmd  = "vim +$line $file";
+                $size = strlen($cmd);
+
+                echo "<pre class='alert alert-danger'>$message: ";
+                echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
             }
         }
 

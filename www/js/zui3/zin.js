@@ -6,6 +6,7 @@
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
+    const startTime   = performance.now();
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
 
@@ -78,7 +79,11 @@
         const perf = {id: options.id, url: options.url || currentAppUrl};
         perf[stage] = performance.now();
         if(stage === 'requestBegin') $.extend(perf, {requestEnd: undefined, renderBegin: undefined, renderEnd: undefined});
-        if(info && info.dataSize) perf.dataSize = info.dataSize;
+        if(info)
+        {
+            if(info.perf) $.extend(perf, info.perf);
+            if(info.dataSize) perf.dataSize = info.dataSize;
+        }
         updateZinbar(perf);
     }
 
@@ -500,8 +505,18 @@
     {
         initZinbar();
 
-        if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
-        else if(DEBUG) loadCurrentPage();
+        if(window.defaultAppUrl)
+        {
+            loadPage(window.defaultAppUrl);
+        }
+        else if(DEBUG && window.zinDebug)
+        {
+            let requestBegin = startTime;
+            if(performance.timing) requestBegin -= ((performance.timing.loadEventStart || Date.now()) - (performance.timing.navigationStart || Date.now()));
+            else if(window.zinDebug.trace && window.zinDebug.trace.request) requestBegin -= window.zinDebug.trace.request.timeUsed;
+            updatePerfInfo({id: 'page'}, 'renderEnd', {id: 'page', perf: {requestBegin: Math.max(0, requestBegin), requestEnd: startTime, renderBegin: startTime}});
+            showZinDebugInfo(window.zinDebug, {id: 'page'});
+        }
 
         /* Compatible with old version */
         if(DEBUG && typeof window.zin !== 'object' && isInAppTab)
