@@ -43,25 +43,42 @@ su('admin');
 
 /**
 
-title=测试 projectModel::fetchProjectListByQuery();
+title=测试 projectModel::fetchProjectListByQuery($status, $projectID, $orderBy);
+timeout=0
 cid=1
+
+- 获取未开始的项目数量 @3
+
+- 获取状态不为done和closed的项目数量 @7
+
+- 根据项目ID获取项目 @1
+
+- 获取不存在的项目 @0
+
+- 根据 不匹配的项目ID和状态 获取项目数量 @0
+
+- 根据 匹配的项目ID和状态 获取项目数量 @1
+
+- 按照ID正序获取项目列表,查看排第一个的项目详情
+ - 属性id @11
+ - 属性name @项目11
+
+- 按照项目名称倒序获取项目列表,查看排第一个的项目详情
+ - 属性id @19
+ - 属性name @项目19
 
 */
 
 $projectTester = new Project();
 
-$byStatus1 = $projectTester->testFetchProjectListByQuery('byStatus', 'wait');
-$byStatus2 = $projectTester->testFetchProjectListByQuery('byStatus', 'undone');
+r(count($projectTester->testFetchProjectListByQuery('wait')))   && p() && e('3'); // 获取未开始的项目数量
+r(count($projectTester->testFetchProjectListByQuery('undone'))) && p() && e('7'); // 获取状态不为done和closed的项目数量
 
-$byId1 = $projectTester->testFetchProjectListByQuery('byid', '11');
-$byId2 = $projectTester->testFetchProjectListByQuery('byid', '10000');
+r(count($projectTester->testFetchProjectListByQuery('', 11)))    && p() && e('1'); // 根据项目ID获取项目
+r(count($projectTester->testFetchProjectListByQuery('', 10000))) && p() && e('0'); // 获取不存在的项目
 
-$byOrder1 = $projectTester->testFetchProjectListByQuery('byStatus', 'all', 'id_asc');
-$byOrder2 = $projectTester->testFetchProjectListByQuery('byStatus', 'all', 'name_desc');
+r(count($projectTester->testFetchProjectListByQuery('doing', 11))) && p() && e('0'); // 根据 不匹配的项目ID和状态 获取项目数量
+r(count($projectTester->testFetchProjectListByQuery('doing', 12))) && p() && e('1'); // 根据 匹配的项目ID和状态 获取项目数量
 
-r(count($byStatus1))  && p()          && e('3');         // 获取未开始的项目数量
-r(count($byStatus2))  && p()          && e('7');         // 获取状态不为done和closed的项目数量
-r(count($byId1))      && p()          && e('1');         // 根据项目ID获取项目
-r(count($byId2))      && p()          && e('0');         // 获取不存在的项目
-r(current($byOrder1)) && p('id,name') && e('11,项目11'); // 按照ID正序获取项目列表,查看排第一个的项目详情
-r(current($byOrder2)) && p('id,name') && e('19,项目19'); // 按照项目名称倒序获取项目列表,查看排第一个的项目详情
+r(current($projectTester->testFetchProjectListByQuery('all', 0, 'id_asc')))    && p('id,name') && e('11,项目11'); // 按照ID正序获取项目列表,查看排第一个的项目详情
+r(current($projectTester->testFetchProjectListByQuery('all', 0, 'name_desc'))) && p('id,name') && e('19,项目19'); // 按照项目名称倒序获取项目列表,查看排第一个的项目详情

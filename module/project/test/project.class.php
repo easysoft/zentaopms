@@ -238,16 +238,17 @@ class Project
     }
 
     /**
-     * Test getList function.
+     * Test fetchProjectListByQuery function.
      *
-     * @param  int    $status
-     * @param  bool   $involved
+     * @param  string $status
+     * @param  int    $projectID
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function testFetchProjectListByQuery($queryType, $param, $orderBy = 'id_desc')
+    public function testFetchProjectListByQuery($status, $projectID = 0, $orderBy = 'id_desc')
     {
-        return $this->project->fetchProjectListByQuery($queryType, $param, $orderBy, 15, '');
+        return $this->project->fetchProjectListByQuery($status, $projectID, $orderBy, 15, '');
     }
 
     /**
