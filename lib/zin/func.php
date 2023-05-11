@@ -1048,3 +1048,18 @@ function priNum()
 {
     return createWg('priNum', func_get_args());
 }
+
+/**
+ * Zentao customize form item dropdown.
+ *
+ * ?string method
+ * ?string url
+ * ?array  actions
+ * ?string target
+ * ?array  items
+ * ?array  value
+ */
+function formItemDropdown()
+{
+    return createWg('formItemDropdown', func_get_args());
+}
