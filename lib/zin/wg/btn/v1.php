@@ -94,6 +94,8 @@ class btn extends wg
         if(!empty($type))    $classList[$type] = true;
         elseif(!empty($url)) $classList['btn-default'] = true;
 
+        if(empty($text) && !empty($icon) && !isset($classList['square'])) $classList['square'] = true;
+
         $size = $this->prop('size');
         if(!empty($size)) $classList["size-$size"] = true;
 
