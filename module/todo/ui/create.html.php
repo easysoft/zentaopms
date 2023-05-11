@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The create file of todo module of ZenTaoPMS.
+ * The create ui file of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -26,8 +26,7 @@ jsVar('defaultType', '');
 jsVar('userAccount', $app->user->account);
 jsVar('defaultDate', date('Y-m-d'));
 
-$cycleTypeOptions = array
-(
+$cycleTypeOptions = array(
     array('text' => $lang->todo->cycleDay,   'value' => 'day'),
     array('text' => $lang->todo->cycleWeek,  'value' => 'week'),
     array('text' => $lang->todo->cycleMonth, 'value' => 'month'),
@@ -110,9 +109,7 @@ formPanel
                 on::change('toggleCycle(this)')
             )
         )
-
     ),
-
     formRow
     (
         setClass('cycle-config hidden'),
@@ -179,7 +176,6 @@ formPanel
                 setClass('input-group-addon pl-4 ring-0 bg-white'),
                 $lang->todo->every
             ),
-
             inputControl
             (
                 set::suffix($lang->todo->cycleDay),
@@ -192,12 +188,10 @@ formPanel
                 )
             )
         )
-
     ),
     formRow
     (
         setClass('cycle-config cycle-type-detail type-week hidden'),
-
         formGroup
         (
             set
@@ -232,11 +226,9 @@ formPanel
             )
         )
     ),
-
     formRow
     (
         setClass('cycle-config cycle-type-detail type-month hidden'),
-
         formGroup
         (
             set
@@ -250,7 +242,6 @@ formPanel
             ),
             inputGroup
             (
-
                 span
                 (
                     setClass('input-group-addon'),
@@ -272,11 +263,9 @@ formPanel
             )
         )
     ),
-
     formRow
     (
         setClass('cycle-config cycle-type-detail type-year hidden'),
-
         formGroup
         (
             set
@@ -516,7 +505,6 @@ formPanel
             )
         )
     ),
-
     formGroup
     (
         set
@@ -574,7 +562,6 @@ formPanel
                     ),
                     on::change('selectNext()')
                 ),
-
                 span
                 (
                     setClass('input-group-addon ring-0'),
@@ -594,7 +581,6 @@ formPanel
                     on::blur('selectEndTime(this)')
                 )
             )
-
         ),
         div
         (
@@ -604,9 +590,9 @@ formPanel
                 set
                 (
                     array(
-                        'id'       => 'switchTime',
-                        'name'     => 'switchTime',
-                        'text'     => $lang->todo->periods['future']
+                        'id'   => 'switchTime',
+                        'name' => 'switchTime',
+                        'text' => $lang->todo->periods['future']
                     )
                 ),
                 on::change('switchDateFeature(this)')
