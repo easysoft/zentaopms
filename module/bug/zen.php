@@ -3,14 +3,15 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
-     * 处理请求数据。
-     * Processing request data.
+     * 使用表单数据构造一个bug对象。
+     * Prepare a bug object from form data.
      *
-     * @param  object $formData
+     * @param  object    $data
+     * @param  string    $uid
      * @access protected
      * @return object
      */
-    protected function beforeCreate(object $formData): object
+    protected function prepareCreateExtras(object $data, string $uid): object
     {
         $now = helper::now();
         $bug = $formData->setDefault('openedBy', $this->app->user->account)
@@ -25,10 +26,9 @@ class bugZen extends bug
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
             ->get();
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $formData->rawdata->uid);
-
-        return $bug;
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $uid);
     }
+
     /**
      * 创建bug。
      * Create a bug.

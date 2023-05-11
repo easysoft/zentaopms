@@ -339,8 +339,8 @@ class bug extends control
         {
             $response['result'] = 'success';
 
-            $formData  = form::data($this->config->bug->form->create);
-            $bug       = $this->bugZen->beforeCreate($formData);
+            $data = form::data($this->config->bug->form->create);
+            $bug  = $this->bugZen->prepareCreateExtras($data, $this->post->uid);
             $bugResult = $this->bugZen->doCreate($bug);
 
             list($hasError, $response) = $this->getErrorRes4Create($bugResult);
