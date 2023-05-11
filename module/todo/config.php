@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 $config->todo = new stdclass();
-$config->todo->maxBatchCreate = 8;
-$config->todo->defaultPri     = 3;
+$config->todo->batchCreateNumber = 8;
+$config->todo->defaultPri        = 3;
 
 $config->todo->create = new stdclass();
 $config->todo->edit   = new stdclass();

@@ -60,7 +60,7 @@
       <tbody>
         <?php $pri = 3;?>
         <?php $time = $date != date('Y-m-d') ? key($times) : $time;?>
-        <?php for($i = 0; $i < $config->todo->maxBatchCreate; $i++):?>
+        <?php for($i = 0; $i < $config->todo->batchCreateNumber; $i++):?>
         <tr class='text-left'>
           <td class='col-id'><?php echo $i+1;?></td>
           <td class="visible <?php echo zget($visibleFields, 'type', 'hidden')?>"><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>

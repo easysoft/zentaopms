@@ -40,7 +40,7 @@ class todoModel extends model
         $validTodos = array();
         $assignedTo = $this->app->user->account;
 
-        for($loop = 0; $loop < $this->config->todo->maxBatchCreate; $loop++)
+        for($loop = 0; $loop < $this->config->todo->batchCreateNumber; $loop++)
         {
             $isExist    = false;
             $assignedTo = $todos->assignedTos[$loop] == 'ditto' ? $assignedTo : $todos->assignedTos[$loop];
