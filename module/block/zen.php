@@ -826,7 +826,7 @@ class blockZen extends block
             {
                 $monthStories[$product][$month] = $story;
             }
-            unset($monthvoidStories[$month]);
+            unset($monthStories[$month]);
         }
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
