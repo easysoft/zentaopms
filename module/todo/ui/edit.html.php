@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The ui file of todo module of ZenTaoPMS.
+ * The edit file of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -54,41 +54,47 @@ function buildDateControl(object $todo): mixed
 
     return formRow
     (
-        set::class('items-center'),
+        setClass('items-center'),
         formGroup
         (
-            set(array
+            set
             (
-                'label'  => $lang->todo->date,
-                'width'  => '1/3'
-            )),
+                array(
+                    'label'  => $lang->todo->date,
+                    'width'  => '1/3'
+                )
+            ),
             control
             (
-                set(array
+                set
                 (
-                    'name'  => 'date',
-                    'class' => 'date',
-                    'value' => $todo->date == '2030-01-01' ? '' : $todo->date,
-                    'type'  => 'date',
-                    'width' => '1/4'
-                )),
+                    array(
+                        'name'  => 'date',
+                        'class' => 'date',
+                        'value' => $todo->date == '2030-01-01' ? '' : $todo->date,
+                        'type'  => 'date',
+                        'width' => '1/4'
+                    )
+                ),
                 on::change('changeDate(this)')
             ),
         ),
         formGroup
         (
-            set::class('items-center ml-4'),
+            setClass('items-center ml-4'),
 
             checkbox
             (
-                set(array
+                set
                 (
-                    'id'      => 'switchDate',
-                    'name'    => 'switchDate',
-                    'text'    => $lang->todo->periods['future'],
-                    'width'   => '100px',
-                    'checked' => $todo->date == '2030-01-01'
-                )),
+                    array(
+                        'id'      => 'switchDate',
+                        'name'    => 'switchDate',
+                        'text'    => $lang->todo->periods['future'],
+                        'width'   => '100px',
+                        'checked' => $todo->date == '2030-01-01'
+                    )
+                ),
                 on::change('togglePending(this)')
             )
         )
@@ -108,44 +114,47 @@ function buildCycleOfDayConfig(object $todo): mixed
     global $lang;
     return formRow
     (
-        set::class('cycle-config cycle-type-detail type-day hidden'),
+        setClass('cycle-config cycle-type-detail type-day hidden'),
 
         formGroup
         (
-            set(array
+            set
             (
-                'label'    => $lang->todo->cycleConfig,
-                'required' => true,
-                'width'    => '1/3'
-            )),
+                array(
+                    'label'    => $lang->todo->cycleConfig,
+                    'required' => true,
+                    'width'    => '1/3'
+                )
+            ),
             inputGroup
             (
 
-                set::class('have-fix'),
+                setClass('have-fix'),
                 span
                 (
-                    set::class('input-group-addon justify-center'),
+                    setClass('input-group-addon justify-center'),
                     $lang->todo->from
                 ),
                 input
                 (
-                    set(array
+                    set
                     (
-                        'class' => 'cycle-date',
-                        'name'  => 'config[date]',
-                        'type'  => 'date',
-                        'value' => $todo->date
-                    )),
+                        array(
+                            'name'  => 'config[date]',
+                            'type'  => 'date',
+                            'value' => $todo->date ? $todo->date : date('Y-m-d')
+                        )
+                    ),
                     on::blur('dateBlur(this)')
                 )
             )
         ),
         div
         (
-            set::class('config-day flex items-center highlight-suffix'),
+            setClass('config-day flex items-center highlight-suffix'),
             span
             (
-                set::class('input-group-addon pl-4 ring-0 bg-white'),
+                setClass('input-group-addon pl-4 ring-0 bg-white'),
                 $lang->todo->every
             ),
 
@@ -156,7 +165,7 @@ function buildCycleOfDayConfig(object $todo): mixed
                 set::suffixWidth('30'),
                 input
                 (
-                    set::id('everyInput'),
+                    setID('everyInput'),
                     set::name('config[day]'),
                     set::value(isset($todo->config->day) ? $todo->config->day : ''),
                     on::blur('everyInputBlur(this)')
@@ -179,30 +188,38 @@ function buildCycleOfWeekConfig(object $todo): mixed
 
     return formRow
     (
-        set::class('cycle-config cycle-type-detail type-week hidden'),
+        setClass('cycle-config cycle-type-detail type-week hidden'),
 
         formGroup
         (
-            set(array
+            set
             (
-                'label'    => $lang->todo->cycleConfig,
-                'required' => true,
-                'width'    => '1/2'
-            )),
+                array(
+                    'label'    => $lang->todo->cycleConfig,
+                    'required' => true,
+                    'width'    => '1/2'
+                )
+            ),
             inputGroup
             (
-                set::class('have-fix'),
+                setClass('have-fix'),
                 span
                 (
-                    set::class('input-group-addon'),
+                    setClass('input-group-addon'),
                     $lang->todo->weekly
                 ),
-                select(set(array
+                select
                 (
-                    'name'  => 'config[week]',
-                    'items' => $lang->todo->dayNames,
-                    'value' => isset($todo->config->week) ? $todo->config->week : 1
-                )))
+                    set
+                    (
+                        array(
+                            'required' => true,
+                            'name'     => 'config[week]',
+                            'items'    => $lang->todo->dayNames,
+                            'value'    => isset($todo->config->week) ? $todo->config->week : 1
+                        )
+                    )
+                )
             )
         )
     );
@@ -224,32 +241,40 @@ function buildCycleOfMonthConfig(object $todo): mixed
 
     return formRow
     (
-        set::class('cycle-config cycle-type-detail type-month hidden'),
+        setClass('cycle-config cycle-type-detail type-month hidden'),
 
         formGroup
         (
-            set(array
+            set
             (
-                'label'    => $lang->todo->cycleConfig,
-                'required' => true,
-                'class'    => 'have-fix',
-                'width'    => '1/2'
-            )),
+                array(
+                    'label'    => $lang->todo->cycleConfig,
+                    'required' => true,
+                    'class'    => 'have-fix',
+                    'width'    => '1/2'
+                )
+            ),
             inputGroup
             (
 
                 span
                 (
-                    set::class('input-group-addon'),
+                    setClass('input-group-addon'),
                     $lang->todo->monthly
                 ),
-                select(set(array
+                select
                 (
-                    'id'    => 'config[month]',
-                    'name'  => 'config[month]',
-                    'items' => $days,
-                    'value' => isset($todo->config->month) ? $todo->config->month : ''
-                )))
+                    set
+                    (
+                        array(
+                            'required' => true,
+                            'id'       => 'config[month]',
+                            'name'     => 'config[month]',
+                            'items'    => $days,
+                            'value'    => isset($todo->config->month) ? $todo->config->month : ''
+                        )
+                    )
+                )
             )
         )
     );
@@ -271,44 +296,55 @@ function buildCycleOfYearConfig(object $todo): mixed
 
     return formRow
     (
-        set::class('cycle-config cycle-type-detail type-year hidden'),
+        setClass('cycle-config cycle-type-detail type-year hidden'),
 
         formGroup
         (
-            set(array
+            set
             (
-                'label'    => $lang->todo->cycleConfig,
-                'required' => true,
-                'class'    => 'have-fix',
-                'width'    => '1/2'
-            )),
+                array(
+                    'label'    => $lang->todo->cycleConfig,
+                    'required' => true,
+                    'class'    => 'have-fix',
+                    'width'    => '1/2'
+                )
+            ),
             inputGroup
             (
                 span
                 (
-                    set::class('input-group-addon'),
+                    setClass('input-group-addon'),
                     $lang->todo->specify
                 ),
                 select
                 (
-                    set(array
+                    set
                     (
-                        'id'       => 'config[specify][month]',
-                        'name'     => 'config[specify][month]',
-                        'items'    => $lang->datepicker->monthNames,
-                        'multiple' => false,
-                        'value'    => isset($todo->config->specify->month) ? $todo->config->specify->month : 0
-                    )),
+                        array(
+                            'required' => true,
+                            'id'       => 'config[specify][month]',
+                            'name'     => 'config[specify][month]',
+                            'items'    => $lang->datepicker->monthNames,
+                            'multiple' => false,
+                            'value'    => isset($todo->config->specify->month) ? $todo->config->specify->month : 0
+                        )
+                    ),
                     on::change('setDays(this.value)')
                 ),
-                select(set(array
+                select
                 (
-                    'id'       => 'specifiedDay',
-                    'name'     => 'config[specify][day]',
-                    'items'    => $days,
-                    'multiple' => false,
-                    'value'    => isset($todo->config->specify->day) ? $todo->config->specify->day : 1
-                )))
+                    set
+                    (
+                        array(
+                            'required' => true,
+                            'id'       => 'specifiedDay',
+                            'name'     => 'config[specify][day]',
+                            'items'    => $days,
+                            'multiple' => false,
+                            'value'    => isset($todo->config->specify->day) ? $todo->config->specify->day : 1
+                        )
+                    )
+                )
             )
         )
     );
@@ -328,25 +364,32 @@ function buildBeforeDays($todo): mixed
 
     return formRow
     (
-        set::class('cycle-config'),
+        setClass('cycle-config'),
         formGroup
         (
-            set(array
+            set
             (
-                'label'  => $lang->todo->generate,
-                'class'  => 'have-fix highlight-suffix',
-                'width'  => '1/3'
-            )),
+                array(
+                    'label'  => $lang->todo->generate,
+                    'class'  => 'have-fix highlight-suffix',
+                    'width'  => '1/3'
+                )
+            ),
             inputControl
             (
                 set::prefix($lang->todo->advance),
                 set::prefixWidth('42'),
-                input(set(array
+                input
                 (
-                    'class' => 'before-days',
-                    'name'  => 'config[beforeDays]',
-                    'value' => $todo->config->beforeDays
-                ))),
+                    set
+                    (
+                        array(
+                            'class' => 'before-days',
+                            'name'  => 'config[beforeDays]',
+                            'value' => $todo->config->beforeDays
+                        )
+                    )
+                ),
                 to::suffix($lang->todo->cycleDay),
                 set::suffixWidth('30')
             )
@@ -367,20 +410,27 @@ function buildDeadline($todo): mixed
     global $lang;
     return formRow
     (
-        set::class('cycle-config'),
+        setClass('cycle-config'),
         formGroup
         (
-            set(array
+            set
             (
-                'label'  => $lang->todo->deadline,
-                'width'  => '1/3',
-            )),
-            input(set(array
+                array(
+                    'label' => $lang->todo->deadline,
+                    'width' => '1/3'
+                )
+            ),
+            input
             (
-                'type'  => 'date',
-                'name'  => 'config[end]',
-                'value' => isset($todo->config->end) ? $todo->config->end : 0
-            )))
+                set
+                (
+                    array(
+                        'type'  => 'date',
+                        'name'  => 'config[end]',
+                        'value' => isset($todo->config->end) ? $todo->config->end : 0
+                    )
+                )
+            )
         )
 
     );
@@ -397,8 +447,7 @@ function buildCycleType(object $todo)
 {
     global $lang;
 
-    $cycleTypeOptions = array
-    (
+    $cycleTypeOptions = array(
         array('text' => $lang->todo->cycleDay,   'value' => 'day'),
         array('text' => $lang->todo->cycleWeek,  'value' => 'week'),
         array('text' => $lang->todo->cycleMonth, 'value' => 'month'),
@@ -410,21 +459,23 @@ function buildCycleType(object $todo)
 
     return formRow
     (
-        set::class('cycle-config'),
+        setClass('cycle-config'),
         formGroup
         (
             set::label($lang->todo->cycleType),
             set::required(true),
             radioList
             (
-                set(array
+                set
                 (
-                    'name'   => 'config[type]',
-                    'id'     => 'cycleType',
-                    'value'  => $type,
-                    'inline' => true,
-                    'items'  => $cycleTypeOptions
-                )),
+                    array(
+                        'name'   => 'config[type]',
+                        'id'     => 'cycleType',
+                        'value'  => $type,
+                        'inline' => true,
+                        'items'  => $cycleTypeOptions
+                    )
+                ),
                 on::change('changeCycleType')
             )
         )
@@ -472,14 +523,25 @@ function buildTodoType(object $todo)
 
     return formGroup
     (
-        set(array
+        set
         (
-            'label'  => $lang->todo->type,
-            'name'   => 'type',
-            'width'  => '1/3',
-            'items'  => $lang->todo->typeList,
-            'value'  => $todo->type
-        )),
+            array(
+                'label'  => $lang->todo->type,
+                'width'  => '1/3',
+            )
+        ),
+        select
+        (
+            set
+            (
+                array(
+                    'required' => true,
+                    'name'     => 'type',
+                    'items'    => $lang->todo->typeList,
+                    'value'    => $todo->type
+                )
+            )
+        ),
         on::change('changeType(this)')
     );
 }
@@ -487,11 +549,11 @@ formPanel
 (
     set::title(''),
     div(
-        set::class('flex items-center pb-2.5'),
+        setClass('flex items-center pb-2.5'),
         span($lang->todo->edit),
         span
         (
-            set::class('text-lg font-bold ml-3'),
+            setClass('text-lg font-bold ml-3'),
             $todo->name,
         ),
         label
@@ -507,53 +569,65 @@ formPanel
     (
         formGroup
         (
-            set(array
+            set
             (
-                'width' => '1/3',
-                'label' => $lang->todo->assignTo,
-            )),
+                array(
+                    'width' => '1/3',
+                    'label' => $lang->todo->assignTo
+                )
+            ),
             select
             (
-                set(array
+                set
                 (
-                    'items'    => $users,
-                    'value'    => $todo->assignedTo,
-                    'id'       => 'assignedTo',
-                    'name'     => 'assignedTo',
-                    'disabled' => $todo->private
-                )),
+                    array(
+                        'required' => true,
+                        'items'    => $users,
+                        'value'    => $todo->assignedTo,
+                        'id'       => 'assignedTo',
+                        'name'     => 'assignedTo',
+                        'disabled' => $todo->private
+                    )
+                ),
                 on::change('changeAssignedTo()')
             )
         ),
 
         formGroup
         (
-            set::class('items-center ml-4'),
+            setClass('items-center ml-4'),
             checkbox
             (
-                set(array
+                set
                 (
-                    'id'      => 'private',
-                    'name'    => 'private',
-                    'text'    => $lang->todo->private,
-                    'value'   => 1,
-                    'checked' => $todo->private,
-                )),
+                    array(
+                        'id'      => 'private',
+                        'name'    => 'private',
+                        'text'    => $lang->todo->private,
+                        'value'   => 1,
+                        'checked' => $todo->private
+                    )
+                ),
                 on::change('togglePrivate(this)')
             ),
-            btn(set(array
+            btn
             (
-                'icon'           => 'help',
-                'data-toggle'    => 'tooltip',
-                'data-placement' => 'top-start',
-                'href'           => 'privateTip',
-                'square'         => true,
-                'class'          => 'ghost h-6 tooltip-btn'
-            ))),
+                set
+                (
+                    array(
+                        'icon'           => 'help',
+                        'data-toggle'    => 'tooltip',
+                        'data-placement' => 'top-start',
+                        'href'           => 'privateTip',
+                        'square'         => true,
+                        'class'          => 'ghost h-6 tooltip-btn'
+                    )
+                )
+            ),
             div
             (
-                set::id('privateTip'),
-                set::class('tooltip darker'),
+                setID('privateTip'),
+                setClass('tooltip darker'),
                 $lang->todo->privateTip
             )
         )
@@ -562,62 +636,94 @@ formPanel
     (
         formGroup
         (
-            set(array
+            set
             (
-                'id'       => 'nameBox',
-                'required' => true,
-                'label'    => $lang->todo->name,
-                'class'    => 'name-box'
-            )),
+                array(
+                    'id'       => 'nameBox',
+                    'required' => true,
+                    'label'    => $lang->todo->name,
+                    'class'    => 'name-box'
+                )
+            ),
             inputGroup
             (
-                set::class('title-group'),
+                setClass('title-group'),
                 div
                 (
-                    set::id('nameInputBox'),
-                    input(set(array
+                    setID('nameInputBox'),
+                    input
                     (
-                        'id'    => 'name',
-                        'name'  => 'name',
-                        'value' => $todo->name
-                    )))
+                        set
+                        (
+                            array(
+                                'id'    => 'name',
+                                'name'  => 'name',
+                                'value' => $todo->name
+                            )
+                        )
+                    )
                 ),
                 div
                 (
-                    set::class('input-group-addon pl-4 bg-white fix-border br-0'),
+                    setClass('input-group-addon pl-4 bg-white fix-border br-0'),
                     $lang->todo->pri
                 ),
-                select(set(array
+                select
                 (
-                    'class' => 'w-20',
-                    'id'    => 'pri',
-                    'name'  => 'pri',
-                    'items' => $lang->todo->priList,
-                    'value' => $todo->pri
-                )))
+                    set
+                    (
+                        array(
+                            'required' => true,
+                            'class'    => 'w-20',
+                            'id'       => 'pri',
+                            'name'     => 'pri',
+                            'items'    => $lang->todo->priList,
+                            'value'    => $todo->pri
+                        )
+                    )
+                )
             )
         )
     ),
 
-    formGroup(set(array
+    formGroup
     (
-        'name'   => 'desc',
-        'type'   => 'editor',
-        'label'  => $lang->todo->desc,
-        'value'  => htmlSpecialString($todo->desc)
-    ))),
-    formGroup(set(array
+        set
+        (
+            array(
+                'name'  => 'desc',
+                'type'  => 'editor',
+                'label' => $lang->todo->desc,
+                'value' => htmlSpecialString($todo->desc)
+            )
+        )
+    ),
+    formGroup
     (
-        'width' => '1/3',
-        'id'    => 'status',
-        'name'  => 'status',
-        'items' => $lang->todo->statusList,
-        'label' => $lang->todo->status,
-        'value' => $todo->status,
-    ))),
+        set
+        (
+            array(
+                'width' => '1/3',
+                'label' => $lang->todo->status,
+            )
+        ),
+        select
+        (
+            set
+            (
+                array(
+                    'required' => true,
+                    'id'       => 'status',
+                    'name'     => 'status',
+                    'items'    => $lang->todo->statusList,
+                    'value'    => $todo->status
+                )
+            )
+        )
+    ),
     formRow
     (
-        set::class('items-center'),
+        setClass('items-center'),
         formGroup
         (
             set::label($lang->todo->beginAndEnd),
@@ -626,31 +732,37 @@ formPanel
             (
                 select
                 (
-                    set(array
+                    set
                     (
-                        'id'       => 'begin',
-                        'name'     => 'begin',
-                        'items'    => $times,
-                        'value'    => $todo->begin,
-                        'disabled' => $todo->begin == 2400
-                    )),
+                        array(
+                            'required' => true,
+                            'id'       => 'begin',
+                            'name'     => 'begin',
+                            'items'    => $times,
+                            'value'    => $todo->begin,
+                            'disabled' => $todo->begin == 2400
+                        )
+                    ),
                     on::change('selectNext()')
                 ),
                 span
                 (
-                    set::class('input-group-addon ring-0'),
+                    setClass('input-group-addon ring-0'),
                     $lang->todo->to
                 ),
                 select
                 (
-                    set(array
+                    set
                     (
-                        'id'       => 'end',
-                        'name'     => 'end',
-                        'items'    => $times,
-                        'value'    => $todo->end,
-                        'disabled' => $todo->begin == 2400
-                    )),
+                        array(
+                            'required' => true,
+                            'id'       => 'end',
+                            'name'     => 'end',
+                            'items'    => $times,
+                            'value'    => $todo->end,
+                            'disabled' => $todo->begin == 2400
+                        )
+                    ),
                     on::blur('selectEndTime(this)')
                 )
             ),
@@ -658,20 +770,21 @@ formPanel
         ),
         div
         (
-            set::class('ml-4 flex items-center'),
+            setClass('ml-4 flex items-center'),
             checkbox
             (
-                set(array
+                set
                 (
-                    'id'      => 'dateSwitcher',
-                    'name'    => 'dateSwitcher',
-                    'checked' => $todo->begin == 2400,
-                    'text'    => $lang->todo->periods['future']
-                )),
+                    array(
+                        'id'      => 'dateSwitcher',
+                        'name'    => 'dateSwitcher',
+                        'checked' => $todo->begin == 2400,
+                        'text'    => $lang->todo->periods['future']
+                    )
+                ),
                 on::change('switchDateFeature(this)')
             )
         )
-
     )
 );
 
