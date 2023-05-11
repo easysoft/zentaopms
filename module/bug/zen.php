@@ -30,20 +30,20 @@ class bugZen extends bug
     }
 
     /**
-     * 创建bug。
-     * Create a bug.
+     * 检查bug是否已经存在。
+     * Check whether bug is exist.
      *
-     * @param  object $bug
+     * @param  object    $bug
      * @access protected
-     * @return array|false
+     * @return array
      */
-    protected function doCreate(object $bug): array|false
+    protected function checkExistBug(object $bug): array
     {
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        return $this->bug->create($bug);
+        return array('status' => 'success');
     }
 
     /**

@@ -341,10 +341,9 @@ class bug extends control
 
             $data = form::data($this->config->bug->form->create);
             $bug  = $this->bugZen->prepareCreateExtras($data, $this->post->uid);
-            $bugResult = $this->bugZen->doCreate($bug);
 
-            list($hasError, $response) = $this->getErrorRes4Create($bugResult);
-            if($hasError) return $this->send($response);
+            $checkExist = $this->bugZen->checkExistBug($bug);
+            if($checkExist['status'] == 'exists') $this->send(array('result' => 'success', 'id' => $checkExist['id'], 'message' => sprintf($this->lang->duplicate, $this->lang->bug->common), 'locate' => $this->createLink('bug', 'view', "bugID={$checkExist['id']}")));
 
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
