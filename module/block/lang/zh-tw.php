@@ -556,3 +556,8 @@ $lang->block->zentaoapp->createEffort         = '記日誌';
 $lang->block->zentaoapp->createDoc            = '建文檔';
 $lang->block->zentaoapp->createTodo           = '建待辦';
 $lang->block->zentaoapp->workbench            = '工作台';
+
+$lang->block->productoverview = new stdclass();
+$lang->block->productoverview->totalProductCount       = '產品總數';
+$lang->block->productoverview->productReleasedThisYear = '今年發布';
+$lang->block->productoverview->releaseCount            = '發布里程碑';

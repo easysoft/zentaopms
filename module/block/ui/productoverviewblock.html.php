@@ -15,75 +15,51 @@ panel
 (
     div
     (
-        set('class', 'flex'),
-        cell
+        set('class', 'flex block-base'),
+        col
         (
-            set('class', 'border-right'),
-            set('style', ['width' => '25%']),
-            col
+            set('class', 'text-center w-1/3'),
+            set::justify('center'),
+            a
             (
-                set('class', 'text-center'),
-                span
-                (
-                    set('class', 'tile-amount text-primary'),
-                    132
-                ),
-                span
-                (
-                    set('class', 'text-light'),
-                    '产品总量'
-                )
-            )
-        ),
-        cell
-        (
-            set('class', 'border-right flex justify-around'),
-            set('style', ['width' => '50%']),
-            col
-            (
-                set('class', 'text-center'),
-                span
-                (
-                    set('class', 'tile-amount text-primary'),
-                    12
-                ),
-                span
-                (
-                    set('class', 'text-light'),
-                    '产品线'
-                )
+                set('href', $this->createLink('product', 'browse')),
+                set('class', 'text-2xl font-bold leading-relaxed'),
+                $totalProductCount
             ),
-            col
+            span
             (
-                set('class', 'text-center'),
-                span
-                (
-                    set('class', 'tile-amount text-primary'),
-                    100
-                ),
-                span
-                (
-                    set('class', 'text-light'),
-                    '今年发布'
-                )
+                set('class', 'text-light'),
+                $lang->block->productoverview->totalProductCount
             )
         ),
-        cell
+        col
         (
-            set('style', ['width' => '25%']),
-            col
+            set('class', 'text-center w-1/3'),
+            set::justify('center'),
+            span
             (
-                set('class', 'text-center'),
-                span
-                (
-                    set('class', 'tile-amount text-important'),
-                    16
-                ),
-                span
-                (
-                    set('class', 'text-light'),
-                    '发布里程碑'
-                )
+                set('class', 'text-2xl font-bold leading-relaxed'),
+                $productReleasedThisYear
+            ),
+            span
+            (
+                set('class', 'text-light'),
+                $lang->block->productoverview->productReleasedThisYear
+            )
+        ),
+        col
+        (
+            set('class', 'text-center w-1/3'),
+            set::justify('center'),
+            span
+            (
+                set('class', 'text-2xl font-bold text-important leading-relaxed'),
+                $releaseCount
+            ),
+            span
+            (
+                set('class', 'text-light'),
+                $lang->block->productoverview->releaseCount
             )
         )
     )

@@ -1463,31 +1463,19 @@ class blockZen extends block
     }
 
     /**
-     * Print product overview block.
+     * 传递产品总览区块页面数据。
+     * Transfer product overview block page data.
      *
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function printProductOverviewBlock()
+    protected function printProductOverviewBlock(): bool
     {
-        $normal = 0;
-        $closed = 0;
+        $this->view->totalProductCount       = 1;
+        $this->view->productReleasedThisYear = 1;
+        $this->view->releaseCount            = $this->loadModel('release')->getReleaseCount('milestone');
 
-        $products = $this->loadModel('product')->getList();
-        foreach($products as $product)
-        {
-            if(!$this->product->checkPriv($product->id)) continue;
-
-            if($product->status == 'normal') $normal++;
-            if($product->status == 'closed') $closed++;
-        }
-
-        $total  = $normal + $closed;
-
-        $this->view->total         = $total;
-        $this->view->normal        = $normal;
-        $this->view->closed        = $closed;
-        $this->view->normalPercent = $total ? round(($normal / $total), 2) * 100 : 0;
+        return true;
     }
 
     /**
