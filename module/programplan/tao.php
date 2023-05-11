@@ -523,4 +523,31 @@ class programplanTao extends programplanModel
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
     }
+
+    /**
+     * 计算阶段在数据库中的位置序号。
+     * Compute the new order for programplan. if orders is not set then begin with the order in zt_project table.
+     *
+     * @param  array     $orders
+     * @param  array     $plans
+     * @access protected
+     * @return array
+     */
+    protected function computeOrders(array $orders, array $plans):array
+    {
+        if(!isset($orders)) $orders = array();
+        asort($orders);
+        if(count($orders) < count($plans))
+        {
+            $orderIndex = empty($orders) ? 0 : count($orders);
+            $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
+            for($i = $orderIndex; $i < count($plans); $i ++)
+            {
+                $lastID ++;
+                $orders[$i] = $lastID * 5;
+            }
+        }
+
+        return $orders;
+    }
 }
