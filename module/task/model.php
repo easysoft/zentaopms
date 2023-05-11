@@ -705,8 +705,6 @@ class taskModel extends model
 
         if($isParentChanged)
         {
-            $this->taskTao->updateLastEdited();
-
             $this->action->create('task', $task->id, 'linkParentTask', '', $task->parent, '', false);
             $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $task->id, '', false);
 

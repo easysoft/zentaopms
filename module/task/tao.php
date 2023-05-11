@@ -656,21 +656,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 更新任务的最后修改人和最后修改日期。
-     * Update lastEditedBy and lastEditedDate of a task.
-     *
-     * @param  int       $taskID
-     * @access protected
-     * @return bool
-     */
-    protected function updateLastEdited(int $taskID): bool
-    {
-        /* Set lastEditedBy to current user, set lastEditedDate to now. */
-        $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($taskID)->exec();
-        return !dao::isError();
-    }
-
-    /**
      * 通过拖动甘特图修改任务的预计开始日期和截止日期。
      * Update task estimate date and deadline through gantt.
      *

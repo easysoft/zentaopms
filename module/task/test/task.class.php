@@ -24,7 +24,7 @@ class taskTest
      * @access public
      * @return array|object
      */
-    public function createTest($param, $assignedToList = array(), $multiple = 0, $team = array(), $selectTestStory = false, $teamSourceList = array(), $teamEstimateList = array(), $teamConsumedList = false, $teamLeftList = false, $requiredFields = '')
+    public function createTest(array $param, array $assignedToList = array(), int $multiple = 0, array $team = array(), bool $selectTestStory = false, array $teamSourceList = array(), array $teamEstimateList = array(), array|bool $teamConsumedList = false, array|bool $teamLeftList = false, string $requiredFields = ''): array|object
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
@@ -1911,9 +1911,9 @@ class taskTest
      * @param  int          $taskID
      * @param  array        $testTasks
      * @access public
-     * @return array|object
+     * @return array|object|bool
      */
-    public function createTestChildTasksTest($taskID = 0, $testTasks = array()): array|object
+    public function createTestChildTasksTest($taskID = 0, $testTasks = array()): array|object|bool
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
@@ -2080,24 +2080,5 @@ class taskTest
             return $result;
         }
 
-    }
-
-    /**
-     * 测试更新任务的最后编辑日期和最后编辑者。
-     * Test update last edited date and last edited account of a task.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return object|string
-     */
-    public function updateLastEditedTest(int $taskID): object|string
-    {
-        global $tester;
-        $this->objectModel->updateLastEdited($taskID);
-
-        if(dao::isError()) return dao::getError();
-        return $tester->dao->select('id,lastEditedDate,lastEditedBy')->from(TABLE_TASK)
-            ->where('id')->eq($taskID)
-            ->fetch();
     }
 }
