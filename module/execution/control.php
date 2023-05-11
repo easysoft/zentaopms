@@ -2680,7 +2680,7 @@ class execution extends control
         $projectID = $this->loadModel('task')->getProjectID($execution->id);
 
         $taskToOpen = $this->cookie->taskToOpen ? $this->cookie->taskToOpen : 0;
-        helper::setcookie('taskToOpen', 0);
+        helper::setcookie('taskToOpen', 0, 0);
 
         $this->view->title            = $this->lang->kanban->view;
         $this->view->users            = $users;
