@@ -29,7 +29,7 @@ class programplanModel extends model
 
     /**
      * 获取阶段列表。
-     * Get plans list.
+     * Get stages list.
      *
      * @param  int    $executionID
      * @param  int    $productID
@@ -45,13 +45,14 @@ class programplanModel extends model
     }
 
     /**
-     * Get plans by idList.
+     * 根据id 查询项目列表。
+     * Get project by idList.
      *
      * @param  array  $idList
      * @access public
      * @return array
      */
-    public function getByList($idList = array())
+    public function getByList(array $idList = array()): array
     {
         $plans = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in($idList)
