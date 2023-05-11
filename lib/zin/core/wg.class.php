@@ -528,7 +528,10 @@ class wg
         $definedProps = static::getDefinedProps();
         foreach($definedProps as $name => $definition)
         {
-            if($this->hasProp($name) || (isset($definition['default']) && $definition['default'] !== null) || (isset($definition['optional']) && $definition['optional'])) continue;
+            if($this->hasProp($name)) continue;
+            if(isset($definition['default']) && $definition['default'] !== null) continue;
+            if(isset($definition['optional']) && $definition['optional']) continue;
+
             trigger_error("[ZIN] The property \"$name: {$definition['type']}\" of widget \"{$this->type()}#$this->gid\" is required.", E_USER_ERROR);
         }
     }
