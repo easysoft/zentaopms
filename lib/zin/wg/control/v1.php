@@ -15,7 +15,7 @@ class control extends wg
 {
     static $defineProps = array
     (
-        'type: string', // text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
+        'type?: string', // text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
         'name: string',
         'id?: string',
         'value?: string',

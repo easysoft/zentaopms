@@ -15,7 +15,7 @@ class formGroup extends wg
         'required?:bool|string="auto"',
         'tip?: string',
         'tipClass?: string|array',
-        'tipProps: array',
+        'tipProps?: array',
         'control?: array|string',
         'width?: string',
         'strong?: bool',

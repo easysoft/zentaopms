@@ -8,7 +8,7 @@ class checkbox extends wg
         'checked?: bool',
         'name?: string',
         'primary: bool=true',
-        'id: string',
+        'id?: string',
         'disabled?: bool',
         'type: string="checkbox"',
         'value?: string',

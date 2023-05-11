@@ -112,6 +112,10 @@ class select extends wg
                 if($item['value'] === '') $hasEmptyItem = true;
             }
         }
+        else
+        {
+            $items = array();
+        }
 
         /* Prepend empty option when current select is not required and whitout any empty item. */
         if(!$required && !$hasEmptyItem) array_unshift($items, $this->onBuildItem(array('text' => '', 'value' => '', 'selected' => in_array('', $valueList))));
