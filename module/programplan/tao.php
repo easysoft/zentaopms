@@ -23,21 +23,21 @@ class programplanTao extends programplanModel
     protected function updateRow(object $plan, array $conditions): bool
     {
         $requiredFields = $conditions['requiredFields'] ?? '';
-        $ids            = $conditions['ids'] ?? '';
+        $projectIDList  = $conditions['relatedExecutionsID'] ?? '';
         $project        = $conditions['project'] ?? '';
         $parentStage    = $conditions['parentStage'] ?? '';
         $parent         = $conditions['parent'] ?? '';
         $setCode        = $conditions['setCode'] ?? '';
 
         $getName = false;
-        if($ids && $project && $parentStage  && $parent) $getName = true;
+        if($projectIDList && $project && $parentStage && $parent) $getName = true;
 
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheckIF($requiredFields, $requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF(!empty($plan->percent), 'percent', 'float')
-            ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$ids}) and type in ('sprint','stage') and `project` = {$project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$parent}" : ''))
+            ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$projectIDList}) and type in ('sprint','stage') and `project` = {$project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$parent}" : ''))
             ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != {$plan->id} and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($plan->id)
             ->exec();
@@ -88,11 +88,12 @@ class programplanTao extends programplanModel
         $count        = count($statusCount);
         $newParent    = null;
         $parentAction = '';
+        $this->loadModel('execution');
         if(isset($statusCount['wait']) && $count == 1 && helper::isZeroDate($parent->realBegan) && $startTasks == 0)
         {
             if($parent->status != 'wait')
             {
-                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('wait');
+                $newParent    = $this->execution->buildExecutionByStatus('wait');
                 $parentAction = 'waitbychild';
             }
         }
@@ -100,7 +101,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'closed')
             {
-                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('closed');
+                $newParent    = $this->execution->buildExecutionByStatus('closed');
                 $parentAction = 'closedbychild';
             }
         }
@@ -108,7 +109,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'suspended')
             {
-                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('suspended');
+                $newParent    = $this->execution->buildExecutionByStatus('suspended');
                 $parentAction = 'suspendedbychild';
             }
         }
@@ -116,7 +117,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'doing')
             {
-                $newParent    = $this->loadModel('execution')->buildExecutionByStatus('doing');
+                $newParent    = $this->execution->buildExecutionByStatus('doing');
                 $parentAction = $parent->status == 'wait' ? 'startbychildstart' : 'startbychild' . $action;
             }
         }
@@ -187,7 +188,7 @@ class programplanTao extends programplanModel
             $childrenIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($oldPlan->id)->fetchAll('id');
             if(!empty($childrenIDList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childrenIDList))->exec();
 
-            /* 父阶段不能那个超过100。 */
+            /* 相同父阶段的子阶段工作量占比之和不超过100%。 */
             /* The workload of the parent plan cannot exceed 100%. */
             $oldPlan->parent = $plan->parent;
             if($setPercent)

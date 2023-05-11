@@ -909,7 +909,7 @@ class programplanModel extends model
      * @access public
      * @return bool|array
      */
-    public function update(int $planID = 0, int $projectID = 0, $plan = null): bool|array
+    public function update(int $planID = 0, int $projectID = 0, object $plan = null): bool|array
     {
         $oldPlan = $this->getByID($planID);
 
@@ -1255,14 +1255,12 @@ class programplanModel extends model
     public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
     {
         $this->loadModel('execution');
-        $this->loadModel('project');
-        $this->loadModel('action');
 
         $stage   = $this->execution->getByID($stageID);
-        $project = $this->project->getByID($stage->project);
-
-        if(isset($project->model) && $project->model != 'waterfall' && $project->model != 'waterfallplus') return false;
         if(empty($stage) || empty($stage->path)) return false;
+
+        $project = $this->loadModel('project')->getByID($stage->project);
+        if(isset($project->model) && $project->model != 'waterfall' && $project->model != 'waterfallplus') return false;
 
         $action       = strtolower($action);
         $parentIdList = explode(',', trim($stage->path, ','));
@@ -1301,7 +1299,7 @@ class programplanModel extends model
             if(isset($newParent) && $newParent)
             {
                 $this->dao->update(TABLE_EXECUTION)->data($newParent)->where('id')->eq($id)->exec();
-                $this->action->create('execution', $id, $parentAction, '', $parentAction);
+                $this->loadModel('action')->create('execution', $id, $parentAction, '', $parentAction);
             }
             unset($newParent, $parentAction);
         }

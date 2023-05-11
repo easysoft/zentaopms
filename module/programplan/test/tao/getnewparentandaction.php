@@ -25,20 +25,20 @@ $programplan = new programplanTest();
 $tester->loadModel('programplan')->programplanTao;
 
 $project = $programplan->getByIdTest(2);
-$result  = $tester->programplan->getNewParentAndAction(['wait' => 1], $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('wait' => 1), $project, 0, 'edit');
 $parent1 = $result['newParent'];
 
 
 $project = $programplan->getByIdTest(5);
-$result  = $tester->programplan->getNewParentAndAction(['closed' => 1], $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('closed' => 1), $project, 0, 'edit');
 $parent2 = $result['newParent'];
 
 $project = $programplan->getByIdTest(8);
-$result  = $tester->programplan->getNewParentAndAction(['suspended' => 1], $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('suspended' => 1), $project, 0, 'edit');
 $parent3 = $result['newParent'];
 
 $project = $programplan->getByIdTest(11);
-$result  = $tester->programplan->getNewParentAndAction(['wait' => 2, 'closed' => 1], $project, 0, 'edit');
+$result  = $tester->programplan->getNewParentAndAction(array('wait' => 2, 'closed' => 1), $project, 0, 'edit');
 $parent4 = $result['newParent'];
 
 
