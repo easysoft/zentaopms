@@ -499,14 +499,14 @@ class programplanModel extends model
      * 创建/设置一个项目阶段。
      * Create/Set a project plan/phase.
      *
-     * @param  form  $formData
+     * @param  object $formData
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
      * @access public
      * @return bool
      */
-    public function create(form $formData, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
+    public function create(object $formData, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
     {
         /* Get every value from formData without use extract(). */
         $planIDList     = $formData->get('planIDList');
@@ -567,6 +567,8 @@ class programplanModel extends model
             $plan->PM         = empty($projectManager[$key]) ? '' : $projectManager[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
             $plan->hasProduct = $project->hasProduct;
+            $plan->percent    = 0;
+            $plan->code       = '';
             if($setCode)    $plan->code    = $codes[$key];
             if($setPercent) $plan->percent = $percents[$key];
 
@@ -779,6 +781,9 @@ class programplanModel extends model
                 if(!dao::isError())
                 {
                     $stageID = $this->dao->lastInsertID();
+                    if($stageID)  $stageID = (int)$stageID;
+                    if(!$stageID) dao::$errors['name'] = $this->lang->fail;
+
                     if($plan->type == 'kanban')
                     {
                         $execution = $this->execution->getByID($stageID);
@@ -842,7 +847,6 @@ class programplanModel extends model
                     {
                         $this->action->create('execution', $stageID, 'opened');
                     }
-
                     $this->computeProgress($stageID, 'create');
                 }
             }
