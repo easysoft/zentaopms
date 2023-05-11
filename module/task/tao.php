@@ -496,25 +496,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 拆分之后更新父任务的parent、lastEditedBy、lastEditedDate字段。
-     * Update the parent's parent, lastEditedBy, and lastEditedDate fields after split.
-     *
-     * @param  int       $parentID
-     * @access protected
-     * @return bool
-     */
-    protected function updateParentAfterSplit(int $parentID): bool
-    {
-        $task = new stdclass();
-        $task->parent         = '-1';
-        $task->lastEditedBy   = $this->app->user->account;
-        $task->lastEditedDate = helper::now();
-        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
-
-        return !dao::isError();
-    }
-
-    /**
      * 将任务的层级改为父子结构。
      * Change the hierarchy of tasks to a parent-child structure.
      *

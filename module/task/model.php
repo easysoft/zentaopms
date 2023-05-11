@@ -184,7 +184,7 @@ class taskModel extends model
 
         /* 拆分任务后更新其他数据。 Process other data after split task. */
         $children = !empty($parentID) ? implode(',', $taskIdList) : '';
-        if($parentID) $this->afterSplitTask($oldParentTask, $children);
+        if($parentID && $taskID) $this->afterSplitTask($oldParentTask, $children);
 
         /* 更新当前执行下的任务泳道。 Update the task lane under current execution. */
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
@@ -3780,22 +3780,20 @@ class taskModel extends model
      */
     public function afterSplitTask(object $oldParentTask, string $children = ''): bool
     {
-        $parentID = (int)$oldParentTask->id;
+        $parentID      = (int)$oldParentTask->id;
+        $oneOfChildren = current(explode(',', $children));
 
         /* 当一个普通任务有消耗时，拆分子任务并更新父任务状态。 */
         /* When a normal task is consumed, create the subtask and update the parent task status. */
         if($oldParentTask->parent == 0 && $oldParentTask->consumed > 0)
         {
-            $taskID = $this->taskTao->splitConsumedTask($oldParentTask);
-            if(!$taskID) return false;
-
-            $this->updateParentStatus($taskID);
+            $inheritTask = $this->taskTao->splitConsumedTask($oldParentTask);
+            if(!$inheritTask) return false;
         }
 
+        $this->updateParentStatus($oneOfChildren);
         $this->computeBeginAndEnd($parentID);
-        $this->taskTao->updateParentAfterSplit($parentID);
 
-        /* 记录父任务日志。 */
         $newParentTask = $this->dao->findById($parentID)->from(TABLE_TASK)->fetch();
         $changes       = common::createChanges($oldParentTask, $newParentTask);
         $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($children, ','));
