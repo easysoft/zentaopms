@@ -10,8 +10,5 @@ ARG MYSQL_PASSWORD
 ENV MYSQL_HOST=${MYSQL_HOST}
 ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-SHELL ["/bin/bash", "-c"]
 # Copy ZenTao
 COPY --chown=33:33 . /apps/zentao/
-
-RUN INIT_PHPINI_ONLY=true /etc/s6/s6-init/run
