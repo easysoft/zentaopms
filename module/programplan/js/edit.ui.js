@@ -41,7 +41,7 @@ function editStage()
         });
         $.ajaxSettings.async = true;
 
-        if(!result) return false;
+        if(!result) return;
     }
 
     var currentAttribute    = $('#attribute').val();
@@ -52,6 +52,6 @@ function editStage()
     {
         var result = confirm(changeAttrLang.replace('%s', stageTypeList[currentAttribute]));
 
-        if(!result) return false;
+        if(!result) return;
     }
 }
