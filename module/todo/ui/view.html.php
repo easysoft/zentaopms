@@ -118,6 +118,7 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
                                 )
                             )
                         ),
+                        set::placement('top-end'),
                         set::items($toolbarDropdownItems)
                     )
                 )
