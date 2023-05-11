@@ -395,15 +395,15 @@ class todoTest
      * 根据周期待办，获取这些待办生成的待办数据。
      * Get created cycle list by todo list.
      *
-     * @param  bool    $isInitCycle
+     * @param  bool    $initCycle
      * @access public
      * @return int
      */
-    public function getCycleListTest(bool $isInitCycle = true): int
+    public function getCycleListTest(bool $initCycle = true): int
     {
         $todoList = $this->objectModel->getValidCycleList();
 
-        if($isInitCycle) $this->objectModel->createBycycle($todoList);
+        if($initCycle) $this->objectModel->createBycycle($todoList);
 
         $cycleList = $this->objectModel->getCycleList($todoList);
 
