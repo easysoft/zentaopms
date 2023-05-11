@@ -574,7 +574,7 @@ $lang->block->typeList->case['openedbyme'] = '由我创建';
 
 $lang->block->typeList->story['assignedTo'] = '指派给我';
 $lang->block->typeList->story['openedBy']   = '由我创建';
-$lang->block->typeList->story['reviewedBy'] = '由我评审';
+$lang->block->typeList->story['reviewedBy'] = '我评审过';
 $lang->block->typeList->story['closedBy']   = '由我关闭';
 
 $lang->block->typeList->product['noclosed'] = '未关闭';
