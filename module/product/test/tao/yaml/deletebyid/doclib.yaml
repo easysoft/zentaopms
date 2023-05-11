@@ -1,0 +1,29 @@
+title: table zt_doc
+desc: "文档"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "文档编号"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 3{4},1-100
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 0{100},11-100,0{630},0{80}
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: execution
+    note: "所属迭代"
+    range: 0{100},0{90},101-730,0{80}
+    prefix: ""
+    postfix: ""
+    format: ""
