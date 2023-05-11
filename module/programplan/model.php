@@ -1070,13 +1070,14 @@ class programplanModel extends model
     }
 
     /**
+     * 根据计划ID判断是否创建了任务。
      * Is create task.
      *
      * @param  int    $planID
      * @access public
      * @return bool
      */
-    public function isCreateTask($planID)
+    public function isCreateTask(int $planID): bool
     {
         if(empty($planID)) return true;
 
