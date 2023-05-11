@@ -282,11 +282,11 @@ class programplanTest
      */
     public function isCreateTaskTest($planID)
     {
-        $object = $this->objectModel->isCreateTask($planID);
+        $result = $this->objectModel->isCreateTask($planID);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return 0;
 
-        return $object ? 2 : 1;
+        return $result;
     }
 
     /**
