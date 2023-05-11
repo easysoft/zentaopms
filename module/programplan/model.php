@@ -594,6 +594,7 @@ class programplanModel extends model
         $milestone    = 0;
         foreach($plans as $index => $plan)
         {
+            /* Check duplicated names to avoid to save same names. */
             if(!empty($sameNames) and in_array($plan->name, $sameNames)) dao::$errors[$index]['name'] = empty($type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
             if($setCode and $sameCodes !== true and !empty($sameCodes) and in_array($plan->code, $sameCodes)) dao::$errors[$index]['code'] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
 
@@ -672,19 +673,10 @@ class programplanModel extends model
         $account = $this->app->user->account;
         $now     = helper::now();
 
-        if(!isset($orders)) $orders = array();
-        asort($orders);
-        if(count($orders) < count($plans))
-        {
-            $orderIndex = empty($orders) ? 0 : count($orders);
-            $lastID     = $this->dao->select('id')->from(TABLE_EXECUTION)->orderBy('id_desc')->fetch('id');
-            for($i = $orderIndex; $i < count($plans); $i ++)
-            {
-                $lastID ++;
-                $orders[$i] = $lastID * 5;
-            }
-        }
+        /* Compute the new orders for programplan. if orders is not set then begin with the order in zt_execution table. */
+        $orders = $this->programplanTao->computeOrders($orders, $plans);
 
+        /* Get linked product by projectID. */
         $linkProducts = array();
         $productList  = $this->loadModel('product')->getProducts($projectID);
         if($project->stageBy == 'product')
@@ -696,6 +688,7 @@ class programplanModel extends model
             $linkProducts = array_keys($productList);
         }
 
+        /* Set each plans. */
         foreach($plans as $plan)
         {
             /* Set planDuration and realDuration. */
@@ -705,8 +698,8 @@ class programplanModel extends model
                 $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
             }
 
-            $plan->days     = helper::diffDate($plan->end, $plan->begin) + 1;
-            $plan->order    = current($orders);
+            $plan->days  = helper::diffDate($plan->end, $plan->begin) + 1;
+            $plan->order = current($orders);
 
             if($plan->id)
             {
