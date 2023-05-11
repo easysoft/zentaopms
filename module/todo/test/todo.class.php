@@ -4,9 +4,8 @@ class todoTest
     public function __construct()
     {
         global $tester;
-        $this->objectModel    = $tester->loadModel('todo');
+        $this->objectModel = $tester->loadModel('todo');
         $tester->app->loadClass('dao');
-        $_SERVER['HTTP_HOST'] = 'test.zentao.net';
     }
 
     /**
@@ -143,7 +142,6 @@ class todoTest
 
         return $object;
     }
-
 
     /**
      * 测试批量完成待办.
