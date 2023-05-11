@@ -405,12 +405,12 @@ class programplanModel extends model
      * 获取阶段百分比。
      * Get total percent.
      *
-     * @param  object $stage
-     * @param  bool   $parent
+     * @param  object    $stage
+     * @param  bool      $parent
      * @access public
      * @return int|float
      */
-    public function getTotalPercent(object $stage, bool $parent = false) : int|float
+    public function getTotalPercent(object $stage, bool $parent = false): int|float
     {
         /* When parent is equal to true, query the total workload of the subphase. */
         $executionID = $parent ? $stage->id : $stage->project;
@@ -428,26 +428,28 @@ class programplanModel extends model
     }
 
     /**
-     * Process plans.
+     * 批量查询阶段关联的项目和属性并过滤日期。
+     * Get product and attribute for stage correlation.
      *
-     * @param  array  $plans
-     * @access public
+     * @param  array   $plans
+     * @access private
      * @return array
      */
-    private function processPlans(array $plans)
+    private function processPlans(array $plans): array
     {
         foreach($plans as $planID => $plan) $plans[$planID] = $this->processPlan($plan);
         return $plans;
     }
 
     /**
-     * Process plan.
+     * 查询阶段关联的项目和属性并过滤日期。
+     * Get product and attribute for stage correlation.
      *
-     * @param  int    $plan
+     * @param  object $plan
      * @access public
      * @return object
      */
-    public function processPlan($plan)
+    public function processPlan(object $plan): object
     {
         $plan->setMilestone = true;
 
@@ -458,11 +460,7 @@ class programplanModel extends model
         }
         else
         {
-            $milestones = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
-                ->where('parent')->eq($plan->id)
-                ->andWhere('milestone')->eq(1)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('count');
+            $milestones = $this->programplanTao->getStageCount((int) $plan->id, 'milestone');
             if($milestones > 0)
             {
                 $plan->milestone    = 0;
@@ -470,11 +468,12 @@ class programplanModel extends model
             }
         }
 
-        $plan->begin     = $plan->begin == '0000-00-00' ? '' : $plan->begin;
-        $plan->end       = $plan->end  == '0000-00-00' ? '' : $plan->end;
-        $plan->realBegan = $plan->realBegan == '0000-00-00' ? '' : $plan->realBegan;
-        $plan->realEnd   = $plan->realEnd == '0000-00-00' ? '' : $plan->realEnd;
+        $replaced = '0000-00-00';
 
+        $plan->begin       = $plan->begin     == $replaced ? '' : $plan->begin;
+        $plan->end         = $plan->end       == $replaced ? '' : $plan->end;
+        $plan->realBegan   = $plan->realBegan == $replaced ? '' : $plan->realBegan;
+        $plan->realEnd     = $plan->realEnd   == $replaced ? '' : $plan->realEnd;
         $plan->product     = $this->loadModel('product')->getProductIDByProject($plan->id);
         $plan->productName = $this->dao->findByID($plan->product)->from(TABLE_PRODUCT)->fetch('name');
 

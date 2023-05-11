@@ -504,4 +504,22 @@ class programplanTao extends programplanModel
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
+
+    /**
+     * 获取子阶段数量。
+     * Get stage count.
+     *
+     * @param  int    $planID
+     * @param  string $mode
+     * @access protected
+     * @return int
+     */
+    protected function getStageCount(int $planID, string $mode = ''): int
+    {
+        return $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)
+            ->where('parent')->eq($planID)
+            ->beginIF($mode == 'milestone')->andWhere('milestone')->eq(1)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetch('count');
+    }
 }
