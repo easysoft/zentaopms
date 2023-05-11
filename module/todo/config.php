@@ -62,3 +62,4 @@ if($this->config->edition == 'max')
     $config->todo->project['review']      = TABLE_REVIEW;
 }
 helper::import(dirname(__FILE__) . 'config/form.php');
+helper::import(dirname(__FILE__) . 'config/toolbar.php');

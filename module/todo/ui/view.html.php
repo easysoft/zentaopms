@@ -27,7 +27,6 @@ jsVar('todoID',          $todo->id);
  * @param  object $user
  * @param  array  $projects
  * @return mixed
- *
  */
 function buildBtnGroup(object $todo, object $config, object $session, object $app, object $user, array $projects): mixed
 {
@@ -43,41 +42,17 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
     }
     else
     {
-        $browseLink = createLink('user', 'todo', "userID=$user->id");
+        $browseLink = createLink('user', 'todo', "userID={$user->id}");
     }
 
-    $buttons = array(
-        array(
-            'icon'  => 'play',
-            'url'   => createLink('todo', 'start', "todoID=$todo->id"),
-            'text'  => $lang->todo->beginAB,
-        ),
-        array(
-            'icon'  => 'magic',
-            'url'   => createLink('todo', 'activate', "todoID=$todo->id"),
-            'text'  => $lang->activate,
-        ),
-        array(
-            'icon'  => 'off',
-            'url'   => createLink('todo', 'close', "todoID=$todo->id"),
-            'text'  => $lang->close,
-        ),
-        array(
-            'icon'  => 'edit',
-            'url'   => createLink('todo', 'edit', "todoID=$todo->id"),
-            'text'  => $lang->edit,
-        ),
-        array(
-            'icon'  => 'trash',
-            'url'   => createLink('todo', 'delete', "todoID=$todo->id"),
-            'text'  => $lang->delete,
-        ),
-        array(
-            'icon'  => 'checked',
-            'url'   => createLink('todo', 'finish', "todoID=$todo->id"),
-            'text'  => $lang->todo->reasonList['done'],
-        )
-    );
+    foreach($config->todo->toolbar->buttonList as $key => $button)
+    {
+        $buttons[] = array(
+            'icon' => $key,
+            'url'  => createLink('todo', $button['action'], "todoID={$todo->id}"),
+            'text' => $button['text']
+        );
+    }
 
     if($todo->status != 'wait') unset($buttons[0]);
     if($todo->status != 'done') unset($buttons[2]);
@@ -370,6 +345,7 @@ function buildProductModalForm(array $products): mixed
                 input
                 (
                     set::type('hidden'),
+                    set::name('productProgram'),
                     set::value(0)
                 ),
                 btn
