@@ -1628,7 +1628,7 @@ class taskTest
      * @access public
      * @return string
      */
-    public function getAssignedTo4MultiTest($taskID, $type = 'current'): string
+    public function getAssignedTo4MultiTest(int $taskID, string $type = 'current'): string
     {
         $task    = $this->objectModel->getByID($taskID);
         $members = empty($task->team) ? array() : $task->team;
