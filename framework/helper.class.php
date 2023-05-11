@@ -352,13 +352,12 @@ class helper extends baseHelper
      * @access public
      * @return bool
      */
-    public static function setcookie(string $name, string $value = '', int $expire = null, string $path = null, string $domain = null, bool $secure = null, bool $httponly = true)
+    public static function setcookie(string $name, string $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
     {
         global $config;
 
         if($expire === null) $expire = $config->cookieLife;
         if($path   === null) $path   = $config->webRoot;
-        if($domain === null) $domain = $config->cookieDomain;
         if($secure === null) $secure = $config->cookieSecure;
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
