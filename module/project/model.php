@@ -1463,8 +1463,8 @@ class projectModel extends model
      */
     public function updateProductStage(int $projectID, string $stageBy): bool
     {
-        /* 如果项目的阶段为由按项目创建，则更新此项目下每个产品。*/
-        if($stageBy == 'product') return true;
+        /* 如果项目的阶段为由按产品创建，则更新此项目下每个产品。*/
+        if($stageBy == 'project') return true;
 
         $executions = $this->loadModel('execution')->getPairs($projectID);
         foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID); // 更新项目下所有产品的阶段。
