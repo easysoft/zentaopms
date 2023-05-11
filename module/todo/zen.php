@@ -142,8 +142,9 @@ class todoZen extends todo
      */
     protected function addCycleYearConfig(object $formData): object
     {
-        $rowData = $formData->rawdata;
-        if(!empty($rowData->config) && $rowData->config['type'] != 'year') return $formData;
+        /* Only handle cases where you add to the backlog by year. */
+        if(empty($formData->data->config)) return $formData;
+        if(!empty($formData->data->config) && $formData->data->config['type'] != 'year') return $formData;
 
         $formData->data->config['type']          = 'day';
         $formData->data->config['specifiedDate'] = 1;
@@ -238,36 +239,34 @@ class todoZen extends todo
      * Processing edit request data.
      *
      * @param  int          $todoID
-     * @param  object       $formData
+     * @param  form         $formData
      * @access protected
      * @return object|false
      */
-    protected function beforeEdit(int $todoID, object $formData): object|false
+    protected function beforeEdit(int $todoID, form $formData): object|false
     {
         $oldTodo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
 
         $objectID   = 0;
-        $rowData    = $formData->rawdata;
+        $postData   = $formData->get();
         $objectType = $oldTodo->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
         
-        if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
-        $rowData->date = !empty($rowData->config['date']) ? $rowData->config['date'] : $rowData->date;
+        if($hasObject && $objectType) $objectID = $postData->uid ? $postData->$objectType : $postData->objectID;
+        $postData->date = !empty($postData->config['date']) ? $postData->config['date'] : $postData->date;
 
         $todo = $formData->add('account', $oldTodo->account)
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF(empty($rowData->date), 'date', '2030-01-01')
-            ->setIF(empty($rowData->begin), 'begin', '2400')
-            ->setIF(empty($rowData->end), 'end', '2400')
+            ->setIF(empty($postData->date), 'date', '2030-01-01')
+            ->setIF(empty($postData->begin), 'begin', '2400')
+            ->setIF(empty($postData->end), 'end', '2400')
             ->setDefault('type', $objectType)
             ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
-
-        $todo = (object)array_merge((array)$rowData, (array)$todo);
 
         if(in_array($todo->type, $this->config->todo->moduleList))
         {
@@ -283,7 +282,14 @@ class todoZen extends todo
             return false;
         }
 
-        if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);
+        if(!empty($oldTodo->cycle))
+        {
+            $this->handleCycleConfig($todo);
+        }
+        else
+        {
+            $todo->config = '';
+        }
 
         return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
     }
