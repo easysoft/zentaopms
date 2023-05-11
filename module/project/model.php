@@ -2913,21 +2913,21 @@ class projectModel extends model
 
         if($project->status == 'wait' || $project->status == 'suspended') $item->actions[] = 'start';
 
-        $closePriv = common::hasPriv($moduleName, 'close');
+        $canClose = common::hasPriv($moduleName, 'close');
         if($project->status == 'doing')
         {
             $item->actions[] = 'close';
-            $closePriv       = false;
+            $canClose        = false;
         }
 
-        $activatePriv = common::hasPriv($moduleName, 'activate');
+        $canActivate = common::hasPriv($moduleName, 'activate');
         if($project->status == 'closed')
         {
             $item->actions[] = 'active';
-            $activatePriv    = false;
+            $canActivate     = false;
         }
 
-        if(common::hasPriv($moduleName, 'suspend') || $closePriv || $activatePriv)
+        if(common::hasPriv($moduleName, 'suspend') || $canClose || $canActivate)
         {
             $menu = 'pause';
             if($project->status != 'doing')  $menu .= ',close';
@@ -2973,19 +2973,21 @@ class projectModel extends model
             $menu .= $this->buildMenu($moduleName, 'start', $params, $project, 'browse', 'play', '', 'iframe', true);
         }
 
-        $closePriv = common::hasPriv($moduleName, 'close');
+        $canClose = common::hasPriv($moduleName, 'close');
         if($project->status == 'doing')
         {
-            $menu .= $this->buildMenu($moduleName, 'close', $params, $project, 'browse', 'off',   '', 'iframe', true);
+            $menu    .= $this->buildMenu($moduleName, 'close', $params, $project, 'browse', 'off',   '', 'iframe', true);
+            $canClose = false;
         }
 
-        $activatePriv = common::hasPriv($moduleName, 'activate');
+        $canActivate = common::hasPriv($moduleName, 'activate');
         if($project->status == 'closed')
         {
-            $menu .= $this->buildMenu($moduleName, 'activate', $params, $project, 'browse', 'magic', '', 'iframe', true);
+            $menu       .= $this->buildMenu($moduleName, 'activate', $params, $project, 'browse', 'magic', '', 'iframe', true);
+            $canActivate = false;
         }
 
-        if(common::hasPriv($moduleName, 'suspend') || $closePriv || $activatePriv)
+        if(common::hasPriv($moduleName, 'suspend') || $canClose || $canActivate)
         {
             $menu .= "<div class='btn-group'>";
             $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
