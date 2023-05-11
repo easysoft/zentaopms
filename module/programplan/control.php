@@ -71,21 +71,16 @@ class programplan extends control
      * 创建一个项目阶段。
      * Create a project plan/phase.
      *
-     * @param  string  $projectID
-     * @param  string  $productID
-     * @param  string  $planID
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @param  int     $planID
      * @param  string  $executionType
      * @access public
      * @return void
      */
-    public function create(string $projectID = '0', string $productID = '0', string $planID = '0', string $executionType = 'stage'): void
+    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage')
     {
-        $projectID = (int)$projectID;
-        $productID = (int)$productID;
-        $planID    = (int)$planID;
-
         $this->commonAction($projectID, $productID);
-
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
@@ -99,7 +94,7 @@ class programplan extends control
                 if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
             }
 
-            $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID&orderBy=order_asc&productID=$productID");
+            $locate = $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -110,8 +105,9 @@ class programplan extends control
 
         /* Set programplan typeList. */
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
-        $plans = $this->programplan->getStage($planID ? $planID : $projectID, $productID, 'parent', 'order_asc');
-        if(!empty($planID) and !empty($plans) and $project->model == 'waterfallplus')
+
+        $plans = $this->programplan->getStage($planID ?: $projectID, $productID, 'parent', 'order_asc');
+        if(!empty($planID) && !empty($plans) && $project->model == 'waterfallplus')
         {
             $executionType = 'stage';
             unset($this->lang->programplan->typeList['agileplus']);
@@ -123,31 +119,18 @@ class programplan extends control
             }
         }
 
-        /* Compute fields for create view. */
-        list($visibleFields, $requiredFields, $customFields, $showFields) = $this->programplanZen->computeFieldsCreateView($executionType);
+        $viewData = new stdclass();
+        $viewData->projectID     = $projectID;
+        $viewData->productID     = $productID;
+        $viewData->planID        = $planID;
+        $viewData->executionType = $executionType;
+        $viewData->programPlan   = $programPlan;
+        $viewData->productList   = $productList;
+        $viewData->project       = $project;
+        $viewData->plans         = $plans;
+        $viewData->executions    = $executions;
 
-        $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $project->name;
-        $this->view->position[]         = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[]         = $this->lang->programplan->create;
-        $this->view->productList        = $productList;
-        $this->view->project            = $project;
-        $this->view->productID          = $productID ? $productID : key($productList);
-        $this->view->stages             = empty($planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $project->model) : array();
-        $this->view->programPlan        = $programPlan;
-        $this->view->plans              = empty($executions) ? $plans : $executions;
-        $this->view->planID             = $planID;
-        $this->view->type               = 'lists';
-        $this->view->executionType      = $executionType;
-        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
-        $this->view->customFields       = $customFields;
-        $this->view->showFields         = $showFields;
-        $this->view->visibleFields      = $visibleFields;
-        $this->view->requiredFields     = $requiredFields;
-        $this->view->colspan            = count($visibleFields) + 3;
-        $this->view->enableOptionalAttr = (empty($programPlan) or (!empty($programPlan) and $programPlan->attribute == 'mix'));
-
-        $this->display();
+        $this->programplanZen->buildCreateView($viewData);
     }
 
     /**

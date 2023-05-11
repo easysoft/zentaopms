@@ -25,6 +25,43 @@ class programplanZen extends programplan
     }
 
     /**
+     * 生成创建项目阶段视图数据。
+     * Build create view data.
+     *
+     * @param  object $viewData
+     * @access protected
+     * @return void
+     */
+    public function buildCreateView(object $viewData)
+    {
+        /* Compute fields for create view. */
+        list($visibleFields, $requiredFields, $customFields, $showFields) = $this->computeFieldsCreateView($viewData->executionType);
+
+        $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $viewData->project->name;
+        $this->view->position[]         = html::a($this->createLink('programplan', 'browse', "projectID={$viewData->projectID}"), $viewData->project->name);
+        $this->view->position[]         = $this->lang->programplan->create;
+        $this->view->productList        = $viewData->productList;
+        $this->view->project            = $viewData->project;
+        $this->view->productID          = $viewData->productID ?: key($viewData->productList);
+        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $viewData->project->model) : array();
+        $this->view->programPlan        = $viewData->programPlan;
+        $this->view->plans              = empty($viewData->executions) ? $viewData->plans : $viewData->executions;
+        $this->view->planID             = $viewData->planID;
+        $this->view->type               = 'lists';
+        $this->view->executionType      = $viewData->executionType;
+        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $viewData->project->PM);
+        $this->view->custom             = $viewData->executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $this->view->customFields       = $customFields;
+        $this->view->showFields         = $showFields;
+        $this->view->visibleFields      = $visibleFields;
+        $this->view->requiredFields     = $requiredFields;
+        $this->view->colspan            = count($visibleFields) + 3;
+        $this->view->enableOptionalAttr = empty($viewData->programPlan) || $viewData->programPlan->attribute == 'mix';
+
+        $this->display();
+    }
+
+    /**
      * 处理编辑阶段的请求数据。
      * Processing edit request data.
      *
