@@ -66,7 +66,7 @@ formPanel
                     set::value(date('Y-m-d') != $todo->date ? key($times) : $time),
                     on::change('selectNext')
                 ),
-                span($lang->todo->to, set::class('input-group-addon')),
+                span($lang->todo->timeTo, set::class('input-group-addon')),
                 select
                 (
                     set::name('end'),

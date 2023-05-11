@@ -35,6 +35,7 @@ $lang->todo->cycleConfig  = "Cấu hình lặp lại";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
 $lang->todo->execution    = $lang->executionCommon;
+$lang->todo->timeTo       = 'timeTo';
 $lang->todo->transform    = 'transform';
 
 $lang->todo->reasonList['story'] = "Chuyển thành câu chuyện";
