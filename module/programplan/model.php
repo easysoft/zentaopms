@@ -544,12 +544,12 @@ class programplanModel extends model
         $sameNames = array_diff_assoc($names, array_unique($names));
 
         /* Check weather need to set code and compute same code. */
-        $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
+        $setCode   = isset($this->config->setCode) && $this->config->setCode == 1;
         $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
 
         /* Prepare the plans user inputted. Process the plan which names not empty only. */
         $project    = $this->loadModel('project')->getByID($projectID);
-        $setPercent = (isset($this->config->setPercent) and $this->config->setPercent == 1) ? true : false;
+        $setPercent = isset($this->config->setPercent) && $this->config->setPercent == 1;
         $plans      = array();
         foreach($names as $key => $name)
         {
@@ -915,7 +915,7 @@ class programplanModel extends model
         /* Judgment of required items. */
         if(!$this->programplanTao->checkRequiredItems($oldPlan, $plan, $projectID)) return false;
 
-        $setCode     = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
+        $setCode     = isset($this->config->setCode) && $this->config->setCode == 1;
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
         /* 设置计划和真实起始日期间隔时间。 */
@@ -1081,7 +1081,7 @@ class programplanModel extends model
         if(empty($planID)) return true;
 
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->andWhere('deleted')->eq('0')->limit(1)->fetch();
-        return empty($task) ? true : false;
+        return empty($task);
     }
 
     /**

@@ -156,7 +156,7 @@ class programplanTao extends programplanModel
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
         if(dao::isError()) return false;
 
-        $setCode = (isset($this->config->setCode) && $this->config->setCode == 1) ? true : false;
+        $setCode = isset($this->config->setCode) && $this->config->setCode == 1;
         if($setCode && empty($plan->code))
         {
             dao::$errors['code'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
@@ -165,7 +165,7 @@ class programplanTao extends programplanModel
 
         /* 对于是否有子阶段进行判断处理。 */
         /* check parent stage. */
-        $setPercent = isset($this->config->setPercent) && $this->config->setPercent == 1 ? true : false;
+        $setPercent = isset($this->config->setPercent) && $this->config->setPercent == 1;
         if($plan->parent > 0)
         {
             $plan->attribute = $parentStage->attribute == 'mix' ? $plan->attribute : $parentStage->attribute;

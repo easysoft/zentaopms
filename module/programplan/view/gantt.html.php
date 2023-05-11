@@ -563,13 +563,13 @@ $(function()
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
-    gantt.config.readonly            = canGanttEdit ? false : true;
+    gantt.config.readonly            = canGanttEdit;
     gantt.config.details_on_dblclick = false;
-    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : true;
+    gantt.config.order_branch        = ganttType == 'assignedTo';
     gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
-    gantt.config.drag_move           = ganttType == 'assignedTo' ? false : true;
-    gantt.config.drag_resize         = ganttType == 'assignedTo' ? false : true;
+    gantt.config.drag_move           = ganttType == 'assignedTo';
+    gantt.config.drag_resize         = ganttType == 'assignedTo';
     gantt.config.smart_rendering     = true;
     gantt.config.smart_scales        = true;
     gantt.config.static_background   = true;
