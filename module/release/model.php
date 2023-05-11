@@ -189,13 +189,13 @@ class releaseModel extends model
         $branch    = $this->post->branch ? $this->post->branch : (int)$branch;
 
         /* Check build if build is required. */
-        if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+        if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build === false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
 
         $release = fixer::input('post')
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setIF($projectID, 'project', $projectID)
-            ->setIF($this->post->build == false, 'build', 0)
+            ->setIF($this->post->build === false, 'build', 0)
             ->setDefault('stories', '')
             ->setDefault('bugs',    '')
             ->setDefault('createdBy',   $this->app->user->account)
@@ -326,7 +326,7 @@ class releaseModel extends model
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('build', '')
-            ->setIF($this->post->build == false, 'build', 0)
+            ->setIF($this->post->build === false, 'build', 0)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
             ->join('build', ',')
