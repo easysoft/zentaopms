@@ -28,8 +28,8 @@ else
     case 'devdata':
         zdRun(true);
         break;
-    case 'copyDB':
-        copyDB();
+    case 'batchInit':
+        batchInitDB(10);
         break;
     case 'extract':
         ztfExtract('api');
@@ -43,6 +43,9 @@ else
         break;
     case 'model':
         ztfRun('model');
+        break;
+    case 'concurrency':
+        ztfRun('model', 50);
         break;
     case 'P1':
         ztfRun($P1);

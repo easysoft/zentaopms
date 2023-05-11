@@ -42,14 +42,14 @@ function getVersionType($version)
  * @access public
  * @return void
  */
-function ztfRun($dir)
+function ztfRun($dir, $concurrency = false)
 {
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
 
     $runTestPath = '';
-    if($dir == 'model')
+    if($dir == 'model' || $dir == 'pipeline')
     {
         $dir = implode(' ', getCaseModelDir());
     }
@@ -69,6 +69,7 @@ function ztfRun($dir)
 
     if($runTestPath) $dir = $runTestPath;
     $command = "$ztfPath $dir";
+    if($concurrency && !isset($config->dbPool) && is_numeric($concurrency)) $command .= "-C $concurrency";
     system($command);
 }
 
@@ -260,51 +261,75 @@ function zdRun($isDev = false)
 }
 
 /**
- * copy init DB.
+ * 根据数据库的建表语句初始化数据库。
+ * According to the database to build predicate sentence to initialize the database.
  *
+ * @param  string $dbName
  * @access public
- * @return void
+ * @return viod
  */
-function copyDB()
+function initDB($dbName)
 {
-    global $config, $dao;
-    $sqlFile = TEST_BASEHPATH . DS . 'tmp/raw.sql';
-    if($config->db->host = 'localhost' and $config->db->port = '3306')
+    global $config;
+    $dbFile  = BASE_ROOT . DS . "db/zentao.sql";
+    $version = $config->version;
+
+    if(!$dbName) $dbName = $config->db->name;
+    $dbHost = $config->db->host;
+    $dbUser = $config->db->user;
+    $dbPWD  = $config->db->password;
+    $dbPort = $config->db->port;
+
+    $tableContent = preg_replace('/__DELIMITER__+/', ";", file_get_contents($dbFile));
+    $tableContent = preg_replace('/__TABLE__+/', $dbName, $tableContent);
+    $tableContent = preg_replace('/^CREATE\s+FUNCTION+/m', "DELIMITER ;;\nCREATE FUNCTION", $tableContent);
+    $tableContent = preg_replace('/END;+/', "END;; \nDELIMITER ;", $tableContent);
+
+    if(!is_dir(BASE_ROOT . DS . 'tmp/testdb')) mkdir(BASE_ROOT . DS . 'tmp/testdb', 777);
+    $dbFile = BASE_ROOT . DS . "tmp/testdb/{$dbName}.sql";
+    file_put_contents($dbFile, $tableContent);
+
+    `mysql -uroot -p{$dbPWD} -h{$dbHost} -P{$dbPort} -e "DROP DATABASE IF EXISTS $dbName; CREATE DATABASE IF NOT EXISTS $dbName COLLATE 'utf8_general_ci';"`;
+    `mysql -uroot -p{$dbPWD} -h{$dbHost} -P{$dbPort} -D{$dbName} < $dbFile`;
+
+    /* 插入一条公司数据和版本信息 */
+    system("mysql -uroot -p{$dbPWD} -h{$dbHost} -D{$dbName} -P{$dbPort} -e \"INSERT INTO zt_company (name, admins) VALUES('unittest', ',admin,');\"");
+    system("mysql -uroot -p{$dbPWD} -h{$dbHost} -D{$dbName} -P{$dbPort} -e \"INSERT INTO zt_config (\`owner\`, \`module\`, \`section\`, \`key\`, \`value\`) VALUES('system', 'common', 'global', 'version', '{$version}');\"");
+    system("mysql -uroot -p{$dbPWD} -h{$dbHost} -D{$dbName} -P{$dbPort} -e \"INSERT INTO zt_user (\`company\`, \`account\`, \`password\`) VALUES('1', 'admin', 'a0933c1218a4e745bacdcf572b10eba7');\"");
+
+    echo "初始化数据库{$dbName}成功！" . PHP_EOL;
+}
+
+/**
+ * 批量初始化数据库。
+ * Batch to initialize the database.
+ *
+ * @param  int    $dbCount
+ * @access public
+ * @return viod
+ */
+function batchInitDB($dbCount)
+{
+    global $config;
+    if(isset($config->dbPool)) return;
+
+    $dbList = array("{$config->db->name}");
+    for($i = 1; $i <= $dbCount; $i++)
     {
-        $dumpCommand = "mysqldump -u%s -p%s %s --add-drop-table=false > %s";
-        $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
-    }
-    else
-    {
-        $dumpCommand = "mysqldump -h%s -P%s -u%s -p%s %s --add-drop-table=false > %s";
-        $dumpCommand  = sprintf($dumpCommand, $config->db->host, $config->db->port, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+        $dbList[] = "{$config->db->name}_{$i}";
     }
 
-    $currentDBNum = $dao->query("select count(*) as num from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'")->fetch();
-    shell_exec($dumpCommand);
-
-    $dbNum = $config->test->dbNum;
-
-    $dbUsed = array();
-    for($i = 1; $i <= $dbNum; $i++)
+    $dbConfig = '$config->dbPool = array();' . PHP_EOL . PHP_EOL;
+    foreach($dbList as $key => $db)
     {
-        $dbUsed[] =  $config->test->dbPrefix . $i;
+        initDB($db);
+        $dbConfig .= "\$config->dbPool[{$key}] = array();" . PHP_EOL;
+        $dbConfig .= "\$config->dbPool[{$key}]['name'] = '{$db}';" . PHP_EOL;
     }
 
-    foreach($dbUsed as $db)
-    {
-        if($currentDBNum->num > 0) $dao->query('DROP DATABASE IF EXISTS ' . $db);
-        $dao->query('CREATE DATABASE ' . $db);
-        if($config->db->host = 'localhost' and $config->db->port = '3306')
-        {
-            shell_exec("mysql -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
-        }
-        else
-        {
-            shell_exec("mysql -h{$config->db->host} -P {$config->db->port} -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
-        }
-        echo '数据库<' . $db . '>复制成功！' . PHP_EOL;
-    }
+    $configFile = TEST_BASEHPATH . DS . 'config' . DS . 'my.php';
+    if(!file_exists($configFile) || !is_writable($configFile)) return;
+    file_put_contents($configFile, $dbConfig, FILE_APPEND);
 }
 
 /**
