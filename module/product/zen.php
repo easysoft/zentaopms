@@ -302,11 +302,11 @@ class productZen extends product
         /* Init fields. */
         $fields = $this->getFormFields4Create(0, $this->appendFlowFields($this->config->product->form->batchEdit, 'batch'));
 
-        /* Remove not show fields. */
-        $showFields = explode(',', $this->config->product->custom->batchEditFields);
+        /* Remove hidden fields. */
+        $shownFields = explode(',', $this->config->product->custom->batchEditFields);
         foreach($fields as $field => $attr)
         {
-            if(!in_array($field, $showFields) and !$attr['required']) unset($fields[$field]);
+            if(!in_array($field, $shownFields) and !$attr['required']) unset($fields[$field]);
         }
 
         return $fields;
@@ -331,20 +331,18 @@ class productZen extends product
     /**
      * Get product lines and product lines of program.
      *
-     * @param  array  $programIdList
-     * @param  string $params         hasempty
+     * @param  array     $programIdList
      * @access protected
      * @return array
      */
-    protected function getProductLines(array $programIdList = array(), string $params = ''): array
+    protected function getProductLines(array $programIdList = array()): array
     {
         /* Get all product lines. */
         $productLines = $this->product->getLines($programIdList);
 
         /* Collect product lines of program lines. */
-        $initArray = strpos($params, 'hasempty') !== false ? array('') : array();
-        $linePairs = $initArray;
-        foreach($programIdList as $programID) $linePairs[$programID] = $initArray;
+        $linePairs = array();
+        foreach($programIdList as $programID) $linePairs[$programID] = array();
         foreach($productLines as $programID => $line) $linePairs[$programID][$line->id] = $line->name;
 
         return array($productLines, $linePairs);
@@ -455,7 +453,7 @@ class productZen extends product
      * @access private
      * @return array
      */
-    private function getUnauthProductPrograms(array $products, array $authPrograms): array
+    private function getUnauthProgramsOfProducts(array $products, array $authPrograms): array
     {
         $unauthPrograms = array();
         $programIdList  = array();
@@ -515,10 +513,10 @@ class productZen extends product
         $moduleName = $tab == 'program' ? 'program' : $this->moduleName;
         $methodName = $tab == 'program' ? 'product' : 'browse';
         $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
-        $locate     = isonlybody() ? 'true' : $this->createLink($moduleName, $methodName, $param);
-        if($tab == 'doc') $locate = $this->createLink('doc', 'productSpace', "objectID=$productID");
+        $location   = isonlybody() ? 'true' : $this->createLink($moduleName, $methodName, $param);
+        if($tab == 'doc') $location = $this->createLink('doc', 'productSpace', "objectID=$productID");
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
     }
 
     /**
@@ -535,10 +533,10 @@ class productZen extends product
         $moduleName = $programID ? 'program' : 'product';
         $methodName = $programID ? 'product' : 'view';
         $param      = $programID ? "programID=$programID" : "product=$productID";
-        $locate     = $this->createLink($moduleName, $methodName, $param);
+        $location   = $this->createLink($moduleName, $methodName, $param);
 
         if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
     }
 
     /**
@@ -599,7 +597,7 @@ class productZen extends product
         if($this->config->systemMode == 'ALM')
         {
             $authPrograms   = $this->loadModel('program')->getTopPairs();
-            $unauthPrograms = $this->getUnauthProductPrograms($products, $authPrograms);
+            $unauthPrograms = $this->getUnauthProgramsOfProducts($products, $authPrograms);
 
             /* Get product lines by programs.*/
             $programIdList = array_merge(array_keys($authPrograms), array_keys($unauthPrograms));
@@ -715,7 +713,7 @@ class productZen extends product
     }
 
     /**
-     * 预处理批量编辑产品数据，将按字段为分组数据重组为产品分组的数据。
+     * 预处理批量编辑产品数据，将按字段分组数据重组为产品分组的数据。
      * Prepare batch edit extras.
      *
      * @param  form $data
@@ -729,7 +727,7 @@ class productZen extends product
         $data       = $data->get();
         $products   = array();
 
-        /* 将按字段为分组数据重组为产品分组的数据。*/
+        /* 将按字段分组数据重组为产品分组的数据。 */
         foreach($data->name as $productID => $productName)
         {
             $productID = (int)$productID;
@@ -830,10 +828,10 @@ class productZen extends product
      */
     protected function responseAfterBatchEdit(array $allChanges, int $programID): array
     {
-        /* Get locate. */
-        $locate = $this->createLink('program', 'product', "programID=$programID");
-        if($this->app->tab == 'product') $locate = $this->createLink('product', 'all');
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate);
+        /* Get location. */
+        $location = $this->createLink('program', 'product', "programID=$programID");
+        if($this->app->tab == 'product') $location = $this->createLink('product', 'all');
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
 
         if(empty($allChanges)) return $response;
 

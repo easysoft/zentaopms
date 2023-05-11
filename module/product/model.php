@@ -37,7 +37,7 @@ class productModel extends model
      * @access public
      * @return string
      */
-    public function getMobileDropMenu(array $products, int $productID, string $extra = '', string|int $branch = ''): string
+    public function getDropMenu4Mobile(array $products, int $productID, string $extra = '', string|int $branch = ''): string
     {
         list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
 
@@ -480,7 +480,7 @@ class productModel extends model
             $this->session->set('currentProductType', $currentProduct->type);
         }
 
-        if($this->app->viewType == 'mhtml') return $this->getMobileDropMenu(array($productID => $currentProductName), $productID, $extra, $branch);
+        if($this->app->viewType == 'mhtml') return $this->getDropMenu4Mobile(array($productID => $currentProductName), $productID, $extra, $branch);
 
         /* Init locateModule and locateMethod for report and story. */
         list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
@@ -2057,7 +2057,8 @@ class productModel extends model
         /* Confirm if product exist. */
         $product = $this->product->getById($productID);
         if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
-        /* If product is invisable for curren user, then response access denied message. */
+
+        /* If product is invisible for current user, respond access denied message. */
         if($productID && !$this->checkPriv($productID))
         {
             $productID = (int)key($products);

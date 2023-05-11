@@ -43,15 +43,12 @@ class product extends control
     /**
      * Index page, to browse.
      *
-     * @param  string $locate      auto|yes    locate to browse page or not. If not, display all products.
      * @param  string $productID
      * @access public
      * @return void
      */
-    public function index(string $locate = 'auto', string $productID = '0')
+    public function index(string $productID = '0')
     {
-        if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
-
         /* Check product id and get product branch. */
         $productID = (int)$productID;
         $productID = $this->product->saveVisitState($productID, $this->products);
