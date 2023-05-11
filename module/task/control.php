@@ -81,7 +81,7 @@ class task extends control
             $columnID = isset($output['columnID']) ? (int)$output['columnID'] : 0;
             $this->task->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
             $this->task->updateKanbanData($execution, $task, (int)$this->post->lane, $columnID);
-            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('lastTaskModule', (int)$this->post->module);
 
             /* Get the information returned after a task is created. */
             $response = $this->taskZen->responseAfterCreate($task, $execution, $this->post->after);
@@ -461,7 +461,7 @@ class task extends control
         $execution = $this->execution->getById($task->execution);
         if(!isonlybody() and $execution->type == 'kanban')
         {
-            setcookie('taskToOpen', $taskID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('taskToOpen', $taskID);
             return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
         }
 

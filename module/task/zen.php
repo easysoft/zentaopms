@@ -779,7 +779,7 @@ class taskZen extends task
         /* Set the response to return task list. */
         elseif($afterChoice == 'toTaskList')
         {
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('moduleBrowseParam', 0);
             $response['load'] = $this->createLink('execution', 'task', "executionID={$executionID}&status=unclosed&param=0&orderBy=id_desc");
         }
         /* Set the response to return story list. */
