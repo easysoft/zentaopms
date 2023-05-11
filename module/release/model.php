@@ -853,6 +853,7 @@ class releaseModel extends model
     }
 
     /**
+     * 获取未删除的发布数量。
      * Get count of the releases.
      *
      * @param  string $type all|milestone
