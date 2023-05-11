@@ -47,25 +47,21 @@ class bugZen extends bug
     }
 
     /**
-     * 创建bug后数据处理。
-     * Do thing after create a bug.
+     * 创建bug后存储上传的文件。
+     * Save files after create a bug.
      *
-     * @param  object $bug
-     * @param  object $formData
-     * @param  string $from
-     * @param  array  $output
+     * @param  int    $bugID
+     * @param  object $rawdata
      * @return void
      */
-    protected function afterCreate(object $bug, object $formData, string $from, array $output)
+    protected function updateFileAfterCreate(int $bugID, object $rawdata): void
     {
-        $bugID = $bug->id;
-
-        if(isset($formData->rawdata->resultFiles))
+        if(isset($rawdata->resultFiles))
         {
-            $resultFiles = $formData->rawdata->resultFiles;
-            if(isset($formData->rawdata->deleteFiles))
+            $resultFiles = $rawdata->resultFiles;
+            if(isset($rawdata->deleteFiles))
             {
-                foreach($formData->rawdata->deleteFiles as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                foreach($rawdata->deleteFiles as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
             }
             $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
             foreach($files as $file)
@@ -77,27 +73,56 @@ class bugZen extends bug
             }
         }
 
-        $this->file->updateObjectID($formData->rawdata->uid, $bugID, 'bug');
+        $this->file->updateObjectID($rawdata->uid, $bugID, 'bug');
         $this->file->saveUpload('bug', $bugID);
-        empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+    }
 
-        if($bug->execution)
+    /**
+     * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
+     * Get kanban laneID and columnID from $_POST and $output from extra().
+     *
+     * @param  object $rawdata
+     * @param  array  $output
+     * @return array
+     */
+    protected function getKanbanVariable(object $rawdata, array $output): array
+    {
+        $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+        if(!empty($rawdata->lane)) $laneID = $rawdata->lane;
+
+        $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
+        $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+        return array($laneID, $columnID);
+    }
+
+    /**
+     * 创建bug后更新执行看板。
+     * Update execution kanban after create a bug.
+     *
+     * @param  object $bug
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @param  string $from
+     * @return void
+     */
+    protected function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
+    {
+        $bugID       = $bug->id;
+        $executionID = $bug->execution;
+
+        if($executionID)
         {
             $this->loadModel('kanban');
 
-            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-            if(!empty($formData->rawdata->lane)) $laneID = $formData->rawdata->lane;
-
-            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-            if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
-            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', $bugID);
+            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'bug');
         }
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
     }
+
 
     /**
      * 处理更新请求数据。

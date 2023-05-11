@@ -351,11 +351,14 @@ class bug extends control
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-            $bugID = $bugResult['id'];
-            $bug   = $this->bug->getByID($bugID);
-            $this->bugZen->afterCreate($bug, $formData, $from, $output);
+            $bug = $this->bug->getByID($bugID);
+            $this->bugZen->updateFileAfterCreate($bugID, $data->rawdata);
+
+            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($data->rawdata, $output);
+            $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
             $this->bugZen->addAction4Create($bugID, $from, $output);
+            empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
             $message = $this->executeHooks($bugID);
             if($message) $this->lang->saveSuccess = $message;
 
