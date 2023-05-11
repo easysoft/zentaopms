@@ -79,15 +79,17 @@ class programplan extends control
      */
     public function create(string $projectID = '0', string $productID = '0', string $planID = '0', string $executionType = 'stage'): void
     {
-        $projectID = (int) $projectID;
-        $productID = (int) $productID;
-        $planID    = (int) $planID;
+        $projectID = (int)$projectID;
+        $productID = (int)$productID;
+        $planID    = (int)$planID;
 
         $this->commonAction($projectID, $productID);
 
         if($_POST)
         {
             $formData = form::data($this->config->programplan->create->form);
+            $formData = $this->programplanZen->beforeCreate($formData);
+
             $this->programplan->create($formData, $projectID, $productID, $planID);
             if(dao::isError())
             {
