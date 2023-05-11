@@ -1024,11 +1024,13 @@ class baseDAO
      * Return the last insert ID.
      *
      * @access public
-     * @return int
+     * @return int|false
      */
     public function lastInsertID()
     {
-        return $this->dbh->lastInsertID();
+        /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
+        $lastInsertID = $this->dbh->lastInsertID();
+        return $lastInsertID !== false ? (int)$lastInsertID : false;
     }
 
     /**

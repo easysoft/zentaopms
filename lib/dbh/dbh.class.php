@@ -453,11 +453,12 @@ class dbh
      *
      * @param string $name
      * @access public
-     * @return string|false
+     * @return int|false
      */
     public function lastInsertId($name = null)
     {
-        return $this->pdo->lastInsertId($name);
+        $lastInsertID = $this->pdo->lastInsertId($name);
+        return $lastInsertID !== false ? (int)$lastInsertID : false;
     }
 
     /**
