@@ -1,0 +1,19 @@
+title: zt_product
+author: jukui
+version: '1.0'
+fields:
+    - field: id
+      range: 1-10
+    - field: name
+      range: 1-10
+      prefix: '瀑布产品'
+    - field: code
+      range: 1-10
+      prefix: 'code'
+    - field: desc
+      range: 1-10
+      prefix: '描述'
+    - field: createdDate
+      range: '`2023-05-11 16:32:06`'
+    - field: program
+      range: 1-10

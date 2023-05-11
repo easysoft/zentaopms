@@ -1,0 +1,27 @@
+title: zt_project
+author: jukui
+version: '1.0'
+fields:
+    - field: id
+      range: 1-10
+    - field: project
+      range: '0,1,2,3,1,2,2,1,5,5'
+    - field: name
+      range: 1-10
+      prefix: '瀑布项目'
+    - field: parent
+      range: '0'
+    - field: type
+      range: 'project'
+    - field: percent
+      range: 1-9
+      prefix: '2'
+    - field: grade
+      range: 1
+    - field: days
+      range: 1
+    - field: status
+      range: 'doing,doing,doing,closed,suspended,closed'
+    - field: desc
+      range: 1-10
+      prefix: '项目描述'
