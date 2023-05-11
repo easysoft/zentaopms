@@ -439,10 +439,9 @@ class project extends control
             $project   = $this->projectZen->prepareCreateExtras($postData);
 
             $projectID = $this->project->create($project, $postData);
-            $projectID = (int)$projectID;
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
+            if($project->model == 'kanban') $this->project->addTeamMembers($projectID, $project, (array)$this->post->$teamMembers);
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
             /* Link the plan stories. */

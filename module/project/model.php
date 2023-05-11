@@ -1205,8 +1205,49 @@ class projectModel extends model
     }
 
     /**
+     * 创建项目后，新增团队成员.
+     * Add team members after create a project.
+     *
+     * @param  int       $projectID
+     * @param  object    $project
+     * @param  array     $members
+     * @access protected
+     * @return bool
+     */
+    protected function addTeamMembers(int $projectID, object $project, array $members): array
+    {
+        /* Set team of project. */
+        array_push($members, $project->PM, $project->openedBy);
+        $members     = array_unique($members);
+        $roles       = $this->loadModel('user')->getUserRoles(array_values($members));
+        $teamMembers = array();
+
+        $member = new stdClass();
+        $member->root    = $projectID;
+        $member->type    = 'project';
+        $member->join    = helper::now();
+        $member->days    = zget($project, 'days', 0);
+        $member->hours   = $this->config->loadModel('execution')->defaultWorkhours;
+
+        foreach($members as $account)
+        {
+            if(empty($account)) continue;
+
+            $member->account = $account;
+            $member->role    = zget($roles, $account, '');
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            $teamMembers[$account] = $member;
+        }
+        $this->execution->addProjectMembers($projectID, $teamMembers);
+
+        return !dao::isError();
+    }
+
+    /**
      * Create a project.
      *
+     * @param  object   $project
+     * @param  object   $postData
      * @access public
      * @return int|bool
      */
@@ -1214,26 +1255,12 @@ class projectModel extends model
     {
         $requiredFields = $this->config->project->create->requiredFields;
         if($this->post->delta == 999) $requiredFields = trim(str_replace(',end,', ',', ",{$requiredFields},"), ',');
-
-        $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_PROJECT)->data($project)
-            ->autoCheck()
-            ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
-            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkFlow()
-            ->exec();
 
+        $this->projectTao->doCreate($project);
         if(dao::isError()) return false;
 
-        $projectID = (int)$this->dao->lastInsertId();
-
-        /* Manage team members. */
-        $teamMembers = $this->projectTao->setProjectTeam($projectID, $project, $postData);
-        $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
-
+        $projectID = $this->dao->lastInsertId();
         /* Add project whitelist. */
         $whitelist = explode(',', $project->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
@@ -1241,16 +1268,18 @@ class projectModel extends model
         $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
         $this->projectTao->createDocLib($projectID, $project, $program);
 
-        if($project->hasProduct) $this->updateProducts($projectID);
-
-        /* If $_POST has product name, create it. */
-        $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
-        $needCreateProduct   = !$project->hasProduct || isset($postData->rawdata->newProduct) || (!$project->parent && empty($linkedProductsCount));
-        if($needCreateProduct && !$this->createProduct($projectID, $project, $postData, $program)) return false;
+        if($project->hasProduct)
+        {
+            $this->updateProducts($projectID);
+            /* If $_POST has product name, create it. */
+            $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
+            $needCreateProduct   = !$project->hasProduct || isset($postData->rawdata->newProduct) || (!$project->parent && empty($linkedProductsCount));
+            if($needCreateProduct && !$this->projectTao->createProduct($projectID, $project, $postData, $program)) return false;
+        }
 
         /* Save order. */
         $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
-        $this->file->updateObjectID($postData->rawdata->uid, $projectID, 'project');
+        $this->file->updateObjectID($this->post->uid, $projectID, 'project');
         $this->loadModel('program')->setTreePath($projectID);
 
         /* Add project admin. */

@@ -119,6 +119,28 @@ class projectTao extends projectModel
     }
 
     /**
+     * 新增项目。
+     * Insert a project to project table.
+     *
+     * @param  object    $project
+     * @access protected
+     * @return bool
+     */
+    protected function doCreate(object $project): bool
+    {
+        $this->lang->error->unique = $this->lang->error->repeat;
+        $this->dao->insert(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent    and `model`   = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model`  = '{$project->model}' and `deleted` = '0'")
+            ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->checkFlow()
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Fetch undone tasks.
      *
      * @param  int $projectID
@@ -199,45 +221,6 @@ class projectTao extends projectModel
         return $project;
     }
 
-    /**
-     * 创建项目后，将团队成员插入到TEAM表.
-     * Insert into zt_team after create a project.
-     *
-     * @param  int    $projectID
-     * @param  object $project
-     * @param  object $postData
-     * @access protected
-     * @return array
-     */
-    protected function setProjectTeam(int $projectID, object $project, object $postData): array
-    {
-        $this->loadModel('execution');
-
-        /* Set team of project. */
-        $members = isset($postData->rawdata->teamMembers) ? $postData->rawdata->teamMembers : array();
-        array_push($members, $project->PM, $project->openedBy);
-        $members = array_unique($members);
-        $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
-
-        $teamMembers = array();
-        foreach($members as $account)
-        {
-            if(empty($account)) continue;
-
-            $member = new stdClass();
-            $member->root    = $projectID;
-            $member->type    = 'project';
-            $member->account = $account;
-            $member->role    = zget($roles, $account, '');
-            $member->join    = helper::now();
-            $member->days    = zget($project, 'days', 0);
-            $member->hours   = $this->config->execution->defaultWorkhours;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-            $teamMembers[$account] = $member;
-        }
-
-        return $teamMembers;
-    }
 
     /**
      * 创建项目后，创建默认的项目主库.
