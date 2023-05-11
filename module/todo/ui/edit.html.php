@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The edit file of todo module of ZenTaoPMS.
+ * The edit ui file of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -26,7 +26,6 @@ jsVar('userAccount', $app->user->account);
 if($todo->cycle && $todo->config)
 {
     $todo->config = json_decode($todo->config);
-
     $type = '';
     if(isset($todo->config->type)) $type = $todo->config->type == 'day' && isset($todo->config->cycleYear) ? 'year' : $todo->config->type;
     jsVar('cycleType', $type);
@@ -44,7 +43,7 @@ else
  * Build date control for off-cycle todo display.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildDateControl(object $todo): mixed
 {
@@ -60,8 +59,8 @@ function buildDateControl(object $todo): mixed
             set
             (
                 array(
-                    'label'  => $lang->todo->date,
-                    'width'  => '1/3'
+                    'label' => $lang->todo->date,
+                    'width' => '1/3'
                 )
             ),
             control
@@ -77,12 +76,11 @@ function buildDateControl(object $todo): mixed
                     )
                 ),
                 on::change('changeDate(this)')
-            ),
+            )
         ),
         formGroup
         (
             setClass('items-center ml-4'),
-
             checkbox
             (
                 set
@@ -98,7 +96,6 @@ function buildDateControl(object $todo): mixed
                 on::change('togglePending(this)')
             )
         )
-
     );
 }
 
@@ -107,11 +104,12 @@ function buildDateControl(object $todo): mixed
  * Build setting with cycle of day.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildCycleOfDayConfig(object $todo): mixed
 {
     global $lang;
+
     return formRow
     (
         setClass('cycle-config cycle-type-detail type-day hidden'),
@@ -128,7 +126,6 @@ function buildCycleOfDayConfig(object $todo): mixed
             ),
             inputGroup
             (
-
                 setClass('have-fix'),
                 span
                 (
@@ -157,10 +154,8 @@ function buildCycleOfDayConfig(object $todo): mixed
                 setClass('input-group-addon pl-4 ring-0 bg-white'),
                 $lang->todo->every
             ),
-
             inputControl
             (
-
                 set::suffix($lang->todo->cycleDay),
                 set::suffixWidth('30'),
                 input
@@ -180,7 +175,7 @@ function buildCycleOfDayConfig(object $todo): mixed
  * Build setting with cycle of week.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildCycleOfWeekConfig(object $todo): mixed
 {
@@ -189,7 +184,6 @@ function buildCycleOfWeekConfig(object $todo): mixed
     return formRow
     (
         setClass('cycle-config cycle-type-detail type-week hidden'),
-
         formGroup
         (
             set
@@ -230,7 +224,7 @@ function buildCycleOfWeekConfig(object $todo): mixed
  * Build setting with cycle of month.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildCycleOfMonthConfig(object $todo): mixed
 {
@@ -242,7 +236,6 @@ function buildCycleOfMonthConfig(object $todo): mixed
     return formRow
     (
         setClass('cycle-config cycle-type-detail type-month hidden'),
-
         formGroup
         (
             set
@@ -256,7 +249,6 @@ function buildCycleOfMonthConfig(object $todo): mixed
             ),
             inputGroup
             (
-
                 span
                 (
                     setClass('input-group-addon'),
@@ -285,7 +277,7 @@ function buildCycleOfMonthConfig(object $todo): mixed
  * Build setting with cycle of year.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildCycleOfYearConfig(object $todo): mixed
 {
@@ -297,7 +289,6 @@ function buildCycleOfYearConfig(object $todo): mixed
     return formRow
     (
         setClass('cycle-config cycle-type-detail type-year hidden'),
-
         formGroup
         (
             set
@@ -348,7 +339,6 @@ function buildCycleOfYearConfig(object $todo): mixed
             )
         )
     );
-
 }
 
 /**
@@ -356,7 +346,7 @@ function buildCycleOfYearConfig(object $todo): mixed
  * Build generating todo control.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildBeforeDays($todo): mixed
 {
@@ -370,9 +360,9 @@ function buildBeforeDays($todo): mixed
             set
             (
                 array(
-                    'label'  => $lang->todo->generate,
-                    'class'  => 'have-fix highlight-suffix',
-                    'width'  => '1/3'
+                    'label' => $lang->todo->generate,
+                    'class' => 'have-fix highlight-suffix',
+                    'width' => '1/3'
                 )
             ),
             inputControl
@@ -395,7 +385,6 @@ function buildBeforeDays($todo): mixed
             )
         )
     );
-
 }
 
 /**
@@ -403,7 +392,7 @@ function buildBeforeDays($todo): mixed
  * Build deadline control.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildDeadline($todo): mixed
 {
@@ -432,7 +421,6 @@ function buildDeadline($todo): mixed
                 )
             )
         )
-
     );
 }
 
@@ -441,7 +429,7 @@ function buildDeadline($todo): mixed
  * Build cycle type.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildCycleType(object $todo)
 {
@@ -480,7 +468,6 @@ function buildCycleType(object $todo)
             )
         )
     );
-
 }
 
 /**
@@ -488,7 +475,7 @@ function buildCycleType(object $todo)
  * Build cycle types and settings.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
  */
 function buildCycleConfig(object $todo): mixed
 {
@@ -513,7 +500,8 @@ function buildCycleConfig(object $todo): mixed
  * Build todo type for off-cycle todo display.
  *
  * @param  object $todo
- * @return mixed Any type supported by zin widget function 任何 zin 部件函数参数支持的类型。
+ * @return mixed
+
  */
 function buildTodoType(object $todo)
 {
@@ -526,8 +514,8 @@ function buildTodoType(object $todo)
         set
         (
             array(
-                'label'  => $lang->todo->type,
-                'width'  => '1/3',
+                'label' => $lang->todo->type,
+                'width' => '1/3',
             )
         ),
         select
@@ -592,7 +580,6 @@ formPanel
                 on::change('changeAssignedTo()')
             )
         ),
-
         formGroup
         (
             setClass('items-center ml-4'),
@@ -685,7 +672,6 @@ formPanel
             )
         )
     ),
-
     formGroup
     (
         set
@@ -766,7 +752,6 @@ formPanel
                     on::blur('selectEndTime(this)')
                 )
             ),
-
         ),
         div
         (
