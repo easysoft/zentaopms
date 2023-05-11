@@ -404,6 +404,7 @@ $lang->block->count   = '数量';
 $lang->block->type    = '类型';
 $lang->block->orderBy = '排序';
 
+if(!isset($lang->block->availableBlocks)) $lang->block->availableBlocks = new stdclass();
 $lang->block->availableBlocks['todo']        = '日程';
 $lang->block->availableBlocks['task']        = '任务';
 $lang->block->availableBlocks['bug']         = 'Bug';
@@ -711,11 +712,10 @@ $lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式�
 $lang->block->customModeTip->light  = "适用于小型研发团队的管理模式，提供{$lang->projectCommon}管理的核心功能。";
 
 $lang->block->projectstatistic = new stdclass();
-$lang->block->projectstatistic->story = '需求';
-$lang->block->projectstatistic->cost  = '投入';
-$lang->block->projectstatistic->task  = '任务';
-$lang->block->projectstatistic->bug   = 'Bug';
-
+$lang->block->projectstatistic->story       = '需求';
+$lang->block->projectstatistic->cost        = '投入';
+$lang->block->projectstatistic->task        = '任务';
+$lang->block->projectstatistic->bug         = 'Bug';
 $lang->block->projectstatistic->storyPoints = '总规模';
 $lang->block->projectstatistic->done        = '已完成';
 $lang->block->projectstatistic->undone      = '剩余';
@@ -727,7 +727,6 @@ $lang->block->projectstatistic->wait        = '未开始';
 $lang->block->projectstatistic->doing       = '进行中';
 $lang->block->projectstatistic->resolved    = '已解决';
 $lang->block->projectstatistic->activated   = '激活';
-
 $lang->block->projectstatistic->unit        = '个';
 $lang->block->projectstatistic->SP          = 'SP';
 $lang->block->projectstatistic->personDay   = '人天';
@@ -746,7 +745,6 @@ $lang->block->productstatistic->newPlan         = '最新计划';
 $lang->block->productstatistic->newExecution    = '最新执行';
 $lang->block->productstatistic->newRelease      = '最新发布';
 
-$lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
 $lang->block->productoverview->productReleasedThisYear = '今年发布';
 $lang->block->productoverview->releaseCount            = '发布里程碑';
