@@ -660,7 +660,7 @@ class kanban extends control
         $order = 1;
         foreach($columns as $columnID)
         {
-            $order = $order ++;
+            $order += $order;
             $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
         }
 
