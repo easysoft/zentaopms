@@ -3368,36 +3368,37 @@ class executionModel extends model
 
         if(!empty($plans)) return false;
 
-        $planStories  = array();
+        $stories      = array();
         $planProducts = array();
         $this->loadModel('story');
         $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
         foreach($plans as $productID => $planIdList)
         {
             if(empty($planIdList)) continue;
-            $planIdList = explode(',', $planIdList);
+
+            $planIdList        = explode(',', $planIdList);
             $executionBranches = zget($executionProducts, $productID, array());
             foreach($planIdList as $planID)
             {
-                $planStory = $this->story->getPlanStories($planID);
-                if(!empty($planStory))
+                $planStories = $this->story->getPlanStories($planID);
+                if(!empty($planStories))
                 {
-                    foreach($planStory as $id => $story)
+                    foreach($planStories as $id => $story)
                     {
                         if($story->status != 'active' or (!empty($story->branch) and !empty($executionBranches) and !isset($executionBranches[$story->branch])))
                         {
-                            unset($planStory[$id]);
+                            unset($planStories[$id]);
                             continue;
                         }
                         $planProducts[$story->id] = $story->product;
                     }
-                    $planStories = array_merge($planStories, array_keys($planStory));
+                    $stories = array_merge($stories, array_keys($planStories));
                 }
             }
         }
 
-        $this->linkStory($projectID, $planStories, $planProducts);
-        $this->linkStory($executionID, $planStories, $planProducts);
+        $this->linkStory($projectID, $stories, $planProducts);
+        $this->linkStory($executionID, $stories, $planProducts);
 
         return true;
     }
