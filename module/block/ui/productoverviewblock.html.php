@@ -22,7 +22,7 @@ panel
             set::justify('center'),
             a
             (
-                set('href', $this->createLink('product', 'browse')),
+                set('href', $this->createLink('product', 'all', 'browseType=all')),
                 set('class', 'text-2xl font-bold leading-relaxed'),
                 $totalProductCount
             ),
