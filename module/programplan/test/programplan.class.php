@@ -342,17 +342,18 @@ class programplanTest
     }
 
     /**
+     * 测试获取父阶段的子类型。
      * Test get parent stage's children types.
      *
      * @param  int    $parentID
      * @access public
-     * @return string
+     * @return array|bool
      */
-    public function getParentChildrenTypesTest($parentID)
+    public function getParentChildrenTypesTest(int $parentID): array|bool
     {
         $objects = $this->objectModel->getParentChildrenTypes($parentID);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return false;
 
         return $objects;
     }
