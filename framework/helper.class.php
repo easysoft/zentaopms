@@ -292,6 +292,7 @@ class helper extends baseHelper
      *
      * @param string $content
      * @return never
+     * @throws EndResponseException
      */
     public static function end(string $content = ''): never
     {
@@ -345,7 +346,7 @@ class helper extends baseHelper
      * @param string      $value
      * @param int|null    $expire
      * @param string|null $path
-     * @param string|null $domain
+     * @param string      $domain
      * @param bool|null   $secure
      * @param bool        $httponly
      * @static
@@ -361,6 +362,36 @@ class helper extends baseHelper
         if($secure === null) $secure = $config->cookieSecure;
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+    }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)$value;
+            case 'array':
+                return (array)$value;
+            case 'object':
+                return (object)$value;
+            case 'string':
+            default:
+                return (string)$value;
+        }
     }
 }
 

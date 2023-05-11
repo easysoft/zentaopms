@@ -1589,11 +1589,10 @@ class baseRouter
             $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
             if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
 
-            /*
+            /**
              * 使用反射机制获取函数参数的默认值。
              * Get the default settings of the method to be called using the reflecting.
-             *
-             * */
+             */
             $defaultParams = array();
             $methodReflect = new reflectionMethod($className, $methodName);
             foreach($methodReflect->getParameters() as $param)
@@ -1601,20 +1600,24 @@ class baseRouter
                 $name = $param->getName();
 
                 $default = '_NOT_SET';
+                $type    = null;
                 if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
                 {
-                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
+                    $default = $paramDefaultValue[$appName][$className][$methodName][$name]['default'];
+                    $type    = $paramDefaultValue[$appName][$className][$methodName][$name]['type'];
                 }
                 elseif(isset($paramDefaultValue[$className][$methodName][$name]))
                 {
-                    $default = $paramDefaultValue[$className][$methodName][$name];
+                    $default = $paramDefaultValue[$className][$methodName][$name]['default'];
+                    $type    = $paramDefaultValue[$className][$methodName][$name]['type'];
                 }
-                elseif(!$isEncrypted and $param->isDefaultValueAvailable())
+                elseif(!$isEncrypted && $param->isDefaultValueAvailable())
                 {
                     $default = $param->getDefaultValue();
+                    if(method_exists($param, 'hasType') && $param->hasType()) $type = $param->getType()->getName();
                 }
 
-                $defaultParams[$name] = $default;
+                $defaultParams[$name] = array('default' => $default, 'type' => $type);
             }
 
             /**
@@ -2421,7 +2424,7 @@ class baseRouter
 
     /**
      * 合并请求的参数和默认参数，这样就可以省略已经有默认值的参数了。
-     * Merge the params passed in and the default params. Thus the params which have default values needn't pass value, just like a function.
+     * Merge the params passed in and the default params. Thus, the params which have default values needn't pass value, just like a function.
      *
      * @param   array $defaultParams     the default params defined by the method.
      * @param   array $passedParams      the params passed in through url.
@@ -2453,15 +2456,15 @@ class baseRouter
 
         $passedParams = array_values($passedParams);
         $i = 0;
-        foreach($defaultParams as $key => $defaultValue)
+        foreach($defaultParams as $key => $defaultItem)
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags((string) $passedParams[$i]);
+                $defaultParams[$key] = helper::convertType(strip_tags((string) $passedParams[$i]), $defaultItem['type']);
             }
             else
             {
-                if($defaultValue === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
             }
             $i ++;
         }
@@ -2510,7 +2513,7 @@ class baseRouter
      * Get the $param var.
      *
      * @access public
-     * @return string
+     * @return array
      */
     public function getParams()
     {
