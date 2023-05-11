@@ -117,8 +117,7 @@ class select extends wg
         /* Prepend empty option when current optional select has no empty item. */
         if($optional && !$hasEmptyItem) array_unshift($items, $this->onBuildItem(array('text' => '', 'value' => '', 'selected' => in_array('', $valueList))));
 
-        $props    = $this->props->skip(['items', 'value', 'multiple', 'required', 'optional']);
-        $required = $this->prop('required');
+        $props = $this->props->skip(['items', 'value', 'multiple', 'required', 'optional']);
 
         return h::select
         (
