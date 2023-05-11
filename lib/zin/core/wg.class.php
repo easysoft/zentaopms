@@ -71,7 +71,8 @@ class wg
 
         zin::renderInGlobal($this);
         static::checkPageResources();
-        $this->checkProps();
+
+        $this->checkErrors();
     }
 
     public function __debugInfo()
@@ -516,12 +517,12 @@ class wg
     }
 
     /**
-     * Check properties in debug mode
+     * Check errors in debug mode.
      *
      * @access protected
      * @return void
      */
-    protected function checkProps()
+    protected function checkErrors()
     {
         global $config;
         if(!isset($config->debug) || !$config->debug) return;
@@ -535,6 +536,26 @@ class wg
 
             trigger_error("[ZIN] The property \"$name: {$definition['type']}\" of widget \"{$this->type()}#$this->gid\" is required.", E_USER_ERROR);
         }
+
+        $wgErrors = $this->onCheckErrors();
+        if(empty($wgErrors)) return;
+
+        foreach($wgErrors as $error)
+        {
+            if(is_array($error)) trigger_error("[ZIN] $error[0]", count($error) > 1 ? $error[1] : E_USER_WARNING);
+            else trigger_error("[ZIN] $error", E_USER_ERROR);
+        }
+    }
+
+    /**
+     * The lifecycle method for checking errors in debug mode.
+     *
+     * @access protected
+     * @return array|null
+     */
+    protected function onCheckErrors(): array|null
+    {
+        return null;
     }
 
     protected static function getDefaultProps()
