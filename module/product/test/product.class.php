@@ -472,8 +472,9 @@ class productTest
      * @access public
      * @return array
      */
-    public function getProductsTest($projectID, $status)
+    public function getProductsTest(int $projectID, string $status): array
     {
+        $this->objectModel->app->user->admin = true;
         $objects = $this->objectModel->getProducts($projectID, $status);
 
         if(dao::isError())

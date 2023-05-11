@@ -257,7 +257,7 @@ class productModel extends model
      * @access public
      * @return int[]
      */
-    public function getProducts(string|int $projectID = '0', string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
+    public function getProducts(int $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
         if(defined('TUTORIAL'))
@@ -267,9 +267,8 @@ class productModel extends model
             return $this->tutorial->getExecutionProducts();
         }
 
-        if(!empty($append) and is_array($append)) $append = implode(',', $append);
-
         /* 初始化变量。 */
+        $append          = $this->productTao->formatAppendParam($append);
         $views           = $this->app->user->view->products . (empty($append) ? '' : ",$append");
         $projectProducts = $this->productTao->getProductsByProjectID($projectID, $views, $status, $orderBy, $noDeleted);
         $products        = array();
@@ -281,7 +280,7 @@ class productModel extends model
             return $products;
         }
 
-        /* 将分支ID、计划ID合并到产品数据中。*/
+        /* 将分支 ID 、计划 ID 合并到产品数据中。*/
         foreach($projectProducts as $product)
         {
             if(!isset($products[$product->id]))

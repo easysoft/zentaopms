@@ -656,7 +656,7 @@ class productTao extends productModel
      * @param  string    $orderBy
      * @param  bool      $noDeleted
      * @access protected
-     * @return int
+     * @return int[]
      */
     protected function getProductsByProjectID(int $projectID, string $productIdListStr, string $status, string $orderBy, bool $noDeleted): array
     {
@@ -665,7 +665,7 @@ class productTao extends productModel
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
             ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
-            ->beginIF(!empty($projectID))->andWhere('t1.project')->in($projectID)->fi()
+            ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($productIdListStr)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
