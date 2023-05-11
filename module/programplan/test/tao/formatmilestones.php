@@ -11,7 +11,7 @@ function initData()
 
 /**
 
-title=测试 programplanModel->getMilestoneByProduct();
+title=测试 programplanTao->formatMilestones();
 cid=1
 pid=1
 
@@ -21,9 +21,14 @@ initData();
 
 global $tester;
 
-$tester->loadModel('programplan');
-$result1 = $tester->programplan->getMilestoneByProduct(1, 1);
-$result2 = $tester->programplan->getMilestoneByProduct(2, 4);
+$tester->loadModel('programplan')->programplanTao;
+
+/** 测试阶段id为2,3,5,6的里程碑数据  */
+$data1 = array(2 => ',2,12,', 3 => ',3,13,');
+$data2 = array(5 => ',5,15,', 6 => ',6,16,');
+
+$result1 = $tester->programplan->formatMilestones($data1, 1);
+$result2 = $tester->programplan->formatMilestones($data2, 4);
 
 r(count($result1)) && p() && e('2'); // 测试获取产品1 项目1的里程碑个数
 r(count($result2)) && p() && e('2'); // 测试获取产品2 项目4的里程碑个数

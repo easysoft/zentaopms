@@ -202,7 +202,7 @@ class programplanTao extends programplanModel
     }
 
     /**
-     * 格式化里程碑。
+     * 组装里程碑数据。
      * Format milestones use '/'.
      *
      * @param  array  $milestones
