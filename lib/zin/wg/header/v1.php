@@ -10,7 +10,7 @@ class header extends wg
 {
     static $defineBlocks = array(
         'heading' => array('map' => 'toolbar'),
-        'navbar' => array('map' => 'nav'),
+        'navbar'  => array('map' => 'nav'),
         'toolbar' => array('map' => 'btn')
     );
 
@@ -93,7 +93,7 @@ class header extends wg
                 'active' => $currentVision == $vision,
                 'url' => createLink('my', 'ajaxSwitchVision', "vision=$vision"),
                 'data-type' => 'ajax',
-                'text' => $lang->visionList[$vision],
+                'text' => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
             );
         }
 
