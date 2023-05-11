@@ -16,6 +16,7 @@ class bugZen extends bug
         $now = helper::now();
         $bug = $data->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
+            ->setIF(empty($data->data->deadline), 'deadline', null)
             ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF($data->data->assignedTo != '', 'assignedDate', $now)
             ->setIF($data->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($data->data->story))
