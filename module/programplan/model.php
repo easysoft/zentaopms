@@ -1113,10 +1113,9 @@ class programplanModel extends model
         if(strtolower($action) == 'create')
         {
             global $dao;
+            if(empty($plan->id)) return true;
 
-            $task = '';
-            if(!empty($plan->id)) $task = $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch();
-
+            $task = $dao->select('*')->from(TABLE_TASK)->where('execution')->eq($plan->id)->andWhere('deleted')->eq('0')->limit(1)->fetch();
             return empty($task);
         }
 
