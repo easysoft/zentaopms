@@ -1,0 +1,6 @@
+title: zt_project
+author: liuhong
+version: "1.0"
+fields:
+    - field: multiple
+      range: 0,1
