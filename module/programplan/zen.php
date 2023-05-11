@@ -177,6 +177,7 @@ class programplanZen extends programplan
     }
 
     /**
+     * 计算创建视图的可见字段字段和必填字段。
      * Compute visibleFields and requiredFields for create view.
      *
      * @param  string $executionType
@@ -188,11 +189,11 @@ class programplanZen extends programplan
         $visibleFields      = array();
         $requiredFields     = array();
         $customFields       = array();
-        $showFields         = array();
-
         $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
         $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
-        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
+
+        foreach(explode(',', $this->config->programplan->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
+
         $showFields = $this->config->programplan->$custom->createFields;
         foreach(explode(',', $showFields) as $field)
         {
