@@ -82,7 +82,7 @@ class programplanZen extends programplan
      * @param  object    $plan
      * @param  array    $changes
      * @access protected
-     * @return viod
+     * @return void
      */
     protected function afterEdit(object $plan, array $changes)
     {
@@ -104,7 +104,7 @@ class programplanZen extends programplan
      *
      * @param  object $plan
      * @access protected
-     * @return viod
+     * @return void
      */
     protected function buildEditView(object $plan)
     {

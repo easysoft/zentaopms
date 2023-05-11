@@ -13,15 +13,18 @@ declare(strict_types=1);
 class programplanModel extends model
 {
     /**
+     * 根据id获取阶段。
      * Get plan by id.
      *
      * @param  int    $planID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($planID)
+    public function getByID(int $planID): object|false
     {
         $plan = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
+
+        if(dao::isError()) return false;
 
         return $this->processPlan($plan);
     }
