@@ -1,0 +1,11 @@
+.status-done .label-dot {background-color: #0DBB7D;}
+.status-doing .label-dot {background-color: #FF6F42;}
+.status-pause .label-dot {background-color: #B89664;}
+.status-draft .label-dot {background-color: #8166EE;}
+.status-cancel .label-dot {background-color: #838A9D;}
+.status-closed .label-dot {background-color: #9EA3B0;}
+.status-changing .label-dot {background-color: #FB2B2B;}
+.status-reviewing .label-dot {background-color: #18A6FD;}
+.status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
+
+.todo-id {border-radius: 10px;}
