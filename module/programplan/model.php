@@ -65,6 +65,7 @@ class programplanModel extends model
     }
 
     /**
+     * 获取阶段列表。
      * Get plans.
      *
      * @param  int    $executionID
@@ -73,9 +74,10 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getPlans($executionID = 0, $productID = 0, $orderBy = 'id_asc')
+    public function getPlans(int $executionID = 0, int $productID = 0, string $orderBy = 'id_asc'): array
     {
         $plans = $this->getStage($executionID, $productID, 'all', $orderBy);
+        if(!$plans) return array();
 
         $parents  = array();
         $children = array();
