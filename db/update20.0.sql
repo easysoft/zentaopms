@@ -12,3 +12,8 @@ DROP INDEX account_vision_module_type_order ON `zt_block`;
 
 ALTER TABLE `zt_block` DROP COLUMN `source`;
 ALTER TABLE `zt_block` DROP COLUMN `type`;
+
+ALTER TABLE `zt_project` ADD `stageBy` enum('project', 'product') NOT NULL DEFAULT 'product' AFTER `division`;
+UPDATE `zt_project` SET `stageBy` = 'project' WHERE `division` = '0';
+UPDATE `zt_project` SET `stageBy` = 'product' WHERE `division` = '1';
+ALTER TABLE `zt_project` DROP `division`;
