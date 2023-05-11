@@ -1868,8 +1868,8 @@ class taskModel extends model
     }
 
     /**
-     * Get the task list under a execution.
      * 获取执行下的任务列表信息。
+     * Get the task list under a execution.
      *
      * @param  int          $executionID
      * @param  int          $productID
@@ -3858,6 +3858,7 @@ class taskModel extends model
 
         /* If lane id or column id is empty, update the task type lane of the kanban. */
         if(!$laneID || !$columnID) $this->kanban->updateLane($kanbanID, 'task');
+
         return true;
     }
 
@@ -3898,8 +3899,8 @@ class taskModel extends model
      * 创建关联需求的测试类型的子任务。
      * Create a subtask for the test type story with the story.
      *
-     * @param  int       $taskID
-     * @param  object[]  $testTasks
+     * @param  int      $taskID
+     * @param  object[] $testTasks
      * @access public
      * @return void
      */
