@@ -2489,20 +2489,21 @@ EOF;
     }
 
     /**
-     * Check current page whether is in iframe. If it is not iframe and not allowed to open independently, then redirect to index to open it in iframe
+     * 检查当前页面是否在 iframe 中打开，如果不是 iframe 并且不允许独立打开，则跳转到首页以 iframe 方式打开。
+     * Check current page whether is in iframe. If it is not iframe and not allowed to open independently, then redirect to index to open it in iframe.
      *
      * @access public
      * @return void
      */
     public function checkIframe()
     {
+        /* 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。 */
         if($this->app->getViewType() != 'html' or helper::isAjaxRequest() or isset($_GET['_single'])) return;
 
-        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']) and $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')
-        {
-            return;
-        }
-        elseif(isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER']))
+        /
+        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
+
+        if(isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER']))
         {
             $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
             if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
@@ -2510,11 +2511,14 @@ EOF;
 
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+
         if($module == 'index' or
            $module == 'tutorial' or
            $module == 'install' or
            $module == 'upgrade' or
            $module == 'sso' or
+           $module == 'cron' or
+           $module == 'misc' or
           ($module == 'user' and strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) or
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
