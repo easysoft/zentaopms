@@ -2500,7 +2500,6 @@ EOF;
         /* 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。 */
         if($this->app->getViewType() != 'html' or helper::isAjaxRequest() or isset($_GET['_single'])) return;
 
-        /
         if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
 
         if(isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER']))
