@@ -36,7 +36,7 @@ $lang->todo->cycleConfig  = "周期設置";
 $lang->todo->project      = "所屬項目";
 $lang->todo->product      = "所屬產品";
 $lang->todo->execution    = "所屬{$lang->execution->common}";
-$lang->todo->timeTo       = '至';
+$lang->todo->timespanTo   = '至';
 $lang->todo->transform    = '轉化';
 
 $lang->todo->reasonList['story'] = "轉{$lang->SRCommon}";

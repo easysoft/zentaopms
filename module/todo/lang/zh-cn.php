@@ -37,7 +37,7 @@ $lang->todo->product      = "所属{$lang->productCommon}";
 $lang->todo->execution    = "所属{$lang->execution->common}";
 $lang->todo->changeDate   = "修改日期";
 $lang->todo->future       = '待定';
-$lang->todo->timeTo       = '至';
+$lang->todo->timespanTo   = '至';
 $lang->todo->transform    = '转化';
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
