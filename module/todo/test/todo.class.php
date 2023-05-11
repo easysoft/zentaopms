@@ -475,8 +475,8 @@ class todoTest
 
         $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
 
-        if($configType == 'day') return $date == false;
-        if($configType == 'week') return $date == $today;
+        if($configType == 'day')   return $date == false;
+        if($configType == 'week')  return $date == $today;
         if($configType == 'month') return $date == $today;
 
         return $date;
