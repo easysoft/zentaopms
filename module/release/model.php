@@ -256,7 +256,7 @@ class releaseModel extends model
             if($this->post->sync and $release->bugs)
             {
                 $releaseBugs   = $this->loadModel('bug')->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
-                $release->bugs = join(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
+                $release->bugs = implode(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
             }
 
             $release->build   = ',' . trim($release->build, ',') . ',';
@@ -400,7 +400,7 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' and !empty($release->build))
             {
-                $stories  = join(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
+                $stories  = implode(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
                 $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
                 $stories  = trim($stories, ',');
 
@@ -460,7 +460,7 @@ class releaseModel extends model
             if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
         }
 
-        $release->stories .= ',' . join(',', $this->post->stories);
+        $release->stories .= ',' . implode(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         if($release->stories)
@@ -537,7 +537,7 @@ class releaseModel extends model
             if(strpos(",{$release->$field},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
         }
 
-        $release->$field .= ',' . join(',', $this->post->bugs);
+        $release->$field .= ',' . implode(',', $this->post->bugs);
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
