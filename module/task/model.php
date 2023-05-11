@@ -588,14 +588,16 @@ class taskModel extends model
     /**
      * Update a task.
      *
-     * @param  int    $taskID
+     * @param  object $task
+     * @param  object $team
+     * @param  object $rawData
      * @access public
-     * @return void
+     * @return array|string|false
      */
-    public function update($task)
+    public function update(object $task, object $team, object $rawData): array|string|false
     {
         $taskID = $task->id;
-        if($taskID <= 0) return;
+        if($taskID <= 0) return false;
 
         $oldTask = $this->getByID($taskID);
 
@@ -614,17 +616,13 @@ class taskModel extends model
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
         }
-        if(empty($teams)) $task->mode = '';
 
         $requiredFields = $this->taskTao->getRequiredFields4Edit($task);
         $this->taskTao->doUpdate($task, $oldTask, $requiredFields);
 
         if(!dao::isError())
         {
-            if($_POST['mode'] == 'single')
-            {
-                $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
-            }
+            if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
 
             if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
 
@@ -636,6 +634,7 @@ class taskModel extends model
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
             if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
+
             $this->loadModel('action');
             $isParentChanged = $task->parent != $oldTask->parent;
             if($oldTask->parent > 0)
@@ -662,8 +661,7 @@ class taskModel extends model
 
             if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
 
-            unset($oldTask->parent);
-            unset($task->parent);
+            unset($oldTask->parent, $task->parent);
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
             if(isset($oldTask->team))

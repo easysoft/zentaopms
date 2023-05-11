@@ -166,15 +166,17 @@ class task extends control
         if(!empty($_POST))
         {
             $changes       = array();
-            $postDataFixer = form::data($this->config->task->form->edit);
-            $rawData       = $postDataFixer->rawdata;
+            $taskDataFixer = form::data($this->config->task->form->edit);
+            $teamDataFixer = form::data($this->config->task->form->team->edit);
+            $rawData       = $taskDataFixer->rawdata;
 
             /* Prepare and check data. */
-            $task = $this->taskZen->prepareEdit($postDataFixer, $taskID);
+            $task = $this->taskZen->prepareEdit($taskDataFixer, $taskID);
+            $team = $teamDataFixer->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update task. */
-            $changes = $this->task->update($task, $rawData);
+            $changes = $this->task->update($task, $team, $rawData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
