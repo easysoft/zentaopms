@@ -871,4 +871,81 @@ class releaseModel extends model
             ->beginIF($type == 'milestone')->andWhere('t1.marker')->eq(1)->fi()
             ->fetch('releaseCount');
     }
+
+    /**
+     * 获取发布列表区块的数据。
+     * Get the data for the release list block.
+     *
+     * @param  int      $projectID
+     * @param  string   $orderBy
+     * @param  int      $limit
+     * @access public
+     * @return object[]
+     */
+    public function getReleasesBlockData(int $projectID = 0, $orderBy = 'id_desc', int $limit = 0): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll();
+    }
+
+    /**
+     * 通过产品ID列表获取产品下发布的数量。
+     * Get release count of the product through the product ID list.
+     *
+     * @param  array  $productIdList
+     * @param  string $date
+     * @access public
+     * @return array
+     */
+    public function getReleaseCountByProduct(array $productIdList, string $date = ''): array
+    {
+        return $this->dao->select('product, status, COUNT(*) AS count')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIdList)
+            ->beginIF($date)->andWhere('date')->eq($date)->fi()
+            ->groupBy('product, status')
+            ->fetchGroup('product', 'status');
+    }
+
+    /**
+     * 通过产品ID列表获取产品下发布。
+     * Get releases of the product through the product ID list.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByProduct(array $productIdList): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_RELEASE)
+            ->where('product')->in($productIdList)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+    }
+
+    /**
+     * 通过产品ID列表获取产品下近期的发布列表。
+     * statisticRecentReleases
+     *
+     * @param  array  $productIdList
+     * @param  string $date
+     * @param  string $orderBy
+     * @access public
+     * @return object[]
+     */
+    public function statisticRecentReleases(array $productIdList, $date = '', $orderBy = 'date_asc'): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in($productIdList)
+            ->beginIF($date)->andWhere('date')->lt($date)->fi()
+            ->orderBy($orderBy)
+            ->fetchAll('product');
+    }
 }

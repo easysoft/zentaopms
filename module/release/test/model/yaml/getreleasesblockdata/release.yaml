@@ -1,0 +1,19 @@
+title: zt_release
+author: Shujie Tian
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100
+    - field: name
+      range: 1-100
+      prefix: "发布"
+    - field: status
+      range: normal
+    - field: product
+      range: 1-10
+    - field: project
+      range: 1-10
+    - field: marker
+      range: "0{30},1{50},0{15},1{5}"
+    - field: deleted
+      range: "0{80},1{20}"
