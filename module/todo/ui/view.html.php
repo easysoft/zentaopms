@@ -142,7 +142,7 @@ function buildToolbarDropdown(object $config, array $projects): mixed
     $createStoryPriv = common::hasPriv('story', 'create');
     $createTaskPriv  = common::hasPriv('task', 'create');
     $createBugPriv   = common::hasPriv('bug', 'create');
-    $printBtn        = ($config->vision == 'lite' && empty($projects)) ? false : true;
+    $printBtn        = $config->vision == 'lite' && empty($projects);
 
     $dropdownItems = array();
     if($printBtn && $createStoryPriv || $createTaskPriv || $createBugPriv)
