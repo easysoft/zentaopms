@@ -199,7 +199,7 @@ formPanel
                         'name' => "assignedTo",
                         'id' => "assignedTo",
                         'value' => $task->assignedTo,
-                        'disabled' => (!empty($task->team) and $task->mode == 'linear') ? true : false,
+                        'disabled' => !empty($task->team) && $task->mode == 'linear',
                         'type' => "picker",
                         'items' => $assignedToOptions
                     ))),

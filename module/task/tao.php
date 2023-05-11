@@ -188,7 +188,7 @@ class taskTao extends taskModel
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))) ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', !($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome'))));
 
         return $tasks;
     }
@@ -701,7 +701,7 @@ class taskTao extends taskModel
     protected function updateTaskEsDateByGantt(int $taskID, object $postData): bool
     {
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        $isChildTask = $task->parent > 0 ? true : false;
+        $isChildTask = $task->parent > 0;
 
         if($isChildTask) $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
         $stage  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->andWhere('project')->eq($task->project)->fetch();

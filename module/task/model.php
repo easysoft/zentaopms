@@ -1260,7 +1260,7 @@ class taskModel extends model
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if the current user is in the team. */
-        $inTeam = empty($task->team) ? true : false;
+        $inTeam = empty($task->team);
         foreach($task->team as $teamMember)
         {
             if($teamMember->account == $this->app->user->account) $inTeam = true;
