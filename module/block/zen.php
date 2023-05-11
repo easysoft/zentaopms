@@ -203,7 +203,7 @@ class blockZen extends block
             if($moduleName == 'my' && strpos($this->config->block->workMethods, $method) !== false)
             {
                 /* 处理研发需求列表区块点击更多后的跳转连接。 */
-                if($moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo')
+                if($moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
                 {
                     $block->moreLink = $this->createLink('my', 'contribute', 'module=story&type=' . $block->params->type); // 当指派给我时跳转到贡献中由我创建。
                 }

@@ -573,6 +573,7 @@ $lang->block->typeList->case['assigntome'] = 'CasTests qui me sont assignés';
 $lang->block->typeList->case['openedbyme'] = "CasTests que j'ai créés";;
 
 $lang->block->typeList->story['assignedTo'] = 'Stories qui me sont assignées';
+$lang->block->typeList->story['reviewBy']   = 'Stories besoins que j’accepte es';
 $lang->block->typeList->story['openedBy']   = "Stories que j'ai créées";
 $lang->block->typeList->story['reviewedBy'] = "Stories que j'ai acceptées";
 $lang->block->typeList->story['closedBy']   = "Stories que j'ai fermées";

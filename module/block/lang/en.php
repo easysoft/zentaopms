@@ -573,6 +573,7 @@ $lang->block->typeList->case['assigntome'] = 'AssignedToMe';
 $lang->block->typeList->case['openedbyme'] = 'CreatedByMe';
 
 $lang->block->typeList->story['assignedTo'] = 'AssignedToMe';
+$lang->block->typeList->story['reviewBy']   = 'ReviewingByMe';
 $lang->block->typeList->story['openedBy']   = 'CreatedByMe';
 $lang->block->typeList->story['reviewedBy'] = 'ReviewedByMe';
 $lang->block->typeList->story['closedBy']   = 'ClosedByMe' ;
