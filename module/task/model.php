@@ -2998,7 +2998,7 @@ class taskModel extends model
         $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
         $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
 
-        $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
+        $canBatchAction = in_array(true, array($canBatchEdit, $canBatchClose, $canBatchCancel, $canBatchChangeModule, $canBatchAssignTo));
         $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));
 
         $canView  = common::hasPriv('task', 'view');
@@ -3459,7 +3459,7 @@ class taskModel extends model
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
 
-        if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, $canRecordEstimate, $canEdit, $canBatchCreate))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
