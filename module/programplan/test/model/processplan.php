@@ -1,8 +1,14 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
+
+zdTable('project')->config('project')->gen(5);
+zdTable('projectproduct')->config('projectproduct')->gen(5);
+zdTable('product')->config('product')->gen(2);
 
 /**
 
@@ -10,19 +16,11 @@ title=测试 programplanModel->processPlan();
 cid=1
 pid=1
 
-测试计算计划131 >> 131,阶段31,已关闭的正常产品21
-测试计算计划132 >> 132,阶段32,已关闭的正常产品22
-测试计算计划133 >> 133,阶段33,已关闭的正常产品23
-测试计算计划134 >> 134,阶段34,已关闭的正常产品24
-测试计算计划135 >> 135,阶段35,已关闭的正常产品25
-
 */
-$planIDList = array(131, 132, 133, 134, 135);
+$planIDList = array(1, 2, 3);
 
 $programplan = new programplanTest();
 
-r($programplan->processPlanTest($planIDList[0])) && p('id,name,productName') && e('131,阶段31,已关闭的正常产品21'); // 测试计算计划131
-r($programplan->processPlanTest($planIDList[1])) && p('id,name,productName') && e('132,阶段32,已关闭的正常产品22'); // 测试计算计划132
-r($programplan->processPlanTest($planIDList[2])) && p('id,name,productName') && e('133,阶段33,已关闭的正常产品23'); // 测试计算计划133
-r($programplan->processPlanTest($planIDList[3])) && p('id,name,productName') && e('134,阶段34,已关闭的正常产品24'); // 测试计算计划134
-r($programplan->processPlanTest($planIDList[4])) && p('id,name,productName') && e('135,阶段35,已关闭的正常产品25'); // 测试计算计划135
+r($programplan->processPlanTest($planIDList[0])) && p('id,name,productName')           && e('1,瀑布项目1,瀑布产品1');        // 测试id为1的瀑布项目
+r($programplan->processPlanTest($planIDList[1])) && p('id,name,productName,attribute') && e('2,阶段a,瀑布产品2,review');     // 测试id为2的瀑布项目阶段
+r($programplan->processPlanTest($planIDList[2])) && p('id,name,productName,attribute') && e('3,阶段a子1,瀑布产品2,release'); // 测试id为3的瀑布项目阶段
