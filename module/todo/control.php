@@ -241,6 +241,7 @@ class todo extends control
      */
     public function close(string $todoID)
     {
+        /* Close the todo with status done. */
         $todoID = (int)$todoID;
         $todo   = $this->todo->getByID($todoID);
         if($todo->status == 'done')
@@ -249,6 +250,7 @@ class todo extends control
             if(!$isClosed) return print(js::error(dao::getError()));
         }
 
+        /* Return json if run mode is API. */
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
             $this->send(array('status' => 'success'));
