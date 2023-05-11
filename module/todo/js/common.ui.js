@@ -96,13 +96,13 @@ function loadList(type, id, objectID)
 {
     if(id)
     {
-        divClass = '.name-box' + id;
-        divID    = '#nameBox' + id;
+        nameBoxClass = '.name-box' + id;
+        nameBoxID    = '#nameBox' + id;
     }
     else
     {
-        divClass = '.name-box';
-        divID    = '#nameBox';
+        nameBoxClass = '.name-box';
+        nameBoxID    = '#nameBox';
     }
 
     id = id ? id : '';
@@ -118,19 +118,19 @@ function loadList(type, id, objectID)
         {
             if(data.length != 0)
             {
-                if($(divClass).find('#nameInputBox').html(data).find('select').chosen) $(divClass).find('#nameInputBox').html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).find('select').val(objectID).trigger('chosen:updated');
-                if($(divClass + ' select').val() == null) $(divClass + ' select').attr('data-placeholder', noOptions.replace('%s', chosenType[type])).trigger('chosen:updated');
+                if($(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen) $(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen();
+                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(objectID).trigger('chosen:updated');
+                if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions.replace('%s', chosenType[type])).trigger('chosen:updated');
             }
             else
             {
-                if($(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(divClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
+                if($(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen) $(nameBoxClass).find('#nameInputBox').html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
             }
         });
     }
     else
     {
-        $(divClass).find('#nameInputBox').html(nameDefaultHtml);
+        $(nameBoxClass).find('#nameInputBox').html(nameDefaultHtml);
     }
 
     if(nameBoxLabel) return;
