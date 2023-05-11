@@ -138,7 +138,7 @@ class execution extends control
 
         /* Get products by execution. */
         $products = $this->product->getProductPairsByProject($executionID);
-        setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        helper::setcookie('preExecutionID', $executionID);
 
         /* Save the recently five executions visited in the cookie. */
         $recentExecutions = isset($this->config->execution->recentExecutions) ? explode(',', $this->config->execution->recentExecutions) : array();
@@ -154,19 +154,18 @@ class execution extends control
 
         if($this->cookie->preExecutionID != $executionID)
         {
-            $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
-            setcookie('productBrowseParam', 0, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('moduleBrowseParam',  0);
+            helper::setcookie('productBrowseParam', 0);
         }
         if($browseType == 'bymodule')
         {
-            setcookie('moduleBrowseParam',  (int)$param, 0, $this->config->webRoot, '', false, false);
-            setcookie('productBrowseParam', 0, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('moduleBrowseParam',  (int)$param);
+            helper::setcookie('productBrowseParam', 0);
         }
         elseif($browseType == 'byproduct')
         {
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
-            setcookie('productBrowseParam', (int)$param, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('moduleBrowseParam',  0);
+            helper::setcookie('productBrowseParam', (int)$param);
         }
         else
         {
@@ -186,7 +185,7 @@ class execution extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
-        setcookie('executionTaskOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
+        helper::setcookie('executionTaskOrder', $orderBy);
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
@@ -769,44 +768,35 @@ class execution extends control
         $type      = strtolower($type);
         $param     = $param;
         $productID = 0;
-        setcookie('storyPreExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        helper::setcookie('storyPreExecutionID', $executionID);
         if($this->cookie->storyPreExecutionID != $executionID)
         {
             $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = $_COOKIE['storyBranchParam'] = 0;
-            setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('storyModuleParam',  0);
+            helper::setcookie('storyProductParam', 0);
+            helper::setcookie('storyBranchParam',  0);
         }
         if($type == 'bymodule')
         {
             $module    = $this->loadModel('tree')->getByID($param);
             $productID = isset($module->root) ? $module->root : 0;
 
-            $_COOKIE['storyModuleParam']  = $param;
-            $_COOKIE['storyProductParam'] = 0;
-            $_COOKIE['storyBranchParam']  = 0;
-            setcookie('storyModuleParam', $param, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('storyModuleParam',  $param);
+            helper::setcookie('storyProductParam', 0);
+            helper::setcookie('storyBranchParam',  0);
         }
         elseif($type == 'byproduct')
         {
             $productID = $param;
-            $_COOKIE['storyModuleParam']  = 0;
-            $_COOKIE['storyProductParam'] = $param;
-            $_COOKIE['storyBranchParam']  = 0;
-            setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyProductParam', $param, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('storyModuleParam',  0);
+            helper::setcookie('storyProductParam', $param);
+            helper::setcookie('storyBranchParam',  0);
         }
         elseif($type == 'bybranch')
         {
-            $_COOKIE['storyModuleParam']  = 0;
-            $_COOKIE['storyProductParam'] = 0;
-            $_COOKIE['storyBranchParam']  = $param;
-            setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
-            setcookie('storyBranchParam',  $param, 0, $this->config->webRoot, '', false, true);
+            helper::setcookie('storyModuleParam',  0);
+            helper::setcookie('storyProductParam', 0);
+            helper::setcookie('storyBranchParam',  $param);
         }
         else
         {
@@ -820,7 +810,7 @@ class execution extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
-        setcookie('executionStoryOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
+        helper::setcookie('executionStoryOrder', $orderBy);
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
@@ -2689,8 +2679,8 @@ class execution extends control
 
         $projectID = $this->loadModel('task')->getProjectID($execution->id);
 
-        $taskToOpen = !empty($_COOKIE['taskToOpen']) ? $_COOKIE['taskToOpen'] : 0;
-        setcookie('taskToOpen', 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        $taskToOpen = $this->cookie->taskToOpen ? $this->cookie->taskToOpen : 0;
+        helper::setcookie('taskToOpen', 0);
 
         $this->view->title            = $this->lang->kanban->view;
         $this->view->users            = $users;

@@ -168,7 +168,7 @@ class executionModel extends model
 
         if($this->cookie->executionMode == 'noclosed' and $execution and ($execution->status == 'done' or $execution->status == 'closed'))
         {
-            setcookie('executionMode', 'all');
+            helper::setcookie('executionMode', 'all');
             $this->cookie->executionMode = 'all';
         }
 
@@ -205,7 +205,7 @@ class executionModel extends model
 
         $isMobile = $this->app->viewType == 'mhtml';
 
-        setCookie("lastExecution", $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        helper::setcookie('lastExecution', $executionID);
         $currentExecution = $this->getById($executionID);
 
         if(isset($currentExecution->type) and $currentExecution->type == 'program') return;
