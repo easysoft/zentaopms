@@ -658,7 +658,11 @@ class kanban extends control
         $columns =  explode(',', trim($columns, ','));
 
         $order = 1;
-        foreach($columns as $columnID) $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order++)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
+        foreach($columns as $columnID)
+        {
+            $order = $order ++;
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
+        }
 
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
 
