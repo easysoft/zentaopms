@@ -238,7 +238,7 @@ function buildTodoInfo(object $todo, array $users, array $times): mixed
             div
             (
                 setClass('flex', 'items-center', 'py-1'),
-                div($key, setClass('w-13', 'text-gray', 'text-right', 'mr-4')),
+                div($key, setClass('w-14', 'text-gray', 'text-right', 'mr-4')),
                 div
                 (
                     $key == $lang->todo->status ? span(setClass('label', 'label-dot', 'mr-1', 'shadow-none')) : null,
@@ -298,13 +298,13 @@ function buildCycleTodoInfo(object $todo): mixed
         div
         (
             setClass('flex', 'items-top', 'py-1'),
-            div($lang->todo->beginAndEnd, setClass('w-13', 'text-gray', 'text-right', 'mr-4')),
+            div($lang->todo->beginAndEnd, setClass('w-14', 'text-gray', 'text-right', 'mr-4')),
             div($todo->config->begin . " ~ " . $todo->config->end)
         ),
         div
         (
             setClass('flex', 'items-top', 'py-1'),
-            div($lang->todo->cycleConfig, setClass('w-13', 'text-gray', 'text-right', 'mr-4')),
+            div($lang->todo->cycleConfig, setClass('w-14', 'text-gray', 'text-right', 'mr-4')),
             div
             (
                 $cycleConfig,
