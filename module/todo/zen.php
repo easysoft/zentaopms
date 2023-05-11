@@ -106,13 +106,13 @@ class todoZen extends todo
      */
     protected function beforeCreate(object $formData): object
     {
-        $rowData    = $formData->rawdata;
-        $objectType = $rowData->type;
+        $rawData    = $formData->rawdata;
+        $objectType = $rawData->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = $rowData->uid ? $rowData->$objectType : $rowData->objectID;
-        $rowData->date = !empty($rowData->config['date']) ? $rowData->config['date'] : $rowData->date;
+        if($hasObject && $objectType) $objectID = $rawData->uid ? $rawData->$objectType : $rawData->objectID;
+        $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
         return $formData->add('account', $this->app->user->account)
             ->setDefault('objectID', 0)
@@ -122,11 +122,11 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF(empty($rowData->date),  'date', '2030-01-01')
-            ->setIF(empty($rowData->begin), 'begin', '2400')
-            ->setIF(empty($rowData->begin) || empty($rowData->end), 'end', '2400')
-            ->setIF($rowData->status == 'done', 'finishedBy', $this->app->user->account)
-            ->setIF($rowData->status == 'done', 'finishedDate', helper::now())
+            ->setIF(empty($rawData->date),  'date', '2030-01-01')
+            ->setIF(empty($rawData->begin), 'begin', '2400')
+            ->setIF(empty($rawData->begin) || empty($rawData->end), 'end', '2400')
+            ->setIF($rawData->status == 'done', 'finishedBy', $this->app->user->account)
+            ->setIF($rawData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
@@ -251,7 +251,7 @@ class todoZen extends todo
         $postData   = $formData->get();
         $objectType = $oldTodo->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
-        
+
         if($hasObject && $objectType) $objectID = $postData->uid ? $postData->$objectType : $postData->objectID;
         $postData->date = !empty($postData->config['date']) ? $postData->config['date'] : $postData->date;
 
