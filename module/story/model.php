@@ -2945,7 +2945,7 @@ class storyModel extends model
         elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
         {
             $status = $storyType == 'story' ? 'active' : 'all';
-            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc', true, $storyIDList, $pager);
+            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, 'id_desc', true, $storyIDList, $pager);
         }
 
         if($type != 'linkRelateSR' and $type != 'linkRelateUR')
@@ -2965,7 +2965,7 @@ class storyModel extends model
      * @param  string|int       $productID
      * @param  array|string|int $branch
      * @param  array|string     $moduleIdList
-     * @param  string           $status
+     * @param  array|string     $status
      * @param  string           $type    requirement|story
      * @param  string           $orderBy
      * @param  array|string     $excludeStories
@@ -2975,7 +2975,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
+    public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
