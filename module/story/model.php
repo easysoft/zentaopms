@@ -208,6 +208,239 @@ class storyModel extends model
     }
 
     /**
+     * Get stories list of a execution.
+     *
+     * @param  int          $executionID
+     * @param  int          $productID
+     * @param  string|int   $branch
+     * @param  string       $orderBy
+     * @param  string       $type
+     * @param  int|string   $param
+     * @param  string       $storyType
+     * @param  array|string $excludeStories
+     * @param  object|null  $pager
+     * @access public
+     * @return array
+     */
+    public function getExecutionStories(int $executionID = 0, int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
+    {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
+
+        if(empty($executionID)) return array();
+
+        /* 格式化参数。 */
+        $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
+        $type    = strtolower($type);
+        if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
+        if(empty($productID)) $productID = key($this->loadModel('product')->getProducts($executionID));
+
+        if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $excludeStories, $pager);
+        if($type != 'bysearch')
+        {
+            $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+            $modules        = $this->storyTao->getModules4ExecutionStories($type, $param);
+            $unclosedStatus = $this->lang->story->statusList;
+            unset($unclosedStatus['closed']);
+
+            $productParam = ($type == 'byproduct' and $param)        ? $param : $this->cookie->storyProductParam;
+            $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
+            if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
+
+            /* Get story id list of linked executions. */
+            $type     = (strpos('bymodule|byproduct', $type) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
+            $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+                ->where('t1.project')->eq($executionID)
+                ->andWhere('t2.type')->eq($storyType)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
+                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
+                ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();
+            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $projectID, $type, $branchParam, $unclosedStatus, $orderBy, $pager);
+            if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, $productParam, $unclosedStatus, $orderBy, $pager);
+        }
+
+        $stories = $this->storyTao->fixBranchStoryStage($stories);
+        return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $storyType);
+    }
+
+    /**
+     * 获取多个执行的关联需求。
+     * get execution stories by execution id list.
+     *
+     * @param  string       $executionIdList
+     * @param  int          $productID
+     * @param  string|int   $branch
+     * @param  string       $orderBy
+     * @param  string       $type            bybranch
+     * @param  string       $param
+     * @param  string       $storyType       story|requirement
+     * @param  array|string $excludeStories
+     * @param  object|null  $pager
+     * @access public
+     * @return void
+     */
+    public function batchGetExecutionStories(string $executionIdList = '', int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    {
+        if(empty($executionIdList)) return array();
+
+        /* 格式化参数。 */
+        $type = strtolower($type);
+        if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
+        $executions   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($executionIdList)->fetchAll('id');
+        $hasProject   = false;
+        $hasExecution = false;
+        foreach($executions as $execution)
+        {
+            if($execution->type == 'project') $hasProject   = true;
+            if($execution->type != 'project') $hasExecution = true;
+        }
+
+        $modules        = $this->storyTao->getModules4ExecutionStories($type, $param);
+        $unclosedStatus = $this->lang->story->statusList;
+        unset($unclosedStatus['closed']);
+
+        $branchParam = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
+        if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
+
+        $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->where('t1.project')->in($executionIdList)
+            ->andWhere('t2.type')->eq($storyType)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
+            ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+            ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
+            ->beginIF($hasProject)
+            ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
+            ->fi()
+            ->beginIF($hasExecution)
+            ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
+            ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager, 't2.id')
+            ->fetchAll('id');
+
+        return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $storyType);
+    }
+
+    /**
+     * Get stories pairs of a execution.
+     *
+     * @param  int           $executionID
+     * @param  int           $productID
+     * @param  int           $branch
+     * @param  array|string  $moduleIdList
+     * @param  string        $type full|short
+     * @param  string        $status all|unclosed|review
+     * @access public
+     * @return array
+     */
+    public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 'all', $moduleIdList = 0, $type = 'full', $status = 'all')
+    {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStoryPairs();
+        $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
+            ->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.project')->eq((int)$executionID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('story')
+            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
+            ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
+            ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
+            ->beginIF($status == 'review')->andWhere('t2.status')->in('draft,changing')->fi()
+            ->beginIF($status == 'active')->andWhere('t2.status')->eq('active')->fi()
+            ->orderBy('t1.`order` desc, t1.`story` desc')
+            ->fetchAll('id');
+        return empty($stories) ? array() : $this->formatStories($stories, $type);
+    }
+
+    /**
+     * Get stories list of a plan.
+     *
+     * @param  int    $planID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    {
+        if(strpos($orderBy, 'module') !== false)
+        {
+            $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+                ->from(TABLE_PLANSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
+                ->where('t1.plan')->eq($planID)
+                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $stories = $this->dao->select("distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
+                ->from(TABLE_PLANSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where('t1.plan')->eq($planID)
+                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)
+                ->fetchAll('id');
+        }
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+
+        return $stories;
+    }
+
+    /**
+     * Get stories pairs of a plan.
+     *
+     * @param  int    $planID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)
+            ->where('plan')->eq($planID)
+            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+    }
+
+    /**
+     * Get stories by plan id list.
+     *
+     * @param  string|array $planIdList
+     * @access public
+     * @return array
+     */
+    public function getStoriesByPlanIdList($planIdList = '')
+    {
+        return $this->dao->select('t1.plan as planID, t2.*')->from(TABLE_PLANSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->beginIF($planIdList)->andWhere('t1.plan')->in($planIdList)->fi()
+            ->fetchGroup('planID', 'id');
+    }
+
+    /**
      * Create a story.
      *
      * @param  int    $executionID
@@ -2993,7 +3226,7 @@ class storyModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        return $this->mergePlanTitle($productID, $stories, $type);
+        return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $type);
     }
 
     /**
@@ -3214,7 +3447,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $type);
+        return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $type);
     }
 
     /**
@@ -3243,7 +3476,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $type);
+        return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $type);
     }
 
     /**
@@ -3267,15 +3500,7 @@ class storyModel extends model
         $executionID = empty($executionID) ? 0 : $executionID;
         $products    = empty($executionID) ? $this->product->getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 'all') : $this->product->getProducts($executionID);
 
-        $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
-
-        /* Get the sql and form status from the query. */
-        if($query)
-        {
-            $this->session->set('storyQuery', $query->sql);
-            $this->session->set('storyForm', $query->form);
-        }
-        if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
+        $this->storyTao->setSearchSessionByQueryID($queryID, 'storyQuery', 'storyForm');
 
         $allProduct     = "`product` = 'all'";
         $storyQuery     = $this->session->storyQuery;
@@ -3356,26 +3581,6 @@ class storyModel extends model
     }
 
     /**
-     * Get Story changed Revert ObjectID.
-     *
-     * @param  int $productID
-     * @access public
-     * @return array
-     */
-    public function getRevertStoryIDList($productID)
-    {
-        $review = $this->dao->select('objectID')->from(TABLE_ACTION)
-            ->where('product')->like("%,$productID,%")
-            ->andWhere('action')->eq('reviewed')
-            ->andWhere('objectType')->eq('story')
-            ->andWhere('extra')->eq('Revert')
-            ->groupBy('objectID')
-            ->orderBy('objectID_desc')
-            ->fetchPairs();
-        return $review;
-    }
-
-    /**
      * Get stories by a sql.
      *
      * @param  int    $productID
@@ -3394,7 +3599,7 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
-        $review = $this->getRevertStoryIDList($productID);
+        $review = $this->storyTao->getRevertStoryIdList($productID);
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
         if(strpos($sql, 'result') !== false)
         {
@@ -3434,295 +3639,6 @@ class storyModel extends model
         }
 
         return $stories;
-    }
-
-    /**
-     * Get stories list of a execution.
-     *
-     * @param  array|int    $executionID
-     * @param  int          $productID
-     * @param  int          $branch
-     * @param  string       $orderBy
-     * @param  string       $type
-     * @param  int          $param
-     * @param  string       $storyType
-     * @param  array|string $excludeStories
-     * @param  object       $pager
-     * @access public
-     * @return array
-     */
-    public function getExecutionStories(array|int $executionID = 0, int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
-    {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
-
-        if(!$executionID) return array();
-        $executions   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($executionID)->fetchAll('id');
-        $hasProject   = false;
-        $hasExecution = false;
-        foreach($executions as $execution)
-        {
-            if($execution->type == 'project') $hasProject   = true;
-            if($execution->type != 'project') $hasExecution = true;
-        }
-
-        $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
-        $type    = strtolower($type);
-
-        $products = $this->loadModel('product')->getProducts($executionID);
-        if($type == 'bysearch')
-        {
-            $queryID  = (int)$param;
-
-            if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    if($this->app->rawModule == 'projectstory')
-                    {
-                        $this->session->set('storyQuery', $query->sql);
-                        $this->session->set('storyForm', $query->form);
-                    }
-                    else
-                    {
-                        $this->session->set('executionStoryQuery', $query->sql);
-                        $this->session->set('executionStoryForm', $query->form);
-                    }
-                }
-            }
-
-            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
-
-            $allProduct = "`product` = 'all'";
-            $storyQuery = $this->session->executionStoryQuery;
-            if(strpos($this->session->executionStoryQuery, $allProduct) !== false)
-            {
-                $storyQuery = str_replace($allProduct, '1', $this->session->executionStoryQuery);
-            }
-            $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
-
-            if($products) $productID = key($products);
-            $review = $this->getRevertStoryIDList($productID);
-
-            if(strpos($storyQuery, 'result') !== false)
-            {
-                if(strpos($storyQuery, 'revert') !== false)
-                {
-                    $storyQuery  = str_replace("AND t2.`result` = 'revert'", '', $storyQuery);
-                    $storyQuery .= " AND t2.`id` " . helper::dbIN($review);
-                }
-                else
-                {
-                    $storyQuery = str_replace(array('t2.`result`'), array('t4.`result`'), $storyQuery);
-                }
-            }
-
-            $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-                ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
-                ->where($storyQuery)
-                ->andWhere('t1.project')->in($executionID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t3.deleted')->eq(0)
-                ->andWhere('t2.type')->eq($storyType)
-                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
-                ->orderBy($orderBy)
-                ->page($pager, 't2.id')
-                ->fetchAll('id');
-        }
-        else
-        {
-            $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
-            $moduleParam  = ($type == 'bymodule'  and $param !== '') ? $param : $this->cookie->storyModuleParam;
-
-            $modules = array();
-            if(!empty($moduleParam) or strpos('allstory,unclosed,bymodule', $type) !== false)
-            {
-                $modules = $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs();
-            }
-
-            if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
-
-            $unclosedStatus = $this->lang->story->statusList;
-            unset($unclosedStatus['closed']);
-
-            /* Get story id list of linked executions. */
-            $storyIdList = array();
-            if($type == 'linkedexecution' or $type == 'unlinkedexecution')
-            {
-                $executions  = $this->loadModel('execution')->getPairs($executionID);
-                $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
-            }
-
-            $type = (strpos('bymodule|byproduct', $type) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
-
-            $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-                ->where('t1.project')->in($executionID)
-                ->andWhere('t2.type')->eq($storyType)
-                ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
-                ->beginIF($hasProject)
-                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-                ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
-                ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
-                ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
-                ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi()
-                ->fi()
-                ->beginIF($hasExecution)
-                ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
-                ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->fi()
-                ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t3.deleted')->eq(0)
-                ->orderBy($orderBy)
-                ->page($pager, 't2.id')
-                ->fetchAll('id');
-        }
-
-        $query = $this->dao->get();
-
-        /* Get the stories of main branch. */
-        $branchStoryList = $this->dao->select('t1.*,t2.branch as productBranch')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project = t2.project')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->where('t1.story')->in(array_keys($stories))
-            ->andWhere('t1.branch')->eq(BRANCH_MAIN)
-            ->andWhere('t3.type')->ne('normal')
-            ->fetchAll();
-
-        $branches       = array();
-        $stageOrderList = 'wait,planned,projected,developing,developed,testing,tested,verified,released,closed';
-
-        foreach($branchStoryList as $story) $branches[$story->productBranch][$story->story] = $story->story;
-
-        /* Set up story stage. */
-        foreach($branches as $branchID => $storyIdList)
-        {
-            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
-
-            /* Take the earlier stage. */
-            foreach($stages as $storyID => $stage) if(strpos($stageOrderList, $stories[$storyID]->stage) > strpos($stageOrderList, $stage)) $stories[$storyID]->stage = $stage;
-        }
-
-        $this->dao->sqlobj->sql = $query;
-        return $this->mergePlanTitle($productID, $stories, $storyType);
-    }
-
-    /**
-     * Get stories pairs of a execution.
-     *
-     * @param  int           $executionID
-     * @param  int           $productID
-     * @param  int           $branch
-     * @param  array|string  $moduleIdList
-     * @param  string        $type full|short
-     * @param  string        $status all|unclosed|review
-     * @access public
-     * @return array
-     */
-    public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 'all', $moduleIdList = 0, $type = 'full', $status = 'all')
-    {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStoryPairs();
-        $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
-            ->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->where('t1.project')->eq((int)$executionID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.type')->eq('story')
-            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
-            ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
-            ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
-            ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
-            ->beginIF($status == 'review')->andWhere('t2.status')->in('draft,changing')->fi()
-            ->beginIF($status == 'active')->andWhere('t2.status')->eq('active')->fi()
-            ->orderBy('t1.`order` desc, t1.`story` desc')
-            ->fetchAll('id');
-        return empty($stories) ? array() : $this->formatStories($stories, $type);
-    }
-
-    /**
-     * Get stories list of a plan.
-     *
-     * @param  int    $planID
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
-    {
-        if(strpos($orderBy, 'module') !== false)
-        {
-            $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
-            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
-                ->from(TABLE_PLANSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                ->where('t1.plan')->eq($planID)
-                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            $stories = $this->dao->select("distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
-                ->from(TABLE_PLANSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where('t1.plan')->eq($planID)
-                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)
-                ->fetchAll('id');
-        }
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-
-        return $stories;
-    }
-
-    /**
-     * Get stories pairs of a plan.
-     *
-     * @param  int    $planID
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
-    {
-        return $this->dao->select('*')->from(TABLE_STORY)
-            ->where('plan')->eq($planID)
-            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
-    }
-
-    /**
-     * Get stories by plan id list.
-     *
-     * @param  string|array $planIdList
-     * @access public
-     * @return array
-     */
-    public function getStoriesByPlanIdList($planIdList = '')
-    {
-        return $this->dao->select('t1.plan as planID, t2.*')->from(TABLE_PLANSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->beginIF($planIdList)->andWhere('t1.plan')->in($planIdList)->fi()
-            ->fetchGroup('planID', 'id');
     }
 
     /**
@@ -3810,7 +3726,7 @@ class storyModel extends model
         $productIdList = array();
         foreach($stories as $story) $productIdList[$story->product] = $story->product;
 
-        return $this->mergePlanTitle($productIdList, $stories, $storyType);
+        return $this->storyTao->mergePlanTitleAndChildren($productIdList, $stories, $storyType);
     }
 
     /**
@@ -4795,52 +4711,6 @@ class storyModel extends model
         }
 
         return $menu;
-    }
-
-    /**
-     * Merge plan title.
-     *
-     * @param  int|array|string $productID
-     * @param  array            $stories
-     * @param  string           $type          story|requirement
-     *
-     * @access public
-     * @return array
-     */
-    public function mergePlanTitle(array|string|int $productID, array $stories, string $type = 'story'): array
-    {
-        $rawQuery = $this->dao->get();
-
-        /* Get plans. */
-        if(is_int($productID))$productID = (string)$productID;
-        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
-
-        /* Get parent stories and children. */
-        $stories = $this->storyTao->mergeChildren($stories, $type);
-        $parents = $this->storyTao->extractParents($stories);
-        if($parents)
-        {
-            $children = $this->dao->select('id,parent,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
-            $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
-        }
-
-        foreach($stories as $storyID => $story)
-        {
-            /* Export story linkstories. */
-            if(isset($children[$story->id])) $story->linkStories = implode(',', array_column($children[$story->id], 'title'));
-
-            /* Merge parent story title. */
-            if($story->parent > 0 and isset($parents[$story->parent])) $story->parentName = $parents[$story->parent]->title;
-
-            /* Merge plan title. */
-            $story->planTitle = '';
-            $storyPlans       = explode(',', trim($story->plan, ','));
-            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
-        }
-
-        /* For save session query. */
-        $this->dao->sqlobj->sql = $rawQuery;
-        return $stories;
     }
 
     /**

@@ -312,6 +312,53 @@ class storyTao extends storyModel
     }
 
     /**
+     * 追加需求所属的计划标题和子需求。
+     * Merge plan title and children.
+     *
+     * @param  int|array|string $productID
+     * @param  array            $stories
+     * @param  string           $type          story|requirement
+     *
+     * @access protected
+     * @return array
+     */
+    protected function mergePlanTitleAndChildren(array|string|int $productID, array $stories, string $type = 'story'): array
+    {
+        $rawQuery = $this->dao->get();
+
+        /* Get plans. */
+        if(is_int($productID))$productID = (string)$productID;
+        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
+
+        /* Get parent stories and children. */
+        $stories = $this->mergeChildren($stories, $type);
+        $parents = $this->extractParents($stories);
+        if($parents)
+        {
+            $children = $this->dao->select('id,parent,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
+            $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
+        }
+
+        foreach($stories as $storyID => $story)
+        {
+            /* Export story linkstories. */
+            if(isset($children[$story->id])) $story->linkStories = implode(',', array_column($children[$story->id], 'title'));
+
+            /* Merge parent story title. */
+            if($story->parent > 0 and isset($parents[$story->parent])) $story->parentName = $parents[$story->parent]->title;
+
+            /* Merge plan title. */
+            $story->planTitle = '';
+            $storyPlans       = explode(',', trim($story->plan, ','));
+            foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
+        }
+
+        /* For save session query. */
+        $this->dao->sqlobj->sql = $rawQuery;
+        return $stories;
+    }
+
+    /**
      * 提取需求列表中的父需求 ID 列表。
      * Extract parents from stories.
      *
@@ -328,5 +375,234 @@ class storyTao extends storyModel
             return false;
         }, $stories);
         return array_values(array_unique(array_filter($parent)));
+    }
+
+    /**
+     * 通过搜索条件获取关联执行的需求。
+     * Get execution stories by search.
+     *
+     * @param  int         $executionID
+     * @param  int         $queryID
+     * @param  int         $productID
+     * @param  string      $orderBy
+     * @param  string      $storyType
+     * @param  array       $excludeStories
+     * @param  object|null $pager
+     * @access protected
+     * @return array
+     */
+    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType, array $excludeStories, object|null $pager = null): array
+    {
+        /* 获取查询条件。 */
+        $this->setSearchSessionByQueryID($queryID);
+        if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
+        if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
+
+        /* 处理查询条件。 */
+        $storyQuery = $this->replaceAllProductQuery($this->session->executionStoryQuery);
+        $storyQuery = $this->replaceRevertQuery($storyQuery, $productID);
+        $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
+        if(strpos($storyQuery, 'result') !== false) $storyQuery = str_replace('t2.`result`', 't4.`result`', $storyQuery);
+
+        $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
+            ->where($storyQuery)
+            ->andWhere('t1.project')->eq($executionID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t2.type')->eq($storyType)
+            ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
+            ->orderBy($orderBy)
+            ->page($pager, 't2.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取保存的查询条件。
+     * Set search session by queryID.
+     *
+     * @param  int       $queryID
+     * @param  string    $queryName
+     * @param  string    $formName
+     * @access protected
+     * @return void
+     */
+    protected function setSearchSessionByQueryID(int $queryID, string $queryName, string $formName): void
+    {
+        if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
+
+        $query = $this->loadModel('search')->getQuery($queryID);
+        if(empty($query)) return;
+
+        $this->session->set($queryName, $query->sql);
+        $this->session->set($formName, $query->form);
+    }
+
+    /**
+     * 替换所有产品的查询条件。
+     * Replace all product query.
+     *
+     * @param  string    $query
+     * @access protected
+     * @return void
+     */
+    protected function replaceAllProductQuery(string $query)
+    {
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
+    }
+
+    /**
+     * 如果有撤销变更的条件，用撤销变更的 ID 列表做替换
+     * Replace revert query.
+     *
+     * @param  string    $storyQuery
+     * @param  int       $productID
+     * @access protected
+     * @return string
+     */
+    protected function replaceRevertQuery(string $storyQuery, int $productID): string
+    {
+        if(strpos($storyQuery, 'result') === false) return $storyQuery;
+        if(strpos($storyQuery, 'revert') === false) return $storyQuery;
+
+        $reviews     = $this->getRevertStoryIdList($productID);
+        $storyQuery  = str_replace("AND `result` = 'revert'", '', $storyQuery);
+        $storyQuery .= " AND `id` " . helper::dbIN($reviews);
+    }
+
+    /**
+     * 获取撤销变更的 ID 列表。
+     * Get Story changed Revert ObjectID.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    protected function getRevertStoryIdList(int $productID): array
+    {
+        return $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('product')->like("%,$productID,%")
+            ->andWhere('action')->eq('reviewed')
+            ->andWhere('objectType')->eq('story')
+            ->andWhere('extra')->eq('Revert')
+            ->groupBy('objectID')
+            ->orderBy('objectID_desc')
+            ->fetchPairs('objectID', 'objectID');
+    }
+
+    /**
+     * 根据请求类型获取查询的模块。
+     * Get modules for query execution stories.
+     *
+     * @param  string    $type
+     * @param  string    $param
+     * @access protected
+     * @return array
+     */
+    protected function getModules4ExecutionStories(string $type, string $param): array
+    {
+        $moduleParam = ($type == 'bymodule'  and $param !== '') ? $param : $this->cookie->storyModuleParam;
+
+        if(empty($moduleParam) and strpos('allstory,unclosed,bymodule', $type) == false) return array();
+        return $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs();
+    }
+
+    /**
+     * 获取执行下关联的需求。
+     * Fetch execution stories.
+     *
+     * @param  dao         $storyDAO
+     * @param  string      $productParam
+     * @param  string      $unclosedStatus
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @access protected
+     * @return int[]
+     */
+    protected function fetchExecutionStories(dao $storyDAO, string $productParam, string $unclosedStatus, string $orderBy, object|null $pager = null): array
+    {
+        return $storyDAO->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
+            ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+            ->orderBy($orderBy)
+            ->page($pager, 't2.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取项目下关联的需求。
+     * Fetch project stories.
+     *
+     * @param  dao         $storyDAO
+     * @param  int         $productID
+     * @param  int         $projectID
+     * @param  string      $type
+     * @param  string      $branchParam
+     * @param  array       $unclosedStatus
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @access protected
+     * @return int[]
+     */
+    protected function fetchProjectStories(dao $storyDAO, int $productID, int $projectID, string $type, string $branchParam, array $unclosedStatus, string $orderBy, object|null $pager = null): array
+    {
+        $storyIdList = array();
+        if($type == 'linkedexecution' or $type == 'unlinkedexecution')
+        {
+            $executions  = $this->loadModel('execution')->getPairs($projectID);
+            $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
+        }
+
+        return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
+            ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
+            ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+            ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
+            ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi();
+            ->orderBy($orderBy)
+            ->page($pager, 't2.id')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 修正多分支产品需求的阶段，取最靠前的阶段。
+     * Fix branch story stage.
+     *
+     * @param  array     $stories
+     * @access protected
+     * @return array
+     */
+    protected function fixBranchStoryStage(array $stories): array
+    {
+        $rawQuery = $this->dao->get();
+
+        /* 获取阶段序列和关联的多分支产品需求。 */
+        $stageOrderList  = implode(',', array_keys($this->lang->story->stageList));
+        $branchStoryList = $this->dao->select('t1.*,t2.branch as productBranch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project = t2.project')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.story')->in(array_keys($stories))
+            ->andWhere('t1.branch')->eq(BRANCH_MAIN)
+            ->andWhere('t3.type')->ne('normal')
+            ->fetchAll();
+
+        /* 对需求做分组。 */
+        $branches = array();
+        foreach($branchStoryList as $story) $branches[$story->productBranch][$story->story] = $story->story;
+
+        /* Take the earlier stage. */
+        foreach($branches as $branchID => $storyIdList)
+        {
+            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
+            foreach($stages as $storyID => $stage)
+            {
+                if(strpos($stageOrderList, $stories[$storyID]->stage) > strpos($stageOrderList, $stage)) $stories[$storyID]->stage = $stage;
+            }
+        }
+
+        $this->dao->sqlobj->sql = $rawQuery;
+        return $stories;
     }
 }
