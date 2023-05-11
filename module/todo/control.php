@@ -126,6 +126,7 @@ class todo extends control
             $formData = form::data($this->config->todo->edit->form);
             $formData = $this->todoZen->addCycleYearConfig($formData);
 
+            /* Processing edit request data. */
             $todo = $this->todoZen->beforeEdit($todoID, $formData);
             if(dao::isError())
             {
@@ -133,6 +134,7 @@ class todo extends control
                 return print(js::error(dao::getError()));
             }
 
+            /* update a todo. */
             $changes = $this->todo->update($todoID, $todo);
             if(dao::isError())
             {
@@ -140,6 +142,7 @@ class todo extends control
                 return print(js::error(dao::getError()));
             }
 
+            /* Handle data after edit todo. */
             $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
@@ -152,6 +155,7 @@ class todo extends control
 
         unset($this->lang->todo->typeList['cycle']);
 
+        /* Build create form data. */
         $this->todoZen->buildEditView($todo);
     }
 
@@ -173,6 +177,8 @@ class todo extends control
 
         /* Get form data for my-todo. */
         if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($formData, $type, $userID, $status);
+
+        /* Save the todo data for batch edit. */
         if($from == 'todoBatchEdit')
         {
             $todos = $this->todoZen->beforeBatchEdit($formData);

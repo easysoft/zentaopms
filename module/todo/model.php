@@ -134,6 +134,7 @@ class todoModel extends model
                     $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
                 }
 
+                /* Create changes of one object. */
                 $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
             }
             else
