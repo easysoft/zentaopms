@@ -11,6 +11,20 @@ declare(strict_types=1);
 class programplanZen extends programplan
 {
     /**
+     * Process formData before use it to create programplan.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return object
+     */
+    protected function beforeCreate(object $formData): object
+    {
+        $formData->setIf(empty($formData->rawdata->codes), 'codes', array());
+        $formData->setIf(empty($formData->rawdata->output), 'output', array());
+        return $formData;
+    }
+
+    /**
      * 处理编辑阶段的请求数据。
      * Processing edit request data.
      *
