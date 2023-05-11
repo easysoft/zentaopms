@@ -1,8 +1,7 @@
 /**
  * 待办转研发需求。
- * todo change to story.
+ * Change todo to story.
  *
- * @access public
  * @return void
  */
 function toStory()
@@ -12,9 +11,8 @@ function toStory()
 
 /**
  * 待办转任务。
- * todo change to task.
+ * Change todo to task.
  *
- * @access public
  * @return void
  */
 function toTask()
@@ -31,9 +29,8 @@ function toTask()
 
 /**
  * 待办转bug。
- * todo change to bug.
+ * Change todo to bug.
  *
- * @access public
  * @return void
  */
 function toBug()
@@ -49,11 +46,11 @@ function toBug()
 }
 
 /**
- * 开源版没有调用此方法。
  * 跳转至创建项目页面。
  * Link to create project.
  *
- * @access public
+ * 开源版没有调用此方法。
+ *
  * @return void
  */
 function createProject()
@@ -62,24 +59,23 @@ function createProject()
 }
 
 /**
- * 开源版没有调用此方法。
  * 跳转至创建执行页面。
  * Create execution.
  *
- * @access public
+ * 开源版没有调用此方法。
+ *
  * @return void
  */
 function createExecution()
 {
-    loadPage(createLink('execution', 'create'));
+    loadPage($.createLink('execution', 'create'));
 }
 
 /**
  * 通过 projectID 获取执行。
  * Get executions by project id.
  *
- * @param  int    $projectID
- * @access public
+ * @param  int  projectID
  * @return void
  */
 function getExecutionByProject(projectID)
@@ -94,11 +90,10 @@ function getExecutionByProject(projectID)
 }
 
 /**
- * 通过 projectID 获取产品。
- * Get products by project id.
+ * 获取产品。
+ * Get products by projectID.
  *
- * @param  int    $projectID
- * @access public
+ * @param  int  projectID
  * @return void
  */
 function getProductByProject(projectID)
@@ -111,11 +106,10 @@ function getProductByProject(projectID)
 }
 
 /**
- * 通过 productID 获取项目集。
- * Get programs by product id.
+ * 获取产品项目集。
+ * Get programs by productID.
  *
- * @param  int    $productID
- * @access public
+ * @param  int  productID
  * @return void
  */
 function getProgramByProduct(productID)
@@ -128,12 +122,12 @@ function getProgramByProduct(productID)
 }
 
 /**
- * 开源版没有调用此方法。
  * 展开收起执行下拉菜单。
  * Toggle show execution.
  *
- * @param  bool $multiple
- * @access public
+ * 开源版没有调用此方法。
+ *
+ * @param  bool multiple
  * @return void
  */
 function toggleExecution(multiple)
