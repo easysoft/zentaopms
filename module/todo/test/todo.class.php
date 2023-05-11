@@ -407,7 +407,7 @@ class todoTest
 
         $cycleList = $this->objectModel->getCycleList($todoList);
 
-        return count($cycleList) > 0 ? 1: 0;
+        return count($cycleList) > 0 ? 1 : 0;
     }
 
     /**
