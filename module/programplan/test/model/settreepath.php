@@ -1,8 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
 su('admin');
+
+
+function initData()
+{
+    zdTable('project')->config('project')->gen(10);
+}
 
 /**
 
@@ -10,19 +15,17 @@ title=测试 programplanModel->setTreePath();
 cid=1
 pid=1
 
-测试更新计划131的路径 >> 阶段31;,41,131,
-测试更新计划132的路径 >> 阶段32;,42,132,
-测试更新计划133的路径 >> 阶段33;,43,133,
-测试更新计划134的路径 >> 阶段34;,44,134,
-测试更新计划135的路径 >> 阶段35;,45,135,
-
 */
-$planIDList = array(131, 132, 133, 134, 135);
 
-$programplan = new programplanTest();
+initData();
 
-r($programplan->setTreePathTest($planIDList[0])) && p('name;path') && e('阶段31;,41,131,'); // 测试更新计划131的路径
-r($programplan->setTreePathTest($planIDList[1])) && p('name;path') && e('阶段32;,42,132,'); // 测试更新计划132的路径
-r($programplan->setTreePathTest($planIDList[2])) && p('name;path') && e('阶段33;,43,133,'); // 测试更新计划133的路径
-r($programplan->setTreePathTest($planIDList[3])) && p('name;path') && e('阶段34;,44,134,'); // 测试更新计划134的路径
-r($programplan->setTreePathTest($planIDList[4])) && p('name;path') && e('阶段35;,45,135,'); // 测试更新计划135的路径
+global $tester;
+$tester->loadModel('programplan');
+
+$tester->programplan->setTreePath(2);
+$tester->programplan->setTreePath(9);
+
+
+r($tester->programplan->getByID(2)) && p('path|grade', '|') && e(',1,2,| 1');   // 给stageID=2没有子阶段不走if设置path,grade
+r($tester->programplan->getByID(9)) && p('path|grade', '|') && e(',7,8,9,| 3'); // 给stageID=9有子阶段走if设置path,grade
+
