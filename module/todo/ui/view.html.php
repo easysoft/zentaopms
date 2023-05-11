@@ -113,7 +113,7 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
                             set
                             (
                                 array(
-                                    'text'  => $lang->more,
+                                    'text'  => $lang->todo->transform,
                                     'class' => 'ghost text-white'
                                 )
                             )
