@@ -445,9 +445,11 @@ class todoTest
     public function getValidsOfBatchCreateTest(array $todos, int $loop, string $assignedTo): int
     {
         $todos = json_decode(json_encode($todos));
-        $this->objectModel->getValidsOfBatchCreate($todos, $loop, $assignedTo);
+        $todo  = $this->objectModel->getValidsOfBatchCreate($todos, $loop, $assignedTo);
 
-        return dao::isError() ? 0 : 1;
+        if(dao::isError()) return 0;
+
+        return empty($todo) ? 0 : 1;
     }
 
     /**
