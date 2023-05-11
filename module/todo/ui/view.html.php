@@ -334,11 +334,11 @@ function buildProductModalForm(array $products): mixed
             btn
             (
                 $lang->product->create,
-                on::click('createPorduct'),
                 set
                 (
                     array(
-                        'id'    => 'createPorduct',
+                        'url'   => createLink('product', 'create'),
+                        'id'    => 'createProduct',
                         'class' => 'secondary-pale',
                         'icon'  => 'plus'
                     )
