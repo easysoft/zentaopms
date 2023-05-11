@@ -2497,40 +2497,59 @@ EOF;
      */
     public function checkIframe()
     {
-        /* 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。 */
-        if($this->app->getViewType() != 'html' or helper::isAjaxRequest() or isset($_GET['_single'])) return;
+        /*
+         * 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。
+         * Ignore the following situations: non-HTML request, Ajax request, special GET parameter _single.
+         */
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
 
+        /**
+         * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
+         * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
+         */
         if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
 
-        if(isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER']))
+        /**
+         * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
+         * Ignore safari browser when there is HTTP_REFERER request header, because safari browser will not send HTTP_SEC_FETCH_DEST request header correctly.
+         */
+        if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
         {
             $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
             if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
         }
 
+        /**
+         * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
+         * The following pages can be allowed to open in non-iframe, so ignore these pages.
+         */
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
 
-        if($module == 'index' or
-           $module == 'tutorial' or
-           $module == 'install' or
-           $module == 'upgrade' or
-           $module == 'sso' or
-           $module == 'cron' or
-           $module == 'misc' or
-          ($module == 'user' and strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) or
-          ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
-          ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
-          ($module == 'report' && $method == 'annualdata') or
-          ($module == 'misc' && $method == 'captcha') or
-          ($module == 'bug' && $method == 'create') or
-          ($module == 'execution' and $method == 'printkanban') or
-          ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
-          ($module == 'traincourse' and $method == 'playvideo'))
+        if($module == 'index' ||
+           $module == 'tutorial' ||
+           $module == 'install' ||
+           $module == 'upgrade' ||
+           $module == 'sso' ||
+           $module == 'cron' ||
+           $module == 'misc' ||
+          ($module == 'user' && strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) ||
+          ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
+          ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
+          ($module == 'report' && $method == 'annualdata') ||
+          ($module == 'misc' && $method == 'captcha') ||
+          ($module == 'bug' && $method == 'create') ||
+          ($module == 'execution' && $method == 'printkanban') ||
+          ($module == 'traincourse' && $method == 'ajaxuploadlargefile') ||
+          ($module == 'traincourse' && $method == 'playvideo'))
         {
             return;
         }
 
+        /**
+         * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
+         * If none of the above conditions are missed, then the current page must be opened in iframe, using 302 jump to achieve.
+         */
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
