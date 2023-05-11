@@ -949,4 +949,109 @@ class productTao extends productModel
 
         return $record ? $record->count : 0;
     }
+
+    /**
+     * 获取产品与项目关联的项目集数据列表。
+     * Get the progam info of the releated project and product by product list.
+     *
+     * @param  array     $productList
+     * @access protected
+     * @return array
+     */
+    protected function getProjectProductList(array $productList): array
+    {
+        $projectProductList = $this->dao->select('t1.product,t1.project,t2.parent,t2.path')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in(array_keys($productList))
+            ->andWhere('t1.project')->in($this->app->user->view->projects)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.status')->eq('doing')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchGroup('product', 'project');
+
+        if($this->config->systemMode != 'ALM' || $this->config->product->showAllProjects) return $projectProductList;
+
+        /* ALM mode and don't show all projects. */
+        foreach($projectProductList as $productID => $projects)
+        {
+            if(!isset($productList[$productID])) continue;
+
+            $product = $productList[$productID];
+            foreach($projects as $projectID => $project)
+            {
+                if($project->parent == $product->program || strpos($project->path, ",{$product->program},") === 0) continue;
+                /* Filter invalid product. */
+                unset($projectProductList[$productID][$projectID]);
+            }
+        }
+
+        return $projectProductList;
+    }
+
+    /**
+     * 获取产品相关计划列表。
+     * Get plan list by product ID list.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getPlanList(array $productIdList): array
+    {
+        $date = date('Y-m-d');
+        return $this->dao->select('id,product,title,parent,begin,end')
+            ->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in($productIdList)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('end')->ge($date)
+            ->andWhere('parent')->ne(-1)
+            ->orderBy('begin desc')
+            ->fetchGroup('product', 'id');
+    }
+
+    /**
+     * 获取产品相关执行列表。
+     * Get execution list by project and  product ID list.
+     *
+     * @param  array     $projectIdList
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getExecutionList(array $projectIdList, array $productIdList): array
+    {
+        return $this->dao->select('t1.product as productID,t2.*')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+            ->where('type')->in('stage,sprint,kanban')
+            ->andWhere('t2.project')->in($projectIdList)
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('t1.project')->in($this->app->user->view->sprints)
+            ->fi()
+            ->andWhere('t1.product')->in($productIdList)
+            ->andWhere('status')->eq('doing')
+            ->andWhere('multiple')->ne('0')
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchGroup('project', 'id');
+    }
+
+    /**
+     * 获取产品相关发布列表。
+     * Get release list by product ID list.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getReleaseList(array $productIdList): array
+    {
+        return $this->dao->select('id,product,name,marker')
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in($productIdList)
+            ->andWhere('status')->eq('normal')
+            ->fetchGroup('product', 'id');
+    }
 }

@@ -1377,57 +1377,23 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats4Kanban()
+    public function getStats4Kanban(): array
     {
-        $date = date('Y-m-d');
         $this->loadModel('program');
 
-        $productList = $this->getList();
-        $programList = $this->program->getTopPairs('', '', true);
-        $projectList = $this->program->getProjectStats(0, 'doing');
+        /* Get base data. */
+        $productList    = $this->getList();
+        $programList    = $this->program->getTopPairs('', '', true);
+        $projectList    = $this->program->getProjectStats(0, 'doing');
 
-        $projectProduct = $this->dao->select('t1.product,t1.project,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in(array_keys($productList))
-            ->andWhere('t1.project')->in($this->app->user->view->projects)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.status')->eq('doing')
-            ->andWhere('t2.deleted')->eq('0')
-            ->fetchGroup('product', 'project');
+        $productIdList  = array_keys($productList);
+        $projectIdList  = array_keys($projectList);
+        $projectProduct = $this->productTao->getProjectProductList($productList);
+        $planList       = $this->productTao->getPlanList($productIdList);
+        $executionList  = $this->productTao->getExecutionList($projectIdList, $productIdList);
+        $releaseList    = $this->productTao->getReleaseList($productIdList);
 
-        if($this->config->systemMode == 'ALM' and !$this->config->product->showAllProjects)
-        {
-            foreach($projectProduct as $productID => $projects)
-            {
-                if(!isset($productList[$productID])) continue;
-                $product = $productList[$productID];
-                foreach($projects as $projectID => $project)
-                {
-                    if($project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) unset($projectProduct[$productID][$projectID]);
-                }
-            }
-        }
-
-        $planList = $this->dao->select('id,product,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in(array_keys($productList))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('end')->ge($date)
-            ->andWhere('parent')->ne(-1)
-            ->orderBy('begin desc')
-            ->fetchGroup('product', 'id');
-
-        $executionList = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-            ->where('type')->in('stage,sprint,kanban')
-            ->andWhere('t2.project')->in(array_keys($projectList))
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t1.product')->in(array_keys($productList))
-            ->andWhere('status')->eq('doing')
-            ->andWhere('multiple')->ne('0')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
-            ->fetchGroup('project', 'id');
-
+        /* Filter latest executions. */
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
         $today                   = helper::today();
@@ -1435,8 +1401,8 @@ class productModel extends model
         {
             foreach($executions as &$execution)
             {
-                /* Judge whether the execution is delayed. */
-                if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+                /* Calculate delayed execution. */
+                if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
                 {
                     $delay = helper::diffDate($today, $execution->end);
                     if($delay > 0) $execution->delay = $delay;
@@ -1452,13 +1418,7 @@ class productModel extends model
 
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
-        $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)
-            ->where('deleted')->eq('0')
-            ->andWhere('product')->in(array_keys($productList))
-            ->andWhere('status')->eq('normal')
-            ->fetchGroup('product', 'id');
-
-        /* Convert predefined HTML entities to characters. */
+        /* Build result. */
         $statsData = array(
             'programList'             => $programList,
             'productList'             => $productList,
@@ -1470,7 +1430,7 @@ class productModel extends model
             'hourList'                => $hourList,
             'releaseList'             => $releaseList
         );
-
+        /* Convert predefined HTML entities to characters. */
         $statsData = $this->covertHtmlSpecialChars($statsData);
 
         return $statsData;
