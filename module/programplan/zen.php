@@ -196,8 +196,7 @@ class programplanZen extends programplan
 
         if($type == 'lists')
         {
-            $sort  = common::appendOrder($orderBy);
-            $this->loadModel('datatable');
+            $sort   = common::appendOrder($orderBy);
             $stages = $this->programplan->getPlans($projectID, $productID, $sort);
             $this->view->dateDetails  = $dateDetails;
 
@@ -207,7 +206,7 @@ class programplanZen extends programplan
         $owner = $this->app->user->account;
         if(!isset($this->config->programplan->browse->stageCustom)) $this->loadModel('setting')->setItem("$owner.programplan.browse.stageCustom", 'date,task');
         $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module=programplan&section=browse&key=stageCustom");
-        $dateDetails = strpos($selectCustom, 'date') !== false ? 0 : 1; // Gantt chart detail date display.
+        $dateDetails  = strpos($selectCustom, 'date') !== false ? 0 : 1; // Gantt chart detail date display.
 
         /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];

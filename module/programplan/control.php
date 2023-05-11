@@ -63,6 +63,7 @@ class programplan extends control
         /* Generate stage list page data. */
         $stages = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy);
 
+        /* Build gantt browse view. */
         $this->programplanZen->buildBrowseView($projectID, $productID, $stages, $type, $orderBy);
     }
 
