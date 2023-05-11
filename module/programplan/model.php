@@ -1090,13 +1090,14 @@ class programplanModel extends model
     }
 
     /**
-     * Get parent stage's children types.
+     * 根据父id获取父阶段的子类型。
+     * Get parent stage's children types by parentID.
      *
      * @param  int    $parentID
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getParentChildrenTypes($parentID)
+    public function getParentChildrenTypes(int $parentID): array|bool
     {
         if(empty($parentID)) return true;
 
