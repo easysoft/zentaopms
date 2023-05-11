@@ -5,13 +5,13 @@ fields:
     - field: id
       range: 1-6
     - field: project
-      range: '1,2,3,4,1,1'
+      range: '0,1,2,3,1,1'
     - field: name
       range: '瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b,阶段c'
     - field: parent
       range: '0,1,2,3,1,1'
     - field: type
-      range: 'stage'
+      range: 'project,stage{9}'
     - field: percent
       range: 1-6
       prefix: '2'
