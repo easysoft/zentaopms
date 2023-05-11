@@ -16,28 +16,40 @@ $app->loadLang('execution');
  * 获取区块左侧的产品列表.
  * Get product tabs on the left side.
  *
- * @param  array    $products
- * @param  string   $blockNavCode
+ * @param  array  $products
+ * @param  string $blockNavCode
+ * @param  bool   $longBlock
  * @access public
  * @return array
  */
-function getProductTabs($products, $blockNavCode): array
+function getProductTabs(array $products, string $blockNavCode, bool $longBlock): array
 {
     $navTabs  = array();
     $selected = key($products);
+    $navTabs[] = li
+    (
+        set('class', 'nav-item of-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
+        a(icon(set('size', '24'), 'angle-left'))
+    );
     foreach($products as $product)
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item' . ($product->id == $selected ? ' active' : '')),
+            set('class', 'nav-item nav-switch w-full' . ($product->id == $selected ? ' active' : '')),
             a
             (
                 set('class', 'ellipsis text-dark'),
-                set('data-toggle', 'tab'),
-                set('href', "#tab3{$blockNavCode}Content{$product->id}"),
+                $longBlock ? set('data-toggle', 'tab') : null,
+                set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
                 $product->name
 
             ),
+            !$longBlock ? a
+            (
+                set('class', 'hidden'),
+                set('data-toggle', 'tab'),
+                set('href', "#tab3{$blockNavCode}Content{$product->id}"),
+            ) : null,
             a
             (
                 set('class', 'link flex-1 text-right hidden'),
@@ -50,6 +62,11 @@ function getProductTabs($products, $blockNavCode): array
             )
         );
     }
+    $navTabs[] = li
+    (
+        set('class', 'nav-item of-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
+        a(icon(set('size', '24'), 'angle-right'))
+    );
     return $navTabs;
 }
 
@@ -57,12 +74,13 @@ function getProductTabs($products, $blockNavCode): array
  * 获取区块右侧显示的产品信息.
  * Get product statistical information.
  *
- * @param  object   $products
- * @param  string   $blockNavID
+ * @param  array  $products
+ * @param  string $blockNavID
+ * @param  bool   $longBlock
  * @access public
  * @return array
  */
-function getProductInfo($products, $blockNavID): array
+function getProductInfo(array $products, string $blockNavID, bool $longBlock): array
 {
     global $lang;
 
@@ -78,14 +96,14 @@ function getProductInfo($products, $blockNavID): array
             set('id', "tab3{$blockNavID}Content{$product->id}"),
             div
             (
-                set('class', 'flex h-full'),
+                set('class', 'flex h-full ' . ($longBlock ? '' : 'col')),
                 cell
                 (
                     set('class', 'flex-1'),
                     set('width', '70%'),
                     div
                     (
-                        set('class', 'flex h-full'),
+                        set('class', 'flex h-full ' . ($longBlock ? '' : 'col')),
                         cell
                         (
                             set('width', '40%'),
@@ -97,7 +115,7 @@ function getProductInfo($products, $blockNavID): array
                             ),
                             div
                             (
-                                set('class', 'flex'),
+                                set('class', 'flex h-full story-num w-44'),
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
@@ -184,12 +202,12 @@ function getProductInfo($products, $blockNavID): array
                                 set('class', 'border-r'),
                                 div
                                 (
-                                    set('class', 'px-2 pb-2'),
+                                    set('class', 'px-4 pb-2'),
                                     $lang->block->productstatistic->storyStatistics
                                 ),
                                 div
                                 (
-                                    set('class', 'px-2'),
+                                    set('class', 'px-4'),
                                     span
                                     (
                                         set('class', 'border-r pr-2 text-sm text-gray'),
@@ -203,7 +221,7 @@ function getProductInfo($products, $blockNavID): array
                                 ),
                                 div
                                 (
-                                    set('class', 'pr-4 py-2'),
+                                    set('class', 'px-4 py-2'),
                                     div
                                     (
                                         set('class', 'bg-primary h-44 w-full'),
@@ -297,25 +315,26 @@ function getProductInfo($products, $blockNavID): array
 $blockNavCode = 'nav-' . uniqid();
 div
 (
-    set('class', 'productstatistic-block of-hidden ' . ($longBlock ? '' : 'block-sm')),
+    on::click('.nav-prev,.nav-next', 'switchNav'),
+    set('class', 'productstatistic-block of-hidden ' . ($longBlock ? 'block-long' : 'block-sm')),
     div
     (
-        set('class', "flex h-full" . ($longBlock ? '' : 'col')),
+        set('class', "flex h-full " . ($longBlock ? '' : 'col')),
         cell
         (
             set('width', '22%'),
-            set('class', 'of-hidden bg-secondary-pale'),
+            set('class', $longBlock ? 'bg-secondary-pale' : ''),
             ul
             (
-                set('class', 'nav nav-tabs nav-stacked h-full of-y-auto of-x-hidden'),
-                getProductTabs($products, $blockNavCode)
+                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked h-full of-y-auto of-x-hidden' : 'pt-4 px-4')),
+                getProductTabs($products, $blockNavCode, $longBlock)
             ),
         ),
         cell
         (
             set('class', 'tab-content'),
             set('width', '78%'),
-            getProductInfo($products, $blockNavCode)
+            getProductInfo($products, $blockNavCode, $longBlock)
         )
     )
 );
