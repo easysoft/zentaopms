@@ -258,7 +258,7 @@ function verifyCycleDate(dateInput)
  * @param  object time
  * @return void
  */
-function selectEndTime(time)
+function verifyEndTime(time)
 {
     if($(time).val() < $('#begin').val()) $(time).addClass('has-error');
 }

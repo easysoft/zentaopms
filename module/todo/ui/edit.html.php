@@ -749,7 +749,7 @@ formPanel
                             'disabled' => $todo->begin == 2400
                         )
                     ),
-                    on::blur('selectEndTime(this)')
+                    on::blur('verifyEndTime(this)')
                 )
             ),
         ),

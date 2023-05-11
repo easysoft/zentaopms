@@ -578,7 +578,7 @@ formPanel
                             'items'    => $times
                         )
                     ),
-                    on::blur('selectEndTime(this)')
+                    on::blur('verifyEndTime(this)')
                 )
             )
         ),
