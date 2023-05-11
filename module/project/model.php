@@ -275,18 +275,18 @@ class projectModel extends model
     /**
      * Get project overview for block.
      *
-     * @param  string     $queryType byId|byStatus
-     * @param  string|int $param
+     * @param  string     $status
+     * @param  int        $projectID
      * @param  string     $orderBy
      * @param  int        $limit
      * @param  string     $excludedModel
      * @access public
      * @return array
      */
-    public function getOverviewList(string $queryType = 'byStatus', string|int $param = 'all', string $orderBy = 'id_desc', int $limit = 15, string $excludedModel = ''): array
+    public function getOverviewList(string $status = '', int $projectID = 0, string $orderBy = 'id_desc', int $limit = 15, string $excludedModel = ''): array
     {
         /* Get project list by query. */
-        $projects = $this->projectTao->fetchProjectListByQuery($queryType, $param, $orderBy, $limit, $excludedModel);
+        $projects = $this->projectTao->fetchProjectListByQuery($status, $projectID, $orderBy, $limit, $excludedModel);
         if(empty($projects)) return array();
 
         /* Get team members under the project. */

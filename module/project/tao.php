@@ -686,26 +686,25 @@ class projectTao extends projectModel
      * 通过条件查询和数量限制查询项目列表。
      * Get project list by query and with limit.
      *
-     * @param  string     $queryType
-     * @param  string|int $param
+     * @param  string     $status
+     * @param  int        $projectID
      * @param  string     $orderBy
      * @param  int        $limit
      * @param  string     $excludedModel
      * @access protected
      * @return array
      */
-    protected function fetchProjectListByQuery(string $queryType, string|int $param, string $orderBy, int $limit, string $excludedModel): array
+    protected function fetchProjectListByQuery(string $status, int $projectID, string $orderBy, int $limit, string $excludedModel): array
     {
-        $queryType = strtolower($queryType);
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-            ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
-            ->beginIF($queryType == 'byid')->andWhere('id')->eq($param)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($status && $status != 'all' && $status != 'undone')->andWhere('status')->eq($status)->fi()
+            ->beginIF($projectID)->andWhere('id')->eq($projectID)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');

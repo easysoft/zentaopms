@@ -636,7 +636,7 @@ class blockZen extends block
         $type    = isset($this->params->type)    ? $this->params->type    : 'all';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
 
-        $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $type, $orderBy, $count);
+        $this->view->projects = $this->loadModel('project')->getOverviewList($type, 0, $orderBy, $count);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
@@ -650,7 +650,7 @@ class blockZen extends block
     {
         $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
-        $count = isset($this->params->count) ? (int)$this->params->count : 0; 
+        $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $count , 1);
 
@@ -670,7 +670,7 @@ class blockZen extends block
         $executionPairs = array();
         $noMultiples    = array();
         foreach($executions as $execution)
-        {    
+        {
             if(empty($execution->multiple)) $noMultiples[$execution->product] = $execution->project;
             $executionPairs[$execution->product] = $execution->name;
         }
@@ -711,7 +711,7 @@ class blockZen extends block
 
         /* Get projects. */
         $excludedModel = $this->config->edition == 'max' ? '' : 'waterfall';
-        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, $excludedModel);
+        $projects      = $this->project->getOverviewList($status, 0, 'order_asc', $count, $excludedModel);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -1166,7 +1166,7 @@ class blockZen extends block
         $projectID = $this->session->project;
         $this->app->loadLang('execution');
         $this->app->loadLang('bug');
-        $totalData = $this->loadModel('project')->getOverviewList('byId', $projectID, 'id_desc', 1);
+        $totalData = $this->loadModel('project')->getOverviewList('', $projectID, 'id_desc', 1);
 
         $this->view->totalData = $totalData;
         $this->view->projectID = $projectID;
@@ -1793,7 +1793,7 @@ class blockZen extends block
         $this->app->loadLang('task');
         $this->app->loadLang('program');
         $this->app->loadLang('execution');
-        $this->view->projects = $this->loadModel('project')->getOverviewList('byStatus', $status, $orderBy, $count);
+        $this->view->projects = $this->loadModel('project')->getOverviewList($status, 0, $orderBy, $count);
     }
 
     /**

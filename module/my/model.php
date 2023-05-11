@@ -169,7 +169,7 @@ class myModel extends model
     public function getDoingProjects()
     {
         $data = new stdClass();
-        $doingProjects = $this->loadModel('project')->getOverviewList('byStatus', 'doing', 'id_desc');
+        $doingProjects = $this->loadModel('project')->getOverviewList('doing');
         $maxCount      = 5;
         $myProjects    = array();
         foreach($doingProjects as $key => $project)
@@ -223,7 +223,7 @@ class myModel extends model
             $allConsumed      = 0;
             $thisYearConsumed = 0;
 
-            $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc', 0);
+            $projects         = $this->loadModel('project')->getOverviewList('all', 0, 'id_desc', 0);
             $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
             foreach($projects as $project)
             {
