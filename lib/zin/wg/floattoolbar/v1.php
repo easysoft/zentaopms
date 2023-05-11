@@ -10,7 +10,9 @@ class floatToolbar extends wg
     );
 
     protected static $defineBlocks = array(
-        'dropdowns' => array()
+        'prefix' => array(),
+        'main'   => array(),
+        'suffix' => array()
     );
 
     public static function getPageCSS(): string|false
@@ -18,8 +20,10 @@ class floatToolbar extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function divider(): wg
+    private function buildDivider(wg|array|null $wg): wg|null
     {
+        if(empty($wg)) return null;
+
         return div(setClass('divider w-px h-6 mx-2'));
     }
 
@@ -32,25 +36,37 @@ class floatToolbar extends wg
         return $btns;
     }
 
+    private function mergeBtns(array|null $btns, array|wg|null $block): array|wg|null
+    {
+        if(empty($btns) && empty($block)) return null;
+        if(empty($btns)) return $block;
+        if(empty($block)) return $btns;
+
+        if(!is_array($block)) $block = array($block);
+        return array_merge($btns, $block);
+    }
+
     protected function build(): wg
     {
-        $prefix    = $this->prop('prefix');
-        $main      = $this->prop('main');
-        $suffix    = $this->prop('suffix');
+        $prefixBtns = $this->buildBtns($this->prop('prefix'));
+        $mainBtns   = $this->buildBtns($this->prop('main'));
+        $suffixBtns = $this->buildBtns($this->prop('suffix'));
 
-        $prefixBtns = $this->buildBtns($prefix);
-        $mainBtns   = $this->buildBtns($main);
-        $suffixBtns = $this->buildBtns($suffix);
-        $dropdowns  = $this->block('dropdowns');
-        if(!empty($dropdowns)) $mainBtns = array_merge($mainBtns, $dropdowns);
+        $prefixBlock  = $this->block('prefix');
+        $mainBlock    = $this->block('main');
+        $suffixBlock  = $this->block('suffix');
+
+        $prefixBtns = $this->mergeBtns($prefixBtns, $prefixBlock);
+        $mainBtns   = $this->mergeBtns($mainBtns, $mainBlock);
+        $suffixBtns = $this->mergeBtns($suffixBtns, $suffixBlock);
 
         return div
         (
             setClass('float-toolbar inline-flex rounded p-1.5 items-center'),
             $prefixBtns,
-            empty($prefixBtns) ? null : $this->divider(),
+            $this->buildDivider($prefixBtns),
             $mainBtns,
-            empty($suffixBtns) ? null : $this->divider(),
+            $this->buildDivider($suffixBtns),
             $suffixBtns,
         );
     }
