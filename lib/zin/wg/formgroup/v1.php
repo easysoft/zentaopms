@@ -31,7 +31,7 @@ class formGroup extends wg
 
         if($required === 'auto') $required = isFieldRequired($name);
 
-        if(is_string($control)) $control = ['type' => $control, 'name' => $name];
+        if(is_string($control))                   $control = ['type' => $control, 'name' => $name];
         elseif(empty($control) && $name !== NULL) $control = ['name' => $name];
 
         if(!empty($control))

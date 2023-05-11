@@ -84,14 +84,18 @@ class panel extends wg
         );
     }
 
-    protected function build()
+    protected function buildProps(): array
     {
         list($class, $size) = $this->prop(['class', 'size']);
+        return array(setClass('panel', $class, empty($size) ? NULL : "size-$size"));
+    }
+
+    protected function build()
+    {
         return div
         (
-            setClass('panel', $class, empty($size) ? NULL : "size-$size"),
+            $this->buildProps(),
             set($this->getRestProps()),
-
             $this->buildHeading(),
             $this->buildBody(),
             $this->buildFooter()

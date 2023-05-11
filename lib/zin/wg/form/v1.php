@@ -21,7 +21,7 @@ class form extends formBase
     protected static $defaultProps = array
     (
         'grid'          => true,
-        'actionsClass'  => 'form-group gap-4 no-label'
+        'actionsClass'  => 'form-group no-label'
     );
 
     public function onBuildItem(item|array $item): wg

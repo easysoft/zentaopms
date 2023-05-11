@@ -19,6 +19,7 @@ class formBase extends wg
 {
     protected static $defineProps = array
     (
+        'id?: string',
         'method?: string',
         'url?: string',
         'actions?: array',
@@ -30,6 +31,7 @@ class formBase extends wg
 
     protected static $defaultProps = array
     (
+        'id'            => '$GID',
         'method'        => 'post',
         'target'        => 'ajax',
         'actions'       => ['submit', 'cancel'],
@@ -38,7 +40,7 @@ class formBase extends wg
     protected function buildActions(): wg|null
     {
         $actions = $this->prop('actions');
-        if(empty($actions)) return NULL;
+        if(empty($actions)) return null;
 
         global $lang;
         foreach($actions as $key => $action)
@@ -62,30 +64,30 @@ class formBase extends wg
 
     protected function buildProps(): array
     {
-        return array();
+        list($url, $target, $method, $id) = $this->prop(['url', 'target', 'method', 'id']);
+        return array
+        (
+            set::class('form load-indicator'),
+            $target === 'ajax' ? set::class('form-ajax') : null,
+            set(array
+            (
+                'id'     => $id,
+                'action' => empty($url) ? $_SERVER['REQUEST_URI'] : $url,
+                'target' => $target === 'ajax' ? null: $target,
+                'method' => $method
+            ))
+        );
     }
 
     protected function build(): wg
     {
-        list($url, $target, $method, $id) = $this->prop(['url', 'target', 'method', 'id']);
-
-        $isAjax = $target === 'ajax';
-        if($isAjax)
-        {
-            $target = NULL;
-            if(empty($id)) $id = $this->gid;
-        }
-        if(empty($url)) $url = $_SERVER['REQUEST_URI'];
-
         return h::form
         (
-            set::class('form load-indicator', $isAjax ? 'form-ajax' : ''),
-            set(['id' => $id, 'action' => $url, 'target' => $target, 'method' => $method]),
-            set($this->getRestProps()),
             $this->buildProps(),
+            set($this->getRestProps()),
             $this->buildContent(),
             $this->buildActions(),
-            $isAjax ? zui::ajaxForm(set::_to("#$id")) : NULL
+            $this->prop('target') === 'ajax' ? zui::ajaxForm(set::_to('#' . $this->id())) : null
         );
     }
 }

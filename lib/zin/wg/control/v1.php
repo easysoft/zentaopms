@@ -13,7 +13,8 @@ require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 
 class control extends wg
 {
-    static $defineProps = array(
+    static $defineProps = array
+    (
         'type: string', // text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
         'name: string',
         'id?: string',
@@ -42,11 +43,10 @@ class control extends wg
 
         foreach($propsNames as $propName)
         {
-            if(isset($allProps[$propName]))
-            {
-                $controlProps[$propName] = $allProps[$propName];
-                unset($allProps[$propName]);
-            }
+            if(!isset($allProps[$propName])) continue;
+
+            $controlProps[$propName] = $allProps[$propName];
+            unset($allProps[$propName]);
         }
 
         return new inputControl

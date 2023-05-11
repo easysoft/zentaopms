@@ -112,15 +112,16 @@ function checkbox()
 /**
  * Form widget.
  *
+ * ?string id='$GID'
  * ?string method='post'
  * ?string url
  * ?array  actions
+ * ?string actionsClass
  * ?string target
- * ?array  items
- * ?bool   grid
- * ?int    labelWidth
  * ?string submitBtnText
  * ?string cancelBtnText
+ * ?bool   grid
+ * ?int    labelWidth
  */
 function form()
 {
