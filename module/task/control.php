@@ -217,7 +217,7 @@ class task extends control
             return $this->send($response);
         }
 
-        if(!$this->post->taskIDList) return $this->locate($this->session->taskList);
+        if(!$this->post->taskIDList) $this->locate($this->session->taskList);
         $taskIdList = array_unique($this->post->taskIDList);
 
         /* Set parameters based on whether the page is execution or my. */
