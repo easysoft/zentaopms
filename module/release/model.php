@@ -856,4 +856,23 @@ class releaseModel extends model
 
         return $menu;
     }
+
+    /**
+     * Get count of the releases.
+     *
+     * @param  string $type all|milestone
+     * @access public
+     * @return int
+     */
+    public function getReleaseCount(string $type = 'all'): int
+    {
+        return $this->dao->select('COUNT(t1.id) as releaseCount')->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->beginIF($type == 'milestone')->andWhere('t1.marker')->eq(1)->fi()
+            ->fetch('releaseCount');
+    }
 }
