@@ -26,7 +26,7 @@ class kanban extends control
         $this->session->set('regionID', 'all', 'kanban');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title         = $this->lang->kanbanspace->common;
@@ -409,8 +409,6 @@ class kanban extends control
         $kanbanIdList = $this->kanban->getCanViewObjects();
         if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return print(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
 
-        $space = $this->kanban->getSpaceByID($kanban->space);
-
         $this->kanban->setSwitcher($kanban);
         $this->kanban->setHeaderActions($kanban);
 
@@ -594,7 +592,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
+            $laneID = $this->kanban->createLane($kanbanID, $regionID, null);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
@@ -1124,7 +1122,7 @@ class kanban extends control
     public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $cards2Imported = $this->kanban->getCards2Import($selectedKanbanID, $kanbanID, $pager);
@@ -1193,7 +1191,7 @@ class kanban extends control
         $this->loadModel('productplan');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $productPairs      = $this->product->getPairs('', 0, '', 'all');
@@ -1259,7 +1257,7 @@ class kanban extends control
         $this->loadModel('release');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Kanban products has no releases. */
@@ -1321,7 +1319,7 @@ class kanban extends control
         $this->loadModel('build');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $builds2Imported = array();
@@ -1377,7 +1375,7 @@ class kanban extends control
         $this->loadModel('programplan');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram('', 'all', false, '', '', '', 'multiple');
@@ -1427,7 +1425,7 @@ class kanban extends control
         $this->loadModel('ticket');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->products          = array('all' => $this->lang->kanban->allProducts) + $this->feedback->getGrantProducts();
