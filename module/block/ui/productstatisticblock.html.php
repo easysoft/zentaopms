@@ -101,7 +101,19 @@ function getProductInfo($products, $blockNavID): array
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
-                                    div(a(set('href', helper::createLink('index')), set('class', 'text-black') , $stories ? $stories['total'] : 0)),
+                                    div
+                                    (
+                                        common::hasPriv('product', 'browse') ? a
+                                        (
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory-0-story")),
+                                            set('class', 'text-black'),
+                                            $stories ? $stories['total'] : 0
+                                        ) : span
+                                        (
+                                            set('class', 'text-black'),
+                                            $stories ? $stories['total'] : 0
+                                        )
+                                    ),
                                     div
                                     (
                                         span
@@ -114,7 +126,19 @@ function getProductInfo($products, $blockNavID): array
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
-                                    div(a(set('href', helper::createLink('index')), set('class', 'text-black') , $stories ? $stories['closed'] : 0)),
+                                    div
+                                    (
+                                        common::hasPriv('product', 'browse') ? a
+                                        (
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory-0-story")),
+                                            set('class', 'text-black'),
+                                            $stories ? $stories['closed'] : 0
+                                        ) : span
+                                        (
+                                            set('class', 'text-black'),
+                                            $stories ? $stories['closed'] : 0
+                                        )
+                                    ),
                                     div
                                     (
                                         span
@@ -127,7 +151,19 @@ function getProductInfo($products, $blockNavID): array
                                 cell
                                 (
                                     set('class', 'flex-1 text-center'),
-                                    div(a(set('href', helper::createLink('index')), set('class', 'text-black') , $stories ? $stories['notClosed'] : 0)),
+                                    div
+                                    (
+                                        common::hasPriv('product', 'browse') ? a
+                                        (
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed-0-story")),
+                                            set('class', 'text-black'),
+                                            $stories ? $stories['notClosed'] : 0
+                                        ) : span
+                                        (
+                                            set('class', 'text-black'),
+                                            $stories ? $stories['notClosed'] : 0
+                                        )
+                                    ),
                                     div
                                     (
                                         span
@@ -188,12 +224,19 @@ function getProductInfo($products, $blockNavID): array
                     ),
                     $product->newPlan ? div
                     (
-                        set('class', 'py-2'),
-                        div(span(set('class', 'text-sm'), $lang->block->productstatistic->newPlan)),
+                        set('class', 'pb-4'),
+                        div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newPlan)),
                         div
                         (
                             set('class', 'py-1'),
-                            a(set('href', helper::createLink('productplan', 'view', "planID={$product->newPlan->id}")), $product->newPlan->title),
+                            common::hasPriv('productplan', 'view') ? a
+                            (
+                                set('href', helper::createLink('productplan', 'view', "planID={$product->newPlan->id}")),
+                                $product->newPlan->title
+                            ) : span
+                            (
+                                $product->newPlan->title
+                            ),
                             span
                             (
                                 set('class', 'label lighter-pale rounded-full ml-2 px-1'),
@@ -203,12 +246,19 @@ function getProductInfo($products, $blockNavID): array
                     ) : null,
                     $product->newExecution ? div
                     (
-                        set('class', 'py-2'),
-                        div(span(set('class', 'text-sm'), $lang->block->productstatistic->newExecution)),
+                        set('class', 'pb-4'),
+                        div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newExecution)),
                         div
                         (
                             set('class', 'py-1'),
-                            a(set('href', helper::createLink('execution', 'task', "executionID={$product->newExecution->id}")), $product->newExecution->name),
+                            common::hasPriv('execution', 'task') ? a
+                            (
+                                set('href', helper::createLink('execution', 'task', "executionID={$product->newExecution->id}")),
+                                $product->newExecution->name
+                            ) : span
+                            (
+                                $product->newExecution->name
+                            ),
                             span
                             (
                                 set('class', 'label important-pale rounded-full ml-2'),
@@ -218,12 +268,18 @@ function getProductInfo($products, $blockNavID): array
                     ) : null,
                     $product->newRelease ? div
                     (
-                        set('class', 'py-2'),
-                        div(span(set('class', 'text-sm'), $lang->block->productstatistic->newRelease)),
+                        div(span(set('class', 'text-sm text-gray'), $lang->block->productstatistic->newRelease)),
                         div
                         (
                             set('class', 'py-1'),
-                            a(set('href', helper::createLink('release', 'view', "releaseID={$product->newRelease->id}")), $product->newRelease->name),
+                            common::hasPriv('release', 'view') ? a
+                            (
+                                set('href', helper::createLink('release', 'view', "releaseID={$product->newRelease->id}")),
+                                $product->newRelease->name
+                            ) : span
+                            (
+                                $product->newRelease->name
+                            ),
                             span
                             (
                                 set('class', 'label rounded-full ml-2 ' . ($product->newRelease->status == 'normal' ? 'success-pale' : 'lighter-pale')),
