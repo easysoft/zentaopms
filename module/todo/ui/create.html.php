@@ -182,9 +182,9 @@ formPanel
                 set::suffixWidth('30'),
                 input
                 (
-                    setID('everyInput'),
+                    setID('spaceDay'),
                     set::name('config[day]'),
-                    on::blur('everyInputBlur(this)')
+                    on::blur('verifySpaceDay(this)')
                 )
             )
         )

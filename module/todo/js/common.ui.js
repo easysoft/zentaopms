@@ -181,7 +181,7 @@ function showEvery(switcher)
 {
     if(switcher.checked)
     {
-        $('#everyInput').removeAttr('disabled');
+        $('#spaceDay').removeAttr('disabled');
         $('.specify').addClass('hidden');
         $('.every').removeClass('hidden');
         $('#cycleYear').removeAttr('checked');
@@ -231,12 +231,12 @@ function changeDate(dateInput)
  * 间隔输入控件失焦。
  * The input control of the every is blur.
  *
- * @param  object everyInput
+ * @param  object spaceDay
  * @return void
  */
-function everyInputBlur(everyInput)
+function verifySpaceDay(spaceDay)
 {
-    if(!$(everyInput).val()) $(everyInput).closest('.input-control').addClass('has-error');
+    if(!$(spaceDay).val()) $(spaceDay).closest('.input-control').addClass('has-error');
 }
 
 /**

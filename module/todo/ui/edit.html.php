@@ -160,10 +160,10 @@ function buildCycleOfDayConfig(object $todo): mixed
                 set::suffixWidth('30'),
                 input
                 (
-                    setID('everyInput'),
+                    setID('spaceDay'),
                     set::name('config[day]'),
                     set::value(isset($todo->config->day) ? $todo->config->day : ''),
-                    on::blur('everyInputBlur(this)')
+                    on::blur('verifySpaceDay(this)')
                 )
             )
         )
