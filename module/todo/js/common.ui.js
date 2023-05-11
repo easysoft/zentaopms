@@ -246,7 +246,7 @@ function verifySpaceDay(spaceDay)
  * @param  object dateInput
  * @return void
  */
-function dateBlur(dateInput)
+function verifyCycleDate(dateInput)
 {
     if(!$(dateInput).val()) $(dateInput).closest('.input-group').addClass('has-error');
 }

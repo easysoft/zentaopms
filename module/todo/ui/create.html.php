@@ -164,7 +164,7 @@ formPanel
                             'type'  => 'date'
                         )
                     ),
-                    on::blur('dateBlur(this)')
+                    on::blur('verifyCycleDate(this)')
                 )
             )
         ),

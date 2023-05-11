@@ -142,7 +142,7 @@ function buildCycleOfDayConfig(object $todo): mixed
                             'value' => $todo->date ? $todo->date : date('Y-m-d')
                         )
                     ),
-                    on::blur('dateBlur(this)')
+                    on::blur('verifyCycleDate(this)')
                 )
             )
         ),
