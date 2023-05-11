@@ -17,7 +17,7 @@ class on
 {
     public static function __callStatic($name, $args)
     {
-        list($callback, $options) = array_merge($args, array(NULL));
+        list($callback, $options) = array_merge($args, array(null));
         return on($name, $callback, $options);
     }
 }

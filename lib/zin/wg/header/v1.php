@@ -141,7 +141,7 @@ class header extends wg
                     (
                         setClass('flex-auto'),
                         div(setClass('text-lg'), empty($user->realname) ? $user->account : $user->realname),
-                        $noRole ? NULL : div(setClass('text-gray text-sm'), $lang->user->roleList[$user->role])
+                        $noRole ? null : div(setClass('text-gray text-sm'), $lang->user->roleList[$user->role])
                     )->render()
                 )))),
             );

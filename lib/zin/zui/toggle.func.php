@@ -10,7 +10,7 @@
  */
 namespace zin;
 
-function toggle($name, $options = NULL)
+function toggle($name, $options = null)
 {
     $props = array('data-toggle' => $name);
     if (is_array($options))

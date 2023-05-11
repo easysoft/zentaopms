@@ -42,7 +42,7 @@ class props extends \zin\utils\dataset
      * @access public
      * @param array $props - Properties list array
      */
-    public function __construct($props = NULL)
+    public function __construct($props = null)
     {
         $this->style       = new \zin\utils\style();
         $this->class       = new \zin\utils\classlist();
@@ -77,18 +77,18 @@ class props extends \zin\utils\dataset
     {
         if($prop === 'class' || $prop === '.')
         {
-            if(!$this->class->count()) return NULL;
+            if(!$this->class->count()) return null;
             return $this->class->toStr();
         }
         if($prop === 'style' || $prop === '~')
         {
-            if(!$this->style->count(true)) return NULL;
+            if(!$this->style->count(true)) return null;
             return $this->style->toStr();
         }
         return parent::getVal($prop);
     }
 
-    public function reset($name, $value = NULL)
+    public function reset($name, $value = null)
     {
         if(is_array($name))
         {
@@ -102,7 +102,7 @@ class props extends \zin\utils\dataset
         if($value) $this->setVal($name, $value);
     }
 
-    public function bindEvent($name, $callback = NULL)
+    public function bindEvent($name, $callback = null)
     {
         if(is_array($name))
         {
@@ -138,7 +138,7 @@ class props extends \zin\utils\dataset
         return false;
     }
 
-    public function hx($name, $value = NULL)
+    public function hx($name, $value = null)
     {
         if(is_array($name))
         {
@@ -158,7 +158,7 @@ class props extends \zin\utils\dataset
      *     $map = array(
      *         'id' => 'sayHelloBtn',
      *         'data-title' => 'Say "Hello"!',
-     *         'data-content' => NULL,
+     *         'data-content' => null,
      *         'data-show' => true,
      *     );
      *     // Output string: id="sayHelloBtn" data-title="Say &quot;Hello&quot;!" data-show="true"
@@ -177,10 +177,10 @@ class props extends \zin\utils\dataset
         foreach($this->data as $name => $value)
         {
             /* Handle boolean attributes */
-            if(in_array($name, static::$booleanAttrs)) $value = $value ? true : NULL;
+            if(in_array($name, static::$booleanAttrs)) $value = $value ? true : null;
 
             /* Skip any null value or events setting */
-            if($value === NULL || in_array($name, $skipProps) || $name[0] === '@') continue;
+            if($value === null || in_array($name, $skipProps) || $name[0] === '@') continue;
 
             /* Convert non-string to json */
             if($value === true && !str_starts_with($name, 'data-'))
@@ -213,7 +213,7 @@ class props extends \zin\utils\dataset
         $data = $this->toJsonData();
         foreach($data as $name => $value)
         {
-            if($value === NULL || $name[0] === '@' || in_array($name, $skipProps)) unset($data[$name]);
+            if($value === null || $name[0] === '@' || in_array($name, $skipProps)) unset($data[$name]);
             if($skipFalse && $value === false) unset($data[$name]);
         }
 
@@ -227,7 +227,7 @@ class props extends \zin\utils\dataset
         $data = $this->toJsonData();
         foreach($data as $name => $value)
         {
-            if($value === NULL || !in_array($name, $pickProps)) unset($data[$name]);
+            if($value === null || !in_array($name, $pickProps)) unset($data[$name]);
         }
 
         return $data;

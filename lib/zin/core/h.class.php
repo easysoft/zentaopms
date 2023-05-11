@@ -32,7 +32,7 @@ class h extends wg
     public function isSelfClose()
     {
         $selfClose = $this->props->get('selfClose');
-        if($selfClose !== NULL) return $selfClose;
+        if($selfClose !== null) return $selfClose;
 
         return in_array($this->getTagName(), static::$selfCloseTags);
     }
@@ -170,7 +170,7 @@ class h extends wg
         return static::create('link', prop('rel', 'stylesheet'), prop('href', $src), ...$args);
     }
 
-    public static function import($file, $type = NULL, ...$args)
+    public static function import($file, $type = null, ...$args)
     {
         if(is_array($file))
         {
@@ -181,7 +181,7 @@ class h extends wg
             }
             return $children;
         }
-        if($type === NULL) $type = pathinfo($file, PATHINFO_EXTENSION);
+        if($type === null) $type = pathinfo($file, PATHINFO_EXTENSION);
         if($type == 'js' || $type == 'cjs') return static::importJs($file, ...$args);
         if($type == 'css') return static::importCss($file, ...$args);
         return null;
@@ -190,14 +190,14 @@ class h extends wg
     public static function css(...$args)
     {
         list($code, $args) = h::splitRawCode($args);
-        if(empty($code)) return NULL;
+        if(empty($code)) return null;
         return static::create('style', html(implode("\n", $code)), ...$args);
     }
 
     public static function globalJS(...$args)
     {
         list($code, $args) = h::splitRawCode($args);
-        if(empty($code)) return NULL;
+        if(empty($code)) return null;
         return static::create('script', html(implode("\n", $code)), ...$args);
     }
 
@@ -205,7 +205,7 @@ class h extends wg
     {
 
         list($code, $args) = h::splitRawCode($args);
-        if(empty($code)) return NULL;
+        if(empty($code)) return null;
         return static::create('script', html(h::createJsScopeCode($code)), ...$args);
     }
 

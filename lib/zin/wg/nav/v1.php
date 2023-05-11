@@ -26,7 +26,7 @@ class nav extends wg
         (
             setClass('nav'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
+            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             $this->children()
         );
     }

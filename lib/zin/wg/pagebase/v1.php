@@ -85,7 +85,7 @@ class pageBase extends wg
             (
                 set($bodyProps),
                 set::class($bodyClass),
-                empty($imports) ? NULL : h::import($imports),
+                empty($imports) ? null : h::import($imports),
                 h::css($css, set::id('pageCSS')),
                 $body,
                 h::js($js, set::id('pageJS'))

@@ -40,10 +40,10 @@ class inputGroup extends wg
 
         return div
         (
-            setClass('input-group', $seg ? 'input-group-segment' : NULL),
+            setClass('input-group', $seg ? 'input-group-segment' : null),
             set($this->getRestProps()),
-            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : NULL,
-            is_array($children) ? array_map(array($this, 'onBuildItem'), $children) : NULL,
+            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
+            is_array($children) ? array_map(array($this, 'onBuildItem'), $children) : null,
         );
     }
 }

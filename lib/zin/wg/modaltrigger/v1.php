@@ -60,7 +60,7 @@ class modalTrigger extends wg
 
             $triggerProps = array(
                 'data-toggle'         => 'modal',
-                'data-target'         => $triggerBlock->hasProp('target', 'href') ? NULL : $target,
+                'data-target'         => $triggerBlock->hasProp('target', 'href') ? null : $target,
                 'data-type'           => $type,
                 'data-url'            => $url,
                 'data-position'       => $this->prop('position'),

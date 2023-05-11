@@ -24,7 +24,7 @@ class formLabel extends wg
         list($text, $required, $for) = $this->prop(['text', 'required', 'for']);
         return h::label
         (
-            setClass('form-label', $required ? 'required' : NULL),
+            setClass('form-label', $required ? 'required' : null),
             set('for', $for),
             set($this->getRestProps()),
             $text,

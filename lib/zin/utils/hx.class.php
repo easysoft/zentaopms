@@ -89,7 +89,7 @@ class hx extends dataset
         foreach($this->data as $name => $value)
         {
             /* Skip any null value */
-            if($value === NULL) continue;
+            if($value === null) continue;
 
             /* Convert non-string to json */
             if(!is_string($value)) $value = json_encode($value);

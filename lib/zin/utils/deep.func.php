@@ -1,7 +1,7 @@
 <?php
 namespace zin\utils;
 
-function deepGet(&$data, $namePath, $defaultValue = NULL)
+function deepGet(&$data, $namePath, $defaultValue = null)
 {
     $names = explode('.', $namePath);
     foreach($names as $name)
@@ -15,7 +15,7 @@ function deepGet(&$data, $namePath, $defaultValue = NULL)
         if(!is_array($data) || !isset($data[$name])) return $defaultValue;
         $data = &$data[$name];
     }
-    return $data === NULL ? $defaultValue : $data;
+    return $data === null ? $defaultValue : $data;
 }
 
 function deepSet(&$data, $namePath, $value)

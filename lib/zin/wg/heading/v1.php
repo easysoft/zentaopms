@@ -33,7 +33,7 @@ class heading extends wg
         (
             set::url($url),
             set::hint($lang->$tab->common),
-            $tab == 'devops' ? set::class('num') : NULL,
+            $tab == 'devops' ? set::class('num') : null,
             html($icon),
             span(set::class('text'), $lang->$tab->common),
         );
@@ -54,7 +54,7 @@ class heading extends wg
             set::id('heading'),
             new toolbar
             (
-                $showAppName ? $this->buildAppName() : NULL,
+                $showAppName ? $this->buildAppName() : null,
                 set::btnClass('primary'),
                 set::items($this->prop('items')),
                 $this->children()

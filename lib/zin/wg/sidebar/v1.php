@@ -31,7 +31,7 @@ class sidebar extends wg
                 set::class("sidebar-toggle sidebar-$side-toggle"),
                 icon("angle-$side"),
                 on::click("zui.toggleSidebar({side: '$side'})")
-            ) : NULL
+            ) : null
         );
     }
 }

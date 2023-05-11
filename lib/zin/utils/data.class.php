@@ -38,7 +38,7 @@ class data extends dataset
     {
         if($prop[0] === '$') $prop = substr($prop, 1);
 
-        if($value === NULL || ($removeEmpty && empty($value))) return $this->remove($prop);
+        if($value === null || ($removeEmpty && empty($value))) return $this->remove($prop);
 
         $names = explode('.', $prop);
         $lastName = array_pop($names);
@@ -57,7 +57,7 @@ class data extends dataset
             }
         }
 
-        if($value === NULL || ($removeEmpty && empty($value)))
+        if($value === null || ($removeEmpty && empty($value)))
         {
             if(isset($data[$lastName])) unset($data[$lastName]);
             return $this;
@@ -75,7 +75,7 @@ class data extends dataset
         $data = &$this->data;
         foreach($names as $name)
         {
-            if(!is_array($data)) return NULL;
+            if(!is_array($data)) return null;
             $data = &$data[$name];
         }
         return $data;

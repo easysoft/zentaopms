@@ -51,7 +51,7 @@ class dropdown extends wg
 
             $triggerProps = array
             (
-                'data-target'         => $triggerBlock->hasProp('target', 'href') ? NULL : $target,
+                'data-target'         => $triggerBlock->hasProp('target', 'href') ? null : $target,
                 'data-toggle'         => 'dropdown',
                 'data-placement'      => $placement,
                 'data-strategy'       => $strategy,
@@ -82,7 +82,7 @@ class dropdown extends wg
                     divorce($itemsList),
                 );
 
-                if($hasIcons === NULL)
+                if($hasIcons === null)
                 {
                     if(is_array($items))
                     {

@@ -183,7 +183,7 @@ class navbar extends wg
                     $isActive = true;
                 }
 
-                $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : NULL;
+                $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : null;
                 if($isActive && empty($activeMenu)) $activeMenu = $menuItem->name;
                 else $isActive = false;
 

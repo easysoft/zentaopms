@@ -33,7 +33,7 @@ class zui extends wg
                 $tagName,
                 set($targetProps),
                 set('data-zin-id', $this->gid)
-            ) : NULL,
+            ) : null,
             $this->children(),
             h::jsCall('~zui.create', $name, $selector, $options)
         );
@@ -44,7 +44,7 @@ class zui extends wg
         return new zui(set('_name', $name), $args);
     }
 
-    public static function toggle($name, $options = NULL)
+    public static function toggle($name, $options = null)
     {
         return toggle($name, $options);
     }
@@ -57,25 +57,25 @@ class zui extends wg
             if(is_bool($arg)) $class[$name]        = $arg;
             else              $class["$name-$arg"] = true;
         }
-        if(isset($class[$name]) && $class[$name] === false) return NULL;
+        if(isset($class[$name]) && $class[$name] === false) return null;
         return setClass($class);
     }
 
-    public static function skin($name, $flag = true, $falseValue = NULL, $cssProp = NULL)
+    public static function skin($name, $flag = true, $falseValue = null, $cssProp = null)
     {
-        if($flag === NULL) return NULL;
+        if($flag === null) return null;
 
         if(is_array($flag))
         {
-            return array_map(function($value) use($name, $cssProp) {return zui::skin($name, $value, NULL, $cssProp);}, $flag);
+            return array_map(function($value) use($name, $cssProp) {return zui::skin($name, $value, null, $cssProp);}, $flag);
         }
 
         if($flag === false)
         {
-            if(empty($falseValue)) return NULL;
+            if(empty($falseValue)) return null;
             $flag = 'none';
         }
-        elseif($cssProp !== NULL && is_string($flag) && (str_ends_with($flag, 'px') || str_starts_with($flag, '#') || str_contains($flag, '.') || str_contains($flag, '(')))
+        elseif($cssProp !== null && is_string($flag) && (str_ends_with($flag, 'px') || str_starts_with($flag, '#') || str_contains($flag, '.') || str_contains($flag, '(')))
         {
             if(str_starts_with($flag, '(')) $flag = substr($flag, 1, -1);
             return setStyle($cssProp, $flag);
@@ -128,19 +128,19 @@ class zui extends wg
         return zui::skin('special', $value);
     }
 
-    public static function bg($value = NULL)
+    public static function bg($value = null)
     {
         return zui::skin('bg', $value, 'transparent', 'background');
     }
 
-    public static function text($value = NULL)
+    public static function text($value = null)
     {
         return zui::skin('text', $value, 'fore', 'color');
     }
 
     public static function muted($value = true)
     {
-        return $value ? setClass('muted') : NULL;
+        return $value ? setClass('muted') : null;
     }
 
     public static function opacity($value)
@@ -150,7 +150,7 @@ class zui extends wg
 
     public static function disabled($value = true)
     {
-        return $value ? setClass('disabled') : NULL;
+        return $value ? setClass('disabled') : null;
     }
 
     public static function width($value)

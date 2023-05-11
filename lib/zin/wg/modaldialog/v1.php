@@ -33,8 +33,8 @@ class modalDialog extends wg
         (
             setClass('modal-header', $this->prop('headerClass')),
             set($this->prop('headerProps')),
-            empty($itemID) ? NULL : label($itemID, setStyle(['min-width' => '30px']), setClass('justify-center')),
-            empty($title) ? NULL : div(setClass('modal-title'), $title),
+            empty($itemID) ? null : label($itemID, setStyle(['min-width' => '30px']), setClass('justify-center')),
+            empty($title) ? null : div(setClass('modal-title'), $title),
             $headerBlock
         );
     }
@@ -49,7 +49,7 @@ class modalDialog extends wg
         return div
         (
             setClass('modal-actions'),
-            empty($actions) ? NULL : toolbar(set::items($actions)),
+            empty($actions) ? null : toolbar(set::items($actions)),
             $actionsBlock,
             $closeBtn ? btn
             (
@@ -57,7 +57,7 @@ class modalDialog extends wg
                 set::square(true),
                 is_array($closeBtn) ? set($closeBtn) : setClass('ghost'),
                 span(setClass('close'))
-            ) : NULL
+            ) : null
         );
     }
 
@@ -73,7 +73,7 @@ class modalDialog extends wg
             setClass('modal-footer', $this->prop('footerClass')),
             set($this->prop('footerProps')),
             $footerBlock,
-            empty($footerActions) ? NULL : toolbar(set::items($footerActions))
+            empty($footerActions) ? null : toolbar(set::items($footerActions))
         );
     }
 

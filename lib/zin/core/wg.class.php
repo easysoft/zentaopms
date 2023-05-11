@@ -26,11 +26,11 @@ class wg
      * @todo @sunhao: Support for using string
      * @var array|string
      */
-    protected static $defineProps = NULL;
+    protected static $defineProps = null;
 
-    protected static $defaultProps = NULL;
+    protected static $defaultProps = null;
 
-    protected static $defineBlocks = NULL;
+    protected static $defineBlocks = null;
 
     protected static $wgToBlockMap = array();
 
@@ -50,15 +50,15 @@ class wg
 
     public $blocks = array();
 
-    public $parent = NULL;
+    public $parent = null;
 
     public $gid;
 
     public $displayed = false;
 
-    protected $matchedPortals = NULL;
+    protected $matchedPortals = null;
 
-    protected $renderOptions = NULL;
+    protected $renderOptions = null;
 
     public function __construct(/* string|element|object|array|null ...$args */)
     {
@@ -111,7 +111,7 @@ class wg
         $children  = $this->build();
         $after     = $this->buildAfter();
         $options   = $this->renderOptions;
-        $selectors = (!empty($options) && isset($options['selector'])) ? $options['selector'] : NULL;
+        $selectors = (!empty($options) && isset($options['selector'])) ? $options['selector'] : null;
 
         return new dom
         (
@@ -119,7 +119,7 @@ class wg
             [$before, $children, $after],
             $selectors,
             (!empty($options) && isset($options['type'])) ? $options['type'] : 'html', // TODO: () may not work in lower php
-            (!empty($options) && isset($options['data'])) ? $options['data'] : NULL,
+            (!empty($options) && isset($options['data'])) ? $options['data'] : null,
         );
     }
 
@@ -195,7 +195,7 @@ class wg
     public function buildEvents()
     {
         $events = $this->props->events();
-        if(empty($events)) return NULL;
+        if(empty($events)) return null;
 
         $id   = $this->id();
         $code = array($this->shortType() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");if(!ele)return;');
@@ -205,11 +205,11 @@ class wg
             {
                 $code[]   = "ele.addEventListener('$event', function(e){";
                 if(is_string($binding)) $binding = (object)array('handler' => $binding);
-                $selector = isset($binding->selector) ? $binding->selector : NULL;
+                $selector = isset($binding->selector) ? $binding->selector : null;
                 $handler  = isset($binding->handler) ? trim($binding->handler) : '';
-                $stop     = isset($binding->stop) ? $binding->stop : NULL;
-                $prevent  = isset($binding->prevent) ? $binding->prevent : NULL;
-                $self     = isset($binding->self) ? $binding->self : NULL;
+                $stop     = isset($binding->stop) ? $binding->stop : null;
+                $prevent  = isset($binding->prevent) ? $binding->prevent : null;
+                $self     = isset($binding->self) ? $binding->self : null;
                 unset($binding->selector);
                 unset($binding->handler);
                 unset($binding->stop);
@@ -259,7 +259,7 @@ class wg
 
     public function add($item, $blockName = 'children')
     {
-        if($item === NULL || is_bool($item)) return $this;
+        if($item === null || is_bool($item)) return $this;
 
         if(is_array($item))
         {
@@ -279,7 +279,7 @@ class wg
         return $this;
     }
 
-    public function addToBlock($name, $child = NULL)
+    public function addToBlock($name, $child = null)
     {
         if(is_array($name))
         {
@@ -303,13 +303,13 @@ class wg
         if($name === 'children' && $child instanceof wg)
         {
             $blockName = static::getBlockNameForWg($child);
-            if($blockName !== NULL) $name = $blockName;
+            if($blockName !== null) $name = $blockName;
         }
 
         $result = $name === 'children' ? $this->onAddChild($child) : $this->onAddBlock($child, $name);
 
         if($result === false) return;
-        if($result !== NULL && $result !== true) $child = $result;
+        if($result !== null && $result !== true) $child = $result;
 
         if(isset($this->blocks[$name])) $this->blocks[$name][] = $child;
         else $this->blocks[$name] = array($child);
@@ -375,7 +375,7 @@ class wg
         }
     }
 
-    public function prop($name, $defaultValue = NULL)
+    public function prop($name, $defaultValue = null)
     {
         if(is_array($name))
         {
@@ -398,7 +398,7 @@ class wg
      * @param mixed          $value       - Property value
      * @return dataset
      */
-    public function setProp($prop, $value = NULL)
+    public function setProp($prop, $value = null)
     {
         if($prop instanceof props) $prop = $prop->toJsonData();
 
@@ -557,7 +557,7 @@ class wg
         $wgType = ($wg instanceof wg) ? $wg->type() : $wg;
         $wgBlockMap = static::wgBlockMap();
         if(str_starts_with($wgType, 'zin\\')) $wgType = substr($wgType, 4);
-        return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : NULL;
+        return isset($wgBlockMap[$wgType]) ? $wgBlockMap[$wgType] : null;
     }
 
     public static function nextGid()
@@ -565,9 +565,9 @@ class wg
         return 'zin' . (++static::$gidSeed);
     }
 
-    protected static function getDefinedProps($name = NULL)
+    protected static function getDefinedProps($name = null)
     {
-        if($name === NULL) $name = get_called_class();
+        if($name === null) $name = get_called_class();
 
         if(!isset(wg::$definedPropsMap[$name]) && $name === get_called_class())
         {
@@ -612,7 +612,7 @@ class wg
         {
             $optional = false;
             $type     = 'mixed';
-            $default  = (isset($props[$name]) && isset($props[$name]['default'])) ? $props[$name]['default'] : NULL;
+            $default  = (isset($props[$name]) && isset($props[$name]['default'])) ? $props[$name]['default'] : null;
 
             if(is_int($name) && is_string($value))
             {
@@ -645,7 +645,7 @@ class wg
                 if(!str_contains($value, '='))
                 {
                     $type    = $value;
-                    $default = NULL;
+                    $default = null;
                 }
                 else
                 {
@@ -656,7 +656,7 @@ class wg
                 if(is_string($default)) $default = json_decode(trim($default));
             }
 
-            $props[$name] = array('type' => empty($type) ? 'mixed' : $type, 'default' => $default, 'optional' => $default !== NULL || $optional);
+            $props[$name] = array('type' => empty($type) ? 'mixed' : $type, 'default' => $default, 'optional' => $default !== null || $optional);
         }
 
         if(static::$defaultProps && (!$parentClass || static::$defaultProps !== $parentClass::$defaultProps))

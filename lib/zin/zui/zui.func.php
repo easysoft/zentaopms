@@ -12,7 +12,7 @@ function warning($value = true)     {return zui::warning($value);}
 function danger($value = true)      {return zui::danger($value);}
 function important($value = true)   {return zui::important($value);}
 function special($value = true)     {return zui::special($value);}
-function bg($value = NULL)          {return zui::bg($value);}
+function bg($value = null)          {return zui::bg($value);}
 function muted($value = true)       {return zui::muted($value);}
 function opacity($value)            {return zui::opacity($value);}
 function disabled($value = true)    {return zui::disabled($value);}

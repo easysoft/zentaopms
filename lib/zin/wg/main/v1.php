@@ -14,15 +14,15 @@ class main extends wg
     protected function buildMenu()
     {
         $menuBlocks = $this->block('menu');
-        if(empty($menuBlocks)) return NULL;
+        if(empty($menuBlocks)) return null;
 
         list($featureBarList, $navList, $toolbarList, $restList) = groupWgInList($menuBlocks, array('featureBar', 'nav', 'toolbar'));
 
-        $featureBar = NULL;
+        $featureBar = null;
         if(!empty($featureBarList)) $featureBar = $featureBarList[0];
         elseif(!empty($navList)) $featureBar = new featureBar($navList);
 
-        $toolbar = NULL;
+        $toolbar = null;
         if(!empty($toolbarList)) $toolbar = $toolbarList[0];
         if($toolbar instanceof wg && !$toolbar->hasProp('id')) $toolbar->setProp('id', 'actionBar');
 

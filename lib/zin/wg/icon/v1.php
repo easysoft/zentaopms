@@ -22,12 +22,12 @@ class icon extends wg
         list($name, $size) = $this->prop(array('name', 'size'));
         return h::i
         (
-            setClass('icon', empty($name) ? NULL : "icon-$name"),
+            setClass('icon', empty($name) ? null : "icon-$name"),
             is_numeric($size)
                 ? setStyle('font-size', "{$size}px")
                 : (is_string($size)
                     ? setClass("icon-$size")
-                    : NULL),
+                    : null),
             set($this->props->skip(array_keys(icon::getDefinedProps()))),
             $this->children()
         );

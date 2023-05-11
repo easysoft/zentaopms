@@ -24,7 +24,7 @@ class searchToggle extends wg
             set::icon('search'),
             set::text($lang->searchAB),
             on::click('window.toggleSearchForm'),
-            $this->prop('open') ? h::jsCall('~window.toggleSearchForm') : NULL
+            $this->prop('open') ? h::jsCall('~window.toggleSearchForm') : null
         );
     }
 }

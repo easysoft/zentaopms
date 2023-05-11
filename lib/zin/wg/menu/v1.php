@@ -27,7 +27,7 @@ class menu extends wg
         (
             setClass('menu'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            is_array($items) ? array_map(array($this, 'onBuildItem'), $this->prop('items')) : NULL,
+            is_array($items) ? array_map(array($this, 'onBuildItem'), $this->prop('items')) : null,
             $this->children(),
         );
     }

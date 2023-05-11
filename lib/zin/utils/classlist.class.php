@@ -210,12 +210,12 @@ class classlist
      * @param string $name - classname string
      * @return classlist
      */
-    public function toggle($name, $toggle = NULL)
+    public function toggle($name, $toggle = null)
     {
         $name = trim($name);
         if(strlen($name))
         {
-            if($toggle === NULL) $toggle = !$this->has($name);
+            if($toggle === null) $toggle = !$this->has($name);
             $this->list[$name] = $toggle;
         }
         return $this;
@@ -290,7 +290,7 @@ class classlist
      * @param string|array $names - A string or a class name list
      * @return classlist
      */
-    static public function new($names = NULL)
+    static public function new($names = null)
     {
         return (new classlist($names));
     }

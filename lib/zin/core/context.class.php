@@ -123,7 +123,7 @@ class context extends \zin\utils\dataset
      */
     public static function current(): context
     {
-        if(empty(static::$map)) static::$map['current'] = new context(NULL);
+        if(empty(static::$map)) static::$map['current'] = new context(null);
         return static::$map['current'];
     }
 

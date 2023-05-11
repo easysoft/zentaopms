@@ -22,7 +22,7 @@ require_once __DIR__ . DS . 'zin.class.php';
  * @param string|array $options
  * @return void
  */
-function render(string $wgName = 'page', string|array $options = NULL)
+function render(string $wgName = 'page', string|array $options = null)
 {
     $args = array();
     foreach(zin::$globalRenderList as $item)
@@ -37,7 +37,7 @@ function render(string $wgName = 'page', string|array $options = NULL)
     $isFullPage = str_starts_with($wgName, 'page');
     if($isFullPage) $args[] = set::display(false);
 
-    if($options === NULL)
+    if($options === null)
     {
         if(isset($_SERVER['HTTP_X_ZIN_OPTIONS']) && !empty($_SERVER['HTTP_X_ZIN_OPTIONS']))
         {

@@ -73,7 +73,7 @@ class style extends dataset
      * @param mixed          $value - Property value
      * @return mixed
      */
-    public function cssVar($name = '', $value = NULL)
+    public function cssVar($name = '', $value = null)
     {
         /* Support for setting multiple variables by an array */
         if(is_array($name))
@@ -97,10 +97,10 @@ class style extends dataset
         $varName = style::formatVarName($name);
 
         /* Return the specific variable value by name */
-        if($value === NULL) return $this->get($varName);
+        if($value === null) return $this->get($varName);
 
         /* Set the specific variable value and return style object self */
-        $this->set($varName, $value === '' ? NULL : $value);
+        $this->set($varName, $value === '' ? null : $value);
         return $this;
     }
 
@@ -142,7 +142,7 @@ class style extends dataset
      * @param string $style - CSS style list
      * @return style
      */
-    static public function new($style = NULL)
+    static public function new($style = null)
     {
         return new style($style);
     }

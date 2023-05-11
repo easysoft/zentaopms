@@ -27,7 +27,7 @@ class toolbar extends wg
         return new btn
         (
             setClass('toolbar-item', $btnClass),
-            is_array($btnProps) ? set($btnProps) : NULL,
+            is_array($btnProps) ? set($btnProps) : null,
             inherit($item)
         );
     }

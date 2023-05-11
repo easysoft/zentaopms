@@ -30,9 +30,9 @@ class dataset
      * @access public
      * @param array $data - Properties list array
      */
-    public function __construct($data = NULL)
+    public function __construct($data = null)
     {
-        if($data !== NULL) $this->set($data);
+        if($data !== null) $this->set($data);
     }
 
     /**
@@ -101,9 +101,9 @@ class dataset
      * @access public
      * @return string
      */
-    public function __invoke($name = NULL, $value = NULL)
+    public function __invoke($name = null, $value = null)
     {
-        if($value !== NULL || is_array($name)) return $this->set($name, $value);
+        if($value !== null || is_array($name)) return $this->set($name, $value);
         if(is_string($name)) return $this->get($name);
 
         return $this->toStr();
@@ -148,7 +148,7 @@ class dataset
 
     protected function getVal($prop)
     {
-        return isset($this->data[$prop]) ? $this->data[$prop] : NULL;
+        return isset($this->data[$prop]) ? $this->data[$prop] : null;
     }
 
     /**
@@ -194,7 +194,7 @@ class dataset
      * @param bool           $removeEmpty - Whether to remove empty value
      * @return dataset
      */
-    public function set($prop, $value = NULL)
+    public function set($prop, $value = null)
     {
         if(is_array($prop))
         {
@@ -214,10 +214,10 @@ class dataset
      * @param mixed  $defaultValue - Optional default value if actual value is null
      * @return mixed
      */
-    public function get($prop, $defaultValue = NULL)
+    public function get($prop, $defaultValue = null)
     {
         $val = $this->getVal($prop);
-        return $val === NULL ? $defaultValue : $val;
+        return $val === null ? $defaultValue : $val;
     }
 
     public function addToList($prop, $values)
@@ -233,9 +233,9 @@ class dataset
         return $this->get($prop, array());
     }
 
-    public function list($prop, $values = NULL)
+    public function list($prop, $values = null)
     {
-        if($values === NULL) return $this->getList($prop);
+        if($values === null) return $this->getList($prop);
         return $this->setList($prop, $values);
     }
 
@@ -248,7 +248,7 @@ class dataset
      */
     public function remove($prop)
     {
-        return $this->setVal($prop, NULL);
+        return $this->setVal($prop, null);
     }
 
     public function clear()
@@ -265,7 +265,7 @@ class dataset
      */
     public function has($prop)
     {
-        return $this->getVal($prop) !== NULL;
+        return $this->getVal($prop) !== null;
     }
 
     /**

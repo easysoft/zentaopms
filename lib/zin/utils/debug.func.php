@@ -13,13 +13,13 @@ namespace zin\utils;
 
 $logs = array();
 
-function log($type, $msg = NULL, $file)
+function log($type, $msg = null, $file)
 {
     global $config;
 
     if(!$config->debug) return;
 
-    if($msg === NULL)
+    if($msg === null)
     {
         $msg = $type;
         $type = 'i';
@@ -39,6 +39,6 @@ function log($type, $msg = NULL, $file)
     $logs[] = array(array('type' => strtolower($type), 'msg' => $msg));
 }
 
-function logInfo($msg, $file = NULL)  {log('i', $msg, $file);};
-function logWarn($msg, $file = NULL)  {log('w', $msg, $file);};
-function logError($msg, $file = NULL) {log('e', $msg, $file);};
+function logInfo($msg, $file = null)  {log('i', $msg, $file);};
+function logWarn($msg, $file = null)  {log('w', $msg, $file);};
+function logError($msg, $file = null) {log('e', $msg, $file);};

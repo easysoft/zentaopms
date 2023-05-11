@@ -31,7 +31,7 @@ class featureBar extends wg
         \common::sortFeatureMenu($currentModule, $currentMethod);
 
         $rawItems = \customModel::getFeatureMenu($app->rawModule, $app->rawMethod);
-        if(!is_array($rawItems)) return NULL;
+        if(!is_array($rawItems)) return null;
 
         $current      = $this->prop('current', data('browseType'));
         $recTotal     = data('recTotal');
@@ -77,7 +77,7 @@ class featureBar extends wg
                     'text'   => $item->text,
                     'active' => $isActive,
                     'url'    => str_replace('{key}', $item->name, $link),
-                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : NULL,
+                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
                     'type'   => 'dropdown',
                     'items'  => $subItems,
                     'props'  => ['data-id' => $item->name, 'data-load' => 'table']
@@ -92,7 +92,7 @@ class featureBar extends wg
                 'text'   => $item->text,
                 'active' => $isActive,
                 'url'    => str_replace('{key}', $item->name, $link),
-                'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : NULL,
+                'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
                 'props'  => ['data-id' => $item->name, 'data-load' => 'table']
             );
         }

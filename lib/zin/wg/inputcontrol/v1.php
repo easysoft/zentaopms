@@ -62,10 +62,10 @@ class inputControl extends wg
         return div
         (
             setClass($class),
-            empty($vars) ? NULL : setCssVar($vars),
+            empty($vars) ? null : setCssVar($vars),
             $this->children(),
-            empty($prefix) ? NULL : div(setClass('input-control-prefix'), $prefix),
-            empty($suffix) ? NULL : div(setClass('input-control-suffix'), $suffix)
+            empty($prefix) ? null : div(setClass('input-control-prefix'), $prefix),
+            empty($suffix) ? null : div(setClass('input-control-suffix'), $suffix)
         );
     }
 }

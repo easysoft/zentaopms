@@ -4,7 +4,7 @@ namespace zin;
 function usePager()
 {
     $pager = data('pager');
-    if(empty($pager)) return NULL;
+    if(empty($pager)) return null;
 
     $pager->setParams();
     $params = $pager->params;

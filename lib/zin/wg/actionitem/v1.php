@@ -39,10 +39,10 @@ class actionItem extends wg
         (
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
             set($this->prop('props')),
-            $icon ? icon($icon) : NULL,
-            empty($text) ? NULL : span($text, setClass('text')),
+            $icon ? icon($icon) : null,
+            empty($text) ? null : span($text, setClass('text')),
             $this->children(),
-            $trailingIcon ? icon($trailingIcon) : NULL,
+            $trailingIcon ? icon($trailingIcon) : null,
         );
     }
 
@@ -90,11 +90,11 @@ class actionItem extends wg
             setClass(array('active' => $active, 'disabled' => $disabled)),
             set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
             set($this->prop('props')),
-            $icon ? icon($icon) : NULL,
+            $icon ? icon($icon) : null,
             $text,
             $badge,
             $this->children(),
-            $trailingIcon ? icon($trailingIcon) : NULL,
+            $trailingIcon ? icon($trailingIcon) : null,
         );
     }
 

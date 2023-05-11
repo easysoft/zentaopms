@@ -23,9 +23,9 @@ function parseWgSelector($selector)
     $selector = trim($selector);
     $len      = strlen($selector);
 
-    if($len < 1) return NULL;
+    if($len < 1) return null;
 
-    $result = ['class' => [], 'id' => NULL, 'tag' => NULL, 'inner' => false, 'name' => NULL, 'first' => false, 'selector' => $selector];
+    $result = ['class' => [], 'id' => null, 'tag' => null, 'inner' => false, 'name' => null, 'first' => false, 'selector' => $selector];
     if(str_contains($selector, '/'))
     {
         $parts          = explode('/', $selector, 2);
@@ -101,7 +101,7 @@ function parseWgSelector($selector)
     }
     $updateResult($result, $current, $type);
 
-    if(empty($result['class'])) $result['class'] = NULL;
+    if(empty($result['class'])) $result['class'] = null;
     if(empty($result['name']))
     {
         if(!empty($result['id']))      $result['name'] = $result['id'];

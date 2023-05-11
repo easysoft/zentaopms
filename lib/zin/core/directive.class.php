@@ -21,7 +21,7 @@ class directive
 
     public $options;
 
-    public $parent = NULL;
+    public $parent = null;
 
     /**
      * Construct a directive object
@@ -30,7 +30,7 @@ class directive
      * @param  array  $options
      * @access public
      */
-    public function __construct($type, $data, $options = NULL)
+    public function __construct($type, $data, $options = null)
     {
         $this->type    = $type;
         $this->data    = $data;
@@ -48,18 +48,18 @@ class directive
         );
     }
 
-    public static function is($item, $type = NULL)
+    public static function is($item, $type = null)
     {
-        return is_object($item) && $item instanceof directive && ($type === NULL || $item->type === $type);
+        return is_object($item) && $item instanceof directive && ($type === null || $item->type === $type);
     }
 }
 
-function directive($type, $data, $options = NULL)
+function directive($type, $data, $options = null)
 {
     return new directive($type, $data, $options);
 }
 
-function isDirective($item, $type = NULL)
+function isDirective($item, $type = null)
 {
     return directive::is($item, $type);
 }

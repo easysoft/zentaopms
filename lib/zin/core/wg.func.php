@@ -16,9 +16,9 @@ require_once __DIR__ . DS . 'directive.class.php';
 require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'context.func.php';
 
-function set($name, $value = NULL)
+function set($name, $value = null)
 {
-    if($name === NULL) return NULL;
+    if($name === null) return null;
 
     $props = null;
     if($name instanceof props) $props = $name;
@@ -28,7 +28,7 @@ function set($name, $value = NULL)
     if($props) return directive('prop', $props);
 }
 
-function prop($name, $value = NULL)
+function prop($name, $value = null)
 {
     return set($name, $value);
 }
@@ -38,12 +38,12 @@ function setClass()
     return directive('class', func_get_args());
 }
 
-function setStyle($name, $value = NULL)
+function setStyle($name, $value = null)
 {
     return directive('style', is_array($name) ? $name : array($name => $value));
 }
 
-function setCssVar($name, $value = NULL)
+function setCssVar($name, $value = null)
 {
     return directive('cssVar', is_array($name) ? $name : array($name => $value));
 }
@@ -58,7 +58,7 @@ function setTag($id)
     return prop('tagName', $id);
 }
 
-function on($name, $handler, $options = NULL)
+function on($name, $handler, $options = null)
 {
     if(is_string($options) && is_string($handler))
     {
@@ -97,12 +97,12 @@ function text(/* string ...$lines */)
     return directive('text', implode("\n", \zin\utils\flat(func_get_args())));
 }
 
-function block($name, $value = NULL)
+function block($name, $value = null)
 {
     return directive('block', is_array($name) ? $name : array($name => $value));
 }
 
-function to($name, $value = NULL)
+function to($name, $value = null)
 {
     return block($name, $value);
 }
@@ -127,7 +127,7 @@ function divorce($item)
 {
     if($item instanceof wg)
     {
-        $item->parent = NULL;
+        $item->parent = null;
     }
     else if(is_array($item))
     {

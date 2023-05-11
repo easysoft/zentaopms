@@ -31,12 +31,12 @@ class panel extends wg
         $actionsBlock = $this->block('headingActions');
         $actions      = $this->prop('headingActions');
 
-        if(empty($actions) && empty($actionsBlock)) return NULL;
+        if(empty($actions) && empty($actionsBlock)) return null;
 
         return div
         (
             setClass('panel-actions'),
-            empty($actions) ? NULL : toolbar(set::items($actions)),
+            empty($actions) ? null : toolbar(set::items($actions)),
             $actionsBlock
         );
     }
@@ -47,13 +47,13 @@ class panel extends wg
         $headingBlock       = $this->block('heading');
         $actions            = $this->buildHeadingActions();
 
-        if(empty($title) && empty($headingBlock) && empty($actions)) return NULL;
+        if(empty($title) && empty($headingBlock) && empty($actions)) return null;
 
         return div
         (
             setClass('panel-heading', $this->prop('headingClass')),
             set($this->prop('headingProps')),
-            empty($title) ? NULL : div(setClass('panel-title', $this->prop('titleClass', empty($size) ? NULL : "text-$size")), $title, set($this->prop('titleProps'))),
+            empty($title) ? null : div(setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")), $title, set($this->prop('titleProps'))),
             $headingBlock,
             $actions
         );
@@ -80,14 +80,14 @@ class panel extends wg
             setClass('panel-footer', $this->prop('footerClass')),
             set($this->prop('footerProps')),
             $footerBlock,
-            empty($footerActions) ? NULL : toolbar(set::items($footerActions))
+            empty($footerActions) ? null : toolbar(set::items($footerActions))
         );
     }
 
     protected function buildProps(): array
     {
         list($class, $size) = $this->prop(['class', 'size']);
-        return array(setClass('panel', $class, empty($size) ? NULL : "size-$size"));
+        return array(setClass('panel', $class, empty($size) ? null : "size-$size"));
     }
 
     protected function build()

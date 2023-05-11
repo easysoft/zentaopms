@@ -17,6 +17,6 @@ class toggle
 {
     public static function __callStatic($name, $args)
     {
-        return toggle($name, empty($args) ? NULL : $args[0]);
+        return toggle($name, empty($args) ? null : $args[0]);
     }
 }
