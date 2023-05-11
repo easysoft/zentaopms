@@ -64,12 +64,12 @@
         zinbar = new zui.Zinbar($bar[0]);
     }
 
-    function updateZinbar(perf, errors)
+    function updateZinbar(perf, errors, basePath)
     {
         if(!DEBUG) return;
 
-        if(zinbar && zinbar.$) zinbar.$.update(perf, errors);
-        else requestAnimationFrame(() => zinbar.$.update(perf, errors));
+        if(zinbar && zinbar.$) zinbar.$.update(perf, errors, basePath);
+        else requestAnimationFrame(() => zinbar.$.update(perf, errors, basePath));
     }
 
     function updatePerfInfo(options, stage, info)
@@ -91,7 +91,7 @@
     {
         if(!DEBUG) return;
 
-        updateZinbar({id: options.id, trace: data.trace, xhprof: data.xhprof}, data.errors);
+        updateZinbar({id: options.id, trace: data.trace, xhprof: data.xhprof}, data.errors, data.basePath);
     }
 
     function updatePageWithHtml(data)
