@@ -1,9 +1,32 @@
 <?php
+declare(strict_types=1);
+/**
+ * The select widget class file of zin module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      sunhao<sunhao@easycorp.ltd>
+ * @package     zin
+ * @link        http://www.zentao.net
+ */
 namespace zin;
 
+/**
+ * 选择框（select）部件类，支持 Ajax 提交。
+ * The select control widget class.
+ *
+ * @author Hao Sun
+ */
 class select extends wg
 {
-    static $defineProps = array(
+    /**
+     * Define widget properties.
+     *
+     * @var    array
+     * @access protected
+     */
+    static $defineProps = array
+    (
         'name: string',
         'id?: string',
         'class?: string="form-control"',
@@ -11,11 +34,31 @@ class select extends wg
         'required?: bool',
         'disabled?: bool',
         'multiple?: bool',
+        'optional?: bool',
         'items?: array',
         'size?: int',
     );
 
-    public function onBuildItem($item)
+    /**
+     * The lifecycle method of created.
+     *
+     * Set default id with name.
+     * @access protected
+     * @return void
+     */
+    protected function created()
+    {
+        $this->setDefaultProps(['id' => $this->prop('name')]);
+    }
+
+     /**
+     * Handle building inner options.
+     *
+     * @param  wg|array  wg
+     * @access public
+     * @return wg
+     */
+    public function onBuildItem($item): wg|array
     {
         if($item instanceof item) $item = $item->props->toJsonData();
 
@@ -33,41 +76,53 @@ class select extends wg
         return h::option(set($item), $text);
     }
 
-    public function isMultiple()
-    {
-        return $this->prop('multiple');
-    }
-
+    /**
+     * Get value list.
+     *
+     * @access public
+     * @return array
+     */
     public function getValueList()
     {
-        $value = $this->prop('value');
-        if($this->isMultiple()) return is_array($value) ? $value : explode(',', $value);
-        return [$value];
+        list($value, $multiple) = $this->prop(array('value', 'multiple'));
+        if($multiple) return is_array($value) ? $value : explode(',', $value);
+        return array($value);
     }
 
+    /**
+     * The lifecycle method of building.
+     *
+     * @access protected
+     * @return wg
+     */
     protected function build()
     {
-        list($items) = $this->prop(['items']);
+        list($items, $multiple, $required, $optional) = $this->prop(array('items', 'multiple', 'required', 'optional'));
 
+        $hasEmptyItem = false;
+        $valueList    = $this->getValueList();
         if(!empty($items))
         {
-            $valueList = $this->getValueList();
             foreach($items as $key => $item)
             {
-                if(!is_array($item)) $item = ['text' => $item, 'value' => $key];
+                if(!is_array($item))          $item = array('text' => $item, 'value' => strval($key));
                 if(!isset($item['selected'])) $item['selected'] = in_array($item['value'], $valueList);
                 $items[$key] = $this->onBuildItem($item);
+
+                if($item['value'] === '') $hasEmptyItem = true;
             }
         }
 
-        $props    = $this->props->skip(['items', 'value', 'multiple', 'required']);
+        /* Prepend empty option when current optional select has no empty item. */
+        if($optional && !$hasEmptyItem) array_unshift($items, $this->onBuildItem(array('text' => '', 'value' => '', 'selected' => in_array('', $valueList))));
+
+        $props    = $this->props->skip(['items', 'value', 'multiple', 'required', 'optional']);
         $required = $this->prop('required');
-        if(!$this->hasProp('id') && isset($props['name'])) $props['id'] = $props['name'];
 
         return h::select
         (
             setClass('form-control',  $required ? 'is-required' : ''),
-            set::multiple($this->isMultiple()),
+            set::multiple($multiple),
             set($props),
             $items,
             $this->children()
