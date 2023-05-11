@@ -26,22 +26,23 @@ function call($programplan, $col, $plan, $users, $productID)
 
 $programplan = new programplanTest();
 
-$colIDList = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'output', 'version', 'editedBy', 'openedBy', 'actions');
+$colIDList = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'output', 'version', 'editedBy', 'openedBy', 'editedDate', 'openedDate', 'actions');
 
 $col = new stdClass();
 $col->id   = $colIDList[0];
 $col->show = true;
 
 $plan = new stdClass();
-$plan->id        = '1';
-$plan->milestone = true;
-$plan->grade     = 1;
-$plan->children  = 1;
-$plan->name      = '名称';
-$plan->percent   = '10';
-$plan->attribute = '10';
-$plan->begin     = '2023-05-06';
-$plan->editedBy  = 'id_desc';
+$plan->id         = '1';
+$plan->milestone  = true;
+$plan->grade      = 1;
+$plan->children   = 1;
+$plan->name       = '名称';
+$plan->percent    = '10';
+$plan->attribute  = '10';
+$plan->begin      = '2023-05-06';
+$plan->editedBy   = 'id_desc';
+$plan->editedDate = '2023-05-06';
 
 $users = array();
 
@@ -69,3 +70,9 @@ $col->id = $colIDList[10];
 $matches = call($programplan, $col, $plan, $users, 1);
 $result  = isset($matches[1][0]) && $matches[1][0] == $plan->editedBy ? 1 : 0;
 r($result) && p() && e('1'); // 验证类型为editedBy 的输出td
+
+/* $colIDList key 12-13验证方法一致 */
+$col->id = $colIDList[12];
+$matches = call($programplan, $col, $plan, $users, 1);
+$result  = isset($matches[1][0]) && $matches[1][0] == '05-06' ? 1 : 0;
+r($result) && p() && e('1'); // 验证类型为editedDate 的输出td
