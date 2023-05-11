@@ -30,7 +30,7 @@ fields:
     note: "Only stage has attribute"
     range:
   - field: percent
-    range: 1-100:R
+    range: 1-100
   - field: milestone
     note: "Is it milestone"
     range: 0
