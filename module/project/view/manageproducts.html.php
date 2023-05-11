@@ -144,5 +144,5 @@
 <?php js::set('linkedProducts', array_keys($linkedProducts));?>
 <?php js::set('noticeSwitch', $noticeSwitch);?>
 <?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
-<?php js::set('stageBySwitchList', $lang->project->stageBy == 'project'SwitchList);?>
+<?php js::set('stageBySwitchList', $lang->project->stageBySwitchList);?>
 <?php include '../../common/view/footer.html.php';?>

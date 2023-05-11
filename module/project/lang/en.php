@@ -196,11 +196,11 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = "{$lang->projectCommon}s Ownedbyme";
 $lang->project->typeList['other'] = "Other {$lang->projectCommon}s";
 
-$lang->project->stageBy == 'project'List['0'] = "Create by {$lang->projectCommon}";
-$lang->project->stageBy == 'project'List['1'] = "Create by {$lang->productCommon}";
+$lang->project->stageByList['0'] = "Create by {$lang->projectCommon}";
+$lang->project->stageByList['1'] = "Create by {$lang->productCommon}";
 
-$lang->project->stageBy == 'project'SwitchList['0'] = 'Close';
-$lang->project->stageBy == 'project'SwitchList['1'] = "Open";
+$lang->project->stageBySwitchList['0'] = 'Close';
+$lang->project->stageBySwitchList['1'] = "Open";
 
 $lang->project->waitProjects    = "Waiting {$lang->projectCommon}s";
 $lang->project->doingProjects   = "Ongoing {$lang->projectCommon}s";
