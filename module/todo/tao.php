@@ -315,7 +315,12 @@ class todoTao extends todoModel
             $specifiedDate = $todo->config->specify->month + 1 . '-' . $todo->config->specify->day;
 
             /* If not set cycle every year and have data, continue. */
-            if(!empty($lastCycle) and !isset($todo->config->cycleYear)) return false;
+            if(!empty($lastCycle) and !isset($todo->config->cycleYear))
+            {
+                /* Delete a one-time todo. */
+                $this->todo->delete(TABLE_TODO, $todo->id);
+                return false;
+            }
             /* If set specified date, only judge month and day. */
             if(date('m-d', strtotime($date)) != $specifiedDate) return false;
         }
