@@ -504,7 +504,7 @@ class project extends control
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
-        $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
         $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
 

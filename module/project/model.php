@@ -874,7 +874,7 @@ class projectModel extends model
 
     /**
      * 根据项目ID获取分支分组。
-     * Get branch group by project id.
+     * Get branch groups.
      *
      * @param  int   $projectID
      * @param  array $productIdList
@@ -882,7 +882,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getBranchGroupByProject(int $projectID, array $productIdList): array
+    public function getBranchGroup(int $projectID, array $productIdList): array
     {
         return $this->dao->select('t1.product as productID, t1.branch as branchID, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')

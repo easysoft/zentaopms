@@ -773,7 +773,7 @@ class projectZen extends project
         $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', $linkedProductIdList);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
         $projectStories      = $this->project->getStoriesByProject($projectID);
-        $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project,don't allow to remove the product. */
         $unmodifiableProducts     = array();

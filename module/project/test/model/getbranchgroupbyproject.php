@@ -10,7 +10,7 @@ zdTable('projectproduct')->config('projectproduct')->gen(6);
 
 /**
 
-title=测试 projectModel->getBranchGroupByProject();
+title=测试 projectModel->getBranchGroup();
 timeout=0
 cid=1
 pid=1
@@ -21,9 +21,9 @@ global $tester;
 $tester->loadModel('project');
 
 $productIdList = array(1, 2, 3);
-$project1      = $tester->project->getBranchGroupByProject(1, $productIdList);
-$project2      = $tester->project->getBranchGroupByProject(2, $productIdList);
-$project3      = $tester->project->getBranchGroupByProject(3, $productIdList);
+$project1      = $tester->project->getBranchGroup(1, $productIdList);
+$project2      = $tester->project->getBranchGroup(2, $productIdList);
+$project3      = $tester->project->getBranchGroup(3, $productIdList);
 
 r(key($project1[1]))   && p('') && e('1'); // 获取id为1的项目的关联产品的分支数组，获取第一个数组的键
 r(count($project1[1])) && p('') && e('3'); // 获取id为1的项目的关联产品的分支数组数量，按产品分组
