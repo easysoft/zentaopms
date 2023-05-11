@@ -2465,6 +2465,8 @@ class baseRouter
             else
             {
                 if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+
+                $defaultParams[$key] = $defaultItem['default'];
             }
             $i ++;
         }
