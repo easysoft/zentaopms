@@ -140,14 +140,11 @@ class programplanModel extends model
      */
     public function getDataForGantt(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
     {
-        $this->loadModel('stage');
-        $this->loadModel('execution');
-
         $plans = $this->getStage($executionID, $productID, 'all', 'order');
 
+        /* Set plan baseline data. */
         if($baselineID)
         {
-            /* Set plan baseline. */
             $baseline = $this->loadModel('cm')->getByID($baselineID);
             $oldData  = json_decode($baseline->data);
             $oldPlans = $oldData->stage;
@@ -165,6 +162,7 @@ class programplanModel extends model
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
 
+        /* Set task baseline data. */
         if($baselineID)
         {
             $oldTasks = isset($oldData->task) ? $oldData->task : array();
@@ -186,7 +184,8 @@ class programplanModel extends model
             $datas['data'][$index]->consumed = $stage['progress']['totalConsumed'];
         }
 
-        $datas = $this->setRelationTask($planIdList, $datas);
+        /* Set relation task data. */
+        $datas = $this->programplanTao->setRelationTask($planIdList, $datas);
 
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;

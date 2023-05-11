@@ -194,6 +194,7 @@ class programplanZen extends programplan
         $selectCustom = 0; // Display date and task settings.
         $dateDetails  = 1; // Gantt chart detail date display.
 
+        /* Get data of type lists. */
         if($type == 'lists')
         {
             $sort   = common::appendOrder($orderBy);
@@ -203,18 +204,19 @@ class programplanZen extends programplan
             return $stages;
         }
 
+        /* Obtain user page configuration items. */
         $owner = $this->app->user->account;
         if(!isset($this->config->programplan->browse->stageCustom)) $this->loadModel('setting')->setItem("$owner.programplan.browse.stageCustom", 'date,task');
         $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module=programplan&section=browse&key=stageCustom");
         $dateDetails  = strpos($selectCustom, 'date') !== false ? 0 : 1; // Gantt chart detail date display.
 
-        /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
         $this->view->dateDetails  = $dateDetails;
         $this->view->selectCustom = $selectCustom;
 
+        /* Get data for gantt. */
         if($type == 'gantt' )     $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false);
         if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false);
 
