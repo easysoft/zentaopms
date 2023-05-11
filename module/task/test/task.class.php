@@ -1584,7 +1584,6 @@ class taskTest
         $tasks = $this->objectModel->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
         {
-            $error = dao::getError();
             return dao::getError();
         }
         elseif($count == "1")
@@ -1837,14 +1836,14 @@ class taskTest
      * 测试管理多人任务团队。
      * Test manage multi task team members.
      *
-     * @param  int        $taskID
-     * @param  string     $taskStatus
-     * @param  string     $mode
-     * @param  array      $teamList
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
+     * @param int        $taskID
+     * @param string     $taskStatus
+     * @param string     $mode
+     * @param array      $teamList
+     * @param array      $teamSourceList
+     * @param array      $teamEstimateList
+     * @param array|bool $teamConsumedList
+     * @param array|bool $teamLeftList
 
      * @access public
      * @return array
