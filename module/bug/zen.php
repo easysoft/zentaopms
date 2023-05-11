@@ -14,13 +14,13 @@ class bugZen extends bug
     protected function prepareCreateExtras(object $data, string $uid): object
     {
         $now = helper::now();
-        $bug = $formData->setDefault('openedBy', $this->app->user->account)
+        $bug = $data->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF($formData->data->assignedTo != '', 'assignedDate', $now)
-            ->setIF($formData->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $formData->data->deadline)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $formData->data->execution)
+            ->setIF($data->data->assignedTo != '', 'assignedDate', $now)
+            ->setIF($data->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($data->data->story))
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $data->data->deadline)
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $data->data->execution)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product,execution,module,severity')
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
@@ -327,64 +327,39 @@ class bugZen extends bug
     }
 
     /**
-     * 获得create方法的发生错误时的返回。
-     * Get response for create function when error happened.
+     * 获得create方法的response。
+     * Get response for create.
      *
-     * @param  array $bugResult
-     * @param  array $response
+     * @param  int   $bugID
+     * @param  int   $executionID
+     * @param  array $output
      * @return array
      */
-    protected function getErrorRes4Create(array $bugResult): array
+    protected function responseAfterCreate(int $bugID, int $executionID, array $output): array
     {
-        $hasError = false;
-        $response = array();
+        /* Return bug id when call the API. */
+        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID);
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
 
-        if(!$bugResult or dao::isError())
-        {
-            $hasError = true;
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
+        if(isonlybody()) return $this->responseInModal($executionID);
 
-        if($bugResult['status'] == 'exists')
-        {
-            $hasError = true;
-            $bugID = $bugResult['id'];
-            $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
-            $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
-            $response['id']      = $bugID;
-        }
-
-        return array($hasError, $response);
-    }
-
-    /**
-     * 获得create方法的onlybody返回。
-     * Get onlybody response for create.
-     *
-     * @param  array $bugResult
-     * @param  array $response
-     * @return array
-     */
-    protected function getOnlyBodyRes4Create(object $formData, array $output): array
-    {
-        $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
-        $executionID = $formData->data->execution ? $formData->data->execution : $executionID;
-        $this->responseInModal($executionID);
+        $location = $this->getLocation4Create($bugID, $executionID, $output);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location);
     }
 
     /**
      * 获得create方法的返回url。
      * Get response url for create.
      *
-     * @param  object $formData
-     * @param  array  $output
      * @param  int    $bugID
+     * @param  int    $executionID
      * @param  string $branch
      * @return string
      */
-    protected function getLocation4Create(object $formData, array $output, int $bugID, string $branch): string
+    protected function getLocation4Create(int $bugID, int $executionID, array $output): string
     {
+        $bug = $this->bug->getByID($bugID);
+
         if($this->app->tab == 'execution')
         {
             if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
@@ -393,8 +368,7 @@ class bugZen extends bug
             }
             else
             {
-                $executionID = $formData->data->execution ? $formData->data->execution : zget($output, 'executionID', $this->session->execution);
-                $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
+                $location = $this->createLink('execution', 'bug', "executionID=$executionID");
             }
 
         }
@@ -405,7 +379,7 @@ class bugZen extends bug
         else
         {
             setcookie('bugModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            $location = $this->createLink('bug', 'browse', "productID={$formData->data->product}&branch=$branch&browseType=byModule&param={$formData->data->module}&orderBy=id_desc");
+            $location = $this->createLink('bug', 'browse', "productID={$bug->product}&branch=$bug->branch&browseType=byModule&param={$bug->module}&orderBy=id_desc");
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
 

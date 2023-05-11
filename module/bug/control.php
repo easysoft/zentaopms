@@ -337,8 +337,6 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $response['result'] = 'success';
-
             $data = form::data($this->config->bug->form->create);
             $bug  = $this->bugZen->prepareCreateExtras($data, $this->post->uid);
 
@@ -349,7 +347,7 @@ class bug extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Set from param if there is a object to transfer bug. */
-            setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            setcookie('lastBugModule', (int)$data->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             $bug = $this->bug->getByID($bugID);
 
@@ -362,19 +360,8 @@ class bug extends control
             $message = $this->executeHooks($bugID);
             if($message) $this->lang->saveSuccess = $message;
 
-            /* Return bug id when call the API. */
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
-
-            /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $response = $this->getOnlyBodyRes4Create($formData, $output);
-                return $this->send($response);
-            }
-
-            $location = $this->bugZen->getLocation4Create($formData, $output, $bugID, $branch);
-            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location);
+            $executionID = $bug->execution ? $bug->execution : zget($output, 'executionID', $this->session->execution);
+            $response = $this->bugZen->responseAfterCreate($bugID, (int)$executionID, $output);
             return $this->send($response);
         }
 
