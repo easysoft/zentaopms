@@ -41,6 +41,7 @@ class control extends wg
         (
             set::class('form-control-static'),
             set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder'))),
+            set('data-name', $this->prop('name')),
             $this->prop('value')
         );
     }

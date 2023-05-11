@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'formlabel' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 
 /**
@@ -37,7 +36,7 @@ class formBatchItem extends wg
         'labelProps?: string',
         'required?:bool|string="auto"',
         'control?: array|string',
-        'width?: number=100',
+        'width?: number|string',
         'value?: string|array',
         'disabled?: bool',
         'items?: array',
@@ -61,37 +60,37 @@ class formBatchItem extends wg
 
         if($required === 'auto') $required = isFieldRequired($name);
 
-        if(is_string($control))                   $control = ['type' => $control, 'name' => $name];
-        elseif(empty($control) && $name !== null) $control = ['name' => $name];
+        if(is_string($control)) $control = array('type' => $control, 'name' => $name);
+        if(empty($control))     $control = array();
 
-        if(empty($label)) $label = $name;
+        if(!isset($control['type'])) $control['type']        = 'text';
+        if($required !== null)       $control['required']    = $required;
+        if($name !== null)           $control['name']        = $name;
+        if($value !== null)          $control['value']       = $value;
+        if($disabled !== null)       $control['disabled']    = $disabled;
+        if($items !== null)          $control['items']       = $items;
+        if($placeholder !== null)    $control['placeholder'] = $placeholder;
 
-        if(!empty($control))
-        {
-            if($required !== null)    $control['required']    = $required;
-            if($name !== null)        $control['name']        = $name;
-            if($value !== null)       $control['value']       = $value;
-            if($disabled !== null)    $control['disabled']    = $disabled;
-            if($items !== null)       $control['items']       = $items;
-            if($placeholder !== null) $control['placeholder'] = $placeholder;
-        }
+        $asIndex = $control['type'] === 'index';
+        if($asIndex) $control['type'] = 'static';
 
         return array
         (
             h::th
             (
                 set::class('form-batch-head'),
+                zui::width($width),
                 set('data-required', $required),
-                set('data-width', $width),
                 set('data-ditto', $ditto),
                 set('data-name', $name),
+                $asIndex ? set('data-index', $asIndex) : null,
                 set($this->getRestProps()),
                 span
                 (
-                    set::class('form-batch-label', $labelClass, $strong ? 'font-bold' : null),
+                    set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null),
                     set::required($required),
                     set($labelProps),
-                    $label
+                    empty($label) ? $name : $label
                 ),
                 empty($tip) ? null : new btn
                 (

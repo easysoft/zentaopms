@@ -110,11 +110,15 @@ class formBatch extends formBase
 
         return array
         (
-            h::table
+            div
             (
-                setClass('table form-batch-table'),
-                h::thead(h::tr($headItems)),
-                h::tbody(),
+                setClass('form-batch-container'),
+                h::table
+                (
+                    setClass('table form-batch-table'),
+                    h::thead(h::tr($headItems)),
+                    h::tbody(),
+                )
             ),
             template(setClass('form-batch-template'), h::tr($templateItems)),
             $otherItems
