@@ -345,6 +345,9 @@ class bug extends control
             $checkExist = $this->bugZen->checkExistBug($bug);
             if($checkExist['status'] == 'exists') $this->send(array('result' => 'success', 'id' => $checkExist['id'], 'message' => sprintf($this->lang->duplicate, $this->lang->bug->common), 'locate' => $this->createLink('bug', 'view', "bugID={$checkExist['id']}")));
 
+            $bugID = $this->bug->create($bug);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$formData->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 

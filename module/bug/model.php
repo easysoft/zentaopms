@@ -47,14 +47,14 @@ class bugModel extends model
     }
 
     /**
+     * bug的入库操作。
      * Insert bug into zt_bug.
-     * bug的入库操作
      *
      * @param  object $bug
      * @access public
-     * @return array|false
+     * @return int|false
      */
-    public function create(object $bug): array|false
+    public function create(object $bug): int|false
     {
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()
@@ -63,11 +63,7 @@ class bugModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError())
-        {
-            $bugID = $this->dao->lastInsertID();
-            return array('status' => 'created', 'id' => $bugID);
-        }
+        if(!dao::isError()) return $this->dao->lastInsertID();
         return false;
     }
 
