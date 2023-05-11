@@ -430,11 +430,11 @@ class programplanModel extends model
      * 批量查询阶段关联的项目和属性并过滤日期。
      * Get product and attribute for stage correlation.
      *
-     * @param  array   $plans
-     * @access private
+     * @param  array  $plans
+     * @access public
      * @return array
      */
-    private function processPlans(array $plans): array
+    public function processPlans(array $plans): array
     {
         foreach($plans as $planID => $plan) $plans[$planID] = $this->processPlan($plan);
         return $plans;
