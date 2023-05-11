@@ -404,7 +404,6 @@ $lang->block->count   = 'Numéro';
 $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Trié par';
 
-if(!isset($lang->block->availableBlocks)) $lang->block->availableBlocks = new stdclass();
 $lang->block->availableBlocks['todo']        = 'Schedule';
 $lang->block->availableBlocks['task']        = 'Tasks';
 $lang->block->availableBlocks['bug']         = 'Bugs';

@@ -404,7 +404,6 @@ $lang->block->count   = '数量';
 $lang->block->type    = '类型';
 $lang->block->orderBy = '排序';
 
-if(!isset($lang->block->availableBlocks)) $lang->block->availableBlocks = new stdclass();
 $lang->block->availableBlocks['todo']        = '日程';
 $lang->block->availableBlocks['task']        = '任务';
 $lang->block->availableBlocks['bug']         = 'Bug';
