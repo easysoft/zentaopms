@@ -1,0 +1,32 @@
+title: table zt_build
+author: Hu Fangzhou
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-20
+
+  - field: project
+    range: 1-10
+
+  - field: product
+    range: 1-10
+
+  - field: execution
+    range: 10-20
+
+  - field: name
+    fields:
+      - field: name1
+        range: 项目{10},执行{10}
+
+      - field: name2
+        range: 1-10,11-20
+
+      - field: name3
+        range: 版本
+
+      - field: name4
+        range: 1-20
+  - field: deleted
+    range: 0{19},1

@@ -428,4 +428,26 @@ class buildTest
 
         return $objects;
     }
+
+    /**
+     * Test get build's data for block.
+     * 
+     * @param  int     $projectID
+     * @param  string  $orderBy
+     * @param  int     $limit
+     * @param  bool    $adminUser
+     * @access public
+     * @return array
+     */
+    public function getBuildBlockDataTest(int $projectID = 0, string $orderBy = 'id_desc', int $limit = 10, bool $adminUser = true): array
+    {
+        global $tester;
+
+        if(!$adminUser) $tester->app->user->admin = false;
+
+        $build = $this->objectModel->getBuildBlockData($projectID, $orderBy, $limit);
+        if(!$adminUser) $tester->app->user->admin = true;
+
+        return $build;
+    }
 }

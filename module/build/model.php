@@ -829,4 +829,25 @@ class buildModel extends model
 
         return $menu;
     }
+
+    /**
+     * 为区块获取版本数据。
+     * Get build's data for block.
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @access public
+     * @return object[]
+     */
+    public function getBuildBlockData(int $projectID = 0, string $orderBy = 'id_desc', int $limit = 10): array
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)
+            ->where('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->orderBy($orderBy)
+            ->limit($limit)
+            ->fetchAll();
+    }
 }

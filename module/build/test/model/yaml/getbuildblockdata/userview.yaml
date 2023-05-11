@@ -1,0 +1,32 @@
+title: table zt_userview
+desc: "可访问权限"
+author: Hu Fangzhou
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    range: admin,dev1
+  - field: programs
+    note: "项目集"
+    range: 0
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: products
+    note: "产品"
+    range: "`1,3,5,7`,`2,4,6,8`"
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: projects
+    note: "项目"
+    range: "`1,3,5,7`,`2,4,6,8`"
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: sprints
+    note: "迭代"
+    range: "`11,13,15,17`,`12,14,16,18`"
+    prefix: ","
+    postfix: ""
+    format: ""
