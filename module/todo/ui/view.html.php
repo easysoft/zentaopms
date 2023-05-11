@@ -50,7 +50,7 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
         array(
             'icon'  => 'play',
             'url'   => createLink('todo', 'start', "todoID=$todo->id"),
-            'text'  => $lang->todo->start,
+            'text'  => $lang->todo->beginAB,
         ),
         array(
             'icon'  => 'magic',
@@ -75,7 +75,7 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
         array(
             'icon'  => 'checked',
             'url'   => createLink('todo', 'finish', "todoID=$todo->id"),
-            'text'  => $lang->todo->finish,
+            'text'  => $lang->todo->reasonList['done'],
         )
     );
 
