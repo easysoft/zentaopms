@@ -839,6 +839,7 @@ class taskZen extends task
         $this->view->task             = $task;
         $this->view->storyID          = $storyID;
         $this->view->blockID          = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
+        $this->view->hideStory        = $this->task->isNoStoryExecution($execution);
 
         $this->display();
     }
@@ -916,31 +917,23 @@ class taskZen extends task
         $projectID     = $execution ? $execution->project : 0;
         $lifetimeList  = array();
         $attributeList = array();
+        $executions    = $this->executionPairs;
         if($projectID)
         {
-            $executionKey  = 0;
             $executions    = $this->execution->getByProject($projectID, 'all', 0, true);
             $executionList = $this->execution->getByIdList(array_keys($executions));
             foreach($executionList as $executionItem)
             {
-                if(!common::canModify('execution', $executionItem)) $executionKey = $executionItem->id;
-                if($executionKey) unset($executions[$executionKey]);
-                if(!$executionKey) continue;
-
-                $lifetimeList[$executionKey]  = $executionItem->lifetime;
-                $attributeList[$executionKey] = $executionItem->attribute;
+                if(!common::canModify('execution', $executionItem)) unset($executions[$executionItem->id]);
             }
         }
-        else
+
+        $executionList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionList as $executionItem)
         {
-            $executions    = $this->executionPairs;
-            $executionList = $this->execution->getByIdList(array_keys($executions));
-            foreach($executionList as $executionItem)
-            {
-                $executionKey = $executionItem->id;
-                $lifetimeList[$executionKey]  = $executionItem->lifetime;
-                $attributeList[$executionKey] = $executionItem->attribute;
-            }
+            $executionKey = $executionItem->id;
+            $lifetimeList[$executionKey]  = $executionItem->lifetime;
+            $attributeList[$executionKey] = $executionItem->attribute;
         }
 
         $this->view->projectID     = $projectID;

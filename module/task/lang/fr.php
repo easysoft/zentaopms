@@ -165,6 +165,7 @@ $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Testée';
 $lang->task->teamMember        = 'Team Member';
 $lang->task->to                = 'To';
+$lang->task->suffixHour        = 'H';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';

@@ -258,5 +258,5 @@ $config->task->modeOptions[] = array('text' => $lang->task->modeList['multi'], '
 
 $config->task->afterOptions = array();
 $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['continueAdding'], 'value' => 'continueAdding');
-$config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toTaskList'], 'value' => 'toTaskList');
+$config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toTaskList'], 'value' => 'toTaskList', 'checked' => true);
 $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toStoryList'], 'value' => 'toStoryList');
