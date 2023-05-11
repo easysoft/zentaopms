@@ -70,9 +70,9 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
             (
                 array(
                     array(
-                        'icon'  => 'back',
-                        'url'   => $browseLink,
-                        'text'  => $lang->goback,
+                        'icon' => 'back',
+                        'url'  => $browseLink,
+                        'text' => $lang->goback,
                     )
                 )
             ),
