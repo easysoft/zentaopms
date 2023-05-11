@@ -652,9 +652,10 @@ class bugZen extends bug
      * 初始化一个默认的bug模板。
      * Init a default bug templete.
      *
+     * @param  array  $fields
      * @return object
      */
-    protected function initBug(): object
+    protected function initBug($fields): object
     {
         $bug = new stdclass();
         $bug->projectID   = 0;
@@ -694,6 +695,8 @@ class bugZen extends bug
         $bug->builds     = array();
         $bug->branches   = array();
 
+        if(!empty($fields)) $bug = $this->updateBug($bug, $fields);
+
         return $bug;
     }
 
@@ -710,6 +713,114 @@ class bugZen extends bug
         foreach($fields as $field => $value) $bug->$field = $value;
 
         return $bug;
+    }
+
+    /**
+     * 解析extras，如果bug来源于某个对象（bug, case, testtask, todo），使用对象的一些属性对bug赋值。
+     * Extract extras, if bug come from an object(bug, case, testtask, todo), get some value from object.
+     *
+     * @param  object $bug
+     * @param  array $output
+     * @return object
+     */
+    protected function extractObjectFromExtras(object $bug, array $output): object
+    {
+        extract($output);
+
+        /* Get title, steps, storyID, moduleID, version, executionID from case. */
+        if(isset($runID) and $runID and isset($resultID) and $resultID)
+        {
+            $fields = $this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+            $bug    = $this->updateBug($bug, $fields);
+        }
+        if(isset($runID) and !$runID and isset($caseID) and $caseID)
+        {
+            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
+            $bug    = $this->updateBug($bug, $fields);
+        }
+
+        /* Get projectID, moduleID, executionID, productID, taskID, storyID, buildID, caseID, title, steps, severity, type, assignedTo, deadline, os, browser, mailto, keywords, color, testtask, feedbackBy, notifyEmail, pri from case. */
+        if(isset($bugID) and $bugID)
+        {
+            $bugInfo = $this->bug->getById((int)$bugID);
+
+            $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'productID' => $bugInfo->product, 'taskID' => $bugInfo->task, 'storyID' => $bugInfo->story, 'buildID' => $bugInfo->openedBuild,
+                'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
+                'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
+                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
+
+            $bug = $this->updateBug($bug, $fields);
+        }
+
+        /* Get buildID from testtask. */
+        if(isset($testtask) and $testtask)
+        {
+            $testtask = $this->loadModel('testtask')->getById((int)$testtask);
+            $bug      = $this->updateBug($bug, array('buildID' => $testtask->build));
+        }
+
+        /* Get title, steps, pri from todo. */
+        if(isset($todoID) and $todoID)
+        {
+            $todo = $this->loadModel('todo')->getById((int)$todoID);
+            $bug  = $this->updateBug($bug, array('title' => $todo->name, 'steps' => $todo->desc, 'pri' => $todo->pri));
+        }
+
+        return $bug;
+    }
+
+    /**
+     *
+     * 构建创建bug页面数据。
+     * Build form fields for create bug.
+     *
+     * @param  object $bug
+     * @param  array  $output
+     * @param  string $from
+     * @return void
+     */
+    protected function buildCreateForm(object $bug, array $output, string $from)
+    {
+        extract($output);
+        $currentProduct = $this->product->getById($bug->productID);
+
+        /* Get branches, if moduleOptionMenu is empty, return. */
+        $bug = $this->getBranches4Create($bug, $currentProduct);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
+        /* TODO: 返回方式应该返回一个数组，暂时不知道怎么返回。 */
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
+
+        /* Get builds and stroies. */
+        $bug = $this->getBuildsAndStories4Create($bug);
+        /* Get project,. */
+        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($projectID)));
+        /* Get products and projects. */
+        $bug = $this->getProductsAndProjects4Create($bug);
+        /* Append projects. */
+        $bug = $this->appendProjects4Create($bug, (isset($bugID) ? $bugID : 0));
+        /* Get project model. */
+        $bug = $this->getProjectModel4Create($bug);
+        /* Get executions. */
+        $bug = $this->getExecutions4Create($bug);
+
+        $this->extractBugTemplete($bug);
+
+        $this->view->title        = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->view->customFields = $this->getCustomFields4Create();
+        $this->view->showFields   = $this->config->bug->custom->createFields;
+
+        $this->view->productMembers        = $this->getProductMembers4Create($bug);
+        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
+        $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
+        $this->view->moduleOptionMenu      = $moduleOptionMenu;
+        $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
+        $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
+        $this->view->product               = $currentProduct;
+        $this->view->blockID               = $this->getBlockID4Create();
+        $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
+
+        $this->display();
     }
 
     /**
