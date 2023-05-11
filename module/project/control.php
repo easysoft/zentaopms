@@ -858,7 +858,7 @@ class project extends control
         $this->view->orderBy          = $orderBy;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->status           = $status;
-        $this->view->isStage          = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->isStage          = isset($project->model) && ($project->model == 'waterfall' || $project->model == 'waterfallplus');
         $this->view->changeStatusHtml = common::hasPriv('execution', 'batchChangeStatus') ? $changeStatusHtml : '';
 
         $this->display();
@@ -1157,8 +1157,8 @@ class project extends control
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink($fromModule, $fromMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
-        $devel         = $project->model == 'waterfall' ? true : false;
-        $executions    = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
+        $devel      = $project->model == 'waterfall';
+        $executions = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
         if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);

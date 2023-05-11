@@ -255,7 +255,7 @@ class projectZen extends project
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $withProgram   = $this->config->systemMode == 'ALM' ? true : false;
+        $withProgram   = $this->config->systemMode == 'ALM';
         $allProducts   = array('0' => '') + $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
@@ -1008,7 +1008,7 @@ class projectZen extends project
 
         if($objectType == 'program')
         {
-            $withProgram = $this->config->systemMode == 'ALM' ? true : false;
+            $withProgram = $this->config->systemMode == 'ALM';
             $allProducts = array(0 => '') + $this->program->getProductPairs($selectedProgramID, 'all', 'noclosed', '', 0, $withProgram);
             $data['allProducts'] = html::select("products[]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
             $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
