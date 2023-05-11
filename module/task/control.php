@@ -128,7 +128,7 @@ class task extends control
             /* 批量创建任务。 Batch create tasks. */
             $postData   = form::data($this->config->task->form->batchCreate);
             $tasks      = $this->taskZen->prepareTasks4BatchCreate($execution, $postData->rawdata);
-            $taskIdList = $this->task->batchCreate($execution, $tasks, $output);
+            $taskIdList = $this->task->batchCreate($execution, $tasks, $taskID, $output);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* 接口调用返回任务编号列表。 Return task id list when call the API. */

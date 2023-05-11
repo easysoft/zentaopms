@@ -138,11 +138,12 @@ class taskModel extends model
      *
      * @param  object $execution
      * @param  array  $tasks
+     * @param  int    $parentID
      * @param  array  $output
      * @access public
      * @return array|false
      */
-    public function batchCreate(object $execution, array $tasks, array $output): array|false
+    public function batchCreate(object $execution, array $tasks, int $parentID, array $output): array|false
     {
         /* 检查必填项。 Check required fields. */
         $tasks = $this->checkRequired4BatchCreate($execution, $tasks);
@@ -153,8 +154,6 @@ class taskModel extends model
         $this->loadModel('score');
         $this->loadModel('action');
 
-        /* 判断创建的任务是不是由任务拆分而来。 Judge whether the created task is split from the task. */
-        $parentID      = !empty($tasks[1]->parent) ? $tasks[1]->parent : 0;
         $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
 
         $taskIdList = array();
