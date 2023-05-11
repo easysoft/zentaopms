@@ -2504,6 +2504,12 @@ EOF;
         if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
 
         /**
+         * 忽略 zin 页面。
+         * Ignore zin page.
+         */
+        if(isset($this->config->debug) && $this->config->debug && isset($this->config->zinTool) && $this->config->zinTool) return;
+
+        /**
          * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
          * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
          */
