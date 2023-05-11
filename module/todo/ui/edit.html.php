@@ -734,7 +734,7 @@ formPanel
                 span
                 (
                     setClass('input-group-addon ring-0'),
-                    $lang->todo->to
+                    $lang->todo->timespanTo
                 ),
                 select
                 (
