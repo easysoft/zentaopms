@@ -34,7 +34,6 @@ $config->todo->batchCreate->form['date']        = array('required' => false, 'ty
 $config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->todo->edit->form = array();
-$config->todo->edit->form['type']         = array('required' => true,  'type' => 'string');
 $config->todo->edit->form['name']         = array('required' => true,  'type' => 'string');
 $config->todo->edit->form['status']       = array('required' => true,  'type' => 'string');
 $config->todo->edit->form['pri']          = array('required' => true,  'type' => 'int');
