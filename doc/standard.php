@@ -483,7 +483,7 @@ XHTML规定所有属性都必须有一个值，没有值的就重复本身。例
 比如：
 <script>
 /**
- * Displays an confirmation box beforme to submit a "DROP/DELETE/ALTER" query.
+ * Displays an confirmation box before to submit a "DROP/DELETE/ALTER" query.
  * This function is called while clicking links
  *
  * @author                         wangcs<wangcs@okooo.net>
