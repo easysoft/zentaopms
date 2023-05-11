@@ -2502,9 +2502,10 @@ EOF;
         {
             return;
         }
-        elseif((isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER'])) or strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false)
+        elseif(isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER']))
         {
-            return;
+            $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
         }
 
         $module = $this->app->getModuleName();
