@@ -302,6 +302,9 @@ class projectZen extends project
         $withProgram         = $this->config->systemMode == 'ALM';
         $allProducts         = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
 
+        $unmodifiableProducts     = array();
+        $unmodifiableMainBranches = array();
+        $unmodifiableBranches     = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
