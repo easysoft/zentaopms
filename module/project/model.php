@@ -2796,21 +2796,8 @@ class projectModel extends model
             $table = constant('TABLE_'. strtoupper($module));
             if($module == 'execution')
             {
-                switch($model)
-                {
-                    case 'waterfall':
-                        $type = 'stage';
-                        break;
-                    case 'waterfallplus':
-                        $type = 'stage';
-                        break;
-                    case 'kanban':
-                        $type = 'kanban';
-                        break;
-                    default:
-                        $type = 'sprint';
-                        break;
-                }
+                $this->app->loadConfig('execution');
+                $type = zget($this->config->execution->modelList, $model, '');
             }
 
             /* 检查对应类型的数据是否已经存在。 */
