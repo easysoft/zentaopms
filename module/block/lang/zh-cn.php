@@ -745,6 +745,7 @@ $lang->block->productstatistic->newPlan         = '最新计划';
 $lang->block->productstatistic->newExecution    = '最新执行';
 $lang->block->productstatistic->newRelease      = '最新发布';
 
+$lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
 $lang->block->productoverview->productReleasedThisYear = '今年发布';
 $lang->block->productoverview->releaseCount            = '发布里程碑';

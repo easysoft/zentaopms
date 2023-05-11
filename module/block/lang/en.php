@@ -744,6 +744,7 @@ $lang->block->projectstatistic->personDay   = 'personDay';
 $lang->block->projectstatistic->day         = 'day';
 $lang->block->projectstatistic->hour        = 'hour';
 
+$lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';
 $lang->block->productoverview->productReleasedThisYear = 'Number Of Releases This Year';
 $lang->block->productoverview->releaseCount            = 'Total Release Count';
