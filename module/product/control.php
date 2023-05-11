@@ -667,6 +667,7 @@ class product extends control
     }
 
     /**
+     * 产品看板。
      * Product kanban.
      *
      * @access public
@@ -674,36 +675,20 @@ class product extends control
      */
     public function kanban()
     {
-        $this->session->set('projectList', $this->app->getURI(true), 'project');
-        $this->session->set('productPlanList', $this->app->getURI(true), 'product');
-        $this->session->set('releaseList', $this->app->getURI(true), 'product');
+        /* Save back URI to session. */
+        $this->productZen->saveBackUriSession4Kanban();
 
-        $kanbanGroup = $this->product->getStats4Kanban();
-        extract($kanbanGroup);
+        /* Generate data. */
+        list( , $productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList) = $this->product->getStats4Kanban();
 
-        $programPairs  = $this->loadModel('program')->getPairs(true);
-        $myProducts    = array();
-        $otherProducts = array();
-        foreach($productList as $productID => $product)
-        {
-            if($product->status != 'normal') continue;
-            if($product->PO == $this->app->user->account) $myProducts[$product->program][] = $productID;
-            else $otherProducts[$product->program][] = $productID;
-        }
+        $programPairs = $this->loadModel('program')->getPairs(true);
+        $kanbanList   = $this->productZen->getProductList4Kanban($productList);
+        $emptyHour    = $this->productZen->getEmptyHour();
 
-        $kanbanList = array();
-        if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
-        if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
-
-        $emptyHour = new stdclass();
-        $emptyHour->totalEstimate = 0;
-        $emptyHour->totalConsumed = 0;
-        $emptyHour->totalLeft     = 0;
-        $emptyHour->progress      = 0;
-
+        /* Assign. */
         $this->view->title            = $this->lang->product->kanban;
         $this->view->kanbanList       = $kanbanList;
-        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programPairs;
+        $this->view->programList      = array($this->lang->product->emptyProgram) + $programPairs;
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;
         $this->view->projectList      = $projectList;

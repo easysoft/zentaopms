@@ -1525,8 +1525,8 @@ class productZen extends product
     }
 
     /**
-     * 将返回链接保存到session中。
-     * Save back uri in session.
+     * 保存产品仪表盘的返回链接session。
+     * Save back uri to session.
      *
      * @access protected
      * @return void
@@ -1536,5 +1536,71 @@ class productZen extends product
         $uri = $this->app->getURI(true);
         $this->session->set('productPlanList', $uri, 'product');
         $this->session->set('releaseList',     $uri, 'product');
+    }
+
+    /**
+     * 保存看板的返回链接session。
+     * Save back uri to session.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function saveBackUriSession4Kanban(): void
+    {
+        $uri = $this->app->getURI(true);
+
+        $this->session->set('projectList',     $uri, 'project');
+        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('releaseList',     $uri, 'product');
+    }
+
+    /**
+     * 获取产品看板页面的产品列表。
+     * Get product list for Kanban.
+     *
+     * @param  array     $productList
+     * @access protected
+     * @return array
+     */
+    protected function getProductList4Kanban(array $productList): array
+    {
+        $kanbanList    = array();
+        $myProducts    = array();
+        $otherProducts = array();
+        foreach($productList as $productID => $product)
+        {
+            if($product->status != 'normal') continue;
+
+            if($product->PO == $this->app->user->account)
+            {
+                $myProducts[$product->program][] = $productID;
+                continue;
+            }
+
+            $otherProducts[$product->program][] = $productID;
+        }
+        if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
+        if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
+
+        return $kanbanList;
+    }
+
+    /**
+     * 获取空的小时对象数据。
+     * Get empty hour data object.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function getEmptyHour(): object
+    {
+        $hour = new stdclass();
+
+        $hour->totalEstimate = 0;
+        $hour->totalConsumed = 0;
+        $hour->totalLeft     = 0;
+        $hour->progress      = 0;
+
+        return $hour;
     }
 }

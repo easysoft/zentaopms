@@ -1372,6 +1372,7 @@ class productModel extends model
     }
 
     /**
+     * 获取看板页面的产品统计信息。
      * Get stats for product kanban.
      *
      * @access public
@@ -1459,7 +1460,18 @@ class productModel extends model
             ->fetchGroup('product', 'id');
 
         /* Convert predefined HTML entities to characters. */
-        $statsData = array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
+        $statsData = array(
+            'programList'             => $programList,
+            'productList'             => $productList,
+            'planList'                => $planList,
+            'projectList'             => $projectList,
+            'executionList'           => $executionList,
+            'projectProduct'          => $projectProduct,
+            'projectLatestExecutions' => $projectLatestExecutions,
+            'hourList'                => $hourList,
+            'releaseList'             => $releaseList
+        );
+
         $statsData = $this->covertHtmlSpecialChars($statsData);
 
         return $statsData;
