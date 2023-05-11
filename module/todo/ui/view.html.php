@@ -103,7 +103,7 @@ function buildBtnGroup(object $todo, object $config, object $session, object $ap
             ),
             set::main($buttons),
             $todo->status != 'done' && $todo->status != 'closed' ?
-            to::dropdowns
+            to::suffix
             (
                 array(
                     dropdown
