@@ -8,3 +8,5 @@ fields:
       range: '0,0,1,2'
     - field: type
       range: 'project{2},sprint{2}'
+    - field: acl
+      range: 'private'
