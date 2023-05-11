@@ -30,7 +30,7 @@ class select extends wg
         'name: string',
         'id?: string',
         'class?: string="form-control"',
-        'value?: string',
+        'value?: string=""',
         'required?: bool',
         'disabled?: bool',
         'multiple?: bool',
@@ -105,8 +105,9 @@ class select extends wg
         {
             foreach($items as $key => $item)
             {
-                if(!is_array($item))          $item = array('text' => $item, 'value' => strval($key));
-                if(!isset($item['selected'])) $item['selected'] = in_array($item['value'], $valueList);
+                if(!is_array($item))           $item = array('text' => $item, 'value' => $key);
+                if(!is_string($item['value'])) $item['value'] = strval($item['value']);
+                if(!isset($item['selected']))  $item['selected'] = in_array($item['value'], $valueList);
                 $items[$key] = $this->onBuildItem($item);
 
                 if($item['value'] === '') $hasEmptyItem = true;
