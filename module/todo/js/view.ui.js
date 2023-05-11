@@ -21,7 +21,7 @@ function toTask()
     if(!executionID)
     {
         alert(selectExecution);
-        return false;
+        return;
     }
 
     loadPage($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView));
@@ -39,7 +39,7 @@ function toBug()
     if(!productID)
     {
         alert(selectProduct);
-        return false;
+        return;
     }
 
     loadPage($.createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView));
