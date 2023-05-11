@@ -390,15 +390,16 @@ class programplanTest
     }
 
     /**
+     * 检查是否顶级阶段。
      * Test check whether it is the top stage.
      *
-     * @param  int     $planID
+     * @param  int         $planID
      * @access public
-     * @return string
+     * @return string|bool
      */
-    public function checkTopStageTest($planID)
+    public function isTopStageTest(int $planID): string|bool
     {
-        $objects = $this->objectModel->checkTopStage($planID);
+        $objects = $this->objectModel->isTopStage($planID);
 
         if(dao::isError()) return dao::getError();
 
