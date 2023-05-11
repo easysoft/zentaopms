@@ -30,6 +30,21 @@ class control extends wg
         $this->setDefaultProps(['id' => $this->prop('name')]);
     }
 
+    /**
+     * Build control with static content.
+     *
+     * @return wg
+     */
+    protected function buildStatic(): wg
+    {
+        return div
+        (
+            set::class('form-control-static'),
+            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder'))),
+            $this->prop('value')
+        );
+    }
+
     protected function buildTextarea()
     {
         return new textarea(set($this->props->skip('type')));
