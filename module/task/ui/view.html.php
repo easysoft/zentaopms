@@ -177,6 +177,17 @@ function vtable(array $data): wg
     );
 }
 
+function storySection(array $props): wg
+{
+    extract($props);
+    return div
+    (
+        setClass('my-4'),
+        descHeading(array('title' => $title, 'className' => $titleClass)),
+        detailDesc(array('desc' => $desc)),
+    );
+}
+
 div
 (
     setClass('detail-header flex justify-between mb-3'),
@@ -199,34 +210,24 @@ div
         detailSection
         (
             array(
-                detailTitle(array('title' => $lang->task->legendDesc, 'className' => 'mb-3 text-subtitle')),
+                detailTitle(array('title' => $lang->task->legendDesc, 'className' => 'mb-3 mt-1 text-subtitle')),
                 detailDesc(array('desc' => empty($task->desc) ? $lang->noData : $task->desc)),
             )
         ),
         detailSection
         (
             array(
-                detailTitle(array('title' => '相关需求', 'className' => 'text-subtitle')),
+                detailTitle(array('title' => $lang->task->story, 'className' => 'text-subtitle')),
                 div
                 (
                     setClass('my-3'),
                     idLabel(array('id' => $task->storyID, 'className' => 'mr-2')),
-                    detailSubtitle(array('title' => $task->storyTitle, 'className' => 'text-base text-story-title')),
+                    detailSubtitle(array('title' => $task->storyTitle, 'className' => 'text-base text-story-title inline-block')),
                 ),
                 div
                 (
-                    div
-                    (
-                        setClass('my-4'),
-                        descHeading(array('title' => '需求描述', 'className' => 'mb-1 text-base')),
-                        detailDesc(array('desc' => empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec)),
-                    ),
-                    div
-                    (
-                        setClass('my-4'),
-                        descHeading(array('title' => $lang->task->storyVerify, 'className' => 'mb-1 text-base')),
-                        detailDesc(array('desc' => empty($task->storyVerify) ? $lang->noData : $task->storyVerify))
-                    )
+                    storySection(array('title' => $lang->story->legendSpec, 'titleClass' => 'mb-1 text-base', 'desc' => empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec)),
+                    storySection(array('title' => $lang->task->storyVerify, 'titleClass' => 'mb-1 text-base', 'desc' => empty($task->storyVerify) ? $lang->noData : $task->storyVerify))
                 ),
             )
         ),
@@ -238,7 +239,7 @@ div
         )
     ),
     div(
-        setClass('detail-side p-5 flex-none'),
+        setClass('detail-side px-5 py-4 flex-none'),
         tabs
         (
             set::items

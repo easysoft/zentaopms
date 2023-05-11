@@ -1,2 +1,7 @@
+.nav-tabs>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0;}
+.nav-tabs>.nav-item>a:after {border-width: 0;}
+.nav-tabs>.nav-item>a:before {background: none;}
 .nav-tabs>.nav-item.active>a {color: var(--color-primary-500);}
 .nav-tabs>.nav-item.active>a:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
+.nav-tabs>.nav-item.active:after {width: calc(100% - 32px); margin-left: 16px; border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
+.nav-tabs {border-bottom: 1px solid #E6EAF1;}

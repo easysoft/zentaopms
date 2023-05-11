@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class tabs extends wg
@@ -10,7 +11,7 @@ class tabs extends wg
         'activeID?string'
     );
 
-    public static function getPageCSS()
+    public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -20,7 +21,7 @@ class tabs extends wg
         return isset($item['id']) ? $item['id'] : $this->gid;
     }
 
-    protected function buildLabelView(string $id, array $item)
+    protected function buildLabelView(string $id, array $item): wg|null
     {
         if(!isset($item['label'])) return null;
         $isActive = $this->prop('activeID') == $id || (isset($item['active']) && $item['active']);
@@ -38,7 +39,7 @@ class tabs extends wg
         );
     }
 
-    protected function buildContentView(string $id, array $item)
+    protected function buildContentView(string $id, array $item): wg|null
     {
         if(!isset($item['data'])) return null;
         $isActive = $this->prop('activeID') == $id || (isset($item['active']) && $item['active']);
@@ -51,20 +52,20 @@ class tabs extends wg
         );
     }
 
-    protected function buildTabHeader($labelViews)
+    protected function buildTabHeader($labelViews): wg|null
     {
         if(empty($labelViews)) return null;
 
         $isVertical = $this->prop('direction') === 'v';
         return ul
         (
-            setClass('nav nav-tabs'),
+            setClass('nav nav-tabs gap-x-5'),
             $isVertical ? setClass('nav-stacked') : null,
             $labelViews
         );
     }
 
-    protected function buildTabBody($contentViews)
+    protected function buildTabBody($contentViews): wg|null
     {
         if(empty($contentViews)) return null;
 
@@ -75,7 +76,7 @@ class tabs extends wg
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $items = $this->prop('items');
         // $activeID  = $this->prop('activeID');
@@ -104,13 +105,6 @@ class tabs extends wg
             if(!empty($contentView)) $contentViews[] = $contentView;
 
         }
-
-        /* There is no active item, then set index 0 to be actived. */
-        // if(empty($activeID))
-        // {
-        //     $labelViews[0]->setProp('class', 'active');
-        //     $contentViews[0]->setProp('class', 'active');
-        // }
 
         return div
         (
