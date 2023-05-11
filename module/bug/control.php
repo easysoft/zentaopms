@@ -233,72 +233,73 @@ class bug extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Init bug tpl, give tpl as many variables as possible, except for extract variables */
-        $bugTpl = $this->bugZen->initBugTemplete();
+        $bug = $this->bugZen->initBug();
 
         /* Set bug productID,branch,title,assignedTo, and handle copy bug, from runID,caseID,resultID, from testtask, from todo. */
-        $tplFields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($currentProduct->QD) ? $currentProduct->QD : ''));
-        $bugTpl    = $this->bugZen->updateBugTemplete($bugTpl, $tplFields);
+        $fields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($currentProduct->QD) ? $currentProduct->QD : ''));
+        $bug    = $this->bugZen->updateBug($bug, $fields);
+
         if(isset($runID) and $runID and isset($resultID) and $resultID)
         {
-            $tplFields = $this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
-            $bugTpl    = $this->bugZen->updateBugTemplete($bugTpl, $tplFields);
+            $fields = $this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+            $bug    = $this->bugZen->updateBug($bug, $fields);
         }
         if(isset($runID) and !$runID and isset($caseID) and $caseID)
         {
-            $tplFields = $this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
-            $bugTpl    = $this->bugZen->updateBugTemplete($bugTpl, $tplFields);
+            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
+            $bug    = $this->bugZen->updateBug($bug, $fields);
         }
         if(isset($bugID) and $bugID)
         {
-            $bug = $this->bug->getById($bugID);
+            $bugInfo = $this->bug->getById($bugID);
 
-            $tplFields = array('projectID' => $bug->project, 'moduleID' => $bug->module, 'executionID' => $bug->execution, 'productID' => $bug->product, 'taskID' => $bug->task, 'storyID' => $bug->story, 'buildID' => $bug->openedBuild,
-                'caseID' => $bug->case, 'title' => $bug->title, 'steps' => $bug->steps, 'severity' => $bug->severity, 'type' => $bug->type, 'assignedTo' => $bug->assignedTo, 'deadline' => (helper::isZeroDate($bug->deadline) ? '' : $bug->deadline),
-                'os' => $bug->os, 'browser' => $bug->browser, 'mailto' => $bug->mailto, 'keywords' => $bug->keywords, 'color' => $bug->color, 'testtask' => $bug->testtask, 'feedbackBy' => $bug->feedbackBy, 'notifyEmail' => $bug->notifyEmail,
-                'pri' => ($bug->pri == 0 ? 3 : $bug->pri));
+            $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'productID' => $bugInfo->product, 'taskID' => $bugInfo->task, 'storyID' => $bugInfo->story, 'buildID' => $bugInfo->openedBuild,
+                'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
+                'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
+                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
 
-            $bugTpl = $this->bugZen->updateBugTemplete($bugTpl, $tplFields);
+            $bug = $this->bugZen->updateBug($bug, $fields);
         }
         if(isset($testtask) and $testtask)
         {
             $testtask = $this->loadModel('testtask')->getById($testtask);
-            $bugTpl   = $this->bugZen->updateBugTemplete($bugTpl, array('buildID' => $testtask->build));
+            $bug      = $this->bugZen->updateBug($bug, array('buildID' => $testtask->build));
         }
         if(isset($todoID) and $todoID)
         {
-            $todo   = $this->loadModel('todo')->getById($todoID);
-            $bugTpl = $this->bugZen->updateBugTemplete($bugTpl, array('title' => $todo->name, 'steps' => $todo->desc, 'pri' => $todo->pri));
+            $todo = $this->loadModel('todo')->getById($todoID);
+            $bug  = $this->bugZen->updateBug($bug, array('title' => $todo->name, 'steps' => $todo->desc, 'pri' => $todo->pri));
         }
 
-        $bugTpl = $this->bugZen->getBranches4Create($bugTpl, $currentProduct);
-        $bugTpl = $this->bugZen->getBuildsAndStories4Create($bugTpl);
+        $bug = $this->bugZen->getBranches4Create($bug, $currentProduct);
+        $bug = $this->bugZen->getBuildsAndStories4Create($bug);
 
         /* Get all project team members linked with this product. */
-        $productMembers   = $this->bugZen->getProductMembers4Create($bugTpl);
-        $moduleOptionMenu = $this->tree->getOptionMenu($bugTpl->productID, 'bug', 0, ($bugTpl->branch === 'all' or !isset($bugTpl->branches[$bugTpl->branch])) ? 0 : $bugTpl->branch);
-        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bugTpl->productID}&view=story")));
+        $productMembers   = $this->bugZen->getProductMembers4Create($bug);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
         /* Get project. */
-        if($bugTpl->projectID) $bugTpl = $this->bugZen->updateBugTemplete($bugTpl, array('project' => $this->loadModel('project')->getByID($projectID)));
+        if($bug->projectID) $bug = $this->bugZen->updateBugTemplete($bug, array('project' => $this->loadModel('project')->getByID($projectID)));
         /* Get products and projects. */
-        $bugTpl = $this->bugZen->getProductsAndProjects4Create($bugTpl);
+        $bug = $this->bugZen->getProductsAndProjects4Create($bug);
         /* Append projects. */
-        $bugTpl = $this->bugZen->appendProjects4Create($bugTpl, (isset($bugID) ? $bugID : 0));
+        $bug = $this->bugZen->appendProjects4Create($bug, (isset($bugID) ? $bugID : 0));
         /* Get project model. */
-        $bugTpl = $this->bugZen->getProjectModel4Create($bugTpl);
+        $bug = $this->bugZen->getProjectModel4Create($bug);
         /* Get executions. */
-        $bugTpl = $this->bugZen->getExecutions4Create($bugTpl);
+        $bug = $this->bugZen->getExecutions4Create($bug);
 
-        $this->bugZen->extractBugTemplete($bugTpl);
-        $this->view->title        = isset($this->products[$bugTpl->productID]) ? $this->products[$bugTpl->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->bugZen->extractBugTemplete($bug);
+        $this->view->title        = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $this->bugZen->getCustomFields4Create();
         $this->view->showFields   = $this->config->bug->custom->createFields;
 
-        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bugTpl->productID") : '';
-        $this->view->productName           = isset($this->products[$bugTpl->productID]) ? $this->products[$bugTpl->productID] : '';
+        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
+        $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
-        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bugTpl->productID, $bugTpl->branch);
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->productMembers        = $productMembers;
         $this->view->product               = $currentProduct;

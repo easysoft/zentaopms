@@ -654,127 +654,127 @@ class bugZen extends bug
      *
      * @return object
      */
-    protected function initBugTemplete(): object
+    protected function initBug(): object
     {
-        $bugTpl = new stdclass();
-        $bugTpl->projectID   = 0;
-        $bugTpl->moduleID    = 0;
-        $bugTpl->executionID = 0;
-        $bugTpl->productID   = 0;
-        $bugTpl->taskID      = 0;
-        $bugTpl->storyID     = 0;
-        $bugTpl->buildID     = 0;
-        $bugTpl->caseID      = 0;
-        $bugTpl->runID       = 0;
-        $bugTpl->testtask    = 0;
-        $bugTpl->version     = 0;
-        $bugTpl->title       = '';
-        $bugTpl->steps       = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
-        $bugTpl->os          = '';
-        $bugTpl->browser     = '';
-        $bugTpl->assignedTo  = '';
-        $bugTpl->deadline    = '';
-        $bugTpl->mailto      = '';
-        $bugTpl->keywords    = '';
-        $bugTpl->severity    = 3;
-        $bugTpl->type        = 'codeerror';
-        $bugTpl->pri         = 3;
-        $bugTpl->color       = '';
-        $bugTpl->feedbackBy  = '';
-        $bugTpl->notifyEmail = '';
+        $bug = new stdclass();
+        $bug->projectID   = 0;
+        $bug->moduleID    = 0;
+        $bug->executionID = 0;
+        $bug->productID   = 0;
+        $bug->taskID      = 0;
+        $bug->storyID     = 0;
+        $bug->buildID     = 0;
+        $bug->caseID      = 0;
+        $bug->runID       = 0;
+        $bug->testtask    = 0;
+        $bug->version     = 0;
+        $bug->title       = '';
+        $bug->steps       = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
+        $bug->os          = '';
+        $bug->browser     = '';
+        $bug->assignedTo  = '';
+        $bug->deadline    = '';
+        $bug->mailto      = '';
+        $bug->keywords    = '';
+        $bug->severity    = 3;
+        $bug->type        = 'codeerror';
+        $bug->pri         = 3;
+        $bug->color       = '';
+        $bug->feedbackBy  = '';
+        $bug->notifyEmail = '';
 
-        $bugTpl->project      = '';
-        $bugTpl->branch       = '';
-        $bugTpl->execution    = '';
-        $bugTpl->projectModel = '';
-        $bugTpl->projects   = array();
-        $bugTpl->executions = array();
-        $bugTpl->products   = array();
-        $bugTpl->stories    = array();
-        $bugTpl->builds     = array();
-        $bugTpl->branches   = array();
+        $bug->project      = '';
+        $bug->branch       = '';
+        $bug->execution    = '';
+        $bug->projectModel = '';
+        $bug->projects   = array();
+        $bug->executions = array();
+        $bug->products   = array();
+        $bug->stories    = array();
+        $bug->builds     = array();
+        $bug->branches   = array();
 
-        return $bugTpl;
+        return $bug;
     }
 
     /**
      * 更新bug模板。
      * Update bug templete.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @param  array  $fields
      * @return object
      */
-    protected function updateBugTemplete(object $bugTpl, array $fields): object
+    protected function updateBug(object $bug, array $fields): object
     {
-        foreach($fields as $field => $value) $bugTpl->$field = $value;
+        foreach($fields as $field => $value) $bug->$field = $value;
 
-        return $bugTpl;
+        return $bug;
     }
 
     /**
-     * 将$bugTpl对象的属性添加到view对象中。
+     * 将$bug对象的属性添加到view对象中。
      * Add the prop of the $butTpl object to the view object
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @return void
      */
-    protected function extractBugTemplete(object $bugTpl): void
+    protected function extractBugTemplete(object $bug): void
     {
-        $this->view->projectID   = $bugTpl->projectID;
-        $this->view->moduleID    = $bugTpl->moduleID;
-        $this->view->productID   = $bugTpl->productID;
-        $this->view->products    = $bugTpl->products;
-        $this->view->stories     = $bugTpl->stories;
-        $this->view->projects    = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bugTpl->projects;
-        $this->view->executions  = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bugTpl->executions;
-        $this->view->builds      = $bugTpl->builds;
-        $this->view->execution   = $bugTpl->execution;
-        $this->view->taskID      = $bugTpl->taskID;
-        $this->view->storyID     = $bugTpl->storyID;
-        $this->view->buildID     = $bugTpl->buildID;
-        $this->view->caseID      = $bugTpl->caseID;
-        $this->view->runID       = $bugTpl->runID;
-        $this->view->version     = $bugTpl->version;
-        $this->view->testtask    = $bugTpl->testtask;
-        $this->view->bugTitle    = $bugTpl->title;
-        $this->view->pri         = $bugTpl->pri;
-        $this->view->steps       = htmlSpecialString($bugTpl->steps);
-        $this->view->os          = $bugTpl->os;
-        $this->view->browser     = $bugTpl->browser;
-        $this->view->assignedTo  = $bugTpl->assignedTo;
-        $this->view->deadline    = $bugTpl->deadline;
-        $this->view->mailto      = $bugTpl->mailto;
-        $this->view->keywords    = $bugTpl->keywords;
-        $this->view->severity    = $bugTpl->severity;
-        $this->view->type        = $bugTpl->type;
-        $this->view->branch      = $bugTpl->branch;
-        $this->view->branches    = $bugTpl->branches;
-        $this->view->color       = $bugTpl->color;
-        $this->view->feedbackBy  = $bugTpl->feedbackBy;
-        $this->view->notifyEmail = $bugTpl->notifyEmail;
+        $this->view->projectID   = $bug->projectID;
+        $this->view->moduleID    = $bug->moduleID;
+        $this->view->productID   = $bug->productID;
+        $this->view->products    = $bug->products;
+        $this->view->stories     = $bug->stories;
+        $this->view->projects    = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
+        $this->view->executions  = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
+        $this->view->builds      = $bug->builds;
+        $this->view->execution   = $bug->execution;
+        $this->view->taskID      = $bug->taskID;
+        $this->view->storyID     = $bug->storyID;
+        $this->view->buildID     = $bug->buildID;
+        $this->view->caseID      = $bug->caseID;
+        $this->view->runID       = $bug->runID;
+        $this->view->version     = $bug->version;
+        $this->view->testtask    = $bug->testtask;
+        $this->view->bugTitle    = $bug->title;
+        $this->view->pri         = $bug->pri;
+        $this->view->steps       = htmlSpecialString($bug->steps);
+        $this->view->os          = $bug->os;
+        $this->view->browser     = $bug->browser;
+        $this->view->assignedTo  = $bug->assignedTo;
+        $this->view->deadline    = $bug->deadline;
+        $this->view->mailto      = $bug->mailto;
+        $this->view->keywords    = $bug->keywords;
+        $this->view->severity    = $bug->severity;
+        $this->view->type        = $bug->type;
+        $this->view->branch      = $bug->branch;
+        $this->view->branches    = $bug->branches;
+        $this->view->color       = $bug->color;
+        $this->view->feedbackBy  = $bug->feedbackBy;
+        $this->view->notifyEmail = $bug->notifyEmail;
 
-        $this->view->projectModel    = $bugTpl->projectModel;
+        $this->view->projectModel    = $bug->projectModel;
         $this->view->stepsRequired   = strpos($this->config->bug->create->requiredFields, 'steps');
-        $this->view->isStepsTemplate = $bugTpl->steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
+        $this->view->isStepsTemplate = $bug->steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
     }
 
     /**
-     * 获取bug创建页面的branches和branch，并绑定到bugTpl上。
-     * Get the branches and branch for the bug create page and bind them to bugTpl.
+     * 获取bug创建页面的branches和branch，并绑定到bug上。
+     * Get the branches and branch for the bug create page and bind them to bug.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @param  object $currentProduct
      * @return object
      */
-    protected function getBranches4Create(object $bugTpl, object $currentProduct): object
+    protected function getBranches4Create(object $bug, object $currentProduct): object
     {
-        $productID = $bugTpl->productID;
-        $branch    = $bugTpl->branch;
+        $productID = $bug->productID;
+        $branch    = $bug->branch;
 
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
-            $objectID        = $this->app->tab == 'project' ? $bugTpl->projectID : $bugTpl->executionID;
+            $objectID        = $this->app->tab == 'project' ? $bug->projectID : $bug->executionID;
             $productBranches = $currentProduct->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
@@ -784,24 +784,24 @@ class bugZen extends bug
             $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
-        return $this->updateBugTemplete($bugTpl, array('branches' => $branches, 'branch' => $branch));
+        return $this->updateBug($bug, array('branches' => $branches, 'branch' => $branch));
     }
 
     /**
-     * 获取bug创建页面的builds和stories，并绑定到bugTpl上。
-     * Get the builds and stories for the bug create page and bind them to bugTpl.
+     * 获取bug创建页面的builds和stories，并绑定到bug上。
+     * Get the builds and stories for the bug create page and bind them to bug.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @return object
      */
-    protected function getBuildsAndStories4Create(object $bugTpl): object
+    protected function getBuildsAndStories4Create(object $bug): object
     {
         $this->loadModel('build');
-        $productID   = $bugTpl->productID;
-        $branch      = $bugTpl->branch;
-        $projectID   = $bugTpl->projectID;
-        $executionID = $bugTpl->executionID;
-        $moduleID    = $bugTpl->moduleID ? $bugTpl->moduleID : 0;
+        $productID   = $bug->productID;
+        $branch      = $bug->branch;
+        $projectID   = $bug->projectID;
+        $executionID = $bug->executionID;
+        $moduleID    = $bug->moduleID ? $bug->moduleID : 0;
 
         if($executionID)
         {
@@ -815,19 +815,19 @@ class bugZen extends bug
             $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
         }
 
-        return $this->updateBugTemplete($bugTpl, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
+        return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
     }
 
     /**
      * 获取bug创建页面的产品成员。
      * Get the product members for bug create page.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @return array
      */
-    protected function getProductMembers4Create(object $bugTpl): array
+    protected function getProductMembers4Create(object $bug): array
     {
-        $productMembers = $this->bug->getProductMemberPairs($bugTpl->productID, $bugTpl->branch);
+        $productMembers = $this->bug->getProductMemberPairs($bug->productID, $bug->branch);
         $productMembers = array_filter($productMembers);
         if(empty($productMembers)) $productMembers = $this->view->users;
 
@@ -835,18 +835,18 @@ class bugZen extends bug
     }
 
     /**
-     * 获取bug创建页面的products和projects，并绑定到bugTpl上。
-     * Get the products and projects for the bug create page and bind them to bugTpl.
+     * 获取bug创建页面的products和projects，并绑定到bug上。
+     * Get the products and projects for the bug create page and bind them to bug.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @return object
      */
-    protected function getProductsAndProjects4Create(object $bugTpl): object
+    protected function getProductsAndProjects4Create(object $bug): object
     {
-        $productID   = $bugTpl->productID;
-        $branch      = $bugTpl->branch;
-        $projectID   = $bugTpl->projectID;
-        $executionID = $bugTpl->executionID;
+        $productID   = $bug->productID;
+        $branch      = $bug->branch;
+        $projectID   = $bug->projectID;
+        $executionID = $bug->executionID;
         $projects    = array(0 => '');
         $products    = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
 
@@ -870,25 +870,25 @@ class bugZen extends bug
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
 
-        return $this->updateBugTemplete($bugTpl, array('products' => $products, 'projects' => $projects));
+        return $this->updateBug($bug, array('products' => $products, 'projects' => $projects));
     }
 
     /**
-     * 追加bug创建页面的products和projects，并绑定到bugTpl上。
-     * Append the products and projects for the bug create page and bind them to bugTpl.
+     * 追加bug创建页面的products和projects，并绑定到bug上。
+     * Append the products and projects for the bug create page and bind them to bug.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @param  int    $bugID
      * @return object
      */
-    protected function appendProjects4Create(object $bugTpl, int $bugID): object
+    protected function appendProjects4Create(object $bug, int $bugID): object
     {
-        $productID = $bugTpl->productID;
-        $branch    = $bugTpl->branch;
-        $projects  = $bugTpl->projects;
+        $productID = $bug->productID;
+        $branch    = $bug->branch;
+        $projects  = $bug->projects;
 
-        $projectID = $bugTpl->projectID;
-        $project   = $bugTpl->project;
+        $projectID = $bug->projectID;
+        $project   = $bug->project;
 
         /* Link all projects to product when copying bug under qa. */
         if($bugID and $this->app->tab == 'qa')
@@ -900,21 +900,21 @@ class bugZen extends bug
             $projects += array($projectID => $project->name);
         }
 
-        return $this->updateBugTemplete($bugTpl, array('projects' => $projects));
+        return $this->updateBug($bug, array('projects' => $projects));
     }
 
     /**
      * 获得项目的模式。
      * Get project model.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @return object
      */
-    protected function getProjectModel4Create(object $bugTpl): object
+    protected function getProjectModel4Create(object $bug): object
     {
-        $projectID    = $bugTpl->projectID;
-        $executionID  = $bugTpl->executionID;
-        $project      = $bugTpl->project;
+        $projectID    = $bug->projectID;
+        $executionID  = $bug->executionID;
+        $project      = $bug->project;
         $projectModel = '';
 
         if($projectID and $project)
@@ -925,7 +925,7 @@ class bugZen extends bug
             if(!$project->multiple) $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
         }
 
-        return $this->updateBugTemplete($bugTpl, array('projectModel' => $projectModel, 'executionID' => $executionID));
+        return $this->updateBug($bug, array('projectModel' => $projectModel, 'executionID' => $executionID));
     }
 
     /**
@@ -965,27 +965,27 @@ class bugZen extends bug
     }
 
     /**
-     * 获得bug创建页面的products和projects，并绑定到bugTpl上。
-     * Get the executions and projects for the bug create page and bind them to bugTpl.
+     * 获得bug创建页面的products和projects，并绑定到bug上。
+     * Get the executions and projects for the bug create page and bind them to bug.
      *
-     * @param  object $bugTpl
+     * @param  object $bug
      * @return object
      */
-    protected function getExecutions4Create(object $bugTpl): object
+    protected function getExecutions4Create(object $bug): object
     {
-        $productID   = $bugTpl->productID;
-        $branch      = $bugTpl->branch;
-        $projectID   = $bugTpl->projectID;
-        $executionID = $bugTpl->executionID;
+        $productID   = $bug->productID;
+        $branch      = $bug->branch;
+        $projectID   = $bug->projectID;
+        $executionID = $bug->executionID;
 
-        $projects    = $bugTpl->projects;
+        $projects    = $bug->projects;
         $executions  = array(0 => '');
 
         if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
         $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
         $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
-        return $this->updateBugTemplete($bugTpl, array('executions' => $executions, 'execution' => $execution));
+        return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
     }
 
     /**
