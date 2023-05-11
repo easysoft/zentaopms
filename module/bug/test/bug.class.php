@@ -33,14 +33,13 @@ class bugTest
 
         foreach($param as $key => $value) $bug->$key = $value;
 
-        $object   = $this->objectModel->create($bug);
+        $objectID = $this->objectModel->create($bug);
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
-            $objectID = $object['id'];
             $object = $this->objectModel->getByID($objectID);
             return $object;
         }
@@ -2137,11 +2136,11 @@ class bugTest
     }
 
     /**
-     * The test for updatelinkbug function. 
-     * 
-     * @param  string $bugID 
-     * @param  string $linkBug 
-     * @param  string $oldLinkBug 
+     * The test for updatelinkbug function.
+     *
+     * @param  string $bugID
+     * @param  string $linkBug
+     * @param  string $oldLinkBug
      * @access public
      * @return array
      */
