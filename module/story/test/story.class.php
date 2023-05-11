@@ -527,4 +527,33 @@ class storyTest
 
         return $title;
     }
+
+    /**
+     * 测试 fetchProjectStories 方法。
+     * Test fetchProjectStories method.
+     *
+     * @param  int         $productID
+     * @param  int         $projectID
+     * @param  string      $type
+     * @param  string      $branch
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function fetchProjectStoriesTest(int $productID, int $projectID, string $type = 'all', string $branch = '', object|null $pager = null): array
+    {
+        $unclosedStatus = $this->objectModel->lang->story->statusList;
+        unset($unclosedStatus['closed']);
+
+        $storyIdList = array('1,2,3,4,5,6,7');
+        $storyDAO    = $this->objectModel->dao->select("DISTINCT t2.*")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t2.type')->eq('story')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0);
+
+        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $projectID, $type, $branch, $storyIdList, 't2.id_desc', $pager);
+    }
 }

@@ -515,17 +515,17 @@ class storyTao extends storyModel
      * Fetch execution stories.
      *
      * @param  dao         $storyDAO
-     * @param  string      $productParam
-     * @param  string      $unclosedStatus
+     * @param  string      $product
      * @param  string      $orderBy
      * @param  object|null $pager
      * @access protected
      * @return int[]
      */
-    protected function fetchExecutionStories(dao $storyDAO, string $productParam, string $unclosedStatus, string $orderBy, object|null $pager = null): array
+    protected function fetchExecutionStories(dao $storyDAO, string $product, string $orderBy, object|null $pager = null): array
     {
-        return $storyDAO->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
-            ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+        $unclosedStatus = $this->getUnclosedStatusKeys();
+        return $storyDAO->beginIF(!empty($product))->andWhere('t1.product')->eq($product)->fi()
+            ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in($unclosedStatus)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
             ->fetchAll('id');
@@ -539,28 +539,22 @@ class storyTao extends storyModel
      * @param  int         $productID
      * @param  int         $projectID
      * @param  string      $type
-     * @param  string      $branchParam
-     * @param  array       $unclosedStatus
+     * @param  string      $branch
+     * @param  array       $executionIdList
      * @param  string      $orderBy
      * @param  object|null $pager
      * @access protected
      * @return int[]
      */
-    protected function fetchProjectStories(dao $storyDAO, int $productID, int $projectID, string $type, string $branchParam, array $unclosedStatus, string $orderBy, object|null $pager = null): array
+    protected function fetchProjectStories(dao $storyDAO, int $productID, int $projectID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null): array
     {
-        $storyIdList = array();
-        if($type == 'linkedexecution' or $type == 'unlinkedexecution')
-        {
-            $executions  = $this->loadModel('execution')->getPairs($projectID);
-            $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
-        }
-
+        $unclosedStatus = $this->getUnclosedStatusKeys();
         return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
+            ->beginIF($type == 'bybranch' and $branch !== '')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
-            ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-            ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
-            ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi();
+            ->beginIF($type == 'unclosed')->andWhere('t2.status')->in($unclosedStatus)->fi()
+            ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($executionStoryIdList)->fi()
+            ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($executionStoryIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
             ->fetchAll('id');
@@ -604,5 +598,38 @@ class storyTao extends storyModel
 
         $this->dao->sqlobj->sql = $rawQuery;
         return $stories;
+    }
+
+    /**
+     * 获取需求非关闭状态的键值。
+     * Get unclosed status keys.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getUnclosedStatusKeys(): array
+    {
+        $unclosedStatus = $this->lang->story->statusList;
+        unset($unclosedStatus['closed']);
+        return array_keys($unclosedStatus);
+    }
+
+    /**
+     * 获取需求 ID 列表，这些需求是关联在项目下的执行。
+     * Get id list of executions by product.
+     *
+     * @param  string    $type
+     * @param  int       $projectID
+     * @access protected
+     * @return array
+     */
+    protected function getIdListOfExecutionsByProjectID(string $type, int $projectID): array
+    {
+        if($type != 'linkedexecution' && $type != 'unlinkedexecution') return array();
+
+        $executions = $this->loadModel('execution')->getPairs($projectID);
+        if(empty($executions)) return array();
+
+        return $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
     }
 }

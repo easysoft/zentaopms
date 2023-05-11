@@ -234,19 +234,18 @@ class storyModel extends model
         if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
         if(empty($productID)) $productID = key($this->loadModel('product')->getProducts($executionID));
 
+        /* 获取需求。 */
         if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $excludeStories, $pager);
         if($type != 'bysearch')
         {
-            $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
-            $modules        = $this->storyTao->getModules4ExecutionStories($type, $param);
-            $unclosedStatus = $this->lang->story->statusList;
-            unset($unclosedStatus['closed']);
-
+            /* 根据请求类型和参数，获取查询要用到的条件。 */
+            $modules      = $this->storyTao->getModules4ExecutionStories($type, $param);
+            $storyIdList  = $this->storyTao->getIdListOfExecutionsByProjectID($type, $executionID);
             $productParam = ($type == 'byproduct' and $param)        ? $param : $this->cookie->storyProductParam;
             $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
-            /* Get story id list of linked executions. */
+            /* 设置查询需求的公共 DAO 变量。 */
             $type     = (strpos('bymodule|byproduct', $type) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
             $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -258,8 +257,11 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();
-            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $projectID, $type, $branchParam, $unclosedStatus, $orderBy, $pager);
-            if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, $productParam, $unclosedStatus, $orderBy, $pager);
+
+            /* 根据传入的 ID 是项目还是执行分别查询需求。 */
+            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $projectID, $type, $branchParam, $storyIdList, $orderBy, $pager);
+            if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, $productParam, $orderBy, $pager);
         }
 
         $stories = $this->storyTao->fixBranchStoryStage($stories);
