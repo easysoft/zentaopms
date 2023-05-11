@@ -42,7 +42,7 @@
 #customDatatable div.col[data-key=plan] {display: none !important;}
 </style>
 <?php endif;?>
-<?php $isAllModules = (!empty($module->name) or !empty($product->name) or !empty($branch)) ? false : true;?>
+<?php $isAllModules = empty($module->name) && empty($product->name) && empty($branch);?>
 <?php $sidebarName  = $lang->tree->all;?>
 <?php $removeBtn    = '';?>
 <div id="mainMenu" class="clearfix">

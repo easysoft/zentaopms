@@ -1205,10 +1205,9 @@ function deleteCard(objectType, objectID, regionID)
     setTimeout(function()
     {
         var objectLang = objectType + 'Lang';
-        var result     = confirm(window[objectLang].confirmDelete) ? true : false;
+        var result     = confirm(window[objectLang].confirmDelete);
 
-        if(!result) return false;
-        if(!objectID) return false;
+        if(!result || !objectID) return false;
 
         var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
         return $.ajax(

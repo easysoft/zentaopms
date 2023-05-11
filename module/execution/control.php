@@ -251,7 +251,7 @@ class execution extends control
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->setModule    = !$execution->multiple ? false : true;
+        $this->view->setModule    = (bool)$execution->multiple;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
         $this->view->projectName  = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
@@ -959,7 +959,7 @@ class execution extends control
         $this->view->storyType         = $storyType;
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
-        $this->view->isAllProduct      = ($this->cookie->storyProductParam or $this->cookie->storyModuleParam or $this->cookie->storyBranchParam) ? false : true;
+        $this->view->isAllProduct      = !$this->cookie->storyProductParam && !$this->cookie->storyModuleParam && !$this->cookie->storyBranchParam;
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         $this->view->moduleTree        = $moduleTree;
         $this->view->modulePairs       = $modulePairs;
@@ -1904,7 +1904,7 @@ class execution extends control
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
         $this->view->project             = $project;
         $this->view->stageBy             = $project->stageBy;
         $this->view->type                = $type;

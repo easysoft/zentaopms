@@ -14,7 +14,7 @@ $(function()
  */
 function checkClosed()
 {
-    var disabledAssigned = $('#bugList tr.checked .c-assignedTo a').length > 0 ? true : false;
+    var disabledAssigned = $('#bugList tr.checked .c-assignedTo a').length > 0;
     $('#bugList tr.checked .c-assignedTo a').each(function()
     {
         if(!$(this).hasClass('disabled'))
