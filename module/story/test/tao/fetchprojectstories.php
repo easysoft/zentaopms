@@ -21,7 +21,7 @@ $story->gen(50);
 
 /**
 
-title=测试 storyModel->batchGetRelations();
+title=测试 storyModel->fetchProjectStoriesTest();
 cid=1
 pid=1
 
