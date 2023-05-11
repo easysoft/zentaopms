@@ -347,7 +347,7 @@ class bug extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Set from param if there is a object to transfer bug. */
-            setcookie('lastBugModule', (int)$data->data->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('lastBugModule', (string)$data->data->module);
 
             $bug = $this->bug->getByID($bugID);
 
