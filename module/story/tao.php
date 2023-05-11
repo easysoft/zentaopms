@@ -570,6 +570,7 @@ class storyTao extends storyModel
      */
     protected function fixBranchStoryStage(array $stories): array
     {
+        if(empty($stories)) return array();
         $rawQuery = $this->dao->get();
 
         /* 获取阶段序列和关联的多分支产品需求。 */
