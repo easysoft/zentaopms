@@ -92,7 +92,7 @@ class bugZen extends bug
         if(!empty($rawdata->lane)) $laneID = $rawdata->lane;
 
         $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
-        $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+        if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
         return array($laneID, $columnID);
     }
