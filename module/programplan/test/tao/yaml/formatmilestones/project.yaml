@@ -1,0 +1,16 @@
+title: zt_project
+author: liuchenglong
+version: "1.0"
+fields:
+    - field: id
+      range: 1-6
+    - field: project
+      range: 0, 1, 1, 0, 4, 4
+    - field: model
+      range: 'waterfall, , ,waterfall, , ,'
+    - field: type
+      range: 'project,stage,stage,project,stage,stage'
+    - field: status
+      range: 'suspended,suspended,wait,suspended,suspended,closed'
+    - field: milestone
+      range: 0, 1, 1, 0 ,1 ,1

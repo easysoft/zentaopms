@@ -1,0 +1,8 @@
+title: zt_projectproduct
+author: liuchenglong
+version: "1.0"
+fields:
+    - field: project
+      range: 1-10
+    - field: product
+      range: 1, 1, 1, 2, 2, 2
