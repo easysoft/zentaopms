@@ -34,7 +34,6 @@ class select extends wg
         'required?: bool',
         'disabled?: bool',
         'multiple?: bool',
-        'optional?: bool',
         'items?: array',
         'size?: int',
     );
@@ -97,7 +96,7 @@ class select extends wg
      */
     protected function build()
     {
-        list($items, $multiple, $required, $optional) = $this->prop(array('items', 'multiple', 'required', 'optional'));
+        list($items, $multiple, $required) = $this->prop(array('items', 'multiple', 'required'));
 
         $hasEmptyItem = false;
         $valueList    = $this->getValueList();
@@ -114,10 +113,10 @@ class select extends wg
             }
         }
 
-        /* Prepend empty option when current optional select has no empty item. */
-        if($optional && !$hasEmptyItem) array_unshift($items, $this->onBuildItem(array('text' => '', 'value' => '', 'selected' => in_array('', $valueList))));
+        /* Prepend empty option when current select is not required and whitout any empty item. */
+        if(!$required && !$hasEmptyItem) array_unshift($items, $this->onBuildItem(array('text' => '', 'value' => '', 'selected' => in_array('', $valueList))));
 
-        $props = $this->props->skip(['items', 'value', 'multiple', 'required', 'optional']);
+        $props = $this->props->skip(['items', 'value', 'multiple', 'required']);
 
         return h::select
         (
