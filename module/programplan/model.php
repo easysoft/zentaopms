@@ -22,7 +22,7 @@ class programplanModel extends model
      */
     public function getByID(int $planID): object|false
     {
-        $plan = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($planID)->fetch();
+        $plan = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($planID)->fetch();
 
         if(dao::isError()) return false;
 
