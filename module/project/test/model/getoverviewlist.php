@@ -43,25 +43,33 @@ su('admin');
 /**
 
 title=测试 projectModel::getOverviewList;
+timeout=0
 cid=1
+
+- 获取未开始的项目数量 @3
+
+- 获取状态不为done和closed的项目数量 @7
+
+- 根据项目ID获取项目 @1
+
+- 获取不存在的项目 @0
+
+- 按照ID正序获取项目列表,查看排第一个的项目详情
+ - 属性id @11
+ - 属性name @项目11
+
+- 按照项目名称倒序获取项目列表,查看排第一个的项目详情
+ - 属性id @19
+ - 属性name @项目19
 
 */
 
 global $tester;
-$tester->loadModel('project');
+$projectTester = $tester->loadModel('project');
 
-$byStatus1 = $tester->project->getOverviewList('byStatus', 'wait');
-$byStatus2 = $tester->project->getOverviewList('byStatus', 'undone');
-
-$byId1 = $tester->project->getOverviewList('byid', '11');
-$byId2 = $tester->project->getOverviewList('byid', '10000');
-
-$byOrder1 = $tester->project->getOverviewList('byStatus', 'all', 'id_asc');
-$byOrder2 = $tester->project->getOverviewList('byStatus', 'all', 'name_desc');
-
-r(count($byStatus1))  && p()          && e('3');         // 获取未开始的项目数量
-r(count($byStatus2))  && p()          && e('7');         // 获取状态不为done和closed的项目数量
-r(count($byId1))      && p()          && e('1');         // 根据项目ID获取项目
-r(count($byId2))      && p()          && e('0');         // 获取不存在的项目
-r(current($byOrder1)) && p('id,name') && e('11,项目11'); // 按照ID正序获取项目列表,查看排第一个的项目详情
-r(current($byOrder2)) && p('id,name') && e('19,项目19'); // 按照项目名称倒序获取项目列表,查看排第一个的项目详情
+r(count($projectTester->getOverviewList('wait')))                  && p()          && e('3');         // 获取未开始的项目数量
+r(count($projectTester->getOverviewList('undone')))                && p()          && e('7');         // 获取状态不为done和closed的项目数量
+r(count($projectTester->getOverviewList('', 11)))                  && p()          && e('1');         // 根据项目ID获取项目
+r(count($projectTester->getOverviewList('', 10000)))               && p()          && e('0');         // 获取不存在的项目
+r(current($projectTester->getOverviewList('all', 0, 'id_asc')))    && p('id,name') && e('11,项目11'); // 按照ID正序获取项目列表,查看排第一个的项目详情
+r(current($projectTester->getOverviewList('all', 0, 'name_desc'))) && p('id,name') && e('19,项目19'); // 按照项目名称倒序获取项目列表,查看排第一个的项目详情
