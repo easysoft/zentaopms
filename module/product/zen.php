@@ -365,7 +365,7 @@ class productZen extends product
         /* 获取字段语言项。 */
         $fields     = explode(',', $productConfig->list->exportFields);
         $fieldPairs = array();
-        foreach($fields as $key => $fieldName)
+        foreach($fields as $fieldName)
         {
             $fieldName = trim($fieldName);
             $fieldPairs[$fieldName] = zget($productLang, $fieldName);
@@ -391,7 +391,7 @@ class productZen extends product
         $users        = $this->user->getPairs('noletter');
         $productStats = $this->product->getStats($orderBy, null, $status);
 
-        foreach($productStats as $i => $product)
+        foreach($productStats as $product)
         {
             $product->line              = zget($lines, $product->line, '');
             $product->manager           = zget($users, $product->PO, '');
@@ -1344,7 +1344,8 @@ class productZen extends product
 
         /* For setMenu. */
         if($this->app->tab == 'project') $this->session->set('storyList', $uri, 'project');
-        else {
+        else
+        {
             $this->session->set('productList', $uri, 'product');
             $this->session->set('storyList',   $uri, 'product');
         }
@@ -1452,7 +1453,6 @@ class productZen extends product
         }
 
         print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
-        return;
     }
 
     /**

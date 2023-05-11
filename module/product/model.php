@@ -172,15 +172,12 @@ class productModel extends model
                 $this->session->set('productQuery', ' 1 = 1');
             }
         }
-        else
-        {
-            if($this->session->productQuery == false) $this->session->set('productQuery', ' 1 = 1');
-        }
+        elseif(!$this->session->productQuery) $this->session->set('productQuery', ' 1 = 1');
 
         $productQuery = $this->session->productQuery;
         $productQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $productQuery);
 
-        $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where($productQuery)
             ->andWhere('t1.deleted')->eq(0)
@@ -189,8 +186,6 @@ class productModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
-
-        return $products;
     }
 
     /**
@@ -848,7 +843,7 @@ class productModel extends model
             $modules          = array();
             $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
             $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-            foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
+            foreach($branchModuleList as $branchModules) $modules = array_merge($modules, $branchModules);
         }
         elseif($this->app->tab == 'project')
         {
@@ -860,7 +855,7 @@ class productModel extends model
                 if(isset($branchGroup[$productID]))
                 {
                     $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
-                    foreach($branchModuleList as $branchID => $branchModules)
+                    foreach($branchModuleList as $branchModules)
                     {
                         if(is_array($branchModules)) $moduleList += $branchModules;
                     }
@@ -1438,7 +1433,7 @@ class productModel extends model
         $today                   = helper::today();
         foreach($executionList as $projectID => $executions)
         {
-            foreach($executions as $executionID => &$execution)
+            foreach($executions as &$execution)
             {
                 /* Judge whether the execution is delayed. */
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
