@@ -3,6 +3,271 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
+     * 获取列表页面的 branch 参数。
+     * Get browse branch param.
+     *
+     * @param  string    $branch
+     * @param  string    $productType
+     * @access protected
+     * @return string
+     */
+    protected function getBrowseBranch(string $branch, string $productType): string
+    {
+        if($productType == 'normal') $branch = 'all';
+        if($productType != 'normal')
+        {
+            if($this->cookie->preBranch !== '' && $branch === '') $branch = $this->cookie->preBranch;
+
+            /* 如果是多分支产品时，设置分支的 cookie。*/
+            helper::setcookie('preBranch', $branch);
+        }
+
+        return $branch;
+    }
+
+    /**
+     * 处理列表页面的参数。
+     * Processing browse params.
+     *
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  int       $recTotal
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @access protected
+     * @return array
+     */
+    protected function prepareBrowseParams(string $browseType, int $param, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    {
+        /* 设置模块 ID。*/
+        /* Set module id. */
+        $moduleID = 0;
+        if($this->cookie->bugModule)  $moduleID = $this->cookie->bugModule;
+        if($browseType == 'bymodule') $moduleID = $param;
+
+        /* 设置搜索查询 ID。*/
+        /* Set query id. */
+        $queryID = $browseType == 'bysearch' ? $param : 0;
+
+        /* 设置 id 为第二排序规则。*/
+        /* Append id for second sort rule. */
+        $realOrderBy = common::appendOrder($orderBy);
+
+        /* 加载分页器。*/
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        return array($moduleID, $queryID, $realOrderBy, $pager);
+    }
+
+    /**
+     * 设置浏览页面的 cookie。
+     * Set cookie in browse view.
+     *
+     * @param  object    $product
+     * @param  string    $branch
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function setBrowseCookie(object $product, string $branch, string $browseType, int $param, string $orderBy): void
+    {
+        /* 如果产品或者分支变了，清空 bug 模块的 cookie。*/
+        /* Clear cookie of bug module if the product or the branch is changed. */
+        $productChanged = $this->cookie->preProductID != $product->id;
+        $branchChanged  = $product->type != 'normal' && $this->cookie->preBranch != $branch;
+        if($productChanged || $branchChanged)
+        {
+            $_COOKIE['bugModule'] = 0;
+            helper::setcookie('bugModule', '0', 0);
+        }
+
+        /* 如果浏览类型为按模块浏览或者浏览类型为空，设置 bug 模块的 cookie 为当前模块，清空 bug 分支的 cookie。*/
+        /* Set cookie of bug module and clear cookie of bug branch if browse type is by module or is empty. */
+        if($browseType == 'bymodule' || $browseType == '')
+        {
+            helper::setcookie('bugModule', $param, 0);
+
+            $_COOKIE['bugBranch'] = 0;
+            helper::setcookie('bugBranch', '0', 0);
+        }
+
+        /* 设置测试应用的 bug 排序 cookie。*/
+        /* Set the cookie of bug order in qa. */
+        helper::setcookie('qaBugOrder', $orderBy, 0);
+    }
+
+    /**
+     * 设置浏览界面的 session。
+     * Set session in browse view.
+     *
+     * @param  string    $browseType
+     * @access protected
+     * @return void
+     */
+    protected function setBrowseSession(string $browseType): void
+    {
+        /* 设置浏览方式的 session，记录刚刚是搜索还是按模块浏览。*/
+        /* Set session of browse type. */
+        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
+        if(($browseType == 'bymodule') && $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
+
+        $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
+    }
+
+    /**
+     * 设置列表页面的搜索表单。
+     * Build browse search form.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID): void
+    {
+        $this->config->bug->search['onMenuBar'] = 'yes';
+
+        $actionURL      = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
+
+        $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
+    }
+
+    /**
+     * 获取列表页面的 bug 列表。
+     * Get browse bugs.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $browseType
+     * @param  array     $executions
+     * @param  int       $moduleID
+     * @param  int       $queryID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getBrowseBugs(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager): array
+    {
+        $bugs = $this->bug->getList($browseType, $productID, $this->projectID, $executions, $branch, $moduleID, $queryID, $orderBy, $pager);
+
+        /* 把查询条件保存到 session。*/
+        /* Process the sql, get the conditon partion, save it to session. */
+        $this->loadModel('common')->saveQueryCondition($this->bug->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
+
+        /* 检查 bug 是否有过变更。*/
+        /* Process bug for check story changed. */
+        $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
+
+        /* 处理 bug 的版本信息。*/
+        /* Process the openedBuild and resolvedBuild fields. */
+        return $this->bug->processBuildForBugs($bugs);
+    }
+
+    /**
+     * 获取分支。
+     * Get branch options.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    private function getBranchOptions(int $productID): array
+    {
+        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
+        return array($branchOption, $branchTagOption);
+    }
+
+    /**
+     * 获取浏览页面所需的变量, 并输出到前台。
+     * Get the data required by the browse page and output.
+     *
+     * @param  array     $bugs
+     * @param  object    $product
+     * @param  string    $branch
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  int       $moduleID
+     * @param  array     $executions
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return void
+     */
+    protected function buildBrowseView(array $bugs, object $product, string $branch, string $browseType, int $param, int $moduleID, array $executions, string $orderBy, object $pager): void
+    {
+        $this->loadModel('datatable');
+
+        /* 获取分支列表。*/
+        /* Get branch options. */
+        $showBranch      = false;
+        $branchOption    = array();
+        $branchTagOption = array();
+        if($product->type != 'normal')
+        {
+            $showBranch = $this->loadModel('branch')->showBranch($product->id);
+
+            list($branchOption, $branchTagOption) = $this->getBranchOptions($product->id);
+        }
+
+        /* 获取需求和任务的 id 列表。*/
+        /* Get story and task id list. */
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+
+        $showModule = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
+
+        /* Set view. */
+        $this->view->title           = $product->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->product         = $product;
+        $this->view->branch          = $branch;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
+        $this->view->currentModuleID = $moduleID;
+        $this->view->moduleName      = $moduleID ? $this->tree->getByID($moduleID)->name : $this->lang->tree->all;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
+        $this->view->modules         = $this->tree->getOptionMenu($product->id, $viewType = 'bug', $startModuleID = 0, $branch);
+        $this->view->moduleTree      = $this->tree->getTreeMenu($product->id, 'bug', 0, array('treeModel', 'createBugLink'), '', $branch);
+        $this->view->bugs            = $bugs;
+        $this->view->summary         = $this->bug->summary($bugs);
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
+        $this->view->executions      = $executions;
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch);
+        $this->view->releasedBuilds  = $this->loadModel('release')->getReleasedBuilds($product->id, $branch);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
+        $this->view->tasks           = $this->loadModel('task')->getByList($taskIdList);
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
+        $this->view->pager           = $pager;
+        $this->view->orderBy         = $orderBy;
+
+        $this->display();
+    }
+
+    /**
      * 使用表单数据构造一个bug对象。
      * Prepare a bug object from form data.
      *
