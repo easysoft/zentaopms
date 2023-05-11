@@ -1640,34 +1640,29 @@ class taskTest
      * 测试计算当前任务状态。
      * Test compute the status of the current task.
      *
-     * @param  object $currentTask
-     * @param  object $oldTask
-     * @param  object $task
-     * @param  bool   $condition  true|false
-     * @param  bool   $hasEfforts true|false
-     * @param  int    $teamCount
+     * @param  object       $currentTask
+     * @param  object       $oldTask
+     * @param  object       $task
+     * @param  bool         $condition  true|false
+     * @param  bool         $hasEfforts true|false
+     * @param  array        $members
      * @access public
      * @return object|array
      */
-    public function computeTaskStatusTest($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members): object|array
+    public function computeTaskStatusTest(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object|array
     {
         $task = $this->objectModel->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $task;
-        }
+
+        if(dao::isError()) return dao::getError();
+        return $task;
     }
 
     /**
      * 测试根据条件移除创建任务的必填项。
      * Test remove required fields for creating tasks based on conditions.
      *
-     * @param  object $task
-     * @param  bool   $selectTestStory
+     * @param  object       $task
+     * @param  bool         $selectTestStory
      * @access public
      * @return string|array
      */
@@ -1676,21 +1671,16 @@ class taskTest
         global $tester;
         $tester->config->task->create->requiredFields = 'name,type,execution,story,estimate,estStarted,deadline,module';
         $this->objectModel->removeCreateRequiredFields($task, $selectTestStory);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $tester->config->task->create->requiredFields;
-        }
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->task->create->requiredFields;
     }
 
     /**
      * 测试创建一个任务。
      * Test create a task.
      *
-     * @param  array  $param
+     * @param  array        $param
      * @access public
      * @return object|array
      */
@@ -1717,15 +1707,8 @@ class taskTest
 
         $objectID = $this->objectModel->doCreate($task);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $object = $this->objectModel->getByID($objectID);
-            return $object;
-        }
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getByID($objectID);
     }
 
     /**
@@ -1801,7 +1784,7 @@ class taskTest
      * @access public
      * @return object|bool
      */
-    public function afterCreateTest($taskID = 0, $taskIdList = array(), $bugID = 0, $todoID = 0, $testTasks = array()): object|bool
+    public function afterCreateTest(int $taskID = 0, array $taskIdList = array(), int $bugID = 0, int $todoID = 0, array $testTasks = array()): object|bool
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
@@ -1854,14 +1837,9 @@ class taskTest
         $task->id     = $taskID;
         $task->status = $taskStatus;
         $teams = $this->objectModel->manageTaskTeam($mode, $task, $teamList, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $teams;
-        }
+
+        if(dao::isError()) return dao::getError();
+        return $teams;
     }
 
     /**
@@ -1892,24 +1870,19 @@ class taskTest
         $task->id     = $taskID;
         $task->status = $taskStatus;
         $minStatus = $this->objectModel->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, $inTeams);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $taskTeamMember = $tester->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($account)->fetch();
-            $taskTeamMember = json_decode(json_encode($taskTeamMember), true);
-            return array('minStatus' => $minStatus, 'taskTeamMember' => !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0');
-        }
+
+        if(dao::isError()) return dao::getError();
+        $taskTeamMember = $tester->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($account)->fetch();
+        $taskTeamMember = json_decode(json_encode($taskTeamMember), true);
+        return array('minStatus' => $minStatus, 'taskTeamMember' => !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0');
     }
 
     /**
      * 测试创建关联需求的测试类型的子任务。
      * Test create a subtask for the test type story with the story.
      *
-     * @param  int          $taskID
-     * @param  array        $testTasks
+     * @param  int               $taskID
+     * @param  array             $testTasks
      * @access public
      * @return array|object|bool
      */
