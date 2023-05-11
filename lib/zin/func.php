@@ -110,6 +110,23 @@ function checkbox()
 }
 
 /**
+ * Base form widget.
+ *
+ * ?string id='$GID'
+ * ?string method='post'
+ * ?string url
+ * ?array  actions
+ * ?string actionsClass
+ * ?string target
+ * ?string submitBtnText
+ * ?string cancelBtnText
+ */
+function formBase()
+{
+    return createWg('formBase',  func_get_args());
+}
+
+/**
  * Form widget.
  *
  * ?string id='$GID'
@@ -142,6 +159,66 @@ function form()
 function formPanel()
 {
     return createWg('formPanel', func_get_args());
+}
+
+/**
+ * Zentao form batch wg.
+ *
+ * ?string id='$GID'
+ * ?string method='post'
+ * ?string url
+ * ?array  actions
+ * ?string actionsClass
+ * ?string target
+ * ?array  items
+ * ?int    minRows=1
+ * ?int    maxRows=100
+ * ?array  data
+ * ?string mode='add'
+ */
+function formBatch()
+{
+    return createWg('formBatch', func_get_args());
+}
+
+/**
+ * Zentao form batch item wg.
+ *
+ * ?string          name
+ * ?string|bool     label
+ * ?string          labelClass
+ * ?string          labelProps
+ * ?bool|string     required="auto"
+ * ?array|string    control
+ * ?string          width
+ * ?string|array    value
+ * ?bool            disabled
+ * ?array           items
+ * ?string          placeholder
+ */
+function formBatchItem()
+{
+    return createWg('formBatchItem', func_get_args());
+}
+
+/**
+ * Form panel widget.
+ *
+ * ?string method
+ * ?string url
+ * ?array  actions
+ * ?string target
+ * ?array  items
+ * ?bool   grid
+ * ?int    labelWidth
+ * ?int    minRows=1
+ * ?int    maxRows=100
+ * ?array  data
+ * ?string mode='add'
+ */
+function formBatchPanel()
+{
+    return createWg('formBatchPanel', func_get_args());
 }
 
 /**
