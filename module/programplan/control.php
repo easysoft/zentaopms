@@ -15,8 +15,8 @@ class programplan extends control
     /**
      * Common action.
      *
-     * @param  int     $projectID
-     * @param  int     $productID
+     * @param  int    $projectID
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -37,19 +37,16 @@ class programplan extends control
      * 渲染阶段数据页面。
      * Browse program plans.
      *
-     * @param  string  $projectID
-     * @param  string  $productID
-     * @param  string  $type
-     * @param  string  $orderBy
-     * @param  string  $baselineID
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $baselineID
      * @access public
      * @return void
      */
-    public function browse(string $projectID = '0', string $productID = '0', string $type = 'gantt', string $orderBy = 'id_asc', string $baselineID = '0')
+    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0)
     {
-        $productID  = (int)$productID;
-        $projectID  = (int)$projectID;
-        $baselineID = (int)$baselineID;
         $this->app->loadLang('stage');
         $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
         $this->commonAction($projectID, $productID);
@@ -71,10 +68,10 @@ class programplan extends control
      * 创建一个项目阶段。
      * Create a project plan/phase.
      *
-     * @param  int     $projectID
-     * @param  int     $productID
-     * @param  int     $planID
-     * @param  string  $executionType
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $planID
+     * @param  string $executionType
      * @access public
      * @return void
      */
@@ -137,21 +134,20 @@ class programplan extends control
      * 编辑阶段内容。
      * Edit a project plan.
      *
-     * @param  string    $planID
-     * @param  string    $projectID
+     * @param  int    $planID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function edit(string $planID = '0', string $projectID = '0')
+    public function edit(int $planID = 0, int $projectID = 0)
     {
-        $planID    = (int)$planID;
-        $projectID = (int)$projectID;
-        $plan      = $this->programplan->getByID($planID);
+        $plan = $this->programplan->getByID($planID);
 
         if($_POST)
         {
-            $formData     = form::data($this->config->programplan->edit->form);
-            $postData     = $this->programplanZen->beforeEdit($formData);
+            $formData = form::data($this->config->programplan->edit->form);
+
+            $postData = $this->programplanZen->beforeEdit($formData);
             $postData->id = $planID;
 
             $changes = $this->programplan->update($planID, $projectID, $postData);
@@ -239,16 +235,15 @@ class programplan extends control
      * ajax请求：获取阶段ID的属性。
      * AJAX: Get stageID attributes.
      *
-     * @param  string $stageID
+     * @param  int    $stageID
      * @param  string $attribute
      * @access public
      * @return int
      */
-    public function ajaxGetAttribute(string $stageID, string $attribute): int
+    public function ajaxGetAttribute(int $stageID, string $attribute): int
     {
         $this->app->loadLang('stage');
 
-        $stageID        = (int)$stageID;
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
 
         if(empty($stageAttribute) || $stageAttribute == 'mix')
@@ -263,13 +258,12 @@ class programplan extends control
      * ajax请求：获取阶段ID的属性。
      * AJAX: Get stageID attribute.
      *
-     * @param  string $stageID
+     * @param  int    $stageID
      * @access public
      * @return int
      */
-    public function ajaxGetStageAttr(string $stageID): int
+    public function ajaxGetStageAttr(int $stageID): int
     {
-        $stageID        = (int)$stageID;
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
 
         if(!$stageAttribute) return print(js::error(dao::getError()));
