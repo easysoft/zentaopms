@@ -2993,6 +2993,51 @@ class projectModel extends model
     }
 
     /**
+     * Add plans.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @access public
+     * @return bool
+     */
+    public function addPlans(int $projectID, array $plans): bool
+    {
+        $planIdList = array();
+        foreach($planList as $plans)
+        {
+            foreach($planList as $planID)
+            {
+                $planIdList[$planID] = $planID;
+            }
+        }
+        if(empty($planIdList)) return true;
+
+        $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
+        foreach($planIdList as $planID)
+        {
+            $planStories = $planProducts = array();
+            $planStory   = isset($planStoryGroup[$planID]) ? $planStoryGroup[$planID] : array();
+            if(!empty($planStory))
+            {
+                foreach($planStory as $id => $story)
+                {
+                    if($story->status == 'draft' or $story->status == 'reviewing')
+                    {
+                        unset($planStory[$id]);
+                        continue;
+                    }
+                    $planProducts[$story->id] = $story->product;
+                }
+
+                $planStories = array_keys($planStory);
+                $this->loadModel('execution')->linkStory($projectID, $planStories, $planProducts);
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Update plans.
      *
      * @param  int    $projectID

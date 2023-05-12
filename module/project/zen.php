@@ -392,47 +392,6 @@ class projectZen extends project
     }
 
     /**
-     * Link plan's stories after create a project.
-     *
-     * @param  object $postData
-     * @access protected
-     * @return void
-     */
-    protected function linkPlanStories(object $postData)
-    {
-        $planIdList = array();
-        foreach($postData->rawdata->plans as $plans)
-        {
-            foreach($plans as $planID)
-            {
-                $planIdList[$planID] = $planID;
-            }
-        }
-
-        $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
-        foreach($planIdList as $planID)
-        {
-            $planStories = $planProducts = array();
-            $planStory   = isset($planStoryGroup[$planID]) ? $planStoryGroup[$planID] : array();
-            if(!empty($planStory))
-            {
-                foreach($planStory as $id => $story)
-                {
-                    if($story->status == 'draft' or $story->status == 'reviewing')
-                    {
-                        unset($planStory[$id]);
-                        continue;
-                    }
-                    $planProducts[$story->id] = $story->product;
-                }
-
-                $planStories = array_keys($planStory);
-                $this->loadModel('execution')->linkStory($projectID, $planStories, $planProducts);
-            }
-        }
-    }
-
-    /**
      * Append extras data to post data.
      *
      * @param  object $postData
