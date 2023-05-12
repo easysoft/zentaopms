@@ -1506,11 +1506,11 @@ class projectModel extends model
      *
      * @param  object      $project
      * @param  object      $oldProject
-     * @param  int         $uid
+     * @param  string      $uid
      * @access public
      * @return array|false
      */
-    public function update(object $project, object $oldProject, int $uid): array|false
+    public function update(object $project, object $oldProject, string $uid): array|false
     {
         /* 通过主键查老项目信息, 处理父节点和图片字段。*/
         /* Fetch old project's info and dispose parent and file info. */

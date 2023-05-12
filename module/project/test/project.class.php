@@ -112,11 +112,11 @@ class Project
      *
      * @param  object $project
      * @param  object $oldProject
-     * @param  int    $uid
+     * @param  string $uid
      * @access public
      * @return void
      */
-    public function update(object $project, object $oldProject, int $uid)
+    public function update(object $project, object $oldProject, string $uid)
     {
         $this->project->update($project, $oldProject, $uid);
 

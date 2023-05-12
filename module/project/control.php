@@ -500,7 +500,7 @@ class project extends control
             $postData   = form::data($this->config->project->form->edit);
             $newProject = $this->projectZen->prepareProject($postData, $project->hasProduct);
 
-            $changes = $this->project->update($newProject, $project, (int)$this->post->uid);
+            $changes = $this->project->update($newProject, $project, $this->post->uid);
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
