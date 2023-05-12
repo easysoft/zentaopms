@@ -897,57 +897,49 @@ class productTao extends productModel
     {
         switch ($tableName)
         {
-        case TABLE_PRODUCTPLAN:
-            /* Get unclosed plans count. */
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('end')->gt(helper::now())->fetch();
-            break;
-        case TABLE_BUILD:
-            /* Get builds count. */
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-            break;
-        case TABLE_CASE:
-            /* Get cases count. */
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-            break;
-        case TABLE_BUG:
-            /* Get bugs count. */
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-            break;
-        case TABLE_DOC:
-            /* Get docs count. */
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
-            break;
-        case TABLE_RELEASE:
-            /* Get releases count. */
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-            break;
-        case TABLE_PROJECTPRODUCT:
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t2.deleted')->eq(0)
-                ->andWhere('t1.product')->eq($productID)
-                ->andWhere('t2.type')->eq('project')
-                ->fetch();
-            break;
-        case 'executions':
-            $record = $this->dao->select('count(*) AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t2.deleted')->eq(0)
-                ->andWhere('t1.product')->eq($productID)
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->fetch();
-            break;
-        case 'progress':
-            $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('status')->eq('closed')->fetch('count');
-            if(empty($closedTotal)) return 0;
+            case TABLE_PRODUCTPLAN:
+                /* Get unclosed plans count. */
+                return $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->andWhere('end')->gt(helper::now())->fetch('count');
+            case TABLE_BUILD:
+                /* Get builds count. */
+                return $this->dao->select('COUNT(*) AS count')->from(TABLE_BUILD)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+            case TABLE_CASE:
+                /* Get cases count. */
+                return $this->dao->select('COUNT(*) AS count')->from(TABLE_CASE)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+            case TABLE_BUG:
+                /* Get bugs count. */
+                return $this->dao->select('COUNT(*) AS count')->from(TABLE_BUG)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+            case TABLE_DOC:
+                /* Get docs count. */
+                return $this->dao->select('COUNT(*) AS count')->from(TABLE_DOC)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+            case TABLE_RELEASE:
+                /* Get releases count. */
+                return $this->dao->select('COUNT(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
+            case TABLE_PROJECTPRODUCT:
+                return $this->dao->select('COUNT(*) AS count')
+                    ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                    ->where('t2.deleted')->eq('0')
+                    ->andWhere('t1.product')->eq("$productID")
+                    ->andWhere('t2.type')->eq('project')
+                    ->fetch('count');
+            case 'executions':
+                return $this->dao->select('COUNT(*) AS count')
+                    ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                    ->where('t2.deleted')->eq('0')
+                    ->andWhere('t1.product')->eq("$productID")
+                    ->andWhere('t2.type')->in('sprint,stage,kanban')
+                    ->fetch('count');
+            case 'progress':
+                $closedTotal = $this->dao->select('COUNT(id) AS count')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->andWhere('status')->eq('closed')->fetch('count');
+                if(empty($closedTotal)) return 0;
 
-            $allTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
-            return round($closedTotal / $allTotal * 100, 1);
-        default:
-            return 0;
+                $allTotal = $this->dao->select('COUNT(id) AS count')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
+                return round($closedTotal / $allTotal * 100, 1);
         }
 
-        return $record ? $record->count : 0;
+        return 0;
     }
 
     /**
