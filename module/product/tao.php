@@ -637,13 +637,11 @@ class productTao extends productModel
      * @access protected
      * @return int
      */
-    protected function getStoriesInCasesCount(array $storyIdList): int
+    protected function getStoryCasesCount(array $storyIdList): int
     {
         if(empty($storyIdList)) return 0;
 
-        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
-
-        return count($cases);
+        return $this->dao->select('COUNT(story) AS count')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq('0')->fetch('count');
     }
 
     /**

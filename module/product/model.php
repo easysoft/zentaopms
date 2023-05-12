@@ -1517,7 +1517,7 @@ class productModel extends model
             }
         }
 
-        $casesCount = $this->productTao->getStoriesInCasesCount($storyIdList);
+        $casesCount = $this->productTao->getStoryCasesCount($storyIdList);
         $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
         $storyCommon = $this->lang->SRCommon;
