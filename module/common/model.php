@@ -2541,7 +2541,8 @@ EOF;
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
-        die(header("location: $redirectUrl"));
+        header("location: $redirectUrl");
+        helper::end();
     }
 
     /**
@@ -2966,7 +2967,7 @@ EOF;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) die(js::locate($this->config->webRoot));
+        if($isFreepasswd) helper::end(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));
@@ -3115,12 +3116,12 @@ EOF;
             $response->errcode = $this->config->entry->errcode[$reasonPhrase];
             $response->errmsg  = urlencode($this->lang->entry->errmsg[$reasonPhrase]);
 
-            die(urldecode(json_encode($response)));
+            helper::end(urldecode(json_encode($response)));
         }
         else
         {
             $response->error = $reasonPhrase;
-            die(urldecode(json_encode($response)));
+            helper::end(urldecode(json_encode($response)));
         }
     }
 
