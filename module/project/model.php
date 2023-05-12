@@ -498,6 +498,7 @@ class projectModel extends model
 
 
     /**
+     * 生成项目下拉框跳转链接
      * Create the link from module,method.
      *
      * @param  string $module
@@ -506,170 +507,42 @@ class projectModel extends model
      * @access public
      * @return string
      */
-    public function getProjectLink($module, $method, $projectID)
+    public function getProjectLink(string $module, string $method, int $projectID) :string
     {
         $link    = helper::createLink('project', 'index', "projectID=%s");
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        $project = $this->projectTao->fetchProjectInfo($projectID);
 
         if(empty($project->multiple)) return $link;
 
-        if(in_array($module, array('testreport', 'testcase')))
-            return helper::createLink('project', $module, "projectID=%s");
-
-        if($module == 'projectstory' && in_array($method, array('story', 'linkstory', 'track')))
-            return helper::createLink($module, $method, "projectID=%s");
-
-        if($module == 'project') $this->buildLinkForProject($module, $method);
-        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord,', ',' . $module . ',') !== false)
+        if($module == 'build' && $method !== 'create')
         {
-            if($module == 'product' and $method == 'showerrornone')
-            {
-                $link = helper::createLink('projectstory', 'story', "projectID=%s");
-            }
-            elseif($module == 'projectstory' and $method == 'story')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'projectstory' and $method == 'linkstory')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'projectstory' and $method = 'track')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'bug')
-            {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method, "productID=0&branch=0&extras=projectID=%s");
-                }
-                elseif($method == 'edit')
-                {
-                    $link = helper::createLink('project', 'bug', "projectID=%s");
-                }
-            }
-            elseif($module == 'story')
-            {
-                if($method == 'change' or $method == 'create')
-                {
-                    $link = helper::createLink('projectstory', 'story', "projectID=%s");
-                }
-                elseif($method == 'zerocase')
-                {
-                    $link = helper::createLink('project', 'testcase', "projectID=%s");
-                }
-            }
-            elseif($module == 'testcase')
-            {
-                $link = helper::createLink('project', 'testcase', "projectID=%s");
-            }
-            elseif($module == 'testtask')
-            {
-                if($method == 'browseunits')
-                {
-                    $link = helper::createLink('project', 'testcase', "projectID=%s");
-                }
-                else
-                {
-                    $link = helper::createLink('project', 'testtask', "projectID=%s");
-                }
-            }
-            elseif($module == 'testreport')
-            {
-                $link = helper::createLink('project', 'testreport', "projectID=%s");
-            }
-            elseif($module == 'repo')
-            {
-                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . '#app=project';
-            }
-            elseif($module == 'doc' or $module == 'api')
-            {
-                $link = helper::createLink($module, 'projectSpace', "objectID=%s") . '#app=project';
-            }
-            elseif($module == 'build')
-            {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s") . '#app=project';
-                }
-                else
-                {
-                    $fromModule = $this->app->tab == 'project' ? 'projectbuild' : 'project';
-                    $fromMethod = $this->app->tab == 'project' ? 'browse' : 'build';
-                    $link = helper::createLink($fromModule, $fromMethod, "projectID=%s");
-                }
-            }
-            elseif($module == 'projectrelease')
-            {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method, "projectID=%s");
-                }
-                else
-                {
-                    $link = helper::createLink('projectrelease', 'browse', "projectID=%s");
-                }
-            }
-            elseif($module == 'stakeholder')
-            {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method, "projectID=%s");
-                }
-                else
-                {
-                    $link = helper::createLink($module, 'browse', "projectID=%s");
-                }
-            }
-            elseif(strpos("issue,risk,meeting,report,measrecord", $module) !== false)
-            {
-                if($method == 'projectsummary')
-                {
-                    $link = helper::createLink($module, $method, "projectID=%s") . '#app=project';
-                }
-                else
-                {
-                    $link = helper::createLink($module, 'browse', "projectID=%s");
-                }
-            }
+            $fromModule = $this->app->tab == 'project' ? 'projectbuild' : 'project';
+            $fromMethod = $this->app->tab == 'project' ? 'browse' : 'build';
+
+            return helper::createLink($fromModule, $fromMethod, "projectID=%s");
+        }
+
+        if(!empty($this->config->project->linkMap->$module[$method]))
+        {
+            $linkParams = $this->config->project->linkMap->$module[$method];
+            if(!$linkParams[0]) $linkParams[0] = $module;
+            if(!$linkParams[1]) $linkParams[1] = $method;
+
+            return helper::createLink($linkParams[0], $linkParams[1], $linkParams[2]) . $linkParams[3];
+        }
+
+        if(!empty($this->config->project->linkMap->$module['']))
+        {
+            $linkParams = $this->config->project->linkMap->$module[''];
+            if(!$linkParams[0]) $linkParams[0] = $module;
+
+            return helper::createLink($linkParams[0], $linkParams[1], $linkParams[2]) . $linkParams[3];
         }
 
         if(in_array($module, $this->config->waterfallModules))
         {
-            $link = helper::createLink($module, 'browse', "projectID=%s");
-            if($module == 'reviewissue')
-            {
-                $link = helper::createLink($module, 'issue', "projectID=%s");
-            }
-            elseif($module == 'cm' and $method = 'report')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'weekly' and $method = 'index')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'milestone' and $method = 'index')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'workestimation' and $method = 'index')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'durationestimation' and $method = 'index')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'budget' and $method = 'summary')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'programplan')
-            {
-                $link = helper::createLink('project', 'execution', "type=all&projectID=%s");
-            }
+            return helper::createLink($module, 'browse', "projectID=%s");
         }
 
         return $link;

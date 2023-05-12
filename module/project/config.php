@@ -346,4 +346,112 @@ $config->project->browseTable->cols['actions']['actionsMap'] = array(
     'whitelist' => array('icon'=> 'icon-shield-check', 'text'=> $lang->project->whitelist,      'name'  => 'whitelist')
 );
 
+$config->project->linkMap = new stdclass();
+
+$config->project->linkMap->project = array();
+$config->project->linkMap->project['execution']      = array('', '', 'status=all&projectID=%s', '');
+$config->project->linkMap->project['bug']            = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['testcase']       = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['testtask']       = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['testreport']     = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['build']          = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['view']           = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['dynamic']        = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['manageproducts'] = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['team']           = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['managemembers']  = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['whitelist']      = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['addwhitelist']   = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['group']          = array('', '', 'projectID=%s', '');
+$config->project->linkMap->project['managePriv']     = array('project', 'group', 'projectID=%s', '');
+
+$config->project->linkMap->product = array();
+$config->project->linkMap->product['showerrornone'] = array('projectstory', 'story', 'projectID=%s', '');
+
+$config->project->linkMap->projectstory = array();
+$config->project->linkMap->projectstory['story']     = array('', '', 'projectID=%s', '');
+$config->project->linkMap->projectstory['linkstory'] = array('', '', 'projectID=%s', '');
+$config->project->linkMap->projectstory['track']     = array('', '', 'projectID=%s', '');
+
+$config->project->linkMap->bug = array();
+$config->project->linkMap->bug['create'] = array('', '', 'productID=0&branch=0&extras=projectID=%s', '');
+$config->project->linkMap->bug['edit']   = array('project', 'bug', 'projectID=%s', '');
+
+$config->project->linkMap->story = array();
+$config->project->linkMap->story['change']   = array('projectstory', 'story', 'projectID=%s', '');
+$config->project->linkMap->story['create']   = array('projectstory', 'story', 'projectID=%s', '');
+$config->project->linkMap->story['zerocase'] = array('project', 'testcase', 'projectID=%s', '');
+
+$config->project->linkMap->testcase = array();
+$config->project->linkMap->testcase[''] = array('project', 'testcase', 'projectID=%s', '');
+
+$config->project->linkMap->testtask = array();
+$config->project->linkMap->testtask['browseunits'] = array('project', 'testcase', 'projectID=%s', '');
+$config->project->linkMap->testtask['']            = array('project', 'testtask', 'projectID=%s', '');
+
+$config->project->linkMap->testreport = array();
+$config->project->linkMap->testreport[''] = array('project', 'testreport', 'projectID=%s', '');
+
+$config->project->linkMap->repo = array();
+$config->project->linkMap->repo[''] = array('repo', 'browse', 'repoID=&branchID=&objectID=%s', '#app=project');
+
+$config->project->linkMap->doc = array();
+$config->project->linkMap->doc[''] = array('doc', 'projectSpace', 'objectID=%s', '#app=project');
+
+$config->project->linkMap->build = array();
+$config->project->linkMap->build['create'] = array('', '', 'executionID=&productID=&projectID=%s', '#app=project');
+
+$config->project->linkMap->projectrelease = array();
+$config->project->linkMap->projectrelease['create'] = array('', '', 'projectID=%s', '');
+$config->project->linkMap->projectrelease['']       = array('projectrelease', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->stakeholder = array();
+$config->project->linkMap->stakeholder['create'] = array('', '', 'projectID=%s', '');
+$config->project->linkMap->stakeholder['']       = array('stakeholder', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->issue = array();
+$config->project->linkMap->issue['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->issue['']               = array('issue', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->risk = array();
+$config->project->linkMap->risk['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->risk['']               = array('issue', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->meeting = array();
+$config->project->linkMap->meeting['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->meeting['']               = array('issue', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->report = array();
+$config->project->linkMap->report['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->report['']               = array('issue', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->measrecord = array();
+$config->project->linkMap->measrecord['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->measrecord['']               = array('issue', 'browse', 'projectID=%s', '');
+
+$config->project->linkMap->reviewissue = array();
+$config->project->linkMap->reviewissue[''] = array('reviewissue', 'issue', 'projectID=%s', '');
+
+$config->project->linkMap->cm = array();
+$config->project->linkMap->cm['report'] = array('cm', 'report', 'projectID=%s', '');
+
+$config->project->linkMap->weekly = array();
+$config->project->linkMap->weekly['index'] = array('weekly', 'index', 'projectID=%s', '');
+
+$config->project->linkMap->milestone = array();
+$config->project->linkMap->milestone['index'] = array('milestone', 'index', 'projectID=%s', '');
+
+$config->project->linkMap->workestimation = array();
+$config->project->linkMap->workestimation['index'] = array('workestimation', 'index', 'projectID=%s', '');
+
+$config->project->linkMap->durationestimation = array();
+$config->project->linkMap->durationestimation['index'] = array('durationestimation', 'index', 'projectID=%s', '');
+
+$config->project->linkMap->budget = array();
+$config->project->linkMap->budget['summary'] = array('budget', 'summary', 'projectID=%s', '');
+
+$config->project->linkMap->programplan = array();
+$config->project->linkMap->programplan[''] = array('project', 'execution', 'type=all&projectID=%s', '');
+            
+
 include 'config/form.php';
