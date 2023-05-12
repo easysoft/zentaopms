@@ -121,9 +121,10 @@ class product extends control
         $browseType = strtolower($browseType);
 
         /* Pre process. */
-        $isProjectStory = $this->app->rawModule == 'projectstory';
         $this->loadModel('datatable');
         $this->loadModel('execution');
+        $isProjectStory = $this->app->rawModule == 'projectstory';
+        $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
 
         /* Generate data. */
         $showModule              = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
@@ -131,7 +132,7 @@ class product extends control
         $product                 = $this->productZen->getBrowseProduct($productID);
         $project                 = $this->loadModel('project')->getByID($projectID);
         list($branch, $branchID) = $this->productZen->getBranchAndBranchID($product, $branch);
-        $orderBy                 = $orderBy ?? ($this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc');
+        $orderBy                 = $orderBy ? $orderBy : $cookieOrderBy;
 
         /* ATTENTION: be careful to change the order of follow sentencies. */
         $this->productZen->setMenu4Browse($projectID, $productID, $branch, $storyType);

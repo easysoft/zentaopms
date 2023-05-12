@@ -1014,7 +1014,7 @@ class productZen extends product
         /* If product does not exist in $this->products list, then attach it to the list. */
         if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
 
-        return $product ?? false;
+        return $product ? $product : false;
     }
 
     /**
