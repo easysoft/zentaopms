@@ -132,7 +132,7 @@ class blockModel extends model
      */
     public function getMyHiddenBlocks(string $dashboard): array|false
     {
-        return $this->blockTao->fetchMyBlocks($dashboard, $hidden = 1);
+        return $this->blockTao->fetchMyBlocks($dashboard, 1);
     }
 
     /**
@@ -482,7 +482,6 @@ class blockModel extends model
         $data->params  = json_encode($params);
 
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
-
         return !dao::isError();
     }
 }
