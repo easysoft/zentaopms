@@ -590,11 +590,10 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  object $team
-     * @param  object $rawData
      * @access public
      * @return array|string|false
      */
-    public function update(object $task, object $team, object $rawData): array|string|false
+    public function update(object $task, object $team): array|string|false
     {
         $taskID = $task->id;
         if($taskID <= 0) return false;
