@@ -20,4 +20,4 @@ div.checkbox-primary + span.table-nest-icon {margin-left: 0px !important;}
 #checkAll + label.hover:after {border-width: 0px;}
 .c-budget {width:100px; text-align: right; padding-right:16px !important;}
 .c-status {width: 65px !important;}
-.icon-scrum.table-nest-toggle:after, .icon-waterfall.table-nest-toggle:after, .icon-kanban.table-nest-toggle:after, .icon-waterfallplus.table-nest-toggle:after, .icon-aglieplus.table-nest-toggle:after {content: ''; border: 0;}
+.icon-scrum.table-nest-toggle:after, .icon-waterfall.table-nest-toggle:after, .icon-kanban.table-nest-toggle:after, .icon-waterfallplus.table-nest-toggle:after, .icon-aglieplus.table-nest-toggle:after, .icon-ipd.table-nest-toggle:after {content: ''; border: 0;}
