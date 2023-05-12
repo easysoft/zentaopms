@@ -225,10 +225,10 @@ $lang->project->budgetOverrun          = "{$lang->projectCommon}的预算超出�
 $lang->project->disabledInputTip       = '请先取消%s';
 $lang->project->linkRepoFailed         = '关联代码库失败';
 $lang->project->unLinkProductTip       = "您确认要取消与%s的关联关系吗？（不影响已关联的需求）";
-$lang->project->summary                = "本页共 <strong>%s</strong> 个{$lang->projectCommon}。";
-$lang->project->allSummary             = "本页共 <strong>%s</strong> 个{$lang->projectCommon}，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，已挂起 <strong>%s</strong>，已关闭 <strong>%s</strong> 。";
-$lang->project->checkedSummary         = "选中 <strong>%total%</strong> 个{$lang->projectCommon}。";
-$lang->project->checkedAllSummary      = "选中 <strong>%total%</strong> 个{$lang->projectCommon}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，已挂起 <strong>%suspended%</strong>，已关闭 <strong>%closed%</strong> 。";
+$lang->project->summary                = "本页共 %s 个{$lang->projectCommon}。";
+$lang->project->allSummary             = "本页共 %s 个{$lang->projectCommon}，未开始 %s，进行中 %s，已挂起 %s，已关闭 %s 。";
+$lang->project->checkedSummary         = "选中 %total% 个{$lang->projectCommon}。";
+$lang->project->checkedAllSummary      = "选中 %total% 个{$lang->projectCommon}，未开始 %wait%，进行中 %doing%，已挂起 %suspended%，已关闭 %closed% 。";
 
 $lang->project->error = new stdclass();
 $lang->project->error->existProductName = "{$lang->productCommon}名称已存在。";

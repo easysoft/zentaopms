@@ -224,10 +224,10 @@ $lang->project->budgetOverrun          = "The {$lang->projectCommon}'s budget ex
 $lang->project->disabledInputTip       = 'Please cancel %s first';
 $lang->project->linkRepoFailed         = "Failed to link {$lang->projectCommon}s and code repositories.";
 $lang->project->unLinkProductTip       = 'Are you sure you want to unlink %s? (Does not affect linked requirements)';
-$lang->project->summary                = "Total {$lang->projectCommon}s: <strong>%s</strong>.";
-$lang->project->allSummary             = "Total {$lang->projectCommon}s: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>, Suspended: <strong>%s</strong>, Closed: <strong>%s</strong>.";
-$lang->project->checkedSummary         = 'Seleted: <strong>%total%</strong>.';
-$lang->project->checkedAllSummary      = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>, Suspended: <strong>%suspended%</strong>, Closed: <strong>%closed%</strong>.';
+$lang->project->summary                = "Total {$lang->projectCommon}s: %s.";
+$lang->project->allSummary             = "Total {$lang->projectCommon}s: %s, Wait: %s, Doing: %s, Suspended: %s, Closed: %s.";
+$lang->project->checkedSummary         = 'Seleted: %total%.';
+$lang->project->checkedAllSummary      = 'Seleted: %total%, Wait: %wait%, Doing: %doing%, Suspended: %suspended%, Closed: %closed%.';
 
 $lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->tip = new stdclass();
