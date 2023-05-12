@@ -249,12 +249,14 @@ class todoZen extends todo
 
         $objectID   = 0;
         $postData   = $form->get();
-        $objectType = $oldTodo->type;
+        $objectType = !empty($postData->type) ? $postData->type : $oldTodo->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
-        if($hasObject && $objectType) $objectID = $postData->uid ? $postData->$objectType : $postData->objectID;
+        if($hasObject && $objectType) $objectID = $this->post->$objectType ? $this->post->$objectType : $this->post->objectID;
+        /* Cycle todo date Replaces the todo date. */
         $postData->date = !empty($postData->config['date']) ? $postData->config['date'] : $postData->date;
 
+        /* Process todo. */
         $todo = $form->add('account', $oldTodo->account)
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
@@ -268,10 +270,11 @@ class todoZen extends todo
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
+        /* Non-custom type Gets the backlog name based on the type id. */
         if(in_array($todo->type, $this->config->todo->moduleList))
         {
             $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($objectType);
+            $object = $this->loadModel($type)->getByID((int)$objectID);
             if(isset($object->name))  $todo->name = $object->name;
             if(isset($object->title)) $todo->name = $object->title;
         }
@@ -282,14 +285,9 @@ class todoZen extends todo
             return false;
         }
 
-        if(!empty($oldTodo->cycle))
-        {
-            $this->handleCycleConfig($todo);
-        }
-        else
-        {
-            $todo->config = '';
-        }
+        /* Handle cycle configuration item. */
+        if(!empty($oldTodo->cycle)) $this->handleCycleConfig($todo);
+        else $todo->config = '';
 
         return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
     }

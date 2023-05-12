@@ -34,9 +34,10 @@ $config->todo->batchCreate->form['date']        = array('required' => false, 'ty
 $config->todo->batchCreate->form['switchDate']  = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->todo->edit->form = array();
-$config->todo->edit->form['name']         = array('required' => true,  'type' => 'string');
+if($this->post->type && !in_array($this->post->type, $this->config->todo->moduleList)) $config->todo->edit->form['name'] = array('required' => true,  'type' => 'string');
 $config->todo->edit->form['status']       = array('required' => true,  'type' => 'string');
 $config->todo->edit->form['pri']          = array('required' => true,  'type' => 'int');
+$config->todo->edit->form['type']         = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->edit->form['date']         = array('required' => false, 'type' => 'string',  'default' => helper::today());
 $config->todo->edit->form['begin']        = array('required' => false, 'type' => 'int',     'default' => 2400);
 $config->todo->edit->form['end']          = array('required' => false, 'type' => 'int',     'default' => 2400);
