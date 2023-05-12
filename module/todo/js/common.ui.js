@@ -228,8 +228,8 @@ function changeDate(dateInput)
 }
 
 /**
- * 间隔输入控件失焦。
- * The input control of the every is blur.
+ * 验证间隔天数是否为空。
+ * Verify if the sapceDay value is empty.
  *
  * @param  object spaceDay
  * @return void
@@ -240,8 +240,8 @@ function verifySpaceDay(spaceDay)
 }
 
 /**
- * 周期类型为天的日期控件失焦。
- * Date control with cycle type of day is blur.
+ * 验证周期类型为天的日期是否为空。
+ * Verify if the date with a cycle type of days is empty.
  *
  * @param  object dateInput
  * @return void
@@ -252,8 +252,8 @@ function verifyCycleDate(dateInput)
 }
 
 /**
- * 结束时间失焦。
- * The end time control is blur.
+ * 验证结束时间是否正确。
+ * Verify if the end time is correct.
  *
  * @param  object time
  * @return void

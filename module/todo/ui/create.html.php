@@ -443,7 +443,7 @@ formPanel
                         'data-placement' => 'top-start',
                         'href'           => 'privateTip',
                         'square'         => true,
-                        'class'          => 'ghost h-6 tooltip-btn'
+                        'class'          => 'ghost h-6 mt-0.5 tooltip-btn'
                     )
                 )
             ),
