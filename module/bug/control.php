@@ -85,6 +85,7 @@ class bug extends control
     }
 
     /**
+     * Bug 列表。
      * Browse bugs.
      *
      * @param  int    $productID
@@ -98,175 +99,35 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $productID, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('datatable');
+        $productID  = $this->product->saveVisitState($productID, $this->products);
+        $product    = $this->product->getByID($productID);
+        $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
+        $browseType = $browseType ? strtolower($browseType) : 'unclosed';
 
-        $productID = $this->product->saveVisitState($productID, $this->products);
-        $product   = $this->product->getById($productID);
-        if($product->type != 'normal')
-        {
-            /* Set productID, moduleID, queryID and branch. */
-            $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-            setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        }
-        else
-        {
-            $branch = 'all';
-        }
+        /* 设置排序字段。*/
+        /* Set the order field. */
+        if(!$orderBy) $orderBy = 'id_desc';
+        if($this->cookie->qaBugOrder) $orderBy = $this->cookie->qaBugOrder;
 
+        /* 设置导航。*/
         $this->qa->setMenu($this->products, $productID, $branch);
 
-        /* Set browse type. */
-        $browseType = strtolower($browseType);
-        if($this->cookie->preProductID != $productID or ($this->cookie->preBranch != $branch and $product->type != 'normal' and $branch != 'all') or $browseType == 'bybranch')
-        {
-            $_COOKIE['bugModule'] = 0;
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        }
-        if($browseType == 'bymodule' or $browseType == '')
-        {
-            setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            $_COOKIE['bugBranch'] = 0;
-            setcookie('bugBranch', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        }
-        if($browseType == 'bybranch') setcookie('bugBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('bugBrowseType', $browseType);
+        $this->bugZen->setBrowseCookie($product, $branch, $browseType, $param, $orderBy);
 
-        $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
-        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
+        $this->bugZen->setBrowseSession($browseType);
 
-        /* Set session. */
-        $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
+        /* 处理列表页面的参数。*/
+        /* Processing browse params. */
+        list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
 
-        /* Set moduleTree. */
-        if($browseType == '')
-        {
-            setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            $browseType = 'unclosed';
-        }
-        else
-        {
-            $branch = $this->cookie->treeBranch;
-        }
+        $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
-        if($this->projectID and !$productID)
-        {
-            $moduleTree = $this->tree->getBugTreeMenu($this->projectID, $productID, 0, array('treeModel', 'createBugLink'));
-        }
-        else
-        {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), '', $branch);
-        }
-
-        if(($browseType != 'bymodule' && $browseType != 'bybranch')) $this->session->set('bugBrowseType', $browseType);
-        if(($browseType == 'bymodule' || $browseType == 'bybranch') and $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
-
-        /* Process the order by field. */
-        if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
-        setcookie('qaBugOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        /* Append id for secend sort. */
-        $sort = common::appendOrder($orderBy);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Get executios. */
         $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+        $bugs       = $this->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
-        /* Get product id list. */
-        $productIDList = $productID ? $productID : array_keys($this->products);
-
-        /* Get bugs. */
-        $bugs = $this->bug->getList($browseType, $productIDList, $this->projectID, array_keys($executions), $branch, $moduleID, $queryID, $sort, $pager);
-
-        /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->bug->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
-
-        /* Process bug for check story changed. */
-        $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
-
-        /* Process the openedBuild and resolvedBuild fields. */
-        $bugs = $this->bug->processBuildForBugs($bugs);
-
-        /* Get story and task id list. */
-        $storyIdList = $taskIdList = array();
-        foreach($bugs as $bug)
-        {
-            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
-            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
-            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
-        }
-        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
-
-        /* Build the search form. */
-        $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
-        $this->config->bug->search['onMenuBar'] = 'yes';
-        $searchProducts = $this->product->getPairs('', 0, '', 'all');
-        $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
-
-        $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
-        $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
-
-        $showBranch      = false;
-        $branchOption    = array();
-        $branchTagOption = array();
-        if($product and $product->type != 'normal')
-        {
-            /* Display of branch label. */
-            $showBranch = $this->loadModel('branch')->showBranch($productID);
-
-            /* Display status of branch. */
-            $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
-            foreach($branches as $branchInfo)
-            {
-                $branchOption[$branchInfo->id]    = $branchInfo->name;
-                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-            }
-        }
-
-        /* Set view. */
-        $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
-        $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName,'','title=' . $productName);
-        $this->view->position[]      = $this->lang->bug->common;
-        $this->view->productID       = $productID;
-        $this->view->product         = $product;
-        $this->view->projectProducts = $this->product->getProducts($this->projectID);
-        $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
-        $this->view->releasedBuilds  = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
-        $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
-        $this->view->moduleTree      = $moduleTree;
-        $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
-        $this->view->summary         = $this->bug->summary($bugs);
-        $this->view->browseType      = $browseType;
-        $this->view->bugs            = $bugs;
-        $this->view->users           = $this->user->getPairs('noletter');
-        $this->view->pager           = $pager;
-        $this->view->param           = $param;
-        $this->view->orderBy         = $orderBy;
-        $this->view->moduleID        = $moduleID;
-        $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
-        $this->view->branch          = $branch;
-        $this->view->branchOption    = $branchOption;
-        $this->view->branchTagOption = $branchTagOption;
-        $this->view->executions      = $executions;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
-        $this->view->stories         = $storyList;
-        $this->view->tasks           = $taskList;
-        $this->view->setModule       = true;
-        $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
-        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->showBranch      = $showBranch;
-        $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
-
-        $this->display();
+        $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $param, $moduleID, $executions, $orderBy, $pager);
     }
 
     /**
