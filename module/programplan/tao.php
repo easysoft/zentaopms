@@ -550,4 +550,26 @@ class programplanTao extends programplanModel
 
         return $orders;
     }
+
+    /**
+     * 插入项目细节。
+     * Insert project spec.
+     * @param  int    $planID
+     * @param  object $plan
+     * @access public
+     * @return bool
+     */
+    protected function insertProjectSpec(int $planID, object $plan): bool
+    {
+        $spec = new stdclass();
+        $spec->project   = $planID;
+        $spec->version   = $plan->version;
+        $spec->name      = $plan->name;
+        $spec->milestone = $plan->milestone;
+        $spec->begin     = $plan->begin;
+        $spec->end       = $plan->end;
+
+        $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
+        return !dao::isError();
+    }
 }

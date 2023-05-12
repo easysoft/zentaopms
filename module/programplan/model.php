@@ -741,17 +741,7 @@ class programplanModel extends model
                 if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                 /* Record version change information. */
-                if($planChanged)
-                {
-                    $spec = new stdclass();
-                    $spec->project   = $stageID;
-                    $spec->version   = $plan->version;
-                    $spec->name      = $plan->name;
-                    $spec->milestone = $plan->milestone;
-                    $spec->begin     = $plan->begin;
-                    $spec->end       = $plan->end;
-                    $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
-                }
+                if($planChanged) $this->programplanTao->insertProjectSpec($stageID, $plan);
 
                 $changes  = common::createChanges($oldStage, $plan);
                 $actionID = $this->action->create('execution', $stageID, 'edited');
@@ -827,14 +817,7 @@ class programplanModel extends model
                     if($plan->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                     /* Record version change information. */
-                    $spec = new stdclass();
-                    $spec->project   = $stageID;
-                    $spec->version   = $plan->version;
-                    $spec->name      = $plan->name;
-                    $spec->milestone = $plan->milestone;
-                    $spec->begin     = $plan->begin;
-                    $spec->end       = $plan->end;
-                    $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
+                    $this->programplanTao->insertProjectSpec($stageID, $plan);
 
                     if($project->hasProduct and !empty($linkProducts))
                     {
@@ -926,7 +909,7 @@ class programplanModel extends model
             $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
         }
 
-        if($planChanged)  $plan->version = $oldPlan->version + 1;
+        if($planChanged) $plan->version = $oldPlan->version + 1;
         if(empty($plan->parent)) $plan->parent = $projectID;
         $parentStage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($plan->parent)->andWhere('type')->eq('stage')->fetch();
 
@@ -957,18 +940,7 @@ class programplanModel extends model
             $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
         }
 
-        if($planChanged)
-        {
-            $spec = new stdclass();
-            $spec->project   = $planID;
-            $spec->version   = $plan->version;
-            $spec->name      = $plan->name;
-            $spec->milestone = $plan->milestone;
-            $spec->begin     = $plan->begin;
-            $spec->end       = $plan->end;
-
-            $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
-        }
+        if($planChanged) $this->programplanTao->insertProjectSpec($planID, $plan);
 
         return common::createChanges($oldPlan, $plan);
     }
