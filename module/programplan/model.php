@@ -197,7 +197,8 @@ class programplanModel extends model
     }
 
     /**
-     * Get gantt data group by assigned.
+     * 获取按照指派给分组甘特图相关数据。
+     * Gets Gantt chart related data as assigned to the group.
      *
      * @param  int     $executionID
      * @param  int     $productID
