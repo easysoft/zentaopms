@@ -2511,10 +2511,10 @@ class projectModel extends model
      */
     public function getStats4Kanban()
     {
-        $latestExecutions = $this->projectTao->getLatestExecutions();
-        $projectsStats    = $this->projectTao->getProjectsStats();
+        $ongoingExecutions = $this->projectTao->getOngoingExecutions();
+        $projectsStats     = $this->projectTao->getProjectsStats();
 
-        return array('kanbanGroup' => $projectsStats, 'latestExecutions' => $latestExecutions);
+        return array('kanbanGroup' => $projectsStats, 'ongoingExecutions' => $ongoingExecutions);
     }
 
     /**

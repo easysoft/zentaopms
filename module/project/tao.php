@@ -478,27 +478,27 @@ class projectTao extends projectModel
     }
 
     /**
-     * 获取最近进行中的执行列表。
-     * Get latest executions.
+     * 获取进行中的执行列表。
+     * Get ongoing executions.
      *
      * @access protected
      * @return array
      */
-    protected function getLatestExecutions(): array
+    protected function getOngoingExecutions(): array
     {
         /* 获取进行中的执行。 */
-        $executions = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
-        $doingExecutions = array();
-        foreach($executions as $execution) $doingExecutions[$execution->project][$execution->id] = $execution;
+        $executions        = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
+        $projectExecutions = array();
+        foreach($executions as $execution) $projectExecutions[$execution->project][$execution->id] = $execution;
 
-        /* 将执行按照执行ID进行逆序排序。*/
-        $latestExecutions = array();
-        foreach($doingExecutions as $projectID => $executions)
+        /* 将执行按照执行ID进行逆序排序。 */
+        $ongoingExecutions = array();
+        foreach($projectExecutions as $projectID => $executions)
         {
-            krsort($doingExecutions[$projectID]);
-            $latestExecutions[$projectID] = current($doingExecutions[$projectID]);
+            krsort($projectExecutions[$projectID]);
+            $ongoingExecutions[$projectID] = current($projectExecutions[$projectID]);
         }
-        return $latestExecutions;
+        return $ongoingExecutions;
     }
 
     /**
@@ -510,8 +510,7 @@ class projectTao extends projectModel
      */
     protected function getProjectsStats(): array
     {
-        $this->loadModel('program');
-        $projectsStats = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
+        $projectsStats = $this->loadModel('program')->getProjectStats(0, 'all', 0, 'order_asc');
         $projectsStats = $this->classfyProjects($projectsStats);
 
         /* 只保留最近关闭的两个项目。*/
