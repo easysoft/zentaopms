@@ -76,7 +76,6 @@ $lang->todo->advance      = 'Trước';
 $lang->todo->cycleType    = 'Loại chu kỳ';
 $lang->todo->monthly      = 'Hàng tháng';
 $lang->todo->weekly       = 'Hàng tuần';
-$lang->todo->to           = 'Đến';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';

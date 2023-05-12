@@ -79,7 +79,6 @@ $lang->todo->advance      = '提前';
 $lang->todo->cycleType    = '週期類型';
 $lang->todo->monthly      = '每月';
 $lang->todo->weekly       = '每週';
-$lang->todo->to           = '至';
 
 $lang->todo->cycleDaysLabel  = '間隔天數';
 $lang->todo->beforeDaysLabel = '提前天數';
