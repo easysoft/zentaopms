@@ -23,7 +23,7 @@ class bugTao extends bugModel
 
     /**
      * Get bug list by browse type.
-     * 通过浏览类型获取bug列表。
+     * 通过浏览类型获取 bug 列表。
      *
      * @param  string     $browseType
      * @param  int|array  $productIdList
@@ -94,7 +94,7 @@ class bugTao extends bugModel
     }
 
     /**
-     * 获取需要确认需求变动的bug列表。
+     * 获取需要确认需求变动的 bug 列表。
      * Get bug list that related story need to be confirmed.
      *
      * @param  int|array  $productIdList

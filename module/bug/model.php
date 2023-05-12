@@ -305,7 +305,7 @@ class bugModel extends model
     }
 
     /**
-     * 根据浏览类型获取bug列表。
+     * 根据浏览类型获取 bug 列表。
      * Get bug list by browse type.
      *
      * @param  string     $browseType
