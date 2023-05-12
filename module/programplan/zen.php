@@ -19,8 +19,8 @@ class programplanZen extends programplan
      */
     protected function beforeCreate(object $formData): object
     {
-        $formData->setIf(empty($formData->rawdata->codes), 'codes', array());
-        $formData->setIf(empty($formData->rawdata->output), 'output', array());
+        $formData->setIf(empty($formData->data->codes), 'codes', array());
+        $formData->setIf(empty($formData->data->output), 'output', array());
         return $formData;
     }
 
@@ -71,7 +71,7 @@ class programplanZen extends programplan
      */
     protected function beforeEdit(object $formData): object
     {
-        $rowData = $formData->rawdata;
+        $rowData = $formData->data;
         return isset($rowData->output) ? $formData->join($rowData->output, ',')->get() : $rowData;
     }
 
