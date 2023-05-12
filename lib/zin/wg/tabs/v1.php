@@ -8,7 +8,7 @@ class tabs extends wg
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'items:array',
-        'activeID?string'
+        'activeID?:string'
     );
 
     public static function getPageCSS(): string|false
@@ -79,7 +79,6 @@ class tabs extends wg
     protected function build(): wg
     {
         $items = $this->prop('items');
-        // $activeID  = $this->prop('activeID');
         $isVertical = $this->prop('direction') === 'v';
 
         if(empty($items))
