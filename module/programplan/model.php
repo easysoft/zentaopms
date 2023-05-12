@@ -464,7 +464,7 @@ class programplanModel extends model
         }
         else
         {
-            $milestones = $this->programplanTao->getStageCount((int) $plan->id, 'milestone');
+            $milestones = $this->programplanTao->getStageCount($plan->id, 'milestone');
             if($milestones > 0)
             {
                 $plan->milestone    = 0;
