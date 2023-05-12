@@ -429,7 +429,7 @@ class programplanModel extends model
                         $data->start_date    = $end;
                         $data->endDate       = $end; 
                         $data->duration      = 1;
-                        $data->color         = isset($this->lang->program->gantt->reviewColorList[$point->status]) ? $this->lang->program->gantt->reviewColorList[$point->status] : '#FC913F';
+                        $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
                         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
                         $data->textColor     = $this->lang->execution->gantt->stage->textColor;
                         $data->bar_height    = $this->lang->execution->gantt->bar_height;
