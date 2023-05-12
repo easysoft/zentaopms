@@ -44,7 +44,10 @@ class formBatch extends formBase
         'data?: array',
 
         /* Batch operation mode. */
-        'mode?: string'
+        'mode?: string',
+
+        /* Actions text display on header. */
+        'actionsText?: string',
     );
 
     /**
@@ -108,6 +111,18 @@ class formBatch extends formBase
             }
         }
 
+        if($this->prop('mode') === 'add')
+        {
+            $actionsText = $this->prop('actionsText');
+            if($actionsText === null) $actionsText = data('lang.actions');
+            $headItems[] = h::th
+            (
+                set('data-name', 'ACTIONS'),
+                setClass('form-batch-head'),
+                span(setClass('form-label form-batch-label'), $actionsText)
+            );
+        }
+
         return array
         (
             div
@@ -142,5 +157,15 @@ class formBatch extends formBase
         $props[] = set('data-max-rows', $maxRows);
 
         return $props;
+    }
+
+    /**
+     * Build content after current widget.
+     */
+    protected function buildAfter(): array
+    {
+        $after = parent::buildAfter();
+        $after[] = zui::batchForm(set::_to('#' . $this->id()));
+        return $after;
     }
 }
