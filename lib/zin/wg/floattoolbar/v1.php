@@ -52,9 +52,9 @@ class floatToolbar extends wg
         $mainBtns   = $this->buildBtns($this->prop('main'));
         $suffixBtns = $this->buildBtns($this->prop('suffix'));
 
-        $prefixBlock  = $this->block('prefix');
-        $mainBlock    = $this->block('main');
-        $suffixBlock  = $this->block('suffix');
+        $prefixBlock = $this->block('prefix');
+        $mainBlock   = $this->block('main');
+        $suffixBlock = $this->block('suffix');
 
         $prefixBtns = $this->mergeBtns($prefixBtns, $prefixBlock);
         $mainBtns   = $this->mergeBtns($mainBtns, $mainBlock);
