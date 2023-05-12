@@ -435,9 +435,7 @@ class project extends control
         if($_POST)
         {
             $postData  = form::data($this->config->project->form->create);
-
             $project   = $this->projectZen->prepareCreateExtras($postData);
-
             $projectID = $this->project->create($project, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -445,7 +443,7 @@ class project extends control
             $this->loadModel('action')->create('project', $projectID, 'opened');
 
             /* Link the plan stories. */
-            if(!empty($_POST['hasProduct']) && !empty($_POST['plans'])) $this->projectZen->linkPlanStories($postData);
+            if(($project->hasProduct) && !empty($this->post->plans)) $this->projectZen->linkPlanStories($postData);
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
@@ -465,7 +463,7 @@ class project extends control
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
                 }
 
-                $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
+                $parent     = (int)$project->parent;
                 $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
                 if(!empty($systemMode) and $systemMode == 'light') $parent = 0;
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', false, $projectID)));
