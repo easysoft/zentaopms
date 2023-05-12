@@ -903,11 +903,10 @@ class bug extends control
      * Update assign of bug.
      *
      * @param  int    $bugID
-     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function assignTo($bugID, $kanbanGroup = 'default')
+    public function assignTo($bugID)
     {
         $bug = $this->bug->getById($bugID);
         $this->bug->checkBugExecutionPriv($bug);
@@ -981,35 +980,33 @@ class bug extends control
     {
         if($this->post->bugIDList)
         {
-            $bugIDList     = $this->post->bugIDList;
-            $bugIDList     = array_unique($bugIDList);
-            $oldBugs       = $this->bug->getByIdList($bugIDList);
-            $skipBugIDList = '';
+            $bugIdList     = $this->post->bugIDList;
+            $bugIdList     = array_unique($bugIdList);
+            $oldBugs       = $this->bug->getByIdList($bugIdList);
+            $skipBugIdList = '';
             unset($_POST['bugIDList']);
 
             /* Remove condition mismatched bugs. */
-            foreach($bugIDList as $key => $bugID)
+            foreach($bugIdList as $key => $bugID)
             {
                 $oldBug = $oldBugs[$bugID];
                 if($branchID == $oldBug->branch)
                 {
-                    unset($bugIDList[$key]);
-                    continue;
+                    unset($bugIdList[$key]);
                 }
                 elseif($branchID != $oldBug->branch and !empty($oldBug->module))
                 {
-                    $skipBugIDList .= '[' . $bugID . ']';
-                    unset($bugIDList[$key]);
-                    continue;
+                    $skipBugIdList .= '[' . $bugID . ']';
+                    unset($bugIdList[$key]);
                 }
             }
 
-            if(!empty($skipBugIDList))
+            if(!empty($skipBugIdList))
             {
-                echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIDList));
+                echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList));
             }
 
-            $allChanges = $this->bug->batchChangeBranch($bugIDList, $branchID, $oldBugs);
+            $allChanges = $this->bug->batchChangeBranch($bugIdList, $branchID, $oldBugs);
             if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {
@@ -1190,7 +1187,7 @@ class bug extends control
             if(dao::isError()) return print(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
-            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''));
             $this->action->logHistory($actionID, $changes);
 
@@ -1295,7 +1292,7 @@ class bug extends control
 
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
-            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->action->create('bug', $bugID, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
@@ -1474,7 +1471,7 @@ class bug extends control
             $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->in($closedBugs)->exec();
 
             $this->loadModel('score')->create('ajax', 'batchOther');
-            if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
+            if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)));
             if($viewType)
             {
                 return print(js::locate($this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'parent'));

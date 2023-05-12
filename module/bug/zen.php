@@ -19,7 +19,7 @@ class bugZen extends bug
             ->setIF(empty($data->data->deadline), 'deadline', null)
             ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF($data->data->assignedTo != '', 'assignedDate', $now)
-            ->setIF($data->data->story != false, 'storyVersion', $this->loadModel('story')->getVersion($data->data->story))
+            ->setIF($data->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($data->data->story))
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $data->data->deadline)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $data->data->execution)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
@@ -305,7 +305,7 @@ class bugZen extends bug
         $todoID   = isset($output['todoID']) ? $output['todoID'] : 0;
 
         $action   = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
-        $actionID = $this->action->create('bug', $bugID, $action);
+        $this->action->create('bug', $bugID, $action);
 
         /* Add score for create. */
         if(empty($bug->case))
@@ -634,7 +634,7 @@ class bugZen extends bug
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
-        else if($projectID and $project)
+        elseif($projectID and $project)
         {
             $projects += array($projectID => $project->name);
         }
@@ -762,7 +762,7 @@ class bugZen extends bug
                 $this->view->lanePairs     = $lanePairs;
             }
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
             if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
         }
