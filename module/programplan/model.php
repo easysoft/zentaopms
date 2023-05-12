@@ -921,15 +921,10 @@ class programplanModel extends model
         $relatedExecutionsID = $this->loadModel('execution')->getRelatedExecutions($planID);
         $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
 
-        $conditions = array();
-        $conditions['requiredFields']      = $this->config->programplan->edit->requiredFields ?? '';
-        $conditions['relatedExecutionsID'] = $relatedExecutionsID;
-        $conditions['oldProject']          = $oldPlan->project;
-        $conditions['oldParent']           = $oldPlan->parent;
-        $conditions['parentStage']         = $parentStage;
-        $conditions['setCode']             = $setCode;
+        $plan->relatedExecutionsID = $relatedExecutionsID;
+        $plan->parentStage         = $setCode;
 
-        $result = $this->programplanTao->updateRow($plan, $conditions);
+        $result = $this->programplanTao->updateRow($plan, $oldPlan, $parentStage);
         if(!$result) return false;
 
         $this->setTreePath($planID);

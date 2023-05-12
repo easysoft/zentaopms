@@ -20,25 +20,20 @@ class programplanTao extends programplanModel
      * @access protected
      * @return bool
      */
-    protected function updateRow(object $plan, array $conditions): bool
+    protected function updateRow(object $plan, object $oldPlan, object|null $parentStage): bool
     {
-        $requiredFields = $conditions['requiredFields'] ?? '';
-        $projectIDList  = $conditions['relatedExecutionsID'] ?? '';
-        $project        = $conditions['project'] ?? '';
-        $parentStage    = $conditions['parentStage'] ?? '';
-        $parent         = $conditions['parent'] ?? '';
-        $setCode        = $conditions['setCode'] ?? '';
+        $requiredFields = $this->config->programplan->edit->requiredFields ?? '';
 
-        $getName = false;
-        if($projectIDList && $project && $parentStage && $parent) $getName = true;
+        $getname = '';
+        if($plan->relatedExecutionsID && $oldPlan->project && $parentStage && $oldPlan->parent) $getname = true;
 
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheckIF($requiredFields, $requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF(!empty($plan->percent), 'percent', 'float')
-            ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$projectIDList}) and type in ('sprint','stage') and `project` = {$project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$parent}" : ''))
-            ->checkIF(!empty($plan->code) and $setCode, 'code', 'unique', "id != {$plan->id} and type in ('sprint','stage','kanban') and `deleted` = '0'")
+            ->checkIF(!empty($plan->name) && $getname, 'name', 'unique', "id in ({$plan->relatedExecutionsID}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
+            ->checkIF(!empty($plan->code) and $plan->setCode, 'code', 'unique', "id != {$plan->id} and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($plan->id)
             ->exec();
 
