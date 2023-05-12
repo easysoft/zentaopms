@@ -1341,14 +1341,15 @@ class programplanModel extends model
     }
 
     /**
+     * 更新子阶段的属性值.
      * Update sub-stage attribute.
      *
      * @param  int    $planID
      * @param  string $attribute
      * @access public
-     * @return bool
+     * @return true|null
      */
-    public function updateSubStageAttr($planID, $attribute)
+    public function updateSubStageAttr(int $planID, string $attribute): bool|null
     {
         if($attribute == 'mix') return true;
 
@@ -1356,12 +1357,11 @@ class programplanModel extends model
             ->where('parent')->eq($planID)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
+        if(empty($subStageList)) return true;
+
         $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->where('id')->in(array_keys($subStageList))->exec();
 
-        foreach($subStageList as $childID => $subStage)
-        {
-            $this->updateSubStageAttr($childID, $attribute);
-        }
+        foreach($subStageList as $childID => $subStage) $this->updateSubStageAttr($childID, $attribute);
     }
 
     /**
