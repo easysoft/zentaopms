@@ -493,23 +493,45 @@ class programplanTest
         return 'success';
     }
 
-    /** 测试获取甘特图相关数据。
+    /**
+     * 测试获取甘特图相关数据。
      * Test get data for gantt view.
      *
-     * @param  int     $executionID
-     * @param  int     $productID
-     * @param  int     $baselineID
-     * @param  string  $selectCustom
-     * @param  bool    $returnJson
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $baselineID
+     * @param  string $selectCustom
+     * @param  bool   $returnJson
      * @access public
      * @return array
      */
     public function getDataForGanttTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
     {
-        $objects = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+        $gantt = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
 
-        if($returnJson) $objects = json_decode($objects, true);
+        if($returnJson) $gantt = json_decode($gantt, true);
 
-        return $objects['data'];
+        return $gantt['data'];
+    }
+
+    /**
+     * 测试获取按照指派给分组甘特图相关数据。
+     * The test gets Gantt chart related data as assigned to the group.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $baselineID
+     * @param  string $selectCustom
+     * @param  bool   $returnJson
+     * @access public
+     * @return array
+     */
+    public function getDataForGanttGroupByAssignedToTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
+    {
+        $gantt = $this->objectModel->getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+
+        if($returnJson) $gantt = json_decode($gantt, true);
+
+        return $gantt['data'];
     }
 }
