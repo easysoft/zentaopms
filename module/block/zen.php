@@ -547,6 +547,7 @@ class blockZen extends block
     }
 
     /**
+     * 打印产品计划列表区块。
      * Print plan block.
      *
      * @param  object    $block
@@ -559,15 +560,11 @@ class blockZen extends block
         $this->session->set('productList', $uri, 'product');
         $this->session->set('productPlanList', $uri, 'product');
 
-        $this->app->loadLang('productplan');
-        $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.shadow')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
-            ->orderBy('t1.begin desc')
-            ->beginIF($this->viewType != 'json')->limit($block->params->count)->fi()
-            ->fetchAll();
+        $this->app->loadClass('pager', $static = true);
+        $count = isset($block->params->count) ? (int)$block->params->count : 0;
+        $pager = pager::init(0, $count , 1);
+
+        $this->view->plans = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct');
 
         return !dao::getError();
     }

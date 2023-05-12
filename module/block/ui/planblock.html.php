@@ -16,7 +16,7 @@ panel
     dtable
     (
         set::cols($config->block->plan->dtable),
-        set::data($plans)
+        set::data(array_values($plans))
     )
 );
 
