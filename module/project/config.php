@@ -36,107 +36,160 @@ $config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
 global $lang;
-$config->project->datatable = new stdclass();
-$config->project->datatable->defaultField = array('id', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'progress', 'actions');
+$config->project->dtable = new stdclass();
+$config->project->dtable->defaultField = array('id', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'progress', 'actions');
 
-$config->project->datatable->fieldList['id']['title']    = 'ID';
-$config->project->datatable->fieldList['id']['fixed']    = 'left';
-$config->project->datatable->fieldList['id']['width']    = '60';
-$config->project->datatable->fieldList['id']['required'] = 'yes';
-$config->project->datatable->fieldList['id']['pri']      = '1';
+$config->project->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->project->dtable->fieldList['id']['name']     = 'id';
+$config->project->dtable->fieldList['id']['width']    = 90;
+$config->project->dtable->fieldList['id']['flex']     = 0;
+$config->project->dtable->fieldList['id']['fixed']    = 'left';
+$config->project->dtable->fieldList['id']['type']     = 'id';
+$config->project->dtable->fieldList['id']['sortType'] = 'desc';
+$config->project->dtable->fieldList['id']['checkbox'] = true;
 
-$config->project->datatable->fieldList['name']['title']    = 'name';
-$config->project->datatable->fieldList['name']['fixed']    = 'left';
-$config->project->datatable->fieldList['name']['width']    = 'auto';
-$config->project->datatable->fieldList['name']['minWidth'] = '180';
-$config->project->datatable->fieldList['name']['required'] = 'yes';
-$config->project->datatable->fieldList['name']['sort']     = 'no';
-$config->project->datatable->fieldList['name']['pri']      = '1';
+$config->project->dtable->fieldList['name']['title']        = $lang->project->name;
+$config->project->dtable->fieldList['name']['name']         = 'name';
+$config->project->dtable->fieldList['name']['width']        = 200;
+$config->project->dtable->fieldList['name']['flex']         = 1;
+$config->project->dtable->fieldList['name']['fixed']        = 'left';
+$config->project->dtable->fieldList['name']['type']         = 'link';
+$config->project->dtable->fieldList['name']['sortType']     = true;
+$config->project->dtable->fieldList['name']['linkTemplate'] = helper::createLink('project', 'index', 'projectID = {id}');
 
-$config->project->datatable->fieldList['code']['title']    = 'code';
-$config->project->datatable->fieldList['code']['fixed']    = 'left';
-$config->project->datatable->fieldList['code']['width']    = '100';
-$config->project->datatable->fieldList['code']['minWidth'] = '180';
-$config->project->datatable->fieldList['code']['required'] = 'no';
-$config->project->datatable->fieldList['code']['sort']     = 'no';
-$config->project->datatable->fieldList['code']['pri']      = '1';
+$config->project->dtable->fieldList['code']['title']    = $lang->project->code;
+$config->project->dtable->fieldList['code']['name']     = 'code';
+$config->project->dtable->fieldList['code']['width']    = 100;
+$config->project->dtable->fieldList['code']['flex']     = 0;
+$config->project->dtable->fieldList['code']['fixed']    = false;
+$config->project->dtable->fieldList['code']['sortType'] = false;
 
-$config->project->datatable->fieldList['PM']['title']    = 'PM';
-$config->project->datatable->fieldList['PM']['fixed']    = 'no';
-$config->project->datatable->fieldList['PM']['width']    = '80';
-$config->project->datatable->fieldList['PM']['required'] = 'yes';
-$config->project->datatable->fieldList['PM']['sort']     = 'no';
-$config->project->datatable->fieldList['PM']['pri']      = '2';
+$config->project->dtable->fieldList['PM']['title']    = $lang->project->PM;
+$config->project->dtable->fieldList['PM']['name']     = 'PM';
+$config->project->dtable->fieldList['PM']['width']    = '80';
+$config->project->dtable->fieldList['PM']['flex']     = 1;
+$config->project->dtable->fieldList['PM']['fixed']    = false;
+$config->project->dtable->fieldList['PM']['type']     = 'avatarBtn';
+$config->project->dtable->fieldList['PM']['sortType'] = false;
 
-$config->project->datatable->fieldList['status']['title']    = 'status';
-$config->project->datatable->fieldList['status']['fixed']    = 'left';
-$config->project->datatable->fieldList['status']['width']    = '75';
-$config->project->datatable->fieldList['status']['required'] = 'no';
-$config->project->datatable->fieldList['status']['sort']     = 'yes';
-$config->project->datatable->fieldList['status']['pri']      = '2';
+$config->project->dtable->fieldList['status']['title']    = $lang->project->status;
+$config->project->dtable->fieldList['status']['name']     = 'status';
+$config->project->dtable->fieldList['status']['width']    = 75;
+$config->project->dtable->fieldList['status']['flex']     = 1;
+$config->project->dtable->fieldList['status']['fixed']    = false;
+$config->project->dtable->fieldList['status']['type']     = 'status';
+$config->project->dtable->fieldList['status']['sortType'] = true;
+$config->project->dtable->fieldList['status']['statusMap'] = $lang->project->statusList;
 
-$config->project->datatable->fieldList['hasProduct']['title']    = 'type';
-$config->project->datatable->fieldList['hasProduct']['fixed']    = 'left';
-$config->project->datatable->fieldList['hasProduct']['width']    = '100';
-$config->project->datatable->fieldList['hasProduct']['required'] = 'no';
-$config->project->datatable->fieldList['hasProduct']['sort']     = 'yes';
-$config->project->datatable->fieldList['hasProduct']['pri']      = '2';
+$config->project->dtable->fieldList['hasProduct']['title']    = $lang->project->type;
+$config->project->dtable->fieldList['hasProduct']['name']     = 'hasProduct';
+$config->project->dtable->fieldList['hasProduct']['width']    = 100;
+$config->project->dtable->fieldList['hasProduct']['flex']     = 1;
+$config->project->dtable->fieldList['hasProduct']['fixed']    = false;
+$config->project->dtable->fieldList['hasProduct']['sortType'] = true;
 
-$config->project->datatable->fieldList['budget']['title']    = 'budget';
-$config->project->datatable->fieldList['budget']['fixed']    = 'no';
-$config->project->datatable->fieldList['budget']['width']    = '100';
-$config->project->datatable->fieldList['budget']['required'] = 'yes';
-$config->project->datatable->fieldList['budget']['pri']      = '3';
+$config->project->dtable->fieldList['budget']['title'] = $lang->project->budget;
+$config->project->dtable->fieldList['budget']['name']  = 'budget';
+$config->project->dtable->fieldList['budget']['width'] = 100;
+$config->project->dtable->fieldList['budget']['flex']  = 1;
+$config->project->dtable->fieldList['budget']['fixed'] = 'no';
+$config->project->dtable->fieldList['budget']['type']  = 'money';
 
-$config->project->datatable->fieldList['begin']['title']    = 'begin';
-$config->project->datatable->fieldList['begin']['fixed']    = 'no';
-$config->project->datatable->fieldList['begin']['width']    = '115';
-$config->project->datatable->fieldList['begin']['required'] = 'no';
-$config->project->datatable->fieldList['begin']['pri']      = '9';
+$config->project->dtable->fieldList['begin']['title'] = $lang->project->begin;
+$config->project->dtable->fieldList['begin']['name']  = 'begin';
+$config->project->dtable->fieldList['begin']['width'] = 115;
+$config->project->dtable->fieldList['begin']['flex']  = 1;
+$config->project->dtable->fieldList['begin']['fixed'] = 'no';
+$config->project->dtable->fieldList['begin']['type']  = 'date';
 
-$config->project->datatable->fieldList['end']['title']    = 'end';
-$config->project->datatable->fieldList['end']['fixed']    = 'no';
-$config->project->datatable->fieldList['end']['width']    = '100';
-$config->project->datatable->fieldList['end']['required'] = 'no';
-$config->project->datatable->fieldList['end']['pri']      = '3';
+$config->project->dtable->fieldList['end']['title'] = $lang->project->end;
+$config->project->dtable->fieldList['end']['name']  = 'end';
+$config->project->dtable->fieldList['end']['width'] = 100;
+$config->project->dtable->fieldList['end']['flex']  = 1;
+$config->project->dtable->fieldList['end']['fixed'] = 'no';
+$config->project->dtable->fieldList['end']['type']  = 'date';
 
-$config->project->datatable->fieldList['teamCount']['title']    = 'teamCount';
-$config->project->datatable->fieldList['teamCount']['fixed']    = 'no';
-$config->project->datatable->fieldList['teamCount']['width']    = '70';
-$config->project->datatable->fieldList['teamCount']['required'] = 'no';
-$config->project->datatable->fieldList['teamCount']['sort']     = 'no';
-$config->project->datatable->fieldList['teamCount']['pri']      = '8';
+$config->project->dtable->fieldList['teamCount']['title']    = $lang->project->teamCount;
+$config->project->dtable->fieldList['teamCount']['name']     = 'teamCount';
+$config->project->dtable->fieldList['teamCount']['width']    = 70;
+$config->project->dtable->fieldList['teamCount']['flex']     = 1;
+$config->project->dtable->fieldList['teamCount']['fixed']    = 'no';
+$config->project->dtable->fieldList['teamCount']['sortType'] = false;
+$config->project->dtable->fieldList['teamCount']['type']     = 'count';
 
-$config->project->datatable->fieldList['estimate']['title']    = 'estimate';
-$config->project->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->project->datatable->fieldList['estimate']['width']    = '70';
-$config->project->datatable->fieldList['estimate']['maxWidth'] = '80';
-$config->project->datatable->fieldList['estimate']['required'] = 'no';
-$config->project->datatable->fieldList['estimate']['sort']     = 'no';
-$config->project->datatable->fieldList['estimate']['pri']      = '8';
+$config->project->dtable->fieldList['estimate']['title']    = $lang->project->estimate;
+$config->project->dtable->fieldList['estimate']['name']     = 'estimate';
+$config->project->dtable->fieldList['estimate']['width']    = 70;
+$config->project->dtable->fieldList['estimate']['flex']     = 1;
+$config->project->dtable->fieldList['estimate']['fixed']    = 'no';
+$config->project->dtable->fieldList['estimate']['sortType'] = false;
+$config->project->dtable->fieldList['estimate']['type']     = 'number';
 
-$config->project->datatable->fieldList['consume']['title']    = 'consume';
-$config->project->datatable->fieldList['consume']['fixed']    = 'no';
-$config->project->datatable->fieldList['consume']['width']    = '80';
-$config->project->datatable->fieldList['consume']['maxWidth'] = '80';
-$config->project->datatable->fieldList['consume']['required'] = 'no';
-$config->project->datatable->fieldList['consume']['sort']     = 'no';
-$config->project->datatable->fieldList['consume']['pri']      = '7';
+$config->project->dtable->fieldList['consume']['title']    = $lang->project->consume;
+$config->project->dtable->fieldList['consume']['name']     = 'consume';
+$config->project->dtable->fieldList['consume']['width']    = 80;
+$config->project->dtable->fieldList['consume']['flex']     = 1;
+$config->project->dtable->fieldList['consume']['fixed']    = 'no';
+$config->project->dtable->fieldList['consume']['sortType'] = false;
+$config->project->dtable->fieldList['consume']['type']     = 'number';
 
-$config->project->datatable->fieldList['progress']['title']    = 'progress';
-$config->project->datatable->fieldList['progress']['fixed']    = 'no';
-$config->project->datatable->fieldList['progress']['width']    = '65';
-$config->project->datatable->fieldList['progress']['required'] = 'no';
-$config->project->datatable->fieldList['progress']['sort']     = 'no';
-$config->project->datatable->fieldList['progress']['pri']      = '6';
+$config->project->dtable->fieldList['progress']['title']    = $lang->project->progress;
+$config->project->dtable->fieldList['progress']['name']     = 'progress';
+$config->project->dtable->fieldList['progress']['width']    = 65;
+$config->project->dtable->fieldList['progress']['flex']     = 1;
+$config->project->dtable->fieldList['progress']['fixed']    = 'no';
+$config->project->dtable->fieldList['progress']['type']     = 'progress';
+$config->project->dtable->fieldList['progress']['sortType'] = false;
 
-$config->project->datatable->fieldList['actions']['title']    = 'actions';
-$config->project->datatable->fieldList['actions']['fixed']    = 'right';
-$config->project->datatable->fieldList['actions']['width']    = '165';
-$config->project->datatable->fieldList['actions']['required'] = 'yes';
-$config->project->datatable->fieldList['actions']['pri']      = '1';
+$config->project->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->project->dtable->fieldList['actions']['name']     = 'actions';
+$config->project->dtable->fieldList['actions']['width']    = 165;
+$config->project->dtable->fieldList['actions']['flex']     = 0;
+$config->project->dtable->fieldList['actions']['fixed']    = 'right';
+$config->project->dtable->fieldList['actions']['type']     = 'actions';
+$config->project->dtable->fieldList['actions']['sortType'] = false;
 
-if(!isset($config->setCode) or $config->setCode == 0) unset($config->project->datatable->fieldList['code']);
+$config->project->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'icon-play';
+$config->project->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $lang->project->start;
+$config->project->dtable->fieldList['actions']['actionsMap']['start']['url']  = helper::createLink('project', 'start', 'projectID={id}', '', true);
+
+$config->project->dtable->fieldList['actions']['actionsMap']['close']['icon'] = 'icon-off';
+$config->project->dtable->fieldList['actions']['actionsMap']['close']['hint'] = $lang->project->close;
+$config->project->dtable->fieldList['actions']['actionsMap']['close']['url']  = helper::createLink('project', 'close', 'projectID={id}', '', true);
+
+$config->project->dtable->fieldList['actions']['actionsMap']['active']['icon'] = 'icon-magic';
+$config->project->dtable->fieldList['actions']['actionsMap']['active']['hint'] = $lang->project->activate;
+$config->project->dtable->fieldList['actions']['actionsMap']['active']['url']  = helper::createLink('project', 'activate', 'projectID={id}', '', true);
+
+$config->project->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'icon-edit';
+$config->project->dtable->fieldList['actions']['actionsMap']['edit']['hint'] = $lang->project->edit;
+$config->project->dtable->fieldList['actions']['actionsMap']['edit']['url']  = helper::createLink('project', 'edit', 'projectID={id}');
+
+$config->project->dtable->fieldList['actions']['actionsMap']['pause']['icon'] = 'icon-pause';
+$config->project->dtable->fieldList['actions']['actionsMap']['pause']['hint'] = $lang->project->suspend;
+$config->project->dtable->fieldList['actions']['actionsMap']['pause']['url']  = helper::createLink('project', 'suspend', 'projectID={id}', '', true);
+
+$config->project->dtable->fieldList['actions']['actionsMap']['group']['icon'] = 'icon-group';
+$config->project->dtable->fieldList['actions']['actionsMap']['group']['hint'] = $lang->project->team;
+$config->project->dtable->fieldList['actions']['actionsMap']['group']['url']  = helper::createLink('project', 'team', 'projectID={id}');
+
+$config->project->dtable->fieldList['actions']['actionsMap']['perm']['icon'] = 'icon-lock';
+$config->project->dtable->fieldList['actions']['actionsMap']['perm']['hint'] = $lang->project->group;
+$config->project->dtable->fieldList['actions']['actionsMap']['perm']['url']  = helper::createLink('project', 'group', 'projectID={id}');
+
+$config->project->dtable->fieldList['actions']['actionsMap']['link']['icon'] = 'icon-link';
+$config->project->dtable->fieldList['actions']['actionsMap']['link']['hint'] = $lang->project->manageProducts;
+$config->project->dtable->fieldList['actions']['actionsMap']['link']['url']  = helper::createLink('project', 'manageProducts', 'projectID={id}');
+
+$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['icon'] = 'icon-shield-check';
+$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['hint'] = $lang->project->whitelist;
+$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['url']  = helper::createLink('project', 'whitelist', 'projectID={id}');
+
+$config->project->dtable->fieldList['actions']['actionsMap']['delete']['icon'] = 'icon-trash';
+$config->project->dtable->fieldList['actions']['actionsMap']['delete']['hint'] = $lang->project->delete;
+$config->project->dtable->fieldList['actions']['actionsMap']['delete']['url']  = helper::createLink('project', 'delete', 'projectID={id}');
+
+if(!isset($config->setCode) or $config->setCode == 0) unset($config->project->dtable->fieldList['code']);
 
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum         = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
