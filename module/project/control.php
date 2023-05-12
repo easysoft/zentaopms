@@ -1823,29 +1823,28 @@ class project extends control
     }
 
     /**
-     * 管理项目的关联产品。
-     * Manage products under project.
+     * 管理项目关联产品。
+     * Manage products of project.
      *
      * @param  string $projectID
      * @param  string $from  project|program|programproject
-     *
      * @access public
      * @return void
      */
     public function manageProducts(string $projectID, string $from = 'project')
     {
-        /* Access the nonProduct project alter tips. */
+        /* 如果是无产品项目，则返回。*/
+        /* If hasProduct is 0, return. */
         $projectID = (int)$projectID;
         $project   = $this->project->getById($projectID);
         if(!$project->hasProduct) return print(js::error($this->lang->project->cannotManageProducts) . js::locate('back'));
 
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        $idList     = array_keys($executions);
-
-        /* Sets the associated products of the project. */
+        $IdList     = array_keys($executions);
         if(!empty($_POST))
         {
-            /* No associated product is displayed. */
+            /* 如果没有选择产品，则提示错误*/
+            /* If no product is selected, prompt error. */
             $postData         = form::data($this->config->project->form->manageProducts);
             $postProducts     = $this->post->products;
             $postOtherProduct = $this->post->otherProducts;
@@ -1854,11 +1853,11 @@ class project extends control
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
 
-            /* Merge and build associated products. */
-            $this->projectZen->mergeProducts($projectID, $project, $idList, $postData);
+            $this->projectZen->updateLinkedProducts($projectID, $project, $IdList);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* After the product is linked successfully, the page is displayed. */
+            /* 成功关联产品后，跳转页面。*/
+            /* After successfully associating the product, jump to the page. */
             $locateLink = inLink('manageProducts', "projectID=$projectID");
             if($from == 'program')  $locateLink = $this->session->projectList;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -1867,7 +1866,8 @@ class project extends control
         /* Set menu. */
         $this->setProjectMenu($projectID, $project->parent);
 
-        /* Extract cannot be removed product and branch. */
+        /* 提取无法被移除的关联产品及分支。*/
+        /* Extract associated products and branches that cannot be removed. */
         $this->projectZen->extractUnModifyForm($projectID, $project);
 
         /* Organizing render pages requires data. */
