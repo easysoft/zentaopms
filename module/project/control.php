@@ -114,12 +114,12 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu()
+    public function ajaxGetDropMenu(string $projectID, string $module, string $method)
     {
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
 
-        $this->display();
+        $this->projectZen->getDropMenu(intval($projectID), $module, $method);
     }
 
     /**

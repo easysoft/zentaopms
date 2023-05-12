@@ -570,12 +570,12 @@ class projectZen extends project
     }
 
     /**
-     * 获取项目下拉选择框
+     * 获取项目下拉选择框选项.
      * Get project drop menu.
      *
-     * @param  int $projectID
-     * @param  int $module
-     * @param  int $method
+     * @param  int        $projectID
+     * @param  int        $module
+     * @param  int        $method
      * @access protected
      * @return void
      */
@@ -586,16 +586,20 @@ class projectZen extends project
         $programs        = array();
         $orderedProjects = array();
 
+        /* Query user's project and program. */
         $projects = $this->project->getListByCurrentUser();
         $programs = $this->program->getPairs(true);
-        $link     = $this->project->getProjectLink($module, $method, $projectID);
 
+        /* Create the link from module,method. */
+        $link = $this->project->getProjectLink($module, $method, $projectID);
+
+        /* Generate project tree. */
         foreach($projects as $project)
         {
             $project->parent = $this->program->getTopByID($project->parent);
             $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
+
             $orderedProjects[$project->parent][] = $project;
-            unset($projects[$project->id]);
         }
 
         $this->view->link      = $link;
