@@ -1,0 +1,22 @@
+title: zt_task
+author: lanzongjun
+version: '1.0'
+fields:
+    - field: id
+      range: 1-8
+    - field: project
+      range: 1
+    - field: execution
+      range: 2{2},3{2},4{2},5{2}
+    - field: type
+      range: design,devel,test,study,discuss,ui,affair,misc
+    - field: status
+      range: wait{8}
+    - field: deleted
+      range: 0,1,1,0
+    - field: vision
+      range: rnd,rnd,rnd,lite
+    - field: openedDate
+      range: "20220101 000000:1W"   # 生成从2021年1月1日0时0分0秒到当前时间的数据，步长为1周
+      type: timestamp
+      format: "YY/MM/DD hh:mm:ss"

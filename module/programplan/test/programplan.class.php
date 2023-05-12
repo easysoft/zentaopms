@@ -512,4 +512,24 @@ class programplanTest
 
         return $objects['data'];
     }
+
+    /** 测试获取按照指派给分组甘特图相关数据。
+     *  The test gets Gantt chart related data as assigned to the group.
+     *
+     * @param  int     $executionID
+     * @param  int     $productID
+     * @param  int     $baselineID
+     * @param  string  $selectCustom
+     * @param  bool    $returnJson
+     * @access public
+     * @return array
+     */
+    public function getDataForGanttGroupByAssignedToTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
+    {
+        $objects = $this->objectModel->getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+
+        if($returnJson) $objects = json_decode($objects, true);
+
+        return $objects['data'];
+    }
 }
