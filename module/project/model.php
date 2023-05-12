@@ -2918,63 +2918,6 @@ class projectModel extends model
      * Build project browse action menu.
      *
      * @param  object $project
-     * @param  object $item
-     * @access public
-     * @return string
-     */
-    public function buildOperateBrowseMenuZin($project, &$item)
-    {
-        $item->actions = array();
-        $moduleName    = 'project';
-
-        if($project->status == 'wait' || $project->status == 'suspended') $item->actions[] = 'start';
-
-        $canClose = common::hasPriv($moduleName, 'close');
-        if($project->status == 'doing')
-        {
-            $item->actions[] = 'close';
-            $canClose        = false;
-        }
-
-        $canActivate = common::hasPriv($moduleName, 'activate');
-        if($project->status == 'closed')
-        {
-            $item->actions[] = 'active';
-            $canActivate     = false;
-        }
-
-        if(common::hasPriv($moduleName, 'suspend') || $canClose || $canActivate)
-        {
-            $menu = 'pause';
-            if($project->status != 'doing')  $menu .= ',close';
-            if($project->status != 'closed') $menu .= ',active';
-
-            $item->actions[] = 'other:' . $menu;
-        }
-
-        $item->actions[] = 'edit';
-
-        if($this->config->vision != 'lite')
-        {
-            $item->actions[] = 'group';
-            $item->actions[] = 'perm';
-
-            if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
-            {
-                $item->actions[] = 'more:link,whitelist,delete';
-            }
-            return;
-        }
-
-        $item->actions[] = 'group';
-        $item->actions[] = 'whitelist';
-        $item->actions[] = 'delete';
-    }
-
-    /**
-     * Build project browse action menu.
-     *
-     * @param  object $project
      * @access public
      * @return string
      */
