@@ -485,15 +485,15 @@ class programplanModel extends model
     }
 
     /**
-     * 获取时间间隔。
+     * 获取时间段内工作时间间隔天数。
      * Get duration.
      *
-     * @param  int    $begin
-     * @param  int    $end
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return int
      */
-    public function getDuration(int $begin, int $end): int
+    public function getDuration(string $begin, string $end): int
     {
         $duration = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         return count($duration);
