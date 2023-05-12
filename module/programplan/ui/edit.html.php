@@ -24,10 +24,10 @@ formPanel
     set::actions(array()),
     div
     (
-        set::class('flex items-center pb-2.5'),
+        setClass('flex items-center pb-2.5'),
         span($lang->edit),
-        span($plan->name, set::class('text-lg font-bold ml-3')),
-        label($plan->id,  set::class('circle ml-2 label-id px-2'))
+        span($plan->name, setClass('text-lg font-bold ml-3')),
+        label($plan->id,  setClass('circle ml-2 label-id px-2'))
     ),
     formGroup
     (
