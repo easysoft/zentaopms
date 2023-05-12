@@ -13,14 +13,13 @@ class bugZen extends bug
      */
     protected function getBrowseBranch(string $branch, string $productType): string
     {
-        if($productType == 'normal') $branch = 'all';
-        if($productType != 'normal')
-        {
-            if($this->cookie->preBranch !== '' && $branch === '') $branch = $this->cookie->preBranch;
+        if($productType == 'normal') return 'all';
 
-            /* 如果是多分支产品时，设置分支的 cookie。*/
-            helper::setcookie('preBranch', $branch);
-        }
+        if($this->cookie->preBranch !== '' && $branch === '') $branch = $this->cookie->preBranch;
+
+        /* 如果是多分支产品时，设置分支的 cookie。*/
+        /* Set branch cookie if product is multi-branch. */
+        helper::setcookie('preBranch', $branch);
 
         return $branch;
     }
@@ -56,8 +55,10 @@ class bugZen extends bug
 
         /* 加载分页器。*/
         /* Load pager. */
+        $viewType = $this->app->getViewType();
+        if($viewType == 'mhtml' || $viewType == 'xhtml') $recPerPage = 10;
+
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         return array($moduleID, $queryID, $realOrderBy, $pager);
@@ -81,19 +82,13 @@ class bugZen extends bug
         /* Clear cookie of bug module if the product or the branch is changed. */
         $productChanged = $this->cookie->preProductID != $product->id;
         $branchChanged  = $product->type != 'normal' && $this->cookie->preBranch != $branch;
-        if($productChanged || $branchChanged)
-        {
-            $_COOKIE['bugModule'] = 0;
-            helper::setcookie('bugModule', '0', 0);
-        }
+        if($productChanged || $branchChanged) helper::setcookie('bugModule', '0', 0);
 
         /* 如果浏览类型为按模块浏览或者浏览类型为空，设置 bug 模块的 cookie 为当前模块，清空 bug 分支的 cookie。*/
         /* Set cookie of bug module and clear cookie of bug branch if browse type is by module or is empty. */
         if($browseType == 'bymodule' || $browseType == '')
         {
             helper::setcookie('bugModule', $param, 0);
-
-            $_COOKIE['bugBranch'] = 0;
             helper::setcookie('bugBranch', '0', 0);
         }
 
