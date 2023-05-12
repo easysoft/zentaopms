@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 class programplanTest
 {
     public function __construct()
@@ -122,38 +124,36 @@ class programplanTest
     }
 
     /**
+     * 测试处理阶段列表。
      * Test process plans.
      *
      * @param  array  $planIDList
      * @access public
-     * @return array
+     * @return object|array
      */
-    public function processPlansTest($planIDList)
+    public function processPlansTest(array $planIDList): object|array
     {
-        $plans = $this->objectModel->getByList($planIDList);
-
+        $plans   = $this->objectModel->getByList($planIDList);
         $objects = $this->objectModel->processPlans($plans);
 
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
     /**
+     * 测试处理阶段。
      * Test process plan.
      *
      * @param  int    $planID
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function processPlanTest($planID)
+    public function processPlanTest(int $planID): object|array
     {
-        $plan = $this->objectModel->getByID($planID);
-
+        $plan   = $this->objectModel->getByID($planID);
         $object = $this->objectModel->processPlan($plan);
 
         if(dao::isError()) return dao::getError();
-
         return $object;
     }
 
@@ -507,26 +507,6 @@ class programplanTest
     public function getDataForGanttTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
     {
         $objects = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
-
-        if($returnJson) $objects = json_decode($objects, true);
-
-        return $objects['data'];
-    }
-
-    /** 测试获取按照指派给分组甘特图相关数据。
-     *  The test gets Gantt chart related data as assigned to the group.
-     *
-     * @param  int     $executionID
-     * @param  int     $productID
-     * @param  int     $baselineID
-     * @param  string  $selectCustom
-     * @param  bool    $returnJson
-     * @access public
-     * @return array
-     */
-    public function getDataForGanttGroupByAssignedToTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
-    {
-        $objects = $this->objectModel->getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID, $selectCustom, $returnJson);
 
         if($returnJson) $objects = json_decode($objects, true);
 
