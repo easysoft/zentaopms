@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('idvalue', isset($todo->idvalue) ? $todo->idvalue : null);
 jsVar('moduleList', $config->todo->moduleList);
 jsVar('objectsMethod', $config->todo->getUserObjectsMethod);
 jsVar('defaultType', $todo->type);

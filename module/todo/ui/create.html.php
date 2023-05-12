@@ -14,7 +14,7 @@ namespace zin;
 jsVar('noTodo', $lang->todo->noTodo);
 jsVar('moduleList', $config->todo->moduleList);
 jsVar('objectsMethod', $config->todo->getUserObjectsMethod);
-jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => isset($lang->todo->idvalue) ? $lang->todo->idvalue : null));
+jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));
 jsVar('vision', $config->vision);
 jsVar('noOptions', $lang->todo->noOptions);
 jsVar('chosenType', $lang->todo->typeList);

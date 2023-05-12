@@ -87,12 +87,13 @@ function togglePending(switcher)
  * 加载不同类型数据列表，从而更改待办名称控件。
  * Load different types of list to change the name control.
  *
- * @param  type        $type        Type of selected todo.
- * @param  id          $id          ID of selected todo.
- * @param  objectID    $objectID    ID of the closed todo type.
+ * @param  string type        Type of selected todo.
+ * @param  string id          ID of selected todo.
+ * @param  string defaultType Default type of selected todo.
+ * @param  int    todoID      ID of the closed todo type.
  * @return void
  */
-function loadList(type, id, objectID)
+function loadList(type, id, todoDefaultType, todoID)
 {
     if(id)
     {
@@ -109,7 +110,7 @@ function loadList(type, id, objectID)
     var param = 'userID=' + userID + '&id=' + id;
     if(type == 'task') param += '&status=wait,doing';
 
-    if(defaultType && type == defaultType && objectID != 0) param += '&objectID=' + objectID;
+    if(todoDefaultType && type == todoDefaultType && todoID != 0) param += '&objectID=' + todoID;
 
     if(moduleList.indexOf(type) !== -1)
     {
@@ -119,7 +120,7 @@ function loadList(type, id, objectID)
             if(data.length != 0)
             {
                 if($(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen) $(nameBoxClass).find('#nameInputBox').html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(objectID).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(nameBoxClass).find('select').val(todoID).trigger('chosen:updated');
                 if($(nameBoxClass + ' select').val() == null) $(nameBoxClass + ' select').attr('data-placeholder', noOptions.replace('%s', chosenType[type])).trigger('chosen:updated');
             }
             else
@@ -134,6 +135,7 @@ function loadList(type, id, objectID)
     }
 
     if(nameBoxLabel) return;
+
     var formLabel = type == 'custom' ||(vision && vision == 'rnd') ?  nameBoxLabel.custom : nameBoxLabel.objectID;
     $('#nameBox .form-label').text(formLabel);
 }

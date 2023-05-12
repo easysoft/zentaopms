@@ -1,4 +1,4 @@
-loadList($('#type').val(), '');
+loadList($('#type').val(), '', defaultType, objectID);
 
 if(cycleType) toggleCycleConfig(cycleType);
 
@@ -11,5 +11,5 @@ if(cycleType) toggleCycleConfig(cycleType);
  */
 function changeType(typeSelect)
 {
-    loadList($(typeSelect).find('select').val(), '', idvalue);
+    loadList($(typeSelect).find('select').val(), '', defaultType, objectID);
 }
