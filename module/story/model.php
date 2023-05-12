@@ -231,13 +231,14 @@ class storyModel extends model
         $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
         $type    = strtolower($type);
         if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
-        if(empty($productID)) $productID = key($this->loadModel('product')->getProducts($executionID));
+        if(empty($productID)) $productID = (int)key($this->loadModel('product')->getProducts($executionID));
 
         /* 获取需求。 */
         if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $excludeStories, $pager);
         if($type != 'bysearch')
         {
             /* 根据请求类型和参数，获取查询要用到的条件。 */
+            $execution    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
             $modules      = $this->storyTao->getModules4ExecutionStories($type, $param);
             $storyIdList  = $this->storyTao->getIdListOfExecutionsByProjectID($type, $executionID);
             $productParam = ($type == 'byproduct' and $param)        ? $param : $this->cookie->storyProductParam;
@@ -258,7 +259,6 @@ class storyModel extends model
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();
 
             /* 根据传入的 ID 是项目还是执行分别查询需求。 */
-            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
             if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $type, $branchParam, $storyIdList, $orderBy, $pager);
             if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, (int)$productParam, $orderBy, $pager);
         }
