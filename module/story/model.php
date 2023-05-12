@@ -259,8 +259,8 @@ class storyModel extends model
 
             /* 根据传入的 ID 是项目还是执行分别查询需求。 */
             $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
-            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $projectID, $type, $branchParam, $storyIdList, $orderBy, $pager);
-            if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, $productParam, $orderBy, $pager);
+            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $type, $branchParam, $storyIdList, $orderBy, $pager);
+            if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, (int)$productParam, $orderBy, $pager);
         }
 
         $stories = $this->storyTao->fixBranchStoryStage($stories);

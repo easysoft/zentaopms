@@ -255,6 +255,7 @@ class storyTao extends storyModel
     protected function buildProductsCondition(string|int $productIdList, array|string|int $branch = 'all'): string
     {
         /* 如果查询所有分支，直接用 idList 条件。 */
+        if(empty($productIdList))  $productIdList = '0';
         if(is_int($productIdList)) $productIdList = (string)$productIdList;
         if(empty($productIdList) or $branch === 'all' or $branch === '') return '`product` ' . helper::dbIN($productIdList);
 
@@ -324,9 +325,11 @@ class storyTao extends storyModel
      */
     protected function mergePlanTitleAndChildren(array|string|int $productID, array $stories, string $type = 'story'): array
     {
+        if(empty($stories)) return array();
         $rawQuery = $this->dao->get();
 
         /* Get plans. */
+        if(empty($productID)) $productID = '0';
         if(is_int($productID))$productID = (string)$productID;
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
@@ -391,12 +394,15 @@ class storyTao extends storyModel
      * @access protected
      * @return array
      */
-    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType, array $excludeStories, object|null $pager = null): array
+    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', array $excludeStories = array(), object|null $pager = null): array
     {
         /* 获取查询条件。 */
-        $this->setSearchSessionByQueryID($queryID);
+        $rawModule = $this->app->rawModule;
+        $queryName = $rawModule == 'projectstory' ? 'storyQuery' : 'executionStoryQuery';
+        $formName  = $rawModule == 'projectstory' ? 'storyForm'  : 'executionStoryForm';
+        $this->setSearchSessionByQueryID($queryID, $queryName, $formName);
         if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
-        if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
+        if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->storyQuery);
 
         /* 处理查询条件。 */
         $storyQuery = $this->replaceAllProductQuery($this->session->executionStoryQuery);
@@ -404,7 +410,7 @@ class storyTao extends storyModel
         $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
         if(strpos($storyQuery, 'result') !== false) $storyQuery = str_replace('t2.`result`', 't4.`result`', $storyQuery);
 
-        $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
@@ -446,12 +452,13 @@ class storyTao extends storyModel
      *
      * @param  string    $query
      * @access protected
-     * @return void
+     * @return string
      */
-    protected function replaceAllProductQuery(string $query)
+    protected function replaceAllProductQuery(string $query): string
     {
         $allProduct = "`product` = 'all'";
-        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
+        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1 = 1', $query);
+        return $query;
     }
 
     /**
@@ -469,8 +476,9 @@ class storyTao extends storyModel
         if(strpos($storyQuery, 'revert') === false) return $storyQuery;
 
         $reviews     = $this->getRevertStoryIdList($productID);
-        $storyQuery  = str_replace("AND `result` = 'revert'", '', $storyQuery);
+        $storyQuery  = str_replace("`result` = 'revert'", '1 = 1', $storyQuery);
         $storyQuery .= " AND `id` " . helper::dbIN($reviews);
+        return $storyQuery;
     }
 
     /**
@@ -483,6 +491,7 @@ class storyTao extends storyModel
      */
     protected function getRevertStoryIdList(int $productID): array
     {
+        if(empty($productID)) return array();
         return $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('product')->like("%,$productID,%")
             ->andWhere('action')->eq('reviewed')
@@ -497,7 +506,7 @@ class storyTao extends storyModel
      * 根据请求类型获取查询的模块。
      * Get modules for query execution stories.
      *
-     * @param  string    $type
+     * @param  string    $type   bymodule|allstory|unclosed
      * @param  string    $param
      * @access protected
      * @return array
@@ -506,7 +515,7 @@ class storyTao extends storyModel
     {
         $moduleParam = ($type == 'bymodule'  and $param !== '') ? $param : $this->cookie->storyModuleParam;
 
-        if(empty($moduleParam) and strpos('allstory,unclosed,bymodule', $type) == false) return array();
+        if(empty($moduleParam) and strpos('allstory,unclosed,bymodule', $type) === false) return array();
         return $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
@@ -515,17 +524,18 @@ class storyTao extends storyModel
      * Fetch execution stories.
      *
      * @param  dao         $storyDAO
-     * @param  string      $product
+     * @param  int         $productID
      * @param  string      $orderBy
      * @param  object|null $pager
      * @access protected
      * @return int[]
      */
-    protected function fetchExecutionStories(dao $storyDAO, string $product, string $orderBy, object|null $pager = null): array
+    protected function fetchExecutionStories(dao $storyDAO, int $productID, string $orderBy, object|null $pager = null): array
     {
+        $browseType     = $this->session->executionStoryBrowseType;
         $unclosedStatus = $this->getUnclosedStatusKeys();
-        return $storyDAO->beginIF(!empty($product))->andWhere('t1.product')->eq($product)->fi()
-            ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in($unclosedStatus)->fi()
+        return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($browseType and strpos('changing|', $browseType) !== false)->andWhere('t2.status')->in($unclosedStatus)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
             ->fetchAll('id');
@@ -537,7 +547,6 @@ class storyTao extends storyModel
      *
      * @param  dao         $storyDAO
      * @param  int         $productID
-     * @param  int         $projectID
      * @param  string      $type
      * @param  string      $branch
      * @param  array       $executionIdList
@@ -546,7 +555,7 @@ class storyTao extends storyModel
      * @access protected
      * @return int[]
      */
-    protected function fetchProjectStories(dao $storyDAO, int $productID, int $projectID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null): array
+    protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null): array
     {
         $unclosedStatus = $this->getUnclosedStatusKeys();
         return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()

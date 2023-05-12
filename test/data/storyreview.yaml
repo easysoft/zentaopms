@@ -12,4 +12,7 @@ fields:
     - field: result
       range: ""
     - field: reviewDate
-      range: ""
+      note: "创建日期"
+      range: "(M)-(w)"
+      type: timestamp
+      format: "YY/MM/DD"

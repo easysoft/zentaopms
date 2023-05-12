@@ -14,8 +14,10 @@ pid=1
 
 global $tester;
 $storyModel = $tester->loadModel('story');
-r($storyModel->buildProductsCondition('')) && p() && e('1=1');    //不传入数据
-r($storyModel->buildProductsCondition(0))  && p() && e('1=1');    //不传入数据
+$condition  = $storyModel->buildProductsCondition('');
+r($condition == "`product` IN ('0')") && p() && e('1');            //不传入数据
+$condition  = $storyModel->buildProductsCondition(0);
+r($condition == "`product` IN ('0')") && p() && e('1');            //不传入数据
 $condition = $storyModel->buildProductsCondition('1,2');
 r($condition == "`product` IN ('1','2')")  && p() && e('1');      //传入正常产品 ID。
 $condition = $storyModel->buildProductsCondition('1,2', '1');

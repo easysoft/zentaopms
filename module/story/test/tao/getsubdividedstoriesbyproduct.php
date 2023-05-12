@@ -24,13 +24,12 @@ global $tester;
 $storyModel = $tester->loadModel('story');
 $storyModel->config->URAndSR = 1;
 
-r($storyModel->getSubdividedStoriesByProduct(0)) && p() && e('0');
-
-r(count($storyModel->getSubdividedStoriesByProduct(7))) && p() && e('4');
+r($storyModel->getSubdividedStoriesByProduct(0)) && p() && e('0');        //不传入任何产品。
+r(count($storyModel->getSubdividedStoriesByProduct(7))) && p() && e('8'); //传入产品 ID。
 
 $storyModel->dao->update(TABLE_STORY)->set('deleted')->eq(1)->where('id')->eq(1)->exec();
 $storyModel->dao::$cache = array();
-r(count($storyModel->getSubdividedStoriesByProduct(7))) && p() && e('3');
+r(count($storyModel->getSubdividedStoriesByProduct(7))) && p() && e('7'); //删除一个需求。
 
 $storyModel->config->URAndSR = 0;
-r($storyModel->getSubdividedStoriesByProduct(7)) && p() && e('0');
+r($storyModel->getSubdividedStoriesByProduct(7)) && p() && e('0'); //不启用用户需求的情况。

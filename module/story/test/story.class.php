@@ -554,6 +554,50 @@ class storyTest
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $projectID, $type, $branch, $storyIdList, 't2.id_desc', $pager);
+        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $type, $branch, $storyIdList, 't2.id_desc', $pager);
+    }
+
+    /**
+     * 测试 fetchExecutionStories 方法。
+     * Test fetchExecutionStories method.
+     *
+     * @param  int         $executionID
+     * @param  int         $product
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionStoriesTest(int $executionID, int $productID, object|null $pager = null): array
+    {
+        $unclosedStatus = $this->objectModel->lang->story->statusList;
+        unset($unclosedStatus['closed']);
+
+        $storyDAO = $this->objectModel->dao->select("DISTINCT t2.*")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->where('t1.project')->eq($executionID)
+            ->andWhere('t2.type')->eq('story')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0);
+
+        return $this->objectModel->fetchExecutionStories($storyDAO, $productID, 't2.id_desc', $pager);
+    }
+
+    /**
+     * 测试 getExecutionStoriesBySearch。
+     * Test getExecutionStoriesBySearch method.
+     *
+     * @param  int         $executionID
+     * @param  int         $queryID
+     * @param  int         $productID
+     * @param  array       $excludeStories
+     * @param  object|null $pager
+     * @access public
+     * @return int
+     */
+    public function getExecutionStoriesBySearchTest(int $executionID, int $queryID, int $productID, array $excludeStories = array(), object|null $pager = null): int
+    {
+        $stories = $this->objectModel->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', $excludeStories, $pager);
+        return count($stories);
     }
 }

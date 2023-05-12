@@ -37,6 +37,15 @@ fields:
     range: "(-6M)-(+6M):7D"
     type: timestamp
     format: "YYYY-MM-DD"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin"
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    postfix: ""
+    format: "YY/MM/DD"
   - field: order
     note: "排序"
     value: "$id * 5"
