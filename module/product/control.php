@@ -717,12 +717,7 @@ class product extends control
             return print(js::reload('parent'));
         }
 
-        $this->view->title      = $this->lang->product->line;
-        $this->view->position[] = $this->lang->product->line;
-
-        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs('', 'withDeleted');
-        $this->view->lines    = $this->product->getLines();
-        $this->display();
+        $this->productZen->buildManageLineForm();
     }
 
     /**

@@ -625,13 +625,29 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function buildCloseForm(int $productID)
+    protected function buildCloseForm(int $productID): void
     {
         $this->view->title   = $this->view->product->name . $this->lang->colon .$this->lang->close;
         $this->view->product = $this->product->getById($productID);
         $this->view->actions = $this->loadModel('action')->getList('product', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->fields  = $this->getFormFields4Close();
+        $this->display();
+    }
+
+    /**
+     * 构建维护产品线页面数据。
+     * Build manageLine form.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function buildManageLineForm(): void
+    {
+        $this->view->title    = $this->lang->product->line;
+        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs('', 'withDeleted');
+        $this->view->lines    = $this->product->getLines();
+        $this->view->fields   = $this->config->product->form->manageLine;
         $this->display();
     }
 
