@@ -20,7 +20,7 @@ class form extends baseFixer
      *
      * @var object
      */
-    public $rawdata;
+    protected $rawdata;
 
     /**
      * 原始配置。
@@ -28,7 +28,7 @@ class form extends baseFixer
      *
      * @var array
      */
-    public $rawconfig;
+    protected $rawconfig;
 
     /**
      * 错误信息列表。
@@ -71,6 +71,7 @@ class form extends baseFixer
      *
      * @param array $config
      * @return $this
+     * @throws EndResponseException
      */
     public function config(array $config)
     {
@@ -113,7 +114,7 @@ class form extends baseFixer
         if(!isset($config['type']))
         {
             if(!isset($this->errors[$field])) $this->errors[$field] = array();
-            $this->errors[$field][] = "Field '$field' need defined type";
+            $this->errors[$field][] = "Field '{$field}' need defined type";
         }
 
         if(isset($config['required']) && $config['required'])
@@ -136,7 +137,7 @@ class form extends baseFixer
             $data = $config['default'];
         }
 
-        $data = $this->convertType($data, $config['type']);
+        $data = helper::convertType($data, $config['type']);
 
         if(isset($config['filter']))
         {
@@ -164,34 +165,6 @@ class form extends baseFixer
                 return join(',', $value);
             default:
                 return $value;
-        }
-    }
-
-    /**
-     * 转换类型。
-     * Convert the type.
-     *
-     * @param mixed  $value
-     * @param string $type
-     * @return array|bool|float|int|object|string
-     */
-    protected function convertType($value, $type)
-    {
-        switch($type)
-        {
-            case 'int':
-                return (int)$value;
-            case 'float':
-                return (float)$value;
-            case 'bool':
-                return (bool)$value;
-            case 'array':
-                return (array)$value;
-            case 'object':
-                return (object)$value;
-            case 'string':
-            default:
-                return (string)$value;
         }
     }
 }
