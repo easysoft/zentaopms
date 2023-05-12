@@ -3455,7 +3455,7 @@ class taskModel extends model
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
 
-        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, $canRecordEstimate, $canEdit, $canBatchCreate))
+        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, array($canRecordEstimate, $canEdit, $canBatchCreate)))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
