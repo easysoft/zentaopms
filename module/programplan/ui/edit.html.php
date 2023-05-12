@@ -39,10 +39,11 @@ formPanel
         (
             on::change('changeParentStage(this)'),
             set(array(
-                'id'    => 'parent',
-                'name'  => 'parent',
-                'items' => $parentStageList,
-                'value' => $plan->parent
+                'id'       => 'parent',
+                'name'     => 'parent',
+                'items'    => $parentStageList,
+                'value'    => $plan->parent,
+                'required' => true
             ))
         )
     ),
@@ -78,9 +79,10 @@ formPanel
             'width' => '2/3'
         )),
         select(set(array(
-            'name'  => 'PM',
-            'items' => $PMUsers,
-            'value' => $plan->PM
+            'name'     => 'PM',
+            'items'    => $PMUsers,
+            'value'    => $plan->PM,
+            'required' => true
         )))
     ),
     isset($config->setPercent) && $config->setPercent == 1 ?
@@ -110,10 +112,11 @@ formPanel
             )),
             $enableOptionalAttr ?
             select(set(array(
-                'id'    => 'attribute',
-                'name'  => 'attribute',
-                'items' => $lang->stage->typeList,
-                'value' => $plan->attribute
+                'id'       => 'attribute',
+                'name'     => 'attribute',
+                'items'    => $lang->stage->typeList,
+                'value'    => $plan->attribute,
+                'required' => true
             ))):
             zget($lang->stage->typeList, $plan->attribute)
         ),
@@ -163,7 +166,8 @@ formPanel
             'name'     => 'acl',
             'items'    => $lang->execution->aclList,
             'value'    => $plan->acl,
-            'disabled' => $plan->grade == 2 ? 'disabled' : ''
+            'disabled' => $plan->grade == 2 ? 'disabled' : '',
+            'required' => true
         )))
     ),
     formGroup
@@ -220,7 +224,8 @@ formPanel
             'name'     => 'output[]',
             'items'    => $documentList,
             'value'    => $plan->output,
-            'multiple' => true
+            'multiple' => true,
+            'required' => true
         )))
     ) : null,
     formGroup
