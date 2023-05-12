@@ -1372,7 +1372,7 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getSelfAndChildrenList(string|int|array $planIdList)
+    public function getSelfAndChildrenList(string|int|array $planIdList): array
     {
         if(is_numeric($planIdList)) $planIdList = (array)$planIdList;
 

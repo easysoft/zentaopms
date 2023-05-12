@@ -51,6 +51,7 @@ class programplanTest
     }
 
     /**
+     * 测试根据id 查询项目列表。
      * Test get plans by idList.
      *
      * @param  array $idList
@@ -105,6 +106,7 @@ class programplanTest
     }
 
     /**
+     * 测试获取阶段百分比。
      * Test get total percent.
      *
      * @param  int    $stageID
@@ -112,7 +114,7 @@ class programplanTest
      * @access public
      * @return int
      */
-    public function getTotalPercentTest($stageID, $parent = false)
+    public function getTotalPercentTest(int $stageID, bool $parent = false): int
     {
         $stage = $this->objectModel->getByID($stageID);
 
@@ -429,13 +431,14 @@ class programplanTest
     }
 
     /**
+     * 测试获取阶段当前和子集信息。
      * Test get plan and its children.
      *
-     * @param  string|int|array  $executionIdList
+     * @param  string|int|array $executionIdList
      * @access public
-     * @return string
+     * @return array
      */
-    public function getSelfAndChildrenListTest($executionIdList)
+    public function getSelfAndChildrenListTest(string|int|array $executionIdList): array
     {
         $objects = $this->objectModel->getSelfAndChildrenList($executionIdList);
 
@@ -444,14 +447,14 @@ class programplanTest
         return $objects;
     }
 
-    /**
+    /**获取阶段同一层级信息。
      * Test get plan's siblings.
      *
-     * @param  string|int|array  $executionIdList
+     * @param  string|int|array $executionIdList
      * @access public
-     * @return string
+     * @return array
      */
-    public function getSiblingsTest($executionIdList)
+    public function getSiblingsTest(array|string|int $executionIdList): array
     {
         $objects = $this->objectModel->getSiblings($executionIdList);
 
