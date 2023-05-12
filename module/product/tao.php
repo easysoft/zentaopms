@@ -688,13 +688,13 @@ class productTao extends productModel
         $return  = false;
 
         /* Get product plans. */
-        $plans = $this->loadModel('productplan')->getList($productID, $branch);
+        $planList = $this->loadModel('productplan')->getList($productID, $branch);
 
-        /* Get valid product plans and parent plans. */
-        list($orderedPlans, $parents) = $this->filterValidProductPlans($plans);
+        /* Filter the valid plans, then get the ordered and parents plans. */
+        list($orderedPlans, $parentPlans) = $this->filterOrderedAndParentPlans($planList);
 
         /* Get roadmaps of product plans. */
-        list($roadmap, $total, $return) = $this->getRoadmapOfPlans($orderedPlans, $parents, $branch, $count);
+        list($roadmap, $total, $return) = $this->getRoadmapOfPlans($orderedPlans, $parentPlans, $branch, $count);
         if($return) return array($roadmap, $return);
 
         /* Get roadmpas of product releases. */
@@ -726,22 +726,22 @@ class productTao extends productModel
      * 过滤有效的产品计划, 并返回所有父级计划。
      * Filter valid product plans.
      *
-     * @param  array   $plans
+     * @param  array   $planList
      * @access private
      * @return array[]
      */
-    private function filterValidProductPlans(array $plans): array
+    private function filterOrderedAndParentPlans(array $planList): array
     {
-        $parents      = array();
+        $parentPlans  = array();
         $orderedPlans = array();
 
-        foreach($plans as $planID => $plan)
+        foreach($planList as $planID => $plan)
         {
-            /* Remove parent plan. */
+            /* Collect and remove parent plan. */
             if($plan->parent == '-1')
             {
-                $parents[$planID] = $plan->title;
-                unset($plans[$planID]);
+                $parentPlans[$planID] = $plan->title;
+                unset($planList[$planID]);
                 continue;
             }
 
@@ -753,7 +753,7 @@ class productTao extends productModel
 
         krsort($orderedPlans);
 
-        return array($orderedPlans, $parents);
+        return array($orderedPlans, $parentPlans);
     }
 
     /**
