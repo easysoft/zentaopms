@@ -75,7 +75,7 @@ class programplan extends control
             $module       = 'programplan';
             $section      = 'browse';
             $object       = 'stageCustom';
-            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task');
+            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task,point');
 
             $selectCustom = $this->setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
