@@ -1134,7 +1134,7 @@ class project extends control
         $this->view->orderBy          = $orderBy;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->status           = $status;
-        $this->view->isStage          = (isset($project->model) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')) ? true : false;
+        $this->view->isStage          = (isset($project->model) and in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) ? true : false;
         $this->view->changeStatusHtml = common::hasPriv('execution', 'batchChangeStatus') ? $changeStatusHtml : '';
 
         $this->display();
