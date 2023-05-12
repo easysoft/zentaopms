@@ -354,7 +354,7 @@ class project extends control
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title          = $this->lang->project->browse;
-        $this->view->projectStats   = $projectStats;
+        $this->view->projectStats   = $this->projectZen->processProjectListData($projectStats);
         $this->view->pager          = $pager;
         $this->view->programID      = $programID;
         $this->view->program        = $this->program->getByID($programID);

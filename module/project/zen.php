@@ -1019,4 +1019,104 @@ class projectZen extends project
 
         return $data;
     }
+
+    /**
+     * 处理项目列表展示数据。
+     * Process project list display data.
+     *
+     * @param  array     $projectList
+     * @access protected
+     * @return array
+     */
+    protected function processProjectListData(array $projectList): array
+    {
+        $userList = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
+
+        foreach($projectList as $project)
+        {
+            $project->from       = 'project';
+            $project->end        = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+            $project->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
+            $project->estimate   = $project->hours->totalEstimate . $this->lang->execution->workHourUnit;
+            $project->consume    = $project->hours->totalConsumed . $this->lang->execution->workHourUnit;
+            $project->surplus    = $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
+            $project->progress   = $project->hours->progress;
+
+            $projectBudget   = $this->project->getBudgetWithUnit($project->budget);
+            $project->budget = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+
+            if($project->PM)
+            {
+                $user = zget($userList, $project->PM);
+                if(empty($user)) continue;
+
+                $project->PM        = $user->realname;
+                $project->PMAvatar  = $user->avatar;
+                $project->PMAccount = $project->PM;
+            }
+
+            $project->actions = $this->buildOperateBrowseMenu($project);
+        }
+
+        return array_values($projectList);
+    }
+
+    /**
+     * 根据项目状态和权限生成列表中操作列按钮。
+     * Build table action menu for project browse page.
+     *
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    protected function buildOperateBrowseMenu(object $project): array
+    {
+        $actions    = array();
+        $moduleName = 'project';
+
+        if($project->status == 'wait' || $project->status == 'suspended') $actions[] = 'start';
+
+        $canClose = common::hasPriv($moduleName, 'close');
+        if($project->status == 'doing')
+        {
+            $actions[] = 'close';
+            $canClose  = false;
+        }
+
+        $canActivate = common::hasPriv($moduleName, 'activate');
+        if($project->status == 'closed')
+        {
+            $actions[]   = 'active';
+            $canActivate = false;
+        }
+
+        if(common::hasPriv($moduleName, 'suspend') || $canClose || $canActivate)
+        {
+            $menu = 'pause';
+            if($project->status != 'doing')  $menu .= ',close';
+            if($project->status != 'closed') $menu .= ',active';
+
+            $actions[] = 'other:' . $menu;
+        }
+
+        $actions[] = 'edit';
+
+        if($this->config->vision != 'lite')
+        {
+            $actions[] = 'group';
+            $actions[] = 'perm';
+
+            if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
+            {
+                $actions[] = 'more:link,whitelist,delete';
+            }
+            return $actions;
+        }
+
+        $actions[] = 'group';
+        $actions[] = 'whitelist';
+        $actions[] = 'delete';
+
+        return $actions;
+    }
 }
