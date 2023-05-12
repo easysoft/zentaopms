@@ -1315,10 +1315,11 @@ class taskZen extends task
      * Get R&D kanban's or task kanban's data after task's data is updated.
      *
      * @param  object    $execution
+     * @param  int       $regionID
      * @access protected
      * @return string
      */
-    protected function getKanbanData(object $execution): string
+    protected function getKanbanData(object $execution, int $regionID = 0): string
     {
         $this->loadModel('kanban');
 
@@ -1330,7 +1331,7 @@ class taskZen extends task
         /* 处理专业研发看板。 Handling professional R&D kanban. */
         if($execution->type == 'kanban')
         {
-            $kanbanData = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            $kanbanData = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
             return json_encode($kanbanData);
         }
 
