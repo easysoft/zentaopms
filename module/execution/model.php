@@ -5367,6 +5367,11 @@ class executionModel extends model
                 echo $this->task->buildNestedList($execution, $task, false, $showmore, $users);
             }
         }
+
+        if(!empty($execution->points))
+        {
+            foreach($execution->points as $point) echo $this->buildPointList($execution, $point);
+        }
     }
 
     /**
