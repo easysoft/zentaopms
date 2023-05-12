@@ -1151,15 +1151,11 @@ class productZen extends product
             return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
         }
 
-        return $this->tree->getTreeMenu(
-            $productID,
-            'story',
-            0,
-            array('treeModel', $createModuleLink),
-            array('projectID' => $projectID, 'productID' => $productID),
-            $branch,
-            "&param=$param&storyType=$storyType"
-        );
+        /* Pre generate parameters. */
+        $userFunc = array('treeModel', $createModuleLink);
+        $extra    = array('projectID' => $projectID, 'productID' => $productID);
+
+        return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType");
     }
 
     /**
