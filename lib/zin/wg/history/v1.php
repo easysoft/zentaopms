@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class history extends wg
@@ -9,26 +10,26 @@ class history extends wg
         'methodName?:string'
     );
 
-    public static function getPageCSS()
+    public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function marker(int $num)
+    private function marker(int $num): wg
     {
         return span
         (
-            setClass('marker', 'text-sm', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-2'),
+            setClass('marker', 'relative', 'z-10', 'text-sm', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-1', 'border', 'h-5', 'w-5', 'z-10'),
             $num
         );
     }
 
-    private function timeline()
+    private function timeline(): wg
     {
         return div(setClass('timeline w-px absolute'));
     }
 
-    private function checkEditCommentPriv($action)
+    private function checkEditCommentPriv(object $action): bool
     {
         global $app;
         $methodName = $this->prop('methodName') === null ? $this->prop('methodName') : data('methodName');
@@ -41,65 +42,64 @@ class history extends wg
             && common::hasPriv('action', 'editComment');
     }
 
-    private function expandBtn($i)
+    private function expandBtn(int $i): wg
     {
         global $lang;
-        return button
+        return btn
         (
-            setClass('btn btn-mini switch-btn btn-icon btn-expand'),
-            set::type('button'),
+            setClass('btn-expand btn-mini px-0'),
             set::title($lang->switchDisplay),
             h::i(setClass('change-show icon icon-plus icon-sm')),
-            on::click(<<<EXPAND
-            var changeBox = document.querySelector("#changeBox$i");
-            var icon = e.target.querySelector('.icon');
-            console.log(icon);
-            icon.classList.toggle('icon-plus');
-            icon.classList.toggle('icon-minus');
-            if (icon.classList.contains('icon-plus')) {
-                changeBox.classList.remove('show');
-            } else {
-                changeBox.classList.add('show');
-            }
-            EXPAND),
+            on::click
+            (
+                <<<EXPAND
+                var changeBox = document.querySelector("#changeBox$i");
+                var icon = e.target.querySelector('.icon');
+                console.log(icon);
+                icon.classList.toggle('icon-plus');
+                icon.classList.toggle('icon-minus');
+                if (icon.classList.contains('icon-plus')) changeBox.classList.remove('show');
+                else                                      changeBox.classList.add('show');
+                EXPAND
+            ),
         );
     }
 
-    private function editCommentBtn()
+    private function editCommentBtn(): wg
     {
         global $lang;
         return button
         (
-            setClass('btn btn-link btn-icon btn-sm btn-edit-comment'),
+            setClass('btn btn-link px-0 btn-edit-comment'),
             set::title($lang->action->editComment),
             h::i(setClass('icon icon-pencil')),
         );
     }
 
-    private function historyChanges($action, $i)
+    private function historyChanges(object $action, int $i): wg
     {
         global $app;
         return div
         (
-            setClass('history-changes'),
-            set::id("changeBox$i"),
+            setClass('history-changes ml-7 mt-2'),
+            setID("changeBox$i"),
             html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
         );
     }
 
-    private function actionItem($action, $i)
+    private function actionItem(object $action, int $i): wg
     {
         global $app;
         return li
         (
-            setClass('my-3'),
+            setClass('mb-2'),
             set::value($i),
             $this->marker($i),
             html($app->loadTarget('action')->renderAction($action))
         );
     }
 
-    private function getComment($action)
+    private function getComment(object $action): string
     {
         if(str_contains($action->comment, '<pre class="prettyprint lang-html">'))
         {
@@ -114,7 +114,7 @@ class history extends wg
             : $action->comment;
     }
 
-    private function comment($action)
+    private function comment(object $action): wg
     {
         $comment = $this->getComment($action);
         return div
@@ -128,7 +128,7 @@ class history extends wg
         );
     }
 
-    private function commentEditForm($action)
+    private function commentEditForm(object $action): wg
     {
         global $lang;
         return form
@@ -153,8 +153,8 @@ class history extends wg
                 button
                 (
                     setClass('btn btn-wide btn-primary'),
+                    setID('submit'),
                     set::type('submit'),
-                    set::id('submit'),
                     $lang->save,
                 ),
                 button
@@ -166,18 +166,17 @@ class history extends wg
         );
     }
 
-    private function historyList()
+    private function historyList(): wg
     {
-        $actions = $this->prop('actions') === null ? $this->prop('actions') : data('actions');
-        $users   = $this->prop('users') === null ? $this->prop('users') : data('users');
-        $historiesListView = h::ol(setClass('histories-list relative'));
-        $i = 0;
-
+        $actions = $this->prop('actions') !== null ? $this->prop('actions') : data('actions');
+        $users   = $this->prop('users') !== null ? $this->prop('users') : data('users');
+        $historiesListView = h::ol(setClass('history-list col relative'));
         $historiesListView->add($this->timeline());
+
+        $i = 0;
         foreach($actions as $action)
         {
             if($action->action === 'assigned' || $action->action === 'toaudit') $action->extra = zget($users, $action->extra);
-
             $action->actor = zget($users, $action->actor);
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
@@ -192,11 +191,9 @@ class history extends wg
             if(strlen(trim(($action->comment))) !== 0)
             {
                 $canEditComment = $this->checkEditCommentPriv($action);
-
                 if($canEditComment) $actionItemView->add($this->editCommentBtn());
 
                 $actionItemView->add($this->comment($action));
-
                 if($canEditComment) $actionItemView->add($this->commentEditForm($action));
             }
             $historiesListView->add($actionItemView);
@@ -205,41 +202,49 @@ class history extends wg
         return $historiesListView;
     }
 
-    private function reverseBtn()
+    private function reverseBtn(): wg
     {
         global $lang;
         return btn
         (
-            setClass('btn-mini btn-icon btn-reverse mr-2'),
+            setClass('btn-reverse btn-mini px-0 ml-3'),
             set::title($lang->reverse),
             set::icon('arrow-up'),
-            on::click(<<<REVERSE
-            document.querySelector('.histories-list').classList.toggle('sort-reverse');
-            var icon = e.target.querySelector('.icon');
-            icon.classList.toggle('icon-arrow-up');
-            icon.classList.toggle('icon-arrow-down');
-            REVERSE)
+            on::click
+            (
+                <<<REVERSE
+                document.querySelector('.history-list').classList.toggle('sort-reverse');
+                var icon = e.target.querySelector('.icon');
+                icon.classList.toggle('icon-arrow-up');
+                icon.classList.toggle('icon-arrow-down');
+                REVERSE
+            )
         );
     }
 
-    private function expandAllBtn()
+    private function expandAllBtn(): wg
     {
         global $lang;
         return btn
         (
-            setClass('btn-mini btn-icon btn-expand-all'),
+            setClass('btn-mini px-0 btn-expand-all ml-2'),
             set::title($lang->switchDisplay),
             set::icon('plus'),
             on::click(<<<EXPANDALL
             var icon = e.target.querySelector('.icon');
             var isExpand = icon.classList.contains('icon-plus');
             var changeBoxs = document.querySelectorAll('[id^="changeBox"]');
-            if(isExpand) {
-                changeBoxs.forEach(function(box) {
+            if(isExpand)
+            {
+                changeBoxs.forEach(function(box)
+                {
                     box.classList.add('show');
                 });
-            } else {
-                changeBoxs.forEach(function(box) {
+            }
+            else
+            {
+                changeBoxs.forEach(function(box)
+                {
                     box.classList.remove('show');
                 });
             }
@@ -249,36 +254,36 @@ class history extends wg
         );
     }
 
-    private function commentBtn()
+    private function commentBtn(): wg
     {
         global $lang;
         return btn
         (
-            setClass('btn-comment btn-link ml-4'),
+            setClass('btn-comment ml-4 size-sm ghost'),
             set::icon('chat-line'),
             set::iconClass('text-primary'),
             $lang->action->create
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         global $lang;
         return div
         (
-            setClass('detail histories'),
-            set::id('actionbox'),
+            setClass('histories p-4'),
+            setID('actionbox'),
             set('data-textdiff', $lang->action->textDiff),
             set('data-original', $lang->action->original),
             div
             (
-                setClass('detail-title'),
+                setClass('detail-title flex items-center'),
                 span($lang->history),
                 $this->reverseBtn(),
                 $this->expandAllBtn(),
                 $this->commentBtn(),
             ),
-            div(setClass('detail-content'), $this->historyList())
+            div(setClass('mt-3'), $this->historyList())
         );
     }
 }
