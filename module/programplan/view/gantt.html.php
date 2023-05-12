@@ -12,6 +12,8 @@
 ?>
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
+<?php if($project->model == 'ipd') js::set('reviewPoints', json_encode($reviewPoints));?>
+<?php js::set('projectID', $projectID);?>
 <style>
 .submitBtn{display:none}
 .gantt_row_task:hover .submitBtn{ display: inline-block;}
@@ -619,7 +621,7 @@ $(function()
 
     function getSubmitBtn(task)
     {
-        if(task.type == 'point') return '<button class="btn btn-link submitBtn" title="<?php echo $lang->review->submit;?>"><i class="icon-confirm"></i></button>';
+        if(task.type == 'point') return '<button class="btn btn-link submitBtn" title="<?php echo $lang->programplan->submit;?>"><i class="icon-confirm"></i></button>';
     }
 
     gantt.templates.task_end_date = function(data)
@@ -764,6 +766,25 @@ $(function()
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
+        if($(e.srcElement).hasClass('icon-confirm'))
+        {
+            var pointAttr = JSON.parse(reviewPoints);
+            var category  = id.split("-")[1];
+
+            if(pointAttr[category]['disabled'])
+            {
+                new $.zui.Messager(pointAttr[category]['message'], {
+                    type: 'danger',
+                    icon: 'exclamation-sign'
+                }).show();
+                return false;
+            }
+            else
+            {
+                location.href = createLink('review', 'create', 'projectID=' + projectID);
+            }
+        }
+
         if(ganttType == 'assignedTo')
         {
             taskID = id;

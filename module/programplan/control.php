@@ -113,11 +113,17 @@ class programplan extends control
             $plans = $this->programplan->getPlans($projectID, $productID, $sort);
         }
 
+        $project = $this->project->getByID($projectID);
+        if($project->model == 'ipd' and $this->config->edition == 'ipd')
+        {
+            $this->view->reviewPoints = $this->loadModel('review')->getReviewPointByProject($projectID);
+        }
+
         $zooming = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
         $this->view->title        = $this->lang->programplan->browse;
         $this->view->position[]   = $this->lang->programplan->browse;
         $this->view->projectID    = $projectID;
-        $this->view->project      = $this->project->getByID($projectID);
+        $this->view->project      = $project;
         $this->view->productID    = $productID;
         $this->view->product      = $this->product->getByID($productID);
         $this->view->productList  = $this->product->getProductPairsByProject($projectID, 'all', '', false);

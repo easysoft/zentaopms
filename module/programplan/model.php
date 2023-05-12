@@ -368,10 +368,11 @@ class programplanModel extends model
         if($project->model == 'ipd' and $datas)
         {
             $this->loadModel('review');
-            $reviewPoints = $this->dao->select('*')->from(TABLE_OBJECT)
-                ->where('deleted')->eq('0')
-                ->andWhere('project')->eq($projectID)
-                ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            $reviewPoints = $this->dao->select('t1.*, t2.status')->from(TABLE_OBJECT)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t1.project')->eq($projectID)
+                ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
                 ->fetchAll('id');
 
             foreach($datas['data'] as $plan)
