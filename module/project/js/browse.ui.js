@@ -1,6 +1,7 @@
 window.footerGenerator = function()
 {
-    const statistic = langSummary;
+    const rows = this.layout.allRows.filter((x) => x.data.type === "project");
+    const statistic = langSummary.replace('%s', rows.length);
     return [{children: statistic, className: "text-dark"}, "flex", "pager"];
 }
 
