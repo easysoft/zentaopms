@@ -564,7 +564,8 @@ class blockZen extends block
         $count = isset($block->params->count) ? (int)$block->params->count : 0;
         $pager = pager::init(0, $count , 1);
 
-        $this->view->plans = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct');
+        $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->plans    = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct');
 
         return !dao::getError();
     }

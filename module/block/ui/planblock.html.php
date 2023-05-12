@@ -19,8 +19,11 @@ if(!$longBlock)
     unset($config->block->plan->dtable['bugs']);
 }
 
+foreach($plans as $plan) $plan->product = zget($products, $plan->product); 
+
 panel
 (
+    set('class', 'plan-block'),
     dtable
     (
         set::cols(array_values($config->block->plan->dtable)),
