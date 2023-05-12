@@ -42,11 +42,11 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->todo->create->form);
-            $formData = $this->todoZen->addCycleYearConfig($formData);
-            $todoData = $this->todoZen->beforeCreate($formData);
+            $form     = form::data($this->config->todo->create->form);
+            $form     = $this->todoZen->addCycleYearConfig($form);
+            $todoData = $this->todoZen->beforeCreate($form);
 
-            $uid  = isset($formData->rawdata->uid) ? $formData->rawdata->uid : '';
+            $uid  = isset($form->data->uid) ? $form->data->uid : '';
             $todo = $this->todoZen->prepareCreateData($todoData, $uid);
             if(!$todo) return print(js::error(dao::getError()));
 
@@ -54,7 +54,7 @@ class todo extends control
             if($todoID === false) return print(js::error(dao::getError()));
 
             $todo->id = $todoID;
-            $this->todoZen->afterCreate($todo, $formData);
+            $this->todoZen->afterCreate($todo, $form);
 
             if(!empty($todoData->objectID)) return $this->send(array('result' => 'success'));
 
@@ -90,8 +90,8 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $formData   = form::data($this->config->todo->batchCreate->form);
-            $todosData  = $this->todoZen->beforeBatchCreate($formData);
+            $form       = form::data($this->config->todo->batchCreate->form);
+            $todosData  = $this->todoZen->beforeBatchCreate($form);
             $todoIDList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
@@ -114,20 +114,19 @@ class todo extends control
      * 编辑待办数据。
      * Edit a todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function edit(string $todoID)
+    public function edit(int $todoID)
     {
-        $todoID = (int)$todoID;
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->todo->edit->form);
-            $formData = $this->todoZen->addCycleYearConfig($formData);
+            $form = form::data($this->config->todo->edit->form);
+            $form = $this->todoZen->addCycleYearConfig($form);
 
             /* Processing edit request data. */
-            $todo = $this->todoZen->beforeEdit($todoID, $formData);
+            $todo = $this->todoZen->beforeEdit($todoID, $form);
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
@@ -165,24 +164,23 @@ class todo extends control
      *
      * @param  string $from example:myTodo, todoBatchEdit.
      * @param  string $type
-     * @param  string $userID
+     * @param  int    $userID
      * @param  string $status
      * @access public
      * @return void
      */
-    public function batchEdit(string $from = '', string $type = 'today', string $userID = '', string $status = 'all')
+    public function batchEdit(string $from = '', string $type = 'today', int $userID = 0, string $status = 'all')
     {
-        $formData = form::data($this->config->todo->batchEdit->form);
-        $userID   = (int)$userID;
+        $form = form::data($this->config->todo->batchEdit->form);
 
         /* Get form data for my-todo. */
-        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($formData, $type, $userID, $status);
+        if($from == 'myTodo') $this->todoZen->batchEditFromMyTodo($form, $type, $userID, $status);
 
         /* Save the todo data for batch edit. */
         if($from == 'todoBatchEdit')
         {
-            $todos = $this->todoZen->beforeBatchEdit($formData);
-            $allChanges = $this->todo->batchUpdate($todos, $formData->data->todoIDList);
+            $todos      = $this->todoZen->beforeBatchEdit($form);
+            $allChanges = $this->todo->batchUpdate($todos, $form->data->todoIDList);
             $this->todoZen->afterBatchEdit($allChanges);
 
             return print(js::locate($this->session->todoList, 'parent'));

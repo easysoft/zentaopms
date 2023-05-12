@@ -100,13 +100,13 @@ class todoZen extends todo
      * 处理创建待办的请求数据。
      * Processing request data of create.
      *
-     * @param  object    $formData
+     * @param  form      $form
      * @access protected
      * @return object
      */
-    protected function beforeCreate(object $formData): object
+    protected function beforeCreate(form $form): object
     {
-        $rawData    = $formData->rawdata;
+        $rawData    = $form->data;
         $objectType = $rawData->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
@@ -114,7 +114,7 @@ class todoZen extends todo
         if($hasObject && $objectType) $objectID = $rawData->uid ? $rawData->$objectType : $rawData->objectID;
         $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
-        return $formData->add('account', $this->app->user->account)
+        return $form->add('account', $this->app->user->account)
             ->setDefault('objectID', 0)
             ->setDefault('vision', $this->config->vision)
             ->setDefault('assignedTo', $this->app->user->account)
@@ -136,21 +136,21 @@ class todoZen extends todo
      * 添加按年循环待办的配置项。
      * Adds a yearly cycle of configuration items.
      *
-     * @param  object    $formData
+     * @param  form      $form
      * @access protected
-     * @return object
+     * @return form
      */
-    protected function addCycleYearConfig(object $formData): object
+    protected function addCycleYearConfig(form $form): form
     {
         /* Only handle cases where you add to the backlog by year. */
-        if(empty($formData->data->config)) return $formData;
-        if(!empty($formData->data->config) && $formData->data->config['type'] != 'year') return $formData;
+        if(empty($form->data->config)) return $form;
+        if(!empty($form->data->config) && $form->data->config['type'] != 'year') return $form;
 
-        $formData->data->config['type']          = 'day';
-        $formData->data->config['specifiedDate'] = 1;
-        $formData->data->config['cycleYear']     = 1;
+        $form->data->config['type']          = 'day';
+        $form->data->config['specifiedDate'] = 1;
+        $form->data->config['cycleYear']     = 1;
 
-        return $formData;
+        return $form;
     }
 
     /**
@@ -204,13 +204,13 @@ class todoZen extends todo
      * Create a todo after data processing.
      *
      * @param  object    $todo
-     * @param  object    $formData
+     * @param  form      $form
      * @access protected
      * @return object
      */
-    protected function afterCreate(object $todo, object $formData): object
+    protected function afterCreate(object $todo, form $form): object
     {
-        if(isset($formData->rawdata->uid)) $this->loadModel('file')->updateObjectID($formData->rawdata->uid, $todo->id, 'todo');
+        if(isset($form->data->uid)) $this->loadModel('file')->updateObjectID($form->data->uid, $todo->id, 'todo');
 
         $this->loadModel('score')->create('todo', 'create', $todo->id);
 
@@ -225,13 +225,13 @@ class todoZen extends todo
      * 处理批量创建待办的请求数据。
      * Processing request data of batch create todo.
      *
-     * @param  object    $formData
+     * @param  form      $form
      * @access protected
      * @return object
      */
-    protected function beforeBatchCreate(object $formData): object
+    protected function beforeBatchCreate(form $form): object
     {
-        return $formData->get();
+        return $form->get();
     }
 
     /**
@@ -239,23 +239,23 @@ class todoZen extends todo
      * Processing edit request data.
      *
      * @param  int          $todoID
-     * @param  form         $formData
+     * @param  form         $form
      * @access protected
      * @return object|false
      */
-    protected function beforeEdit(int $todoID, form $formData): object|false
+    protected function beforeEdit(int $todoID, form $form): object|false
     {
         $oldTodo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
 
         $objectID   = 0;
-        $postData   = $formData->get();
+        $postData   = $form->get();
         $objectType = $oldTodo->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         if($hasObject && $objectType) $objectID = $postData->uid ? $postData->$objectType : $postData->objectID;
         $postData->date = !empty($postData->config['date']) ? $postData->config['date'] : $postData->date;
 
-        $todo = $formData->add('account', $oldTodo->account)
+        $todo = $form->add('account', $oldTodo->account)
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
@@ -314,14 +314,14 @@ class todoZen extends todo
      * 批量编辑页面渲染。
      * Batch edit view display.
      *
-     * @param  object    $formData
+     * @param  form      $form
      * @param  string    $type
      * @param  int       $userID
      * @param  string    $status
      * @access protected
      * @return void
      */
-    protected function batchEditFromMyTodo(object $formData, string $type, int $userID, string $status): void
+    protected function batchEditFromMyTodo(form $form, string $type, int $userID, string $status): void
     {
         /* Initialize vars. */
         $editedTodos = $objectIdList = $reviews = array();
@@ -332,7 +332,7 @@ class todoZen extends todo
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($formData, $type, $account, $status);
+        list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($form, $type, $account, $status);
 
         $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, '', '', isset($objectIdList['bug']) ? $objectIdList['bug'] : '');
         $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', '', isset($objectIdList['task']) ? $objectIdList['task'] : '');
@@ -375,21 +375,21 @@ class todoZen extends todo
      * 获取批量编辑页面初始化待办数据。
      * Get batch edit page initialization todo data.
      *
-     * @param  object    $formData
+     * @param  form      $form
      * @param  string    $type
      * @param  string    $account
      * @param  string    $status
      * @access protected
      * @return array
      */
-    private function getBatchEditInitTodos(object $formData, string $type, string $account, string $status): array
+    private function getBatchEditInitTodos(form $form, string $type, string $account, string $status): array
     {
         $editedTodos  = array();
         $objectIdList = array();
         $todoIdList   = array();
 
         $allTodos = $this->todo->getList($type, $account, $status);
-        if($formData->data->todoIDList) $todoIdList = $formData->data->todoIDList;
+        if($form->data->todoIDList) $todoIdList = $form->data->todoIDList;
 
         /* Initialize todos whose need to edited. */
         foreach($allTodos as $todo)
@@ -432,15 +432,15 @@ class todoZen extends todo
      * 处理批量编辑待办数据。
      * Build batch edit view.
      *
-     * @param  object    $formData
+     * @param  form      $form
      * @access protected
      * @return array
      */
-    protected function beforeBatchEdit(object $formData): array
+    protected function beforeBatchEdit(form $form): array
     {
         $todos      = array();
-        $data       = $formData->rawdata;
-        $todoIdList = $formData->data->todoIDList ? $formData->data->todoIDList : array();
+        $data       = $form->data;
+        $todoIdList = $form->data->todoIDList ? $form->data->todoIDList : array();
 
         if(!empty($todoIdList))
         {
