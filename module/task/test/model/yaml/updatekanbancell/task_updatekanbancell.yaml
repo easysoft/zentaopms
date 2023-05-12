@@ -1,0 +1,15 @@
+---
+title: zt_task
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: execution
+  range: 11
+- field: story
+  range: 0
+- field: parent
+  range: "0{5},`-1`,6"
+- field: status
+  range: "wait,doing,done,cancel,closed,doing{2}"
+...
+

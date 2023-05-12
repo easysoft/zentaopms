@@ -802,6 +802,7 @@ class task extends control
     }
 
     /**
+     * 暂停任务。
      * Pause task.
      *
      * @param  int    $taskID
@@ -809,7 +810,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function pause($taskID, $extra = '')
+    public function pause(int $taskID, string $extra = '')
     {
         $this->taskZen->commonAction($taskID);
 
@@ -818,52 +819,33 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->task->pause($taskID, $extra);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            /* Init task data. */
+            $postData = form::data($this->config->task->form->pause);
+            $task     = $postData->data;
+            $task->id = $taskID;
 
+            /* Pause task. */
+            $changes = $this->task->pause($task, $output);
+            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+            /* Record log. */
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('task', $taskID, 'Paused', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('task', $taskID, 'Paused', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
             $this->executeHooks($taskID);
 
-            if(isonlybody())
-            {
-                $task         = $this->task->getById($taskID);
-                $execution    = $this->execution->getByID($task->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                if($output['from'] == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-                }
-                return print(js::closeModal('parent.parent', 'this'));
-            }
-
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            /* Get response after the suspended task. */
+            $from     = zget($output, 'from');
+            $task     = $this->task->getById($taskID);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            return $this->send($response);
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->pause;
-        $this->view->position[] = $this->lang->task->pause;
-
+        /* Show the variables associated. */
+        $this->view->title = $this->view->execution->name . $this->lang->colon .$this->lang->task->pause;
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }

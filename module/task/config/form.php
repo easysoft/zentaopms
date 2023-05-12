@@ -93,3 +93,8 @@ $config->task->form->batchCreate['estStarted']    = array('type' => 'array', 're
 $config->task->form->batchCreate['deadline']      = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['desc']          = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['pri']           = array('type' => 'array', 'required' => false, 'default' => array());
+
+$config->task->form->pause = array();
+$config->task->form->pause['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->pause['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->pause['status']         = array('type' => 'string', 'required' => false, 'default' => 'pause');

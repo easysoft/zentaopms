@@ -1514,36 +1514,27 @@ class taskModel extends model
     /**
      * Pause task
      *
-     * @param  int    $taskID
-     * @param  string $extra
+     * @param  object $task
+     * @param  array  $output
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function pause($taskID, $extra = '')
+    public function pause(object $task, array $output = array()): bool|array
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        /* Get old task. */
+        $oldTask = $this->getById($task->id);
 
-        $oldTask = $this->getById($taskID);
+        /* Update kanban status. */
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($task->id)->exec();
 
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setDefault('status', 'pause')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->stripTags($this->config->task->editor->pause['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
+        /* If task has parent task, update status of the parent task. */
+        if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->pause['id'], $this->post->uid);
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
+        /* If output is not empty, update kanban cell. */
+        $this->updateKanbanCell($task->id, $output, $oldTask->execution);
 
-        if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-
-        $this->loadModel('kanban');
-        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        if(dao::isError()) return false;
+        return common::createChanges($oldTask, $task);
     }
 
     /**
@@ -3455,7 +3446,7 @@ class taskModel extends model
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
 
-        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, array($canRecordEstimate, $canEdit, $canBatchCreate)))
+        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, $canRecordEstimate, $canEdit, $canBatchCreate))
         {
             $menu .= "<div class='dividing-line'></div>";
         }
@@ -3921,5 +3912,21 @@ class taskModel extends model
             $childTaskID = $this->dao->lastInsertID();
             $this->action->create('task', $childTaskID, 'Opened');
         }
+    }
+
+    /**
+     * 更新看板单元格。
+     * Update kanban cell.
+     *
+     * @param  int    $taskID
+     * @param  array  $output
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function updateKanbanCell(int $taskID, array $output, int $executionID): void
+    {
+        if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($executionID, 'task', $taskID);
+        if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
     }
 }

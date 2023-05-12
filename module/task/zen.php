@@ -1331,4 +1331,20 @@ class taskZen extends task
         $kanbanType = $executionLaneType == 'all' ? 'task' : key($kanbanData);
         return json_encode($kanbanData[$kanbanType]);
     }
+
+    /**
+     * 处理开始任务后的返回信息。
+     * The information return after process the start task.
+     *
+     * @param  object    $task
+     * @param  string    $from ''|taskkanban
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterChangeStatus(object $task, string $from): array
+    {
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
+        if(isonlybody()) return $this->taskZen->responseKanban($task, $from);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
+    }
 }

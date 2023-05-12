@@ -584,29 +584,28 @@ class taskTest
     }
 
     /**
+     * 测试暂停任务。
      * Test pause a task.
      *
      * @param  int    $taskID
-     * @param  array  $param
      * @access public
      * @return array
      */
-    public function pauseTest($taskID, $param = array())
+    public function pauseTest(int $taskID): array
     {
-        $createFields = array('status' => 'pause', 'comment' => '单元测试');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->pause($taskID);
-        unset($_POST);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
+        $task = new stdclass();
+        $task->id             = $taskID;
+        $task->status         = 'pause';
+        $task->lastEditedBy   = 'admin';
+        $task->lastEditedDate = helper::now();
+
+        $_SERVER['HTTP_HOST'] = '';
+
+        $changes = $this->objectModel->pause($task, array());
+
+        if(dao::isError()) return dao::getError();
+
+        return $changes;
     }
 
     /**
@@ -2051,5 +2050,29 @@ class taskTest
 
         return $result;
 
+    }
+
+    /**
+     * 测试更新看板单元格。
+     * Test update kanban cell.
+     *
+     * @param  int    $taskID
+     * @param  array  $output
+     * @param  int    $executionID
+     * @access public
+     * @return array|string
+     */
+    public function updateKanbanCellTest(int $taskID, int $executionID, array $output): array|string
+    {
+        $_SERVER['HTTP_HOST'] = '';
+
+        $this->objectModel->updateKanbanCell($taskID, $output, $executionID);
+
+        global $tester;
+        $cells = $tester->dao->select("CONCAT(id, ':', cards) as cards")->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->fetchPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        return implode('|', $cells);
     }
 }
