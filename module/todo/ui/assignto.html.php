@@ -21,7 +21,8 @@ formPanel
         set::name('assignedTo'),
         set::label($lang->todo->assignedTo),
         set::width('1/2'),
-        set::items($members)
+        set::items($members),
+        set::required(true)
     ),
     formRow
     (
@@ -64,6 +65,7 @@ formPanel
                     set::name('begin'),
                     set::items($times),
                     set::value(date('Y-m-d') != $todo->date ? key($times) : $time),
+                    set::required(true),
                     on::change('selectNext')
                 ),
                 span($lang->todo->timespanTo, setClass('input-group-addon')),
@@ -71,7 +73,8 @@ formPanel
                 (
                     setID('end'),
                     set::name('end'),
-                    set::items($times)
+                    set::items($times),
+                    set::required(true)
                 )
             )
         ),
