@@ -45,7 +45,7 @@ class productZen extends product
     protected function setProjectMenu(int $productID, string $branch, string $preBranch)
     {
         $branch = ($preBranch !== '' and $branch === '') ? $preBranch : $branch;
-        setCookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preBranch', $branch);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
 
         $this->product->setMenu($productID, $branch);
@@ -97,7 +97,7 @@ class productZen extends product
      */
     protected function setTrackMenu(int $productID, string $branch, int $projectID)
     {
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preBranch', $branch);
 
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1075,35 +1075,35 @@ class productZen extends product
     protected function saveAndModifyCookie4Browse(int $productID, string $branch, int $param, string $browseType, string $orderBy): void
     {
         /* Set product ID and branch of the pre visited product. */
-        setcookie('preProductID', (string)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preProductID', (string)$productID);
+        helper::setcookie('preBranch', $branch);
 
         /* Set module ID of story. */
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
             $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('storyModule', '0', 0);
         }
 
         if($browseType == 'bymodule' or $browseType == '')
         {
-            setcookie('storyModule', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('storyModule', (string)$param, 0);
 
             /* The module ID from project app. */
-            if($this->app->tab == 'project') setcookie('storyModuleParam', (string)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            if($this->app->tab == 'project') helper::setcookie('storyModuleParam', (string)$param, 0);
 
             /* Re-init the story branch. */
             $_COOKIE['storyBranch'] = 'all';
-            setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('storyBranch', 'all', 0);
 
             /* For rendering module tree. */
-            if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            if($browseType == '') helper::setcookie('treeBranch', $branch, 0);
         }
 
-        if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($browseType == 'bybranch') helper::setcookie('storyBranch', $branch, 0);
 
         /* Save sort order of product stories list. */
-        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('productStoryOrder', $orderBy, 0);
     }
 
     /**

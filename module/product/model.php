@@ -1980,13 +1980,13 @@ class productModel extends model
 
         $this->session->set('product', $productID, $this->app->tab);
 
-        setcookie('preProductID', (string)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preProductID', (string)$productID);
 
         /* If preProductID changed, then reset preBranch. */
         if($this->cookie->preProductID != $this->session->product)
         {
             $this->cookie->set('preBranch', 0);
-            setcookie('preBranch', '0', $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('preBranch', '0');
         }
 
         return $productID;
