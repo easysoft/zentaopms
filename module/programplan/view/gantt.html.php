@@ -621,7 +621,7 @@ $(function()
 
     function getSubmitBtn(task)
     {
-        if(task.type == 'point') return '<button class="btn btn-link submitBtn" title="<?php echo $lang->programplan->submit;?>"><i class="icon-confirm"></i></button>';
+        if(task.type == 'point' && !task.rawStatus) return '<button class="btn btn-link submitBtn" title="<?php echo $lang->programplan->submit;?>"><i class="icon-confirm"></i></button>';
     }
 
     gantt.templates.task_end_date = function(data)
@@ -677,12 +677,15 @@ $(function()
     gantt.templates.rightside_text = function(start, end, task)
     {
         if(typeof task.owner_id == 'undefined') return;
+        if(task.type == 'point') return "<span class='status-" + task.rawStatus + "'>" + task.status + '</span>';
         return getByIdForGantt(gantt.serverList('userList'), task.owner_id);
     };
+
     gantt.templates.grid_row_class = function (start, end, task)
     {
         if(task.type == 'task') return 'task-item';
     };
+
     gantt.templates.link_class = function(link)
     {
         var types = gantt.config.links;
@@ -691,9 +694,10 @@ $(function()
         if(link.type == types.finish_to_finish) return 'finish_to_finish';
         if(link.type == types.start_to_finish)  return 'start_to_finish';
     };
+
     gantt.templates.tooltip_text = function (start, end, task)
     {
-        return task.text;
+        if(task.type != 'point') return task.text;
     };
 
     gantt.attachEvent('onTemplatesReady', function()
