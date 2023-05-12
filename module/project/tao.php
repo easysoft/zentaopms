@@ -511,27 +511,25 @@ class projectTao extends projectModel
     protected function getProjectsStats(): array
     {
         $projectsStats = $this->loadModel('program')->getProjectStats(0, 'all', 0, 'order_asc');
-        $projectsStats = $this->classfyProjects($projectsStats);
+        $projectsStats = $this->classifyProjects($projectsStats);
 
         /* 只保留最近关闭的两个项目。*/
         /* Only display recent two closed projects. */
-        $projectsStats = $this->sortAndReduceClosedGroup($projectsStats, 2);
+        $projectsStats = $this->sortAndReduceClosedProjects($projectsStats, 2);
         return $projectsStats;
     }
 
     /**
      * 对项目按照我的、其它的和关闭的进行分类。
-     * Classfy projects by my, other and closed.
+     * Classify projects according to my, other and closed.
      *
-     * @param  int       $projects
+     * @param  array     $projects
      * @access protected
      * @return array
      */
-    protected function classfyProjects($projects): array
+    protected function classifyProjects(array $projects): array
     {
-        $myProjects    = array();
-        $otherProjects = array();
-        $closedGroup   = array();
+        $classifiedProjects = array('myProjects' => array(), 'otherProjects' => array(), 'closedProjects' => array());
         foreach($projects as $project)
         {
             if(!str_contains('wait,doing,closed', $project->status)) continue;
@@ -543,63 +541,55 @@ class projectTao extends projectModel
             {
                 if($project->status != 'closed')
                 {
-                    $myProjects[$topProgram][$project->status][] = $project;
+                    $classifiedProjects['myProjects'][$topProgram][$project->status][] = $project;
                 }
                 else
                 {
-                    $closedGroup['my'][$topProgram][$project->closedDate] = $project;
+                    $classifiedProjects['closedProjects']['my'][$topProgram][$project->closedDate] = $project;
                 }
             }
             else
             {
                 if($project->status != 'closed')
                 {
-                    $otherProjects[$topProgram][$project->status][] = $project;
+                    $classifiedProjects['otherProjects'][$topProgram][$project->status][] = $project;
                 }
                 else
                 {
-                    $closedGroup['other'][$topProgram][$project->closedDate] = $project;
+                    $classifiedProjects['closedProjects']['other'][$topProgram][$project->closedDate] = $project;
                 }
             }
         }
 
-        return array('myProjects' => $myProjects, 'otherProjects' => $otherProjects, 'closedGroup' => $closedGroup);
+        return $classifiedProjects;
     }
 
     /**
      * 对groups列表进行排序和缩减。
-     * Sort and reduce groups.
+     * Sort and reduce projects.
      *
      * @param  array     $projectsStats
      * @param  int       $retainNum
      * @access protected
      * @return array
      */
-    protected function sortAndReduceClosedGroup(array $projectsStats, int $retainNum = 2): array
+    protected function sortAndReduceClosedProjects(array $projectsStats, int $retainNum = 2): array
     {
-        $myProjects    = $projectsStats['myProjects'];
-        $otherProjects = $projectsStats['otherProjects'];
-        $closedGroup   = $projectsStats['closedGroup'];
-        foreach($closedGroup as $group => $closedProjects)
+        $sortedAndReducedProjects = array('my' => $projectsStats['myProjects'], 'other' => $projectsStats['otherProjects']);
+        $closedProjects           = $projectsStats['closedProjects'];
+        foreach($closedProjects as $group => $groupedProjects)
         {
-            foreach($closedProjects as $topProgram => $projects)
+            foreach($groupedProjects as $topProgram => $projects)
             {
                 krsort($projects);
                 if($retainNum > 0)
                 {
-                    if($group == 'my')
-                    {
-                        $myProjects[$topProgram]['closed'] = array_slice($projects, 0, $retainNum);
-                    }
-                    else
-                    {
-                        $otherProjects[$topProgram]['closed'] = array_slice($projects, 0, $retainNum);
-                    }
+                    $sortedAndReducedProjects[$group][$topProgram]['closed'] = array_slice($projects, 0, $retainNum);
                 }
             }
         }
 
-        return array('my' => $myProjects, 'other' => $otherProjects);
+        return $sortedAndReducedProjects;
     }
 
     /**
