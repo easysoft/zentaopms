@@ -554,9 +554,9 @@ class programplanTao extends programplanModel
     /**
      * 插入项目细节。
      * Insert project spec.
-     * @param  int    $planID
-     * @param  object $plan
-     * @access public
+     * @param  int       $planID
+     * @param  object    $plan
+     * @access protected
      * @return bool
      */
     protected function insertProjectSpec(int $planID, object $plan): bool
