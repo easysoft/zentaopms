@@ -94,19 +94,19 @@ class product extends control
     }
 
     /**
-     * 产品研发需求列表。
+     * 浏览产品研发/用户需求列表。
      * Browse requirements list of product.
      *
-     * @param  int         $productID
-     * @param  int|stirng  $branch      all|''|0
-     * @param  string      $browseType
-     * @param  int         $param       Story Module ID
-     * @param  string      $storyType   requirement|story
-     * @param  string      $orderBy
-     * @param  int         $recTotal
-     * @param  int         $recPerPage
-     * @param  int         $pageID
-     * @param  int         $projectID
+     * @param  string  $productID
+     * @param  string  $branch      all|''|0
+     * @param  string  $browseType
+     * @param  string  $param       Story Module ID
+     * @param  string  $storyType   requirement|story
+     * @param  string  $orderBy
+     * @param  string  $recTotal
+     * @param  string  $recPerPage
+     * @param  string  $pageID
+     * @param  string  $projectID
      * @access public
      * @return void
      */
@@ -242,12 +242,13 @@ class product extends control
     }
 
     /**
+     * 编辑产品。
      * Edit a product.
      *
-     * @param  int       $productID
-     * @param  string    $action
-     * @param  string    $extra
-     * @param  int       $programID
+     * @param  string  $productID
+     * @param  string  $action
+     * @param  string  $extra
+     * @param  string  $programID
      * @access public
      * @return void
      */
@@ -348,7 +349,7 @@ class product extends control
      * 查看产品。
      * View a product.
      *
-     * @param  int    $productID
+     * @param  string $productID
      * @access public
      * @return void
      */
@@ -384,8 +385,8 @@ class product extends control
      * 删除产品。
      * Delete a product.
      *
-     * @param  int    $productID
-     * @param  string $confirm    yes|no
+     * @param  string $productID
+     * @param  string $confirm   yes|no
      * @access public
      * @return void
      */
@@ -418,8 +419,8 @@ class product extends control
      * 产品路线图。
      * Road map of a product.
      *
-     * @param  int        $productID
-     * @param  int|string $branch
+     * @param  stirng $productID
+     * @param  stirng $branch
      * @access public
      * @return void
      */
@@ -453,10 +454,10 @@ class product extends control
      * 产品动态。
      * Product dynamic.
      *
-     * @param  int    $productID
+     * @param  string $productID
      * @param  string $type
      * @param  string $param
-     * @param  int    $recTotal
+     * @param  string $recTotal
      * @param  string $date
      * @param  string $direction next|pre
      * @access public
@@ -512,7 +513,7 @@ class product extends control
     /**
      * Product dashboard.
      *
-     * @param  int    $productID
+     * @param  string $productID
      * @access public
      * @return void
      */
@@ -605,11 +606,11 @@ class product extends control
      *
      * @param  string $browseType
      * @param  string $orderBy
-     * @param  int    $param
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @param  int    $programID
+     * @param  string $param
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
+     * @param  string $programID
      * @access public
      * @return void
      */
@@ -816,12 +817,12 @@ class product extends control
     /**
      * Story track.
      *
-     * @param  string      $productID
-     * @param  int|string  $branch
-     * @param  string      $projectID
-     * @param  string      $recTotal
-     * @param  string      $recPerPage
-     * @param  string      $pageID
+     * @param  string $productID
+     * @param  string $branch
+     * @param  string $projectID
+     * @param  string $recTotal
+     * @param  string $recPerPage
+     * @param  string $pageID
      * @access public
      * @return void
      */
