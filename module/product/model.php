@@ -1420,15 +1420,15 @@ class productModel extends model
 
         /* Build result. */
         $statsData = array(
-            'programList'             => $programList,
-            'productList'             => $productList,
-            'planList'                => $planList,
-            'projectList'             => $projectList,
-            'executionList'           => $executionList,
-            'projectProduct'          => $projectProduct,
-            'projectLatestExecutions' => $projectLatestExecutions,
-            'hourList'                => $hourList,
-            'releaseList'             => $releaseList
+            $programList,
+            $productList,
+            $planList,
+            $projectList,
+            $executionList,
+            $projectProduct,
+            $projectLatestExecutions,
+            $hourList,
+            $releaseList
         );
         /* Convert predefined HTML entities to characters. */
         $statsData = $this->covertHtmlSpecialChars($statsData);
