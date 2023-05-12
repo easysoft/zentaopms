@@ -168,14 +168,11 @@ formPanel
                 )
             )
         ),
-        div
+        formGroup
         (
+            set::label($lang->todo->every),
+            set::required(true),
             setClass('config-day flex items-center highlight-suffix'),
-            span
-            (
-                setClass('input-group-addon pl-4 ring-0 bg-white'),
-                $lang->todo->every
-            ),
             inputControl
             (
                 set::suffix($lang->todo->cycleDay),

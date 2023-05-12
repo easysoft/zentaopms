@@ -76,7 +76,7 @@ class formItemDropdown extends wg
                        'class'       => 'ghost',
                        'icon'        => 'cog',
                        'data-target' => 'custom',
-                       'data-toggle' =>'dropdown'
+                       'data-toggle' => 'dropdown'
                     )
                 )
             ),
