@@ -661,7 +661,7 @@ class kanbanTest
     {
         global $tester;
         /* Get group objects. */
-        if($browseType == 'story') $cardList = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'story') $cardList = $tester->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'bug')   $cardList = $tester->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
         $objects = $this->objectModel->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
@@ -1718,7 +1718,7 @@ class kanbanTest
     {
         global $tester;
         /* Get group objects. */
-        if($objecType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
+        if($objecType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
         if($objecType == 'bug')   $objectGroup['bug']   = $tester->loadModel('bug')->getExecutionBugs($executionID);
         if($objecType == 'task')  $objectGroup['task']  = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
 

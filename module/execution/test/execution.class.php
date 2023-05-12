@@ -2565,7 +2565,7 @@ class executionTest
         {
             global $tester;
             $contents    = array('story', 'wait', 'doing', 'done', 'cancel');
-            $stories     = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 'id_asc');
+            $stories     = $tester->loadModel('story')->getExecutionStories($executionID, 0, 'id_asc');
             $kanbanTasks = $this->executionModel->getKanbanTasks($executionID, "id");
             $kanbanBugs  = $tester->loadModel('bug')->getExecutionBugs($executionID);
             $users       = array();

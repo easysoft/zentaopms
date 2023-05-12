@@ -212,7 +212,6 @@ class storyModel extends model
      *
      * @param  int          $executionID
      * @param  int          $productID
-     * @param  string|int   $branch
      * @param  string       $orderBy
      * @param  string       $type
      * @param  int|string   $param
@@ -222,7 +221,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStories(int $executionID = 0, int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
+    public function getExecutionStories(int $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStories();
 
@@ -255,7 +254,7 @@ class storyModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
-                ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
+                ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in($this->storyTao->getUnclosedStatusKeys())->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();
 
             /* 根据传入的 ID 是项目还是执行分别查询需求。 */
@@ -5222,7 +5221,7 @@ class storyModel extends model
         $excludeStories = $this->storyTao->getSubdividedStoriesByProduct($productID);
         if($projectID)
         {
-            $stories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story', $excludeStories, $this->config->URAndSR ? null : $pager);
+            $stories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', 0, 'story', $excludeStories, $this->config->URAndSR ? null : $pager);
         }
         else
         {
@@ -5279,7 +5278,7 @@ class storyModel extends model
 
         /* 获取关联项目的研发需求。*/
         $projectStories = array();
-        if($projectID) $projectStories = $this->getExecutionStories($projectID, $productID, $branch, '`order`_desc', 'all', 0, 'story');
+        if($projectID) $projectStories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', 0, 'story');
 
         /* 获取用户需求细分的研发需求。 */
         $requirementStories = $this->storyTao->batchGetRelations(array_keys($requirements), 'requirement', array('id', 'title', 'parent'));

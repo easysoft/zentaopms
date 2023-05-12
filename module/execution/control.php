@@ -825,7 +825,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, $storyType, '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, $param, $storyType, '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
@@ -2973,7 +2973,7 @@ class execution extends control
 
         if($_POST)
         {
-            $stories    = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
+            $stories    = $this->loadModel('story')->getExecutionStories($executionID, 0, $orderBy);
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
 
             $order = 1;
