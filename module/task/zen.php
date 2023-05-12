@@ -423,31 +423,22 @@ class taskZen extends task
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = true;
 
-        $execution    = $this->execution->getByID($task->execution);
-        $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-        $execGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+        $execution  = $this->execution->getByID($task->execution);
+        $kanbanData = $this->getKanbanData($execution, $regionID);
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
         if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban')
         {
-            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-            $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-            $kanbanData    = json_encode($kanbanData);
-
             $response['callback'] = "parent.parent.updateKanban({$kanbanData}, {$regionID})";
             return $response;
         }
+
         if($from == 'taskkanban')
         {
-            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-            $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $execGroupBy, $taskSearchValue);
-            $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-            $kanbanData      = $kanbanData[$kanbanType];
-            $kanbanData      = json_encode($kanbanData);
-
             $response['callback'] = "parent.parent.updateKanban(\"task\", $kanbanData)";
             return $response;
         }
+
         $response['load'] = true;
         return $response;
     }
