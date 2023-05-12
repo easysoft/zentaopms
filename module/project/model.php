@@ -1427,7 +1427,7 @@ class projectModel extends model
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
                     ->where('project')->eq($projectID)
                     ->fetchPairs();
-                $this->personnel->updateWhitelist($whitelist, 'product', current($linkedProducts));
+                $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
             }
             else
             {
@@ -1504,18 +1504,19 @@ class projectModel extends model
      * 更新项目。
      * Update project.
      *
-     * @param  object $project
-     * @param  object $oldProject
+     * @param  object      $project
+     * @param  object      $oldProject
+     * @param  int         $uid
      * @access public
      * @return array|false
      */
-    public function update(object $project, object $oldProject): array|false
+    public function update(object $project, object $oldProject, int $uid): array|false
     {
         /* 通过主键查老项目信息, 处理父节点和图片字段。*/
         /* Fetch old project's info and dispose parent and file info. */
         $projectID = $oldProject->id;
         if(!isset($project->parent)) $project->parent = $oldProject->parent;
-        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $uid);
 
         /* 若此项目为多迭代项目， 检查起止日期不得小于迭代的起止日期。*/
         /* If this project has multiple stage, check if execution's start and end dates in project's start and end dates. */
@@ -1533,7 +1534,7 @@ class projectModel extends model
         $this->updateWhitelist($project, $oldProject);               // 更新关联的白名单列表。
         $this->updateProductStage($projectID, $oldProject->stageBy); // 更新关联的所有产品的阶段。
 
-        $this->file->updateObjectID($this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
+        $this->file->updateObjectID($uid, $projectID, 'project');    // 通过uid更新文件id。
 
         if($oldProject->parent != $project->parent) $this->loadModel('program')->fixPath($projectID, $project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);                // 无迭代的非瀑布项目需要更新。

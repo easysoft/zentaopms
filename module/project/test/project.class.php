@@ -110,20 +110,19 @@ class Project
     /**
      * Update a project.
      *
-     * @param  int   $projectID
-     * @param  array $data
+     * @param  object $project
+     * @param  object $oldProject
+     * @param  int    $uid
      * @access public
      * @return void
      */
-    public function update($projectID, $data)
+    public function update(object $project, object $oldProject, int $uid)
     {
-        $_POST = $data;
-        $this->project->update($projectID);
+        $this->project->update($project, $oldProject, $uid);
 
-        unset($_POST);
         if(dao::isError()) return array('message' => dao::getError());
 
-        return $this->project->getByID($projectID);
+        return $this->project->getByID($oldProject->id);
     }
 
     /**
