@@ -461,8 +461,8 @@ class todo extends control
         if(!$_POST) $this->locate($this->createLink('my', 'todo'));
 
         $formData   = form::data($this->config->todo->editDate->form);
-        $todoIDList = !empty($formData->rawdata->todoIDList) ? $formData->rawdata->todoIDList : array($todoID);
-        $date       = !empty($formData->rawdata->date) ? $formData->rawdata->date : date::today();
+        $todoIDList = !empty($formData->data->todoIDList) ? $formData->data->todoIDList : array($todoID);
+        $date       = !empty($formData->data->date) ? $formData->data->date : date::today();
         if(!$todoIDList) $this->locate((string)$this->session->todoList);
 
         $this->todo->editDate((array)$todoIDList, (string)$date);
@@ -487,7 +487,7 @@ class todo extends control
             $configTime = $this->config->todo->times;
 
             $formData    = form::data($this->config->todo->export->form);
-            $checkedItem = $formData->rawdata->exportType == 'selected' ? $this->cookie->checkedItem : '';
+            $checkedItem = $formData->data->exportType == 'selected' ? $this->cookie->checkedItem : '';
 
             $todos = $this->todo->getByExportList($orderBy, (string) $this->session->todoReportCondition, (string)$checkedItem);
 
