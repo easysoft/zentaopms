@@ -1159,8 +1159,8 @@ class productZen extends product
     }
 
     /**
-     * 获取是否展示分支。
-     * Get the tree structure of modules.
+     * 是否展示分支。
+     * Can show the branch.
      *
      * @param  int       $projectID
      * @param  int       $productID
@@ -1169,9 +1169,9 @@ class productZen extends product
      * @access protected
      * @return bool
      */
-    protected function getShowBranch4Browse(int $projectID, int $productID, string $storyType, bool $isProjectStory): bool
+    protected function canShowBranch4Browse(int $projectID, int $productID, string $storyType, bool $isProjectStory): bool
     {
-        if($isProjectStory and $storyType == 'story') return $this->loadModel('branch')->showBranch($productID, 0, $projectID);
+        if($isProjectStory && $storyType == 'story') return $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 
         return $this->loadModel('branch')->showBranch($productID);
     }
@@ -1188,10 +1188,9 @@ class productZen extends product
      */
     protected function getProjectProducts4Browse(int $projectID, string $storyType, bool $isProjectStory): array
     {
-        $projectProducts = array();
-        if($isProjectStory && $storyType == 'story') $projectProducts = $this->product->getProducts($projectID);
+        if($isProjectStory && $storyType == 'story') return $this->product->getProducts($projectID);
 
-        return $projectProducts;
+        return array();
     }
 
     /**
@@ -1207,12 +1206,9 @@ class productZen extends product
      */
     protected function getProductPlans4Browse(array $projectProducts, int $projectID, string $storyType, bool $isProjectStory): array
     {
-        $this->loadModel('execution');
+        if($isProjectStory && $storyType == 'story') return $this->loadModel('execution')->getPlans($projectProducts, 'skipParent,unexpired,noclosed', $projectID);
 
-        $plans = array();
-        if($isProjectStory && $storyType == 'story') $plans = $this->execution->getPlans($projectProducts, 'skipParent,unexpired,noclosed', $projectID);
-
-        return $plans;
+        return array();
     }
 
     /**
@@ -1276,15 +1272,15 @@ class productZen extends product
      */
     protected function getBranchOptions4Browse(array $projectProducts, int $projectID): array
     {
-        $branchOptions = array();
+        $this->loadModel('branch');
 
+        $branchOptions = array();
         foreach($projectProducts as $product)
         {
-            if($product and $product->type != 'normal')
-            {
-                $branches = $this->loadModel('branch')->getList($product->id, $projectID, 'all');
-                foreach($branches as $branchInfo) $branchOptions[$product->id][$branchInfo->id] = $branchInfo->name;
-            }
+            if(!$product || $product->type == 'normal') continue;
+
+            $branches = $this->branch->getList($product->id, $projectID, 'all');
+            foreach($branches as $branchInfo) $branchOptions[$product->id][$branchInfo->id] = $branchInfo->name;
         }
 
         return $branchOptions;

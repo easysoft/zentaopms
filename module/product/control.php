@@ -141,7 +141,7 @@ class product extends control
         /* Generate data. */
         $moduleID              = $this->productZen->getModuleId4Browse($param, $browseType);
         $moduleTree            = $this->productZen->getModuleTree4Browse($projectID, $productID, $branch, $param, $storyType, $browseType);
-        $showBranch            = $this->productZen->getShowBranch4Browse($projectID, $productID, $storyType, $isProjectStory);
+        $showBranch            = $this->productZen->canShowBranch4Browse($projectID, $productID, $storyType, $isProjectStory);
         $projectProducts       = $this->productZen->getProjectProducts4Browse($projectID, $storyType, $isProjectStory);
         $productPlans          = $this->productZen->getProductPlans4Browse($projectProducts, $projectID, $storyType, $isProjectStory);
         list($stories, $pager) = $this->productZen->getStoriesAndPager4Browse($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $recTotal, $recPerPage, $pageID);
