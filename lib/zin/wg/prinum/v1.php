@@ -13,7 +13,8 @@ class priNum extends wg
         if($pri == 1) return 'danger-outline';
         if($pri == 2) return 'warning-outline';
         if($pri == 3) return 'secondary-outline';
-        return 'success-outline';
+        if($pri == 4) return 'teal-outline';
+        return 'gray-outline';
     }
 
     protected function build(): wg
