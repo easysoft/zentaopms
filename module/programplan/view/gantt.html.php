@@ -50,7 +50,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_grid_head_owner_id {text-align: left}
 .gantt_critical_task{background:#e63030 !important; border-color:#9d3a3a !important;}
 .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
-.gantt_row.task-item{cursor: pointer;}
+.gantt_row{cursor: pointer;}
 
 #ganttDownload, #ganttHeader {display: none;}
 #ganttContainer {margin-top: 40px;}
@@ -682,11 +682,6 @@ $(function()
         return getByIdForGantt(gantt.serverList('userList'), task.owner_id);
     };
 
-    gantt.templates.grid_row_class = function (start, end, task)
-    {
-        if(task.type == 'task') return 'task-item';
-    };
-
     gantt.templates.link_class = function(link)
     {
         var types = gantt.config.links;
@@ -770,6 +765,10 @@ $(function()
     var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
+        var task = gantt.getTask(id);
+        if(task.type == 'point' && task.rawStatus) location.href = createLink('review', 'view', 'reviewID=' + task.reviewID);
+        if(task.type == 'plan')                    window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
+
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
         if($(e.srcElement).hasClass('icon-confirm'))
         {
