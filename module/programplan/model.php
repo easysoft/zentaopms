@@ -438,7 +438,7 @@ class programplanModel extends model
 
                         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
 
-                        $datas['data'][$data->id] = $data;
+                        if($selectCustom && strpos($selectCustom, "point") !== false) $datas['data'][$data->id] = $data;
                     }
                 }
             }
