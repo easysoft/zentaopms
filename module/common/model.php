@@ -3405,12 +3405,12 @@ EOF;
 
         foreach($lang->$moduleName->$menuKey as $label => $menu)
         {
-            $lang->$moduleName->$menuKey->$label = self::setMenuVarsEx($menu, $objectID, $params);
+            $lang->$moduleName->$menuKey->$label = static::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {
                 foreach($menu['subMenu'] as $key1 => $subMenu)
                 {
-                    $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = static::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
 
@@ -3418,13 +3418,13 @@ EOF;
 
             foreach($menu['dropMenu'] as $key2 => $dropMenu)
             {
-                $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2 = self::setMenuVarsEx($dropMenu, $objectID, $params);
+                $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key2 = static::setMenuVarsEx($dropMenu, $objectID, $params);
 
                 if(!isset($dropMenu['subMenu'])) continue;
 
                 foreach($dropMenu['subMenu'] as $key3 => $subMenu)
                 {
-                    $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key3 = self::setMenuVarsEx($subMenu, $objectID, $params);
+                    $lang->$moduleName->$menuKey->{$label}['dropMenu']->$key3 = static::setMenuVarsEx($subMenu, $objectID, $params);
                 }
             }
         }
@@ -3466,7 +3466,7 @@ EOF;
             }
             else
             {
-                self::setMenuVars($tab, (int)$app->session->$tab);
+                static::setMenuVars($tab, (int)$app->session->$tab);
             }
         }
     }
