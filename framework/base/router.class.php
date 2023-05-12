@@ -1611,9 +1611,9 @@ class baseRouter
                     $default = $paramDefaultValue[$className][$methodName][$name]['default'];
                     $type    = $paramDefaultValue[$className][$methodName][$name]['type'];
                 }
-                elseif(!$isEncrypted && $param->isDefaultValueAvailable())
+                elseif(!$isEncrypted)
                 {
-                    $default = $param->getDefaultValue();
+                    if($param->isDefaultValueAvailable()) $default = $param->getDefaultValue();
                     if(method_exists($param, 'hasType') && $param->hasType()) $type = $param->getType()->getName();
                 }
 
