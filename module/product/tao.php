@@ -38,10 +38,10 @@ class productTao extends productModel
      * 从数据表获取符合条件的id=>name的键值对。
      * Fetch pairs like id=>name.
      *
-     * @param string       $mode     all|noclosed
-     * @param int          $programID
-     * @param string|array $append
-     * @param string|int   $shadow    all|0|1
+     * @param  string       $mode     all|noclosed
+     * @param  int          $programID
+     * @param  string|array $append
+     * @param  string|int   $shadow    all|0|1
      * @access protected
      * @return int[]
      */
@@ -376,7 +376,7 @@ class productTao extends productModel
      * @param  array     $productIDs
      * @param  string    $storyType
      * @access protected
-     * @return [array, array]
+     * @return array[]
      */
     protected function getStatsStoriesAndRequirements(array $productIDs, string $storyType): array
     {
@@ -730,7 +730,7 @@ class productTao extends productModel
      *
      * @param  array   $plans
      * @access private
-     * @return [array, array]
+     * @return array[]
      */
     private function filterValidProductPlans(array $plans): array
     {

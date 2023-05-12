@@ -1299,11 +1299,11 @@ class productZen extends product
      * 获取分支和分支标签的显示项。
      * Get options of branch and branch tag.
      *
-     * @param  int           $productID
-     * @param  object|bool   $product
-     * @param  bool          $isProjectStory
+     * @param  int         $productID
+     * @param  object|bool $product
+     * @param  bool        $isProjectStory
      * @access protected
-     * @return [array, array]
+     * @return array[]
      */
     protected function getBranchAndTagOption4Browse(int $projectID, object|bool $product, bool $isProjectStory): array
     {
