@@ -1370,13 +1370,21 @@ class programModel extends model
             if(empty($projects)) return;
         }
 
-        /* 1. Get executions to be refreshed. */
+        /* 1. Get summary and members of executions to be refreshed. */
         $summary = $this->dao->select('execution, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->beginIF(!empty($projects))->andWhere('project')->in($projects)->fi()
             ->groupBy('execution')
             ->fetchAll();
-        if(empty($summary)) return;
+
+        $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.type')->eq('project')
+            ->beginIF(!empty($projects))->andWhere('t1.root')->in($projects)->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchPairs('root');
+
 
         /* 2. Get all parents to be refreshed. */
         $executions = array();
@@ -1392,11 +1400,17 @@ class programModel extends model
             $executionID = $execution->execution;
             foreach($executionPaths[$executionID] as $nodeID)
             {
-                if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0);
+                if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0);
                 $stats[$nodeID]['totalEstimate'] += $execution->totalEstimate;
                 $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
                 $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
             }
+        }
+
+        foreach($teamMembers as $projectID => $teamCount)
+        {
+            if(!isset($stats[$projectID])) $stats[$projectID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0);
+            $stats[$projectID]['teamCount'] = $teamCount;
         }
 
         /* 4. Refresh stats to db. */
@@ -1406,6 +1420,7 @@ class programModel extends model
             $progress  = $totalReal ? round($project['totalConsumed'] / $totalReal, 2) * 100 : 0;
             $this->dao->update(TABLE_PROJECT)
                 ->set('progress')->eq($progress)
+                ->set('teamCount')->eq($project['teamCount'])
                 ->set('estimate')->eq($project['totalEstimate'])
                 ->set('consumed')->eq($project['totalConsumed'])
                 ->set('left')->eq($project['totalLeft'])
@@ -1461,7 +1476,6 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            $project->teamCount   = isset($teamMembers[$project->id]) ? count($teamMembers[$project->id]) : 0;
             $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
 
             /* Convert predefined HTML entities to characters. */
@@ -1469,6 +1483,7 @@ class programModel extends model
 
             $stats[$key] = $project;
         }
+
         return $stats;
     }
 

@@ -364,7 +364,7 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'id_desc', $pager);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
 
         $this->display();
@@ -1542,7 +1542,7 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', $pager, 'all', $projectID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
     }
 

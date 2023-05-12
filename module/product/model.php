@@ -1369,50 +1369,6 @@ class productModel extends model
 
         $projectKeys = array_keys($projects);
         $stats       = array();
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
-        /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $projectID => $projectTasks)
-        {
-            $hour = (object)$emptyHour;
-            foreach($projectTasks as $task)
-            {
-                if($task->status != 'cancel')
-                {
-                    $hour->totalEstimate += $task->estimate;
-                    $hour->totalConsumed += $task->consumed;
-                }
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
-            }
-            $hours[$projectID] = $hour;
-        }
-
-        /* Compute totalReal and progress. */
-        $progressList = $this->loadModel('project')->getWaterfallProgress(array_keys($hours));
-        foreach($hours as $projectID => $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $projects[$projectID]->model == 'waterfall' ? $progressList[$projectID] : ($hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0);
-        }
-
-        /* Get the number of project teams. */
-        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
-            ->where('root')->in($projectKeys)
-            ->andWhere('type')->eq('project')
-            ->groupBy('root')
-            ->fetchAll('root');
 
         /* Process projects. */
         foreach($projects as $key => $project)
@@ -1426,10 +1382,6 @@ class productModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            /* Process the hours. */
-            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
-
-            $project->teamCount = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
             $stats[] = $project;
         }
         return $stats;

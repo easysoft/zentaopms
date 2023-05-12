@@ -297,7 +297,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15, $excludedModel = '')
+    public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 10, $excludedModel = '')
     {
         $queryType = strtolower($queryType);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -316,31 +316,12 @@ class projectModel extends model
         if(empty($projects)) return array();
         $projectIdList = array_keys($projects);
 
-        $teams = $this->dao->select('t1.root, count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectIdList)
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('root')->fetchPairs();
-
-        $hours = $this->dao->select('t2.project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.project')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->lt(1)
-            ->groupBy('t2.project')
-            ->fetchAll('project');
-
         $storySummary = $this->getTotalStoriesByProject($projectIdList);
         $taskSummary  = $this->getTotalTaskByProject($projectIdList);
         $bugSummary   = $this->getTotalBugByProject($projectIdList);
 
         foreach($projects as $projectID => $project)
         {
-            $project->consumed      = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
-            $project->estimate      = isset($hours[$projectID]) ? (float)$hours[$projectID]->estimate : 0;
-            $project->teamCount     = isset($teams[$projectID]) ? $teams[$projectID] : 0;
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs : 0;
             $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs : 0;
             $project->doneBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->doneBugs : 0;
