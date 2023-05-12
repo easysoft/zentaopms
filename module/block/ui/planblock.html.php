@@ -11,11 +11,19 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$longBlock)
+{
+    unset($config->block->plan->dtable['id']);
+    unset($config->block->plan->dtable['product']);
+    unset($config->block->plan->dtable['hour']);
+    unset($config->block->plan->dtable['bugs']);
+}
+
 panel
 (
     dtable
     (
-        set::cols($config->block->plan->dtable),
+        set::cols(array_values($config->block->plan->dtable)),
         set::data(array_values($plans))
     )
 );
