@@ -1117,13 +1117,12 @@ class productZen extends product
      */
     protected function getModuleId4Browse(int $param, string $browseType): int
     {
+        if($browseType == 'bymodule') return $param;
+
         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
+        if($browseType != 'bysearch' && $browseType != 'bybranch' && $cookieModule) return $cookieModule;
 
-        $moduleID = 0;
-        if($browseType == 'bymodule') $moduleID = $param;
-        elseif($browseType != 'bysearch' and $browseType != 'bybranch' and $cookieModule) $moduleID = $cookieModule;
-
-        return $moduleID;
+        return 0;
     }
 
     /**
