@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
-su('admin');
 
 /**
 
@@ -18,7 +17,9 @@ closed状态任务激活 >> status,closed,doing
 
 */
 
-$taskIDList = array('37','39','40','41','42');
+$task     = zdTable('task')->gen(10);
+
+$taskIDList = array(1, 3, 4, 5, 6);
 
 $task = new taskTest();
 r($task->activateTest($taskIDList[0])) && p('0:field,old,new') && e('status,wait,doing');   //wait状态任务激活

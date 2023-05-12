@@ -61,7 +61,6 @@ formPanel
 (
     set::title($formTitle), // The form title is diffrent from the page title,
     setStyle(['max-width' => '100%']),
-    setClass('mx-8'),
     div
     (
         setClass('flex'),
@@ -143,14 +142,31 @@ formPanel
                 set::items($executionOptions),
                 on::change('loadAll(this.value)'),
             ),
-            formGroup
+            formRow
             (
-                set::name("module"),
-                set::label($lang->task->module),
-                set::value($task->module),
-                set::control("picker"),
-                set::strong(true),
-                set::items($moduleOptions)
+                formGroup
+                (
+                    set::label($lang->task->module),
+                    set::strong(true),
+                    inputGroup
+                    (
+                        control(set(array
+                        (
+                            'name' => "module",
+                            'value' => $task->module,
+                            'type' => "picker",
+                            'items' => $moduleOptions
+                        ))),
+                    )
+                ),
+                formGroup
+                (
+                    set::width('1/5'),
+                    set::name('showAllModule'),
+                    set::value($showAllModule ? '1' : ''),
+                    set::control(array('type' => 'checkList', 'inline' => true)),
+                    set::items(array('1' => $lang->all))
+                )
             ),
             formGroup
             (
@@ -256,16 +272,14 @@ formPanel
                         'items' => $mailtoOptions,
                         'multiple' => true
                     ))),
-                    control(set(array
+                    control
                     (
-                        'name' => "contactListMenu",
-                        'id' => "contactListMenu",
-                        'value' => "",
-                        'disabled' => false,
-                        'type' => "picker",
-                        'onchange' => "setMailto",
-                        'items' => $contactListMenuOptions
-                    )))
+                        setStyle('width', '30%'),
+                        set::name('contactListMenu'),
+                        set::type("picker"),
+                        set::items($contactListMenuOptions),
+                        on::change('setMailto')
+                    ),
                 )
             ),
             h::strong
@@ -303,13 +317,15 @@ formPanel
                 set::strong(true),
                 span
                 (
+                    setClass('span-text'),
                     $task->consumed,
-                    h::a
+                ),
+                h::a
+                (
+                    setClass('span-text'),
+                    icon
                     (
-                        icon
-                        (
-                            'time'
-                        )
+                        'time'
                     )
                 )
             ),

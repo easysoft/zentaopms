@@ -102,7 +102,7 @@ class taskZen extends task
 
     /**
      * 编辑任务后返回响应.
-     * Reponse after edit.
+     * Response after edit.
      *
      * @param  int       $taskID
      * @param  string    $from    ''|taskkanban
@@ -409,7 +409,7 @@ class taskZen extends task
 
     /**
      * 返回看板下响应。
-     * Reposn from kanban.
+     * Response from kanban.
      *
      * @param  object    $task
      * @param  string    $from ''|taskkanban
@@ -1346,5 +1346,31 @@ class taskZen extends task
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
         if(isonlybody()) return $this->taskZen->responseKanban($task, $from);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
+    }
+
+    /**
+     * 准备激活任务数据。
+     * Prepare to activate task data.
+     *
+     * @param  form      $taskData
+     * @param  int       $taskID
+     * @access protected
+     * @return object
+     */
+    protected function prepareActivate(form $taskData, int $taskID): object
+    {
+        $task = $taskData
+            ->add('id', $taskID)
+            ->setDefault('status', 'doing')
+            ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
+            ->setDefault('finishedDate, canceledDate, closedDate', null)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('assignedDate', helper::now())
+            ->setDefault('activatedDate', helper::now())
+            ->stripTags($this->config->task->editor->activate['id'], $this->config->allowedTags)
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $taskData->field('uid'));
     }
 }

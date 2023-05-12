@@ -712,66 +712,67 @@ class taskModel extends model
     }
 
     /**
-     * Batch update task.
+     * 批量更新任务。
+     * Batch update tasks.
      *
+     * @param  object $postData
      * @access public
-     * @return void
+     * @return array[]|false
      */
-    public function batchUpdate()
+    public function batchUpdate(object $postData): array|false
     {
         $tasks      = array();
         $allChanges = array();
         $now        = helper::now();
         $today      = date(DT_DATE1);
-        $data       = fixer::input('post')->get();
-        $taskIDList = $this->post->taskIDList;
+        $taskIdList = $postData->taskIDList;
 
         /* Process data if the value is 'ditto'. */
-        foreach($taskIDList as $taskID)
+        foreach($taskIdList as $taskID)
         {
-            if(isset($data->modules[$taskID]) and ($data->modules[$taskID] == 'ditto')) $data->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
-            if($data->types[$taskID]       == 'ditto') $data->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
-            if($data->pris[$taskID]        == 'ditto') $data->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
-            if($data->finishedBys[$taskID] == 'ditto') $data->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
-            if($data->canceledBys[$taskID] == 'ditto') $data->canceledBys[$taskID] = isset($prev['canceledBy']) ? $prev['canceledBy'] : '';
-            if($data->closedBys[$taskID]   == 'ditto') $data->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
-            if($data->estStarteds[$taskID] == '0000-00-00') $data->estStarteds[$taskID] = '';
-            if($data->deadlines[$taskID]   == '0000-00-00') $data->deadlines[$taskID]   = '';
-            if(isset($data->assignedTos[$taskID]) and $data->assignedTos[$taskID] == 'ditto') $data->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
+            if(isset($postData->modules[$taskID]) and ($postData->modules[$taskID] == 'ditto')) $postData->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($postData->types[$taskID]       == 'ditto') $postData->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
+            if($postData->pris[$taskID]        == 'ditto') $postData->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
+            if($postData->finishedBys[$taskID] == 'ditto') $postData->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
+            if($postData->canceledBys[$taskID] == 'ditto') $postData->canceledBys[$taskID] = isset($prev['canceledBy']) ? $prev['canceledBy'] : '';
+            if($postData->closedBys[$taskID]   == 'ditto') $postData->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
+            if($postData->estStarteds[$taskID] == '0000-00-00') $postData->estStarteds[$taskID] = '';
+            if($postData->deadlines[$taskID]   == '0000-00-00') $postData->deadlines[$taskID]   = '';
+            if(isset($postData->assignedTos[$taskID]) and $postData->assignedTos[$taskID] == 'ditto') $postData->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
 
-            $prev['module']     = $data->modules[$taskID];
-            $prev['type']       = $data->types[$taskID];
-            $prev['pri']        = $data->pris[$taskID];
-            $prev['finishedBy'] = $data->finishedBys[$taskID];
-            $prev['canceledBy'] = $data->canceledBys[$taskID];
-            $prev['closedBy']   = $data->closedBys[$taskID];
-            if(isset($data->assignedTos[$taskID])) $prev['assignedTo'] = $data->assignedTos[$taskID];
+            $prev['module']     = $postData->modules[$taskID];
+            $prev['type']       = $postData->types[$taskID];
+            $prev['pri']        = $postData->pris[$taskID];
+            $prev['finishedBy'] = $postData->finishedBys[$taskID];
+            $prev['canceledBy'] = $postData->canceledBys[$taskID];
+            $prev['closedBy']   = $postData->closedBys[$taskID];
+            if(isset($postData->assignedTos[$taskID])) $prev['assignedTo'] = $postData->assignedTos[$taskID];
         }
 
         /* Initialize tasks from the post data.*/
         $extendFields = $this->getFlowExtendFields();
-        $oldTasks     = $taskIDList ? $this->getByList($taskIDList) : array();
+        $oldTasks     = $taskIdList ? $this->getByList($taskIdList) : array();
         $tasks        = array();
-        foreach($taskIDList as $taskID)
+        foreach($taskIdList as $taskID)
         {
             $oldTask = $oldTasks[$taskID];
 
             $task = new stdclass();
             $task->id             = $taskID;
-            $task->color          = $data->colors[$taskID];
-            $task->name           = $data->names[$taskID];
-            $task->module         = isset($data->modules[$taskID]) ? $data->modules[$taskID] : 0;
-            $task->type           = $data->types[$taskID];
-            $task->status         = isset($data->statuses[$taskID]) ? $data->statuses[$taskID] : $oldTask->status;
-            $task->pri            = $data->pris[$taskID];
-            $task->estimate       = isset($data->estimates[$taskID]) ? $data->estimates[$taskID] : $oldTask->estimate;
-            $task->left           = isset($data->lefts[$taskID]) ? $data->lefts[$taskID] : $oldTask->left;
-            $task->estStarted     = $data->estStarteds[$taskID];
-            $task->deadline       = $data->deadlines[$taskID];
-            $task->finishedBy     = $data->finishedBys[$taskID];
-            $task->canceledBy     = $data->canceledBys[$taskID];
-            $task->closedBy       = $data->closedBys[$taskID];
-            $task->closedReason   = $data->closedReasons[$taskID];
+            $task->color          = $postData->colors[$taskID];
+            $task->name           = $postData->names[$taskID];
+            $task->module         = isset($postData->modules[$taskID]) ? $postData->modules[$taskID] : 0;
+            $task->type           = $postData->types[$taskID];
+            $task->status         = isset($postData->statuses[$taskID]) ? $postData->statuses[$taskID] : $oldTask->status;
+            $task->pri            = $postData->pris[$taskID];
+            $task->estimate       = isset($postData->estimates[$taskID]) ? $postData->estimates[$taskID] : $oldTask->estimate;
+            $task->left           = isset($postData->lefts[$taskID]) ? $postData->lefts[$taskID] : $oldTask->left;
+            $task->estStarted     = $postData->estStarteds[$taskID];
+            $task->deadline       = $postData->deadlines[$taskID];
+            $task->finishedBy     = $postData->finishedBys[$taskID];
+            $task->canceledBy     = $postData->canceledBys[$taskID];
+            $task->closedBy       = $postData->closedBys[$taskID];
+            $task->closedReason   = $postData->closedReasons[$taskID];
             $task->finishedDate   = $oldTask->finishedBy == $task->finishedBy ? $oldTask->finishedDate : $now;
             $task->canceledDate   = $oldTask->canceledBy == $task->canceledBy ? $oldTask->canceledDate : $now;
             $task->closedDate     = $oldTask->closedBy == $task->closedBy ? $oldTask->closedDate : $now;
@@ -780,7 +781,7 @@ class taskModel extends model
             $task->consumed       = $oldTask->consumed;
             $task->parent         = $oldTask->parent;
 
-            if(isset($data->assignedTos[$taskID])) $task->assignedTo = $data->assignedTos[$taskID];
+            if(isset($postData->assignedTos[$taskID])) $task->assignedTo = $postData->assignedTos[$taskID];
             if($task->status == 'closed')          $task->assignedTo = 'closed';
             if(isset($task->assignedTo) and $oldTask->assignedTo != $task->assignedTo) $task->assignedDate = $now;
 
@@ -815,9 +816,9 @@ class taskModel extends model
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
             }
 
-            if(!empty($data->consumeds[$taskID]))
+            if(!empty($postData->consumeds[$taskID]))
             {
-                if($data->consumeds[$taskID] < 0)
+                if($postData->consumeds[$taskID] < 0)
                 {
                     dao::$errors[] = sprintf($this->lang->task->error->consumed, $taskID);
                     return false;
@@ -829,7 +830,7 @@ class taskModel extends model
                     $record->task     = $taskID;
                     $record->date     = $today;
                     $record->left     = $task->left;
-                    $record->consumed = $data->consumeds[$taskID];
+                    $record->consumed = $postData->consumeds[$taskID];
                     $this->addTaskEstimate($record);
 
                     $task->consumed = $oldTask->consumed + $record->consumed;
@@ -997,17 +998,17 @@ class taskModel extends model
     /**
      * Batch change the module of task.
      *
-     * @param  array  $taskIDList
+     * @param  array  $taskIdList
      * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function batchChangeModule($taskIDList, $moduleID)
+    public function batchChangeModule($taskIdList, $moduleID)
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldTasks   = $this->getByList($taskIDList);
-        foreach($taskIDList as $taskID)
+        $oldTasks   = $this->getByList($taskIdList);
+        foreach($taskIdList as $taskID)
         {
             $oldTask = $oldTasks[$taskID];
             if($moduleID == $oldTask->module) continue;
@@ -1645,21 +1646,23 @@ class taskModel extends model
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
-    /**
-     * Activate a task.
-     *
-     * @param int    $taskID
-     * @param string $extra
-     *
-     * @access public
-     * @return array
-     */
-    public function activate($taskID, $extra)
-    {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
 
-        if(strpos($this->config->task->activate->requiredFields, 'comment') !== false and !$this->post->comment)
+    /**
+     * 激活任务。
+     * Activate task.
+     *
+     * @param  object $task
+     * @param  string $comment
+     * @param  object $teamData
+     * @param  string $drag
+     * @access public
+     * @return array|false
+     */
+    public function activate(object $task, string $comment, object $teamData, string $drag): array|false
+    {
+        $taskID = $task->id;
+
+        if(strpos($this->config->task->activate->requiredFields, 'comment') !== false and !$comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
             return false;
@@ -1667,44 +1670,13 @@ class taskModel extends model
 
         $oldTask = $this->getById($taskID);
         if($oldTask->parent == '-1') $this->config->task->activate->requiredFields = '';
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
-            ->setDefault('left', 0)
-            ->setDefault('assignedTo', '')
-            ->setDefault('status', 'doing')
-            ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
-            ->setDefault('finishedDate, canceledDate, closedDate', null)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('assignedDate', helper::now())
-            ->setDefault('activatedDate', helper::now())
-            ->stripTags($this->config->task->editor->activate['id'], $this->config->allowedTags)
-            ->setIF(empty($oldTask->finishedDate), 'finishedDate', '')
-            ->setIF(empty($oldTask->canceledDate), 'canceledDate', '')
-            ->setIF(empty($oldTask->closedDate), 'closedDate', '')
-            ->remove('comment,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,teamSource')
-            ->get();
-
-        if(!is_numeric($task->left))
-        {
-            dao::$errors[] = $this->lang->task->error->leftNumber;
-            return false;
-        }
-
-        if(empty($task->left))
-        {
-            dao::$errors[] = sprintf($this->lang->task->error->notempty, $this->lang->task->left);
-            return false;
-        }
 
         if(!empty($oldTask->team))
         {
-            $this->manageTaskTeam($oldTask->mode, $oldTask->id, $task->status);
+            $this->manageTaskTeam($oldTask->mode, $task, $teamData->team, $teamData->teamSource, $teamData->teamEstimate, $teamData->teamConsumed);
             $task = $this->computeMultipleHours($oldTask, $task);
         }
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
@@ -1732,8 +1704,8 @@ class taskModel extends model
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');
-        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($drag['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($drag['toColID'])) $this->kanban->moveCard($taskID, $drag['fromColID'], $drag['toColID'], $drag['fromLaneID'], $drag['toLaneID']);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

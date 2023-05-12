@@ -1147,26 +1147,28 @@ class task extends control
      * Activate a task.
      *
      * @param  int    $taskID
-     * @param  string $extra
+     * @param  string $cardPosition
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function activate($taskID, $extra = '')
+    public function activate($taskID, $cardPosition = '', $drag = '', $from = '')
     {
         $this->taskZen->commonAction($taskID);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        if($cardPosition) list($regionID) = $cardPosition;
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->task->activate($taskID, $extra);
+            $taskData = form::data($this->config->task->form->acivate);
+            $teamData = form::data($this->config->task->form->team->edit)->get();
+
+            $task     = $this->taskZen->prepareActivate($taskData, $taskID);
+            $changes  = $this->task->activate($task, $this->post->comment, $teamData, $drag);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('task', $taskID, 'Activated', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1174,36 +1176,16 @@ class task extends control
 
             if(isonlybody())
             {
-                $task         = $this->task->getById($taskID);
-                $execution    = $this->execution->getByID($task->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == "kanban")
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                if($output['from'] == "taskkanban")
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-                }
-                return print(js::closeModal('parent.parent', 'this'));
+                $task     = $this->task->getById($taskID);
+                $regionID = !empty($regionID) ? (int)$regionID : 0;
+                return $this->taskZen->responseKanban($task, $from, $regionID);
             }
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID=$taskID"), 'closeModal' => true);
         }
 
-        if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
+        if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy; // Ensure that the completion person is on the user list.
 
+        /* Get task teammembers. */
         if(!empty($this->view->task->team))
         {
             $teamAccounts = array_column($this->view->task->team, 'account');
@@ -1214,6 +1196,7 @@ class task extends control
             }
             $this->view->teamMembers = $teamMembers;
         }
+
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

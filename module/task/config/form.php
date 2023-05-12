@@ -77,6 +77,25 @@ $config->task->form->team->edit['teamConsumed'] = array('type' => 'array', 'requ
 $config->task->form->team->edit['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->team->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
 
+$config->task->form->batchEdit = array();
+$config->task->form->batchEdit['taskIDList']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['modules']       = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['names']         = array('type' => 'array', 'required' => true, 'default' => array());
+$config->task->form->batchEdit['colors']        = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['types']         = array('type' => 'array', 'required' => true, 'default' => array());
+$config->task->form->batchEdit['statuses']      = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['assignedTos']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['estimates']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['estStarteds']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['consumeds']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['lefts']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['finishedBys']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['canceledBys']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['closedBys']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['closedReasons'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['deadlines']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchEdit['pris']          = array('type' => 'array', 'required' => false, 'default' => array());
+
 $config->task->form->batchCreate = array();
 $config->task->form->batchCreate['module']        = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['parent']        = array('type' => 'array', 'required' => false, 'default' => array());
@@ -98,3 +117,8 @@ $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->pause['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->task->form->pause['status']         = array('type' => 'string', 'required' => false, 'default' => 'pause');
+
+$config->task->form->activate = array();
+$config->task->form->activate['mode']       = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->activate['left']       = array('type' => 'float', 'required' => true, 'default' => 0);
+$config->task->form->activate['assignedTo'] = array('type' => 'string', 'required' => true);

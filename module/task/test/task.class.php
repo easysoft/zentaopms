@@ -158,37 +158,39 @@ class taskTest
      * Test batch update tasks.
      *
      * @param  array  $param
-     * @param  int    $taskID
      * @access public
      * @return array
      */
-    public function batchUpdateObject($param = array(), $taskID = '')
+    public function batchUpdateObject(array $param = array())
     {
-        $taskIDList = array($taskID => $taskID);
-        $colors = array($taskID =>'#ff4e3e');
-        $name = array($taskID =>'');
-        $modules = array($taskID => '0');
-        $assignedTos = array($taskID =>'');
-        $types =array($taskID => '');
-        $statuses = array($taskID =>'wait');
-        $estStarteds = array($taskID => '');
-        $deadlines = array($taskID => '');
-        $pris = array($taskID => '3');
-        $finishedBys = array($taskID => '');
-        $canceledBys = array($taskID => '');
-        $closedBys = array($taskID => '');
-        $closedReasons = array($taskID => '');
-        $consumeds = array($taskID => '');
-        $lefts = array($taskID => '');
-        $createFields = array('taskIDList' => $taskIDList, 'modules' => $modules, 'names' => $name, 'types' => $types, 'assignedTos' => $assignedTos,
+        $postData = new stdclass();
+
+        foreach($param['taskIDList'] as $taskID)
+        {
+            $colors[$taskID]        = '';
+            $name[$taskID]          = '';
+            $modules[$taskID]       =  '0';
+            $assignedTos[$taskID]   = '';
+            $types[$taskID]         = '';
+            $statuses[$taskID]      = 'wait';
+            $estStarteds[$taskID]   =  '';
+            $deadlines[$taskID]     =  '';
+            $pris[$taskID]          =  '3';
+            $finishedBys[$taskID]   =  '';
+            $canceledBys[$taskID]   =  '';
+            $closedBys[$taskID]     =  '';
+            $closedReasons[$taskID] =  '';
+            $consumeds[$taskID]     =  0;
+            $lefts[$taskID]         =  0;
+        }
+        $createFields = array('modules' => $modules, 'names' => $name, 'types' => $types, 'assignedTos' => $assignedTos,
             'pris' => $pris, 'estStarteds' => $estStarteds, 'colors' => $colors, 'deadlines' => $deadlines, 'statuses' => $statuses, 'finishedBys'=>$finishedBys,
             'canceledBys' => $canceledBys, 'closedBys' => $closedBys, 'closedReasons' => $closedReasons, 'consumeds' => $consumeds, 'lefts'=> $lefts);
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($createFields as $field => $defaultValue) $postData->$field = $defaultValue;
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        foreach($param as $key => $value) $postData->$key = $value;
 
-        $object = $this->objectModel->batchUpdate();
-        unset($_POST);
+        $allChanges = $this->objectModel->batchUpdate($postData);
 
         if(dao::isError())
         {
@@ -196,8 +198,7 @@ class taskTest
         }
         else
         {
-            $object = $object[$taskID];
-            return $object;
+            return array_shift($allChanges);
         }
     }
 
@@ -279,13 +280,14 @@ class taskTest
      * @access public
      * @return array
      */
-    public function activateTest($taskID, $param = array())
+    public function activateTest(int $taskID, array $param = array())
     {
-        $createFields = array('status' => 'doing', 'comment' => '单元测试','assignedTo' => '', 'left' => '3');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->activate($taskID, $extra = '');
-        unset($_POST);
+        $createFields = array('id' => $taskID, 'status' => 'doing', 'comment' => '单元测试','assignedTo' => '', 'left' => '3');
+        foreach($createFields as $field => $defaultValue) $postData[$field] = $defaultValue;
+        foreach($param as $key => $value) $postData[$key] = $value;
+
+        $teamData = new stdclass();
+        $object = $this->objectModel->activate((object)$postData, $extra = '', $teamData, '');
         if(dao::isError())
         {
             $error = dao::getError();
