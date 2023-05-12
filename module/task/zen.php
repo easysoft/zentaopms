@@ -138,7 +138,7 @@ class taskZen extends task
     }
 
     /**
-     * 构建任务编辑表格
+     * 构建任务编辑表单。
      * Build task edit form.
      *
      * @param  int       $taskID
@@ -186,6 +186,139 @@ class taskZen extends task
         $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
         $this->view->contactLists  = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+        $this->display();
+    }
+
+    /**
+     * 批量编辑任务后返回响应。
+     * Response after batch edit.
+     *
+     * @param  array[]   $allChanges
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterBatchEdit(array $allChanges): array
+    {
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->saveSuccess;
+
+        if(!empty($allChanges))
+        {
+            foreach($allChanges as $taskID => $changes)
+            {
+                if(empty($changes)) continue;
+
+                $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+
+                $task = $this->task->getById($taskID);
+                if($task->fromBug != 0)
+                {
+                    foreach($changes as $change)
+                    {
+                        if($change['field'] == 'status')
+                        {
+                            $response['callback']   = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
+                            return $response;
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        $response['load'] = $this->session->taskList;
+        return $response;
+    }
+
+    /**
+     * 根据页面是执行还是我的地盘设置参数。
+     * Set parameters based on whether the page is execution or my.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function batchEdit4Pages(int $executionID): void
+    {
+        /* The tasks of execution. */
+        if($executionID)
+        {
+            $execution = $this->execution->getById($executionID);
+            $this->execution->setMenu($execution->id);
+
+            /* Set modules and members. */
+            $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';
+            $modules       = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+            $modules       = array('ditto' => $this->lang->task->ditto) + $modules;
+
+            $this->view->title      = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$execution->id"), $execution->name);
+            $this->view->execution  = $execution;
+            $this->view->modules    = $modules;
+        }
+        /* The tasks of my. */
+        else
+        {
+            /* Set my menu. */
+            $this->loadModel('my');
+            $this->lang->my->menu->work['subModule'] = 'task';
+
+            $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
+            $this->view->title      = $this->lang->task->batchEdit;
+            $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        }
+    }
+
+    /**
+     * 创建批量编辑表单。
+     * Build batch edit form.
+     *
+     * @param  array     $taskIdList
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function buildBatchEditForm(array $taskIdList, int $executionID): void
+    {
+        /* Get edited tasks. */
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->fetchAll('id');
+        $teams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
+
+        /* Get execution teams. */
+        $executionIdList = array();
+        foreach($tasks as $task) if(!in_array($task->execution, $executionIdList)) $executionIdList[] = $task->execution;
+        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIdList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
+
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+
+        /* Set Custom. */
+        foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
+        {
+            if(!empty($this->view->executionn) && $this->view->execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
+            $customFields[$field] = $this->lang->task->$field;
+        }
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->task->custom->batchEditFields;
+
+        /* Assign. */
+        $this->view->position[]     = $this->lang->task->common;
+        $this->view->position[]     = $this->lang->task->batchEdit;
+        $this->view->executionID    = $executionID;
+        $this->view->priList        = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
+        $this->view->statusList     = array('ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
+        $this->view->typeList       = array('ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
+        $this->view->taskIDList     = $taskIdList;
+        $this->view->tasks          = $tasks;
+        $this->view->teams          = $teams;
+        $this->view->executionTeams = $executionTeams;
+        $this->view->executionName  = isset($execution) ? $execution->name : '';
+        $this->view->executionType  = isset($execution) ? $execution->type : '';
+        $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
+
         $this->display();
     }
 
@@ -280,10 +413,11 @@ class taskZen extends task
      *
      * @param  object    $task
      * @param  string    $from ''|taskkanban
+     * @param  int       $regionID
      * @access protected
      * @return array
      */
-    protected function responseKanban(object $task, string $from): array
+    protected function responseKanban(object $task, string $from, int $regionID = 0): array
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
@@ -297,10 +431,10 @@ class taskZen extends task
         if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban')
         {
             $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-            $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
             $kanbanData    = json_encode($kanbanData);
 
-            $response['callback'] = "parent.parent.updateKanban($kanbanData)";
+            $response['callback'] = "parent.parent.updateKanban({$kanbanData}, {$regionID})";
             return $response;
         }
         if($from == 'taskkanban')
