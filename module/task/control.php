@@ -1113,14 +1113,15 @@ class task extends control
     {
         $this->taskZen->commonAction($taskID);
 
-        if($cardPosition) list($regionID, $laneID, $columnID) = explode(',', $cardPosition);
+        $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
+        parse_str($cardPosition, $output);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
 
             $postData = form::data($this->config->task->form->cancel)->get();
-            $changes  = $this->task->cancel($taskID, $extra);
+            $changes  = $this->task->cancel($taskID, $output['laneID']);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($postData->comment != '' || !empty($changes))
