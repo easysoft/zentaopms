@@ -79,6 +79,13 @@ class formBase extends wg
         );
     }
 
+    protected function buildAfter(): array
+    {
+        $after = parent::buildAfter();
+        if($this->prop('target') === 'ajax') $after[] = zui::ajaxForm(set::_to('#' . $this->id()));
+        return $after;
+    }
+
     protected function build(): wg
     {
         return h::form
@@ -87,7 +94,6 @@ class formBase extends wg
             set($this->getRestProps()),
             $this->buildContent(),
             $this->buildActions(),
-            $this->prop('target') === 'ajax' ? zui::ajaxForm(set::_to('#' . $this->id())) : null
         );
     }
 }
