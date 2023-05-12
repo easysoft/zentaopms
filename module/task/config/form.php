@@ -29,6 +29,10 @@ $config->task->form->assign['left']           = array('type' => 'float', 'requir
 $config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->task->form->assign['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
+$config->task->form->cancel = array();
+$config->task->form->cancel['status']  = array('type' => 'string', 'required' => false, 'default' => 'cancel');
+$config->task->form->cancel['comment'] = array('type' => 'string', 'required' => false, 'default' => '');
+
 $config->task->form->manageTeam = array();
 $config->task->form->manageTeam['status']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->manageTeam['estimate']       = array('type' => 'float', 'required' => false, 'default' => 0);

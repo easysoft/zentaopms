@@ -1122,64 +1122,40 @@ class task extends control
      * Cancel a task.
      *
      * @param  int    $taskID
-     * @param  string $extra
+     * @param  string $cardPosition
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function cancel($taskID, $extra = '')
+    public function cancel(int $taskID, string $cardPosition = '', string $from = '')
     {
         $this->taskZen->commonAction($taskID);
 
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        if($cardPosition) list($regionID, $laneID, $columnID) = explode(',', $cardPosition);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->cancel($taskID, $extra);
+
+            $postData = form::data($this->config->task->form->cancel)->get();
+            $changes  = $this->task->cancel($taskID, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
+            if($postData->comment != '' || !empty($changes))
             {
-                $actionID = $this->action->create('task', $taskID, 'Canceled', $this->post->comment);
+                $actionID = $this->action->create('task', $taskID, 'Canceled', $postData->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
             $this->executeHooks($taskID);
 
-            if(isonlybody())
-            {
-                $task         = $this->task->getById($taskID);
-                $execution    = $this->execution->getByID($task->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                if($output['from'] == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-                }
-                return print(js::closeModal('parent.parent', 'this'));
-            }
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            $task = $this->task->getById($taskID);
+            if(isonlybody()) return $this->taskZen->responseKanban($task, $from, $regionID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->cancel;
-        $this->view->position[] = $this->lang->task->cancel;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title = $this->view->execution->name . $this->lang->colon . $this->lang->task->cancel;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
