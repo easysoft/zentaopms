@@ -3504,7 +3504,7 @@ class testcaseModel extends model
         $orderBy = 'product_desc,sort_asc';
 
         /* Get sql for batch execution. */
-        if($executionSql !== NULL) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+        if($executionSql !== null) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
 
         return $this->buildQuery($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
     }

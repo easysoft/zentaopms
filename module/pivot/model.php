@@ -139,7 +139,7 @@ class pivotModel extends model
      */
     public function processDateVar($var, $type = 'date')
     {
-        if(empty($var)) return NULL;
+        if(empty($var)) return null;
 
         $format = $type == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
         switch($var)

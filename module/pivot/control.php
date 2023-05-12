@@ -288,8 +288,6 @@ class pivot extends control
         $settings   = $post->settings;
         $filterType = 'result';
 
-        $pivot = $this->pivot->getById($pivotID);
-
         list($sql, $filterFormat) = $this->pivot->getFilterFormat($post->sql, $filters);
         $post->sql = $sql;
 
