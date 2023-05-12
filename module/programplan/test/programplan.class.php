@@ -409,25 +409,26 @@ class programplanTest
     }
 
     /**
+     * 测试更新子阶段的属性。
      * Test update sub-stage attribute.
      *
      * @param  int     $planID
      * @param  string  $attribute
-     * @param  int     $subStageID
      * @access public
-     * @return string
+     * @return bool|string
      */
-    public function updateSubStageAttrTest($planID, $attribute, $subStageID)
+    public function updateSubStageAttrTest(int $planID, string $attribute): bool|string
     {
+        $this->objectModel->updateSubStageAttr($planID, $attribute);
+        if(dao::isError()) return false;
+
         global $tester;
+        $subStage = $tester->dao->select('attribute')->from(TABLE_PROJECT)->where('parent')->eq($planID)->fetch();
+        if(!$subStage) return true;
 
-        $objects = $this->objectModel->updateSubStageAttr($planID, $attribute);
-
-        if(dao::isError()) return dao::getError();
-
-        $attribute = $tester->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($subStageID)->fetch('attribute');
-
-        return $attribute;
+        /* Handles the result when the unit test assertion is an empty string. */
+        $attribute = $subStage->attribute == '' ? 'empty string' : $subStage->attribute;
+        return $attribute == 'mix' ? true : $attribute;
     }
 
     /**
