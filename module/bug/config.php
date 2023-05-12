@@ -11,6 +11,8 @@ $config->bug->create->requiredFields  = 'title,openedBuild';
 $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 
+$config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'needconfirm');
+
 $config->bug->list = new stdclass();
 $config->bug->list->allFields = 'id, module, execution, story, task,
     title, keywords, severity, pri, type, os, browser, hardware,

@@ -305,37 +305,40 @@ class bugModel extends model
     }
 
     /**
-     * 根据浏览类型获取bug列表。
+     * 根据浏览类型获取 bug 列表。
      * Get bug list by browse type.
      *
-     * @param  string      $browseType
-     * @param  int|array   $productIdList
-     * @param  int         $projectID
-     * @param  int[]       $executionIdList
-     * @param  int|string  $branch
-     * @param  int         $moduleID
-     * @param  int         $queryID
-     * @param  string      $orderBy
-     * @param  object      $pager
+     * @param  string     $browseType
+     * @param  int|array  $productIdList
+     * @param  int        $projectID
+     * @param  int[]      $executionIdList
+     * @param  int|string $branch
+     * @param  int        $moduleID
+     * @param  int        $queryID
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
     public function getList(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
-        /* Set modules and browse type. */
-        $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : 0;
-        $browseType = ($browseType == 'bymodule' and $this->session->bugBrowseType and $this->session->bugBrowseType != 'bysearch') ? $this->session->bugBrowseType : $browseType;
-        $browseType = $browseType == 'bybranch' ? 'bymodule' : $browseType;
+        if($browseType == 'bymodule' && $this->session->bugBrowseType && $this->session->bugBrowseType != 'bysearch') $browseType = $this->session->bugBrowseType;
 
-        /* Set orderBy. */
-        if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        /* 处理排序。*/
+        /* Process sort field. */
+        if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
-        /* Get bugs by browse type. */
         $bugList = array();
-        if($browseType == 'bysearch') $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
-        elseif($browseType == 'needconfirm') $bugList = $this->bugTao->getListByNeedconfirm($productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-        elseif(strpos(',all,bymodule,assigntome,openedbyme,resolvedbyme,assigntonull,unconfirmed,unresolved,unclosed,toclosed,longlifebugs,postponedbugs,overduebugs,assignedbyme,review,', ",$browseType,") !== false) $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        if($browseType == 'bysearch')
+        {
+            $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
+        }
+        elseif(in_array($browseType, $this->config->bug->browseTypeList))
+        {
+            $modules = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : array();
+            $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
+        }
 
         return $this->bugTao->batchAppendDelayedDays($bugList);
     }
@@ -351,7 +354,8 @@ class bugModel extends model
     {
         if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
         {
-            echo(js::alert($this->lang->bug->executionAccessDenied));
+            echo js::alert($this->lang->bug->executionAccessDenied);
+
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
             if($this->app->tab == 'my') print(js::reload('parent'));

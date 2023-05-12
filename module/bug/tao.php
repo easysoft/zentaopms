@@ -23,36 +23,32 @@ class bugTao extends bugModel
 
     /**
      * Get bug list by browse type.
-     * 通过浏览类型获取bug列表。
+     * 通过浏览类型获取 bug 列表。
      *
-     * @param  string       $browseType
-     * @param  int|array    $productIdList
-     * @param  int|string   $branch
-     * @param  int|array    $moduleIdList
-     * @param  int[]        $executionIdList
-     * @param  string       $orderBy
-     * @param  object       $pager
-     * @param  int          $projectID
+     * @param  string     $browseType
+     * @param  int|array  $productIdList
+     * @param  int        $projectID
+     * @param  int[]      $executionIdList
+     * @param  int|string $branch
+     * @param  array      $moduleIdList
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access protected
      * @return array
      */
-    protected function getListByBrowseType(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, int|array $moduleIdList, string $orderBy, object $pager = null): array
+    protected function getListByBrowseType(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, object $pager = null): array
     {
-        $browseType            = strtolower($browseType);
-        $lastEditedDate        = '';
-        $bugIdListAssignedByMe = array();
+        $browseType = strtolower($browseType);
 
+        if($browseType == 'needconfirm') return $this->getNeedConfirmList($productIdList, $projectID, $executionIdList, $branch, $moduleIdList, $orderBy, $pager);
+
+        $lastEditedDate = '';
         if($browseType == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
-        if($browseType == 'assignedbyme')
-        {
-            $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)
-                ->where('objectType')->eq('bug')
-                ->andWhere('action')->eq('assigned')
-                ->andWhere('actor')->eq($this->app->user->account)
-                ->fetchPairs('objectID', 'objectID');
-        }
 
-        $bugList = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+        $bugIdListAssignedByMe = array();
+        if($browseType == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+
+        $bugList = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -93,29 +89,30 @@ class bugTao extends bugModel
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+
         return $bugList;
     }
 
     /**
-     * Get bug list of story need confirm.
-     * 获取需要确认需求变动的bug列表。
+     * 获取需要确认需求变动的 bug 列表。
+     * Get bug list that related story need to be confirmed.
      *
      * @param  int|array  $productIdList
      * @param  int        $projectID
      * @param  int[]      $executionIdList
      * @param  int|string $branch
-     * @param  int|array  $moduleIdList
+     * @param  array      $moduleIdList
      * @param  string     $orderBy
      * @param  object     $pager
      * @access protected
      * @return array
      */
-    protected function getListByNeedconfirm(int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, int|array $moduleIdList, string $orderBy, object $pager = null): array
+    protected function getNeedConfirmList(int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, object $pager = null): array
     {
-        return $this->dao->select("t1.*, t2.title AS storyTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
+        return $this->dao->select("t1.*, t2.title AS storyTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere("t2.status = 'active'")
+            ->andWhere('t2.status')->eq('active')
             ->andWhere('t2.version > t1.storyVersion')
             ->andWhere('t1.product')->in($productIdList)
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
