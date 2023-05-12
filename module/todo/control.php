@@ -191,20 +191,19 @@ class todo extends control
      * 开始一个待办事项。
      * Start a todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function start(string $todoID)
+    public function start(int $todoID)
     {
-        $todoID = (int)$todoID;
-        $todo   = $this->todo->getByID($todoID);
-
+        $todo = $this->todo->getByID($todoID);
         if($todo->status == 'wait')
         {
             $this->todo->start($todoID);
             if(dao::isError()) return print(js::error(dao::getError()));
         }
+
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
         if(isonlybody()) return print(js::reload('parent.parent'));
 
@@ -215,14 +214,13 @@ class todo extends control
      * 激活待办事项。
      * Activate a todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function activate(string $todoID)
+    public function activate(int $todoID)
     {
-        $todoID = (int)$todoID;
-        $todo   = $this->todo->getByID($todoID);
+        $todo = $this->todo->getByID($todoID);
 
         if($todo->status == 'done' || $todo->status == 'closed')
         {
@@ -239,15 +237,14 @@ class todo extends control
      * 关闭待办。
      * Close one todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function close(string $todoID)
+    public function close(int $todoID)
     {
         /* Close the todo with status done. */
-        $todoID = (int)$todoID;
-        $todo   = $this->todo->getByID($todoID);
+        $todo = $this->todo->getByID($todoID);
         if($todo->status == 'done')
         {
             $isClosed = $this->todo->close($todoID);
@@ -269,13 +266,12 @@ class todo extends control
      * 指派待办。
      * Assign todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function assignTo(string $todoID)
+    public function assignTo(int $todoID)
     {
-        $todoID = (int)$todoID;
         if(!empty($_POST))
         {
             $formData = form::data($this->config->todo->assignTo->form);
@@ -295,15 +291,14 @@ class todo extends control
      * 获取待办的信息。
      * Get info of todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @param  string $from  my|company
      * @access public
      * @return void
      */
-    public function view(string $todoID, string $from = 'company')
+    public function view(int $todoID, string $from = 'company')
     {
-        $todo = $this->todo->getByID((int)$todoID, true);
-
+        $todo = $this->todo->getByID($todoID, true);
         if(!$todo)
         {
             if((defined('RUN_MODE') && RUN_MODE == 'api') or $this->app->viewType == 'json') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
@@ -331,15 +326,15 @@ class todo extends control
      * 删除待办。
      * Delete a todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete(string $todoID, string $confirm = 'no')
+    public function delete(int $todoID, string $confirm = 'no')
     {
-        $todoID = (int)$todoID;
-        if($confirm == 'no')  return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
+
         $this->todo->delete(TABLE_TODO, $todoID);
 
         if(helper::isAjaxRequest())
@@ -364,14 +359,13 @@ class todo extends control
      * 完成待办。
      * Finish a todo.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function finish(string $todoID)
+    public function finish(int $todoID)
     {
-        $todoID = (int)$todoID;
-        $todo   = $this->todo->getByID($todoID);
+        $todo = $this->todo->getByID($todoID);
         if($todo->status != 'done' && $todo->status != 'closed')
         {
             $result = $this->todo->finish($todoID);
@@ -435,10 +429,9 @@ class todo extends control
     public function batchClose()
     {
         $waitIdList = array();
-        $todoIdlist = form::data($this->config->todo->batchClose->form)->get('todoIDList');
-        foreach($todoIdlist as $todoID)
+        $todoIdList = form::data($this->config->todo->batchClose->form)->get('todoIDList');
+        foreach($todoIdList as $todoID)
         {
-            $todoID = (int) $todoID;
             $todo   = $this->todo->getByID($todoID);
             if($todo->status == 'done') $this->todo->close($todoID);
             if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
@@ -473,16 +466,16 @@ class todo extends control
      * 获取导出待办数据。
      * Get data to export.
      *
-     * @param  string $userID
+     * @param  int    $userID
      * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function export(string $userID, string $orderBy)
+    public function export(int $userID, string $orderBy)
     {
         if($_POST)
         {
-            $user       = $this->todoZen->getUserById((int)$userID);
+            $user       = $this->todoZen->getUserById($userID);
             $todoLang   = (object)$this->lang->todo;
             $configTime = $this->config->todo->times;
 
@@ -527,14 +520,12 @@ class todo extends control
      * ajax请求：获得 todo 的动作。 用于 web 应用程序。
      * AJAX: get actions of a todo. for web app.
      *
-     * @param  string $todoID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function ajaxGetDetail(string $todoID)
+    public function ajaxGetDetail(int $todoID)
     {
-        $todoID = (int)$todoID;
-
         $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
         $this->display();
     }
@@ -543,15 +534,13 @@ class todo extends control
      * ajax请求：获取程序id。
      * AJAX: get program id.
      *
-     * @param  string $objectID
+     * @param  int    $objectID
      * @param  string $objectType
      * @access public
      * @return void
      */
-    public function ajaxGetProgramID(string $objectID, string $objectType)
+    public function ajaxGetProgramID(int $objectID, string $objectType)
     {
-        $objectID = (int)$objectID;
-
         $table = $objectType == 'project' ? TABLE_PROJECT : TABLE_PRODUCT;
         $field = $objectType == 'project' ? 'parent' : 'program';
         echo $this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch($field);
@@ -561,13 +550,12 @@ class todo extends control
      * ajax请求：获取执行对。
      * AJAX: get execution pairs.
      *
-     * @param  string $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionPairs(string $projectID)
+    public function ajaxGetExecutionPairs(int $projectID)
     {
-        $projectID = (int)$projectID;
         $this->session->set('project', $projectID);
 
         $project    = $this->loadModel('project')->getByID($projectID);
@@ -582,13 +570,12 @@ class todo extends control
      * ajax请求：获取产品对。
      * AJAX: get product pairs.
      *
-     * @param  string $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetProductPairs(string $projectID)
+    public function ajaxGetProductPairs(int $projectID)
     {
-        $projectID = (int)$projectID;
         $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
