@@ -335,10 +335,11 @@ function buildProductModalForm(array $products): mixed
                     set
                     (
                         array(
-                            'id'    => 'product',
-                            'class' => 'form-control',
-                            'name'  => 'product',
-                            'items' => $products,
+                            'id'       => 'product',
+                            'class'    => 'form-control',
+                            'name'     => 'product',
+                            'items'    => $products,
+                            'required' => true
                         )
                     )
                 ),
@@ -480,9 +481,10 @@ modal
                 set
                 (
                     array(
-                        'id'    => 'project',
-                        'name'  => 'project',
-                        'items' => $projects
+                        'id'       => 'project',
+                        'name'     => 'project',
+                        'items'    => $projects,
+                        'required' => true
                     )
                 )
             )
@@ -492,9 +494,15 @@ modal
             set::label($lang->todo->execution),
             select
             (
-                setID('execution'),
-                set::name('execution'),
-                set::items($executions)
+                set
+                (
+                    array(
+                        'id'       => 'execution',
+                        'name'     => 'execution',
+                        'items'    => $executions,
+                        'required' => true
+                    )
+                )
             )
         ),
         btn
@@ -529,9 +537,10 @@ modal
                 set
                 (
                     array(
-                        'id'    => 'bugProject',
-                        'name'  => 'bugProject',
-                        'items' => $projects
+                        'id'       => 'bugProject',
+                        'name'     => 'bugProject',
+                        'items'    => $projects,
+                        'required' => true
                     )
                 )
             )
@@ -541,9 +550,15 @@ modal
             set::label($lang->todo->product),
             select
             (
-                setID('bugProduct'),
-                set::name('bugProduct'),
-                set::items($projectProducts)
+                set
+                (
+                    array(
+                        'id'       => 'bugProduct',
+                        'name'     => 'bugProduct',
+                        'items'    => $projectProducts,
+                        'required' => true
+                    )
+                )
             )
         ),
         btn
