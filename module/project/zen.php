@@ -759,7 +759,7 @@ class projectZen extends project
             foreach($IdList as $executionID)
             {
                 $this->execution->updateProducts($executionID);
-                if($diffProducts) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', $currentIds));
+                if($changes) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', $currentIds));
             }
         }
 
@@ -801,7 +801,7 @@ class projectZen extends project
 
             foreach($executions as $executionID => $unlinkedExecutionProducts)
             {
-                $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
+                $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkedExecutionProducts));
             }
         }
     }
