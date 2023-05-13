@@ -123,24 +123,26 @@ class project extends control
     }
 
     /**
-     * 复制Kanban项目，获取项目数据。
-     * Ajax get the kanban copy project.
+     * 获取可复制看板项目通过页面检索。
+     * Ajax retrieve cloneable Kanban projects based on search.
      *
      * @access public
      * @return void
      */
-    public function ajaxGetCopyProjects()
+    public function ajaxRetrieveCloneableProject()
     {
-        /* Get replicable kanban project pairs by model. */
+        /* 获取可复制的看板项目键值对。*/
+        /* Get cloneable kanban project pairs by model. */
         $projectKeys = $this->project->getCopyProjectPairs($this->post->name, $this->post->model);
         $projects    = $this->project->getPairsByModel('', 0, '', $projectKeys);
 
-        /* Building render pages requires data. */
+        /* 页面渲染出可复制的项目。*/
+        /* Rendering cloneable projects on page. */
         $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
         foreach($projects as $id => $name)
         {
             $active = $this->post->cpoyProjectID == $id ? 'active' : '';
-            $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>";
+            $html  .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . '</a></div>';
         }
         echo $html;
     }

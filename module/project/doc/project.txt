@@ -1,7 +1,7 @@
 createGuide ## 1 zk
 export
 ajaxGetDropMenu
-ajaxGetCopyProjects
+ajaxRetrieveCloneableProject
 ajaxGetUnlinkTips
 ajaxGetLinkedProducts
 ajaxGetObjectInfo

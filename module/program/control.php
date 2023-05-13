@@ -699,7 +699,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetCopyProjects()
+    public function ajaxRetrieveCloneableProject()
     {
         $data = fixer::input('post')->get();
         $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
