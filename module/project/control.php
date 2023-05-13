@@ -206,52 +206,65 @@ class project extends control
     }
 
     /**
-     * 获取项目选中项目或项目集对象的信息
-     * Ajax: Get selected object's information.
+     * 选中项目或项目集时，获取项目表单数据：创建或编辑。
+     * Ajax: Get selected object's form information: create or edit.
      *
-     * @param  string $objectType
+     * @param  string $objectType project|program
      * @param  string $objectID
      * @param  string $selectedProgramID
-     *
      * @access public
      * @return void
      */
-    public function ajaxGetObjectInfo(string $objectType, string $objectID, string $selectedProgramID)
+    public function ajaxGetProjectFormInfo(string $objectType, string $objectID, string $selectedProgramID)
     {
-        /* Get the available budget for the program. */
+        $objectID          = (int)$objectID;
+        $selectedProgramID = (int)$selectedProgramID;
+        $projectFormInfo   = array();
+
+        /* 如果选择项目集，获取项目集相关信息。*/
+        /* If selectedProgramID exist, get the info for the program. */
         if($selectedProgramID)
         {
-            $selectedProgramID = (int)$selectedProgramID;
-            $selectedProgram   = $this->loadModel('program')->getByID($selectedProgramID);
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+
             if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+
+            $projectFormInfo['selectedProgramBegin'] = $selectedProgram->begin;
+            $projectFormInfo['selectedProgramEnd']   = $selectedProgram->end;
+            $projectFormInfo['budgetUnit']           = $selectedProgram->budgetUnit;
+            $projectFormInfo['selectedProgramPath']  = explode(',', $selectedProgram->path);
         }
 
+        /* 获取可用预算和项目集时间段。*/
         /* Get the available budget and program time range. */
         if(!empty($objectID))
         {
-            $objectID = (int)$objectID;
-            $object   = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
+            /* 获取最后选中的最后项目集。*/
+            /* Get the path of the last selected program. */
+            $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
+            $projectFormInfo['objectPath'] = explode(',', $object->path);
 
             if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + (int)$object->budget : $availableBudget;
 
             if($objectType == 'program')
             {
-                $minChildBegin = $this->project->getProgramMinBegin($objectID);
-                $maxChildEnd   = $this->project->getProgramMaxEnd($objectID);
+                $progranChildDate = $this->project->getProgramDate($objectID);
+                $projectFormInfo['minChildBegin'] = isset($progranChildDate) ? $progranChildDate['minChildBegin'] : '';
+                $projectFormInfo['maxChildEnd']   = isset($progranChildDate) ? $progranChildDate['maxChildEnd'] : '';
             }
         }
 
-        /* Build the selected drop-down data. */
-        $data = array();
-        $data = $this->projectZen->buildSelectForm($selectedProgramID, $selectedProgram, $objectType);
+        if($objectType == 'program')
+        {
+            $withProgram = $this->config->systemMode == 'ALM' ? true : false;
+            $allProducts = array('') + $this->program->getProductPairs($selectedProgramID, 'all', 'noclosed', '', 0, $withProgram);
+            $projectFormInfo['allProducts'] = html::select('products[]', $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
+            $projectFormInfo['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
+        }
 
-        /* Finish task #64882.Get the path of the last selected program. */
-        if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
-        if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
-        if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
-        if(isset($maxChildEnd))     $data['maxChildEnd']     = $maxChildEnd;
+        if(isset($availableBudget)) $projectFormInfo['availableBudget'] = $availableBudget;
 
-        echo json_encode($data);
+        echo json_encode($projectFormInfo);
     }
 
     /**

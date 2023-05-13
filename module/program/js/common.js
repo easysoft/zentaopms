@@ -305,7 +305,7 @@ function setBudgetTipsAndAclList(parentID)
 
     if(parentID != 0)
     {
-        $.get(createLink('project', 'ajaxGetObjectInfo', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID), function(data)
+        $.get(createLink('project', 'ajaxGetProjectFormInfo', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID), function(data)
         {
             var data      = JSON.parse(data);
             parentProgram = programList[parentID];
@@ -351,7 +351,7 @@ function compareChildDate()
         var programEnd   = new Date(end);
         var programBegin = new Date(begin);
 
-        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
+        $.get(createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
             var childInfo = JSON.parse(data);
             if(childInfo.maxChildEnd == '' || childInfo.minChildBegin == '') return;
@@ -404,7 +404,7 @@ function outOfDateTip()
         }
 
         if(typeof(programID) == 'undefined') programID = 0;
-        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
+        $.get(createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
         {
             var dateTip     = '';
             var data        = JSON.parse(data);
@@ -451,7 +451,7 @@ function budgetOverrunTips()
     }
 
     if(typeof(programID) == 'undefined') programID = 0;
-    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
+    $.get(createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
 

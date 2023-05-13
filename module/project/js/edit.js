@@ -7,7 +7,7 @@ $(function()
 
         setAclList(programID);
 
-        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + programID), function(data)
+        $.get(createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + programID), function(data)
         {
             var data = JSON.parse(data);
             selectedParent     = programID != 0 ? data.selectedProgramPath[1] : 0;

@@ -150,7 +150,7 @@ function setParentProgram(parentProgram)
 
     if(parentProgram == 0) $('#budgetBox').find('input').removeAttr("placeholder");
 
-    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + parentProgram), function(data)
+    $.get(createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + parentProgram), function(data)
     {
         var data = JSON.parse(data);
         selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
