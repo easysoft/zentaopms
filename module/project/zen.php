@@ -774,44 +774,34 @@ class projectZen extends project
     }
 
     /**
-     * 记录多迭代及瀑布类项目移除的产品
-     * Record multiple and waterfall project unlinked products
+     * 记录取消关联产品的执行到action表。
+     * Record the execution of disassociated products to the action table.
      *
-     * @param  object $project
-     * @param  array  $oldProducts
-     * @param  array  $newProductIDs
-     * @param  array  $idList
-     *
+     * @param  array     $formerProducts
+     * @param  array     $selectedIds
+     * @param  array     $executionIdList
      * @access protected
      * @return void
      */
-    protected function dealMultipleProduct(object $project, array $oldProducts, array $newProductIDs, array $idList): void
+    protected function recordExecutionsOfUnlinkedProducts(array $formerProducts, array $selectedIds, array $executionIdList): void
     {
-        /* Update multiple project linked products. */
-        if(empty($project->multiple))
+        $executionProductGroup = $this->loadModel('project')->getExecutionProductGroup($executionIdList); //项目下所有执行对应的关联产品。
+        $unlinkedProductIds    = array_diff(array_keys($formerProducts), $selectedIds);                   //取消关联的产品。
+        if(!empty($unlinkedProductIds))
         {
-            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
-            if($executionID) $this->execution->updateProducts($executionID);
-        }
+            $unlinkedProductPairs = array(); //取消关联的产品id->name键值对。
+            foreach($unlinkedProductIds as $productID) $unlinkedProductPairs[$productID] = $formerProducts[$productID]->name;
 
-        /* multiple and waterfall project unlinked products create action. */
-        if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
-        {
-            $oldExecutionProducts = $this->project->getExecutionProductGroup($idList);
-            $unlinkedProducts     = array_diff(array_keys($oldProducts), $newProductIDs);
-            if(!empty($unlinkedProducts))
+            $executions = array(); //取消关联产品的执行
+            foreach($executionProductGroup as $executionID => $products) //遍历执行对应关联产品键值对。
             {
-                $unlinkedProductPairs = array();
-                foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
+                $unlinkedExecutionProducts = array_intersect_key($unlinkedProductPairs, $products); //获取执行中解除的关联产品。
+                if($unlinkedExecutionProducts) $executions[$executionID] = $unlinkedExecutionProducts;
+            }
 
-                $unlinkExecutions = array();
-                foreach($oldExecutionProducts as $executionID => $executionProducts)
-                {
-                    $unlinkExecutionProducts = array_intersect_key($unlinkedProductPairs, $executionProducts);
-                    if($unlinkExecutionProducts) $unlinkExecutions[$executionID] = $unlinkExecutionProducts;
-                }
-
-                foreach($unlinkExecutions as $executionID => $unlinkExecutionProducts) $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
+            foreach($executions as $executionID => $unlinkedExecutionProducts)
+            {
+                $this->loadModel('action')->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkExecutionProducts));
             }
         }
     }
@@ -946,13 +936,12 @@ class projectZen extends project
      * 根据当前所在模块更新二级菜单
      * set project menu
      *
-     * @param  int    $projectID
-     * @param  object $project
-     *
+     * @param  int $projectID
+     * @param  int $project
      * @access protected
      * @return void
      */
-    protected function setProjectMenu(int $projectID, object $projectParent): void
+    protected function setProjectMenu(int $projectID, int $projectParent): void
     {
         if($this->app->tab == 'program')
         {
