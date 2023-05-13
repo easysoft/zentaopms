@@ -719,43 +719,56 @@ class projectZen extends project
     }
 
     /**
-     * 关联产品时,合并项目下的新旧产品
-     * Merge old and new products under the project When link products.
+     * 管理项目的关联产品:构建数据，更新产品变动，记录日志。
+     * Manage project related products: build data, update product changes, and record actions.
      *
      * @param  int       $projectID
      * @param  object    $project
-     * @param  array     $idList
-     * @param  object    $postData
-     *
+     * @param  array     $IdList
      * @access protected
      * @return bool
      */
-    protected function mergeProducts(int $projectID, object $project, array $idList, object $postData): bool
+    protected function updateLinkedProducts(int $projectID, object $project, array $IdList): bool
     {
+        /* 获取旧产品数据，并更新。*/
         /* Get old product data and update it. */
-        $oldProducts = $this->loadModel('product')->getProducts($projectID);
+        $formerProducts = $this->loadModel('product')->getProducts($projectID);
         $this->project->updateProducts($projectID);
         if(dao::isError()) return false;
 
-        /* Merge old and new linked products under the project. */
-        $newProducts   = $this->product->getProducts($projectID);
-        $oldProductIDs = array_keys($oldProducts);
-        $newProductIDs = array_keys($newProducts);
-        $diffProducts  = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
-        if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($postData->rawdata->products) ? implode(',', $postData->rawdata->products) : '');
+        /* 如果关联产品新增或删除，记录动态。*/
+        /* If add or delete associated products and record their dynamics. */
+        $currentProducts = $this->product->getProducts($projectID);
+        $formerIds       = array_keys($formerProducts);
+        $currentIds      = array_keys($currentProducts);
+        $changes         = array_merge(array_diff($formerIds, $currentIds), array_diff($currentIds, $formerIds));
+        if($changes) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($this->post->products) ? implode(',', $this->post->products) : '');
 
-        /* Project stageBy project update linked products. */
+        /* 如果是无迭代项目，更新关联产品。*/
+        /* IF multiple is 0 Update associated products. */
+        if(empty($project->multiple))
+        {
+            $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
+            if($executionID) $this->execution->updateProducts($executionID);
+        }
+
+        /* 如果是瀑布项目单套阶段，更新关联产品。*/
+        /* If it is a single stage of the waterfall project, update associated products. */
         if($project->stageBy == 'project')
         {
-            foreach($idList as $executionID)
+            foreach($IdList as $executionID)
             {
                 $this->execution->updateProducts($executionID);
-                if($diffProducts) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', array_keys($newProducts)));
+                if($diffProducts) $this->loadModel('action')->create('execution', $executionID, 'Managed', '', implode(',', $currentIds));
             }
         }
 
-        /* Deal multiple project*/
-        $this->dealMultipleProduct($oldProducts, $newProductIDs, $idList);
+        /* 如果有迭代并且是非瀑布项目，记录关联产品执行到action表。*/
+        /* If it is multiple project and model isn't waterfall project, record to table action. */
+        if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
+        {
+            $this->recordExecutionsOfUnlinkedProducts($formerProducts, $currentIds, $IdList);
+        }
 
         return true;
     }
