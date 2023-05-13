@@ -14,7 +14,7 @@ function deleteMemeber(projectID, account, userID)
         if(!result) return true;
 
         var removeConfirm = '';
-        var tipsLink      = createLink('project', 'ajaxGetUnlinkTips', 'projectID=' + projectID + '&account=' + account);
+        var tipsLink      = createLink('project', 'ajaxGetRemoveMemberTips', 'projectID=' + projectID + '&account=' + account);
         $.get(tipsLink, function(tips)
         {
             var unlinkURL = createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&confirm=yes');

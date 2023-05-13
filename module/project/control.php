@@ -148,27 +148,28 @@ class project extends control
     }
 
     /**
-     * 获取解除项目团队成员提示。
-     * Ajax get unlink tips when unlink team member.
+     * 移除项目团队成员时进行提示。
+     * Ajax prompts when removing project team members.
      *
      * @param  string $projectID
      * @param  string $account
-     *
      * @access public
      * @return void
      */
-    public function ajaxGetUnlinkTips(string $projectID, string $account)
+    public function ajaxGetRemoveMemberTips(string $projectID, string $account)
     {
         $projectID = (int)$projectID;
-        $project = $this->project->getByID($projectID);
+        $project   = $this->project->getByID($projectID);
         if(!$project->multiple) return;
 
-        /* Get execution members. */
+        /* 获取项目下相关执行的团队成员。*/
+        /* Get team members of execution under the project. */
         $executions       = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
         $executionMembers = $this->project->getExecutionMembers($account, array_keys($executions));
         if(empty($executionMembers)) return;
 
-        /* Echo tips based on the number of user executions. */
+        /* 根据移除的成员参与执行的数量，输出对应的提示语。*/
+        /* Output corresponding prompts based on the number of removed members participating in execution. */
         $count          = count($executionMembers);
         $executionNames = $count != 0 ? current($executionMembers) : '';
         if($count > 1) $executionNames .= ',' . next($executionMembers);
