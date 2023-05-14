@@ -47,6 +47,11 @@ class projectStory extends control
 
         /* Set product list for export. */
         $this->session->set('exportProductList', $this->products);
+        if($storyType == 'requirement')
+        {
+            unset($this->lang->projectstory->featureBar['story']['linkedExecution']);
+            unset($this->lang->projectstory->featureBar['story']['unlinkedExecution']);
+        }
 
         if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
