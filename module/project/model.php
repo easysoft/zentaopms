@@ -1278,7 +1278,7 @@ class projectModel extends model
             }
         }
 
-        if($_POST['products'])
+        if($_POST['products'] and $this->post->model != 'ipd')
         {
             $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
