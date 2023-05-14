@@ -2700,10 +2700,11 @@ class executionModel extends model
      * @param  string $actionURL
      * @param  string $type
      * @param  object $execution
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $execution = null)
+    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $execution = null, $storyType = 'story')
     {
         $this->app->loadLang('branch');
         $branchPairs  = array(BRANCH_MAIN => $this->lang->branch->main);
@@ -2760,6 +2761,9 @@ class executionModel extends model
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
             $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
         }
+
+        if($storyType == 'requirement') unset($this->config->product->search['fields']['plan']);
+
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $project = $execution;
