@@ -1117,8 +1117,8 @@ class productModel extends model
         if($browseType == 'activestory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
         if($browseType == 'changingstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
         if($browseType == 'reviewingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'reviewing', $type, $sort, $pager);
-        if($browseType == 'passedstory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'passed', $type, $sort, $pager);
         if($browseType == 'launchedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'launched', $type, $sort, $pager);
+        if($browseType == 'developingstory')$stories = $this->story->getByStatus($productID, $branch, $modules, 'developing', $type, $sort, $pager);
         if($browseType == 'willclose')      $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
         if($browseType == 'closedstory')    $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
         if($browseType == 'assignedbyme')   $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
