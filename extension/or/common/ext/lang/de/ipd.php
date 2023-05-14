@@ -1,4 +1,5 @@
 <?php
+$lang->SRCommon   = 'Requirement';
 $lang->demandpool = new stdclass();
 $lang->demandpool->common = 'RM Hub';
 
@@ -58,7 +59,7 @@ $lang->demandpool->menuOrder[30] = 'view';
 $lang->product->menu              = new stdclass();
 $lang->product->menu->requirement = array('link' => "Requirement|product|browse|productID=%s&branch=&browseType=assignedtome&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->roadmap     = array('link' => "Roadmap|roadmap|browse|productID=%s");
-$lang->product->menu->initiating  = array('link' => "Initiating|product|initiating|productID=%s");
+#$lang->product->menu->initiating  = array('link' => "Initiating|product|initiating|productID=%s");
 $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
 
 $lang->product->menu->settings['subMenu'] = new stdclass();
