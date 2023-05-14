@@ -59,7 +59,9 @@
           <th class='c-branch'><?php echo $lang->product->branchName[$productType];?></th>
           <?php endif;?>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
+          <?php if($storyType != 'requirement'):?>
           <th class='c-estimate text-right'><?php echo $lang->story->estimateAB;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <tbody>
@@ -104,7 +106,9 @@
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
         <?php endif;?>
         <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
+        <?php if($storyType != 'requirement'):?>
         <td class='text-right c-estimate' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
+        <?php endif;?>
       </tr>
       <?php $storyCount++;?>
       <?php endforeach;?>
