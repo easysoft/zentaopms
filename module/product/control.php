@@ -597,6 +597,8 @@ class product extends control
         /* Set menu when page come from program. */
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
+        if($this->config->vision == 'or') unset($this->lang->product->statusList['normal']);
+
         /* Set custom. */
         foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
         $this->view->customFields = $customFields;
