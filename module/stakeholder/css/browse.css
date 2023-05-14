@@ -1,7 +1,6 @@
 table td, table th {overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .c-phone {width: 120px;}
 .c-email {width: 200px;}
-.btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .c-name {width: 120px;}
