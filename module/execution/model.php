@@ -2731,10 +2731,7 @@ class executionModel extends model
         }
 
         /* Build search form. */
-        if($type == 'executionStory')
-        {
-            $this->config->product->search['module'] = 'executionStory';
-        }
+        if($type == 'executionStory') $this->config->product->search['module'] = 'executionStory';
 
         $this->config->product->search['fields']['title'] = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
         $this->config->product->search['actionURL'] = $actionURL;
@@ -2762,8 +2759,6 @@ class executionModel extends model
             $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
         }
 
-        if($storyType == 'requirement') unset($this->config->product->search['fields']['plan']);
-
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $project = $execution;
@@ -2773,6 +2768,16 @@ class executionModel extends model
             unset($this->config->product->search['fields']['product']);
 
             if($project->model != 'kanban') unset($this->config->product->search['fields']['plan']);
+        }
+
+        if($storyType == 'requirement')
+        {
+            unset($this->config->product->search['fields']['plan']);
+            if($project->model == 'ipd')
+            {
+                unset($this->config->product->search['fields']['stage']);
+                unset($this->config->product->search['fields']['status']);
+            }
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
