@@ -452,6 +452,11 @@ $config->project->linkMap->budget['summary'] = array('budget', 'summary', 'proje
 
 $config->project->linkMap->programplan = array();
 $config->project->linkMap->programplan[''] = array('project', 'execution', 'type=all&projectID=%s', '');
-            
+
+$config->project->budget = new stdclass();
+$config->project->budget->tenThousand       = 10000;
+$config->project->budget->oneHundredMillion = 100000000;
+$config->project->budget->precision    = 2;
+
 
 include 'config/form.php';

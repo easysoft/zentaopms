@@ -2108,23 +2108,23 @@ class projectModel extends model
     public function getBudgetWithUnit(float|string $budget): float|string
     {
         $budget = (float)$budget;
-        if($budget < 10000)
+        if($budget < $this->config->project->budget->tenThousand)
         {
-            $budget = round($budget, 2);
+            $budget = round($budget, $this->config->project->budget->precision);
             $unit   = '';
         }
-        elseif($budget < 100000000 && $budget >= 10000)
+        elseif($budget < $this->config->project->budget->oneHundredMillion && $budget >= $this->config->project->budget->tenThousand)
         {
-            $budget = round($budget/10000, 2);
+            $budget = round($budget/$this->config->project->budget->tenThousand, $this->config->project->budget->precision);
             $unit   = $this->lang->project->tenThousand;
         }
         else
         {
-            $budget = round($budget/100000000, 2);
+            $budget = round($budget/$this->config->project->budget->oneHundredMillion, $this->config->project->budget->precision);
             $unit   = $this->lang->project->hundredMillion;
         }
 
-        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, 2);
+        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, $this->config->project->budget->precision);
         return $projectBudget;
     }
 
