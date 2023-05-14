@@ -58,7 +58,7 @@ $lang->demandpool->menuOrder[30] = 'view';
 $lang->product->menu              = new stdclass();
 $lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=assignedtome&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->roadmap     = array('link' => "路标|roadmap|browse|productID=%s");
-$lang->product->menu->initiating  = array('link' => "立项|product|initiating|productID=%s");
+#$lang->product->menu->initiating  = array('link' => "立项|product|initiating|productID=%s");
 $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
 
 $lang->product->menu->settings['subMenu'] = new stdclass();
