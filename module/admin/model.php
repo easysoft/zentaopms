@@ -678,21 +678,20 @@ class adminModel extends model
      */
     public function getZentaoData()
     {
-        $zentaoData = !empty($this->config->zentaoWebsite) ? $this->config->zentaoWebsite : null;
-
         $data = new stdclass();
-        $data->hasData = true;
+        $data->hasData  = true;
+        $data->dynamics = array();
+        $data->classes  = array();
+        $data->plugins  = array();
+        $data->patches  = array();
 
-        $dynamics = array();
-        $classes  = array();
-        $plugins  = array();
-        $patches  = array();
+        $zentaoData = !empty($this->config->zentaoWebsite) ? $this->config->zentaoWebsite : null;
         if(empty($zentaoData))
         {
             $data->hasData = false;
             if($this->config->edition == 'open')
             {
-                $plugins = array(
+                $data->plugins = array(
                     $this->config->admin->plugins[27],
                     $this->config->admin->plugins[26],
                     $this->config->admin->plugins[30]
@@ -700,7 +699,7 @@ class adminModel extends model
             }
             else
             {
-                $plugins = array(
+                $data->plugins = array(
                     $this->config->admin->plugins[198],
                     $this->config->admin->plugins[194],
                     $this->config->admin->plugins[203]
@@ -709,17 +708,12 @@ class adminModel extends model
         }
         else
         {
-            $dynamics = json_decode($zentaoData->news);
-            $classes  = json_decode($zentaoData->publicClass);
-            $plugins  = json_decode($zentaoData->plugin);
-            $patches  = json_decode($zentaoData->patch);
-            if(common::checkNotCN()) array_pop($plugins);
+            $data->dynamics = json_decode($zentaoData->news);
+            $data->classes  = json_decode($zentaoData->publicClass);
+            $data->plugins  = json_decode($zentaoData->plugin);
+            $data->patches  = json_decode($zentaoData->patch);
+            if(common::checkNotCN()) array_pop($data->plugins);
         }
-
-        $data->dynamics = $dynamics;
-        $data->classes  = $classes;
-        $data->plugins  = $plugins;
-        $data->patches  = $patches;
 
         return $data;
     }
