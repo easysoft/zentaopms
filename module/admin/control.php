@@ -51,8 +51,6 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-        $this->loadModel('misc');
-
         $clientLang = $this->app->getClientLang();
         $langNotCN  = common::checkNotCN();
         $dateUsed   = $this->admin->genDateUsed();
@@ -61,7 +59,6 @@ class admin extends control
         $hasInternet = $zentaoData->hasData;
 
         $this->view->title       = $this->lang->admin->common;
-        $this->view->position[]  = $this->lang->admin->index;
         $this->view->plugins     = $zentaoData->plugins;
         $this->view->patches     = $zentaoData->patches;
         $this->view->dateUsed    = $dateUsed;
