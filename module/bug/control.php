@@ -410,7 +410,7 @@ class bug extends control
 
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
 
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
@@ -457,7 +457,7 @@ class bug extends control
 
         $bug = $this->bug->getByID($bugID);
 
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
 
         $this->bugZen->setEditMenu($bug);
 
@@ -709,7 +709,7 @@ class bug extends control
     public function assignTo($bugID)
     {
         $bug = $this->bug->getById($bugID);
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
 
         /* Set menu. */
         $this->qa->setMenu($this->products, $bug->product, $bug->branch);
@@ -937,7 +937,7 @@ class bug extends control
         }
 
         $productID = $bug->product;
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
@@ -1034,7 +1034,7 @@ class bug extends control
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
         unset($this->lang->bug->resolutionList['tostory']);
 
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
@@ -1111,7 +1111,7 @@ class bug extends control
         }
 
         $productID = $bug->product;
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
@@ -1164,7 +1164,7 @@ class bug extends control
             return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        $this->bug->checkBugExecutionPriv($oldBug);
+        $this->bugZen->checkBugExecutionPriv($oldBug);
         $this->bugZen->buildCloseForm($oldBug);
     }
 
@@ -1190,7 +1190,7 @@ class bug extends control
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
 
         /* Set the menu. */
         $this->qa->setMenu($this->products, $bug->product, $bug->branch);
@@ -1324,7 +1324,7 @@ class bug extends control
     public function confirmStoryChange($bugID)
     {
         $bug = $this->bug->getById($bugID);
-        $this->bug->checkBugExecutionPriv($bug);
+        $this->bugZen->checkBugExecutionPriv($bug);
         $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
         return print(js::reload('parent'));

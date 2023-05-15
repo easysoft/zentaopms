@@ -338,27 +338,6 @@ class bugModel extends model
     }
 
     /**
-     * Check bug execution priv.
-     *
-     * @param  object    $bug
-     * @access public
-     * @return void
-     */
-    public function checkBugExecutionPriv($bug)
-    {
-        if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
-        {
-            echo js::alert($this->lang->bug->executionAccessDenied);
-
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
-            if($this->app->tab == 'my') print(js::reload('parent'));
-
-            return print(js::locate('back'));
-        }
-    }
-
-    /**
      * Get bug list of a plan.
      *
      * @param  int    $planID
