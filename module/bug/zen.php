@@ -312,8 +312,9 @@ class bugZen extends bug
      * 创建bug后存储上传的文件。
      * Save files after create a bug.
      *
-     * @param  int    $bugID
-     * @param  object $rawdata
+     * @param  int       $bugID
+     * @param  object    $rawdata
+     * @access protected
      * @return void
      */
     protected function updateFileAfterCreate(int $bugID, object $rawdata): void
@@ -343,8 +344,9 @@ class bugZen extends bug
      * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
      * Get kanban laneID and columnID from $_POST and $output from extra().
      *
-     * @param  object $rawdata
-     * @param  array  $output
+     * @param  object    $rawdata
+     * @param  array     $output
+     * @access protected
      * @return array
      */
     protected function getKanbanVariable(object $rawdata, array $output): array
@@ -363,9 +365,10 @@ class bugZen extends bug
      * Update execution kanban after create a bug.
      *
      * @param  object $bug
-     * @param  int    $laneID
-     * @param  int    $columnID
-     * @param  string $from
+     * @param  int       $laneID
+     * @param  int       $columnID
+     * @param  string    $from
+     * @access protected
      * @return void
      */
     protected function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
@@ -555,9 +558,10 @@ class bugZen extends bug
      * 为create方法添加动态。
      * Add action for create function.
      *
-     * @param  object $bug
-     * @param  array  $output
-     * @param  string $from
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $from
+     * @access protected
      * @return void
      */
     protected function addAction4Create(object $bug, array $output, string $from): void
@@ -592,9 +596,10 @@ class bugZen extends bug
      * 获得create方法的response。
      * Get response for create.
      *
-     * @param  int   $bugID
-     * @param  int   $executionID
-     * @param  array $output
+     * @param  int      $bugID
+     * @param  int      $executionID
+     * @param  array    $output
+     * @access protected
      * @return array
      */
     protected function responseAfterCreate(int $bugID, int $executionID, array $output): array
@@ -613,9 +618,10 @@ class bugZen extends bug
      * 获得create方法的返回url。
      * Get response url for create.
      *
-     * @param  int    $bugID
-     * @param  int    $executionID
-     * @param  string $branch
+     * @param  int       $bugID
+     * @param  int       $executionID
+     * @param  string    $branch
+     * @access protected
      * @return string
      */
     protected function getLocation4Create(int $bugID, int $executionID, array $output): string
@@ -652,7 +658,8 @@ class bugZen extends bug
      * 初始化一个默认的bug模板。
      * Init a default bug templete.
      *
-     * @param  array  $fields
+     * @param  array     $fields
+     * @access protected
      * @return object
      */
     protected function initBug($fields): object
@@ -704,8 +711,9 @@ class bugZen extends bug
      * 更新bug模板。
      * Update bug templete.
      *
-     * @param  object $bug
-     * @param  array  $fields
+     * @param  object    $bug
+     * @param  array     $fields
+     * @access protected
      * @return object
      */
     protected function updateBug(object $bug, array $fields): object
@@ -719,8 +727,9 @@ class bugZen extends bug
      * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
      * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
      *
-     * @param  object $bug
-     * @param  object $currentProduct
+     * @param  object    $bug
+     * @param  object    $currentProduct
+     * @access protected
      * @return object
      */
     protected function setOptionMenu(object $bug, object $currentProduct): object
@@ -739,8 +748,9 @@ class bugZen extends bug
      * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。
      * Extract extras, if bug come from an object(bug, case, testtask, todo), get some value from object.
      *
-     * @param  object $bug
-     * @param  array  $output
+     * @param  object    $bug
+     * @param  array     $output
+     * @access protected
      * @return object
      */
     protected function extractObjectFromExtras(object $bug, array $output): object
@@ -798,9 +808,10 @@ class bugZen extends bug
      * 构建创建bug页面数据。
      * Build form fields for create bug.
      *
-     * @param  object $bug
-     * @param  array  $output
-     * @param  string $from
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $from
+     * @access protected
      * @return void
      */
     protected function buildCreateForm(object $bug, array $output, string $from): void
@@ -850,7 +861,8 @@ class bugZen extends bug
      * 将$bug对象的属性添加到view对象中。
      * Add the prop of the $bug object to the view object.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @access protected
      * @return void
      */
     protected function extractBugTemplete(object $bug): void
@@ -897,8 +909,9 @@ class bugZen extends bug
      * 获取bug创建页面的branches和branch，并绑定到bug上。
      * Get the branches and branch for the bug create page and bind them to bug.
      *
-     * @param  object $bug
-     * @param  object $currentProduct
+     * @param  object    $bug
+     * @param  object    $currentProduct
+     * @access protected
      * @return object
      */
     protected function getBranches4Create(object $bug, object $currentProduct): object
@@ -925,7 +938,8 @@ class bugZen extends bug
      * 获取bug创建页面的builds和stories，并绑定到bug上。
      * Get the builds and stories for the bug create page and bind them to bug.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @access protected
      * @return object
      */
     protected function getBuildsAndStories4Create(object $bug): object
@@ -956,7 +970,8 @@ class bugZen extends bug
      * 获取bug创建页面的产品成员。
      * Get the product members for bug create page.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @access protected
      * @return array
      */
     protected function getProductMembers4Create(object $bug): array
@@ -972,7 +987,8 @@ class bugZen extends bug
      * 获取bug创建页面的products和projects，并绑定到bug上。
      * Get the products and projects for the bug create page and bind them to bug.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @access protected
      * @return object
      */
     protected function getProductsAndProjects4Create(object $bug): object
@@ -1011,8 +1027,9 @@ class bugZen extends bug
      * 追加bug创建页面的products和projects，并绑定到bug上。
      * Append the products and projects for the bug create page and bind them to bug.
      *
-     * @param  object $bug
-     * @param  int    $bugID
+     * @param  object    $bug
+     * @param  int       $bugID
+     * @access protected
      * @return object
      */
     protected function appendProjects4Create(object $bug, int $bugID): object
@@ -1041,7 +1058,8 @@ class bugZen extends bug
      * 获得项目的模式。
      * Get project model.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @access protected
      * @return object
      */
     protected function getProjectModel4Create(object $bug): object
@@ -1066,6 +1084,7 @@ class bugZen extends bug
      * 获得指派给我的blockID。
      * Get block id of assigned to me.
      *
+     * @access protected
      * @return int
      */
     protected function getBlockID4Create(): int
@@ -1085,6 +1104,7 @@ class bugZen extends bug
      * 获得指派给我的blockID。
      * Get block id of assigned to me.
      *
+     * @access protected
      * @return array
      */
     protected function getCustomFields4Create(): array
@@ -1102,7 +1122,8 @@ class bugZen extends bug
      * 获得bug创建页面的products和projects，并绑定到bug上。
      * Get the executions and projects for the bug create page and bind them to bug.
      *
-     * @param  object $bug
+     * @param  object    $bug
+     * @access protected
      * @return object
      */
     protected function getExecutions4Create(object $bug): object
@@ -1126,9 +1147,10 @@ class bugZen extends bug
      * 为创建bug设置导航数据。
      * Set menu for create bug page.
      *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  array  $output
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  array     $output
+     * @access protected
      * @return void
      */
     protected function setMenu4Create(int $productID, string $branch, array $output): void
