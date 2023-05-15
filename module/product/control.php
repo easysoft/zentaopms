@@ -623,34 +623,26 @@ class product extends control
         $queryID = ($browseType == 'bySearch' or !empty($param)) ? $param : 0;
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
 
-        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
-        $productStructure = $this->productZen->statisticProgram($productStats);
+        $productStats = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
 
         /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
-        /* Get product lines. */
-        list($productLines, $programLines) = $this->productZen->getProductLines();
-
-        $this->view->title            = $this->lang->productCommon;
-        $this->view->position[]       = $this->lang->productCommon;
-        $this->view->recTotal         = $pager->recTotal;
-        $this->view->productStats     = $productStats;
-        $this->view->productStructure = $productStructure;
-        $this->view->productLines     = $productLines;
-        $this->view->programLines     = $programLines;
-        $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->userIdPairs      = $this->user->getPairs('noletter|showid');
-        $this->view->usersAvatar      = $this->user->getAvatarPairs('');
-        $this->view->orderBy          = $orderBy;
-        $this->view->browseType       = $browseType;
-        $this->view->pager            = $pager;
-        $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
-        $this->view->param            = $param;
-        $this->view->recPerPage       = $recPerPage;
-        $this->view->pageID           = $pageID;
-        $this->view->programID        = $programID;
+        $this->view->title         = $this->lang->productCommon;
+        $this->view->recTotal      = $pager->recTotal;
+        $this->view->productStats  = $productStats;
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
+        $this->view->avatarList    = $this->user->getAvatarPairs('');
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->pager         = $pager;
+        $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
+        $this->view->param         = $param;
+        $this->view->recPerPage    = $recPerPage;
+        $this->view->pageID        = $pageID;
+        $this->view->programID     = $programID;
 
         $this->display();
     }
