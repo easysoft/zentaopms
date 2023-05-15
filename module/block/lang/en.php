@@ -682,7 +682,7 @@ $lang->block->guideTabs['visionSwitch']   = 'Interface Switch';
 $lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
 $lang->block->guideTabs['preference']     = 'Personalized setting';
 $lang->block->guideTabs['downloadClient'] = 'Desktop Client download';
-$lang->block->guideTabs['downloadMoblie'] = 'Mobile Apps download';
+$lang->block->guideTabs['downloadMobile'] = 'Mobile Apps download';
 
 $lang->block->themes['default']    = 'Default';
 $lang->block->themes['blue']       = 'Young Blue';

@@ -13,13 +13,12 @@ namespace zin;
 $app->loadLang('execution');
 
 /**
- * 获取区块左侧的产品列表.
+ * 获取区块左侧的产品列表。
  * Get product tabs on the left side.
  *
  * @param  array  $products
  * @param  string $blockNavCode
  * @param  bool   $longBlock
- * @access public
  * @return array
  */
 function getProductTabs(array $products, string $blockNavCode, bool $longBlock): array
@@ -71,13 +70,12 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
 }
 
 /**
- * 获取区块右侧显示的产品信息.
+ * 获取区块右侧显示的产品信息。
  * Get product statistical information.
  *
  * @param  array  $products
  * @param  string $blockNavID
  * @param  bool   $longBlock
- * @access public
  * @return array
  */
 function getProductInfo(array $products, string $blockNavID, bool $longBlock): array

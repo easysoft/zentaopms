@@ -682,7 +682,7 @@ $lang->block->guideTabs['visionSwitch']   = '界面切换';
 $lang->block->guideTabs['themeSwitch']    = '主题切换';
 $lang->block->guideTabs['preference']     = '个性化设置';
 $lang->block->guideTabs['downloadClient'] = '客户端下载';
-$lang->block->guideTabs['downloadMoblie'] = '移动端下载';
+$lang->block->guideTabs['downloadMobile'] = '移动端下载';
 
 $lang->block->themes['default']    = '禅道蓝';
 $lang->block->themes['blue']       = '青春蓝';
