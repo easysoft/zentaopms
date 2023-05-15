@@ -4,27 +4,36 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+zdTable('project')->config('project')->gen(6);
+zdTable('task')->config('task')->gen(9);
+zdTable('taskteam')->config('taskteam')->gen(6);
+
 /**
 
-title=测试taskModel->startTest();
+title=taskModel->start();
+timeout=0
 cid=1
-pid=1
-
-wait状态任务开始 >> status,wait,doing
-doing状态任务开始 >> 此任务已被启动，不能重复启动！
-pause状态任务开始 >> status,pause,doing
-closed状态任务开始 >> status,closed,doing
 
 */
 
-$taskIDList = array('1','4','6');
+$taskIDList = range(1, 9);
 
-$waitstart   = array('assignedTo' => 'user92','consumed' => '10');
-$pausestart  = array('assignedTo' => 'user95','consumed' => '10');
-$closedstart = array('assignedTo' => 'user97','consumed' => '10');
+$waitTask   = array('assignedTo' => 'admin', 'consumed' => 10);
+$doingTask  = array('assignedTo' => 'user1', 'consumed' => 10);
+$doneTask   = array('assignedTo' => '',      'consumed' => 5);
+$cancelTask = array('assignedTo' => 'admin', 'consumed' => 0);
+$closedTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
+$childTask  = array('assignedTo' => 'admin', 'consumed' => 2, 'left' => 5);
+$linearTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
+$multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 
-$task = new taskTest();
-r($task->startTest($taskIDList[0],$waitstart))   && p('0:field,old,new') && e('status,wait,doing');   // wait状态任务开始
-r($task->startTest($taskIDList[0],$waitstart))   && p() && e('此任务已被启动，不能重复启动！');       // doing状态任务开始
-r($task->startTest($taskIDList[1],$pausestart))  && p('0:field,old,new') && e('status,pause,doing');  // pause状态任务开始
-r($task->startTest($taskIDList[2],$closedstart)) && p('0:field,old,new') && e('status,closed,doing'); // closed状态任务开始
+$taskTester = new taskTest();
+
+r($taskTester->startTest($taskIDList[0], $waitTask))   && p('0:field,old,new') && e('status,wait,doing');   // 测试开始任务状态为未开始的任务
+r($taskTester->startTest($taskIDList[1], $doingTask))  && p('2:field,old,new') && e('consumed,4,10');       // 测试开始任务状态为进行中的任务
+r($taskTester->startTest($taskIDList[2], $doneTask))   && p('0:field,old,new') && e('status,done,doing');   // 测试开始任务状态为已完成的任务
+r($taskTester->startTest($taskIDList[3], $cancelTask)) && p('3:field,old,new') && e('consumed,6,0');        // 测试开始任务状态为已取消的任务
+r($taskTester->startTest($taskIDList[4], $closedTask)) && p('0:field,old,new') && e('status,closed,doing'); // 测试开始任务状态为已取消的任务
+r($taskTester->startTest($taskIDList[6], $childTask))  && p('0:field,old,new') && e('status,wait,doing');   // 测试开始任务状态为未开始的子任务
+r($taskTester->startTest($taskIDList[7], $linearTask)) && p('0:field,old,new') && e('status,wait,doing');   // 测试开始任务状态为未开始的串行任务
+r($taskTester->startTest($taskIDList[8], $multiTask))  && p('0:field,old,new') && e('status,doing,done');   // 测试开始任务状态为未开始的并行任务

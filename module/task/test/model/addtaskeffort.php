@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=taskModel->addTaskEstimate();
+title=taskModel->addTaskEffort();
 cid=1
 pid=1
 
@@ -49,8 +49,8 @@ $record5->left     = 6;
 $record5->consumed = 9;
 
 $task = new taskTest();
-r($task->addTaskEstimateTest($record1)) && p('id,task,left,consumed') && e("601,1,0,3");   // 插入task为1 left为0 consumed为3的任务
-r($task->addTaskEstimateTest($record2)) && p('id,task,left,consumed') && e("602,601,0,3"); // 插入task为601 left为0 consumed为3的任务
-r($task->addTaskEstimateTest($record3)) && p('id,task,left,consumed') && e("603,602,1,4"); // 插入task为601 left为1 consumed为4的任务
-r($task->addTaskEstimateTest($record4)) && p('id,task,left,consumed') && e("604,904,3,6"); // 插入task为904 left为3 consumed为6的任务
-r($task->addTaskEstimateTest($record5)) && p('id,task,left,consumed') && e("605,907,6,9"); // 插入task为907 left为6 consumed为9的任务
+r($task->addTaskEffortTest($record1)) && p('id,task,left,consumed') && e("601,1,0,3");   // 插入task为1 left为0 consumed为3的任务
+r($task->addTaskEffortTest($record2)) && p('id,task,left,consumed') && e("602,601,0,3"); // 插入task为601 left为0 consumed为3的任务
+r($task->addTaskEffortTest($record3)) && p('id,task,left,consumed') && e("603,602,1,4"); // 插入task为601 left为1 consumed为4的任务
+r($task->addTaskEffortTest($record4)) && p('id,task,left,consumed') && e("604,904,3,6"); // 插入task为904 left为3 consumed为6的任务
+r($task->addTaskEffortTest($record5)) && p('id,task,left,consumed') && e("605,907,6,9"); // 插入task为907 left为6 consumed为9的任务

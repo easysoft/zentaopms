@@ -216,29 +216,50 @@ class taskTest
         return $object[1];
     }
 
-    public function startTest($taskID, $param = array())
+    /**
+     * Start a task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function startTest(int $taskID, array $param = array()): array
     {
-        $createFields = array( 'status' => 'doing', 'consumed' => '9', 'assignedTo' => '', 'comment' => '9', 'realStarted' => '', 'left' => '3');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $obj = $this->objectModel->start($taskID);
-        unset($_POST);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            if ($error[0] = "此任务已被启动，不能重复启动！")
-            {
-                return $error[0];
-            }
-            else
-            {
-                return $error;
-            }
-        }
-        else
-        {
-            return $obj;
-        }
+        $task        = new stdclass();
+        $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => '', 'left' => 0, 'consumed' => 0);
+        foreach($startFields as $field => $defaultvalue) $task->{$field} = $defaultvalue;
+        foreach($param as $key => $value) $task->{$key} = $value;
+
+        $oldTask = $this->objectModel->getByID($taskID);
+        $result  = $this->objectModel->start($oldTask, $task);
+        return $result;
+    }
+
+    /**
+     * Other data process after task start.
+     *
+     * @param  int        $taskID
+     * @param  array      $param
+     * @param  string     $comment
+     * @param  array      $output
+     * @access public
+     * @return array|bool
+     */
+    public function afterStartTest(int $taskID, array $param = array(), string $comment = '', array $output = array()): array|bool
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $task        = new stdclass();
+        $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => '', 'left' => 0, 'consumed' => 0);
+        foreach($startFields as $field => $defaultvalue) $task->{$field} = $defaultvalue;
+        foreach($param as $key => $value) $task->{$key} = $value;
+
+        $oldTask = $this->objectModel->getByID($taskID);
+        $changes = $this->objectModel->start($oldTask, $task);
+        $result  = $this->objectModel->afterStart($oldTask, $task, $changes, $task->left, $comment, $output);
+        return $result;
     }
 
     /**
@@ -1391,16 +1412,16 @@ class taskTest
     }
 
     /**
-     * Test add task estimate.
+     * Test add task effort.
      *
      * @param  object  $data
      * @access public
      * @return object
      */
-    public function addTaskEstimateTest($data)
+    public function addTaskEffortTest($data)
     {
         $data->date = date("Y-m-d");
-        $this->objectModel->addTaskEstimate($data);
+        $this->objectModel->addTaskEffort($data);
 
         global $tester;
         $objectID = $tester->dao->lastInsertID();
