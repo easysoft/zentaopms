@@ -236,6 +236,8 @@ class bug extends control
         $fields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($currentProduct->QD) ? $currentProduct->QD : ''));
         $bug = $this->bugZen->initBug($fields);
 
+        $bug = $this->bugZen->setOptionMenu($bug, $currentProduct);
+
         /* 处理复制bug，从用例、测试单、日志转bug。 */
         /* Handle copy bug, bug from case, testtask, todo. */
         $bug = $this->bugZen->extractObjectFromExtras($bug, $output);

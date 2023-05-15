@@ -716,6 +716,26 @@ class bugZen extends bug
     }
 
     /**
+     * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
+     * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
+     *
+     * @param  object $bug
+     * @param  object $currentProduct
+     * @return object
+     */
+    protected function setOptionMenu(object $bug, object $currentProduct): object
+    {
+        $bug = $this->getBranches4Create($bug, $currentProduct);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
+
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+
+        return $bug;
+    }
+
+
+    /**
      * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。
      * Extract extras, if bug come from an object(bug, case, testtask, todo), get some value from object.
      *
@@ -783,16 +803,10 @@ class bugZen extends bug
      * @param  string $from
      * @return void
      */
-    protected function buildCreateForm(object $bug, array $output, string $from)
+    protected function buildCreateForm(object $bug, array $output, string $from): void
     {
         extract($output);
-        $currentProduct = $this->product->getById($bug->productID);
-
-        /* 获取分支，如果模块菜单是空的，则返回到模块维护页面。 */
-        /* Get branches, if moduleOptionMenu is empty, return. */
-        $bug = $this->getBranches4Create($bug, $currentProduct);
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
-        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
+        $currentProduct = $this->product->getByID($bug->productID);
 
         /* 获得版本下拉和需求下拉列表。 */
         /* Get builds and stroies. */
@@ -822,7 +836,6 @@ class bugZen extends bug
         $this->view->productMembers        = $this->getProductMembers4Create($bug);
         $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
-        $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
