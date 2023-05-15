@@ -337,7 +337,8 @@ class project extends control
     }
 
     /**
-     * Project list.
+     * 渲染项目列表页面数据。
+     * Display project list page.
      *
      * @param  int    $programID
      * @param  string $browseType
@@ -349,10 +350,8 @@ class project extends control
      * @access public
      * @return void
      */
-    public function browse($programID = 0, $browseType = 'doing', $param = 0, $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browse(int $programID = 0, string $browseType = 'doing', string $param = '', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
-        $this->loadModel('datatable');
-        $this->loadModel('execution');
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
