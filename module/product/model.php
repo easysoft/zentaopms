@@ -1320,7 +1320,6 @@ class productModel extends model
         $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIDs);
         $assignToNull         = $this->productTao->getAssignToNullTODO($productIDs);
         list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIDs, $storyType);
-        $rootLinePairs        = $this->productTao->getRootLinePairs($products);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1339,7 +1338,6 @@ class productModel extends model
             $product->fixedBugs    = isset($fixedBugs[$product->id])     ? $fixedBugs[$product->id]     : 0;
             $product->thisWeekBugs = isset($thisWeekBugs[$product->id])  ? $thisWeekBugs[$product->id]  : 0;
             $product->assignToNull = isset($assignToNull[$product->id])  ? $assignToNull[$product->id]  : 0;
-            $product->rootLine     = isset($rootLinePairs[$product->id]) ? $rootLinePairs[$product->id] : '';
 
             /* Calculate product progress. */
             $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
