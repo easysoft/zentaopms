@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 su('admin');
 
@@ -12,12 +12,12 @@ function initData()
     $data->branch->range('0-1');
     $data->project->range('0-5');
     $data->execution->range('0-5');
-    $data->title->prefix("BUG")->range('1-5');
+    $data->title->prefix('BUG')->range('1-5');
     $data->openedBuild->range('1-5');
-    $data->type->range("[codeerror]");
-    $data->status->range("[active]");
-    $data->pri->range("[3]");
-    $data->severity->range("[3]");
+    $data->type->range('[codeerror]');
+    $data->status->range('[active]');
+    $data->pri->range('[3]');
+    $data->severity->range('[3]');
 
     $data->gen(4);
 }
@@ -53,8 +53,6 @@ cid=1
 - 测试解决方案为重复Bug时，不输入重复Bug值 @『重复Bug』不能为空。
 
 - 测试解决方案为已修复时，不输入解决版本 @『解决版本』不能为空。
-
-
 
 */
 

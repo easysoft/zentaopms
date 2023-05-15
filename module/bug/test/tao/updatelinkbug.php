@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 su('admin');
 
@@ -14,10 +14,10 @@ function initData()
     $data->execution->range('0-5');
     $data->title->prefix("BUG")->range('1-5');
     $data->openedBuild->range('1-5');
-    $data->type->range("[codeerror]");
-    $data->status->range("[active]");
-    $data->pri->range("[3]");
-    $data->severity->range("[3]");
+    $data->type->range('[codeerror]');
+    $data->status->range('[active]');
+    $data->pri->range('[3]');
+    $data->severity->range('[3]');
 
     $data->gen(5);
 }
