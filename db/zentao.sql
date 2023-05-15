@@ -1272,6 +1272,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
   `reviewer` text NULL,
+  `PMT` text COLLATE 'utf8_general_ci' NOT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `createdVersion` varchar(20) NOT NULL DEFAULT '',
@@ -1306,8 +1307,10 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) NOT NULL DEFAULT 0,
+  `charter` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT 'sprint',
+  `category` char(30) COLLATE 'utf8_general_ci' NOT NULL,
   `lifetime` char(30) NOT NULL DEFAULT '',
   `budget` varchar(30) NOT NULL DEFAULT '0',
   `budgetUnit` char(30) NOT NULL DEFAULT 'CNY',
@@ -1617,7 +1620,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `category` varchar(30) NOT NULL DEFAULT 'feature',
   `pri` tinyint(3) unsigned NOT NULL DEFAULT '3',
   `estimate` float unsigned NOT NULL,
-  `status` enum('','changing','active','draft','reviewing','closed') NOT NULL DEFAULT '',
+  `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
   `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released','closed') NOT NULL DEFAULT 'wait',
@@ -1651,6 +1654,11 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `storyChanged` enum('0','1') NOT NULL DEFAULT '0',
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
+  `BSA` char(30) NOT NULL,
+  `duration` char(30) NOT NULL,
+  `demand` mediumint(8)  NOT NULL,
+  `submitedBy` varchar(30) NOT NULL,
+  `roadmap` VARCHAR(255)  NOT NULL  DEFAULT '',
   `URChanged` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -1658,6 +1666,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   KEY `status` (`status`),
   KEY `assignedTo` (`assignedTo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` mediumint(9) NOT NULL DEFAULT '0',
@@ -13031,6 +13040,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `testEst` char(30) NOT NULL DEFAULT '',
   `devEst` char(30) NOT NULL DEFAULT '',
   `designEst` char(30) NOT NULL DEFAULT '',
+  `end` date NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -13044,13 +13054,14 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `object` mediumint(8) NOT NULL DEFAULT '0',
   `template` mediumint(8) NOT NULL DEFAULT '0',
-  `doc` mediumint(8) NOT NULL DEFAULT '0',
-  `docVersion` smallint(6) NOT NULL DEFAULT '0',
+  `doc` varchar(255) NOT NULL DEFAULT '',
+  `docVersion` varchar(255) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL DEFAULT '',
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `auditedBy` varchar(255) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
+  `begin` date NULL,
   `deadline` date NULL,
   `lastReviewedBy` varchar(255) NOT NULL DEFAULT '',
   `lastReviewedDate` date NULL,
@@ -14781,6 +14792,7 @@ BEGIN
     END IF__DELIMITER__
 END;
 
+-- DROP TABLE IF EXISTS `zt_demandpool`;
 CREATE TABLE `zt_demandpool` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -14795,7 +14807,7 @@ CREATE TABLE `zt_demandpool` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+-- DROP TABLE IF EXISTS `zt_demand`;
 CREATE TABLE `zt_demand` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `pool` int(8) NOT NULL,
@@ -14841,6 +14853,7 @@ CREATE TABLE `zt_demand` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_demandspec`;
 CREATE TABLE `zt_demandspec` (
   `demand` mediumint(9) NOT NULL,
   `version` smallint(6) NOT NULL,
@@ -14851,6 +14864,7 @@ CREATE TABLE `zt_demandspec` (
   UNIQUE KEY `demand` (`demand`,`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_demandreview`;
 CREATE TABLE `zt_demandreview` (
   `demand` mediumint(9) NOT NULL,
   `version` smallint(6) NOT NULL,
@@ -14860,12 +14874,14 @@ CREATE TABLE `zt_demandreview` (
   UNIQUE KEY `demand` (`demand`,`version`,`reviewer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_charter`;
 CREATE TABLE `zt_charter` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `level` int(8) NOT NULL,
   `category` char(30) NOT NULL,
   `market` varchar(30) NOT NULL,
+  `check` enum('0','1') NOT NULL DEFAULT '0',
   `appliedBy` char(30) NOT NULL,
   `appliedDate` datetime NOT NULL,
   `budget` char(30) NOT NULL,
@@ -14877,7 +14893,7 @@ CREATE TABLE `zt_charter` (
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `charterFiles` text NOT NULL,
-  `reviewedBy` char(30) NOT NULL,
+  `reviewedBy` varchar(255) NOT NULL,
   `reviewedResult` char(30) NOT NULL,
   `reviewedDate` datetime NOT NULL,
   `meetingDate` date NOT NULL,
@@ -14890,15 +14906,7 @@ CREATE TABLE `zt_charter` (
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'reviewRules', 'allpass');
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'needReview', 1);
 
-ALTER TABLE `zt_story` ADD `BSA` char(30) NOT NULL AFTER `notifyEmail`;
-ALTER TABLE `zt_story` ADD `duration` char(30) NOT NULL AFTER `notifyEmail`;
-ALTER TABLE `zt_story` ADD `demand` mediumint(8)  NOT NULL AFTER `notifyEmail`;
-ALTER TABLE `zt_product` ADD `PMT` text COLLATE 'utf8_general_ci' NOT NULL AFTER `reviewer`;
-ALTER TABLE `zt_story` ADD `submitedBy` varchar(30) NOT NULL AFTER `changedDate`;
-ALTER TABLE `zt_story` ADD `roadmap` VARCHAR(255)  NOT NULL  DEFAULT ''  AFTER `plan`;
-ALTER TABLE `zt_charter` ADD `check` enum('0','1') NOT NULL DEFAULT '0';
-ALTER TABLE `zt_charter` modify column reviewedBy varchar(255);
-
+-- DROP TABLE IF EXISTS `zt_roadmap`;
 CREATE TABLE `zt_roadmap` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `product` mediumint(8) NOT NULL,
@@ -14915,18 +14923,13 @@ CREATE TABLE `zt_roadmap` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_roadmapstory`;
 CREATE TABLE `zt_roadmapstory` (
   `roadmap` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL,
   `order` MEDIUMINT  UNSIGNED  NOT NULL,
   UNIQUE KEY `roadmap_story` (`roadmap`,`story`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `zt_story` MODIFY `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '' AFTER `estimate`;
-
-ALTER TABLE `zt_project`
-ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`,
-ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `type`;
 
 INSERT INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
 ('概念',        '10',   'concept',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
@@ -14935,9 +14938,3 @@ INSERT INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `
 ('验证',        '15',   'qualify',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('发布',        '10',   'launch',    'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('全生命周期',  '5',    'lifecycle', 'ipd', 'admin', '2020-02-08 21:08:45',  'admin', '2020-02-12 13:50:27',  '0');
-
-ALTER TABLE `zt_review` ADD `begin` date NULL AFTER `createdDate`;
-ALTER TABLE `zt_review` MODIFY `doc` varchar(255);
-ALTER TABLE `zt_review` MODIFY `docVersion` varchar(255);
-
-ALTER TABLE `zt_object` ADD `end` date NULL AFTER `designEst`;
