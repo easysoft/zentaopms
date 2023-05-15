@@ -81,7 +81,6 @@ formPanel
         set::name('name'),
         set::label($lang->project->name),
         set::strong(true),
-        set::placeholder($lang->project->inputProjectName)
     ),
     (!isset($config->setCode) or $config->setCode == 1) ? formGroup
     (
@@ -89,7 +88,6 @@ formPanel
         set::name('code'),
         set::label($lang->project->code),
         set::strong(true),
-        set::placeholder($lang->project->inputProjectCode)
     ) : null,
     ($model == 'waterfall') ? null : formGroup
     (
@@ -98,7 +96,7 @@ formPanel
         set::label($lang->project->multiple),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
-        set::value($multiple),
+        empty($copyProjectID) ? null : set::value($multiple),
         empty($copyProjectID) ? null : formHidden('multiple', $multiple)
     ),
     formGroup
@@ -218,8 +216,7 @@ formPanel
             )
         )
     ),
-    /* TODO handle !empty($products) */
-    $products ? null :
+    empty($products) ? null :
     formRow
     (
         formGroup
