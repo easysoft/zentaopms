@@ -678,7 +678,7 @@ class adminModel extends model
      */
     public function getZentaoData()
     {
-        $zentaoData = $this->loadModel('block')->getZentaoData();
+        $zentaoData = !empty($this->config->zentaoWebsite) ? $this->config->zentaoWebsite : null;
 
         $data = new stdclass();
         $data->hasData = true;
@@ -709,10 +709,10 @@ class adminModel extends model
         }
         else
         {
-            $news        = json_decode($zentaoData['news']);
-            $publicclass = json_decode($zentaoData['publicclass']);
-            $plugins     = json_decode($zentaoData['plugin']);
-            $patches     = json_decode($zentaoData['patch']);
+            $news        = json_decode($zentaoData->news);
+            $publicclass = json_decode($zentaoData->publicclass);
+            $plugins     = json_decode($zentaoData->plugin);
+            $patches     = json_decode($zentaoData->patch);
             if(common::checkNotCN()) array_pop($plugins);
         }
 
