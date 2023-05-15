@@ -604,16 +604,13 @@ class productTest
     /**
      * Test manage line.
      *
-     * @param  array  $param
+     * @param  array  $lines
      * @access public
      * @return void
      */
-    public function manageLineTest($param, $moduleID = 0)
+    public function manageLineTest(array $lines): array
     {
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->manageLine();
-        unset($_POST);
+        $this->objectModel->manageLine($lines);
 
         if(dao::isError())
         {
@@ -621,12 +618,7 @@ class productTest
         }
         else
         {
-            global $tester;
-
-            $moduleID = $moduleID ? $moduleID : $tester->dao->select('id')->from(TABLE_MODULE)->orderby('id desc')->fetch()->id;
-            $object   = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
-
-            return $object;
+            return $this->objectModel->dao->select('id,root,name')->from(TABLE_MODULE)->where('type')->eq('line')->orderby('id desc')->fetchAll('id');
         }
     }
 

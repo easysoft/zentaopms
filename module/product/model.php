@@ -675,8 +675,7 @@ class productModel extends model
         $line->grade  = 1;
 
         /* Get the max order number. */
-        $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
-        $maxOrder = $maxOrder ? $maxOrder : 0;
+        $maxOrder = (int)$this->dao->select("`order`")->from(TABLE_MODULE)->where('type')->eq('line')->orderBy('`order`_desc')->limit(1)->fetch('order');
 
         foreach($lines as $programID => $lineNameList)
         {
@@ -707,13 +706,13 @@ class productModel extends model
                 $lineID = $this->dao->lastInsertID();
 
                 /* Compute product line path and update it. */
-                $path   = ",$lineID,";
+                $path = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
             }
-
-            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
         }
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
     }
 
     /**
