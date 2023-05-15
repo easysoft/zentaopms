@@ -309,7 +309,7 @@ class bugModel extends model
      * Get bug list by browse type.
      *
      * @param  string     $browseType
-     * @param  int|array  $productIdList
+     * @param  array      $productIdList
      * @param  int        $projectID
      * @param  int[]      $executionIdList
      * @param  int|string $branch
@@ -320,25 +320,19 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $browseType, array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if($browseType == 'bymodule' && $this->session->bugBrowseType && $this->session->bugBrowseType != 'bysearch') $browseType = $this->session->bugBrowseType;
+
+        if(!in_array($browseType, $this->config->bug->browseTypeList)) return array();
 
         /* 处理排序。*/
         /* Process sort field. */
         if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
-        $bugList = array();
-        if($browseType == 'bysearch')
-        {
-            $bugList = $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
-        }
-        elseif(in_array($browseType, $this->config->bug->browseTypeList))
-        {
-            $modules = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : array();
-            $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $orderBy, $pager);
-        }
+        $modules = $moduleID ? $this->loadModel('tree')->getAllChildID($moduleID) : array();
+        $bugList = $this->bugTao->getListByBrowseType($browseType, $productIdList, $projectID, $executionIdList, $branch, $modules, $queryID, $orderBy, $pager);
 
         return $this->bugTao->batchAppendDelayedDays($bugList);
     }
@@ -1316,7 +1310,7 @@ class bugModel extends model
 
         if($browseType == 'bySearch')
         {
-            return $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
+            return $this->bugTao->getBySearch((array)$bug->product, 'all', 0, $queryID, $bugIDList, 'id', $pager);
         }
         else
         {
@@ -2409,82 +2403,6 @@ class bugModel extends model
         return $this->dao->select('issueKey')->from(TABLE_BUG)
             ->where('issueKey')->like("$sonarqubeID:%")
             ->fetchPairs();
-    }
-
-    /**
-     * Get bugs by search.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  int         $queryID
-     * @param  string      $orderBy
-     * @param  string      $excludeBugs
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getBySearch($productIDList, $branch = 0, $queryID = 0, $orderBy = '', $excludeBugs = '', $pager = null, $projectID = 0)
-    {
-        if($queryID)
-        {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
-            {
-                $this->session->set('bugQuery', $query->sql);
-                $this->session->set('bugForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('bugQuery', ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($this->session->bugQuery === false) $this->session->set('bugQuery', ' 1 = 1');
-        }
-
-        $bugQuery = $this->getBugQuery($this->session->bugQuery);
-
-        /* If search criteria don't have products, append the selected product from the top left dropdown-menu. */
-        if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
-        if(strpos($bugQuery, '`product`') === false)
-        {
-            $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
-        }
-        else
-        {
-            $productParis  = $this->loadModel('product')->getPairs('', 0, '', 'all');
-            $productIDList = array_keys($productParis);
-
-            if(!empty($productIDList))
-            {
-                $productIDList = implode(',', $productIDList);
-                $bugQuery     .= ' AND `product` IN (' . $productIDList . ')';
-            }
-        }
-
-        $allBranch = "`branch` = 'all'";
-        $branch    = trim($branch, ',');
-        if(strpos($branch, ',') !== false) $branch = str_replace(',', "','", $branch);
-        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
-        if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
-
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)->where($bugQuery)
-            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
-            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-
-            ->beginIF($projectID)
-            ->andWhere('project', true)->eq($projectID)
-            ->orWhere('project')->eq(0)
-            ->andWhere('openedBuild')->eq('trunk')
-            ->markRight(1)
-            ->fi()
-
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)
-            ->fetchAll();
     }
 
     /**

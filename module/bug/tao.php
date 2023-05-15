@@ -26,20 +26,22 @@ class bugTao extends bugModel
      * 通过浏览类型获取 bug 列表。
      *
      * @param  string     $browseType
-     * @param  int|array  $productIdList
+     * @param  array      $productIdList
      * @param  int        $projectID
      * @param  int[]      $executionIdList
      * @param  int|string $branch
      * @param  array      $moduleIdList
+     * @param  int        $queryID
      * @param  string     $orderBy
      * @param  object     $pager
      * @access protected
      * @return array
      */
-    protected function getListByBrowseType(string $browseType, int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, object $pager = null): array
+    protected function getListByBrowseType(string $browseType, array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, int $queryID, string $orderBy, object $pager = null): array
     {
         $browseType = strtolower($browseType);
 
+        if($browseType == 'bysearch')    return $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
         if($browseType == 'needconfirm') return $this->getNeedConfirmList($productIdList, $projectID, $executionIdList, $branch, $moduleIdList, $orderBy, $pager);
 
         $lastEditedDate = '';
@@ -94,10 +96,50 @@ class bugTao extends bugModel
     }
 
     /**
+     * 搜索 bug。
+     * Search bugs.
+     *
+     * @param  array      $productIdList
+     * @param  int|string $branch
+     * @param  int        $projectID
+     * @param  int        $queryID
+     * @param  string     $orderBy
+     * @param  string     $excludeBugs
+     * @param  object     $pager
+     * @access public
+     * @return array
+     */
+    protected function getBySearch(array $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null)
+    {
+        $bugQeury = $this->processSearchQuery($queryID, $productIdList, $branch);
+
+        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+            ->where($bugQuery)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('project')->in('0,' . $this->app->user->view->projects)
+            ->andWhere('execution')->in('0,' . $this->app->user->view->sprints)
+            ->fi()
+
+            ->beginIF($projectID)
+            ->andWhere('project', true)->eq($projectID)
+            ->orWhere('project')->eq(0)
+            ->andWhere('openedBuild')->eq('trunk')
+            ->markRight(1)
+            ->fi()
+
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * 获取需要确认需求变动的 bug 列表。
      * Get bug list that related story need to be confirmed.
      *
-     * @param  int|array  $productIdList
+     * @param  array      $productIdList
      * @param  int        $projectID
      * @param  int[]      $executionIdList
      * @param  int|string $branch
@@ -107,7 +149,7 @@ class bugTao extends bugModel
      * @access protected
      * @return array
      */
-    protected function getNeedConfirmList(int|array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, object $pager = null): array
+    protected function getNeedconfirmList(array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, object $pager = null): array
     {
         return $this->dao->select("t1.*, t2.title AS storyTitle, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -339,5 +381,57 @@ class bugTao extends bugModel
         $this->action->logHistory($actionID, $changes);
 
         return array($bug, $oldBug);
+    }
+
+    /**
+     * 处理搜索的查询语句。
+     * Process search query.
+     *
+     * @param  int        $queryID
+     * @param  array      $productIdList
+     * @param  int|string $branch
+     * @access protected
+     * @return string
+     */
+    private function processSearchQuery(int $queryID, array $productIdList, int|string $branch): string
+    {
+        /* 设置 bug 查询的 session。*/
+        /* Set the session of bug query. */
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+
+            if($query)
+            {
+                $this->session->set('bugQuery', $query->sql);
+                $this->session->set('bugForm', $query->form);
+            }
+        }
+        if($this->session->bugQuery === false) $this->session->set('bugQuery', ' 1 = 1');
+
+        $bugQuery = $this->getBugQuery($this->session->bugQuery);
+
+        /* 在 bug 的查询中加上产品的限制。*/
+        /* Append product condition in bug query. */
+        if(strpos($bugQuery, '`product`') !== false)
+        {
+            $productParis  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $productIdList = array_keys($productParis);
+        }
+        $productIdList = implode(',', $productIdList);
+        $bugQuery .= ' AND `product` IN (' . $productIdList . ')';
+
+        /* 如果查询中没有分支条件，获取主干和当前分支下的 bug。*/
+        /* If there is no branch condition in query, append it that is main and current . */
+        $branch = trim($branch, ',');
+        if(strpos($branch, ',') !== false) $branch = str_replace(',', "','", $branch);
+        if($branch !== 'all' && strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
+
+        /* 将所有分支条件替换成 1。*/
+        /* Replace the condition of all branch to 1. */
+        $allBranch = "`branch` = 'all'";
+        if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
+
+        return $bugQuery;
     }
 }
