@@ -34,7 +34,7 @@ function printPreference()
                 set::control(array
                 (
                     'type'  => 'select',
-                    'items' => $URSRList
+                    'items' => $config->URSRList
                 ))
             ),
             $config->systemMode == 'ALM' ? formGroup

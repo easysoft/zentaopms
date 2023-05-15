@@ -26,12 +26,12 @@ function getGuideTabs(string $blockNavCode): array
     $selected = key($lang->block->guideTabs);
     foreach($lang->block->guideTabs as $tab => $tabName)
     {
-        //if(strpos($tab, 'download') !== false && (!isset($config->xxserver->installed) || !$config->xuanxuan->turnon)) continue;
-        //if($tab == 'downloadMoblie' && common::checkNotCN()) continue;
-        //if(($tab == 'preference' || $tab == 'systemMode') && $config->vision == 'lite') continue;
-        //if($tab == 'systemMode' && !common::hasPriv('custom', 'mode')) continue;
-        //if($tab == 'preference' && !common::hasPriv('my', 'preference')) continue;
-        //if($tab == 'visionSwitch' && !strpos($app->user->visions, ',')) continue;
+        if(strpos($tab, 'download') !== false && (!isset($config->xxserver->installed) || !$config->xuanxuan->turnon)) continue;
+        if($tab == 'downloadMoblie' && common::checkNotCN()) continue;
+        if(($tab == 'preference' || $tab == 'systemMode') && $config->vision == 'lite') continue;
+        if($tab == 'systemMode' && !common::hasPriv('custom', 'mode')) continue;
+        if($tab == 'preference' && !common::hasPriv('my', 'preference')) continue;
+        if($tab == 'visionSwitch' && !strpos($app->user->visions, ',')) continue;
 
         $navTabs[] = li
         (
@@ -85,6 +85,7 @@ function getGuideInfo($blockNavID): array
 }
 
 $blockNavCode = 'nav-' . uniqid();
+$config->URSRList = $URSRList;
 div
 (
     set('class', 'guide-block of-hidden'),
