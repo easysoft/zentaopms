@@ -716,17 +716,18 @@ class bugZen extends bug
     }
 
     /**
-     * 解析extras，如果bug来源于某个对象（bug, case, testtask, todo），使用对象的一些属性对bug赋值。
+     * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。
      * Extract extras, if bug come from an object(bug, case, testtask, todo), get some value from object.
      *
      * @param  object $bug
-     * @param  array $output
+     * @param  array  $output
      * @return object
      */
     protected function extractObjectFromExtras(object $bug, array $output): object
     {
         extract($output);
 
+        /* 获取用例的标题、步骤、所属需求、所属模块、版本、所属执行。 */
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
         if(isset($runID) and $runID and isset($resultID) and $resultID)
         {
@@ -739,6 +740,7 @@ class bugZen extends bug
             $bug    = $this->updateBug($bug, $fields);
         }
 
+        /* 获得bug的所属项目、所属模块、所属执行、关联产品、关联任务、关联需求、关联版本、关联用例、标题、步骤、严重程度、类型、指派给、截止日期、操作系统、浏览器、抄送给、关键词、颜色、所属测试单、反馈人、通知邮箱、优先级。 */
         /* Get projectID, moduleID, executionID, productID, taskID, storyID, buildID, caseID, title, steps, severity, type, assignedTo, deadline, os, browser, mailto, keywords, color, testtask, feedbackBy, notifyEmail, pri from case. */
         if(isset($bugID) and $bugID)
         {
@@ -752,6 +754,7 @@ class bugZen extends bug
             $bug = $this->updateBug($bug, $fields);
         }
 
+        /* 获取测试单的版本。 */
         /* Get buildID from testtask. */
         if(isset($testtask) and $testtask)
         {
@@ -759,6 +762,7 @@ class bugZen extends bug
             $bug      = $this->updateBug($bug, array('buildID' => $testtask->build));
         }
 
+        /* 获得代办的标题、步骤和优先级。 */
         /* Get title, steps, pri from todo. */
         if(isset($todoID) and $todoID)
         {
@@ -784,22 +788,28 @@ class bugZen extends bug
         extract($output);
         $currentProduct = $this->product->getById($bug->productID);
 
+        /* 获取分支，如果模块菜单是空的，则返回到模块维护页面。 */
         /* Get branches, if moduleOptionMenu is empty, return. */
         $bug = $this->getBranches4Create($bug, $currentProduct);
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
-        /* TODO: 返回方式应该返回一个数组，暂时不知道怎么返回。 */
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
+        /* 获得版本下拉和需求下拉列表。 */
         /* Get builds and stroies. */
         $bug = $this->getBuildsAndStories4Create($bug);
-        /* Get project,. */
+        /* 如果bug有所属项目，查询这个项目。 */
+        /* Get project. */
         if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($projectID)));
+        /* 获得产品下拉和项目下拉列表。 */
         /* Get products and projects. */
         $bug = $this->getProductsAndProjects4Create($bug);
+        /* 追加下拉列表的内容。 */
         /* Append projects. */
         $bug = $this->appendProjects4Create($bug, (isset($bugID) ? $bugID : 0));
+        /* 获得项目的管理方式。 */
         /* Get project model. */
         $bug = $this->getProjectModel4Create($bug);
+        /* 获得执行下拉列表。 */
         /* Get executions. */
         $bug = $this->getExecutions4Create($bug);
 
