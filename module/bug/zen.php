@@ -848,7 +848,7 @@ class bugZen extends bug
 
     /**
      * 将$bug对象的属性添加到view对象中。
-     * Add the prop of the $butTpl object to the view object
+     * Add the prop of the $bug object to the view object.
      *
      * @param  object $bug
      * @return void
