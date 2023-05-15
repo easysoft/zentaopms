@@ -30,17 +30,12 @@ class formBatchPanel extends formPanel
      */
     protected static $defineProps = array
     (
-        /* Min rows count */
-        'minRows?: int',
-
-        /* Max rows count */
-        'maxRows?: int',
-
-        /* Default rows data */
-        'data?: array',
-
-        /* Batch operation mode */
-        'mode?: string'
+        'items?: array[]',      // 使用一个列定义对象数组来定义批量表单项。
+        'minRows?: int',        // 最小显示的行数目。
+        'maxRows?: int',        // 最多显示的行数目。
+        'data?: array[]',       // 初始化行数据。
+        'mode?: string',        // 批量操作模式，可以为 `'add'`（批量添加） 或 `'edit'`（批量编辑）。
+        'actionsText?: string', // 操作列头部文本，如果不指定则使用 `$lang->actions` 的值。
     );
 
     /**

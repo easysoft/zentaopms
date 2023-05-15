@@ -30,22 +30,23 @@ class formBatchItem extends wg
      */
     protected static $defineProps = array
     (
-        'name: string',
-        'label: string|bool',
-        'labelClass?: string',
-        'labelProps?: string',
-        'required?:bool|string="auto"',
-        'control?: array|string',
-        'width?: number|string',
-        'value?: string|array',
-        'disabled?: bool',
-        'items?: array',
-        'placeholder?: string',
-        'tip?: string',
-        'tipClass?: string',
-        'tipIcon?: string="info-sign"',
-        'tipProps?: string',
-        'ditto?: bool'
+        'name: string',                 // 表单项名称，无需包含 `[]`。
+        'label: string|bool',           // 列标题。
+        'labelClass?: string',          // 列标题类名。
+        'labelProps?: string',          // 列标题属性，例如 `array('data-toggle' => 'tooltip', 'data-title' 。=> 'This is a tip')`
+        'required?:bool|string="auto"', // 是否必填，如果设置为 `"auto"`，则自动从当前模块 config 中查询。
+        'control?: array|string',       // 控件类型或控件配置。
+        'width?: number|string',        // 列宽度，如果设置为 `"auto"` 则自动填充剩余宽度。
+        'minWidth?: number|string',     // 列最小宽度。
+        'value?: string|array',         // 默认值。
+        'disabled?: bool',              // 是否禁用。
+        'items?: array',                // 选项，当控件类型为下拉菜单时使用此属性指定下拉菜单项。
+        'placeholder?: string',         // 占位文本。
+        'tip?: string',                 // 显示在列标题上的提示文本。
+        'tipClass?: string',            // 列标题上的提示触发按钮类名。
+        'tipIcon?: string="info-sign"', // 列标题上的提示触发按钮图标。
+        'tipProps?: string',            // 列标题上的提示触发按钮其他属性。
+        'ditto?: bool'                  // 是否显示同上按钮。
     );
 
     /**

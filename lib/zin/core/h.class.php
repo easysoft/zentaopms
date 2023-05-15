@@ -17,7 +17,7 @@ require_once __DIR__ . DS . 'wg.func.php';
 
 class h extends wg
 {
-    protected static $defineProps = 'tagName, selfClose?:bool=false';
+    protected static $defineProps = 'tagName, selfClose?:bool';
 
     public function getTagName()
     {
@@ -288,5 +288,5 @@ class h extends wg
         return [$code, $args];
     }
 
-    public static $selfCloseTags = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+    public static $selfCloseTags = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr');
 }

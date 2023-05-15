@@ -19,22 +19,14 @@ class formBase extends wg
 {
     protected static $defineProps = array
     (
-        'id?: string',
-        'method?: string',
-        'url?: string',
-        'actions?: array',
-        'actionsClass?: string',
-        'target?: string',
-        'submitBtnText?: string',
-        'cancelBtnText?: string',
-    );
-
-    protected static $defaultProps = array
-    (
-        'id'            => '$GID',
-        'method'        => 'post',
-        'target'        => 'ajax',
-        'actions'       => ['submit', 'cancel'],
+        'id?: string="$GID"',               // ID，如果不指定则自动生成（使用 zin 部件 GID）。
+        'method?: "get"|"post"="post"',     // 表单提交方式。
+        'url?: string',                     // 表单提交地址。
+        'actions?: array=["submit","cancel"]', // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
+        'actionsClass?: string',            // 表单操作按钮栏类名。
+        'target?: string="ajax"',           // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
+        'submitBtnText?: string',           // 表单提交按钮文本，如果不指定则使用 `$lang->save` 的值。
+        'cancelBtnText?: string',           // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
     );
 
     protected function buildActions(): wg|null

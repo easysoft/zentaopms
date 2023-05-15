@@ -3,20 +3,21 @@ namespace zin;
 
 class panel extends wg
 {
-    protected static $defineProps = array(
-        'class?: string="rounded shadow ring-0 canvas"',
-        'size?: string',
-        'title?: string',
-        'titleClass?: string',
-        'titleProps?: array',
-        'headingClass?: string',
-        'headingProps?: array',
-        'headingActions?: array',
-        'bodyClass?: string',
-        'bodyProps?: array',
-        'footerActions?: array',
-        'footerClass?: string',
-        'footerProps?: array',
+    protected static $defineProps = array
+    (
+        'class?: string="rounded shadow ring-0 canvas"', // 类名。
+        'size?: "sm"|"lg"',         // 额外尺寸。
+        'title?: string',           // 标题。
+        'titleClass?: string',      // 标题类名。
+        'titleProps?: array',       // 标题属性。
+        'headingClass?: string',    // 标题栏类名。
+        'headingProps?: array',     // 标题栏属性。
+        'headingActions?: array[]', // 标题栏操作按钮。
+        'bodyClass?: string',       // 主体类名。
+        'bodyProps?: array',        // 主体属性。
+        'footerActions?: array[]',  // 底部操作按钮。
+        'footerClass?: string',     // 底部类名。
+        'footerProps?: array'       // 底部属性。
     );
 
     static $defineBlocks = array
