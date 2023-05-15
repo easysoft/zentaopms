@@ -46,7 +46,8 @@ class projectStory extends control
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         /* Set product list for export. */
-        $this->session->set('exportProductList', $this->products);
+        $this->session->set('exportProductList',  $this->products);
+        $this->session->set('executionStoryList', $this->app->getURI(true));
         if($storyType == 'requirement')
         {
             unset($this->lang->projectstory->featureBar['story']['linkedExecution']);
