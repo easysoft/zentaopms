@@ -13,7 +13,7 @@ namespace zin;
 
 function printSystemMode()
 {
-    global $lang, $config;
+    global $lang, $config, $app;
 
     $modes = array();
     $usedMode = zget($config->global, 'mode', 'light');
@@ -22,9 +22,56 @@ function printSystemMode()
         $modes[] = cell
         (
             set('class', 'flex-1 block mr-4 ' . ($usedMode == $mode ? 'active' : '')),
-            div
+            $usedMode != $mode && $mode == 'light' && !empty($config->programs) ? modalTrigger
             (
-                set('class', 'w-full state'),
+                to::trigger(div
+                (
+                    set('class', 'w-full state'),
+                    img
+                    (
+                        set('class', 'p-4'),
+                        set('src', $config->webRoot . "theme/default/images/guide/{$mode}_" . (common::checkNotCN() ? 'en' : 'cn') . ".png")
+                    ),
+                    div
+                    (
+                        set('class', 'px-4 pb-2'),
+                        div(set('class', 'pb-2'), span(set('class', 'font-bold'), $modeName)),
+                        span(set('class', 'text-sm text-gray'), $lang->block->customModeTip->{$mode})
+                    )
+                )),
+                set('size', '550'),
+                modal
+                (
+                    set::title($lang->custom->selectDefaultProgram),
+                    form
+                    (
+                        set::actions(array('submit')),
+                        set::url(helper::createLink('custom', 'mode')),
+                        div(set('class', 'secondary-pale p-4'), span($lang->custom->selectProgramTips)),
+                        formGroup
+                        (
+                            set('class', 'hidden'),
+                            set::name('mode'),
+                            set::value('light'),
+                            set::control(array('type' => 'input'))
+                        ),
+                        formGroup
+                        (
+                            set::value($config->programID),
+                            set::label($lang->custom->defaultProgram),
+                            set::name('defaultProgram'),
+                            set::control(array
+                            (
+                                'type'  => 'select',
+                                'items' => $config->programs
+                            ))
+                        )
+                    )
+                )
+            ) : div
+            (
+                set('class', 'w-full mode-block ' . ($usedMode != $mode ? 'state' : '')),
+                set('data-mode', $mode),
                 img
                 (
                     set('class', 'p-4'),

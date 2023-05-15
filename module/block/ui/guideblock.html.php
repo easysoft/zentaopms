@@ -38,7 +38,8 @@ function getGuideTabs(string $blockNavCode): array
             set('class', 'nav-item w-full' . ($tab == $selected ? ' active' : '')),
             a
             (
-                set('class', 'ellipsis text-dark'),
+                set('class', 'ellipsis guide-tab text-dark'),
+                set('data-tab', $tab),
                 set('data-toggle', 'tab'),
                 set('href', "#tab{$blockNavCode}Content{$tab}"),
                 $tabName
@@ -84,8 +85,14 @@ function getGuideInfo($blockNavID): array
     return $tabItems;
 }
 
+
 $blockNavCode = 'nav-' . uniqid();
-$config->URSRList = $URSRList;
+$config->URSRList  = $URSRList;
+$config->programID = $programID;
+$config->programs  = $programs;
+
+$usedMode = zget($config->global, 'mode', 'light');
+jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));
 div
 (
     set('class', 'guide-block of-hidden'),
