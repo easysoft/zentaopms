@@ -712,9 +712,16 @@ class product extends control
         $this->app->loadLang('tree');
         if($_POST)
         {
-            $this->product->manageLine();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::reload('parent'));
+            /* 从POST中获取数据，并预处理数据。 */
+            /* Get data form post and prepare data. */
+            $data  = form::data($this->config->product->form->manageLine);
+            $lines = $this->productZen->prepareManageLineExtras($data);
+            if($lines === false) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* 添加或更新产品线。 */
+            /* Add or update product line. */
+            $response = $this->product->manageLine($lines);
+            return $this->send($response);
         }
 
         $this->productZen->buildManageLineForm();

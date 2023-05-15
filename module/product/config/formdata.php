@@ -52,3 +52,4 @@ $config->product->form->close['status'] = array('type' => 'string', 'control' =>
 $config->product->form->manageLine = array();
 $config->product->form->manageLine['products'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');
 $config->product->form->manageLine['programs'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');
+$config->product->form->manageLine['modules']  = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');

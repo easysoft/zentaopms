@@ -789,6 +789,45 @@ class productZen extends product
     }
 
     /**
+     * 预处理产品线数据。
+     * Prepare manage line extras.
+     *
+     * @param  form      $form
+     * @access protected
+     * @return array|false
+     */
+    protected function prepareManageLineExtras(form $form): array|false
+    {
+        $data = $form->get();
+
+        /* When there are products under the line, the program cannot be modified  */
+        if(!$this->canChangeProgram($data)) return false;
+
+        /* 拼装产品线列表。列表项目集编号为键，该项目集下的产品线名称列表为值。 */
+        /* Build product line list. The program id as key, line name list as value. */
+        $lines = array();
+        foreach($data->modules as $id => $name)
+        {
+            if(empty($name)) continue;
+            if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
+            {
+                dao::$errors[] = $this->lang->product->programEmpty;
+                return false;
+            }
+
+            $programID = $data->programs[$id];
+            if(!isset($lines[$programID])) $lines[$programID] = array();
+            if(in_array($name, $lines[$programID]))
+            {
+                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $name);
+                return false;
+            }
+            $lines[$programID][$id] = $name;
+        }
+        return $lines;
+    }
+
+    /**
      * 成功插入产品数据后，其他的额外操作。
      * Process after create product.
      *
@@ -1607,5 +1646,38 @@ class productZen extends product
         $hour->progress      = 0;
 
         return $hour;
+    }
+
+    /**
+     * 如果修改产品线的项目集，检查该产品线下是否有关联产品。如果有关联产品将不能修改项目集。
+     * If the program of a product line changed, check whether there are related products under the product line. If there is an associated product, the program can not be modified.
+     *
+     * @param  object    $lines
+     * @access protected
+     * @return bool
+     */
+    protected function canChangeProgram(object $lines): bool
+    {
+        if($this->config->systemMode != 'ALM') return true;
+
+        /* 获取修改项目集的产品线。 */
+        /* Get the product lines which program change. */
+        $oldLines = $this->product->getLines();
+        $changedProgramLines = array();
+        foreach($oldLines as $oldLine)
+        {
+            $oldLineID = 'id' . $oldLine->id;
+            if($lines->programs[$oldLineID] != $oldLine->root) $changedProgramLines[$oldLine->id] = $oldLine->name;
+        }
+
+        /* 检查修改项目集的产品线下是否有关联产品。 */
+        /* Check whether there are related products under the product line. */
+        if($changedProgramLines)
+        {
+            $hasProductLines = $this->dao->select('id,line')->from(TABLE_PRODUCT)->where('line')->in(array_keys($changedProgramLines))->fetchPairs('line', 'line');
+            foreach($hasProductLines as $lineID) dao::$errors["id{$lineID}"][] = sprintf($this->lang->product->changeLineError, $changedProgramLines[$lineID]);
+            if(dao::isError()) return false;
+        }
+        return true;
     }
 }

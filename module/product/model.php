@@ -659,80 +659,60 @@ class productModel extends model
     }
 
     /**
-     * Manage line.
+     * 添加或更新产品线。
+     * Add or update product line.
      *
+     * @param  array  $lines
      * @access public
-     * @return void
+     * @return array
      */
-    public function manageLine()
+    public function manageLine(array $lines): array
     {
-        $oldLines = $this->getLines();
-        $data     = fixer::input('post')->get();
-
-        /* When there are products under the line, the program cannot be modified  */
-        if($this->config->systemMode == 'ALM')
-        {
-            foreach($oldLines as $oldLine)
-            {
-                $oldLineID = 'id' . $oldLine->id;
-                if($data->programs[$oldLineID] != $oldLine->root)
-                {
-                    $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
-                    if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
-                }
-            }
-        }
-
-        $line = new stdClass();
+        /* Init product line object. */
+        $line = new stdclass();
         $line->type   = 'line';
         $line->parent = 0;
         $line->grade  = 1;
 
+        /* Get the max order number. */
         $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
         $maxOrder = $maxOrder ? $maxOrder : 0;
 
-        $lines = array();
-        foreach($data->modules as $id => $name)
+        foreach($lines as $programID => $lineNameList)
         {
-            if(empty($name)) continue;
-            if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
+            foreach($lineNameList as $lineID => $lineName)
             {
-                dao::$errors[] = $this->lang->product->programEmpty;
-                return false;
-            }
+                $isInsert = is_numeric($lineID);
+                if(!$isInsert) $lineID = str_replace('id', '', $lineID);
 
-            $programID = $data->programs[$id];
-            if(!isset($lines[$programID])) $lines[$programID] = array();
-            if(in_array($name, $lines[$programID]))
-            {
-                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $name);
-                return false;
-            }
-            $lines[$programID][] = $name;
-        }
+                /* Build product line data. */
+                $line->name = strip_tags(trim($lineName));
+                $line->root = $programID;
+                if($isInsert)
+                {
+                    $maxOrder   += 10; //Reserve for extension. Increment the order number by 10.
+                    $line->order = $maxOrder;
+                }
 
-        foreach($data->modules as $id => $name)
-        {
-            if(empty($name)) continue;
+                /* Update product line. */
+                if(!$isInsert)
+                {
+                    unset($line->order);
+                    $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
+                    continue;
+                }
 
-            $line->name = strip_tags(trim($name));
-            $line->root = $data->programs[$id];
-
-            if(is_numeric($id))
-            {
-                $maxOrder += 10;
-                $line->order = $maxOrder;
-
+                /* Insert product line. */
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
                 $lineID = $this->dao->lastInsertID();
+
+                /* Compute product line path and update it. */
                 $path   = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
             }
-            else
-            {
-                $lineID = str_replace('id', '', $id);
-                $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
-            }
+
+            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
         }
     }
 
