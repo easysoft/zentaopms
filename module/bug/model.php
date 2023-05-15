@@ -940,6 +940,10 @@ class bugModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        /* If the edition is not pms, update feedback. */
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
         return common::createChanges($oldBug, $bug);
     }
 
