@@ -543,7 +543,7 @@ class adminModel extends model
             $plugins[] = $extension;
         }
 
-        return $this->loadModel('block')->setZentaoData($type, $plugins);
+        return $this->loadModel('setting')->setItem("system.common.zentaoWebsite.$type", json_encode($plugins));
     }
 
     /**
@@ -592,7 +592,7 @@ class adminModel extends model
             $index ++;
         }
 
-        return $this->loadModel('block')->setZentaoData('publicclass', $publicClass);
+        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.publicclass', json_encode($publicClass));
     }
 
     /**
@@ -626,7 +626,7 @@ class adminModel extends model
             $index ++;
         }
 
-        return $this->loadModel('block')->setZentaoData('news', $news);
+        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.news', json_encode($news));
     }
 
     /**
