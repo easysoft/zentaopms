@@ -12,9 +12,9 @@ $config->block->product->dtable->fieldList['name']['sortType'] = 1;
 $config->block->product->dtable->fieldList['name']['width']    = 250;
 $config->block->product->dtable->fieldList['name']['type']     = 'link';
 
-$config->block->product->dtable->fieldList['manager']['name']         = 'po';
-$config->block->product->dtable->fieldList['manager']['title']        = $lang->product->manager;
-$config->block->product->dtable->fieldList['manager']['type']         = 'avatarBtn';
+$config->block->product->dtable->fieldList['manager']['name']     = 'product';
+$config->block->product->dtable->fieldList['manager']['title']    = $lang->product->manager;
+$config->block->product->dtable->fieldList['manager']['type']     = 'avatarBtn';
 $config->block->product->dtable->fieldList['manager']['sortType'] = 1;
 $config->block->product->dtable->fieldList['manager']['minWidth'] = 100;
 
