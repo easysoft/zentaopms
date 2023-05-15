@@ -1002,7 +1002,7 @@ function programMenu()
 /**
  * Zentao module menu widget.
  *
- * int    productID
+ * array  modules
  * int    activeKey
  * string closeLink
  */

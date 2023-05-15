@@ -1,22 +1,23 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 class moduleMenu extends wg
 {
-    private $modules = [];
+    private $modules = array();
 
     protected static $defineProps = array(
-        'productID:int',
+        'modules:array',
         'activeKey:int',
         'closeLink:string'
     );
 
-    public static function getPageCSS()
+    public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildMenuTree($parentItems, $parentID)
+    private function buildMenuTree(array $parentItems, int|string $parentID): array
     {
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
@@ -32,29 +33,29 @@ class moduleMenu extends wg
         return $parentItems;
     }
 
-    private function getChildModule($id)
+    private function getChildModule(int|string $id): array
     {
         return array_filter($this->modules, fn($module) => $module->parent == $id);
     }
 
-    private function setMenuTreeProps()
+    private function setMenuTreeProps(): void
     {
-        global $app;
-        $id = $this->prop('productID');
-        $this->setProp('productID', null);
-        $this->modules = $app->loadTarget('tree')->getProductStructure($id, 'story');
+        $this->modules = $this->prop('modules');
         $this->setProp('items', $this->buildMenuTree([], 0));
         $this->setDefaultProps(array('activeClass' => 'active'));
     }
 
-    private function getTitle($activeKey)
+    private function getTitle($activeKey): string
     {
         foreach($this->modules as $module)
-            if($module->id == $activeKey)
-                return $module->name;
+        {
+            if($module->id == $activeKey) return $module->name;
+        }
+
+        return '';
     }
 
-    protected function build()
+    protected function build(): wg
     {
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
@@ -74,6 +75,7 @@ class moduleMenu extends wg
                 )
             );
         }
+
         return div
         (
             setClass('module-menu rounded shadow-sm'),
@@ -86,10 +88,7 @@ class moduleMenu extends wg
                 ),
                 $closeBtn
             ),
-            h::main
-            (
-                zui::menutree(inherit($this))
-            ),
+            h::main(zui::menutree(inherit($this))),
             div
             (
                 setClass('setting-btns'),
