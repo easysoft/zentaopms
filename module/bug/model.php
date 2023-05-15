@@ -385,8 +385,8 @@ class bugModel extends model
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->bugTao->getNameFromTable($bug->duplicateBug, TABLE_BUG, 'title');
         if($bug->case)         $bug->caseTitle         = $this->bugTao->getNameFromTable($bug->case, TABLE_CASE, 'title');
         if($bug->linkBug)      $bug->linkBugTitles     = $this->bugTao->getBugPairsByList($bug->linkBug);
-        if($bug->toStory)      $bug->toStoryTitle      = $this->bugTao->getNameFormTable($bug->toStory, TABLE_STORY, 'title');
-        if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFormTable($bug->toTask, TABLE_TASK, 'name');
+        if($bug->toStory)      $bug->toStoryTitle      = $this->bugTao->getNameFromTable($bug->toStory, TABLE_STORY, 'title');
+        if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask, TABLE_TASK, 'name');
 
         $bug->linkMRTitles = $this->mr->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
