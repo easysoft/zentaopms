@@ -765,11 +765,12 @@ $(function()
     var taskModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%'});
     gantt.attachEvent('onTaskClick', function(id, e)
     {
+        if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
+
         var task = gantt.getTask(id);
         if(task.type == 'point' && task.rawStatus) location.href = createLink('review', 'view', 'reviewID=' + task.reviewID);
         if(task.type == 'plan')                    window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
 
-        if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
         if($(e.srcElement).hasClass('icon-confirm'))
         {
             var pointAttr = JSON.parse(reviewPoints);
