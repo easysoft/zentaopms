@@ -6,8 +6,12 @@ require_once dirname(__DIR__) . DS . 'modaldialog' . DS . 'v1.php';
 class modal extends modalDialog
 {
     static $defineProps = array(
-        'id?: string="$GID"',
-        'modalProps?: array=array()'
+        'id?:string="$GID"',
+        'modalProps?:array'
+    );
+
+    static $defaultProps = array(
+        'modalProps' => array()
     );
 
     protected function build()
