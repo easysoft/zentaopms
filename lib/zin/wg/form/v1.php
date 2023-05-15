@@ -49,7 +49,7 @@ class form extends formBase
         list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));
         $props = parent::buildProps();
         if($grid)               $props[] = set::class('form-grid');
-        if(!empty($labelWidth)) $props[] = setCssVar('form-label-width', $labelWidth);
+        if(!empty($labelWidth)) $props[] = setCssVar('form-grid-label-width', $labelWidth);
 
         return $props;
     }
