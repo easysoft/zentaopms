@@ -659,6 +659,36 @@ class productModel extends model
     }
 
     /**
+     * 更新排序。
+     * Sort order field.
+     *
+     * @param  array  $sortedIdList
+     * @access public
+     * @return void
+     */
+    public function sort(array $sortedIdList): void
+    {
+        /* Remove programID. */
+        $sortedIdList = array_values(array_filter(array_map(function($id){return (is_numeric($id) and $id > 0) ? $id : null;}, $sortedIdList)));
+        if(empty($sortedIdList)) return;
+
+        /* Get the list of products before sorting. */
+        $products = $this->dao->select('t1.`order`, t1.id')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.id')->in($sortedIdList)
+            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+            ->fetchPairs('order', 'id');
+
+        /* Update order by sorted id list. */
+        foreach($products as $order => $id)
+        {
+            $newID = array_shift($sortedIdList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+        }
+    }
+
+    /**
      * 添加或更新产品线。
      * Add or update product line.
      *

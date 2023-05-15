@@ -553,27 +553,15 @@ class product extends control
      */
     public function sort()
     {
-        /* Init vars. */
-        $idList  = explode(',', trim($this->post->products, ','));
+        /* Can only be order by program sorting. */
         $orderBy = $this->post->orderBy;
         if(strpos($orderBy, 'program') === false) return false;
 
-        /* Remove programID. */
-        $idList = array_filter(array_map(function($id){return is_numeric($id) ? $id : null;}, $idList));
+        /* Get sorted id list. */
+        $sortedIdList = explode(',', trim($this->post->products, ','));
 
-        /* Update order. */
-        $products = $this->dao->select('t1.`order`, t1.id')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.id')->in($idList)
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-            ->fetchPairs('order', 'id');
-
-        foreach($products as $order => $id)
-        {
-            $newID = array_shift($idList);
-            if($id == $newID) continue;
-            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
-        }
+        /* Sort by sorted id list. */
+        $this->product->sort($sortedIdList);
     }
 
     /**

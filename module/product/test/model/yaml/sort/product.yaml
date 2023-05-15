@@ -1,0 +1,10 @@
+title: Build product data.
+desc: Build product data.
+author: wangyidong
+version: 1.0.0
+
+fields:
+  - field: program
+    range: '0'
+  - field: line
+    range: '0'

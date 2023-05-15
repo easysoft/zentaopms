@@ -1159,4 +1159,20 @@ class productTest
 
         return array('hasProduct' => $hasProduct, 'hasBranch' => $hasBranch);
     }
+
+    /**
+     * 测试 sort 方法。
+     * Test sort method.
+     *
+     * @param  array $sortedIdList
+     * @access public
+     * @return string
+     */
+    public function sortTest(array $sortedIdList): string
+    {
+        $this->objectModel->sort($sortedIdList);
+
+        $products = $this->objectModel->dao->select('id')->from(TABLE_PRODUCT)->orderBy('`order`')->fetchAll('id');
+        return implode('|', array_keys($products));
+    }
 }
