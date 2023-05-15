@@ -380,40 +380,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 获取多人串行任务的指派人。
-     * Get the assignedTo for the multiply linear task.
-     *
-     * @param  string|array $members
-     * @param  object       $task
-     * @param  string       $type    current|next
-     * @access protected
-     * @return string
-     */
-    protected function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
-    {
-        if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
-
-        /* Format task team members. */
-        if(!is_array($members)) $members = explode(',', trim($members, ','));
-        $members = array_values($members);
-        if(is_object($members[0])) $members = array_column($members, 'account');
-
-        /* Get the member of the first unfinished task. */
-        $teamHours = array_values($task->team);
-        foreach($members as $i => $account)
-        {
-            if(isset($teamHours[$i]) && $teamHours[$i]->status == 'done') continue;
-            if($type == 'current') return $account;
-            break;
-        }
-
-        /* Get the member of the second unfinished task. */
-        if($type == 'next' && isset($members[$i + 1])) return $members[$i + 1];
-
-        return $task->openedBy;
-    }
-
-    /**
      * 检查一个任务是否有子任务。
      * Check if a task has children.
      *

@@ -9,8 +9,6 @@
  * @version     $Id: model.php 5154 2013-07-16 05:51:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class taskModel extends model
 {
     /**
@@ -1109,87 +1107,39 @@ class taskModel extends model
     }
 
     /**
+     * 开始一个任务。
      * Start a task.
      *
-     * @param  int    $taskID
-     * @param  string $extra
+     * @param  object      $oldTask
+     * @param  object      $task
      * @access public
-     * @return void
+     * @return false|array
      */
-    public function start($taskID, $extra = '')
+    public function start(object $oldTask, object $task): false|array
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        $oldTask = $this->getById($taskID);
-        if(!empty($oldTask->team))
+        /* Process data for multiple tasks. */
+        $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team) : array();
+        if(!empty($oldTask->team) && $currentTeam)
         {
-            $currentTeam = $this->getTeamByAccount($oldTask->team);
-            if($currentTeam and $this->post->consumed < $currentTeam->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
-            if($currentTeam and $currentTeam->status == 'doing' and $oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
-        }
-        else
-        {
-            if($this->post->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
-            if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
-        }
-        if(dao::isError()) return false;
-
-        $editorIdList = $this->config->task->editor->start['id'];
-        if($this->app->getMethodName() == 'restart') $editorIdList = $this->config->task->editor->restart['id'];
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('status', 'doing')
-            ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
-            ->stripTags($editorIdList, $this->config->allowedTags)
-            ->removeIF(!empty($oldTask->team), 'consumed,left')
-            ->remove('comment')->get();
-
-        $task = $this->loadModel('file')->processImgURL($task, $editorIdList, $this->post->uid);
-        if($this->post->left == 0)
-        {
-            if(isset($task->consumed) and $task->consumed == 0) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->consumed);
-            if(empty($oldTask->team))
-            {
-                $task->status       = 'done';
-                $task->finishedBy   = $this->app->user->account;
-                $task->finishedDate = $now;
-                $task->assignedTo   = $oldTask->openedBy;
-            }
-        }
-
-        /* Record consumed and left. */
-        $estimate = new stdclass();
-        $estimate->date     = helper::today();
-        $estimate->task     = $taskID;
-        $estimate->consumed = zget($_POST, 'consumed', 0);
-        $estimate->left     = zget($_POST, 'left', 0);
-        $estimate->work     = zget($task, 'work', '');
-        $estimate->account  = $this->app->user->account;
-        $estimate->consumed = (!empty($oldTask->team) and $currentTeam) ? $estimate->consumed - $currentTeam->consumed : $estimate->consumed - $oldTask->consumed;
-        if($this->post->comment) $estimate->work = $this->post->comment;
-        if($estimate->consumed > 0) $estimateID = $this->addTaskEstimate($estimate);
-
-        if(!empty($oldTask->team) and $currentTeam)
-        {
+            /* Update task team. */
             $team = new stdclass();
-            $team->consumed = $this->post->consumed;
-            $team->left     = $this->post->left;
+            $team->consumed = $task->consumed;
+            $team->left     = $task->left;
             $team->status   = empty($team->left) ? 'done' : 'doing';
-
             $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
-            if($oldTask->mode == 'linear' and !empty($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
 
+            /* Compute hours for multiple task. */
             $task = $this->computeMultipleHours($oldTask, $task);
+
+            /* Set the assigner for the task. */
+            $now = helper::now();
             if($team->status == 'done')
             {
                 $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'next');
                 $task->assignedDate = $now;
             }
 
+            /* Set the task finisher. */
             $finishedUsers = $this->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
             if(count($finishedUsers) == count($oldTask->team))
             {
@@ -1200,22 +1150,64 @@ class taskModel extends model
         }
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()
-            ->check('consumed,left', 'float')
             ->checkFlow()
-            ->where('id')->eq((int)$taskID)->exec();
+            ->where('id')->eq($oldTask->id)
+            ->exec();
 
+        if(dao::isError()) return false;
+        return common::createChanges($oldTask, $task);
+    }
+
+    /**
+     * 开始任务后的其他数据处理。
+     * Other data process after task start.
+     *
+     * @param  object     $oldTask
+     * @param  object     $task
+     * @param  array      $changes
+     * @param  int        $left
+     * @param  string     $comment
+     * @param  array      $output
+     * @access public
+     * @return array|bool
+     */
+    public function afterStart(object $oldTask, object $task, array $changes, int $left, string $comment, array $output): array|bool
+    {
+        /* Update the data of the parent task. */
         if($oldTask->parent > 0)
         {
-            $this->updateParentStatus($taskID);
+            $this->updateParentStatus($oldTask->id);
             $this->computeBeginAndEnd($oldTask->parent);
         }
-        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
-        $this->loadModel('kanban');
-        if(!isset($output['toColID']) or $task->status == 'done') $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['toColID']) and $task->status == 'doing') $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        /* Update the data related to the task. */
+        $this->updateKanbanCell($oldTask->id, $output, $oldTask->execution);
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+
+        /* Create related dynamic and record. */
+        $action   = $left == 0 ? 'Finished' : 'Started';
+        $actionID = $this->loadModel('action')->create('task', $oldTask->id, $action, $comment);
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+        /* Send Webhook notifications and Synchornize status to execution, project and program. */
+        $this->executeHooks($oldTask->id);
+        $this->loadModel('common')->syncPPEStatus($oldTask->id);
+
+        /* Remind whether to update status of the bug, if task which from that bug has been finished. */
+        if($changes && $this->needUpdateBugStatus($oldTask))
+        {
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'status' && $change['new'] == 'done')
+                {
+                    $confirmURL = helper::createLink('bug', 'view', "id={$oldTask->fromBug}");
+                    $cancelURL  = helper::createLink('task', 'view', "taskID={$oldTask->id}");
+                    return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $oldTask->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -1293,7 +1285,7 @@ class taskModel extends model
 
         foreach($estimates as $estimate)
         {
-            $this->addTaskEstimate($estimate);
+            $this->addTaskEffort($estimate);
 
             $work       = $estimate->work;
             $estimateID = $this->dao->lastInsertID();
@@ -1474,7 +1466,7 @@ class taskModel extends model
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
-        if($estimate->consumed) $estimateID = $this->addTaskEstimate($estimate);
+        if($estimate->consumed) $estimateID = $this->addTaskEffort($estimate);
 
         if(!empty($oldTask->team) and $currentTeam)
         {
@@ -2905,13 +2897,13 @@ class taskModel extends model
     }
 
     /**
-     * Add task estimate.
+     * Add task effort.
      *
      * @param  object    $data
      * @access public
      * @return int
      */
-    public function addTaskEstimate($data)
+    public function addTaskEffort($data)
     {
         $oldTask = $this->getById($data->task);
 
@@ -3610,12 +3602,12 @@ class taskModel extends model
      * 批量创建前检查必填项。
      * Check required fields before batch create tasks.
      *
-     * @param  object    $execution
-     * @param  object[]  $data
-     * @access protected
+     * @param  object         $execution
+     * @param  object[]       $data
+     * @access public
      * @return object[]|false
      */
-    protected function checkRequired4BatchCreate(object $execution, array $data): array|false
+    public function checkRequired4BatchCreate(object $execution, array $data): array|false
     {
         /* 设置必填项。 */
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
@@ -3664,7 +3656,7 @@ class taskModel extends model
 
     /**
      * 创建任务后的其他数据处理。
-     * Other data processing after task creation.
+     * Other data process after task create.
      *
      * @param  object $task
      * @param  array  $taskIdList
@@ -3899,5 +3891,39 @@ class taskModel extends model
     {
         if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($executionID, 'task', $taskID);
         if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+    }
+
+    /**
+     * 获取多人串行任务的指派人。
+     * Get the assignedTo for the multiply linear task.
+     *
+     * @param  string|array $members
+     * @param  object       $task
+     * @param  string       $type    current|next
+     * @access protected
+     * @return string
+     */
+    protected function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
+    {
+        if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
+
+        /* Format task team members. */
+        if(!is_array($members)) $members = explode(',', trim($members, ','));
+        $members = array_values($members);
+        if(is_object($members[0])) $members = array_column($members, 'account');
+
+        /* Get the member of the first unfinished task. */
+        $teamHours = array_values($task->team);
+        foreach($members as $i => $account)
+        {
+            if(isset($teamHours[$i]) && $teamHours[$i]->status == 'done') continue;
+            if($type == 'current') return $account;
+            break;
+        }
+
+        /* Get the member of the second unfinished task. */
+        if($type == 'next' && isset($members[$i + 1])) return $members[$i + 1];
+
+        return $task->openedBy;
     }
 }

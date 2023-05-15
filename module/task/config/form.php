@@ -122,3 +122,12 @@ $config->task->form->activate = array();
 $config->task->form->activate['mode']       = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->activate['left']       = array('type' => 'float', 'required' => true, 'default' => 0);
 $config->task->form->activate['assignedTo'] = array('type' => 'string', 'required' => true);
+
+$config->task->form->start = array();
+$config->task->form->start['status']         = array('type' => 'string', 'required' => false, 'default' => 'doing');
+$config->task->form->start['consumed']       = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->start['left']           = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->start['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->start['realStarted']    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->start['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->start['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());

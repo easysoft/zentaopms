@@ -62,10 +62,10 @@ class task extends control
             return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}")));
         }
 
-        /* Submit the data processing after creating the task form. */
+        /* Submit the data process after create the task form. */
         if(!empty($_POST))
         {
-            /* Prepare the data information before creating the task. */
+            /* Prepare the data information before create the task. */
             $result = $this->taskZen->prepareCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -420,94 +420,58 @@ class task extends control
     }
 
     /**
+     * 开始一个任务。
      * Start a task.
      *
      * @param  int    $taskID
-     * @param  string $extra
+     * @param  string $cardPosition
      * @access public
      * @return void
      */
-    public function start($taskID, $extra = '')
+    public function start(int $taskID, string $cardPosition = '')
     {
+        /* Common actions of task module and task. */
         $this->taskZen->commonAction($taskID);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
         $task = $this->task->getById($taskID);
 
+        /* Analytic parameter. */
+        $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
+        parse_str($cardPosition, $output);
+
+        /* Submit the data process after start the task form. */
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->task->start($taskID, $extra);
+            /* Prepare the data information before start the task. */
+            $newTask = $this->taskZen->prepareStart($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* Start a task. */
+            $changes = $this->task->start($task, $newTask, $output);
+
+            /* If there is an error, return an error message. */
             if(dao::isError())
             {
                 if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
+                return array('result' => 'fail', 'message' => dao::getError());
             }
 
-            $act = $this->post->left == 0 ? 'Finished' : 'Started';
-            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            /* Update other data related to the task after it is started. */
+            $result = $this->task->afterStart($task, $newTask, $changes, $this->post->left, $this->post->comment, $output);
+            if(is_array($result)) $this->send($result);
 
-            $this->executeHooks($taskID);
-            $this->loadModel('common')->syncPPEStatus($taskID);
-
-            /* Remind whether to update status of the bug, if task which from that bug has been finished. */
-            if($changes and $this->task->needUpdateBugStatus($task))
-            {
-                foreach($changes as $change)
-                {
-                    if($change['field'] == 'status' and $change['new'] == 'done')
-                    {
-                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                        unset($_GET['onlybody']);
-                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
-                    }
-                }
-            }
-
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
-
-            if(isonlybody())
-            {
-                $execution    = $this->execution->getByID($task->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                if(isset($output['from']) and $output['from'] == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-                }
-                return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
-            }
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            /* Get the information returned after a task is started. */
+            $from     = zget($output, 'from');
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $this->send($response);
         }
 
+        /* Shows the variables needed to start the task page. */
         $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
         if(!empty($task->team)) $assignedTo = $this->task->getAssignedTo4Multi($task->team, $task);
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
-        $this->view->position[] = $this->lang->task->start;
-
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
+        $this->view->members    = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo = $assignedTo;
         $this->display();
     }

@@ -25,8 +25,8 @@ class taskZen extends task
      * 任务模块的一些常用操作。
      * Common actions of task module.
      *
-     * @param  int    $taskID
-     * @access public
+     * @param  int       $taskID
+     * @access protected
      * @return void
      */
     protected function commonAction(int $taskID): void
@@ -512,7 +512,7 @@ class taskZen extends task
 
     /**
      * 处理创建任务的请求数据。
-     * Process the request data for the creation task.
+     * Process the request data for the create task.
      *
      * @param  int       $executionID
      * @param  object    $formData
@@ -703,11 +703,11 @@ class taskZen extends task
      * 检查当前用户在该执行中是否是受限用户。
      * Checks if the current user is a limited user in this execution.
      *
-     * @param  string $executionID
-     * @access public
+     * @param  string    $executionID
+     * @access protected
      * @return bool
      */
-    public function isLimitedInExecution(string $executionID): bool
+    protected function isLimitedInExecution(string $executionID): bool
     {
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($this->session->limitedExecutions) ? $this->session->limitedExecutions : '';
@@ -795,11 +795,9 @@ class taskZen extends task
                 $this->checkEstStartedAndDeadline($task->execuiton, $task->estStarted, $task->deadline);
                 if(dao::isError())
                 {
-                    foreach(dao::getError() as $error)
-                    {
-                        dao::$errors[] = "ID: {$task->story} {$error}";
-                        return false;
-                    }
+                    $error = current(dao::getError());
+                    dao::$errors[] = "ID: {$task->story} {$error}";
+                    return false;
                 }
             }
 
@@ -814,11 +812,9 @@ class taskZen extends task
             $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($this->config->task->create->requiredFields, 'notempty');
             if(dao::isError())
             {
-                foreach(dao::getError() as $error)
-                {
-                    dao::$errors[] = "ID: {$task->story} {$error}";
-                    return false;
-                }
+                $error = current(dao::getError());
+                dao::$errors[] = "ID: {$task->story} {$error}";
+                return false;
             }
         }
         return !dao::isError();
@@ -826,7 +822,7 @@ class taskZen extends task
 
     /**
      * 处理创建任务后的返回信息。
-     * The information returned after processing the creation task.
+     * The information return after process the create task.
      *
      * @param  object    $taskID
      * @param  object    $execution
@@ -1138,7 +1134,7 @@ class taskZen extends task
         $result = $this->checkCreate($executionID, $estimate, $estStarted, $deadline);
         if(!$result) return false;
 
-        /* Process the request data for the creation task. */
+        /* Process the request data for the create task. */
         $formData = form::data($this->config->task->form->create);
         $task     = $this->prepareTask4Create($executionID, $formData);
 
@@ -1194,6 +1190,127 @@ class taskZen extends task
             $testTasks[$storyID] = $task;
         }
         return $testTasks;
+    }
+
+    /**
+     * 准备开始任务前的数据信息。
+     * Prepare the data before start the task.
+     *
+     * @param  object       $oldTask
+     * @access protected
+     * @return false|object
+     */
+    protected function prepareStart(object $oldTask): false|object
+    {
+        /* Process the request data for the creation task. */
+        $formData    = form::data($this->config->task->form->start);
+        $task        = $this->prepareTask4Start($oldTask, $formData);
+        $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
+
+        /* Check if the input post data meets the requirements. */
+        $result = $this->checkStart($oldTask, $task, $currentTeam);
+        if(!$result) return false;
+
+        /* Record task effort. */
+        $effort = $this->prepareEffort4Start($oldTask, $task, $currentTeam);
+        if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+        if($oldTask->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+
+        return $task;
+    }
+
+    /**
+     * 处理开始任务的请求数据。
+     * Process the request data for the start task.
+     *
+     * @param  object    $oldTask
+     * @param  object    $formData
+     * @access protected
+     * @return object
+     */
+    protected function prepareTask4Start(object $oldTask, object $formData): object
+    {
+        $now  = helper::now();
+        $task = $formData->add('id', $oldTask->id)
+            ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
+            ->stripTags($this->config->task->editor->start['id'], $this->config->allowedTags)
+            ->get();
+
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], $this->post->uid);
+        if($task->left == 0 && empty($oldTask->team))
+        {
+            $task->status       = 'done';
+            $task->finishedBy   = $this->app->user->account;
+            $task->finishedDate = $now;
+            $task->assignedTo   = $oldTask->openedBy;
+        }
+        return $task;
+    }
+
+    /**
+     * 处理开始任务的日志数据。
+     * Process the effort data for the start task.
+     *
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @param  array     $currentTeam
+     * @access protected
+     * @return object
+     */
+    protected function prepareEffort4Start(object $oldTask, object $task, array $currentTeam): object
+    {
+        $effort = new stdclass();
+        $effort->date     = helper::today();
+        $effort->task     = $task->id;
+        $effort->consumed = zget($task, 'consumed', 0);
+        $effort->left     = zget($task, 'left', 0);
+        $effort->work     = zget($task, 'work', '');
+        $effort->account  = $this->app->user->account;
+        $effort->consumed = !empty($oldTask->team) && $currentTeam ? $effort->consumed - $currentTeam->consumed : $effort->consumed - $oldTask->consumed;
+        if($this->post->comment) $effort->work = $this->post->comment;
+
+        return $effort;
+    }
+
+    /**
+     * 检查传入的开始数据是否符合要求。
+     * Check if the input post meets the requirements.
+     *
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @access protected
+     * @return bool
+     */
+    protected function checkStart(object $oldTask, object $task, $currentTeam): bool
+    {
+        if(!empty($oldTask->team))
+        {
+            if($currentTeam && $task->consumed < $currentTeam->consumed) dao::$errors['consumed'] = $this->lang->oldTask->error->consumedSmall;
+            if($currentTeam && $currentTeam->status == 'doing' && $oldTask->status == 'doing') dao::$errors[] = $this->lang->oldTask->error->alreadyStarted;
+        }
+        else
+        {
+            if($task->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->oldTask->error->consumedSmall;
+            if($oldTask->status == 'doing') dao::$errors[] = $this->lang->oldTask->error->alreadyStarted;
+        }
+        if(!$task->left && !$task->consumed) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->oldTask->consumed);
+        return !dao::isError();
+    }
+
+    /**
+     * 处理开始任务后的返回信息。
+     * The information return after process the start task.
+     *
+     * @param  object    $task
+     * @param  string    $from ''|taskkanban
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterChangeStatus(object $task, string $from): array
+    {
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
+        if(isonlybody()) return $this->responseKanban($task, $from);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
     }
 
     /**
@@ -1315,7 +1432,7 @@ class taskZen extends task
         $this->loadModel('kanban');
 
         $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-        $execGroupBy       = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+        $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
         $rdSearchValue     = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
         $taskSearchValue   = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
 
@@ -1327,25 +1444,9 @@ class taskZen extends task
         }
 
         /* 处理任务看板。 Handling task kanban. */
-        $kanbanData = $this->kanban->getExecutionKanban($execution->id, $executionLaneType, $execGroupBy, $taskSearchValue);
+        $kanbanData = $this->kanban->getExecutionKanban($execution->id, $executionLaneType, $executionGroupBy, $taskSearchValue);
         $kanbanType = $executionLaneType == 'all' ? 'task' : key($kanbanData);
         return json_encode($kanbanData[$kanbanType]);
-    }
-
-    /**
-     * 处理开始任务后的返回信息。
-     * The information return after process the start task.
-     *
-     * @param  object    $task
-     * @param  string    $from ''|taskkanban
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterChangeStatus(object $task, string $from): array
-    {
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(isonlybody()) return $this->taskZen->responseKanban($task, $from);
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
     }
 
     /**
