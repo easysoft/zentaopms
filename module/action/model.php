@@ -413,7 +413,7 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title) : $title;
             }
-            elseif($actionName == 'changedbycharter' and $action->objectType == 'story')
+            elseif($actionName == 'changedbycharter')
             {
                 $name = $this->dao->select('name')->from(TABLE_CHARTER)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('charter', 'view') ? html::a(helper::createLink('charter', 'view', "charterID=$action->extra"), $name) : $name;
