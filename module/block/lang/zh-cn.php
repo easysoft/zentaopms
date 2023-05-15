@@ -749,3 +749,9 @@ $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
 $lang->block->productoverview->productReleasedThisYear = '今年发布';
 $lang->block->productoverview->releaseCount            = '发布里程碑';
+
+$lang->block->productlist = new stdclass();
+$lang->block->productlist->unclosedFeedback  = '未关闭反馈';
+$lang->block->productlist->activatedStory    = '激活需求';
+$lang->block->productlist->storyCompleteRate = '需求完成率';
+$lang->block->productlist->activatedBug      = '激活Bug';

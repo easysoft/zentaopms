@@ -11,76 +11,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-$cols = array
-(
-    array
-    (
-        'name'     => 'name',
-        'title'    => '产品名称',
-        'width'    => '200',
-        'type'     => 'link',
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'poName',
-        'title'    => '负责人',
-        'width'    => 200,
-        'type'     => 'avatarBtn',
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'feedback',
-        'title'    => '未关闭反馈',
-        'width'    => 100,
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'story',
-        'title'    => '激活需求',
-        'width'    => 100,
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'storyCompletionRate',
-        'title'    => '需求完成率',
-        'width'    => 100,
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'plan',
-        'title'    => '计划',
-        'width'    => 100,
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'bug',
-        'title'    => '激活BUG',
-        'width'    => 100,
-        'sortType' => 1,
-    ),
-    array
-    (
-        'name'     => 'release',
-        'title'    => '发布',
-        'width'    => 100,
-        'sortType' => 1,
-    ),
-);
-
-$data = array();
-
 foreach($productStats as $product)
 {
     if(!empty($product->PO))
     {
+        $product->po        = $product->PO;
         $product->poName    = zget($users, $product->PO);
-        $product->poAvatar  = $usersAvatar[$product->PO];
+        $product->poAvatar  = zget($userAvatars, $product->PO);
         $product->poAccount = $product->PO;
     }
 }
@@ -90,8 +27,8 @@ panel
     dtable
     (
         setClass('shadow rounded'),
-        set::cols($cols),
-        set::data($productStats)
+        set::cols(array_values($config->block->product->dtable->fieldList)),
+        set::data(array_values($productStats))
     )
 );
 

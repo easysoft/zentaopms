@@ -641,48 +641,24 @@ class blockZen extends block
     /**
      * Print product block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProductListBlock()
+    protected function printProductListBlock(object $block): bool
     {
         $this->app->loadClass('pager', $static = true);
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
-        $count = isset($this->params->count) ? (int)$this->params->count : 0;
-        $type  = isset($this->params->type) ? $this->params->type : '';
+        $count = isset($block->params->count) ? (int)$block->params->count : 0;
+        $type  = isset($block->params->type) ? $block->params->type : '';
         $pager = pager::init(0, $count , 1);
 
-        $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
-        $productIdList = array();
-        foreach($productStats as $product) $productIdList[] = $product->id;
+        $productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
 
-        $this->app->loadLang('project');
-        $executions = $this->dao->select('t1.product,t2.id,t2.project,t2.name,t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in($productIdList)
-            ->andWhere('t2.type')->in('stage,sprint')
-            ->andWhere('t2.deleted')->eq(0)
-            ->orderBy('t1.project')
-            ->fetchAll('product');
-
-        $executionPairs = array();
-        $noMultiples    = array();
-        foreach($executions as $execution)
-        {
-            if(empty($execution->multiple)) $noMultiples[$execution->product] = $execution->project;
-            $executionPairs[$execution->product] = $execution->name;
-        }
-        if($noMultiples)
-        {
-            $noMultipleProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
-            foreach($noMultiples as $productID => $projectID)
-            {
-                if(isset($noMultipleProjects[$projectID])) $executionPairs[$productID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
-            }
-        }
-
-        $this->view->executions   = $executionPairs;
         $this->view->productStats = $productStats;
+        $this->view->users        = $this->loadModel('user')->getPairs();
+        $this->view->userAvatars  = $this->user->getAvatarPairs();
+
+        return !dao::isError();
     }
 
     /**

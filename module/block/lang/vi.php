@@ -571,3 +571,9 @@ $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = 'Total Product Count';
 $lang->block->productoverview->productReleasedThisYear = 'Number Of Releases This Year';
 $lang->block->productoverview->releaseCount            = 'Total Release Count';
+
+$lang->block->productlist = new stdclass();
+$lang->block->productlist->unclosedFeedback  = 'Number Of Feedback Not Closed';
+$lang->block->productlist->activatedStory    = 'Activate Requirements';
+$lang->block->productlist->storyCompleteRate = 'Requirement Completion Rate';
+$lang->block->productlist->activatedBug      = 'Activate Bugs';
