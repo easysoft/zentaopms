@@ -84,10 +84,10 @@ class admin extends control
 
         if($hasInternet)
         {
-            $nextWeek   = date('Y-m-d', strtotime('-7 days'));
-            $zentaoData = $this->loadModel('block')->getZentaoData($nextWeek);
+            $lastSyncDate = !empty($this->config->zentaoWebsite->lastSyncDate) ? $this->config->zentaoWebsite->lastSyncDate : '';
+            $nextWeek     = date('Y-m-d', strtotime('-7 days'));
 
-            if(empty($zentaoData))
+            if(empty($lastSyncDate) || $lastSyncDate <= $nextWeek)
             {
                 $this->admin->setExtensionsByAPI('plugin', 6);
                 $this->admin->setExtensionsByAPI('patch', 5);
