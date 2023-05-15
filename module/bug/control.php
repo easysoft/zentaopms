@@ -182,7 +182,7 @@ class bug extends control
      *
      * @param  string $productID
      * @param  string $branch
-     * @param  string $extras       others params, forexample, executionID=10,moduleID=10
+     * @param  string $extras       Other params, for example, executionID=10,moduleID=10.
      * @access public
      * @return void
      */
