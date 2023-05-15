@@ -1049,7 +1049,7 @@ class programplanModel extends model
                     $stageID = $this->dao->lastInsertID();
 
                     /* Ipd project create default review points. */
-                    if($project->model == 'ipd' && $this->config->edition == 'ipd') $this->loadModel('review')->createDefaultPoint($projectID, $productID, $data->attribute);
+                    if($project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($projectID, $productID, $data->attribute);
 
                     if($data->type == 'kanban')
                     {
