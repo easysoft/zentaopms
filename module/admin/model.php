@@ -608,8 +608,8 @@ class adminModel extends model
         $data     = $this->fetchAPI($apiURL);
         $articles = $data->articles;
 
-        $index = 1;
-        $news  = array();
+        $index    = 1;
+        $dynamics = array();
         foreach($articles as $article)
         {
             if($index > $limit) break;
@@ -618,15 +618,15 @@ class adminModel extends model
             if(!isset($this->lang->admin->$tagKey)) break;
             if(!preg_match("/{$this->lang->admin->$tagKey}\d/", $article->title)) continue;
 
-            $news[$index] = new stdClass();
-            $news[$index]->id        = $article->id;
-            $news[$index]->title     = $article->title;
-            $news[$index]->addedDate = $article->addedDate;
-            $news[$index]->link      = $this->config->admin->apiRoot . "/download/{$article->alias}-{$article->id}.html";
+            $dynamics[$index] = new stdClass();
+            $dynamics[$index]->id        = $article->id;
+            $dynamics[$index]->title     = $article->title;
+            $dynamics[$index]->addedDate = $article->addedDate;
+            $dynamics[$index]->link      = $this->config->admin->apiRoot . "/download/{$article->alias}-{$article->id}.html";
             $index ++;
         }
 
-        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.news', json_encode($news));
+        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.news', json_encode($dynamics));
     }
 
     /**
@@ -683,10 +683,10 @@ class adminModel extends model
         $data = new stdclass();
         $data->hasData = true;
 
-        $news    = array();
-        $classes = array();
-        $plugins = array();
-        $patches = array();
+        $dynamics = array();
+        $classes  = array();
+        $plugins  = array();
+        $patches  = array();
         if(empty($zentaoData))
         {
             $data->hasData = false;
@@ -709,17 +709,17 @@ class adminModel extends model
         }
         else
         {
-            $news    = json_decode($zentaoData->news);
-            $classes = json_decode($zentaoData->publicClass);
-            $plugins = json_decode($zentaoData->plugin);
-            $patches = json_decode($zentaoData->patch);
+            $dynamics = json_decode($zentaoData->news);
+            $classes  = json_decode($zentaoData->publicClass);
+            $plugins  = json_decode($zentaoData->plugin);
+            $patches  = json_decode($zentaoData->patch);
             if(common::checkNotCN()) array_pop($plugins);
         }
 
-        $data->news    = $news;
-        $data->classes = $classes;
-        $data->plugins = $plugins;
-        $data->patches = $patches;
+        $data->dynamics = $dynamics;
+        $data->classes  = $classes;
+        $data->plugins  = $plugins;
+        $data->patches  = $patches;
 
         return $data;
     }

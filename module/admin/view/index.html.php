@@ -116,7 +116,7 @@
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
         <?php echo html::a($config->admin->dynamicURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
-      <?php foreach($zentaoData->news as $dynamic):?>
+      <?php foreach($zentaoData->dynamics as $dynamic):?>
       <div class="dynamic-block">
         <div class="dynamic-content" title=<?php echo $dynamic->title ?>><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
         <div class="dynamic-time"><?php echo substr($dynamic->addedDate, 0, 10);?></div>
