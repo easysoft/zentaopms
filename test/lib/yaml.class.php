@@ -437,9 +437,6 @@ class yaml
         $tableSqlDir = dirname($sqlPath);
 
         if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0777, true);
-        $dumpCommand = "mysqldump -u%s -p%s -h%s -P%s %s %s > {$tableSqlDir}/{$tableName}.sql 2>/dev/null";
-        $execDump    = sprintf($dumpCommand, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName);
-        system($execDump);
 
         if($isClear === true)
         {
