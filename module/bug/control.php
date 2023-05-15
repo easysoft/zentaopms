@@ -966,73 +966,51 @@ class bug extends control
      */
     public function resolve(int $bugID, string $extra = '')
     {
-        /* Get bug and execution. */
+        /* Get old bug, and check privilege of the execution. */
         $bug = $this->bug->getById($bugID);
-        if($bug->execution) $execution = $this->loadModel('execution')->getByID($bug->execution);
+        $this->bugZen->checkBugExecutionPriv($bug);
 
         if(!empty($_POST))
         {
-            /* Update bug status and get changes after resolving. */
-            $changes = $this->bug->resolve($bugID, $extra);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            /* Save files. */
-            $files = $this->loadModel('file')->saveUpload('bug', $bugID);
-
-            /* Record log. */
-            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''));
-            $this->action->logHistory($actionID, $changes);
-
-            /* Get new bug. */
-            $bug = $this->bug->getById($bugID);
-
-            $this->executeHooks($bugID);
-
-            /* This bug has been converted to a task, update the status of the related task or not. */
-            if($bug->toTask != 0)
-            {
-                /* If task is not finished, update it's status. */
-                $task = $this->task->getById($bug->toTask);
-                if($task->status != 'done')
-                {
-                    $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                    unset($_GET['onlybody']);
-                    $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                    return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
-                }
-            }
-
-            /* Get response after resolving. */
+            /* Parse extra, and get variables. */
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
-            $regionID = zget($output, 'regionID', 0);
 
+            /* Init bug data. */
+            $postData = form::data($this->config->bug->form->resolve);
+            $bug      = $postData->data;
+            $bug->id  = $bugID;
+
+            $changes = $this->bug->resolve($bug, $output);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->bugZen->processAfterResolve($bug, $changes, $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''), $output);
+
+            /* Get response after resolving. */
+            $regionID = zget($output, 'regionID', 0);
             return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
         }
 
-        /* Get project id, product id of bug, get users who is not closed and get assigned person. */
-        $projectID  = $bug->project;
-        $productID  = $bug->product;
+        /* Get users who is not closed and get assigned person. */
         $users      = $this->user->getPairs('noclosed');
         $assignedTo = $bug->openedBy;
-        if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
+        if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $bug->product);
+
         /* Remove 'Convert to story' from the solution list. */
         unset($this->lang->bug->resolutionList['tostory']);
 
-        /* check privilege of the bug's execution. */
-        $this->bugZen->checkBugExecutionPriv($bug);
         /* Set menu. */
-        $this->qa->setMenu($this->products, $productID, $bug->branch);
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
         /* Show the variables associated. */
-        $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->title          = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug            = $bug;
         $this->view->users          = $users;
         $this->view->assignedTo     = $assignedTo;
-        $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID, 'stagefilter');
-        $this->view->builds         = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch,noreleased');
-        $this->view->actions        = $this->action->getList('bug', $bugID);
-        $this->view->execution      = isset($execution) ? $execution : '';
+        $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $bug->project, 'stagefilter');
+        $this->view->builds         = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'withbranch,noreleased');
+        $this->view->actions        = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->execution      = $bug->execution ? $this->loadModel('execution')->getByID($bug->execution) : '';
         $this->display();
     }
 

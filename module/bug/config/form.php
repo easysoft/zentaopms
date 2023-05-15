@@ -94,3 +94,14 @@ $config->bug->form->assignTo['assignedDate']   = array('required' => false, 'typ
 $config->bug->form->assignTo['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->assignTo['lastEditedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
 $config->bug->form->assignTo['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+
+$config->bug->form->resolve = array();
+$config->bug->form->resolve['status']         = array('required' => false, 'type' => 'string', 'default' => 'resolved');
+$config->bug->form->resolve['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->resolve['resolvedDate']   = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->resolve['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->resolve['assignedDate']   = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->resolve['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
+$config->bug->form->resolve['lastEditedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->resolve['confirmed']      = array('required' => false, 'type' => 'int',    'default' => 1);
+$config->bug->form->resolve['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);

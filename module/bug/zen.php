@@ -1602,4 +1602,40 @@ class bugZen extends bug
 
         return $users;
     }
+
+    /**
+     * 解决成功后的相关处理。
+     * Relevant processing after resolving bug.
+     *
+     * @param  int         $bugID
+     * @param  array       $changes
+     * @param  string|bool $comment
+     * @param  string|bool $actionExtra
+     * @param  array       $output
+     * @access protected
+     * @return void
+     */
+    protected function processAfterResolve(int $bug, array $changes, string|bool $comment, string|bool $actionExtra, array $output): void
+    {
+        /* Add score. */
+        $this->loadModel('score')->create('bug', 'resolve', $bug);
+
+        /* Move bug card in kanban. */
+        if($bug->execution)
+        {
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($bug->execution, 'bug', $bug->id);
+            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        }
+
+        /* Save files. */
+        $files = $this->loadModel('file')->saveUpload('bug', $bug->id);
+
+        /* Record log. */
+        $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
+        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $comment, $actionExtra);
+        $this->action->logHistory($actionID, $changes);
+
+        $this->executeHooks($bug->id);
+    }
 }

@@ -850,36 +850,17 @@ class bugModel extends model
     /**
      * Resolve a bug.
      *
-     * @param  int    $bugID
-     * @param  string $extra
+     * @param  object      $bugID
+     * @param  array       $output
      * @access public
      * @return array|false
      */
-    public function resolve(int $bugID, string $extra = ''): array|false
+    public function resolve(object $bug, array $output = array()): array|false
     {
-        /* Parse extra, and get variables. */
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
         /* Construct bug data. */
         $now    = helper::now();
-        $oldBug = $this->getById($bugID);
-        $bug    = fixer::input('post')
-            ->add('id', $bugID)
-            ->add('status',    'resolved')
-            ->add('confirmed', 1)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('resolvedBy',     $this->app->user->account)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('resolvedDate',   $now)
-            ->setDefault('assignedTo',     $oldBug->openedBy)
-            ->setDefault('duplicateBug',   0)
-            ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
-            ->stripTags($this->config->bug->editor->resolve['id'], $this->config->allowedTags)
-            ->remove('files,labels')
-            ->get();
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
+        $oldBug = $this->getById($bug->id);
+        $bug    = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
 
         /* Set comment lang for alert error. */
         $this->lang->bug->comment = $this->lang->comment;
@@ -960,16 +941,6 @@ class bugModel extends model
 
         if(!dao::isError())
         {
-            /* Add score. */
-            $this->loadModel('score')->create('bug', 'resolve', $oldBug);
-            /* Move bug card in kanban. */
-            if($oldBug->execution)
-            {
-                $this->loadModel('kanban');
-                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-                if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-            }
-
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
 
