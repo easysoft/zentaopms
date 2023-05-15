@@ -335,7 +335,7 @@ class bug extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
             }
 
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('bugModule', 0, 0);
 
             /* If link from no head then reload. */
             if(isonlybody() && $executionID) $this->bugZen->responseInModal($executionID);
