@@ -5,6 +5,15 @@ function switchMode(mode)
         parent.location.reload();
     });
 }
+
+function switchVision(vision)
+{
+    $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function(result)
+    {
+        parent.location.reload();
+    })
+}
+
 $('.mode-switch .block').on('click', '.mode-block.state', function()
 {
     const mode = $(this).data('mode');
@@ -12,6 +21,12 @@ $('.mode-switch .block').on('click', '.mode-block.state', function()
     {
         if(result) switchMode(mode);
     }});
+})
+
+$('.vision-switch .block').on('click', '.vision-block.state', function()
+{
+    const vision = $(this).data('vision');
+    switchVision(vision);
 })
 
 $('.guide-block').on('click', '.guide-tab', function()

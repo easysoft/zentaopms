@@ -30,7 +30,8 @@ function printVisionSwitch()
             set('class', 'flex-1 block mr-4 ' . ($config->vision == $vision->key ? 'active' : '')),
             div
             (
-                set('class', 'w-full state'),
+                set('class', 'w-full vision-block state'),
+                set('data-vision', $vision->key),
                 img
                 (
                     set('class', 'p-4'),
