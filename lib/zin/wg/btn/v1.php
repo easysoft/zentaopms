@@ -30,11 +30,6 @@ class btn extends wg
         }
     }
 
-    protected function getOtherProps()
-    {
-        return array();
-    }
-
     protected function getProps()
     {
         $props = $this->props->skip(array_keys(static::getDefinedProps()));
