@@ -1538,7 +1538,7 @@ EOF;
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
             if(isOnlybody()) return print(js::closeModal('parent.parent'));
 
-            return print(js::locate($this->createLink('my', 'index'), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'index')));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;

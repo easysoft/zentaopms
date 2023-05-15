@@ -86,10 +86,15 @@ function getGuideInfo($blockNavID): array
 }
 
 
-$blockNavCode = 'nav-' . uniqid();
-$config->URSRList  = $URSRList;
-$config->programID = $programID;
-$config->programs  = $programs;
+$blockNavCode          = 'nav-' . uniqid();
+$config->URSRList      = $URSRList;
+$config->programID     = $programID;
+$config->programs      = $programs;
+$config->URSR          = $URSR;
+$config->programLink   = $programLink;
+$config->productLink   = $productLink;
+$config->projectLink   = $projectLink;
+$config->executionLink = $executionLink;
 
 $usedMode = zget($config->global, 'mode', 'light');
 jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));

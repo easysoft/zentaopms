@@ -24,11 +24,12 @@ function printPreference()
         set('class', 'p-6'),
         form
         (
+            set::url(helper::createLink('my', 'preference', "showTip=false")),
             set::labelWidth('8rem'),
             set::actions(array('submit')),
             formGroup
             (
-                set::value($URSR),
+                set::value($config->URSR),
                 set::label($lang->my->storyConcept),
                 set::name('URSR'),
                 set::control(array
@@ -39,7 +40,7 @@ function printPreference()
             ),
             $config->systemMode == 'ALM' ? formGroup
             (
-                set::value($programLink),
+                set::value($config->programLink),
                 set::label($lang->my->programLink),
                 set::name('programLink'),
                 set::control(array
@@ -50,7 +51,7 @@ function printPreference()
             ) : null,
             formGroup
             (
-                set::value($productLink),
+                set::value($config->productLink),
                 set::label($lang->my->productLink),
                 set::name('productLink'),
                 set::control(array
@@ -61,7 +62,7 @@ function printPreference()
             ),
             formGroup
             (
-                set::value($projectLink),
+                set::value($config->projectLink),
                 set::label($lang->my->projectLink),
                 set::name('projectLink'),
                 set::control(array
@@ -72,7 +73,7 @@ function printPreference()
             ),
             formGroup
             (
-                set::value($executionLink),
+                set::value($config->executionLink),
                 set::label($lang->my->executionLink),
                 set::name('executionLink'),
                 set::control(array
