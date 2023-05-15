@@ -603,27 +603,21 @@ class product extends control
     }
 
     /**
-     * Products under project set.
+     * 产品列表。
+     * Product list.
      *
      * @param  string $browseType
      * @param  string $orderBy
-     * @param  string $param
-     * @param  string $recTotal
-     * @param  string $recPerPage
-     * @param  string $pageID
-     * @param  string $programID
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function all(string $browseType = 'noclosed', string $orderBy = 'program_asc', string $param = '0', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1', string $programID = '0')
+    public function all(string $browseType = 'noclosed', string $orderBy = 'program_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $programID = 0)
     {
-        /* Convert string to int. */
-        $param      = (int)$param;
-        $recTotal   = (int)$recTotal;
-        $recPerPage = (int)$recPerPage;
-        $pageID     = (int)$pageID;
-        $programID  = (int)$programID;
-
         /* Set env data. */
         $this->productZen->setMenu4All();
 
