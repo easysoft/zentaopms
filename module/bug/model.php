@@ -936,22 +936,11 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->checkFlow()
-            ->where('id')->eq((int)$bugID)
+            ->where('id')->eq((int)$bug->id)
             ->exec();
 
-        if(!dao::isError())
-        {
-            /* Link bug to build and release. */
-            $this->linkBugToBuild($bugID, $bug->resolvedBuild);
-
-            /* If the edition is not pms, update feedback. */
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-
-            /* Return changes after resolving. */
-            return common::createChanges($oldBug, $bug);
-        }
-
-        return false;
+        if(dao::isError()) return false;
+        return common::createChanges($oldBug, $bug);
     }
 
     /**

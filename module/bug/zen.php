@@ -1628,6 +1628,12 @@ class bugZen extends bug
             if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
+        /* Link bug to build and release. */
+        $this->linkBugToBuild($bug->id, $bug->resolvedBuild);
+
+        /* If the edition is not pms, update feedback. */
+        if(($this->config->edition != 'pms') && $bug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
         /* Save files. */
         $files = $this->loadModel('file')->saveUpload('bug', $bug->id);
 
