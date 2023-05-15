@@ -545,12 +545,13 @@ class product extends control
     }
 
     /**
-     * Update order.
+     * 产品排序。
+     * Sort product.
      *
      * @access public
      * @return void
      */
-    public function updateOrder()
+    public function sort()
     {
         /* Init vars. */
         $idList  = explode(',', trim($this->post->products, ','));
@@ -558,10 +559,7 @@ class product extends control
         if(strpos($orderBy, 'program') === false) return false;
 
         /* Remove programID. */
-        foreach($idList as $i => $id)
-        {
-            if(!is_numeric($id)) unset($idList[$i]);
-        }
+        $idList = array_filter(array_map(function($id){return is_numeric($id) ? $id : null;}, $idList));
 
         /* Update order. */
         $products = $this->dao->select('t1.`order`, t1.id')->from(TABLE_PRODUCT)->alias('t1')

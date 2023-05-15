@@ -37,7 +37,7 @@
   <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$programID");?>'>
-      <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
+      <?php $canOrder = common::hasPriv('product', 'sort');?>
       <table id="productList" class="table has-sort-head table-bordered table-fixed">
         <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
@@ -141,7 +141,7 @@ $(function()
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
-        $.post(createLink('product', 'updateOrder'), {'products' : list, 'orderBy' : orderBy});
+        $.post(createLink('product', 'sort'), {'products' : list, 'orderBy' : orderBy});
     });
 });
 </script>
