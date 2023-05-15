@@ -32,7 +32,8 @@ function printThemeSwitch()
                 set('class', 'block ' . ($app->cookie->theme == $themeKey ? 'active' : '')),
                 div
                 (
-                    set('class', 'w-full state'),
+                    set('class', 'w-full theme-block ' . ($app->cookie->theme != $themeKey ? 'state' : '')),
+                    set('data-theme', $themeKey),
                     img
                     (
                         set('class', 'p-4'),

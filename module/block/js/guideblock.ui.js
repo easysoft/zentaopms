@@ -29,6 +29,12 @@ $('.vision-switch .block').on('click', '.vision-block.state', function()
     switchVision(vision);
 })
 
+$('.theme-switch .block').on('click', '.theme-block.state', function()
+{
+    selectTheme($(this).attr('data-theme'));
+})
+
+
 $('.guide-block').on('click', '.guide-tab', function()
 {
     const tab = $(this).data('tab');
