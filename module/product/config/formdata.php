@@ -1,5 +1,4 @@
 <?php
-global $lang;
 $config->product->form = new stdclass();
 $config->product->form->create = array();
 $config->product->form->create['program']   = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
@@ -35,16 +34,16 @@ $config->product->form->edit['whitelist'] = array('type' => 'array',   'control'
 if($config->systemMode != 'ALM') unset($config->product->form->edit['program'], $config->product->form->edit['line']);
 
 $config->product->form->batchEdit = array();
-$config->product->form->batchEdit['program']       = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 0, 'options' => array());
-$config->product->form->batchEdit['name']          = array('type' => 'array', 'control' => 'text',     'required' => true,  'default' => '');
-$config->product->form->batchEdit['line']          = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 0,        'options' => array());
-$config->product->form->batchEdit['PO']            = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',       'options' => array());
-$config->product->form->batchEdit['QD']            = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',       'options' => array());
-$config->product->form->batchEdit['RD']            = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',       'options' => array());
-$config->product->form->batchEdit['type']          = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 'normal', 'options' => $lang->product->typeList);
-$config->product->form->batchEdit['status']        = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 'normal', 'options' => $lang->product->statusList);
-$config->product->form->batchEdit['desc']          = array('type' => 'array', 'control' => 'textarea', 'required' => false, 'default' => '');
-$config->product->form->batchEdit['acl']           = array('type' => 'array', 'control' => 'radio',    'required' => false, 'default' => 'private', 'options' => $lang->product->aclList);
+$config->product->form->batchEdit['program'] = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 0, 'options' => array());
+$config->product->form->batchEdit['name']    = array('type' => 'array', 'control' => 'text',     'required' => true,  'default' => '');
+$config->product->form->batchEdit['line']    = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 0,        'options' => array());
+$config->product->form->batchEdit['PO']      = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',       'options' => array());
+$config->product->form->batchEdit['QD']      = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',       'options' => array());
+$config->product->form->batchEdit['RD']      = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => '',       'options' => array());
+$config->product->form->batchEdit['type']    = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 'normal', 'options' => $lang->product->typeList);
+$config->product->form->batchEdit['status']  = array('type' => 'array', 'control' => 'select',   'required' => false, 'default' => 'normal', 'options' => $lang->product->statusList);
+$config->product->form->batchEdit['desc']    = array('type' => 'array', 'control' => 'textarea', 'required' => false, 'default' => '');
+$config->product->form->batchEdit['acl']     = array('type' => 'array', 'control' => 'radio',    'required' => false, 'default' => 'private', 'options' => $lang->product->aclList);
 if($config->systemMode != 'ALM') unset($config->product->form->batchEdit['program'], $config->product->form->batchEdit['line']);
 
 $config->product->form->close = array();
