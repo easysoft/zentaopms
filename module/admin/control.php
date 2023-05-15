@@ -55,17 +55,10 @@ class admin extends control
         $langNotCN  = common::checkNotCN();
         $dateUsed   = $this->admin->genDateUsed();
 
-        $zentaoData  = $this->admin->getZentaoData();
-        $hasInternet = $zentaoData->hasData;
-
-        $this->view->title       = $this->lang->admin->common;
-        $this->view->plugins     = $zentaoData->plugins;
-        $this->view->patches     = $zentaoData->patches;
-        $this->view->dateUsed    = $dateUsed;
-        $this->view->hasInternet = $hasInternet;
-        $this->view->dynamics    = $zentaoData->news;
-        $this->view->publicClass = $zentaoData->publicClass;
-        $this->view->langNotCN   = $langNotCN;
+        $this->view->title      = $this->lang->admin->common;
+        $this->view->zentaoData = $this->admin->getZentaoData();
+        $this->view->dateUsed   = $dateUsed;
+        $this->view->langNotCN  = $langNotCN;
         $this->display();
     }
 

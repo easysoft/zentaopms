@@ -11,9 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('hasInternet', $hasInternet);?>
+<?php js::set('hasInternet', $zentaoData->hasData);?>
 <div id='mainContent' class='main-content admin'>
-  <div class="main <?php if(!$hasInternet) echo 'without-internet';?>">
+  <div class="main <?php if(!$zentaoData->hasData) echo 'without-internet';?>">
     <div class="settings panel">
       <div class="panel-title mt-6"><?php echo $lang->admin->setting?></div>
       <div class="settings-list <?php if($config->vision == 'lite') echo 'lite-setting';?>">
@@ -35,14 +35,14 @@
       </div>
     </div>
 
-    <?php if($plugins):?>
+    <?php if($zentaoData->plugins):?>
     <div class="plug panel">
       <div class="panel-title">
         <?php echo $lang->admin->pluginRecommendation;?>
         <?php echo html::a($config->admin->extensionURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
-        <?php foreach($plugins as $plugin):?>
+        <?php foreach($zentaoData->plugins as $plugin):?>
         <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));?>
         <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
           <span class='ext-download'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></span>
@@ -63,25 +63,25 @@
             <div class="official-content">
               <div class="title">
                 <?php echo $lang->admin->followUs?>
-                <?php if(!$hasInternet):?>
+                <?php if(!$zentaoData->hasData):?>
                 <i class="icon follow-us icon-arrow-right text-primary"></i>
                 <?php endif;?>
               </div>
               <div class="content"> <?php echo $lang->admin->followUsContent?></div>
             </div>
             </div>
-            <?php if(!$bind and !$ignore and $hasInternet and common::hasPriv('admin', 'register')):?>
+            <?php if(!$bind and !$ignore and $zentaoData->hasData and common::hasPriv('admin', 'register')):?>
               <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
             <?php endif;?>
         </div>
-      <?php if($publicClass):?>
+      <?php if($zentaoData->publicClass):?>
       <div class="panel publicClass">
         <div class="panel-title">
           <?php echo $lang->admin->publicClass;?>
           <?php echo html::a($config->admin->classURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
         </div>
         <div class="classList flex">
-          <?php foreach($publicClass as $class):?>
+          <?php foreach($zentaoData->publicClass as $class):?>
           <a class="classItem shadow-primary-hover" href='<?php echo $class->viewLink;?>' target='_blank'>
 	      <div class="imgBack">
               <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>
@@ -96,7 +96,7 @@
     </div>
   </div>
 
-  <?php if($hasInternet and !$langNotCN):?>
+  <?php if($zentaoData->hasData and !$langNotCN):?>
   <div class="side panel" style="background: #FCFDFE">
     <div class="h-56 flex align-center justify-between">
       <div class="panel-title"><?php echo $lang->admin->zentaoInfo?></div>
@@ -116,7 +116,7 @@
         <div class="panel-title"><?php echo $lang->admin->updateDynamics?></div>
         <?php echo html::a($config->admin->dynamicURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
-      <?php foreach($dynamics as $dynamic):?>
+      <?php foreach($zentaoData->news as $dynamic):?>
       <div class="dynamic-block">
         <div class="dynamic-content" title=<?php echo $dynamic->title ?>><i class="icon icon-horn text-primary pr-4 font-20"></i><?php echo html::a($dynamic->link, $dynamic->title, '_blank');?></div>
         <div class="dynamic-time"><?php echo substr($dynamic->addedDate, 0, 10);?></div>
@@ -128,7 +128,7 @@
         <div class="panel-title"><?php echo $lang->admin->updatePatch?></div>
         <?php echo html::a($config->admin->patchURL, "{$lang->more} <i class='icon icon-caret-right pb-3'></i>", '_blank', 'class="more text-muted flex align-center"');?>
       </div>
-      <?php foreach($patches as $patch):?>
+      <?php foreach($zentaoData->patches as $patch):?>
       <div class="patch-block">
 	    <div class="title flex justify-between">
 	      <div class="panel-title"><?php echo $patch->name?></div>
