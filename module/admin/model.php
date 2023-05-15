@@ -626,7 +626,7 @@ class adminModel extends model
             $index ++;
         }
 
-        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.news', json_encode($dynamics));
+        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.dynamic', json_encode($dynamics));
     }
 
     /**
@@ -708,7 +708,7 @@ class adminModel extends model
         }
         else
         {
-            $data->dynamics = json_decode($zentaoData->news);
+            $data->dynamics = json_decode($zentaoData->dynamic);
             $data->classes  = json_decode($zentaoData->publicClass);
             $data->plugins  = json_decode($zentaoData->plugin);
             $data->patches  = json_decode($zentaoData->patch);
