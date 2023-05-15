@@ -639,7 +639,7 @@ class bugZen extends bug
         }
         else
         {
-            setcookie('bugModule', '0', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            helper::setcookie('bugModule', '0', 0);
             $location = $this->createLink('bug', 'browse', "productID={$bug->product}&branch=$bug->branch&browseType=byModule&param={$bug->module}&orderBy=id_desc");
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
