@@ -74,14 +74,14 @@
               <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
             <?php endif;?>
         </div>
-      <?php if($zentaoData->publicClass):?>
+      <?php if($zentaoData->classes):?>
       <div class="panel publicClass">
         <div class="panel-title">
           <?php echo $lang->admin->publicClass;?>
           <?php echo html::a($config->admin->classURL, "{$lang->more} <i class='icon icon-caret-right'></i>", '_blank', 'class="more text-muted flex align-center"');?>
         </div>
         <div class="classList flex">
-          <?php foreach($zentaoData->publicClass as $class):?>
+          <?php foreach($zentaoData->classes as $class):?>
           <a class="classItem shadow-primary-hover" href='<?php echo $class->viewLink;?>' target='_blank'>
 	      <div class="imgBack">
               <div class="classImg" style="background-image: url('<?php echo $class->image;?>');"></div>

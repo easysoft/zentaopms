@@ -683,10 +683,10 @@ class adminModel extends model
         $data = new stdclass();
         $data->hasData = true;
 
-        $news        = array();
-        $publicClass = array();
-        $plugins     = array();
-        $patches     = array();
+        $news    = array();
+        $classes = array();
+        $plugins = array();
+        $patches = array();
         if(empty($zentaoData))
         {
             $data->hasData = false;
@@ -709,17 +709,17 @@ class adminModel extends model
         }
         else
         {
-            $news        = json_decode($zentaoData->news);
-            $publicClass = json_decode($zentaoData->publicClass);
-            $plugins     = json_decode($zentaoData->plugin);
-            $patches     = json_decode($zentaoData->patch);
+            $news    = json_decode($zentaoData->news);
+            $classes = json_decode($zentaoData->publicClass);
+            $plugins = json_decode($zentaoData->plugin);
+            $patches = json_decode($zentaoData->patch);
             if(common::checkNotCN()) array_pop($plugins);
         }
 
-        $data->news        = $news;
-        $data->publicClass = $publicClass;
-        $data->plugins     = $plugins;
-        $data->patches     = $patches;
+        $data->news    = $news;
+        $data->classes = $classes;
+        $data->plugins = $plugins;
+        $data->patches = $patches;
 
         return $data;
     }
