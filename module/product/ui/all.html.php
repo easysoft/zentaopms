@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-$cols = array_values($config->product->all->dtable->fieldList);
+$cols = array_values($config->product->dtable->fieldList);
 
 /* TODO: implements extend fields. */
 $extendFields = $this->product->getFlowExtendFields();
