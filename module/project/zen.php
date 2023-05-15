@@ -37,7 +37,7 @@ class projectZen extends project
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
 
-        if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($project->code);
+        if(!isset($this->config->setCode) || $this->config->setCode == 0) unset($project->code);
 
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
@@ -59,7 +59,7 @@ class projectZen extends project
     protected function checkWorkdaysLegtimate($project): bool
     {
         $workdays = helper::diffDate($project->end, $project->begin) + 1;
-        if(isset($project->days) and $project->days > $workdays)
+        if(isset($project->days) && $project->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
@@ -129,7 +129,7 @@ class projectZen extends project
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) and empty($rawdata->branch[$index]))
+                if(isset($multipleProducts[$productID]) && empty($rawdata->branch[$index]))
                 {
                     dao::$errors[] = $this->lang->project->error->emptyBranch;
                     return false;
@@ -138,7 +138,7 @@ class projectZen extends project
         }
 
         /* Judge products not empty. */
-        if($project->parent and $project->hasProduct && empty($linkedProductsCount) and !isset($rawdata->newProduct))
+        if($project->parent && $project->hasProduct && empty($linkedProductsCount) && !isset($rawdata->newProduct))
         {
             dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
             return false;
@@ -159,7 +159,7 @@ class projectZen extends project
     {
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin) + 1;
-        if(isset($project->days) and $project->days > $workdays)
+        if(isset($project->days) && $project->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
@@ -172,7 +172,7 @@ class projectZen extends project
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetNumber);
                 return false;
             }
-            elseif(is_numeric($project->budget) and ($project->budget < 0))
+            elseif(is_numeric($project->budget) && ($project->budget < 0))
             {
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetGe0);
                 return false;
@@ -239,8 +239,8 @@ class projectZen extends project
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        if($this->app->tab == 'program' and $programID)                   $this->loadModel('program')->setMenu($programID);
-        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
+        if($this->app->tab == 'program' && $programID)                   $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'product' && !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
@@ -260,7 +260,7 @@ class projectZen extends project
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
         $this->view->title               = $this->lang->project->create;
-        $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
+        $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->model               = $model;
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
@@ -315,7 +315,7 @@ class projectZen extends project
                 if(!isset($productPlans[$productID])) $productPlans[$productID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
                 $productPlans[$productID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 
-                if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
+                if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
                 {
                     if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
                     array_push($unmodifiableProducts, $productID);
@@ -480,7 +480,7 @@ class projectZen extends project
      */
     protected function responseAfterStart(object $project, array $changes, string $comment): void
     {
-        if($comment != '' or !empty($changes))
+        if($comment != '' || !empty($changes))
         {
             $actionID = $this->loadModel('action')->create('project', $project->id, 'Started', $comment);
             $this->action->logHistory($actionID, $changes);
@@ -503,7 +503,7 @@ class projectZen extends project
      */
     protected function responseAfterSuspend(int $projectID, array $changes, string $comment): void
     {
-        if($comment != '' or !empty($changes))
+        if($comment != '' || !empty($changes))
         {
             $actionID = $this->loadModel('action')->create('project', $projectID, 'Suspended', $comment);
             $this->action->logHistory($actionID, $changes);
@@ -541,7 +541,7 @@ class projectZen extends project
      */
     protected function responseAfterClose(int $projectID, array $changes, string $comment): void
     {
-        if($comment != '' or !empty($changes))
+        if($comment != '' || !empty($changes))
         {
             $actionID = $this->loadModel('action')->create('project', $projectID, 'Closed', $comment);
             $this->action->logHistory($actionID, $changes);
@@ -647,7 +647,7 @@ class projectZen extends project
      */
     protected function responseAfterActivate(int $projectID, array $changes): void
     {
-        if($this->post->comment != '' or !empty($changes))
+        if($this->post->comment != '' || !empty($changes))
         {
             $actionID = $this->loadModel('action')->create('project', $projectID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
@@ -765,7 +765,7 @@ class projectZen extends project
 
         /* 如果有迭代并且是非瀑布项目，记录关联产品执行到action表。*/
         /* If it is multiple project and model isn't waterfall project, record to table action. */
-        if($project->multiple and $project->model != 'waterfall' and $project->model != 'waterfallplus')
+        if($project->multiple && $project->model != 'waterfall' && $project->model != 'waterfallplus')
         {
             $this->recordExecutionsOfUnlinkedProducts($formerProducts, $currentIds, $IdList);
         }
@@ -839,7 +839,7 @@ class projectZen extends project
                 $linkedBranches[$productID][$branchID] = $branchID;
                 $linkedBranchIdList[$branchID] = $branchID;
 
-                if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
+                if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
                 {
                     if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
                     array_push($unmodifiableProducts, $productID);
@@ -918,7 +918,7 @@ class projectZen extends project
             {
                 foreach($branchGroups[$productID] as $branchID => $branchName)
                 {
-                    if(isset($linkedProducts[$productID]) and isset($linkedBranches[$productID][$branchID])) continue;
+                    if(isset($linkedProducts[$productID]) && isset($linkedBranches[$productID][$branchID])) continue;
                     $otherProducts["{$productID}_{$branchID}"] = $productName . '_' . $branchName;
                 }
             }

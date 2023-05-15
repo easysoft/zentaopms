@@ -2876,7 +2876,7 @@ class projectModel extends model
     public function addPlans(int $projectID, array $plans): bool
     {
         $planIdList = array();
-        foreach($planList as $plans)
+        foreach($plans as $planList)
         {
             foreach($planList as $planID)
             {

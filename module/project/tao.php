@@ -169,7 +169,7 @@ class projectTao extends projectModel
 
         foreach($tasks as $task)
         {
-            if($task->status == 'wait' and !helper::isZeroDate($task->estStarted))
+            if($task->status == 'wait' && !helper::isZeroDate($task->estStarted))
             {
                 $taskDays   = helper::diffDate($task->deadline, $task->estStarted);
                 $taskOffset = helper::diffDate($task->estStarted, $oldProject->begin);
@@ -217,7 +217,7 @@ class projectTao extends projectModel
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         /* Filter the date is empty or 1970. */
-        if($project and helper::isZeroDate($project->end)) $project->end = '';
+        if($project && helper::isZeroDate($project->end)) $project->end = '';
         return $project;
     }
 
@@ -238,7 +238,7 @@ class projectTao extends projectModel
         $this->app->loadLang('doc');
         $authorizedUsers = array();
 
-        if($project->parent and $project->acl == 'program')
+        if($project->parent && $project->acl == 'program')
         {
             $stakeHolders    = $this->loadModel('stakeholder')->getStakeHolderPairs($project->parent);
             $authorizedUsers = array_keys($stakeHolders);
@@ -451,7 +451,7 @@ class projectTao extends projectModel
      */
     protected function buildLinkForStory(string $method) :string
     {
-        if($method == 'change' or $method == 'create')
+        if($method == 'change' || $method == 'create')
             return helper::createLink('projectstory', 'story', "projectID=%s");
         if($method == 'zerocase')
             return helper::createLink('project', 'testcase', "projectID=%s");
@@ -633,12 +633,12 @@ class projectTao extends projectModel
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq('project')
             ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($status)->fi()
-            ->beginIF($status == 'undone' or $status == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($status == 'undone' || $status == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($status == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
-            ->beginIF($this->cookie->involved or $involved)
+            ->beginIF($this->cookie->involved || $involved)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
