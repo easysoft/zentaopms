@@ -970,9 +970,9 @@ class projectZen extends project
             $project->from       = 'project';
             $project->end        = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
             $project->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
-            $project->estimate   = $project->hours->totalEstimate . $this->lang->execution->workHourUnit;
-            $project->consume    = $project->hours->totalConsumed . $this->lang->execution->workHourUnit;
-            $project->surplus    = $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
+            $project->estimate   = $project->hours->totalEstimate . $this->lang->project->workHourUnit;
+            $project->consume    = $project->hours->totalConsumed . $this->lang->project->workHourUnit;
+            $project->surplus    = $project->hours->totalLeft     . $this->lang->project->workHourUnit;
             $project->progress   = $project->hours->progress;
 
             $projectBudget   = $this->project->getBudgetWithUnit($project->budget);
