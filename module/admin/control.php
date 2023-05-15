@@ -51,14 +51,10 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-        $clientLang = $this->app->getClientLang();
-        $langNotCN  = common::checkNotCN();
-        $dateUsed   = $this->admin->genDateUsed();
-
         $this->view->title      = $this->lang->admin->common;
         $this->view->zentaoData = $this->admin->getZentaoData();
-        $this->view->dateUsed   = $dateUsed;
-        $this->view->langNotCN  = $langNotCN;
+        $this->view->dateUsed   = $this->admin->genDateUsed();
+        $this->view->langNotCN  = common::checkNotCN();
         $this->display();
     }
 
