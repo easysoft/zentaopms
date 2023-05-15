@@ -64,7 +64,7 @@ class admin extends control
         $this->view->dateUsed    = $dateUsed;
         $this->view->hasInternet = $hasInternet;
         $this->view->dynamics    = $zentaoData->news;
-        $this->view->publicClass = $zentaoData->publicclass;
+        $this->view->publicClass = $zentaoData->publicClass;
         $this->view->langNotCN   = $langNotCN;
         $this->display();
     }

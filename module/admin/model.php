@@ -592,7 +592,7 @@ class adminModel extends model
             $index ++;
         }
 
-        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.publicclass', json_encode($publicClass));
+        return $this->loadModel('setting')->setItem('system.common.zentaoWebsite.publicClass', json_encode($publicClass));
     }
 
     /**
@@ -684,7 +684,7 @@ class adminModel extends model
         $data->hasData = true;
 
         $news        = array();
-        $publicclass = array();
+        $publicClass = array();
         $plugins     = array();
         $patches     = array();
         if(empty($zentaoData))
@@ -710,14 +710,14 @@ class adminModel extends model
         else
         {
             $news        = json_decode($zentaoData->news);
-            $publicclass = json_decode($zentaoData->publicclass);
+            $publicClass = json_decode($zentaoData->publicClass);
             $plugins     = json_decode($zentaoData->plugin);
             $patches     = json_decode($zentaoData->patch);
             if(common::checkNotCN()) array_pop($plugins);
         }
 
         $data->news        = $news;
-        $data->publicclass = $publicclass;
+        $data->publicClass = $publicClass;
         $data->plugins     = $plugins;
         $data->patches     = $patches;
 
