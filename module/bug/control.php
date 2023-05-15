@@ -956,6 +956,7 @@ class bug extends control
     }
 
     /**
+     * 解决bug。
      * Resolve a bug.
      *
      * @param  int    $bugID
@@ -963,26 +964,31 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function resolve($bugID, $extra = '')
+    public function resolve(int $bugID, string $extra = '')
     {
-        /* Get bug. */
+        /* Get bug and execution. */
         $bug = $this->bug->getById($bugID);
         if($bug->execution) $execution = $this->loadModel('execution')->getByID($bug->execution);
 
         if(!empty($_POST))
         {
+            /* Update bug status and get changes after resolving. */
             $changes = $this->bug->resolve($bugID, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
+            /* Save files. */
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
+            /* Record log. */
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''));
             $this->action->logHistory($actionID, $changes);
 
+            /* Get new bug. */
             $bug = $this->bug->getById($bugID);
 
             $this->executeHooks($bugID);
 
+            /* This bug has been converted to a task, update the status of the related task or not. */
             if($bug->toTask != 0)
             {
                 /* If task is not finished, update it's status. */
@@ -996,6 +1002,7 @@ class bug extends control
                 }
             }
 
+            /* Get response after resolving. */
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
             $regionID = zget($output, 'regionID', 0);
@@ -1003,16 +1010,21 @@ class bug extends control
             return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
         }
 
+        /* Get project id, product id of bug, get users who is not closed and get assigned person. */
         $projectID  = $bug->project;
         $productID  = $bug->product;
         $users      = $this->user->getPairs('noclosed');
         $assignedTo = $bug->openedBy;
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
+        /* Remove 'Convert to story' from the solution list. */
         unset($this->lang->bug->resolutionList['tostory']);
 
+        /* check privilege of the bug's execution. */
         $this->bugZen->checkBugExecutionPriv($bug);
+        /* Set menu. */
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
+        /* Show the variables associated. */
         $this->view->title          = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug            = $bug;
         $this->view->users          = $users;

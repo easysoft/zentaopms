@@ -853,13 +853,15 @@ class bugModel extends model
      * @param  int    $bugID
      * @param  string $extra
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function resolve($bugID, $extra = '')
+    public function resolve(int $bugID, string $extra = ''): array|false
     {
+        /* Parse extra, and get variables. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
+        /* Construct bug data. */
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
@@ -897,9 +899,12 @@ class bugModel extends model
                 }
             }
 
+            /* If the resolution of bug is duplicate, duplicate bug id cannot be empty. */
             if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
 
+            /* When creating a new build, the build name cannot be empty. */
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
+            /* When creating a new build, the execution of the build cannot be empty. */
             if(empty($bug->buildExecution))
             {
                 $executionLang = $this->lang->bug->execution;
@@ -912,6 +917,7 @@ class bugModel extends model
             }
             if(dao::isError()) return false;
 
+            /* Construct build data. */
             $buildData = new stdclass();
             $buildData->product     = (int)$oldBug->product;
             $buildData->branch      = (int)$oldBug->branch;
@@ -923,22 +929,26 @@ class bugModel extends model
             $buildData->createdBy   = $this->app->user->account;
             $buildData->createdDate = helper::now();
 
+            /* Create a build. */
             $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
             $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
                 ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
                 ->exec();
             if(dao::isError()) return false;
+            /* Get build id, and record log. */
             $buildID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('build', $buildID, 'opened');
             $bug->resolvedBuild = $buildID;
         }
 
+        /* If the resolved build is not the trunk, get test plan id. */
         if($bug->resolvedBuild and $bug->resolvedBuild != 'trunk')
         {
             $testtaskID = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
             if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
         }
 
+        /* Update bug. */
         $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
@@ -950,7 +960,9 @@ class bugModel extends model
 
         if(!dao::isError())
         {
+            /* Add score. */
             $this->loadModel('score')->create('bug', 'resolve', $oldBug);
+            /* Move bug card in kanban. */
             if($oldBug->execution)
             {
                 $this->loadModel('kanban');
@@ -961,8 +973,10 @@ class bugModel extends model
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
 
+            /* If the edition is not pms, update feedback. */
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
+            /* Return changes after resolving. */
             return common::createChanges($oldBug, $bug);
         }
 
