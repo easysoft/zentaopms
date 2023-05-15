@@ -710,7 +710,7 @@ class bug extends control
      */
     public function assignTo(int $bugID)
     {
-        /* Get old task, and check privilege of the execution. */
+        /* Get old bug, and check privilege of the execution. */
         $bug = $this->bug->getById($bugID);
         $this->bugZen->checkBugExecutionPriv($bug);
 
@@ -965,6 +965,7 @@ class bug extends control
      */
     public function resolve($bugID, $extra = '')
     {
+        /* Get bug. */
         $bug = $this->bug->getById($bugID);
         if($bug->execution) $execution = $this->loadModel('execution')->getByID($bug->execution);
 
