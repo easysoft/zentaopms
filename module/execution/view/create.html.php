@@ -113,7 +113,7 @@
           <?php
           if($isStage)
           {
-              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control chosen'");
+              echo html::select('attribute', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, '', "class='form-control chosen'");
           }
           else
           {
