@@ -103,15 +103,15 @@ class bugTao extends bugModel
      * @param  int|string $branch
      * @param  int        $projectID
      * @param  int        $queryID
-     * @param  string     $orderBy
      * @param  string     $excludeBugs
+     * @param  string     $orderBy
      * @param  object     $pager
      * @access public
      * @return array
      */
     protected function getBySearch(array $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null)
     {
-        $bugQeury = $this->processSearchQuery($queryID, $productIdList, $branch);
+        $bugQuery = $this->processSearchQuery($queryID, $productIdList, (string)$branch);
 
         return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
             ->where($bugQuery)
@@ -393,7 +393,7 @@ class bugTao extends bugModel
      * @access protected
      * @return string
      */
-    private function processSearchQuery(int $queryID, array $productIdList, int|string $branch): string
+    private function processSearchQuery(int $queryID, array $productIdList, string $branch): string
     {
         /* 设置 bug 查询的 session。*/
         /* Set the session of bug query. */
