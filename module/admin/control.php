@@ -93,6 +93,8 @@ class admin extends control
                 $this->admin->setExtensionsByAPI('patch', 5);
                 $this->admin->setDynamicsByAPI(3);
                 $this->admin->setPublicClassByAPI(3);
+
+                $this->loadModel('setting')->setItem('system.common.zentaoWebsite.lastSyncDate', date('Y-m-d'));
             }
         }
 
