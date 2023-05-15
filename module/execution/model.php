@@ -5377,7 +5377,7 @@ class executionModel extends model
             }
         }
 
-        if(!empty($execution->points))
+        if(!empty($execution->points) and $this->cookie->showStage)
         {
             foreach($execution->points as $point) echo $this->buildPointList($execution, $point);
         }

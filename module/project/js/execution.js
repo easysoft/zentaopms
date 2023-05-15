@@ -9,6 +9,12 @@ $(function()
         $('input#editExecution1').prop('disabled', show).attr('title', show == 1 ? disabledExecutionTip : defaultExecutionTip);
         window.location.reload();
     });
+    $('input[name^="showStage"]').click(function()
+    {
+        var show = $(this).is(':checked') ? 1 : 0;
+        $.cookie('showStage', show, {expires:config.cookieLife, path:config.webRoot});
+        window.location.reload();
+    });
     if($.cookie('showTask') == 1) $('input#editExecution1').prop('disabled', true).attr('title', disabledExecutionTip);
 
     $('input#editExecution1').click(function()

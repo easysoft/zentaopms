@@ -42,6 +42,7 @@
     <?php endforeach;?>
     <?php if(common::hasPriv('execution', 'batchEdit') and !empty($executionStats)) echo html::checkbox('editExecution', array('1' => $lang->edit . $lang->executionCommon), '', $this->cookie->editExecution ? 'checked=checked' : '');?>
     <?php if(common::hasPriv('execution', 'task')) echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
+    <?php if($project->model == 'ipd') echo html::checkbox('showStage', array('1' => $lang->programplan->stageCustom->point), '', $this->cookie->showStage ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) and ($this->config->edition == 'max' or $this->config->edition == 'ipd')):?>
