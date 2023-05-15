@@ -1575,10 +1575,10 @@ class baseRouter
             $moduleName = $this->moduleName;
             $methodName = $this->methodName;
 
-            /*
+            /**
              * 引入该模块的control文件。
              * Include the control file of the module.
-             **/
+             */
             $isExt = $this->setActionExtFile();
             if($isExt)
             {
@@ -1604,24 +1604,27 @@ class baseRouter
                 if(str_starts_with($line1, '<?php //') and str_starts_with($line2, "if(!extension_loaded('ionCube Loader'))")) $isEncrypted = true;
             }
 
-            /*
+            /**
              * 设置control的类名。
              * Set the class name of the control.
-             **/
+             */
             $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
             if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
 
-            /*
+            /**
              * 创建control类的实例。
-             * Create a instance of the control.
-             **/
+             * Create an instance of the control.
+             */
             $module = new $className();
             if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
             $this->control = $module;
 
-            /* include default value for module*/
+            /* include default value for module. */
             $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
             if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+            /* include default type for module. */
+            $defaultTypeFiles = glob($this->getTmpRoot() . "defaulttype/*.php");
+            if($defaultTypeFiles) foreach($defaultTypeFiles as $typeFile) include $typeFile;
 
             /**
              * 使用反射机制获取函数参数的默认值。
@@ -1634,21 +1637,31 @@ class baseRouter
                 $name = $param->getName();
 
                 $default = '_NOT_SET';
-                $type    = null;
                 if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
                 {
-                    $default = $paramDefaultValue[$appName][$className][$methodName][$name]['default'];
-                    $type    = $paramDefaultValue[$appName][$className][$methodName][$name]['type'];
+                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
                 }
                 elseif(isset($paramDefaultValue[$className][$methodName][$name]))
                 {
-                    $default = $paramDefaultValue[$className][$methodName][$name]['default'];
-                    $type    = $paramDefaultValue[$className][$methodName][$name]['type'];
+                    $default = $paramDefaultValue[$className][$methodName][$name];
                 }
-                elseif(!$isEncrypted)
+                elseif(!$isEncrypted && $param->isDefaultValueAvailable())
                 {
-                    if($param->isDefaultValueAvailable()) $default = $param->getDefaultValue();
-                    if(method_exists($param, 'hasType') && $param->hasType()) $type = $param->getType()->getName();
+                    $default = $param->getDefaultValue();
+                }
+
+                $type = 'string';
+                if(isset($paramDefaultType[$appName][$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultType[$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$className][$methodName][$name];
+                }
+                elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
+                {
+                    $type = $param->getType()->getName();
                 }
 
                 $defaultParams[$name] = array('default' => $default, 'type' => $type);
