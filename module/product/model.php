@@ -1320,6 +1320,7 @@ class productModel extends model
         $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIDs);
         $assignToNull         = $this->productTao->getAssignToNullTODO($productIDs);
         list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIDs, $storyType);
+        $rootLinePairs        = $this->productTao->getRootLinePairs($products);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1328,15 +1329,17 @@ class productModel extends model
             $product->stories                 = $stories[$product->id];
             $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
             $product->stories['unclosed']     = isset($unclosedStory[$product->id])     ? $unclosedStory[$product->id]     : 0;
-            $product->requirements            = $reqs[$product->id];
-            $product->plans                   = isset($plans[$product->id])        ? $plans[$product->id]        : 0;
-            $product->releases                = isset($releases[$product->id])     ? $releases[$product->id]     : 0;
-            $product->bugs                    = isset($bugs[$product->id])         ? $bugs[$product->id]         : 0;
-            $product->unResolved              = isset($unResolved[$product->id])   ? $unResolved[$product->id]   : 0;
-            $product->closedBugs              = isset($closedBugs[$product->id])   ? $closedBugs[$product->id]   : 0;
-            $product->fixedBugs               = isset($fixedBugs[$product->id])    ? $fixedBugs[$product->id]    : 0;
-            $product->thisWeekBugs            = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
-            $product->assignToNull            = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
+
+            $product->requirements = $reqs[$product->id];
+            $product->plans        = isset($plans[$product->id])         ? $plans[$product->id]         : 0;
+            $product->releases     = isset($releases[$product->id])      ? $releases[$product->id]      : 0;
+            $product->bugs         = isset($bugs[$product->id])          ? $bugs[$product->id]          : 0;
+            $product->unResolved   = isset($unResolved[$product->id])    ? $unResolved[$product->id]    : 0;
+            $product->closedBugs   = isset($closedBugs[$product->id])    ? $closedBugs[$product->id]    : 0;
+            $product->fixedBugs    = isset($fixedBugs[$product->id])     ? $fixedBugs[$product->id]     : 0;
+            $product->thisWeekBugs = isset($thisWeekBugs[$product->id])  ? $thisWeekBugs[$product->id]  : 0;
+            $product->assignToNull = isset($assignToNull[$product->id])  ? $assignToNull[$product->id]  : 0;
+            $product->rootLine     = isset($rootLinePairs[$product->id]) ? $rootLinePairs[$product->id] : '';
 
             /* Calculate product progress. */
             $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];

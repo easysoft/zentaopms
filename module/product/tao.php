@@ -1044,4 +1044,45 @@ class productTao extends productModel
             ->andWhere('status')->eq('normal')
             ->fetchGroup('product', 'id');
     }
+
+    /*
+     * Get product root line name pairs.
+     *
+     * @param  array     $productList
+     * @access protected
+     * @return array
+     */
+    protected function getRootLinePairs(array $productList): array
+    {
+        $productLinePairs = array();
+        foreach($productList as $productID => $product)
+        {
+            if($product->line > 0) continue;
+            $productLinePairs[$productID] = $product->line;
+        }
+        if(!empty($productLinePairs)) return array();
+
+        /* Get product lines. */
+        $lineIdList = array_unique(array_values($productLinePairs));
+        $productLines = $this->dao->select('id,path')->from(TABLE_MODULE)
+            ->where('type')->eq('line')
+            ->andWhere('id')->in($lineIdList)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+
+        /* Get root lines of products. */
+        $productRootLines = array();
+        foreach($productLines as $id => $line)
+        {
+            $productID = array_search($id, $productLinePairs);
+            $productRootLines[$productID] = array_shift(explode(trim($line['path'], ','), ','));
+        }
+
+        $rootLinePairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(array_values($productRootLines))->fetchPairs();
+
+        $productRootLinePairs = array();
+        foreach($productRootLines as $productID => $rootLine) $productRootLinePairs[$productID] = $rootLinePairs[$rootLine];
+
+        return $productRootLinePairs;
+    }
 }
