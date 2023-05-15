@@ -93,7 +93,7 @@ pipeline {
 
                 steps {
                   container('zentao') {
-                    sh 'apachectl start ; initdb.php > /apps/zentao/unittestdb.spl ; /apps/zentao/test/ztest batchInit ;/apps/zentao/test/runtime/ztf  /apps/zentao/module -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log ; parsehtml.php ; initdb.php /apps/zentao/unittest.sql'
+                    sh 'apachectl start ; initdb.php > /apps/zentao/unittestdb.spl ; /apps/zentao/test/ztest batchInit ;/apps/zentao/test/runtime/ztf  /apps/zentao/module -C 11 | tee /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log ; parsehtml.php ; initdb.php /apps/zentao/unittestdb.sql'
                     publishHTML (target : [allowMissing: false,alwaysLinkToLastBuild: false,keepAll: true,reportDir: 'coverage',reportFiles: 'index.html',reportName: 'UT Coverage Report',reportTitles: 'UT Coverage Report'])
                     sh 'pipeline-unittest.sh /apps/zentao/test/${MIDDLE_IMAGE_TAG}.log'
                   }
