@@ -396,11 +396,7 @@ class product extends control
         $productID = (int)$productID;
 
         /* Not confirm. */
-        if($confirm == 'no')
-        {
-            print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
-            return;
-        }
+        if($confirm == 'no') return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
 
         /* Delete product. */
         $this->product->deleteById($productID);
@@ -734,7 +730,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function whitelist(int $productID = 0, string $module = 'product', string $objectType = 'product', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->product->setMenu($productID, 0);
         $this->lang->modulePageNav = '';
@@ -752,7 +748,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function addWhitelist($productID = 0, $deptID = 0, $copyID = 0)
+    public function addWhitelist(int $productID = 0, int $deptID = 0, int $copyID = 0)
     {
         $this->product->setMenu($productID);
         $this->lang->modulePageNav = '';
@@ -768,7 +764,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function unbindWhitelist($id = 0, $confirm = 'no')
+    public function unbindWhitelist(int $id = 0, string $confirm = 'no')
     {
         echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
     }
