@@ -184,6 +184,7 @@ $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '项目看板';
 $lang->project->moreActions        = '更多操作';
+$lang->project->other              = '其他操作';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -379,6 +380,7 @@ $lang->project->moreModelTitle     = '更多模型敬请期待...';
 $lang->project->empty                  = "暂时没有{$lang->projectCommon}";
 $lang->project->nextStep               = '下一步';
 $lang->project->hoursUnit              = '%s 工时';
+$lang->project->workHourUnit           = 'h';
 $lang->project->membersUnit            = '%s人';
 $lang->project->lastIteration          = "近期{$lang->executionCommon}";
 $lang->project->lastKanban             = '近期看板';
@@ -455,5 +457,3 @@ $lang->project->associatePlan     = '关联计划';
 $lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
 $lang->project->tenThousandYuan   = '万元';
 $lang->project->planDate          = '计划日期';
-$lang->project->inputProjectName  = '输入项目名称';
-$lang->project->inputProjectCode  = '输入项目代号';

@@ -68,7 +68,6 @@ $lang->project->allProjects         = "All {$lang->projectCommon}s";
 $lang->project->ignore              = 'Ignore';
 $lang->project->disableExecution    = "{$lang->projectCommon} of disable {$lang->executionCommon}";
 $lang->project->selectProduct       = "Select {$lang->productCommon}";
-$lang->project->ignore              = 'Ignorer';
 $lang->project->manageRepo          = 'Manage Repo';
 $lang->project->linkedRepo          = 'Link Repo';
 $lang->project->unlinkedRepo        = 'Unlink Repo';
@@ -139,7 +138,7 @@ $lang->project->realBeganAB        = 'Actual Begin';
 $lang->project->realEndAB          = 'Actual End';
 $lang->project->realBegan          = 'Actual Begin';
 $lang->project->realEnd            = 'Actual End';
-$lang->project->stageBy           = 'Stage Type';
+$lang->project->stageBy            = 'Stage Type';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -183,7 +182,9 @@ $lang->project->product            = $lang->productCommon;
 $lang->project->branch             = 'Platform/Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
-$lang->project->kanban             = 'Project Kanban';
+$lang->project->kanban             = 'Kanban';
+$lang->project->moreActions        = 'More Actions';
+$lang->project->other              = 'Other Actions';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -230,7 +231,6 @@ $lang->project->allSummary             = "Total {$lang->projectCommon}s: %s, Wai
 $lang->project->checkedSummary         = 'Seleted: %total%.';
 $lang->project->checkedAllSummary      = 'Seleted: %total%, Wait: %wait%, Doing: %doing%, Suspended: %suspended%, Closed: %closed%.';
 
-$lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->tip = new stdclass();
 $lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
 $lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
@@ -246,6 +246,7 @@ $lang->project->error->budgetNumber     = '『Budget』must be numbers.';
 $lang->project->error->productNotEmpty  = "Please link {$lang->productCommon}s or create {$lang->productCommon}s.";
 $lang->project->error->emptyBranch      = 'Branch can not be empty!';
 
+$lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->hundredMillion = 'Hundred Million';
 
 $lang->project->unitList['CNY'] = 'RMB';
@@ -295,8 +296,9 @@ $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Unfinished';
 $lang->project->featureBar['browse']['wait']      = 'Waiting';
 $lang->project->featureBar['browse']['doing']     = 'Doing';
-$lang->project->featureBar['browse']['suspended'] = 'Suspended';
-$lang->project->featureBar['browse']['closed']    = 'Closed';
+$lang->project->featureBar['browse']['exceeded']  = 'Exceeded';
+$lang->project->featureBar['browse']['risky']     = 'Risky';
+$lang->project->featureBar['browse']['more']      = 'More';
 
 $lang->project->featureBar['index']['all']       = 'All';
 $lang->project->featureBar['index']['undone']    = 'Unfinished';
@@ -378,6 +380,7 @@ $lang->project->moreModelTitle     = 'Please look forward to more models...';
 $lang->project->empty                  = "No {$lang->projectCommon}.";
 $lang->project->nextStep               = 'Next step';
 $lang->project->hoursUnit              = '%s hours';
+$lang->project->workHourUnit           = 'H';
 $lang->project->membersUnit            = '%s men';
 $lang->project->lastIteration          = "Recent {$lang->executionCommon}";
 $lang->project->lastKanban             = 'Recent Kanban';
@@ -418,7 +421,7 @@ $lang->project->begigLetterExecution = "The start date of {$lang->projectCommon}
 $lang->project->endGreateExecution   = "The finish date of the {$lang->projectCommon} should be ≥ the maximum finish date of the execution: %s.";
 $lang->project->childLongTime        = "There are long-term {$lang->projectCommon}s in the child {$lang->projectCommon}, and the parent {$lang->projectCommon} should also be a long-term {$lang->projectCommon}.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from {$lang->projectCommon}?";
-$lang->project->stageByTips         = "Created by {$lang->projectCommon} as a single set of stages, and the stage is associated with all {$lang->productCommon}s; created by {$lang->productCommon} as multiple sets of stages, each set of stages is associated with a {$lang->productCommon}";
+$lang->project->stageByTips          = "Created by {$lang->projectCommon} as a single set of stages, and the stage is associated with all {$lang->productCommon}s; created by {$lang->productCommon} as multiple sets of stages, each set of stages is associated with a {$lang->productCommon}";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
@@ -444,7 +447,13 @@ $lang->project->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->project->moreSelects = array();
-$lang->project->moreSelects['suspended'] = 'Suspendues';
-$lang->project->moreSelects['closed']    = 'Fermées';
+$lang->project->moreSelects['suspended'] = 'Suspended';
+$lang->project->moreSelects['closed']    = 'Closed';
 
-$lang->project->manDay = 'Man Day';
+$lang->project->manDay            = 'Man Day';
+$lang->project->day               = 'Day';
+$lang->project->newProduct        = 'New Product';
+$lang->project->associatePlan     = 'Associate Plan';
+$lang->project->editorPlaceholder = 'You can directly paste images in the editor. Hotkeys: Command C+V';
+$lang->project->tenThousandYuan   = '10k';
+$lang->project->planDate          = 'Schedule Date';

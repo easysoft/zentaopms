@@ -182,7 +182,9 @@ $lang->project->product            = $lang->productCommon;
 $lang->project->branch             = 'Platform/Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
-$lang->project->kanban             = 'Project Kanban';
+$lang->project->kanban             = 'Kanban';
+$lang->project->moreActions        = 'More Actions';
+$lang->project->other              = 'Other Actions';
 
 /* Project Kanban. */
 $lang->project->projectTypeList = array();
@@ -229,7 +231,6 @@ $lang->project->allSummary             = "Total {$lang->projectCommon}s: %s, Wai
 $lang->project->checkedSummary         = 'Seleted: %total%.';
 $lang->project->checkedAllSummary      = 'Seleted: %total%, Wait: %wait%, Doing: %doing%, Suspended: %suspended%, Closed: %closed%.';
 
-$lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->tip = new stdclass();
 $lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
 $lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
@@ -245,6 +246,7 @@ $lang->project->error->budgetNumber     = '『Budget』must be numbers.';
 $lang->project->error->productNotEmpty  = "Please link {$lang->productCommon}s or create {$lang->productCommon}s.";
 $lang->project->error->emptyBranch      = 'Branch can not be empty!';
 
+$lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->hundredMillion = 'Hundred Million';
 
 $lang->project->unitList['CNY'] = 'RMB';
@@ -378,6 +380,7 @@ $lang->project->moreModelTitle     = 'Please look forward to more models...';
 $lang->project->empty                  = "No {$lang->projectCommon}.";
 $lang->project->nextStep               = 'Next step';
 $lang->project->hoursUnit              = '%s hours';
+$lang->project->workHourUnit           = 'H';
 $lang->project->membersUnit            = '%s men';
 $lang->project->lastIteration          = "Recent {$lang->executionCommon}";
 $lang->project->lastKanban             = 'Recent Kanban';
@@ -447,4 +450,10 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = 'Suspended';
 $lang->project->moreSelects['closed']    = 'Closed';
 
-$lang->project->manDay = 'Man Day';
+$lang->project->manDay            = 'Man Day';
+$lang->project->day               = 'Day';
+$lang->project->newProduct        = 'New Product';
+$lang->project->associatePlan     = 'Associate Plan';
+$lang->project->editorPlaceholder = 'You can directly paste images in the editor. Hotkeys: Command C+V';
+$lang->project->tenThousandYuan   = '10k';
+$lang->project->planDate          = 'Schedule Date';
