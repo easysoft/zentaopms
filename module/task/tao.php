@@ -668,4 +668,32 @@ class taskTao extends taskModel
     {
         return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
     }
+
+    /**
+     * 通过父任务更新子任务。
+     * Update chilren task by parent task.
+     *
+     * @param  int       $parentID
+     * @param  object    $data
+     * @param  string    $action
+     * @param  string    $comment
+     * @access protected
+     * @return void
+     */
+    protected function updateChildrenByParent(int $parentID, object $data, string $action, string $comment): void
+    {
+        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchAll('id');
+        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($parentID)->exec();
+        $this->computeWorkingHours($parentID);
+
+        if(!dao::isError() and count($oldChildrenTasks) > 0)
+        {
+            $this->loadModel('action');
+            foreach($oldChildrenTasks as $oldChildrenTask)
+            {
+                $actionID = $this->action->create('task', $oldChildrenTask->id, $action, $comment);
+                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
+            }
+        }
+    }
 }

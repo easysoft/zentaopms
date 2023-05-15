@@ -1650,7 +1650,7 @@ class taskModel extends model
      * @access public
      * @return array|false
      */
-    public function activate(object $task, string $comment, object $teamData, string $drag): array|false
+    public function activate(object $task, string $comment, object $teamData, array $drag): array|false
     {
         $taskID = $task->id;
 
@@ -1679,25 +1679,13 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
         {
-            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->left);
             unset($task->id);
-            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
-            $this->computeWorkingHours($taskID);
-            if(!dao::isError() and count($oldChildrenTasks) > 0)
-            {
-                $this->loadModel('action');
-                foreach($oldChildrenTasks as $oldChildrenTask)
-                {
-                    $actionID = $this->action->create('task', $oldChildrenTask->id, 'Activated', $this->post->comment);
-                    $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-                }
-            }
+            $this->taskTao->updateChildrenByParent($taskID, $task, 'Activated', $comment);
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-        $this->loadModel('kanban');
-        if(!isset($drag['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($drag['toColID'])) $this->kanban->moveCard($taskID, $drag['fromColID'], $drag['toColID'], $drag['fromLaneID'], $drag['toLaneID']);
+
+        $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

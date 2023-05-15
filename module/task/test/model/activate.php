@@ -6,18 +6,39 @@ include dirname(__FILE__, 2) . '/task.class.php';
 /**
 
 title=taskModel->activate();
+timeout=0
 cid=1
-pid=1
 
-wait状态任务激活 >> status,wait,doing
-done状态任务激活 >> status,done,doing
-pause状态任务激活 >> status,pause,doing
-cancel状态任务激活 >> status,cancel,doing
-closed状态任务激活 >> status,closed,doing
+- wait状态任务激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @doing
+
+- done状态任务激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @done
+ - 第0条的new属性 @doing
+
+- pause状态任务激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @pause
+ - 第0条的new属性 @doing
+
+- cancel状态任务激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @cancel
+ - 第0条的new属性 @doing
+
+- closed状态任务激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
 
 */
 
-$task     = zdTable('task')->gen(10);
+zdTable('task')->gen(10);
+zdTable('project')->config('execution')->gen(10);
+zdTable('story')->gen(30);
 
 $taskIDList = array(1, 3, 4, 5, 6);
 

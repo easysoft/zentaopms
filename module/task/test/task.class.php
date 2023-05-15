@@ -303,12 +303,13 @@ class taskTest
      */
     public function activateTest(int $taskID, array $param = array())
     {
-        $createFields = array('id' => $taskID, 'status' => 'doing', 'comment' => '单元测试','assignedTo' => '', 'left' => '3');
+        $createFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
         foreach($createFields as $field => $defaultValue) $postData[$field] = $defaultValue;
         foreach($param as $key => $value) $postData[$key] = $value;
 
+        $comment = '单元测试';
         $teamData = new stdclass();
-        $object = $this->objectModel->activate((object)$postData, $extra = '', $teamData, '');
+        $object = $this->objectModel->activate((object)$postData, $comment, $teamData, array());
         if(dao::isError())
         {
             $error = dao::getError();

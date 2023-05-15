@@ -1116,7 +1116,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function activate($taskID, $cardPosition = '', $drag = '', $from = '')
+    public function activate(int $taskID, string $cardPosition = '', string $cardDrag = '', string $from = '')
     {
         $this->taskZen->commonAction($taskID);
         if($cardPosition) list($regionID) = $cardPosition;
@@ -1127,7 +1127,7 @@ class task extends control
             $teamData = form::data($this->config->task->form->team->edit)->get();
 
             $task     = $this->taskZen->prepareActivate($taskData, $taskID);
-            $changes  = $this->task->activate($task, $this->post->comment, $teamData, $drag);
+            $changes  = $this->task->activate($task, $this->post->comment, $teamData, explode(',', $cardDrag));
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
