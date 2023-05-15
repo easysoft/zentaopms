@@ -1,0 +1,11 @@
+---
+title: zt_bug
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: assignedTo
+  range: user1
+- field: status
+  range: active,resolved,closed
+...
+

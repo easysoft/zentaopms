@@ -912,27 +912,28 @@ class bugTest
     }
 
     /**
+     * 测试指派一个bug。
      * Test assign a bug to a user again.
      *
-     * @param  int    $bugID
-     * @param  array  $param
+     * @param  object $bug
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function assignTest($bugID, $param = array())
+    public function assignTest(object $bug): array|string
     {
-        $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->assign($bugID);
-        unset($_POST);
+        $changes = $this->objectModel->assign($bug);
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
-            return $object;
+            $result = '';
+            foreach($changes as $change)
+            {
+                if(strpos($change['field'], 'Date') === false) $result .= "{$change['field']}:{$change['old']} to {$change['new']};";
+            }
+            return $result;
         }
     }
 

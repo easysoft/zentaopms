@@ -2,7 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/bug.class.php';
-su('admin');
+
+zdTable('bug')->config('bug_assign')->gen(6);
 
 /**
 
@@ -10,28 +11,62 @@ title=bugModel->assign();
 cid=1
 pid=1
 
-指派bugID为1的bug >> assignedTo,admin,user92
-指派bugID为2的bug >> assignedTo,admin,user93
-指派bugID为3的bug >> assignedTo,admin,user94
-指派bugID为4的bug >> assignedTo,admin,user95
-指派bugID为51的bug >> assignedTo,dev1,user96
-指派人不发生变化的bug >> 0
-
 */
 
-$bugIDlist = array('1','2','3','4','51','81');
+$now = helper::now();
 
-$bug1  = array('assignedTo' => 'user92', 'status' => 'active');
-$bug2  = array('assignedTo' => 'user93', 'status' => 'active');
-$bug3  = array('assignedTo' => 'user94', 'status' => 'active');
-$bug4  = array('assignedTo' => 'user95', 'status' => 'active');
-$bug51 = array('assignedTo' => 'user96', 'status' => 'active');
-$bug81 = array('assignedTo' => 'user97', 'status' => 'active');
+$bug1 = new stdclass();
+$bug1->id             = 1;
+$bug1->assignedTo     = 'user2';
+$bug1->assignedDate   = $now;
+$bug1->lastEditedBy   = 'admin';
+$bug1->lastEditedDate = $now;
+$bug1->mailto         = 'user1,user3';
+
+$bug2 = new stdclass();
+$bug2->id             = 2;
+$bug2->assignedTo     = 'user2';
+$bug2->assignedDate   = $now;
+$bug2->lastEditedBy   = 'admin';
+$bug2->lastEditedDate = $now;
+$bug2->mailto         = 'user2';
+
+$bug3 = new stdclass();
+$bug3->id             = 3;
+$bug3->assignedTo     = 'user2';
+$bug3->assignedDate   = $now;
+$bug3->lastEditedBy   = 'admin';
+$bug3->lastEditedDate = $now;
+$bug3->mailto         = 'user3';
+
+$bug4 = new stdclass();
+$bug4->id             = 4;
+$bug4->assignedTo     = 'user1';
+$bug4->assignedDate   = $now;
+$bug4->lastEditedBy   = 'admin';
+$bug4->lastEditedDate = $now;
+$bug4->mailto         = 'user1';
+
+$bug5 = new stdclass();
+$bug5->id             = 5;
+$bug5->assignedTo     = 'user1';
+$bug5->assignedDate   = $now;
+$bug5->lastEditedBy   = 'admin';
+$bug5->lastEditedDate = $now;
+$bug5->mailto         = 'user2';
+
+$bug6 = new stdclass();
+$bug6->id             = 6;
+$bug6->assignedTo     = 'user1';
+$bug6->assignedDate   = $now;
+$bug6->lastEditedBy   = 'admin';
+$bug6->lastEditedDate = $now;
+$bug6->mailto         = 'user3';
 
 $bug = new bugTest();
-r($bug->assignTest($bugIDlist[0],$bug1))  && p('0:field,old,new') && e('assignedTo,admin,user92'); // 指派bugID为1的bug
-r($bug->assignTest($bugIDlist[1],$bug2))  && p('0:field,old,new') && e('assignedTo,admin,user93'); // 指派bugID为2的bug
-r($bug->assignTest($bugIDlist[2],$bug3))  && p('0:field,old,new') && e('assignedTo,admin,user94'); // 指派bugID为3的bug
-r($bug->assignTest($bugIDlist[3],$bug4))  && p('0:field,old,new') && e('assignedTo,admin,user95'); // 指派bugID为4的bug
-r($bug->assignTest($bugIDlist[4],$bug51)) && p('0:field,old,new') && e('assignedTo,dev1,user96');  // 指派bugID为51的bug
-r($bug->assignTest($bugIDlist[5],$bug81)) && p() && e('0');                                        // 指派人不发生变化的bug
+r($bug->assignTest($bug1))  && p() && e('assignedTo:user1 to user2;mailto:admin to user1,user3;'); // 指派bug状态为激活的bug 更改指派人
+r($bug->assignTest($bug2))  && p() && e('assignedTo:user1 to user2;mailto:admin to user2;');       // 指派bug状态为解决的bug 更改指派人
+r($bug->assignTest($bug3))  && p() && e('0');                                                      // 指派bug状态为关闭的bug 更改指派人
+r($bug->assignTest($bug4))  && p() && e('mailto:admin to user1;');                                 // 指派bug状态为激活的bug 不更改指派人
+r($bug->assignTest($bug5))  && p() && e('mailto:admin to user2;');                                 // 指派bug状态为解决的bug 不更改指派人
+r($bug->assignTest($bug6))  && p() && e('0');                                                      // 指派bug状态为关闭的bug 不更改指派人

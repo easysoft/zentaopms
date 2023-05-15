@@ -752,37 +752,29 @@ class bugModel extends model
     }
 
     /**
-     * Assign a bug to a user again.
+     * 将任务指派给一个用户。
+     * Assign a bug to a user.
      *
-     * @param  int    $bugID
+     * @param  object      $bug
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function assign($bugID)
+    public function assign($bug): array|false
     {
-        $now = helper::now();
-        $oldBug = $this->getById($bugID);
+        /* Get old bug. */
+        $oldBug = $this->getById($bug->id);
+        /* If status of the bug is closed, skip it. */
         if($oldBug->status == 'closed') return array();
 
-        $bug = fixer::input('post')
-            ->add('id', $bugID)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('assignedDate', $now)
-            ->setDefault('mailto', '')
-            ->stripTags($this->config->bug->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule')
-            ->join('mailto', ',')
-            ->get();
-
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
+        /* Update assigned of the bug. */
         $this->dao->update(TABLE_BUG)
             ->data($bug)
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq($bugID)->exec();
+            ->where('id')->eq($bug->id)->exec();
 
-        if(!dao::isError()) return common::createChanges($oldBug, $bug);
+        if(dao::isError()) return false;
+        return common::createChanges($oldBug, $bug);
     }
 
     /**

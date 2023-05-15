@@ -480,10 +480,11 @@ class bugZen extends bug
      * @param  int       $bugID
      * @param  array     $changes
      * @param  string    $kanbanGroup
+     * @param  int       $regionID
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit(int $bugID, array $changes, string $kanbanGroup): array
+    protected function responseAfterOperate(int $bugID, array $changes, string $kanbanGroup = '', int $regionID = 0): array
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
 
@@ -504,7 +505,7 @@ class bugZen extends bug
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isonlybody()) $this->responseInModal($bug->execution, $kanbanGroup);
+        if(isonlybody()) $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID=$bugID"));
     }
@@ -1368,26 +1369,7 @@ class bugZen extends bug
      */
     protected function getEditAssignedToPairs(object $bug): array
     {
-        if($bug->execution)
-        {
-            $assignedToPairs = $this->user->getTeamMemberPairs($bug->execution, 'execution');
-        }
-        elseif($bug->project)
-        {
-            $assignedToPairs = $this->loadModel('project')->getTeamMemberPairs($bug->project);
-        }
-        else
-        {
-            $assignedToPairs = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
-            $assignedToPairs = array_filter($assignedToPairs);
-            if(empty($assignedToPairs)) $assignedToPairs = $this->user->getPairs('devfirst|noclosed');
-        }
-
-        if($bug->assignedTo && !isset($assignedToPairs[$bug->assignedTo]) && $bug->assignedTo != 'closed')
-        {
-            $assignedTo = $this->user->getByID($bug->assignedTo);
-            $assignedToPairs[$bug->assignedTo] = $assignedTo->realname;
-        }
+        $assignedToPairs = $this->bugZen->getAssignedToPairs($bug);
 
         if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
 
@@ -1580,5 +1562,44 @@ class bugZen extends bug
 
             return print(js::locate('back'));
         }
+    }
+
+    /**
+     * 基于当前bug获取指派给。
+     * Get assigned pairs by bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return string[]
+     */
+    protected function getAssignedToPairs(object $bug): array
+    {
+        /* If the execution of the bug is not empty, get the team members for the execution. */
+        if($bug->execution)
+        {
+            $users = $this->loadModel('user')->getTeamMemberPairs($bug->execution, 'execution');
+        }
+        /* If the project of the bug is not empty, get the team members for the project. */
+        elseif($bug->project)
+        {
+            $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
+        }
+        /* If the execution and project of the bug are both empty, get the team member of the bug's product. */
+        else
+        {
+            $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
+            $users = array_filter($users);
+            /* If the team member of the product is empty, get all user. */
+            if(empty($users)) $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        }
+
+        /* If the assigned person doesn't exist in the user list and the assigned person is not closed, append it. */
+        if($bug->assignedTo && !isset($users[$bug->assignedTo]) && $bug->assignedTo != 'closed')
+        {
+            $assignedTo = $this->user->getByID($bug->assignedTo);
+            $users[$bug->assignedTo] = $assignedTo->realname;
+        }
+
+        return $users;
     }
 }

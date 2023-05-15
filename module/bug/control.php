@@ -452,7 +452,8 @@ class bug extends control
 
             $this->executeHooks($bugID);
 
-            return $this->send($this->bugZen->responseAfterEdit($bugID, $changes, $kanbanGroup));
+            /* Get response after editing bug. */
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup));
         }
 
         $bug = $this->bug->getByID($bugID);
@@ -700,14 +701,16 @@ class bug extends control
     }
 
     /**
+     * 指派bug。
      * Update assign of bug.
      *
      * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function assignTo($bugID)
+    public function assignTo(int $bugID)
     {
+        /* Get old task, and check privilege of the execution. */
         $bug = $this->bug->getById($bugID);
         $this->bugZen->checkBugExecutionPriv($bug);
 
@@ -716,52 +719,36 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->bug->assign($bugID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+            /* Init bug data. */
+            $postData = form::data($this->config->bug->form->assignTo);
+            $bug      = $postData->data;
+            $bug->id  = $bugID;
+
+            $changes = $this->bug->assign($bug);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* Record log. */
+            $actionID = $this->loadModel('action')->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
 
-            if(isonlybody()) $this->bugZen->responseInModal($bug->execution);
-
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('status' => 'success', 'data' => $bugID));
-            }
-            else
-            {
-                return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
-            }
+            /* Get response after assigning bug. */
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes));
         }
 
         /* Get assigned to member. */
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            if($bug->execution)
-            {
-                $users = $this->user->getTeamMemberPairs($bug->execution, 'execution');
-            }
-            elseif($bug->project)
-            {
-                $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
-            }
-            else
-            {
-                $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
-                $users = array_filter($users);
-                if(empty($users)) $users = $this->user->getPairs('devfirst|noclosed');
-            }
+            $users = $this->bugZen->getAssignedToPairs($bug);
         }
         else
         {
-            $users = $this->user->getPairs('devfirst|noclosed');
+            $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
         }
 
-        $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
-        $this->view->position[] = $this->lang->bug->assignedTo;
-
+        /* Show the variables associated. */
+        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
         $this->view->users   = $users;
         $this->view->bug     = $bug;
         $this->view->bugID   = $bugID;
@@ -1010,21 +997,9 @@ class bug extends control
 
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
+            $regionID = zget($output, 'regionID', 0);
 
-            if(isonlybody())
-            {
-                $regionID = zget($output, 'regionID', 0);
-                $this->bugZen->responseInModal($bug->execution, '', $regionID);
-            }
-
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('status' => 'success', 'data' => $bugID));
-            }
-            else
-            {
-                return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
-            }
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
         }
 
         $projectID  = $bug->project;
@@ -1152,16 +1127,9 @@ class bug extends control
 
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
+            $regionID = zget($output, 'regionID', 0);
 
-            if(isonlybody())
-            {
-                $regionID = zget($output, 'regionID', 0);
-                $this->bugZen->responseInModal($bug->execution, '', $regionID);
-            }
-
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
-
-            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup));
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
