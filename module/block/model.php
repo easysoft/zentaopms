@@ -444,44 +444,4 @@ class blockModel extends model
 
         return !dao::isError();
     }
-
-    /**
-     * Get zentao.net data.
-     *
-     * @param  string $minTime
-     * @access public
-     * @return array
-     */
-    public function getZentaoData(string $minTime = ''): array
-    {
-        return $this->dao->select('type,params')->from(TABLE_BLOCK)
-            ->where('account')->eq('system')
-            ->andWhere('vision')->eq('rnd')
-            ->andWhere('module')->eq('zentao')
-            ->beginIF($minTime)->andWhere('source')->ge($minTime)->fi()
-            ->andWhere('type')->in('plugin,patch,publicclass,news')
-            ->fetchPairs('type');
-    }
-
-    /**
-     * Set zentao data.
-     *
-     * @param  string $type
-     * @param  string $params
-     * @access public
-     * @return bool
-     */
-    public function setZentaoData(string $type = 'patch', string $params = ''): bool
-    {
-        $data = new stdclass();
-        $data->account = 'system';
-        $data->vision  = 'rnd';
-        $data->module  = 'zentao';
-        $data->type    = $type;
-        $data->source  = date('Y-m-d');
-        $data->params  = json_encode($params);
-
-        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
-        return !dao::isError();
-    }
 }
