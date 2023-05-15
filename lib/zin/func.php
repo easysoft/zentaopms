@@ -1063,3 +1063,71 @@ function formItemDropdown()
 {
     return createWg('formItemDropdown', func_get_args());
 }
+
+/**
+ * Zentao editor wg.
+ *
+ * string   name
+ * ?string  id
+ * ?string  class
+ * ?string  value
+ * ?bool    required
+ * ?string  placeholder
+ * ?int     rows
+ * ?int     cols
+ */
+function editor()
+{
+    return createWg('editor', func_get_args());
+}
+
+/**
+ * Zentao comment button wg.
+ *
+ * ?string          dataTarget
+ * ?string          dataUrl
+ * ?string          dataType
+ * ?string          icon
+ * ?string          text
+ * ?bool            square
+ * ?bool            disabled
+ * ?bool            active
+ * ?string          url
+ * ?string          target
+ * ?string          trailingIcon
+ * ?string          hint
+ * ?string          type
+ * ?string          btnType
+ * string|int|null  size
+ * string|bool|null caret
+ */
+function commentBtn()
+{
+    return createWg('commentBtn', func_get_args());
+}
+
+/**
+ *
+ * Zentao comment dialog wg.
+ *
+ * ?string title,
+ * ?string url
+ * ?string name='comment'
+ * ?string method='POST'
+ */
+function commentDialog()
+{
+    return createWg('commentDialog', func_get_args());
+}
+
+/**
+ * Zentao comment form wg.
+ *
+ * ?string url
+ * ?string name='comment'
+ * ?string method='POST'
+ */
+function commentForm()
+{
+    return createWg('commentForm', func_get_args());
+}

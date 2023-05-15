@@ -5,8 +5,9 @@ namespace zin;
 class commentBtn extends btn
 {
     static $defineProps = array(
+        'dataTarget?:string',
         'dataUrl?:string',
-        'dataType?:string="html"',
+        'dataType?:string',
         'icon?:string',
         'iconClass?:string',
         'text?:string',
@@ -26,14 +27,15 @@ class commentBtn extends btn
 
     protected function getProps(): array
     {
-        $dataUrl  = $this->prop('dataUrl');
-        $dataType = $this->prop('dataType');
-        $props    = parent::getProps();
+        $dataTarget = $this->prop('dataTarget');
+        $dataUrl    = $this->prop('dataUrl');
+        $dataType   = $this->prop('dataType');
+        $props      = parent::getProps();
 
         $props['data-toggle']    = 'modal';
-        $props['data-type']      = 'ajax';
-        $props['data-data-type'] = $dataType;
+        $props['data-type']      = $dataType;
         $props['data-url']       = $dataUrl;
+        $props['data-target']    = $dataTarget;
 
         return $props;
     }
