@@ -1050,4 +1050,25 @@ class productTao extends productModel
             ->andWhere('status')->eq('normal')
             ->fetchGroup('product', 'id');
     }
+
+    /**
+     * 获取多个产品下进行中的执行数的键值对。
+     * Get k-v pairs of product ID and doing executions count.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getExecutionCountPairs(array $productIdList): array
+    {
+        return $this->dao->select('t1.product, COUNT(*) AS count')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t1.product')->in($productIdList)
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
+            ->andWhere('t2.status')->eq('doing')
+            ->groupBy('t1.product')
+            ->fetchPairs('product');
+    }
 }

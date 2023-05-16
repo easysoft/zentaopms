@@ -36,11 +36,10 @@ foreach($productStats as $productID => $product)
     $item->releases          = $product->releases;
     $item->parent            = null;
     $item->productLine       = $product->lineName;
-    $item->execution         = rand(0, 10);
+    $item->execution         = $product->executions;
     $item->feedback          = rand(0, 100);
     $item->testCaseCoverage  = rand(0, 100);
     $item->releasesOld       = rand(0, 10);
-    /* TODO attach extend fields. */
 
     $data[] = $item;
 }

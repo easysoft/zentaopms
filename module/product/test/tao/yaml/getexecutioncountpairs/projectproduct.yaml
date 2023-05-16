@@ -1,0 +1,13 @@
+title: zt_projectproduct
+author: chentao
+desc: 项目关联产品表
+version: 1.0
+fields:
+  - field: project
+    range: 1-100
+  - field: product
+    range: 1-100
+  - field: branch
+    range: 0{40},1-10:2,0{155}
+  - field: plan
+    range: 1-360:3
