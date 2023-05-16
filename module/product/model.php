@@ -1474,7 +1474,7 @@ class productModel extends model
     }
 
     /**
-     * 获取产品需求的照耀信息。
+     * 获取产品需求的摘要信息。
      * Get the summary of product's stories.
      *
      * @param  array  $stories
