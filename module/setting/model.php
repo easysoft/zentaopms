@@ -42,18 +42,20 @@ class settingModel extends model
     /**
      * Set value of an item.
      *
-     * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
-     * @param  string      $value
+     * @param  string $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
+     * @param  string $value
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setItem($path, $value = '')
+    public function setItem(string $path, string $value = ''): bool
     {
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
 
         $item->value = strval($value);
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
+
+        return !dao::isError();
     }
 
     /**
