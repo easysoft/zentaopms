@@ -73,7 +73,7 @@ $config->task->form->edit['closedBy']       = array('type' => 'string', 'require
 $config->task->form->edit['closedReason']   = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['closedDate']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->edit['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
-$config->task->form->edit['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->edit['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 
 $config->task->form->team->edit = array();
 $config->task->form->team->edit['team']         = array('type' => 'array', 'required' => false, 'default' => array());
