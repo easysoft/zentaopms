@@ -14,11 +14,6 @@
 class adminModel extends model
 {
     /**
-     * The extension manager version. Don't change it.
-     */
-    const EXT_MANAGER_VERSION = '1.3';
-
-    /**
      * The api root.
      *
      * @var string

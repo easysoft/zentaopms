@@ -12,6 +12,11 @@ declare(strict_types=1);
 class adminZen extends admin
 {
     /**
+     * The extension manager version. Don't change it.
+     */
+    const EXT_MANAGER_VERSION = '1.3';
+
+    /**
      * Sync extensions from zentao official website by api.
      *
      * @param  string $type         plugin|patch
