@@ -978,8 +978,7 @@ class bug extends control
 
             /* Init bug data. */
             $postData = form::data($this->config->bug->form->resolve);
-            $bug      = $postData->data;
-            $bug->id  = $bugID;
+            $bug      = $this->bugZen->prepareResolve($postData, $bug);
 
             $changes = $this->bug->resolve($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

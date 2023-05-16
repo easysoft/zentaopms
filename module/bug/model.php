@@ -857,10 +857,8 @@ class bugModel extends model
      */
     public function resolve(object $bug, array $output = array()): array|false
     {
-        /* Construct bug data. */
-        $now    = helper::now();
+        /* Get old bug. */
         $oldBug = $this->getById($bug->id);
-        $bug    = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
 
         /* Set comment lang for alert error. */
         $this->lang->bug->comment = $this->lang->comment;
@@ -930,7 +928,7 @@ class bugModel extends model
         }
 
         /* Update bug. */
-        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
+        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment,uid')
             ->autoCheck()
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')

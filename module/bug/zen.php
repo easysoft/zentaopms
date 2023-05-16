@@ -1604,6 +1604,27 @@ class bugZen extends bug
     }
 
     /**
+     * Prepare to resolve a bug.
+     *
+     * @param  object $postData
+     * @param  object $oldBug
+     * @access protected
+     * @return object
+     */
+    protected function prepareResolve(object $postData, object $oldBug): object
+    {
+        $bug = $postData
+            ->setDefault('assignedTo', $oldBug->openedBy)
+            ->add('id', $oldBug->id)
+            ->add('status',    'resolved')
+            ->add('confirmed', 1)
+            ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $postData->get('uid'));
+    }
+
+    /**
      * 解决成功后的相关处理。
      * Relevant processing after resolving bug.
      *
@@ -1623,13 +1644,12 @@ class bugZen extends bug
         /* Move bug card in kanban. */
         if($bug->execution)
         {
-            $this->loadModel('kanban');
             if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($bug->execution, 'bug', $bug->id);
             if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
         /* Link bug to build and release. */
-        $this->linkBugToBuild($bug->id, $bug->resolvedBuild);
+        $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
 
         /* Save files. */
         $files = $this->loadModel('file')->saveUpload('bug', $bug->id);
