@@ -25,8 +25,13 @@ class coverage
      */
     public function initTraceFile(): bool
     {
-        $tracePath = $this->zentaoRoot . "/tmp/coverage/";
-        $this->traceFile = $tracePath . "traces.json";
+        $tracePath     = $this->zentaoRoot . "/tmp/coverage/";
+        $backtrace     = debug_backtrace();
+        $runFile       = $backtrace[count($backtrace)-1]['file'];
+        $moduleName    = basename(dirname(dirname(dirname($runFile))));
+        $testModelName = basename(dirname($runFile));
+
+        $this->traceFile = $tracePath . $moduleName . '_' . $testModelName. '_' . basename($runFile, '.php') . '.json';
         if(!is_dir($tracePath)) mkdir($tracePath, 0777, true);
         if(!is_file($this->traceFile)) file_put_contents($this->traceFile, json_encode(array()));
 
@@ -343,6 +348,33 @@ EOT;
     }
 
     /**
+     * Get traces list from save path.
+     *
+     * @param  string            $filePath
+     * @param  string            $key
+     * @return array|string|bool
+     *
+     */
+    public function loadTraceFromFiles(string $filePath, string $key = ''): array|string|bool
+    {
+        $tracesFiles = glob("{$filePath}/*.json");
+        if(!$tracesFiles) return false ;
+
+        $tracesList  = array();
+        foreach($tracesFiles as $file)
+        {
+            $traces = json_decode(file_get_contents($file), true);
+            $tracesList = array_merge_recursive($tracesList, $traces);
+        }
+
+        $tracesList['time']    = $tracesList['time'][count($tracesList['time'])-1];
+        $tracesList['ztfPath'] = $tracesList['ztfPath'][count($tracesList['ztfPath'])-1];
+        if($key == '') return $report;
+        return isset($tracesList[$key]) ? $tracesList[$key] : array();
+    }
+
+
+    /**
      * Generate summary report.
      *
      * @param  string $module
@@ -352,7 +384,8 @@ EOT;
     public function genSummaryReport(string $module='', string $file=''): string
     {
         /* Get trace from file. */
-        $traces = $this->loadTraceFromFile('traces');
+        $tracesPath = $this->zentaoRoot . '/tmp/coverage';
+        $traces     = $this->loadTraceFromFiles($tracesPath, 'traces');
 
         /* Generate report. */
         $reportHtml = empty($file) ? '<style>td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}</style>' . PHP_EOL: '<style>td { border: 1px solid #ccc;  padding: 8px;}</style>' . PHP_EOL;
@@ -406,7 +439,8 @@ EOT;
     {
         $latestTime = 0;
         $latestFile = '';
-        $reportPath = $this->loadTraceFromFile('ztfPath');
+        $tracePath  = $this->zentaoRoot . "/tmp/coverage/";
+        $reportPath = $this->loadTraceFromFiles($tracePath, 'ztfPath');
 
         exec("find $reportPath -type f -name result.json", $files, $returnCode);
         if($returnCode !== 0 || empty($files)) return false;
