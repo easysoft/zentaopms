@@ -925,22 +925,19 @@ class productModel extends model
      * Get project pairs by product.
      *
      * @param  array  $productIdList
-     * @param  int    $branch
-     * @param  int    $appendProject
-     * @param  string $status all|closed|unclosed
      * @access public
      * @return array
      */
-    public function getProjectPairsByProductIdList(array $productIdList, int $branch = 0, int $appendProject = 0, string $status = ''): array
+    public function getProjectPairsByProductIdList(array $productIdList): array
     {
-        $projectPairs = array();
-        foreach($productIdList as $productID)
-        {
-            $projects     = $this->getProjectPairsByProduct($productID, $branch, $appendProject, $status);
-            $projectPairs = $projectPairs + $projects;
-        }
-
-        return $projectPairs;
+        return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy('t1.product,order_asc')
+            ->fetchPairs('id', 'name');
     }
 
     /**
