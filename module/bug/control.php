@@ -1079,10 +1079,7 @@ class bug extends control
         $this->bugZen->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->activate;
-
+        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
