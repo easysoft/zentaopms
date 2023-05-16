@@ -1,4 +1,6 @@
 <?php
+$now = helper::now();
+
 $config->task->form = new stdclass();
 $config->task->form->team = new stdclass();
 $config->task->form->testTask = new stdclass();
@@ -20,7 +22,7 @@ $config->task->form->create['deadline']     = array('type' => 'string', 'require
 $config->task->form->create['vision']       = array('type' => 'string', 'required' => false, 'default' => $config->vision);
 $config->task->form->create['status']       = array('type' => 'string', 'required' => false, 'default' => 'wait');
 $config->task->form->create['openedBy']     = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
-$config->task->form->create['openedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->create['openedDate']   = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->task->form->create['mailto']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->create['version']      = array('type' => 'int', 'required' => false, 'default' => 1);
 $config->task->form->create['uid']          = array('type' => 'int', 'required' => false, 'default' => 0);
@@ -28,8 +30,8 @@ $config->task->form->create['uid']          = array('type' => 'int', 'required' 
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->assign['left']           = array('type' => 'float', 'required' => true);
-$config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
-$config->task->form->assign['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->assign['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => $now);
 
 $config->task->form->cancel = array();
 $config->task->form->cancel['status']  = array('type' => 'string', 'required' => false, 'default' => 'cancel');
@@ -40,8 +42,8 @@ $config->task->form->manageTeam['status']         = array('type' => 'string', 'r
 $config->task->form->manageTeam['estimate']       = array('type' => 'float', 'required' => false, 'default' => 0);
 $config->task->form->manageTeam['left']           = array('type' => 'float', 'required' => false, 'default' => 0);
 $config->task->form->manageTeam['consumed']       = array('type' => 'float', 'required' => false, 'default' => 0);
-$config->task->form->manageTeam['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
-$config->task->form->manageTeam['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->manageTeam['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->manageTeam['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => $now);
 
 $config->task->form->edit = array();
 $config->task->form->edit['name']           = array('type' => 'string', 'required' => true);
@@ -119,7 +121,7 @@ $config->task->form->batchCreate['pri']           = array('type' => 'array', 're
 
 $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
-$config->task->form->pause['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->pause['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->task->form->pause['status']         = array('type' => 'string', 'required' => false, 'default' => 'pause');
 
 $config->task->form->activate = array();
@@ -134,14 +136,18 @@ $config->task->form->start['left']           = array('type' => 'float', 'require
 $config->task->form->start['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->start['realStarted']    = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->start['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
-$config->task->form->start['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->task->form->start['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 
-$config->task->form->testTask->create = array();
-$config->task->form->testTask->create['testStory']       = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['testEstStarted']  = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['testDeadline']    = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['testAssignedTo']  = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['testPri']         = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['testEstimate']    = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['estStartedDitto'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->testTask->create['deadlineDitto']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->finish = array();
+$config->task->form->finish['realStarted']     = array('type' => 'string', 'required' => true);
+$config->task->form->finish['left']            = array('type' => 'float',  'required' => false, 'default' => 0);
+$config->task->form->finish['consumed']        = array('type' => 'float',  'required' => false, 'default' => 0);
+$config->task->form->finish['currentConsumed'] = array('type' => 'float',  'required' => false, 'default' => 0);
+$config->task->form->finish['assignedTo']      = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->cancel['comment']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->finish['status']          = array('type' => 'string', 'required' => false, 'default' => 'done');
+$config->task->form->finish['finishedDate']    = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->finish['lastEditedDate']  = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->finish['assignedDate']    = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->finish['finishedBy']      = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->finish['lastEditedBy']    = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
