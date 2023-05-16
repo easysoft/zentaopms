@@ -1479,7 +1479,7 @@ class bugZen extends bug
         $product   = $this->product->getByID($productID);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
-        $projects = $this->product->getProjectPairsByProduct($productID, $bug->branch);
+        $projects = $this->product->getProjectPairsByProduct($productID, (string)$bug->branch);
         $this->session->set("project", key($projects), 'project');
 
         $this->executeHooks($bugID);
