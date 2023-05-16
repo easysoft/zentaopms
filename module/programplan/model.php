@@ -372,7 +372,7 @@ class programplanModel extends model
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t1.project')->eq($projectID)
-                ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+                ->andWhere('t1.product')->eq($productID)
                 ->fetchAll('id');
 
             foreach($datas['data'] as $plan)
