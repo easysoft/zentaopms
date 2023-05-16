@@ -97,6 +97,7 @@
         <th><?php echo $lang->my->productLink;?></th>
         <td><?php echo html::select('productLink', $lang->my->productLinkList, $productLink, "class='form-control picker productLink'");?></td>
       </tr>
+      <?php if($config->vision != 'or'):?>
       <tr>
         <th><?php echo $lang->my->projectLink;?></th>
         <td><?php echo html::select('projectLink', $lang->my->projectLinkList, $projectLink, "class='form-control picker projectLink'");?></td>
@@ -105,6 +106,7 @@
         <th><?php echo $lang->my->executionLink;?></th>
         <td><?php echo html::select('executionLink', $lang->my->executionLinkList, $executionLink, "class='form-control picker executionLink'");?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='2' class='text-center form-actions'>
           <?php echo html::submitButton();?>
