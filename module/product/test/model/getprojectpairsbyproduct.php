@@ -3,26 +3,47 @@
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/product.class.php';
 
+$product = zdTable('product');
+$product->type->range('normal{2},branch,normal{2}');
+$product->gen(5);
+
+$project = zdTable('project');
+$project->status->range('wait{2},doing{4},suspended,closed');
+$project->multiple->range('0{25},1{25}');
+$project->gen(50);
+
+$projectproduct = zdTable('projectproduct');
+$projectproduct->product->range('1-4');
+$projectproduct->project->range('11-70');
+$projectproduct->branch->range('0{2},1,0');
+$projectproduct->gen(50);
+
 /**
 
-title=productModel->getProjectPairsByProduct();
+title=测试productModel->getProjectPairsByProduct();
 cid=1
 pid=1
 
-返回产品1关联的项目11名字 >> 项目1
-返回产品1关联的项目21名字 >> 项目11
-传入不存在的产品 >> 没有数据
-返回id为15的项目名 >> 项目5
-传入不存在的项目id >> 没有数据
-
 */
 
-$product = new productTest('admin');
+global $tester;
+$product = $tester->loadModel('product');
+$product->app->user->admin = true;
 
-$t_return = array('1', '10001', '15', '7010');
+r($product->getProjectPairsByProduct(0))  && p() && e('0'); //不传入产品 ID。
+r($product->getProjectPairsByProduct(10)) && p() && e('0'); //传入不存在产品 ID。
 
-r($product->getProjectPairsByProductID($t_return[0]))   && p('11') && e('项目1');    // 返回产品1关联的项目11名字
-r($product->getProjectPairsByProductID($t_return[0]))   && p('21') && e('项目11');   // 返回产品1关联的项目21名字
-r($product->getProjectPairsByProductID($t_return[1]))   && p()     && e('没有数据'); // 传入不存在的产品
-r($product->getAppendProject($t_return[2]))             && p('15') && e('项目5');    // 返回id为15的项目名
-r($product->getAppendProject($t_return[3]))             && p()     && e('没有数据'); // 传入不存在的项目id
+r(count($product->getProjectPairsByProduct(4)))                                 && p() && e('12'); //用超级管理员，传入产品 ID，确认获取条目数。
+r(count($product->getProjectPairsByProduct(4, '', '', 'noclosed')))             && p() && e('6');  //用超级管理员，传入产品 ID，确认获取非关闭项目的条目数。
+r(count($product->getProjectPairsByProduct(4, '', '18', 'noclosed')))           && p() && e('7');  //用超级管理员，传入产品 ID 和追加查询的项目，确认获取非关闭项目的条目数。
+r(count($product->getProjectPairsByProduct(4, '', '', 'noclosed', 'multiple'))) && p() && e('3');  //用超级管理员，传入产品 ID，确认获取启用执行非关闭项目的条目数。
+r(count($product->getProjectPairsByProduct(3, 'all')))                          && p() && e('12'); //用超级管理员，传入产品 ID 和所有分支，确认获取条目数。
+r(count($product->getProjectPairsByProduct(3, '1')))                            && p() && e('12'); //用超级管理员，传入产品 ID 和存在分支，确认获取条目数。
+r(count($product->getProjectPairsByProduct(3, '2')))                            && p() && e('0');  //用超级管理员，传入产品 ID 和不存在分支，确认获取条目数。
+
+$product->app->user->admin = false;
+$product->app->user->view->projects = '14,38,46,58';
+r(count($product->getProjectPairsByProduct(4)))                                 && p() && e('4'); //用超级管理员，传入产品 ID，确认获取条目数。
+r(count($product->getProjectPairsByProduct(4, '', '', 'noclosed')))             && p() && e('3'); //用超级管理员，传入产品 ID，确认获取非关闭项目的条目数。
+r(count($product->getProjectPairsByProduct(4, '', '18', 'noclosed')))           && p() && e('4'); //用超级管理员，传入产品 ID 和追加查询的项目，确认获取非关闭项目的条目数。
+r(count($product->getProjectPairsByProduct(4, '', '', 'noclosed', 'multiple'))) && p() && e('2'); //用超级管理员，传入产品 ID，确认获取启用执行非关闭项目的条目数。
