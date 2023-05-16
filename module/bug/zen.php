@@ -1606,59 +1606,28 @@ class bugZen extends bug
     /**
      * Prepare to resolve a bug.
      *
-     * @param  object $postData
-     * @param  object $oldBug
+     * @param  object    $oldBug
+     * @param  int       $uid
      * @access protected
      * @return object
      */
-    protected function prepareResolve(object $postData, object $oldBug): object
+    protected function buildBugForResolve(object $oldBug, int $uid): object
     {
-        $bug = $postData
+        $bug = form::data($this->config->bug->form->resolve)
             ->setDefault('assignedTo', $oldBug->openedBy)
-            ->add('id', $oldBug->id)
+            ->add('id', (int)$oldBug->id)
             ->add('status',    'resolved')
             ->add('confirmed', 1)
             ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $postData->get('uid'));
-    }
-
-    /**
-     * 解决成功后的相关处理。
-     * Relevant processing after resolving bug.
-     *
-     * @param  int         $bugID
-     * @param  array       $changes
-     * @param  string|bool $comment
-     * @param  string|bool $actionExtra
-     * @param  array       $output
-     * @access protected
-     * @return void
-     */
-    protected function processAfterResolve(int $bug, array $changes, string|bool $comment, string|bool $actionExtra, array $output): void
-    {
-        /* Add score. */
-        $this->loadModel('score')->create('bug', 'resolve', $bug);
-
-        /* Move bug card in kanban. */
-        if($bug->execution)
+        /* If the resolved build is not the trunk, get test plan id. */
+        if(isset($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk')
         {
-            if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($bug->execution, 'bug', $bug->id);
-            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            $testtaskID = (int)$this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
         }
 
-        /* Link bug to build and release. */
-        $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
-
-        /* Save files. */
-        $files = $this->loadModel('file')->saveUpload('bug', $bug->id);
-
-        /* Record log. */
-        $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $comment, $actionExtra);
-        $this->action->logHistory($actionID, $changes);
-
-        $this->executeHooks($bug->id);
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $uid);
     }
 }

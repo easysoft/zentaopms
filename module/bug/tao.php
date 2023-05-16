@@ -434,4 +434,50 @@ class bugTao extends bugModel
 
         return $bugQuery;
     }
+
+    /**
+     * 在解决bug中创建版本时，检查必填项。
+     * While resolving a bug, check for required fields during build creation.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return bool
+     */
+    protected function checkRequired4Resolve(object $bug, int $oldExecution): bool
+    {
+        /* Set lang for error. */
+        $this->lang->bug->comment = $this->lang->comment;
+
+        /* When creating a new build, the execution of the build cannot be empty. */
+        if(empty($bug->buildExecution))
+        {
+            $executionLang = $this->lang->bug->execution;
+            if($oldExecution)
+            {
+                $execution = $this->dao->findByID($oldExecution)->from(TABLE_EXECUTION)->fetch();
+                if($execution and $execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+            }
+            dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
+        }
+
+        /* Check required fields of resolving bug. */
+        foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
+        {
+            if($requiredField == 'resolvedBuild') continue;
+            if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
+                dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+
+        /* If the resolution of bug is duplicate, duplicate bug id cannot be empty. */
+        if($bug->resolution == 'duplicate' and empty($bug->duplicateBug)) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+
+        /* When creating a new build, the build name cannot be empty. */
+        if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
+
+        return !dao::isError();
+    }
 }

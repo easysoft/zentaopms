@@ -2164,4 +2164,52 @@ class bugTest
         if(dao::isError()) return dao::getError();
         return $linkBugPairs;
     }
+
+    /**
+     * 测试在解决bug中创建版本时，检查必填项。
+     * While resolving a bug, test check for required fields during build creation.
+     *
+     * @param  string       $resolution
+     * @param  string       $resolvedDate
+     * @param  string       $assignedTo
+     * @param  string       $comment
+     * @param  int          $execution
+     * @param  string       $buildName
+     * @param  int          $oldExecution
+     * @param  int          $duplicateBug
+     * @access public
+     * @return string
+     */
+    public function checkRequired4ResolveTest(string $resolution, string $resolvedDate, string $assignedTo, string $comment, int $execution, string $buildName, int $oldExecution = 0, int $duplicateBug = 0): string
+    {
+        $bug = new stdclass();
+        $bug->resolution     = $resolution;
+        $bug->resolvedDate   = $resolvedDate;
+        $bug->assignedTo     = $assignedTo;
+        $bug->comment        = $comment;
+        $bug->buildExecution = $execution;
+        $bug->buildName      = $buildName;
+        $bug->duplicateBug   = $duplicateBug;
+
+        global $tester;
+        $tester->config->bug->resolve->requiredFields = 'resolution,resolvedBuild,resolvedDate,assignedTo,comment';
+
+        $this->objectModel->checkRequired4Resolve($bug, $oldExecution);
+
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            $return = '';
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
+        }
+        else
+        {
+            return 'no error';
+        }
+    }
 }

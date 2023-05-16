@@ -96,6 +96,8 @@ $config->bug->form->assignTo['lastEditedDate'] = array('required' => false, 'typ
 $config->bug->form->assignTo['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 
 $config->bug->form->resolve = array();
+$config->bug->form->resolve['resolvedBuild']  = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->resolve['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->resolve['resolvedDate']   = array('required' => false, 'type' => 'string', 'default' => helper::now());
 $config->bug->form->resolve['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');

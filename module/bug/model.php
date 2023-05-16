@@ -755,11 +755,11 @@ class bugModel extends model
      * 将任务指派给一个用户。
      * Assign a bug to a user.
      *
-     * @param  object      $bug
+     * @param  object     $bug
      * @access public
-     * @return array|false
+     * @return true|false
      */
-    public function assign($bug): array|false
+    public function assign($bug): bool
     {
         /* Get old bug. */
         $oldBug = $this->getById($bug->id);
@@ -774,7 +774,13 @@ class bugModel extends model
             ->where('id')->eq($bug->id)->exec();
 
         if(dao::isError()) return false;
-        return common::createChanges($oldBug, $bug);
+        $changes = common::createChanges($oldBug, $bug);
+
+        /* Record log. */
+        $actionID = $this->loadModel('action')->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+        $this->action->logHistory($actionID, $changes);
+
+        return !dao::isError();
     }
 
     /**
@@ -858,42 +864,15 @@ class bugModel extends model
     public function resolve(object $bug, array $output = array()): array|false
     {
         /* Get old bug. */
-        $oldBug = $this->getById($bug->id);
+        $oldBug = $this->getById((int)$bug->id);
 
-        /* Set comment lang for alert error. */
-        $this->lang->bug->comment = $this->lang->comment;
-
-        /* Can create build when resolve bug. */
-        if(isset($bug->createBuild))
+        /* Can create build when resolving bug. */
+        if(!empty($bug->createBuild))
         {
+            $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
+
             /* Check required fields. */
-            foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
-            {
-                if($requiredField == 'resolvedBuild') continue;
-                if(!isset($_POST[$requiredField]) or strlen(trim($_POST[$requiredField])) == 0)
-                {
-                    $fieldName = $requiredField;
-                    if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
-                }
-            }
-
-            /* If the resolution of bug is duplicate, duplicate bug id cannot be empty. */
-            if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
-
-            /* When creating a new build, the build name cannot be empty. */
-            if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
-            /* When creating a new build, the execution of the build cannot be empty. */
-            if(empty($bug->buildExecution))
-            {
-                $executionLang = $this->lang->bug->execution;
-                if($oldBug->execution)
-                {
-                    $execution = $this->loadModel('execution')->getByID($oldBug->execution);
-                    if($execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
-                }
-                dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
-            }
+            $this->bugTao->checkRequired4Resolve($bug, $oldBug->execution);
             if(dao::isError()) return false;
 
             /* Construct build data. */
@@ -909,22 +888,15 @@ class bugModel extends model
             $buildData->createdDate = helper::now();
 
             /* Create a build. */
-            $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
             $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
                 ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
                 ->exec();
             if(dao::isError()) return false;
+
             /* Get build id, and record log. */
             $buildID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('build', $buildID, 'opened');
             $bug->resolvedBuild = $buildID;
-        }
-
-        /* If the resolved build is not the trunk, get test plan id. */
-        if($bug->resolvedBuild and $bug->resolvedBuild != 'trunk')
-        {
-            $testtaskID = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
-            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
         }
 
         /* Update bug. */
@@ -936,13 +908,32 @@ class bugModel extends model
             ->checkFlow()
             ->where('id')->eq((int)$bug->id)
             ->exec();
-
         if(dao::isError()) return false;
+
+        /* Add score. */
+        $this->loadModel('score')->create('bug', 'resolve', $bug);
+
+        /* Move bug card in kanban. */
+        if($bug->execution)
+        {
+            if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($bug->execution, 'bug', $bug->id);
+            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        }
+
+        /* Link bug to build and release. */
+        $this->linkBugToBuild($bug->id, $bug->resolvedBuild);
+
+        /* Save files and record log. */
+        $files      = $this->loadModel('file')->saveUpload('bug', $bug->id);
+        $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
+        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $bug->comment, $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
+        $changes    = common::createChanges($oldBug, $bug);
+        $this->action->logHistory($actionID, $changes);
 
         /* If the edition is not pms, update feedback. */
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-        return common::createChanges($oldBug, $bug);
+        return !dao::isError();
     }
 
     /**

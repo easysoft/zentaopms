@@ -724,12 +724,8 @@ class bug extends control
             $bug      = $postData->data;
             $bug->id  = $bugID;
 
-            $changes = $this->bug->assign($bug);
+            $this->bug->assign($bug);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            /* Record log. */
-            $actionID = $this->loadModel('action')->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
-            $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
 
@@ -977,13 +973,12 @@ class bug extends control
             parse_str($extra, $output);
 
             /* Init bug data. */
-            $postData = form::data($this->config->bug->form->resolve);
-            $bug      = $this->bugZen->prepareResolve($postData, $bug);
+            $bug = $this->bugZen->buildBugForResolve($bug, (int)$this->post->uid);
 
             $changes = $this->bug->resolve($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->bugZen->processAfterResolve($bug, $changes, $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''), $output);
+            $this->executeHooks($bug->id);
 
             /* Get response after resolving. */
             $regionID = zget($output, 'regionID', 0);
