@@ -12,7 +12,7 @@ declare(strict_types=1);
 class adminZen extends admin
 {
     /**
-     * Set extensions from zentao.net.
+     * Sync extensions from zentao official website by api.
      *
      * @param  string $type plugin|patch
      * @param  int    $limit
@@ -39,7 +39,7 @@ class adminZen extends admin
     }
 
     /**
-     * Set public class from zentao.net.
+     * Sync public classes from zentao official website by api.
      *
      * @param  int    $limit
      * @access public
@@ -68,7 +68,7 @@ class adminZen extends admin
     }
 
     /**
-     * Set dynamics by API.
+     * Sync dynamics from zentao official website by API.
      *
      * @param  int    $limit
      * @access public
@@ -102,7 +102,7 @@ class adminZen extends admin
     }
 
     /**
-     * Fetch data from an api.
+     * Fetch data from an API.
      *
      * @param  string    $url
      * @access public
