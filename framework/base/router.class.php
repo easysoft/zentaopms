@@ -801,7 +801,7 @@ class baseRouter
         $xhprofRuns = new \XHProfRuns_Default($outputDir);
         $type       = "{$this->moduleName}_{$this->methodName}";
         $runID      = $xhprofRuns->save_run($log, $type);
-        header("Xhprof-RunID: {$runID}");
+        if(!headers_sent()) header("Xhprof-RunID: {$runID}");
 
         return true;
     }
