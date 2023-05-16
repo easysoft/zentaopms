@@ -148,6 +148,27 @@ class form extends baseFixer
     }
 
     /**
+     * Special array.
+     *
+     * @param mixed $data
+     * @access public
+     * @return mixed
+     */
+    public function specialArray($data): mixed
+    {
+        if(!is_array($data))
+        {
+            if(is_string($data)) return htmlspecialchars($data, ENT_QUOTES);
+
+            return $data;
+        }
+
+        foreach($data as &$value) $value = $this->specialArray($value);
+
+        return $data;
+    }
+
+    /**
      * 过滤表单字段数据。
      * Filter the form field data.
      *
