@@ -1031,7 +1031,7 @@ class projectModel extends model
         krsort($projectMenu);
         $projectMenu = array_pop($projectMenu);
 
-        return $lastMenu;
+        return $projectMenu;
     }
 
     /**
