@@ -874,12 +874,12 @@ class product extends control
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch    ''|'all'|int
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
+    public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0)
     {
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch);

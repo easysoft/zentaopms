@@ -924,50 +924,53 @@ class productModel extends model
     /**
      * Get project pairs by product.
      *
-     * @param  array  $productIDList
+     * @param  array  $productIdList
      * @param  int    $branch
      * @param  int    $appendProject
      * @param  string $status all|closed|unclosed
      * @access public
      * @return array
      */
-    public function getProjectPairsByProductIDList($productIDList, $branch = 0, $appendProject = 0, $status = '')
+    public function getProjectPairsByProductIdList(array $productIdList, int $branch = 0, int $appendProject = 0, string $status = ''): array
     {
-        $projectParis = array();
-        foreach($productIDList as $productID)
+        $projectPairs = array();
+        foreach($productIdList as $productID)
         {
             $projects     = $this->getProjectPairsByProduct($productID, $branch, $appendProject, $status);
-            $projectParis = $projectParis + $projects;
+            $projectPairs = $projectPairs + $projects;
         }
 
-        return $projectParis;
+        return $projectPairs;
     }
 
     /**
      * Get project pairs by product.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch        'all'|''|int
      * @param  int    $appendProject
-     * @param  string $status all|closed|unclosed
-     * @param  string $param  multiple|
+     * @param  string $status        all|noclosed
+     * @param  string $param         multiple|
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '', $param = '')
+    public function getProjectPairsByProduct(int $productID, string $branch = '0', string $appendProject = '', string $status = '', string $param = ''): array
     {
-        $product = $this->getById($productID);
+        $product = $this->getByID($productID);
         if(empty($product)) return array();
 
+        $appendProject = $this->productTao->formatAppendParam($appendProject);
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
+            ->where('(1=1')
+            ->andWhere('t1.product')->eq($productID)
+            ->beginIF($status == 'noclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('t2.multiple')->ne('0')->fi()
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '' and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
+            ->markRight(1)
             ->beginIF($appendProject)->orWhere('t2.id')->in($appendProject)->fi()
             ->orderBy('order_asc')
             ->fetchPairs('id', 'name');

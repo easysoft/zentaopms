@@ -660,18 +660,19 @@ class productTao extends productModel
     {
         /* 处理要用的到变量信息。 */
         $append  = $this->formatAppendParam($append);
-        $views   = $this->app->user->view->products . (empty($append) ? '' : ",$append");
         $orderBy = ($orderBy ? "{$orderBy}," : '') . 't2.order asc';
 
         return $this->dao->select("t1.branch, t1.plan, t2.*")
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('1=1')
+            ->where('(1=1')
             ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
+            ->markRight(1)
+            ->beginIF($append)->orWhere('t1.id')->in($append)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
     }
