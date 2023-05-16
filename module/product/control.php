@@ -842,17 +842,15 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProducts($executionID)
+    public function ajaxGetProducts(int $executionID)
     {
-        $this->loadModel('build');
-        if(!$executionID) return print(html::select('product', array(), '', "class='form-control chosen' required"));
+        if(empty($executionID)) return print(html::select('product', array(), '', "class='form-control chosen' required"));
+
+        $this->app->loadLang('build');
         $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
         $products = $this->product->getProductPairsByProject($executionID, $status);
-        if(empty($products))
-        {
-            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
-        }
 
+        if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
         return print(html::select('product', $products, '', "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
     }
 
