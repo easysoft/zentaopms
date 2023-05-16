@@ -1058,39 +1058,39 @@ class productZen extends product
      * 获取研发需求列表页面关联的产品信息。
      * Get the product of the browse page.
      *
-     * @param  int       $productID
+     * @param  int         $productID
      * @access protected
-     * @return object|false
+     * @return object|null
      */
-    protected function getBrowseProduct(int $productID): object|false
+    protected function getBrowseProduct(int $productID): object|null
     {
         $product = $this->product->getById($productID);
+        if(empty($product)) return null;
 
         /* If product does not exist in $this->products list, then attach it to the list. */
-        if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
+        if(!isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
 
-        return $product ? $product : false;
+        return $product;
     }
 
     /**
-     * 获取产品的分支和分支ID。
-     * Get branch and branchID.
+     * 获取产品分支ID。
+     * Get branchID.
      *
-     * @param  object    $product
-     * @param  string    $branch
+     * @param  object|null $product
+     * @param  string      $branch
      * @access protected
-     * @return object
+     * @return string
      */
-    protected function getBranchAndBranchID(object|bool $product, string $branch): array
+    protected function getBranchID(object|null $product, string $branch): string
     {
-        if(empty($product) || $product->type == 'normal') return ['all', 'all'];
+        if(empty($product) || $product->type == 'normal') return 'all';
 
         /* 获取分支和分支ID。*/
         $branchPairs = $this->loadModel('branch')->getPairs($product->id, 'all');
-        $branch      = ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
-        $branchID    = $branch;
+        $branchID      = ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
 
-        return [$branch, $branchID];
+        return $branchID;
     }
 
     /**
@@ -1170,7 +1170,7 @@ class productZen extends product
      * @access protected
      * @return int
      */
-    protected function getModuleId4Browse(int $param, string $browseType): int
+    protected function getModuleId(int $param, string $browseType): int
     {
         if($browseType == 'bymodule') return $param;
 
@@ -1193,12 +1193,18 @@ class productZen extends product
      * @access protected
      * @return string
      */
-    protected function getModuleTree4Browse(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): string
+    protected function getModuleTree(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): string
     {
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
-        if($browseType == '') $browseType = 'unclosed';
-        else $branch = $this->cookie->treeBranch;
+        if($browseType == '')
+        {
+            $browseType = 'unclosed';
+        }
+        else
+        {
+            $branch = $this->cookie->treeBranch;
+        }
 
         /* If in project story and not chose product, get project story mdoules. */
         if(empty($productID) && $this->app->rawModule == 'projectstory')
@@ -1224,7 +1230,7 @@ class productZen extends product
      * @access protected
      * @return bool
      */
-    protected function canShowBranch4Browse(int $projectID, int $productID, string $storyType, bool $isProjectStory): bool
+    protected function canShowBranch(int $projectID, int $productID, string $storyType, bool $isProjectStory): bool
     {
         if($isProjectStory && $storyType == 'story') return $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 
@@ -1241,7 +1247,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getProjectProducts4Browse(int $projectID, string $storyType, bool $isProjectStory): array
+    protected function getProjectProductList(int $projectID, string $storyType, bool $isProjectStory): array
     {
         if($isProjectStory && $storyType == 'story') return $this->product->getProducts($projectID);
 
@@ -1259,7 +1265,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getProductPlans4Browse(array $projectProducts, int $projectID, string $storyType, bool $isProjectStory): array
+    protected function getProductPlans(array $projectProducts, int $projectID, string $storyType, bool $isProjectStory): array
     {
         if($isProjectStory && $storyType == 'story') return $this->loadModel('execution')->getPlans($projectProducts, 'skipParent,unexpired,noclosed', $projectID);
 
@@ -1268,7 +1274,7 @@ class productZen extends product
 
     /**
      * 获取需求列表及分页对象。
-     * Get stories and the pager object.
+     * Get stories.
      *
      * @param  int       $projectID
      * @param  int       $productID
@@ -1278,22 +1284,15 @@ class productZen extends product
      * @param  string    $storyType
      * @param  string    $browseType
      * @param  string    $orderBy
-     * @param  int       $recTotal
-     * @param  int       $recPerPage
-     * @param  int       $pageID
+     * @param  object    $pager
      * @access protected
      * @return array
      */
-    protected function getStoriesAndPager4Browse(int $projectID, int $productID, string $branchID, int $moduleID, int $param, string $storyType, string $browseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    protected function getStories(int $projectID, int $productID, string $branchID, int $moduleID, int $param, string $storyType, string $browseType, string $orderBy, object $pager): array
     {
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
-        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $isProjectStory = $this->app->rawModule == 'projectstory';
 
@@ -1313,7 +1312,7 @@ class productZen extends product
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
-        return array($stories, $pager);
+        return $stories;
     }
 
     /**
@@ -1325,7 +1324,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getBranchOptions4Browse(array $projectProducts, int $projectID): array
+    protected function getBranchOptions(array $projectProducts, int $projectID): array
     {
         $this->loadModel('branch');
 
@@ -1346,12 +1345,12 @@ class productZen extends product
      * Get options of branch and branch tag.
      *
      * @param  int         $productID
-     * @param  object|bool $product
+     * @param  object|null $product
      * @param  bool        $isProjectStory
      * @access protected
      * @return array[]
      */
-    protected function getBranchAndTagOption4Browse(int $projectID, object|bool $product, bool $isProjectStory): array
+    protected function getBranchAndTagOption(int $projectID, object|null $product, bool $isProjectStory): array
     {
         $branchOption    = array();
         $branchTagOption = array();
