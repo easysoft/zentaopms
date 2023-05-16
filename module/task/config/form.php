@@ -1,6 +1,7 @@
 <?php
 $config->task->form = new stdclass();
 $config->task->form->team = new stdclass();
+$config->task->form->testTask = new stdclass();
 
 global $app;
 $config->task->form->create = array();
@@ -134,3 +135,13 @@ $config->task->form->start['assignedTo']     = array('type' => 'string', 'requir
 $config->task->form->start['realStarted']    = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->start['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->start['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->task->form->testTask->create = array();
+$config->task->form->testTask->create['testStory']       = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testEstStarted']  = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testDeadline']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testAssignedTo']  = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testPri']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testEstimate']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['estStartedDitto'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['deadlineDitto']   = array('type' => 'array', 'required' => false, 'default' => array());

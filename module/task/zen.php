@@ -42,7 +42,7 @@ class taskZen extends task
 
     /**
      * 构造待更新的任务数据。
-     * Build the task data to be updated.
+     * Build the task data to be update.
      *
      * @param  int          $taskID
      * @access protected
@@ -506,15 +506,15 @@ class taskZen extends task
     }
 
     /**
-     * 处理创建任务的请求数据。
-     * Process the request data for the create task.
+     * 构造待创建的任务数据。
+     * Build the task data to create.
      *
      * @param  int       $executionID
      * @param  object    $formData
      * @access protected
      * @return object
      */
-    protected function prepareTask4Create(int $executionID, object $formData): object
+    protected function buildTaskForCreate(int $executionID, object $formData): object
     {
         $postData  = $formData->get();
         $execution = $this->dao->findById($postData->execution)->from(TABLE_EXECUTION)->fetch();
@@ -1117,7 +1117,7 @@ class taskZen extends task
      * @access protected
      * @return false|array
      */
-    protected function prepareCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): false|array
+    protected function buildForCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): false|array
     {
         /* Check if the input post data meets the requirements. */
         $result = $this->checkCreate($executionID, $estimate, $estStarted, $deadline);
@@ -1125,13 +1125,13 @@ class taskZen extends task
 
         /* Process the request data for the create task. */
         $formData = form::data($this->config->task->form->create);
-        $task     = $this->prepareTask4Create($executionID, $formData);
+        $task     = $this->buildTaskForCreate($executionID, $formData);
 
         /* Prepare to create the data for the test subtask and to check the data format. */
         $testTasks = array();
         if($selectTestStory && $task->type == 'test')
         {
-            $testTasks = $this->prepareTestTasks4Create($executionID, $formData);
+            $testTasks = $this->buildTestTasksForCreate($executionID, $formData);
             $result    = $this->checkTestTasks($testTasks);
             if(!$result) return false;
         }
@@ -1143,38 +1143,38 @@ class taskZen extends task
     }
 
     /**
-     * 处理关联需求的测试子任务的请求数据。
-     * Process request data for test subtasks related to stories.
+     * 构造待创建的测试类型的子任务数据。
+     * Build subtask data for the test type to create.
      *
      * @param  int       $executionID
      * @param  object    $formData
      * @access protected
      * @return array
      */
-    protected function prepareTestTasks4Create(int $executionID, object $formData): array
+    protected function buildTestTasksForCreate(int $executionID, object $formData): array
     {
         /* Set data for the type of test task that has linked stories. */
         $testTasks = array();
-        $rawData   = $formData->rawdata;
-        foreach($rawData->testStory as $key => $storyID)
+        $postData  = form::data($this->config->task->form->testTask->create)->get();
+        foreach($postData->testStory as $key => $storyID)
         {
             if(empty($storyID)) continue;
 
             /* Process the ditto option as a concrete value. */
-            $estStarted = !isset($rawData->testEstStarted[$key]) || (isset($rawData->estStartedDitto[$key]) && $rawData->estStartedDitto[$key] == 'on') ? $estStarted : $rawData->testEstStarted[$key];
-            $deadline   = !isset($rawData->testDeadline[$key]) || (isset($rawData->deadlineDitto[$key]) && $rawData->deadlineDitto[$key] == 'on') ? $deadline : $rawData->testDeadline[$key];
-            $assignedTo = !isset($rawData->testAssignedTo[$key]) || $rawData->testAssignedTo[$key] == 'ditto' ? $assignedTo : $rawData->testAssignedTo[$key];
+            $estStarted = !isset($postData->testEstStarted[$key]) || (isset($postData->estStartedDitto[$key]) && $postData->estStartedDitto[$key] == 'on') ? $estStarted : $postData->testEstStarted[$key];
+            $deadline   = !isset($postData->testDeadline[$key]) || (isset($postData->deadlineDitto[$key]) && $postData->deadlineDitto[$key] == 'on') ? $deadline : $postData->testDeadline[$key];
+            $assignedTo = !isset($postData->testAssignedTo[$key]) || $postData->testAssignedTo[$key] == 'ditto' ? $assignedTo : $postData->testAssignedTo[$key];
 
             /* Set task data. */
             $task = new stdclass();
             $task->execution  = $executionID;
             $task->story      = $storyID;
-            $task->pri        = $rawData->testPri[$key];
+            $task->pri        = $postData->testPri[$key];
             $task->estStarted = $estStarted;
             $task->deadline   = $deadline;
             $task->assignedTo = $assignedTo;
-            $task->estimate   = (float)$rawData->testEstimate[$key];
-            $task->left       = (float)$rawData->testEstimate[$key];
+            $task->estimate   = (float)$postData->testEstimate[$key];
+            $task->left       = (float)$postData->testEstimate[$key];
 
             $testTasks[$storyID] = $task;
         }
