@@ -3443,14 +3443,15 @@ class testcaseModel extends model
      * @param  string $branch     number|all
      * @param  int    $moduleID
      * @param  array  $caseIdArr
-     * @param  object $pager      object|NULL
+     * @param  object $pager      object|null
      * @param  string $type
      * @param  array  $topIdList
      * @param  string $browseType
+     * @param  string $executionSql
      * @access public
      * @return array
      */
-    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = NULL, $type = '', $topIdList = array(), $browseType, &$executionSql = NULL)
+    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = null, $type = '', $topIdList = array(), $browseType = '', &$executionSql = null)
     {
         /* Get list of module and its children module. */
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
@@ -3504,7 +3505,7 @@ class testcaseModel extends model
         $orderBy = 'product_desc,sort_asc';
 
         /* Get sql for batch execution. */
-        if($executionSql !== NULL) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+        if($executionSql !== null) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
 
         return $this->buildQuery($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
@@ -3512,10 +3513,10 @@ class testcaseModel extends model
     /**
      * Get paginated data with all IDs list.
      *
-     * @param  string $modules
-     * @param  string $type
-     * @param  string $objectIdList
-     * @param  string $branch
+     * @param  string       $modules
+     * @param  string       $type
+     * @param  string|array $objectIdList
+     * @param  string       $branch
      * @access public
      * @return object
      */
