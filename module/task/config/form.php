@@ -22,6 +22,7 @@ $config->task->form->create['openedBy']     = array('type' => 'string', 'require
 $config->task->form->create['openedDate']   = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->task->form->create['mailto']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->create['version']      = array('type' => 'int', 'required' => false, 'default' => 1);
+$config->task->form->create['uid']          = array('type' => 'int', 'required' => false, 'default' => 0);
 
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');

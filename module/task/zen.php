@@ -521,14 +521,14 @@ class taskZen extends task
      */
     protected function prepareTask4Create(int $executionID, object $formData): object
     {
-        $rawData   = $formData->rawdata;
-        $execution = $this->dao->findById($rawData->execution)->from(TABLE_EXECUTION)->fetch();
-        $team      = !empty($rawData->team) ? array_filter($rawData->team) : array();
+        $postData  = $formData->get();
+        $execution = $this->dao->findById($postData->execution)->from(TABLE_EXECUTION)->fetch();
+        $team      = !empty($postData->team) ? array_filter($postData->team) : array();
         $task      = $formData->setDefault('execution', $executionID)
             ->setDefault('project', $this->task->getProjectID($executionID))
-            ->setIF($rawData->estimate !== false, 'left', $rawData->estimate)
-            ->setIF(isset($rawData->story), 'storyVersion', isset($rawData->story) ? $this->loadModel('story')->getVersion($rawData->story) : 0)
-            ->setIF(empty($rawData->multiple) || count($team) < 1, 'mode', '')
+            ->setIF($postData->estimate !== false, 'left', $postData->estimate)
+            ->setIF(isset($postData->story), 'storyVersion', isset($postData->story) ? $this->loadModel('story')->getVersion($postData->story) : 0)
+            ->setIF(empty($postData->multiple) || count($team) < 1, 'mode', '')
             ->setIF($execution && ($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))), 'story', 0)
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
@@ -537,7 +537,7 @@ class taskZen extends task
         if(empty($formData->deadline)) $task->deadline = null;
 
         /* Processing image link. */
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $rawData->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $postData->uid);
     }
 
     /**
