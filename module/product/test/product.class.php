@@ -1161,16 +1161,16 @@ class productTest
     }
 
     /**
-     * 测试 sort 方法。
-     * Test sort method.
+     * 测试 updateOrder 方法。
+     * Test updateOrder method.
      *
      * @param  array $sortedIdList
      * @access public
      * @return string
      */
-    public function sortTest(array $sortedIdList): string
+    public function updateOrderTest(array $sortedIdList): string
     {
-        $this->objectModel->sort($sortedIdList);
+        $this->objectModel->updateOrder($sortedIdList);
 
         $products = $this->objectModel->dao->select('id')->from(TABLE_PRODUCT)->orderBy('`order`')->fetchAll('id');
         return implode('|', array_keys($products));
