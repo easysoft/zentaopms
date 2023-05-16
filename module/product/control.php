@@ -97,27 +97,21 @@ class product extends control
      * 浏览产品研发/用户需求列表。
      * Browse requirements list of product.
      *
-     * @param  string  $productID
+     * @param  int  $productID
      * @param  string  $branch      all|''|0
      * @param  string  $browseType
-     * @param  string  $param       Story Module ID
+     * @param  int     $param       Story Module ID
      * @param  string  $storyType   requirement|story
      * @param  string  $orderBy
-     * @param  string  $recTotal
-     * @param  string  $recPerPage
-     * @param  string  $pageID
-     * @param  string  $projectID
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @param  int     $projectID
      * @access public
      * @return void
      */
-    public function browse(string $productID = '0', string $branch = '', string $browseType = '', string $param = '0', string $storyType = 'story', string $orderBy = '', string $recTotal = '0', string $recPerPage = '20', $pageID = '1', $projectID = '0')
+    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
-        $productID  = (int)$productID;
-        $param      = (int)$param;
-        $recTotal   = (int)$recTotal;
-        $recPerPage = (int)$recPerPage;
-        $pageID     = (int)$pageID;
-        $projectID  = (int)$projectID;
         $browseType = strtolower($browseType);
 
         /* Pre process. */
