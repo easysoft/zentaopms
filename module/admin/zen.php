@@ -14,13 +14,13 @@ class adminZen extends admin
     /**
      * Sync extensions from zentao official website by api.
      *
-     * @param  string $type plugin|patch
+     * @param  string $type         plugin|patch
      * @param  int    $limit
      * @param  bool   $hasInternet
      * @access public
-     * @return array
+     * @return bool
      */
-    public function syncExtensions($type = 'plugin', $limit = 5)
+    public function syncExtensions(string $type = 'plugin', int $limit = 5): bool
     {
         $searchType = $type == 'plugin' ? 'byModule,offcial' : 'byModule';
         $param      = $type == 'plugin' ? '' : 'MTIxOA==';
@@ -43,9 +43,9 @@ class adminZen extends admin
      *
      * @param  int    $limit
      * @access public
-     * @return void
+     * @return bool
      */
-    public function syncPublicClasses($limit = 3)
+    public function syncPublicClasses(int $limit = 3): bool
     {
         $apiURL  = $this->config->admin->videoAPIURL;
         $data    = $this->fetchAPI($apiURL);
@@ -72,9 +72,9 @@ class adminZen extends admin
      *
      * @param  int    $limit
      * @access public
-     * @return void
+     * @return bool
      */
-    public function syncDynamics($limit = 2)
+    public function syncDynamics(int $limit = 2): bool
     {
         $apiURL   = $this->config->admin->downloadAPIURL;
         $data     = $this->fetchAPI($apiURL);
@@ -104,11 +104,11 @@ class adminZen extends admin
     /**
      * Fetch data from an API.
      *
-     * @param  string    $url
+     * @param  string $url
      * @access public
-     * @return mixed
+     * @return bool|array|object
      */
-    public function fetchAPI($url)
+    public function fetchAPI(string $url): bool|array|object
     {
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
