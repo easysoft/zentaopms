@@ -861,9 +861,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductById($productID)
+    public function ajaxGetProductByID(int $productID)
     {
-        $product = $this->product->getById($productID);
+        $product = $this->product->getByID($productID);
 
         $product->branchSourceName = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         $product->branchName       = $this->lang->product->branchName[$product->type];
