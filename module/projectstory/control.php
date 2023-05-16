@@ -52,6 +52,7 @@ class projectStory extends control
         {
             unset($this->lang->projectstory->featureBar['story']['linkedExecution']);
             unset($this->lang->projectstory->featureBar['story']['unlinkedExecution']);
+            $this->lang->projectstory->unlinkStory = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->unlinkStory);
         }
 
         if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
