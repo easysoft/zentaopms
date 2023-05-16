@@ -3456,19 +3456,19 @@ class testcaseModel extends model
     /**
      * Get scenes and cases list.
      *
-     * @param  mixed  $productID  int|array
-     * @param  string $branch     number|all
-     * @param  int    $moduleID
-     * @param  array  $caseIdArr
-     * @param  object $pager      object|null
-     * @param  string $type
-     * @param  array  $topIdList
-     * @param  string $browseType
-     * @param  string $executionSql
+     * @param  int|array $productID  int|array
+     * @param  string    $branch     number|all
+     * @param  int       $moduleID
+     * @param  array     $caseIdArr
+     * @param  object    $pager      object|null
+     * @param  string    $type
+     * @param  array     $topIdList
+     * @param  string    $browseType
+     * @param  string    $executionSql
      * @access public
      * @return array
      */
-    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = null, $type = '', $topIdList = array(), $browseType = '', &$executionSql = null)
+    public function getList($productID, $branch, $moduleID, $caseIdArr, $pager = null, $type = '', $topIdList = array(), $browseType = '', &$executionSql = null)
     {
         /* Get list of module and its children module. */
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
@@ -3486,7 +3486,8 @@ class testcaseModel extends model
             ->fetchPairs('id','path');
 
         $sceneIdArr = array();
-        foreach ($cases as $path) {
+        foreach($cases as $path)
+        {
             $tmpArr     = explode(',', trim($path, ','));
             $sceneIdArr = array_merge($sceneIdArr,$tmpArr);
         }
