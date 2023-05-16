@@ -3077,20 +3077,17 @@ class story extends control
     }
 
     /**
-     * AJAX: Get user requirements.
+     * AJAX: Get product user stories.
      *
      * @param  int    $productID
      * @param  int    $branchID
-     * @param  int    $moduleID
      * @param  string $requirementList
      * @access public
      * @return string
      */
-    public function ajaxGetURS($productID, $branchID = 0, $moduleID = 0, $requirementList = 0)
+    public function ajaxGetProductUserStories($productID, $branchID = 0, $requirementList = 0)
     {
-        $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
-
-        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+        $URS = $this->story->getProductStoryPairs($productID, $branchID, 0, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }

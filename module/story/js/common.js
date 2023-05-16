@@ -96,20 +96,19 @@ function getStatus(method, params)
 }
 
 /**
- * Load URS.
+ * Load product user stories.
  *
  * @access public
  * @return void
  */
-function loadURS(allURS)
+function loadProductUserStories()
 {
     var productID       = $('#product').val();
     var branchID        = $('#branch').val();
-    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
     var requirementList = $('#URS').val();
     requirementList     = requirementList ? requirementList.join(',') : '';
 
-    var link = createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
+    var link = createLink('story', 'ajaxGetProductUserStories', 'productID=' + productID + '&branchID=' + branchID + '&requirementList=' + requirementList);
 
     $.post(link, function(data)
     {
