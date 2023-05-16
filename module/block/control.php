@@ -986,7 +986,7 @@ class block extends control
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
             }
-            elseif(in_array($project->model, array('waterfall', 'waterfallplus')))
+            elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             {
                 $begin   = $project->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
