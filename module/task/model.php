@@ -1711,12 +1711,14 @@ class taskModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
-        $task->openedDate     = !empty($task->openedDate)     ? substr($task->openedDate, 0, 19) : null;
-        $task->finishedDate   = !empty($task->finishedDate)   ? substr($task->finishedDate, 0, 19) : null;
-        $task->canceledDate   = !empty($task->canceledDate)   ? substr($task->canceledDate, 0, 19) : null;
-        $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19) : null;
+
+        $task->openedDate     = !empty($task->openedDate)     ? substr($task->openedDate, 0, 19)     : null;
+        $task->finishedDate   = !empty($task->finishedDate)   ? substr($task->finishedDate, 0, 19)   : null;
+        $task->canceledDate   = !empty($task->canceledDate)   ? substr($task->canceledDate, 0, 19)   : null;
+        $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19)     : null;
         $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
-        $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19) : null;
+        $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19)    : null;
+        $task->mailto         = empty($task->mailto)          ? ''                                   : $task->mailto;
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;

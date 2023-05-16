@@ -544,12 +544,13 @@ class taskZen extends task
      * 处理批量创建任务的请求数据。
      * Process the request data for batch create tasks.
      *
-     * @param  object    $execution
-     * @param  object    $formData
+     * @param  object         $execution
+     * @param  object         $formData
+     * @param  int            $taskID
      * @access protected
      * @return object[]|false
      */
-    protected function prepareTasks4BatchCreate(object $execution, object $formData): array|false
+    protected function prepareTasks4BatchCreate(object $execution, object $formData, int $taskID): array|false
     {
         /* 去除重复数据。 Deduplicated data. */
         $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
@@ -569,6 +570,8 @@ class taskZen extends task
         $data         = array();
         foreach($formData->name as $i => $name)
         {
+            if(empty($name)) continue;
+
             /* 给同上的变量赋值。 Assign values to ditto fields. */
             $story      = !isset($tasks->story[$i]) || $tasks->story[$i] == 'ditto'            ? $story      : $tasks->story[$i];
             $module     = !isset($tasks->module[$i]) || $tasks->module[$i] == 'ditto'          ? $module     : $tasks->module[$i];
@@ -577,19 +580,9 @@ class taskZen extends task
             $estStarted = !isset($tasks->estStarted[$i]) || isset($tasks->estStartedDitto[$i]) ? $estStarted : $tasks->estStarted[$i];
             $deadline   = !isset($tasks->deadline[$i]) || isset($tasks->deadlineDitto[$i])     ? $deadline   : $tasks->deadline[$i];
 
-            /* 检查任务名称为空的数据。 Check the data whick task's name. */
-            if(empty($tasks->name[$i]))
-            {
-                if($this->common->checkValidRow('task', $tasks, $i))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
-                    return false;
-                }
-                continue;
-            }
 
             $dittoFields = array('story' => $story, 'module' => $module, 'type' => $type, 'assignedTo' => $assignedTo, 'estStarted' => $estStarted, 'deadline' => $deadline);
-            $data[$i]    = $this->buildData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields);
+            $data[$i]    = $this->buildData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields, $taskID);
         }
 
         return $data;
@@ -652,10 +645,11 @@ class taskZen extends task
      * @param  int       $index
      * @param  array     $dittoFields
      * @param  array     $extendFields
+     * @param  int       $taskID
      * @access protected
      * @return object
      */
-    protected function buildData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields): object
+    protected function buildData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields, int $taskID): object
     {
         extract($dittoFields);
         $now = helper::now();
@@ -665,10 +659,10 @@ class taskZen extends task
         $task->type       = $type;
         $task->module     = (int)$module;
         $task->assignedTo = $assignedTo;
-        $task->color      = $tasks->color[$index];
+        $task->color      = isset($tasks->color[$index]) ? $tasks->color[$index] : '';
         $task->name       = $tasks->name[$index];
         $task->desc       = nl2br($tasks->desc[$index]);
-        $task->pri        = $tasks->pri[$index];
+        $task->pri        = (int)$tasks->pri[$index];
         $task->estimate   = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
         $task->left       = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
         $task->project    = $execution->project;
@@ -678,7 +672,7 @@ class taskZen extends task
         $task->status     = 'wait';
         $task->openedBy   = $this->app->user->account;
         $task->openedDate = $now;
-        $task->parent     = $tasks->parent[$index];
+        $task->parent     = $taskID;
         $task->vision     = isset($tasks->vision[$index]) ? $tasks->vision[$index] : 'rnd';
         $task->version    = 1;
         if($story) $task->storyVersion = (int)$this->dao->findById($task->story)->from(TABLE_STORY)->fetch('version');
@@ -1103,8 +1097,8 @@ class taskZen extends task
     {
         $this->loadModel('kanban');
 
-        $regionID    = (int)$output['regionID'];
-        $laneID      = (int)$output['laneID'];
+        $regionID    = isset($output['regionID']) ? (int)$output['regionID'] : 0;
+        $laneID      = isset($output['laneID']) ? (int)$output['laneID'] : 0;
         $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
         $regionID    = $regionID ? $regionID : key($regionPairs);
         $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
@@ -1360,7 +1354,7 @@ class taskZen extends task
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。 */
         /* Get region and lane dropdown data and set default values for regions and lanes. */
-        if($execution->type == 'kanban') $this->assignKanbanRelatedVars($execution->id, $output);
+        if($execution->type == 'kanban') $this->assignKanban4Create($execution->id, $output);
 
         if($taskID)
         {
@@ -1390,6 +1384,7 @@ class taskZen extends task
         $this->view->taskConsumed  = isset($task) ? $task->consumed : 0;
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
+        $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
 
         $this->display();
     }

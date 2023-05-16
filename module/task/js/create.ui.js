@@ -1,8 +1,5 @@
 $(function()
 {
-    lifetimeList  = JSON.parse(lifetimeList);
-    attributeList = JSON.parse(attributeList);
-
     if(hideStory)
     {
         $("input[name='after'][value='toStoryList']").parent().hide();
@@ -93,6 +90,7 @@ function toggleSelectTestStory()
         $('#estStarted').closest('.form-row').addClass('hidden');
         $('#estimate').parent().prev().addClass('hidden');
         $('#estimate').parent().addClass('hidden');
+        $('#testStoryBox').removeClass('hidden');
 
         $('[name^=multiple]').prop('checked', false);
         showTeamBox();
@@ -105,6 +103,7 @@ function toggleSelectTestStory()
         $('#estStarted').closest('.form-row').removeClass('hidden');
         $('#estimate').parent().prev().removeClass('hidden');
         $('#estimate').parent().removeClass('hidden');
+        $('#testStoryBox').addClass('hidden');
     }
 }
 

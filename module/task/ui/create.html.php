@@ -25,8 +25,8 @@ jsVar('requiredFields', $config->task->create->requiredFields);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
 jsVar('window.lifetime', $execution->lifetime);
 jsVar('window.attribute', $execution->attribute);
-jsVar('window.lifetimeList', json_encode($lifetimeList));
-jsVar('window.attributeList', json_encode($attributeList));
+jsVar('window.lifetimeList', $lifetimeList);
+jsVar('window.attributeList', $attributeList);
 jsVar('hasProduct', $execution->hasProduct);
 jsVar('hideStory', $hideStory);
 $requiredFields = array();
@@ -253,6 +253,7 @@ formPanel
                 setClass('empty-story-tip input-control has-prefix has-suffix'),
                 $storyEmptyPreTip,
                 input(
+                    set::name(''),
                     prop('readonly'),
                     prop('onfocus', 'this.blur()'),
                 ),

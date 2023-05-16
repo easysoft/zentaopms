@@ -107,7 +107,7 @@ $config->task->form->batchCreate['name']          = array('type' => 'array', 're
 $config->task->form->batchCreate['color']         = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['type']          = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['assignedTo']    = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['estimated']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate['estimate']      = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['estStarted']    = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['deadline']      = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchCreate['desc']          = array('type' => 'array', 'required' => false, 'default' => array());
