@@ -35,7 +35,7 @@ foreach($longBlocks as $index => $block)
                 set('class', 'panel-actions nav nav-default'),
                 dropdown
                 (
-                    icon(set('class', 'icon icon-ellipsis-v')),
+                    icon('ellipsis-v'),
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
@@ -81,10 +81,7 @@ foreach($shortBlocks as $index => $block)
                 set('class', 'panel-actions nav nav-default'),
                 dropdown
                 (
-                    icon
-                    (
-                        set('class', 'icon icon-ellipsis-v')
-                    ),
+                    icon('ellipsis-v'),
                     set::items
                     ([
                         ['text' => $lang->block->refresh, 'url' => ''],
