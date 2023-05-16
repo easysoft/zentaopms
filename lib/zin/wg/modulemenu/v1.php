@@ -24,7 +24,7 @@ class moduleMenu extends wg
 
         foreach($children as $child)
         {
-            $item = array('key' => $child->id, 'text' => $child->name, 'items' => []);
+            $item = array('key' => $child->id, 'text' => $child->name, 'url' => $child->url, 'items' => []);
             $items = $this->buildMenuTree($item['items'], $child->id);
             if(count($items) !== 0) $item['items'] = $items;
             else unset($item['items']);
