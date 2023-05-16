@@ -40,6 +40,7 @@ $lang->mainNav->menuOrder[35] = 'admin';
 $lang->navGroup->demandpool = 'demandpool';
 $lang->navGroup->demand     = 'demandpool';
 $lang->navGroup->roadmap    = 'product';
+$lang->navGroup->charter    = 'charter';
 
 $lang->demandpool->menu = new stdclass();
 $lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport,review,change');
