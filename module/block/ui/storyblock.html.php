@@ -20,11 +20,10 @@ foreach($stories as $story)
 
 panel
 (
-    set::class('block-table'),
     dtable
     (
         set::width('100%'),
-        set::cols(array_values($config->block->dtable->stories->fieldList)),
+        set::cols(array_values($config->block->story->dtable->fieldList)),
         set::data(array_values($stories))
     )
 );

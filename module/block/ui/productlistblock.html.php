@@ -11,6 +11,14 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$longBlock)
+{
+    unset($config->block->product->dtable->fieldList['unclosedFeedback']);
+    unset($config->block->product->dtable->fieldList['storyCompleteRate']);
+    unset($config->block->product->dtable->fieldList['plan']);
+    unset($config->block->product->dtable->fieldList['activatedBug']);
+}
+
 foreach($productStats as $product)
 {
     if(!empty($product->PO))
@@ -26,7 +34,6 @@ panel
 (
     dtable
     (
-        setClass('shadow rounded'),
         set::cols(array_values($config->block->product->dtable->fieldList)),
         set::data(array_values($productStats))
     )

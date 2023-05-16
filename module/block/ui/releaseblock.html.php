@@ -22,7 +22,7 @@ panel
     (
         set::width('100%'),
         set::height('auto'),
-        set::cols(array_values($config->block->dtable->release->fieldList)),
+        set::cols(array_values($config->block->release->dtable->fieldList)),
         set::data(array_values($releases))
     )
 );

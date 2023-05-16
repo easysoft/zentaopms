@@ -13,10 +13,10 @@ namespace zin;
 
 if(!$longBlock)
 {
-    unset($config->block->plan->dtable['id']);
-    unset($config->block->plan->dtable['product']);
-    unset($config->block->plan->dtable['hour']);
-    unset($config->block->plan->dtable['bugs']);
+    unset($config->block->plan->dtable->fieldList['id']);
+    unset($config->block->plan->dtable->fieldList['product']);
+    unset($config->block->plan->dtable->fieldList['hour']);
+    unset($config->block->plan->dtable->fieldList['bugs']);
 }
 
 foreach($plans as $plan) $plan->product = zget($products, $plan->product); 
@@ -26,7 +26,7 @@ panel
     set('class', 'plan-block'),
     dtable
     (
-        set::cols(array_values($config->block->plan->dtable)),
+        set::cols(array_values($config->block->plan->dtable->fieldList)),
         set::data(array_values($plans))
     )
 );
