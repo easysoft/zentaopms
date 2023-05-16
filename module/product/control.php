@@ -551,7 +551,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function sort()
+    public function updateOrder()
     {
         /* Can only be order by program sorting. */
         $orderBy = $this->post->orderBy;
@@ -561,7 +561,7 @@ class product extends control
         $sortedIdList = explode(',', trim($this->post->products, ','));
 
         /* Sort by sorted id list. */
-        $this->product->sort($sortedIdList);
+        $this->product->updateOrder($sortedIdList);
     }
 
     /**
@@ -847,8 +847,8 @@ class product extends control
         if(empty($executionID)) return print(html::select('product', array(), '', "class='form-control chosen' required"));
 
         $this->app->loadLang('build');
-        $status   = empty($this->config->CRProduct) ? 'noclosed' : '';
-        $products = $this->product->getProductPairsByProject($executionID, $status);
+        $status   = empty($this->config->CRProduct) ? 'noclosed' : 'all';
+        $products = $this->product->getProducts($executionID, $status, '', $withBranch = false);
 
         if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
         return print(html::select('product', $products, '', "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));

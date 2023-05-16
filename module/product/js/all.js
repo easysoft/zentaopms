@@ -154,7 +154,7 @@ $(function()
             {
                 products += $(this.item).data('id') + ',' ;
             });
-            $.post(createLink('product', 'sort'), {'products' : products, 'orderBy' : orderBy});
+            $.post(createLink('product', 'updateOrder'), {'products' : products, 'orderBy' : orderBy});
 
             $('#productListForm').table('initNestedList');
         }
