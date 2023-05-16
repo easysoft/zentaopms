@@ -75,10 +75,10 @@ class admin extends control
 
             if(empty($lastSyncDate) || $lastSyncDate <= $nextWeek)
             {
-                $this->adminZen->setExtensionsByAPI('plugin', 6);
-                $this->adminZen->setExtensionsByAPI('patch', 5);
-                $this->adminZen->setDynamicsByAPI(3);
-                $this->adminZen->setPublicClassByAPI(3);
+                $this->adminZen->syncExtensions('plugin', 6);
+                $this->adminZen->syncExtensions('patch', 5);
+                $this->adminZen->syncDynamics(3);
+                $this->adminZen->syncPublicClasses(3);
 
                 $this->loadModel('setting')->setItem('system.common.zentaoWebsite.lastSyncDate', date('Y-m-d'));
             }

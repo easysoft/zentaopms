@@ -20,7 +20,7 @@ class adminZen extends admin
      * @access public
      * @return array
      */
-    public function setExtensionsByAPI($type = 'plugin', $limit = 5)
+    public function syncExtensions($type = 'plugin', $limit = 5)
     {
         $searchType = $type == 'plugin' ? 'byModule,offcial' : 'byModule';
         $param      = $type == 'plugin' ? '' : 'MTIxOA==';
@@ -45,7 +45,7 @@ class adminZen extends admin
      * @access public
      * @return void
      */
-    public function setPublicClassByAPI($limit = 3)
+    public function syncPublicClasses($limit = 3)
     {
         $apiURL  = $this->config->admin->videoAPIURL;
         $data    = $this->fetchAPI($apiURL);
@@ -74,7 +74,7 @@ class adminZen extends admin
      * @access public
      * @return void
      */
-    public function setDynamicsByAPI($limit = 2)
+    public function syncDynamics($limit = 2)
     {
         $apiURL   = $this->config->admin->downloadAPIURL;
         $data     = $this->fetchAPI($apiURL);
