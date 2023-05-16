@@ -167,25 +167,20 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $changes       = array();
-            $taskDataFixer = form::data($this->config->task->form->edit);
-            $teamDataFixer = form::data($this->config->task->form->team->edit);
-            $rawData       = $taskDataFixer->rawdata;
-
             /* Prepare and check data. */
-            $task = $this->taskZen->prepareEdit($taskDataFixer, $taskID);
-            $team = $teamDataFixer->get();
+            $postData = form::data()->getAll(true);
+            $task     = $this->taskZen->buildTaskForEdit($taskID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update task. */
-            $changes = $this->task->update($task, $team, $rawData);
+            $changes = $this->task->update($task, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
-            if($rawData->comment != '' or !empty($changes))
+            if($postData->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->loadModel('action')->create('task', $taskID, $action, $rawData->comment);
+                $actionID = $this->loadModel('action')->create('task', $taskID, $action, $postData->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 

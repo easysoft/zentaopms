@@ -586,12 +586,12 @@ class taskModel extends model
     /**
      * Update a task.
      *
-     * @param  object $task
-     * @param  object $team
+     * @param  object             $task
+     * @param  object             $postData
      * @access public
      * @return array|string|false
      */
-    public function update(object $task, object $team): array|string|false
+    public function update(object $task, object $postData): array|string|false
     {
         $taskID = $task->id;
         if($taskID <= 0) return false;
@@ -599,16 +599,24 @@ class taskModel extends model
         $oldTask = $this->getByID($taskID);
 
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
-        if($this->post->parent > 0)
+        if($postData->parent > 0)
         {
             $taskConsumed = 0;
-            $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
-            if($taskConsumed > 0) return print(js::error($this->lang->task->error->alreadyConsumed));
+            $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($postData->parent)->andWhere('parent')->eq(0)->fetch('consumed');
+            if($taskConsumed > 0)
+            {
+                dao::$errors[] = $this->lang->task->error->alreadyConsumed;
+                return false;
+            }
         }
 
-        if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
+        if($task->consumed < $oldTask->consumed)
+        {
+            dao::$errors[] = $this->lang->task->error->consumedSmall;
+            return false;
+        }
 
-        if($this->post->team and count(array_filter($this->post->team)) > 1)
+        if($postData->team and count(array_filter($postData->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
@@ -623,9 +631,9 @@ class taskModel extends model
 
             if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
 
-            if($this->post->story != $oldTask->story)
+            if($postData->story != $oldTask->story)
             {
-                $this->loadModel('story')->setStage($this->post->story);
+                $this->loadModel('story')->setStage($postData->story);
                 $this->story->setStage($oldTask->story);
             }
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
@@ -668,10 +676,10 @@ class taskModel extends model
                 $oldTask->team = '';
                 foreach($oldTeams as $team) $oldTask->team .= "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left . "\n";
                 $task->team = '';
-                foreach($this->post->team as $i => $account)
+                foreach($postData->team as $i => $account)
                 {
                     if(empty($account)) continue;
-                    $task->team .= "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($this->post->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($this->post->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($this->post->teamLeft, $i, 0) . "\n";
+                    $task->team .= "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($postData->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($postData->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($postData->teamLeft, $i, 0) . "\n";
                 }
             }
 

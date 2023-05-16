@@ -38,66 +38,61 @@ class taskZen extends task
 
         /* Set menu. */
         $this->execution->setMenu($this->view->execution->id);
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
     /**
-     * 准备编辑数据。
-     * Prepare edit data.
+     * 构造待更新的任务数据。
+     * Build the task data to be updated.
      *
-     * @param  form      $postDataFixer
-     * @param  int       $taskID
+     * @param  int          $taskID
      * @access protected
      * @return object|false
      */
-    protected function prepareEdit(form $postDataFixer, int $taskID): object|false
+    protected function buildTaskForEdit(int $taskID): object|false
     {
-        $now      = helper::now();
         $oldTask  = $this->task->getByID($taskID);
-        $postData = $postDataFixer->get();
+        $postData = form::data()->getAll(true);
 
-        /* Check that the data is reasonable. */
+        /* Check if the input post meets the requirements. */
         if($postData->estimate < 0 or $postData->left < 0 or $postData->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
         if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, $postData->estStarted, $postData->deadline);
         if(!empty($postData->lastEditedDate) && $oldTask->lastEditedDate != $postData->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
         if(dao::isError()) return false;
 
-        $task = $postDataFixer->add('id', $taskID)
-            ->setIF(!$postData->assignedTo && !empty($oldTask->team) && !empty($postDataFixer->rawdata->team), 'assignedTo', $this->task->getAssignedTo4Multi($postDataFixer->rawdata->team, $oldTask))
-            ->setIF(!$oldTask->mode && !$postData->assignedTo && !empty($postDataFixer->rawdata->team), 'assignedTo', $postDataFixer->rawdata->team[0])
-
-            ->setIF($oldTask->parent == 0 && $postData->parent == '', 'parent', 0)
-            ->setIF($postData->story !== false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
+        $now  = helper::now();
+        $task = form::data()->add('id', $taskID)
+            ->setIF(!$postData->assignedTo && !empty($oldTask->team) && !empty($postData->team), 'assignedTo', $this->task->getAssignedTo4Multi($postData->team, $oldTask))
+            ->setIF($postData->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
 
             ->setIF($postData->mode   == 'single', 'mode', '')
-            ->setIF($postData->status == 'done', 'left', 0)
-            ->setIF($postData->status == 'done'   && !$postData->finishedBy,   'finishedBy',   $this->app->user->account)
-            ->setIF($postData->status == 'done'   && !$postData->finishedDate, 'finishedDate', $now)
+            ->setIF(!$oldTask->mode && !$postData->assignedTo && !empty($postData->team), 'assignedTo', $postData->team[0])
+            ->setIF($postData->story !== false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
+            ->setIF($postData->status == 'wait' && $postData->left == $oldTask->left && $postData->consumed == 0 && $postData->estimate, 'left', $postData->estimate)
 
-            ->setIF($postData->status == 'cancel' && !$postData->canceledBy,   'canceledBy',   $this->app->user->account)
-            ->setIF($postData->status == 'cancel' && !$postData->canceledDate, 'canceledDate', $now)
+            ->setIF($postData->status == 'done', 'left', 0)
+            ->setIF($postData->status == 'done'   && empty($postData->finishedBy),   'finishedBy',   $this->app->user->account)
+            ->setIF($postData->status == 'done'   && empty($postData->finishedDate), 'finishedDate', $now)
+
+            ->setIF($postData->status == 'cancel' && empty($postData->canceledBy),   'canceledBy',   $this->app->user->account)
+            ->setIF($postData->status == 'cancel' && empty($postData->canceledDate), 'canceledDate', $now)
             ->setIF($postData->status == 'cancel', 'assignedTo',   $oldTask->openedBy)
             ->setIF($postData->status == 'cancel', 'assignedDate', $now)
 
-            ->setIF($postData->status == 'closed' && !$postData->closedBy,     'closedBy',     $this->app->user->account)
-            ->setIF($postData->status == 'closed' && !$postData->closedDate,   'closedDate',   $now)
+            ->setIF($postData->status == 'closed' && empty($postData->closedBy),     'closedBy',     $this->app->user->account)
+            ->setIF($postData->status == 'closed' && empty($postData->closedDate),   'closedDate',   $now)
+
             ->setIF($postData->consumed > 0 && $postData->left > 0 && $postData->status == 'wait', 'status', 'doing')
 
-            ->setIF($postData->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
-
-            ->setIF($postData->status == 'wait' && $postData->left == $oldTask->left && $postData->consumed == 0 && $postData->estimate, 'left', $postData->estimate)
-            ->setIF($oldTask->parent > 0 && !$postData->parent, 'parent', 0)
+            ->setIF($oldTask->parent >= 0 && empty($postData->parent), 'parent', 0)
             ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
 
             ->setIF($oldTask->name != $postData->name || $oldTask->estStarted != $postData->estStarted || $oldTask->deadline != $postData->deadline, 'version', $oldTask->version + 1)
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $postDataFixer->rawData->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $postData->uid);
     }
 
     /**
