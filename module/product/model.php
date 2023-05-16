@@ -1947,6 +1947,7 @@ class productModel extends model
             $product->stories                 = $stories[$product->id];
             $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
             $product->stories['unclosed']     = isset($unclosedStory[$product->id]) ? $unclosedStory[$product->id] : 0;
+            $product->stories['totalStories'] = $product->stories['unclosed'] + $product->stories['closed'];
 
             $product->requirements = $requirements[$product->id];
             $product->plans        = isset($plans[$product->id])    ? $plans[$product->id]    : 0;

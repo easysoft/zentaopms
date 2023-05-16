@@ -128,7 +128,7 @@
             <td><?php echo $program['activeStories'];?></td>
             <td><?php echo $program['changingStories'];?></td>
             <td><?php echo $program['reviewingStories'];?></td>
-            <?php $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];?>
+            <?php $totalStories = $program['totalStories'];?>
             <td><?php echo $totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $program['unResolvedBugs'];?></td>
             <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
@@ -169,7 +169,7 @@
             <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
             <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
             <td><?php echo isset($line['reviewingStories']) ? $line['reviewingStories'] : 0;?></td>
-            <?php $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);?>
+            <?php $totalStories = (isset($line['totalStories']) ? $line['totalStories'] : 0)?>
             <td><?php echo $totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100;?>%</td>
             <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
             <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
@@ -184,7 +184,7 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+          $totalStories = $product->stories['totalStories'];
 
           $trClass = '';
           if($product->line and $this->config->systemMode == 'ALM')
