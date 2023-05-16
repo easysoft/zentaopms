@@ -848,7 +848,7 @@ class product extends control
 
         $this->app->loadLang('build');
         $status   = empty($this->config->CRProduct) ? 'noclosed' : 'all';
-        $products = $this->product->getProducts($executionID, $status, '', $withBranch = false);
+        $products = $this->product->getProductPairsByProject($executionID, $status);
 
         if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
         return print(html::select('product', $products, '', "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));

@@ -213,16 +213,10 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '', $noDeleted = true)
+    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '', $noDeleted = true): array
     {
-        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append, $noDeleted);
-        $pairs    = array();
-        if(!empty($products))
-        {
-            foreach($products as $product) $pairs[$product->id] = $product->deleted ? $product->name . "({$this->lang->product->deleted})" : $product->name;
-        }
-
-        return $pairs;
+        if(empty($projectID)) return array();
+        return $this->getProducts($projectID, $status, '', false, $append, $noDeleted);
     }
 
     /**
@@ -268,15 +262,13 @@ class productModel extends model
         }
 
         /* 初始化变量。 */
-        $append          = $this->productTao->formatAppendParam($append);
-        $views           = $this->app->user->view->products . (empty($append) ? '' : ",$append");
-        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $views, $status, $orderBy, $noDeleted);
+        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $append, $status, $orderBy, $noDeleted);
         $products        = array();
 
         /* 如果不返回分支信息，则返回 id=>name 的键值对。 */
         if(!$withBranch)
         {
-            foreach($projectProducts as $product) $products[$product->id] = $product->name;
+            foreach($projectProducts as $product) $products[$product->id] = $product->deleted ? $product->name . "({$this->lang->product->deleted})" : $product->name;
             return $products;
         }
 
@@ -666,7 +658,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function sort(array $sortedIdList): void
+    public function updateOrder(array $sortedIdList): void
     {
         /* Remove programID. */
         $sortedIdList = array_values(array_filter(array_map(function($id){return (is_numeric($id) and $id > 0) ? $id : null;}, $sortedIdList)));
