@@ -66,7 +66,11 @@ toolbar
 /* zin: Define the sidebar in main content. */
 sidebar
 (
-    moduleMenu()
+    moduleMenu(set(array(
+        'modules'   => $programTree,
+        'activeKey' => $programID,
+        'closeLink' => $this->createLink('project', 'browse')
+    )))
 );
 
 /* zin: Define the dtable in main content. */
@@ -78,6 +82,7 @@ dtable
     set::data($projectStats),
     set::plugins(array("checkable")),
     set::checkable(true),
+    set::sortLink(helper::createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );

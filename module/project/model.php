@@ -1030,7 +1030,6 @@ class projectModel extends model
 
         krsort($projectMenu);
         $projectMenu = array_pop($projectMenu);
-        $lastMenu    = "<ul class='tree' data-ride='tree' id='projectTree' data-name='tree-project'>{$projectMenu}</ul>\n";
 
         return $lastMenu;
     }

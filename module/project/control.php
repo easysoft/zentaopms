@@ -373,7 +373,7 @@ class project extends control
         $this->view->pager          = $pager;
         $this->view->programID      = $programID;
         $this->view->program        = $this->program->getByID($programID);
-        $this->view->programTree    = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
+        $this->view->programTree    = $this->project->getProgramTree();
         $this->view->programs       = array('0' => '') + $this->program->getParentPairs();
         $this->view->users          = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->userIdPairs    = $this->loadModel('user')->getPairs('nodeleted|showid');
