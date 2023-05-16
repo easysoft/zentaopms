@@ -1630,4 +1630,70 @@ class bugZen extends bug
 
         return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $uid);
     }
+
+    /**
+     * 准备激活数据。
+     * Prepare Activate Data.
+     *
+     * @param  form      $formData
+     * @param  int       $bugID
+     * @access protected
+     * @return object
+     */
+    protected function prepareActivate(form $formData, int $bugID): object
+    {
+        $oldBug = $this->bug->getById($bugID);
+        $now    = helper::now();
+        $bug    = $formData
+            ->setDefault('assignedTo',     $oldBug->resolvedBy)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('activatedDate',  $now)
+            ->setDefault('activatedCount', (int)$oldBug->activatedCount)
+            ->stripTags($this->config->bug->editor->activate['id'], $this->config->allowedTags)
+            ->add('id', $bugID)
+            ->add('resolution', '')
+            ->add('status', 'active')
+            ->add('resolvedDate', '0000-00-00')
+            ->add('resolvedBy', '')
+            ->add('resolvedBuild', '')
+            ->add('closedBy', '')
+            ->add('closedDate', '0000-00-00')
+            ->add('duplicateBug', 0)
+            ->add('toTask', 0)
+            ->add('toStory', 0)
+            ->join('openedBuild', ',')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $formData->get('uid'));
+    }
+
+    /**
+     * 构建bug激活表单。
+     * Build bug activate form.
+     *
+     * @param  int       $bugID
+     * @access protected
+     * @return void
+     */
+    protected function buildActivateForm(int $bugID): void
+    {
+        $bug = $this->bug->getById($bugID);
+
+        $productID = $bug->product;
+        $this->checkBugExecutionPriv($bug);
+        $this->qa->setMenu($this->products, $productID, $bug->branch);
+
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->activate;
+
+        $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
+        $this->view->actions = $this->action->getList('bug', $bugID);
+
+        $this->display();
+    }
 }

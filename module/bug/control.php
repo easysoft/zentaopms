@@ -1044,43 +1044,36 @@ class bug extends control
      */
     public function activate($bugID, $extra = '')
     {
-        $bug = $this->bug->getById($bugID);
         if(!empty($_POST))
         {
-            $changes = $this->bug->activate($bugID, $extra);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
 
-            $files = $this->loadModel('file')->saveUpload('bug', $bugID);
+            /* Activate bug. */
+            $formData = form::data($this->config->bug->form->activate);
+            $bug      = $this->bugZen->prepareActivate($formData, $bugID);
+            $changes  = $this->bug->activate($bug, $output);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            /* Save attachments and record logs. */
+            $files      = $this->loadModel('file')->saveUpload('bug', $bugID);
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->action->create('bug', $bugID, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
 
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-
             if(isonlybody())
             {
                 $regionID = zget($output, 'regionID', 0);
+                $bug      = $this->bug->getById($bugID);
                 $this->bugZen->responseInModal($bug->execution, '', $regionID);
             }
 
-            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "bugID={$bugID}"), 'closeModal' => true);
         }
 
-        $productID = $bug->product;
-        $this->bugZen->checkBugExecutionPriv($bug);
-        $this->qa->setMenu($this->products, $productID, $bug->branch);
-
-        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
-        $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
-        $this->view->actions = $this->action->getList('bug', $bugID);
-
-        $this->display();
+        $this->bugZen->buildActivateForm($bugID);
     }
 
     /**

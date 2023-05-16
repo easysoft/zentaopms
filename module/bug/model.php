@@ -1117,67 +1117,39 @@ class bugModel extends model
     }
 
     /**
+     * 激活一个bug。
      * Activate a bug.
      *
-     * @param  int    $bugID
-     * @param  string $extra
+     * @param  object $bugID
+     * @param  array  $output
      * @access public
-     * @return void
+     * @return array
      */
-    public function activate($bugID, $extra)
+    public function activate(object $bug, array $output): array
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        $bugID      = (int)$bugID;
+        $bugID      = $bug->id;
         $oldBug     = $this->getById($bugID);
-        $solveBuild = $this->dao->select('id')
-            ->from(TABLE_BUILD)
-            ->where("CONCAT(',', bugs, ',')")->like("%,{$bugID},%")
-            ->fetch('id');
-        $now = helper::now();
-        $bug = fixer::input('post')
-            ->setDefault('assignedTo',     $oldBug->resolvedBy)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('activatedDate',  $now)
-            ->setDefault('activatedCount', (int)$oldBug->activatedCount)
-            ->stripTags($this->config->bug->editor->activate['id'], $this->config->allowedTags)
-            ->add('id', $bugID)
-            ->add('resolution', '')
-            ->add('status', 'active')
-            ->add('resolvedDate', '0000-00-00')
-            ->add('resolvedBy', '')
-            ->add('resolvedBuild', '')
-            ->add('closedBy', '')
-            ->add('closedDate', '0000-00-00')
-            ->add('duplicateBug', 0)
-            ->add('toTask', 0)
-            ->add('toStory', 0)
-            ->join('openedBuild', ',')
-            ->remove('comment,files,labels')
-            ->get();
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
+        $bug->activatedCount += 1;
 
+        /* Update build. */
+        $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("CONCAT(',', bugs, ',')")->like("%,{$bugID},%")->fetch();
         if($solveBuild)
         {
-            $this->loadModel('build');
-            $build = $this->build->getByID($solveBuild);
-            $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
-            $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$solveBuild)->exec();
+            $buildBugs = trim(str_replace(",$bugID,", ',', ",$solveBuild->bugs,"), ',');
+            $this->dao->update(TABLE_BUILD)->set('bugs')->eq($buildBugs)->where('id')->eq($solveBuild->id)->exec();
         }
 
+        /* Update kanban. */
         if($oldBug->execution)
         {
             $this->loadModel('kanban');
             if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
             if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
-        $bug->activatedCount += 1;
+
         return common::createChanges($oldBug, $bug);
     }
 

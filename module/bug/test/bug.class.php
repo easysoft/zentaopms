@@ -1128,9 +1128,16 @@ class bugTest
      * @access public
      * @return array
      */
-    public function activateObject($bugID)
+    public function activateObject(int $bugID, array $bulidList = array(), string $returnField = 'activatedCount'): array
     {
-        $changes = $this->objectModel->activate($bugID, '');
+        $oldBug = $this->objectModel->getById($bugID);
+
+        $bug = new stdclass();
+        $bug->id             = $bugID;
+        $bug->status         = 'active';
+        $bug->activatedCount = (int)$oldBug->activatedCount;
+        $bug->openedBuild    = implode(',', $bulidList);
+        $changes = $this->objectModel->activate($bug, array());
 
         if($changes == array()) $changes = '没有数据更新';
 
@@ -1142,7 +1149,7 @@ class bugTest
         {
             foreach($changes as $change)
             {
-                if($change['field'] == 'activatedCount') return $change;
+                if($change['field'] == $returnField) return $change;
             }
         }
     }

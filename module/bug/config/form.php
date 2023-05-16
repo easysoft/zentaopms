@@ -110,3 +110,7 @@ $config->bug->form->resolve['createBuild']    = array('required' => false, 'type
 $config->bug->form->resolve['buildExecution'] = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->resolve['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['uid']            = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->bug->form->activate = array();
+$config->bug->form->activate['assignedTo'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->activate['openedBuild'] = array('required' => false, 'type' => 'array', 'default' => array());
