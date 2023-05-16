@@ -407,6 +407,8 @@ class baseRouter
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
+        $this->setupXhprof();
+
         $this->setEdition();
         $this->setVision();
 
@@ -697,6 +699,47 @@ class baseRouter
     public function setDebug()
     {
         if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+    }
+
+    /**
+     * 启用Xhprof。
+     * Setup xhprof.
+     *
+     * @return void
+     */
+    protected function setupXhprof()
+    {
+        if(!empty($this->config->debug) && $this->config->debug >= 4 && extension_loaded('xhprof')) xhprof_enable();
+    }
+
+    /**
+     * 输出Xhprof结果。
+     * Output xhprof.
+     *
+     * @return bool
+     */
+    protected function outputXhprof()
+    {
+        if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
+
+        $log          = xhprof_disable();
+        $xhprofPath   = $this->getWwwRoot() . 'xhprof';
+        $libUtilsPath = $xhprofPath . DS . 'xhprof_lib' . DS . 'utils' . DS;
+        $outputDir    = ini_get('xhprof.output_dir');
+
+        if(!is_dir($xhprofPath) || !is_dir($libUtilsPath)) return false;
+        if(!$outputDir) $outputDir = $xhprofPath . DS . 'xhprof_runs';
+        if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
+
+        include_once $libUtilsPath . 'xhprof_lib.php';
+        include_once $libUtilsPath . 'xhprof_runs.php';
+
+        $xhprofRuns = new \XHProfRuns_Default($outputDir);
+        $type       = "{$this->moduleName}_{$this->methodName}";
+        $runID      = $xhprofRuns->save_run($log, $type);
+        header("Xhprof-RunID: {$runID}");
+
+        return true;
     }
 
     /**
@@ -2192,13 +2235,18 @@ class baseRouter
     public function loadModule()
     {
         try {
-            if(is_null($this->params) and !$this->setParams()) return false;
+            if(is_null($this->params) and !$this->setParams())
+            {
+                $this->outputXhprof();
+                return false;
+            }
 
             /* 调用该方法   Call the method. */
             $module = $this->control;
 
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
+            $this->outputXhprof();
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
