@@ -1035,26 +1035,27 @@ class projectModel extends model
     }
 
     /**
+     * 根据项目ID获取项目集列表。
      * Get the program tree of project.
-     * Copied from getTreeMenu().
      *
      * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getProgramTree($projectID = 0)
+    public function getProgramTree(int $projectID = 0): array
     {
         $programs = array();
         $stmt     = $this->dbh->query($this->buildMenuQuery($projectID));
 
         while($project = $stmt->fetch())
         {
-            $prog = new stdClass();
-            $prog->id = $project->id;
-            $prog->name = $project->name;
-            $prog->parent = $project->parent;
+            $program = new stdClass();
+            $program->id     = $project->id;
+            $program->name   = $project->name;
+            $program->parent = $project->parent;
+            $program->url    = helper::createLink('project', 'browse', "programID={$program->id}");
 
-            $programs[] = $prog;
+            $programs[] = $program;
         }
 
         return $programs;

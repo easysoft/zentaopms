@@ -16,7 +16,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("programID={$programID}&status={key}&param={$param}&orderBy={$orderBy}"),
+    set::linkParams("programID={$programID}&status={key}"),
     item(set(array
     (
         'type' => "checkbox",
