@@ -426,7 +426,6 @@ $lang->bug->featureBar['browse']['assignedbyme'] = $lang->bug->assignedByMe;
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
-
 $lang->bug->moreSelects['browse']['more']['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['browse']['more']['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->moreSelects['browse']['more']['longlifebugs']  = $lang->bug->longLifeBugs;
