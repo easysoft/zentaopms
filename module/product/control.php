@@ -187,7 +187,7 @@ class product extends control
         $this->view->browseType      = $browseType;
         $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
         $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getByID($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
         $this->view->branchOptions   = $branchOptions;
@@ -479,7 +479,7 @@ class product extends control
         $account = 'all';
         if($type == 'account')
         {
-            $user = $this->loadModel('user')->getById($param, 'id');
+            $user = $this->loadModel('user')->getByID($param, 'id');
             if($user) $account = $user->account;
         }
 
@@ -926,7 +926,7 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        if($projectID) $project = $this->loadModel('project')->getById($projectID);
+        if($projectID) $project = $this->loadModel('project')->getByID($projectID);
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $mode);

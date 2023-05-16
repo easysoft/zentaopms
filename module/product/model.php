@@ -81,7 +81,7 @@ class productModel extends model
         }
 
         /* 查询产品数据。*/
-        $product = $this->getById($productID);
+        $product = $this->getByID($productID);
         $this->session->set('currentProductType', $product->type);
 
         /* 生成异步获取下拉菜单的链接。*/
@@ -466,7 +466,7 @@ class productModel extends model
         $currentProductName = $this->lang->productCommon;
         if($productID)
         {
-            $currentProduct     = $this->getById($productID);
+            $currentProduct     = $this->getByID($productID);
             $currentProductName = $currentProduct->name;
             $this->session->set('currentProductType', $currentProduct->type);
         }
@@ -619,7 +619,7 @@ class productModel extends model
      */
     public function close(int $productID, object $product): array|false
     {
-        $oldProduct = $this->getById($productID);
+        $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
@@ -640,7 +640,7 @@ class productModel extends model
      */
     public function activate($productID)
     {
-        $oldProduct = $this->getById($productID);
+        $oldProduct = $this->getByID($productID);
         $product    = (object)array('status' => 'normal');
 
         $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq((int)$productID)->exec();
@@ -878,7 +878,7 @@ class productModel extends model
         }
         $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
 
-        $productInfo   = $this->getById($productID);
+        $productInfo   = $this->getByID($productID);
 
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
         {
@@ -1291,7 +1291,7 @@ class productModel extends model
         if(!$this->checkPriv($productID)) return false;
 
         /* Get product. */
-        $product = $this->getById($productID);
+        $product = $this->getByID($productID);
         if(empty($product)) return false;
 
         /* Attach statistic data. */
@@ -2019,7 +2019,7 @@ class productModel extends model
         /* 产品ID已经被删除，不存在于产品列表中。*/
         /* Product ID does not exsit in products list, it may be deleted. */
         /* Confirm if product exist. */
-        $product = $this->product->getById($productID);
+        $product = $this->product->getByID($productID);
         if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
 
         /* If product is invisible for current user, respond access denied message. */
