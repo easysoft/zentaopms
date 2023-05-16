@@ -817,6 +817,23 @@ class testcaseModel extends model
     }
 
     /**
+     * Get case stories by productID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getStoriesByProduct($productID)
+    {
+        return $this->dao->select('t1.story, t2.title')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.story')->ne(0)
+            ->fetchPairs();
+    }
+
+    /**
      * Update a case.
      *
      * @param  int    $caseID
