@@ -1566,7 +1566,7 @@ class projectModel extends model
             if(dao::isError()) return false;
         }
 
-        if($_POST['products'])
+        if($_POST['products'] and $oldProject->model != 'ipd')
         {
             $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
