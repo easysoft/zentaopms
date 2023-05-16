@@ -32,7 +32,9 @@ $zentaoRoot    = dirname(__FILE__, 3) . DIRECTORY_SEPARATOR;
 $testPath      = $zentaoRoot . 'test' . DIRECTORY_SEPARATOR;
 $frameworkRoot = $zentaoRoot . 'framework' . DIRECTORY_SEPARATOR;
 
-if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true')
+$runFile = debug_backtrace()[count(debug_backtrace())-1]['file'];
+
+if(isset($codeCoverageConfig) and $codeCoverageConfig == 'true' and basename($runFile) != 'ztest')
 {
     $coverage = new coverage();
     $coverage->startCodeCoverage();
