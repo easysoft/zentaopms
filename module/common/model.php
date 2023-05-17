@@ -969,6 +969,7 @@ class commonModel extends model
         $items        = array();
         $lastItem     = end($menuOrder);
         $printDivider = false;
+        $views        = $app->user->rights['acls']['views'];
 
         foreach($menuOrder as $key => $group)
         {
@@ -981,6 +982,17 @@ class commonModel extends model
             {
                 $items[]      = 'divider';
                 $printDivider = false;
+            }
+
+            /* 权限分组-视野维护-可访问视图的优先级最高，如果没有某个视图的权限，直接跳过。 */
+            /* View management-accessible views have the highest priority, continue if user do not have permission ffor a view. */
+            if(!empty($views))
+            {
+                $menu = isset($lang->navGroup->$currentModule) ? $lang->navGroup->$currentModule : $currentModule;
+                if($menu == 'my' and $currentMethod == 'team') $menu = 'system';
+
+                $openMenu = $menu == 'my' and $currentMethod != 'team';
+                if(!$openMenu and !isset($views[$menu])) continue;
             }
 
             /**
