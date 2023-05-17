@@ -104,22 +104,22 @@ class form extends baseFixer
      * Convert the field type.
      *
      * @param string $field
-     * @param array $config
+     * @param array $fieldConfig
      * @return void
      */
-    public function convertField(string $field, array $config)
+    public function convertField(string $field, array $fieldConfig)
     {
         global $app;
 
-        if(!isset($config['type']))
+        if(!isset($fieldConfig['type']))
         {
             if(!isset($this->errors[$field])) $this->errors[$field] = array();
             $this->errors[$field][] = "Field '{$field}' need defined type";
         }
 
-        if(isset($config['required']) && $config['required'])
+        if(isset($fieldConfig['required']) && $fieldConfig['required'])
         {
-            if(!isset($config['default']) && (!isset($this->rawdata->$field) || $this->rawdata->$field === ''))
+            if(!isset($fieldConfig['default']) && (!isset($this->rawdata->$field) || $this->rawdata->$field === ''))
             {
                 if(!isset($this->errors[$field])) $this->errors[$field] = array();
                 $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
@@ -132,16 +132,16 @@ class form extends baseFixer
             $data = $this->rawdata->$field;
         }
 
-        if(isset($config['default']) && !isset($this->rawdata->$field))
+        if(isset($fieldConfig['default']) && !isset($this->rawdata->$field))
         {
-            $data = $config['default'];
+            $data = $fieldConfig['default'];
         }
 
-        $data = helper::convertType($data, $config['type']);
+        $data = helper::convertType($data, $fieldConfig['type']);
 
-        if(isset($config['filter']))
+        if(isset($fieldConfig['filter']))
         {
-            $data = $this->filter($data, $config['filter']);
+            $data = $this->filter($data, $fieldConfig['filter']);
         }
 
         $this->data->$field = $data;
