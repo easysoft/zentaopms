@@ -226,7 +226,8 @@ class programplanModel extends model
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $end)
+
+            if(($today > $end) and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
                 $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
@@ -325,7 +326,7 @@ class programplanModel extends model
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $end)
+            if(($today > $end) and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
                 $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
