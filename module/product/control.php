@@ -28,9 +28,6 @@ class product extends control
         if(!isset($this->app->user)) return;
 
         /* Load need modules. */
-        $this->loadModel('story');
-        $this->loadModel('release');
-        $this->loadModel('tree');
         $this->loadModel('user');
 
         /* Get all products, if no, goto the create page. */
@@ -117,6 +114,7 @@ class product extends control
         /* Pre process. */
         $this->loadModel('datatable');
         $this->loadModel('execution');
+        $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
         $cookieOrderBy  = zget($this->cookie, 'productStoryOrder', 'id_desc');
         $showModule     = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
@@ -147,7 +145,7 @@ class product extends control
         $stories         = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $queryCondition = $this->story->dao->get();
+        $queryCondition = $this->dao->get();
         $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false and !$isProjectStory));
 
         /* Collect story ID list. */
@@ -478,7 +476,7 @@ class product extends control
         $account = 'all';
         if($type == 'account')
         {
-            $user = $this->loadModel('user')->getByID($param, 'id');
+            $user = $this->user->getByID($param, 'id');
             if($user) $account = $user->account;
         }
 
@@ -490,7 +488,7 @@ class product extends control
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
         $this->view->position[]   = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[]   = $this->lang->product->dynamic;
-        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
+        $this->view->userIdPairs  = $this->user->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID    = $productID;
         $this->view->type         = $type;
@@ -808,7 +806,7 @@ class product extends control
         /* Load pager and get tracks. */
         $this->app->loadClass('pager', true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
+        $tracks = $this->loadModel('story')->getTracks($productID, $branch, $projectID, $pager);
 
         /* Get project products. */
         $projectProducts = array();
@@ -1039,7 +1037,7 @@ class product extends control
         /* Get product reviewers. */
         $product          = $this->product->getByID($productID);
         $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
 
         $storyReviewers = '';
         if($storyID)
@@ -1049,7 +1047,7 @@ class product extends control
             $storyReviewers = implode(',', array_keys($storyReviewers));
         }
 
-        $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
+        $reviewers = $this->user->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
 
         echo html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple");
     }
