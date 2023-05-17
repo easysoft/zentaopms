@@ -1192,8 +1192,7 @@ class taskZen extends task
     protected function prepareStart(object $oldTask): false|object
     {
         /* Process the request data for the creation task. */
-        $formData    = form::data($this->config->task->form->start);
-        $task        = $this->prepareTask4Start($oldTask, $formData);
+        $task        = $this->buildTaskForStart($oldTask);
         $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
 
         /* Check if the input post data meets the requirements. */
@@ -1213,14 +1212,13 @@ class taskZen extends task
      * Process the request data for the start task.
      *
      * @param  object    $oldTask
-     * @param  object    $formData
      * @access protected
      * @return object
      */
-    protected function prepareTask4Start(object $oldTask, object $formData): object
+    protected function buildTaskForStart(object $oldTask): object
     {
         $now  = helper::now();
-        $task = $formData->add('id', $oldTask->id)
+        $task = form::data($this->config->task->form->start)->add('id', $oldTask->id)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
             ->stripTags($this->config->task->editor->start['id'], $this->config->allowedTags)
             ->get();
