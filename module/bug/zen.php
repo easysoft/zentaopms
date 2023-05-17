@@ -1604,7 +1604,8 @@ class bugZen extends bug
     }
 
     /**
-     * Prepare to resolve a bug.
+     * 为解决bug构造bug数据。
+     * Build bug for resolving a bug.
      *
      * @param  object    $oldBug
      * @param  int       $uid
@@ -1615,7 +1616,8 @@ class bugZen extends bug
     {
         $bug = form::data($this->config->bug->form->resolve)
             ->setDefault('assignedTo', $oldBug->openedBy)
-            ->add('id', (int)$oldBug->id)
+            ->add('id',        $oldBug->id)
+            ->add('execution', $oldBug->execution)
             ->add('status',    'resolved')
             ->add('confirmed', 1)
             ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')

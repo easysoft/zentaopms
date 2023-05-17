@@ -2219,4 +2219,35 @@ class bugTest
             return 'no error';
         }
     }
+
+    /**
+     * 测试在解决bug的时候创建版本。
+     * Test create build when resolving a bug.
+     *
+     * @access public
+     * @return array
+     */
+    public function createBuildTest(object $bug, int $bugID)
+    {
+        global $tester;
+        $oldBug = $tester->dao->findByID($bugID)->from(TABLE_BUG)->fetch();
+        $this->objectModel->createBuild($bug, $oldBug);
+
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            $return = '';
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
+        }
+        else
+        {
+            $build = $tester->dao->findByID($bug->resolvedBuild)->from(TABLE_BUILD)->fetch();
+            return $build;
+        }
+    }
 }

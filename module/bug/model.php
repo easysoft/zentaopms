@@ -854,6 +854,7 @@ class bugModel extends model
     }
 
     /**
+     * 解决一个bug。
      * Resolve a bug.
      *
      * @param  object      $bugID
@@ -869,34 +870,8 @@ class bugModel extends model
         /* Can create build when resolving bug. */
         if(!empty($bug->createBuild))
         {
-            $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
-
-            /* Check required fields. */
-            $this->bugTao->checkRequired4Resolve($bug, $oldBug->execution);
+            $this->createBuild($bug, $oldBug);
             if(dao::isError()) return false;
-
-            /* Construct build data. */
-            $buildData = new stdclass();
-            $buildData->product     = (int)$oldBug->product;
-            $buildData->branch      = (int)$oldBug->branch;
-            $buildData->project     = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
-            $buildData->execution   = $bug->buildExecution;
-            $buildData->name        = $bug->buildName;
-            $buildData->date        = date('Y-m-d');
-            $buildData->builder     = $this->app->user->account;
-            $buildData->createdBy   = $this->app->user->account;
-            $buildData->createdDate = helper::now();
-
-            /* Create a build. */
-            $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
-                ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
-                ->exec();
-            if(dao::isError()) return false;
-
-            /* Get build id, and record log. */
-            $buildID = $this->dao->lastInsertID();
-            $this->loadModel('action')->create('build', $buildID, 'opened');
-            $bug->resolvedBuild = $buildID;
         }
 
         /* Update bug. */
@@ -932,6 +907,48 @@ class bugModel extends model
 
         /* If the edition is not pms, update feedback. */
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 在解决bug的时候创建一个版本。
+     * Create build when resolving a bug.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return bool
+     */
+    public function createBuild(object $bug, object $oldBug): bool
+    {
+        /* Check required fields. */
+        $this->bugTao->checkRequired4Resolve($bug, $oldBug->execution);
+        if(dao::isError()) return false;
+
+        /* Construct build data. */
+        $buildData = new stdclass();
+        $buildData->product     = (int)$oldBug->product;
+        $buildData->branch      = (int)$oldBug->branch;
+        $buildData->project     = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
+        $buildData->execution   = $bug->buildExecution;
+        $buildData->name        = $bug->buildName;
+        $buildData->date        = date('Y-m-d');
+        $buildData->builder     = $this->app->user->account;
+        $buildData->createdBy   = $this->app->user->account;
+        $buildData->createdDate = helper::now();
+
+        /* Create a build. */
+        $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
+        $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
+            ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
+            ->exec();
+        if(dao::isError()) return false;
+
+        /* Get build id, and record log. */
+        $buildID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('build', $buildID, 'opened');
+        $bug->resolvedBuild = $buildID;
 
         return !dao::isError();
     }
