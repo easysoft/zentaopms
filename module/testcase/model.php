@@ -3520,7 +3520,7 @@ class testcaseModel extends model
         }
 
         /* Sort by product ID for project list. */
-        $orderBy = 'product_desc,sort_asc';
+        $orderBy = 'product_desc,sort_desc';
 
         /* Get sql for batch execution. */
         if($executionSql !== null) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
