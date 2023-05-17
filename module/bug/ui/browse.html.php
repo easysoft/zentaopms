@@ -33,7 +33,15 @@ foreach($bugs as $bug)
     $bug->resolution   = zget($lang->bug->resolutionList, $bug->resolution); 
     $bug->os           = zget($lang->bug->osList, $bug->os); 
     $bug->browser      = zget($lang->bug->browserList, $bug->browser); 
-    $bug->actions      = array('confirm', 'resolve', 'close', 'edit', 'copy');
+
+    $actions = array();
+    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
+    {
+        $isClickable = $this->bug->isClickable($bug, $actionCode);
+
+        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
+    }
+    $bug->actions = $actions;
 }
 
 $cols = array_values($config->bug->dtable->fieldList);

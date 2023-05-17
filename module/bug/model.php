@@ -2950,17 +2950,17 @@ class bugModel extends model
         $params = 'bugID={id}';
 
         $actions = array();
-        $actions['confirm']['icon']        = 'icon-confirm';
+        $actions['confirm']['icon']        = 'icon-ok';
         $actions['confirm']['hint']        = $this->lang->bug->confirmBug;
         $actions['confirm']['url']         = inlink('confirmBug', $params);
         $actions['confirm']['data-toggle'] = 'modal';
 
-        $actions['resolve']['icon']        = 'icon-resolve';
+        $actions['resolve']['icon']        = 'icon-checked';
         $actions['resolve']['hint']        = $this->lang->bug->resolve;
         $actions['resolve']['url']         = inlink('resolve', $params);
         $actions['resolve']['data-toggle'] = 'modal';
 
-        $actions['close']['icon']        = 'icon-close';
+        $actions['close']['icon']        = 'icon-off';
         $actions['close']['hint']        = $this->lang->bug->close;
         $actions['close']['url']         = inlink('close', $params);
         $actions['close']['data-toggle'] = 'modal';
