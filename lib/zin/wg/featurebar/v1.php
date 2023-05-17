@@ -54,14 +54,14 @@ class featureBar extends wg
 
             $isActive = $item->name == $current;
 
-            if($item->name == 'more' && !empty($lang->product->moreSelects))
+            if($item->name == 'more' && !empty($lang->$currentModule->moreSelects))
             {
 
                 $subItems = array();
                 $callback = $this->prop('moreMenuLinkCallback');
                 $callback = isset($callback[0]) ? $callback[0] : null;
 
-                foreach($lang->product->moreSelects as $key => $text)
+                foreach($lang->$currentModule->moreSelects as $key => $text)
                 {
                     $subItems[] = array
                     (
