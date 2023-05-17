@@ -758,9 +758,9 @@ class bugModel extends model
      * @param  object $bug
      * @param  string $comment
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function assign(object $bug, string $comment = ''): bool
+    public function assign(object $bug, string $comment = ''): array|false
     {
         /* Get old bug. */
         $oldBug = $this->getById($bug->id);
@@ -781,7 +781,7 @@ class bugModel extends model
         $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $comment, $bug->assignedTo);
         $this->action->logHistory($actionID, $changes);
 
-        return !dao::isError();
+        return $changes;
     }
 
     /**
@@ -861,9 +861,9 @@ class bugModel extends model
      * @param  object      $bugID
      * @param  array       $output
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function resolve(object $bug, array $output = array()): bool
+    public function resolve(object $bug, array $output = array()): array|false
     {
         /* Get old bug. */
         $oldBug = $this->getById((int)$bug->id);
@@ -912,7 +912,7 @@ class bugModel extends model
         /* If the edition is not pms, update feedback. */
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-        return !dao::isError();
+        return $changes;
     }
 
     /**
