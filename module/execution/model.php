@@ -4091,6 +4091,12 @@ class executionModel extends model
             $begin = $executions[$executionID]->begin;
             $end   = $executions[$executionID]->end;
             if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
+            /* Unset burn information that is greater than the execution end date. */
+            foreach($executionBurns as $date => $burnInfo)
+            {
+                if($date > $end) unset($executionBurns[$date]);
+            }
+
             $executionBurns = $this->processBurnData($executionBurns, $this->config->execution->defaultBurnPeriod, $begin, $end);
 
             /* Shorter names. */
