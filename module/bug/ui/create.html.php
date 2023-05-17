@@ -27,13 +27,14 @@ $showTask             = strpos(",$showFields,", ',task,')             !== false;
 $showMailto           = strpos(",$showFields,", ',mailto,')           !== false;
 $showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
 
-form
+formPanel
 (
     on::change('#product', 'loadAll'),
     on::change('#branch',  'loadBranch'),
     on::change('#module',  'loadModuleRelated'),
     on::change('.refresh', 'loadProductModules'),
     on::change('#project', 'loadProductExecutions'),
+    to::headingActions(icon('cog-outline')),
     formRow
     (
         formGroup
