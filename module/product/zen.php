@@ -1087,6 +1087,7 @@ class productZen extends product
         }
 
         /* If in project story and not chose product, get project story mdoules. */
+        if(!isset($this->tree)) $this->loadModel('tree');
         if(empty($productID) && $this->app->rawModule == 'projectstory')
         {
             return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
@@ -1175,6 +1176,7 @@ class productZen extends product
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         $isProjectStory = $this->app->rawModule == 'projectstory';
+        if(!isset($this->story)) $this->loadModel('story');
 
         /* Get stories. */
         if($isProjectStory and $storyType == 'story')
