@@ -234,7 +234,13 @@
                     <?php
                     if(!$task->storyTitle) echo $lang->noData;
                     $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                    if($task->storyTitle and !common::printLink('execution', 'storyView', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
+
+                    /* Fix bug #32710, link to story-view if no executions under project. */
+                    $project = $this->loadModel('project')->getByID($task->project);
+                    $moduleName = !$project->multiple ? 'story' : 'execution';
+                    $methodName = !$project->multiple ? 'view'  : 'storyView';
+
+                    if($task->storyTitle and !common::printLink($moduleName, $methodName, "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
                     if($task->needConfirm)
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";
