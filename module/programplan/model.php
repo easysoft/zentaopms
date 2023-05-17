@@ -1803,16 +1803,16 @@ class programplanModel extends model
         $weekend_days = [6, 7];
 
         $timestamp = strtotime($date);
-        $counter   = 0;
+        $i         = 0;
         $this->loadModel('holiday');
-        while($counter < 5)
+        while($i < $counter)
         {
             $timestamp   = strtotime('-1 day', $timestamp);
             $weekday     = date('N', $timestamp);
             $currentDate = date('Y-m-d', $timestamp);
             if(!in_array($weekday, $weekend_days) and !$this->holiday->isHoliday($currentDate))
             {
-                $counter ++;
+                $i ++;
             }
         }
 
