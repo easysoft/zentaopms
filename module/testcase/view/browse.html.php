@@ -483,7 +483,7 @@ function toOrder(sourceId,targetId)
   }
 
   var scenes  = newOrders.join();
-  var orderBy = 'sort_asc';
+  var orderBy = 'sort_desc';
   $.post(createLink('testcase', 'updateOrder'), {'scenes' : scenes, 'orderBy' : orderBy}, function(data){
     window.location.reload();
   });
