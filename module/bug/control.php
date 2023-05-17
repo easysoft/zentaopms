@@ -720,11 +720,11 @@ class bug extends control
         if(!empty($_POST))
         {
             /* Init bug data. */
-            $postData = form::data($this->config->bug->form->assignTo);
-            $bug      = $postData->data;
-            $bug->id  = $bugID;
+            $bug = form::data($this->config->bug->form->assignTo)
+                ->add('id', $bugID)
+                ->get();
 
-            $this->bug->assign($bug);
+            $this->bug->assign($bug, $this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($bugID);

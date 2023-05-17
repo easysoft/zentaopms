@@ -4,6 +4,10 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/bug.class.php';
 
 zdTable('bug')->config('bug_assign')->gen(6);
+zdTable('user')->gen(1);
+zdTable('product')->gen(10);
+
+su('admin');
 
 /**
 
@@ -64,9 +68,9 @@ $bug6->lastEditedDate = $now;
 $bug6->mailto         = 'user3';
 
 $bug = new bugTest();
-r($bug->assignTest($bug1))  && p() && e('assignedTo:user1 to user2;mailto:admin to user1,user3;'); // 指派bug状态为激活的bug 更改指派人
-r($bug->assignTest($bug2))  && p() && e('assignedTo:user1 to user2;mailto:admin to user2;');       // 指派bug状态为解决的bug 更改指派人
-r($bug->assignTest($bug3))  && p() && e('0');                                                      // 指派bug状态为关闭的bug 更改指派人
-r($bug->assignTest($bug4))  && p() && e('mailto:admin to user1;');                                 // 指派bug状态为激活的bug 不更改指派人
-r($bug->assignTest($bug5))  && p() && e('mailto:admin to user2;');                                 // 指派bug状态为解决的bug 不更改指派人
-r($bug->assignTest($bug6))  && p() && e('0');                                                      // 指派bug状态为关闭的bug 不更改指派人
+r($bug->assignTest($bug1))  && p('assignedTo;mailto', ';') && e('user2;user1,user3;'); // 指派bug状态为激活的bug 更改指派人
+r($bug->assignTest($bug2))  && p('assignedTo;mailto', ';') && e('user2;user2;');       // 指派bug状态为解决的bug 更改指派人
+r($bug->assignTest($bug3))  && p('assignedTo;mailto', ';') && e('user1;admin');        // 指派bug状态为关闭的bug 更改指派人
+r($bug->assignTest($bug4))  && p('assignedTo;mailto', ';') && e('user1;user1;');       // 指派bug状态为激活的bug 不更改指派人
+r($bug->assignTest($bug5))  && p('assignedTo;mailto', ';') && e('user1;user2;');       // 指派bug状态为解决的bug 不更改指派人
+r($bug->assignTest($bug6))  && p('assignedTo;mailto', ';') && e('user1;admin');        // 指派bug状态为关闭的bug 不更改指派人

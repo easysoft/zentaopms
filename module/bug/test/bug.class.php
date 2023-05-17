@@ -917,23 +917,21 @@ class bugTest
      *
      * @param  object $bug
      * @access public
-     * @return array|string
+     * @return array|object
      */
-    public function assignTest(object $bug): array|string
+    public function assignTest(object $bug): array|object
     {
-        $changes = $this->objectModel->assign($bug);
+        $_SERVER['HTTP_HOST'] = '';
+        $this->objectModel->assign($bug);
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
-            $result = '';
-            foreach($changes as $change)
-            {
-                if(strpos($change['field'], 'Date') === false) $result .= "{$change['field']}:{$change['old']} to {$change['new']};";
-            }
-            return $result;
+            global $tester;
+            $bug = $tester->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
+            return $bug;
         }
     }
 
