@@ -37,9 +37,9 @@ $items[] = array
     'width'   => '180px',
 );
 
-/* Field of story. */
 if(!$hideStory)
 {
+    /* Field of story. */
     $items[] = array
     (
         'name'    => 'story',
@@ -48,6 +48,63 @@ if(!$hideStory)
         'items'   => $stories,
         'width'   => '200px',
         'ditto'   => true,
+    );
+
+    /* Field of view story. */
+    $items[] = array
+    (
+        'name'       => 'preview',
+        'label'      => '',
+        'labelClass' => 'hidden',
+        'width'      => '40px',
+        'control'    => array
+        (
+            'type'        => 'btn',
+            'icon'        => 'eye',
+            'class'       => 'btn-link',
+            'hint'        => $lang->preview,
+            'tagName'     => 'a',
+            'url'         => '#',
+            'data-toggle' => 'modal',
+        )
+    );
+
+    /* Field of copy story. */
+    $items[] = array
+    (
+        'name'       => 'copyStory',
+        'label'      => '',
+        'labelClass' => 'hidden',
+        'width'      => '40px',
+        'control'    => array
+        (
+            'type'  => 'btn',
+            'icon'  => 'arrow-right',
+            'class' => 'btn-link',
+            'hint'  => $lang->task->copyStoryTitle,
+        )
+    );
+
+    /* Hidden fields related to story. */
+    $items[] = array
+    (
+        'name'  => 'storyEstimate',
+        'label' => '',
+        'labelClass' => 'hidden',
+    );
+
+    $items[] = array
+    (
+        'name'  => 'storyDesc',
+        'label' => '',
+        'labelClass' => 'hidden',
+    );
+
+    $items[] = array
+    (
+        'name'  => 'storyPri',
+        'label' => '',
+        'labelClass' => 'hidden',
     );
 }
 
@@ -155,10 +212,19 @@ $items[] = array
 
 /* ====== Define the page structure with zin widgets ====== */
 
+checkbox
+(
+    set::id('zeroTaskStory'),
+    set::text($lang->story->zeroTask),
+    on::change('toggleZeroTaskStory'),
+);
 formBatchPanel
 (
     set::items($items),
     on::change('[data-name="module"]', 'setStories'),
+    on::change('[data-name="story"]', 'setStoryRelated'),
+    on::click('[data-name="copyStory"]', 'copyStoryTitle'),
+    on::change('[data-name="regions"]', 'loadLanes'),
 );
 
 /* ====== Render page ====== */

@@ -537,18 +537,19 @@ class taskZen extends task
 
     /**
      * 处理批量创建任务的请求数据。
-     * Process the request data for batch create tasks.
+     * Process the request data for the batch create tasks.
      *
      * @param  object         $execution
-     * @param  object         $formData
      * @param  int            $taskID
      * @access protected
      * @return object[]|false
      */
-    protected function prepareTasks4BatchCreate(object $execution, object $formData, int $taskID): array|false
+    protected function buildTasksForBatchCreate(object $execution, int $taskID): array|false
     {
+        $tasks = form::data($this->config->task->form->batchCreate)->get();
+
         /* 去除重复数据。 Deduplicated data. */
-        $tasks = $this->removeDuplicate4BatchCreate($execution, $formData);
+        $tasks = $this->removeDuplicate4BatchCreate($execution, $tasks);
         if(!$tasks) return false;
 
         /* Init. */
@@ -563,7 +564,7 @@ class taskZen extends task
         $this->loadModel('common');
         $extendFields = $this->task->getFlowExtendFields();
         $data         = array();
-        foreach($formData->name as $i => $name)
+        foreach($tasks->name as $i => $name)
         {
             if(empty($name)) continue;
 
