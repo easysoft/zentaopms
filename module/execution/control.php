@@ -44,7 +44,7 @@ class execution extends control
         if(!isset($this->app->user)) return;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
-        /* this->app->tab will always be my if use API. */
+        /* $this->app->tab will always be my if use API. */
         if(defined('RUN_MODE') and RUN_MODE == 'api') $mode = '';
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
