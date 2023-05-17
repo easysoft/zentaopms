@@ -241,7 +241,7 @@ class product extends control
             $productID = $this->product->create($productData, $this->post->uid, zget($_POST, 'lineName', ''));
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response = $this->productZen->responseAfterCreate($productID, $product->program);
+            $response = $this->productZen->responseAfterCreate($productID, $productData->program);
             return $this->send($response);
         }
 
