@@ -794,8 +794,6 @@ class productZen extends product
      */
     protected function responseAfterCreate(int $productID, int $programID): array
     {
-        $this->loadModel('action')->create('product', $productID, 'opened');
-
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
@@ -810,18 +808,11 @@ class productZen extends product
      *
      * @param  int    $productID
      * @param  int    $programID
-     * @param  array  $changes
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit(int $productID, int $programID, array $changes): array
+    protected function responseAfterEdit(int $productID, int $programID): array
     {
-        if($changes)
-        {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
-            $this->action->logHistory($actionID, $changes);
-        }
-
         $message = $this->executeHooks($productID);
         if($message) $this->lang->saveSuccess = $message;
 
@@ -832,52 +823,18 @@ class productZen extends product
      * 成功批量更新产品数据后，其他的额外操作。
      * Response after batch edit products.
      *
-     * @param  array $allChanges
      * @param  int   $programID
      * @access protected
      * @return array
      */
-    protected function responseAfterBatchEdit(array $allChanges, int $programID): array
+    protected function responseAfterBatchEdit(int $programID): array
     {
         /* Get location. */
         $location = $this->createLink('program', 'product', "programID=$programID");
         if($this->app->tab == 'product') $location = $this->createLink('product', 'all');
         $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
 
-        if(empty($allChanges)) return $response;
-
-        /* Save actions. */
-        $this->loadModel('action');
-        foreach($allChanges as $productID => $changes)
-        {
-            if(empty($changes)) continue;
-
-            $actionID = $this->action->create('product', $productID, 'Edited');
-            $this->action->logHistory($actionID, $changes);
-        }
         return $response;
-    }
-
-    /**
-     * 成功关闭产品数据后，后续操作。
-     * Response after close product
-     *
-     * @param  int    $productID
-     * @param  array  $changes
-     * @param  string $comment
-     * @access protected
-     * @return void
-     */
-    protected function responseAfterClose(int $productID, array $changes = array(), string $comment = '')
-    {
-        if(!empty($comment) or !empty($changes))
-        {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        $this->executeHooks($productID);
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()');
     }
 
     /**

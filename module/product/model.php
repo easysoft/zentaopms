@@ -522,6 +522,7 @@ class productModel extends model
         $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
 
         /* Update and create linked data. */
+        $this->loadModel('action')->create('product', $productID, 'opened');
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
@@ -557,7 +558,15 @@ class productModel extends model
         if($product->type == 'normal' and $oldProduct->type != 'normal') $this->loadModel('branch')->unlinkBranch4Project($productID);
         if($product->type != 'normal' and $oldProduct->type == 'normal') $this->loadModel('branch')->linkBranch4Project($productID);
 
-        return common::createChanges($oldProduct, $product);
+        /* Save action and changes. */
+        $changes = common::createChanges($oldProduct, $product);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return $changes;
     }
 
     /**
@@ -606,6 +615,16 @@ class productModel extends model
         if(!empty($unlinkProducts))     $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
         if(!empty($linkProducts))       $this->loadModel('branch')->linkBranch4Project($linkProducts);
 
+        /* Save actions. */
+        $this->loadModel('action');
+        foreach($allChanges as $productID => $changes)
+        {
+            if(empty($changes)) continue;
+
+            $actionID = $this->action->create('product', $productID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
         return $allChanges;
     }
 
@@ -614,10 +633,11 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  object $product    must have status field.
+     * @param  string $comment
      * @access public
      * @return array|false
      */
-    public function close(int $productID, object $product): array|false
+    public function close(int $productID, object $product, string $comment = ''): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
@@ -628,7 +648,14 @@ class productModel extends model
             ->exec();
 
         if(dao::isError()) return false;
-        return common::createChanges($oldProduct, $product);
+
+        $changes = common::createChanges($oldProduct, $product);
+        if(!empty($comment) or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+        return $changes;
     }
 
     /**

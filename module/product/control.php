@@ -266,11 +266,11 @@ class product extends control
         {
             $productData = $this->productZen->buildProductForEdit($this->post->acl);
 
-            $changes = $this->product->update($productID, $productData, $this->post->uid);
+            $this->product->update($productID, $productData, $this->post->uid);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
-            $response = $this->productZen->responseAfterEdit($productID, $programID, $changes);
+            $response = $this->productZen->responseAfterEdit($productID, $programID);
             return $this->send($response);
         }
 
@@ -303,7 +303,7 @@ class product extends control
             $result = $this->product->batchUpdate($products);
             if(dao::isError()) return $this->send($result);
 
-            $response = $this->productZen->responseAfterBatchEdit($result, $programID);
+            $response = $this->productZen->responseAfterBatchEdit($programID);
             return $this->send($response);
         }
 
@@ -331,11 +331,11 @@ class product extends control
         {
             $productData = $this->productZen->buildProductForClose();
 
-            $changes = $this->product->close($productID, $productData);
+            $this->product->close($productID, $productData, $this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response = $this->productZen->responseAfterClose($productID, $changes, $this->post->comment);
-            return $this->send($response);
+            $this->executeHooks($productID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
         }
 
         $this->product->setMenu($productID);
