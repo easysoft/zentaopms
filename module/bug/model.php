@@ -1764,7 +1764,7 @@ class bugModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branchID);
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, (string)$branchID);
 
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
