@@ -37,8 +37,7 @@ foreach($productStats as $productID => $product)
     $item->parent            = null;
     $item->productLine       = $product->lineName;
     $item->execution         = $product->executions;
-    $item->feedback          = rand(0, 100);
-    $item->testCaseCoverage  = rand(0, 100);
+    $item->testCaseCoverage  = $product->coverage;
     $item->releasesOld       = rand(0, 10);
 
     $data[] = $item;

@@ -1370,6 +1370,7 @@ class productModel extends model
         $assignToNull         = $this->productTao->getAssignToNullTODO($productIdList);
         list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIdList, $storyType);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
+        $coveragePairs        = $this->productTao->getCaseCoveragePairs($productIdList);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1389,6 +1390,7 @@ class productModel extends model
             $product->thisWeekBugs = isset($thisWeekBugs[$product->id])        ? $thisWeekBugs[$product->id]        : 0;
             $product->assignToNull = isset($assignToNull[$product->id])        ? $assignToNull[$product->id]        : 0;
             $product->executions   = isset($executionCountPairs[$product->id]) ? $executionCountPairs[$product->id] : 0;
+            $product->coverage     = isset($coveragePairs[$product->id])       ? $coveragePairs[$product->id]       : 0;
 
             /* Calculate product progress. */
             $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
