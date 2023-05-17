@@ -239,10 +239,10 @@ class product extends control
             $productData = $this->productZen->buildProductForCreate();
 
             $productID = $this->product->create($productData, $this->post->uid, zget($_POST, 'lineName', ''));
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->productZen->responseAfterCreate($productID, $product->program);
-            $this->send($response);
+            return $this->send($response);
         }
 
         $this->productZen->setCreateMenu($programID);
@@ -267,11 +267,11 @@ class product extends control
             $productData = $this->productZen->buildProductForEdit($this->post->acl);
 
             $changes = $this->product->update($productID, $productData, $this->post->uid);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
             $response = $this->productZen->responseAfterEdit($productID, $programID, $changes);
-            $this->send($response);
+            return $this->send($response);
         }
 
         $this->productZen->setEditMenu($productID, $programID);
@@ -298,10 +298,10 @@ class product extends control
             $formConfig = $this->productZen->appendFlowFields($this->config->product->form->batchEdit, 'batch');
             $data       = form::data($formConfig);
             $products   = $this->productZen->prepareBatchEditExtras($data);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $result = $this->product->batchUpdate($products);
-            if(dao::isError()) $this->send($result);
+            if(dao::isError()) return $this->send($result);
 
             $response = $this->productZen->responseAfterBatchEdit($result, $programID);
             return $this->send($response);
@@ -332,10 +332,10 @@ class product extends control
             $productData = $this->productZen->buildProductForClose();
 
             $changes = $this->product->close($productID, $productData);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->productZen->responseAfterClose($productID, $changes, $this->post->comment);
-            $this->send($response);
+            return $this->send($response);
         }
 
         $this->product->setMenu($productID);
@@ -667,7 +667,7 @@ class product extends control
             /* Get data form post and prepare data. */
             $data  = form::data($this->config->product->form->manageLine);
             $lines = $this->productZen->prepareManageLineExtras($data);
-            if($lines === false) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($lines === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* 添加或更新产品线。 */
             /* Add or update product line. */
@@ -1078,6 +1078,6 @@ class product extends control
     public function ajaxSetState(int $productID)
     {
         $this->session->set('product', $productID, $this->app->tab);
-        $this->send(array('result' => 'success', 'productID' => $this->session->product));
+        return $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
 }
