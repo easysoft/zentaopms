@@ -895,7 +895,7 @@ class baseJS
         $message = str_replace("\\'", "'", $message);
         $message = str_replace("'", "\\'", $message);
 
-        return static::start($full) . "alert('" . $message . "')" . static::end() . static::resetForm();
+        return static::start($full) . "window.alert('" . $message . "')" . static::end() . static::resetForm();
     }
 
     /**
