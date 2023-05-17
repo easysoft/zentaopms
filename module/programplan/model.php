@@ -281,13 +281,14 @@ class programplanModel extends model
             $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
 
             /* Get lastest task deadline. */
-            if(isset($reviewDeadline[$task->execution]['taskEnd']))
+            $taskExecutionID = $execution->parent ? $execution->parent : $execution->id;
+            if(isset($reviewDeadline[$taskExecutionID]['taskEnd']))
             {
-                $reviewDeadline[$task->execution]['taskEnd'] = $task->deadline > $reviewDeadline[$task->execution]['taskEnd'] ? $task->deadline : $reviewDeadline[$task->execution]['taskEnd'];
+                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline > $reviewDeadline[$taskExecutionID]['taskEnd'] ? $task->deadline : $reviewDeadline[$taskExecutionID]['taskEnd'];
             }
             else
             {
-                $reviewDeadline[$task->execution]['taskEnd'] = $task->deadline;
+                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline;
             }
 
             $start = $realBegan ? $realBegan : $estStart;
