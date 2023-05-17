@@ -861,12 +861,15 @@ class bugModel extends model
      * @param  object      $bugID
      * @param  array       $output
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function resolve(object $bug, array $output = array()): array|false
+    public function resolve(object $bug, array $output = array()): bool
     {
         /* Get old bug. */
         $oldBug = $this->getById((int)$bug->id);
+
+        /* If status of the bug is closed, skip it. */
+        if($oldBug->status == 'closed') return false;
 
         /* Can create build when resolving bug. */
         if(!empty($bug->createBuild))

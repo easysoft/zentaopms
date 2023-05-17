@@ -1,7 +1,18 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+
+zdTable('user')->gen(1);
+zdTable('product')->gen(10);
+
+zdTable('bug')->config('bug_resolve')->gen(7);
+zdTable('project')->config('project_resolve')->gen(1);
+zdTable('kanbanregion')->config('kanbanregion_resolve')->gen(1);
+zdTable('kanbanlane')->config('kanbanlane_resolve')->gen(1);
+zdTable('kanbancolumn')->config('kanbancolumn_resolve')->gen(9);
+zdTable('kanbancell')->config('kanbancell_resolve')->gen(9);
+
 su('admin');
 
 /**
@@ -10,39 +21,31 @@ title=bugModel->resolve();
 cid=1
 pid=1
 
-解决原因为设计如此 指派人变化的bug >> resolvedBuild,,trunk;resolution,,bydesign
-不填解决原因的bug >> 『解决方案』不能为空。
-解决原因为重复Bug 不填bugID的bug >> 『重复ID』不能为空。
-解决原因为重复Bug 填bugID的bug >> duplicateBug,0,1;status,active,resolved
-解决原因为外部原因的bug >> resolvedBuild,,trunk;resolution,,external
-解决原因为已解决的bug >> resolvedBuild,,trunk;resolution,,fixed
-解决原因为无法重现的bug >> resolvedBuild,,trunk;resolution,,notrepro
-解决原因为延期处理的bug >> resolvedBuild,,trunk;resolution,,postponed
-解决原因为不予解决的bug >> resolvedBuild,,trunk;resolution,,willnotfix
-解决已解决的bug >> resolvedBuild,,trunk;confirmed,0,1
-
 */
 
-$bugIDList = array('1','2','3','4', '5', '6', '7','51',);
+$bugIdList = array(1, 2, 3, 4, 5, 6, 7);
 
-$bug1    = array('assignedTo' => 'user92', 'resolution' => 'bydesign');
-$bug2    = array('assignedTo' => 'admin', 'resolution' => 'duplicate');
-$bug2AB  = array('assignedTo' => 'admin', 'resolution' => 'duplicate', 'duplicateBug' => '1');
-$bug3    = array('assignedTo' => 'admin', 'resolution' => 'external');
-$bug4    = array('assignedTo' => 'admin', 'resolution' => 'fixed');
-$bug5    = array('assignedTo' => 'admin', 'resolution' => 'notrepro');
-$bug6    = array('assignedTo' => 'admin', 'resolution' => 'postponed');
-$bug7    = array('assignedTo' => 'admin', 'resolution' => 'willnotfix');
-$bug51   = array('assignedTo' => 'user96', 'resolution' => 'bydesign');
+/* Normal condition. */
+$bydesignBug  = array('resolution' => 'bydesign');
+$duplicateBug = array('resolution' => 'duplicate', 'duplicateBug' => 1);
+$fixedBug     = array('resolution' => 'fixed', 'resolvedBuild' => 1);
+
+/* Error condition. */
+$emptyResulution   = array('resolution' => '');
+$empthDuplicateBug = array('resolution' => 'duplicate');
+$emptyFixedBug     = array('resolution' => 'fixed');
+
+$output = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' => 1);
 
 $bug = new bugTest();
-r($bug->resolveTest($bugIDList[0],$bug1))    && p('0:field,old,new;4:field,old,new') && e('resolvedBuild,,trunk;resolution,,bydesign');   // 解决原因为设计如此 指派人变化的bug
-r($bug->resolveTest($bugIDList[0]))          && p('resolution:0')                    && e('『解决方案』不能为空。');                      // 不填解决原因的bug
-r($bug->resolveTest($bugIDList[1],$bug2))    && p('duplicateBug:0')                  && e('『重复ID』不能为空。');                        // 解决原因为重复Bug 不填bugID的bug
-r($bug->resolveTest($bugIDList[1],$bug2AB))  && p('0:field,old,new;3:field,old,new') && e('duplicateBug,0,1;status,active,resolved');     // 解决原因为重复Bug 填bugID的bug
-r($bug->resolveTest($bugIDList[2],$bug3))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,external');   // 解决原因为外部原因的bug
-r($bug->resolveTest($bugIDList[3],$bug4))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,fixed');      // 解决原因为已解决的bug
-r($bug->resolveTest($bugIDList[4],$bug5))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,notrepro');   // 解决原因为无法重现的bug
-r($bug->resolveTest($bugIDList[5],$bug6))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,postponed');  // 解决原因为延期处理的bug
-r($bug->resolveTest($bugIDList[6],$bug7))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,willnotfix'); // 解决原因为不予解决的bug
-r($bug->resolveTest($bugIDList[7],$bug51))   && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;confirmed,0,1');          // 解决已解决的bug
+r($bug->resolveTest($bugIdList[0], $bydesignBug))  && p('resolution,assignedTo')               && e('bydesign,user99');    // 测试解决原因为设计如此的bug
+r($bug->resolveTest($bugIdList[1], $duplicateBug)) && p('resolution,assignedTo,duplicateBug')  && e('duplicate,user99,1'); // 测试解决原因为重复bug 有重复bugID的bug
+r($bug->resolveTest($bugIdList[2], $fixedBug))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1');     // 测试解决原因为解决 有解决版本的bug
+
+r($bug->resolveTest($bugIdList[3], $bydesignBug, $output))  && p('resolution,assignedTo')               && e('bydesign,user99');    // 测试解决原因为设计如此的bug 传入output
+r($bug->resolveTest($bugIdList[4], $duplicateBug, $output)) && p('resolution,assignedTo,duplicateBug')  && e('duplicate,user99,1'); // 测试解决原因为重复bug 有重复bugID的bug 传入output
+r($bug->resolveTest($bugIdList[5], $fixedBug, $output))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1');     // 测试解决原因为解决 有解决版本的bug 传入output
+
+r($bug->resolveTest($bugIdList[6], $emptyResulution))   && p() && e('『解决方案』不能为空。'); // 测试解决原因为空的bug
+r($bug->resolveTest($bugIdList[6], $empthDuplicateBug)) && p() && e('『重复Bug』不能为空。');  // 测试解决原因为重复bug 无重复bugID的bug
+r($bug->resolveTest($bugIdList[6], $emptyFixedBug))     && p() && e('『解决版本』不能为空。'); // 测试解决原因为解决 无解决版本的bug

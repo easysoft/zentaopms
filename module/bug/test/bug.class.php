@@ -989,37 +989,55 @@ class bugTest
     /**
      * Test confirm a bug.
      *
-     * @param  int    $bugID
-     * @param  array  $param
+     * @param  object        $bug
+     * @param  array         $param
+     * @param  array         $output
      * @access public
-     * @return array
+     * @return object|string
      */
-    public function resolveTest($bugID, $param = array())
+    public function resolveTest(int $bugID, array $param = array(), array $output = array()): object|string
     {
-        $createFields['duplicateBug']   = '';
-        $createFields['buildExecution'] = '0';
-        $createFields['resolvedBuild']  = 'trunk';
-        $createFields['buildName']      = '';
-        $createFields['resolvedDate']   = helper::now();
-        $createFields['assignedTo']     = '';
-        $createFields['status']         = 'resolved';
-        $createFields['labels']         = array('');
-        $createFields['comment']        = '';
-        $createFields['resolution']     = '';
+        $_SERVER['HTTP_HOST'] = '';
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $bug = new stdclass();
+        $bug->id             = $bugID;
+        $bug->status         = 'resolved';
+        $bug->execution      = 11;
+        $bug->resolution     = '';
+        $bug->resolvedBy     = 'admin';
+        $bug->resolvedBuild  = 0;
+        $bug->resolvedDate   = helper::now();
+        $bug->assignedTo     = 'user99';
+        $bug->assignedDate   = helper::now();
+        $bug->lastEditedBy   = 'user99';
+        $bug->lastEditedDate = helper::now();
+        $bug->duplicateBug   = 0;
+        $bug->buildName      = '';
+        $bug->createBuild    = 0;
+        $bug->buildExecution = 0;
+        $bug->comment        = '';
+        $bug->uid            = '';
 
-        $object = $this->objectModel->resolve($bugID);
+        foreach($param as $key => $value) $bug->{$key} = $value;
 
-        unset($_POST);
+        $this->objectModel->resolve($bug, $output);
+
         if(dao::isError())
         {
-            return dao::getError();
+            $return = '';
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
         }
         else
         {
-            return $object;
+            global $tester;
+            $bug = $tester->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
+            return $bug;
         }
     }
 
