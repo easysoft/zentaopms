@@ -144,10 +144,20 @@ $config->task->form->finish['left']            = array('type' => 'float',  'requ
 $config->task->form->finish['consumed']        = array('type' => 'float',  'required' => false, 'default' => 0);
 $config->task->form->finish['currentConsumed'] = array('type' => 'float',  'required' => false, 'default' => 0);
 $config->task->form->finish['assignedTo']      = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->cancel['comment']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->finish['comment']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->finish['status']          = array('type' => 'string', 'required' => false, 'default' => 'done');
 $config->task->form->finish['finishedDate']    = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->task->form->finish['lastEditedDate']  = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->task->form->finish['assignedDate']    = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->task->form->finish['finishedBy']      = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->finish['lastEditedBy']    = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+
+$config->task->form->testTask->create = array();
+$config->task->form->testTask->create['testStory']       = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testEstStarted']  = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testDeadline']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testAssignedTo']  = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testPri']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['testEstimate']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['estStartedDitto'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->testTask->create['deadlineDitto']   = array('type' => 'array', 'required' => false, 'default' => array());
