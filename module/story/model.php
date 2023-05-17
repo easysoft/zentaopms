@@ -4645,7 +4645,7 @@ class storyModel extends model
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'iframe showinonlybody', true, "data-app='{$this->app->tab}'");
 
                 $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow)
+                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow OR $story->type == 'requirement')
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
