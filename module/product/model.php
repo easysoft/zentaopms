@@ -509,7 +509,7 @@ class productModel extends model
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
-        $productID = (int)$this->dao->lastInsertID();
+        $productID = $this->dao->lastInsertID();
 
         /* Fix order and line fields for product. */
         $fixData = new stdclass();

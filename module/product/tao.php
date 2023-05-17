@@ -564,7 +564,7 @@ class productTao extends productModel
         $this->dao->insert(TABLE_MODULE)->data($line)->exec();
         if(dao::isError()) return false;
 
-        $lineID = (int)$this->dao->lastInsertID();
+        $lineID = $this->dao->lastInsertID();
         $path   = ",$lineID,";
         $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('`order`')->eq($lineID)->where('id')->eq($lineID)->exec();
 
@@ -601,7 +601,7 @@ class productTao extends productModel
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         if(dao::isError())return false;
-        return (int)$this->dao->lastInsertID();
+        return $this->dao->lastInsertID();
     }
 
     /**
