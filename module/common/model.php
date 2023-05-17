@@ -960,6 +960,7 @@ class commonModel extends model
     {
         global $lang;
         global $app;
+        global $config;
 
         $app->loadLang('my');
 
@@ -1049,7 +1050,7 @@ class commonModel extends model
             }
 
             /* Check whether the menu of this group have permissions. If yes, point to them. */
-            if($display == false and isset($lang->$group->menu))
+            if($display == false and isset($lang->$group->menu) and $config->vision != 'or')
             {
                 foreach($lang->$group->menu as $menu)
                 {
