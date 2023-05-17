@@ -374,7 +374,7 @@ class productModel extends model
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision != 'lite')->andWhere('t1.id')->in($views)->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
             ->fetchPairs('id', 'name');
     }
