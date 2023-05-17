@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$this->bug->setOperateActions($view = 'browse');
+
 foreach($bugs as $bug)
 {
     $bug->productName  = zget($products, $bug->product);
@@ -31,6 +33,7 @@ foreach($bugs as $bug)
     $bug->resolution   = zget($lang->bug->resolutionList, $bug->resolution); 
     $bug->os           = zget($lang->bug->osList, $bug->os); 
     $bug->browser      = zget($lang->bug->browserList, $bug->browser); 
+    $bug->actions      = array('confirm', 'resolve', 'close', 'edit', 'copy');
 }
 
 $cols = array_values($config->bug->dtable->fieldList);

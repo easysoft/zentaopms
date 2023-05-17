@@ -2250,4 +2250,20 @@ class bugTest
             return $build;
         }
     }
+
+    /*
+     * 测试设置操作按钮。
+     * Test for setting operate actions.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function setOperateActionsTest(string $type = 'browse'): array
+    {
+        $this->objectModel->setOperateActions($type);
+
+        global $tester;
+        return $tester->config->bug->dtable->fieldList['actions']['actionsMap'];
+    }
 }

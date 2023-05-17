@@ -2937,6 +2937,53 @@ class bugModel extends model
     }
 
     /**
+     * 设置操作按钮。
+     * Set operate actions.
+     *
+     * @param  string $type browse|view
+     * @access public
+     * @return void
+     */
+    public function setOperateActions(string $type = 'browse'): void
+    {
+        $params = 'bugID={id}';
+
+        $actions = array();
+        $actions['confirm']['icon']        = 'icon-confirm';
+        $actions['confirm']['hint']        = $this->lang->bug->confirmBug;
+        $actions['confirm']['url']         = inlink('confirmBug', $params);
+        $actions['confirm']['data-toggle'] = 'modal';
+
+        $actions['resolve']['icon']        = 'icon-resolve';
+        $actions['resolve']['hint']        = $this->lang->bug->resolve;
+        $actions['resolve']['url']         = inlink('resolve', $params);
+        $actions['resolve']['data-toggle'] = 'modal';
+
+        $actions['close']['icon']        = 'icon-close';
+        $actions['close']['hint']        = $this->lang->bug->close;
+        $actions['close']['url']         = inlink('close', $params);
+        $actions['close']['data-toggle'] = 'modal';
+
+        $actions['edit']['icon'] = 'icon-edit';
+        $actions['edit']['hint'] = $this->lang->bug->edit;
+        $actions['edit']['url']  = inlink('edit', $params);
+
+        if($this->app->tab != 'product')
+        {
+            $extraParams = "extras=$params";
+            if($this->app->tab == 'project')   $extraParams .= ',projectID={project}';
+            if($this->app->tab == 'execution') $extraParams .= ',executionID={execution}';
+            $copyParams = "productID={product}&branch={branch}&$extraParams";
+
+            $actions['copy']['icon'] = 'icon-copy';
+            $actions['copy']['hint'] = $this->lang->bug->copy;
+            $actions['copy']['url']  = inlink('create', $copyParams);
+        }
+
+        $this->config->bug->dtable->fieldList['actions']['actionsMap'] = $actions;
+    }
+
+    /**
      * Build bug menu.
      *
      * @param  object $bug
