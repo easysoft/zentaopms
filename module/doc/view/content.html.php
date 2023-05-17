@@ -198,14 +198,12 @@
         <?php common::printPreAndNext($preAndNext);?>
       </div>
     </div>
-    <?php if(!empty($outline) and strip_tags($outline)):?>
     <div id="outlineMenu" class="outline table-col">
       <div class="outline-content">
-      <?php echo $outline;?>
+        <?php echo isset($outline) ? $outline : '';?>
       </div>
     </div>
     <div class="outline-toggle"><i class="icon icon-menu-arrow-left"></i></div>
-    <?php endif;?>
     <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php
       $canBeChanged = common::canBeChanged('doc', $doc);
