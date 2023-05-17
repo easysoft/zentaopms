@@ -53,8 +53,7 @@ $config->project->dtable->fieldList['name']['name']         = 'name';
 $config->project->dtable->fieldList['name']['width']        = 200;
 $config->project->dtable->fieldList['name']['flex']         = 1;
 $config->project->dtable->fieldList['name']['fixed']        = 'left';
-$config->project->dtable->fieldList['name']['type']         = 'link';
-$config->project->dtable->fieldList['name']['linkTemplate'] = helper::createLink('project', 'index', 'projectID = {id}');
+$config->project->dtable->fieldList['name']['link']         = helper::createLink('project', 'index', 'projectID = {id}');
 
 $config->project->dtable->fieldList['code']['title'] = $lang->project->code;
 $config->project->dtable->fieldList['code']['name']  = 'code';
@@ -270,8 +269,7 @@ $config->project->browseTable->cols['name']['title']        = $lang->project->na
 $config->project->browseTable->cols['name']['fixed']        = 'left';
 $config->project->browseTable->cols['name']['width']        = 408;
 $config->project->browseTable->cols['name']['sortType']     = true;
-$config->project->browseTable->cols['name']['type']         = 'link';
-$config->project->browseTable->cols['name']['linkTemplate'] = helper::createLink('project', 'index', 'projectID={id}');
+$config->project->browseTable->cols['name']['link']         = helper::createLink('project', 'index', 'projectID={id}');
 
 $config->project->browseTable->cols['PM']['name']     = 'PM';
 $config->project->browseTable->cols['PM']['title']    = $lang->project->PM;
