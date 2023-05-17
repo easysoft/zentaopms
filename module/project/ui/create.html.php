@@ -15,7 +15,9 @@ foreach($lang->project->modelList as $key => $text)
     );
 }
 
-$currency = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
+$currency      = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
+$multipleInput = empty($copyProjectID) ? null : formHidden('multiple', $multiple);
+$multipleValue = empty($copyProjectID) ? null : $multiple;
 
 $title = $this->view->title;
 useData('title', null);
@@ -96,8 +98,8 @@ formPanel
         set::label($lang->project->multiple),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
-        empty($copyProjectID) ? null : set::value($multiple),
-        empty($copyProjectID) ? null : formHidden('multiple', $multiple)
+        set::value($multipleValue),
+        $multipleInput
     ),
     formGroup
     (
