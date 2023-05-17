@@ -362,15 +362,13 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->view;
-        $this->view->product    = $product;
-        $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
-        $this->view->reviewers  = explode(',', $product->reviewer);
+        $this->view->title     = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->product   = $product;
+        $this->view->actions   = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->groups    = $this->loadModel('group')->getPairs();
+        $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
+        $this->view->reviewers = explode(',', $product->reviewer);
 
         $this->display();
     }
@@ -426,12 +424,10 @@ class product extends control
         $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
 
         /* Assign view data. */
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->roadmap;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->roadmap;
-        $this->view->product    = $product;
-        $this->view->roadmaps   = $roadmaps;
-        $this->view->branches   = $branches;
+        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->product  = $product;
+        $this->view->roadmaps = $roadmaps;
+        $this->view->branches = $branches;
 
         $this->display();
     }
@@ -474,8 +470,6 @@ class product extends control
 
         /* Assign. */
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
-        $this->view->position[]   = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
-        $this->view->position[]   = $this->lang->product->dynamic;
         $this->view->userIdPairs  = $this->user->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID    = $productID;
@@ -514,15 +508,13 @@ class product extends control
         $this->product->setMenu($productID);
 
         /* Assign. */
-        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
-        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[] = $this->lang->product->view;
-        $this->view->product    = $product;
-        $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->lines      = array('') + $this->product->getLinePairs();
-        $this->view->dynamics   = $this->productZen->getActions4Dashboard($productID);
-        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->product  = $product;
+        $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users    = $this->user->getPairs('noletter');
+        $this->view->lines    = array('') + $this->product->getLinePairs();
+        $this->view->dynamics = $this->productZen->getActions4Dashboard($productID);
+        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
     }
