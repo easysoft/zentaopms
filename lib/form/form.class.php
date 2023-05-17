@@ -77,7 +77,7 @@ class form extends baseFixer
     {
         $this->rawconfig = $config;
 
-        foreach($this->rawconfig as $key => $value) $this->convertField($key, $value);
+        foreach($this->rawconfig as $field => $fieldConfig) $this->convertField($field, $fieldConfig);
         if(!empty($this->errors))
         {
             $response = array('result' => 'fail', 'message' => $this->errors);
