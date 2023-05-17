@@ -642,4 +642,23 @@ class storyTao extends storyModel
 
         return $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs();
     }
+
+    /**
+     * 通过产品ID列表批量获取产品关联的需求列表。
+     * Get story list by product ID list.
+     *
+     * @param  int[]     $productIdList
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function getStoriesByProductIdList(array $productIdList, string $storyType = ''): array
+    {
+        return $this->dao->select('id, product, parent')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->andWhere('product')->in($productIdList)
+            ->fetchAll();
+    }
 }
