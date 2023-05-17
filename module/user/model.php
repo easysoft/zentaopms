@@ -2072,13 +2072,12 @@ class userModel extends model
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
         if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
 
+        /* 权限分组-视野维护的优先级最高，所以这里进行了替换操作。*/
+        /* View management has the highest priority, so there is a substitution. */
         if(!empty($acls['programs']) and !$isAdmin)
         {
             $grantPrograms = '';
-            foreach($acls['programs'] as $programID)
-            {
-                if(strpos(",{$userView->programs},", ",{$programID},") !== false) $grantPrograms .= ",{$programID}";
-            }
+            foreach($acls['programs'] as $programID) $grantPrograms .= ",{$programID}";
             $userView->programs = $grantPrograms;
         }
         if(!empty($acls['projects']) and !$isAdmin)
@@ -2086,19 +2085,13 @@ class userModel extends model
             $grantProjects = '';
             /* If is project admin, set projectID to userview. */
             if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
-            foreach($acls['projects'] as $projectID)
-            {
-                if(strpos(",{$userView->projects},", ",{$projectID},") !== false) $grantProjects .= ",{$projectID}";
-            }
+            foreach($acls['projects'] as $projectID) $grantProjects .= ",{$projectID}";
             $userView->projects = $grantProjects;
         }
         if(!empty($acls['products']) and !$isAdmin)
         {
             $grantProducts = '';
-            foreach($acls['products'] as $productID)
-            {
-                if(strpos(",{$userView->products},", ",{$productID},") !== false) $grantProducts .= ",{$productID}";
-            }
+            foreach($acls['products'] as $productID) $grantProducts .= ",{$productID}";
             $userView->products = $grantProducts;
         }
 
@@ -2115,10 +2108,7 @@ class userModel extends model
         if(!empty($acls['sprints']) and !$isAdmin)
         {
             $grantSprints= '';
-            foreach($acls['sprints'] as $sprintID)
-            {
-                if(strpos(",{$userView->sprints},", ",{$sprintID},") !== false) $grantSprints .= ",{$sprintID}";
-            }
+            foreach($acls['sprints'] as $sprintID) $grantSprints .= ",{$sprintID}";
             $userView->sprints = $grantSprints;
         }
 
