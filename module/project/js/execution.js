@@ -99,6 +99,7 @@ $(function()
 
             var checkedWait     = 0;
             var checkedDoing    = 0;
+            var executionCount  = 0;
             var executionIDList = [];
             $rows.each(function()
             {
@@ -110,10 +111,11 @@ $(function()
 
                 if(data.status === 'wait') checkedWait++;
                 if(data.status === 'doing') checkedDoing++;
+                if(data.nestPathLevel == 1) executionCount++;
             });
 
-            if(status != 'all') return (checkedTotal ? checkedExecutions : executionSummary).replace('%s', $rows.length);
-            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait).replace('%doing%', checkedDoing);
+            if(status != 'all') return (checkedTotal ? checkedExecutions : executionSummary).replace('%s', executionCount);
+            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', executionCount).replace('%wait%', checkedWait).replace('%doing%', checkedDoing);
         }
     })
 
