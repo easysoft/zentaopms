@@ -236,11 +236,9 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->create);
-            $data       = form::data($formConfig);
-            $product    = $this->productZen->prepareCreateExtras($data, $this->post->acl, $this->post->uid);
+            $productData = $this->productZen->buildProductForCreate();
 
-            $productID = $this->product->create($product, $this->post->uid, zget($_POST, 'lineName', ''));
+            $productID = $this->product->create($productData, $this->post->uid, zget($_POST, 'lineName', ''));
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->productZen->responseAfterCreate($productID, $product->program);
@@ -266,11 +264,9 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->edit);
-            $data       = form::data($formConfig);
-            $product    = $this->productZen->prepareEditExtras($data, $this->post->acl, $this->post->uid);
+            $productData = $this->productZen->buildProductForEdit($this->post->acl);
 
-            $changes = $this->product->update($productID, $product, $this->post->uid);
+            $changes = $this->product->update($productID, $productData, $this->post->uid);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);
@@ -333,11 +329,9 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->close);
-            $data       = form::data($formConfig);
-            $product    = $this->productZen->prepareCloseExtras($data);
+            $productData = $this->productZen->buildProductForClose();
 
-            $changes = $this->product->close($productID, $product);
+            $changes = $this->product->close($productID, $productData);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->productZen->responseAfterClose($productID, $changes, $this->post->comment);

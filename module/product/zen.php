@@ -627,8 +627,10 @@ class productZen extends product
      */
     protected function buildCloseForm(int $productID): void
     {
-        $this->view->title   = $this->view->product->name . $this->lang->colon .$this->lang->close;
-        $this->view->product = $this->product->getById($productID);
+        $product = $this->product->getByID($productID);
+
+        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->product = $product;
         $this->view->actions = $this->loadModel('action')->getList('product', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->fields  = $this->getFormFields4Close();
@@ -652,45 +654,38 @@ class productZen extends product
     }
 
     /**
-     * 追加创建信息，处理白名单、项目集字段，还有富文本内容处理。
-     * Prepare data for create.
+     * 构建创建产品的数据。
+     * Build product data for create.
      *
-     * @param  form   $data
-     * @param  string $acl
-     * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareCreateExtras(form $data, string $acl, string $uid = ''): object
+    protected function buildProductForCreate(): object
     {
-        $product = $data->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->setDefault('createdVersion', $this->config->version)
+        $editorFields = array_keys(array_filter(array_map(function($config){return (!empty($config['control']) && $config['control'] == 'editor');}, $this->config->product->form->create)));
+        $productData  = form::data($this->config->product->form->create)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
-            ->setIF($acl == 'open', 'whitelist', '')
-            ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $uid);
+        return $this->loadModel('file')->processImgURL($productData, $editorFields, $this->post->uid);
     }
 
     /**
-     * 处理白名单和富文本内容。
-     * Prepare data for edit.
+     * 构建编辑产品的数据。
+     * Build product data for edit.
      *
-     * @param  form   $data
-     * @param  string $acl
-     * @param  string $uid
      * @access protected
      * @return object
      */
-    protected function prepareEditExtras(form $data, string $acl, string $uid = ''): object
+    protected function buildProductForEdit(): object
     {
-        $product = $data->setIF($acl == 'open', 'whitelist', '')
-            ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
+        $editorFields = array_keys(array_filter(array_map(function($config){return (!empty($config['control']) && $config['control'] == 'editor');}, $this->config->product->form->edit)));
+        $productData  = form::data($this->config->product->form->edit)
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $uid);
+        return $this->loadModel('file')->processImgURL($productData, $editorFields, $this->post->uid);
     }
 
     /**
@@ -737,20 +732,16 @@ class productZen extends product
     }
 
     /**
-     * 预处理关闭产品数据。
-     * Prepare close product extras.
+     * 构建关闭产品数据。
+     * Build product data for close.
      *
-     * @param  form $data
      * @access protected
      * @return object
      */
-    protected function prepareCloseExtras(form $data): object
+    protected function buildProductForClose(): object
     {
-        $product = $data->setDefault('status', 'closed')
-            ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
-            ->get();
-        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
-        return $product;
+        $productData = form::data($this->config->product->form->close)->get();
+        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
     }
 
     /**
