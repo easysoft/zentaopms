@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php $app->loadLang('execution');?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->product->featureBar['project'] as $key => $label):?>

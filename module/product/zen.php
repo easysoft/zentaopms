@@ -652,41 +652,6 @@ class productZen extends product
     }
 
     /**
-     * 为view层设置要用数据。
-     * Set view variables and display for project page.
-     *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $status
-     * @param  bool   $involved   $this->cookie->involved or $involved
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access protected
-     * @return void
-     */
-    protected function displayProjectPage(int $productID, string $branch, string $status, bool $involved, string $orderBy, object $pager)
-    {
-        $this->app->loadLang('execution');
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
-
-        $product  = $this->product->getByID($productID);
-        $projects = $this->loadModel('project')->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
-        foreach($projectStats as $project) unset($projects[$project->id]);
-
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $this->getPMList($projectStats);
-        $this->view->product      = $product;
-        $this->view->projects     = $projects;
-        $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branchID     = $branch;
-        $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
-        $this->view->pager        = $pager;
-        $this->display();
-    }
-
-    /**
      * 追加创建信息，处理白名单、项目集字段，还有富文本内容处理。
      * Prepare data for create.
      *

@@ -76,15 +76,32 @@ class product extends control
      */
     public function project(string $status = 'all', int $productID = 0, string $branch = '', string $involved = '0', string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $involved  = ($this->cookie->involved or $involved);
+        if(!$involved) $involved = $this->cookie->involved;
         $this->productZen->setProjectMenu($productID, $branch, $this->cookie->preBranch);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Set view variables and display. */
-        $this->productZen->displayProjectPage($productID, $branch, $status, $involved, $orderBy, $pager);
+        /* Get projects linked product with statistic. */
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, (bool)$involved, $orderBy, $pager);
+
+        /* Get project pairs of same program. */
+        $product  = $this->product->getByID($productID);
+        $projects = $this->loadModel('project')->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
+        foreach($projectStats as $project) unset($projects[$project->id]);
+
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+        $this->view->projectStats = $projectStats;
+        $this->view->PMList       = $this->getPMList($projectStats);
+        $this->view->product      = $product;
+        $this->view->projects     = $projects;
+        $this->view->status       = $status;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchID     = $branch;
+        $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
+        $this->view->pager        = $pager;
+        $this->display();
     }
 
     /**
