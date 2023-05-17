@@ -295,9 +295,8 @@ class product extends control
         if($this->post->name)
         {
             /* 从POST中获取数据，并预处理数据。 */
-            $formConfig = $this->productZen->appendFlowFields($this->config->product->form->batchEdit, 'batch');
-            $data       = form::data($formConfig);
-            $products   = $this->productZen->prepareBatchEditExtras($data);
+            $data     = form::data($this->config->product->form->batchEdit);
+            $products = $this->productZen->prepareBatchEditExtras($data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $result = $this->product->batchUpdate($products);

@@ -230,7 +230,7 @@ class productZen extends product
      */
     private function getFormFields4Create(int $programID = 0, array $fields = array()): array
     {
-        if(empty($fields)) $fields = $this->appendFlowFields($this->config->product->form->create);
+        if(empty($fields)) $fields = $this->config->product->form->create;
 
         /* 准备数据。*/
         $this->loadModel('user');
@@ -269,7 +269,7 @@ class productZen extends product
     {
         /* Init fields. */
         $programID = (int)$product->program;
-        $fields    = $this->getFormFields4Create($programID, $this->appendFlowFields($this->config->product->form->edit));
+        $fields    = $this->getFormFields4Create($programID, $this->config->product->form->edit);
         $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
 
         /* Check program priv, and append to program list that is not exist product's program. */
@@ -300,7 +300,7 @@ class productZen extends product
     private function getFormFields4BatchEdit(): array
     {
         /* Init fields. */
-        $fields = $this->getFormFields4Create(0, $this->appendFlowFields($this->config->product->form->batchEdit, 'batch'));
+        $fields = $this->getFormFields4Create(0, $this->config->product->form->batchEdit);
 
         /* Remove hidden fields. */
         $shownFields = explode(',', $this->config->product->custom->batchEditFields);
@@ -322,7 +322,7 @@ class productZen extends product
     private function getFormFields4Close(): array
     {
         /* Init fields. */
-        $fields = $this->appendFlowFields($this->config->product->form->close);
+        $fields = $this->config->product->form->close;
         $fields['comment'] = array('type' => 'string',  'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
 
         return $fields;
@@ -932,39 +932,6 @@ class productZen extends product
         }
 
         return $data;
-    }
-
-    /**
-     * 追加工作流配置字段。
-     * Append flow fields.
-     *
-     * @param  array  $fields
-     * @param  string $type     single|batch
-     * @access protected
-     * @return array
-     */
-    protected function appendFlowFields(array $fields, string $type = 'single'): array
-    {
-        $extendFields = $this->product->getFlowExtendFields();
-        if(empty($extendFields)) return $fields;
-
-        /* 构造表单属性，并追加到表单配置中。 */
-        foreach($extendFields as $extendField)
-        {
-            $control = $extendField->control;
-            if($control == 'richtext') $control = 'editor';
-            if($control == 'input')    $control = 'text';
-
-            $field = $extendField;
-            $fields[$field] = array();
-            $fields[$field]['type']    = $type == 'single' ? 'string' : 'array';
-            $fields[$field]['control'] = $control;
-            $fields[$field]['title']   = $extendField->name;
-            $fields[$field]['default'] = $extendField->default;
-            $fields[$field]['options'] = $extendField->options;
-        }
-
-        return $fields;
     }
 
     /**
