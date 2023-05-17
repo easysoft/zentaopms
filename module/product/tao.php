@@ -1053,7 +1053,7 @@ class productTao extends productModel
 
     /**
      * 获取多个产品下进行中的执行数的键值对。
-     * Get k-v pairs of product ID and doing executions count.
+     * Get K-V pairs of product ID and doing executions count.
      *
      * @param  array     $productIdList
      * @access protected
@@ -1070,5 +1070,65 @@ class productTao extends productModel
             ->andWhere('t2.status')->eq('doing')
             ->groupBy('t1.product')
             ->fetchPairs('product');
+    }
+
+    /**
+     * 获取多个产品关联需求用例覆盖率的键值对。
+     * Get K-V pairs of product ID and test case coverage.
+     *
+     * @param  int[]     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getCaseCoveragePairs(array $productIdList): array
+    {
+        if(empty($productIdList)) return array();
+
+        /* Get storie list by product ID list. */
+        if(!isset($this->story)) $this->loadModel('story');
+        $storyList = $this->story->getStoriesByProductIdList($productIdList);
+
+        /* Get case count of each story. */
+        $storyIdList = array();
+        $productStoryList = array();
+        foreach($storyList as $story)
+        {
+            $storyIdList[] = $story->id;
+
+            if(!isset($productStoryList[$story->product])) $productStoryList[$story->product] = array();
+            $productStoryList[$story->product][] = $story->id;
+        }
+        $caseCountPairs = $this->getCaseCountByStoryIdList($storyIdList);
+
+        /* Calculate coverage. */
+        $coveragePairs = array();
+        foreach($productStoryList as $productID => $list)
+        {
+            $total        = count($list);
+            $totalCovered = 0;
+
+            foreach($list as $storyID) isset($caseCountPairs[$storyID]) && $totalCovered++;
+            $coveragePairs[$productID] = round($totalCovered * 100 / $total);
+        }
+
+        return $coveragePairs;
+    }
+
+    /**
+     * 通过需求ID列表获取每个需求关联的用例数。
+     * Get case count of each story in the story list.
+     *
+     * @param  int[]     $storyIdList
+     * @access protected
+     * @return array
+     */
+    protected function getCaseCountByStoryIdList(array $storyIdList): array
+    {
+        return $this->dao->select('story, COUNT(*) AS count')
+            ->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
+            ->andWhere('story')->in($storyIdList)
+            ->groupBy('story')
+            ->fetchPairs('story');
     }
 }
