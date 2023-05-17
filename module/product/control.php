@@ -2,12 +2,11 @@
 /**
  * The control file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: control.php 5144 2013-07-15 06:37:03Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
+ * @link        https://www.zentao.net
  */
 class product extends control
 {
@@ -40,14 +39,13 @@ class product extends control
     /**
      * Index page, to browse.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function index(string $productID = '0')
+    public function index(int $productID = 0)
     {
         /* Check product id and get product branch. */
-        $productID = (int)$productID;
         $productID = $this->product->saveVisitState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
 
@@ -66,25 +64,24 @@ class product extends control
      * The projects which linked the product.
      *
      * @param  string $status
-     * @param  string $productID
+     * @param  int    $productID
      * @param  string $branch
      * @param  string $involved
      * @param  string $orderBy
-     * @param  string $recTotal
-     * @param  string $recPerPage
-     * @param  string $pageID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function project(string $status = 'all', string $productID = '0', string $branch = '', string $involved = '0', string $orderBy = 'order_desc', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
+    public function project(string $status = 'all', int $productID = 0, string $branch = '', string $involved = '0', string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $productID = (int)$productID;
         $involved  = ($this->cookie->involved or $involved);
         $this->productZen->setProjectMenu($productID, $branch, $this->cookie->preBranch);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
-        $pager = new pager((int)$recTotal, (int)$recPerPage, (int)$pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Set view variables and display. */
         $this->productZen->displayProjectPage($productID, $branch, $status, $involved, $orderBy, $pager);
@@ -94,7 +91,7 @@ class product extends control
      * 浏览产品研发/用户需求列表。
      * Browse requirements list of product.
      *
-     * @param  int  $productID
+     * @param  int     $productID
      * @param  string  $branch      all|''|0
      * @param  string  $browseType
      * @param  int     $param       Story Module ID
@@ -213,15 +210,13 @@ class product extends control
      * Create a product.
      * 创建产品。可以是顶级产品，也可以是项目集下的产品。
      *
-     * @param  string $programID
+     * @param  int    $programID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function create(string $programID = '0', string $extra = '')
+    public function create(int $programID = 0, string $extra = '')
     {
-        $programID = (int)$programID;
-
         if(!empty($_POST))
         {
             $formConfig = $this->productZen->appendFlowFields($this->config->product->form->create);
@@ -231,7 +226,7 @@ class product extends control
             $productID = $this->product->create($product, $this->post->uid, zget($_POST, 'lineName', ''));
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response = $this->productZen->responseAfterCreate($productID, (int)$product->program);
+            $response = $this->productZen->responseAfterCreate($productID, $product->program);
             $this->send($response);
         }
 
@@ -243,18 +238,15 @@ class product extends control
      * 编辑产品。
      * Edit a product.
      *
-     * @param  string  $productID
-     * @param  string  $action
-     * @param  string  $extra
-     * @param  string  $programID
+     * @param  int    $productID
+     * @param  string $action
+     * @param  string $extra
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function edit(string $productID, string $action = 'edit', string $extra = '', string $programID = '0')
+    public function edit(int $productID, string $action = 'edit', string $extra = '', int $programID = 0)
     {
-        $productID = (int)$productID;
-        $programID = (int)$programID;
-
         if(!empty($_POST))
         {
             $formConfig = $this->productZen->appendFlowFields($this->config->product->form->edit);
@@ -281,14 +273,12 @@ class product extends control
      * 根据POST过来的ID列表，批量编辑相应产品。
      * Batch edit products.
      *
-     * @param  string    $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
-    public function batchEdit(string $programID = '0')
+    public function batchEdit(int $programID = 0)
     {
-        $programID = (int)$programID;
-
         if($this->post->name)
         {
             /* 从POST中获取数据，并预处理数据。 */
@@ -318,14 +308,12 @@ class product extends control
     /**
      * Close product.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function close(string $productID)
+    public function close(int $productID)
     {
-        $productID = (int)$productID;
-
         if(!empty($_POST))
         {
             $formConfig = $this->productZen->appendFlowFields($this->config->product->form->close);
@@ -347,14 +335,12 @@ class product extends control
      * 查看产品。
      * View a product.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function view(string $productID)
+    public function view(int $productID)
     {
-        $productID = (int)$productID;
-
         /* Get product. */
         $product = $this->product->getStatByID($productID);
         if(!$product) return $this->productZen->responseNotFound4View();
@@ -383,15 +369,13 @@ class product extends control
      * 删除产品。
      * Delete a product.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @param  string $confirm   yes|no
      * @access public
      * @return void
      */
-    public function delete(string $productID, string $confirm = 'no')
+    public function delete(int $productID, string $confirm = 'no')
     {
-        $productID = (int)$productID;
-
         /* Not confirm. */
         if($confirm == 'no') return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
 
@@ -413,15 +397,13 @@ class product extends control
      * 产品路线图。
      * Road map of a product.
      *
-     * @param  stirng $productID
+     * @param  int    $productID
      * @param  stirng $branch
      * @access public
      * @return void
      */
-    public function roadmap(string $productID,  string $branch = 'all')
+    public function roadmap(int $productID,  string $branch = 'all')
     {
-        $productID = (int)$productID;
-
         /* Set env viriables. */
         $this->product->setMenu($productID, $branch);
         $this->productZen->saveSession4Roadmap();
@@ -448,21 +430,17 @@ class product extends control
      * 产品动态。
      * Product dynamic.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @param  string $type
-     * @param  string $param
-     * @param  string $recTotal
+     * @param  int    $param
+     * @param  int    $recTotal
      * @param  string $date
      * @param  string $direction next|pre
      * @access public
      * @return void
      */
-    public function dynamic(string $productID = '0', string $type = 'today', string $param = '', string $recTotal = '0', string $date = '', string $direction = 'next')
+    public function dynamic(int $productID = 0, string $type = 'today', int $param = 0, int $recTotal = 0, string $date = '', string $direction = 'next')
     {
-        $productID = (int)$productID;
-        $recTotal  = (int)$recTotal;
-        $param     = (int)$param;
-
         $this->loadModel('action');
 
         /* Save env data. */
@@ -507,14 +485,12 @@ class product extends control
     /**
      * Product dashboard.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function dashboard(string $productID = '0')
+    public function dashboard(int $productID = 0)
     {
-        $productID = (int)$productID;
-
         /* Check and get product ID. */
         $productID = $this->product->saveVisitState($productID, $this->products);
 
@@ -567,13 +543,12 @@ class product extends control
      *
      * @param  string $moduleName   project|qa|execution
      * @param  string $activeMenu
-     * @param  string $objectID     The format of this parameter should be integer.
+     * @param  int    $objectID     The format of this parameter should be integer.
      * @access public
      * @return void
      */
-    public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', string $objectID = '')
+    public function showErrorNone(string $moduleName = 'qa', string $activeMenu = 'index', int $objectID = 0)
     {
-        $objectID = (int)$objectID;
         $this->productZen->setShowErrorNoneMenu($moduleName, $activeMenu, $objectID);
 
         $this->view->title    = $this->lang->$moduleName->common;
@@ -785,20 +760,18 @@ class product extends control
     /**
      * Story track.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @param  string $branch
-     * @param  string $projectID
-     * @param  string $recTotal
-     * @param  string $recPerPage
-     * @param  string $pageID
+     * @param  int    $projectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track(string $productID, string $branch = '', string $projectID = '0', string $recTotal = '0', string $recPerPage = '20', string $pageID = '1')
+    public function track(int $productID, string $branch = '', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $productID = (int)$productID;
-        $projectID = (int)$projectID;
-        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
 
         /* Set menu. The projectstory module does not execute. */
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
@@ -1063,10 +1036,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(string $productID, string $module, string $method, string $extra = '', string $from = '')
+    public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '', string $from = '')
     {
-        $productID = (int)$productID;
-        $shadow    = '0';
+        $shadow = '0';
         if($from == 'qa') $shadow = 'all';
 
         $products        = $this->productZen->getProducts4DropMenu($shadow);
@@ -1092,9 +1064,9 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxSetState(string $productID)
+    public function ajaxSetState(int $productID)
     {
-        $this->session->set('product', (int)$productID, $this->app->tab);
+        $this->session->set('product', $productID, $this->app->tab);
         $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
 }
