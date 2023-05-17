@@ -66,25 +66,25 @@ class task extends control
         if(!empty($_POST))
         {
             /* Prepare the data information before create the task. */
-            $result = $this->taskZen->buildForCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
+            $result = $this->taskZen->buildDataForCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            list($task, $testTasks, $duplicateTaskID) = $result;
+            list($taskData, $testTaskData, $duplicateTaskID) = $result;
             if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'load' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
             /* Create task. */
-            $taskIdList = $this->task->create($task, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
+            $taskIdList = $this->task->create($taskData, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is created. */
-            $task->id = current($taskIdList);
+            $taskData->id = current($taskIdList);
             $columnID = isset($output['columnID']) ? (int)$output['columnID'] : 0;
-            $this->task->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
-            $this->task->updateKanbanData($execution, $task, (int)$this->post->lane, $columnID);
+            $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID, $testTaskData);
+            $this->task->updateKanbanData($execution, $taskData, (int)$this->post->lane, $columnID);
             helper::setcookie('lastTaskModule', (int)$this->post->module);
 
             /* Get the information returned after a task is created. */
-            $response = $this->taskZen->responseAfterCreate($task, $execution, $this->post->after);
+            $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after);
             return $this->send($response);
         }
 
@@ -122,10 +122,10 @@ class task extends control
         if(!empty($_POST))
         {
             /* 批量创建任务。 Batch create tasks. */
-            $tasks = $this->taskZen->buildTasksForBatchCreate($execution, $taskID);
+            $taskData = $this->taskZen->buildTasksForBatchCreate($execution, $taskID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $taskIdList = $this->task->batchCreate($execution, $tasks, $taskID, $output);
+            $taskIdList = $this->task->batchCreate($execution, $taskData, $taskID, $output);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* 接口调用返回任务编号列表。 Return task id list when call the API. */
@@ -302,8 +302,8 @@ class task extends control
             if(!is_array($this->post->taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}"), 'parent'));
 
             $this->loadModel('action');
-            $tasks = $this->taskZen->prepareBatchAssignedTasks($this->post->taskIDList, $this->post->assignedTo);
-            foreach($tasks as $taskID => $task)
+            $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIDList, $this->post->assignedTo);
+            foreach($taskData as $taskID => $task)
             {
                 /* Assign task. */
                 $changes = $this->task->assign($task);
@@ -376,13 +376,7 @@ class task extends control
 
         $this->executeHooks($taskID);
 
-        $title      = "TASK#$task->id $task->name / $execution->name";
-        $position[] = html::a($this->createLink('execution', 'browse', "executionID=$task->execution"), $execution->name);
-        $position[] = $this->lang->task->common;
-        $position[] = $this->lang->task->view;
-
-        $this->view->title        = $title;
-        $this->view->position     = $position;
+        $this->view->title        = "TASK#$task->id $task->name / $execution->name";
         $this->view->execution    = $execution;
         $this->view->task         = $task;
         $this->view->actions      = $this->loadModel('action')->getList('task', $taskID);
@@ -607,10 +601,9 @@ class task extends control
             return print(js::locate($url, 'parent'));
         }
 
-        $this->view->title      = $this->lang->task->editEstimate;
-        $this->view->position[] = $this->lang->task->editEstimate;
-        $this->view->estimate   = $estimate;
-        $this->view->task       = $this->task->getById($estimate->objectID);
+        $this->view->title    = $this->lang->task->editEstimate;
+        $this->view->estimate = $estimate;
+        $this->view->task     = $this->task->getById($estimate->objectID);
         $this->display();
     }
 
@@ -753,11 +746,9 @@ class task extends control
             if($currentTeam) $task->myConsumed = $currentTeam->consumed;
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
-        $this->view->position[] = $this->lang->task->finish;
-        $this->view->members    = $members;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-
+        $this->view->title   = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->members = $members;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -866,8 +857,6 @@ class task extends control
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->restart;
-        $this->view->position[] = $this->lang->task->restart;
-
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
@@ -955,10 +944,8 @@ class task extends control
             }
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
-        $this->view->position[] = $this->lang->task->finish;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-
+        $this->view->title = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1157,9 +1144,8 @@ class task extends control
             $this->view->teamMembers = $teamMembers;
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
-        $this->view->position[] = $this->lang->task->activate;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1353,18 +1339,14 @@ class task extends control
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
-        $executions = $this->execution->getPairs();
 
         $this->execution->setMenu($executionID);
-        $this->executions          = $executions;
+        $this->executions          = $this->execution->getPairs();
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->task->report->common;
-        $this->view->position[]    = $this->executions[$executionID];
-        $this->view->position[]    = $this->lang->task->report->common;
         $this->view->executionID   = $executionID;
         $this->view->browseType    = $browseType;
         $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? implode(',', $this->post->charts) : '';
-
         $this->display();
     }
 

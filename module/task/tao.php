@@ -33,7 +33,7 @@ class taskTao extends taskModel
         if(dao::isError()) return false;
 
         /* Get task id. */
-        $taskID = (int)$this->dao->lastInsertID();
+        $taskID = $this->dao->lastInsertID();
 
         /* Insert task desc data. */
         $taskSpec = new stdclass();

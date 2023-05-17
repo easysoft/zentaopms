@@ -439,15 +439,15 @@ class taskZen extends task
     }
 
     /**
-     * 准备批量指派的任务数据。
-     * Prepare batch assigned tasks.
+     * 构造待批量指派的任务数据。
+     * Build the task data to batch assign to.
      *
      * @param  string[]  $taskIdList
      * @param  string    $assignedTo
      * @access protected
      * @return object[]
      */
-    protected function prepareBatchAssignedTasks(array $taskIdList, string $assignedTo): array
+    protected function buildTasksForBatchAssignTo(array $taskIdList, string $assignedTo): array
     {
         $taskIdList     = array_unique($taskIdList);
         $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'account');
@@ -510,12 +510,12 @@ class taskZen extends task
      * Build the task data to create.
      *
      * @param  int       $executionID
-     * @param  object    $formData
      * @access protected
      * @return object
      */
-    protected function buildTaskForCreate(int $executionID, object $formData): object
+    protected function buildTaskForCreate(int $executionID): object
     {
+        $formData  = form::data($this->config->task->form->create);
         $postData  = $formData->get();
         $execution = $this->dao->findById($postData->execution)->from(TABLE_EXECUTION)->fetch();
         $team      = !empty($postData->team) ? array_filter($postData->team) : array();
@@ -717,7 +717,7 @@ class taskZen extends task
      * @access protected
      * @return bool
      */
-    protected function checkCreate(int $executionID, float $estimate, string $estStarted, string $deadline): bool
+    protected function checkCreateTask(int $executionID, float $estimate, string $estStarted, string $deadline): bool
     {
         /* Check if the estimate is positive. */
         if($estimate < 0)
@@ -768,7 +768,7 @@ class taskZen extends task
      * @access protected
      * @return bool
      */
-    protected function checkTestTasks(array $tasks): bool
+    protected function checkCreateTestTasks(array $tasks): bool
     {
         foreach($tasks as $task)
         {
@@ -933,9 +933,9 @@ class taskZen extends task
         if(!$storyID && !isset($moduleOptionMenu[$task->module])) $task->module = 0;
 
         /* Display relevant variables. */
-        $this->assignExecution4Create($execution);
-        $this->assignStory4Create($executionID);
-        if($execution->type == 'kanban') $this->assignKanban4Create($executionID, $output);
+        $this->assignExecutionForCreate($execution);
+        $this->assignStoryForCreate($executionID);
+        if($execution->type == 'kanban') $this->assignKanbanForCreate($executionID, $output);
 
         /* Set Custom fields. */
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
@@ -1023,7 +1023,7 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function assignExecution4Create(object $execution): void
+    protected function assignExecutionForCreate(object $execution): void
     {
         $projectID     = $execution ? $execution->project : 0;
         $lifetimeList  = array();
@@ -1065,7 +1065,7 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function assignStory4Create(int $executionID): void
+    protected function assignStoryForCreate(int $executionID): void
     {
         $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $executionID);
@@ -1089,7 +1089,7 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function assignKanban4Create(int $executionID, array $output): void
+    protected function assignKanbanForCreate(int $executionID, array $output): void
     {
         $this->loadModel('kanban');
 
@@ -1118,22 +1118,21 @@ class taskZen extends task
      * @access protected
      * @return false|array
      */
-    protected function buildForCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): false|array
+    protected function buildDataForCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): false|array
     {
         /* Check if the input post data meets the requirements. */
-        $result = $this->checkCreate($executionID, $estimate, $estStarted, $deadline);
+        $result = $this->checkCreateTask($executionID, $estimate, $estStarted, $deadline);
         if(!$result) return false;
 
         /* Process the request data for the create task. */
-        $formData = form::data($this->config->task->form->create);
-        $task     = $this->buildTaskForCreate($executionID, $formData);
+        $task = $this->buildTaskForCreate($executionID);
 
         /* Prepare to create the data for the test subtask and to check the data format. */
         $testTasks = array();
         if($selectTestStory && $task->type == 'test')
         {
-            $testTasks = $this->buildTestTasksForCreate($executionID, $formData);
-            $result    = $this->checkTestTasks($testTasks);
+            $testTasks = $this->buildTestTasksForCreate($executionID);
+            $result    = $this->checkCreateTestTasks($testTasks);
             if(!$result) return false;
         }
 
@@ -1148,11 +1147,10 @@ class taskZen extends task
      * Build subtask data for the test type to create.
      *
      * @param  int       $executionID
-     * @param  object    $formData
      * @access protected
      * @return array
      */
-    protected function buildTestTasksForCreate(int $executionID, object $formData): array
+    protected function buildTestTasksForCreate(int $executionID): array
     {
         /* Set data for the type of test task that has linked stories. */
         $testTasks = array();
@@ -1348,7 +1346,7 @@ class taskZen extends task
     {
         /* 获取区域和泳道下拉数据，并设置区域和泳道的默认值。 */
         /* Get region and lane dropdown data and set default values for regions and lanes. */
-        if($execution->type == 'kanban') $this->assignKanban4Create($execution->id, $output);
+        if($execution->type == 'kanban') $this->assignKanbanForCreate($execution->id, $output);
 
         if($taskID)
         {
