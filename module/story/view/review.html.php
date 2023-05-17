@@ -64,10 +64,12 @@
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
         </tr>
+        <?php if($this->config->vision != 'or'):?>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
           <td colspan='2'><?php include './affected.html.php';?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>
