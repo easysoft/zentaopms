@@ -213,7 +213,8 @@ class programplanModel extends model
             $data->deadline      = $end;
             $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
             $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';;
-            $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
+            $data->parent        = $plan->grade == 1 ? 0 : $plan->parent;
+            $data->isParent      = false;
             $data->open          = true;
             $data->start_date    = $realBegan ? $realBegan : $start;
             $data->endDate       = $realEnd ? $realEnd : $end;
@@ -238,7 +239,8 @@ class programplanModel extends model
             if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
+            if(isset($datas['data'][$data->parent])) $datas['data'][$data->parent]->isParent = 1;
+            $stageIndex[$plan->id] = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
         }
 
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";

@@ -775,7 +775,7 @@ $(function()
 
         var task = gantt.getTask(id);
         if(task.type == 'point' && task.rawStatus) location.href = createLink('review', 'view', 'reviewID=' + task.reviewID);
-        if(task.type == 'plan')                    window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
+        if(task.type == 'plan' && !task.isParent)  window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
 
         if($(e.srcElement).hasClass('icon-confirm'))
         {
