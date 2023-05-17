@@ -114,7 +114,7 @@ class product extends control
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
         $cookieOrderBy  = zget($this->cookie, 'productStoryOrder', 'id_desc');
-        $showModule     = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
+        $showModule     = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : ''; //config->datatable->productBrowse may be undefined.
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
