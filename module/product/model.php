@@ -2406,6 +2406,10 @@ class productModel extends model
             {
                 $link = helper::createLink($module, 'report', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
             }
+            elseif($module == 'story' and $this->config->vision == 'or')
+            {
+                $link = helper::createLink('story', 'create', "productID=%s&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID0&todoID=0&extra=&storyType=requirement");
+            }
             elseif($module == 'testtask')
             {
                 $extra = $method != 'browse' ? '' : "&extra=$extra";
