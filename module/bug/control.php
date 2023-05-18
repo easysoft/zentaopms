@@ -264,6 +264,7 @@ class bug extends control
 
         if(!empty($_POST))
         {
+            /* Batch create bugs. */
             $actions = $this->bug->batchCreate($productID, $branch, $extra);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -274,6 +275,7 @@ class bug extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
             }
 
+            /* Set cookie. */
             helper::setcookie('bugModule', 0, 0);
 
             /* If link from no head then reload. */
@@ -315,6 +317,7 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
 
+        /* Get titles from uploaded images. */
         if($this->session->bugImagesFile)
         {
             $files = $this->session->bugImagesFile;
@@ -334,6 +337,7 @@ class bug extends control
             $customFields[$field] = $this->lang->bug->$field;
         }
 
+        /* If type of the product is branch or platform, append type of the product to the custom fields. */
         if($product->type != 'normal')
         {
             $this->config->bug->custom->batchCreateFields = sprintf($this->config->bug->custom->batchCreateFields, $product->type);
@@ -343,6 +347,7 @@ class bug extends control
             $this->config->bug->custom->batchCreateFields = trim(sprintf($this->config->bug->custom->batchCreateFields, ''), ',');
         }
 
+        /* Set display fields. */
         $showFields = $this->config->bug->custom->batchCreateFields;
         if($product->type == 'normal')
         {
@@ -350,6 +355,7 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
+        /* Get project information and set language item base on project model. */
         $projectID = isset($execution) ? $execution->project : 0;
         $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : $projectID;
         $project   = $this->loadModel('project')->getByID($projectID);
@@ -371,8 +377,6 @@ class bug extends control
         $this->view->showFields   = $showFields;
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->batchCreate;
 
         $this->view->project          = $project;
         $this->view->product          = $product;
