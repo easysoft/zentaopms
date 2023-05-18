@@ -140,7 +140,7 @@ $config->program->productView->dtable->fieldList['name']['flex']         = 1;
 $config->program->productView->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->productView->dtable->fieldList['name']['checkbox']     = true;
 $config->program->productView->dtable->fieldList['name']['sortType']     = true;
-$config->program->productView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+$config->program->productView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
 
 $config->program->productView->dtable->fieldList['PM']['name']     = 'PM';
 $config->program->productView->dtable->fieldList['PM']['title']    = $lang->program->PM;
@@ -214,7 +214,7 @@ $config->program->projectView->dtable->fieldList['name']['flex']         = 1;
 $config->program->projectView->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->projectView->dtable->fieldList['name']['checkbox']     = true;
 $config->program->projectView->dtable->fieldList['name']['sortType']     = true;
-$config->program->projectView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+$config->program->projectView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
 
 $config->program->projectView->dtable->fieldList['status']['name']      = 'status';
 $config->program->projectView->dtable->fieldList['status']['title']     = $lang->program->status;
