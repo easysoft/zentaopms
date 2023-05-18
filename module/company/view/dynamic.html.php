@@ -52,7 +52,7 @@
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>
     <div class="dynamic <?php if($isToday) echo 'active';?>">
-      <div class="dynamic-date <?php if($browseType == 'all') echo 'c-date';?>">
+      <div class="dynamic-date <?php if($browseType == 'all') echo 'c-dynamic-date';?>">
         <?php if($isToday):?>
         <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
         <?php endif;?>
