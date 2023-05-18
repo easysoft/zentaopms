@@ -10,9 +10,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 
-helper::import(dirname(dirname(__FILE__)) . '/base/filter/filter.class.php');
+helper::import(dirname(dirname(__FILE__)) . '/filter/filter.class.php');
 
-class form extends baseFixer
+class form extends fixer
 {
     /**
      * 原始 $_POST 数据。
