@@ -136,7 +136,7 @@ class wg
         return is_string($result) ? $result : json_encode($result);
     }
 
-    public function display(array $options = array()): wg
+    public function display(?array $options = array()): wg
     {
         zin::disableGlobalRender();
         $this->renderOptions = $options;
