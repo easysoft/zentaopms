@@ -1040,16 +1040,6 @@ function floatToolbar()
 }
 
 /**
- * Zentao priority number wg.
- *
- * int pri
- */
-function priLabel()
-{
-    return createWg('priLabel', func_get_args());
-}
-
-/**
  * Zentao customize form item dropdown.
  *
  * ?string method
@@ -1130,6 +1120,16 @@ function commentDialog()
 function commentForm()
 {
     return createWg('commentForm', func_get_args());
+}
+
+/**
+ * Zentao priority number wg.
+ *
+ * int pri
+ */
+function priLabel()
+{
+    return createWg('priLabel', func_get_args());
 }
 
 /**
