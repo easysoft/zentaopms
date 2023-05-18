@@ -784,11 +784,11 @@ class taskZen extends task
      *
      * @param  object    $taskID
      * @param  object    $execution
-     * @param  string    $afterChoice continueAdding|toTaskList|toStoryList
+     * @param  string    $afterChoose continueAdding|toTaskList|toStoryList
      * @access protected
      * @return array
      */
-    protected function responseAfterCreate(object $task, object $execution, string $afterChoice): array
+    protected function responseAfterCreate(object $task, object $execution, string $afterChoose): array
     {
         /* If there is a database error, return the error message. */
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -825,7 +825,7 @@ class taskZen extends task
         }
 
         /* Process the return information for selecting a jump after creation. */
-        return $this->generalCreateResponse($task, $execution->id, $afterChoice);
+        return $this->generalCreateResponse($task, $execution->id, $afterChoose);
     }
 
     /**
@@ -834,11 +834,11 @@ class taskZen extends task
      *
      * @param  object    $task
      * @param  int       $executionID
-     * @param  string    $afterChoice
+     * @param  string    $afterChoose continueAdding|toTaskList|toStoryList
      * @access protected
      * @return array
      */
-    protected function generalCreateResponse(object $task, int $executionID, string $afterChoice): array
+    protected function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
     {
         /* Set the universal return value. */
         $response['result']  = 'success';
@@ -847,7 +847,7 @@ class taskZen extends task
 
         /* Set the response to continue adding task to story. */
         $executionID = $task->execution;
-        if($afterChoice == 'continueAdding')
+        if($afterChoose == 'continueAdding')
         {
             $storyID  = $task->story ? $task->story : 0;
             $moduleID = $task->module ? $task->module : 0;
@@ -857,7 +857,7 @@ class taskZen extends task
         }
 
         /* Set the response to return task list. */
-        if($afterChoice == 'toTaskList')
+        if($afterChoose == 'toTaskList')
         {
             helper::setcookie('moduleBrowseParam', '0');
             $response['load'] = $this->createLink('execution', 'task', "executionID={$executionID}&status=unclosed&param=0&orderBy=id_desc");

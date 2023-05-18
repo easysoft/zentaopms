@@ -58,7 +58,7 @@ class taskModel extends model
         foreach($assignedToList as $assignedTo)
         {
             /* If the type of task is affair and assignedTo is empty, skip it. */
-            if(empty($assignedTo)) continue;
+            if(count($assignedToList) > 1 && empty($assignedTo)) continue;
 
             $task->assignedTo = $assignedTo;
             $taskID = $this->create($task);
@@ -113,7 +113,7 @@ class taskModel extends model
         if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         /* Insert task data. */
-        if(empty($task->assignedTo)) $task->assignedDate = null;
+        if(empty($task->assignedTo)) unset($task->assignedDate);
         $this->dao->insert(TABLE_TASK)->data($task)
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->autoCheck()

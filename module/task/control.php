@@ -67,7 +67,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Check whether a task with the same name is created within the specified time. */
-            $duplicateTaskID = $this->checkDuplicateName($task);
+            $duplicateTaskID = $this->taskZen->checkDuplicateName($task);
             if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'load' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
             $this->dao->begin();

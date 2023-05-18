@@ -1671,7 +1671,7 @@ class taskTest
      *
      * @param  array        $param
      * @param  array        $testTasks
-     * @param  string       $requiredFields
+     * @param  string       $requiredField
      * @access public
      * @return object|array
      */
@@ -1710,6 +1710,46 @@ class taskTest
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->getByID($objectID);
+    }
+
+    /**
+     * 创建事务类型的任务。
+     * Create a affair type task.
+     *
+     * @param  array        $param
+     * @param  array        $assignedToList
+     * @param  string       $requiredField
+     * @access public
+     * @return object|array
+     */
+    public function createTaskOfAffairObject(array $param = array(), array $assignedToList = array(), string $requiredField = ''): object|array
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $createFields = array(
+            'execution'    => 3,
+            'module'       => 0,
+            'story'        => 0,
+            'name'         => '',
+            'type'         => 'affair',
+            'pri'          => 3,
+            'estimate'     => 0,
+            'left'         => 0,
+            'estStarted'   => '2021-01-10',
+            'deadline'     => '2021-03-19',
+            'desc'         => '',
+            'version'      => '1'
+        );
+
+        $task = new stdclass();
+        foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
+        foreach($param as $key => $value) $task->$key = $value;
+        if($requiredField) $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredField . ',';
+        $objectIdList = $this->objectModel->createTaskOfAffair($task, $assignedToList);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getByList($objectIdList);
     }
 
     /**
