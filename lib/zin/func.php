@@ -1142,3 +1142,14 @@ function riskLabel()
 {
     return createWg('riskLabel', func_get_args());
 }
+
+/**
+ * Zentao severity label wg.
+ *
+ * ?string     text
+ * ?int|string level 1|2|3|4
+ */
+function severityLabel()
+{
+    return createWg('severityLabel', func_get_args());
+}
