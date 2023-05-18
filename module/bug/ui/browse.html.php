@@ -47,20 +47,73 @@ foreach($bugs as $bug)
 $cols = array_values($config->bug->dtable->fieldList);
 $data = array_values($bugs);
 
+$canCreate      = false;
+$canBatchCreate = false;
+if(common::canModify('product', $product))
+{
+    $canCreate      = hasPriv('bug', 'create');
+    $canBatchCreate = hasPriv('bug', 'batchCreate');
+
+    $selectedBranch  = $branch != 'all' ? $branch : 0;
+    $createLink      = $this->createLink('bug', 'create', "productID={$product->id}&branch=$selectedBranch&extra=moduleID=$currentModuleID");
+    $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID={$product->id}&branch=$branch&executionID=0&moduleID=$currentModuleID");
+    if(commonModel::isTutorialMode())
+    {
+        $wizardParams = helper::safe64Encode("productID={$product->id}&branch=$branch&extra=moduleID=$currentModuleID");
+        $createLink   = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+    }
+
+    $createItem      = array('text' => $lang->bug->create,      'url' => $createLink);
+    $batchCreateItem = array('text' => $lang->bug->batchCreate, 'url' => $batchCreateLink);
+}
+
 featureBar
 (
+    set::linkParams("product=$product->id&branch=$branch&browseType={key}"),
     li(searchToggle())
 );
 
-toolbar();
+if(!isonlybody())
+{
+    toolbar
+    (
+        hasPriv('bug', 'report') ? item(set(array
+        (   'text'  => $lang->bug->report->common,
+            'icon'  => 'bar-chart',
+            'class' => 'ghost',
+            'url'   => createLink('bug', 'report', "productID=$product->id&browseType=$browseType&branch=$branch&module=$currentModuleID")
+        ))) : null,
+        hasPriv('bug', 'export') ? item(set(array
+        (
+            'text'  => $lang->bug->export,
+            'icon'  => 'export',
+            'class' => 'ghost',
+            'url'   => createLink('bug', 'export', "productID={$product->id}&orderBy=$orderBy&browseType=$browseType"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $canCreate && $canBatchCreate ? btngroup
+        (
+            btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->bug->create),
+            dropdown
+            (
+                btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+                set::items(array($createItem, $batchCreateItem)),
+                set::placement('bottom-end'),
+            )
+        ) : null,
+        $canCreate && !$canBatchCreate ? item(set($createItem)) : null,
+        $canBatchCreate && !$canCreate ? item(set($batchCreateItem)) : null,
+    );
+}
 
 sidebar();
 
 dtable
 (
-    set::checkable(true),
     set::cols($cols),
-    set::data($data)
+    set::data($data),
+    set::footPager(usePager()),
+    set::footer(jsRaw('window.footerGenerator'))
 );
 
 render();
