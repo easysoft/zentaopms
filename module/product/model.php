@@ -330,16 +330,17 @@ class productModel extends model
     }
 
     /**
+     * 获取排序后的产品列表，顺序为：我的产品、其他人的产品、关闭的产品。
      * Get ordered products.
      *
      * @param  string     $status
      * @param  int        $num
      * @param  int        $projectID
-     * @param  string|int $shadow       all | 0 | 1
+     * @param  string|int $shadow     all|0|1
      * @access public
      * @return array
      */
-    public function getOrderedProducts($status, $num = 0, $projectID = 0, $shadow = 0)
+    public function getOrderedProducts(string $status, int $num = 0, int $projectID = 0, int|string $shadow = 0): array
     {
         $products = array();
         if($projectID)
@@ -351,47 +352,40 @@ class productModel extends model
         {
             $products = $this->getList(0, $status, $num, 0, $shadow);
         }
-
         if(empty($products)) return $products;
 
-        $lines       = $this->getLinePairs();
-        $productList = array();
+        $lines = $this->getLinePairs();
+        $productsWithLine = array();
+        $productsNoLine   = array();
 
-        foreach($lines as $id => $name)
+        foreach($products as $product)
         {
-            foreach($products as $key => $product)
+            if(array_key_exists($product->line, $lines))
             {
-                if($product->line == $id)
-                {
-                    if($this->config->systemMode == 'ALM') $product->name = $name . '/' . $product->name;
-                    $productList[] = $product;
-                    unset($products[$key]);
-                }
+                $lineName = $lines[$product->line];
+                if($this->config->systemMode == 'ALM') $product->name = $lineName . '/' . $product->name;
+                $productsWithLine[] = $product;
+            }
+            else
+            {
+                $productsNoLine[] = $product;
             }
         }
+        $productList = array_merge($productsWithLine, $productsNoLine);
 
-        $productList = array_merge($productList, $products);
-        $products    = $mineProducts = $otherProducts = $closedProducts = array();
+        $currentUser     = $this->app->user->account;
+        $orderedProducts = $mineProducts = $othersProducts = $closedProducts = array();
         foreach($productList as $product)
         {
             if(!$this->app->user->admin and !$this->checkPriv($product->id)) continue;
-            if($product->status == 'normal' and $product->PO == $this->app->user->account)
-            {
-                $mineProducts[$product->id] = $product;
-            }
-            elseif($product->status == 'normal' and $product->PO != $this->app->user->account)
-            {
-                $otherProducts[$product->id] = $product;
-            }
-            elseif($product->status == 'closed')
-            {
-                $closedProducts[$product->id] = $product;
-            }
+            if($product->status == 'normal' and $product->PO == $currentUser) $mineProducts[$product->id]   = $product;
+            if($product->status == 'normal' and $product->PO != $currentUser) $othersProducts[$product->id] = $product;
+            if($product->status == 'closed')                                  $closedProducts[$product->id] = $product;
         }
-        $products = $mineProducts + $otherProducts + $closedProducts;
+        $orderedProducts = $mineProducts + $othersProducts + $closedProducts;
 
-        if(empty($num)) return $products;
-        return array_slice($products, 0, $num, true);
+        if(empty($num)) return $orderedProducts;
+        return array_slice($orderedProducts, 0, $num, true);
     }
 
     /**
