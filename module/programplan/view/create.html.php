@@ -202,7 +202,7 @@
             <?php $i ++;?>
             <?php endforeach;?>
           <?php endif;?>
-          <?php if($project->model != 'ipd'):?>
+          <?php if($project->model != 'ipd' or $planID):?>
           <?php for($j = 0; $j < 5; $j ++):?>
           <tr class='addedItem'>
             <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, '', "class='form-control chosen'");?></td>
