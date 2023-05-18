@@ -5,8 +5,8 @@ namespace zin;
 class severityLabel extends wg
 {
     protected static $defineProps = array(
-        'text?:string',
-        'level?:string|int'
+        'text?:string',     //标签文本
+        'level?:string|int' //严重程度等级 1|2|3|4
     );
 
     protected function onAddChild(mixed $child): mixed
