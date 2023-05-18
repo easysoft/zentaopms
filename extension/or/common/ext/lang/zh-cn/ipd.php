@@ -106,3 +106,15 @@ unset($lang->createIcons['project']);
 unset($lang->createIcons['execution']);
 unset($lang->createIcons['kanbanspace']);
 unset($lang->createIcons['kanban']);
+
+$lang->searchObjects = array();
+$lang->searchObjects['all']        = '全部';
+$lang->searchObjects['story']      = '需求';
+$lang->searchObjects['demandpool'] = '需求池';
+$lang->searchObjects['demand']     = '需求池需求';
+$lang->searchObjects['roadmap']    = '路标';
+$lang->searchObjects['charter']    = '立项';
+$lang->searchObjects['product']    = $lang->productCommon;
+$lang->searchObjects['doc']        = '文档';
+$lang->searchObjects['user']       = '用户';
+$lang->searchTips                  = '编号(ctrl+g)';

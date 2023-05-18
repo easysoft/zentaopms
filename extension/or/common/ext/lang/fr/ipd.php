@@ -106,3 +106,15 @@ unset($lang->createIcons['project']);
 unset($lang->createIcons['execution']);
 unset($lang->createIcons['kanbanspace']);
 unset($lang->createIcons['kanban']);
+
+$lang->searchObjects = array();
+$lang->searchObjects['all']        = 'All';
+$lang->searchObjects['story']      = 'Requirement';
+$lang->searchObjects['demandpool'] = 'DemandPool';
+$lang->searchObjects['demand']     = 'Demand';
+$lang->searchObjects['roadmap']    = 'Roadmap';
+$lang->searchObjects['charter']    = 'Charter';
+$lang->searchObjects['product']    = $lang->productCommon;
+$lang->searchObjects['doc']        = 'Document';
+$lang->searchObjects['user']       = 'User';
+$lang->searchTips                  = 'ID(ctrl+g)';
