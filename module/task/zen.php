@@ -1095,8 +1095,8 @@ class taskZen extends task
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->get();
 
-        if(empty($postData->estStarted)) $task->estStarted = null;
-        if(empty($postData->deadline)) $task->deadline = null;
+        if(empty($postData->estStarted)) unset($task->estStarted);
+        if(empty($postData->deadline)) unset($task->deadline);
 
         /* Processing image link. */
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $postData->uid);

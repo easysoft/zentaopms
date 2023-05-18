@@ -1666,6 +1666,53 @@ class taskTest
     }
 
     /**
+     * 创建测试类型的任务。
+     * Create a test type task.
+     *
+     * @param  array        $param
+     * @param  array        $testTasks
+     * @param  string       $requiredFields
+     * @access public
+     * @return object|array
+     */
+    public function createTaskOfTestObject(array $param = array(), array $testTasks = array(), string $requiredField = ''): object|array
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $createFields = array(
+            'execution'    => 3,
+            'module'       => 0,
+            'story'        => 0,
+            'name'         => '',
+            'type'         => 'test',
+            'assignedTo'   => 'admin',
+            'assignedDate' => helper::now(),
+            'pri'          => 3,
+            'estimate'     => 0,
+            'left'         => 0,
+            'estStarted'   => '2021-01-10',
+            'deadline'     => '2021-03-19',
+            'desc'         => '',
+            'version'      => '1'
+        );
+
+        $task = new stdclass();
+        foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
+        foreach($param as $key => $value) $task->$key = $value;
+        if($requiredField)
+        {
+            if(!empty($testTasks) and $requiredField == 'estStarted') unset($task->estStarted);
+            if(!empty($testTasks) and $requiredField == 'deadline') unset($task->deadline);
+            $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredField . ',';
+        }
+        $objectID = $this->objectModel->createTaskOfTest($task, $testTasks);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getByID($objectID);
+    }
+
+    /**
      * 测试创建一个任务。
      * Test create a task.
      *
@@ -1691,7 +1738,6 @@ class taskTest
 
         $task = new stdclass();
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
-
         foreach($param as $key => $value) $task->$key = $value;
 
         $objectID = $this->objectModel->doCreate($task);

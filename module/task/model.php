@@ -131,8 +131,8 @@ class taskModel extends model
         $taskSpec->task       = $taskID;
         $taskSpec->version    = $task->version;
         $taskSpec->name       = $task->name;
-        $taskSpec->estStarted = $task->estStarted ? $task->estStarted : null;
-        $taskSpec->deadline   = $task->deadline ? $task->deadline : null;
+        if(!empty($task->estStarted)) $taskSpec->estStarted = $task->estStarted;
+        if(!empty($task->deadline)) $taskSpec->deadline = $task->deadline;
         $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
 
         if(dao::isError()) return false;
@@ -362,17 +362,17 @@ class taskModel extends model
         $latestDeadline      = '';
         foreach($tasks as $task)
         {
-            if(!helper::isZeroDate($task->estStarted)  && (empty($earliestEstStarted)   || $earliestEstStarted  > $task->estStarted))  $earliestEstStarted  = $task->estStarted;
-            if(!helper::isZeroDate($task->realStarted) && (empty($earliestRealStarted)  || $earliestRealStarted > $task->realStarted)) $earliestRealStarted = $task->realStarted;
-            if(!helper::isZeroDate($task->deadline)    && (empty($latestDeadline)       || $latestDeadline      < $task->deadline))    $latestDeadline      = $task->deadline;
+            if(!helper::isZeroDate($task->estStarted)  && (empty($earliestEstStarted)  || $earliestEstStarted  > $task->estStarted))  $earliestEstStarted  = $task->estStarted;
+            if(!helper::isZeroDate($task->realStarted) && (empty($earliestRealStarted) || $earliestRealStarted > $task->realStarted)) $earliestRealStarted = $task->realStarted;
+            if(!helper::isZeroDate($task->deadline)    && (empty($latestDeadline)      || $latestDeadline      < $task->deadline))    $latestDeadline      = $task->deadline;
         }
 
         /* Initialize task data and update it. */
-        $newTask = new stdclass();
-        $newTask->estStarted  = $earliestEstStarted;
-        $newTask->realStarted = $earliestRealStarted;
-        $newTask->deadline    = $latestDeadline;
-        $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
+        $newTask = array();
+        if(!empty($earliestEstStarted))  $newTask['estStarted']  = $earliestEstStarted;
+        if(!empty($earliestRealStarted)) $newTask['realStarted'] = $earliestRealStarted;
+        if(!empty($latestDeadline))      $newTask['deadline']    = $latestDeadline;
+        if(!empty($newTask)) $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
 
         return !dao::isError();
     }

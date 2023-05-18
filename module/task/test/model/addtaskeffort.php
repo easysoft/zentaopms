@@ -7,8 +7,8 @@ su('admin');
 /**
 
 title=taskModel->addTaskEffort();
+timeout=0
 cid=1
-pid=1
 
 插入task为1 left为0 consumed为3的任务 >> 601,1,0,3
 插入task为601 left为0 consumed为3的任务 >> 602,601,0,3

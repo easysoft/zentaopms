@@ -1,0 +1,15 @@
+title: table zt_story
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: title
+    range: 1-5
+    profix: '需求'
+  - field: product
+    range: 1
+  - field: type
+    range: story
+  - field: vision
+    range: rnd

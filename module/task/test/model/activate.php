@@ -9,31 +9,6 @@ title=taskModel->activate();
 timeout=0
 cid=1
 
-- wait状态任务激活
- - 第0条的field属性 @status
- - 第0条的old属性 @wait
- - 第0条的new属性 @doing
-
-- done状态任务激活
- - 第0条的field属性 @status
- - 第0条的old属性 @done
- - 第0条的new属性 @doing
-
-- pause状态任务激活
- - 第0条的field属性 @status
- - 第0条的old属性 @pause
- - 第0条的new属性 @doing
-
-- cancel状态任务激活
- - 第0条的field属性 @status
- - 第0条的old属性 @cancel
- - 第0条的new属性 @doing
-
-- closed状态任务激活
- - 第0条的field属性 @status
- - 第0条的old属性 @closed
- - 第0条的new属性 @doing
-
 */
 
 zdTable('task')->gen(10);
