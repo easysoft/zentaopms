@@ -242,8 +242,8 @@ class productTest
      */
     public function getProductPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
     {
-        $this->objectModel->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->orderBy('id_desc')->limit(5)->exec();
-        $this->objectModel->dao->update(TABLE_PRODUCT)->set('shadow')->eq(1)->where('id')->ge(18)->andWhere('id')->lt(23)->exec();
+        $this->objectModel->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->orderBy('id_desc')->limit(5)->exec(); /* 将最后五个产品设置为影子产品。 */
+        $this->objectModel->dao->update(TABLE_PRODUCT)->set('shadow')->eq(1)->where('id')->ge(18)->andWhere('id')->lt(23)->exec(); /* 将第18到22个产品设置为影子产品。*/
         $pairs = $this->objectModel->getPairs($mode, $programID, $append, $shadow);
         return $pairs;
     }
