@@ -114,6 +114,7 @@ class storyModel extends model
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($storyIdList)->andWhere('t1.id')->in($storyIdList)->fi()
             ->beginIF(!$storyIdList)->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()
             ->fetchAll('id');
     }
 
