@@ -10,6 +10,29 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+
+jsVar('holders', $lang->bug->placeholder);
+jsVar('page', 'create');
+jsVar('createRelease', $lang->release->create);
+jsVar('createBuild', $lang->build->create);
+jsVar('refresh', $lang->refreshIcon);
+jsVar('flow', $config->global->flow);
+jsVar('stepsRequired', $stepsRequired);
+jsVar('stepsNotEmpty', $lang->bug->stepsNotEmpty);
+jsVar('isStepsTemplate', $isStepsTemplate);
+jsVar('oldProjectID', $projectID);
+jsVar('oldProductID', $productID);
+jsVar('blockID', $blockID);
+jsVar('moduleID', $moduleID);
+jsVar('tab', $this->app->tab);
+jsVar('requiredFields', $config->bug->create->requiredFields);
+jsVar('showFields', $showFields);
+jsVar('projectExecutionPairs', $projectExecutionPairs);
+jsVar('productID', $productID);
+jsVar('released', $lang->build->released);
+if($this->app->tab == 'execution') jsVar('objectID', zget($execution, 'id', ''));
+if($this->app->tab == 'project')   jsVar('objectID', $projectID);
+
 foreach(explode(',', $config->bug->create->requiredFields) as $field)
 {
     if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
@@ -29,11 +52,11 @@ $showKeywords         = strpos(",$showFields,", ',keywords,')         !== false;
 
 formPanel
 (
-    on::change('#product', 'loadAll'),
-    on::change('#branch',  'loadBranch'),
-    on::change('#module',  'loadModuleRelated'),
-    on::change('.refresh', 'loadProductModules'),
-    on::change('#project', 'loadProductExecutions'),
+    on::change('#product',   'changeProduct'),
+    on::change('#branch',    'changeBranch'),
+    on::change('#project',   'changeProject'),
+    on::change('#execution', 'changeExecution'),
+    on::change('#module',    'changeModule'),
     to::headingActions(icon('cog-outline')),
     formRow
     (
@@ -63,9 +86,16 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->project),
-            set::control(array('type' => 'select', 'items' => $projects)),
-            set::name('project'),
-            set::value($projectID)
+            inputGroup
+            (
+                set('id', 'projectBox'),
+                select
+                (
+                    set::name('project'),
+                    set::items($projects),
+                    set::value($projectID)
+                )
+            )
         )
     ),
     formRow
@@ -76,13 +106,14 @@ formPanel
             set::label($lang->bug->module),
             inputGroup
             (
+                set('id', 'moduleBox'),
                 select
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::value($moduleID)
                 ),
-                span
+                count($moduleOptionMenu) == 1 ? span
                 (
                     set('class', 'input-group-addon'),
                     a
@@ -98,7 +129,7 @@ formPanel
                         set('href', 'javascript:void(0)'),
                         icon('refresh')
                     )
-                )
+                ) : null
             )
         ),
         formGroup
@@ -106,9 +137,16 @@ formPanel
             set::class($showExecution ? '' : 'hidden'),
             set::width('1/2'),
             set::label($projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution),
-            set::control(array('type' => 'select', 'items' => $executions)),
-            set::name('execution'),
-            set::value(zget($execution, 'id', ''))
+            inputGroup
+            (
+                set('id', 'executionBox'),
+                select
+                (
+                    set::name('execution'),
+                    set::items($executions),
+                    set::value(zget($execution, 'id', ''))
+                )
+            )
         )
     ),
     formRow
@@ -275,9 +313,16 @@ formPanel
             set::width('1/2'),
             set::class($showStory ? '' : 'hidden'),
             set::label($lang->bug->story),
-            set::control(array('type' => 'select', 'items' => (empty($stories) ? '' : $stories))),
-            set::name('story'),
-            set::value($storyID)
+            inputGroup
+            (
+                set('id', 'storyBox'),
+                select
+                (
+                    set::name('story'),
+                    set::items((empty($stories) ? '' : $stories)),
+                    set::value($storyID)
+                )
+            )
         ),
         formGroup
         (
@@ -310,6 +355,15 @@ formPanel
             set::name('keywords'),
             set::value($keywords)
         )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::label($lang->bug->files),
+            set::name('files[]'),
+            set::control('file')
+        ),
     )
 );
 

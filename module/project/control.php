@@ -1927,11 +1927,10 @@ class project extends control
      * AJAX: get a project by execution id.
      *
      * @param  string $executionID
-     *
      * @access public
      * @return string
      */
-    public function ajaxGetPairsByExecution(string $executionID): string
+    public function ajaxGetPairsByExecution(string $executionID)
     {
         $execution    = $this->loadModel('execution')->getByID((int)$executionID);
         $projectPairs = $this->loadModel('project')->getPairsByIdList($execution->project);

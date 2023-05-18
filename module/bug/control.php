@@ -1552,7 +1552,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProductMembers($productID, $selectedUser = '', $branchID = '')
+    public function ajaxGetProductMembers(int $productID, string $selectedUser = '', int $branchID = 0)
     {
         $productMembers = $this->bug->getProductMemberPairs($productID, $branchID);
         $productMembers = array_filter($productMembers);
