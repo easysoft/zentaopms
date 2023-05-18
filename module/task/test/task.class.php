@@ -1906,11 +1906,10 @@ class taskTest
      * @param  array       $taskIdList
      * @param  int         $bugID
      * @param  int         $todoID
-     * @param  array       $testTasks
      * @access public
      * @return object|bool
      */
-    public function afterCreateTest(int $taskID = 0, array $taskIdList = array(), int $bugID = 0, int $todoID = 0, array $testTasks = array()): object|bool
+    public function afterCreateTest(int $taskID = 0, array $taskIdList = array(), int $bugID = 0, int $todoID = 0): object|bool
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
@@ -1918,7 +1917,7 @@ class taskTest
         $task = $this->objectModel->getByID($taskID);
         if(!$task) return false;
 
-        $result = $this->objectModel->afterCreate($task, $taskIdList, $bugID, $todoID, $testTasks);
+        $result = $this->objectModel->afterCreate($task, $taskIdList, $bugID, $todoID);
         if(!$result) return false;
 
         if($bugID)

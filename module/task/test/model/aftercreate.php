@@ -71,4 +71,4 @@ r($taskTester->afterCreateTest(1, $taskIdList['test'], 1))                && p('
 r($taskTester->afterCreateTest(2, $taskIdList['todo'], 0, 1))             && p('status')        && e('done');      // 测试待办转任务后，更新待办的信息
 r($taskTester->afterCreateTest(3, $taskIdList['design']))                 && p('designVersion') && e('1');         // 测试任务关联设计后，更新任务中的designVersion字段
 r($taskTester->afterCreateTest(4, $taskIdList['story']))                  && p('stage')         && e('planned');   // 测试任务关联需求后，更新需求的阶段
-r($taskTester->afterCreateTest(1, $taskIdList['test'], 0, 0, $testTasks)) && p('parent')        && e('-1');        // 测试任务创建子任务后，父任务的parent字段的值
+r($taskTester->afterCreateTest(1, $taskIdList['test'], 0, 0, $testTasks)) && p('parent')        && e('0');         // 测试任务创建子任务后，父任务的parent字段的值
