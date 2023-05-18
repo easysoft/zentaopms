@@ -1164,20 +1164,7 @@ class bugZen extends bug
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
             $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
-            if($execution->type == 'kanban')
-            {
-                $this->loadModel('kanban');
-                $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
-                $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
-                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
-
-                $this->view->executionType = $execution->type;
-                $this->view->regionID      = $regionID;
-                $this->view->laneID        = $laneID;
-                $this->view->regionPairs   = $regionPairs;
-                $this->view->lanePairs     = $lanePairs;
-            }
+            if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
         }
         elseif($this->app->tab == 'project')
         {
@@ -1849,5 +1836,129 @@ class bugZen extends bug
         if(isonlybody()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc"));
+    }
+
+    /**
+     * 展示批量创建bug的相关变量。
+     * Show the variables associated with the batch creation bugs.
+     *
+     * @param  int        $executionID
+     * @param  object     $product
+     * @param  string     $branch
+     * @param  array      $output
+     * @param  array|bool $bugImagesFile
+     * @access protected
+     * @return void
+     */
+    protected function assignCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
+    {
+        if($executionID)
+        {
+            /* Get builds, stories and branches of this execution. */
+            $builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased', $executionID, 'execution');
+            $stories         = $this->story->getExecutionStoryPairs($executionID);
+            $productBranches = $product->type != 'normal' ? $this->execution->getBranchByProduct($product->id, $executionID) : array();
+            $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
+            $branch          = key($branches);
+
+            /* Get the variables associated with kanban. */
+            $execution = $this->loadModel('execution')->getById($executionID);
+            if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
+        }
+        else
+        {
+            /* Get builds, stories and branches of the product. */
+            $builds   = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased');
+            $stories  = $this->story->getProductStoryPairs($product->id, $branch);
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
+        }
+
+        /* Get project information. */
+        $projectID = isset($execution) ? $execution->project : 0;
+        $project   = $this->loadModel('project')->getByID($projectID);
+
+        $this->assignVarsForBatchCreate($product, $project, $bugImagesFile);
+
+        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
+        $this->view->project          = $project;
+        $this->view->projectID        = $projectID;
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', 'id_desc', $projectID, 'multiple,stagefilter');
+        $this->view->executionID      = $executionID;
+        $this->view->stories          = $stories;
+        $this->view->builds           = $builds;
+        $this->view->branch           = $branch;
+        $this->view->branches         = $branches;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 0 : $branch);
+    }
+
+    /**
+     * 展示看板的相关变量。
+     * Show the variables associated with the kanban.
+     *
+     * @param  object    $execution
+     * @param  array     $output
+     * @access protected
+     * @return void
+     */
+    protected function assignKanbanVars(object $execution, array $output)
+    {
+        $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
+        $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
+        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
+        $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+        $this->view->executionType = $execution->type;
+        $this->view->regionID      = $regionID;
+        $this->view->laneID        = $laneID;
+        $this->view->regionPairs   = $regionPairs;
+        $this->view->lanePairs     = $lanePairs;
+    }
+
+    /**
+     * 展示字段相关变量。
+     * Show the variables associated with the batch created fields.
+     *
+     * @param  object      $product
+     * @param  object|bool $project
+     * @param  array|bool  $bugImagesFile
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForBatchCreate(object $product, object|bool $project, array|bool $bugImagesFile)
+    {
+        /* Set custom fields. */
+        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
+        {
+            $customFields[$field] = $this->lang->bug->$field;
+        }
+        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+        if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
+
+        /* Set display fields. */
+        $showFields = $this->config->bug->custom->batchCreateFields;
+        if($product->type != 'normal')
+        {
+            $showFields = sprintf($showFields, $product->type);
+            $showFields = str_replace(array(",branch,", ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+        else
+        {
+            $showFields = trim(sprintf($showFields, ''), ',');
+        }
+
+        /* Get titles from uploaded images. */
+        if(!empty($bugImagesFile))
+        {
+            foreach($bugImagesFile as $fileName => $file)
+            {
+                $title = $file['title'];
+                $titles[$title] = $fileName;
+            }
+            $this->view->titles = $titles;
+        }
+
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
     }
 }
