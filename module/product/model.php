@@ -924,12 +924,12 @@ class productModel extends model
     /**
      * Build search form for all method of product module.
      *
-     * @param  int       $queryID
-     * @param  string    $actionURL
+     * @param  int    $queryID
+     * @param  string $actionURL
      * @access public
      * @return void
      */
-    public function buildProductSearchForm($queryID, $actionURL)
+    public function buildProductSearchForm(int $queryID, string $actionURL): void
     {
         $this->config->product->all->search['queryID']   = $queryID;
         $this->config->product->all->search['actionURL'] = $actionURL;
@@ -1372,7 +1372,7 @@ class productModel extends model
 
         /* Render statistic result to each product. */
         $stats = array();
-        foreach($products as $key => $product)
+        foreach($products as $productID => $product)
         {
             $product->stories                 = $stories[$product->id];
             $product->stories['finishClosed'] = isset($finishClosedStory[$product->id]) ? $finishClosedStory[$product->id] : 0;
@@ -1395,7 +1395,7 @@ class productModel extends model
             $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
             $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
 
-            $stats[$key] = $product;
+            $stats[$productID] = $product;
         }
 
         return $stats;
