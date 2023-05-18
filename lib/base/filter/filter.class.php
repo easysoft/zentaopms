@@ -1338,7 +1338,7 @@ class baseFixer
      * @access public
      * @return object
      */
-    public function get($fields = '')
+    public function get(string $fields = ''): object
     {
         $fields = str_replace(' ', '', trim($fields));
         foreach($this->data as $field => $value) $this->specialChars($field);
