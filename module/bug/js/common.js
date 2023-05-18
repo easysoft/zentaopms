@@ -174,17 +174,17 @@ function loadBranch()
   * @access public
   * @return void
   */
-function loadAllBuilds(object)
+function loadAllBuilds()
 {
     if(page == 'resolve')
     {
         oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
-        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=0&index=0&type=all');
-        $('#resolvedBuildBox').load(link, function(){$(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})});
+        link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=0&index=0&type=all');
+        $('#resolvedBuildBox').load(link);
     }
     else
     {
-        productID   = $('#product').val();
+        productID = $('#product').val();
 
         var buildBox = '';
         if(page == 'edit') buildBox = $(object).closest('.input-group').attr('id');

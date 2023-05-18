@@ -90,11 +90,17 @@ function changeExecution(event)
 
 function changeModule(event)
 {
-    var moduleID  = $(event.target).val();
-    var productID = $('#product').val();
-    var storyID   = $('#story').val();
+    const moduleID  = $(event.target).val();
+    const productID = $('#product').val();
+    const storyID   = $('#story').val();
     loadAssignedToByModule(moduleID, productID);
     loadProductStories(moduleID, productID, storyID);
+}
+
+function clickRefresh(event)
+{
+    const productID = $('#product').val();
+    loadProductModules(productID);
 }
 
 function loadProductBranches(productID)
@@ -270,7 +276,7 @@ function loadProjectBuilds(projectID)
     }
 }
 
-function loadProductBuilds(productID)
+function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
 {
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
@@ -278,26 +284,35 @@ function loadProductBuilds(productID)
 
     if(page == 'create')
     {
-        const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
-        $.get(link, function(data)
+        if(buildBox == 'all' || buildBox == 'openedBuildBox')
         {
-            $('#openedBuild').replaceWith(data);
-        })
+            const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch + '&index=0&type=' + type);
+            $.get(link, function(data)
+            {
+                $('#openedBuild').replaceWith(data);
+            })
+        }
     }
     else
     {
-        const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
-        $('#openedBuildBox').load(openedLink, function()
+        if(buildBox == 'all' || buildBox == 'openedBuildBox')
         {
-            $(this).find('select').val(oldOpenedBuild);
-        });
+            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=' + type);
+            $('#openedBuildBox').load(openedLink, function()
+            {
+                $(this).find('select').val(oldOpenedBuild);
+            });
+        }
 
-        const oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
-        const resolvedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
-        $('#resolvedBuildBox').load(resolvedLink, function()
+        if(buildBox == 'all' || buildBox == 'resolvedBuildBox')
         {
-            $(this).find('select').val(oldResolvedBuild);
-        });
+            const oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
+            const resolvedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=' + type);
+            $('#resolvedBuildBox').load(resolvedLink, function()
+            {
+                $(this).find('select').val(oldResolvedBuild);
+            });
+        }
     }
 }
 
@@ -408,5 +423,33 @@ function loadTestTasks(productID, executionID)
         var defaultOption = '<option title="' + oldTestTaskTitle + '" value="' + oldTestTask + '" selected="selected">' + oldTestTaskTitle + '</option>';
         $('#testtaskBox').html(data);
         $('#testtask').append(defaultOption);
+    });
+}
+
+function loadAllBuilds(event)
+{
+    const productID = $('#product').val();
+    const buildBox  = $(event.target).prev().attr('id');
+    loadProductBuilds(productID, 'all', buildBox);
+}
+
+function loadAllUsers(event)
+{
+    isClosedBug = typeof isClosedBug == 'undefined' ? false : isClosedBug;
+
+    const params = isClosedBug ? '&params=devfirst' : '';
+    const link   = $.createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            $('#assignedTo').replaceWith(data);
+            if(!isClosedBug)
+            {
+                const moduleID  = $('#module').val();
+                const productID = $('#product').val();
+                loadAssignedToByModule(moduleID, productID);
+            }
+        }
     });
 }

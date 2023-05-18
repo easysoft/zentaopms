@@ -1018,7 +1018,7 @@ class bugZen extends bug
         }
         else
         {
-            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+            $projects += $this->product->getProjectPairsByProduct($productID, (string)$branch);
         }
 
         return $this->updateBug($bug, array('products' => $products, 'projects' => $projects));

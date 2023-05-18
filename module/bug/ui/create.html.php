@@ -57,6 +57,9 @@ formPanel
     on::change('#project',   'changeProject'),
     on::change('#execution', 'changeExecution'),
     on::change('#module',    'changeModule'),
+    on::click('#refresh',    'clickRefresh'),
+    on::click('#allBuilds',  'loadAllBuilds'),
+    on::click('#allUsers',   'loadAllUsers'),
     to::headingActions(icon('cog-outline')),
     formRow
     (
@@ -125,7 +128,8 @@ formPanel
                     ),
                     a
                     (
-                        set('class', 'text-black refresh'),
+                        set('id', 'refreshModule'),
+                        set('class', 'text-black'),
                         set('href', 'javascript:void(0)'),
                         icon('refresh')
                     )
@@ -251,8 +255,7 @@ formPanel
             set::width('1/2'),
             set::class($showOS ? '' : 'hidden'),
             set::label($lang->bug->os),
-            set::control(array('type' => 'select', 'items' => $lang->bug->osList)),
-            set::multiple(true),
+            set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
             set::name('os[]'),
             set::value($os)
         ),
@@ -341,8 +344,7 @@ formPanel
             set::width('1/2'),
             set::class($showMailto ? '' : 'hidden'),
             set::label($lang->bug->lblMailto),
-            set::control(array('type' => 'select', 'items' => $users)),
-            set::multiple(true),
+            set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
             set::name('mailto[]'),
             set::value(str_replace(' ', '', $mailto))
         ),
