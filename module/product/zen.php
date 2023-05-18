@@ -260,16 +260,13 @@ class productZen extends product
      * Get form fields for create.
      *
      * @param  int   $programID
-     * @param  array $fields
      * @access private
      * @return array
      */
-    private function getFormFields4Create(int $programID = 0, array $fields = array()): array
+    private function getFormFields4Create(int $programID = 0): array
     {
-        if(empty($fields)) $fields = $this->config->product->form->create;
-        $fields = $this->setSelectFormOptions($programID, $fields);
-
-        if(empty($programID)) unset($fields['line']);
+        $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
+        $fields['program']['default'] = $programID;
 
         return $fields;
     }
