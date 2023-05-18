@@ -220,18 +220,16 @@ class productZen extends product
     }
 
     /**
-     * 获取创建产品页面的表单配置。
-     * Get form fields for create.
+     * 设置表单字段下拉选项。
+     * Set form select options.
      *
-     * @param  int   $programID
-     * @param  array $fields
+     * @param  int     $programID
+     * @param  array   $fields
      * @access private
      * @return array
      */
-    private function getFormFields4Create(int $programID = 0, array $fields = array()): array
+    private function setSelectFormOptions(int $programID, array $fields): array
     {
-        if(empty($fields)) $fields = $this->config->product->form->create;
-
         /* 准备数据。*/
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed');
@@ -258,6 +256,25 @@ class productZen extends product
     }
 
     /**
+     * 获取创建产品页面的表单配置。
+     * Get form fields for create.
+     *
+     * @param  int   $programID
+     * @param  array $fields
+     * @access private
+     * @return array
+     */
+    private function getFormFields4Create(int $programID = 0, array $fields = array()): array
+    {
+        if(empty($fields)) $fields = $this->config->product->form->create;
+        $fields = $this->setSelectFormOptions($programID, $fields);
+
+        if(empty($programID)) unset($fields['line']);
+
+        return $fields;
+    }
+
+    /**
      * 获取编辑产品页面的表单配置。
      * Get form fields for create.
      *
@@ -269,7 +286,7 @@ class productZen extends product
     {
         /* Init fields. */
         $programID = (int)$product->program;
-        $fields    = $this->getFormFields4Create($programID, $this->config->product->form->edit);
+        $fields    = $this->setSelectFormOptions($programID, $this->config->product->form->edit);
         $fields['changeProjects'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => '');
 
         /* Check program priv, and append to program list that is not exist product's program. */
@@ -300,7 +317,7 @@ class productZen extends product
     private function getFormFields4BatchEdit(): array
     {
         /* Init fields. */
-        $fields = $this->getFormFields4Create(0, $this->config->product->form->batchEdit);
+        $fields = $this->setSelectFormOptions(0, $this->config->product->form->batchEdit);
 
         /* Remove hidden fields. */
         $shownFields = explode(',', $this->config->product->custom->batchEditFields);
