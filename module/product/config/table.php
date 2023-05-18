@@ -31,15 +31,6 @@ $config->product->dtable->fieldList['PO']['sortType'] = false;
 $config->product->dtable->fieldList['PO']['border']   = 'right';
 $config->product->dtable->fieldList['PO']['align']    = 'left';
 
-$config->product->dtable->fieldList['feedback']['name']     = 'feedback';
-$config->product->dtable->fieldList['feedback']['title']    = $lang->product->feedback;
-$config->product->dtable->fieldList['feedback']['minWidth'] = 62;
-$config->product->dtable->fieldList['feedback']['type']     = 'format';
-$config->product->dtable->fieldList['feedback']['sortType'] = false;
-$config->product->dtable->fieldList['feedback']['group']    = $lang->SRCommon;
-$config->product->dtable->fieldList['feedback']['border']   = 'right';
-$config->product->dtable->fieldList['feedback']['align']    = 'center';
-
 $config->product->dtable->fieldList['draftStories']['name']     = 'draftStories';
 $config->product->dtable->fieldList['draftStories']['title']    = $lang->product->draftStory;
 $config->product->dtable->fieldList['draftStories']['minWidth'] = 82;
