@@ -23,7 +23,6 @@ class wg
     /**
      * Define props for the element
      *
-     * @todo @sunhao: Support for using string
      * @var array|string
      */
     protected static $defineProps = null;
@@ -137,7 +136,7 @@ class wg
         return is_string($result) ? $result : json_encode($result);
     }
 
-    public function display($options = [])
+    public function display(array $options = array()): wg
     {
         zin::disableGlobalRender();
         $this->renderOptions = $options;
@@ -558,20 +557,15 @@ class wg
         return null;
     }
 
-    protected static function getDefaultProps()
+    public static function getPageCSS(): string|false
     {
-        $defaultProps = array();
-        foreach(static::getDefinedProps() as $name => $definition)
-        {
-            if(!isset($definition['default'])) continue;
-            $defaultProps[$name] = $definition['default'];
-        }
-        return $defaultProps;
+        return false;
     }
 
-    public static function getPageCSS() {}
-
-    public static function getPageJS() {}
+    public static function getPageJS(): string|false
+    {
+        return false;
+    }
 
     protected static function checkPageResources()
     {
@@ -621,15 +615,26 @@ class wg
         return 'zin' . (++static::$gidSeed);
     }
 
-    protected static function getDefinedProps($name = null)
+    protected static function getDefinedProps(string|null $wgName = null): array
     {
-        if($name === null) $name = get_called_class();
+        if($wgName === null) $wgName = get_called_class();
 
-        if(!isset(wg::$definedPropsMap[$name]) && $name === get_called_class())
+        if(!isset(wg::$definedPropsMap[$wgName]) && $wgName === get_called_class())
         {
-            wg::$definedPropsMap[$name] = static::parsePropsDefinition(static::$defineProps);
+            wg::$definedPropsMap[$wgName] = static::parsePropsDefinition(static::$defineProps);
         }
-        return wg::$definedPropsMap[$name];
+        return wg::$definedPropsMap[$wgName];
+    }
+
+    protected static function getDefaultProps(string|null $wgName = null): array
+    {
+        $defaultProps = array();
+        foreach(static::getDefinedProps($wgName) as $name => $definition)
+        {
+            if(!isset($definition['default'])) continue;
+            $defaultProps[$name] = $definition['default'];
+        }
+        return $defaultProps;
     }
 
     /**
