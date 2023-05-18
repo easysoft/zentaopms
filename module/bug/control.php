@@ -213,8 +213,8 @@ class bug extends control
 
             $bug = $this->bug->getByID($bugID);
 
-            $this->bugZen->updateFileAfterCreate($bugID, $data->rawdata);
-            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($data->rawdata, $output);
+            $this->bugZen->updateFileAfterCreate($bugID, $data->data);
+            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($data->data, $output);
             $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
             $this->bugZen->addAction4Create($bug, $output, $from);

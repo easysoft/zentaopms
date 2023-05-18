@@ -11,25 +11,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('holders', $lang->bug->placeholder);
-jsVar('page', 'create');
-jsVar('createRelease', $lang->release->create);
-jsVar('createBuild', $lang->build->create);
-jsVar('refresh', $lang->refreshIcon);
-jsVar('flow', $config->global->flow);
-jsVar('stepsRequired', $stepsRequired);
-jsVar('stepsNotEmpty', $lang->bug->stepsNotEmpty);
-jsVar('isStepsTemplate', $isStepsTemplate);
 jsVar('oldProjectID', $projectID);
 jsVar('oldProductID', $productID);
-jsVar('blockID', $blockID);
 jsVar('moduleID', $moduleID);
 jsVar('tab', $this->app->tab);
-jsVar('requiredFields', $config->bug->create->requiredFields);
-jsVar('showFields', $showFields);
-jsVar('projectExecutionPairs', $projectExecutionPairs);
-jsVar('productID', $productID);
-jsVar('released', $lang->build->released);
 if($this->app->tab == 'execution') jsVar('objectID', zget($execution, 'id', ''));
 if($this->app->tab == 'project')   jsVar('objectID', $projectID);
 
@@ -163,8 +148,8 @@ formPanel
             (
                 select
                 (
-                    set::multiple(true),
-                    set::name('openedBuild[]'),
+                    //set::multiple(true),
+                    set::name('openedBuild'),
                     set::items($builds),
                     set::value(empty($buildID) ? '' : $buildID)
                 ),
@@ -255,8 +240,8 @@ formPanel
             set::width('1/2'),
             set::class($showOS ? '' : 'hidden'),
             set::label($lang->bug->os),
-            set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
-            set::name('os[]'),
+            set::control(array('type' => 'select', 'items' => $lang->bug->osList, /*'multiple' => true*/)),
+            set::name('os'),
             set::value($os)
         ),
         formGroup
@@ -265,7 +250,7 @@ formPanel
             set::class($showOS ? '' : 'hidden'),
             set::label($lang->bug->browser),
             set::control(array('type' => 'select', 'items' => $lang->bug->browserList)),
-            set::name('browser[]'),
+            set::name('browser'),
             set::value($browser)
         )
     ),
@@ -344,8 +329,8 @@ formPanel
             set::width('1/2'),
             set::class($showMailto ? '' : 'hidden'),
             set::label($lang->bug->lblMailto),
-            set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
-            set::name('mailto[]'),
+            set::control(array('type' => 'select', 'items' => $users, /*('multiple' => true*/)),
+            set::name('mailto'),
             set::value(str_replace(' ', '', $mailto))
         ),
         formGroup

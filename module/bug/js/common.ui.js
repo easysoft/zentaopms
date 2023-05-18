@@ -1,5 +1,5 @@
 $(function()
-{   
+{
     $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
 });
 
@@ -12,7 +12,7 @@ function changeProduct(event)
         {
             if(result)
             {
-                changeProductConfirmed = true;    // Only notice the user one time.
+                changeProductConfirmed = true; // Only notice the user one time.
                 loadAll(event);
             }
             else
@@ -107,8 +107,8 @@ function loadProductBranches(productID)
 {
     $('#branch').remove();
 
-    const branchStatus = page == 'create' ? 'active' : 'all';
-    const oldBranch    = page == 'edit' ? bugBranch : 0; 
+    const branchStatus = config.currentMethod == 'create' ? 'active' : 'all';
+    const oldBranch    = config.currentMethod == 'edit' ? bugBranch : 0;
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
@@ -116,8 +116,8 @@ function loadProductBranches(productID)
         if(data)
         {    
             $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', page == 'create' ? '120px' : '65px');
-        }    
+            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
+        }
     });
 }
 
@@ -154,7 +154,7 @@ function loadExecutions(productID, projectID = 0)
 
 function loadExecutionLabel(projectID)
 {
-    if(page == 'create' && projectID)
+    if(config.currentMethod == 'create' && projectID)
     {
         const link = $.createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
         $.post(link, function(executionLang)
@@ -251,7 +251,7 @@ function loadProjectBuilds(projectID)
     const productID      = $('#product').val();
     const oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
 
-    if(page == 'create')
+    if(config.currentMethod == 'create')
     {
         const link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
         $.get(link, function(data)
@@ -282,7 +282,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(oldOpenedBuild) == 'undefined') oldOpenedBuild = 0;
 
-    if(page == 'create')
+    if(config.currentMethod == 'create')
     {
         if(buildBox == 'all' || buildBox == 'openedBuildBox')
         {
@@ -326,7 +326,7 @@ function loadExecutionBuilds(executionID, num)
     if(typeof(branch) == 'undefined')    branch    = 0;
     if(typeof(productID) == 'undefined') productID = 0;
 
-    if(page == 'create')
+    if(config.currentMethod == 'create')
     {
         const link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
         $.get(link, function(data)

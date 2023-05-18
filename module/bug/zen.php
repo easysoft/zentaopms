@@ -88,7 +88,7 @@ class bugZen extends bug
         /* Set cookie of bug module and clear cookie of bug branch if browse type is by module or is empty. */
         if($browseType == 'bymodule' || $browseType == '')
         {
-            helper::setcookie('bugModule', $param, 0);
+            helper::setcookie('bugModule', (string)$param, 0);
             helper::setcookie('bugBranch', '0', 0);
         }
 
