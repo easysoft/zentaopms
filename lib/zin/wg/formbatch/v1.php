@@ -37,6 +37,7 @@ class formBatch extends formBase
         'data?: array[]',       // 初始化行数据。
         'mode?: string',        // 批量操作模式，可以为 `'add'`（批量添加） 或 `'edit'`（批量编辑）。
         'actionsText?: string', // 操作列头部文本，如果不指定则使用 `$lang->actions` 的值。
+        'idKey?: string',       // 用于从行数据获取 ID 的属性名。
     );
 
     /**
@@ -154,7 +155,12 @@ class formBatch extends formBase
     protected function buildAfter(): array
     {
         $after = parent::buildAfter();
-        $after[] = zui::batchForm(set::_to('#' . $this->id()));
+
+        $after[] = zui::batchForm
+        (
+            set::_to('#' . $this->id()),
+            set($this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey')))
+        );
         return $after;
     }
 }
