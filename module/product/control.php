@@ -318,6 +318,7 @@ class product extends control
     }
 
     /**
+     * 关闭产品。
      * Close product.
      *
      * @param  int    $productID
@@ -487,6 +488,7 @@ class product extends control
     }
 
     /**
+     * 产品仪表盘。
      * Product dashboard.
      *
      * @param  int    $productID
@@ -644,6 +646,7 @@ class product extends control
     }
 
     /**
+     * 维护产品线。
      * Manage product line.
      *
      * @access public
