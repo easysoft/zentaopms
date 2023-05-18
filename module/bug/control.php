@@ -268,23 +268,12 @@ class bug extends control
 
             /* Batch create bugs. */
             $actions = $this->bug->batchCreate($productID, $branch, $extra);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Return bug id list when call the API. */
-            if($this->viewType == 'json')
-            {
-                $bugIDList = array_keys($actions);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList));
-            }
-
-            /* Set cookie. */
             helper::setcookie('bugModule', 0, 0);
 
-            /* If link from no head then reload. */
-            if(isonlybody() && $executionID) $this->bugZen->responseInModal($executionID);
+            $response = $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $actions);
+            return $this->send($response);
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
         }
 
         /* Get product, then set menu. */

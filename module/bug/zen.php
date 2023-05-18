@@ -1820,4 +1820,35 @@ class bugZen extends bug
         }
         return $bug;
     }
+
+    /**
+     * 批量创建bug后返回响应。
+     * Response after batch create.
+     *
+     * @param int $productID
+     * @param string $branch
+     * @param int $executionID
+     * @param array $actions
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $actions)
+    {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        /* Return bug id list when call the API. */
+        if($this->viewType == 'json')
+        {
+            $bugIDList = array_keys($actions);
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList);
+        }
+
+        /* Respond after updating in modal. */
+        if(isonlybody() && $executionID) $this->responseInModal($executionID);
+
+        /* If link from no head then reload. */
+        if(isonlybody()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
+
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc"));
+    }
 }
