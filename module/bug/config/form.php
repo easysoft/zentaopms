@@ -115,3 +115,20 @@ $config->bug->form->resolve['uid']            = array('required' => false, 'type
 $config->bug->form->activate = array();
 $config->bug->form->activate['assignedTo'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->activate['openedBuild'] = array('required' => false, 'type' => 'array', 'default' => array());
+
+$config->bug->form->batchCreate = array();
+$config->bug->form->batchCreate['modules']      = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['projects']     = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['executions']   = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['branches']     = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['lanes']        = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['openedBuilds'] = array('required' => true,  'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['titles']       = array('required' => true,  'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['deadlines']    = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['stepses']      = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['types']        = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['pris']         = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['severities']   = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['oses']         = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['browsers']     = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['keywords']     = array('required' => false, 'type' => array(), 'default' => array());
