@@ -33,9 +33,10 @@ class history extends wg
     {
         global $app;
         $methodName = $this->prop('methodName') === null ? $this->prop('methodName') : data('methodName');
+        $actions = $this->prop('actions');
 
         return (!isset($canBeChanged) || !empty($canBeChanged))
-            && end($actions) == $action
+            && !empty($actions) && end($actions) == $action
             && trim($action->comment) !== ''
             && str_contains(',view,objectlibs,viewcard,', ",$methodName,")
             && $action->actor == $app->user->account
@@ -257,12 +258,13 @@ class history extends wg
     private function commentBtn(): wg
     {
         global $lang;
-        return btn
+        return commentBtn
         (
+            set::dataTarget('#comment-dialog'),
             setClass('btn-comment ml-4 size-sm ghost'),
             set::icon('chat-line'),
             set::iconClass('text-primary'),
-            $lang->action->create
+            set::text($lang->action->create)
         );
     }
 

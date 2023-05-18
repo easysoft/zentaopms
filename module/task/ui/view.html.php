@@ -332,4 +332,6 @@ div
     )
 );
 
+commentDialog(set::name('comment'));
+
 render();
