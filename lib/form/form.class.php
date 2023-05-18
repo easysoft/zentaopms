@@ -188,4 +188,24 @@ class form extends fixer
                 return $value;
         }
     }
+
+    /**
+     * 过滤富文字段数据。
+     * Filter the editor fields.
+     *
+     * @param  string $fields
+     * @access public
+     * @return void
+     */
+    public function get(string $fields = ''): object
+    {
+        global $config;
+
+        foreach($this->rawconfig as $field => $fieldConfig)
+        {
+            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
+        }
+
+        return parent::get($fields);
+    }
 }
