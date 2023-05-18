@@ -1,10 +1,16 @@
 <?php
 namespace zin;
 
+/* Get column settings of the data table. */
 $cols = array_values($config->product->dtable->fieldList);
+/* Set the name link. */
+foreach($cols as &$col)
+{
+    if($col['name'] != 'name') continue;
 
-/* TODO: implements extend fields. */
-$extendFields = $this->product->getFlowExtendFields();
+    $col['link'] = sprintf($col['link'], createLink('product', 'browse', array('productID' => '${row.id}')));
+    break;
+}
 
 $data         = array();
 $totalStories = 0;
@@ -111,7 +117,6 @@ toolbar
         'url'   => createLink('product', 'create')
     )))
 );
-
 
 jsVar('langSummary', $lang->product->pageSummary);
 dtable
