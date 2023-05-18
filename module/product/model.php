@@ -201,7 +201,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '', $noDeleted = true): array
+    public function getProductPairsByProject(int $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true): array
     {
         if(empty($projectID)) return array();
         return $this->getProducts($projectID, $status, '', false, $append, $noDeleted);
