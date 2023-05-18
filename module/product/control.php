@@ -673,6 +673,7 @@ class product extends control
     }
 
     /**
+     * 白名单列表。
      * Get white list personnel.
      *
      * @param  int    $productID
@@ -694,6 +695,7 @@ class product extends control
     }
 
     /**
+     * 添加用户到白名单。
      * Adding users to the white list.
      *
      * @param  int     $productID
@@ -712,6 +714,7 @@ class product extends control
     }
 
     /*
+     * 从白名单移除用户。
      * Removing users from the white list.
      *
      * @param  int     $id
@@ -725,6 +728,7 @@ class product extends control
     }
 
     /**
+     * 导出产品。
      * Export product.
      *
      * @param  string    $status
@@ -763,6 +767,7 @@ class product extends control
     }
 
     /**
+     * 需求矩阵。
      * Story track.
      *
      * @param  int    $productID
