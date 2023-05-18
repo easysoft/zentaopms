@@ -358,7 +358,7 @@ class productTao extends productModel
 
         $programKeys = array(0 => 0);
         foreach($products as $product) $programKeys[] = $product->program;
-        $programs = $this->program->getBaseDataIn(array_unique($programKeys));
+        $programs = $this->program->getBaseDataList(array_unique($programKeys));
 
         foreach($products as $product)
         {

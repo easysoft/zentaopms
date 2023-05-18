@@ -16,15 +16,15 @@ class programTao extends programModel
      * 通过项目集ID列表批量获取项目集基本数据。
      * Get program base data with program ID array.
      *
-     * @param  array     $programIDs
+     * @param  array     $programIdList
      * @access protected
      * @return array
      */
-    protected function getBaseDataIn(array $programIDs): array
+    protected function getBaseDataList(array $programIdList): array
     {
         return $this->dao->select('id,name,PM')
             ->from(TABLE_PROGRAM)
-            ->where('id')->in($programIDs)
+            ->where('id')->in($programIdList)
             ->fetchAll('id');
     }
 }
