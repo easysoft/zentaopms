@@ -1920,35 +1920,23 @@ class taskTest
      * 测试管理多人任务团队成员。
      * Test manage multi task team member.
      *
-     * @param  int        $taskID
-     * @param  string     $taskStatus
-     * @param  string     $mode
-     * @param  int        $row
-     * @param  string     $account
-     * @param  string     $minStatus
-     * @param  array      $undoneUsers
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
-     * @param  bool       $inTeams
+     * @param  string      $mode
+     * @param  object      $task
+     * @param  object      $teamData
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function manageTaskTeamMemberTest(int $taskID, string $taskStatus, string $mode, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): array
+    public function manageTaskTeamMemberTest(string $mode, object $task, object $teamData): string|array
     {
         global $tester;
-        $tester->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
+        $tester->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
-        $task = new stdclass();
-        $task->id     = $taskID;
-        $task->status = $taskStatus;
-        $minStatus = $this->objectModel->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, $inTeams);
-
+        $teams = $this->objectModel->manageTaskTeamMember($mode, $task, $teamData);
         if(dao::isError()) return dao::getError();
-        $taskTeamMember = $tester->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($account)->fetch();
+
+        $taskTeamMember = $tester->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->andWhere('account')->eq(current($teams))->fetch();
         $taskTeamMember = json_decode(json_encode($taskTeamMember), true);
-        return array('minStatus' => $minStatus, 'taskTeamMember' => !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0');
+        return !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0';
     }
 
     /**
@@ -2013,7 +2001,12 @@ class taskTest
         global $tester;
 
         $parentTask = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentTaskID)->fetch();
-        $taskID     = $this->objectModel->splitConsumedTask($parentTask);
+        foreach($parentTask as $key => $value)
+        {
+            if(strpos($key, 'Date')) unset($parentTask->$key);
+        }
+
+        $taskID = $this->objectModel->splitConsumedTask($parentTask);
 
         $testResult['subTaskEffort'] = $tester->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
         $testResult['childrenTask']  = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
