@@ -5301,7 +5301,7 @@ class executionModel extends model
         echo "<td class='hours text-right' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
-        echo '<td class="c-actions text-center">';
+        echo '<td class="c-actions text-left">';
 
         $title = '';
         $disabled = '';
