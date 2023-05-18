@@ -16,7 +16,7 @@ class dtable extends wg
         static::$dtableID++;
     }
 
-    public static function getPageCSS()
+    public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
