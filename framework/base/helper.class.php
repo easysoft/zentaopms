@@ -853,7 +853,7 @@ function a(): int
     $vars = func_get_args();
     foreach($vars as $var)
     {
-        echo "<pre></code>";
+        echo "<pre><code>";
         print_r($var);
         echo "</code></pre>";
     }
