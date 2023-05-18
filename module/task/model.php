@@ -30,8 +30,6 @@ class taskModel extends model
         $taskID = $this->create($task);
         if(!$taskID) return false;
 
-        $this->setTaskFiles(array($taskID)); // Set attachments for tasks.
-
         /* If the current task has test subtasks, create test subtasks and update the task information. */
         if(!empty($testTasks))
         {
@@ -69,7 +67,6 @@ class taskModel extends model
             $taskIdList[] = $taskID;
         }
 
-        $this->setTaskFiles($taskIdList);
         if(dao::isError()) return false;
 
         return $taskIdList;
@@ -90,7 +87,6 @@ class taskModel extends model
         $taskID = $this->create($task);
         if(!$taskID) return false;
 
-        $this->setTaskFiles($taskFiles, $taskID);
         if(count(array_filter($teamData->team)) < 2) return $taskID;
 
         /* Manage the team of task and calculate the team hours. */
