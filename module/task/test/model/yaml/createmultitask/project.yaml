@@ -1,0 +1,19 @@
+title: table zt_project
+author: Hu Fangzhou
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: name
+    note: "名称"
+    fields:
+      - field: name1
+        range: rnd
+      - field: name2
+        range: 项目,迭代,阶段,看板{2}
+  - field: project
+    range: 1
+  - field: type
+    range: project,sprint,stage,kanban{2}
+  - field: vision
+    range: rnd{4},lite

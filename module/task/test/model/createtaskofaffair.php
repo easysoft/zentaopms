@@ -35,8 +35,8 @@ r($taskTester->createTaskOfAffairObject($kanbanTask,        $emptyAssignedTo))  
 r($taskTester->createTaskOfAffairObject($sprintTask,        $assignedToList))                && p('4:assignedTo')               && e('admin');                      // 测试创建迭代下的多个事务任务
 r($taskTester->createTaskOfAffairObject($stageTask,         $assignedToList))                && p('8:assignedTo')               && e('user1');                      // 测试创建阶段下的多个事务任务
 r($taskTester->createTaskOfAffairObject($kanbanTask,        $assignedToList))                && p('12:assignedTo')              && e('user2');                      // 测试创建看板下的多个事务任务
-r($taskTester->createTaskOfAffairObject($notEstimateTask,   $emptyAssignedTo, 'estimate'))   && p('estimate:0')                 && e('『最初预计』不能为空。');     // 测试创建迭代下的测试任务的预计必填项
-r($taskTester->createTaskOfAffairObject($notStoryTask,      $emptyAssignedTo, 'story'))      && p('story:0')                    && e('『相关研发需求』不能为空。'); // 测试创建迭代下的测试任务的需求必填项
-r($taskTester->createTaskOfAffairObject($notEstStartedTask, $emptyAssignedTo, 'estStarted')) && p('estStarted:0')               && e('『预计开始』不能为空。');     // 测试创建迭代下的测试任务的预计开始必填项
-r($taskTester->createTaskOfAffairObject($notDeadlineTask,   $emptyAssignedTo, 'deadline'))   && p('deadline:0')                 && e('『截止日期』不能为空。');     // 测试创建迭代下的测试任务的截止日期必填项
-r($taskTester->createTaskOfAffairObject($notModuleTask,     $emptyAssignedTo, 'module'))     && p('module:0')                   && e('『所属模块』不能为空。');     // 测试创建迭代下的测试任务的模块必填项
+r($taskTester->createTaskOfAffairObject($notEstimateTask,   $emptyAssignedTo, 'estimate'))   && p('estimate:0')                 && e('『最初预计』不能为空。');     // 测试创建迭代下的事务任务的预计必填项
+r($taskTester->createTaskOfAffairObject($notStoryTask,      $emptyAssignedTo, 'story'))      && p('story:0')                    && e('『相关研发需求』不能为空。'); // 测试创建迭代下的事务任务的需求必填项
+r($taskTester->createTaskOfAffairObject($notEstStartedTask, $emptyAssignedTo, 'estStarted')) && p('estStarted:0')               && e('『预计开始』不能为空。');     // 测试创建迭代下的事务任务的预计开始必填项
+r($taskTester->createTaskOfAffairObject($notDeadlineTask,   $emptyAssignedTo, 'deadline'))   && p('deadline:0')                 && e('『截止日期』不能为空。');     // 测试创建迭代下的事务任务的截止日期必填项
+r($taskTester->createTaskOfAffairObject($notModuleTask,     $emptyAssignedTo, 'module'))     && p('module:0')                   && e('『所属模块』不能为空。');     // 测试创建迭代下的事务任务的模块必填项

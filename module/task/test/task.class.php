@@ -1753,6 +1753,57 @@ class taskTest
     }
 
     /**
+     * 创建多人任务。
+     * Create a multiplayer task.
+     *
+     * @param  array        $param
+     * @param  array        $testTasks
+     * @param  string       $requiredField
+     * @access public
+     * @return object|array
+     */
+    public function createMultiTaskObject(array $param = array(), array $teamData = array(), string $requiredField = ''): object|array
+    {
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $createFields = array(
+            'execution'    => 3,
+            'module'       => 1,
+            'story'        => 2,
+            'name'         => '',
+            'mode'         => '',
+            'status'       => 'wait',
+            'type'         => 'test',
+            'assignedTo'   => 'admin',
+            'assignedDate' => helper::now(),
+            'pri'          => 3,
+            'estimate'     => 1,
+            'left'         => 0,
+            'estStarted'   => '2021-01-10',
+            'deadline'     => '2021-03-19',
+            'desc'         => '',
+            'version'      => '1'
+        );
+
+        $task = new stdclass();
+        foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
+        foreach($param as $key => $value) $task->$key = $value;
+        if($requiredField)
+        {
+            if(!empty($testTasks) and $requiredField == 'estStarted') unset($task->estStarted);
+            if(!empty($testTasks) and $requiredField == 'deadline') unset($task->deadline);
+            $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredField . ',';
+        }
+        $teamInfo = new stdclass();
+        foreach($teamData as $key => $value) $teamInfo->{$key} = $value;
+        $objectID = $this->objectModel->createMultiTask($task, $teamInfo);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getByID($objectID);
+    }
+
+    /**
      * 测试创建一个任务。
      * Test create a task.
      *

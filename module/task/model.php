@@ -536,9 +536,9 @@ class taskModel extends model
      * @param  object $task
      * @param  object $teamData
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function manageTaskTeam(string $mode, object $task, object $teamData): array
+    public function manageTaskTeam(string $mode, object $task, object $teamData): array|false
     {
         /* Get old team member, and delete old task team. */
         $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
