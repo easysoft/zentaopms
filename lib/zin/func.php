@@ -1131,3 +1131,14 @@ function commentForm()
 {
     return createWg('commentForm', func_get_args());
 }
+
+/**
+ * Zentao risk label wg.
+ *
+ * ?string text
+ * ?string level 'h'|'m'|'l'
+ */
+function riskLabel()
+{
+    return createWg('riskLabel', func_get_args());
+}
