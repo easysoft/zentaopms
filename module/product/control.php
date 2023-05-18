@@ -246,7 +246,13 @@ class product extends control
         }
 
         $this->productZen->setCreateMenu($programID);
-        $this->productZen->buildCreateForm($programID, $extra);
+
+        $this->view->title      = $this->lang->product->create;
+        $this->view->gobackLink = $this->productZen->getBackLink4Create($extra);
+        $this->view->programID  = $programID;
+        $this->view->fields     = $this->productZen->getFormFields4Create($programID);
+        unset($this->lang->product->typeList['']);
+        $this->display();
     }
 
     /**
@@ -279,7 +285,12 @@ class product extends control
         $product   = $this->product->getByID($productID);
         $productID = $this->product->saveVisitState($productID, $this->products);
 
-        $this->productZen->buildEditForm($product);
+        $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
+        $this->view->product = $product;
+        $this->view->fields  = $this->productZen->getFormFields4Edit($product);
+        unset($this->lang->product->typeList['']);
+
+        $this->display();
     }
 
     /**

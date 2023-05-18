@@ -207,7 +207,7 @@ class productZen extends product
      * @access private
      * @return string
      */
-    private function getBackLink4Create(string $extra): string
+    protected function getBackLink4Create(string $extra): string
     {
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -263,7 +263,7 @@ class productZen extends product
      * @access private
      * @return array
      */
-    private function getFormFields4Create(int $programID = 0): array
+    protected function getFormFields4Create(int $programID = 0): array
     {
         $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
         $fields['program']['default'] = $programID;
@@ -279,7 +279,7 @@ class productZen extends product
      * @access private
      * @return array
      */
-    private function getFormFields4Edit(object $product): array
+    protected function getFormFields4Edit(object $product): array
     {
         /* Init fields. */
         $programID = (int)$product->program;
@@ -551,44 +551,6 @@ class productZen extends product
 
         if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
-    }
-
-    /**
-     * 构建创建产品页面数据。
-     * Build form fields for create.
-     *
-     * @param  int    $programID
-     * @param  string $extra
-     * @access protected
-     * @return void
-     */
-    protected function buildCreateForm(int $programID = 0, string $extra = '')
-    {
-        $this->view->title      = $this->lang->product->create;
-        $this->view->gobackLink = $this->getBackLink4Create($extra);
-        $this->view->programID  = $programID;
-        $this->view->fields     = $this->getFormFields4Create($programID);
-
-        unset($this->lang->product->typeList['']);
-        $this->display();
-    }
-
-    /**
-     * 构建编辑产品页面数据。
-     * Build form fields for edit.
-     *
-     * @param  object $product
-     * @access protected
-     * @return void
-     */
-    protected function buildEditForm(object $product)
-    {
-        $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $this->view->product = $product;
-        $this->view->fields  = $this->getFormFields4Edit($product);
-
-        unset($this->lang->product->typeList['']);
-        $this->display();
     }
 
     /**
