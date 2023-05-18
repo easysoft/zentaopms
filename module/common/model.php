@@ -1010,7 +1010,7 @@ class commonModel extends model
 
             /* Check whether other preference item under the module have permissions. If yes, point to other methods. */
             $moduleLinkList = $currentModule . 'LinkList';
-            if(!$display and isset($lang->my->$moduleLinkList))
+            if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or')
             {
                 foreach($lang->my->$moduleLinkList as $key => $linkList)
                 {
