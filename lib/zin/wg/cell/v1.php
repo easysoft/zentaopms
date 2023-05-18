@@ -9,7 +9,7 @@ class cell extends wg
         'grow:int',
         'shrink:int',
         'width:string|int',
-        'align:string', //'auto'|'flex-start'|'flex-end'|'center'|'baseline'|'stretch'
+        'align:string', // 'auto'|'flex-start'|'flex-end'|'center'|'baseline'|'stretch'
         'flex:string'
     );
 
