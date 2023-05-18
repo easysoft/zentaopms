@@ -1451,7 +1451,7 @@ class productModel extends model
             $releaseList
         );
         /* Convert predefined HTML entities to characters. */
-        $statsData = $this->covertHtmlSpecialChars($statsData);
+        $statsData = $this->convertHtmlSpecialChars($statsData);
 
         return $statsData;
     }
@@ -1843,7 +1843,7 @@ class productModel extends model
      * @param  array $statsData
      * @return array
      */
-    public function covertHtmlSpecialChars($statsData)
+    public function convertHtmlSpecialChars($statsData)
     {
         if(empty($statsData)) return array();
 
