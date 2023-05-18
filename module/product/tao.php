@@ -1085,11 +1085,10 @@ class productTao extends productModel
         if(empty($productIdList)) return array();
 
         /* Get storie list by product ID list. */
-        if(!isset($this->story)) $this->loadModel('story');
-        $storyList = $this->story->getStoriesByProductIdList($productIdList);
+        $storyList = $this->loadModel('story')->getStoriesByProductIdList($productIdList);
 
         /* Get case count of each story. */
-        $storyIdList = array();
+        $storyIdList      = array();
         $productStoryList = array();
         foreach($storyList as $story)
         {
@@ -1104,11 +1103,12 @@ class productTao extends productModel
         $coveragePairs = array();
         foreach($productStoryList as $productID => $list)
         {
-            $total        = count($list);
-            $totalCovered = 0;
+            $total = count($list);
 
+            $totalCovered = 0;
             foreach($list as $storyID) isset($caseCountPairs[$storyID]) && $totalCovered++;
-            $coveragePairs[$productID] = round($totalCovered * 100 / $total);
+
+            $coveragePairs[$productID] = $total ? round($totalCovered * 100 / $total) : 0;
         }
 
         return $coveragePairs;
