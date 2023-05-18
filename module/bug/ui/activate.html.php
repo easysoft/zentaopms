@@ -1,0 +1,63 @@
+<?php
+declare(strict_types=1);
+/**
+ * The activate view file of bug module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Gang Liu <liugang@easycorp.ltd>
+ * @package     bug
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+set::title($bug->title);
+
+form
+(
+    formGroup
+    (
+        set::width('1/3'),
+        set::name('assignedTo'),
+        set::label($lang->bug->assignedTo),
+        set::value($bug->resolvedBy),
+        set::items($users)
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->bug->openedBuild),
+        select
+        (
+            set::name('openedBuild[]'),
+            set::value($bug->openedBuild),
+            set::multiple(true),
+            set::items($builds)
+        ),
+        input
+        (
+            set::class('hidden'),
+            set::name('status'),
+            set::value('active')
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->comment),
+        set::name('comment'),
+        set::control('editor'),
+        set::rows(6)
+    ),
+    formGroup
+    (
+        set::label($lang->bug->files),
+        set::name('files[]'),
+        set::control('file')
+    ),
+    set::actions(array('submit'))
+);
+
+h::hr(set::class('mt-6'));
+
+history();
+
+render('modalDialog');
