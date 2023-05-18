@@ -1,4 +1,4 @@
-.detail-side {width: 370px; border-left: 2px solid var(--color-slate-300);}
+.detail-side {width: 370px; border-left: 1px solid var(--color-slate-300);}
 .detail-header .text-title {font-weight: 600; color: var(--color-slate-800);}
 .detail-body .text-subtitle {font-size: 14px; line-height: 22px; font-weight: 600; color: var(--color-slate-900);}
 .detail-body .text-story-title {color: var(--color-slate-800); font-weight: 600;}

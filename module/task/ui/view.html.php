@@ -94,7 +94,8 @@ function backBtn(array $props): wg
     (
         set::icon('back'),
         set::url($url),
-        setClass('btn-back text-white bg-secondary', $className),
+        set::type('secondary'),
+        setClass($className),
         $lang->goback
     );
 }
@@ -116,7 +117,8 @@ function createTaskBtn(array $props): wg
     (
         set::icon('plus'),
         set::url($url),
-        setClass('bg-primary text-white', $className),
+        set::type('primary'),
+        setClass($className),
         $lang->task->create
     );
 }
@@ -203,7 +205,7 @@ div
 
 div
 (
-    setClass('detail-body', 'bg-white', 'flex'),
+    setClass('detail-body', 'canvas shadow rounded', 'flex'),
     div
     (
         setClass('detail-main grow'),
@@ -239,7 +241,7 @@ div
         )
     ),
     div(
-        setClass('detail-side px-5 py-4 flex-none'),
+        setClass('detail-side px-5 py-4 flex-none surface'),
         tabs
         (
             set::items
