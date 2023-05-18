@@ -350,7 +350,15 @@ class product extends control
         }
 
         $this->product->setMenu($productID);
-        $this->productZen->buildCloseForm($productID);
+
+        $product = $this->product->getByID($productID);
+
+        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->product = $product;
+        $this->view->actions = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->fields  = $this->productZen->getFormFields4Close();
+        $this->display();
     }
 
     /**
@@ -684,7 +692,11 @@ class product extends control
             return $this->send($response);
         }
 
-        $this->productZen->buildManageLineForm();
+        $this->view->title    = $this->lang->product->line;
+        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs('', 'withDeleted');
+        $this->view->lines    = $this->product->getLines();
+        $this->view->fields   = $this->config->product->form->manageLine;
+        $this->display();
     }
 
     /**

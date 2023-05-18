@@ -333,7 +333,7 @@ class productZen extends product
      * @access private
      * @return array
      */
-    private function getFormFields4Close(): array
+    protected function getFormFields4Close(): array
     {
         /* Init fields. */
         $fields = $this->config->product->form->close;
@@ -590,42 +590,6 @@ class productZen extends product
         $this->view->unauthPrograms = $unauthPrograms;
 
         unset($this->lang->product->typeList['']);
-        $this->display();
-    }
-
-    /**
-     * 构建关闭产品页面数据。
-     * Build close product form.
-     *
-     * @param  int $productID
-     * @access protected
-     * @return void
-     */
-    protected function buildCloseForm(int $productID): void
-    {
-        $product = $this->product->getByID($productID);
-
-        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
-        $this->view->product = $product;
-        $this->view->actions = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->fields  = $this->getFormFields4Close();
-        $this->display();
-    }
-
-    /**
-     * 构建维护产品线页面数据。
-     * Build manageLine form.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function buildManageLineForm(): void
-    {
-        $this->view->title    = $this->lang->product->line;
-        $this->view->programs = array('') + $this->loadModel('program')->getTopPairs('', 'withDeleted');
-        $this->view->lines    = $this->product->getLines();
-        $this->view->fields   = $this->config->product->form->manageLine;
         $this->display();
     }
 
