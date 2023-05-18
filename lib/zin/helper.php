@@ -37,10 +37,8 @@ function getWgVer($name)
     return isset($config->zin->verMap[$name]) ? $config->zin->verMap[$name] : $config->zin->wgVer;
 }
 
-function createWg($name, $args)
+function createWg($name, $args): wg
 {
-    global $app;
-
     $name  = strtolower($name);
     $wgVer = getWgVer($name);
 
