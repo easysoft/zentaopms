@@ -872,12 +872,12 @@ class product extends control
      * AJAX: get projects of a product in html select.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProjectsByBranch($productID, $branch = 0, $number = 0)
+    public function ajaxGetProjectsByBranch(int $productID, string $branch = '', int $number = 0)
     {
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch);
@@ -890,7 +890,7 @@ class product extends control
      *
      * @param  int    $productID
      * @param  int    $projectID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  string $number
      * @param  int    $executionID
      * @param  string $from showImport
@@ -898,7 +898,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '', $mode = '')
+    public function ajaxGetExecutions(int $productID, int $projectID = 0, string $branch = '', string $number = '', int $executionID = 0, string $from = '', string $mode = '')
     {
         if($this->app->tab == 'execution' and $this->session->execution)
         {
@@ -932,12 +932,12 @@ class product extends control
      *
      * @param  int    $productID
      * @param  int    $projectID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionsByProject($productID, $projectID = 0, $branch = 0, $number = 0)
+    public function ajaxGetExecutionsByProject(int $productID, int $projectID = 0, string $branch = '', int $number = 0)
     {
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
         $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, 'multiple,stagefilter');
@@ -954,14 +954,16 @@ class product extends control
      * AJAX: get plans of a product in html select.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @param  int    $planID
-     * @param  bool   $needCreate
+     * @param  string $fieldID
+     * @param  int    $needCreate
      * @param  string $expired
      * @param  string $param
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
+    public function ajaxGetPlans(int $productID, string $branch = '', int $planID = 0, string $fieldID = '', int $needCreate = 0, string $expired = '', string $param = '')
     {
         $param    = strtolower($param);
         if(strpos($param, 'forstory') === false)
@@ -998,7 +1000,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetLine($programID, $productID = 0)
+    public function ajaxGetLine(int $programID, int $productID = 0)
     {
         $lines = array();
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
@@ -1015,7 +1017,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetReviewers($productID, $storyID = 0)
+    public function ajaxGetReviewers(int $productID, int $storyID = 0)
     {
         /* Get product reviewers. */
         $product          = $this->product->getByID($productID);
