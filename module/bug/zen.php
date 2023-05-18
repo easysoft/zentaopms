@@ -1263,7 +1263,7 @@ class bugZen extends bug
 
         /* 获取项目列表。*/
         /* Get project pairs. */
-        $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, $bug->branch);
+        $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         if(!empty($bug->project) and empty($projects[$bug->project]))
         {
             $project = $this->project->getByID($bug->project);
@@ -1313,10 +1313,7 @@ class bugZen extends bug
      */
     protected function getEditBuildPairs(object $bug): array
     {
-        $objectType = '';
-        if($bug->project)   $objectType = 'project';
-        if($bug->execution) $objectType = 'execution';
-
+        $objectType         = $bug->project ? 'project' : 'execution';
         $objectID           = $bug->execution ? $bug->execution : $bug->project;
         $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
         $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
@@ -1369,7 +1366,7 @@ class bugZen extends bug
      */
     protected function getEditAssignedToPairs(object $bug): array
     {
-        $assignedToPairs = $this->bugZen->getAssignedToPairs($bug);
+        $assignedToPairs = $this->getAssignedToPairs($bug);
 
         if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
 

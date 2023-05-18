@@ -277,7 +277,8 @@ class buildModel extends model
             ->beginIF($products and $products != 'all')->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
-            ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
+            ->orderBy('t1.date desc, t1.id desc')
+            ->fetchAll('id');
 
         $deletedExecutions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
 
