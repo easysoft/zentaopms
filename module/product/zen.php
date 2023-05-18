@@ -1501,49 +1501,4 @@ class productZen extends product
         }
         return true;
     }
-
-    /**
-     * 通过项目集ID列表获取所有跟项目集列表。
-     * Get root program list by product statistic list.
-     *
-     * @param  array     $productStatList
-     * @access protected
-     * @return array
-     */
-    protected function getRootProgramList(array $productStatList): array
-    {
-        if(empty($productStatList)) return array();
-
-        $programIdList = array();
-        foreach($productStatList as $product)
-        {
-            if(empty($product->program)) continue;
-            $programIdList[] = $product->program;
-        }
-
-        // Get all program suffix with program ID.
-        $result = $this->loadModel('program')->getBaseDataList($programIdList);
-
-        // parse the root program ID.
-        $rootProgramList   = array();
-        $rootProgramIdList = array();
-        foreach($result as $programID => $program)
-        {
-            $pathList = explode(',', trim($program->path, ','));
-            $rootID   = array_shift($pathList);
-            if($rootID != $programID)
-            {
-                $rootProgramIdList[] = $rootID;
-            }
-            else
-            {
-                $rootProgramList[] = $program;
-            }
-        }
-
-        // get the root progams.
-        if(count($rootProgramIdList) == 0) return $rootProgramList;
-        $result = $this->loadModel('program')->getBaseDataList($rootProgramIdList);
-        return array_merge($rootProgramList, $result);
-    }
 }
