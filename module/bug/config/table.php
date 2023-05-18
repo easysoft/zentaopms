@@ -18,7 +18,7 @@ $config->bug->dtable->fieldList['title']['link']     = helper::createLink('bug',
 
 $config->bug->dtable->fieldList['module']['name']  = 'moduleName';
 $config->bug->dtable->fieldList['module']['title'] = $lang->bug->module;
-$config->bug->dtable->fieldList['module']['type']  = 'shortTitle';
+$config->bug->dtable->fieldList['module']['type']  = 'text';
 
 $config->bug->dtable->fieldList['severity']['name']  = 'severity';
 $config->bug->dtable->fieldList['severity']['title'] = $lang->bug->severity;
@@ -35,7 +35,7 @@ $config->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 
 $config->bug->dtable->fieldList['branch']['name']  = 'branch';
 $config->bug->dtable->fieldList['branch']['title'] = $lang->bug->branch;
-$config->bug->dtable->fieldList['branch']['type']  = 'shortTitle';
+$config->bug->dtable->fieldList['branch']['type']  = 'text';
 
 $config->bug->dtable->fieldList['type']['name']  = 'type';
 $config->bug->dtable->fieldList['type']['title'] = $lang->bug->type;
@@ -58,10 +58,9 @@ $config->bug->dtable->fieldList['openedBy']['title']   = $lang->bug->openedByAB;
 $config->bug->dtable->fieldList['openedBy']['type']    = 'user';
 $config->bug->dtable->fieldList['openedBy']['userMap'] = array();
 
-$config->bug->dtable->fieldList['openedDate']['name']   = 'openedDate';
-$config->bug->dtable->fieldList['openedDate']['title']  = $lang->bug->openedDateAB;
-$config->bug->dtable->fieldList['openedDate']['type']   = 'date';
-$config->bug->dtable->fieldList['openedDate']['format'] = 'n月d日 H:i';
+$config->bug->dtable->fieldList['openedDate']['name']  = 'openedDate';
+$config->bug->dtable->fieldList['openedDate']['title'] = $lang->bug->openedDateAB;
+$config->bug->dtable->fieldList['openedDate']['type']  = 'date';
 
 $config->bug->dtable->fieldList['openedBuild']['name']  = 'openedBuild';
 $config->bug->dtable->fieldList['openedBuild']['title'] = $lang->bug->openedBuild;
@@ -109,17 +108,17 @@ $config->bug->dtable->fieldList['activatedDate']['type']  = 'date';
 
 $config->bug->dtable->fieldList['story']['name']  = 'storyName';
 $config->bug->dtable->fieldList['story']['title'] = $lang->bug->story;
-$config->bug->dtable->fieldList['story']['type']  = 'shortTitle';
+$config->bug->dtable->fieldList['story']['type']  = 'text';
 $config->bug->dtable->fieldList['story']['link']  = helper::createLink('story', 'view', 'storyID={story}');
 
 $config->bug->dtable->fieldList['task']['name']  = 'taskName';
 $config->bug->dtable->fieldList['task']['title'] = $lang->bug->task;
-$config->bug->dtable->fieldList['task']['type']  = 'shortTitle';
+$config->bug->dtable->fieldList['task']['type']  = 'text';
 $config->bug->dtable->fieldList['task']['link']  = helper::createLink('task', 'view', 'taskID={task}');
 
 $config->bug->dtable->fieldList['toTask']['name']  = 'toTaskName';
 $config->bug->dtable->fieldList['toTask']['title'] = $lang->bug->toTask;
-$config->bug->dtable->fieldList['toTask']['type']  = 'shortTitle';
+$config->bug->dtable->fieldList['toTask']['type']  = 'text';
 $config->bug->dtable->fieldList['toTask']['link']  = helper::createLink('task', 'view', 'taskID={toTask}');
 
 $config->bug->dtable->fieldList['keywords']['name']  = 'keywords';
@@ -154,8 +153,9 @@ $config->bug->dtable->fieldList['lastEditedDate']['name']  = 'lastEditedDate';
 $config->bug->dtable->fieldList['lastEditedDate']['title'] = $lang->bug->lastEditedDateAB;
 $config->bug->dtable->fieldList['lastEditedDate']['type']  = 'date';
 
-$config->bug->dtable->fieldList['actions']['name']  = 'actions';
-$config->bug->dtable->fieldList['actions']['title'] = $lang->actions;
-$config->bug->dtable->fieldList['actions']['type']  = 'actions';
-$config->bug->dtable->fieldList['actions']['width'] = '140';
-$config->bug->dtable->fieldList['actions']['fixed'] = 'right';
+$config->bug->dtable->fieldList['actions']['name']     = 'actions';
+$config->bug->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->bug->dtable->fieldList['actions']['type']     = 'actions';
+$config->bug->dtable->fieldList['actions']['width']    = '140';
+$config->bug->dtable->fieldList['actions']['sortType'] = false;
+$config->bug->dtable->fieldList['actions']['fixed']    = 'right';
