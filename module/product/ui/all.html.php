@@ -14,7 +14,6 @@ foreach($cols as &$col)
 
 $data         = array();
 $totalStories = 0;
-$programs     = array();
 
 foreach($productStats as $productID => $product)
 {
@@ -28,7 +27,7 @@ foreach($productStats as $productID => $product)
     }
     $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
-    $item->name              = $product->name; /* TODO replace with <a> */
+    $item->name              = $product->name;
     $item->id                = $product->id;
     $item->type              = 'product';
     $item->draftStories      = $product->stories['draft'];
@@ -40,7 +39,6 @@ foreach($productStats as $productID => $product)
     $item->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
     $item->plans             = $product->plans;
     $item->releases          = $product->releases;
-    $item->parent            = null;
     $item->productLine       = $product->lineName;
     $item->execution         = $product->executions;
     $item->testCaseCoverage  = $product->coverage;
@@ -75,8 +73,8 @@ featureBar
                 array
                 (
                     'title'       => $lang->program->all,
-                    'programs'    => $programs,
-                    'activeKey'   => !empty($programs) ? $programID : null,
+                    'programs'    => $programList,
+                    'activeKey'   => !empty($programList) ? $programID : null,
                     'closeLink'   => sprintf($programMenuLink, 0),
                     'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
                 )

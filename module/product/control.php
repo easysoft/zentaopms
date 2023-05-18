@@ -579,21 +579,25 @@ class product extends control
         /* Set env data. */
         $this->productZen->setMenu4All();
 
-        /* Generate statistics of products and program. */
+        /* Generate statistics of products. */
+        if($this->config->systemMode == 'light' && $orderBy == 'program_asc') $orderBy = 'order_asc';
         $this->app->loadClass('pager', true);
-        $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $queryID = ($browseType == 'bySearch' or !empty($param)) ? $param : 0;
-        if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
+        $pager           = new pager($recTotal, $recPerPage, $pageID);
+        $queryID         = ($browseType == 'bySearch' || !empty($param)) ? $param : 0;
+        $productStatList = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
 
-        $productStats = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
+        /* Generate root program list. */
+        $rootProgramList = $this->productZen->getRootProgramList($productStatList);
 
         /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
+        /* Assign. */
         $this->view->title         = $this->lang->productCommon;
         $this->view->recTotal      = $pager->recTotal;
-        $this->view->productStats  = $productStats;
+        $this->view->productStats  = $productStatList;
+        $this->view->programList   = $rootProgramList;
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
         $this->view->avatarList    = $this->user->getAvatarPairs('');
