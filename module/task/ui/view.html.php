@@ -267,7 +267,7 @@ div
                             $lang->task->type       => zget($this->lang->task->typeList, $task->type, $task->type),
                             $lang->task->status     => $this->processStatus('task', $task),
                             $lang->task->progress   => $task->progress . ' %',
-                            $lang->task->pri        => priNum(set::pri(1)),
+                            $lang->task->pri        => priLabel(1),
                         )
                     )
                 ),

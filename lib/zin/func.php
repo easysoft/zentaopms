@@ -1044,9 +1044,9 @@ function floatToolbar()
  *
  * int pri
  */
-function priNum()
+function priLabel()
 {
-    return createWg('priNum', func_get_args());
+    return createWg('priLabel', func_get_args());
 }
 
 /**

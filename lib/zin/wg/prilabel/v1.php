@@ -2,11 +2,20 @@
 declare(strict_types=1);
 namespace zin;
 
-class priNum extends wg
+class priLabel extends wg
 {
     protected static $defineProps = array(
         'pri:int',
     );
+
+    protected function onAddChild(mixed $child): mixed
+    {
+        if(is_string($child) && !$this->props->has('pri'))
+        {
+            $this->props->set('pri', $child);
+            return false;
+        }
+    }
 
     private function getStyleClass(int $pri): string
     {
