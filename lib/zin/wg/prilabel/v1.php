@@ -17,24 +17,24 @@ class priLabel extends wg
         }
     }
 
-    private function getStyleClass(int $pri): string
+    private function setThemeStyle(int $pri): \zin\directive
     {
-        if($pri == 1) return 'danger-outline';
-        if($pri == 2) return 'warning-outline';
-        if($pri == 3) return 'secondary-outline';
-        if($pri == 4) return 'teal-outline';
-        return 'gray-outline';
+        if($pri == 1) return setClass('danger-outline');
+        if($pri == 2) return setClass('warning-outline');
+        if($pri == 3) return setClass('secondary-outline');
+        if($pri == 4) return setStyle(array('color' => '#95D3E0', 'box-shadow' => 'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(149, 211, 224) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px'));
+        return setClass('gray-outline');
     }
 
     protected function build(): wg
     {
-        $pri       = (int)$this->prop('pri');
-        $className = $this->getStyleClass($pri);
+        $pri = (int)$this->prop('pri');
 
         return span
         (
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            setClass('center', 'rounded-full', 'aspect-square', 'bg', 'h-4', 'w-4', $className),
+            setClass('center', 'rounded-full', 'aspect-square', 'bg', 'h-4', 'w-4'),
+            $this->setThemeStyle($pri),
             $pri
         );
     }

@@ -32,6 +32,7 @@ class severityLabel extends wg
         $text = $this->prop('text');
         return span
         (
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
             setClass('severity-label'),
             $this->setThemeStyle(),
             $text
