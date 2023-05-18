@@ -122,11 +122,11 @@ $storyPreviewBtn = span
     ),
 );
 
-$aftoicesRow = '';
+$afterCreateRow = '';
 /* Ct redirect within pop-ups. */
 if(!isonlybody())
 {
-    $afterChoicesRow = formGroup
+    $afterRow = formGroup
     (
         set::width('3/4'),
         set::label($lang->task->afterSubmit),
@@ -155,7 +155,7 @@ formPanel
             set::name('module'),
             set::label($lang->task->module),
             set::value($task->module),
-            set::items($moduleOptionMenu)
+            set::items($modulePairs)
         )
     ),
     $kanbanRow,
@@ -343,10 +343,11 @@ formPanel
         set::name('mailto[]'),
         set::items($users),
     ),
-    $afterChoicesRow
+    $afterRow
 );
 
 
 /* ====== Render page ====== */
 
-render();
+$pageType = isonlybody() ? 'modal' : 'page';
+render($pageType);

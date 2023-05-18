@@ -9,42 +9,6 @@ class taskTest
     }
 
     /**
-     * Create a task.
-     *
-     * @param  array      $param
-     * @param  array      $assignedToList
-     * @param  int        $multiple
-     * @param  array      $team
-     * @param  bool       $selectTestStory
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
-     * @param  string     $requiredFields
-     * @access public
-     * @return array|object
-     */
-    public function createTest(array $param, array $assignedToList = array(), int $multiple = 0, array $team = array(), bool $selectTestStory = false, array $teamSourceList = array(), array $teamEstimateList = array(), array|bool $teamConsumedList = false, array|bool $teamLeftList = false, string $requiredFields = ''): array|object
-    {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
-        if($requiredFields) $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredFields;
-
-        $task         = new stdclass();
-        $createFields = array('mailto' => '', 'mode' => '', 'status' => 'wait');
-        foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
-        foreach($param as $key => $value) $task->$key = $value;
-        $taskIdList = $this->objectModel->create($task, $assignedToList, $multiple, $team, $selectTestStory, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
-
-        unset($_POST);
-        if(dao::isError()) return dao::getError();
-
-        if(!$taskIdList) return false;
-        return $this->objectModel->getByID(current($taskIdList));
-    }
-
-    /**
      * Test update a task.
      *
      * @param  int   $objectID
@@ -1709,7 +1673,7 @@ class taskTest
      * @access public
      * @return object|array
      */
-    public function doCreateObject($param = array()): object|array
+    public function createObject($param = array()): object|array
     {
         $createFields = array(
             'module' => 0,

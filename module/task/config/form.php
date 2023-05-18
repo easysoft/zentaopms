@@ -26,6 +26,7 @@ $config->task->form->create['openedDate']   = array('type' => 'string', 'require
 $config->task->form->create['mailto']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->create['version']      = array('type' => 'int', 'required' => false, 'default' => 1);
 $config->task->form->create['uid']          = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->create['mailto']       = array('type' => 'array', 'required' => false, 'default' => '', 'filter' => 'join');
 
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
@@ -75,12 +76,14 @@ $config->task->form->edit['closedDate']     = array('type' => 'string', 'require
 $config->task->form->edit['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->edit['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 
-$config->task->form->team->edit = array();
-$config->task->form->team->edit['team']         = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->team->edit['teamSource']   = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->team->edit['teamEstimate'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->team->edit['teamConsumed'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->team->edit['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->create = array();
+$config->task->form->team->create['team']         = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->create['teamSource']   = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->create['teamEstimate'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->create['teamConsumed'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->team->create['teamLeft']     = array('type' => 'array', 'required' => false, 'default' => array());
+
+$config->task->form->team->edit = $config->task->form->team->create;
 $config->task->form->team->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->task->form->batchEdit = array();

@@ -12,69 +12,240 @@
 class taskModel extends model
 {
     /**
+     * 创建测试类型的任务。
+     * Create a test type task.
+     *
+     * @param  object    $task
+     * @param  array     $testTasks
+     * @access public
+     * @return false|int
+     */
+    public function createTaskOfTest(object $task, array $testTasks): false|int
+    {
+        if(!empty($testTasks))
+        {
+            $this->config->task->create->requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', $this->config->task->create->requiredFields);
+        }
+
+        $taskID = $this->create($task);
+        if(!$taskID) return false;
+
+        $this->setTaskFiles(array($taskID)); // Set attachments for tasks.
+
+        /* If the current task has test subtasks, create test subtasks and update the task information. */
+        if(!empty($testTasks))
+        {
+            $this->createTestChildTasks($taskID, $testTasks);
+            $this->computeWorkingHours($taskID);
+            $this->computeBeginAndEnd($taskID);
+            $this->dao->update(TABLE_TASK)->set('`parent`')->eq(-1)->where('id')->eq($taskID)->exec();
+        }
+
+        if(dao::isError()) return false;
+        return $taskID;
+    }
+
+    /**
+     * 创建事务类型的任务。
+     * Create a task of affair type.
+     *
+     * @param  object      $task
+     * @param  array       $assignedToList
+     * @access public
+     * @return false|array
+     */
+    public function createTaskOfAffair(object $task, array $assignedToList): false|array
+    {
+        $taskIdList = array();
+        foreach($assignedToList as $assignedTo)
+        {
+            /* If the type of task is affair and assignedTo is empty, skip it. */
+            if(empty($assignedTo)) continue;
+
+            $task->assignedTo = $assignedTo;
+            $taskID = $this->create($task);
+            if(!$taskID) return false;
+
+            $taskIdList[] = $taskID;
+        }
+
+        $this->setTaskFiles($taskIdList);
+        if(dao::isError()) return false;
+
+        return $taskIdList;
+    }
+
+    /**
+     * 创建多人任务。
+     * Create a multiplayer task.
+     *
+     * @param  object    $task
+     * @param  object    $teamData
+     * @access public
+     * @return false|int
+     */
+    public function createMultiTask(object $task, object $teamData): false|int
+    {
+        $task->assignedTo = '';
+        $taskID = $this->create($task);
+        if(!$taskID) return false;
+
+        $this->setTaskFiles($taskFiles, $taskID);
+        if(count(array_filter($teamData->team)) < 2) return $taskID;
+
+        /* Manage the team of task and calculate the team hours. */
+        $task->id = $taskID;
+        $teams    = $this->manageTaskTeam($task->mode, $task, $teamData);
+        if($teams) $this->computeMultipleHours($task);
+
+        return $taskID;
+    }
+
+    /**
      * 创建一个任务。
      * Create a task.
      *
-     * @param  object     $task
-     * @param  array      $assignedToList
-     * @param  int        $multiple
-     * @param  array      $team
-     * @param  bool       $selectTestStory
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
+     * @param  object    $task
      * @access public
-     * @return bool|array
+     * @return false|int
      */
-    public function create(object $task, array $assignedToList, int $multiple, array $team, bool $selectTestStory, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): bool|array
+    public function create(object $task): false|int
     {
-        /* Remove required fields for creating tasks based on conditions. */
-        $this->taskTao->removeCreateRequiredFields($task, $selectTestStory);
+        /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
+        $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
+        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
-        /* Create task. */
-        $taskIdList = array();
-        $taskFiles  = array();
+        /* Insert task data. */
+        if(empty($task->assignedTo)) $task->assignedDate = null;
+        $this->dao->insert(TABLE_TASK)->data($task)
+            ->checkIF($task->estimate != '', 'estimate', 'float')
+            ->autoCheck()
+            ->batchCheck($requiredFields, 'notempty')
+            ->checkFlow()
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        /* Get task id. */
+        $taskID = $this->dao->lastInsertID();
+
+        /* Insert task desc data. */
+        $taskSpec = new stdclass();
+        $taskSpec->task       = $taskID;
+        $taskSpec->version    = $task->version;
+        $taskSpec->name       = $task->name;
+        $taskSpec->estStarted = $task->estStarted ? $task->estStarted : null;
+        $taskSpec->deadline   = $task->deadline ? $task->deadline : null;
+        $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'task');
+        $this->loadModel('score')->create('task', 'create', $taskID);
+        if(dao::isError()) return false;
+
+        return $taskID;
+    }
+
+    /**
+     * 批量创建任务。
+     * Batch create tasks.
+     *
+     * @param  object $execution
+     * @param  array  $tasks
+     * @param  int    $parentID
+     * @param  array  $output
+     * @access public
+     * @return array|false
+     */
+    public function batchCreate(object $execution, array $tasks, int $parentID, array $output): array|false
+    {
+        /* 检查必填项。 Check required fields. */
+        $tasks = $this->checkRequired4BatchCreate($execution, $tasks);
+        if(!$tasks) return false;
+
+        /* 加载模块。 Load module. */
+        $this->loadModel('story');
+        $this->loadModel('score');
         $this->loadModel('action');
-        foreach($assignedToList as $assignedTo)
+
+        $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
+
+        $taskIdList = array();
+        foreach($tasks as $task)
         {
-            /* If the type of task is affair and assignedTo is empty, skip it.*/
-            if($task->type == 'affair' && empty($assignedTo)) continue;
+            /* 获取当前任务所属泳道并移除laneID属性。 Get the current laneID and remove the laneID from task object. */
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            $laneID = isset($task->laneID) ? $task->laneID : $laneID;
+            if(isset($task->laneID)) unset($task->laneID);
 
-            /* Process the assigned person data for the task. */
-            $task->assignedTo = $multiple ? '' : $assignedTo;
-            if($task->assignedTo) $task->assignedDate = helper::now();
-
-            /* Create task. */
-            $taskID = $this->taskTao->doCreate($task);
+            /* 将数据插入到任务表中。 Insert the tasks. */
+            $taskID = $this->create($task);
             if(!$taskID) return false;
 
-            /* Set attachments for tasks. */
-            $taskFiles = $this->setTaskFiles($taskFiles, $taskID);
+            /* 更新任务相关对象信息。 Update the related objects' info, such as story, kanban and so on. */
+            if($task->story) $this->story->setStage($task->story);
+            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+            $this->updateKanban4BatchCreate($taskID, $execution->id, $laneID, $columnID);
 
-            /* If the task is multi-task, manage the team of task and calculate the team hours. */
-            if($multiple && count(array_filter($team)) > 1)
-            {
-                $task->id = $taskID;
-                $teams    = $this->manageTaskTeam($task->mode, $task, $team, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
-                if($teams) $this->computeMultipleHours($task);
-                unset($task->id);
-            }
-
-            $taskIdList[] = $taskID;
-            $this->action->create('task', $taskID, 'Opened', '');
+            $this->executeHooks($taskID);
+            $taskIdList[$taskID] = $taskID;
         }
+        if(!dao::isError()) $this->score->create('ajax', 'batchCreate'); // Updating scores for the first batch creation operation.
+
+        /* 拆分任务后更新其他数据。 Process other data after split task. */
+        $children = !empty($parentID) ? implode(',', $taskIdList) : '';
+        if($parentID && $taskID) $this->afterSplitTask($oldParentTask, $children);
+
+        /* 更新当前执行下的任务泳道。 Update the task lane under current execution. */
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
         return $taskIdList;
+    }
+
+    /**
+     * Create task from gitlab issue.
+     *
+     * @param  object    $task
+     * @param  int       $executionID
+     * @access public
+     * @return int
+     */
+    public function createTaskFromGitlabIssue($task, $executionID)
+    {
+        $task->version      = 1;
+        $task->openedBy     = $this->app->user->account;
+        $task->lastEditedBy = $this->app->user->account;
+        $task->assignedDate = isset($task->assignedTo) ? helper::now() : 0;
+        $task->story        = 0;
+        $task->module       = 0;
+        $task->estimate     = 0;
+        $task->estStarted   = '0000-00-00';
+        $task->left         = 0;
+        $task->pri          = 3;
+        $task->type         = 'devel';
+        $task->project      = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
+
+        $this->dao->insert(TABLE_TASK)->data($task, 'id,product')
+             ->autoCheck()
+             ->batchCheck($this->config->task->create->requiredFields, 'notempty')
+             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
+             ->exec();
+
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
     }
 
     /**
      * 计算多人任务工时。
      * Compute hours for multiple task.
      *
-     * @param  object  $oldTask
-     * @param  object  $task
-     * @param  array   $team
-     * @param  bool    $autoStatus
+     * @param  object      $oldTask
+     * @param  object      $task
+     * @param  array       $team
+     * @param  bool        $autoStatus
      * @access public
      * @return object|bool
      */
@@ -128,98 +299,6 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
         }
         return !dao::isError();
-    }
-
-    /**
-     * 批量创建任务。
-     * Batch create tasks.
-     *
-     * @param  object $execution
-     * @param  array  $tasks
-     * @param  int    $parentID
-     * @param  array  $output
-     * @access public
-     * @return array|false
-     */
-    public function batchCreate(object $execution, array $tasks, int $parentID, array $output): array|false
-    {
-        /* 检查必填项。 Check required fields. */
-        $tasks = $this->checkRequired4BatchCreate($execution, $tasks);
-        if(!$tasks) return false;
-
-        /* 加载模块。 Load module. */
-        $this->loadModel('story');
-        $this->loadModel('score');
-        $this->loadModel('action');
-
-        $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
-
-        $taskIdList = array();
-        foreach($tasks as $task)
-        {
-            /* 获取当前任务所属泳道并移除laneID属性。 Get the current laneID and remove the laneID from task object. */
-            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-            $laneID = isset($task->laneID) ? $task->laneID : $laneID;
-            if(isset($task->laneID)) unset($task->laneID);
-
-            /* 将数据插入到任务表中。 Insert the tasks. */
-            $taskID = $this->taskTao->doCreate($task);
-            if(!$taskID) return false;
-
-            /* 更新任务相关对象信息。 Update the related objects' info, such as story, kanban and so on. */
-            if($task->story) $this->story->setStage($task->story);
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            $this->updateKanban4BatchCreate($taskID, $execution->id, $laneID, $columnID);
-
-            $this->executeHooks($taskID);
-            $this->action->create('task', $taskID, 'Opened', '');
-            if(!dao::isError()) $this->score->create('task', 'create', $taskID);
-
-            $taskIdList[$taskID] = $taskID;
-        }
-        if(!dao::isError()) $this->score->create('ajax', 'batchCreate'); // Updating scores for the first batch creation operation.
-
-        /* 拆分任务后更新其他数据。 Process other data after split task. */
-        $children = !empty($parentID) ? implode(',', $taskIdList) : '';
-        if($parentID && $taskID) $this->afterSplitTask($oldParentTask, $children);
-
-        /* 更新当前执行下的任务泳道。 Update the task lane under current execution. */
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
-        return $taskIdList;
-    }
-
-    /**
-     * Create task from gitlab issue.
-     *
-     * @param  object    $task
-     * @param  int       $executionID
-     * @access public
-     * @return int
-     */
-    public function createTaskFromGitlabIssue($task, $executionID)
-    {
-        $task->version      = 1;
-        $task->openedBy     = $this->app->user->account;
-        $task->lastEditedBy = $this->app->user->account;
-        $task->assignedDate = isset($task->assignedTo) ? helper::now() : 0;
-        $task->story        = 0;
-        $task->module       = 0;
-        $task->estimate     = 0;
-        $task->estStarted   = '0000-00-00';
-        $task->left         = 0;
-        $task->pri          = 3;
-        $task->type         = 'devel';
-        $task->project      = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
-
-        $this->dao->insert(TABLE_TASK)->data($task, 'id,product')
-             ->autoCheck()
-             ->batchCheck($this->config->task->create->requiredFields, 'notempty')
-             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
-             ->exec();
-
-        if(dao::isError()) return false;
-
-        return $this->dao->lastInsertID();
     }
 
     /**
@@ -454,52 +533,33 @@ class taskModel extends model
     }
 
     /**
-     * Manage multi task team members.
+     * 维护多人任务的团队信息。
+     * Manage multi task team.
      *
-     * @param  string     $mode
-     * @param  object     $task
-     * @param  array      $teamList
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
+     * @param  string $mode
+     * @param  object $task
+     * @param  object $teamData
      * @access public
      * @return array
      */
-    public function manageTaskTeam(string $mode, object $task, array $teamList, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): array
+    public function manageTaskTeam(string $mode, object $task, object $teamData): array
     {
         /* Get old team member, and delete old task team. */
         $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
         $oldMembers = array_column($oldTeams, 'account');
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
-        /* If status of the task is doing, get the person who did not complete the task. */
-        $undoneUsers = array();
-        if($task->status == 'doing')
-        {
-            $efforts = $this->getTaskEfforts($task->id);
-            foreach($efforts as $effort)
-            {
-                if($effort->left != 0) $undoneUsers[$effort->account] = $effort->account;
-                if($effort->left == 0) unset($undoneUsers[$effort->account]);
-            }
-        }
-
-        $teams       = array();
-        $minStatus   = 'done';
+        /* Set effort left = 0 when linear task members be changed. */
         $changeUsers = array();
-        foreach($teamList as $row => $account)
+        $teamData->team = array_filter($teamData->team);
+        foreach($teamData->team as $index => $account)
         {
-            if(empty($account)) continue;
-
-            /* Manage task team member. */
-            $minStatus = $this->taskTao->manageTaskTeamMember($mode, $task, $row, $account, $minStatus, $undoneUsers, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList, isset($teams[$account]));
-
-            /* Set effort left = 0 when linear task members be changed. */
-            if($mode == 'linear' && isset($oldTeams[$row]) && $oldTeams[$row]->account != $account) $changeUsers[] = $oldTeams[$row]->account;
-
-            $teams[$account] = $account;
+            if($mode == 'linear' && isset($oldTeams[$index]) && $oldTeams[$index]->account != $account) $changeUsers[] = $oldTeams[$index]->account;
         }
+
+        /* Manage task team member. */
+        $teams = $this->manageTaskTeamMember($mode, $task, $teamData);
+        if(!dao::isError()) return false;
 
         /* Set effort left = 0 when multi task members be removed. */
         if($mode == 'multi' && $oldMembers)
@@ -509,6 +569,71 @@ class taskModel extends model
         }
         if($changeUsers) $this->resetEffortLeft($task->id, $changeUsers);
 
+        return $teams;
+    }
+
+    /**
+     * 维护多人任务团队成员信息。
+     * Manage multi-task team member information.
+     *
+     * @param  string      $mode
+     * @param  object      $task
+     * @param  object      $teamData
+     * @access public
+     * @return false|array
+     */
+    public function manageTaskTeamMember(string $mode, object $task, object $teamData): false|array
+    {
+        /* If status of the task is doing, get the person who did not complete the task. */
+        $undoneUsers = array();
+        if($task->status == 'doing')
+        {
+            $efforts = $this->getTaskEfforts($task->id);
+            foreach($efforts as $effort)
+            {
+                if($effort->left != 0) $undoneUsers[$effort->account] = $effort->account;
+                else unset($undoneUsers[$effort->account]);
+            }
+        }
+
+        $minStatus = 'done';
+        $teamList  = array_filter($teamData->team);
+        $teams     = array();
+        foreach($teamList as $index => $account)
+        {
+            /* Set member information. */
+            $member = new stdclass();
+            $member->task     = $task->id;
+            $member->order    = $index;
+            $member->account  = $account;
+            $member->estimate = zget($teamData->teamEstimateList, $index, 0);
+            $member->consumed = isset($teamData->teamConsumedList) ? zget($teamData->teamConsumedList, $index, 0) : 0;
+            $member->left     = isset($teamData->teamLeftList) ? zget($teamData->teamLeftList, $index, 0) : 0;
+            $member->status   = 'wait';
+            if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
+            if($task->status == 'done') $member->left = 0;
+
+            /* Compute task status of member. */
+            if($member->left == 0 && $member->consumed > 0)
+            {
+                $member->status = 'done';
+            }
+            elseif($task->status == 'doing')
+            {
+                $teamSource = zget($teamData->teamSourceList, $index);
+                if(!empty($teamSource) && $teamSource != $account && isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
+                if(isset($undoneUsers[$account]) && ($mode == 'multi' || ($mode == 'linear' && $minStatus != 'wait'))) $member->status = 'doing';
+            }
+
+            /* Compute multi-task status, and in a linear task, there is only one doing status. */
+            if(($mode == 'linear' && $member->status == 'doing') || $member->status == 'wait') $minStatus = 'wait';
+            if($minStatus != 'wait' && $member->status == 'doing') $minStatus = 'doing';
+
+            /* Insert or update team member. */
+            $this->taskTao->setTeamMember($member, $mode, isset($teams[$account]));
+            if(dao::isError()) return false;
+            $teams[$account] = $account;
+        }
         return $teams;
     }
 
@@ -1673,7 +1798,7 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->manageTaskTeam($oldTask->mode, $task, $teamData->team, $teamData->teamSource, $teamData->teamEstimate, $teamData->teamConsumed);
+            $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
         }
 
@@ -3590,10 +3715,17 @@ class taskModel extends model
         if(empty($execution) || empty($this->config->limitTaskDate)) return false;
         if(empty($execution->multiple)) $this->lang->execution->common = $this->lang->project->common;
 
-        if(!empty($estStarted) && !helper::isZeroDate($estStarted) && $estStarted < $execution->begin) dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
-        if(!empty($estStarted) && !helper::isZeroDate($estStarted) && $estStarted > $execution->end)   dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
-        if(!empty($deadline) && !helper::isZeroDate($deadline) && $deadline > $execution->end)       dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
-        if(!empty($deadline) && !helper::isZeroDate($deadline) && $deadline < $execution->begin)     dao::$errors['deadline'][]   = $pre . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
+        if(!empty($estStarted) && !helper::isZeroDate($estStarted))
+        {
+            if($estStarted < $execution->begin) dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
+            if($estStarted > $execution->end)   dao::$errors['estStarted'][] = $pre . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
+        }
+
+        if(!empty($deadline) && !helper::isZeroDate($deadline))
+        {
+            if($deadline > $execution->end)   dao::$errors['deadline'][] = $pre . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
+            if($deadline < $execution->begin) dao::$errors['deadline'][] = $pre . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
+        }
     }
 
     /**
@@ -3609,7 +3741,7 @@ class taskModel extends model
     {
         /* 设置必填项。 */
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($this->taskTao->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
         $requiredFields = trim($requiredFields, ',');
         $requiredFields = array_filter(explode(',', $requiredFields));
 
@@ -3660,14 +3792,15 @@ class taskModel extends model
      * @param  array  $taskIdList
      * @param  int    $bugID
      * @param  int    $todoID
-     * @param  array  $testTasks
      * @access public
      * @return bool
      */
-    public function afterCreate(object $task, array $taskIdList, int $bugID, int $todoID, array $testTasks): bool
+    public function afterCreate(object $task, array $taskIdList, int $bugID, int $todoID): bool
     {
-        $this->loadModel('file');
         $this->loadModel('score');
+        $this->loadModel('file');
+
+        $this->setTaskFiles($taskIdList); // Set attachments for tasks.
         foreach($taskIdList as $taskID)
         {
             /* If the task comes from a bug, update the task and bug information. */
@@ -3698,20 +3831,6 @@ class taskModel extends model
 
             /* If the task comes from a story, update the stage of the story. */
             if($task->story) $this->loadModel('story')->setStage($task->story);
-
-            /* If the current task has test subtasks, create test subtasks and update the task information. */
-            if(!empty($testTasks))
-            {
-                $this->createTestChildTasks($taskID, $testTasks);
-                $this->computeWorkingHours($taskID);
-                $this->computeBeginAndEnd($taskID);
-                $this->dao->update(TABLE_TASK)->set('`parent`')->eq(-1)->where('id')->eq($taskID)->exec();
-            }
-            if(dao::isError()) return false;
-
-            /* Update file information and create score. */
-            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
-            $this->score->create('task', 'create', $taskID);
         }
         return !dao::isError();
     }
@@ -3779,30 +3898,32 @@ class taskModel extends model
      * 更新看板中的任务泳道数据。
      * Update the task lane data in Kanban.
      *
-     * @param  object $execution
-     * @param  object $task
+     * @param  int    $executionID
+     * @param  array  $taskIdList
      * @param  int    $laneID
      * @param  int    $oldColumnID
      * @access public
      * @return bool
      */
-    public function updateKanbanData(object $execution, object $task, int $laneID, int $oldColumnID): bool
+    public function updateKanbanData(int $executionID, array $taskIdList, int $laneID, int $oldColumnID): bool
     {
-        if(!isset($execution->id) || !isset($task->execution)) return false;
+        if(!$executionID) return false;
 
         $this->loadModel('kanban');
 
         /* Get kanban id, lane id and column id. */
-        $kanbanID = $execution->type == 'kanban' ? $execution->id : $task->execution;
         $laneID   = !empty($laneID) ? $laneID : 0;
         $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
         if(empty($columnID)) $columnID = $oldColumnID;
 
         /* If both of lane id and column id are not empty, add task to the kanban cell. */
-        if($laneID && $columnID) $this->kanban->addKanbanCell($kanbanID, $laneID, $columnID, 'task', $task->id);
+        if($laneID && $columnID)
+        {
+            foreach($taskIdList as $taskID) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
+        }
 
         /* If lane id or column id is empty, update the task type lane of the kanban. */
-        if(!$laneID || !$columnID) $this->kanban->updateLane($kanbanID, 'task');
+        if(!$laneID || !$columnID) $this->kanban->updateLane($executionID, 'task');
 
         return true;
     }
@@ -3811,33 +3932,29 @@ class taskModel extends model
      * 设置任务的附件。
      * Set attachments for tasks.
      *
-     * @param  array  $taskFiles
-     * @param  int    $taskID
+     * @param  int|array $taskIdList
      * @access public
-     * @return array
+     * @return bool
      */
-    public function setTaskFiles(array $taskFiles, int $taskID): array
+    public function setTaskFiles(array $taskIdList): bool
     {
-        if(!empty($taskFiles) && !$taskID) return array();
+        if(empty($taskIdList)) return true;
 
-        /* If taskFiles is not empty, create task files. */
-        if(!empty($taskFiles))
+        $taskID        = array_shift($taskIdList);
+        $taskFilePairs = $this->loadModel('file')->saveUpload('task', $taskID);
+        if(!empty($taskIdList))
         {
-            foreach($taskFiles as $taskFile)
+            $taskFiles = $taskFilePairs ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFilePairs))->fetchAll('id') : array();
+            foreach($taskIdList as $objectID)
             {
-                $taskFile->objectID = $taskID;
-                $this->dao->insert(TABLE_FILE)->data($taskFile)->exec();
+                foreach($taskFiles as $taskFile)
+                {
+                    $taskFile->objectID = $objectID;
+                    $this->dao->insert(TABLE_FILE)->data($taskFile)->exec();
+                }
             }
         }
-        /* If taskFiles is empty, get task files. */
-        else
-        {
-            $taskFileTitle = $this->loadModel('file')->saveUpload('task', $taskID);
-            $taskFiles     = $taskFileTitle ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFileTitle))->fetchAll('id') : array();
-            foreach($taskFiles as $fileID => $taskFile) unset($taskFiles[$fileID]->id);
-        }
-
-        return $taskFiles;
+        return !dao::isError();
     }
 
     /**
@@ -3898,10 +4015,10 @@ class taskModel extends model
      * @param  string|array $members
      * @param  object       $task
      * @param  string       $type    current|next
-     * @access protected
+     * @access public
      * @return string
      */
-    protected function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
+    public function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
     {
         if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
 
@@ -3923,5 +4040,19 @@ class taskModel extends model
         if($type == 'next' && isset($members[$i + 1])) return $members[$i + 1];
 
         return $task->openedBy;
+    }
+
+    /**
+     * 检查执行是否有需求列表。
+     * Check whether execution has story list.
+     *
+     * @param  object    $execution
+     * @access public
+     * @return bool
+     */
+    public function isNoStoryExecution(object $execution): bool
+    {
+        if(empty($execution)) return false;
+        return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
     }
 }

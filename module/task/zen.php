@@ -506,36 +506,6 @@ class taskZen extends task
     }
 
     /**
-     * 构造待创建的任务数据。
-     * Build the task data to create.
-     *
-     * @param  int       $executionID
-     * @access protected
-     * @return object
-     */
-    protected function buildTaskForCreate(int $executionID): object
-    {
-        $formData  = form::data($this->config->task->form->create);
-        $postData  = $formData->get();
-        $execution = $this->dao->findById($postData->execution)->from(TABLE_EXECUTION)->fetch();
-        $team      = !empty($postData->team) ? array_filter($postData->team) : array();
-        $task      = $formData->setDefault('execution', $executionID)
-            ->setDefault('project', $this->task->getProjectID($executionID))
-            ->setIF($postData->estimate !== false, 'left', $postData->estimate)
-            ->setIF(isset($postData->story), 'storyVersion', isset($postData->story) ? $this->loadModel('story')->getVersion($postData->story) : 0)
-            ->setIF(empty($postData->multiple) || count($team) < 1, 'mode', '')
-            ->setIF($execution && ($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))), 'story', 0)
-            ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
-            ->join('mailto', ',')
-            ->get();
-        if(empty($formData->estStarted)) $task->estStarted = null;
-        if(empty($formData->deadline)) $task->deadline = null;
-
-        /* Processing image link. */
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $postData->uid);
-    }
-
-    /**
      * 处理批量创建任务的请求数据。
      * Process the request data for the batch create tasks.
      *
@@ -710,17 +680,14 @@ class taskZen extends task
      * 检查传入的创建数据是否符合要求。
      * Check if the input post meets the requirements.
      *
-     * @param  int       $executionID
-     * @param  float     $estimate
-     * @param  string    $estStarted
-     * @param  string    $deadline
+     * @param  object    $task
      * @access protected
      * @return bool
      */
-    protected function checkCreateTask(int $executionID, float $estimate, string $estStarted, string $deadline): bool
+    protected function checkCreateTask(object $task): bool
     {
         /* Check if the estimate is positive. */
-        if($estimate < 0)
+        if($task->estimate < 0)
         {
             dao::$errors['estimate'] = $this->lang->task->error->recordMinus;
             return false;
@@ -729,12 +696,12 @@ class taskZen extends task
         /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
         if(!empty($this->config->limitTaskDate))
         {
-            $this->task->checkEstStartedAndDeadline($executionID, $estStarted, $deadline);
+            $this->task->checkEstStartedAndDeadline($task->execution, $task->estStarted, $task->deadline);
             if(dao::isError()) return false;
         }
 
         /* Check start and end date. */
-        if(!helper::isZeroDate($deadline) && $estStarted > $deadline)
+        if(!helper::isZeroDate($task->deadline) && $task->estStarted > $task->deadline)
         {
             dao::$errors['deadline'] = $this->lang->task->error->deadlineSmall;
             return false;
@@ -755,7 +722,8 @@ class taskZen extends task
     {
         /* Check duplicate task. */
         if($task->type == 'affair' || !$task->name) return 0;
-        $result = $this->loadModel('common')->removeDuplicate('task', $task, "execution={$task->execution} and story=" . (int)$task->story . (isset($task->feedback) ? " and feedback=" . (int)$task->feedback : ''));
+        $sql    = "execution={$task->execution} AND story=" . (int)$task->story . (isset($task->feedback) ? " AND feedback=" . (int)$task->feedback : '');
+        $result = $this->loadModel('common')->removeDuplicate('task', $task, $sql);
         if($result['stop']) return zget($result, 'duplicate', 0);
         return 0;
     }
@@ -782,7 +750,7 @@ class taskZen extends task
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
             if(!empty($this->config->limitTaskDate))
             {
-                $this->checkEstStartedAndDeadline($task->execuiton, $task->estStarted, $task->deadline);
+                $this->task->checkEstStartedAndDeadline($task->execuiton, $task->estStarted, $task->deadline);
                 if(dao::isError())
                 {
                     $error = current(dao::getError());
@@ -825,15 +793,14 @@ class taskZen extends task
         /* If there is a database error, return the error message. */
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        /* Return task id when call the API. */
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
-
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
 
-        /* Send Webhook notifications. */
         $message = $this->executeHooks($task->id);
         if($message) $response['message'] = $message;
+
+        /* Return task id when call the API. */
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
 
         /* Processing the return information of pop-up windows. */
         if(isonlybody())
@@ -886,24 +853,24 @@ class taskZen extends task
             $moduleID = $task->module ? $task->module : 0;
             $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
             $response['load']    = $this->createLink('task', 'create', "executionID={$executionID}&storyID={$storyID}&moduleID={$moduleID}");
-        }
-        /* Set the response to return task list. */
-        elseif($afterChoice == 'toTaskList')
-        {
-            helper::setcookie('moduleBrowseParam', 0);
-            $response['load'] = $this->createLink('execution', 'task', "executionID={$executionID}&status=unclosed&param=0&orderBy=id_desc");
-        }
-        /* Set the response to return story list. */
-        elseif($afterChoice == 'toStoryList')
-        {
-            $response['load'] = $this->createLink('execution', 'story', "executionID={$executionID}");
-            if($this->config->vision == 'lite')
-            {
-                $projectID = $this->execution->getProjectID($executionID);
-                $response['load'] = $this->createLink('projectstory', 'story', "projectID={$projectID}");
-            }
+            return $response;
         }
 
+        /* Set the response to return task list. */
+        if($afterChoice == 'toTaskList')
+        {
+            helper::setcookie('moduleBrowseParam', '0');
+            $response['load'] = $this->createLink('execution', 'task', "executionID={$executionID}&status=unclosed&param=0&orderBy=id_desc");
+            return $response;
+        }
+
+        /* Set the response to return story list. */
+        $response['load'] = $this->createLink('execution', 'story', "executionID={$executionID}");
+        if($this->config->vision == 'lite')
+        {
+            $projectID = $this->execution->getProjectID($executionID);
+            $response['load'] = $this->createLink('projectstory', 'story', "projectID={$projectID}");
+        }
         return $response;
     }
 
@@ -924,13 +891,12 @@ class taskZen extends task
     protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output): void
     {
         /* Get information about the task. */
-        $executionID = $execution->id;
-        $task        = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $this->view->task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
 
         /* Get module information. */
-        $showAllModule    = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $moduleOptionMenu = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
-        if(!$storyID && !isset($moduleOptionMenu[$task->module])) $task->module = 0;
+        $executionID      = $execution->id;
+        $showAllModule    = zget($this->config->execution->task, 'allModule', '');
+        $modulePairs      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Display relevant variables. */
         $this->assignExecutionForCreate($execution);
@@ -940,17 +906,16 @@ class taskZen extends task
         /* Set Custom fields. */
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->task->create;
-        $this->view->customFields     = $customFields;
-        $this->view->showAllModule    = $showAllModule;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->showFields       = $this->config->task->custom->createFields;
-        $this->view->gobackLink       = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
-        $this->view->execution        = $execution;
-        $this->view->task             = $task;
-        $this->view->storyID          = $storyID;
-        $this->view->blockID          = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
-        $this->view->hideStory        = $this->task->isNoStoryExecution($execution);
+        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
+        $this->view->customFields  = $customFields;
+        $this->view->showAllModule = $showAllModule;
+        $this->view->modulePairs   = $modulePairs;
+        $this->view->showFields    = $this->config->task->custom->createFields;
+        $this->view->gobackLink    = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
+        $this->view->execution     = $execution;
+        $this->view->storyID       = $storyID;
+        $this->view->blockID       = isonlybody() ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assingtome', 'assingtome') : 0;
+        $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
 
         $this->display();
     }
@@ -1107,39 +1072,38 @@ class taskZen extends task
     }
 
     /**
-     * 准备创建任务前的数据信息。
-     * Prepare the data before create the task.
+     * 构造待创建的任务数据。
+     * Build the task data to create.
      *
      * @param  int       $executionID
-     * @param  float     $estimate
-     * @param  string    $estStarted
-     * @param  string    $deadline
-     * @param  bool      $selectTestStory
      * @access protected
-     * @return false|array
+     * @return object
      */
-    protected function buildDataForCreate(int $executionID, float $estimate, string $estStarted, string $deadline, bool $selectTestStory): false|array
+    protected function buildTaskForCreate(int $executionID): object
     {
+        $formData  = form::data($this->config->task->form->create);
+        $postData  = $formData->get();
+        $execution = $this->dao->findById($postData->execution)->from(TABLE_EXECUTION)->fetch();
+        $team      = !empty($postData->team) ? array_filter($postData->team) : array();
+        $task      = $formData->setDefault('execution', $executionID)
+            ->setDefault('project', $execution->project)
+            ->setIF($postData->estimate !== false, 'left', $postData->estimate)
+            ->setIF(isset($postData->story), 'storyVersion', isset($postData->story) ? $this->loadModel('story')->getVersion($postData->story) : 0)
+            ->setIF(empty($postData->multiple) || count($team) < 1, 'mode', '')
+            ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
+            ->setIF(!empty($postData->assignedTo), 'assignedDate', helper::now())
+            ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
+            ->get();
+
+        if(empty($postData->estStarted)) $task->estStarted = null;
+        if(empty($postData->deadline)) $task->deadline = null;
+
+        /* Processing image link. */
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $postData->uid);
+
         /* Check if the input post data meets the requirements. */
-        $result = $this->checkCreateTask($executionID, $estimate, $estStarted, $deadline);
-        if(!$result) return false;
-
-        /* Process the request data for the create task. */
-        $task = $this->buildTaskForCreate($executionID);
-
-        /* Prepare to create the data for the test subtask and to check the data format. */
-        $testTasks = array();
-        if($selectTestStory && $task->type == 'test')
-        {
-            $testTasks = $this->buildTestTasksForCreate($executionID);
-            $result    = $this->checkCreateTestTasks($testTasks);
-            if(!$result) return false;
-        }
-
-        /* Check whether a task with the same name is created within the specified time. */
-        $duplicateTaskID = $this->checkDuplicateName($task);
-
-        return array($task, $testTasks, $duplicateTaskID);
+        $this->checkCreateTask($task);
+        return $task;
     }
 
     /**
@@ -1153,15 +1117,17 @@ class taskZen extends task
     protected function buildTestTasksForCreate(int $executionID): array
     {
         /* Set data for the type of test task that has linked stories. */
+        $postData = form::data($this->config->task->form->testTask->create)->get();
+        if(!isset($postData->selectTestStory)) return array();
+
         $testTasks = array();
-        $postData  = form::data($this->config->task->form->testTask->create)->get();
         foreach($postData->testStory as $key => $storyID)
         {
             if(empty($storyID)) continue;
 
             /* Process the ditto option as a concrete value. */
-            $estStarted = !isset($postData->testEstStarted[$key]) || (isset($postData->estStartedDitto[$key]) && $postData->estStartedDitto[$key] == 'on') ? $estStarted : $postData->testEstStarted[$key];
-            $deadline   = !isset($postData->testDeadline[$key]) || (isset($postData->deadlineDitto[$key]) && $postData->deadlineDitto[$key] == 'on') ? $deadline : $postData->testDeadline[$key];
+            $estStarted = !isset($postData->testEstStarted[$key]) || isset($postData->estStartedDitto[$key]) ? $estStarted : $postData->testEstStarted[$key];
+            $deadline   = !isset($postData->testDeadline[$key]) || isset($postData->deadlineDitto[$key]) ? $deadline : $postData->testDeadline[$key];
             $assignedTo = !isset($postData->testAssignedTo[$key]) || $postData->testAssignedTo[$key] == 'ditto' ? $assignedTo : $postData->testAssignedTo[$key];
 
             /* Set task data. */
@@ -1177,6 +1143,8 @@ class taskZen extends task
 
             $testTasks[$storyID] = $task;
         }
+
+        $this->checkCreateTestTasks($testTasks);
         return $testTasks;
     }
 

@@ -47,44 +47,67 @@ class task extends control
         parse_str($extra, $output);
 
         /* If you do not have permission to access any execution, go to the create execution page. */
-        if(empty($this->app->user->view->sprints) && !$executionID) $this->locate($this->createLink('execution', 'create'));
+        if(!$this->execution->checkPriv($executionID)) $this->locate($this->createLink('execution', 'create'));
 
         /* Set menu and get execution information. */
         $executionID = $this->taskZen->setMenu($executionID);
         $execution   = $this->execution->getById($executionID);
 
         /* Check whether the execution has permission to create tasks. */
-        $this->execution->getLimitedExecution();
-        $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
+        $limitedExecutions = (string)$this->execution->getLimitedExecution();
         if(strpos(",{$limitedExecutions},", ",{$executionID},") !== false)
         {
-            echo js::alert($this->lang->task->createDenied);
-            return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}")));
+            return $this->send(array('load' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'message' => $this->lang->task->createDenied));
         }
 
         /* Submit the data process after create the task form. */
         if(!empty($_POST))
         {
-            /* Prepare the data information before create the task. */
-            $result = $this->taskZen->buildDataForCreate($executionID, (float)$this->post->estimate, $this->post->estStarted, $this->post->deadline, (bool)$this->post->selectTestStory);
+            $task = $this->taskZen->buildTaskForCreate($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            list($taskData, $testTaskData, $duplicateTaskID) = $result;
+            /* Check whether a task with the same name is created within the specified time. */
+            $duplicateTaskID = $this->checkDuplicateName($task);
             if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'load' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
-            /* Create task. */
-            $taskIdList = $this->task->create($taskData, $this->post->assignedTo, (int)$this->post->multiple, $this->post->team, (bool)$this->post->selectTestStory, $this->post->teamSource, $this->post->teamEstimate, $this->post->teamConsumed, $this->post->teamLeft);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->dao->begin();
+            if($this->post->type == 'test')
+            {
+                /* Prepare to create the data for the test subtask and to check the data format. */
+                $testTasks  = $this->taskZen->buildTestTasksForCreate($task->execution);
+                $taskIdList = $this->task->createTaskOfTest($task, $testTasks);
+            }
+            elseif($this->post->type == 'affair')
+            {
+                $taskIdList = $this->task->createTaskOfAffair($task, $this->post->assignedTo);
+            }
+            elseif($this->post->multiple)
+            {
+                $teamData   = form::data($config->task->form->team->create)->get();
+                $taskIdList = $this->task->createMultiTask($task, $teamData);
+            }
+            else
+            {
+                $taskIdList = $this->task->create($task);
+            }
+
+            if(dao::isError())
+            {
+                $this->dao->rollBack();
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+            $this->dao->commit();
 
             /* Update other data related to the task after it is created. */
-            $taskData->id = current($taskIdList);
-            $columnID = isset($output['columnID']) ? (int)$output['columnID'] : 0;
-            $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID, $testTaskData);
-            $this->task->updateKanbanData($execution, $taskData, (int)$this->post->lane, $columnID);
+            $columnID   = isset($output['columnID']) ? (int)$output['columnID'] : 0;
+            $taskIdList = (array)$taskIdList;
+            $task->id   = current($taskIdList);
+            $this->task->afterCreate($task, $taskIdList, $bugID, $todoID);
+            $this->task->updateKanbanData($task->execution, $taskIdList, (int)$this->post->lane, $columnID);
             helper::setcookie('lastTaskModule', (int)$this->post->module);
 
             /* Get the information returned after a task is created. */
-            $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after);
+            $response = $this->taskZen->responseAfterCreate($task, $execution, $this->post->after);
             return $this->send($response);
         }
 

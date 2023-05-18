@@ -13,43 +13,6 @@ declare(strict_types=1);
 class taskTao extends taskModel
 {
     /**
-     * 创建一个任务。
-     * Create a task.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return int|false
-     */
-    protected function doCreate(object $task): int|false
-    {
-        /* Insert task data. */
-        $this->dao->insert(TABLE_TASK)->data($task)
-            ->checkIF($task->estimate != '', 'estimate', 'float')
-            ->autoCheck()
-            ->batchCheck($this->config->task->create->requiredFields, 'notempty')
-            ->checkFlow()
-            ->exec();
-
-        if(dao::isError()) return false;
-
-        /* Get task id. */
-        $taskID = $this->dao->lastInsertID();
-
-        /* Insert task desc data. */
-        $taskSpec = new stdclass();
-        $taskSpec->task       = $taskID;
-        $taskSpec->version    = $task->version;
-        $taskSpec->name       = $task->name;
-        $taskSpec->estStarted = $task->estStarted ? $task->estStarted : null;
-        $taskSpec->deadline   = $task->deadline ? $task->deadline : null;
-        $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
-
-        if(dao::isError()) return false;
-
-        return $taskID;
-    }
-
-    /**
      * 更新一个任务。
      * Update a task.
      *
@@ -240,36 +203,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 根据条件移除创建任务的必填项。
-     * Remove required fields for creating tasks based on conditions.
-     *
-     * @param  object    $task
-     * @param  bool      $selectTestStory
-     * @access protected
-     * @return void
-     */
-    protected function removeCreateRequiredFields(object $task, bool $selectTestStory): void
-    {
-        /* Get create required fields and the execution of the task. */
-        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
-
-        /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
-        if($execution && $this->isNoStoryExecution($execution))
-        {
-            $requiredFields = str_replace(',story,', ',', $requiredFields);
-        }
-
-        /* If the type of the task is test and select story is true, remove some required fields. */
-        if($task->type == 'test' && $selectTestStory)
-        {
-            $requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', $requiredFields);
-        }
-
-        $this->config->task->create->requiredFields = trim($requiredFields, ',');
-    }
-
-    /**
      * 获取edit方法的必填项。
      * Get required fields for edit method.
      *
@@ -310,73 +243,6 @@ class taskTao extends taskModel
     protected function getTeamMembersByIdList(array $taskIdList): array
     {
         return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
-    }
-
-    /**
-     * Manage multi task team member.
-     *
-     * @param  string     $mode
-     * @param  object     $task
-     * @param  int        $row
-     * @param  string     $account
-     * @param  string     $minStatus
-     * @param  array      $undoneUsers
-     * @param  array      $teamSourceList
-     * @param  array      $teamEstimateList
-     * @param  array|bool $teamConsumedList
-     * @param  array|bool $teamLeftList
-     * @param  bool       $inTeams
-     * @access protected
-     * @return string
-     */
-    protected function manageTaskTeamMember(string $mode, object $task, int $row, string $account, string $minStatus, array $undoneUsers, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList, bool $inTeams): string
-    {
-        /* Set member information. */
-        $member = new stdclass();
-        $member->task     = $task->id;
-        $member->order    = $row;
-        $member->account  = $account;
-        $member->estimate = zget($teamEstimateList, $row, 0);
-        $member->consumed = $teamConsumedList ? zget($teamConsumedList, $row, 0) : 0;
-        $member->left     = $teamLeftList ? zget($teamLeftList, $row, 0) : 0;
-        $member->status   = 'wait';
-        if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
-        if($task->status == 'done') $member->left = 0;
-
-        /* Compute task status of member. */
-        if($member->left == 0 && $member->consumed > 0)
-        {
-            $member->status = 'done';
-        }
-        elseif($task->status == 'doing')
-        {
-            $teamSource = zget($teamSourceList, $row);
-
-            if(!empty($teamSource) && $teamSource != $account && isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
-            if(isset($undoneUsers[$account]) && ($mode == 'multi' || ($mode == 'linear' && $minStatus != 'wait'))) $member->status = 'doing';
-        }
-
-        /* Compute multi-task status, and in a linear task, there is only one doing status. */
-        if(($mode == 'linear' && $member->status == 'doing') || $member->status == 'wait') $minStatus = 'wait';
-        if($minStatus != 'wait' && $member->status == 'doing') $minStatus = 'doing';
-
-        /* Insert or update team. */
-        if($mode == 'multi' && $inTeams)
-        {
-            $this->dao->update(TABLE_TASKTEAM)
-                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
-                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
-                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
-                ->where('task')->eq($member->task)
-                ->andWhere('account')->eq($member->account)
-                ->exec();
-        }
-        else
-        {
-            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
-        }
-
-        return $minStatus;
     }
 
     /**
@@ -657,19 +523,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 检查执行是否有需求列表。
-     * Check whether execution has story list.
-     *
-     * @param  object    $execution
-     * @access protected
-     * @return bool
-     */
-    protected function isNoStoryExecution($execution): bool
-    {
-        return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
-    }
-
-    /**
      * 通过父任务更新子任务。
      * Update chilren task by parent task.
      *
@@ -695,5 +548,34 @@ class taskTao extends taskModel
                 $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
             }
         }
+    }
+
+    /**
+     * 维护团队成员信息。
+     * Maintain team member information.
+     *
+     * @param  object    $member
+     * @param  string    $mode   multi|linear
+     * @param  bool      $inTeam
+     * @access protected
+     * @return bool
+     */
+    protected function setTeamMember(object $member, string $mode, bool $inTeam): bool
+    {
+        if($mode == 'multi' && $ininTeam)
+        {
+            $this->dao->update(TABLE_TASKTEAM)
+                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
+                ->where('task')->eq($member->task)
+                ->andWhere('account')->eq($member->account)
+                ->exec();
+        }
+        else
+        {
+            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
+        }
+        return !dao::isError();
     }
 }

@@ -2356,9 +2356,9 @@ class executionModel extends model
      * Check the privilege.
      *
      * @access public
-     * @return bool
+     * @return bool|string
      */
-    public function getLimitedExecution()
+    public function getLimitedExecution(): bool|string
     {
         /* If is admin, return true. */
         if($this->app->user->admin) return true;
@@ -2372,6 +2372,7 @@ class executionModel extends model
             ->fetchPairs('root', 'root');
 
         $_SESSION['limitedExecutions'] = join(',', $executions);
+        return $_SESSION['limitedExecutions'];
     }
 
     /**
