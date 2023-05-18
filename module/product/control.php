@@ -603,10 +603,10 @@ class product extends control
         $this->app->loadClass('pager', true);
         $pager           = new pager($recTotal, $recPerPage, $pageID);
         $queryID         = ($browseType == 'bySearch' || !empty($param)) ? $param : 0;
-        $productStatList = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', 0, $queryID);
+        $productStatList = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', $programID, $queryID);
 
         /* Generate root program list. */
-        $rootProgramList = $this->productZen->getRootProgramList($productStatList);
+        $rootProgramList = $this->loadModel('program')->getRootProgramList();
 
         /* Save search form. */
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
