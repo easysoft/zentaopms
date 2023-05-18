@@ -969,7 +969,7 @@ class commonModel extends model
         $items        = array();
         $lastItem     = end($menuOrder);
         $printDivider = false;
-        $views        = $app->user->rights['acls']['views'];
+        $views        = isset($app->user->rights['acls']['views']) ? $app->user->rights['acls']['views'] : array();
 
         foreach($menuOrder as $key => $group)
         {
