@@ -5364,7 +5364,7 @@ class executionModel extends model
             foreach($execution->children as $child)
             {
                 $child->division = $execution->division;
-                $this->printNestedList($child, true, $users, $productID);
+                $this->printNestedList($child, true, $users, $productID, $project);
             }
         }
 
