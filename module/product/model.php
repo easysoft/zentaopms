@@ -107,6 +107,7 @@ class productModel extends model
     }
 
     /**
+     * 检查是否有权限访问该产品。
      * Check privilege.
      *
      * @param  int    $product
@@ -123,6 +124,7 @@ class productModel extends model
     }
 
     /**
+     * 根据id获取产品。
      * Get product by id.
      *
      * @param  int    $productID
@@ -139,6 +141,7 @@ class productModel extends model
     }
 
     /**
+     * 根据id列表获取产品列表。
      * Get by idList.
      *
      * @param  array    $productIdList
