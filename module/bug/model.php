@@ -724,29 +724,28 @@ class bugModel extends model
     }
 
     /**
+     * 批量激活bug。
      * Batch active bugs.
      *
+     * @param  object $activateData
+     * @param  array  $postExtendData
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function batchActivate()
+    public function batchActivate(object $activateData, array $postExtendData): array|false
     {
-        $now  = helper::now();
-        $data = fixer::input('post')->get();
-
         $activateBugs = array();
-        $bugIDList    = $data->bugIDList ? $data->bugIDList : array();
+        $bugIdList    = $activateData->bugIdList ? $activateData->bugIdList : array();
+        if(empty($bugIdList)) return $activateBugs;
 
-        if(empty($bugIDList)) return $activateBugs;
-
-        $extendFields = $this->getFlowExtendFields();
-        foreach($bugIDList as $bugID)
+        $now = helper::now();
+        foreach($bugIdList as $bugID)
         {
-            if($data->statusList[$bugID] == 'active') continue;
+            if($activateData->statusList[$bugID] == 'active') continue;
 
-            $activateBugs[$bugID]['assignedTo']  = $data->assignedToList[$bugID];
-            $activateBugs[$bugID]['openedBuild'] = $data->openedBuildList[$bugID];
-            $activateBugs[$bugID]['comment']     = $data->commentList[$bugID];
+            $activateBugs[$bugID]['assignedTo']  = $activateData->assignedToList[$bugID];
+            $activateBugs[$bugID]['openedBuild'] = $activateData->openedBuildList[$bugID];
+            $activateBugs[$bugID]['comment']     = $activateData->commentList[$bugID];
 
             $activateBugs[$bugID]['activatedDate']  = $now;
             $activateBugs[$bugID]['assignedDate']   = $now;
@@ -763,13 +762,10 @@ class bugModel extends model
             $activateBugs[$bugID]['lastEditedBy']   = $this->app->user->account;
             $activateBugs[$bugID]['lastEditedDate'] = $now;
 
-            foreach($extendFields as $extendField)
+            foreach($postExtendData as $field => $postFieldData)
             {
-                $postFieldData = $this->post->{$extendField->field};
-
                 if(is_array($postFieldData[$bugID])) $postFieldData[$bugID] = implode(',', $postFieldData[$bugID]);
-
-                $activateBugs[$bugID][$extendField->field] = htmlSpecialString($postFieldData[$bugID]);
+                $activateBugs[$bugID][$field] = htmlSpecialString($postFieldData[$bugID]);
             }
         }
 
@@ -777,10 +773,14 @@ class bugModel extends model
         foreach($activateBugs as $bugID => $bug)
         {
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
-            if(dao::isError()) return print(js::error('bug#' . $bugID . dao::getError(true)));
+            if(dao::isError())
+            {
+                dao::$errors['message'][] = 'bug#' . $bugID . dao::getError(true);
+                return false;
+            }
+            $this->loadModel('action')->create('bug', $bugID, 'Activated', $bug['comment']);
 
             $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
-
             $this->executeHooks($bugID);
         }
 

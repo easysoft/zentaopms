@@ -1,0 +1,2 @@
+table.form-batch-table tr td:first-child, table.form-batch-table tr th:first-child {display: none;}
+table.form-batch-table tr td:nth-child(2), table.form-batch-table tr th:nth-child(2) {display: none;}

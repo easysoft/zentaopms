@@ -113,8 +113,15 @@ $config->bug->form->resolve['comment']        = array('required' => false, 'type
 $config->bug->form->resolve['uid']            = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->activate = array();
-$config->bug->form->activate['assignedTo'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->activate['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->activate['openedBuild'] = array('required' => false, 'type' => 'array', 'default' => array());
+
+$config->bug->form->batchActivate = array();
+$config->bug->form->batchActivate['bugIdList']       = array('type' => 'array', 'required' => true);
+$config->bug->form->batchActivate['statusList']      = array('type' => 'array', 'required' => false, 'default' => array());
+$config->bug->form->batchActivate['assignedToList']  = array('type' => 'array', 'required' => false, 'default' => array());
+$config->bug->form->batchActivate['openedBuildList'] = array('type' => 'array', 'required' => false, 'default' => array());
+$config->bug->form->batchActivate['commentList']     = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->bug->form->batchCreate = array();
 $config->bug->form->batchCreate['modules']      = array('required' => false, 'type' => array(), 'default' => array());

@@ -880,14 +880,15 @@ class bugTest
      * Test batch activate bugs.
      *
      * @param  array  $bugIDList
+     * @param  array  $buildList
      * @access public
      * @return array
      */
-    public function batchActivateObject($bugIDList)
+    public function batchActivateObject(array $bugIDList, array $buildList = array())
     {
         $statusList      = array('1' => 'active', '53' => 'resolved', '82' => 'closed');
         $assignedToList  = array('1' => 'admin',  '53' => 'admin',    '82' => 'admin');
-        $openedBuildList = array('1' => 'trunk',  '53' => 'trunk',    '82' => 'trunk');
+        $openedBuildList = $buildList ? $buildList : array('1' => 'trunk',  '53' => 'trunk',    '82' => 'trunk');
         $commentList     = array('1' => '',       '53' => '',         '82' => '');
 
         $batchActivateFields['bugIDList']       = $bugIDList;
@@ -896,10 +897,7 @@ class bugTest
         $batchActivateFields['openedBuildList'] = $openedBuildList;
         $batchActivateFields['commentList']     = $commentList;
 
-        foreach($batchActivateFields as $field => $value) $_POST[$field] = $value;
-
-        $object = $this->objectModel->batchActivate();
-        unset($_POST);
+        $object = $this->objectModel->batchActivate((object)$batchActivateFields, array());
 
         if(dao::isError())
         {

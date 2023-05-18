@@ -1125,35 +1125,40 @@ class bug extends control
     }
 
     /**
+     * 批量激活bug。
      * Batch activate bugs.
      *
+     * @param  int    $productID
+     * @param  int    $branch
      * @access public
-     * @return void
+     * @return viod
      */
-    public function batchActivate($productID, $branch = 0)
+    public function batchActivate(int $productID, string $branch = '0')
     {
         if($this->post->statusList)
         {
-            $activateBugs = $this->bug->batchActivate();
-            foreach($activateBugs as $bugID => $bug) $this->action->create('bug', $bugID, 'Activated', $bug['comment']);
+            /* Get acitvate form data and extend data. */
+            $activateData   = form::data($this->config->bug->form->batchActivate)->get();
+            $postExtendData = array();
+            $extendFields   = $this->bug->getFlowExtendFields();
+            foreach($extendFields as $extendField) $postExtendData[$extendField->field] = $this->post->{$extendField->field};
+
+            $activateBugs = $this->bug->batchActivate($activateData, $postExtendData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('score')->create('ajax', 'batchOther');
             return print(js::locate($this->session->bugList, 'parent'));
         }
 
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
-
-        $bugIDList = array_unique($this->post->bugIDList);
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
+        $bugIdList = array_unique($this->post->bugIDList);
 
         $this->qa->setMenu($this->products, $productID, $branch);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->batchActivate;
-
-        $this->view->bugs    = $bugs;
-        $this->view->users   = $this->user->getPairs();
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
+        $this->view->title  = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
+        $this->view->bugs   = $this->bug->getByIdList($bugIdList);
+        $this->view->users  = $this->user->getPairs();
+        $this->view->builds = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
 
         $this->display();
     }
