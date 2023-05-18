@@ -192,16 +192,21 @@ $(function()
     }).on('click', '#hisTrigger', function()
     {
         var $history = $('#history');
+        var $outlineMenu= $('#outlineMenu');
         var $icon = $(this);
         if($history.hasClass('hidden'))
         {
             $history.removeClass('hidden');
+            $outlineMenu.addClass('hidden');
             $icon.addClass('text-primary');
+            $icon.removeClass('history-btn');
         }
         else
         {
             $history.addClass('hidden');
+            $outlineMenu.removeClass('hidden');
             $icon.removeClass('text-primary');
+            $icon.addClass('history-btn');
         }
         adjustPageTitleWidth();
     }).on('click', '#closeBtn', function()
