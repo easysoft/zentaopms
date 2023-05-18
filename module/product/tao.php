@@ -38,7 +38,7 @@ class productTao extends productModel
      * 从数据表获取符合条件的id=>name的键值对。
      * Fetch pairs like id=>name.
      *
-     * @param  string       $mode     all|noclosed
+     * @param  string       $mode      all|noclosed
      * @param  int          $programID
      * @param  string|array $append
      * @param  string|int   $shadow    all|0|1
