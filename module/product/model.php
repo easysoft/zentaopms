@@ -151,13 +151,14 @@ class productModel extends model
     }
 
     /**
+     * 通过搜索查询产品列表。
      * Get list by search.
      *
      * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getListBySearch($queryID = 0)
+    public function getListBySearch(int $queryID = 0): array
     {
         $this->loadModel('search')->setQuery('product', $queryID);
 
