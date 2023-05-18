@@ -330,6 +330,37 @@ class productModel extends model
     }
 
     /**
+     * 遍历产品列表，将产品线拼接到产品名上。
+     * Iterate products, concatenating product line onto product name.
+     *
+     * @param  array  $products
+     * @access public
+     * @return array
+     */
+    public function concatProductLine(array $products): array
+    {
+        $lines = $this->getLinePairs();
+        $productsWithLine = array();
+        $productsNoLine   = array();
+
+        foreach($products as $product)
+        {
+            if(array_key_exists($product->line, $lines))
+            {
+                $lineName = $lines[$product->line];
+                if($this->config->systemMode == 'ALM') $product->name = $lineName . '/' . $product->name;
+                $productsWithLine[] = $product;
+            }
+            else
+            {
+                $productsNoLine[] = $product;
+            }
+        }
+
+        return array_merge($productsWithLine, $productsNoLine);
+    }
+
+    /**
      * 获取排序后的产品列表，顺序为：我的产品、其他人的产品、关闭的产品。
      * Get ordered products.
      *
@@ -354,25 +385,7 @@ class productModel extends model
         }
         if(empty($products)) return $products;
 
-        $lines = $this->getLinePairs();
-        $productsWithLine = array();
-        $productsNoLine   = array();
-
-        foreach($products as $product)
-        {
-            if(array_key_exists($product->line, $lines))
-            {
-                $lineName = $lines[$product->line];
-                if($this->config->systemMode == 'ALM') $product->name = $lineName . '/' . $product->name;
-                $productsWithLine[] = $product;
-            }
-            else
-            {
-                $productsNoLine[] = $product;
-            }
-        }
-        $productList = array_merge($productsWithLine, $productsNoLine);
-
+        $productList     = $this->concatProductLine($products);
         $currentUser     = $this->app->user->account;
         $orderedProducts = $mineProducts = $othersProducts = $closedProducts = array();
         foreach($productList as $product)
