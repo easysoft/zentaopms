@@ -514,6 +514,33 @@ class bugModel extends model
     }
 
     /**
+     * 获取 bug 列表页面左侧模块。
+     * Get bug modules for side bar of browse page.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function getModulesForSidebar(int $productID, string $branch): array
+    {
+        $stmt    = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', 0, $branch));
+        $modules = array();
+        while($data = $stmt->fetch())
+        {
+            $module = new stdclass();
+            $module->id     = $data->id;
+            $module->parent = $data->parent;
+            $module->name   = $data->name;
+            $module->url    = helper::createLink('bug', 'browse', "product=$productID&branch=$branch&type=byModule&param=$data->id");
+
+            $modules[] = $module;
+        }
+
+        return $modules;
+    }
+
+    /**
      * 更新 bug 信息。
      * Update a bug.
      *

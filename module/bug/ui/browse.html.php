@@ -69,6 +69,7 @@ if(common::canModify('product', $product))
 
 featureBar
 (
+    set::current($browseType),
     set::linkParams("product=$product->id&branch=$branch&browseType={key}"),
     li(searchToggle())
 );
@@ -78,8 +79,9 @@ if(!isonlybody())
     toolbar
     (
         hasPriv('bug', 'report') ? item(set(array
-        (   'text'  => $lang->bug->report->common,
+        (
             'icon'  => 'bar-chart',
+            'text'  => $lang->bug->report->common,
             'class' => 'ghost',
             'url'   => createLink('bug', 'report', "productID=$product->id&browseType=$browseType&branch=$branch&module=$currentModuleID")
         ))) : null,
@@ -106,7 +108,15 @@ if(!isonlybody())
     );
 }
 
-sidebar();
+sidebar
+(
+    moduleMenu(set(array
+    (
+        'modules'   => $moduleTree,
+        'activeKey' => $currentModuleID,
+        'closeLink' => createLink('bug', 'browse', "productID=$product->id&branch=$branch")
+    )))
+);
 
 dtable
 (
