@@ -282,14 +282,15 @@ class productModel extends model
     }
 
     /**
-     * Get product id by project.
+     * 通过项目id查询关联的产品id。
+     * Get product id list or first id by project.
      *
      * @param  int    $projectID
      * @param  bool   $isFirst
      * @access public
-     * @return array
+     * @return object[]|int
      */
-    public function getProductIDByProject($projectID, $isFirst = true)
+    public function getProductIDByProject(int $projectID, bool $isFirst = true): array|int
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
             ->where('1=1')
