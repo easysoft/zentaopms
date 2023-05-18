@@ -5,8 +5,8 @@ namespace zin;
 class riskLabel extends wg
 {
     protected static $defineProps = array(
-        'string?:text', // 标签文本
-        'string?:level' // 等级：高('h')、中('m')、低('l')
+        'text?:string', // 标签文本
+        'level?:string' // 风险等级：高('h')、中('m')、低('l')
     );
 
     public static function getPageCSS(): string|false
