@@ -183,10 +183,12 @@
                 </td>
               </tr>
               <?php if($story->parent >= 0 and $story->type == 'story'):?>
+              <?php if($app->tab == 'product'):?>
               <tr class="<?php if($hiddenParent) echo 'hidden';?>">
                 <th><?php echo $lang->story->parent;?></th>
                 <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
               </tr>
+              <?php endif;?>
               <tr class="<?php if($hiddenPlan) echo 'hidden';?>">
                 <th><?php echo $lang->story->plan;?></th>
                 <td>

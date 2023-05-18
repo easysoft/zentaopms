@@ -249,6 +249,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <span class='input-group-btn'><?php echo html::commonButton($lang->story->loadAllStories, "class='btn btn-default' onclick='loadURS(true)' data-toggle='tooltip'");?></span>
               </div>
             </td>
+            <?php if($app->tab == 'product'):?>
             <td colspan="2" <?php if($hiddenParent) echo 'hidden';?>>
               <div class='input-group' id='moduleIdBox'>
                 <?php if(!$hiddenURS):?>
@@ -257,6 +258,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
               </div>
             </td>
+            <?php endif;?>
           </tr>
           <?php else:?>
           <tr <?php if($hiddenParent) echo 'hidden';?>>
