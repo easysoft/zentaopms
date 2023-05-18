@@ -87,7 +87,7 @@
             </div>
           </td>
         </tr>
-        <?php if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))):?>
+        <?php if(in_array($project->model, array('waterfall', 'waterfallplus'))):?>
         <tr>
           <th><?php echo $lang->stage->type;?></th>
           <td>
@@ -97,7 +97,7 @@
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
           </td>
         </tr>
-        <?php elseif($execution->type != 'kanban'):?>
+        <?php elseif($execution->type != 'kanban' and $project->model != 'ipd'):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>

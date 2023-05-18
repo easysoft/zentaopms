@@ -60,7 +60,20 @@
           <tr id="attributeType">
             <th><?php echo $lang->programplan->attribute;?></th>
             <td colspan='2'>
-              <?php echo $enableOptionalAttr ? html::select('attribute', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $plan->attribute, "class='form-control'") : zget($lang->stage->typeList, $plan->attribute);?>
+              <?php 
+              if($project->model == 'ipd')
+              {
+                  echo zget($lang->stage->ipdTypeList, $plan->attribute);
+              }
+              elseif($enableOptionalAttr)
+              {
+                  echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");
+              }
+              else
+              {
+                  echo zget($lang->stage->typeList, $plan->attribute);
+              }
+            ?>
             </td>
             <td>
               <?php if($project->model != 'ipd'):?>

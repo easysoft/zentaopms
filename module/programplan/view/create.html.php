@@ -100,7 +100,9 @@
             <th class='c-date <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>'><?php echo $lang->programplan->realBegan;?></th>
             <th class='c-date <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>'><?php echo $lang->programplan->realEnd;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->programplan->desc;?></th>
+            <?php if($project->model != 'ipd'):?>
             <th class="c-action text-center w-110px"> <?php echo $lang->actions;?></th>
+            <?php endif;?>
           </tr>
         </thead>
         <tbody class='sortable'>
@@ -119,18 +121,33 @@
                   <span class='input-group-addon'>%</span>
                 </div>
               </td>
-              <td class='<?php echo $hideAttribute . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'><?php echo $enableOptionalAttr ? html::select("attributes[$i]", $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $stage->type, "class='form-control'") : ($project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) :  zget($lang->stage->typeList, $programPlan->attribute));?></td>
+              <td class='<?php echo $hideAttribute . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'>
+                <?php
+                if($enableOptionalAttr)
+                {
+                    $disabled = $project->model == 'ipd' ? 'disabled' : '';
+                    echo html::select("attributes[$i]", $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $stage->type, "class='form-control' $disabled");
+                    if($project->model == 'ipd') echo html::hidden("attributes[$i]", $stage->type);
+                }
+                else
+                {
+                    $project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) :  zget($lang->stage->typeList, $programPlan->attribute);
+                }
+                ?>
+              </td>
               <td class='<?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>'><?php echo html::select("acl[$i]", $lang->execution->aclList, 'open', "class='form-control' $class");?></td>
               <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
               <td><input type='text' name='begin[<?php echo $i;?>]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
+              <?php if($project->model != 'ipd'):?>
               <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
                 <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
                 <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
               </td>
+              <?php endif;?>
             </tr>
             <?php $i ++;?>
             <?php endforeach;?>
@@ -152,7 +169,20 @@
                   <span class='input-group-addon'>%</span>
                 </div>
               </td>
-              <td class='<?php echo $hideAttribute . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'><?php echo $enableOptionalAttr ? html::select("attributes[$i]", $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $plan->attribute, "class='form-control'") : ($project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) :  zget($lang->stage->typeList, $programPlan->attribute));?></td>
+              <td class='<?php echo $hideAttribute . zget($requiredFields, 'attribute', '', ' required');?> <?php echo $attrAlign;?>'>
+                <?php 
+                if($enableOptionalAttr)
+                {
+                    $disabled = $project->model == 'ipd' ? 'disabled' : '';
+                    echo html::select("attributes[$i]", $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $plan->attribute, "class='form-control' $disabled");
+                    if($project->model == 'ipd') echo html::hidden("attributes[$i]", $plan->attribute);
+                }
+                else
+                {
+                    $project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) : zget($lang->stage->typeList, $programPlan->attribute);
+                }
+                ?>
+              </td>
               <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, $plan->acl, "class='form-control' $class");?></td>
               <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
               <td><input type='text' name='begin[<?php echo $i;?>] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
@@ -160,16 +190,19 @@
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
               <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("desc[$i]", $plan->desc, "rows='1' class='form-control autosize'");?></td>
+              <?php if($project->model != 'ipd'):?>
               <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
                 <button type="button" class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
                 <a href='javascript:;' onclick='deleteItem(this)' class='invisible btn btn-link'><i class='icon icon-close'></i></a>
                 <?php echo html::hidden('orders[]', $plan->order);?>
               </td>
+              <?php endif;?>
             </tr>
             <?php $i ++;?>
             <?php endforeach;?>
           <?php endif;?>
+          <?php if($project->model != 'ipd'):?>
           <?php for($j = 0; $j < 5; $j ++):?>
           <tr class='addedItem'>
             <td class='<?php echo $typeClass;?>'><?php echo html::select("type[$i]", $lang->execution->typeList, '', "class='form-control chosen'");?></td>
@@ -200,6 +233,7 @@
           </tr>
           <?php $i ++;?>
           <?php endfor;?>
+          <?php endif;?>
         </tbody>
         <tfoot>
           <tr>
