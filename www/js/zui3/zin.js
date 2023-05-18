@@ -69,7 +69,7 @@
         if(!DEBUG) return;
 
         if(zinbar && zinbar.$) zinbar.$.update(perf, errors, basePath);
-        else requestAnimationFrame(() => zinbar.$.update(perf, errors, basePath));
+        else requestAnimationFrame(() => updateZinbar(perf, errors, basePath));
     }
 
     function updatePerfInfo(options, stage, info)
