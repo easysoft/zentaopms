@@ -90,6 +90,7 @@ class bugModel extends model
         $actions   = array();
         $data      = fixer::input('post')->get();
 
+        /* Remove the bug with the same name within the specified time. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
 
@@ -98,6 +99,7 @@ class bugModel extends model
         $moduleOwners = array();
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
 
+        /* Construct data. */
         $module    = 0;
         $project   = 0;
         $execution = 0;
@@ -167,6 +169,7 @@ class bugModel extends model
                 $bug->assignedDate = $now;
             }
 
+            /* Get extend fields. */
             foreach($extendFields as $extendField)
             {
                 $bug->{$extendField->field} = $this->post->{$extendField->field}[$i];
@@ -175,7 +178,7 @@ class bugModel extends model
                 $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
             }
 
-            /* Required field check. */
+            /* Check required fields. */
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -189,9 +192,9 @@ class bugModel extends model
             $bugs[$i] = $bug;
         }
 
-        /* When the bug is created by uploading an image, add the image to the step of the bug. */
         foreach($bugs as $i => $bug)
         {
+            /* Get lane id, remove laneID from bug.  */
             $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
             if(isset($bug->laneID))
             {
@@ -199,6 +202,7 @@ class bugModel extends model
                 unset($bug->laneID);
             }
 
+            /* When the bug is created by uploading an image, add the image to the step of the bug. */
             if(!empty($data->uploadImage[$i]))
             {
                 $fileName = $data->uploadImage[$i];
@@ -225,6 +229,8 @@ class bugModel extends model
             }
 
             if($this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
+
+            /* Create a bug. */
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -236,6 +242,7 @@ class bugModel extends model
 
             $this->executeHooks($bugID);
 
+            /* If bug has the execution, update kanban data. */
             if($bug->execution)
             {
                 $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
@@ -245,8 +252,10 @@ class bugModel extends model
                 if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
 
             }
-            /* When the bug is created by uploading the image, add the image to the file of the bug. */
+
             $this->loadModel('score')->create('bug', 'create', $bugID);
+
+            /* When the bug is created by uploading the image, add the image to the file of the bug. */
             if(!empty($data->uploadImage[$i]) and !empty($file))
             {
                 $file['objectType'] = 'bug';
