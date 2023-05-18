@@ -10,5 +10,8 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
-
+panel
+(
+    div('这是编辑页面')
+);
 render();

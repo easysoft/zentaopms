@@ -12,10 +12,10 @@ namespace zin;
 
 jsVar('page', 'assignedto');
 
+set::title($bug->title);
 /* zin: Define the form in main content. */
-formPanel
+form
 (
-    set::title($bug->title),
     formGroup
     (
         set::width('1/3'),
@@ -41,4 +41,4 @@ formPanel
     ),
 );
 
-render();
+render('modalDialog');
