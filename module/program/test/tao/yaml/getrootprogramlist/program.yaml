@@ -1,0 +1,61 @@
+title: program
+author: Chen Tao
+version: "1.0"
+fields:
+  - field: id
+    range: 1-50
+  - field: project
+    range: 0
+  - field: model
+    range: []
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: "项目集"
+    - field: name2
+      range: 1-10000
+  - field: type
+    range: program
+  - field: budget
+    range: 1000000-1:100
+  - field: status
+    range: wait
+  - field: parent
+    range: 0:{10},1-30
+  - field: path
+    range: "`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`, `,7,`, `,8,`, `,9,`, `,10,`, `,1,11,`, `,2,12,`, `,3,13,`, `,4,14,`, `,5,15,`, `,6,16,`, `,7,17,`, `,8,18,`, `,9,19,`, `,10,20,`, `,1,11,21,`, `,2,12,22,`, `,3,13,23,`, `,4,14,24,`, `,5,15,25,`, `,6,16,26,`, `,7,17,27,`, `,8,18,28,`, `,9,19,29,`, `,10,20,30,`, `,1,11,21,31,`, `,2,12,22,32,`, `,3,13,23,33,`, `,4,14,24,34,`, `,5,15,25,35,`, `,6,16,26,36,`, `,7,17,27,37,`, `,8,18,28,38,`, `,9,19,29,39,`, `,10,20,30,40,`"
+  - field: grade
+    range: 1
+  - field: code
+    range: 1-10000
+    prefix: "program"
+  - field: begin
+    range: "(-5M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+10w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: desc
+    range: 1-10000
+    prefix: "项目集描述"
+  - field: acl
+    range: open{4},private{4}
+  - field: PO
+    range: 1-10
+    prefix: "po"
+  - field: PM
+    range: 1-10
+    prefix: "pm"
+  - field: QD
+    range: 1-10
+    prefix: "test"
+  - field: RD
+    range: 1-10
+    prefix: "dev"
+  - field: openedVersion
+    range: "16.5"

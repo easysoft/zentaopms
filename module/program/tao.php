@@ -29,4 +29,21 @@ class programTao extends programModel
             ->andWhere('type')->eq('program')
             ->fetchAll('id');
     }
+
+    /**
+     *获取所有根项目集基本数据。
+     * Get base data of all root programs.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getRootProgramList(): array
+    {
+        return $this->dao->select('id,name,PM,path,parent,type')
+            ->from(TABLE_PROGRAM)
+            ->where('parent')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->eq('program')
+            ->fetchAll();
+    }
 }
