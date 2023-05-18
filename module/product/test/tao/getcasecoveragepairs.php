@@ -22,7 +22,6 @@ $tester = new productTest('admin');
 $productList   = $tester->objectModel->getList();
 $productIdList = array_keys($productList);
 $pairs         = $tester->objectModel->getCaseCoveragePairs($productIdList);
-//var_dump($pairs);
 
 r($pairs[1])           && p('') && e('100');
 r($pairs[7])           && p('') && e('25');
