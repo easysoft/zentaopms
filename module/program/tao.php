@@ -22,9 +22,11 @@ class programTao extends programModel
      */
     protected function getBaseDataList(array $programIdList): array
     {
-        return $this->dao->select('id,name,PM')
+        return $this->dao->select('id,name,PM,path,parent,type')
             ->from(TABLE_PROGRAM)
             ->where('id')->in($programIdList)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->eq('program')
             ->fetchAll('id');
     }
 }
