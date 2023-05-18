@@ -159,20 +159,7 @@ class productModel extends model
      */
     public function getListBySearch($queryID = 0)
     {
-        if($queryID)
-        {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
-            {
-                $this->session->set('productQuery', $query->sql);
-                $this->session->set('productForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('productQuery', ' 1 = 1');
-            }
-        }
-        elseif(!$this->session->productQuery) $this->session->set('productQuery', ' 1 = 1');
+        $this->loadModel('search')->setQuery('product', $queryID);
 
         $productQuery = $this->session->productQuery;
         $productQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $productQuery);

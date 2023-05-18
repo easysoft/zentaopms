@@ -395,6 +395,41 @@ class searchModel extends model
     }
 
     /**
+     * 将搜索条件保存到session中。
+     * Save query to session.
+     *
+     * @param  string $module
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function setQuery(string $module, int $queryID = 0): string
+    {
+        $querySessionName = $module . 'Query';
+        $formSessionName  = $module . 'Form';
+
+        if($queryID)
+        {
+            $query = $this->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($querySessionName, $query->sql);
+                $this->session->set($formSessionName, $query->form);
+            }
+            else
+            {
+                $this->session->set($querySessionName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$querySessionName == false) $this->session->set($querySessionName, ' 1 = 1');
+        }
+
+        return $this->session->$querySessionName;
+    }
+
+    /**
      * Get a query.
      *
      * @param  int    $queryID
