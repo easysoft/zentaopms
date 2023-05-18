@@ -562,7 +562,7 @@ class taskTao extends taskModel
      */
     protected function setTeamMember(object $member, string $mode, bool $inTeam): bool
     {
-        if($mode == 'multi' && $ininTeam)
+        if($mode == 'multi' && $inTeam)
         {
             $this->dao->update(TABLE_TASKTEAM)
                 ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
