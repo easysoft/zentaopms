@@ -17,10 +17,13 @@ form
     formGroup
     (
         set::width('1/3'),
-        set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
-        set::value($bug->resolvedBy),
-        set::items($users)
+        select
+        (
+            set::name('assignedTo'),
+            set::value($bug->resolvedBy),
+            set::items($users),
+        )
     ),
     formGroup
     (
@@ -30,28 +33,32 @@ form
         (
             set::name('openedBuild[]'),
             set::value($bug->openedBuild),
-            set::multiple(true),
-            set::items($builds)
+            set::items($builds),
+            set::multiple(true)
         ),
         input
         (
-            set::class('hidden'),
             set::name('status'),
-            set::value('active')
+            set::value('active'),
+            set::class('hidden')
         )
     ),
     formGroup
     (
         set::label($lang->comment),
-        set::name('comment'),
-        set::control('editor'),
-        set::rows(6)
+        editor
+        (
+            set::name('comment'),
+            set::rows(6)
+        )
     ),
     formGroup
     (
         set::label($lang->bug->files),
-        set::name('files[]'),
-        set::control('file')
+        fileinput
+        (
+            set::name('files[]')
+        )
     ),
     set::actions(array('submit'))
 );
