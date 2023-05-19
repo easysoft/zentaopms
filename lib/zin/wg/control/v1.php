@@ -1,33 +1,25 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'editor' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 
 class control extends wg
 {
-    static $defineProps = array
-    (
-        'type?: string', // text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
-        'name: string',
-        'id?: string',
-        'value?: string',
-        'required?: bool',
-        'placeholder?: string',
-        'disabled?: bool',
-        'items?: array'
+    static $defineProps = array(
+        'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
+        'name: string',          // HTML name 属性
+        'id?: string',           // HTML id 属性
+        'value?: string',        // HTML value 属性
+        'placeholder?: string',  // HTML placeholder 属性
+        'required?: bool',       // 是否为必填项
+        'disabled?: bool',       // 是否为禁用状态
+        'items?: array'          // 表单输入元素子项数据
     );
 
     protected function created()
     {
-        $this->setDefaultProps(['id' => $this->prop('name')]);
+        $this->setDefaultProps(array('id' => $this->prop('name')));
     }
 
     /**
@@ -40,20 +32,20 @@ class control extends wg
         return div
         (
             set::class('form-control-static'),
-            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder'))),
+            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items'))),
             set('data-name', $this->prop('name')),
             $this->prop('value')
         );
     }
 
-    protected function buildTextarea()
+    protected function buildTextarea(): wg
     {
-        return new textarea(set($this->props->skip('type')));
+        return textarea(set($this->props->skip('type')));
     }
 
-    protected function buildInputControl()
+    protected function buildInputControl(): wg
     {
-        $controlProps = [];
+        $controlProps = array();
         $allProps     = $this->props->skip('type');
         $propsNames   = array_keys(inputControl::getDefinedProps());
 
@@ -65,63 +57,60 @@ class control extends wg
             unset($allProps[$propName]);
         }
 
-        return new inputControl
+        return inputControl
         (
             set($controlProps),
-            new input(set($allProps)),
+            input(set($allProps)),
         );
     }
 
-    protected function buildCheckbox()
+    protected function buildCheckbox(): wg
     {
         if($this->hasProp('items')) return $this->buildCheckList();
-        return new checkList
+        return checkList
         (
-            new checkbox(set($this->props->skip('type')))
+            checkbox(set($this->props->skip('type')))
         );
     }
 
-    protected function buildCheckList()
+    protected function buildCheckList(): wg
     {
-        return new checkList
-        (
-            set($this->props->skip('type'))
-        );
-    }
-
-    protected function buildRadioList()
-    {
-        return new radioList
+        return checkList
         (
             set($this->props->skip('type'))
         );
     }
 
-    protected function buildCheckListInline()
+    protected function buildRadioList(): wg
     {
-        return new checkList
+        return radioList
+        (
+            set($this->props->skip('type'))
+        );
+    }
+
+    protected function buildCheckListInline(): wg
+    {
+        return checkList
         (
             set::inline(true),
             set($this->props->skip('type'))
         );
     }
 
-    protected function buildRadioListInline()
+    protected function buildRadioListInline(): wg
     {
-        return new radioList
+        return radioList
         (
             set::inline(true),
             set($this->props->skip('type'))
         );
     }
 
-    protected function build()
+    protected function build(): wg
     {
         $type = $this->prop('type');
-        if(empty($type))
-        {
-            $type = $this->hasProp('items') ? 'picker' : 'text';
-        }
+        if(empty($type)) $type = $this->hasProp('items') ? 'picker' : 'text';
 
         $methodName = "build{$type}";
         if(method_exists($this, $methodName)) return $this->$methodName();
@@ -129,6 +118,6 @@ class control extends wg
         $wgName = "\\zin\\$type";
         if(class_exists($wgName)) return new $wgName(set($this->props->skip('type')), $this->children());
 
-        return new input(set($this->props));
+        return input(set($this->props));
     }
 }

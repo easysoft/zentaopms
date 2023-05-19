@@ -13,19 +13,19 @@ class inputControl extends wg
     );
 
     public static $defineBlocks = array(
-        'prefix' => [],
-        'suffix' => [],
+        'prefix' => array(),
+        'suffix' => array(),
     );
 
-    protected function build()
+    protected function build(): wg
     {
         list($prefix, $suffix, $prefixWidth, $suffixWidth) = $this->prop(['prefix', 'suffix', 'prefixWidth', 'suffixWidth']);
 
         if(empty($prefix)) $prefix = $this->block('prefix');
         if(empty($suffix)) $suffix = $this->block('suffix');
 
-        $class = ['input-control'];
-        $vars  = [];
+        $class = array('input-control');
+        $vars  = array();
         if(!empty($prefix))
         {
             if(is_numeric($prefixWidth))
