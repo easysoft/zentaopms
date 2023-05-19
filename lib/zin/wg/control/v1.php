@@ -2,7 +2,15 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'editor' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'radiolist' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'select' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'inputcontrol' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'picker' . DS . 'v1.php';
 
 class control extends wg
 {
@@ -40,7 +48,7 @@ class control extends wg
 
     protected function buildTextarea(): wg
     {
-        return textarea(set($this->props->skip('type')));
+        return new textarea(set($this->props->skip('type')));
     }
 
     protected function buildInputControl(): wg
@@ -57,25 +65,25 @@ class control extends wg
             unset($allProps[$propName]);
         }
 
-        return inputControl
+        return new inputControl
         (
             set($controlProps),
-            input(set($allProps)),
+            new input(set($allProps)),
         );
     }
 
     protected function buildCheckbox(): wg
     {
         if($this->hasProp('items')) return $this->buildCheckList();
-        return checkList
+        return new checkList
         (
-            checkbox(set($this->props->skip('type')))
+            new checkbox(set($this->props->skip('type')))
         );
     }
 
     protected function buildCheckList(): wg
     {
-        return checkList
+        return new checkList
         (
             set($this->props->skip('type'))
         );
@@ -83,7 +91,7 @@ class control extends wg
 
     protected function buildRadioList(): wg
     {
-        return radioList
+        return new radioList
         (
             set($this->props->skip('type'))
         );
@@ -91,7 +99,7 @@ class control extends wg
 
     protected function buildCheckListInline(): wg
     {
-        return checkList
+        return new checkList
         (
             set::inline(true),
             set($this->props->skip('type'))
@@ -100,7 +108,7 @@ class control extends wg
 
     protected function buildRadioListInline(): wg
     {
-        return radioList
+        return new radioList
         (
             set::inline(true),
             set($this->props->skip('type'))
