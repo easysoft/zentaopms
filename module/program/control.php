@@ -172,6 +172,9 @@ class program extends control
             $this->view->program = $program;
         }
 
+        $products = $this->loadModel('product')->getList($programID, $browseType);
+        $this->view->products = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story',  $programID);
+
         $this->view->title         = $this->lang->program->product;
         $this->view->position[]    = $this->lang->program->product;
         $this->view->programID     = $programID;
@@ -179,7 +182,6 @@ class program extends control
         $this->view->orderBy       = $orderBy;
         $this->view->pager         = $pager;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products      = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, 0, 'story', $programID);
         $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
         $this->view->usersAvatar   = $this->user->getAvatarPairs('');
         $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
