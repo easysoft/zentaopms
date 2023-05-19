@@ -12,32 +12,60 @@ declare(strict_types=1);
 namespace zin;
 panel
 (
-    div('This is a rudimentary bug view page.'),
-    history(),
-    floatToolbar
+    div
     (
-        set::prefix
+        set('class', 'flex'),
+        cell
         (
-            array(array('icon' => 'back', 'text' => $lang->goback))
-        ),
-        set::main
-        (
-            array
+            set('width', '70%'),
+            set('class', 'border-r'),
+            history(),
+            center
             (
-                array('icon' => 'ok', 'text' => $lang->bug->confirmBug, 'url' => helper::createLink('bug', 'confirmBug', "bugID=$bug->id"), 'data-toggle' => 'modal'),
-                array('icon' => 'hand-right', 'text' => $lang->bug->assignTo, 'url' => helper::createLink('bug', 'assignTo', "bugID=$bug->id"), 'data-toggle' => 'modal'),
-                array('icon' => 'checked', 'text' => $lang->bug->resolve, 'url' => helper::createLink('bug', 'resolve', "bugID=$bug->id"), 'data-toggle' => 'modal'),
-                array('icon' => 'close', 'text' => $lang->bug->close, 'url' => helper::createLink('bug', 'close', "bugID=$bug->id"), 'data-toggle' => 'modal'),
-                array('icon' => 'magic', 'text' => $lang->bug->activate, 'url' => helper::createLink('bug', 'activate', "bugID=$bug->id"), 'data-toggle' => 'modal'),
+                floatToolbar
+                (
+                    set::prefix
+                    (
+                        array(array('icon' => 'back', 'text' => $lang->goback))
+                    ),
+                    set::main($actionList),
+                    set::suffix
+                    (
+                        array
+                        (
+                            array('icon' => 'edit', 'url' => helper::createLink('bug', 'edit', "bugID={$bug->id}")),
+                            array('icon' => 'copy', 'url' => helper::createLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extras=bugID={$bug->id}")),
+                            array('icon' => 'trash', 'url' => helper::createLink('bug', 'delete', "bugID={$bug->id}")),
+                        )
+                    )
+                )
             )
         ),
-        set::suffix
+        cell
         (
-            array
+            set('width', '30%'),
+            set('class', 'px-4'),
+            tabs
             (
-                array('icon' => 'edit', 'url' => helper::createLink('bug', 'edit', "bugID=$bug->id")),
-                array('icon' => 'copy'),
-                array('icon' => 'delete'),
+                set::items
+                (
+                    array
+                    (
+                        array('id' => 'legendBasicInfo', 'label' => $lang->bug->legendBasicInfo, 'data' => '123', 'active' => true),
+                        array('id' => 'legendLife', 'label' => $lang->bug->legendMisc, 'data' => '456'),
+                    )
+                )
+            ),
+            tabs
+            (
+                set::items
+                (
+                    array
+                    (
+                        array('id' => 'legendExecStoryTask', 'label' => (!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask), 'data' => '123', 'active' => true),
+                        array('id' => 'legendMisc', 'label' => $lang->bug->legendMisc, 'data' => '456'),
+                    )
+                )
             )
         )
     )

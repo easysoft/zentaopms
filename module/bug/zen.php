@@ -1487,6 +1487,7 @@ class bugZen extends bug
         $this->view->preAndNext  = $this->common->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
         $this->view->linkCommits = $this->repo->getCommitsByObject($bugID, 'bug');
+        $this->view->actionList  = $this->bug->buildOperateMenu($bug, 'view');
 
         $this->view->projects = array('' => '') + $projects;
     }

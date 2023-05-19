@@ -2818,62 +2818,45 @@ class bugModel extends model
     }
 
     /**
-     * 设置操作按钮。
-     * Set operate actions.
-     *
-     * @param  string $type browse|view
-     * @access public
-     * @return void
-     */
-    public function setOperateActions(string $type = 'browse'): void
-    {
-        $params = 'bugID={id}';
-
-        $actions = array();
-        $actions['confirm']['icon']        = 'icon-ok';
-        $actions['confirm']['hint']        = $this->lang->bug->confirm;
-        $actions['confirm']['url']         = inlink('confirm', $params);
-        $actions['confirm']['data-toggle'] = 'modal';
-
-        $actions['resolve']['icon']        = 'icon-checked';
-        $actions['resolve']['hint']        = $this->lang->bug->resolve;
-        $actions['resolve']['url']         = inlink('resolve', $params);
-        $actions['resolve']['data-toggle'] = 'modal';
-
-        $actions['close']['icon']        = 'icon-off';
-        $actions['close']['hint']        = $this->lang->bug->close;
-        $actions['close']['url']         = inlink('close', $params);
-        $actions['close']['data-toggle'] = 'modal';
-
-        $actions['edit']['icon'] = 'icon-edit';
-        $actions['edit']['hint'] = $this->lang->bug->edit;
-        $actions['edit']['url']  = inlink('edit', $params);
-
-        if($this->app->tab != 'product')
-        {
-            $extraParams = "extras=$params";
-            if($this->app->tab == 'project')   $extraParams .= ',projectID={project}';
-            if($this->app->tab == 'execution') $extraParams .= ',executionID={execution}';
-            $copyParams = "productID={product}&branch={branch}&$extraParams";
-
-            $actions['copy']['icon'] = 'icon-copy';
-            $actions['copy']['hint'] = $this->lang->bug->copy;
-            $actions['copy']['url']  = inlink('create', $copyParams);
-        }
-
-        $this->config->bug->dtable->fieldList['actions']['actionsMap'] = $actions;
-    }
-
-    /**
-     * Build bug menu.
+     * 构造详情页或列表页需要的操作菜单。
+     * Build action menu.
      *
      * @param  object $bug
      * @param  string $type
      * @access public
      * @return string
      */
-    public function buildOperateMenu($bug, $type = 'view')
+    public function buildOperateMenu(object $bug = null, $type = 'view'): array
     {
+        $defaultParams = $bug ? "bugID={$bug->id}" : 'bugID={id}';
+        $copyParams    = $bug ? "productID={$bug->product}&branch={$bug->branch}&extra=bugID={$bug->id}" : 'productID={product}&branch={branch}&extra=bugID={id}';
+        if($this->app->tab == 'project')   $copyParams .= ',projectID={project}';
+        if($this->app->tab == 'execution') $copyParams .= ',executionID={execution}';
+
+        $actions = array();
+        $actions['confirm']  = array('icon' => 'ok',         'text' => $this->lang->bug->confirmedAB, 'url' => helper::createLink('bug', 'confirmBug', $defaultParams), 'data-toggle' => 'modal');
+        $actions['assignTo'] = array('icon' => 'hand-right', 'text' => $this->lang->bug->assignTo,    'url' => helper::createLink('bug', 'assignTo',   $defaultParams), 'data-toggle' => 'modal');
+        $actions['resolve']  = array('icon' => 'checked',    'text' => $this->lang->bug->resolve,     'url' => helper::createLink('bug', 'resolve',    $defaultParams), 'data-toggle' => 'modal');
+        $actions['close']    = array('icon' => 'off',        'text' => $this->lang->bug->close,       'url' => helper::createLink('bug', 'close',      $defaultParams), 'data-toggle' => 'modal');
+        $actions['activate'] = array('icon' => 'magic',      'text' => $this->lang->bug->activate,    'url' => helper::createLink('bug', 'activate',   $defaultParams), 'data-toggle' => 'modal');
+        $actions['edit']     = array('icon' => 'edit',       'text' => $this->lang->bug->edit,        'url' => helper::createLink('bug', 'edit',       $defaultParams));
+        $actions['copy']     = array('icon' => 'copy',       'text' => $this->lang->bug->copy,        'url' => helper::createLink('bug', 'create',     $copyParams));
+
+        foreach($actions as $action => $actionData)
+        {
+            $actionsConfig = $this->config->bug->actions->{$type};
+            if(strpos(",{$actionsConfig},", ",{$action},") === false)
+            { 
+                unset($actions[$action]);
+                continue;
+            }
+            $actions[$action]['hint'] = $actions[$action]['text'];
+            if($type == 'browse') unset($actions[$action]['text']);
+        }
+
+        if($type == 'browse') $this->config->bug->dtable->fieldList['actions']['actionsMap'] = $actions;
+        return $actions;
+
         $menu          = '';
         $params        = "bugID=$bug->id";
         $extraParams   = "extras=bugID=$bug->id";

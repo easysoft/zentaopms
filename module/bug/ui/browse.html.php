@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$this->bug->setOperateActions($view = 'browse');
+$this->bug->buildOperateMenu(null, 'browse');
 
 foreach($bugs as $bug)
 {

@@ -11,6 +11,10 @@ $config->bug->create->requiredFields  = 'title,openedBuild';
 $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 
+$config->bug->actions = new stdclass();
+$config->bug->actions->browse = 'confirm,resolve,close,edit,copy';
+$config->bug->actions->view   = 'confirm,assignTo,resolve,close,activate';
+
 $config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'needconfirm');
 
 $config->bug->list = new stdclass();
