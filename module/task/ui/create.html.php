@@ -305,8 +305,11 @@ formPanel
     formGroup
     (
         set::label($lang->task->desc),
-        set::name('desc'),
-        set::control('editor'),
+        editor
+        (
+            set::name('desc'),
+            set::rows('5'),
+        )
     ),
     formGroup
     (

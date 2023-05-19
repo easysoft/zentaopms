@@ -1187,9 +1187,9 @@ class taskZen extends task
      * @param  object    $oldTask
      * @param  object    $task
      * @access protected
-     * @return bool
+     * @return object
      */
-    protected function buildEffortForStart(object $oldTask, object $task): bool
+    protected function buildEffortForStart(object $oldTask, object $task): object
     {
         $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
 
@@ -1201,12 +1201,8 @@ class taskZen extends task
         $effort->work     = zget($task, 'work', '');
         $effort->account  = $this->app->user->account;
         $effort->consumed = !empty($oldTask->team) && $currentTeam ? $effort->consumed - $currentTeam->consumed : $effort->consumed - $oldTask->consumed;
-        if($this->post->comment) $effort->work = $this->post->comment;
 
-        if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
-        if($oldTask->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
-
-        return !dao::isError();
+        return $effort;
     }
 
     /**

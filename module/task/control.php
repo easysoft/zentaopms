@@ -443,13 +443,14 @@ class task extends control
      */
     public function start(int $taskID, string $cardPosition = '')
     {
-        /* Common actions of task module and task. */
-        $this->taskZen->commonAction($taskID);
-        $task = $this->task->getById($taskID);
-
         /* Analytic parameter. */
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
+
+        /* Common actions of task module and task. */
+        $this->taskZen->commonAction($taskID);
+        $task        = $this->task->getById($taskID);
+        $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         /* Submit the data process after start the task form. */
         if(!empty($_POST))
@@ -460,12 +461,13 @@ class task extends control
 
             /* Record task effort. */
             $effort = $this->buildEffortForStart($task, $taskData);
+            if($this->post->comment) $effort->work = $this->post->comment;
+            if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Start a task. */
-            $changes = $this->task->start($task, $taskData, $output);
-
-            /* If there is an error, return an error message. */
+            $changes = $this->task->start($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is started. */
@@ -486,7 +488,7 @@ class task extends control
         $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
         $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
-        $this->view->currentTeam     = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+        $this->view->currentTeam     = $currentTeam;
         $this->display();
     }
 
@@ -826,64 +828,53 @@ class task extends control
     }
 
     /**
-     * Restart task
+     * 重新开始一个任务。
+     * Restart a task.
      *
      * @param  int    $taskID
      * @param  string $from
      * @access public
      * @return void
      */
-    public function restart($taskID, $from = '')
+    public function restart(int $taskID, string $from = '')
     {
+        /* Common actions of task module and task. */
         $this->taskZen->commonAction($taskID);
-
-        $task = $this->task->getById($taskID);
+        $task        = $this->task->getById($taskID);
+        $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->task->start($taskID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            /* Prepare the data information before restart the task. */
+            $taskData = $this->taskZen->buildTaskForStart($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
-            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            /* Record task effort. */
+            $effort = $this->buildEffortForStart($task, $taskData);
+            if($this->post->comment) $effort->work = $this->post->comment;
+            if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* Restart a task. */
+            $changes = $this->task->start($task, $taskData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $action   = $this->post->left == 0 ? 'Finished' : 'Restarted';
+            $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
-
-            if(isonlybody())
-            {
-                $task         = $this->task->getById($taskID);
-                $execution    = $this->execution->getByID($task->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-                if($from == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-                }
-                return print(js::closeModal('parent.parent', 'this'));
-            }
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $this->send($response);
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->restart;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
-        $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
+        $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->restart;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->members         = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
+        $this->view->assignedTo      = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
+        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->currentTeam     = $currentTeam;
         $this->display();
     }
 

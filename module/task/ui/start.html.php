@@ -102,8 +102,11 @@ else
         formGroup
         (
             set::label($lang->comment),
-            set::name('comment'),
-            set::control('editor'),
+            editor
+            (
+                set::name('comment'),
+                set::rows('5'),
+            )
         ),
     );
 }
