@@ -69,8 +69,8 @@ if(!empty($members) && $task->mode == 'linear')
           <th class="w-120px"><?php common::printOrderLink('date', !strpos($orderBy, ',') ? $orderBy : 'date_asc', $vars, $lang->task->date);?></th>
           <th class="w-120px text-center"><?php echo $lang->task->recordedBy;?></th>
           <th class='text-left'><?php echo $lang->task->work;?></th>
-          <th class="thWidth text-center"><?php echo $lang->task->consumed;?></th>
-          <th class="thWidth text-center"><?php echo $lang->task->left;?></th>
+          <th class="thWidth text-center"><?php echo $lang->task->consumedAB;?></th>
+          <th class="thWidth text-center"><?php echo $lang->task->leftAB;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
