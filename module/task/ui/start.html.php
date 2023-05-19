@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 /* ====== Preparing and processing page data ====== */
+jsVar('confirmFinish', $lang->task->confirmFinish);
+jsVar('noticeTaskStart', $lang->task->noticeTaskStart);
 
 /* zin: Set variables to define control for form. */
 if($task->mode == 'linear')
