@@ -745,7 +745,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID, '', true);
                 showIframe = true;
             }
         }
