@@ -2188,4 +2188,25 @@ class taskTest
 
         return implode('|', $cells);
     }
+
+    /**
+     * 维护团队成员信息。
+     * Maintain team member information.
+     *
+     * @param  array  $member
+     * @param  string $mode
+     * @param  bool   $inTeam
+     * @access public
+     * @return array|object
+     */
+    public function setTeamMemberObject(array $member, string $mode, bool $inTeam = false): array|object
+    {
+        global $tester;
+        $memberInfo = new stdclass();
+        foreach($member as $field => $value) $memberInfo->{$field} = $value;
+        $this->objectModel->setTeamMember($memberInfo, $mode, $inTeam);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($memberInfo->task)->andWhere('account')->eq($memberInfo->account)->fetch();
+    }
 }
