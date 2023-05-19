@@ -33,7 +33,7 @@ $requiredFields = array();
 foreach(explode(',', $config->task->create->requiredFields) as $field)
 {
     if($field) $requiredFields[$field] = '';
-    if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
+    if($field && strpos($showFields, $field) === false) $showFields .= ',' . $field;
 }
 jsVar('showFields', $showFields);
 

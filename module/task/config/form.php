@@ -16,7 +16,7 @@ $config->task->form->create['color']        = array('type' => 'string', 'require
 $config->task->form->create['name']         = array('type' => 'string', 'required' => true, 'default' => '');
 $config->task->form->create['pri']          = array('type' => 'int', 'required' => false, 'default' => $config->task->default->pri);
 $config->task->form->create['estimate']     = array('type' => 'float', 'required' => false, 'default' => 0);
-$config->task->form->create['desc']         = array('type' => 'string', 'required' => false);
+$config->task->form->create['desc']         = array('type' => 'string', 'required' => false, 'control' => 'editor');
 $config->task->form->create['estStarted']   = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->create['deadline']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->create['vision']       = array('type' => 'string', 'required' => false, 'default' => $config->vision);
@@ -137,6 +137,7 @@ $config->task->form->start['status']         = array('type' => 'string', 'requir
 $config->task->form->start['consumed']       = array('type' => 'float', 'required' => false, 'default' => 0);
 $config->task->form->start['left']           = array('type' => 'float', 'required' => false, 'default' => 0);
 $config->task->form->start['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->start['comment']        = array('type' => 'string', 'required' => false, 'control' => 'editor');
 $config->task->form->start['realStarted']    = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->start['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->start['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);

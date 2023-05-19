@@ -1092,7 +1092,6 @@ class taskZen extends task
             ->setIF(empty($postData->multiple) || count($team) < 1, 'mode', '')
             ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
             ->setIF(!empty($postData->assignedTo), 'assignedDate', helper::now())
-            ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->get();
 
         if(empty($postData->estStarted)) unset($task->estStarted);
@@ -1149,45 +1148,18 @@ class taskZen extends task
     }
 
     /**
-     * 准备开始任务前的数据信息。
-     * Prepare the data before start the task.
-     *
-     * @param  object       $oldTask
-     * @access protected
-     * @return false|object
-     */
-    protected function prepareStart(object $oldTask): false|object
-    {
-        /* Process the request data for the creation task. */
-        $task        = $this->buildTaskForStart($oldTask);
-        $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
-
-        /* Check if the input post data meets the requirements. */
-        $result = $this->checkStart($oldTask, $task, $currentTeam);
-        if(!$result) return false;
-
-        /* Record task effort. */
-        $effort = $this->prepareEffort4Start($oldTask, $task, $currentTeam);
-        if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
-        if($oldTask->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
-
-        return $task;
-    }
-
-    /**
      * 处理开始任务的请求数据。
      * Process the request data for the start task.
      *
      * @param  object    $oldTask
      * @access protected
-     * @return object
+     * @return false|object
      */
-    protected function buildTaskForStart(object $oldTask): object
+    protected function buildTaskForStart(object $oldTask): false|object
     {
         $now  = helper::now();
         $task = form::data($this->config->task->form->start)->add('id', $oldTask->id)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
-            ->stripTags($this->config->task->editor->start['id'], $this->config->allowedTags)
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], $this->post->uid);
@@ -1198,6 +1170,13 @@ class taskZen extends task
             $task->finishedDate = $now;
             $task->assignedTo   = $oldTask->openedBy;
         }
+
+        $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
+
+        /* Check if the input post data meets the requirements. */
+        $result = $this->checkStart($oldTask, $task, $currentTeam);
+        if(!$result) return false;
+
         return $task;
     }
 
@@ -1207,12 +1186,13 @@ class taskZen extends task
      *
      * @param  object    $oldTask
      * @param  object    $task
-     * @param  array     $currentTeam
      * @access protected
-     * @return object
+     * @return bool
      */
-    protected function prepareEffort4Start(object $oldTask, object $task, array $currentTeam): object
+    protected function buildEffortForStart(object $oldTask, object $task): bool
     {
+        $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
+
         $effort = new stdclass();
         $effort->date     = helper::today();
         $effort->task     = $task->id;
@@ -1223,7 +1203,10 @@ class taskZen extends task
         $effort->consumed = !empty($oldTask->team) && $currentTeam ? $effort->consumed - $currentTeam->consumed : $effort->consumed - $oldTask->consumed;
         if($this->post->comment) $effort->work = $this->post->comment;
 
-        return $effort;
+        if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+        if($oldTask->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+
+        return !dao::isError();
     }
 
     /**
@@ -1235,19 +1218,20 @@ class taskZen extends task
      * @access protected
      * @return bool
      */
-    protected function checkStart(object $oldTask, object $task, $currentTeam): bool
+    protected function checkStart(object $oldTask, object $task): bool
     {
+        $currentTeam = !empty($oldTask->team) ? $this->task->getTeamByAccount($oldTask->team) : array();
         if(!empty($oldTask->team))
         {
-            if($currentTeam && $task->consumed < $currentTeam->consumed) dao::$errors['consumed'] = $this->lang->oldTask->error->consumedSmall;
-            if($currentTeam && $currentTeam->status == 'doing' && $oldTask->status == 'doing') dao::$errors[] = $this->lang->oldTask->error->alreadyStarted;
+            if($currentTeam && $task->consumed < $currentTeam->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
+            if($currentTeam && $currentTeam->status == 'doing' && $oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         }
         else
         {
-            if($task->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->oldTask->error->consumedSmall;
-            if($oldTask->status == 'doing') dao::$errors[] = $this->lang->oldTask->error->alreadyStarted;
+            if($task->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
+            if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         }
-        if(!$task->left && !$task->consumed) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->oldTask->consumed);
+        if(!$task->left && !$task->consumed) dao::$errors['consumed'] = sprintf($this->lang->error->notempty, $this->lang->task->consumed);
         return !dao::isError();
     }
 
@@ -1428,5 +1412,21 @@ class taskZen extends task
             ->get();
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $taskData->field('uid'));
+    }
+
+    /**
+     * 检查是否能记录任务的日志。
+     * Check if the task effort can be recorded.
+     *
+     * @param  object    $task
+     * @access protected
+     * @return bool
+     */
+    protected function checkRecordEffort(object $task): bool
+    {
+        if(empty($task->team)) return true;
+        if($task->assignedTo != $this->app->user->account && $task->mode == 'linear') return false;
+        if(!isset($task->members[$this->app->user->account])) return false;
+        return true;
     }
 }

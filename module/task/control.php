@@ -35,16 +35,16 @@ class task extends control
      * @param  int    $moduleID
      * @param  int    $taskID
      * @param  int    $todoID
-     * @param  string $extra
+     * @param  string $cardPosition
      * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $extra = '', int $bugID = 0)
+    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0)
     {
         /* Analytic parameter. */
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
+        parse_str($cardPosition, $output);
 
         /* If you do not have permission to access any execution, go to the create execution page. */
         if(!$this->execution->checkPriv($executionID)) $this->locate($this->createLink('execution', 'create'));
@@ -123,15 +123,15 @@ class task extends control
      * @param  int    $moduleID
      * @param  int    $taskID
      * @param  string $iframe
-     * @param  string $extra
+     * @param  string $cardPosition
      * @access public
      * @return void
      */
-    public function batchCreate(int $executionID, int $storyID = 0, int $moduleID = 0, int $taskID = 0, string $extra = '')
+    public function batchCreate(int $executionID, int $storyID = 0, int $moduleID = 0, int $taskID = 0, string $cardPosition = '')
     {
         /* Init vars. */
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
+        parse_str($cardPosition, $output);
 
         /* 判断不能访问的执行。 Judge execution without access. */
         if($this->taskZen->isLimitedInExecution($executionID))
@@ -455,21 +455,21 @@ class task extends control
         if(!empty($_POST))
         {
             /* Prepare the data information before start the task. */
-            $newTask = $this->taskZen->prepareStart($task);
+            $taskData = $this->taskZen->buildTaskForStart($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* Record task effort. */
+            $effort = $this->buildEffortForStart($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Start a task. */
-            $changes = $this->task->start($task, $newTask, $output);
+            $changes = $this->task->start($task, $taskData, $output);
 
             /* If there is an error, return an error message. */
-            if(dao::isError())
-            {
-                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return array('result' => 'fail', 'message' => dao::getError());
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $newTask, $changes, $this->post->left, $this->post->comment, $output);
+            $result = $this->task->afterStart($task, $taskData, $changes, $this->post->left, $this->post->comment, $output);
             if(is_array($result)) $this->send($result);
 
             /* Get the information returned after a task is started. */
@@ -480,12 +480,13 @@ class task extends control
 
         /* Shows the variables needed to start the task page. */
         $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
-        if(!empty($task->team)) $assignedTo = $this->task->getAssignedTo4Multi($task->team, $task);
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members    = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
-        $this->view->assignedTo = $assignedTo;
+        $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
+        $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
+        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->currentTeam     = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
         $this->display();
     }
 

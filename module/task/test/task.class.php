@@ -191,7 +191,7 @@ class taskTest
     public function startTest(int $taskID, array $param = array()): array
     {
         $task        = new stdclass();
-        $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => '', 'left' => 0, 'consumed' => 0);
+        $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => helper::now(), 'left' => 0, 'consumed' => 0);
         foreach($startFields as $field => $defaultvalue) $task->{$field} = $defaultvalue;
         foreach($param as $key => $value) $task->{$key} = $value;
 
@@ -1811,7 +1811,7 @@ class taskTest
      * @access public
      * @return object|array
      */
-    public function createObject($param = array()): object|array
+    public function createObject(array $param = array()): object|array
     {
         $createFields = array(
             'module' => 0,
