@@ -1348,14 +1348,22 @@ class productModel extends model
     public function getStats(string $orderBy = 'order_asc', object|null $pager = null, string $status = 'noclosed', int $line = 0, string $storyType = 'story', int $programID = 0, int $param = 0): array
     {
         /* Fetch products list. */
-        $products = strtolower($status) == static::ST_BYSEARCH ? $this->getListBySearch($param) : $this->productTao->getList($programID, $status, 0, $line);
+        if(strtolower($status) == static::ST_BYSEARCH)
+        {
+            $products = $this->getListBySearch($param);
+        }
+        else
+        {
+            $products = $this->productTao->getList($programID, $status, 0, $line);
+        }
+
         if(empty($products)) return array();
 
         $this->loadModel('story');
 
         /* Get stats data. */
         $productIdList        = array_keys($products);
-        $products             = $this->productTao->getStatsProducts($productIdList,$programID, $orderBy, $pager);
+        $products             = $this->productTao->getStatsProducts($productIdList, $programID, $orderBy, $pager);
         $finishClosedStory    = $this->story->getFinishClosedTotal();
         $unclosedStory        = $this->story->getUnClosedTotal();
         $plans                = $this->productTao->getPlansTODO($productIdList);
