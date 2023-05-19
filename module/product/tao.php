@@ -941,9 +941,9 @@ class productTao extends productModel
 
                 $allTotal = $this->dao->select('COUNT(id) AS count')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
                 return round($closedTotal / $allTotal * 100, 1);
+            default:
+                return 0;
         }
-
-        return 0;
     }
 
     /**
@@ -1106,7 +1106,10 @@ class productTao extends productModel
             $total = count($list);
 
             $totalCovered = 0;
-            foreach($list as $storyID) isset($caseCountPairs[$storyID]) && $totalCovered++;
+            foreach($list as $storyID)
+            {
+                if(isset($caseCountPairs[$storyID])) $totalCovered++;
+            }
 
             $coveragePairs[$productID] = $total ? round($totalCovered * 100 / $total) : 0;
         }
