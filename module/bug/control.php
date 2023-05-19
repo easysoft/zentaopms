@@ -947,16 +947,16 @@ class bug extends control
      * Activate a bug.
      *
      * @param  int    $bugID
-     * @param  string $extra
+     * @param  string $kanbanInfo   a string of kanban info, for example, 'fromColID=1,toColID=2,fromLaneID=1,toLaneID=2,regionID=1'.
      * @access public
      * @return void
      */
-    public function activate(int $bugID, string $extra = '')
+    public function activate(int $bugID, string $kanbanInfo = '')
     {
         if(!empty($_POST))
         {
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $kanbanParams);
+            $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
+            parse_str($kanbanInfo, $kanbanParams);
 
             /* Activate bug. */
             $bugData = $this->bugZen->buildBugForActivate($bugID);
