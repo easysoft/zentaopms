@@ -1651,7 +1651,7 @@ class bugZen extends bug
             ->join('openedBuild', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $formData->get('uid'));
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
     }
 
     /**
