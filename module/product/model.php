@@ -1559,14 +1559,15 @@ class productModel extends model
     }
 
     /**
-     * Judge an action is clickable or not.
+     * 判断某操作是否可点击。
+     * Judge an action is clickable.
      *
      * @param  object $product
      * @param  string $action
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($product, $action)
+    public static function isClickable(object $product, string $action): bool
     {
         $action = strtolower($action);
 
