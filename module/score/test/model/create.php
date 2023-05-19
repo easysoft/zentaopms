@@ -21,7 +21,7 @@ product模块的edit方法不存在与积分规则中，不计算积分 >> 0
 */
 
 $moduleList  = array('user', 'story', 'task', 'bug', 'execution', 'product');
-$methodList  = array('login', 'close', 'finish', 'confirmBug', 'close', 'edit');
+$methodList  = array('login', 'close', 'finish', 'confirm', 'close', 'edit');
 $accountList = array('admin', 'dev10', 'test10', 'top10');
 
 $bug           = new stdclass();

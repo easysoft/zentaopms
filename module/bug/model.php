@@ -843,17 +843,17 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
             ->setDefault('mailto', '')
-            ->stripTags($this->config->bug->editor->confirmbug['id'], $this->config->allowedTags)
+            ->stripTags($this->config->bug->editor->confirm['id'], $this->config->allowedTags)
             ->remove('comment')
             ->join('mailto', ',')
             ->get();
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirmbug['id'], $this->post->uid);
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
 
         if(!dao::isError())
         {
-            $this->loadModel('score')->create('bug', 'confirmBug', $oldBug);
+            $this->loadModel('score')->create('bug', 'confirm', $oldBug);
             if($oldBug->execution)
             {
                 $this->loadModel('kanban');
@@ -2511,11 +2511,11 @@ class bugModel extends model
     {
         $action = strtolower($action);
 
-        if($module == 'bug' && $action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
-        if($module == 'bug' && $action == 'resolve')    return $object->status == 'active';
-        if($module == 'bug' && $action == 'close')      return $object->status == 'resolved';
-        if($module == 'bug' && $action == 'activate')   return $object->status != 'active';
-        if($module == 'bug' && $action == 'tostory')    return $object->status == 'active';
+        if($module == 'bug' && $action == 'confirm')  return $object->status == 'active' && $object->confirmed == 0;
+        if($module == 'bug' && $action == 'resolve')  return $object->status == 'active';
+        if($module == 'bug' && $action == 'close')    return $object->status == 'resolved';
+        if($module == 'bug' && $action == 'activate') return $object->status != 'active';
+        if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
 
         return true;
     }
@@ -2990,8 +2990,8 @@ class bugModel extends model
 
         $actions = array();
         $actions['confirm']['icon']        = 'icon-ok';
-        $actions['confirm']['hint']        = $this->lang->bug->confirmBug;
-        $actions['confirm']['url']         = inlink('confirmBug', $params);
+        $actions['confirm']['hint']        = $this->lang->bug->confirm;
+        $actions['confirm']['url']         = inlink('confirm', $params);
         $actions['confirm']['data-toggle'] = 'modal';
 
         $actions['resolve']['icon']        = 'icon-checked';
@@ -3042,7 +3042,7 @@ class bugModel extends model
         $convertParams = "productID=$bug->product&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
         $toStoryParams = "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id";
 
-        $menu .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $type, 'ok', '', "iframe", true);
+        $menu .= $this->buildMenu('bug', 'confirm', $params, $bug, $type, 'ok', '', "iframe", true);
         if($type == 'view' and $bug->status != 'closed') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
         $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe showinonlybody", true);
         $menu .= $this->buildMenu('bug', 'close', $params, $bug, $type, '', '', "text-danger iframe showinonlybody", true);

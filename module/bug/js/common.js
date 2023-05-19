@@ -5,7 +5,7 @@ $(function()
 
     $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
 
-    if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
+    if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirm')
     {
         oldProductID = $('#product').val();
     }

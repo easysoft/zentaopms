@@ -736,7 +736,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
+                var link = createLink('bug', 'confirm', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }

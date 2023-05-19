@@ -40,7 +40,7 @@ $config->score->rule->doc->create = array('times' => 0, 'hour' => 0, 'score' => 
 
 $config->score->rule->bug->create         = array('times' => 0, 'hour' => 0, 'score' => 1);
 $config->score->rule->bug->resolve        = array('times' => 0, 'hour' => 0, 'score' => 1);
-$config->score->rule->bug->confirmBug     = array('times' => 0, 'hour' => 0, 'score' => 1);
+$config->score->rule->bug->confirm        = array('times' => 0, 'hour' => 0, 'score' => 1);
 $config->score->rule->bug->saveTplModal   = array('times' => 1, 'hour' => 0, 'score' => 20);
 $config->score->rule->bug->createFormCase = array('times' => 0, 'hour' => 0, 'score' => 1);
 
@@ -76,7 +76,7 @@ $config->score->rule->search->saveQueryAdvanced = array('times' => 1, 'hour' => 
 $config->score->ruleExtended = array();
 $config->score->ruleExtended['story']['close']         = array('createID' => 2);
 $config->score->ruleExtended['user']['changePassword'] = array('strength' => array(1 => 2, 2 => 5));
-$config->score->ruleExtended['bug']['confirmBug']      = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
+$config->score->ruleExtended['bug']['confirm']         = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
 $config->score->ruleExtended['bug']['resolve']         = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
 $config->score->ruleExtended['task']['finish']         = array('pri'      => array(1 => 2, 2 => 1, 3 => 0));
 $config->score->ruleExtended['execution']['close']     = array('manager'  => array('close' => 20, 'onTime' => 10),

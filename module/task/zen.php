@@ -120,7 +120,7 @@ class taskZen extends task
             {
                 if($change['field'] == 'status')
                 {
-                    $response['callback']   = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
+                    $response['callback'] = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
                     return $response;
                 }
             }
@@ -213,7 +213,7 @@ class taskZen extends task
                     {
                         if($change['field'] == 'status')
                         {
-                            $response['callback']   = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
+                            $response['callback'] = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
                             return $response;
                         }
                     }

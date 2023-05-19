@@ -23,8 +23,8 @@ class bugConfirmEntry extends entry
         $fields = 'assignedTo,mailto,comment,pri,type';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('bug', 'confirmBug');
-        $control->confirmBug($bugID);
+        $control = $this->loadController('bug', 'confirm');
+        $control->confirm($bugID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');

@@ -110,7 +110,7 @@ class scoreModel extends model
 
                 if($method == 'saveTplModal') $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
 
-                if($method == 'confirmBug')
+                if($method == 'confirm')
                 {
                     $user  = $param->openedBy;
                     $desc .= 'ID:' . $param->id;
@@ -282,7 +282,7 @@ class scoreModel extends model
      */
     public function fixKey($string)
     {
-        $strings = array('created' => 'create', 'opened' => 'create', 'closed' => 'close', 'finished' => 'finish', 'bugconfirmed' => 'confirmBug', 'resolved' => 'resolve');
+        $strings = array('created' => 'create', 'opened' => 'create', 'closed' => 'close', 'finished' => 'finish', 'bugconfirmed' => 'confirm', 'resolved' => 'resolve');
         return isset($strings[$string]) ? $strings[$string] : $string;
     }
 

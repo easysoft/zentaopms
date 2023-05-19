@@ -789,6 +789,7 @@ class bug extends control
     }
 
     /**
+     * 确认 bug。
      * confirm a bug.
      *
      * @param  int    $bugID
@@ -796,13 +797,13 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function confirmBug($bugID, $extra = '')
+    public function confirm(int $bugID, string $extra = '')
     {
-        $bug = $this->bug->getById($bugID);
         if(!empty($_POST))
         {
             $changes = $this->bug->confirm($bugID, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
+
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
@@ -820,14 +821,13 @@ class bug extends control
             return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        $productID = $bug->product;
+        $bug = $this->bug->getByID($bugID);
+
         $this->bugZen->checkBugExecutionPriv($bug);
-        $this->qa->setMenu($this->products, $productID, $bug->branch);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->confirmBug;
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
+        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->confirm;
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->assignedTo);
         $this->view->actions = $this->action->getList('bug', $bugID);

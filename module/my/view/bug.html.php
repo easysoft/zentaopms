@@ -148,11 +148,11 @@
             if($canBeChanged)
             {
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->project);
-                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->project);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true, '', '', $bug->project);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list', '',        '', 'iframe', true, "data-width='95%'", '', $bug->project);
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', 'iframe', true, "data-width='95%'", '', $bug->project);
+                common::printIcon('bug', 'confirm', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->project);
+                common::printIcon('bug', 'resolve', $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $bug->project);
+                common::printIcon('bug', 'close',   $params, $bug, 'list', '',        '', 'iframe', true, '', '', $bug->project);
+                common::printIcon('bug', 'edit',    $params, $bug, 'list', '',        '', 'iframe', true, "data-width='95%'", '', $bug->project);
+                common::printIcon('bug', 'create',  "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', 'iframe', true, "data-width='95%'", '', $bug->project);
             }
             ?>
           </td>
@@ -176,7 +176,7 @@
         {
           $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->project);
           $misc = "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"";
-          echo html::commonButton($lang->bug->confirmBug, $misc);
+          echo html::commonButton($lang->bug->confirm, $misc);
         }
         if($canBatchClose)
         {

@@ -371,7 +371,7 @@ $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
 $lang->qa->menu->index     = array('link' => 'Index|qa|index');
-$lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto');
+$lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirm,assignto');
 $lang->qa->menu->testcase  = array('link' => 'Tình huống|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib');
 $lang->qa->menu->testtask  = array('link' => 'Yêu cầu|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
@@ -388,7 +388,7 @@ $lang->bug->menu = new stdclass();
 $lang->bug->subMenu = $lang->qa->subMenu;
 
 $lang->bug->menu->index     = array('link' => 'Index|qa|index');
-$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirm,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => 'Tình huống|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->bug->menu->testtask  = array('link' => 'Yêu cầu|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
@@ -835,7 +835,6 @@ $lang->icons['close']              = 'off';
 $lang->icons['activate']           = 'magic';
 $lang->icons['review']             = 'glasses';
 $lang->icons['confirm']            = 'search';
-$lang->icons['confirmBug']         = 'search';
 $lang->icons['putoff']             = 'calendar';
 $lang->icons['suspend']            = 'pause';
 $lang->icons['pause']              = 'pause';

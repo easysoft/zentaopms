@@ -290,7 +290,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               $class      = $canBatchConfirm ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchConfirm');
               $misc       = $canBatchConfirm ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"" : '';
-              echo "<li $class>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
+              echo "<li $class>" . html::a('javascript:;', $lang->bug->confirm, '', $misc) . "</li>";
 
               $class      = $canBatchClose ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchClose');

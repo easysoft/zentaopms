@@ -1072,7 +1072,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
+                var link = createLink('bug', 'confirm', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -1364,7 +1364,7 @@ function createBugMenu(options)
     if(priv.canEditBug) items.push({label: bugLang.edit, icon: 'edit', url: createLink('bug', 'edit', 'bugID=' + bug.id + '&comment=&kanbanGroup=' + groupBy, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canResolveBug && (bug.$col.type == 'unconfirmed' || bug.$col.type == 'confirmed' || bug.$col.type == 'fixing')) items.push({label: bugLang.resolve, icon: 'checked', url: createLink('bug', 'resolve', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canConfirmBug && (bug.$col.type == 'fixed' || bug.$col.type == 'testing' || bug.$col.type == 'tested')) items.push({label: bugLang.close, icon: 'off', url: createLink('bug', 'close', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canConfirmBug && bug.$col.type == 'unconfirmed') items.push({label: bugLang.confirmBug, icon: 'ok', url: createLink('bug', 'confirmbug', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canConfirmBug && bug.$col.type == 'unconfirmed') items.push({label: bugLang.confirm, icon: 'ok', url: createLink('bug', 'confirm', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCopyBug) items.push({label: bugLang.copy, icon: 'copy', url: createLink('bug', 'create', 'productID=' + productID + '&branch=&extras=bugID=' + bug.id + ',regionID=' + bug.$lane.region + ',laneID=' + bug.lane + ',columnID=' + bug.column + ',executionID=' + executionID, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canToStoryBug && (bug.$col.type != 'closed')) items.push({label: bugLang.toStory, icon: 'lightbulb', url: createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateBug && (bug.$col.type == 'fixed') || bug.$col.type == 'testing' || bug.$col.type == 'tested' || bug.$col.type == 'closed') items.push({label: bugLang.activate, icon: 'magic', url: createLink('bug', 'activate', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});

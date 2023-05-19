@@ -14,7 +14,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('holders', $lang->bug->placeholder);
-js::set('page', 'confirmbug');
+js::set('page', 'confirm');
 ?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -24,7 +24,7 @@ js::set('page', 'confirmbug');
         <?php echo isonlybody() ? ('<span title="' . $bug->title . '">' . $bug->title . '</span>') : html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title);?>
 
         <?php if(!isonlybody()):?>
-        <small><?php echo $lang->arrow . $lang->bug->confirmBug;?></small>
+        <small><?php echo $lang->arrow . $lang->bug->confirm;?></small>
         <?php endif;?>
       </h2>
     </div>
