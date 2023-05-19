@@ -1194,7 +1194,7 @@ class bug extends control
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->users                 = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->assignedToList        = $assignedToList;
         $this->view->cases                 = array('' => '') + $cases;
         $this->view->openedBuilds          = $openedBuilds;
