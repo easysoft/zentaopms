@@ -173,52 +173,6 @@ class productTao extends productModel
         return $products;
     }
 
-    /**
-     * 获取产品列表。
-     * Get products list.
-     *
-     * @param  int        $programID
-     * @param  string     $status
-     * @param  int        $limit
-     * @param  int        $line
-     * @param  string|int $shadow    all | 0 | 1
-     * @access protected
-     * @return array
-     */
-    protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0)
-    {
-        $products = $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
-            ->where('t1.deleted')->eq(0)
-            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
-            ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
-            ->beginIF($status == 'involved')
-            ->andWhere('t1.PO', true)->eq($this->app->user->account)
-            ->orWhere('t1.QD')->eq($this->app->user->account)
-            ->orWhere('t1.RD')->eq($this->app->user->account)
-            ->orWhere('t1.createdBy')->eq($this->app->user->account)
-            ->orWhere('t4.account')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
-            ->beginIF($status == 'review')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
-            ->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->fetchAll('id');
-
-        return $products;
-    }
-
-
     /* TODO move to productplan module. */
     protected function getPlansTODO(array $productIDs): array
     {
@@ -336,29 +290,29 @@ class productTao extends productModel
      * 获取用于统计的产品列表。
      * Get products list for statistic.
      *
-     * @param  int[]       $roductIDs
-     * @param  int         $programID
+     * @param  int[]       $roductIdList
+     * @param  bool        $appendProgram
      * @param  string      $orderBy
      * @param  object|null $pager
      * @access protected
      * @return array
      */
-    protected function getStatsProducts(array $productIDs, int $programID, string $orderBy, object|null $pager = null): array
+    protected function getStatsProducts(array $productIdList, bool $appendProgram, string $orderBy, object|null $pager = null): array
     {
         $this->loadModel('program');
 
-        if($orderBy == static::OB_PROGRAM) $products = $this->getPagerProductsWithProgramIn($productIDs, $pager);
-        else $products = $this->getPagerProductsIn($productIDs, $pager, $orderBy);
+        if($orderBy == static::OB_PROGRAM) $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
+        else $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
 
         /* Fetch product lines. */
         $linePairs = $this->getLinePairs();
         foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
 
-        if(!empty($programID)) return $products;
+        if(!$appendProgram) return $products;
 
-        $programKeys = array(0 => 0);
-        foreach($products as $product) $programKeys[] = $product->program;
-        $programs = $this->program->getBaseDataList(array_unique($programKeys));
+        $programIdList = array();
+        foreach($products as $product) $programIdList[] = $product->program;
+        $programs = $this->program->getBaseDataList(array_unique($programIdList));
 
         foreach($products as $product)
         {

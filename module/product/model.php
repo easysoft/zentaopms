@@ -1332,38 +1332,72 @@ class productModel extends model
     }
 
     /**
+     * 获取产品列表。
+     * Get products list.
+     *
+     * @param  int        $programID
+     * @param  string     $status
+     * @param  int        $limit
+     * @param  int        $line
+     * @param  string|int $shadow    all | 0 | 1
+     * @access protected
+     * @return array
+     */
+    public function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0)
+    {
+        $products = $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
+            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
+            ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
+            ->beginIF($status == 'involved')
+            ->andWhere('t1.PO', true)->eq($this->app->user->account)
+            ->orWhere('t1.QD')->eq($this->app->user->account)
+            ->orWhere('t1.RD')->eq($this->app->user->account)
+            ->orWhere('t1.createdBy')->eq($this->app->user->account)
+            ->orWhere('t4.account')->eq($this->app->user->account)
+            ->markRight(1)
+            ->fi()
+            ->beginIF($status == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->fetchAll('id');
+
+        return $products;
+    }
+
+    /**
      * 获取产品统计信息。
      * Get product stats.
      *
+     * @param  array       $productIdList
      * @param  string      $orderBy order_asc|program_asc
      * @param  object|null $pager
-     * @param  string      $status
-     * @param  int         $line
      * @param  string      $storyType requirement|story
      * @param  int         $programID
-     * @param  int         $param
      * @access public
      * @return array
      */
-    public function getStats(string $orderBy = 'order_asc', object|null $pager = null, string $status = 'noclosed', int $line = 0, string $storyType = 'story', int $programID = 0, int $param = 0): array
+    public function getStats(array $productIdList, string $orderBy = 'order_asc', object|null $pager = null, string $storyType, int $programID = 0): array
     {
-        /* Fetch products list. */
-        if(strtolower($status) == static::ST_BYSEARCH)
-        {
-            $products = $this->getListBySearch($param);
-        }
-        else
-        {
-            $products = $this->productTao->getList($programID, $status, 0, $line);
-        }
-
-        if(empty($products)) return array();
+        if(empty($productIdList)) return array();
 
         $this->loadModel('story');
 
         /* Get stats data. */
-        $productIdList        = array_keys($products);
-        $products             = $this->productTao->getStatsProducts($productIdList, $programID, $orderBy, $pager);
+        $appendProgram = $programID == 0;
+        $products      = $this->productTao->getStatsProducts($productIdList, $appendProgram, $orderBy, $pager);
+
         $finishClosedStory    = $this->story->getFinishClosedTotal();
         $unclosedStory        = $this->story->getUnClosedTotal();
         $plans                = $this->productTao->getPlansTODO($productIdList);

@@ -600,10 +600,20 @@ class product extends control
 
         /* Generate statistics of products. */
         if($this->config->systemMode == 'light' && $orderBy == 'program_asc') $orderBy = 'order_asc';
+
+        if(strtolower($browseType) == 'bysearch')
+        {
+            $queryID  = ($browseType == 'bySearch' || !empty($param)) ? $param : 0;
+            $products = $this->product->getListBySearch($queryID);
+        }
+        else
+        {
+            $products = $this->product->getList($programID, $browseType);
+        }
+
         $this->app->loadClass('pager', true);
-        $pager           = new pager($recTotal, $recPerPage, $pageID);
-        $queryID         = ($browseType == 'bySearch' || !empty($param)) ? $param : 0;
-        $productStatList = $this->product->getStats($orderBy, $pager, $browseType, 0, 'story', $programID, $queryID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $productStatList = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
 
         /* Generate root program list. */
         $rootProgramList = $this->loadModel('program')->getRootProgramList();
