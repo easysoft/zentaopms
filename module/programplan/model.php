@@ -391,7 +391,7 @@ class programplanModel extends model
                     $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
                     if(in_array($point->category, $categories))
                     {
-                        if($point->end)
+                        if($point->end and !helper::isZeroDate($point->end))
                         {
                             $end = $point->end;
                         }
