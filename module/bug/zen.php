@@ -1620,23 +1620,23 @@ class bugZen extends bug
      * 准备激活数据。
      * Prepare Activate Data.
      *
-     * @param  form      $formData
-     * @param  int       $bugID
+     * @param  int $bugID
      * @access protected
      * @return object
      */
-    protected function prepareActivate(form $formData, int $bugID): object
+    protected function buildBugForActivate(int $bugID): object
     {
-        $oldBug = $this->bug->getById($bugID);
-        $now    = helper::now();
-        $bug    = $formData
+        $now        = helper::now();
+        $formConfig = $this->config->bug->form->activate;
+        $oldBug     = $this->dao->select('resolvedBy, activatedCount')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+
+        $bug = form::data($formConfig)
             ->setDefault('assignedTo',     $oldBug->resolvedBy)
             ->setDefault('assignedDate',   $now)
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
             ->setDefault('activatedCount', (int)$oldBug->activatedCount)
-            ->stripTags($this->config->bug->editor->activate['id'], $this->config->allowedTags)
             ->add('id', $bugID)
             ->add('resolution', '')
             ->add('status', 'active')
@@ -1651,7 +1651,8 @@ class bugZen extends bug
             ->join('openedBuild', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
+        $editorFields = array_keys(array_filter(array_map(function($config){return (!empty($config['control']) && $config['control'] == 'editor');}, $formConfig)));
+        return $this->loadModel('file')->processImgURL($bug, $editorFields, $this->post->uid);
     }
 
     /**

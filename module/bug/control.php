@@ -959,9 +959,8 @@ class bug extends control
             parse_str($extra, $output);
 
             /* Activate bug. */
-            $formData = form::data($this->config->bug->form->activate);
-            $bug      = $this->bugZen->prepareActivate($formData, $bugID);
-            $changes  = $this->bug->activate($bug, $output);
+            $bugData = $this->bugZen->buildBugForActivate($bugID);
+            $changes = $this->bug->activate($bugData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Save attachments and record logs. */
