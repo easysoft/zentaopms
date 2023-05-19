@@ -657,6 +657,7 @@ class productTest
     {
         $objects = $this->objectModel->batchGetStoryStage($stories);
 
+        $stages = array();
         foreach($objects as $id => $object) $stages[$id] = $object[0]->stage;
 
         if(dao::isError())
