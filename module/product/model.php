@@ -319,17 +319,6 @@ class productModel extends model
     }
 
     /**
-     * Get grouped products.
-     *
-     * @access public
-     * @return void
-     */
-    public function getStatusGroups()
-    {
-        return $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
-    }
-
-    /**
      * 遍历产品列表，将产品线拼接到产品名上。
      * Iterate products, concatenating product line onto product name.
      *
