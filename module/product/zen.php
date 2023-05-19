@@ -1129,7 +1129,7 @@ class productZen extends product
         else
         {
             $queryID = ($browseType == 'bysearch') ? $param : 0;
-            $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+            $stories = $this->product->getStories($productID, $branchID, $browseType, (int)$queryID, $moduleID, $storyType, $sort, $pager);
         }
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
