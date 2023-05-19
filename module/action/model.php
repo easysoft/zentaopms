@@ -406,7 +406,7 @@ class actionModel extends model
                 $productID = trim($action->product, ',');
                 $name      = $project->name;
                 $method    = $project->model == 'kanban' ? 'index' : 'view';
-                if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
+                if($name) $action->extra = (common::hasPriv('project', $method) and $this->config->vision != 'or') ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
             }
             elseif($actionName == 'linked2plan')
             {
