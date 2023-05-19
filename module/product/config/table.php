@@ -64,7 +64,7 @@ $config->product->dtable->fieldList['reviewingStories']['group']    = $lang->SRC
 $config->product->dtable->fieldList['reviewingStories']['align']    = 'center';
 
 $config->product->dtable->fieldList['storyCompleteRate']['name']     = 'storyCompleteRate';
-$config->product->dtable->fieldList['storyCompleteRate']['title']    = $lang->product->storyCompleteRate;
+$config->product->dtable->fieldList['storyCompleteRate']['title']    = $lang->product->completeRate;
 $config->product->dtable->fieldList['storyCompleteRate']['minWidth'] = 62;
 $config->product->dtable->fieldList['storyCompleteRate']['type']     = 'progress';
 $config->product->dtable->fieldList['storyCompleteRate']['sortType'] = false;

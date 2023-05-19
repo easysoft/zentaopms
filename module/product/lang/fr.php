@@ -87,7 +87,7 @@ $lang->product->unResolvedBugsTitle   = 'Bugs Ouverts';
 $lang->product->assignToNullBugs      = 'Orphelins [B]';
 $lang->product->assignToNullBugsTitle = 'Bugs non assignés';
 $lang->product->closedBugs            = 'Closed Bug';
-$lang->product->bugFixedRate          = 'Bug Repair rate';
+$lang->product->bugFixedRate          = 'Repair Rate';
 $lang->product->unfoldClosed          = 'Unfold Closed';
 
 $lang->product->confirmDelete        = "Voulez-vous vraiment supprimer le {$lang->productCommon} ?";
@@ -254,3 +254,4 @@ $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
 $lang->product->belongingLine    = 'Product Line';
 $lang->product->testCaseCoverage = 'Case Coverage';
 $lang->product->activatedBug     = 'Activated Bugs';
+$lang->product->completeRate     = 'Completion Rate';

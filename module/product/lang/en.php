@@ -87,7 +87,7 @@ $lang->product->unResolvedBugsTitle   = 'Active Bugs';
 $lang->product->assignToNullBugs      = 'Unassigned [B]';
 $lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 $lang->product->closedBugs            = 'Closed Bug';
-$lang->product->bugFixedRate          = 'Bug Repair rate';
+$lang->product->bugFixedRate          = 'Repair Rate';
 $lang->product->unfoldClosed          = 'Unfold Closed';
 
 $lang->product->confirmDelete        = " Do you want to delete the {$lang->productCommon}?";
@@ -157,13 +157,6 @@ $lang->product->unclosed       = 'Open';
 $lang->product->unplan         = 'Unplanned';
 $lang->product->viewByUser     = 'By User';
 $lang->product->assignedByMe   = 'AssignedByMe';
-
-$lang->product->storyCompleteRate = 'Completion Rate';
-$lang->product->bugFixedRate      = 'Fixed Rate';
-$lang->product->belongingLine     = 'Belong To';
-$lang->product->feedback          = 'Feedback';
-$lang->product->testCaseCoverage  = 'Coverage';
-$lang->product->activatedBug      = 'Activated';
 
 /* Product Kanban. */
 $lang->product->myProduct             = "{$lang->productCommon}s Ownedbyme";
@@ -261,3 +254,4 @@ $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
 $lang->product->belongingLine    = 'Product Line';
 $lang->product->testCaseCoverage = 'Case Coverage';
 $lang->product->activatedBug     = 'Activated Bugs';
+$lang->product->completeRate     = 'Completion Rate';

@@ -87,7 +87,7 @@ $lang->product->unResolvedBugsTitle   = '未解决Bug';
 $lang->product->assignToNullBugs      = '未指派Bug';
 $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->closedBugs            = '关闭Bug';
-$lang->product->bugFixedRate          = 'Bug修复率';
+$lang->product->bugFixedRate          = '修复率';
 $lang->product->unfoldClosed          = '展开已关闭';
 
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
@@ -254,3 +254,4 @@ $lang->product->featureBar['dynamic']['lastMonth'] = '上月';
 $lang->product->belongingLine    = '所属产品线';
 $lang->product->testCaseCoverage = '用例覆盖率';
 $lang->product->activatedBug     = 'Bug激活';
+$lang->product->completeRate     = '完成率';
