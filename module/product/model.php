@@ -1308,7 +1308,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats(array $productIdList, string $orderBy = 'order_asc', object|null $pager = null, string $storyType, int $programID = 0): array
+    public function getStats(array $productIdList, string $orderBy = 'order_asc', object|null $pager = null, string $storyType = 'story', int $programID = 0): array
     {
         if(empty($productIdList)) return array();
 
