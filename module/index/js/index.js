@@ -758,6 +758,7 @@ $.extend(
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
                 var assetType    = ',story,issue,risk,opportunity,doc,';
+                if(vision == 'or' && searchModule == 'story') searchLink = createLink(searchModule, searchMethod, "id=" + objectValue + '&version=0&param=0&storyType=requirement');
                 if(assetType.indexOf(',' + searchModule + ',') > -1)
                 {
                     var link = createLink('index', 'ajaxGetViewMethod' , 'objectID=' + objectValue + '&objectType=' + searchModule);

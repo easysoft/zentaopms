@@ -1397,11 +1397,16 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
+        $story = $this->story->getById($storyID, $version, true);
+
+        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
+        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'all')));
+
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
         $storyID = (int)$storyID;
-        $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID($story->product);
+
         if($tab == 'product' and !empty($product->shadow))
         {
             $backLink = $this->session->productList ? $this->session->productList : inlink('product', 'all');
@@ -1416,9 +1421,6 @@ class story extends control
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
-
-        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
         if(!empty($story->fromBug)) $this->session->set('bugList', $uri, 'qa');
