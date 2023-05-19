@@ -1336,9 +1336,9 @@ class baseFixer
      *
      * @param  string $fieldName
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function get(string $fields = ''): object
+    public function get(string $fields = ''): mixed
     {
         $fields = str_replace(' ', '', trim($fields));
         foreach($this->data as $field => $value) $this->specialChars($field);

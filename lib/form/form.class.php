@@ -195,9 +195,9 @@ class form extends fixer
      *
      * @param  string $fields
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function get(string $fields = ''): object
+    public function get(string $fields = ''): mixed
     {
         global $config;
 

@@ -43,7 +43,7 @@ class validater extends baseValidater
  */
 class fixer extends baseFixer
 {
-    public function get(string $fields = ''): object
+    public function get(string $fields = ''): mixed
     {
         global $config;
         /* Get extend field by flow. */
