@@ -88,15 +88,31 @@ else
             (
                 set::width('1/3'),
                 set::label($task->mode == 'linear' ? $lang->task->myConsumed : $lang->task->consumed),
-                set::name('consumed'),
-                set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed),
+                inputControl
+                (
+                    input
+                    (
+                        set::name('consumed'),
+                        set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed),
+                    ),
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20),
+                ),
             ),
             formGroup
             (
                 set::width('1/3'),
                 set::label($lang->task->left),
-                set::name('left'),
-                set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left),
+                inputControl
+                (
+                    input
+                    (
+                        set::name('left'),
+                        set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left),
+                    ),
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20),
+                ),
             ),
         ),
         formGroup
