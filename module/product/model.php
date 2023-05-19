@@ -217,9 +217,9 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByProjectModel($model)
+    public function getPairsByProjectModel(string $model = 'all'): array
     {
-        return $this->dao->select('t3.id as id, t3.name as name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('t3.id, t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t3.deleted')->eq(0)
