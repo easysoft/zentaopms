@@ -483,7 +483,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function responseAfterOperate(int $bugID, array $changes, string $kanbanGroup = '', int $regionID = 0): array
+    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0): array
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
 
@@ -506,7 +506,7 @@ class bugZen extends bug
         /* Respond after updating in modal. */
         if(isonlybody()) $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID=$bugID"));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID"));
     }
 
     /**
@@ -1506,7 +1506,7 @@ class bugZen extends bug
             ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
             ->get();
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $data->rawdata->uid);
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $bug->uid);
         return $bug;
     }
 

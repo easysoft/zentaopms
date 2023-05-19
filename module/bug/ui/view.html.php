@@ -12,7 +12,8 @@ declare(strict_types=1);
 namespace zin;
 panel
 (
-    div('这是详情页面'),
+    div('This is a rudimentary bug view page.'),
+    history(),
     floatToolbar
     (
         set::prefix

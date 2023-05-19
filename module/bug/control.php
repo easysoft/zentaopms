@@ -978,15 +978,15 @@ class bug extends control
     }
 
     /**
-     * 关闭一个bug。
+     * 根据Bug的ID来关闭Bug。
      * Close a bug.
      *
-     * @param  string $bugID
+     * @param  int    $bugID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function close(string $bugID, string $extra = '')
+    public function close(int $bugID, string $extra = '')
     {
         $oldBug = $this->bug->getByID((int)$bugID);
 
@@ -1005,7 +1005,7 @@ class bug extends control
             parse_str($extra, $output);
             $regionID = zget($output, 'regionID', 0);
 
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup));
+            return $this->send($this->bugZen->responseAfterOperate($bugID));
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
