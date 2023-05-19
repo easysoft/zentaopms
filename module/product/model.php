@@ -409,32 +409,20 @@ class productModel extends model
     /**
      * Get products group by program.
      *
-     * @param  array  $appendIDList
      * @access public
      * @return array
      */
-    public function getProductsGroupByProgram($appendIDList = array())
+    public function getProductsGroupByProgram(): array
     {
-        $views = $this->app->user->view->products;
-        if(!empty($appendIDList)) $views .= ',' . implode(',', $appendIDList);
+        $products = $this->productTao->getList(0, 'noclosed');
 
-        $products = $this->dao->select("t1.id, t1.name, t1.program, t2.name AS programName")->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t1.shadow')->eq((int)0)
-            ->andWhere('t1.status')->ne('closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
-            ->orderBy('program')
-            ->fetchGroup('program');
+        $programIdList = array_unique(array_column($products, 'program'));
+        $programs      = $this->loadModel('program')->getPairsByList($programIdList);
 
-        $productsGroupByProgram = array();
-        foreach($products as $program => $programProducts)
-        {
-            foreach($programProducts as $product) $productsGroupByProgram[$program][$product->id] = $product->programName . '/' . $product->name;
-        }
+        $productGroup = array();
+        foreach($products as $product) $productGroup[$product->program][$product->id] = zget($programs, $product->program, '') . '/' . $product->name;
 
-        return $productsGroupByProgram;
+        return $productGroup;
     }
 
     /*
