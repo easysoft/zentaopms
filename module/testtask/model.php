@@ -778,6 +778,11 @@ class testtaskModel extends model
             ->join('type', ',')
             ->remove('files,labels,uid,comment,contactListMenu')
             ->get();
+
+        /* Fix bug #35419. */
+        $execution     = $this->loadModel('execution')->getByID($task->execution);
+        $task->project = $execution->project;
+
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
         $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
