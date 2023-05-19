@@ -1307,14 +1307,7 @@ class docModel extends model
 
         if($object->project and !$object->execution and $object->acl == 'default')
         {
-            $stakeHolders = array();
-            $project      = $this->loadModel('project')->getById($object->project);
-            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($object->project);
-            $stakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
-
-            $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
-
-            if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
+            if($this->loadModel('project')->checkPriv($object->project)) return true;
         }
 
         if(strpos($extra, 'notdoc') !== false)
@@ -1725,9 +1718,6 @@ class docModel extends model
             /* Load module. */
             $this->loadModel('program');
 
-            /* Sort project. */
-            $orderedProjects = array();
-
             /* Project permissions for DocLib whitelist. */
             if($this->app->tab == 'doc')
             {
@@ -1741,6 +1731,9 @@ class docModel extends model
                     ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
+
+            /* Sort project. */
+            $orderedProjects = array();
 
             $objects = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
@@ -1774,6 +1767,9 @@ class docModel extends model
                     $closedObjects[$id] = $project->name;
                 }
             }
+
+            /* Fix bug #34873. */
+            ksort($myObjects);
         }
         elseif($objectType == 'execution')
         {

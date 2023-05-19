@@ -20,6 +20,7 @@
 
 .c-project, .c-product, .c-execution {width: 110px !important; overflow: unset;}
 .c-user, .c-order {width: 96px !important; overflow: unset;}
+.c-dynamic-date {width: 200px;}
 #mainMenu .picker .picker-selections{white-space:nowrap;}
 .picker-drop-menu{width:auto !important; max-width:350px !important;}
 

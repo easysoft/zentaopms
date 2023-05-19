@@ -338,7 +338,8 @@ class testsuite extends control
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', 0, 'all');
         $this->config->testcase->search['params']['lib']['values']    = $this->loadModel('caselib')->getLibraries();
-        
+        $this->config->testcase->search['params']['story']['values']  = array('' => '') + $this->loadModel('testcase')->getStoriesByProduct($productID);
+
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
 

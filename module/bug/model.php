@@ -1668,7 +1668,7 @@ class bugModel extends model
     public function processBuildForBugs($bugs)
     {
         $productIdList = array();
-        foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
+        foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
         $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = '');
 
         /* Process the openedBuild and resolvedBuild fields. */
@@ -3054,7 +3054,6 @@ class bugModel extends model
         $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-
             ->beginIF($projectID)
             ->andWhere('project', true)->eq($projectID)
             ->orWhere('project')->eq(0)

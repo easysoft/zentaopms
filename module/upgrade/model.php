@@ -5047,6 +5047,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'execution' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('objectType')->eq('task')->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -7392,6 +7393,7 @@ class upgradeModel extends model
             $effort->objectID   = $estimate->task;
             $effort->product    = $relation['product'];
             $effort->project    = (int)$relation['project'];
+            $effort->execution  = (int)$relation['execution'];
             $effort->account    = $estimate->account;
             $effort->work       = empty($estimate->work) ? $this->lang->task->process : $estimate->work;
             $effort->date       = $estimate->date;

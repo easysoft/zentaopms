@@ -817,6 +817,23 @@ class testcaseModel extends model
     }
 
     /**
+     * Get case stories by productID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getStoriesByProduct($productID)
+    {
+        return $this->dao->select('t1.story, t2.title')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.story')->ne(0)
+            ->fetchPairs();
+    }
+
+    /**
      * Update a case.
      *
      * @param  int    $caseID
@@ -3439,18 +3456,19 @@ class testcaseModel extends model
     /**
      * Get scenes and cases list.
      *
-     * @param  mixed  $productID  int|array
-     * @param  string $branch     number|all
-     * @param  int    $moduleID
-     * @param  array  $caseIdArr
-     * @param  object $pager      object|NULL
-     * @param  string $type
-     * @param  array  $topIdList
-     * @param  string $browseType
+     * @param  int|array $productID  int|array
+     * @param  string    $branch     number|all
+     * @param  int       $moduleID
+     * @param  array     $caseIdArr
+     * @param  object    $pager      object|null
+     * @param  string    $type
+     * @param  array     $topIdList
+     * @param  string    $browseType
+     * @param  string    $executionSql
      * @access public
      * @return array
      */
-    public function getList($productID,$branch, $moduleID, $caseIdArr, $pager = NULL, $type = '', $topIdList = array(), $browseType, &$executionSql = NULL)
+    public function getList($productID, $branch, $moduleID, $caseIdArr, $pager = null, $type = '', $topIdList = array(), $browseType = '', &$executionSql = null)
     {
         /* Get list of module and its children module. */
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
@@ -3468,7 +3486,8 @@ class testcaseModel extends model
             ->fetchPairs('id','path');
 
         $sceneIdArr = array();
-        foreach ($cases as $path) {
+        foreach($cases as $path)
+        {
             $tmpArr     = explode(',', trim($path, ','));
             $sceneIdArr = array_merge($sceneIdArr,$tmpArr);
         }
@@ -3501,10 +3520,10 @@ class testcaseModel extends model
         }
 
         /* Sort by product ID for project list. */
-        $orderBy = 'product_desc,sort_asc';
+        $orderBy = 'product_desc,sort_desc';
 
         /* Get sql for batch execution. */
-        if($executionSql !== NULL) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+        if($executionSql !== null) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
 
         return $this->buildQuery($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
@@ -3512,10 +3531,10 @@ class testcaseModel extends model
     /**
      * Get paginated data with all IDs list.
      *
-     * @param  string $modules
-     * @param  string $type
-     * @param  string $objectIdList
-     * @param  string $branch
+     * @param  string       $modules
+     * @param  string       $type
+     * @param  string|array $objectIdList
+     * @param  string       $branch
      * @access public
      * @return object
      */
