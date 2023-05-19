@@ -1180,11 +1180,11 @@ class bugModel extends model
      * Activate a bug.
      *
      * @param  object $bugID
-     * @param  array  $output
+     * @param  array  $kanbanInfo
      * @access public
      * @return array
      */
-    public function activate(object $bug, array $output): array
+    public function activate(object $bug, array $kanbanInfo): array
     {
         $bugID      = $bug->id;
         $oldBug     = $this->getById($bugID);
@@ -1205,8 +1205,8 @@ class bugModel extends model
         if($oldBug->execution)
         {
             $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-            if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            if(!isset($kanbanInfo['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
+            if(isset($kanbanInfo['toColID'])) $this->kanban->moveCard($bugID, $kanbanInfo['fromColID'], $kanbanInfo['toColID'], $kanbanInfo['fromLaneID'], $kanbanInfo['toLaneID']);
         }
 
         return common::createChanges($oldBug, $bug);

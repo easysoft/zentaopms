@@ -956,11 +956,11 @@ class bug extends control
         if(!empty($_POST))
         {
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
+            parse_str($extra, $kanbanInfo);
 
             /* Activate bug. */
             $bugData = $this->bugZen->buildBugForActivate($bugID);
-            $changes = $this->bug->activate($bugData, $output);
+            $changes = $this->bug->activate($bugData, $kanbanInfo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Save attachments and record logs. */
@@ -973,7 +973,7 @@ class bug extends control
 
             if(isonlybody())
             {
-                $regionID = zget($output, 'regionID', 0);
+                $regionID = zget($kanbanInfo, 'regionID', 0);
                 $bug      = $this->bug->getById($bugID);
                 $this->bugZen->responseInModal($bug->execution, '', $regionID);
             }
