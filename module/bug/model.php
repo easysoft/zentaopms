@@ -68,167 +68,39 @@ class bugModel extends model
     }
 
     /**
-     * Batch create
+     * 批量创建bug
+     * Batch create bugs.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $extra
+     * @param  int        $productID
+     * @param  array      $extra
+     * @param  array|bool $extra
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchCreate($productID, $branch = 0, $extra = '')
+    public function batchCreate(array $bugs, int $productID, array $output = array(), array|bool $uploadImages = false, array|bool $bugImagesFiles = false)
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
         /* Load module and init vars. */
         $this->loadModel('action');
-        $this->loadModel('kanban');
-        $branch    = (int)$branch;
-        $productID = (int)$productID;
-        $now       = helper::now();
-        $actions   = array();
-        $data      = fixer::input('post')->get();
+        if(!empty($uploadImages)) $this->loadModel('file');
 
-        /* Remove the bug with the same name within the specified time. */
-        $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
-        $data   = $result['data'];
+        /* Check bugs. */
+        $bugs = $this->bugTao->checkBugsForBatchCreate($bugs, $productID);
+        if(dao::isError()) return false;
 
-        /* Get pairs(moduleID => moduleOwner) for bug. */
-        $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0, $branch));
-        $moduleOwners = array();
-        while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
-
-        /* Construct data. */
-        $module    = 0;
-        $project   = 0;
-        $execution = 0;
-        $type      = '';
-        $pri       = 0;
-        foreach($data->title as $i => $title)
-        {
-            if(empty($title) and $this->common->checkValidRow('bug', $data, $i))
-            {
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
-                return false;
-            }
-
-            $oses     = array_filter($data->oses[$i]);
-            $browsers = array_filter($data->browsers[$i]);
-
-            if($data->modules[$i]    != 'ditto') $module    = (int)$data->modules[$i];
-            if($data->projects[$i]   != 'ditto') $project   = (int)$data->projects[$i];
-            if($data->executions[$i] != 'ditto') $execution = (int)$data->executions[$i];
-            if($data->types[$i]      != 'ditto') $type      = $data->types[$i];
-            if($data->pris[$i]       != 'ditto') $pri       = $data->pris[$i];
-
-            $data->modules[$i]    = (int)$module;
-            $data->projects[$i]   = (int)$project;
-            $data->executions[$i] = (int)$execution;
-            $data->types[$i]      = $type;
-            $data->pris[$i]       = $pri;
-            $data->oses[$i]       = implode(',', $oses);
-            $data->browsers[$i]   = implode(',', $browsers);
-        }
-
-        /* Get bug data. */
-        if(isset($data->uploadImage)) $this->loadModel('file');
-        $extendFields = $this->getFlowExtendFields();
-        $bugs = array();
-        foreach($data->title as $i => $title)
-        {
-            $title = trim($title);
-            if(empty($title)) continue;
-
-            $bug = new stdClass();
-            $bug->openedBy    = $this->app->user->account;
-            $bug->openedDate  = $now;
-            $bug->product     = (int)$productID;
-            $bug->branch      = isset($data->branches) ? (int)$data->branches[$i] : 0;
-            $bug->module      = (int)$data->modules[$i];
-            $bug->project     = (int)$data->projects[$i];
-            $bug->execution   = (int)$data->executions[$i];
-            $bug->openedBuild = isset($data->openedBuilds) ? implode(',', $data->openedBuilds[$i]) : '';
-            $bug->color       = $data->color[$i];
-            $bug->title       = $title;
-            $bug->deadline    = $data->deadlines[$i];
-            $bug->steps       = nl2br($data->stepses[$i]);
-            $bug->type        = $data->types[$i];
-            $bug->pri         = $data->pris[$i];
-            $bug->severity    = $data->severities[$i];
-            $bug->os          = $data->oses[$i];
-            $bug->browser     = $data->browsers[$i];
-            $bug->keywords    = $data->keywords[$i];
-
-            if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
-
-            /* Assign the bug to the person in charge of the module. */
-            if(!empty($moduleOwners[$bug->module]))
-            {
-                $bug->assignedTo   = $moduleOwners[$bug->module];
-                $bug->assignedDate = $now;
-            }
-
-            /* Get extend fields. */
-            foreach($extendFields as $extendField)
-            {
-                $bug->{$extendField->field} = $this->post->{$extendField->field}[$i];
-                if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = implode(',', $bug->{$extendField->field});
-
-                $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-            }
-
-            /* Check required fields. */
-            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if($field and empty($bug->$field))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
-                    return false;
-                }
-            }
-
-            $bugs[$i] = $bug;
-        }
-
-        foreach($bugs as $i => $bug)
+        $actions = array();
+        foreach($bugs as $index => $bug)
         {
             /* Get lane id, remove laneID from bug.  */
-            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            $laneID = zget($output, 'laneID', 0);
             if(isset($bug->laneID))
             {
                 $laneID = $bug->laneID;
                 unset($bug->laneID);
             }
 
-            /* When the bug is created by uploading an image, add the image to the step of the bug. */
-            if(!empty($data->uploadImage[$i]))
-            {
-                $fileName = $data->uploadImage[$i];
-                $file     = $this->session->bugImagesFile[$fileName];
+            $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
 
-                $realPath = $file['realpath'];
-                unset($file['realpath']);
-                if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
-                {
-                    if(in_array($file['extension'], $this->config->file->imageExtensions))
-                    {
-                        $file['addedBy']    = $this->app->user->account;
-                        $file['addedDate']  = $now;
-                        $this->dao->insert(TABLE_FILE)->data($file)->exec();
-
-                        $fileID = $this->dao->lastInsertID();
-                        $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                    }
-                }
-                else
-                {
-                    unset($file);
-                }
-            }
-
-            if($this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
+            $file = $this->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
 
             /* Create a bug. */
             $this->dao->insert(TABLE_BUG)->data($bug)
@@ -238,51 +110,18 @@ class bugModel extends model
                 ->exec();
             if(dao::isError()) return false;
 
-            $bugID = $this->dao->lastInsertID();
+            $bug->id = $this->dao->lastInsertID();
 
-            $this->executeHooks($bugID);
-
-            /* If bug has the execution, update kanban data. */
-            if($bug->execution)
-            {
-                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
-                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
-
-            }
-
-            $this->loadModel('score')->create('bug', 'create', $bugID);
-
-            /* When the bug is created by uploading the image, add the image to the file of the bug. */
-            if(!empty($data->uploadImage[$i]) and !empty($file))
-            {
-                $file['objectType'] = 'bug';
-                $file['objectID']   = $bugID;
-                $file['addedBy']    = $this->app->user->account;
-                $file['addedDate']  = $now;
-                $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                unset($file);
-            }
+            /* Processing other operations after batch creation. */
+            $actions[$bug->id] = $this->afterBatchCreate($bug, $laneID, $output, $uploadImage, $file);
 
             if(dao::isError())
             {
-                dao::$errors['message'][] = 'bug#' . ($i) . dao::getError(true);
+                dao::$errors['message'][] = 'bug#' . ($index) . dao::getError(true);
                 return false;
             }
-            $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
 
-        /* Remove upload image file and session. */
-        if(!empty($data->uploadImage) and $this->session->bugImagesFile)
-        {
-            $classFile = $this->app->loadClass('zfile');
-            $file = current($_SESSION['bugImagesFile']);
-            $realPath = dirname($file['realpath']);
-            if(is_dir($realPath)) $classFile->removeDir($realPath);
-            unset($_SESSION['bugImagesFile']);
-        }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         return $actions;
     }
@@ -3139,5 +2978,134 @@ class bugModel extends model
         }
 
         return $index;
+    }
+
+    /**
+     * 检查批量创建的bug的数据。
+     * Check the batch created bugs.
+     *
+     * @param  array     $bugs
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function checkBugsForBatchCreate(array $bugs, int $productID): array
+    {
+        $this->loadModel('common');
+
+        /* Remove the bug with the same name within the specified time. */
+        foreach($bugs as $index => $bug)
+        {
+            $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
+            if(zget($result, 'stop', false) !== false)
+            {
+                unset($bugs[$index]);
+                continue;
+            }
+
+            /* If the bug is not valid data, unset it.*/
+            if($this->common->checkValidRow('bug', $bug, $index))
+            {
+                unset($bugs[$index]);
+                continue;
+            }
+
+            /* Title cannot be empty. */
+            if(empty($bug->title)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+
+            /* Check required fields. */
+            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field and empty($bug->$field) and $field != 'title') dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
+            }
+        }
+
+        return $bugs;
+    }
+
+    /**
+     * 批量创建bug前处理上传图片。
+     * Before batch creating bugs, process the uploaded images.
+     *
+     * @param  object      $bug
+     * @param  string      $uploadImage
+     * @param  array|bool  $bugImagesFiles
+     * @access protected
+     * @return array|false
+     */
+    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
+    {
+        /* When the bug is created by uploading an image, add the image to the step of the bug. */
+        if(!empty($uploadImage))
+        {
+            $this->loadModel('file');
+
+            $file     = $bugImagesFiles[$uploadImage];
+            $realPath = $file['realpath'];
+
+            if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+            {
+                if(in_array($file['extension'], $this->config->file->imageExtensions))
+                {
+                    $file['addedBy']    = $this->app->user->account;
+                    $file['addedDate']  = helper::now();
+                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+
+                    $fileID = $this->dao->lastInsertID();
+                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
+                }
+            }
+            else
+            {
+                unset($file);
+            }
+        }
+
+        return !empty($file) ? $file : false;
+    }
+
+    /**
+     * 批量创建bug后的其他处理。
+     * Processing after batch creation of bug.
+     *
+     * @param  object     $bug
+     * @param  int        $laneID
+     * @param  array      $output
+     * @param  string     $uploadImage
+     * @param  array|bool $file
+     * @access protected
+     * @return int|bool
+     */
+    protected function afterBatchCreate(object $bug, int $laneID, array $output, string $uploadImage, array|bool $file): int|bool
+    {
+        /* Record log. */
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Opened');
+
+        $this->loadModel('score')->create('bug', 'create', $bug->id);
+
+        $this->executeHooks($bug->id);
+
+        /* If bug has the execution, update kanban data. */
+        if($bug->execution)
+        {
+            $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
+            if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
+
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
+            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
+        }
+
+        /* When the bug is created by uploading the image, add the image to the file of the bug. */
+        if(!empty($uploadImage) and !empty($file))
+        {
+            $file['objectType'] = 'bug';
+            $file['objectID']   = $bug->id;
+            $file['addedBy']    = $this->app->user->account;
+            $file['addedDate']  = helper::now();
+            $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+            unset($file);
+        }
+        return $actionID;
     }
 }

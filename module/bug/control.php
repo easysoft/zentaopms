@@ -269,9 +269,19 @@ class bug extends control
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $this->session->bugImagesFile);
 
             /* Batch create bugs. */
-            $actions = $this->bug->batchCreate($productID, $branch, $extra);
+            $actions = $this->bug->batchCreate($productID, $branch, $output, $this->post->uploadImage, $this->session->bugImagesFile);
 
             helper::setcookie('bugModule', 0, 0);
+
+            /* Remove upload image file and session. */
+            if(!empty($this->post->uploadImage) and !empty($this->session->bugImagesFile))
+            {
+                $classFile = $this->app->loadClass('zfile');
+                $file      = current($_SESSION['bugImagesFile']);
+                $realPath  = dirname($file['realpath']);
+                if(is_dir($realPath)) $classFile->removeDir($realPath);
+                unset($_SESSION['bugImagesFile']);
+            }
 
             $response = $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $actions);
             return $this->send($response);

@@ -46,20 +46,25 @@ class bugTest
     }
 
     /**
+     * 测试批量创建bug。
      * Test batch create bugs.
      *
-     * @param  int    $productID
-     * @param  array  $param
+     * @param  int         $productID
+     * @param  array       $param
+     * @param  array       $output
+     * @param  array|false $uploadImages
+     * @param  array|false $bugImagesFiles
      * @access public
-     * @return object
+     * @return array|object|string
      */
-    public function batchCreateObject($productID, $param = array())
+    public function batchCreateObject(int $productID, array $param = array(), array $output = array(), array|bool $uploadImages = false, array|bool $bugImagesFiles = false): array|object|string
     {
+        $_SERVER['HTTP_HOST'] = '';
+
         $modules      = array('0', '0', '0');
-        $executions   = array('101', '101', '0');
+        $executions   = array('11', '11', '11');
         $openedBuilds = array('', '', '');
-        $title        = array('', '', '');
-        $deadlines    = array('0000-00-00', '0000-00-00', '0000-00-00');
+        $deadlines    = array('2023-01-01', '2023-01-01', '2023-01-01');
         $stepses      = array('', '', '');
         $types        = array('', '', '');
         $severities   = array(3, 3, 3);
@@ -69,43 +74,55 @@ class bugTest
         $color        = array('', '', '');
         $keywords     = array('', '', '');
 
-        $createFields['modules']      = $modules;
-        $createFields['executions']   = $executions;
-        $createFields['openedBuilds'] = $openedBuilds;
-        $createFields['title']        = $title;
-        $createFields['deadlines']    = $deadlines;
-        $createFields['stepses']      = $stepses;
-        $createFields['types']        = $types;
-        $createFields['severities']   = $severities;
-        $createFields['oses']         = $oses;
-        $createFields['browsers']     = $browsers;
-        $createFields['pris']         = $pris;
-        $createFields['color']        = $color;
-        $createFields['keywords']     = $keywords;
+        $bugs = array();
+        foreach($param['title'] as $index => $title)
+        {
+            $bug = new stdclass();
+            $bug->title       = $title;
+            $bug->product     = $productID;
+            $bug->module      = isset($param['modules'])      ? $param['modules'][$index]      : $modules[$index];
+            $bug->execution   = isset($param['executions'])   ? $param['executions'][$index]   : $executions[$index];
+            $bug->openedBuild = isset($param['openedBuilds']) ? $param['openedBuilds'][$index] : $openedBuilds[$index];
+            $bug->deadline    = isset($param['deadlines'])    ? $param['deadlines'][$index]    : $deadlines[$index];
+            $bug->steps       = isset($param['stepses'])      ? $param['stepses'][$index]      : $stepses[$index];
+            $bug->type        = isset($param['types'])        ? $param['types'][$index]        : $types[$index];
+            $bug->severity    = isset($param['severities'])   ? $param['severities'][$index]   : $severities[$index];
+            $bug->os          = isset($param['oses'])         ? $param['oses'][$index]         : $oses[$index];
+            $bug->browser     = isset($param['browsers'])     ? $param['browsers'][$index]     : $browsers[$index];
+            $bug->pri         = isset($param['pris'])         ? $param['pris'][$index]         : $pris[$index];
+            $bug->color       = isset($param['color'])        ? $param['color'][$index]        : $color[$index];
+            $bug->keywords    = isset($param['keywords'])     ? $param['keywords'][$index]     : $keywords[$index];
+            if(isset($param['laneID'])) $bug->laneID = $param['laneID'][$index];
+            if(is_array($bug->openedBuild)) $bug->openedBuild = implode(',', $bug->openedBuild);
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+            $bugs[] = $bug;
+        }
 
-        foreach($param as $key => $value) $_POST[$key] = $value;
+        $object = $this->objectModel->batchCreate($bugs, $productID, $output, $uploadImages, $bugImagesFiles);
 
-        $object = $this->objectModel->batchCreate($productID);
-
-        $bug = array();
+        $bugs = array();
         if(is_array($object))
         {
             foreach($object as $bugID => $actionID)
             {
-                $bug[] = $this->objectModel->getByID($bugID);
+                $bugs[] = $this->objectModel->getByID($bugID);
             }
         }
 
-        unset($_POST);
         if(dao::isError())
         {
-            return dao::getError();
+            $return = '';
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
         }
         else
         {
-            return empty($bug) ? $object : $bug;
+            return empty($bugs) ? $object : $bugs;
         }
     }
 
@@ -2281,5 +2298,116 @@ class bugTest
 
         global $tester;
         return $tester->config->bug->dtable->fieldList['actions']['actionsMap'];
+    }
+
+    /**
+     * 测试检查批量创建的bug的数据。
+     * Test check the batch created bugs.
+     *
+     * @param  array         $bugs
+     * @param  int           $productID
+     * @access public
+     * @return array|string
+     */
+    public function checkBugsForBatchCreateTest(array $bugs, int $productID): array|string
+    {
+        $bugs = $this->objectModel->checkBugsForBatchCreate($bugs, $productID);
+
+        $return = '';
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
+        }
+        else
+        {
+            $return = array_keys($bugs);
+            return implode(',', $return);
+        }
+    }
+
+    /**
+     * 测试检查批量创建的bug的数据。
+     * Test check the batch created bugs.
+     *
+     * @param  array         $bugs
+     * @param  string        $required
+     * @access public
+     * @return array|string
+     */
+    public function afterBatchCreateTest(int $bugID, int $laneID, array $output, string $uploadImage, array|bool $file): array|string
+    {
+        $_SERVER['HTTP_HOST'] = '';
+
+        global $tester;
+        $bug  = $tester->dao->findByID($bugID)->from(TABLE_BUG)->fetch();
+
+        $actionID = $this->objectModel->afterBatchCreate($bug, $laneID, $output, $uploadImage, $file);
+
+        $return = '';
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
+        }
+        else
+        {
+            $fileID = $tester->dao->select('id')->from(TABLE_FILE)->where('objectID')->eq($bugID)->andWhere('objectType')->eq('bug')->fetch('id');
+            $cards  = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
+                ->where('kanban')->eq($bug->execution)
+                ->andWhere('lane')->eq($laneID)
+                ->andWhere('column')->eq(zget($output, 'columnID', 0))
+                ->andWhere('type')->eq('bug')
+                ->fetch('cards');
+
+            return "action:{$actionID},file:{$fileID},cards:{$cards}";
+        }
+    }
+
+    /**
+     * 测试批量创建bug前处理上传图片。
+     * Test process the uploaded images before batch creating bugs.
+     *
+     * @param  object       $bug
+     * @param  string       $uploadImage
+     * @param  array        $bugImagesFile
+     * @access public
+     * @return array|string
+     */
+    public function processImageForBatchCreateTest(object $bug, string $uploadImage, array $bugImagesFiles): array|string
+    {
+        $_SERVER['HTTP_HOST'] = '';
+
+        global $tester;
+        $tester->loadModel('file');
+        $tester->file->savePath = $tester->app->tmpRoot;
+
+        $file = $this->objectModel->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
+
+        if(dao::isError())
+        {
+            $return = '';
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$value}";
+                if(is_array($value))  $return .= implode('', $value);
+            }
+            return $return;
+        }
+        else
+        {
+            return $file;
+        }
     }
 }

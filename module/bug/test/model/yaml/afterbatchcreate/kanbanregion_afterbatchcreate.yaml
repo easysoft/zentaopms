@@ -1,0 +1,17 @@
+---
+title: zt_kanbanregion
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: space
+  range: 0
+- field: kanban
+  range: 11
+- field: lastEditedDate
+  range: "20220101 000000"
+  type: timestamp
+  format: "YY/MM/DD hh:mm:ss"
+...
+

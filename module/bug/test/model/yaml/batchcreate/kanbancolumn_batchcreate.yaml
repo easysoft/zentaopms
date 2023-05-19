@@ -1,0 +1,19 @@
+---
+title: zt_kanbancolumn
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-9
+- field: region
+  range: 1
+- field: type
+  range: unconfirmed,confirmed,resolving,fixing,fixed,test,testing,tested,closed
+- field: parent
+  range: "0{2},`-1`,2{2},0,5{2},0"
+- field: name
+  range: 待确认,已确认,解决中,进行中,完成,测试,测试中,测试完毕,已关闭
+- field: limit
+  range: "`-1`"
+...
+

@@ -1780,31 +1780,6 @@ class bugZen extends bug
             $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
         }
 
-        /* When the bug is created by uploading an image, add the image to the step of the bug. */
-        if(!empty($data->uploadImage[$index]))
-        {
-            $this->loadModel('file');
-            $fileName = $data->uploadImage[$index];
-            $file     = $bugImagesFile[$fileName];
-            $realPath = $file['realpath'];
-
-            if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
-            {
-                if(in_array($file['extension'], $this->config->file->imageExtensions))
-                {
-                    $file['addedBy']    = $this->app->user->account;
-                    $file['addedDate']  = helper::now();
-                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
-
-                    $fileID = $this->dao->lastInsertID();
-                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                }
-            }
-            else
-            {
-                unset($file);
-            }
-        }
         return $bug;
     }
 
