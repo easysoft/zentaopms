@@ -208,7 +208,6 @@ formPanel
             set::width('1/2'),
             set::class($showNoticefeedbackBy ? '' : 'hidden'),
             set::label($lang->bug->feedbackBy),
-            set::control('input'),
             set::name('feedbackBy'),
             set::value(isset($feedbackBy) ? $feedbackBy : '')
         )
@@ -220,7 +219,6 @@ formPanel
             set::width('1/2'),
             set::class($showNoticefeedbackBy ? '' : 'hidden'),
             set::label($lang->bug->notifyEmail),
-            set::control('input'),
             set::name('notifyEmail'),
             set::value($notifyEmail)
         ),
@@ -259,7 +257,6 @@ formPanel
         formGroup
         (
             set::label($lang->bug->title),
-            set::control('input'),
             set::name('title'),
             set::value($bugTitle)
         ),
@@ -338,7 +335,6 @@ formPanel
             set::width('1/2'),
             set::class($showKeywords ? '' : 'hidden'),
             set::label($lang->bug->keywords),
-            set::control('input'),
             set::name('keywords'),
             set::value($keywords)
         )
