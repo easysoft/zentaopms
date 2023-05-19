@@ -1,19 +1,15 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
 /**
-
-title=productModel->batchGetStoryStage();
+title=测试批量获取需求阶段 productModel->batchGetStoryStage();
 cid=1
 pid=1
+ */
 
-测试获取需求1 2 3的阶段 >> wait;planned;projected
-测试获取需求4 5 6的阶段 >> developing;developed;testing
-测试获取需求7 8 9的阶段 >> tested;verified;released
-
-*/
+zdTable('storystage')->gen(50);
 
 $story1 = new stdclass();
 $story1->id = 1;
@@ -47,3 +43,7 @@ $stories2 = array($story4, $story5, $story6);
 $stories3 = array($story7, $story8, $story9);
 
 $product = new productTest('admin');
+
+r($product->batchGetStoryStageTest($stories1)) && p('1,2,3') && e('wait,planned,projected');       // 获取需求ID1,2,3的需求阶段
+r($product->batchGetStoryStageTest($stories2)) && p('4,5,6') && e('developing,developed,testing'); // 获取需求ID4,5,6的需求阶段
+r($product->batchGetStoryStageTest($stories3)) && p('7,8,9') && e('tested,verified,released');     // 获取需求ID7,8,9的需求阶段
