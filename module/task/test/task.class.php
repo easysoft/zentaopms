@@ -1844,18 +1844,14 @@ class taskTest
      * @param  array  $taskFiles
      * @param  int    $taskID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function setTaskFilesTest(array $taskIdList, int $taskID): array
+    public function setTaskFilesTest(int|array $taskIdList): bool
     {
         global $tester;
 
         $taskFiles = array();
-        if($taskIdList)
-        {
-            $taskFiles = $tester->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($taskIdList)->andWhere('objectType')->eq('task')->fetchAll('id');
-            foreach($taskFiles as $fileID => $taskFile) unset($taskFiles[$fileID]->id);
-        }
+        $taskID    = is_array($taskIdList) ? current($taskIdList) : 0;
         if(empty($taskFiles) and $taskID)
         {
             $files = $tester->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetchAll('id');
@@ -1868,7 +1864,8 @@ class taskTest
             $_FILES['files']['error'] = 0;
         }
 
-        return $this->objectModel->setTaskFiles($taskFiles, $taskID);
+        $taskIdList = (array)$taskIdList;
+        return $this->objectModel->setTaskFiles($taskIdList);
     }
 
     /**
@@ -1944,23 +1941,22 @@ class taskTest
      * 测试管理多人任务团队。
      * Test manage multi task team members.
      *
-     * @param int        $taskID
-     * @param string     $taskStatus
-     * @param string     $mode
-     * @param array      $teamList
-     * @param array      $teamSourceList
-     * @param array      $teamEstimateList
-     * @param array|bool $teamConsumedList
-     * @param array|bool $teamLeftList
+     * @param  int        $taskID
+     * @param  string     $taskStatus
+     * @param  string     $mode
+     * @param  array      $teamData
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function manageTaskTeamTest(int $taskID, string $taskStatus, string $mode, array $teamList, array $teamSourceList, array $teamEstimateList, array|bool $teamConsumedList, array|bool $teamLeftList): array
+    public function manageTaskTeamTest(int $taskID, string $taskStatus, string $mode, array $teamData): array|false
     {
         $task = new stdclass();
         $task->id     = $taskID;
         $task->status = $taskStatus;
-        $teams = $this->objectModel->manageTaskTeam($mode, $task, $teamList, $teamSourceList, $teamEstimateList, $teamConsumedList, $teamLeftList);
+
+        $teamInfo = new stdclass();
+        foreach($teamData as $key => $value) $teamInfo->{$key} = $value;
+        $teams = $this->objectModel->manageTaskTeam($mode, $task, $teamInfo);
 
         if(dao::isError()) return dao::getError();
         return $teams;

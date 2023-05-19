@@ -555,7 +555,7 @@ class taskModel extends model
 
         /* Manage task team member. */
         $teams = $this->manageTaskTeamMember($mode, $task, $teamData);
-        if(!dao::isError()) return false;
+        if(dao::isError()) return false;
 
         /* Set effort left = 0 when multi task members be removed. */
         if($mode == 'multi' && $oldMembers)
