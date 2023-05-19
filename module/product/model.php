@@ -662,15 +662,14 @@ class productModel extends model
      *
      * @param  int    $productID.
      * @access public
-     * @return bool | array
+     * @return array|false
      */
-    public function activate($productID)
+    public function activate(int $productID): array|false
     {
         $oldProduct = $this->getByID($productID);
         $product    = (object)array('status' => 'normal');
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq((int)$productID)->exec();
-
+        $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
         if(dao::isError()) return false;
 
         return common::createChanges($oldProduct, $product);
