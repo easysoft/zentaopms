@@ -936,26 +936,23 @@ class bugTest
     /**
      * Test confirm a bug.
      *
-     * @param  int    $bugID
-     * @param  array  $param
+     * @param  array  $bug
      * @access public
      * @return array
      */
-    public function confirmTest($bugID, $param = array())
+    public function confirmTest(array $bug): array
     {
-        $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '', 'pri' => '1');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->confirm($bugID);
-        unset($_POST);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+        $oldBug = $this->objectModel->getByID($bug['id']);
+
+        $bug['confirmed'] = 1;
+
+        $this->objectModel->confirm((object)$bug, array());
+
+        if(dao::isError()) return dao::getError();
+
+        $newBug = $this->objectModel->getByID($bug['id']);
+
+        return common::createChanges($oldBug, $newBug);
     }
 
     /**

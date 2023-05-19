@@ -821,47 +821,41 @@ class bugModel extends model
     }
 
     /**
+     * 确认 bug。
      * Confirm a bug.
      *
-     * @param  int    $bugID
-     * @param  string $extra
+     * @param  object $bug
+     * @param  array  $kanbanData
      * @access public
-     * @return void
+     * @return bool
      */
-    public function confirm($bugID, $extra = '')
+    public function confirm(object $bug, array $kanbanData): bool
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $oldBug = $this->getByID($bug->id);
 
-        $now    = helper::now();
-        $oldBug = $this->getById($bugID);
+        $this->dao->update(TABLE_BUG)->data($bug, $skip = 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        if(dao::isError()) return false;
 
-        $bug = fixer::input('post')
-            ->add('id', $bugID)
-            ->setDefault('confirmed', 1)
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('assignedDate', $now)
-            ->setDefault('mailto', '')
-            ->stripTags($this->config->bug->editor->confirm['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->join('mailto', ',')
-            ->get();
+        /* 确认 bug 后的积分变动。*/
+        /* Record score after confirming bug. */
+        $this->loadModel('score')->create('bug', 'confirm', $oldBug);
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
-
-        if(!dao::isError())
+        /* 如果 bug 有所属执行，更新看板数据。*/
+        /* Update kanban if the bug has execution. */
+        if($oldBug->execution)
         {
-            $this->loadModel('score')->create('bug', 'confirm', $oldBug);
-            if($oldBug->execution)
-            {
-                $this->loadModel('kanban');
-                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-                if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID'], $oldBug->execution);
-            }
-            return common::createChanges($oldBug, $bug);
+            $this->loadModel('kanban');
+            if(!isset($kanbanData['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $oldBug->id);
+            if(isset($kanbanData['toColID']))  $this->kanban->moveCard($oldBug->id, $kanbanData['fromColID'], $kanbanData['toColID'], $kanbanData['fromLaneID'], $kanbanData['toLaneID'], $oldBug->execution);
         }
+
+        /* 记录历史记录。*/
+        /* Record history. */
+        $changes  = common::createChanges($oldBug, $bug);
+        $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $bug->comment);
+        $this->action->logHistory($actionID, $changes);
+
+        return true;
     }
 
     /**
