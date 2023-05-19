@@ -23,9 +23,6 @@ js::set('manualText',    $lang->manual);
 js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 js::set('isAdminUser',   $this->app->user->admin);
 ?>
-<?php if($config->vision == 'or'):?>
-<style> #searchTypeMenu {top: -320px !important} </style>
-<?php endif;?>
 <style>
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
 .icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-new.svg';?>);}
@@ -44,7 +41,7 @@ js::set('isAdminUser',   $this->app->user->admin);
 #menuMoreList > li.active:after {content: attr(data-tip); display: block; position: absolute; left: 100%; background-color: #f1a325; color: #fff; top: 3px; white-space: nowrap; line-height: 16px; padding: 8px 10px; margin-left: 5px; border-radius: 4px;}
 <?php endif;?>
 
-<?php if($this->config->vision == 'lite'):?>
+<?php if($config->vision == 'lite' or $config->vision == 'or'):?>
 #searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
 </style>
