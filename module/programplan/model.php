@@ -189,6 +189,13 @@ class programplanModel extends model
         $isMilestone    = "<icon class='icon icon-flag icon-sm red'></icon> ";
         $stageIndex     = array();
         $reviewDeadline = array();
+
+        foreach($plans as $plan)
+        {
+            $plan->isParent = false;
+            if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
+        }
+
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
@@ -214,7 +221,7 @@ class programplanModel extends model
             $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
             $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';;
             $data->parent        = $plan->grade == 1 ? 0 : $plan->parent;
-            $data->isParent      = false;
+            $data->isParent      = $plan->isParent;
             $data->open          = true;
             $data->start_date    = $realBegan ? $realBegan : $start;
             $data->endDate       = $realEnd ? $realEnd : $end;
@@ -239,7 +246,6 @@ class programplanModel extends model
             if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
-            if(isset($datas['data'][$data->parent])) $datas['data'][$data->parent]->isParent = 1;
             $stageIndex[$plan->id] = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
         }
 
