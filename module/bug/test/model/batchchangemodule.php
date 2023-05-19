@@ -2,40 +2,126 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/bug.class.php';
-su('admin');
+su('user1');
 
 /**
 
 title=测试bugModel->batchChangeModule();
+timeout=0
 cid=1
-pid=1
 
-修改bug1 2模块为0 >> module,1821,0
-修改bug1 2模块为8 >> module,0,8
-修改bug1 2模块为9 >> module,8,9
-修改bug1 2模块为10 >> module,9,10
-修改bug1 2模块为11 >> module,10,11
-修改bug1 2模块为11 未发生变化 >> 0
-修改bug1 3模块为0 >> module,11,0
-修改bug1 3模块为8 >> module,0,8
-修改bug1 3模块为9 >> module,8,9
-修改bug1 3模块为10 >> module,9,10
-修改bug1 3模块为11 >> module,10,11
-修改bug1 3模块为11 未发生变化 >> 0
-修改bug1 4模块为0 >> module,11,0
-修改bug1 4模块为8 >> module,0,8
-修改bug1 4模块为9 >> module,8,9
-修改bug1 4模块为10 >> module,9,10
-修改bug1 4模块为11 >> module,10,11
-修改bug1 4模块为11 未发生变化 >> 0
-修改bug2 3模块为0 >> module,11,0
-修改bug2 3模块为8 >> module,0,8
-修改bug2 3模块为9 >> module,8,9
-修改bug2 3模块为10 >> module,9,10
-修改bug2 3模块为11 >> module,10,11
-修改bug2 3模块为11 未发生变化 >> 0
+- 修改bug1 2模块为0
+ - 第0条的field属性 @module
+ - 第0条的old属性 @1821
+ - 第0条的new属性 @0
+
+- 修改bug1 2模块为8
+ - 第0条的field属性 @module
+ - 第0条的old属性 @0
+ - 第0条的new属性 @8
+
+- 修改bug1 2模块为9
+ - 第0条的field属性 @module
+ - 第0条的old属性 @8
+ - 第0条的new属性 @9
+
+- 修改bug1 2模块为10
+ - 第0条的field属性 @module
+ - 第0条的old属性 @9
+ - 第0条的new属性 @10
+
+- 修改bug1 2模块为11
+ - 第0条的field属性 @module
+ - 第0条的old属性 @10
+ - 第0条的new属性 @11
+
+- 修改bug1 2模块为11 未发生变化 @0
+
+- 修改bug1 3模块为0
+ - 第0条的field属性 @module
+ - 第0条的old属性 @11
+ - 第0条的new属性 @0
+
+- 修改bug1 3模块为8
+ - 第0条的field属性 @module
+ - 第0条的old属性 @0
+ - 第0条的new属性 @8
+
+- 修改bug1 3模块为9
+ - 第0条的field属性 @module
+ - 第0条的old属性 @8
+ - 第0条的new属性 @9
+
+- 修改bug1 3模块为10
+ - 第0条的field属性 @module
+ - 第0条的old属性 @9
+ - 第0条的new属性 @10
+
+- 修改bug1 3模块为11
+ - 第0条的field属性 @module
+ - 第0条的old属性 @10
+ - 第0条的new属性 @11
+
+- 修改bug1 3模块为11 未发生变化 @0
+
+- 修改bug1 4模块为0
+ - 第0条的field属性 @module
+ - 第0条的old属性 @11
+ - 第0条的new属性 @0
+
+- 修改bug1 4模块为8
+ - 第0条的field属性 @module
+ - 第0条的old属性 @0
+ - 第0条的new属性 @8
+
+- 修改bug1 4模块为9
+ - 第0条的field属性 @module
+ - 第0条的old属性 @8
+ - 第0条的new属性 @9
+
+- 修改bug1 4模块为10
+ - 第0条的field属性 @module
+ - 第0条的old属性 @9
+ - 第0条的new属性 @10
+
+- 修改bug1 4模块为11
+ - 第0条的field属性 @module
+ - 第0条的old属性 @10
+ - 第0条的new属性 @11
+
+- 修改bug1 4模块为11 未发生变化 @0
+
+- 修改bug2 3模块为0
+ - 第0条的field属性 @module
+ - 第0条的old属性 @11
+ - 第0条的new属性 @0
+
+- 修改bug2 3模块为8
+ - 第0条的field属性 @module
+ - 第0条的old属性 @0
+ - 第0条的new属性 @8
+
+- 修改bug2 3模块为9
+ - 第0条的field属性 @module
+ - 第0条的old属性 @8
+ - 第0条的new属性 @9
+
+- 修改bug2 3模块为10
+ - 第0条的field属性 @module
+ - 第0条的old属性 @9
+ - 第0条的new属性 @10
+
+- 修改bug2 3模块为11
+ - 第0条的field属性 @module
+ - 第0条的old属性 @10
+ - 第0条的new属性 @11
+
+- 修改bug2 3模块为11 未发生变化 @0
 
 */
+
+zdTable('bug')->gen(10);
+zdTable('module')->gen(20);
 
 $bugIDList1 = array('1', '2');
 $bugIDList2 = array('1', '3');

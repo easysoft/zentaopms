@@ -1075,9 +1075,9 @@ class bugTest
      */
     public function batchChangeModuleTest($bugIDList, $moduleID, $bugID)
     {
-        $bugs = $this->objectModel->getByIdList($bugIDList);
+        $oldBugs = $this->objectModel->getByIdList($bugIDList);
 
-        $object = $this->objectModel->batchChangeModule($bugIDList, $moduleID, $bugs);
+        $this->objectModel->batchChangeModule($bugIDList, $moduleID);
 
         if(dao::isError())
         {
@@ -1085,7 +1085,12 @@ class bugTest
         }
         else
         {
-            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+            $newBugs = $this->objectModel->getByIdList($bugIDList);
+            if(!empty($newBugs[$bugID]))
+            {
+                $changes = common::createChanges($oldBugs[$bugID], $newBugs[$bugID]);
+                return $changes;
+            }
         }
     }
 

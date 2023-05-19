@@ -1022,32 +1022,40 @@ class bugModel extends model
     }
 
     /**
+     * 批量修改bug所属模块。
      * Batch change the module of bug.
      *
-     * @param  array  $bugIDList
+     * @param  array  $bugIdList
      * @param  int    $moduleID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function batchChangeModule($bugIDList, $moduleID)
+    public function batchChangeModule(array $bugIdList, int $moduleID): bool
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldBugs    = $this->getByList($bugIDList);
-        foreach($bugIDList as $bugID)
+        $this->loadModel('action');
+        $now     = helper::now();
+        $oldBugs = $this->getByIdList($bugIdList);
+
+        foreach($bugIdList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
             if($moduleID == $oldBug->module) continue;
 
+            /* Change the module of bug. */
             $bug = new stdclass();
             $bug->lastEditedBy   = $this->app->user->account;
             $bug->lastEditedDate = $now;
             $bug->module         = $moduleID;
 
             $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
-            if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+            if(dao::isError()) return false;
+
+            /* Record logs. */
+            $changes  = common::createChanges($oldBug, $bug);
+            $actionID = $this->action->create('bug', $bugID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
         }
-        return $allChanges;
+        return true;
     }
 
     /**

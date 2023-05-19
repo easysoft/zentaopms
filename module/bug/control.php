@@ -704,30 +704,25 @@ class bug extends control
     }
 
     /**
+     * 批量修改bug所属模块。
      * Batch change the module of bug.
      *
      * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID)
+    public function batchChangeModule(int $moduleID)
     {
         if($this->post->bugIDList)
         {
-            $bugIDList = $this->post->bugIDList;
-            $bugIDList = array_unique($bugIDList);
-            unset($_POST['bugIDList']);
-            $allChanges = $this->bug->batchChangeModule($bugIDList, $moduleID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            foreach($allChanges as $bugID => $changes)
-            {
-                $this->loadModel('action');
-                $actionID = $this->action->create('bug', $bugID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $bugIdList = $this->post->bugIDList;
+            $bugIdList = array_unique($bugIdList);
+
+            $this->bug->batchChangeModule($bugIdList, $moduleID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->session->bugList, 'parent'));
+        return array('load' => $this->session->bugList, 'closeModal' => true);
     }
 
     /**
@@ -948,6 +943,7 @@ class bug extends control
     }
 
     /**
+     * 激活一个bug。
      * Activate a bug.
      *
      * @param  int    $bugID
@@ -955,7 +951,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function activate($bugID, $extra = '')
+    public function activate(int $bugID, string $extra = '')
     {
         if(!empty($_POST))
         {
@@ -1155,7 +1151,7 @@ class bug extends control
             $extendFields   = $this->bug->getFlowExtendFields();
             foreach($extendFields as $extendField) $postExtendData[$extendField->field] = $this->post->{$extendField->field};
 
-            $activateBugs = $this->bug->batchActivate($activateData, $postExtendData);
+            $this->bug->batchActivate($activateData, $postExtendData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('score')->create('ajax', 'batchOther');
