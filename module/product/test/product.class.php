@@ -1055,6 +1055,20 @@ class productTest
     }
 
     /**
+     * Test for concat product line.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return object[]
+     */
+    public function concatProductLineTest(array $productIdList): array
+    {
+        $this->config->systemMode == 'ALM';
+        $products = $this->objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        return $this->objectModel->concatProductLine($products);
+    }
+
+    /**
      * 测试创建产品主库
      * Test for create main lib.
      *

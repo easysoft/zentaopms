@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/product.class.php';
 su('admin');
+
 /**
 
 title=测试productModel->updateProjects();

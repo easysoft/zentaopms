@@ -1,0 +1,13 @@
+title: product line
+desc: Build product line data.
+author: zhouxin
+version: 1.0.0
+
+fields:
+  - field: type
+    range: 'line'
+  - field: name
+    range: 1-5
+    prefix: '产品线'
+  - field: root
+    range: 1
