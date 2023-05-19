@@ -324,18 +324,17 @@ class productTest
     }
 
     /**
-     * Test judge an action is clickable or not.
+     * Test for judge a action is clickable.
      *
      * @param  int    $productID
      * @param  string $status
      * @access public
-     * @return string
+     * @return bool
      */
-    public function testIsClickable($productID, $status)
+    public function testIsClickable(int $productID, string $status): bool
     {
-        $product = $this->objectModel->getById($productID);
-        $isClick = $this->objectModel->isClickable($product, $status);
-        return $isClick == false ? 'false' : 'true';
+        $product = $this->objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+        return $this->objectModel->isClickable($product, $status);
     }
 
     /**
