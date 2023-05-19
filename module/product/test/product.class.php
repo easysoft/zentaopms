@@ -830,21 +830,17 @@ class productTest
     /**
      * Test get product stats.
      *
+     * @param  array  $productIdList
      * @access public
      * @return array
      */
-    public function getStatsTest()
+    public function getStatsTest(array $productIdList)
     {
-        $objects = $this->objectModel->getStats();
+        $objects = $this->objectModel->getStats($productIdList);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
