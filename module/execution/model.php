@@ -5305,7 +5305,7 @@ class executionModel extends model
 
         $title = '';
         $disabled = '';
-        if($project and $project->model == 'ipd')
+        if($project and $project->model == 'ipd' and !$isChild)
         {
             $this->app->loadLang('stage');
             $title    = $execution->ipdStage['canStart'] ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
@@ -5340,7 +5340,7 @@ class executionModel extends model
         {
             $ipdDisabled = '';
             $title = $this->lang->execution->close;
-            if(isset($execution->ipdStage['canClose']) and !$execution->ipdStage['canClose'])
+            if(isset($execution->ipdStage['canClose']) and !$execution->ipdStage['canClose'] and !$isChild)
             {
                 $ipdDisabled = ' disabled ';
                 $title       = $execution->attribute == 'launch' ? $this->lang->execution->disabledTip->launchTip : $this->lang->execution->disabledTip->closeTip;

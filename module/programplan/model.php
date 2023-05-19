@@ -434,7 +434,7 @@ class programplanModel extends model
                         $data->parent        = $plan->id;
                         $data->open          = true;
                         $data->start_date    = $end;
-                        $data->endDate       = $end; 
+                        $data->endDate       = $end;
                         $data->duration      = 1;
                         $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
                         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
@@ -1618,7 +1618,7 @@ class programplanModel extends model
     {
         $stage   = $this->loadModel('execution')->getByID($stageID);
         $project = $this->loadModel('project')->getByID($stage->project);
-        if(empty($stage) or empty($stage->path) or ($project->model != 'waterfall' and $project->model != 'waterfallplus')) return false;
+        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd')))) return false;
 
         $this->loadModel('execution');
         $this->loadModel('action');
