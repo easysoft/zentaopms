@@ -652,9 +652,10 @@ class blockZen extends block
         $type  = isset($block->params->type) ? $block->params->type : '';
         $pager = pager::init(0, $count , 1);
 
-        $productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
-
+        $products = $this->loadModel('product')->getList(0, $type);
+        $productStats = $this->product->getStats(array_keys($products), 'order_desc', $this->viewType != 'json' ? $pager : '');
         $this->view->productStats = $productStats;
+
         $this->view->users        = $this->loadModel('user')->getPairs();
         $this->view->userAvatars  = $this->user->getAvatarPairs();
 
