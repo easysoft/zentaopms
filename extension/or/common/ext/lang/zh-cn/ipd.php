@@ -116,5 +116,4 @@ $lang->searchObjects['roadmap']    = '路标';
 $lang->searchObjects['charter']    = '立项';
 $lang->searchObjects['product']    = $lang->productCommon;
 $lang->searchObjects['doc']        = '文档';
-$lang->searchObjects['user']       = '用户';
 $lang->searchTips                  = '编号(ctrl+g)';
