@@ -139,3 +139,14 @@ $config->bug->form->batchCreate['severities']   = array('required' => false, 'ty
 $config->bug->form->batchCreate['oses']         = array('required' => false, 'type' => array(), 'default' => array());
 $config->bug->form->batchCreate['browsers']     = array('required' => false, 'type' => array(), 'default' => array());
 $config->bug->form->batchCreate['keywords']     = array('required' => false, 'type' => array(), 'default' => array());
+
+$config->bug->form->confirm = array();
+$config->bug->form->confirm['pri']            = array('required' => false, 'type' => 'int',    'default' => 3);
+$config->bug->form->confirm['type']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->confirm['status']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->confirm['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->confirm['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->confirm['assignedDate']   = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->confirm['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
+$config->bug->form->confirm['lastEditedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
+$config->bug->form->confirm['comment']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
