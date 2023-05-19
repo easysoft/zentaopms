@@ -1721,20 +1721,6 @@ class docModel extends model
             /* Sort project. */
             $orderedProjects = array();
 
-            /* Project permissions for DocLib whitelist. */
-            if($this->app->tab == 'doc')
-            {
-                $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
-                    ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
-                    ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
-                    ->andWhere('t1.vision')->eq($this->config->vision)
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
-                    ->beginIF($append)->orWhere('t1.id')->eq($append)->fi()
-                    ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-                    ->fetchPairs();
-            }
-
             $objects = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
                 ->andWhere('vision')->eq($this->config->vision)
