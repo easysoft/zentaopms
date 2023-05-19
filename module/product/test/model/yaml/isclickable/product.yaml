@@ -1,0 +1,7 @@
+title: product.
+desc: product data for isClickable.
+author: zhouxin
+version: 1.0.0
+fields:
+  - field: status
+    range: 'normal{3},closed{3}'
