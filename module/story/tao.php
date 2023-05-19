@@ -342,7 +342,7 @@ class storyTao extends storyModel
             $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
         }
 
-        foreach($stories as $storyID => $story)
+        foreach($stories as $story)
         {
             /* Export story linkstories. */
             if(isset($children[$story->id])) $story->linkStories = implode(',', array_column($children[$story->id], 'title'));
@@ -399,7 +399,7 @@ class storyTao extends storyModel
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
         $this->loadModel('search')->setQuery($rawModule == 'projectstory' ? 'story' : 'executionStory', $queryID);
-        if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
+        if(!$this->session->executionStoryQuery) $this->session->set('executionStoryQuery', ' 1 = 1');
         if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->storyQuery);
 
         /* 处理查询条件。 */

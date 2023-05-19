@@ -690,7 +690,6 @@ class productTao extends productModel
     protected function getGroupRoadmapData(int $productID, string $branch, int $count): array
     {
         $roadmap = array();
-        $total   = 0;
         $return  = false;
 
         /* Get product plans. */
@@ -803,7 +802,7 @@ class productTao extends productModel
                     $roadmap = $this->processRoadmap($roadmap, $branch);
                     $return  = true;
                     break;
-                };
+                }
             }
         }
 

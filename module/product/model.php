@@ -1549,7 +1549,7 @@ class productModel extends model
         }
 
         $casesCount = $this->productTao->getStoryCasesCount($storyIdList);
-        $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
+        $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
         $storyCommon = $this->lang->SRCommon;
         if($storyType == 'requirement') $storyCommon = $this->lang->URCommon;
@@ -1704,20 +1704,20 @@ class productModel extends model
                 $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
             }
         }
-        else if($module == 'productplan' || $module == 'release')
+        elseif($module == 'productplan' || $module == 'release')
         {
             if($method != 'browse' && $method != 'create') $method = 'browse';
             $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
         }
-        else if($module == 'tree')
+        elseif($module == 'tree')
         {
             $link = helper::createLink($module, $method, "productID=%s&type=$extra&currentModuleID=0" . ($branch ? "&branch=%s" : ''));
         }
-        else if($module == 'branch')
+        elseif($module == 'branch')
         {
             $link = helper::createLink($module, $method, "productID=%s");
         }
-        else if($module == 'doc' or $module == 'api')
+        elseif($module == 'doc' or $module == 'api')
         {
             $link = helper::createLink('doc', 'productSpace', "objectID=%s");
         }
@@ -1782,8 +1782,7 @@ class productModel extends model
      */
     public function setParamsForLink($module, $link, $projectID, $productID)
     {
-        $linkHtml = strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
-        return $linkHtml;
+        return strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
     }
 
     /**
@@ -1872,7 +1871,7 @@ class productModel extends model
 
             if($key == 'planList')
             {
-                foreach($data as $productID => $plan)
+                foreach($data as $plan)
                 {
                     !empty($plan) && array_map(function($planItem)
                     {
@@ -1889,11 +1888,7 @@ class productModel extends model
     public function buildRows($productStructure, $params = array())
     {
         $programLines = zget($params, 'programLines', array());
-        $users        = zget($params, 'users', array());
-        $usersAvatar  = zget($params, 'usersAvatar', array());
-        $userIdPairs  = zget($params, 'userIdPairs', array());
-
-        $rows = array();
+        $rows         = array();
         foreach($productStructure as $programID => $program)
         {
             if($programID and $this->config->systemMode == 'ALM') $rows[] = $this->buildRowData($programID, $program, 'program', $params);
@@ -1936,10 +1931,8 @@ class productModel extends model
 
     public function buildRowData($id, $data, $type = 'program', $params = array())
     {
-        $programLines = zget($params, 'programLines', array());
-        $users        = zget($params, 'users', array());
-        $usersAvatar  = zget($params, 'usersAvatar', array());
-        $userIdPairs  = zget($params, 'userIdPairs', array());
+        $users       = zget($params, 'users', array());
+        $usersAvatar = zget($params, 'usersAvatar', array());
 
         $row = new stdclass();
         $row->id = $id;
