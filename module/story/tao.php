@@ -398,9 +398,7 @@ class storyTao extends storyModel
     {
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
-        $queryName = $rawModule == 'projectstory' ? 'storyQuery' : 'executionStoryQuery';
-        $formName  = $rawModule == 'projectstory' ? 'storyForm'  : 'executionStoryForm';
-        $this->setSearchSessionByQueryID($queryID, $queryName, $formName);
+        $this->loadModel('search')->setQuery($rawModule == 'projectstory' ? 'story' : 'executionStory', $queryID);
         if($this->session->executionStoryQuery == false) $this->session->set('executionStoryQuery', ' 1 = 1');
         if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->storyQuery);
 
@@ -423,27 +421,6 @@ class storyTao extends storyModel
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
             ->fetchAll('id');
-    }
-
-    /**
-     * 获取保存的查询条件。
-     * Set search session by queryID.
-     *
-     * @param  int       $queryID
-     * @param  string    $queryName
-     * @param  string    $formName
-     * @access protected
-     * @return void
-     */
-    protected function setSearchSessionByQueryID(int $queryID, string $queryName, string $formName): void
-    {
-        if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
-
-        $query = $this->loadModel('search')->getQuery($queryID);
-        if(empty($query)) return;
-
-        $this->session->set($queryName, $query->sql);
-        $this->session->set($formName, $query->form);
     }
 
     /**

@@ -3501,7 +3501,7 @@ class storyModel extends model
         $executionID = empty($executionID) ? 0 : $executionID;
         $products    = empty($executionID) ? $this->product->getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 'all') : $this->product->getProducts($executionID);
 
-        $this->storyTao->setSearchSessionByQueryID($queryID, 'storyQuery', 'storyForm');
+        $this->loadModel('search')->setQuery('story', $queryID);
 
         $allProduct     = "`product` = 'all'";
         $storyQuery     = $this->session->storyQuery;
