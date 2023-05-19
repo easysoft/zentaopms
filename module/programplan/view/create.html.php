@@ -131,7 +131,7 @@
                 }
                 else
                 {
-                    $project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) :  zget($lang->stage->typeList, $programPlan->attribute);
+                    echo $project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) :  zget($lang->stage->typeList, $programPlan->attribute);
                 }
                 ?>
               </td>
@@ -179,7 +179,7 @@
                 }
                 else
                 {
-                    $project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) : zget($lang->stage->typeList, $programPlan->attribute);
+                    echo $project->model == 'ipd' ? zget($lang->stage->ipdTypeList, $programPlan->attribute) : zget($lang->stage->typeList, $programPlan->attribute);
                 }
                 ?>
               </td>
