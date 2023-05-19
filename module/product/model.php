@@ -213,7 +213,7 @@ class productModel extends model
     /**
      * Get product pairs by project model.
      *
-     * @param  string $model all|scrum|waterfall
+     * @param  string $model all|scrum|waterfall|kanban
      * @access public
      * @return array
      */
@@ -307,9 +307,9 @@ class productModel extends model
      *
      * @param  int    $projectID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getShadowProductByProject($projectID)
+    public function getShadowProductByProject(int $projectID): object|false
     {
         return $this->dao->select('products.*')->from(TABLE_PRODUCT)->alias('products')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('relations')->on('products.id = relations.product')
