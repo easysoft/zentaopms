@@ -216,6 +216,61 @@ class productTao extends productModel
             ->fetchAll('id');
     }
 
+    /**
+     * 获取在需求列表页面的搜索表单中，模块字段的下拉选项。包括产品、项目下的需求页面。
+     * Get modules for search form, in product, project story page.
+     *
+     * @param  int       $productID
+     * @param  array     $products
+     * @param  string    $branch
+     * @param  int       $projectID
+     * @access protected
+     * @return array
+     */
+    protected function getModulesForSearchForm(int $productID, array $products, string $branch = '', int $projectID = 0): array
+    {
+        $this->loadModel('tree');
+        if($this->app->tab != 'project') return $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+
+        if($productID)
+        {
+            $modules    = array();
+            $branchList = $this->loadModel('branch')->getPairs($productID, '', $projectID);
+            unset($branchList['all']);
+
+            $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
+            foreach($branchModuleList as $branchModules) $modules += $branchModules;
+            return $modules;
+        }
+
+        /* 在项目需求页面，获取项目关联产品的模块。 */
+        $moduleList  = array();
+        $modules     = array('/');
+        $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
+        foreach($products as $productID => $productName)
+        {
+            if(isset($branchGroup[$productID]))
+            {
+                $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
+                foreach($branchModuleList as $branchModules)
+                {
+                    if(is_array($branchModules)) $moduleList += $branchModules;
+                }
+            }
+            else
+            {
+                $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+            }
+
+            foreach($moduleList as $moduleID => $moduleName)
+            {
+                if(empty($moduleID)) continue;
+                $modules[$moduleID] = $productName . $moduleName;
+            }
+        }
+        return $modules;
+    }
+
 
     /* TODO move to productplan module. */
     protected function getPlansTODO(array $productIDs): array

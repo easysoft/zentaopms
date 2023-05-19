@@ -799,14 +799,14 @@ class productModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  int    $actionURL
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0, $projectID = 0)
+    public function buildSearchForm(int $productID, array $products, string $queryID, string $actionURL, string $branch = '', int $projectID = 0): void
     {
-        $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
+        $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : array($productID);
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
         $projectID     = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
 
@@ -819,62 +819,24 @@ class productModel extends model
 
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        /* Get modules. */
-        $this->loadModel('tree');
-        if($this->app->tab == 'project' and $productID)
+        if($productID)
         {
-            $modules          = array();
-            $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
-            $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-            foreach($branchModuleList as $branchModules) $modules = array_merge($modules, $branchModules);
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $moduleList  = array();
-            $modules     = array('/');
-            $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
-            foreach($products as $productID => $productName)
+            $productInfo = $this->getByID($productID);
+            if(!empty($productInfo->shadow)) unset($this->config->product->search['fields']['product']);
+            if($productInfo->type == 'normal' or $this->app->tab == 'assetlib')
             {
-                if(isset($branchGroup[$productID]))
-                {
-                    $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
-                    foreach($branchModuleList as $branchModules)
-                    {
-                        if(is_array($branchModules)) $moduleList += $branchModules;
-                    }
-                }
-                else
-                {
-                    $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
-                }
-
-                foreach($moduleList as $moduleID => $moduleName)
-                {
-                    if(empty($moduleID)) continue;
-                    $modules[$moduleID] = $productName . $moduleName;
-                }
+                unset($this->config->product->search['fields']['branch']);
+                unset($this->config->product->search['params']['branch']);
+            }
+            else
+            {
+                $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+                $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
             }
         }
-        else
-        {
-            $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
-        }
-        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
 
-        $productInfo   = $this->getByID($productID);
-
-        if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
-            $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
-
-        if(!empty($productInfo->shadow)) unset($this->config->product->search['fields']['product']);
+        /* Get modules. */
+        $this->config->product->search['params']['module']['values'] = array('' => '') + $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
