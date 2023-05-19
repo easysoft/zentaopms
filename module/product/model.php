@@ -805,6 +805,7 @@ class productModel extends model
             $lib->type      = 'product';
             $lib->main      = '1';
             $lib->acl       = 'default';
+            $lib->vision    = $this->config->vision;
             $lib->addedBy   = $this->app->user->account;
             $lib->addedDate = helper::now();
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
