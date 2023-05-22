@@ -730,12 +730,13 @@ class productTest
      * Test get all executions by product.
      *
      * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getAllExecutionPairsByProductTest($productID)
+    public function getAllExecutionPairsByProductTest($productID, $projectID)
     {
-        $objects = $this->objectModel->getAllExecutionPairsByProduct($productID);
+        $executionPairs = $this->objectModel->getAllExecutionPairsByProduct($productID, 0, $projectID);
 
         if(dao::isError())
         {
@@ -743,7 +744,7 @@ class productTest
         }
         else
         {
-            return $objects;
+            return $executionPairs;
         }
     }
 
