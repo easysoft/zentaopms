@@ -788,28 +788,6 @@ class productTest
     }
 
     /**
-     * Test get team members of a product from projects.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return array
-     */
-    public function getTeamMemberPairsTest($productID)
-    {
-        $product = $this->objectModel->getByID($productID);
-        $objects = $this->objectModel->getTeamMemberPairs($product);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
-    }
-
-    /**
      * Test get product stat by id.
      *
      * @param  int    $productID

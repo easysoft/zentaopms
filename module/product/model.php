@@ -1094,48 +1094,6 @@ class productModel extends model
     }
 
     /**
-     * Get team members of a product from projects.
-     *
-     * @param  object   $product
-     * @access public
-     * @return array
-     */
-    public function getTeamMemberPairs($product)
-    {
-        $members[$product->PO] = $product->PO;
-        $members[$product->QD] = $product->QD;
-        $members[$product->RD] = $product->RD;
-        $members[$product->createdBy] = $product->createdBy;
-
-        /* Set projects and teams as static thus we can only query sql one times. */
-        static $projects, $teams;
-        if(empty($projects))
-        {
-            $projects = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t2.deleted')->eq(0)
-                ->andWhere('t2.type')->eq('project')
-                ->fetchGroup('product', 'project');
-        }
-        if(empty($teams))
-        {
-            $teams = $this->dao->select('t1.root, t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
-                ->where('t2.deleted')->eq(0)
-                ->andWhere('t1.type')->eq('project')
-                ->fetchGroup('root', 'account');
-        }
-
-        if(!isset($projects[$product->id])) return $members;
-        $productProjects = $projects[$product->id];
-
-        $projectTeams = array();
-        foreach(array_keys($productProjects) as $projectID) $projectTeams = array_merge($projectTeams, array_keys($teams[$projectID]));
-
-        return array_flip(array_merge($members, $projectTeams));
-    }
-
-    /**
      * 使用产品ID获取产品统计信息。
      * Get product stat data by product ID.
      *
