@@ -615,6 +615,8 @@ class todo extends control
                 $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
                 $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
 
+                $todo->assignedTo = zget($users, $todo->assignedTo);
+
                 $type = $todo->type;
                 if(isset($users[$todo->account])) $todo->account = $users[$todo->account];
                 if($type == 'bug')                $todo->name    = isset($bugs[$todo->idvalue])    ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';

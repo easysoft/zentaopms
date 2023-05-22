@@ -19,7 +19,7 @@ $config->todo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->todo->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 
 $config->todo->list = new stdclass();
-$config->todo->list->exportFields            = 'id, account, date, begin, end, type, idvalue, pri, name, desc, status, private';
+$config->todo->list->exportFields            = 'id, account, date, begin, end, type, assignedTo, idvalue, pri, name, desc, status, private';
 $config->todo->list->customBatchCreateFields = 'type,pri,desc,beginAndEnd';
 $config->todo->list->customBatchEditFields   = 'pri,beginAndEnd,status';
 
