@@ -13,18 +13,6 @@
 <?php
 class productModel extends model
 {
-    /* Constant status of product. */
-    const ST_NOCLOSED = 'noclosed';
-    const ST_BYSEARCH = 'bysearch';
-    const ST_ALL      = 'all';
-
-    /* OrderBy constant variables. */
-    const OB_PROGRAM = 'program_asc';
-    const OB_ORDER   = 'order_asc';
-
-    const STORY_TYPE_STORY = 'story';
-    const STORY_TYPE_REQ   = 'requirement';
-
     /**
      * 获取移动端1.5级导航。
      * Get product drop menu in mobile.

@@ -400,7 +400,7 @@ class productTao extends productModel
     {
         $this->loadModel('program');
 
-        if($orderBy == static::OB_PROGRAM) $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
+        if($orderBy == 'program_asc') $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
         else $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
 
         /* Fetch product lines. */
@@ -460,7 +460,7 @@ class productTao extends productModel
         }
 
         /* Story type is 'requirement'. */
-        if($storyType == static::STORY_TYPE_REQ) $stories = $requirements;
+        if($storyType == 'requirement') $stories = $requirements;
 
         return array($stories, $requirements);
     }
