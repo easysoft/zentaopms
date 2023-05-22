@@ -225,8 +225,8 @@ panel
                 formGroup
                 (
                     set::label($lang->bug->os),
-                    set::control(array('type' => 'select', 'items' => $lang->bug->osList, /*'multiple' => true*/)),
-                    set::name('os'),
+                    set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
+                    set::name('os[]'),
                     set::value($bug->os)
                 ),
                 formGroup
@@ -245,8 +245,8 @@ panel
                 formGroup
                 (
                     set::label($lang->bug->mailto),
-                    set::control(array('type' => 'select', 'items' => $users, /*('multiple' => true*/)),
-                    set::name('mailto'),
+                    set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
+                    set::name('mailto[]'),
                     set::value($bug->mailto)
                 ),
                 formGroup
@@ -320,8 +320,8 @@ panel
                         set('id', 'openedBuildBox'),
                         select
                         (
-                            //set::multiple(true),
-                            set::name('openedBuild'),
+                            set::multiple(true),
+                            set::name('openedBuild[]'),
                             set::items($openedBuilds),
                             set::value($bug->openedBuild)
                         ),
@@ -408,10 +408,9 @@ panel
                         set('id', 'linkBugsBox'),
                         select
                         (
-                            //set::multiple(true),
-                            set::name('resolvedBuild'),
-                            set::items($bug->linkBugTitles),
-                            set::value()
+                            set::multiple(true),
+                            set::name('resolvedBuild[]'),
+                            set::items($bug->linkBugTitles)
                         ),
                         span
                         (

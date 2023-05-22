@@ -148,8 +148,8 @@ formPanel
             (
                 select
                 (
-                    //set::multiple(true),
-                    set::name('openedBuild'),
+                    set::multiple(true),
+                    set::name('openedBuild[]'),
                     set::items($builds),
                     set::value(empty($buildID) ? '' : $buildID)
                 ),
@@ -238,8 +238,8 @@ formPanel
             set::width('1/2'),
             set::class($showOS ? '' : 'hidden'),
             set::label($lang->bug->os),
-            set::control(array('type' => 'select', 'items' => $lang->bug->osList, /*'multiple' => true*/)),
-            set::name('os'),
+            set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
+            set::name('os[]'),
             set::value($os)
         ),
         formGroup
@@ -326,8 +326,8 @@ formPanel
             set::width('1/2'),
             set::class($showMailto ? '' : 'hidden'),
             set::label($lang->bug->lblMailto),
-            set::control(array('type' => 'select', 'items' => $users, /*('multiple' => true*/)),
-            set::name('mailto'),
+            set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
+            set::name('mailto[]'),
             set::value(str_replace(' ', '', $mailto))
         ),
         formGroup
