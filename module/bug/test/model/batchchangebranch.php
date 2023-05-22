@@ -2,28 +2,65 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/bug.class.php';
-su('admin');
 
 /**
 
 title=测试bugModel->batchChangeBranch();
+timeout=0
 cid=1
-pid=1
 
-修改分支为主干 未发生变化 >> 0
-修改分支为分支11 >> branch,0,11
-修改分支为分支12 >> branch,11,12
-修改分支为主干 未发生变化 >> 0
-修改分支为分支9 >> branch,0,9
-修改分支为分支10 >> branch,9,10
-修改分支为主干 未发生变化 >> 0
-修改分支为分支7 >> branch,0,7
-修改分支为分支8 >> branch,7,8
-修改分支为主干 未发生变化 >> 0
-修改分支为分支37 >> branch,0,37
-修改分支为分支38 >> branch,37,38
+- 修改分支为主干 未发生变化 @0
+
+- 修改分支为分支11
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @0
+ - 第0条的new属性 @11
+
+- 修改分支为分支12
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @11
+ - 第0条的new属性 @12
+
+- 修改分支为主干 未发生变化 @0
+
+- 修改分支为分支9
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @0
+ - 第0条的new属性 @9
+
+- 修改分支为分支10
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @9
+ - 第0条的new属性 @10
+
+- 修改分支为主干 未发生变化 @0
+
+- 修改分支为分支7
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @0
+ - 第0条的new属性 @7
+
+- 修改分支为分支8
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @7
+ - 第0条的new属性 @8
+
+- 修改分支为主干 未发生变化 @0
+
+- 修改分支为分支37
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @0
+ - 第0条的new属性 @37
+
+- 修改分支为分支38
+ - 第0条的field属性 @branch
+ - 第0条的old属性 @37
+ - 第0条的new属性 @38
 
 */
+
+zdTable('bug')->gen(200);
+zdTable('branch')->gen(50);
 
 $bugIDList1 = array('136', '137', '138');
 $bugIDList2 = array('133', '134', '135');

@@ -1064,9 +1064,9 @@ class bugTest
      */
     public function batchChangeBranchTest($bugIDList, $branchID, $bugID)
     {
-        $bugs = $this->objectModel->getByIdList($bugIDList);
+        $oldBugs = $this->objectModel->getByIdList($bugIDList);
 
-        $object = $this->objectModel->batchChangeBranch($bugIDList, $branchID, $bugs);
+        $object = $this->objectModel->batchChangeBranch($bugIDList, $branchID, $oldBugs);
 
         if(dao::isError())
         {
@@ -1087,7 +1087,7 @@ class bugTest
      * @access public
      * @return array
      */
-    public function batchChangeModuleTest($bugIDList, $moduleID, $bugID)
+    public function batchChangeModuleTest(array $bugIDList, int $moduleID, int $bugID)
     {
         $oldBugs = $this->objectModel->getByIdList($bugIDList);
 
@@ -1117,8 +1117,10 @@ class bugTest
      * @access public
      * @return array
      */
-    public function batchChangePlanTest($bugIDList, $planID, $bugID)
+    public function batchChangePlanTest(array $bugIDList, int $planID, int $bugID)
     {
+        $oldBugs = $this->objectModel->getByIdList($bugIDList);
+
         $object = $this->objectModel->batchChangePlan($bugIDList, $planID);
 
         if(dao::isError())
@@ -1127,8 +1129,36 @@ class bugTest
         }
         else
         {
-            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+            $newBugs = $this->objectModel->getByIdList($bugIDList);
+            if(!empty($newBugs[$bugID]))
+            {
+                $changes = common::createChanges($oldBugs[$bugID], $newBugs[$bugID]);
+                return $changes;
+            }
         }
+    }
+
+    /**
+     * Test update bug by id.
+     *
+     * @param  int    $bugID
+     * @param  array  $data
+     * @access public
+     * @return viod
+     */
+    public function updateByIDTest(int $bugID, array $data, $getBug = false)
+    {
+        $oldBug = $this->objectModel->getByID($bugID);
+
+        $result = $this->objectModel->updateByID($bugID, (object)$data);
+
+        if(dao::isError()) return dao::getError();
+
+        $newBug = $this->objectModel->getByID($bugID);
+        if($getBug) return $newBug;
+
+        $changes = common::createChanges($oldBug, $newBug);
+        return $changes;
     }
 
     /**

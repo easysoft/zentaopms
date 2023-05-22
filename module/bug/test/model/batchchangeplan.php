@@ -2,28 +2,66 @@
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/bug.class.php';
-su('admin');
+su('user1');
 
 /**
 
 title=测试bugModel->batchChangePlan();
+timeout=0
 cid=1
-pid=1
 
-修改计划为0 未发生变化 >> 0
-修改计划为计划1 >> plan,0,1
-修改计划为计划2 >> plan,1,2
-修改计划为0 未发生变化 >> 0
-修改计划为计划1 >> plan,0,1
-修改计划为计划2 >> plan,1,2
-修改计划为0 未发生变化 >> 0
-修改计划为计划1 >> plan,0,1
-修改计划为计划2 >> plan,1,2
-修改计划为0 未发生变化 >> 0
-修改计划为计划1 >> plan,0,1
-修改计划为计划2 >> plan,1,2
+- 修改计划为0 未发生变化 @0
+
+- 修改计划为计划1
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @0
+ - 第0条的new属性 @1
+
+- 修改计划为计划2
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @1
+ - 第0条的new属性 @2
+
+- 修改计划为0 未发生变化 @0
+
+- 修改计划为计划1
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @0
+ - 第0条的new属性 @1
+
+- 修改计划为计划2
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @1
+ - 第0条的new属性 @2
+
+- 修改计划为0 未发生变化 @0
+
+- 修改计划为计划1
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @0
+ - 第0条的new属性 @1
+
+- 修改计划为计划2
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @1
+ - 第0条的new属性 @2
+
+- 修改计划为0 未发生变化 @0
+
+- 修改计划为计划1
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @0
+ - 第0条的new属性 @1
+
+- 修改计划为计划2
+ - 第0条的field属性 @plan
+ - 第0条的old属性 @1
+ - 第0条的new属性 @2
 
 */
+
+zdTable('bug')->gen(200);
+zdTable('productplan')->gen(10);
 
 $bugIDList1 = array('136', '137', '138');
 $bugIDList2 = array('133', '134', '135');

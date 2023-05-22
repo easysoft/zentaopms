@@ -840,6 +840,7 @@ class bugModel extends model
     }
 
     /**
+     * 批量修改bug分支。
      * Batch change branch.
      *
      * @param  array  $bugIDList
@@ -848,20 +849,18 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function batchChangeBranch($bugIDList, $branchID, $oldBugs)
+    public function batchChangeBranch(array $bugIDList, int $branchID, array $oldBugs): array
     {
-        $now        = helper::now();
         $allChanges = array();
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
+            if($branchID == $oldBug->branch) continue;
 
             $bug = new stdclass();
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
-            $bug->branch         = $branchID;
+            $bug->branch = $branchID;
+            $this->bugTao->updateByID((int)$bugID, $bug);
 
-            $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
         }
         return $allChanges;
@@ -879,7 +878,6 @@ class bugModel extends model
     public function batchChangeModule(array $bugIdList, int $moduleID): bool
     {
         $this->loadModel('action');
-        $now     = helper::now();
         $oldBugs = $this->getByIdList($bugIdList);
 
         foreach($bugIdList as $bugID)
@@ -889,11 +887,8 @@ class bugModel extends model
 
             /* Change the module of bug. */
             $bug = new stdclass();
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
-            $bug->module         = $moduleID;
-
-            $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+            $bug->module = $moduleID;
+            $this->bugTao->updateByID((int)$bugID, $bug);
             if(dao::isError()) return false;
 
             /* Record logs. */
@@ -905,42 +900,47 @@ class bugModel extends model
     }
 
     /**
+     * 批量修改bug计划。
      * Batch change the plan of bug.
      *
      * @param  array  $bugIDList
      * @param  int    $planID
      * @access public
-     * @return array
+     * @return void
      */
-    public function batchChangePlan($bugIDList, $planID)
+    public function batchChangePlan(array $bugIDList, int $planID): void
     {
-        $now         = helper::now();
-        $allChanges  = array();
-        $oldBugs     = $this->getByList($bugIDList);
+        $this->loadModel('action');
+        $oldBugs     = $this->getByIdList($bugIDList);
         $unlinkPlans = array();
         $link2Plans  = array();
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
             if($planID == $oldBug->plan) continue;
+
+            /* Bugs link to plans and bugs unlink to plans. */
             $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
             $link2Plans[$planID]        = empty($link2Plans[$planID]) ? $bugID : "{$link2Plans[$planID]},$bugID";
 
+            /* Update bug plan. */
             $bug = new stdclass();
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
-            $bug->plan           = $planID;
-
-            $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
-            if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+            $bug->plan = $planID;
+            $this->bugTao->updateByID((int)$bugID, $bug);
+            if(!dao::isError())
+            {
+                $changes  = common::createChanges($oldBug, $bug);
+                $actionID = $this->action->create('bug', $bugID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
+
+        /* Record plan action. */
         if(!dao::isError())
         {
-            $this->loadModel('action');
             foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
             foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
         }
-        return $allChanges;
     }
 
     /**

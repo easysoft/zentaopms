@@ -676,23 +676,22 @@ class bug extends control
     }
 
     /**
+     * 批量修改bug分支。
      * Batch change branch.
      *
      * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID)
+    public function batchChangeBranch(int $branchID)
     {
         if($this->post->bugIDList)
         {
-            $bugIdList     = $this->post->bugIDList;
-            $bugIdList     = array_unique($bugIdList);
-            $oldBugs       = $this->bug->getByIdList($bugIdList);
-            $skipBugIdList = '';
-            unset($_POST['bugIDList']);
+            $bugIdList = array_unique($this->post->bugIDList);
+            $oldBugs   = $this->bug->getByIdList($bugIdList);
 
             /* Remove condition mismatched bugs. */
+            $skipBugIdList = '';
             foreach($bugIdList as $key => $bugID)
             {
                 $oldBug = $oldBugs[$bugID];
@@ -707,22 +706,21 @@ class bug extends control
                 }
             }
 
-            if(!empty($skipBugIdList))
-            {
-                echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList));
-            }
+            if(!empty($skipBugIdList)) echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList));
 
             $allChanges = $this->bug->batchChangeBranch($bugIdList, $branchID, $oldBugs);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* Record log. */
+            $this->loadModel('action');
             foreach($allChanges as $bugID => $changes)
             {
-                $this->loadModel('action');
                 $actionID = $this->action->create('bug', $bugID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
             }
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->session->bugList, 'parent'));
+        return array('load' => $this->session->bugList, 'closeModal' => true);
     }
 
     /**
@@ -737,9 +735,7 @@ class bug extends control
     {
         if($this->post->bugIDList)
         {
-            $bugIdList = $this->post->bugIDList;
-            $bugIdList = array_unique($bugIdList);
-
+            $bugIdList = array_unique($this->post->bugIDList);
             $this->bug->batchChangeModule($bugIdList, $moduleID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
@@ -748,30 +744,23 @@ class bug extends control
     }
 
     /**
+     * 批量修改bug计划。
      * Batch change the plan of bug.
      *
      * @param  int    $planID
      * @access public
      * @return void
      */
-    public function batchChangePlan($planID)
+    public function batchChangePlan(int $planID)
     {
         if($this->post->bugIDList)
         {
-            $bugIDList = $this->post->bugIDList;
-            $bugIDList = array_unique($bugIDList);
-            unset($_POST['bugIDList']);
-            $allChanges = $this->bug->batchChangePlan($bugIDList, $planID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            foreach($allChanges as $bugID => $changes)
-            {
-                $this->loadModel('action');
-                $actionID = $this->action->create('bug', $bugID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $bugIdList = array_unique($this->post->bugIDList);
+            $this->bug->batchChangePlan($bugIdList, $planID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->session->bugList, 'parent'));
+        return array('load' => $this->session->bugList, 'closeModal' => true);
     }
 
     /**
