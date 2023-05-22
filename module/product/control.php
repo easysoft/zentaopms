@@ -178,7 +178,7 @@ class product extends control
         $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);
 
         /* Build search form. */
-        $this->productZen->buildSearchForm4Browse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
+        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
 
         /* Assign. */
         $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
