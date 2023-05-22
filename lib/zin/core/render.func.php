@@ -32,8 +32,6 @@ function render(string $wgName = 'page', string|array $options = null)
     }
     zin::$globalRenderList = array();
 
-    if(is_string($wgName) && isset(zin::$globalRenderMap[$wgName])) $wgName = zin::$globalRenderMap[$wgName];
-
     $isFullPage = str_starts_with($wgName, 'page');
     if($isFullPage) $args[] = set::display(false);
 

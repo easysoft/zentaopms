@@ -19,8 +19,6 @@ class zin
 
     public static $enabledGlobalRender = true;
 
-    public static $globalRenderMap = array();
-
     public static $data = array();
 
     public static function getData($namePath, $defaultValue = null)
