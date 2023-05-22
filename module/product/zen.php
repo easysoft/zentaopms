@@ -681,7 +681,7 @@ class productZen extends product
     protected function buildProductForClose(): object
     {
         $productData = form::data($this->config->product->form->close)->get();
-        return $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
+        return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->close['id'], $this->post->uid);
     }
 
     /**
@@ -772,9 +772,7 @@ class productZen extends product
         /* Get location. */
         $location = $this->createLink('program', 'product', "programID=$programID");
         if($this->app->tab == 'product') $location = $this->createLink('product', 'all');
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
-
-        return $response;
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location);
     }
 
     /**
@@ -908,9 +906,7 @@ class productZen extends product
 
         /* 获取分支和分支ID。*/
         $branchPairs = $this->loadModel('branch')->getPairs($product->id, 'all');
-        $branchID      = ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
-
-        return $branchID;
+        return ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
     }
 
     /**
