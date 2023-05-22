@@ -115,8 +115,6 @@ class testtask extends control
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
 
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
@@ -185,8 +183,6 @@ class testtask extends control
         $sort = common::appendOrder($orderBy);
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]  = html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->testtask->common;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
@@ -262,9 +258,6 @@ class testtask extends control
         if($project && !$project->multiple) $this->view->noMultipleExecutionID = $this->loadModel('execution')->getNoMultipleID($project->id);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->create;
 
         $this->view->product     = $this->product->getByID($productID);
         $this->view->projectID   = $projectID;
@@ -428,8 +421,6 @@ class testtask extends control
 
         /* Assign. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[] = html::a($this->createLink('testcase', 'browseUnits', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testcase->common;
 
         $this->view->productID   = $productID;
         $this->view->task        = $task;
@@ -556,9 +547,6 @@ class testtask extends control
         $runs = $this->testcase->appendData($runs, 'run');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->cases;
 
         $this->view->productID      = $productID;
         $this->view->productName    = $this->products[$productID];
@@ -642,8 +630,6 @@ class testtask extends control
         }
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
-        $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->testtask->reportChart;
         $this->view->productID     = $productID;
         $this->view->taskID        = $taskID;
         $this->view->browseType    = $browseType;
@@ -732,9 +718,6 @@ class testtask extends control
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->cases;
 
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->productID    = $productID;
@@ -873,8 +856,6 @@ class testtask extends control
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->start;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
         $this->display();
@@ -916,8 +897,6 @@ class testtask extends control
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
         $this->display();
@@ -959,8 +938,6 @@ class testtask extends control
 
         $this->view->testtask     = $this->testtask->getById($taskID);
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
-        $this->view->position[]   = $this->lang->testtask->common;
-        $this->view->position[]   = $this->lang->close;
         $this->view->actions      = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
@@ -1003,8 +980,6 @@ class testtask extends control
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->block;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
         $this->display();
@@ -1146,9 +1121,6 @@ class testtask extends control
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->linkCase;
 
         $testTask = $this->testtask->getRelatedTestTasks($productID, $taskID);
 
@@ -1436,8 +1408,6 @@ class testtask extends control
         $this->view->caseIDList = array_keys($cases);
         $this->view->productID  = $productID;
         $this->view->title      = $this->lang->testtask->batchRun;
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->batchRun;
         $this->view->from       = $from;
         $this->view->confirm    = $confirm;
         $this->display();
@@ -1549,8 +1519,6 @@ class testtask extends control
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk', 0, 'execution', '', false);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->importUnitResult;
 
         $this->view->executions = $executions;
         $this->view->builds     = $builds;

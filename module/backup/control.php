@@ -70,7 +70,6 @@ class backup extends control
         krsort($backups);
 
         $this->view->title      = $this->lang->backup->common;
-        $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;
         $this->display();
     }

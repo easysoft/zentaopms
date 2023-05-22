@@ -35,7 +35,6 @@ class editor extends control
     {
         $this->app->loadLang('dev');
         $this->view->title      = $this->lang->editor->common;
-        $this->view->position[] = $this->lang->editor->common;
         $this->view->tab        = $type;
         $this->view->moduleTree = $this->loadModel('dev')->getTree($type, 'module');
         $this->display();

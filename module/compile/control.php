@@ -56,8 +56,6 @@ class compile extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
-        $this->view->position[] = html::a($this->createLink('job', 'browse'), $this->lang->ci->job);
-        $this->view->position[] = $this->lang->compile->browse;
 
         $this->view->repoID    = $repoID;
         $this->view->jobID     = $jobID;
@@ -88,9 +86,6 @@ class compile extends control
         $this->view->job   = $job;
 
         $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
-        $this->view->position[] = html::a($this->createLink('job', 'browse'), $this->lang->ci->job);
-        $this->view->position[] = html::a($this->createLink('compile', 'browse', "jobID=" . $build->job), $this->lang->compile->browse);
-        $this->view->position[] = $this->lang->compile->logs;
         $this->display();
     }
 

@@ -139,8 +139,6 @@ class testreport extends control
         if($tasks)      $tasks      = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
 
         $this->view->title      = $title . $this->lang->colon . $this->lang->testreport->common;
-        $this->view->position[] = html::a(inlink('browse', "objectID=$objectID&objectType=$objectType&extra=$extra"), $title);
-        $this->view->position[] = $this->lang->testreport->browse;
 
         $this->view->reports      = $reports;
         $this->view->orderBy      = $orderBy;
@@ -240,8 +238,6 @@ class testreport extends control
             $this->setChartDatas($objectID);
 
             $this->view->title       = $task->name . $this->lang->testreport->create;
-            $this->view->position[]  = html::a(inlink('browse', "objectID=$productID&objectType=product&extra={$task->id}"), $task->name);
-            $this->view->position[]  = $this->lang->testreport->create;
             $this->view->reportTitle = date('Y-m-d') . " TESTTASK#{$task->id} {$task->name} {$this->lang->testreport->common}";
         }
         elseif($objectType == 'execution' or $objectType == 'project')
@@ -376,8 +372,6 @@ class testreport extends control
             if($productID != $report->product) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
-            $this->view->position[] = html::a($browseLink, $product->name);
-            $this->view->position[] = $this->lang->testreport->edit;
         }
         elseif($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
@@ -393,8 +387,6 @@ class testreport extends control
             }
 
             $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
-            $this->view->position[] = html::a($browseLink, $execution->name);
-            $this->view->position[] = $this->lang->testreport->edit;
         }
 
         if($report->objectType == 'testtask')
@@ -542,7 +534,6 @@ class testreport extends control
 
         $this->view->title      = $report->title;
         $this->view->browseLink = $browseLink;
-        $this->view->position[] = $report->title;
 
         $this->view->tab       = $tab;
         $this->view->pager     = $pager;

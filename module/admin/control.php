@@ -145,7 +145,6 @@ class admin extends control
         }
 
         $this->view->title      = $this->lang->admin->registerNotice->caption;
-        $this->view->position[] = $this->lang->admin->registerNotice->caption;
         $this->view->register   = $this->admin->getRegisterInfo();
         $this->view->sn         = $this->config->global->sn;
         $this->view->from       = $from;
@@ -187,7 +186,6 @@ class admin extends control
         }
 
         $this->view->title      = $this->lang->admin->bind->caption;
-        $this->view->position[] = $this->lang->admin->bind->caption;
         $this->view->sn         = $this->config->global->sn;
         $this->view->from       = $from;
         $this->display();
@@ -208,7 +206,6 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
         $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
-        $this->view->position[] = $this->lang->admin->safe->common;
         $this->display();
     }
 
@@ -221,8 +218,6 @@ class admin extends control
     public function checkWeak()
     {
         $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
-        $this->view->position[] = html::a(inlink('safe'), $this->lang->admin->safe->common);
-        $this->view->position[] = $this->lang->admin->safe->checkWeak;
         $this->view->weakUsers  = $this->loadModel('user')->getWeakUsers();
         $this->display();
     }
@@ -254,7 +249,6 @@ class admin extends control
         if(!isset($this->config->sso)) $this->config->sso = new stdclass();
 
         $this->view->title      = $this->lang->admin->sso;
-        $this->view->position[] = $this->lang->admin->sso;
 
         $this->view->turnon   = isset($this->config->sso->turnon)   ? $this->config->sso->turnon   : 1;
         $this->view->redirect = isset($this->config->sso->redirect) ? $this->config->sso->redirect : 0;
@@ -316,7 +310,6 @@ class admin extends control
         }
 
         $this->view->title      = $this->lang->admin->certifyEmail;
-        $this->view->position[] = $this->lang->admin->certifyEmail;
 
         $this->view->email = helper::safe64Decode($email);
         $this->display();
@@ -340,7 +333,6 @@ class admin extends control
         }
 
         $this->view->title      = $this->lang->admin->certifyMobile;
-        $this->view->position[] = $this->lang->admin->certifyMobile;
 
         $this->view->mobile = helper::safe64Decode($mobile);
         $this->display();
@@ -363,7 +355,6 @@ class admin extends control
         }
 
         $this->view->title      = $this->lang->admin->ztCompany;
-        $this->view->position[] = $this->lang->admin->ztCompany;
 
         $this->view->fields = explode(',', $fields);
         $this->display();
@@ -402,9 +393,6 @@ class admin extends control
         $this->loadModel('webhook');
 
         $this->view->title      = $this->lang->admin->log;
-        $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->admin->api);
-        $this->view->position[] = $this->lang->admin->log;
-        $this->view->position[] = $this->lang->admin->setting;
         $this->display();
     }
 

@@ -28,8 +28,6 @@ class entry extends control
 
         $this->view->title      = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->list;
         $this->view->entries    = $this->entry->getList($orderBy, $pager);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
-        $this->view->position[] = $this->lang->entry->common;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->display();
@@ -55,9 +53,6 @@ class entry extends control
 
         $this->view->title      = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->create;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->common);
-        $this->view->position[] = $this->lang->entry->create;
         $this->display();
     }
 
@@ -86,9 +81,6 @@ class entry extends control
         $entry = $this->entry->getById($id);
         $this->view->title      = $this->lang->entry->edit . $this->lang->colon . $entry->name;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->common);
-        $this->view->position[] = $this->lang->entry->edit;
         $this->view->entry      = $entry;
         $this->display();
     }
@@ -127,9 +119,6 @@ class entry extends control
         $entry = $this->entry->getByID($id);
         $this->view->title      = $this->lang->entry->log . $this->lang->colon . $entry->name;
         $this->view->logs       = $this->entry->getLogs($id, $orderBy, $pager);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->common);
-        $this->view->position[] = $this->lang->entry->log;
         $this->view->entry      = $entry;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;

@@ -171,8 +171,6 @@ class taskZen extends task
         }
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
-        $this->view->position[]    = $this->lang->task->common;
-        $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
@@ -248,7 +246,6 @@ class taskZen extends task
             $modules       = array('ditto' => $this->lang->task->ditto) + $modules;
 
             $this->view->title      = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
-            $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$execution->id"), $execution->name);
             $this->view->execution  = $execution;
             $this->view->modules    = $modules;
         }
@@ -259,7 +256,6 @@ class taskZen extends task
             $this->loadModel('my');
             $this->lang->my->menu->work['subModule'] = 'task';
 
-            $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
             $this->view->title      = $this->lang->task->batchEdit;
             $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         }
@@ -300,8 +296,6 @@ class taskZen extends task
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
 
         /* Assign. */
-        $this->view->position[]     = $this->lang->task->common;
-        $this->view->position[]     = $this->lang->task->batchEdit;
         $this->view->executionID    = $executionID;
         $this->view->priList        = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
         $this->view->statusList     = array('ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
@@ -395,7 +389,6 @@ class taskZen extends task
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
-        $this->view->position[] = $this->lang->task->assign;
         $this->view->task       = $task;
         $this->view->members    = $members;
         $this->view->users      = $this->loadModel('user')->getPairs();

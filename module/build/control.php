@@ -117,7 +117,6 @@ class build extends control
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
         $this->view->title      = $this->lang->build->create;
-        $this->view->position[] = $this->lang->build->create;
 
         $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
         $this->view->branches      = $branches;
@@ -215,7 +214,6 @@ class build extends control
         $this->commonActions($build->project);
 
         $this->view->title           = $build->name . $this->lang->colon . $this->lang->build->edit;
-        $this->view->position[]      = $this->lang->build->edit;
         $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
         $this->view->branchTagOption = $branchTagOption;
         $this->view->orderBy         = $orderBy;

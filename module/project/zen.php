@@ -336,7 +336,6 @@ class projectZen extends project
         }
 
         $this->view->title      = $this->lang->project->edit;
-        $this->view->position[] = $this->lang->project->edit;
 
         $this->view->PMUsers                  = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                    = $this->user->getPairs('noclosed|nodeleted');

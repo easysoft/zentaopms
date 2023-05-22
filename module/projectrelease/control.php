@@ -219,7 +219,6 @@ class projectrelease extends control
         $this->project->setMenu($this->session->project);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
-        $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
@@ -310,7 +309,6 @@ class projectrelease extends control
         $this->executeHooks($releaseID);
 
         $this->view->title        = "RELEASE #$release->id $release->name/" . $product->name;
-        $this->view->position[]   = $this->lang->release->view;
         $this->view->release      = $release;
         $this->view->stories      = $stories;
         $this->view->bugs         = $bugs;

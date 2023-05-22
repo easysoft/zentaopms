@@ -1063,7 +1063,6 @@ class doc extends control
         $files = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
 
         $this->view->title      = $object->name;
-        $this->view->position[] = $object->name;
 
         $this->view->type           = $type;
         $this->view->object         = $object;

@@ -51,7 +51,6 @@ class productplan extends control
         $this->view->branch          = $branch;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
-        $this->view->position[]      = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
     }
 
     /**
@@ -108,8 +107,6 @@ class productplan extends control
         }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
-        $this->view->position[] = $this->lang->productplan->common;
-        $this->view->position[] = $this->lang->productplan->create;
 
         $this->view->productID       = $productID;
         $this->view->lastPlan        = $lastPlan;
@@ -165,7 +162,6 @@ class productplan extends control
             $this->view->branchTagOption = $branchPairs;
         }
         $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
-        $this->view->position[]      = $this->lang->productplan->edit;
         $this->view->productID       = $plan->product;
         $this->view->oldBranch       = $oldBranch;
         $this->view->plan            = $plan;
@@ -375,7 +371,6 @@ class productplan extends control
         }
 
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
-        $this->view->position[]       = $this->lang->productplan->browse;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
         $this->view->branchStatusList = $branchStatusList;
@@ -473,7 +468,6 @@ class productplan extends control
         $this->loadModel('datatable');
         $this->view->modulePairs  = $modulePairs;
         $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
-        $this->view->position[]   = $this->lang->productplan->view;
         $this->view->planStories  = $planStories;
         $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
         $this->view->products     = $products;

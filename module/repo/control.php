@@ -99,8 +99,6 @@ class repo extends control
         $successJobs = $this->loadModel('compile')->getSuccessJobs($jobIDList);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->browse;
 
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
@@ -149,7 +147,6 @@ class repo extends control
         }
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[]      = $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
@@ -224,8 +221,6 @@ class repo extends control
         $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
         $this->view->serviceHosts    = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
-        $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
-        $this->view->position[] = $this->lang->repo->edit;
 
         $this->display();
     }
@@ -513,8 +508,6 @@ class repo extends control
         $this->view->pathInfo     = $pathInfo;
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->view;
         $this->display();
     }
 
@@ -823,8 +816,6 @@ class repo extends control
         $this->view->preAndNext  = $this->repo->getPreAndNext($repo, $root, $revision, $type, 'revision');
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->viewRevision;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->viewRevision;
 
         $this->display();
     }
@@ -999,8 +990,6 @@ class repo extends control
         $this->view->info        = $info;
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->diff;
 
         $this->display();
     }
@@ -1063,7 +1052,6 @@ class repo extends control
         if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;
-        $this->view->position[] = $this->lang->repo->setRules;
 
         $this->display();
     }
@@ -1085,7 +1073,6 @@ class repo extends control
         if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
-        $this->view->position[] = $this->lang->repo->showSyncCommit;
 
         $latestInDB = $this->repo->getLatestCommit($repoID);
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;

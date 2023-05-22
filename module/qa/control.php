@@ -32,7 +32,6 @@ class qa extends control
         $this->qa->setMenu($products, $productID, $branch);
 
         $this->view->title      = $this->lang->qa->index;
-        $this->view->position[] = $this->lang->qa->index;
         $this->view->products   = $products;
         echo $this->fetch('block', 'dashboard', 'dashboard=qa');
     }

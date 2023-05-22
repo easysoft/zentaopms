@@ -65,8 +65,6 @@ class message extends control
         }
 
         $this->view->title      = $this->lang->message->browser;
-        $this->view->position[] = $this->lang->message->common;
-        $this->view->position[] = $this->lang->message->browser;
 
         $this->view->browserConfig = $browserConfig;
         $this->display();
@@ -94,8 +92,6 @@ class message extends control
         $this->loadModel('action');
 
         $this->view->title      = $this->lang->message->setting;
-        $this->view->position[] = $this->lang->message->common;
-        $this->view->position[] = $this->lang->message->setting;
 
         $users = $this->loadModel('user')->getPairs('noletter,noclosed');
         unset($users['']);

@@ -278,8 +278,6 @@ class execution extends control
 
         /* Header and session. */
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->task;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->task;
 
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
@@ -1337,8 +1335,6 @@ class execution extends control
 
         /* Header and position. */
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->build;
-        $this->view->position[] = html::a(inlink('browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->build;
 
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->buildsTotal   = count($builds);
@@ -1385,8 +1381,6 @@ class execution extends control
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]    = html::a($this->createLink('execution', 'testtask', "executionID=$executionID"), $this->executions[$executionID]);
-        $this->view->position[]    = $this->lang->testtask->common;
         $this->view->execution     = $execution;
         $this->view->project       = $this->loadModel('project')->getByID($execution->project);
         $this->view->executionID   = $executionID;
@@ -1874,7 +1868,6 @@ class execution extends control
         if(isset($project->hasProduct) and $project->hasProduct == 0) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
-        $this->view->position[]          = $this->view->title;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->view->allProducts         = $allProducts;
@@ -2210,7 +2203,6 @@ class execution extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $this->view->title       = $this->lang->execution->batchEdit;
-        $this->view->position[]  = $this->lang->execution->batchEdit;
         $this->view->executions  = $executions;
         $this->view->allProjects = $allProjects;
         $this->view->projects    = $projects;
@@ -2310,8 +2302,6 @@ class execution extends control
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->start;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
-        $this->view->position[] = $this->lang->execution->start;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -2353,8 +2343,6 @@ class execution extends control
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->putoff;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
-        $this->view->position[] = $this->lang->execution->putoff;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -2402,8 +2390,6 @@ class execution extends control
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->suspend;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
-        $this->view->position[] = $this->lang->execution->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -2447,8 +2433,6 @@ class execution extends control
         $newEnd   = date('Y-m-d', strtotime($execution->end) + $dateDiff * 24 * 3600);
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->activate;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
-        $this->view->position[] = $this->lang->execution->activate;
         $this->view->execution    = $execution;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
@@ -2492,8 +2476,6 @@ class execution extends control
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $this->view->execution->name);
-        $this->view->position[] = $this->lang->execution->close;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -2583,8 +2565,6 @@ class execution extends control
         if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->view->title      = $this->lang->execution->view;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->view->title;
 
         $this->view->execution    = $execution;
         $this->view->products     = $products;
@@ -2948,8 +2928,6 @@ class execution extends control
         if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
 
         $this->view->title       = $this->lang->execution->tree;
-        $this->view->position[]  = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[]  = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
@@ -3098,8 +3076,6 @@ class execution extends control
         $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
         $this->view->title        = $this->lang->execution->storyKanban;
-        $this->view->position[]   = html::a($this->createLink('execution', 'story', "executionID=$executionID"), $execution->name);
-        $this->view->position[]   = $this->lang->execution->storyKanban;
         $this->view->stories      = $this->story->getKanbanGroupData($stories);
         $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
         $this->view->executionID  = $executionID;
@@ -3539,8 +3515,6 @@ class execution extends control
 
         /* Assign. */
         $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
-        $this->view->position[]   = html::a($browseLink, $object->name);
-        $this->view->position[]   = $this->lang->execution->linkStory;
         $this->view->objectID     = $originObjectID;
         $this->view->object       = $object;
         $this->view->products     = $products;
@@ -3711,8 +3685,6 @@ class execution extends control
         /* The header and position. */
         $execution = $this->execution->getByID($executionID);
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->dynamic;
 
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -4010,7 +3982,6 @@ class execution extends control
         $this->execution->buildSearchForm($queryID, $actionURL);
 
         $this->view->title      = $this->lang->execution->allExecutions;
-        $this->view->position[] = $this->lang->execution->allExecutions;
 
         $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
 

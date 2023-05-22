@@ -81,7 +81,6 @@ class company extends control
 
         /* Assign. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
-        $this->view->position[]  = $this->lang->dept->common;
         $this->view->users       = $users;
         $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
         $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
@@ -153,7 +152,6 @@ class company extends control
     {
         $this->company->setMenu();
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
-        $this->view->position[] = $this->lang->company->view;
         $this->view->company    = $this->company->getById($this->app->company->id);
         $this->display();
     }
@@ -245,7 +243,6 @@ class company extends control
 
         /* The header and position. */
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->position[] = $this->lang->company->dynamic;
 
         /* Get actions. */
         if($browseType != 'bysearch')

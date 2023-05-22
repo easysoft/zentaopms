@@ -1469,8 +1469,6 @@ class bugZen extends bug
 
         /* Header and positon. */
         $this->view->title      = "BUG #$bug->id $bug->title - " . $product->name;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $product->name);
-        $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
         $this->view->project     = $this->project->getByID($bug->project);
@@ -1674,8 +1672,6 @@ class bugZen extends bug
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
-        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->bug->activate;
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);

@@ -45,8 +45,6 @@ class webhook extends control
 
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
         $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
-        $this->view->position[] = $this->lang->webhook->common;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->display();
@@ -74,9 +72,6 @@ class webhook extends control
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
         $this->view->products   = $this->loadModel('product')->getPairs();
         $this->view->executions = $this->loadModel('execution')->getPairs();
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
-        $this->view->position[] = $this->lang->webhook->create;
         $this->display();
     }
 
@@ -100,9 +95,6 @@ class webhook extends control
         $this->app->loadLang('action');
 
         $this->view->title      = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
-        $this->view->position[] = $this->lang->webhook->edit;
         $this->view->products   = $this->loadModel('product')->getPairs();
         $this->view->executions = $this->loadModel('execution')->getPairs();
         $this->view->webhook    = $webhook;
@@ -159,9 +151,6 @@ class webhook extends control
         $webhook = $this->webhook->getByID($id);
         $this->view->title      = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
         $this->view->logs       = $this->webhook->getLogList($id, $orderBy, $pager);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
-        $this->view->position[] = $this->lang->webhook->log;
         $this->view->webhook    = $webhook;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -254,8 +243,6 @@ class webhook extends control
         $users = $unbindUsers + $bindedUsers;
 
         $this->view->title      = $this->lang->webhook->bind;
-        $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->webhook->common);
-        $this->view->position[] = $this->lang->webhook->bind;
 
         $this->view->webhook       = $webhook;
         $this->view->oauthUsers    = $oauthUsers;
@@ -308,7 +295,6 @@ class webhook extends control
         }
 
         $this->view->title      = $this->lang->webhook->chooseDept;
-        $this->view->position[] = $this->lang->webhook->chooseDept;
 
         $this->view->webhookType = $webhook->type;
         $this->view->deptTree    = $response['data'];

@@ -161,7 +161,6 @@ class action extends control
 
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
-        $this->view->position[] = $this->lang->action->trash;
 
         $this->view->trashes             = $trashes;
         $this->view->type                = $type;

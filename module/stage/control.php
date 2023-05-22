@@ -29,8 +29,6 @@ class stage extends control
         $this->view->orderBy     = $orderBy;
         $this->view->type        = $type;
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
-        $this->view->position[]  = $this->lang->stage->common;
-        $this->view->position[]  = $this->lang->stage->browse;
 
         $this->display();
     }
@@ -52,8 +50,6 @@ class stage extends control
         $this->view->orderBy     = $orderBy;
         $this->view->type        = $type;
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
-        $this->view->position[]  = $this->lang->stage->common;
-        $this->view->position[]  = $this->lang->stage->browse;
 
         $this->display('stage', 'browse');
     }
@@ -88,8 +84,6 @@ class stage extends control
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;
-        $this->view->position[]  = $this->lang->stage->common;
-        $this->view->position[]  = $this->lang->stage->create;
 
         $this->display();
     }
@@ -122,8 +116,6 @@ class stage extends control
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->batchCreate;
-        $this->view->position[]  = $this->lang->stage->common;
-        $this->view->position[]  = $this->lang->stage->batchCreate;
 
         $this->display();
     }
@@ -159,8 +151,6 @@ class stage extends control
         }
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
-        $this->view->position[]  = $this->lang->stage->common;
-        $this->view->position[]  = $this->lang->stage->edit;
         $this->view->stage       = $stage;
 
         $this->display();

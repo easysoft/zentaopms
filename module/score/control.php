@@ -34,7 +34,6 @@ class score extends control
         $this->app->loadLang('my');
 
         $this->view->title      = $this->lang->my->scoreRule;
-        $this->view->position[] = $this->lang->my->scoreRule;
         $this->display();
     }
 

@@ -282,8 +282,6 @@ class custom extends control
         }
 
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
-        $this->view->position[]  = $this->lang->custom->common;
-        $this->view->position[]  = $this->lang->$module->common;
         $this->view->fieldList   = $fieldList;
         $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
@@ -334,7 +332,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->working;
-        $this->view->position[] = $this->lang->custom->working;
         $this->display();
     }
 
@@ -369,7 +366,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->required;
-        $this->view->position[] = $this->lang->custom->required;
 
         $this->view->requiredFields = $requiredFields;
         $this->view->module         = $moduleName;
@@ -391,8 +387,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->score;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
         $this->display();
     }
 
@@ -414,7 +408,6 @@ class custom extends control
         $this->lang->admin->menu->system['subModule'] = 'custom';
 
         $this->view->title = $this->lang->custom->timezone;
-        $this->view->position[] = $this->lang->custom->timezone;
         $this->display();
     }
 
@@ -427,7 +420,6 @@ class custom extends control
     public function browseStoryConcept()
     {
         $this->view->title      = $this->lang->custom->browseStoryConcept;
-        $this->view->position[] = $this->lang->custom->browseStoryConcept;
         $this->view->URSRList   = $this->custom->getURSRList();
         $this->view->module     = 'product';
 
@@ -452,7 +444,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->setStoryConcept;
-        $this->view->position[] = $this->lang->custom->setStoryConcept;
 
         $this->display();
     }
@@ -567,8 +558,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->productName;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
         $this->view->module     = 'product';
 
         $this->display();
@@ -589,8 +578,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->kanban;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
 
         $this->display();
     }
@@ -615,7 +602,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->flow;
-        $this->view->position[] = $this->lang->custom->flow;
         $this->display();
     }
 
@@ -648,8 +634,6 @@ class custom extends control
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
 
         $this->view->title                 = $this->lang->custom->mode;
-        $this->view->position[]            = $this->lang->custom->common;
-        $this->view->position[]            = $this->view->title;
         $this->view->mode                  = $mode;
         $this->view->programs              = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
         $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
@@ -930,8 +914,6 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->beginAndEndDate;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
         $this->view->module     = 'task';
 
         $this->display();

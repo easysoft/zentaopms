@@ -76,8 +76,6 @@ class zahost extends control
         $zahost = $this->zahost->getById($id);
 
         $this->view->title      = $this->lang->zahost->view;
-        $this->view->position[] = html::a($this->createLink('host', 'browse'), $this->lang->zahost->common);
-        $this->view->position[] = $this->lang->zahost->view;
 
         $this->view->zahost     = $zahost;
         $this->view->orderBy    = $orderBy;

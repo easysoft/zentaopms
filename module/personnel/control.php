@@ -47,7 +47,6 @@ class personnel extends control
         $this->personnel->buildSearchForm($queryID, $actionURL);
 
         $this->view->title      = $this->lang->personnel->accessible;
-        $this->view->position[] = $this->lang->personnel->accessible;
 
         $this->view->deptID        = $deptID;
         $this->view->programID     = $programID;
@@ -80,7 +79,6 @@ class personnel extends control
         $this->app->loadLang('user');
 
         $this->view->title      = $this->lang->personnel->invest;
-        $this->view->position[] = $this->lang->personnel->invest;
         $this->view->investList = $this->personnel->getInvest($programID);
         $this->view->programID  = $programID;
 
@@ -120,7 +118,6 @@ class personnel extends control
         if($from == 'programproject') $goback = $this->session->programProject ? $this->session->programProject : $this->createLink('program', 'project', "programID=$programID");
 
         $this->view->title      = $this->lang->personnel->whitelist;
-        $this->view->position[] = $this->lang->personnel->whitelist;
 
         $this->view->pager     = $pager;
         $this->view->objectID  = $objectID;
@@ -190,7 +187,6 @@ class personnel extends control
         }
 
         $this->view->title      = $this->lang->personnel->addWhitelist;
-        $this->view->position[] = $this->lang->personnel->addWhitelist;
 
         $this->view->objectID    = $objectID;
         $this->view->objectType  = $objectType;

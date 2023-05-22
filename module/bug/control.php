@@ -165,8 +165,6 @@ class bug extends control
 
         $this->qa->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
         $this->view->branchID      = $branchID;
@@ -471,7 +469,6 @@ class bug extends control
             }
 
             $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
-            $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
             $this->view->plans      = $plans;
         }
         else
@@ -505,7 +502,6 @@ class bug extends control
             $this->lang->task->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'bug';
 
-            $this->view->position[]  = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
             $this->view->title       = "BUG" . $this->lang->bug->batchEdit;
             $this->view->plans       = $this->loadModel('productplan')->getPairs($product->id, $branch);
             $this->view->productList = $productList;

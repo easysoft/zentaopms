@@ -45,8 +45,6 @@ class mail extends control
             if($this->config->mail->mta == 'smtp') $this->locate(inlink('edit'));
         }
         $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->index;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->index;
         $this->display();
     }
 
@@ -77,8 +75,6 @@ class mail extends control
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->detect;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->detect;
 
         $this->view->fromAddress = $this->session->mailConfig ? $this->session->mailConfig->fromAddress : '';
 
@@ -112,8 +108,6 @@ class mail extends control
         $mailConfig->domain = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->edit;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->edit;
 
         $this->view->mailExist  = $this->mail->mailExist();
         $this->view->mailConfig = $mailConfig;
@@ -176,8 +170,6 @@ class mail extends control
             $this->session->set('mailConfig', '');
 
             $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
-            $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-            $this->view->position[] = $this->lang->mail->save;
 
             $this->view->mailExist  = $this->mail->mailExist();
             $this->display();
@@ -227,8 +219,6 @@ class mail extends control
         }
 
         $this->view->title      = $this->lang->mail->sendCloud;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->sendCloud;
 
         $this->view->mailExist  = $this->mail->mailExist();
         $this->view->mailConfig = $mailConfig;
@@ -276,8 +266,6 @@ class mail extends control
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->test;
         $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
         $this->display();
     }
@@ -397,8 +385,6 @@ class mail extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->mail->browse;
-        $this->view->position[] = html::a(inlink('edit'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->browse;
 
         $this->view->queueList = $this->mail->getQueue(null, $orderBy, $pager);
         $this->view->pager     = $pager;
@@ -491,8 +477,6 @@ class mail extends control
         }
 
         $this->view->title      = $this->lang->mail->sendcloudUser;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->sendcloudUser;
 
         $this->view->members = $this->mta->memberList();
         $this->view->users   = $this->loadModel('user')->getList();
@@ -526,8 +510,6 @@ class mail extends control
         }
 
         $this->view->title      = $this->lang->mail->ztCloud;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-        $this->view->position[] = $this->lang->mail->ztCloud;
         if(!empty($this->config->mail->ztcloud->secretKey) and !empty($this->config->global->community))
         {
             $mailConfig = new stdclass();

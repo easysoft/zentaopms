@@ -67,8 +67,6 @@ class job extends control
         }
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
-        $this->view->position[] = $this->lang->ci->job;
-        $this->view->position[] = $this->lang->job->browse;
         $this->view->repoID     = $repoID;
         $this->view->jobList    = $jobList;
         $this->view->orderBy    = $orderBy;
@@ -139,8 +137,6 @@ class job extends control
         }
 
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]  = $this->lang->job->create;
         $this->view->repoPairs   = $repoPairs;
         $this->view->gitlabRepos = $gitlabRepos;
         $this->view->repoTypes   = $repoTypes;
@@ -219,8 +215,6 @@ class job extends control
         }
 
         $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[]          = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]          = $this->lang->job->edit;
         $this->view->repoPairs           = $repoPairs;
         $this->view->gitlabRepos         = $gitlabRepos;
         $this->view->repoTypes           = $repoTypes;
@@ -318,8 +312,6 @@ class job extends control
         }
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
-        $this->view->position[] = $this->lang->ci->job;
-        $this->view->position[] = $this->lang->job->browse;
 
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->job     = $job;

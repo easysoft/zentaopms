@@ -39,8 +39,6 @@ class jenkins extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->browse;
-        $this->view->position[] = $this->lang->jenkins->common;
-        $this->view->position[] = $this->lang->jenkins->browse;
 
         $this->view->jenkinsList = $this->jenkins->getList($orderBy, $pager);
         $this->view->orderBy     = $orderBy;
@@ -66,8 +64,6 @@ class jenkins extends control
         }
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
-        $this->view->position[] = $this->lang->jenkins->create;
 
         $this->display();
     }
@@ -90,8 +86,6 @@ class jenkins extends control
         }
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
-        $this->view->position[] = $this->lang->jenkins->edit;
 
         $this->view->jenkins    = $jenkins;
 

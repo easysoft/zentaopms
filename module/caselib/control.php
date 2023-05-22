@@ -88,9 +88,6 @@ class caselib extends control
         $this->caselib->setLibMenu($libraries, $libID);
 
         $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
-        $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
-        $this->view->position[] = $this->lang->caselib->common;
-        $this->view->position[] = $this->lang->caselib->edit;
 
         $this->view->lib = $lib;
         $this->display();
@@ -201,7 +198,6 @@ class caselib extends control
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'caselib', $showModule) : array();
 
         $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
-        $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
 
         $this->view->libID         = $libID;
         $this->view->libName       = $libraries[$libID];
@@ -289,9 +285,6 @@ class caselib extends control
         }
 
         $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->create;
-        $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
-        $this->view->position[] = $this->lang->caselib->common;
-        $this->view->position[] = $this->lang->testcase->create;
 
         foreach(explode(',', $this->config->caselib->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->showFields       = $this->config->caselib->custom->createFields;
@@ -336,8 +329,6 @@ class caselib extends control
         $this->caselib->setLibMenu($libraries, $libID);
 
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
-        $this->view->position[]       = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
-        $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
         $this->view->currentModuleID  = (int)$moduleID;
@@ -364,9 +355,6 @@ class caselib extends control
 
         $this->loadModel('testcase');
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->caselib->view;
-        $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $lib->name);
-        $this->view->position[] = $this->lang->caselib->common;
-        $this->view->position[] = $this->lang->caselib->view;
 
         $this->view->lib     = $lib;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -763,7 +751,6 @@ class caselib extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
-        $this->view->position[] = $this->lang->testcase->showImport;
 
         $this->view->modules    = $modules;
         $this->view->cases      = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');

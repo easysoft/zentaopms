@@ -56,7 +56,6 @@ class my extends control
         $this->view->user       = $this->loadModel('user')->getById($this->app->user->account);
         $this->view->pager      = $pager;
         $this->view->scores     = $scores;
-        $this->view->position[] = $this->lang->score->record;
 
         $this->display();
     }
@@ -286,7 +285,6 @@ EOF;
 
         /* The title and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
-        $this->view->position[] = $this->lang->my->todo;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
@@ -367,7 +365,6 @@ EOF;
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
-        $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
@@ -432,7 +429,6 @@ EOF;
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
-        $this->view->position[] = $this->lang->my->story;
         $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
@@ -523,7 +519,6 @@ EOF;
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
-        $this->view->position[] = $this->lang->my->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $tasks;
         $this->view->summary    = $this->loadModel('execution')->summary($tasks);
@@ -588,7 +583,6 @@ EOF;
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
-        $this->view->position[]  = $this->lang->my->bug;
         $this->view->bugs        = $bugs;
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -637,7 +631,6 @@ EOF;
         $sort = common::appendOrder($orderBy);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
-        $this->view->position[] = $this->lang->my->myTestTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
 
         $this->view->recTotal   = $recTotal;
@@ -699,7 +692,6 @@ EOF;
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
-        $this->view->position[] = $this->lang->my->myTestCase;
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
@@ -755,7 +747,6 @@ EOF;
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
-        $this->view->position[] = $this->lang->my->doc;
         $this->view->docs       = $docs;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
@@ -803,7 +794,6 @@ EOF;
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $this->view->position[]  = $this->lang->my->project;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->projects    = $projects;
         $this->view->PMList      = $PMList;
@@ -844,7 +834,6 @@ EOF;
             ->fetchGroup('parent', 'id');
 
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
-        $this->view->position[]  = $this->lang->my->execution;
         $this->view->tabID       = 'project';
         $this->view->executions  = $executions;
         $this->view->parentGroup = $parentGroup;
@@ -881,7 +870,6 @@ EOF;
         $this->app->session->set('issueList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->issue;
-        $this->view->position[] = $this->lang->my->issue;
         $this->view->mode       = 'issue';
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
@@ -935,7 +923,6 @@ EOF;
         $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->risk;
-        $this->view->position[] = $this->lang->my->risk;
         $this->view->risks      = $risks;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
@@ -1070,7 +1057,6 @@ EOF;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
-        $this->view->position[] = $this->lang->my->nc;
         $this->view->browseType = $browseType;
         $this->view->ncs        = $ncList;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -1201,7 +1187,6 @@ EOF;
         $this->loadModel('search')->setSearchParams($this->config->feedback->search);
 
         $this->view->title       = $this->lang->my->feedback;
-        $this->view->position[]  = $this->lang->my->feedback;
         $this->view->mode        = 'feedback';
         $this->view->browseType  = $browseType;
         $this->view->feedbacks   = $feedbacks;
@@ -1294,7 +1279,6 @@ EOF;
         foreach($users as $user) unset($user->password); // Remove passwd.
 
         $this->view->title      = $this->lang->my->team;
-        $this->view->position[] = $this->lang->my->team;
         $this->view->users      = $users;
         $this->view->deptID     = $deptID;
         $this->view->orderBy    = $orderBy;
@@ -1331,7 +1315,6 @@ EOF;
         $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
-        $this->view->position[] = $this->lang->my->editProfile;
         $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->userGroups = implode(',', array_keys($userGroups));
@@ -1358,7 +1341,6 @@ EOF;
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
-        $this->view->position[] = $this->lang->my->changePassword;
         $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->rand       = $this->user->updateSessionRandom();
 
@@ -1440,12 +1422,10 @@ EOF;
         if($mode == 'new')
         {
             $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->createList;
-            $this->view->position[] = $this->lang->user->contacts->createList;
         }
         else
         {
             $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->user->contacts->manage;
-            $this->view->position[] = $this->lang->user->contacts->manage;
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
@@ -1513,7 +1493,6 @@ EOF;
         $user = $this->user->getById($this->app->user->account);
 
         $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
-        $this->view->position[]   = $this->lang->my->profile;
         $this->view->user         = $user;
         $this->view->groups       = $this->loadModel('group')->getByAccount($this->app->user->account);
         $this->view->deptPath     = $this->dept->getParents($user->dept);
@@ -1542,7 +1521,6 @@ EOF;
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
-        $this->view->position[] = $this->lang->my->preference;
         $this->view->showTip    = $showTip;
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
@@ -1610,7 +1588,6 @@ EOF;
 
         /* The header and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
-        $this->view->position[] = $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
         $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);

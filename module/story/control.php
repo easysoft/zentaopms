@@ -453,9 +453,6 @@ class story extends control
         $this->view->showFields   = $this->config->story->custom->createFields;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
-        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
-        $this->view->position[]       = $this->lang->story->common;
-        $this->view->position[]       = $this->lang->story->create;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'browse', "productID=$productID") : '';
         $this->view->products         = $products;
         $this->view->users            = $users;
@@ -762,9 +759,6 @@ class story extends control
 
         $this->view->title            = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->productName      = $product->name;
-        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
-        $this->view->position[]       = $this->lang->story->common;
-        $this->view->position[]       = $storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate;
         $this->view->storyID          = $storyID;
         $this->view->products         = $products;
         $this->view->product          = $product;
@@ -824,8 +818,6 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Assign. */
-        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
-        $this->view->position[]       = $this->lang->story->common;
         $this->view->product          = $product;
         $this->view->products         = $products;
         $this->view->story            = $story;
@@ -972,7 +964,6 @@ class story extends control
         if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
         $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->stories          = $stories;
@@ -1323,7 +1314,6 @@ class story extends control
         $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
-        $this->view->position[]       = $this->lang->story->change;
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
@@ -1381,7 +1371,6 @@ class story extends control
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->closedBy);
-        $this->view->position[] = $this->lang->story->activate;
         $this->display();
     }
 
@@ -1700,9 +1689,6 @@ class story extends control
         }
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
-        $this->view->position[] = $this->lang->story->common;
-        $this->view->position[] = $this->lang->story->review;
 
         $this->view->product   = $product;
         $this->view->story     = $story;
@@ -1932,9 +1918,6 @@ class story extends control
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
-        $this->view->position[] = $this->lang->story->common;
-        $this->view->position[] = $this->lang->story->close;
 
         $this->view->product        = $product;
         $this->view->story          = $story;
@@ -2038,7 +2021,6 @@ class story extends control
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
-            $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
             $this->view->title      = $product->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         /* The stories of a execution. */
@@ -2048,7 +2030,6 @@ class story extends control
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
-            $this->view->position[] = html::a($this->createLink('execution', 'story', "executionID=$execution->id"), $execution->name);
             $this->view->title      = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         else
@@ -2066,7 +2047,6 @@ class story extends control
                 if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
-                $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
                 $this->view->title      = $this->lang->story->batchEdit;
             }
         }
@@ -2078,8 +2058,6 @@ class story extends control
 
         unset($this->lang->story->reasonList['subdivided']);
 
-        $this->view->position[]       = $this->lang->story->common;
-        $this->view->position[]       = $this->lang->story->batchClose;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
@@ -2345,7 +2323,6 @@ class story extends control
         $product  = $this->product->getById($story->product);
 
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
-        $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
         $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
@@ -2505,7 +2482,6 @@ class story extends control
 
         /* Assign. */
         $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->colon .$this->lang->story->linkStory;
-        $this->view->position[]   = $this->lang->story->linkStory;
         $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
@@ -2862,8 +2838,6 @@ class story extends control
         if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
-        $this->view->position[]    = $this->products[$productID];
-        $this->view->position[]    = $this->lang->story->reportChart;
         $this->view->productID     = $productID;
         $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;

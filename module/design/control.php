@@ -127,7 +127,6 @@ class design extends control
         $this->view->hiddenProduct = $project->hasProduct ? false : true;
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
-        $this->view->position[] = $this->lang->design->browse;
 
         $this->view->designs    = $designs;
         $this->view->type       = $type;
@@ -180,7 +179,6 @@ class design extends control
         $project = $this->loadModel('project')->getByID($projectID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
-        $this->view->position[] = $this->lang->design->create;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
@@ -229,7 +227,6 @@ class design extends control
         $project = $this->loadModel('project')->getByID($projectID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
-        $this->view->position[] = $this->lang->design->batchCreate;
 
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
@@ -260,7 +257,6 @@ class design extends control
         $project = $this->loadModel('project')->getByID($design->project);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
-        $this->view->position[] = $this->lang->design->view;
 
         $this->view->design  = $design;
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
@@ -315,7 +311,6 @@ class design extends control
         $project = $this->loadModel('project')->getByID($design->project);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
-        $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design  = $design;
         $this->view->project = $project;
@@ -383,7 +378,6 @@ class design extends control
         $revisions = array_chunk($revisions, $pager->recPerPage);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
-        $this->view->position[] = $this->lang->design->linkCommit;
 
         $this->view->repos      = $repos;
         $this->view->repoID     = $repoID;
@@ -445,7 +439,6 @@ class design extends control
         $design = $this->design->getCommit($designID, $pager);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
-        $this->view->position[] = $this->lang->design->submission;
 
         $this->view->design = $design;
         $this->view->pager  = $pager;
@@ -562,7 +555,6 @@ class design extends control
         $design = $this->design->getByID($designID);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->assignedTo;
-        $this->view->position[] = $this->lang->design->assignedTo;
 
         $this->view->design = $design;
         $this->view->users  = $this->loadModel('project')->getTeamMemberPairs($design->project);

@@ -25,8 +25,6 @@ class dev extends control
         if($module == 'restapi') return print($this->fetch('dev', 'restAPI', "apiID=$apiID"));
 
         $this->view->title          = $this->lang->dev->api;
-        $this->view->position[]     = html::a(inlink('api'), $this->lang->dev->common);
-        $this->view->position[]     = $this->lang->dev->api;
 
         $this->view->tables         = $this->dev->getTables();
         $this->view->tab            = 'api';
@@ -70,8 +68,6 @@ class dev extends control
     public function db($table = '')
     {
         $this->view->title         = $this->lang->dev->db;
-        $this->view->position[]    = html::a(inlink('api'), $this->lang->dev->common);
-        $this->view->position[]    = $this->lang->dev->db;
 
         $this->view->tableTree     = $this->dev->getTree($table, 'table');
         $this->view->selectedTable = $table;
@@ -89,8 +85,6 @@ class dev extends control
     public function editor()
     {
         $this->view->title      = $this->lang->dev->editor;
-        $this->view->position[] = html::a(inlink('api'), $this->lang->dev->common);
-        $this->view->position[] = $this->lang->dev->editor;
 
         $this->view->tab = 'editor';
         $this->display();

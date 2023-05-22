@@ -328,7 +328,6 @@ class project extends control
             $this->view->pager            = $pager;
 
             $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
-            $this->view->position[]  = $this->lang->project->index;
             $this->view->project     = $project;
             $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
 
@@ -587,7 +586,6 @@ class project extends control
         $unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
 
         $this->view->title      = $this->lang->project->batchEdit;
-        $this->view->position[] = $this->lang->project->batchEdit;
 
         $this->view->projects             = $projects;
         $this->view->programs             = $programs;
@@ -720,7 +718,6 @@ class project extends control
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
-        $this->view->position[] = $this->lang->group->create;
 
         $this->display('group', 'create');
     }
@@ -784,8 +781,6 @@ class project extends control
         /* The header and position. */
         $project = $this->project->getByID($projectID);
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->dynamic;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->dynamic;
 
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
@@ -842,7 +837,6 @@ class project extends control
         $this->view->allExecutionNum = empty($allExecution);
 
         $this->view->title      = $this->lang->execution->allExecutions;
-        $this->view->position[] = $this->lang->execution->allExecutions;
 
         $executionStats  = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
         $showToggleIcon  = false;
@@ -1125,8 +1119,6 @@ class project extends control
         foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->common;
-        $this->view->position[]   = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $project->name);
-        $this->view->position[]   = $this->lang->testtask->common;
         $this->view->project      = $project;
         $this->view->projectID    = $projectID;
         $this->view->projectName  = $project->name;
@@ -1233,7 +1225,6 @@ class project extends control
 
         /* Header and position. */
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
-        $this->view->position[] = $this->lang->execution->build;
 
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->buildsTotal   = count($builds);
@@ -1294,8 +1285,6 @@ class project extends control
             $groupPrivs = $this->group->getPrivs($groupID);
 
             $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[] = $group->name;
-            $this->view->position[] = $this->lang->group->managePriv;
 
             /* Join changelog when be equal or greater than this version.*/
             $realVersion = str_replace('_', '.', $version);
@@ -1470,7 +1459,6 @@ class project extends control
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
         $this->view->title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
-        $this->view->position[] = $this->lang->project->manageMembers;
 
         $this->view->project        = $project;
         $this->view->users          = $users;
@@ -1564,7 +1552,6 @@ class project extends control
          }
 
          $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-         $this->view->position[] = $this->lang->group->copy;
          $this->view->group      = $this->group->getById($groupID);
 
          $this->display('group', 'copy');

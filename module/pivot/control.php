@@ -103,7 +103,6 @@ class pivot extends control
         $end   = date('Y-m-d', ($end   ? strtotime($end)   : time() + (date('t') - date('j')) * 24 * 3600));
 
         $this->view->title      = $this->lang->pivot->projectDeviation;
-        $this->view->position[] = $this->lang->pivot->projectDeviation;
 
         $this->view->executions = $this->pivot->getExecutions($begin, $end);
         $this->view->begin      = $begin;
@@ -127,7 +126,6 @@ class pivot extends control
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->lang->pivot->productSummary;
-        $this->view->position[] = $this->lang->pivot->productSummary;
         $this->view->products   = $this->pivot->getProducts($conditions);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->submenu    = 'product';
@@ -152,7 +150,6 @@ class pivot extends control
         $end   = $end == 0   ? date('Y-m-d', strtotime('now')) : $end = date('Y-m-d', strtotime($end));
 
         $this->view->title      = $this->lang->pivot->bugCreate;
-        $this->view->position[] = $this->lang->pivot->bugCreate;
         $this->view->begin      = $begin;
         $this->view->end        = $end;
         $this->view->bugs       = $this->pivot->getBugs($begin, $end, $product, $execution);
@@ -176,7 +173,6 @@ class pivot extends control
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->lang->pivot->bugAssign;
-        $this->view->position[] = $this->lang->pivot->bugAssign;
         $this->view->submenu    = 'test';
         $this->view->assigns    = $this->pivot->getBugAssign();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
@@ -234,7 +230,6 @@ class pivot extends control
         }
 
         $this->view->title      = $this->lang->pivot->workload;
-        $this->view->position[] = $this->lang->pivot->workload;
 
         $this->view->workload = $this->pivot->getWorkload($dept, $assign);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed');

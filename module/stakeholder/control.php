@@ -23,7 +23,6 @@ class stakeholder extends control
         $stakeholders = $this->stakeholder->getStakeholders($projectID, $browseType, $orderBy, $pager);
 
         $this->view->title       = $this->lang->stakeholder->browse;
-        $this->view->position[]  = $this->lang->stakeholder->browse;
 
         $this->view->pager        = $pager;
         $this->view->recTotal     = $recTotal;
@@ -89,7 +88,6 @@ class stakeholder extends control
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
-        $this->view->position[] = $this->lang->stakeholder->create;
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
         $this->view->programID  = $this->app->tab == 'program' ? $objectID : 0;
         $this->view->projectID  = $this->app->tab == 'project' ? $objectID : 0;
@@ -131,7 +129,6 @@ class stakeholder extends control
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
 
         $this->view->title      = $this->lang->stakeholder->batchCreate;
-        $this->view->position[] = $this->lang->stakeholder->batchCreate;
 
         $this->view->project            = $this->loadModel('project')->getByID($this->session->project);
         $this->view->users              = $this->user->getPairs('all|nodeleted|noclosed');
@@ -187,7 +184,6 @@ class stakeholder extends control
         }
 
         $this->view->title       = $this->lang->stakeholder->edit;
-        $this->view->position[]  = $this->lang->stakeholder->edit;
 
         $this->view->stakeholder = $stakeholder;
         $this->view->users       = $users;
@@ -358,7 +354,6 @@ class stakeholder extends control
         $this->commonAction($userID, 'stakeholder');
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
-        $this->view->position[] = $this->lang->stakeholder->view;
 
         $this->view->user    = $user;
         $this->view->users   = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
@@ -385,7 +380,6 @@ class stakeholder extends control
         }
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
-        $this->view->position[] = $this->lang->stakeholder->view;
         $this->view->user       = $this->stakeholder->getByID($userID);
         $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->display();
@@ -411,7 +405,6 @@ class stakeholder extends control
         }
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
-        $this->view->position[] = $this->lang->stakeholder->view;
         $this->view->user       = $user;
         $this->display();
     }
@@ -441,7 +434,6 @@ class stakeholder extends control
         $stakeholder = $this->stakeholder->getByID($userID);
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
-        $this->view->position[] = $this->lang->stakeholder->view;
 
         $this->view->stakeholder = $stakeholder;
         $this->view->projectID   = $stakeholder->objectID;

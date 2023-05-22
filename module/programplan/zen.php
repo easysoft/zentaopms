@@ -38,8 +38,6 @@ class programplanZen extends programplan
         list($visibleFields, $requiredFields, $customFields, $showFields) = $this->computeFieldsCreateView($viewData->executionType);
 
         $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $viewData->project->name;
-        $this->view->position[]         = html::a($this->createLink('programplan', 'browse', "projectID={$viewData->projectID}"), $viewData->project->name);
-        $this->view->position[]         = $this->lang->programplan->create;
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
@@ -115,7 +113,6 @@ class programplanZen extends programplan
         $parentStage = $this->project->getByID($plan->parent, 'stage');
 
         $this->view->title              = $this->lang->programplan->edit;
-        $this->view->position[]         = $this->lang->programplan->edit;
         $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
         $this->view->plan               = $plan;
         $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $plan->id, $plan->product);

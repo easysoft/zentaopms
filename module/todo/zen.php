@@ -47,8 +47,6 @@ class todoZen extends todo
         $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
 
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
-        $this->view->position[] = $this->lang->todo->common;
-        $this->view->position[] = $this->lang->todo->batchCreate;
         $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time       = date::now();
@@ -629,7 +627,6 @@ class todoZen extends todo
         $this->view->user            = $this->user->getByID((string)$todo->account);
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->actions         = $this->loadModel('action')->getList('todo', (int)$todo->id);
-        $this->view->position[]      = $this->lang->todo->view;
         $this->view->todo            = $todo;
         $this->view->times           = date::buildTimeList((int)$this->config->todo->times->begin, (int)$this->config->todo->times->end, 5);
         $this->view->from            = $from;

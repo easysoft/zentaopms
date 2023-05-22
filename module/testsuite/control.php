@@ -94,8 +94,6 @@ class testsuite extends control
         $summary   = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
-        $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);
-        $this->view->position[]  = $this->lang->testsuite->common;
 
         $this->view->productID   = $productID;
         $this->view->productName = $productName;
@@ -146,9 +144,6 @@ class testsuite extends control
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testsuite->common;
-        $this->view->position[] = $this->lang->testsuite->create;
 
         $this->view->productID    = $productID;
         $this->display();
@@ -191,9 +186,6 @@ class testsuite extends control
         $this->executeHooks($suiteID);
 
         $this->view->title      = "SUITE #$suite->id $suite->name";
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
-        $this->view->position[] = $this->lang->testsuite->common;
-        $this->view->position[] = $this->lang->testsuite->view;
 
         $this->view->productID    = $productID;
         $this->view->suite        = $suite;
@@ -251,9 +243,6 @@ class testsuite extends control
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
-        $this->view->position[] = $this->lang->testsuite->common;
-        $this->view->position[] = $this->lang->testsuite->edit;
 
         $this->view->suite = $suite;
         $this->display();
@@ -354,9 +343,6 @@ class testsuite extends control
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"));
-        $this->view->position[] = $this->lang->testsuite->common;
-        $this->view->position[] = $this->lang->testsuite->linkCase;
 
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases   = $this->testsuite->getUnlinkedCases($suite, $param, $pager);

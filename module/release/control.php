@@ -28,7 +28,6 @@ class release extends control
         $this->view->product  = $product;
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
     }
 
     /**
@@ -62,7 +61,6 @@ class release extends control
         }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
-        $this->view->position[] = $this->lang->release->browse;
         $this->view->releases   = $releases;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
@@ -102,7 +100,6 @@ class release extends control
 
         $this->commonAction($productID, $branch);
         $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->position[]     = $this->lang->release->create;
         $this->view->productID      = $productID;
         $this->view->builds         = $builds;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
@@ -152,7 +149,6 @@ class release extends control
         }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
-        $this->view->position[] = $this->lang->release->edit;
         $this->view->release    = $release;
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
@@ -238,7 +234,6 @@ class release extends control
         $this->executeHooks($releaseID);
 
         $this->view->title         = "RELEASE #$release->id $release->name/" . $product->name;
-        $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;

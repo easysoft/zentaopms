@@ -88,7 +88,6 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
-        $this->view->position[] = $this->lang->user->todo;
         $this->view->tabID      = 'todo';
         $this->view->date       = $date;
         $this->view->todos      = $todos;
@@ -133,7 +132,6 @@ class user extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
-        $this->view->position[] = $this->lang->user->story;
         $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType, false, 'all');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
@@ -176,7 +174,6 @@ class user extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
-        $this->view->position[] = $this->lang->user->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager, $orderBy);
         $this->view->type       = $type;
@@ -220,7 +217,6 @@ class user extends control
         $this->app->loadLang('bug');
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
-        $this->view->position[] = $this->lang->user->bug;
         $this->view->tabID      = 'bug';
         $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
         $this->view->type       = $type;
@@ -267,7 +263,6 @@ class user extends control
         $sort = common::appendOrder($orderBy);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
-        $this->view->position[] = $this->lang->user->testTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->user       = $user;
@@ -327,7 +322,6 @@ class user extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
-        $this->view->position[] = $this->lang->user->testCase;
         $this->view->user       = $user;
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
@@ -372,7 +366,6 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
-        $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
         $this->view->executions = $this->user->getObjects($account, 'execution', 'all', $orderBy, $pager);
         $this->view->user       = $user;
@@ -412,7 +405,6 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
-        $this->view->position[] = $this->lang->user->issue;
         $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, 0, $account, $orderBy, $pager);
         $this->view->user       = $user;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -453,7 +445,6 @@ class user extends control
         $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
-        $this->view->position[] = $this->lang->user->risk;
         $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $account, $orderBy, $pager);
         $this->view->user       = $user;
         $this->view->type       = $type;
@@ -480,8 +471,6 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->position[]   = $this->lang->user->common;
-        $this->view->position[]   = $this->lang->user->profile;
         $this->view->user         = $user;
         $this->view->groups       = $this->loadModel('group')->getByAccount($account);
         $this->view->deptPath     = $this->dept->getParents($user->dept);
@@ -703,7 +692,6 @@ class user extends control
         $this->view->showFields   = join(',', $showFields);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
-        $this->view->position[] = $this->lang->user->batchEdit;
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
@@ -1244,7 +1232,6 @@ class user extends control
         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
-        $this->view->position[] = $this->lang->user->dynamic;
 
         /* Assign. */
         $this->view->type       = $period;

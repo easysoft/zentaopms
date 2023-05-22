@@ -97,7 +97,6 @@ class upgrade extends control
         }
 
         $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
-        $this->view->position[] = $this->lang->upgrade->common;
         $this->view->version    = $version;
         $this->display();
     }
@@ -116,7 +115,6 @@ class upgrade extends control
 
         $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
-        $this->view->position[]  = $this->lang->upgrade->common;
         $this->view->confirm     = $confirmSql;
         $this->view->fromVersion = $this->post->fromVersion;
         /* When sql is empty then skip it. */
@@ -136,7 +134,6 @@ class upgrade extends control
         $this->session->set('step', '');
 
         $this->view->title      = $this->lang->upgrade->result;
-        $this->view->position[] = $this->lang->upgrade->common;
 
         $result = $this->upgrade->deleteFiles();
         if($result)
@@ -838,7 +835,6 @@ class upgrade extends control
         {
             $this->app->loadLang('install');
             $this->view->title      = $this->lang->upgrade->result;
-            $this->view->position[] = $this->lang->upgrade->common;
 
             $needProcess = $this->upgrade->checkProcess();
             $this->view->needProcess = $needProcess;

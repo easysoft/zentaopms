@@ -75,7 +75,6 @@ class group extends control
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
-        $this->view->position[] = $this->lang->group->create;
         $this->display();
     }
 
@@ -124,7 +123,6 @@ class group extends control
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-        $this->view->position[] = $this->lang->group->copy;
         $this->view->group      = $this->group->getById($groupID);
         $this->display();
     }
@@ -224,8 +222,6 @@ class group extends control
             $groupPrivs = $this->group->getPrivs($groupID);
 
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[] = $group->name;
-            $this->view->position[] = $this->lang->group->managePriv;
 
             /* Join changelog when be equal or greater than this version.*/
             $realVersion = str_replace('_', '.', $version);
@@ -328,7 +324,6 @@ class group extends control
         {
             $this->group->sortResource();
             $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[] = $this->lang->group->managePriv;
 
             $privs             = $this->group->getPrivsListByView('');
             $privs             = $this->group->getCustomPrivs('', $privs);

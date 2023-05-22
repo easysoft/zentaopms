@@ -20,7 +20,6 @@ class cron extends control
     public function index()
     {
         $this->view->title      = $this->lang->cron->common;
-        $this->view->position[] = $this->lang->cron->common;
 
         $this->view->crons = $this->cron->getCrons();
         $this->display();
@@ -66,8 +65,6 @@ class cron extends control
             return print(js::locate(inlink('index'), 'parent'));
         }
         $this->view->title      = $this->lang->cron->create . $this->lang->cron->common;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->cron->common);
-        $this->view->position[] = $this->lang->cron->create;
 
         $this->display();
     }
@@ -88,8 +85,6 @@ class cron extends control
             return print(js::locate(inlink('index'), 'parent'));
         }
         $this->view->title      = $this->lang->cron->edit . $this->lang->cron->common;
-        $this->view->position[] = html::a(inlink('index'), $this->lang->cron->common);
-        $this->view->position[] = $this->lang->cron->edit;
 
         $this->view->cron = $this->cron->getById($cronID);
         $this->display();

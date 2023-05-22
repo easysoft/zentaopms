@@ -246,8 +246,6 @@ class testcase extends control
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
         $this->view->title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $this->view->position[]      = $this->lang->testcase->common;
         $this->view->projectID       = $projectID;
         $this->view->productID       = $productID;
         $this->view->product         = $product;
@@ -332,8 +330,6 @@ class testcase extends control
         $this->app->loadLang('task');
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[]  = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
@@ -751,9 +747,6 @@ class testcase extends control
         $this->view->showFields   = $showFields;
 
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
-        $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $this->view->position[]       = $this->lang->testcase->common;
-        $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->story            = $story;
@@ -863,7 +856,6 @@ class testcase extends control
             $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
-            $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
 
             $this->view->libName = $libraries[$case->lib];
         }
@@ -894,8 +886,6 @@ class testcase extends control
 
         $this->executeHooks($caseID);
 
-        $this->view->position[] = $this->lang->testcase->common;
-        $this->view->position[] = $this->lang->testcase->view;
 
         $this->view->case       = $case;
         $this->view->from       = $from;
@@ -1151,7 +1141,6 @@ class testcase extends control
                 $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
 
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
-                $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
             }
             else
             {
@@ -1201,7 +1190,6 @@ class testcase extends control
             $this->lang->testcase->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'testcase';
 
-            $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->myTestCase);
             $this->view->title      = $this->lang->testcase->batchEdit;
 
             $productIdList = array();
@@ -1264,8 +1252,6 @@ class testcase extends control
 
         /* Assign. */
         $this->view->scenePairs     = $scenePairs;
-        $this->view->position[]     = $this->lang->testcase->common;
-        $this->view->position[]     = $this->lang->testcase->batchEdit;
         $this->view->caseIDList     = $caseIDList;
         $this->view->productID      = $productID;
         $this->view->branchProduct  = $branchProduct;
@@ -1526,9 +1512,6 @@ class testcase extends control
 
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
-        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), zget($this->products, $case->product, ''));
-        $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
-        $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
         $this->view->cases2Link = empty($cases2Link) ? $cases2Link : $cases2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -1583,7 +1566,6 @@ class testcase extends control
         $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->position[] = $this->lang->testcase->linkBugs;
         $this->view->case       = $case;
         $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -2155,7 +2137,6 @@ class testcase extends control
         $pager = pager::init(0, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
-        $this->view->position[] = $this->lang->testcase->importFromLib;
 
         $this->view->libraries        = $libraries;
         $this->view->libID            = $libID;
@@ -2402,7 +2383,6 @@ class testcase extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
-        $this->view->position[] = $this->lang->testcase->showImport;
 
         $this->view->stories    = $stories;
         $this->view->modules    = $modules;

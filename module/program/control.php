@@ -92,7 +92,6 @@ class program extends control
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
         $this->view->title      = $this->lang->program->browse;
-        $this->view->position[] = $this->lang->program->browse;
 
         $this->view->programs     = $programs;
         $this->view->status       = $status;
@@ -176,7 +175,6 @@ class program extends control
         $this->view->products = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story',  $programID);
 
         $this->view->title         = $this->lang->program->product;
-        $this->view->position[]    = $this->lang->program->product;
         $this->view->programID     = $programID;
         $this->view->browseType    = $browseType;
         $this->view->orderBy       = $orderBy;
@@ -215,7 +213,6 @@ class program extends control
         parse_str($extra, $output);
 
         $this->view->title      = $this->lang->program->create;
-        $this->view->position[] = $this->lang->program->create;
 
         $this->view->gobackLink     = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('program', 'browse') : '';
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
@@ -261,7 +258,6 @@ class program extends control
         foreach($children as $childID) unset($parents[$childID]);
 
         $this->view->title      = $this->lang->program->edit;
-        $this->view->position[] = $this->lang->program->edit;
 
         $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->poUsers         = $this->user->getPairs('noclosed|nodeleted|pofirst');
@@ -308,7 +304,6 @@ class program extends control
         }
 
         $this->view->title      = $this->lang->program->close;
-        $this->view->position[] = $this->lang->program->close;
         $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
@@ -344,7 +339,6 @@ class program extends control
         }
 
         $this->view->title      = $this->lang->program->start;
-        $this->view->position[] = $this->lang->program->start;
         $this->view->project    = $this->project->getByID($programID, 'program');
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
@@ -381,7 +375,6 @@ class program extends control
         $newEnd   = date('Y-m-d', strtotime($program->end) + $dateDiff * 24 * 3600);
 
         $this->view->title      = $this->lang->program->activate;
-        $this->view->position[] = $this->lang->program->activate;
         $this->view->project    = $program;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
@@ -416,7 +409,6 @@ class program extends control
         }
 
         $this->view->title      = $this->lang->program->suspend;
-        $this->view->position[] = $this->lang->program->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->action->getList('program', $programID);
         $this->view->project    = $this->project->getByID($programID, 'program');
@@ -492,7 +484,6 @@ class program extends control
         $this->view->allProjectsNum = $allProjectsNum;
 
         $this->view->title      = $this->lang->program->project;
-        $this->view->position[] = $this->lang->program->project;
 
         $this->view->projectStats  = $projectStats;
         $this->view->pager         = $pager;
@@ -526,7 +517,6 @@ class program extends control
         $pager = new pager(0, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->program->stakeholder;
-        $this->view->position[] = $this->lang->program->stakeholder;
 
         $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
         $this->view->pager        = $pager;
@@ -852,7 +842,6 @@ class program extends control
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
         $this->view->title      = $this->lang->program->projectView;
-        $this->view->position[] = $this->lang->program->browse;
 
         $this->view->programs     = $programs;
         $this->view->status       = $status;
@@ -920,7 +909,6 @@ class program extends control
         $this->product->buildProductSearchForm($param, $actionURL);
 
         $this->view->title            = $this->lang->product->common;
-        $this->view->position[]       = $this->lang->product->common;
         $this->view->recTotal         = $pager->recTotal;
         $this->view->productStats     = $productStats;
         $this->view->productStructure = $productStructure;
