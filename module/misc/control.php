@@ -217,13 +217,13 @@ class misc extends control
      * Show captcha and save to session.
      *
      * @param  string $sessionVar
-     * @param  string $uuid
      * @access public
      * @return void
      */
-    public function captcha($sessionVar = 'captcha', $uuid = '')
+    public function captcha($sessionVar = 'captcha')
     {
-        if($sessionVar == 'user') die('The string user is not allowed to be defined as a session field.');
+        if(in_array(strtolower($sessionVar), $this->config->misc->disabledSessionVar)) die("The string {$sessionVar} is not allowed to be defined as a session field.");
+
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
