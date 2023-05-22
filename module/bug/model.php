@@ -1134,37 +1134,34 @@ class bugModel extends model
     }
 
     /**
+     * 获取可以关联的 bug 列表。
      * Get bugs to link.
      *
      * @param  int    $bugID
-     * @param  string $browseType
+     * @param  bool   $bySearch
      * @param  int    $queryID
-     * @param  object $pager
      * @param  string $excludeBugs
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null, $excludeBugs = '')
+    public function getBugs2Link(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, object $pager = null): array
     {
-        $bug       = $this->getById($bugID);
-        $bugIDList = $bug->id . ',' . $bug->linkBug . ',' . $excludeBugs;
+        $bug = $this->getByID($bugID);
 
-        if($browseType == 'bySearch')
-        {
-            return $this->bugTao->getBySearch((array)$bug->product, 'all', 0, $queryID, $bugIDList, 'id', $pager);
-        }
-        else
-        {
-            return $this->dao->select('*')->from(TABLE_BUG)
-                ->where('deleted')->eq('0')
-                ->andWhere('id')->notin($bugIDList)
-                ->andWhere('product')->eq($bug->product)
-                ->beginIF($bug->project)->andWhere('project')->eq($bug->project)->fi()
-                ->beginIF($bug->execution)->andWhere('execution')->eq($bug->execution)->fi()
-                ->orderBy('id desc')
-                ->page($pager)
-                ->fetchAll();
-        }
+        $excludeBugs .= ",{$bug->id},{$bug->linkBug}";
+
+        if($bySearch) return $this->bugTao->getBySearch((array)$bug->product, $branch = 'all', $projectID = 0, $queryID, $excludeBugs, $orderBy = 'id desc', $pager);
+
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->notin($excludeBugs)
+            ->andWhere('product')->eq($bug->product)
+            ->beginIF($bug->project)->andWhere('project')->eq($bug->project)->fi()
+            ->beginIF($bug->execution)->andWhere('execution')->eq($bug->execution)->fi()
+            ->orderBy('id desc')
+            ->page($pager)
+            ->fetchAll();
     }
 
     /**

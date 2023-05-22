@@ -34,7 +34,7 @@ $(function()
             bugIdList += $(this).val() + ',';
         });
 
-        var link = createLink('bug', 'linkBugs', 'bugID=' + bugID + '&browseType=&excludeBugs=' + bugIdList, '', true);
+        var link = createLink('bug', 'linkBugs', 'bugID=' + bugID + '&bySearch=&excludeBugs=' + bugIdList, '', true);
 
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%', url: link});
         modalTrigger.show();

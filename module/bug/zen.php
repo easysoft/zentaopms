@@ -1966,7 +1966,7 @@ class bugZen extends bug
             }
         }
 
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&browseType=bySearch&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bySearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
     }
 }

@@ -1039,7 +1039,7 @@ class bug extends control
      * Link related bugs.
      *
      * @param  int    $bugID
-     * @param  string $browseType
+     * @param  bool   $bySearch
      * @param  string $excludeBugs
      * @param  int    $queryID
      * @param  int    $recTotal
@@ -1048,7 +1048,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function linkBugs(int $bugID, string $browseType = '', string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkBugs(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $bug = $this->bug->getByID($bugID);
 
@@ -1065,9 +1065,9 @@ class bug extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title $this->lang->dash " . $this->products[$bug->product];
+        $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
         $this->view->bug       = $bug;
-        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager, $excludeBugs);
+        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->pager     = $pager;
         $this->display();
