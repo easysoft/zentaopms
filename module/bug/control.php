@@ -377,14 +377,17 @@ class bug extends control
     }
 
     /**
-     * Batch edit bug.
+     * 批量编辑bug。
+     * Batch edit bugs.
      *
-     * @param  int    $productID
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $branch = 0)
+    public function batchEdit(int $productID = 0, int|string $branch = 0)
     {
+        /* Set menu in product tab. */
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
@@ -392,8 +395,10 @@ class bug extends control
 
         if($this->post->titles)
         {
+            /* Batch update the bugs. */
             $allChanges = $this->bug->batchUpdate();
 
+            /* Record logs. */
             foreach($allChanges as $bugID => $changes)
             {
                 if(empty($changes)) continue;
@@ -401,6 +406,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
 
+                /* Pop-up confirmation dialog box, when the bug has been converted to a task. */
                 $bug = $this->bug->getById($bugID);
                 if($bug->toTask != 0)
                 {
@@ -418,14 +424,16 @@ class bug extends control
             return print(js::locate($this->session->bugList, 'parent'));
         }
 
+        /* If there is no bug ID, return to the previous step. */
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
+
         /* Initialize vars.*/
         $bugIDList = array_unique($this->post->bugIDList);
         $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
-        /* The bugs of a product. */
         if($productID)
         {
+            /* The bugs of a product. */
             $product = $this->product->getByID($productID);
             $branchProduct = $product->type == 'normal' ? false : true;
 
@@ -466,9 +474,11 @@ class bug extends control
             $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
             $this->view->plans      = $plans;
         }
-        /* The bugs of my. */
         else
         {
+            /* The bugs of my. */
+
+            /* Get products, branches and modules. */
             $branchProduct   = false;
             $productIdList   = array();
             $branchTagOption = array();
@@ -490,6 +500,7 @@ class bug extends control
                 $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
             }
 
+            /* Set menu. */
             $this->app->loadLang('my');
             $this->lang->task->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'bug';
@@ -510,6 +521,7 @@ class bug extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->batchEditFields;
 
+        /* Get branches, projects, executions and bugs of the products. */
         $branchIdList    = array();
         $projectIdList   = array();
         $executionIdList = array();
@@ -540,6 +552,7 @@ class bug extends control
             $executionMembers = array();
             if($productID)
             {
+                /* If product id is not empty, get members of the product. */
                 $branchList = zget($branchIdList, $productID, array());
                 foreach($branchList as $branchID)
                 {
@@ -549,6 +562,7 @@ class bug extends control
             }
             else
             {
+                /* If product id is empty, get members of the products. */
                 foreach($productIdList as $id)
                 {
                     $branchList = zget($branchIdList, $id, array());
@@ -560,6 +574,7 @@ class bug extends control
                 }
             }
 
+            /* Get members of projects. */
             $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
             $projectMembers     = array();
             foreach($projectIdList as $projectID)
@@ -572,6 +587,7 @@ class bug extends control
                 }
             }
 
+            /* Get members of executions. */
             $executionMemberGroup = $this->execution->getMembersByIdList($executionIdList);
             $executionMembers     = array();
             foreach($executionIdList as $executionID)
