@@ -238,7 +238,7 @@ class product extends control
         {
             $productData = $this->productZen->buildProductForCreate();
 
-            $productID = $this->product->create($productData, $this->post->uid, zget($_POST, 'lineName', ''));
+            $productID = $this->product->create($productData, zget($_POST, 'lineName', ''));
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->productZen->responseAfterCreate($productID, $productData->program);
@@ -270,9 +270,9 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForEdit($this->post->acl);
+            $productData = $this->productZen->buildProductForEdit();
 
-            $this->product->update($productID, $productData, $this->post->uid);
+            $this->product->update($productID, $productData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($action == 'undelete') $this->loadModel('action')->undelete((int)$extra);

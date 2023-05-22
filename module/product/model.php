@@ -459,12 +459,11 @@ class productModel extends model
      * 直接用对象数据创建产品
      *
      * @param  object  $product
-     * @param  string  $uid
      * @param  string  $lineName
      * @access public
      * @return int|false
      */
-    public function create(object $product, string $uid = '', string $lineName = ''): int|false
+    public function create(object $product, string $lineName = ''): int|false
     {
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
@@ -487,7 +486,7 @@ class productModel extends model
 
         /* Update and create linked data. */
         $this->loadModel('action')->create('product', $productID, 'opened');
-        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $productID, 'product');
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
@@ -500,11 +499,10 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  object $product
-     * @param  string $uid
      * @access public
      * @return array|false
      */
-    public function update(int $productID, object $product, string $uid = ''): array|false
+    public function update(int $productID, object $product): array|false
     {
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
 
@@ -513,7 +511,7 @@ class productModel extends model
         if(!$result) return false;
 
         /* Update objectID field of file recode, that upload by editor. */
-        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $productID, 'product');
 
         $whitelist = explode(',', $product->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
