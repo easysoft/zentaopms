@@ -980,7 +980,7 @@ class bug extends control
                 $this->bugZen->responseInModal($bug->execution, '', $regionID);
             }
 
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "bugID={$bugID}"), 'closeModal' => true);
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID={$bugID}"), 'closeModal' => true);
         }
 
         $this->bugZen->buildActivateForm($bugID);
