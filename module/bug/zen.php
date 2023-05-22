@@ -1629,15 +1629,14 @@ class bugZen extends bug
     {
         $now        = helper::now();
         $formConfig = $this->config->bug->form->activate;
-        $oldBug     = $this->dao->select('resolvedBy, activatedCount')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        $resolvedBy = $this->dao->select('resolvedBy')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch('resolvedBy');
 
         $bug = form::data($formConfig)
-            ->setDefault('assignedTo',     $oldBug->resolvedBy)
+            ->setDefault('assignedTo',     $resolvedBy)
             ->setDefault('assignedDate',   $now)
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
-            ->setDefault('activatedCount', (int)$oldBug->activatedCount)
             ->add('id', $bugID)
             ->add('resolution', '')
             ->add('status', 'active')
