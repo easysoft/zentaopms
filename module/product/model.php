@@ -1711,11 +1711,11 @@ class productModel extends model
     /**
      * get the latest project of the product.
      *
-     * @param  int     $productID
+     * @param  int    $productID
      * @access public
      * @return object
      */
-    public function getLatestProject($productID)
+    public function getLatestProject(int $productID): object
     {
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
