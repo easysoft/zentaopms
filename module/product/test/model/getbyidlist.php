@@ -1,26 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
+zdTable('product')->config('product')->gen(5);
 /**
 
 title=productModel->getByIdList();
 cid=1
 pid=1
 
-测试获取product 1 2 3的信息 >> 正常产品1,po1,test1,dev1;正常产品2,po2,test2,dev2;正常产品3,po3,test3,dev3
-测试获取product 4 5 6的信息 >> 正常产品4,po4,test4,dev4;正常产品5,po5,test5,dev5;正常产品6,po6,test6,dev6
-测试获取product 7 8 9的信息 >> 正常产品7,po7,test7,dev7;正常产品8,po8,test8,dev8;正常产品9,po9,test9,dev9
-
 */
 
 $product = new productTest('admin');
 
-$productIDList1 = array('1', '2', '3');
-$productIDList2 = array('4', '5', '6');
-$productIDList3 = array('7', '8', '9');
+$productIdList = array(1, 2, 3, 4, 5);
 
-r($product->getByIdListTest($productIDList1)) && p('1:name,PO,QD,RD;2:name,PO,QD,RD;3:name,PO,QD,RD') && e('正常产品1,po1,test1,dev1;正常产品2,po2,test2,dev2;正常产品3,po3,test3,dev3');   // 测试获取product 1 2 3的信息
-r($product->getByIdListTest($productIDList2)) && p('4:name,PO,QD,RD;5:name,PO,QD,RD;6:name,PO,QD,RD') && e('正常产品4,po4,test4,dev4;正常产品5,po5,test5,dev5;正常产品6,po6,test6,dev6');   // 测试获取product 4 5 6的信息
-r($product->getByIdListTest($productIDList3)) && p('7:name,PO,QD,RD;8:name,PO,QD,RD;9:name,PO,QD,RD') && e('正常产品7,po7,test7,dev7;正常产品8,po8,test8,dev8;正常产品9,po9,test9,dev9');   // 测试获取product 7 8 9的信息
+r($product->getByIdListTest($productIdList)) && p('1:name,program,shadow,line,type,status,PO,QD,acl,vision') && e('产品1,1,0,1,normal,normal,po1,qd1,open,rnd');    // 测试获取产品列表中产品1的信息
+r($product->getByIdListTest($productIdList)) && p('2:name,program,shadow,line,type,status,PO,QD,acl,vision') && e('产品2,2,0,2,normal,normal,po1,qd1,open,rnd');    // 测试获取产品列表中产品2的信息
+r($product->getByIdListTest($productIdList)) && p('3:name,program,shadow,line,type,status,PO,QD,acl,vision') && e('产品3,3,1,3,branch,closed,po2,qd2,private,rnd'); // 测试获取产品列表中产品3的信息
+r($product->getByIdListTest($productIdList)) && p('4:name,program,shadow,line,type,status,PO,QD,acl,vision') && e('产品4,4,1,4,branch,closed,po2,qd2,private,rnd'); // 测试获取产品列表中产品4的信息
+r($product->getByIdListTest($productIdList)) && p('5:name,program,shadow,line,type,status,PO,QD,acl,vision') && e('产品5,5,1,5,branch,closed,po3,qd3,private,rnd'); // 测试获取产品列表中产品5的信息

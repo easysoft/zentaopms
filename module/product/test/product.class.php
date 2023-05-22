@@ -404,20 +404,14 @@ class productTest
      *
      * @param  array  $productIDList
      * @access public
-     * @return array
+     * @return object[]|string
      */
-    public function getByIdListTest($productIDList)
+    public function getByIdListTest(array $productIDList): array|string
     {
-        $objects = $this->objectModel->getByIdList($productIDList);
+        $products = $this->objectModel->getByIdList($productIDList);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+        return $products;
     }
 
     /**

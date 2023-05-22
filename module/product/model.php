@@ -142,7 +142,7 @@ class productModel extends model
 
     /**
      * 根据id列表获取产品列表。
-     * Get products by idList.
+     * Get products by id list.
      *
      * @param  array  $productIdList
      * @access public
