@@ -1376,7 +1376,7 @@ class productModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateMenu($product, $type = 'view')
+    public function buildOperateMenu(object $product, $type = 'view'): string
     {
         $menu   = '';
         $params = "product=$product->id";
