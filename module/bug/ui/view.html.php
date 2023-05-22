@@ -10,6 +10,124 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+
+/**
+ * 根据字段打印表格内容。
+ * print table.
+ *
+ * @param array $fields
+ * @return wg
+ */
+function printTable($fields): wg
+{
+    global $lang;
+
+    $trs = array();
+    foreach($fields as $field)
+    {
+        $trs[] = h::tr
+        (
+            h::th($field['th']),
+            h::td
+            (
+                !empty($field['url']) ?
+                a
+                (
+                    set('href', $field['url']),
+                    set('class', $field['class']),
+                    !empty($field['data-app'])    ? set('data-app', 'product') : null,
+                    !empty($field['data-toggle']) ? set('data-toggle', 'modal') : null,
+                    $field['tr']
+                ) : span
+                (
+                    set('class', $field['class']),
+                    $field['tr']
+                )
+            )
+        );
+    }
+    return h::table(h::tbody($trs));
+}
+
+$app->loadLang('product');
+$moduleTitle = '';
+if(empty($modulePath))
+{
+    $moduleTitle .= '/';
+}
+else
+{
+    if($bugModule->branch and isset($branches[$bugModule->branch]))
+    {
+        $moduleTitle .= $branches[$bugModule->branch] . '/';
+    }
+
+    foreach($modulePath as $key => $module)
+    {
+        $moduleTitle .= $module->name;
+        if(isset($modulePath[$key + 1]))
+        {
+            $moduleTitle .= '/';
+        }
+    }
+}
+
+$openedBuilds = array();
+foreach(explode(',', $bug->openedBuild) as $openedBuild)
+{
+    if(!$openedBuild) continue;
+    $openedBuilds[] = div(zget($builds, $openedBuild));
+}
+
+$osList = array();
+foreach(explode(',', $bug->os) as $os)
+{
+    $osList[] = span(zget($lang->bug->osList, $os));
+}
+
+$browserList = array();
+foreach($browserList as $browser)
+{
+    $browserList[] = span(zget($lang->bug->browserList, $browser));
+}
+
+$mailtoList = '';
+foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account)
+{
+    $mailtoList .= ' ' . zget($users, $account);
+}
+
+$linkBugs = array();
+foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+{
+    $linkBugs[] = a
+    (
+        set('href', helper::createLink('bug', 'view', "bugID=$linkBugID")),
+        set('data-toggle', 'modal'),
+        "#$linkBugID $linkBugTitle"
+    );
+}
+
+$linkMR = array();
+foreach($bug->linkMRTitles as $MRID => $linkMRTitle)
+{
+    $linkMR[] = a
+    (
+        set('href', helper::createLink('mr', 'view', "MRID=$MRID")),
+        "#$MRID $linkMRTitle"
+    );
+}
+
+$linkCommits = array();
+foreach($linkCommits as $commit)
+{
+    $linkCommits[] = a
+    (
+        set('href', helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")),
+        " $commit->comment"
+    );
+}
+
 panel
 (
     div
@@ -51,8 +169,45 @@ panel
                 (
                     array
                     (
-                        array('id' => 'legendBasicInfo', 'label' => $lang->bug->legendBasicInfo, 'data' => '123', 'active' => true),
-                        array('id' => 'legendLife', 'label' => $lang->bug->legendMisc, 'data' => '456'),
+                        array
+                        (
+                            'id' => 'legendBasicInfo', 'label' => $lang->bug->legendBasicInfo, 'data' => printTable(array
+                            (
+                                array('th' => $lang->bug->product, 'tr' => $product->name, 'url' => helper::createLink('product', 'view', "productID=$bug->product"), 'data-app' => 'product'),
+                                array('th' => sprintf($lang->product->branch, $lang->product->branchName[$product->type]), 'tr' => $branchName, 'url' => helper::createLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch")),
+                                array('th' => $lang->bug->module,         'tr' => $moduleTitle),
+                                array('th' => $lang->bug->fromCase,       'tr' => icon('sitemap', "{$lang->bug->fromCase}$lang->colon$bug->case"), 'url' => helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), 'data-toggle' => 'modal'),
+                                array('th' => $lang->bug->productplan,    'tr' => $bug->planName, 'url' => helper::createLink('productplan', 'view', "planID=$bug->plan&type=bug")),
+                                array('th' => $lang->bug->type,           'tr' => zget($lang->bug->typeList, $bug->type)),
+                                array('th' => $lang->bug->status,         'tr' => $this->processStatus('bug', $bug), 'class' => 'status-' . $bug->status),
+                                array('th' => $lang->bug->severity,       'tr' => severityLabel(zget($lang->bug->severityList, $bug->severity), set::level($bug->severity))),
+                                array('th' => $lang->bug->pri,            'tr' => priLabel(zget($lang->bug->priList, $bug->pri))),
+                                array('th' => $lang->bug->activatedCount, 'tr' => $bug->activatedCount),
+                                array('th' => $lang->bug->activatedDate,  'tr' => $bug->activatedDate),
+                                array('th' => $lang->bug->confirmed,      'tr' => $lang->bug->confirmedList[$bug->confirmed]),
+                                array('th' => $lang->bug->lblAssignedTo,  'tr' => zget($users, $bug->assignedTo) . $lang->at . $bug->assignedDate),
+                                array('th' => $lang->bug->deadline,       'tr' => $bug->deadline . (isset($bug->delay) ? printf($lang->bug->delayWarning, $bug->delay) : '')),
+                                array('th' => $lang->bug->feedbackBy,     'tr' => $bug->feedbackBy),
+                                array('th' => $lang->bug->notifyEmail,    'tr' => $bug->notifyEmail),
+                                array('th' => $lang->bug->os,             'tr' => $osList),
+                                array('th' => $lang->bug->browser,        'tr' => $browserList),
+                                array('th' => $lang->bug->keywords,       'tr' => $bug->keywords),
+                                array('th' => $lang->bug->mailto,         'tr' => $mailtoList)
+                            )), 'active' => true
+                        ),
+                        array
+                        (
+                            'id' => 'legendLife', 'label' => $lang->bug->legendLife, 'data' => printTable(array
+                            (
+                                array('th' => $lang->bug->openedBy,      'tr' => zget($users, $bug->openedBy) . $lang->at . $bug->openedDate),
+                                array('th' => $lang->bug->openedBuild,   'tr' => $openedBuilds),
+                                array('th' => $lang->bug->lblResolved,   'tr' => zget($users, $bug->resolvedBy) . $lang->at . $bug->resolvedDate),
+                                array('th' => $lang->bug->resolvedBuild, 'tr' => zget($builds, $bug->resolvedBuild)),
+                                array('th' => $lang->bug->resolution,    'tr' => div(zget($lang->bug->resolutionList, $bug->resolution) . "#$bug->duplicateBug:", a(set('href', createLink('bug', 'view', "bugID=$bug->duplicateBug")), set('data-toggle', 'modal'), $bug->duplicateBugTitle))),
+                                array('th' => $lang->bug->closedBy,      'tr' => zget($users, $bug->closedBy) . $lang->at . $bug->closedDate),
+                                array('th' => $lang->bug->lblLastEdited, 'tr' => zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . $lang->at . $bug->lastEditedDate)
+                            ))
+                        )
                     )
                 )
             ),
@@ -62,12 +217,25 @@ panel
                 (
                     array
                     (
-                        array('id' => 'legendExecStoryTask', 'label' => (!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask), 'data' => '123', 'active' => true),
-                        array('id' => 'legendMisc', 'label' => $lang->bug->legendMisc, 'data' => '456'),
+                        array('id' => 'legendExecStoryTask', 'label' => (!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask), 'data' => printTable(array()), 'active' => true),
+                        array
+                        (
+                            'id' => 'legendMisc', 'label' => $lang->bug->legendMisc, 'data' => printTable(array
+                            (
+                                array('th' => $lang->bug->linkBug,    'tr' => $linkBugs),
+                                array('th' => $lang->bug->fromCase,   'tr' => "#$bug->case $bug->caseTitle", 'url' => helper::createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion"), 'data-toggle' => 'modal'),
+                                array('th' => $lang->bug->toCase,     'tr' => $toCases),
+                                array('th' => $lang->bug->toStory,    'tr' => "#$bug->toStory $bug->toStoryTitle", 'url' => helper::createLink('story', 'view', "storyID=$bug->toStory"), 'data-toggle' => 'modal'),
+                                array('th' => $lang->bug->toTask,     'tr' => "#$bug->toTask $bug->toTaskTitle",   'url' => helper::createLink('task', 'view', "taskID=$bug->toTask"),    'data-toggle' => 'modal'),
+                                array('th' => $lang->bug->linkMR,     'tr' => $linkMR),
+                                array('th' => $lang->bug->linkCommit, 'tr' => $linkCommits),
+                            ))
+                        )
                     )
                 )
             )
         )
     )
 );
+
 render();

@@ -139,4 +139,4 @@ formPanel
     ),
 );
 
-render();
+render('modalDialog');
