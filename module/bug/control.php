@@ -968,18 +968,10 @@ class bug extends control
             $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
             parse_str($kanbanInfo, $kanbanParams);
 
-            /* Activate bug. */
             $bugData = $this->bugZen->buildBugForActivate($bugID);
-            $changes = $this->bug->activate($bugData, $kanbanParams);
+
+            $this->bug->activate($bugData, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            /* Save attachments and record logs. */
-            $files      = $this->loadModel('file')->saveUpload('bug', $bugID);
-            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->action->create('bug', $bugID, 'Activated', $fileAction . $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
-
-            $this->executeHooks($bugID);
 
             if(isonlybody())
             {
