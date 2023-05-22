@@ -12,7 +12,7 @@
 ?>
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
-<?php if($project->model == 'ipd') js::set('reviewPoints', json_encode($reviewPoints));?>
+<?php if(isset($project) and $project->model == 'ipd') js::set('reviewPoints', json_encode($reviewPoints));?>
 <?php js::set('projectID', $projectID);?>
 <style>
 .submitBtn{display:none}
