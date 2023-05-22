@@ -67,12 +67,8 @@ class zanode extends control
     /**
      * Browse ZenAgent Node list in zahost view.
      *
-     * @param  string   $browseType
-     * @param  string   $param
-     * @param  string   $orderBy
-     * @param  int      $recTotal
-     * @param  int      $recPerPage
-     * @param  int      $pageID
+     * @param  int    $hostID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -80,12 +76,13 @@ class zanode extends control
     {
         if(!commonModel::hasPriv('zanode', 'browse'))
         {
-            $this->loadModel('common')->deny('zanode', 'browse');
+            $this->loadModel('common')->deny('zanode', 'browse', false);
         }
-        $this->view->title       = $this->lang->zanode->common;
-        $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
-        $this->view->orderBy     = $orderBy;
-        $this->view->hostID      = $hostID;
+
+        $this->view->title    = $this->lang->zanode->common;
+        $this->view->nodeList = $this->zanode->getListByHost($hostID, $orderBy);
+        $this->view->orderBy  = $orderBy;
+        $this->view->hostID   = $hostID;
 
         $this->display();
     }
@@ -116,7 +113,7 @@ class zanode extends control
     /**
      * Edit node.
      *
-     * @param  int    $hostID
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -258,7 +255,7 @@ class zanode extends control
     /**
      * Create custom image.
      *
-     * @param  int    $zanodeID
+     * @param  int    $nodeID
      * @access public
      * @return void
      */
@@ -375,7 +372,8 @@ class zanode extends control
     /**
      * Desctroy node.
      *
-     * @param  int  $nodeID
+     * @param  int    $nodeID
+     * @param  string $confirm
      * @return void
      */
     public function destroy($nodeID, $confirm = 'no')
@@ -456,7 +454,9 @@ class zanode extends control
     /**
      * Restore node.
      *
-     * @param  int  $nodeID
+     * @param  int    $nodeID
+     * @param  int    $snapshotID
+     * @param  string $confirm
      * @return void
      */
     public function restoreSnapshot($nodeID, $snapshotID, $confirm = 'no')
@@ -471,7 +471,7 @@ class zanode extends control
         if(dao::isError())
         {
             $errors = dao::getError();
-            if(is_array($errors)) $errors = implode($errors, ',');
+            if(is_array($errors)) $errors = implode(',', $errors);
             return print(js::alert($errors) . js::reload('parent'));
         }
         else
@@ -511,7 +511,7 @@ class zanode extends control
     /**
      * Ajax get task status.
      *
-     * @param  int    $extranet
+     * @param  int    $nodeID
      * @param  int    $taskID
      * @param  string $type
      * @param  string $status
@@ -539,13 +539,15 @@ class zanode extends control
             $data = fixer::input('post')->get();
             $this->dao->update(TABLE_IMAGE)->data($data)->where('id')->eq($imageID)->autoCheck()->exec();
 
+            $response = array();
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
             if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                return $this->send($response);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            return $this->send($response);
         }
     }
 
@@ -562,8 +564,8 @@ class zanode extends control
         $serviceStatus = $this->zanode->getServiceStatus($node);
         if ($node->status != 'running')
         {
-            $serviceStatus['ZenAgent'] = "unknown";
-            $serviceStatus['ZTF']      = "unknown";
+            $serviceStatus['ZenAgent'] = 'unknown';
+            $serviceStatus['ZTF']      = 'unknown';
         }
         $node->status = $node->status == 'online' ? 'ready' : $node->status;
         $serviceStatus['node'] = $node->status;
@@ -575,6 +577,7 @@ class zanode extends control
      * Install service by ajax.
      *
      * @param  int    $nodeID
+     * @param  string $service
      * @access public
      * @return void
      */
@@ -589,6 +592,8 @@ class zanode extends control
     /**
      * Ajax: get ZTF script.
      *
+     * @param string $type
+     * @param int    $objectID
      * @access public
      * @return void
      */
