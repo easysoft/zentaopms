@@ -19,7 +19,7 @@ if(!$longBlock)
     unset($config->block->plan->dtable->fieldList['bugs']);
 }
 
-foreach($plans as $plan) $plan->product = zget($products, $plan->product); 
+foreach($plans as $plan) $plan->product = zget($products, $plan->product);
 
 panel
 (
@@ -31,4 +31,4 @@ panel
     )
 );
 
-render();
+render('|fragment');

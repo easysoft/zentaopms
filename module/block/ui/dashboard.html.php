@@ -11,113 +11,46 @@ declare(strict_types=1);
 
 namespace zin;
 
-$mainBlocks = array();
+$blocks = array();
 foreach($longBlocks as $index => $block)
 {
-    $mainBlocks[] =
-    div
+    $blocks[] = array
     (
-        set('class', "panel rounded shadow ring-0 canvas block-item {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
-        set('data-id', $block->id),
-        set('data-name', $block->title),
-        set('data-order', $block->order),
-        set('data-url', $block->blockLink),
-        div
-        (
-            set('class', 'panel-heading'),
-            div
-            (
-                set('class', 'panel-title'),
-                $block->title
-            ),
-            nav
-            (
-                set('class', 'panel-actions nav nav-default'),
-                dropdown
-                (
-                    icon('ellipsis-v'),
-                    set::items
-                    ([
-                        ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink('block', 'edit', "blockID=$block->id"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->hidden, 'url' => $this->createLink('block', 'delete', "blockID=$block->id")],
-                        ['text' => $lang->block->closeForever, 'url' => $this->createLink('block', 'close', "blockID=$block->id")],
-                        ['text' => $lang->block->createBlock, 'url' => $this->createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => $this->createLink('block', 'reset', "dashboard=$dashboard")],
-                    ]),
-                )
-            )
-        ),
-        div
-        (
-            set('id', 'block' . $block->id),
-            set('class', 'panel-body scrollbar-hover')
-        )
+        'id'        => $block->id,
+        'code'      => $block->code,
+        'color'     => isset($block->params->color) ? $block->params->color : null,
+        'fetch'     => $block->blockLink,
+        'size'      => 'smWide',
+        'left'      => 0,
+        'top'       => count($blocks) * 4
     );
 }
 
-$sideBlocks = array();
 foreach($shortBlocks as $index => $block)
 {
-    $sideBlocks[] =
-    div
+    $blocks[] = array
     (
-        set('id', 'block' . $block->id),
-        set('class', "panel rounded shadow ring-0 canvas {$block->code}" . (isset($block->params->color) ? 'panel-' . $block->params->color : '')),
-        set('data-id', $block->id),
-        set('data-name', $block->title),
-        set('data-order', $block->order),
-        set('data-url', $block->blockLink),
-        div
-        (
-            set('class', 'panel-heading'),
-            div
-            (
-                set('class', 'panel-title'),
-                $block->title
-            ),
-            nav
-            (
-                set('class', 'panel-actions nav nav-default'),
-                dropdown
-                (
-                    icon('ellipsis-v'),
-                    set::items
-                    ([
-                        ['text' => $lang->block->refresh, 'url' => ''],
-                        ['text' => $lang->edit, 'url' => $this->createLink('block', 'edit', "blockID=$block->id"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->hidden, 'url' => $this->createLink('block', 'delete', "blockID=$block->id&type=hidden")],
-                        ['text' => $lang->block->createBlock, 'url' => $this->createLink('block', 'create', "dashboard=$dashboard"), 'data-toggle' => 'modal'],
-                        ['text' => $lang->block->reset, 'url' => $this->createLink('block', 'reset', "dashboard=$dashboard")],
-                    ]),
-                )
-            )
-        ),
-        div
-        (
-            set('class', 'panel-body scrollbar-hover')
-        )
+        'id'        => $block->id,
+        'code'      => $block->code,
+        'color'     => isset($block->params->color) ? $block->params->color : null,
+        'fetch'     => $block->blockLink,
+        'size'      => 'sm',
+        'left'      => 8,
+        'top'       => (count($blocks) - count($longBlocks)) * 4
     );
 }
 
-div
+$blockMenuItems = array();
+$blockMenuItems[] = array('text' => $lang->block->refresh, 'data-type' => 'refresh');
+$blockMenuItems[] = array('text' => $lang->edit, 'data-url' => createLink('block', 'edit', "blockID={id}"));
+$blockMenuItems[] = array('text' => $lang->block->hidden, 'data-url' => createLink('block', 'delete', "blockID={id}&type=hidden"));
+$blockMenuItems[] = array('text' => $lang->block->createBlock, 'data-url' => createLink('block', 'create', "dashboard=$dashboard"));
+$blockMenuItems[] = array('text' => $lang->block->reset, 'data-url' => createLink('block', 'reset', "dashboard=$dashboard"));
+
+dashboard
 (
-    set('class', 'dashboard'),
-    set('id', 'dashboard'),
-    div
-    (
-        set('class', 'row'),
-        div
-        (
-            set('class', 'col-main'),
-            $mainBlocks
-        ),
-        div
-        (
-            set('class', 'col-side'),
-            $sideBlocks
-        )
-    )
+    set::blocks($blocks),
+    set::blockMenu(array('items' => $blockMenuItems))
 );
 
 render();

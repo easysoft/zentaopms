@@ -28,4 +28,4 @@ panel
     )
 );
 
-render();
+render('|fragment');

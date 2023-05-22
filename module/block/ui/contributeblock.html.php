@@ -41,4 +41,4 @@ panel
     )
 );
 
-render();
+render('|fragment');

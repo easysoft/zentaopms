@@ -291,4 +291,4 @@ div
     )
 );
 
-render();
+render('|fragment');

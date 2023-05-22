@@ -31,4 +31,4 @@ dtable
     set::data(array_values($projects))
 );
 
-render();
+render('|fragment');

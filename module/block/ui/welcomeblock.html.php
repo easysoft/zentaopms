@@ -128,4 +128,4 @@ panel
     )
 );
 
-render();
+render('|fragment');

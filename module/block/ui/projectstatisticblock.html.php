@@ -162,7 +162,7 @@ function getScrumProjectInfo($project)
 
 /**
  * 获取项目的统计项.
- * get project statistic items. 
+ * get project statistic items.
  *
  * @param  object    $project
  * @access public
@@ -370,4 +370,4 @@ div
     )
 );
 
-render();
+render('|fragment');
