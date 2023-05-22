@@ -6,7 +6,7 @@ class riskLabel extends wg
 {
     protected static $defineProps = array(
         'text?:string', // 标签文本
-        'level?:string' // 风险等级：高('h')、中('m')、低('l')
+        'level?:string' // 风险等级：高('high' 或 'h')、中('middle' 或 'm')、低('low' 或 'l')
     );
 
     public static function getPageCSS(): string|false
@@ -23,12 +23,12 @@ class riskLabel extends wg
         }
     }
 
-    private function setThemeStyle(): \zin\directive
+    private function getThemeClass(): string
     {
         $level = $this->prop('level');
-        if($level === 'h')  return setClass('text-danger');
-        if($level === 'm')  return setClass('text-warning');
-        return setStyle('color', 'var(--color-slate-800)');
+        if($level === 'h' || $level === 'high')  return 'risk-high';
+        if($level === 'm' || $level === 'middle')  return 'risk-middle';
+        return 'risk-low';
     }
 
     protected function build(): wg
@@ -37,8 +37,7 @@ class riskLabel extends wg
         return span
         (
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            setClass('risk-label'),
-            $this->setThemeStyle(),
+            setClass('risk-label', $this->getThemeClass()),
             $text
         );
     }
