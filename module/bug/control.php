@@ -993,7 +993,7 @@ class bug extends control
             if(isonlybody())
             {
                 $regionID = zget($kanbanParams, 'regionID', 0);
-                $bug      = $this->bug->getByID($bugID);
+                $bug      = $this->bug->getBaseInfo($bugID);
                 $this->bugZen->responseInModal($bug->execution, '', $regionID);
             }
 
