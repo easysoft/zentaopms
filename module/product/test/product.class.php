@@ -699,14 +699,47 @@ class productTest
      * Test get executions by product and project.
      *
      * @param  int    $productID
-     * @param  int    $projectID
+     * @param  string $projectID
+     * @param  string $mode
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProductTest($productID, $projectID = 0)
+    public function getExecutionPairsByProductTest(int $productID, string $projectID = '', string $mode = ''): array
     {
-        $objects = $this->objectModel->getExecutionPairsByProduct($productID, 0, 'id_asc', $projectID);
+        $objects = $this->objectModel->getExecutionPairsByProduct($productID, 0, $projectID, $mode);
 
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * 测试 buildExecutionPairs 方法。
+     * Test buildExecutionPairs method.
+     *
+     * @param  string $mode
+     * @param  bool   $withBranch
+     * @access public
+     * @return array
+     */
+    public function buildExecutionPairsTest(string $mode = '', bool $withBranch = false): array
+    {
+        $orderBy    = 't2.begin_desc,t2.id_desc';
+        $executions = $this->objectModel->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
+            ->where('t1.product')->eq('1')
+            ->andWhere('t2.type')->in('sprint,kanban,stage')
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+
+        $objects = $this->objectModel->buildExecutionPairs($executions, $mode, $withBranch);
         if(dao::isError())
         {
             return dao::getError();

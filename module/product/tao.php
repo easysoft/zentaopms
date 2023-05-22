@@ -1186,4 +1186,57 @@ class productTao extends productModel
             ->groupBy('story')
             ->fetchPairs('story');
     }
+
+    /**
+     * 构建执行键值对，主要处理子阶段的情况。
+     * Build execution pairs.
+     *
+     * @param  array     $executions
+     * @param  string    $mode            stagefilter|hasparent
+     * @param  bool      $withProjectName
+     * @access protected
+     * @return array
+     */
+    protected function buildExecutionPairs(array $executions, string $mode = '', bool $withProjectName = false): array
+    {
+        $projectIdList = array();
+        foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
+
+        /* 现在只有阶段有子阶段，所以只查询阶段类型的执行。 */
+        $stages      = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $stageFilter = str_contains($mode, 'stagefilter');
+
+        /* 根据条件整理数据，将子阶段放到父阶段中。 */
+        foreach($executions as $id => $execution)
+        {
+            if($execution->grade == 2 and isset($stages[$execution->parent]))
+            {
+                $executionName = (!$withProjectName ? '' : $execution->projectName) . '/' . $stages[$execution->parent]->name . '/' . $execution->name;
+                if(isset($executions[$execution->parent]))
+                {
+                    $executions[$execution->parent]->children[$id] = $executionName;
+                    unset($executions[$id]);
+                }
+            }
+        }
+
+        /* Build execution pairs. */
+        $this->app->loadLang('project');
+        $executionPairs = array('0' => '');
+        foreach($executions as $executionID => $execution)
+        {
+            if($stageFilter && in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+
+            if(isset($execution->children))
+            {
+                $executionPairs = $executionPairs + $execution->children;
+                continue;
+            }
+
+            $executionPairs[$executionID] = (!$withProjectName ? '' : $execution->projectName) . '/' . $execution->name;
+            if(empty($execution->multiple)) $executionPairs[$executionID] = $execution->projectName . "({$this->lang->project->disableExecution})";
+        }
+
+        return $executionPairs;
+    }
 }

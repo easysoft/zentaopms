@@ -1,7 +1,13 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
+
+zdTable('project')->config('execution')->gen(32);
+$projectProduct = zdTable('projectproduct');
+$projectProduct->project->range('101-150');
+$projectProduct->product->range('1');
+$projectProduct->gen(28);
 
 /**
 
@@ -11,23 +17,31 @@ pid=1
 
 */
 
-$productIDList = array('1', '2', '3', '4', '5', '1000001');
-$projectIDList = array('11', '21', '12', '22', '13', '23', '14', '24', '15', '25');
+$productIDList = array(0, 1, 1000001);
+$projectIDList = array('11', '21', '60', '61', '100');
 
 $product = new productTest('admin');
+$product->objectModel->app->user->view->sprints = implode(',', array_keys(array_fill('101', 28, 'test')));
 
-r($product->getExecutionPairsByProductTest($productIDList[0]))                     && p('101;111') && e('项目1/迭代1;项目11/迭代11');   // 测试获取产品1的信息
-r($product->getExecutionPairsByProductTest($productIDList[0], $projectIDList[0]))  && p('101;111') && e('迭代1;');                      // 测试获取产品1 项目11的信息
-r($product->getExecutionPairsByProductTest($productIDList[0], $projectIDList[1]))  && p('101;111') && e(';迭代11');                     // 测试获取产品1 项目21的信息
-r($product->getExecutionPairsByProductTest($productIDList[1]))                     && p('102;112') && e('项目2/迭代2;项目12/迭代12');   // 测试获取产品2的信息
-r($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[2]))  && p('102;112') && e('迭代2;');                      // 测试获取产品2 项目12的信息
-r($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[3]))  && p('102;112') && e(';迭代12');                     // 测试获取产品2 项目22的信息
-r($product->getExecutionPairsByProductTest($productIDList[2]))                     && p('103;113') && e('项目3/迭代3;项目13/迭代13');   // 测试获取产品3的信息
-r($product->getExecutionPairsByProductTest($productIDList[2], $projectIDList[4]))  && p('103;113') && e('迭代3;');                      // 测试获取产品3 项目13的信息
-r($product->getExecutionPairsByProductTest($productIDList[2], $projectIDList[5]))  && p('103;113') && e(';迭代13');                     // 测试获取产品3 项目23的信息
-r($product->getExecutionPairsByProductTest($productIDList[3]))                     && p('104;114') && e('项目4/迭代4;项目14/迭代14');   // 测试获取产品4的信息
-r($product->getExecutionPairsByProductTest($productIDList[3], $projectIDList[6]))  && p('104;114') && e('迭代4;');                      // 测试获取产品4 项目14的信息
-r($product->getExecutionPairsByProductTest($productIDList[3], $projectIDList[7]))  && p('104;114') && e(';迭代14');                     // 测试获取产品4 项目24的信息
-r($product->getExecutionPairsByProducttest($productIDList[4]))                     && p('105;115') && e('项目5/迭代5;项目15/迭代15');   // 测试获取产品5的信息
-r($product->getExecutionPairsByProducttest($productIDList[4], $projectIDList[8]))  && p('105;115') && e('迭代5;');                      // 测试获取产品5 项目15的信息
-r($product->getExecutionPairsByProducttest($productIDList[4], $projectIDList[9]))  && p('105;115') && e(';迭代15');                     // 测试获取产品5 项目25的信息
+r($product->getExecutionPairsByProductTest($productIDList[0])) && p() && e('0');  // 不传入任何数据。
+
+$executions = $product->getExecutionPairsByProductTest($productIDList[1]);
+r($executions[101]) && p() && e('敏捷项目1/迭代5');             // 只传入产品，不传入项目，检查敏捷项目。
+r($executions[104]) && p() && e('敏捷项目1(不启用迭代的项目)'); // 只传入产品，不传入项目，检查不启用迭代的项目。
+r($executions[112]) && p() && e('瀑布项目2/阶段10/阶段16');     // 只传入产品，不传入项目，检查包含子阶段的项目。
+r($executions[120]) && p() && e('瀑布项目3/阶段24');            // 只传入产品，不传入项目，检查无子阶段的项目。
+r($executions[124]) && p() && e('看板项目4/看板28');            // 只传入产品，不传入项目，检查看板项目。
+
+$executions = $product->getExecutionPairsByProductTest($productIDList[1], 0, 'noclosed');
+r(!isset($executions[101])) && p() && e('1'); // 只传入产品，不传入项目，是否包含关闭的迭代。
+
+$executions = $product->getExecutionPairsByProductTest($productIDList[1], 0, 'multiple');
+r(!isset($executions[104])) && p() && e('1'); // 只传入产品，不传入项目，是否包含不启用迭代的执行。
+
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[0])))  && p() && e('6'); // 传入产品，传入敏捷项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[1])))  && p() && e('0'); // 传入产品，传入无关联数据的项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[2])))  && p() && e('7'); // 传入产品，传入有子阶段的瀑布项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[3])))  && p() && e('7'); // 传入产品，传入无子阶段的瀑布项目。
+r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[4])))  && p() && e('5'); // 传入产品，传入看板项目。
+
+r($product->getExecutionPairsByProductTest($productIDList[2])) && p() && e('0'); // 传入无关联关系的产品。

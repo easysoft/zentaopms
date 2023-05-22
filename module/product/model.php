@@ -995,14 +995,13 @@ class productModel extends model
      * Get executions by product and project.
      *
      * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $orderBy
-     * @param  int    $projectID
-     * @param  string $mode stagefilter or empty
+     * @param  string $branch
+     * @param  string $projectID
+     * @param  string $mode      stagefilter|noclosed|multiple
      * @access public
      * @return array
      */
-    public function getExecutionPairsByProduct($productID, $branch = 0, $projectID = 0, $mode = '')
+    public function getExecutionPairsByProduct(int $productID, string $branch = '', string $projectID = '0', string $mode = '')
     {
         if(empty($productID)) return array();
 
@@ -1027,97 +1026,10 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($waterFallOrderBy)
             ->fetchAll('id');
-
-        /* Only show leaf executions. */
-        $allExecutions = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->notin(array('program', 'project'))->fetchAll('id');
-        $parents = array();
-        foreach($allExecutions as $exec) $parents[$exec->parent] = true;
-
+        if(empty($executions)) return array();
         if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
 
-        $executionPairs = array('0' => '');
-        foreach($executions as $execID=> $execution)
-        {
-            if(isset($parents[$execID])) continue; // Only show leaf.
-            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
-
-            if(empty($execution->multiple))
-            {
-                $this->app->loadLang('project');
-                $executionPairs[$execution->id] = $execution->projectName . "({$this->lang->project->disableExecution})";
-            }
-            else
-            {
-                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
-                $executionName = $projectID != 0 ? '' : $execution->projectName;
-                foreach($paths as $path)
-                {
-                    if(!isset($allExecutions[$path])) continue;
-                    $executionName .= '/' . $allExecutions[$path]->name;
-                }
-
-                $executionPairs[$execID] = $executionName;
-            }
-        }
-
-        return $executionPairs;
-    }
-
-    /**
-     * Get execution pairs by product.
-     *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $projectID
-     * @param  string $mode stagefilter or empty
-     * @access public
-     * @return array
-     */
-    public function getAllExecutionPairsByProduct(int $productID, int $branch = 0, int $projectID = 0, string $mode = ''):array
-    {
-        if(empty($productID)) return array();
-        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.type')->in('stage,sprint,kanban')
-            ->beginIF($branch and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
-            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->orderBy('id_desc')
-            ->fetchAll('id');
-
-        $projectIdList = array();
-        foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
-
-        $executionPairs = array(0 => ''); /* This one empty item will be returned as one valid execution pairs. */
-        $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList, 'all');
-        foreach($executions as $id => $execution)
-        {
-            if($execution->grade == 2 && isset($executions[$execution->parent])) // The grade is 2 means the type of this execution is a project and under a program.
-            {
-                $execution->name = $projectPairs[$execution->project] . '/' . $executions[$execution->parent]->name . '/' . $execution->name;
-                $executions[$execution->parent]->children[$id] = $execution->name;
-                unset($executions[$id]);
-            }
-        }
-
-        if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
-        foreach($executions as $execution)
-        {
-            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
-
-            if(isset($execution->children))
-            {
-                $executionPairs = $executionPairs + $execution->children;
-                continue;
-            }
-
-            /* Some stage of waterfall not need.*/
-            if(isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
-        }
-
-        return $executionPairs;
+        return $this->productTao->buildExecutionPairs($executions, $mode, empty($projectID));
     }
 
     /**
