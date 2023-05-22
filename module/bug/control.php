@@ -291,7 +291,7 @@ class bug extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
-        $this->bugZen->assignCreateVars($executionID, $product, $branch, $output, $this->session->bugImagesFile);
+        $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $this->session->bugImagesFile);
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->users     = $this->user->getPairs('devfirst|noclosed');

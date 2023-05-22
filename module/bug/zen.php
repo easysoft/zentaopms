@@ -1823,7 +1823,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
+    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
     {
         if($executionID)
         {
