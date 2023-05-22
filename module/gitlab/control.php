@@ -1249,7 +1249,7 @@ class gitlab extends control
     {
         if(!$productID) return $this->send(array('message' => array()));
 
-        $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);
+        $executions = $this->loadModel('product')->getExecutionPairsByProduct($productID);
         $options    = "<option value=''></option>";
         foreach($executions as $index =>$execution)
         {
@@ -1361,7 +1361,7 @@ class gitlab extends control
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
-            $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $project->name);
+            $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $projectID);
             return print(js::reload('parent'));
         }
 

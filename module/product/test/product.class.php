@@ -718,28 +718,6 @@ class productTest
     }
 
     /**
-     * Test get all executions by product.
-     *
-     * @param  int    $productID
-     * @param  int    $projectID
-     * @access public
-     * @return array
-     */
-    public function getAllExecutionPairsByProductTest($productID, $projectID)
-    {
-        $executionPairs = $this->objectModel->getAllExecutionPairsByProduct($productID, 0, $projectID);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $executionPairs;
-        }
-    }
-
-    /**
      * Test get roadmap of a proejct.
      *
      * @param  int    $productID

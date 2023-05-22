@@ -946,7 +946,7 @@ class product extends control
         if($projectID) $project = $this->loadModel('project')->getByID($projectID);
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
-        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $mode);
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
