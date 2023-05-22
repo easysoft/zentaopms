@@ -1047,8 +1047,8 @@ class bugModel extends model
             return false;
         }
 
+        $bug->activatedCount = ++$oldBug->activatedCount;
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
-        $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($bugID)->exec();
 
         /* Update build. */
         $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("FIND_IN_SET('$bugID', bugs)")->limit(1)->fetch();
