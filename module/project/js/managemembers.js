@@ -71,7 +71,7 @@ function saveMembers()
  */
 function setRole(account, roleID)
 {
-    $('#roles\\[' + roleID + '\\]').val(roles[account]);
+    $('#roles' + roleID).val(roles[account]);
 }
 
 /**
