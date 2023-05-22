@@ -491,7 +491,7 @@ class taskZen extends task
      */
     protected function buildTasksForBatchCreate(object $execution, int $taskID): array|false
     {
-        $tasks = form::data($this->config->task->form->batchCreate)->get();
+        $tasks = form::batchData($this->config->task->form->batchCreate)->get();
 
         /* 去除重复数据。 Deduplicated data. */
         $tasks = $this->removeDuplicate4BatchCreate($execution, $tasks);

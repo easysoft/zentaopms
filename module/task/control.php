@@ -116,13 +116,13 @@ class task extends control
     }
 
     /**
-     * Batch create task.
+     * 批量创建任务。
+     * Batch create tasks.
      *
      * @param  int    $executionID
      * @param  int    $storyID
      * @param  int    $moduleID
      * @param  int    $taskID
-     * @param  string $iframe
      * @param  string $cardPosition
      * @access public
      * @return void

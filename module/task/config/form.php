@@ -106,22 +106,22 @@ $config->task->form->batchEdit['closedReasons'] = array('type' => 'array', 'requ
 $config->task->form->batchEdit['deadlines']     = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchEdit['pris']          = array('type' => 'array', 'required' => false, 'default' => array());
 
-$config->task->form->batchCreate = array();
-$config->task->form->batchCreate['module']        = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['parent']        = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['story']         = array('type' => 'array', 'required' => true,  'default' => array());
-$config->task->form->batchCreate['storyEstimate'] = array('type' => 'array', 'required' => true,  'default' => array());
-$config->task->form->batchCreate['storyDesc']     = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['storyPri']      = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['name']          = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['color']         = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['type']          = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['assignedTo']    = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['estimate']      = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['estStarted']    = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['deadline']      = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['desc']          = array('type' => 'array', 'required' => false, 'default' => array());
-$config->task->form->batchCreate['pri']           = array('type' => 'array', 'required' => false, 'default' => array());
+$config->task->form->batchCreate = common::formConfig('task', 'batchCreate');
+$config->task->form->batchCreate['module']        = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchCreate['parent']        = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchCreate['story']         = array('type' => 'int', 'required' => false,  'default' => 0);
+$config->task->form->batchCreate['storyEstimate'] = array('type' => 'float', 'required' => false,  'default' => 0);
+$config->task->form->batchCreate['storyDesc']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['storyPri']      = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchCreate['name']          = array('type' => 'string', 'required' => false, 'default' => '', 'base' => true);
+$config->task->form->batchCreate['color']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['type']          = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['assignedTo']    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['estimate']      = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->batchCreate['estStarted']    = array('type' => 'date', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['deadline']      = array('type' => 'date', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['desc']          = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchCreate['pri']           = array('type' => 'int', 'required' => false, 'default' => 0);
 
 $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
