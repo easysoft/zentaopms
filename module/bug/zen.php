@@ -1623,21 +1623,23 @@ class bugZen extends bug
      *
      * @param  int $bugID
      * @access protected
-     * @return object
+     * @return object|false
      */
-    protected function buildBugForActivate(int $bugID): object
+    protected function buildBugForActivate(int $bugID): object|false
     {
+        $bugInfo = $this->bug->getBaseInfo($bugID);
+        if(!$bugInfo) return false;
+
         $now        = helper::now();
         $formConfig = $this->config->bug->form->activate;
-        $resolvedBy = $this->dao->select('resolvedBy')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch('resolvedBy');
 
         $bug = form::data($formConfig)
-            ->setDefault('assignedTo',     $resolvedBy)
-            ->setDefault('assignedDate',   $now)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('activatedDate',  $now)
+            ->setDefault('assignedTo', $bugInfo->resolvedBy)
             ->add('id', $bugID)
+            ->add('assignedDate',   $now)
+            ->add('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->add('activatedDate',  $now)
             ->add('resolution', '')
             ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')
