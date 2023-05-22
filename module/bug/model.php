@@ -1021,19 +1021,18 @@ class bugModel extends model
      * @param  object $bugID
      * @param  array  $kanbanParams
      * @access public
-     * @return array
+     * @return bool
      */
-    public function activate(object $bug, array $kanbanParams): array
+    public function activate(object $bug, array $kanbanParams): bool
     {
-        $bugID      = $bug->id;
-        $oldBug     = $this->getById($bugID);
+        $bugID  = (int)$bug->id;
+        $oldBug = $this->getByID($bugID);
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
-        $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
-        $bug->activatedCount += 1;
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
+        $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($bugID)->exec();
 
         /* Update build. */
-        $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("CONCAT(',', bugs, ',')")->like("%,{$bugID},%")->fetch();
+        $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("FIND_IN_SET('$bugID', bugs)")->limit(1)->fetch();
         if($solveBuild)
         {
             $buildBugs = trim(str_replace(",$bugID,", ',', ",$solveBuild->bugs,"), ',');
@@ -1048,7 +1047,18 @@ class bugModel extends model
             if(isset($kanbanParams['toColID'])) $this->kanban->moveCard($bugID, $kanbanParams['fromColID'], $kanbanParams['toColID'], $kanbanParams['fromLaneID'], $kanbanParams['toLaneID']);
         }
 
-        return common::createChanges($oldBug, $bug);
+        $changes = common::createChanges($oldBug, $bug);
+        $files   = $this->loadModel('file')->saveUpload('bug', $bugID);
+        if($changes or $files)
+        {
+            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
+            $actionID   = $this->loadModel('action')->create('bug', $bugID, 'Activated', $fileAction . $bug->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            $this->executeHooks($bugID);
+        }
+
+        return !dao::isError();
     }
 
     /**
@@ -2846,7 +2856,7 @@ class bugModel extends model
         {
             $actionsConfig = $this->config->bug->actions->{$type};
             if(strpos(",{$actionsConfig},", ",{$action},") === false)
-            { 
+            {
                 unset($actions[$action]);
                 continue;
             }
