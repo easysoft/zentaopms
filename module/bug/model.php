@@ -1039,7 +1039,13 @@ class bugModel extends model
     public function activate(object $bug, array $kanbanParams): bool
     {
         $bugID  = (int)$bug->id;
-        $oldBug = $this->getByID($bugID);
+        $oldBug = $this->getBaseInfo($bugID);
+        if(!$oldBug) return false;
+        if($oldBug->status != 'resolved' && $oldBug->status != 'closed')
+        {
+            dao::$errors[] = $this->lang->bug->error->cannotActivate;
+            return false;
+        }
 
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($bugID)->exec();
