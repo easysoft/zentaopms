@@ -1040,7 +1040,11 @@ class bugModel extends model
     {
         $bugID  = (int)$bug->id;
         $oldBug = $this->getBaseInfo($bugID);
-        if(!$oldBug) return false;
+        if(!$oldBug)
+        {
+            dao::$errors[] = $this->lang->bug->error->notExist;
+            return false;
+        }
         if($oldBug->status != 'resolved' && $oldBug->status != 'closed')
         {
             dao::$errors[] = $this->lang->bug->error->cannotActivate;

@@ -985,6 +985,7 @@ class bug extends control
             parse_str($kanbanInfo, $kanbanParams);
 
             $bugData = $this->bugZen->buildBugForActivate($bugID);
+            if(!$bugData) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
 
             $this->bug->activate($bugData, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
