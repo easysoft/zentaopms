@@ -117,10 +117,14 @@ toolbar
     div(setClass('nav-divider')),
     $config->systemMode == 'ALM' ? item(set(array
     (
-        'text'  => $lang->product->editLine,
-        'icon'  => 'edit',
-        'class' => 'ghost text-primary',
-        'url'   => createLink('product', 'manageLine', $browseType),
+        'text'        => $lang->product->editLine,
+        'icon'        => 'edit',
+        'class'       => 'ghost text-primary',
+        'data-url'    => createLink('product', 'manageLine', $browseType),
+        'data-toggle' => 'modal',
+        'data-type'   => 'ajax',
+        'data-title'  => '',
+        'data-size'   => 'lg'
     ))) : NULL,
     item(set(array
     (
