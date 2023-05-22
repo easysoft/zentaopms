@@ -985,6 +985,7 @@ class productModel extends model
     {
         $oldProduct = $this->getById($productID);
         $product    = (object)array('status' => 'normal');
+        if($this->config->vision == 'or') $product->status = 'wait';
 
         $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq((int)$productID)->exec();
 
