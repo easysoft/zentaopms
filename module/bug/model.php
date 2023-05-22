@@ -2836,7 +2836,7 @@ class bugModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateMenu(object $bug = null, $type = 'view'): array
+    public function buildOperateMenu(object $bug = null, string $type = 'view'): array
     {
         $defaultParams = $bug ? "bugID={$bug->id}" : 'bugID={id}';
         $copyParams    = $bug ? "productID={$bug->product}&branch={$bug->branch}&extra=bugID={$bug->id}" : 'productID={product}&branch={branch}&extra=bugID={id}';

@@ -326,14 +326,18 @@ class project extends control
             $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
             $this->view->executionActions = $executionActions;
             $this->view->pager            = $pager;
+
+            $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
+            $this->view->position[]  = $this->lang->project->index;
+            $this->view->project     = $project;
+            $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
+
+            $this->display();
         }
-
-        $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
-        $this->view->position[]  = $this->lang->project->index;
-        $this->view->project     = $project;
-        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
-
-        $this->display();
+        else
+        {
+            echo $this->fetch('block', 'dashboard', "dashboard={$project->model}project");
+        }
     }
 
     /**

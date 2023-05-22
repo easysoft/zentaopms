@@ -37,7 +37,7 @@ class doc extends control
     public function index()
     {
         $this->view->title = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
-        $this->display();
+        echo $this->fetch('block', 'dashboard', 'dashboard=doc');
     }
 
     /**

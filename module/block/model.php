@@ -330,7 +330,7 @@ class blockModel extends model
 
         /* Mark this app has init. */
         $this->loadModel('setting')->setItem("$account.$dashboard.common.blockInited@$vision", '1');
-        $this->loadModel('setting')->setItem("$account.$dashboard.block.initVersion", $this->config->block->version);
+        $this->loadModel('setting')->setItem("$account.$dashboard.block.initVersion", (string)$this->config->block->version);
 
         return true;
     }
