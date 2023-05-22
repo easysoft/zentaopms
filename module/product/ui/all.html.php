@@ -63,6 +63,21 @@ $programMenuLink = createLink(
 
 featureBar
 (
+    set::link(createLink
+    (
+        $this->app->rawModule,
+        $this->app->rawMethod,
+        array
+        (
+            'browseType' => '{key}',
+            'orderBy'    => $orderBy,
+            'param'      => $param,
+            'recTotal'   => 0,
+            'recPerPage' => $recPerPage,
+            'pageID'     => $pageID,
+            'programID'  => $programID
+        )
+    )),
     to::before
     (
         programMenu
