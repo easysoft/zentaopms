@@ -3195,7 +3195,7 @@ EOF;
             $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
-            $fh = @fopen($logFile, 'a');
+            $fh = fopen($logFile, 'a');
             if($fh)
             {
                 fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
@@ -3283,7 +3283,7 @@ EOF;
             $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
-            $fh = @fopen($logFile, 'a');
+            $fh = fopen($logFile, 'a');
             if($fh)
             {
                 fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
