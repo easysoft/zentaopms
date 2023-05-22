@@ -142,9 +142,9 @@ class productModel extends model
 
     /**
      * 根据id列表获取产品列表。
-     * Get by idList.
+     * Get products by idList.
      *
-     * @param  array    $productIdList
+     * @param  array  $productIdList
      * @access public
      * @return array
      */
@@ -154,8 +154,8 @@ class productModel extends model
     }
 
     /**
-     * 通过搜索查询产品列表。
-     * Get list by search.
+     * 通过session 中的搜索条件查询产品列表。
+     * Get product list by search.
      *
      * @param  int    $queryID
      * @access public
@@ -182,10 +182,10 @@ class productModel extends model
     /**
      * Get product pairs.
      *
-     * @param  string       $mode          all|noclosed
+     * @param  string       $mode      all|noclosed
      * @param  int          $programID
      * @param  string|array $append
-     * @param  string|int   $shadow         all | 0 | 1
+     * @param  string|int   $shadow    all | 0 | 1
      * @return int[]
      */
     public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
