@@ -73,3 +73,8 @@ function isFieldRequired($name)
 
     return $required;
 }
+
+function isAjaxRequest()
+{
+    return \helper::isAjaxRequest();
+}
