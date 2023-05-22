@@ -1022,66 +1022,41 @@ class bug extends control
     }
 
     /**
+     * 关联相关 bug。
      * Link related bugs.
      *
      * @param  int    $bugID
      * @param  string $browseType
      * @param  string $excludeBugs
-     * @param  int    $param
+     * @param  int    $queryID
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs($bugID, $browseType = '', $excludeBugs = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkBugs(int $bugID, string $browseType = '', string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $bug = $this->bug->getByID($bugID);
+
+        /* 检查 bug 所属执行的权限。*/
+        /* Check privilege of bug 所属执行的权限。*/
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        $this->bugZen->buildSearchFormForLinkBugs($bug, $excludeBugs, $queryID);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Get bug and queryID. */
-        $bug     = $this->bug->getById($bugID);
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        /* Set the menu. */
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        /* Hide plan and product in no product project. */
-        if($bug->project and $this->app->tab != 'qa')
-        {
-            $project = $this->loadModel('project')->getByID($bug->project);
-            if(!$project->hasProduct)
-            {
-                unset($this->config->bug->search['fields']['product']);
-                if(!$project->multiple)
-                {
-                    unset($this->config->bug->search['fields']['execution']);
-                    unset($this->config->bug->search['fields']['plan']);
-                }
-            }
-        }
-
-        /* Build the search form. */
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&excludeBugs=$excludeBugs&queryID=myQueryID", '', true);
-        $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
-
-        /* Get bugs to link. */
-        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager, $excludeBugs);
-
         /* Assign. */
-        $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
-        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$bug->product"), $this->products[$bug->product]);
-        $this->view->position[] = html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title);
-        $this->view->position[] = $this->lang->bug->linkBugs;
-        $this->view->bug        = $bug;
-        $this->view->bugs2Link  = $bugs2Link;
-        $this->view->pager      = $pager;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
+        $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title $this->lang->dash " . $this->products[$bug->product];
+        $this->view->bug       = $bug;
+        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager, $excludeBugs);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->pager     = $pager;
         $this->display();
     }
 

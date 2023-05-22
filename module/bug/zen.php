@@ -1937,4 +1937,39 @@ class bugZen extends bug
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
     }
+
+    /**
+     * 设置关联相关 bug 页面的搜索表单。
+     * Build search form for link related bugs page.
+     *
+     * @param  object    $bug
+     * @param  string    $excludeBugs
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchFormForLinkBugs(object $bug, string $excludeBugs, int $queryID): void
+    {
+        /* 无产品项目搜索时隐藏产品、执行和所属计划字段。*/
+        /* Hide plan, execution and product in no product project. */
+        if($bug->project && $this->app->tab != 'qa')
+        {
+            $project = $this->loadModel('project')->getByID($bug->project);
+            if(!$project->hasProduct)
+            {
+                unset($this->config->bug->search['fields']['product']);
+
+                /* 单迭代项目搜索时隐藏执行和所属计划字段。*/
+                /* Hide execution and plan in single project. */
+                if(!$project->multiple)
+                {
+                    unset($this->config->bug->search['fields']['execution']);
+                    unset($this->config->bug->search['fields']['plan']);
+                }
+            }
+        }
+
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&browseType=bySearch&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
+        $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
+    }
 }
