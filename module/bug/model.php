@@ -211,6 +211,19 @@ class bugModel extends model
     }
 
     /**
+     * 获取Bug的基础数据。
+     * Get base info of a bug.
+     *
+     * @param  int $bugID
+     * @access protected
+     * @return object|false
+     */
+    public function getBaseInfo(int $bugID): object|false
+    {
+        return $this->bugTao->fetchBaseInfo();
+    }
+
+    /**
      * Get info of a bug.
      *
      * @param  int    $bugID
