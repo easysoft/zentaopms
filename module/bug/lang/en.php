@@ -434,3 +434,6 @@ $lang->bug->moreSelects['browse']['more']['toclosed']      = $lang->bug->toClose
 $lang->bug->moreSelects['browse']['more']['postponedbugs'] = $lang->bug->postponedBugs;
 $lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
+
+$lang->bug->error = new stdclass();
+$lang->bug->error->cannotActivate = 'Bugs with a status other than Resolved or Closed cannot be activated.';
