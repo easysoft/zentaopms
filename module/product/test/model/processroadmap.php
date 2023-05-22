@@ -9,13 +9,6 @@ title=productModel->processRoadmap();
 cid=1
 pid=1
 
-测试获取产品1下的发布roadmap >> 产品1正常的发布1;产品1正常的发布3;产品1正常的里程碑发布5;项目1停止维护的里程碑发布6
-测试获取产品2下的发布roadmap >> 项目2发布!@#$$%^&*()测试发布的名称到底可以有多长asdlfkjla8
-测试获取产品3下的发布roadmap >> 0
-测试获取产品4下的发布roadmap >> 0
-测试获取产品5下的发布roadmap >> 0
-测试获取不存在产品下的发布roadmap >> 0
-
 */
 
 $productIDList = array('1', '2', '3', '4', '5', '1000001');

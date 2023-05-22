@@ -9,10 +9,6 @@ title=测试productModel->getLatestProject();
 cid=1
 pid=1
 
-测试产品25关联的最后一个未关闭的项目,按begin字段排序 >> 405
-测试产品38关联的最后一个未关闭的项目,按begin字段排序 >> 408
-传入不存在的产品 >> 没有数据
-
 */
 
 $product = new productTest('admin');
