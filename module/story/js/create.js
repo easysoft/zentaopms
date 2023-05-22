@@ -177,6 +177,7 @@ $(window).unload(function(){
     }
 
     if(requiredFields.indexOf('module') > 0) $('#modules' + itemIndex + '_chosen').addClass('required')
+    if(requiredFields.indexOf('plan') > 0) $('#plans' + itemIndex + '_chosen').addClass('required')
 
     itemIndex ++;
  }

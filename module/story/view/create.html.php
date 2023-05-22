@@ -109,7 +109,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <div class='table-col' id='planIdBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->story->plan;?></span>
-                    <?php echo html::select('plans[0]', $plans, $planID, "class='form-control chosen'");?>
+                    <?php $required = strpos($config->story->create->requiredFields, 'plan') === false ? '' : 'required';?>
+                    <?php echo html::select('plans[0]', $plans, $planID, "class='form-control chosen' $required");?>
                   </div>
                 </div>
               </div>
