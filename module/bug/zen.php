@@ -1665,14 +1665,13 @@ class bugZen extends bug
      */
     protected function buildActivateForm(int $bugID): void
     {
-        $bug = $this->bug->getById($bugID);
+        $bug = $this->bug->getByID($bugID);
+        $this->checkBugExecutionPriv($bug);
 
         $productID = $bug->product;
-        $this->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
-
+        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty,noreleased', 0, 'execution', $bug->openedBuild);
