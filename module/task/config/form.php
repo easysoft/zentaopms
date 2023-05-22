@@ -30,9 +30,10 @@ $config->task->form->create['mailto']       = array('type' => 'array', 'required
 
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->assign['left']           = array('type' => 'float', 'required' => true);
-$config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 $config->task->form->assign['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->assign['left']           = array('type' => 'float',  'required' => true);
+$config->task->form->assign['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
 
 $config->task->form->cancel = array();
 $config->task->form->cancel['status']  = array('type' => 'string', 'required' => false, 'default' => 'cancel');

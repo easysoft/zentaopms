@@ -126,7 +126,7 @@ class taskZen extends task
             }
         }
 
-        if(isonlybody()) return $this->responseKanban($task, $from);
+        if(isonlybody()) return $this->responseModal($task, $from);
 
         $response['load'] = $this->createLink('task', 'view', "taskID=$taskID");
         return $response;
@@ -328,23 +328,6 @@ class taskZen extends task
     }
 
     /**
-     * 准备指派给的数据.
-     * Prepare assignto data.
-     *
-     * @param  form      $postDataFixer
-     * @param  int       $taskID
-     * @access protected
-     * @return object
-     */
-    protected function prepareAssignTo(form $postDataFixer, int $taskID): object
-    {
-        return $postDataFixer->add('id', $taskID)
-            ->add('lastEditedBy', $this->app->user->account)
-            ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->get();
-    }
-
-    /**
      * 指派后返回响应.
      * Response after assignto.
      *
@@ -358,14 +341,14 @@ class taskZen extends task
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
-        if(isonlybody()) return $this->responseKanban($task, $from);
+        if(isonlybody()) return $this->responseModal($task, $from);
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID"));
     }
 
     /**
-     * 构建指派给表格。
-     * Build AssignTo Form.
+     * 构建指派给表单。
+     * Build from for assignTo page.
      *
      * @param  int       $executionID
      * @param  int       $taskID
@@ -374,12 +357,11 @@ class taskZen extends task
      */
     protected function buildAssignToForm(int $executionID, int $taskID): void
     {
-        $this->loadModel('action');
+        $task    = $this->task->getByID($taskID);
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
-        $task = $this->task->getByID($taskID);
         /* Compute next assignedTo. */
-        if(!empty($task->team) && strpos('done,cencel,closed', $task->status) === false)
+        if(!empty($task->team) && in_array($task->status, $this->config->task->unfinishedStatus))
         {
             $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $members = $this->task->getMemberPairs($task);
@@ -388,24 +370,24 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
-        $this->view->task       = $task;
-        $this->view->members    = $members;
-        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->title   = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
+        $this->view->task    = $task;
+        $this->view->members = $members;
+        $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
     /**
-     * 返回看板下响应。
-     * Response from kanban.
+     * 如果页面是弹窗，则调用此方法得到正确的返回链接。
+     * Get response infomation of a modal page.
      *
      * @param  object    $task
-     * @param  string    $from ''|taskkanban
+     * @param  string    $from     ''|taskkanban
      * @param  int       $regionID
      * @access protected
      * @return array
      */
-    protected function responseKanban(object $task, string $from, int $regionID = 0): array
+    protected function responseModal(object $task, string $from, int $regionID = 0): array
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
@@ -1236,7 +1218,7 @@ class taskZen extends task
     protected function responseAfterChangeStatus(object $task, string $from): array
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(isonlybody()) return $this->responseKanban($task, $from);
+        if(isonlybody()) return $this->responseModal($task, $from);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
     }
 

@@ -1167,7 +1167,7 @@ class taskModel extends model
         /* Check task left. */
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
         {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->left);
+            dao::$errors['left'] = sprintf($this->lang->error->notempty, $this->lang->task->left);
             return false;
         }
 
@@ -1181,7 +1181,13 @@ class taskModel extends model
             ->where('id')->eq($task->id)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        if(dao::isError()) return false;
+
+        /* Record log. */
+        $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $task->assignedTo);
+        $this->action->logHistory($actionID, $changes);
+
+        return common::createChanges($oldTask, $task);
     }
 
     /**

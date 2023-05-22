@@ -263,16 +263,12 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $postDataFixer = form::data($this->config->task->form->assign);
+            $task = form::data($this->config->task->form->assign)
+                ->add('id', $taskID)
+                ->get();
 
-            /* Assign task. */
-            $task    = $this->taskZen->prepareAssignTo($postDataFixer, $taskID);
             $changes = $this->task->assign($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            /* Record log. */
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $task->assignedTo);
-            $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 

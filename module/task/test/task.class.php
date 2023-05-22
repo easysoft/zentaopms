@@ -297,10 +297,12 @@ class taskTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $task = $_POST;
+        $task       = $_POST;
         $task['id'] = $taskID;
         unset($task['comment']);
-        $object = $this->objectModel->assign((object)$task, $taskID);
+
+        $object = $this->objectModel->assign((object)$task);
+
         unset($_POST);
         if(dao::isError())
         {

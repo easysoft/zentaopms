@@ -70,10 +70,10 @@ $pauseTask     = array('assignedTo' => 'user95','status' => 'pause');
 $cancelTask    = array('assignedTo' => 'user96','status' => 'cancel');
 
 $task = new taskTest();
-r($task->assignTest($taskIDlist[0],$waitTask))   && p('0:field,old,new') && e('assignedTo,old1,user92'); // wait状态任务指派
-r($task->assignTest($taskIDlist[0],$waitTaskLeft)) && p('1:field,old,new') && e('left,0,1');             // wait状态任务指派修改预计剩余
-r($task->assignTest($taskIDlist[1],$doingTask))  && p('0:field,old,new') && e('assignedTo,old2,user93'); // doing状态任务指派
-r($task->assignTest($taskIDlist[1],$doingTaskLeft))  && p() && e('『预计剩余』不能为空。');              // doing状态任务指派,预计剩余为0
-r($task->assignTest($taskIDlist[2],$doneTask))   && p('0:field,old,new') && e('assignedTo,old3,user94'); // done状态任务指派
-r($task->assignTest($taskIDlist[3],$pauseTask))  && p('0:field,old,new') && e('assignedTo,old4,user95'); // pause状态任务指派
-r($task->assignTest($taskIDlist[4],$cancelTask)) && p('0:field,old,new') && e('assignedTo,old5,user96'); // cancel状态任务指派
+r($task->assignTest($taskIDlist[0], $waitTask))      && p('0:field,old,new') && e('assignedTo,old1,user92'); // wait状态任务指派
+r($task->assignTest($taskIDlist[0], $waitTaskLeft))  && p('1:field,old,new') && e('left,0,1');               // wait状态任务指派修改预计剩余
+r($task->assignTest($taskIDlist[1], $doingTask))     && p('0:field,old,new') && e('assignedTo,old2,user93'); // doing状态任务指派
+r($task->assignTest($taskIDlist[1], $doingTaskLeft)) && p()                  && e('『预计剩余』不能为空。'); // doing状态任务指派,预计剩余为0
+r($task->assignTest($taskIDlist[2], $doneTask))      && p('0:field,old,new') && e('assignedTo,old3,user94'); // done状态任务指派
+r($task->assignTest($taskIDlist[3], $pauseTask))     && p('0:field,old,new') && e('assignedTo,old4,user95'); // pause状态任务指派
+r($task->assignTest($taskIDlist[4], $cancelTask))    && p('0:field,old,new') && e('assignedTo,old5,user96'); // cancel状态任务指派
