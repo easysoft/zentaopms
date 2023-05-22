@@ -804,7 +804,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm(int $productID, array $products, string $queryID, string $actionURL, string $branch = '', int $projectID = 0): void
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '', int $projectID = 0): void
     {
         $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : array($productID);
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
