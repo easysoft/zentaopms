@@ -839,12 +839,14 @@ class baseDAO
         if($sql)
         {
             $this->sqlobj = new sql();
-            $this->sqlobj->sql = $sql;
         }
         else
         {
             $sql = $this->processSQL();
         }
+
+        /* Assign the $sql to $this->sqlobj, so sqlError() can print the full sql statement if any exception occurs. */
+        $this->sqlobj->sql = $sql;
 
         try
         {
