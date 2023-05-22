@@ -1977,15 +1977,15 @@ class kanban extends control
      * @param  int    $regionID
      * @param  string $type all|story|task|bug
      * @param  string $field otherLane|lane
-     * @param  int    $i
+     * @param  string $i
      * @access public
      * @return string
      */
-    public function ajaxGetLanes($regionID, $type = 'all', $field = 'otherLane', $i = 0)
+    public function ajaxGetLanes($regionID, $type = 'all', $field = 'otherLane', $i = '')
     {
         $lanes = $this->kanban->getLanePairsByRegion($regionID, $type);
 
-        if($i) return print(html::select($field . "[$i]", $lanes, '', "class='form-control'"));
+        if($i !== '') return print(html::select($field . "[$i]", $lanes, '', "class='form-control'"));
 
         return print(html::select($field, $lanes, '', "class='form-control'"));
     }
