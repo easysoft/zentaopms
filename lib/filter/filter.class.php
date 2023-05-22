@@ -43,43 +43,6 @@ class validater extends baseValidater
  */
 class fixer extends baseFixer
 {
-    public function get(string $fields = ''): mixed
-    {
-        global $config;
-        /* Get extend field by flow. */
-        if(isset($config->bizVersion))
-        {
-            global $app, $dbh;
-            $flowFields = array();
-            $moduleName = $app->fetchModule ? $app->fetchModule : $app->rawModule;
-            $stmt       = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `buildin` = '0'");
-            while($flowField = $stmt->fetch()) $flowFields[$flowField->field] = $flowField;
-
-            foreach($flowFields as $field => $fieldObject)
-            {
-                if(!isset($this->data->$field)) continue;
-
-                $value = $this->data->$field;
-                if(is_array($value))
-                {
-                    $canImplode = true;
-                    foreach($value as $k => $v)
-                    {
-                        if(is_object($v) or is_array($v))
-                        {
-                            $canImplode = false;
-                            break;
-                        }
-                    }
-                    if($canImplode) $this->data->$field = implode(',', $value);
-                }
-                if($fieldObject->control == 'textarea' || $fieldObject->control == 'richtext') $this->skipSpecial($field);
-            }
-        }
-
-        return parent::get($fields);
-    }
-
     /**
      * 过滤Emoji表情。
      * Filter Emoji.
