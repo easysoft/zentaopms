@@ -1385,29 +1385,18 @@ class taskZen extends task
     }
 
     /**
-     * 准备激活任务数据。
-     * Prepare to activate task data.
+     * 构造激活的任务数据。
+     * Build the task data to activate.
      *
-     * @param  form      $taskData
      * @param  int       $taskID
      * @access protected
      * @return object
      */
-    protected function prepareActivate(form $taskData, int $taskID): object
+    protected function buildTaskForActivate(int $taskID): object
     {
-        $task = $taskData
-            ->add('id', $taskID)
-            ->setDefault('status', 'doing')
-            ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
-            ->setDefault('finishedDate, canceledDate, closedDate', null)
-            ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('assignedDate', helper::now())
-            ->setDefault('activatedDate', helper::now())
-            ->stripTags($this->config->task->editor->activate['id'], $this->config->allowedTags)
-            ->get();
+        $task = form::data($this->config->task->form->activate)->add('id', $taskID)->get();
 
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $taskData->field('uid'));
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
     }
 
     /**

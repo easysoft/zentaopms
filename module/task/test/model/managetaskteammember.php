@@ -18,9 +18,9 @@ $taskStatusList = array('wait', 'doing', 'done');
 foreach($taskStatusList as $index => $status)
 {
     $taskName  = "{$status}Task";
-    $$taskName = new stdclass();
-    $$taskName->id     = $taskIdList[$index];
-    $$taskName->status = $status;
+    $taskName = new stdclass();
+    $taskName->id     = $taskIdList[$index];
+    $taskName->status = $status;
 }
 
 $account          = array(array('admin', 'user1', 'user2', 'user3'), array('user4', 'user5', 'user6', 'user7', 'user9'));

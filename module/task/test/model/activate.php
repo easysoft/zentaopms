@@ -3,6 +3,14 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 
+zdTable('project')->config('project')->gen(6);
+zdTable('task')->config('task')->gen(9);
+zdTable('taskteam')->config('taskteam')->gen(6);
+zdTable('kanbanregion')->config('kanbanregion')->gen(1);
+zdTable('kanbanlane')->config('kanbanlane')->gen(1);
+zdTable('kanbancolumn')->config('kanbancolumn')->gen(7);
+zdTable('kanbancell')->config('kanbancell')->gen(7);
+
 /**
 
 title=taskModel->activate();
@@ -11,15 +19,38 @@ cid=1
 
 */
 
-zdTable('task')->gen(10);
-zdTable('project')->config('execution')->gen(10);
-zdTable('story')->gen(30);
+$accountList      = array('admin', 'user1', 'user2', 'user3');
+$teamEstimateList = array(1, 2, 3, 4);
+$teamConsumedList = array(4, 3, 2, 1);
+$teamLeftList     = array(0, 0, 0, 0);
+$teamSourceList   = array('admin', 'user1', 'user2', 'user3');
 
-$taskIDList = array(1, 3, 4, 5, 6);
+$teamData = new stdclass();
+$teamData->team             = $accountList;
+$teamData->teamLeftList     = $teamLeftList;
+$teamData->teamSourceList   = $teamSourceList;
+$teamData->teamEstimateList = $teamEstimateList;
+$teamData->teamConsumedList = $teamConsumedList;
+
+$emptyTeamData = new stdclass();
+
+$drag = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' => 1);
+
+$taskIDList = range(1, 9);
 
 $task = new taskTest();
-r($task->activateTest($taskIDList[0])) && p('0:field,old,new') && e('status,wait,doing');   //wait状态任务激活
-r($task->activateTest($taskIDList[1])) && p('0:field,old,new') && e('status,done,doing');   //done状态任务激活
-r($task->activateTest($taskIDList[2])) && p('0:field,old,new') && e('status,pause,doing');  //pause状态任务激活
-r($task->activateTest($taskIDList[3])) && p('0:field,old,new') && e('status,cancel,doing'); //cancel状态任务激活
-r($task->activateTest($taskIDList[4])) && p('0:field,old,new') && e('status,closed,doing'); //closed状态任务激活
+r($task->activateTest($taskIDList[0], '', $emptyTeamData)) && p('0:field,old,new') && e('status,wait,doing');   // wait状态任务激活
+r($task->activateTest($taskIDList[1], '', $emptyTeamData)) && p('0:field,old,new') && e('left,1,3');            // doing状态任务激活
+r($task->activateTest($taskIDList[2], '', $emptyTeamData)) && p('0:field,old,new') && e('status,done,doing');   // done状态任务激活
+r($task->activateTest($taskIDList[3], '', $emptyTeamData)) && p('0:field,old,new') && e('status,cancel,doing'); // cancel状态任务激活
+r($task->activateTest($taskIDList[4], '', $emptyTeamData)) && p('0:field,old,new') && e('status,closed,doing'); // closed状态任务激活
+r($task->activateTest($taskIDList[7], '', $teamData))      && p('0:field,old,new') && e('status,wait,doing');   // wait状态串行任务激活
+r($task->activateTest($taskIDList[8], '', $teamData))      && p('0:field,old,new') && e('left,8,0');            // doing状态并行任务激活
+
+r($task->activateTest($taskIDList[0], '', $emptyTeamData, $drag)) && p()                  && e('0');                 // wait状态任务激活
+r($task->activateTest($taskIDList[1], '', $emptyTeamData, $drag)) && p()                  && e('0');                 // doing状态任务激活
+r($task->activateTest($taskIDList[2], '', $emptyTeamData, $drag)) && p()                  && e('0');                 // done状态任务激活
+r($task->activateTest($taskIDList[3], '', $emptyTeamData, $drag)) && p()                  && e('0');                 // cancel状态任务激活
+r($task->activateTest($taskIDList[4], '', $emptyTeamData, $drag)) && p()                  && e('0');                 // closed状态任务激活
+r($task->activateTest($taskIDList[7], '', $teamData,      $drag)) && p('0:field,old,new') && e('status,wait,doing'); // wait状态串行任务激活
+r($task->activateTest($taskIDList[8], '', $teamData,      $drag)) && p('0:field,old,new') && e('left,8,0');          // doing状态并行任务激活

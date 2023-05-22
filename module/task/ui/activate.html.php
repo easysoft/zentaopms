@@ -54,9 +54,9 @@ if($task->parent != '-1')
     $leftBox = formGroup(
         set::width('1/4'),
         set::label($lang->task->left),
+        set::name('left'),
         inputControl
         (
-            input(set::name('left')),
             to::suffix($lang->task->suffixHour),
             set::suffixWidth(20),
         ),

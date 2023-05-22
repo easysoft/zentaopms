@@ -1772,14 +1772,14 @@ class taskModel extends model
      * 激活任务。
      * Activate task.
      *
-     * @param  object $task
-     * @param  string $comment
-     * @param  object $teamData
-     * @param  string $drag
+     * @param  object      $task
+     * @param  string      $comment
+     * @param  object      $teamData
+     * @param  string      $drag
      * @access public
      * @return array|false
      */
-    public function activate(object $task, string $comment, object $teamData, array $drag): array|false
+    public function activate(object $task, string $comment, object $teamData, array $drag = array()): array|false
     {
         $taskID = $task->id;
 

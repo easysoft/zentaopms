@@ -128,9 +128,22 @@ $config->task->form->pause['lastEditedDate'] = array('type' => 'string', 'requir
 $config->task->form->pause['status']         = array('type' => 'string', 'required' => false, 'default' => 'pause');
 
 $config->task->form->activate = array();
-$config->task->form->activate['mode']       = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->activate['left']       = array('type' => 'float', 'required' => true, 'default' => 0);
-$config->task->form->activate['assignedTo'] = array('type' => 'string', 'required' => true);
+$config->task->form->activate['mode']           = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->activate['left']           = array('type' => 'float', 'required' => true, 'default' => 0);
+$config->task->form->activate['assignedTo']     = array('type' => 'string', 'required' => false);
+$config->task->form->activate['comment']        = array('type' => 'string', 'required' => false, 'control' => 'editor');
+$config->task->form->activate['status']         = array('type' => 'string', 'required' => false, 'default' => 'doing');
+$config->task->form->activate['activatedDate']  = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->activate['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->activate['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->activate['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->activate['finishedBy']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->activate['canceledBy']     = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->activate['closedBy']       = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->activate['closedReason']   = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->activate['finishedDate']   = array('type' => 'string', 'required' => false, 'default' => null);
+$config->task->form->activate['canceledDate']   = array('type' => 'string', 'required' => false, 'default' => null);
+$config->task->form->activate['closedDate']     = array('type' => 'string', 'required' => false, 'default' => null);
 
 $config->task->form->start = array();
 $config->task->form->start['status']         = array('type' => 'string', 'required' => false, 'default' => 'doing');

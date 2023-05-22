@@ -476,7 +476,7 @@ class task extends control
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($taskData, $from);
             $this->send($response);
         }
 
@@ -797,8 +797,7 @@ class task extends control
         if(!empty($_POST))
         {
             /* Init task data. */
-            $postData = form::data($this->config->task->form->pause);
-            $task     = $postData->data;
+            $task = form::data($this->config->task->form->pause)->get();
             $task->id = $taskID;
 
             /* Pause task. */
@@ -816,7 +815,6 @@ class task extends control
 
             /* Get response after the suspended task. */
             $from     = zget($output, 'from');
-            $task     = $this->task->getById($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
             return $this->send($response);
         }
@@ -1114,19 +1112,21 @@ class task extends control
      * @access public
      * @return void
      */
-    public function activate(int $taskID, string $cardPosition = '', string $cardDrag = '', string $from = '')
+    public function activate(int $taskID, string $cardPosition = '', string $from = '')
     {
+        /* Analytic parameter. */
+        $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
+        parse_str($cardPosition, $output);
+
         $this->taskZen->commonAction($taskID);
-        if($cardPosition) list($regionID) = $cardPosition;
 
         if(!empty($_POST))
         {
-            $taskData = form::data($this->config->task->form->acivate);
+            /* Prepare the data information before activate the task. */
+            $task     = $this->taskZen->buildTaskForActivate($taskID);
             $teamData = form::data($this->config->task->form->team->edit)->get();
-
-            $task     = $this->taskZen->prepareActivate($taskData, $taskID);
-            $changes  = $this->task->activate($task, $this->post->comment, $teamData, explode(',', $cardDrag));
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $changes  = $this->task->activate($task, $this->post->comment, $teamData, $output);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1136,13 +1136,9 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody())
-            {
-                $task     = $this->task->getById($taskID);
-                $regionID = !empty($regionID) ? (int)$regionID : 0;
-                return $this->taskZen->responseKanban($task, $from, $regionID);
-            }
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID=$taskID"), 'closeModal' => true);
+            /* Get the information returned after a task is started. */
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $this->send($response);
         }
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy; // Ensure that the completion person is on the user list.
@@ -1159,8 +1155,9 @@ class task extends control
             $this->view->teamMembers = $teamMembers;
         }
 
-        $this->view->title = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
-        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->isMultiple = !empty($this->view->task->team);
         $this->display();
     }
 

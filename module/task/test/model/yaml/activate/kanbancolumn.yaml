@@ -1,0 +1,19 @@
+---
+title: zt_kanbancolumn
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-7
+- field: region
+  range: 1
+- field: type
+  range: wait,develop,developing,developed,pause,canceled,closed,
+- field: parent
+  range: "0,`-1`,2{2},0{3}"
+- field: name
+  range: 未开始,开发,研发中,研发完毕,已暂停,已取消,已关闭
+- field: limit
+  range: "`-1`"
+...
+

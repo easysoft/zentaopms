@@ -258,31 +258,29 @@ class taskTest
     }
 
     /**
-     * Test activate a task.
+     * 激活任务。
+     * Activate a task.
      *
      * @param  int    $taskID
-     * @param  array  $param
+     * @param  string $comment
+     * @param  object $teamData
+     * @param  array  $drag
      * @access public
      * @return array
      */
-    public function activateTest(int $taskID, array $param = array())
+    public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): array
     {
-        $createFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
-        foreach($createFields as $field => $defaultValue) $postData[$field] = $defaultValue;
-        foreach($param as $key => $value) $postData[$key] = $value;
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
 
-        $comment = '单元测试';
-        $teamData = new stdclass();
-        $object = $this->objectModel->activate((object)$postData, $comment, $teamData, array());
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
+        $task = new stdclass();
+        $activateFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
+        foreach($activateFields as $field => $defaultValue) $task->{$field} = $defaultValue;
+
+        $changes = $this->objectModel->activate($task, $comment, $teamData, $drag);
+
+        if(dao::isError()) return dao::getError();
+        return $changes;
     }
 
     /**
