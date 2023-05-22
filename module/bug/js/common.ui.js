@@ -21,7 +21,7 @@ function changeProduct(event)
             }
         }});
     }
-    else 
+    else
     {
         loadProductBranches(productID)
         loadProductModules(productID);
@@ -112,9 +112,9 @@ function loadProductBranches(productID)
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
-    {    
+    {
         if(data)
-        {    
+        {
             $('#product').closest('.input-group').append(data);
             $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
         }
@@ -456,4 +456,71 @@ function loadAllUsers(event)
             }
         }
     });
+}
+
+function setBranchRelated(event)
+{
+    var branchID = $(event.target).val();
+    var num      = $(event.target).closest('tr').attr('data-index');
+
+    const productID = $('[name="product"]').val();
+
+    var currentModuleID = config.currentMethod == 'batchedit' ? $('#modules_' + num).val() : 0;
+    var moduleLink      = $.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
+    $.get(moduleLink, function(modules)
+    {
+        if(!modules) modules = '<select id="modules_' + num + '" name="modules[' + num + ']" class="form-control"></select>';
+        $('#modules_' + num).replaceWith(modules);
+    });
+
+    var projectLink = $.createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
+    $.get(projectLink, function(projects)
+    {
+        if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
+        $('#projects_' + num).replaceWith(projects);
+    });
+
+    var executionLink = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
+    $.get(executionLink, function(executions)
+    {
+        if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
+        $('#executions_' + num).replaceWith(executions);
+    });
+
+    /* If the branch of the current row is inconsistent with the one below, clear the module and execution of the nex row. */
+    if(config.currentMethod == 'batchcreate')
+    {
+        var nextBranchID = $('#branches_' + (num + 1)).val();
+        if(nextBranchID != branchID)
+        {
+            $('#modules_' + (num + 1)).closest('.form-batch-control').attr('data-ditto', 'off');
+            $('#modules_' + (num + 1)).trigger("chosen:updated");
+
+            $('#executions_' + (num + 1)).closest('.form-batch-control').attr('data-ditto', 'off');
+            $('#executions_' + (num + 1)).trigger("chosen:updated");
+        }
+
+      var buildLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
+      setOpenedBuilds(buildLink, num);
+    }
+
+    if(config.currentMethod == 'batchedit')
+    {
+        var planID   = $('#plans_' + num).val();
+        var planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID=' + num + '&needCreate=false&expired=&param=skipParent');
+        $.ajaxSettings.async = false;
+        $('#plans_' + num).parent('td').load(planLink, function()
+        {
+            var firstBugID = $('.table-form tbody').first('tr').find('input[id^=bugIDList]').val();
+            if(num == firstBugID)
+            {
+                $('#plans_' + firstBugID).find('option').each(function()
+                {
+                    if($(this).val() == 'ditto') $(this).remove();
+                    $('#plans_' + firstBugID).trigger('chosen:updated');
+                });
+            }
+        });
+        $.ajaxSettings.async = true;
+    }
 }
