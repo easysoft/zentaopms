@@ -1,0 +1,27 @@
+---
+title: zt_bug
+author: Gang Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: title
+  fields:
+    - field: title1
+      range: 第 
+    - field: title2
+      range: 1-10
+    - field: title3
+      range: 个bug
+- field: status
+  range: active, resolved, closed, resolved, active
+- field: openedBy
+  range: 1-5
+  prefix: user
+- field: openedDate
+  range: "20230101 000000:1D"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  range: 0, 1
+...
