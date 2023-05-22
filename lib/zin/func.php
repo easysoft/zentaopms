@@ -1154,3 +1154,23 @@ function severityLabel()
 {
     return createWg('severityLabel', func_get_args());
 }
+
+/**
+ * Zentao dashboard widget.
+ *
+ *  ?bool                responsive         是否启用响应式。
+ *  array                blocks             区块列表。
+ *  ?int                 grid               栅格数。
+ *  ?int                 gap                间距。
+ *  ?int                 leftStop           区块水平停靠间隔。
+ *  ?int                 cellHeight         网格高度。
+ *  ?stringunction|array blockFetch         区块数据获取 url 或选项。
+ *  ?array               blockDefaultSize   区块默认大小。
+ *  array                blockSizeMap       区块大小映射。
+ *  ?array               blockMenu          区块菜单。
+ *  ?function            onLayoutChange     布局变更事件。
+ */
+function dashboard()
+{
+    return createWg('dashboard', func_get_args());
+}
