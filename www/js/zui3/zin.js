@@ -25,7 +25,7 @@
             window.history.pushState(state, title, url);
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
         },
-        reloadApp: function(code, url)
+        reloadApp: function(_code, url)
         {
             loadPage(url);
         },
@@ -45,11 +45,11 @@
         activeMenu:    activeNav,
         table:         updateTable,
         fatal:         showFatalError,
-        zinDebug:      (data, info, options) => showZinDebugInfo(data, options),
-        zinErrors:     (data, info, options) => showErrors(data, options.id === 'page'),
+        zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
+        zinErrors:     (data, _info, options) => showErrors(data, options.id === 'page'),
     };
 
-    function showFatalError(data, info, options)
+    function showFatalError(data, _info, options)
     {
         $('body').empty().append($(`<div class="panel danger shadow-xl mx-auto my-4 rounded-lg" style="max-width: 1000px"><div class="panel-heading"><div class="panel-title font-bold text-lg">Fatal error: ${options.url}</div></div></div>`).append($('<div class="panel-body mono"></div>').append(data)));
     }
@@ -98,7 +98,7 @@
     {
         const html = [];
         const skipTags = new Set(['SCRIPT', 'META']);
-        $(data).each(function(idx, node)
+        $(data).each(function(_idx, node)
         {
             const nodeName = node.nodeName;
             if(nodeName === '#text') html.push(node.textContent);
@@ -473,7 +473,7 @@
         if(loadTarget === 'table') loadTable(url);
         else openPage(url);
         e.preventDefault();
-    }).on('zui.locate', (e, data) =>
+    }).on('zui.locate', (_e, data) =>
     {
         if(!data) return;
         if(data === true) return loadCurrentPage();
