@@ -28,14 +28,23 @@ $testSuit1 = array_merge($line1Products, $line2Products, $line3Products);
 $testSuit2 = array_merge($line3Products, $line4Products, $line5Products);
 $testSuit3 = array_merge($line3Products, $line4Products, $noLineProducts);
 
-r($product->concatProductLineTest($testSuit1)) && p('0:name;1:name;2:name')    && e('产品线1/产品1,产品线1/产品2,产品线1/产品3');    // 测试第一组产品列表的0，1，2条数据
-r($product->concatProductLineTest($testSuit1)) && p('5:name;6:name;7:name')    && e('产品线2/产品6,产品线2/产品7,产品线2/产品8');    // 测试第一组产品列表的5，6，7条数据
-r($product->concatProductLineTest($testSuit1)) && p('10:name;11:name;12:name') && e('产品线3/产品11,产品线3/产品12,产品线3/产品13'); // 测试第一组产品列表的10，11，12条数据
+r($product->concatProductLineTest($testSuit1)) && p('0:name')  && e('产品线1/产品1');  // 测试第一组产品列表的0条数据
+r($product->concatProductLineTest($testSuit1)) && p('1:name')  && e('产品线1/产品2');  // 测试第一组产品列表的1条数据
+r($product->concatProductLineTest($testSuit1)) && p('5:name')  && e('产品线2/产品6');  // 测试第一组产品列表的5条数据
+r($product->concatProductLineTest($testSuit1)) && p('6:name')  && e('产品线2/产品7');  // 测试第一组产品列表的6条数据
+r($product->concatProductLineTest($testSuit1)) && p('10:name') && e('产品线3/产品11'); // 测试第一组产品列表的10条数据
+r($product->concatProductLineTest($testSuit1)) && p('11:name') && e('产品线3/产品12'); // 测试第一组产品列表的11条数据
 
-r($product->concatProductLineTest($testSuit2)) && p('0:name;1:name;2:name')    && e('产品线3/产品11,产品线3/产品12,产品线3/产品13'); // 测试第二组产品列表的0，1，2条数据
-r($product->concatProductLineTest($testSuit2)) && p('5:name;6:name;7:name')    && e('产品线4/产品16,产品线4/产品17,产品线4/产品18'); // 测试第二组产品列表的5，6，7条数据
-r($product->concatProductLineTest($testSuit2)) && p('10:name;11:name;12:name') && e('产品线5/产品21,产品线5/产品22,产品线5/产品23'); // 测试第二组产品列表的10，11，12条数据
+r($product->concatProductLineTest($testSuit2)) && p('0:name')  && e('产品线3/产品11'); // 测试第二组产品列表的0条数据
+r($product->concatProductLineTest($testSuit2)) && p('1:name')  && e('产品线3/产品12'); // 测试第二组产品列表的1条数据
+r($product->concatProductLineTest($testSuit2)) && p('5:name')  && e('产品线4/产品16'); // 测试第二组产品列表的5条数据
+r($product->concatProductLineTest($testSuit2)) && p('6:name')  && e('产品线4/产品17'); // 测试第二组产品列表的6条数据
+r($product->concatProductLineTest($testSuit2)) && p('10:name') && e('产品线5/产品21'); // 测试第二组产品列表的10条数据
+r($product->concatProductLineTest($testSuit2)) && p('11:name') && e('产品线5/产品22'); // 测试第二组产品列表的11条数据
 
-r($product->concatProductLineTest($testSuit3)) && p('0:name;1:name;2:name')    && e('产品线3/产品11,产品线3/产品12,产品线3/产品13'); // 测试第三组产品列表的0，1，2条数据
-r($product->concatProductLineTest($testSuit3)) && p('5:name;6:name;7:name')    && e('产品线4/产品16,产品线4/产品17,产品线4/产品18'); // 测试第三组产品列表的5，6，7条数据
-r($product->concatProductLineTest($testSuit3)) && p('10:name;11:name;12:name') && e('产品26,产品27,产品28');                         // 测试第三组产品列表的10，11，12条数据
+r($product->concatProductLineTest($testSuit3)) && p('0:name')  && e('产品线3/产品11'); // 测试第三组产品列表的0条数据
+r($product->concatProductLineTest($testSuit3)) && p('1:name')  && e('产品线3/产品12'); // 测试第三组产品列表的1条数据
+r($product->concatProductLineTest($testSuit3)) && p('5:name')  && e('产品线4/产品16'); // 测试第三组产品列表的5条数据
+r($product->concatProductLineTest($testSuit3)) && p('6:name')  && e('产品线4/产品17'); // 测试第三组产品列表的6条数据
+r($product->concatProductLineTest($testSuit3)) && p('10:name') && e('产品26');         // 测试第三组产品列表的10条数据
+r($product->concatProductLineTest($testSuit3)) && p('11:name') && e('产品27');         // 测试第三组产品列表的11条数据
