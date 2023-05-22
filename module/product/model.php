@@ -635,6 +635,24 @@ class productModel extends model
     }
 
     /**
+     * Activate a product.
+     *
+     * @param  int    $productID.
+     * @access public
+     * @return array|false
+     */
+    public function activate(int $productID): array|false
+    {
+        $oldProduct = $this->getByID($productID);
+        $product    = (object)array('status' => 'normal');
+
+        $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
+        if(dao::isError()) return false;
+
+        return common::createChanges($oldProduct, $product);
+    }
+
+    /**
      * 更新排序。
      * Sort order field.
      *
