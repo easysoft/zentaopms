@@ -44,6 +44,8 @@ class programTao extends programModel
             ->where('parent')->eq('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere('type')->eq('program')
+            ->orderBy('order_asc')
             ->fetchAll();
     }
 }
+
