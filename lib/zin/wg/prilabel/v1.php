@@ -5,7 +5,7 @@ namespace zin;
 class priLabel extends wg
 {
     protected static $defineProps = array(
-        'pri:int|string'
+        'pri: int|string'
     );
 
     protected function onAddChild(mixed $child): mixed
@@ -19,7 +19,7 @@ class priLabel extends wg
 
     protected function build(): wg
     {
-        $pri = (int)$this->prop('pri');
+        $pri = $this->prop('pri');
 
         return span
         (

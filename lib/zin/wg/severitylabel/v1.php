@@ -5,8 +5,9 @@ namespace zin;
 class severityLabel extends wg
 {
     protected static $defineProps = array(
-        'text?:string',     // 标签文本
-        'level?:string|int' // 严重程度等级 1|2|3|4
+        'text?: string',      // 标签文本
+        'level?: string|int', // 严重程度等级
+        'isIcon?: bool=false' // 是否显示为图标
     );
 
     protected function onAddChild(mixed $child): mixed
@@ -18,23 +19,17 @@ class severityLabel extends wg
         }
     }
 
-    private function setThemeStyle(): \zin\directive
-    {
-        $level = (int)$this->prop('level');
-        if($level === 1) return setClass('text-danger');
-        if($level === 2) return setClass('text-warning');
-        if($level === 3) return setClass('text-secondary');
-        return setStyle('color', 'var(--color-slate-800)');
-    }
-
     protected function build()
     {
-        $text = $this->prop('text');
+        $text   = $this->prop('text');
+        $level  = $this->prop('level');
+        $isIcon = $this->prop('isIcon');
+
         return span
         (
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            setClass('severity-label'),
-            $this->setThemeStyle(),
+            setClass($isIcon ? 'severity' : 'severity severity-label'),
+            set('data-severity', $level),
             $text
         );
     }
