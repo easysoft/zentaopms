@@ -435,4 +435,5 @@ $lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdue
 $lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
 
 $lang->bug->error = new stdclass();
+$lang->bug->error->notExist       = 'Bug不存在。';
 $lang->bug->error->cannotActivate = '状态不是已解决或已关闭的Bug不能激活。';

@@ -436,4 +436,5 @@ $lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdue
 $lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
 
 $lang->bug->error = new stdclass();
+$lang->bug->error->notExist       = "Bug doesn't exist.";
 $lang->bug->error->cannotActivate = 'Bugs with a status other than Resolved or Closed cannot be activated.';
