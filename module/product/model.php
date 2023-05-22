@@ -1069,7 +1069,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0, $mode = '')
+    public function getAllExecutionPairsByProduct(int $productID, int $branch = 0, int $projectID = 0, string $mode = ''):array
     {
         if(empty($productID)) return array();
         $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1086,11 +1086,11 @@ class productModel extends model
         $projectIdList = array();
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
-        $executionPairs = array(0 => '');
+        $executionPairs = array(0 => ''); /* This one empty item will be returned as one valid execution pairs. */
         $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList, 'all');
         foreach($executions as $id => $execution)
         {
-            if($execution->grade == 2 && isset($executions[$execution->parent]))
+            if($execution->grade == 2 && isset($executions[$execution->parent])) // The grade is 2 means the type of this execution is a project and under a program.
             {
                 $execution->name = $projectPairs[$execution->project] . '/' . $executions[$execution->parent]->name . '/' . $execution->name;
                 $executions[$execution->parent]->children[$id] = $execution->name;
