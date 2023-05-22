@@ -200,7 +200,6 @@ else
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联{$lang->projectCommon}的团队成员和关系人可访问)";
 }
 $lang->product->aclList['open']    = "公开(有{$lang->productCommon}视图权限，即可访问)";
-//$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
 $lang->product->acls['private'] = '私有';
 $lang->product->acls['open']    = "公开";
@@ -255,3 +254,4 @@ $lang->product->belongingLine    = '所属产品线';
 $lang->product->testCaseCoverage = '用例覆盖率';
 $lang->product->activatedBug     = 'Bug激活';
 $lang->product->completeRate     = '完成率';
+$lang->product->editLine         = '编辑产品线';

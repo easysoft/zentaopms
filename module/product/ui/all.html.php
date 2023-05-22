@@ -119,7 +119,7 @@ toolbar
     (
         'text'  => $lang->product->editLine,
         'icon'  => 'edit',
-        'class' => 'ghost',
+        'class' => 'ghost text-primary',
         'url'   => createLink('product', 'manageLine', $browseType),
     ))) : NULL,
     item(set(array

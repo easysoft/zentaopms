@@ -255,3 +255,4 @@ $lang->product->belongingLine    = 'Product Line';
 $lang->product->testCaseCoverage = 'Case Coverage';
 $lang->product->activatedBug     = 'Activated Bugs';
 $lang->product->completeRate     = 'Completion Rate';
+$lang->product->editLine         = 'Edit Product Line';
