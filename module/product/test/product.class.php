@@ -1060,7 +1060,8 @@ class productTest
      */
     public function concatProductLineTest(array $productIdList): array
     {
-        $this->config->systemMode == 'ALM';
+        global $config;
+        $config->systemMode == 'ALM';
         $products = $this->objectModel->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
         return $this->objectModel->concatProductLine($products);
     }
