@@ -502,24 +502,21 @@ class productTest
     }
 
     /**
-     * Test get ordered products.
+     * Test for get ordered products.
      *
-     * @param  string $status
+     * @param  string     $status
+     * @param  int        $num
+     * @param  int        $projectID
+     * @param  int|string $shadow
      * @access public
      * @return int
      */
-    public function getOrderedProductsTest($status)
+    public function getOrderedProductsTest(string $status, int $num = 0, int $projectID = 0, int|string $shadow = 0): int
     {
-        $objects = $this->objectModel->getOrderedProducts($status);
+        $products = $this->objectModel->getOrderedProducts($status, $num, $projectID, $shadow);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return count($objects);
-        }
+        return count($products);
     }
 
     /**

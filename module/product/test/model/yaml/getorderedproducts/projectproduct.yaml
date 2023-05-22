@@ -1,0 +1,13 @@
+title: projectproduct data
+author: zhouxin
+version: 1.0.0
+
+fields:
+  - field: project
+    range: 1{6},2{6},3{6},4{6},5{6}
+  - field: product
+    range: 1-30
+  - field: branch
+    range: 0
+  - field: plan
+    range: 1
