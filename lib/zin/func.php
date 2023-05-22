@@ -195,6 +195,7 @@ function formBatch()
  * ?bool            disabled
  * ?array           items
  * ?string          placeholder
+ * ?bool            hidden=false
  */
 function formBatchItem()
 {

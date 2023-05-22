@@ -46,7 +46,8 @@ class formBatchItem extends wg
         'tipClass?: string',            // 列标题上的提示触发按钮类名。
         'tipIcon?: string="info-sign"', // 列标题上的提示触发按钮图标。
         'tipProps?: string',            // 列标题上的提示触发按钮其他属性。
-        'ditto?: bool'                  // 是否显示同上按钮。
+        'ditto?: bool',                 // 是否显示同上按钮。
+        'hidden?: bool=false'           // 是否隐藏
     );
 
     /**
@@ -57,7 +58,7 @@ class formBatchItem extends wg
      */
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto'));
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $hidden) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'hidden'));
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -79,7 +80,8 @@ class formBatchItem extends wg
         (
             h::th
             (
-                set::class('form-batch-head'),
+                setClass('form-batch-head'),
+                $hidden ? setClass('hidden') : null,
                 zui::width($width),
                 set('data-required', $required),
                 set('data-ditto', $ditto),
@@ -106,6 +108,7 @@ class formBatchItem extends wg
             h::td
             (
                 setClass('form-batch-control'),
+                $hidden ? setClass('hidden') : null,
                 set('data-name', $name),
                 empty($control) ? null : new control(set($control)),
                 $this->children()
