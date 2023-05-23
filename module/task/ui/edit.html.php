@@ -59,7 +59,13 @@ $teamOptions            = $members;
 /* zin: Define the form in main content */
 formPanel
 (
-    set::title($formTitle), // The form title is diffrent from the page title,
+    set::title(''),
+    entityLabel
+    (
+        set::entityID($task->id),
+        set::level(1),
+        set::text($task->name),
+    ),
     setStyle(['max-width' => '100%']),
     div
     (
