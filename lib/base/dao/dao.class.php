@@ -621,18 +621,9 @@ class baseDAO
             foreach($this->sqlobj->data as $field => $value)
             {
                 if(strpos($skipFields, ",$field,") !== false) continue;
+
                 $fields .= "`{$field}`,";
-
-                if(is_string($value))
-                {
-                    $value = $this->sqlobj->quote($value);
-                }
-                elseif($value === null)
-                {
-                    $value = 'NULL';
-                }
-
-                $values .= $value . ',';
+                $values .= $this->sqlobj->quote($value) . ',';
             }
             $fields = substr($fields, 0, -1);
             $values = substr($values, 0, -1);
@@ -2328,6 +2319,9 @@ class baseSQL
      */
     public function quote($value)
     {
+        if(is_null($value)) return 'NULL';
+        if(is_int($value) || is_float($value)) return $value;
+
         if($this->magicQuote) $value = stripslashes($value);
         return $this->dbh->quote((string)$value);
     }
