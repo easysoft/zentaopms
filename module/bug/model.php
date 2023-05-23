@@ -220,7 +220,7 @@ class bugModel extends model
      */
     public function getBaseInfo(int $bugID): object|false
     {
-        return $this->bugTao->fetchBaseInfo();
+        return $this->bugTao->fetchBaseInfo($bugID);
     }
 
     /**
