@@ -41,7 +41,7 @@ foreach($shortBlocks as $index => $block)
 }
 
 $blockMenuItems = array();
-$blockMenuItems[] = array('text' => $lang->block->refresh, 'data-type' => 'refresh');
+$blockMenuItems[] = array('text' => $lang->block->refresh, 'attrs' => array('data-type' => 'refresh'));
 $blockMenuItems[] = array('text' => $lang->edit, 'data-url' => createLink('block', 'edit', "blockID={id}"));
 $blockMenuItems[] = array('text' => $lang->block->hidden, 'data-url' => createLink('block', 'delete', "blockID={id}&type=hidden"));
 $blockMenuItems[] = array('text' => $lang->block->createBlock, 'data-url' => createLink('block', 'create', "dashboard=$dashboard"));
