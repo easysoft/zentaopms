@@ -735,21 +735,22 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
+        /* Multi-task change to normal task. */
         if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
 
         if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
 
-        if($task->story != $oldTask->story)
-        {
-            $this->loadModel('story')->setStage($task->story);
-            $this->story->setStage($oldTask->story);
-        }
+        /* Compute task's story stage. */
+        $this->loadModel('story')->setStage($task->story);
+        if($task->story != $oldTask->story) $this->story->setStage($oldTask->story);
 
         if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
         if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
         if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
 
         $isParentChanged = $task->parent != $oldTask->parent;
+
+        /* If there is a parent task before updating the task, update the parent. */
         if($oldTask->parent > 0)
         {
             $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
@@ -777,12 +778,15 @@ class taskModel extends model
         unset($oldTask->parent, $task->parent);
 
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+
+        /* Logging history when multi-task team members have changed. */
         if(isset($oldTask->team))
         {
             $users = $this->loadModel('user')->getPairs('noletter|noempty');
-            $oldTeams = $oldTask->team;
+
             $oldTask->team = '';
-            foreach($oldTeams as $team) $oldTask->team .= "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left . "\n";
+            foreach($oldTask->team as $team) $oldTask->team .= "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left . "\n";
+
             $task->team = '';
             foreach($this->post->team as $i => $account)
             {
@@ -825,7 +829,7 @@ class taskModel extends model
 
         if($isParentChanged)
         {
-            $this->action->create('task', $task->id, 'linkParentTask', '', $task->parent, '', false);
+            $this->loadModel('action')->create('task', $task->id, 'linkParentTask', '', $task->parent, '', false);
             $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $task->id, '', false);
 
             $newParentTask = $this->taskTao->fetchByID($task->parent);

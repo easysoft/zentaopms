@@ -53,7 +53,7 @@ cid=1
 
 - 测试修改任务关闭原因 @ 『关闭原因』必须为空。
 
-- 测试修改任务的父任务 @当前选中的父任务已有消耗。
+- 测试修改任务的父任务 @没有数据更新
 
 */
 
@@ -104,4 +104,4 @@ r($task->updateObject($taskIDList[5], $changepri))        && p('0:field,old,new'
 r($task->updateObject($taskIDList[6], $changeexecution))  && p('0:field,old,new') && e('execution,7,8');               // 测试修改任务所属执行
 r($task->updateObject($taskIDList[8], $changedeadline))   && p('0:field,new')     && e("deadline,2022-03-29");         // 测试修改任务截止时间
 r($task->updateObject($taskIDList[0], $closedReason))     && p('closedReason:0')  && e(' 『关闭原因』必须为空。');     // 测试修改任务关闭原因
-r($task->updateObject($taskIDList[8], $changeParent)[0])  && p()                  && e('当前选中的父任务已有消耗。');  // 测试修改任务的父任务
+r($task->updateObject($taskIDList[8], $changeParent))     && p()                  && e('没有数据更新');                // 测试修改任务的父任务
