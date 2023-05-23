@@ -477,97 +477,71 @@ class taskZen extends task
      * 处理批量创建任务的请求数据。
      * Process the request data for the batch create tasks.
      *
-     * @param  object         $execution
-     * @param  int            $taskID
+     * @param  int       $executionID
+     * @param  int       $taskID
      * @access protected
-     * @return object[]|false
+     * @return object[]
      */
-    protected function buildTasksForBatchCreate(object $execution, int $taskID): array|false
+    protected function buildTasksForBatchCreate(int $executionID, int $taskID): array
     {
         $tasks = form::batchData($this->config->task->form->batchCreate)->get();
-
-        /* 去除重复数据。 Deduplicated data. */
-        $tasks = $this->removeDuplicate4BatchCreate($execution, $tasks);
-        if(!$tasks) return false;
-
-        /* Init. */
-        $story      = 0;
-        $module     = 0;
-        $type       = '';
-        $assignedTo = '';
-        $estStarted = null;
-        $deadline   = null;
-
-        /* Get task data. */
-        $this->loadModel('common');
-        $extendFields = $this->task->getFlowExtendFields();
-        $data         = array();
-        foreach($tasks->name as $i => $name)
+        foreach($tasks as $task)
         {
-            if(empty($name)) continue;
-
-            /* 给同上的变量赋值。 Assign values to ditto fields. */
-            $story      = !isset($tasks->story[$i]) || $tasks->story[$i] == 'ditto'            ? $story      : $tasks->story[$i];
-            $module     = !isset($tasks->module[$i]) || $tasks->module[$i] == 'ditto'          ? $module     : $tasks->module[$i];
-            $type       = !isset($tasks->type[$i]) || $tasks->type[$i] == 'ditto'              ? $type       : $tasks->type[$i];
-            $assignedTo = !isset($tasks->assignedTo[$i]) || $tasks->assignedTo[$i] == 'ditto'  ? $assignedTo : $tasks->assignedTo[$i];
-            $estStarted = !isset($tasks->estStarted[$i]) || isset($tasks->estStartedDitto[$i]) ? $estStarted : $tasks->estStarted[$i];
-            $deadline   = !isset($tasks->deadline[$i]) || isset($tasks->deadlineDitto[$i])     ? $deadline   : $tasks->deadline[$i];
-
-
-            $dittoFields = array('story' => $story, 'module' => $module, 'type' => $type, 'assignedTo' => $assignedTo, 'estStarted' => $estStarted, 'deadline' => $deadline);
-            $data[$i]    = $this->buildData4BatchCreate($execution, $tasks, $i, $dittoFields, $extendFields, $taskID);
+            $task->execution = $executionID;
+            $task->left      = $task->estimate;
         }
 
-        return $data;
+        /* 去除重复数据。 Deduplicated data. */
+        return $this->removeDuplicate4BatchCreate($executionID, $tasks);
     }
 
     /**
      * 在批量创建之前移除post数据中重复的数据。
      * Remove the duplicate data before batch create tasks.
      *
-     * @param  object    $execution
-     * @param  object    $tasks
+     * @param  int       $executionID
+     * @param  array     $tasks
      * @access protected
-     * @return object|false
+     * @return array
      */
-    protected function removeDuplicate4BatchCreate(object $execution, object $tasks): object|false
+    protected function removeDuplicate4BatchCreate(int $executionID, array $tasks): array
     {
-        $storyIdList = array();
-        $taskNames   = array();
-        $prevStory   = 0;
-
-        foreach($tasks->story as $key => $storyID)
+        /* 1. 检查表单是否有重复。 Check duplicate in form data. */
+        $duplicateTasks = array();
+        $storyIdList    = array();
+        foreach($tasks as $rowIndex => $task)
         {
-            /* 过滤事务型和任务名称为空的数据。 Filter affair type tasks and empty task name data. */
-            if(empty($tasks->name[$key])) continue;
-            if($tasks->type[$key] == 'affair') continue;
-            if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
+            if(empty($task->story)) continue;
 
-            if($storyID == 'ditto') $storyID = $prevStory;
-            $prevStory = $storyID;
+            /* 事务型任务可能有多个指派人，不需要检查是否重名。 Tasks of Affair type no need to check duplicate name. */
+            if($task->type == 'affair') continue;
 
-            if(!isset($tasks->story[$key - 1]) && $key > 1 && !empty($tasks->name[$key - 1]))
+            /* 表单的任务名称+不能有重复。 The name of post tasks must be unique. */
+
+            /* 检查Post传过来的任务有没有重复数据，不能有相同需求的同名任务。 Check whether the post tasks have duplicate data. */
+            $duplicateKey = (string)$task->story . '-' . $task->name;
+            if(isset($duplicateTasks[$duplicateKey]))
             {
-                $storyIdList[] = 0;
-                $taskNames[]   = $tasks->name[$key - 1];
+                dao::$errors["name[$rowIndex]"] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $task->name;
+                return array();
             }
-
-            /* 检查Post传过来的任务有没有重复数据。 Check whether the task passed by Post has duplicate data. */
-            $hasExistsName = in_array($tasks->name[$key], $taskNames);
-            if($hasExistsName && in_array($storyID, $storyIdList))
-            {
-                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
-                return false;
-            }
-
-            $storyIdList[] = $storyID;
-            $taskNames[]   = $tasks->name[$key];
+            $duplicateTasks[$duplicateKey] = array('rowIndex' => $rowIndex, 'name' => $task->name);
+            $storyIdList[$task->story]     = $task->story;
         }
 
-        $querySQL = "execution={$execution->id} and story "  . helper::dbIN($storyIdList);
-        $result   = $this->loadModel('common')->removeDuplicate('task', $tasks, $querySQL);
-        return $result['data'];
+        /* 2. 检查数据库是否有重复数据。 Check duplicate in db. */
+        $existTasks = $this->task->getListByStories($storyIdList, $executionID);
+        foreach($existTasks as $task)
+        {
+            $duplicateKey = (string)$task->story . '-' . $task->name;
+            if(isset($duplicateTasks[$duplicateKey]))
+            {
+                $rowIndex = $duplicateTasks[$duplicateKey]['rowIndex'];
+                unset($tasks[$rowIndex]);
+            }
+        }
+
+        return $tasks;
     }
 
     /**

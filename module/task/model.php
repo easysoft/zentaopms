@@ -2145,6 +2145,26 @@ class taskModel extends model
     }
 
     /**
+     * Get task list of stories.
+     *
+     * @param  int[]    $storyIdList
+     * @param  int      $executionID
+     * @param  int      $projectID
+     * @access public
+     * @return object[]
+     */
+    public function getListByStories(array $storyIdList, int $executionID = 0, int $projectID = 0): array
+    {
+        return $this->dao->select('id, story, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
+            ->from(TABLE_TASK)
+            ->where('story')->in($storyIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * Get counts of some stories' tasks.
      *
      * @param  array  $stories
@@ -3156,7 +3176,7 @@ class taskModel extends model
                 echo round($task->progress, 2) . '%';
                 break;
             case 'deadline':
-                if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
+                if($task->deadline && substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
                 break;
             case 'openedBy':
                 echo zget($users, $task->openedBy);

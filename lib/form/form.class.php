@@ -188,6 +188,7 @@ class form extends fixer
                     $this->errors[$rowIndex][$field][] = sprintf($app->lang->error->notempty, $fieldName);
                 }
             }
+
             $rowDataList[$rowIndex] = $rowData;
         }
 

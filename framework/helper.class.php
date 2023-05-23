@@ -388,6 +388,9 @@ class helper extends baseHelper
                 return (array)$value;
             case 'object':
                 return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? (string)$value : null;
             case 'string':
             default:
                 return (string)$value;

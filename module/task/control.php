@@ -145,18 +145,18 @@ class task extends control
         if(!empty($_POST))
         {
             /* 批量创建任务。 Batch create tasks. */
-            $taskData = $this->taskZen->buildTasksForBatchCreate($execution, $taskID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $taskData = $this->taskZen->buildTasksForBatchCreate($executionID, $taskID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $taskIdList = $this->task->batchCreate($execution, $taskData, $taskID, $output);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* 接口调用返回任务编号列表。 Return task id list when call the API. */
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
             /* 生成跳转链接。 Generate jump link. */
             $jumpLink = $this->taskZen->getJumpLink($execution);
-            if(!isonlybody()) return print(js::locate($jumpLink, 'parent'));
+            if(!isonlybody()) return $this->send(array('result' => 'success', 'load' => $jumpLink));
 
             /* 执行应用下或者在运营管理界面下更新看板数据。 */
             /* Update kanban data under the execution application or under the operation management interface. */
@@ -166,7 +166,8 @@ class task extends control
                 if($execution->type == 'kanban') return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
                 return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
             }
-            return print(js::reload('parent.parent'));
+
+            return $this->send(array('result' => 'success', 'load' => 'true'));
         }
 
         $this->taskZen->setMenu($executionID);
