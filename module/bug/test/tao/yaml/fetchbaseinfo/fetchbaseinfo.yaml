@@ -6,13 +6,8 @@ fields:
 - field: id
   range: 1-10
 - field: title
-  fields:
-    - field: title1
-      range: 第 
-    - field: title2
-      range: 1-10
-    - field: title3
-      range: 个bug
+  range: 1-10
+  format: "第%d个bug"
 - field: status
   range: active, resolved, closed, resolved, active
 - field: openedBy
