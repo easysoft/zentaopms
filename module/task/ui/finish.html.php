@@ -133,7 +133,7 @@ else
             set::width('2/3'),
             set::name('comment'),
             set::label($lang->comment),
-            set::control("textarea")
+            set::control("editor")
         )
     );
 }
