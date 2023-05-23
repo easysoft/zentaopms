@@ -54,7 +54,7 @@ else
                 set::label($lang->task->currentConsumed),
                 div(
                     set::class('consumed'),
-                    $task->myConsumed . $lang->workingHour
+                    $task->myConsumed . $lang->task->suffixHour
                 )
             );
 
@@ -66,7 +66,7 @@ else
 
         $assignedToControl = formGroup
             (
-                set::width('1/3'),
+                set::width('1/4'),
                 set::name('assignedTo'),
                 set::label($lang->story->assignTo),
                 set::control('picker'),
@@ -83,13 +83,13 @@ else
             set::label(empty($task->team) ? $lang->task->hasConsumed : $lang->task->common . $lang->task->consumed),
             div(
                 set::class('consumed'),
-                $task->consumed . $lang->workingHour
+                $task->consumed . $lang->task->suffixHour
             )
         ),
         $consumedControl,
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/4'),
             set::label($lang->task->currentConsumed),
             inputGroup
             (
@@ -100,7 +100,7 @@ else
                     'value' => 0,
                     'type'  => 'text'
                 ))),
-                $lang->workingHour
+                $lang->task->suffixHour
             )
         ),
         $assignedToControl,
