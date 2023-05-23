@@ -237,32 +237,6 @@ class blockZen extends block
     }
 
     /**
-     * 将区块数组拆分为短区块数组和长区块数组。
-     * Split blocks array into short blocks and long blocks.
-     *
-     * @param  array     $blocks
-     * @access protected
-     * @return array
-     */
-    protected function splitBlocksByLen(array $blocks): array
-    {
-        $shortBlocks = $longBlocks = array();
-        foreach($blocks as $key => $block)
-        {
-            if($this->block->isLongBlock($block))
-            {
-                $longBlocks[$key] = $block;
-            }
-            else
-            {
-                $shortBlocks[$key] = $block;
-            }
-        }
-
-        return array($shortBlocks, $longBlocks);
-    }
-
-    /**
      * 生成 HTML 区块。
      * Generate HTML block.
      *
@@ -1530,7 +1504,6 @@ class blockZen extends block
      */
     protected function printAssignToMeBlock(object $block): void
     {
-        $longBlock  = $this->block->isLongBlock($block);
         $hasIssue   = helper::hasFeature('issue');
         $hasRisk    = helper::hasFeature('risk');
         $hasMeeting = helper::hasFeature('meeting');
@@ -1703,7 +1676,6 @@ class blockZen extends block
         $this->view->isExternalCall = $this->isExternalCall();
         $this->view->hasViewPriv    = $hasViewPriv;
         $this->view->count          = $count;
-        $this->view->longBlock      = $longBlock;
     }
 
     /**

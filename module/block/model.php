@@ -89,26 +89,6 @@ class blockModel extends model
     }
 
     /**
-     * 获取后台信息区块参数信息。
-     *  get admin information block parameter information.
-     *
-     * @param  string $startDate
-     * @access public
-     * @return array|false
-     */
-    public function getAdminBlockList(string $startDate = ''): array|false
-    {
-        return $this->dao->select('code,params')->from(TABLE_BLOCK)
-            ->where('account')->eq('system')
-            ->andWhere('vision')->eq('rnd')
-            ->andWhere('dashboard')->eq('zentao')
-            ->andWhere('module')->eq('zentao')
-            ->andWhere('code')->in('plugin,patch,publicclass,news')
-            ->beginIF($startDate)->andWhere('createdDate')->ge($startDate)->fi()
-            ->fetchPairs();
-    }
-
-    /**
      * 获取当前用户的区块列表。
      * Get block list of current user.
      *
@@ -133,24 +113,6 @@ class blockModel extends model
     public function getMyHiddenBlocks(string $dashboard): array|false
     {
         return $this->blockTao->fetchMyBlocks($dashboard, 1);
-    }
-
-    /**
-     * 获取对应仪表盘下区块的最大排序号。
-     * Get block max order number by dashboard.
-     *
-     * @param  string $dashboard
-     * @access public
-     * @return int
-     */
-    public function getMaxOrderByDashboard(string $dashboard): int
-    {
-        $order = $this->dao->select('MAX(`order`) as `order`')->from(TABLE_BLOCK)
-            ->where('dashboard')->eq($dashboard)
-            ->andWhere('account')->eq($this->app->user->account)
-            ->fetch('order');
-
-        return (int)$order;
     }
 
     /**
@@ -241,7 +203,7 @@ class blockModel extends model
     }
 
     /**
-     * 根据区块索引获取排序靠后的一个区块ID。
+     * 根据区块索引获取靠后的一个区块ID。
      * Get my block id by block code,
      *
      * @param  string    $dashboard
@@ -257,7 +219,7 @@ class blockModel extends model
             ->andWhere('dashboard')->eq($dashboard)
             ->andWhere('module')->eq($module)
             ->andWhere('code')->eq($code)
-            ->orderBy('order_desc')
+            ->orderBy('id_desc')
             ->limit(1)
             ->fetch('id');
 
@@ -286,19 +248,6 @@ class blockModel extends model
     }
 
     /**
-     * 检查此区块是否为长区块。
-     * Check whether long block.
-     *
-     * @param  object $block
-     * @access public
-     * @return bool
-     */
-    public function isLongBlock(object $block): bool
-    {
-        return (!empty($block->grid) && $block->grid >= 6);
-    }
-
-    /**
      * 初始化用户某个仪表盘下的区块数据。
      * Init block when account use first.
      *
@@ -316,11 +265,10 @@ class blockModel extends model
 
         $blocks = $dashboard == 'my' ? $this->lang->block->default[$flow][$dashboard] : $this->lang->block->default[$dashboard];
 
-        foreach($blocks as $index => $block)
+        foreach($blocks as $block)
         {
             $block['account']   = $account;
             $block['dashboard'] = $dashboard;
-            $block['order']     = $index;
             $block['params']    = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
             $block['vision']    = $this->config->vision;
 

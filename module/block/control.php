@@ -42,7 +42,6 @@ class block extends control
             $formData->dashboard = $dashboard;
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
-            $formData->order     = $this->block->getMaxOrderByDashboard($dashboard) + 1;
             $formData->params    = json_encode($formData->params);
 
             $this->block->create($formData);
@@ -123,14 +122,13 @@ class block extends control
     }
 
     /**
-     * 排序区块。
-     * Sort dashboard blocks.
+     * 重新构建区块的布局。
+     * build the layout of blocks.
      *
-     * @param  string $orders
      * @access public
      * @return void
      */
-    public function sort($orders)
+    public function buildLayout()
     {
         $orders = explode(',', $orders);
         foreach($orders as $order => $blockID) $this->block->setOrder($blockID, $order);
@@ -138,35 +136,6 @@ class block extends control
         if(dao::isError()) return $this->send(array('result' => 'fail'));
 
         $this->loadModel('score')->create('block', 'set');
-        return $this->send(array('result' => 'success'));
-    }
-
-
-    /**
-     * 设置一个区块的大小。
-     * Resize a block.
-     *
-     * @param  string $blockID
-     * @param  string $type
-     * @param  string $data
-     * @access public
-     * @return void
-     */
-    public function resize(string $blockID, string $type, string $data)
-    {
-        $block = $this->block->getByID($blockID);
-        if(!$block) return $this->send(array('result' => 'fail', 'code' => 404));
-
-        $field = '';
-        if($type == 'vertical')   $field = 'height';
-        if($type == 'horizontal') $field = 'grid';
-        if(empty($field)) return $this->send(array('result' => 'fail', 'code' => 400));
-
-        $block->$field = $data;
-        $block->params = helper::jsonEncode($block->params);
-        $this->block->update($block);
-
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
         return $this->send(array('result' => 'success'));
     }
 
@@ -238,14 +207,10 @@ class block extends control
         /* 如果页面渲染方式为 json 的话，直接返回 json 格式数据 ，主要是为了给应用提供数据。 */
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
-        /* 将区块列表分为长区块和短区块。 */
-        list($shortBlocks, $longBlocks) = $this->blockZen->splitBlocksByLen($blocks);
-
         /* 组织渲染页面需要数据。 */
-        $this->view->title       = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
-        $this->view->longBlocks  = $longBlocks;
-        $this->view->shortBlocks = $shortBlocks;
-        $this->view->dashboard   = $dashboard;
+        $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
+        $this->view->blocks    = $blocks;
+        $this->view->dashboard = $dashboard;
         $this->render();
     }
 
@@ -287,7 +252,6 @@ class block extends control
         $this->view->moreLink       = $block->moreLink;
         $this->view->title          = $block->title;
         $this->view->block          = $block;
-        $this->view->longBlock      = $this->block->isLongBlock($block);
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */

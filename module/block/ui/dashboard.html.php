@@ -11,34 +11,15 @@ declare(strict_types=1);
 
 namespace zin;
 
-$blocks = array();
-foreach($longBlocks as $index => $block)
+foreach($blocks as $block)
 {
-    $blocks[] = array
-    (
-        'id'        => $block->id,
-        'code'      => $block->code,
-        'color'     => isset($block->params->color) ? $block->params->color : null,
-        'fetch'     => $block->blockLink,
-        'size'      => 'smWide',
-        'left'      => 0,
-        'top'       => count($blocks) * 4
-    );
+    $block->color  = isset($block->params->color) ? $block->params->color : null;
+    $block->fetch  = $block->blockLink;
+    $block->height = $block->height ? $block->height : 3;
+    $block->size   = array($block->width, $block->height);
+    unset($block->title);
 }
-
-foreach($shortBlocks as $index => $block)
-{
-    $blocks[] = array
-    (
-        'id'        => $block->id,
-        'code'      => $block->code,
-        'color'     => isset($block->params->color) ? $block->params->color : null,
-        'fetch'     => $block->blockLink,
-        'size'      => 'sm',
-        'left'      => 2,
-        'top'       => (count($blocks) - count($longBlocks)) * 4
-    );
-}
+$blocks = json_decode(json_encode($blocks), true);
 
 $blockMenuItems = array();
 $blockMenuItems[] = array('text' => $lang->block->refresh, 'attrs' => array('data-type' => 'refresh'));
