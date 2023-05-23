@@ -1174,3 +1174,15 @@ function dashboard()
 {
     return createWg('dashboard', func_get_args());
 }
+
+/**
+ * Zentao detail page section widget.
+ *
+ * string            title
+ * string|array|null content
+ * bool              useHtml=false
+ */
+function section()
+{
+    return createWg('section', func_get_args());
+}
