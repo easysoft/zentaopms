@@ -428,6 +428,7 @@ class zahostModel extends model
         $host = $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
             ->where('id')->eq($hostID)
             ->fetch();
+        $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
 
         if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
         {
@@ -499,6 +500,7 @@ class zahostModel extends model
 
         foreach($list as $host)
         {
+            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
             if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
             {
                 $host->status = 'offline';

@@ -66,6 +66,12 @@ class hostSubmitEntry extends baseEntry
             $this->dao->update(TABLE_ZAHOST)->data(array("status" => "wait"))->where("id")->eq($imageInfo->host)->exec();
         }
 
+        /* Update host status when create image */
+        if(is_numeric($imageInfo->from))
+        {
+            $this->dao->update(TABLE_ZAHOST)->data(array("status" => "wait"))->where("id")->eq($imageInfo->from)->exec();
+        }
+
         return $this->sendSuccess(200, 'success');
     }
 }
