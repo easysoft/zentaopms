@@ -1036,7 +1036,7 @@ class bugModel extends model
      * @access public
      * @return bool
      */
-    public function activate(object $bug, array $kanbanParams): bool
+    public function activate(object $bug, array $kanbanParams = array()): bool
     {
         $bugID  = (int)$bug->id;
         $oldBug = $this->getBaseInfo($bugID);
