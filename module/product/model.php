@@ -1487,30 +1487,21 @@ class productModel extends model
      * @param  array $statsData
      * @return array
      */
-    public function convertHtmlSpecialChars($statsData)
+    public function convertHtmlSpecialChars(array $statsData): array
     {
         if(empty($statsData)) return array();
 
         foreach($statsData as $key => $data)
         {
-            if($key == 'productList' || $key == 'projectList')
-            {
-                !empty($data) && array_map(function($item)
-                {
-                    return $item->name = htmlspecialchars_decode($item->name, ENT_QUOTES);
-                },
-                $data);
-            }
+            if(empty($data)) continue;
 
+            if($key == 'productList' || $key == 'projectList') array_map(function($item){return $item->name = htmlspecialchars_decode($item->name, ENT_QUOTES);}, $data);
             if($key == 'planList')
             {
                 foreach($data as $plan)
                 {
-                    !empty($plan) && array_map(function($planItem)
-                    {
-                        return $planItem->title = htmlspecialchars_decode($planItem->title, ENT_QUOTES);
-                    },
-                    $plan);
+                    if(empty($plan)) continue;
+                    array_map(function($planItem){return $planItem->title = htmlspecialchars_decode($planItem->title, ENT_QUOTES);}, $plan);
                 }
             }
         }
