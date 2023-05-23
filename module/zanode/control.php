@@ -436,7 +436,7 @@ class zanode extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $snapshotList = $this->zanode->getSnapshotList($nodeID, $browseType, $param, $orderBy, $pager);
+        $snapshotList = $this->zanode->getSnapshotList($nodeID, $orderBy, $pager);
 
         $this->view->title        = $this->lang->zanode->browseSnapshot;
         $this->view->nodeID       = $nodeID;
