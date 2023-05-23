@@ -10,6 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 /* ====== Preparing and processing page data ====== */
+jsVar('oldConsumed', $task->consumed);
+jsVar('currentUser', $app->user->account);
+jsVar('members', $members);
+jsVar('teamMemberError', $lang->task->error->teamMember);
+jsVar('teamLeftEmpty', $lang->task->error->teamLeftEmpty);
+jsVar('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));
+jsVar('estimateNotEmpty', sprintf($lang->task->error->notempty, $lang->task->estimate));
+jsVar('leftNotEmpty', sprintf($lang->task->error->notempty, $lang->task->left));
+jsVar('teamNotEmpty', sprintf($lang->error->notempty, $lang->task->assignedTo));
+jsVar('isMultiple', $isMultiple);
+jsVar('taskMode', $task->mode);
+if($isMultiple) jsVar('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control' disabled"));
 
 /* zin: Set variables to define control for form. */
 $taskModeBox = '';
@@ -63,6 +75,17 @@ if($task->parent != '-1')
     );
 }
 
+$modalTeamBtn = array();
+if($isMultiple)
+{
+    $modalTeamBtn = btn(
+        set::text($lang->task->team),
+        set::class('team-group hidden'),
+        set::url('#modalTeam'),
+        set('data-toggle', 'modal'),
+    );
+}
+
 /* ====== Define the page structure with zin widgets ====== */
 formPanel
 (
@@ -73,10 +96,17 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->task->assignedTo),
-            set::name('assignedTo'),
-            set::items($isMultiple ? $teamMembers : $members),
-            set::value($isMultiple ? '' : $task->finishedBy),
             set::required($isMultiple),
+            inputGroup
+            (
+                select
+                (
+                    set::name('assignedTo'),
+                    set::items($isMultiple ? $teamMembers : $members),
+                    set::value($isMultiple ? '' : $task->finishedBy),
+                ),
+                $modalTeamBtn,
+            ),
         ),
         $manageTeamBox,
     ),
@@ -90,6 +120,87 @@ formPanel
             set::rows('5'),
         )
     ),
+);
+
+$teamData = array();
+if($isMultiple)
+{
+    $index = 1;
+    foreach($task->team as $member)
+    {
+        $member->id           = $index ++;
+        $member->team         = $member->account;
+        $member->teamSource   = $member->account;
+        $member->teamEstimate = $member->estimate;
+        $member->teamConsumed = $member->consumed;
+        $member->teamLeft     = $member->left;
+
+        $teamData[] = $member;
+    }
+}
+
+modalTrigger
+(
+    modal
+    (
+        set::id('modalTeam'),
+        set::title($lang->task->team),
+        to::footer
+        (
+            set::footerClass('flex-center'),
+            btn
+            (
+                set::class('primary btn-wide'),
+                set::id('confirmButton'),
+                set::text($lang->confirm),
+            )
+        ),
+        formBatch
+        (
+            set::mode('edit'),
+            set::data($teamData),
+            set::minRows(10),
+            set::actions(array()),
+            formBatchItem
+            (
+                set::name('id'),
+                set::label($lang->task->id),
+                set::control('index'),
+                set::width('10px'),
+            ),
+            formBatchItem
+            (
+                set::name('team'),
+                set::label($lang->task->assignedTo),
+                set::control('select'),
+                set::items($members),
+                set::width('50px'),
+                input
+                (
+                    set::name('teamSource'),
+                    set::class('hidden'),
+                )
+            ),
+            formBatchItem
+            (
+                set::name('teamEstimate'),
+                set::label($lang->task->estimate),
+                set::width('50px'),
+            ),
+            formBatchItem
+            (
+                set::name('teamConsumed'),
+                set::label($lang->task->consumed),
+                set::width('50px'),
+            ),
+            formBatchItem
+            (
+                set::name('teamLeft'),
+                set::label($lang->task->left),
+                set::width('50px'),
+            ),
+        ),
+    )
 );
 
 /* ====== Render page ====== */
