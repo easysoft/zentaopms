@@ -31,4 +31,4 @@ r($product->getProductsTest($projectIdList[1], $statusList[1])) && p('2:name') &
 r($product->getProductsTest($projectIdList[2], $statusList[1])) && p('3:name') && e('正常产品3'); // 测试获取项目13 状态为unclosed的产品信息
 r($product->getProductsTest($projectIdList[3], $statusList[1])) && p('4:name') && e('正常产品4'); // 测试获取项目14 状态为unclosed的产品信息
 r($product->getProductsTest($projectIdList[4], $statusList[1])) && p('5:name') && e('正常产品5'); // 测试获取项目15 状态为unclosed的产品信息
-r($product->getProductsTest($projectIdList[5], $statusList[1])) && p()                         && e('0');                                   // 测试获取不存在的项目状态为unclosed的产品信息
+r($product->getProductsTest($projectIdList[5], $statusList[1])) && p()         && e('0');         // 测试获取不存在的项目状态为unclosed的产品信息
