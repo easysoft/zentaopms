@@ -199,10 +199,10 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
-            if($postData->comment != '' or !empty($changes))
+            if($this->post->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->loadModel('action')->create('task', $taskID, $action, $postData->comment);
+                $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
