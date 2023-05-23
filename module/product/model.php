@@ -1476,9 +1476,9 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setParamsForLink($module, $link, $projectID, $productID)
+    public function setParamsForLink(string $module, string $link, int $projectID, int $productID): string
     {
-        return strpos('programplan', $module) !== false ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
+        return $module == 'programplan' ? sprintf($link, $projectID, $productID) : sprintf($link, $productID);
     }
 
     /**
