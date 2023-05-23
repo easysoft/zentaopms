@@ -215,7 +215,6 @@ $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber    = '"Giờ làm" phải là số.';
 $lang->task->error->estimateNumber    = '"Dự tính" phải là số.';
-$lang->task->error->recordMinus       = 'Giờ làm không nên là số âm';
 $lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Giờ làm không nên là số âm';
 $lang->task->error->consumedSmall     = '"Tổng giờ làm" phải là > số cuối cùng.';
