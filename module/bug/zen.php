@@ -1923,98 +1923,49 @@ class bugZen extends bug
         $bugIdList = $this->post->bugIDList ? $this->post->bugIDList : array();
         if(empty($bugIdList)) return array();
 
-        /* Get input data. */
-        $data = form::data($this->config->bug->form->batchEdit)->get();
+        /* Get bugs and old bugs. */
+        $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
+        $oldBugs = $this->bug->getByIdList($bugIdList);
 
-        /* Get extend fields and old bugs. */
-        $extendFields = $this->bug->getFlowExtendFields();
-        $oldBugs      = $this->bug->getByIdList($bugIdList);
-
-        /* Initialize variable. */
-        $bugs = array();
-        $now  = helper::now();
-        foreach($bugIdList as $bugID)
+        /* Process bugs. */
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        foreach($bugs as $bug)
         {
-            $oldBug = $oldBugs[$bugID];
+            $oldBug = $oldBugs[$bug->id];
 
-            $os           = array_filter($data->os[$bugID]);
-            $browsers     = array_filter($data->browsers[$bugID]);
-            $duplicateBug = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
+            $bug->os      = implode(',', $bug->os);
+            $bug->browser = implode(',', $bug->browser);
 
-            /* Init bug. */
-            $bug = new stdclass();
-            $bug->id             = $bugID;
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
-            $bug->type           = zget($data->types, $bugID);
-            $bug->severity       = zget($data->severities, $bugID);
-            $bug->pri            = zget($data->pris, $bugID);
-            $bug->title          = zget($data->titles, $bugID);
-            $bug->plan           = zget($data->plans, $bugID, 0);
-            $bug->branch         = zget($data->branches, $bugID, 0);
-            $bug->module         = zget($data->modules, $bugID, $oldBug->module);
-            $bug->assignedTo     = $oldBug->status == 'closed' ? $oldBug->assignedTo : $data->assignedTos[$bugID];
-            $bug->deadline       = zget($data->deadlines, $bugID);
-            $bug->resolvedBy     = zget($data->resolvedBys, $bugID);
-            $bug->keywords       = zget($data->keywords, $bugID);
-            $bug->os             = implode(',', $os);
-            $bug->browser        = implode(',', $browsers);
-            $bug->resolution     = zget($data->resolutions, $bugID);
-            $bug->duplicateBug   = $bug->resolution != '' && $bug->resolution != 'duplicate' ? 0 : $duplicateBug;
+            /* If bug is closed, the assignee will not be changed. */
+            if($oldBug->status == 'closed') $bug->assignedTo = $oldBug->assignedTo;
 
-            /* Process bug. */
-            $bugs[$bugID] = $this->buildDataForBatchEdit($bug, $oldBug, $extendFields);
-            unset($bug);
+            /* If resolution of the bug is not duplicate, duplicateBug is zero. */
+            if($bug->resolution != '' && $bug->resolution != 'duplicate') $bug->duplicateBug = 0;
+
+            /* If assignee is changes, set the assigned date. */
+            if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
+
+            /* If resolution is not empty, set the confirmed. */
+            if($bug->resolution != '') $bug->confirmed = 1;
+
+            /* If the bug is resolved, set resolved date and bug status. */
+            if(($bug->resolvedBy != '' || $bug->resolution != '') && strpos(',resolved,closed,', ",{$oldBug->status},") === false)
+            {
+                $bug->resolvedDate = $now;
+                $bug->status       = 'resolved';
+            }
+
+            /* If the bug without resolver is resolved, set resolver. */
+            if($bug->resolution != '' && $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
+
+            /* If the bug without assignee is resolved, set assignee and assigned date. */
+            if($bug->resolution != '' && $bug->assignedTo == '')
+            {
+                $bug->assignedTo   = $oldBug->openedBy;
+                $bug->assignedDate = $now;
+            }
         }
         return $bugs;
-    }
-
-    /**
-     * 为批量编辑 bug 构造数据。
-     * Construct data for batch edit bugs.
-     *
-     * @param  object    $bug
-     * @param  object    $oldBug
-     * @param  array     $extendFields
-     * @access protected
-     * @return object
-     */
-    protected function buildDataForBatchEdit(object $bug, object $oldBug, array $extendFields): object
-    {
-        $now = helper::now();
-
-        /* If assignee is changes, set the assigned date. */
-        if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
-
-        /* If resolution is not empty, set the confirmed. */
-        if($bug->resolution != '') $bug->confirmed = 1;
-
-        /* If the bug is resolved, set resolved date and bug status. */
-        if(($bug->resolvedBy != '' || $bug->resolution != '') && strpos(',resolved,closed,', ",{$oldBug->status},") === false)
-        {
-            $bug->resolvedDate = $now;
-            $bug->status       = 'resolved';
-        }
-
-        /* If the bug without solver is resolved, set solver. */
-        if($bug->resolution != '' && $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
-
-        /* If the bug without assignee is resolved, set assignee and assigned date. */
-        if($bug->resolution != '' && $bug->assignedTo == '')
-        {
-            $bug->assignedTo   = $oldBug->openedBy;
-            $bug->assignedDate = $now;
-        }
-
-        /* Set extend fields. */
-        foreach($extendFields as $extendField)
-        {
-            $bug->{$extendField->field} = $this->post->{$extendField->field}[$bug->id];
-            if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = implode(',', $bug->{$extendField->field});
-
-            $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-        }
-
-        return $bug;
     }
 }
