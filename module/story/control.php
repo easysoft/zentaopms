@@ -2066,7 +2066,6 @@ class story extends control
                 if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
-                $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
                 $this->view->title      = $this->lang->story->batchEdit;
             }
         }
@@ -2078,8 +2077,6 @@ class story extends control
 
         unset($this->lang->story->reasonList['subdivided']);
 
-        $this->view->position[]       = $this->lang->story->common;
-        $this->view->position[]       = $this->lang->story->batchClose;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
