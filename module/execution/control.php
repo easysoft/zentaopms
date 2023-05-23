@@ -1625,6 +1625,8 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
+        $projectID = (int)$projectID;
+
         if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
         if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
