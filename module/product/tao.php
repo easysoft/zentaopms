@@ -947,9 +947,9 @@ class productTao extends productModel
      *
      * @param  int       $productID
      * @access protected
-     * @return int
+     * @return int|float
      */
-    protected function getStatCountByID(string $tableName, int $productID): int
+    protected function getStatCountByID(string $tableName, int $productID): int|float
     {
         switch ($tableName)
         {
