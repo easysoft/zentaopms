@@ -415,7 +415,7 @@ class blockZen extends block
         if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
-        $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
+        $projectID = $block->dashboard == 'my' ? 0 : $projectID;
         $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $block->params->type, $block->params->orderBy, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $projectID);
     }
 
@@ -433,7 +433,7 @@ class blockZen extends block
         $this->app->loadLang('testtask');
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
-        $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
+        $projectID = $block->dashboard == 'my' ? 0 : $projectID;
 
         $cases = array();
         if($block->params->type == 'assigntome')
@@ -559,7 +559,7 @@ class blockZen extends block
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.shadow')->eq(0)
-            ->beginIF($block->module != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
+            ->beginIF($block->dashboard != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
@@ -583,7 +583,7 @@ class blockZen extends block
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($this->view->block->module != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
+            ->beginIF($block->dashboard != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
             ->fetchAll();
@@ -838,7 +838,7 @@ class blockZen extends block
         $count   = isset($block->params->count) ? (int)$block->params->count : 0;
 
         /* Get projects. */
-        $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
+        $projectID  = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
         $executions = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
         if(empty($executions))
         {
@@ -1432,12 +1432,13 @@ class blockZen extends block
     /**
      * Print execution overview block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printExecutionOverviewBlock(): void
+    protected function printExecutionOverviewBlock(object $block): void
     {
-        $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
+        $projectID  = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
         $executions = $this->loadModel('execution')->getList($projectID);
 
         $total = 0;
@@ -1465,14 +1466,15 @@ class blockZen extends block
     /**
      * Print qa overview block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printQaOverviewBlock(): void
+    protected function printQaOverviewBlock(object $block): void
     {
         $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
             ->where('1=1')
-            ->beginIF($this->view->block->module != 'my' && $this->session->project)->andWhere('project')->eq((int)$this->session->project)->fi()
+            ->beginIF($block->module != 'my' && $this->session->project)->andWhere('project')->eq((int)$this->session->project)->fi()
             ->groupBy('lastRunResult')
             ->fetchPairs();
 
@@ -1514,7 +1516,7 @@ class blockZen extends block
         $pager = pager::init(0, $count, 1);
 
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
-        $projectID    = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
+        $projectID    = $block->module == 'my' ? 0 : (int)$this->session->project;
 
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
     }

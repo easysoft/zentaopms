@@ -35,7 +35,7 @@ foreach($shortBlocks as $index => $block)
         'color'     => isset($block->params->color) ? $block->params->color : null,
         'fetch'     => $block->blockLink,
         'size'      => 'sm',
-        'left'      => 8,
+        'left'      => 2,
         'top'       => (count($blocks) - count($longBlocks)) * 4
     );
 }
