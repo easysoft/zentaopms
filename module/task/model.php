@@ -1556,38 +1556,11 @@ class taskModel extends model
         if($currentTeam) $task = $this->computeMultipleHours($oldTask, $task);
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()
-            ->where('id')->eq((int)$taskID)
+            ->where('id')->eq((int)$oldTask->id)
             ->exec();
 
         if(!dao::isError()) return false;
         return common::createChanges($oldTask, $task);
-    }
-
-    public function afterFinish()
-    {
-        $files = $this->loadModel('file')->saveUpload('task', $taskID);
-        if($this->post->comment != '' or !empty($changes))
-        {
-            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        $this->executeHooks($taskID);
-        $this->loadModel('common')->syncPPEStatus($taskID);
-
-        if($this->task->needUpdateBugStatus($task))
-        {
-            foreach($changes as $change)
-            {
-                if($change['field'] == 'status')
-                {
-                    $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                    $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                    return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $oldTask->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
-                }
-            }
-        }
     }
 
     /**

@@ -1403,12 +1403,12 @@ class taskZen extends task
 
         $estimate = new stdclass();
         $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
-        $estimate->task     = $taskID;
+        $estimate->task     = $oldTask->id;
         $estimate->left     = 0;
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $consumed;
+        $estimate->consumed = $task->consumed;
 
-        return $effort;
+        return $estimate;
     }
 }
