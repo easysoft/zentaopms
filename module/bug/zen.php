@@ -1968,4 +1968,30 @@ class bugZen extends bug
         }
         return $bugs;
     }
+
+    /**
+     * 将报表的默认设置合并到当前报表。
+     * Merge the default chart settings and the settings of current chart.
+     *
+     * @param  string $chartCode
+     * @param  string $chartType
+     * @access public
+     * @return object
+     */
+    protected function mergeChartOption(string $chartCode, string $chartType = 'default'): object
+    {
+        $chartOption  = $this->lang->bug->report->$chartCode;
+        $commonOption = $this->lang->bug->report->options;
+
+        $chartOption->graph->caption = $this->lang->bug->report->charts[$chartCode];
+        if(!empty($chartType) && $chartType != 'default') $chartOption->type = $chartType;
+
+        if(!isset($chartOption->type))   $chartOption->type   = $commonOption->type;
+        if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
+        if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
+
+        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+
+        return $chartOption;
+    }
 }

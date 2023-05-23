@@ -2186,31 +2186,6 @@ class bugModel extends model
     }
 
     /**
-     * Merge the default chart settings and the settings of current chart.
-     *
-     * @param  string $chartCode
-     * @param  string $chartType
-     * @access public
-     * @return object
-     */
-    public function mergeChartOption($chartCode, $chartType = 'default')
-    {
-        $chartOption  = $this->lang->bug->report->$chartCode;
-        $commonOption = $this->lang->bug->report->options;
-
-        $chartOption->graph->caption = $this->lang->bug->report->charts[$chartCode];
-        if(!empty($chartType) && $chartType != 'default') $chartOption->type = $chartType;
-
-        if(!isset($chartOption->type))   $chartOption->type   = $commonOption->type;
-        if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
-        if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
-
-        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
-
-        return $chartOption;
-    }
-
-    /**
      * Return the file => label pairs of some fields.
      *
      * @param  string    $fields

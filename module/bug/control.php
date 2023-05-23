@@ -154,7 +154,7 @@ class bug extends control
                 $chartFunc = 'getDataOf' . $chart;
                 $chartData = $this->bug->$chartFunc();
 
-                $this->view->charts[$chart] = $this->bug->mergeChartOption($chart, $chartType);
+                $this->view->charts[$chart] = $this->bugZen->mergeChartOption($chart, $chartType);
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
