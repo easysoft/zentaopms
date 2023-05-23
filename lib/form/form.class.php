@@ -106,7 +106,11 @@ class form extends fixer
 
         if($type == 'single')
         {
-            foreach($this->rawconfig as $field => $fieldConfig) $this->convertField($field, $fieldConfig);
+            foreach($this->rawconfig as $field => $fieldConfig)
+            {
+                if(isset($fieldConfig['control']) && in_array($fieldConfig['control'], array('textarea', 'richtext'))) $this->skipSpecial($field);
+                $this->convertField($field, $fieldConfig);
+            }
         }
         else
         {
@@ -149,6 +153,8 @@ class form extends fixer
 
             /* 以该字段为标准，判断某一行是否要构造数据。 If the value of the field in a row is empty, skip that row. */
             if(!empty($config['base'])) $baseField = $field;
+
+            if(isset($config['control']) && in_array($config['control'], array('textarea', 'richtext'))) $this->skipSpecial($field);
         }
 
         /* 在第一行提示标准字段不能为空。 Display the field error in the first row. */
