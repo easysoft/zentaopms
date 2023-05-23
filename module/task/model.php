@@ -803,7 +803,17 @@ class taskModel extends model
         }
 
         $this->file->processFile4Object('task', $oldTask, $task);
-        return common::createChanges($oldTask, $task);
+        $changes = common::createChanges($oldTask, $task);
+
+        /* Record log. */
+        if($this->post->comment != '' or !empty($changes))
+        {
+            $action   = !empty($changes) ? 'Edited' : 'Commented';
+            $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
+
+        return $changes;
     }
 
     /**

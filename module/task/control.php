@@ -199,14 +199,6 @@ class task extends control
             $changes = $this->task->update($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Record log. */
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
-
             /* Execute hooks and synchronize the status of related objects. */
             $this->executeHooks($taskID);
             if($task->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
