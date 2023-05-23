@@ -918,27 +918,26 @@ class productTao extends productModel
     }
 
     /**
-     * 通过产品ID查询产品关联需求的各状态统计总数。
-     * Get stories total count of each status by product ID.
+     * 通过产品ID查询产品关联需求的各状态统计总数。每一个需求状态对应一个数量。
+     * Get stories total count of each status by product ID. Every story status has a count value.
      *
      * @param  int       $productID
      * @param  string    $storyType
      * @access protected
-     * @return array
+     * @return object[]
      */
     protected function getStoryStatusCountByID(int $productID, string $storyType = 'story'): array
     {
-        $this->loadModel('story');
+        /* 通过产品ID获取每一个需求状态对应的数量。Get count of each story status of the product. */
+        $statusCountList = $this->loadModel('story')->getStoriesCountByProductID($productID, $storyType);
 
-        $stories = $this->story->getStoriesCountByProductID($productID, $storyType);
-
-        /* Padding the stories to sure all status have records. */
+        /* 确保每一种需求状态都是有值的。Padding the stories to make sure all status have records. */
         foreach(array_keys($this->lang->story->statusList) as $status)
         {
-            $stories[$status] = isset($stories[$status]) ? $stories[$status]->count : 0;
+            $statusCountList[$status] = isset($statusCountList[$status]) ? $statusCountList[$status]->count : 0;
         }
 
-        return $stories;
+        return $statusCountList;
     }
 
     /**
