@@ -2063,7 +2063,7 @@ class bugZen extends bug
         /* Set extend fields. */
         foreach($extendFields as $extendField)
         {
-            $bug->{$extendField->field} = $this->post->{$extendField->field}[$bugID];
+            $bug->{$extendField->field} = $this->post->{$extendField->field}[$bug->id];
             if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = implode(',', $bug->{$extendField->field});
 
             $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
