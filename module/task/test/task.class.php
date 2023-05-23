@@ -182,6 +182,37 @@ class taskTest
     }
 
     /**
+     * Test update a task.
+     *
+     * @param  int                 $objectID
+     * @param  array               $param
+     * @access public
+     * @return array|object|string
+     */
+    public function doUpdateTest(int $taskID, array $param = array()): array|object|string
+    {
+        global $tester;
+        $oldTask = $this->objectModel->fetchByID($taskID);
+        $task    = clone $oldTask;
+
+        foreach($task as $field => $value)
+        {
+            if(in_array($field, array_keys($param))) $task->$field = $param[$field];
+        }
+
+        $this->objectModel->doUpdate($task, $oldTask, $tester->config->task->edit->requiredFields);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->fetchByID($taskID);
+        }
+    }
+
+    /**
      * Start a task.
      *
      * @param  int    $taskID
