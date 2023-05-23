@@ -488,7 +488,7 @@ class yaml
             return !empty($error) && !strpos($error, 'Using a password on the command line interface can be insecure');
         });
 
-        if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL;
+        if(!empty($errors)) echo implode(PHP_EOL, $errors) . PHP_EOL . "error cmd: '{$cmd}'" . PHP_EOL;
     }
 
     /**
