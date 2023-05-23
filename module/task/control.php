@@ -672,81 +672,35 @@ class task extends control
     public function finish($taskID, $extra = '')
     {
         $this->taskZen->commonAction($taskID);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $task        = $this->task->getById($taskID);
+        $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->task->finish($taskID, $extra);
-            if(dao::isError())
-            {
-                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
-            $files = $this->loadModel('file')->saveUpload('task', $taskID);
+            $taskData = $this->taskZen->buildTaskForFinish($task);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $task = $this->task->getById($taskID);
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-                $actionID = $this->action->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            /* Get and record esitimate for task. */
+            $effort = $this->buildEffortForStart($task, $taskData);
+            if($this->post->comment) $effort->work = $this->post->comment;
+            if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
+            if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->executeHooks($taskID);
-            $this->loadModel('common')->syncPPEStatus($taskID);
+            $changes  = $this->task->finish($oldTask, $taskData, $extra);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->task->needUpdateBugStatus($task))
-            {
-                foreach($changes as $change)
-                {
-                    if($change['field'] == 'status')
-                    {
-                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug", '', true);
-                        unset($_GET['onlybody']);
-                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
-                    }
-                }
-            }
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
 
-            if(isonlybody())
-            {
-                $execution    = $this->execution->getByID($task->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == "kanban")
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
+            /* Update other data related to the task after it is started. */
+            $result = $this->task->afterStart($task, $taskData, $changes, $this->post->comment, $output);
+            if(is_array($result)) $this->send($result);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                }
-                if($output['from'] == "taskkanban")
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-                }
-                return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
-            }
-
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {
-                return $this->send(array('result' => 'success', 'data' => $taskID));
-            }
-            else
-            {
-                return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
-            }
+            /* Get the information returned after a task is started. */
+            $from     = zget($output, 'from');
+            $response = $this->taskZen->responseAfterChangeStatus($taskData, $from);
+            return $this->send($response);
         }
 
         $task         = $this->view->task;
@@ -756,14 +710,13 @@ class task extends control
         if(!empty($task->team))
         {
             $task->nextBy     = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
-            $task->myConsumed = 0;
-            $currentTeam      = $this->task->getTeamByAccount($task->team);
-            if($currentTeam) $task->myConsumed = $currentTeam->consumed;
+            $task->myConsumed = zget($currentTeam, 'consumed', 0);
         }
 
-        $this->view->title   = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
-        $this->view->members = $members;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->members         = $members;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
         $this->display();
     }
 

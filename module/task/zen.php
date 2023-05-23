@@ -1356,4 +1356,59 @@ class taskZen extends task
         if(!isset($task->members[$this->app->user->account])) return false;
         return true;
     }
+
+    /**
+     * 构建并检查完成任务所需的数据。
+     * Build and check the request data for the finish task.
+     *
+     * @param  object    $oldTask
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForFinish(object $oldTask): object
+    {
+        $now = helper::now();
+        $task = form::data($this->config->task->form->finish)
+            ->setIF(!$this->post->realStarted and helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
+            ->setDefault('assignedTo', $oldTask->openedBy)
+            ->get();
+
+        if(empty($task->currentConsumed)) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
+        if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
+        return $task;
+    }
+
+    /**
+     * 处理开始任务的日志数据。
+     * Process the effort data for the start task.
+     *
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @access protected
+     * @return object
+     */
+    protected function buildEffortForFinish(object $oldTask, object $task): object
+    {
+        /* Record consumed and left. */
+        if(empty($oldTask->team))
+        {
+            $task->consumed = $task->consumed - $oldTask->consumed;
+        }
+        else
+        {
+            $currentTeam = $this->task->getTeamByAccount($oldTask->team);
+            $task->consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
+        }
+        if($task->consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
+
+        $estimate = new stdclass();
+        $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
+        $estimate->task     = $taskID;
+        $estimate->left     = 0;
+        $estimate->work     = zget($task, 'work', '');
+        $estimate->account  = $this->app->user->account;
+        $estimate->consumed = $consumed;
+
+        return $effort;
+    }
 }

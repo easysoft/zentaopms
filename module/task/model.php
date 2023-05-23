@@ -1261,7 +1261,7 @@ class taskModel extends model
     {
         /* Process data for multiple tasks. */
         $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team) : array();
-        if(!empty($oldTask->team) && $currentTeam)
+        if($currentTeam)
         {
             /* Update task team. */
             $team = new stdclass();
@@ -1547,102 +1547,47 @@ class taskModel extends model
      * Finish a task.
      *
      * @param  int    $taskID
-     * @param  string $extra
      * @access public
      * @return void
      */
-    public function finish($taskID, $extra = '')
+    public function finish(object $oldTask, object $task)
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team) : array();
+        if($currentTeam) $task = $this->computeMultipleHours($oldTask, $task);
 
-        $oldTask = $this->getById($taskID);
-        $now     = helper::now();
-
-        if($extra != 'DEVOPS' and strpos($this->config->task->finish->requiredFields, 'comment') !== false and !$this->post->comment)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
-            return false;
-        }
-
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF(!$this->post->realStarted and helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
-            ->setDefault('left', 0)
-            ->setDefault('assignedTo',   $oldTask->openedBy)
-            ->setDefault('assignedDate', $now)
-            ->setDefault('status', 'done')
-            ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
-            ->setDefault('finishedDate, lastEditedDate', $now)
-            ->stripTags($this->config->task->editor->finish['id'], $this->config->allowedTags)
-            ->removeIF(!empty($oldTask->team), 'finishedBy,status,left')
-            ->remove('comment,files,labels,currentConsumed')
-            ->get();
-
-        $currentConsumed = trim($this->post->currentConsumed);
-        if(!is_numeric($currentConsumed)) return dao::$errors[] = $this->lang->task->error->consumedNumber;
-        if(empty($currentConsumed) and $oldTask->consumed == '0') return dao::$errors[] = $this->lang->task->error->consumedEmpty;
-        if(!$this->post->realStarted) return dao::$errors[] = $this->lang->task->error->realStartedEmpty;
-        if(!$this->post->finishedDate) return dao::$errors[] = $this->lang->task->error->finishedDateEmpty;
-        if($this->post->realStarted > $this->post->finishedDate) return dao::$errors[] = $this->lang->task->error->finishedDateSmall;
-
-        /* Record consumed and left. */
-        if(empty($oldTask->team))
-        {
-            $consumed = $task->consumed - $oldTask->consumed;
-            if($consumed < 0) return dao::$errors[] = $this->lang->task->error->consumedSmall;
-        }
-        else
-        {
-            $currentTeam = $this->getTeamByAccount($oldTask->team);
-            $consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
-            if($consumed < 0) return dao::$errors[] = $this->lang->task->error->consumedSmall;
-        }
-
-        $estimate = new stdclass();
-        $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
-        $estimate->task     = $taskID;
-        $estimate->left     = 0;
-        $estimate->work     = zget($task, 'work', '');
-        $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $consumed;
-        if($this->post->comment) $estimate->work = $this->post->comment;
-        if($estimate->consumed) $estimateID = $this->addTaskEffort($estimate);
-
-        if(!empty($oldTask->team) and $currentTeam)
-        {
-            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
-            if($oldTask->mode == 'linear' and isset($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
-            $task = $this->computeMultipleHours($oldTask, $task);
-        }
-
-        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
-
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->finish['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        if(!dao::isError())
+        if(!dao::isError()) return false;
+        return common::createChanges($oldTask, $task);
+    }
+
+    public function afterFinish()
+    {
+        $files = $this->loadModel('file')->saveUpload('task', $taskID);
+        if($this->post->comment != '' or !empty($changes))
         {
-            if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-            if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-            if($task->status == 'done')
-            {
-                $this->loadModel('score')->create('task', 'finish', $taskID);
-
-                $this->loadModel('kanban');
-                if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-                if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-            }
-
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-
-            return common::createChanges($oldTask, $task);
+            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
         }
 
-        return false;
+        $this->executeHooks($taskID);
+        $this->loadModel('common')->syncPPEStatus($taskID);
+
+        if($this->task->needUpdateBugStatus($task))
+        {
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'status')
+                {
+                    $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                    $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                    return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $oldTask->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+                }
+            }
+        }
     }
 
     /**
