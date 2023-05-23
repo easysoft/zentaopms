@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'section' . DS . 'v1.php';
+
 class history extends wg
 {
     protected static $defineProps = array(
@@ -15,6 +17,11 @@ class history extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    public static function getPageJS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     private function marker(int $num): wg
     {
         return span
@@ -22,11 +29,6 @@ class history extends wg
             setClass('marker', 'relative', 'z-10', 'text-sm', 'rounded-full', 'aspect-square', 'inline-flex', 'justify-center', 'items-center', 'mr-1', 'border', 'h-5', 'w-5', 'z-10'),
             $num
         );
-    }
-
-    private function timeline(): wg
-    {
-        return div(setClass('timeline w-px absolute'));
     }
 
     private function checkEditCommentPriv(object $action): bool
@@ -54,9 +56,8 @@ class history extends wg
             on::click
             (
                 <<<EXPAND
-                var changeBox = document.querySelector("#changeBox$i");
-                var icon = e.target.querySelector('.icon');
-                console.log(icon);
+                const changeBox = document.querySelector("#changeBox$i");
+                const icon = e.target.querySelector('.icon');
                 icon.classList.toggle('icon-plus');
                 icon.classList.toggle('icon-minus');
                 if (icon.classList.contains('icon-plus')) changeBox.classList.remove('show');
@@ -172,7 +173,6 @@ class history extends wg
         $actions = $this->prop('actions') !== null ? $this->prop('actions') : data('actions');
         $users   = $this->prop('users') !== null ? $this->prop('users') : data('users');
         $historiesListView = h::ol(setClass('history-list col relative'));
-        $historiesListView->add($this->timeline());
 
         $i = 0;
         foreach($actions as $action)
@@ -211,15 +211,7 @@ class history extends wg
             setClass('btn-reverse btn-mini px-0 ml-3'),
             set::title($lang->reverse),
             set::icon('arrow-up'),
-            on::click
-            (
-                <<<REVERSE
-                document.querySelector('.history-list').classList.toggle('sort-reverse');
-                var icon = e.target.querySelector('.icon');
-                icon.classList.toggle('icon-arrow-up');
-                icon.classList.toggle('icon-arrow-down');
-                REVERSE
-            )
+            on::click('reverseList')
         );
     }
 
@@ -231,27 +223,7 @@ class history extends wg
             setClass('btn-mini px-0 btn-expand-all ml-2'),
             set::title($lang->switchDisplay),
             set::icon('plus'),
-            on::click(<<<EXPANDALL
-            var icon = e.target.querySelector('.icon');
-            var isExpand = icon.classList.contains('icon-plus');
-            var changeBoxs = document.querySelectorAll('[id^="changeBox"]');
-            if(isExpand)
-            {
-                changeBoxs.forEach(function(box)
-                {
-                    box.classList.add('show');
-                });
-            }
-            else
-            {
-                changeBoxs.forEach(function(box)
-                {
-                    box.classList.remove('show');
-                });
-            }
-            icon.classList.toggle('icon-plus');
-            icon.classList.toggle('icon-minus');
-            EXPANDALL)
+            on::click('expandAll')
         );
     }
 
@@ -271,19 +243,22 @@ class history extends wg
     protected function build(): wg
     {
         global $lang;
-        return div
+        return new section
         (
-            setClass('histories p-4'),
+            setClass('histories'),
             setID('actionbox'),
             set('data-textdiff', $lang->action->textDiff),
             set('data-original', $lang->action->original),
-            div
+            set::title($lang->history),
+            to::actions
             (
-                setClass('detail-title flex items-center'),
-                span($lang->history),
-                $this->reverseBtn(),
-                $this->expandAllBtn(),
-                $this->commentBtn(),
+                div
+                (
+                    setClass('flex items-center'),
+                    $this->reverseBtn(),
+                    $this->expandAllBtn(),
+                    $this->commentBtn(),
+                )
             ),
             div(setClass('mt-3'), $this->historyList())
         );

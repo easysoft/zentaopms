@@ -11,10 +11,11 @@ class section extends wg
     );
 
     protected static $defineBlocks = array(
-        'subTitle' => array()
+        'subTitle' => array(),
+        'actions'  => array(),
     );
 
-    protected function onAddChild(mixed $child): mixed
+    protected function onAddChild($child)
     {
         if(is_string($child) && !$this->props->has('content'))
         {
@@ -25,12 +26,16 @@ class section extends wg
 
     private function title(): wg
     {
-        $title = $this->prop('title');
+        $title       = $this->prop('title');
+        $actionsView = $this->block('actions');
+
+        if(empty($actionsView)) return div(setClass('article-h2', 'mb-3'), $title);
 
         return div
         (
-            setClass('article-h2', 'mb-3'),
-            $title
+            setClass('flex', 'items-center', 'mb-3'),
+            div(setClass('article-h2'), $title),
+            $actionsView,
         );
     }
 
@@ -55,10 +60,13 @@ class section extends wg
 
     }
 
-    private function buildContent(): wg|array
+    private function buildContent(): wg|array|null
     {
         $content = $this->prop('content');
+        if(!isset($content)) return null;
+
         if(is_string($content)) return $this->content($content);
+
         return array_map(function($x)
         {
             return div
