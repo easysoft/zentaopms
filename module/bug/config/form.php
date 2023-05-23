@@ -140,6 +140,23 @@ $config->bug->form->batchCreate['oses']         = array('required' => false, 'ty
 $config->bug->form->batchCreate['browsers']     = array('required' => false, 'type' => 'array', 'default' => array());
 $config->bug->form->batchCreate['keywords']     = array('required' => false, 'type' => 'array', 'default' => array());
 
+$config->bug->form->batchEdit = array();
+$config->bug->form->batchEdit['types']         = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['severities']    = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['pris']          = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['titles']        = array('required' => true,  'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['branches']      = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['modules']       = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['plans']         = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['assignedTos']   = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['deadlines']     = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['os']            = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['browsers']      = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['keywords']      = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['resolvedBys']   = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['resolutions']   = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchEdit['duplicateBugs'] = array('required' => false, 'type' => 'array', 'default' => array());
+
 $config->bug->form->confirm = array();
 $config->bug->form->confirm['pri']            = array('required' => false, 'type' => 'int',    'default' => 3);
 $config->bug->form->confirm['type']           = array('required' => false, 'type' => 'string', 'default' => '');

@@ -371,15 +371,15 @@ class bug extends control
     }
 
     /**
-     * 批量编辑bug。
+     * 批量编辑 bugs。
      * Batch edit bugs.
      *
-     * @param  int        $productID
-     * @param  int|string $branch
+     * @param  int    $productID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function batchEdit(int $productID = 0, int|string $branch = 0)
+    public function batchEdit(int $productID = 0, string $branch = '0')
     {
         /* Set menu in product tab. */
         if($this->app->tab == 'product')
@@ -389,6 +389,8 @@ class bug extends control
 
         if($this->post->titles)
         {
+            $bugs = $this->bugZen->buildBugsForBatchEdit();
+
             /* Batch update the bugs. */
             $allChanges = $this->bug->batchUpdate();
 
