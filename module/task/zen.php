@@ -45,54 +45,47 @@ class taskZen extends task
      * Build the task data to be update.
      *
      * @param  int          $taskID
+     * @param  object       $task
      * @access protected
      * @return object|false
      */
-    protected function buildTaskForEdit(int $taskID): object|false
+    protected function buildTaskForEdit(int $taskID, object $task): object|false
     {
-        $oldTask  = $this->task->getByID($taskID);
-        $postData = form::data()->getAll(true);
+        $oldTask = $this->task->getByID($taskID);
 
-        /* Check if the input post meets the requirements. */
-        if($postData->estimate < 0 or $postData->left < 0 or $postData->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
-        if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, $postData->estStarted, $postData->deadline);
-        if(!empty($postData->lastEditedDate) && $oldTask->lastEditedDate != $postData->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        /* Check if the fields is valid. */
+        if($task->estimate < 0 or $task->left < 0 or $task->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
+        if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, $task->estStarted, $task->deadline);
+        if(!empty($task->lastEditedDate) && $oldTask->lastEditedDate != $task->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data()->add('id', $taskID)
-            ->setIF(!$postData->assignedTo && !empty($oldTask->team) && !empty($postData->team), 'assignedTo', $this->task->getAssignedTo4Multi($postData->team, $oldTask))
-            ->setIF($postData->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
-
-            ->setIF($postData->mode   == 'single', 'mode', '')
-            ->setIF(!$oldTask->mode && !$postData->assignedTo && !empty($postData->team), 'assignedTo', $postData->team[0])
-            ->setIF($postData->story !== false && $postData->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($postData->story))
-            ->setIF($postData->status == 'wait' && $postData->left == $oldTask->left && $postData->consumed == 0 && $postData->estimate, 'left', $postData->estimate)
-
-            ->setIF($postData->status == 'done', 'left', 0)
-            ->setIF($postData->status == 'done'   && empty($postData->finishedBy),   'finishedBy',   $this->app->user->account)
-            ->setIF($postData->status == 'done'   && empty($postData->finishedDate), 'finishedDate', $now)
-
-            ->setIF($postData->status == 'cancel' && empty($postData->canceledBy),   'canceledBy',   $this->app->user->account)
-            ->setIF($postData->status == 'cancel' && empty($postData->canceledDate), 'canceledDate', $now)
-            ->setIF($postData->status == 'cancel', 'assignedTo',   $oldTask->openedBy)
-            ->setIF($postData->status == 'cancel', 'assignedDate', $now)
-
-            ->setIF($postData->status == 'closed' && empty($postData->closedBy),     'closedBy',     $this->app->user->account)
-            ->setIF($postData->status == 'closed' && empty($postData->closedDate),   'closedDate',   $now)
-
-            ->setIF($postData->consumed > 0 && $postData->left > 0 && $postData->status == 'wait', 'status', 'doing')
-
-            ->setIF($oldTask->parent >= 0 && empty($postData->parent), 'parent', 0)
+        $task = form::data($this->config->task->form->edit)->add('id', $taskID)
+            ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
+            ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
+            ->setIF($task->mode == 'single', 'mode', '')
+            ->setIF(!$oldTask->mode && !$task->assignedTo && !empty($this->post->team), 'assignedTo', $this->post->team[0])
+            ->setIF($task->story !== false && $task->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($task->story))
+            ->setIF($task->status == 'wait' && $task->left == $oldTask->left && $task->consumed == 0 && $task->estimate, 'left', $task->estimate)
+            ->setIF($task->status == 'done', 'left', 0)
+            ->setIF($task->status == 'done'   && empty($task->finishedBy),   'finishedBy',   $this->app->user->account)
+            ->setIF($task->status == 'done'   && empty($task->finishedDate), 'finishedDate', $now)
+            ->setIF($task->status == 'cancel' && empty($task->canceledBy),   'canceledBy',   $this->app->user->account)
+            ->setIF($task->status == 'cancel' && empty($task->canceledDate), 'canceledDate', $now)
+            ->setIF($task->status == 'cancel', 'assignedTo',   $oldTask->openedBy)
+            ->setIF($task->status == 'cancel', 'assignedDate', $now)
+            ->setIF($task->status == 'closed' && empty($task->closedBy),     'closedBy',     $this->app->user->account)
+            ->setIF($task->status == 'closed' && empty($task->closedDate),   'closedDate',   $now)
+            ->setIF($task->consumed > 0 && $task->left > 0 && $task->status == 'wait', 'status', 'doing')
+            ->setIF($oldTask->parent >= 0 && empty($task->parent), 'parent', 0)
             ->setIF($oldTask->parent < 0, 'estimate', $oldTask->estimate)
             ->setIF($oldTask->parent < 0, 'left', $oldTask->left)
-
-            ->setIF($oldTask->name != $postData->name || $oldTask->estStarted != $postData->estStarted || $oldTask->deadline != $postData->deadline, 'version', $oldTask->version + 1)
+            ->setIF($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline, 'version', $oldTask->version + 1)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $postData->uid);
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
     }
 
     /**

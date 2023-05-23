@@ -190,12 +190,12 @@ class task extends control
         if(!empty($_POST))
         {
             /* Prepare and check data. */
-            $postData = form::data()->getAll(true);
-            $task     = $this->taskZen->buildTaskForEdit($taskID, $postData);
+            $task = form::data($this->config->task->form->edit)->get();
+            $task = $this->taskZen->buildTaskForEdit($taskID, $task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update task. */
-            $changes = $this->task->update($task, $postData);
+            $changes = $this->task->update($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record log. */
