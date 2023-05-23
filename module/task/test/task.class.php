@@ -443,23 +443,19 @@ class taskTest
      */
     public function finishTest($taskID, $param = array())
     {
-        $todate = date("Y-m-d h:i:s");
-        $labels = array('');
-        $createFields = array('status' => 'done', 'currentConsumed' => '', 'realStarted' => '2020-01-17 17:07:07', 'consumed' => '',
-            'assignedTo' => '', 'finishedDate' => $todate, 'labels' => $labels, 'comment' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->finish($taskID);
-        unset($_POST);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
+        $task = new stdclass();
+        $task->id           = $taskID;
+        $task->left         = 0;
+        $task->status       = 'doing';
+        $task->consumed     = 0;
+        $task->assignedTo   = '';
+        $task->realstarted  = helper::now();
+        $task->finishedDate = helper::now();
+        foreach($param as $key => $value) $task->{$key} = $value;
+
+        $oldTask = $this->objectModel->getByID($taskID);
+        $result  = $this->objectModel->finish($oldTask, $task);
+        return $result;
     }
 
     /**

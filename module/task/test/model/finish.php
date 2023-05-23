@@ -4,37 +4,36 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
+zdTable('project')->config('project')->gen(6);
+zdTable('task')->config('task')->gen(9);
+zdTable('taskteam')->config('taskteam')->gen(6);
+
 /**
 
-title=taskModel->finish();
+title=taskModel->start();
+timeout=0
 cid=1
-pid=1
-
-wait状态任务完成 >> status,wait,done
-doing状态任务完成 >> status,doing,done
-done状态任务完成 >> finishedBy,,admin
-pause状态任务完成 >> status,pause,done
-cancel状态任务完成 >> status,cancel,done
-closed状态任务完成 >> status,closed,done
-总计消耗异常验证 >> "总计消耗"必须大于之前消耗
-本次消耗不为0 >> "本次消耗"不能为0
 
 */
 
-$taskIDList = array('7','8','9','10','11','12','13','14');
+$taskIDList = range(1, 9);
 
-$currencyTask        = array('consumed' => '17', 'currentConsumed' => '1');
-$consumedTask        = array('consumed' => '0', 'currentConsumed' => '1');
-$currentConsumedTask = array('consumed' => '10', 'currentConsumed' => '0');
+$waitTask   = array('assignedTo' => 'admin', 'consumed' => 10);
+$doingTask  = array('assignedTo' => 'user1', 'consumed' => 10);
+$doneTask   = array('assignedTo' => '',      'consumed' => 5);
+$cancelTask = array('assignedTo' => 'admin', 'consumed' => 0);
+$closedTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
+$childTask  = array('assignedTo' => 'admin', 'consumed' => 2, 'left' => 5);
+$linearTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
+$multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 
-$task = new taskTest();
-sleep(2);
-//var_dump($task->finishTest($taskIDList[2],$currencyTask));die;
-r($task->finishTest($taskIDList[0],$currencyTask))        && p('0:field,old,new') && e('status,wait,done');   //wait状态任务完成
-r($task->finishTest($taskIDList[1],$currencyTask))        && p('0:field,old,new') && e('status,doing,done');  //doing状态任务完成
-r($task->finishTest($taskIDList[2],$currencyTask))        && p('4:field,old,new') && e('finishedBy,,admin');  //done状态任务完成
-r($task->finishTest($taskIDList[3],$currencyTask))        && p('0:field,old,new') && e('status,pause,done');  //pause状态任务完成
-r($task->finishTest($taskIDList[4],$currencyTask))        && p('0:field,old,new') && e('status,cancel,done'); //cancel状态任务完成
-r($task->finishTest($taskIDList[5],$currencyTask))        && p('0:field,old,new') && e('status,closed,done'); //closed状态任务完成
-r($task->finishTest($taskIDList[6],$consumedTask))        && p() && e('"总计消耗"必须大于之前消耗');          //总计消耗异常验证
-r($task->finishTest($taskIDList[7],$currentConsumedTask)) && p() && e('"本次消耗"不能为0');                   //本次消耗不为0
+$taskTester = new taskTest();
+
+r($taskTester->finishTest($taskIDList[0], $waitTask))   && p('0:field,old,new') && e('status,wait,done');    // 测试完成 任务状态为未开始的任务
+r($taskTester->finishTest($taskIDList[1], $doingTask))  && p('2:field,old,new') && e('assignedTo,~~,user1'); // 测试完成 任务状态为进行中的任务
+r($taskTester->finishTest($taskIDList[2], $doneTask))   && p('0:field,old,new') && e('left,2,0');            // 测试完成 任务状态为已完成的任务
+r($taskTester->finishTest($taskIDList[3], $cancelTask)) && p('3:field,old,new') && e('assignedTo,~~,admin'); // 测试完成 任务状态为已取消的任务
+r($taskTester->finishTest($taskIDList[4], $closedTask)) && p('0:field,old,new') && e('left,4,5');            // 测试完成 任务状态为已取消的任务
+r($taskTester->finishTest($taskIDList[6], $childTask))  && p('0:field,old,new') && e('left,6,5');            // 测试完成 任务状态为未开始的子任务
+r($taskTester->finishTest($taskIDList[7], $linearTask)) && p('0:field,old,new') && e('left,7,5');            // 测试完成 任务状态为未开始的串行任务
+r($taskTester->finishTest($taskIDList[8], $multiTask))  && p('0:field,old,new') && e('left,8,0');            // 测试完成 任务状态为未开始的并行任务
