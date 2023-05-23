@@ -267,7 +267,10 @@ class yaml
      */
     public function config($fileName)
     {
-        $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
+        $runFileName = '';
+        if(str_contains($fileName, '/')) list($runFileName, $fileName) = explode('/', $fileName);
+
+        if($runFileName == '') $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
 
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
@@ -275,7 +278,10 @@ class yaml
         $backtrace = debug_backtrace();
         $runPath   = $backtrace[count($backtrace)-1]['file'];
 
-        $this->configFiles[] = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
+        $yamlFile = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
+        if(!is_file($yamlFile)) $yamlFile = dirname($runPath) . "/yaml/common/{$fileName}.yaml";
+
+        if(is_file($yamlFile)) $this->configFiles[] = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
 
         return $this;
     }
