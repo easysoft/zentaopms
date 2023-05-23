@@ -604,6 +604,13 @@ class testcase extends control
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
         }
+        /* Logic of task 44139. */
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories))
+        {
+            $storyStatus = $this->story->getStatusList('noclosed');
+            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', 1);
+        }
+
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
         $productInfo = $this->loadModel('product')->getById($productID);
 
@@ -1060,6 +1067,12 @@ class testcase extends control
             else
             {
                 $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+            }
+            /* Logic of task 44139. */
+            if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories))
+            {
+                $storyStatus = $this->story->getStatusList('noclosed');
+                $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', 1);
             }
 
             $this->view->productID        = $productID;
@@ -2496,7 +2509,7 @@ class testcase extends control
 
             // if(!empty($_POST['syncToZentao']))
             //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
-            
+
             // $nodeID = $_POST['node'];
             // $node   = $this->zanode->getNodeByID($_POST['node']);
 
