@@ -261,16 +261,21 @@ class yaml
     /**
      * Yaml configuration file for script。
      *
-     * @param  string  $fileName
+     * @param  string $fileName
+     * @param  bool   $useCommon
      * @access public
-     * @return object
+     * @return object $this
      */
-    public function config($fileName)
+    public function config($fileName, $useCommon = false)
     {
-        $runFileName = '';
-        if(str_contains($fileName, '/')) list($runFileName, $fileName) = explode('/', $fileName);
+        if($useCommon)
+        {
+            $yamlFile = dirname($runPath, 2) . DS . 'yaml' . DS . "{$fileName}.yaml";
+            if(is_file($yamlFile)) $this->configFiles[] = $yamlFile;
+            return $this;
+        }
 
-        if($runFileName == '') $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
+        $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
 
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
@@ -278,8 +283,10 @@ class yaml
         $backtrace = debug_backtrace();
         $runPath   = $backtrace[count($backtrace)-1]['file'];
 
-        $yamlFile = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
-        if(!is_file($yamlFile)) $yamlFile = dirname($runPath) . "/yaml/common/{$fileName}.yaml";
+        $yamlFile = dirname($runPath) . DS . 'yaml' . DS . $runFileName . DS . "{$fileName}.yaml";
+
+        /* Try to load common yaml file if yaml file not found in $runFileName path.*/
+        if(!is_file($yamlFile)) $yamlFile = dirname($runPath, 2) . DS . 'yaml' . DS . "{$fileName}.yaml";
 
         if(is_file($yamlFile)) $this->configFiles[] = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
 
