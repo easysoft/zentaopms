@@ -718,17 +718,6 @@ class taskModel extends model
 
         $oldTask = $this->getByID($taskID);
 
-        /* When the selected parent task is a common task and has consumption, select other parent tasks. */
-        if($task->parent > 0)
-        {
-            $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($task->parent)->andWhere('parent')->eq(0)->fetch('consumed');
-            if($taskConsumed > 0)
-            {
-                dao::$errors[] = $this->lang->task->error->alreadyConsumed;
-                return false;
-            }
-        }
-
         if($task->consumed < $oldTask->consumed)
         {
             dao::$errors[] = $this->lang->task->error->consumedSmall;
@@ -1944,6 +1933,7 @@ class taskModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('consumed')->eq('0')
             ->andWhere('execution')->eq($executionID)
             ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
