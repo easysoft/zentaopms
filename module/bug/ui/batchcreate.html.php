@@ -40,7 +40,7 @@ $items[] = array
 /* Field of branch. */
 $items[] = array
 (
-    'name'    => 'branches',
+    'name'    => 'branch',
     'label'   => $lang->product->branchName[$product->type],
     'hidden'   => zget($visibleFields, $product->type, true, false),
     'control' => 'select',
@@ -53,7 +53,7 @@ $items[] = array
 /* Field of module. */
 $items[] = array
 (
-    'name'     => 'modules',
+    'name'     => 'module',
     'label'    => $lang->bug->module,
     'hidden'   => zget($visibleFields, 'module', true, false),
     'control'  => 'select',
@@ -67,7 +67,7 @@ $items[] = array
 /* Field of project. */
 $items[] = array
 (
-    'name'     => 'projects',
+    'name'     => 'project',
     'label'    => $lang->bug->project,
     'hidden'   => zget($visibleFields, 'project', true, false),
     'control'  => 'select',
@@ -81,7 +81,7 @@ $items[] = array
 /* Field of execution. */
 $items[] = array
 (
-    'name'     => 'executions',
+    'name'     => 'execution',
     'label'    => isset($project->model) && $project->model == 'kanban' ? $lang->bug->kanban : $lang->bug->execution,
     'hidden'   => zget($visibleFields, 'execution', true, false),
     'control'  => 'select',
@@ -95,7 +95,7 @@ $items[] = array
 /* Field of openedBuild. */
 $items[] = array
 (
-    'name'     => 'openedBuilds',
+    'name'     => 'openedBuild',
     'label'    => $lang->bug->openedBuild,
     'control'  => array(
         'type'     => 'select',
@@ -122,7 +122,7 @@ if(isset($executionType) && $executionType == 'kanban')
 {
     $items[] = array
     (
-        'name'    => 'regions',
+        'name'    => 'region',
         'label'   => $lang->kanbancard->region,
         'control' => 'select',
         'value'   => $regionID,
@@ -132,7 +132,7 @@ if(isset($executionType) && $executionType == 'kanban')
 
     $items[] = array
     (
-        'name'    => 'lanes',
+        'name'    => 'laneID',
         'label'   => $lang->kanbancard->lane,
         'control' => 'select',
         'value'   => $laneID,
@@ -144,7 +144,7 @@ if(isset($executionType) && $executionType == 'kanban')
 /* Field of deadline. */
 $items[] = array
 (
-    'name'     => 'deadlines',
+    'name'     => 'deadline',
     'label'    => $lang->bug->deadline,
     'hidden'   => zget($visibleFields, 'deadline', true, false),
     'control'  => 'date',
@@ -156,7 +156,7 @@ $items[] = array
 /* Field of steps. */
 $items[] = array
 (
-    'name'     => 'stepses',
+    'name'     => 'steps',
     'label'    => $lang->bug->steps,
     'hidden'   => zget($visibleFields, 'steps', true, false),
     'width'    => '240px',
@@ -166,7 +166,7 @@ $items[] = array
 /* Field of type. */
 $items[] = array
 (
-    'name'     => 'types',
+    'name'     => 'type',
     'label'    => $lang->typeAB,
     'hidden'   => zget($visibleFields, 'type', true, false),
     'control'  => 'select',
@@ -180,7 +180,7 @@ $items[] = array
 /* Field of pri. */
 $items[] = array
 (
-    'name'     => 'pris',
+    'name'     => 'pri',
     'label'    => $lang->bug->pri,
     'hidden'   => zget($visibleFields, 'pri', true, false),
     'control'  => 'select',
@@ -193,7 +193,7 @@ $items[] = array
 /* Field of severity. */
 $items[] = array
 (
-    'name'     => 'severities',
+    'name'     => 'severity',
     'label'    => $lang->bug->severity,
     'hidden'   => zget($visibleFields, 'severity', true, false),
     'control'  => 'select',
@@ -206,7 +206,7 @@ $items[] = array
 /* Field of os. */
 $items[] = array
 (
-    'name'     => 'oses',
+    'name'     => 'os',
     'label'    => $lang->bug->os,
     'hidden'   => zget($visibleFields, 'os', true, false),
     'control'  => 'select',
@@ -218,7 +218,7 @@ $items[] = array
 /* Field of browser. */
 $items[] = array
 (
-    'name'     => 'browsers',
+    'name'     => 'browser',
     'label'    => $lang->bug->browser,
     'hidden'   => zget($visibleFields, 'browser', true, false),
     'control'  => 'select',

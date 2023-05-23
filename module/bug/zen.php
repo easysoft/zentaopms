@@ -1692,7 +1692,7 @@ class bugZen extends bug
      */
     protected function buildBugsForBatchCreate(int $productID, string $branch, array|false $bugImagesFile): array
     {
-        $data = form::data($this->config->bug->form->batchCreate)->get();
+        $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
         $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', 0, $branch));
@@ -1700,78 +1700,24 @@ class bugZen extends bug
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
 
         /* Construct data. */
-        $module       = 0;
-        $project      = 0;
-        $execution    = 0;
-        $type         = '';
-        $pri          = 0;
-        $bugs         = array();
-        $extendFields = $this->bug->getFlowExtendFields();
-        foreach($data->title as $index => $title)
+        foreach($bugs as $bug)
         {
-            $title = trim($title);
-            if(empty($title)) continue;
-
-            $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
+            $bug->openedBuild = implode(',', $bug->openedBuild);
             $bug->product     = $productID;
-            $bug->branch      = (int)zget($data->branches, $index, 0);
-            $bug->module      = (int)zget($data->modules, $index, 0);
-            $bug->project     = (int)zget($data->projects, $index, 0);
-            $bug->execution   = (int)zget($data->executions, $index, 0);
-            $bug->openedBuild = isset($data->openedBuilds) && is_array($data->openedBuilds[$index]) ? implode(',', $data->openedBuilds[$index]) : zget($data->openedBuilds, $index);
-            $bug->title       = $title;
-            $bug->deadline    = zget($data->deadlines, $index, null);
-            $bug->steps       = nl2br($data->stepses[$index]);
-            $bug->type        = zget($data->types, $index);
-            $bug->pri         = zget($data->pris, $index);
-            $bug->severity    = $data->severities[$index];
-            $bug->keywords    = $data->keywords[$index];
+            $bug->steps       = nl2br($bug->steps);
+            $bug->os          = implode(',', $bug->os);
+            $bug->browser     = implode(',', $bug->browser);
 
-            $bugs[$index] = $this->buildDataForBatchCreate($bug, $data, $index, $moduleOwners, $extendFields, $bugImagesFile);
+            /* Assign the bug to the person in charge of the module. */
+            if(!empty($moduleOwners[$bug->module]))
+            {
+                $bug->assignedTo   = $moduleOwners[$bug->module];
+                $bug->assignedDate = helper::now();
+            }
         }
         return $bugs;
-    }
-
-    /**
-     * 为批量创建bug构造数据。
-     * Construct data for batch bug creation.
-     *
-     * @param  object    $bug
-     * @param  object    $data
-     * @param  int       $index
-     * @param  array     $moduleOwners
-     * @param  array     $extendFields
-     * @param  array     $bugImagesFile
-     * @access protected
-     * @return object
-     */
-    protected function buildDataForBatchCreate(object $bug, object $data, int $index, array $moduleOwners, array $extendFields, array|false $bugImagesFile): object
-    {
-        $oses         = is_array($data->oses[$index]) ? array_filter($data->oses[$index]) : array();
-        $browsers     = is_array($data->browsers[$index]) ? array_filter($data->browsers[$index]) : array();
-        $bug->os      = implode(',', $oses);
-        $bug->browser = implode(',', $browsers);
-
-        if(isset($data->lanes[$index])) $bug->laneID = $data->lanes[$index];
-
-        /* Assign the bug to the person in charge of the module. */
-        if(!empty($moduleOwners[$bug->module]))
-        {
-            $bug->assignedTo   = $moduleOwners[$bug->module];
-            $bug->assignedDate = helper::now();
-        }
-
-        /* Get extend fields. */
-        foreach($extendFields as $extendField)
-        {
-            $bug->{$extendField->field} = $data->{$extendField->field}[$index];
-            if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = implode(',', $bug->{$extendField->field});
-            $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-        }
-
-        return $bug;
     }
 
     /**

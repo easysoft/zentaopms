@@ -91,12 +91,8 @@ class bugModel extends model
         foreach($bugs as $index => $bug)
         {
             /* Get lane id, remove laneID from bug.  */
-            $laneID = zget($output, 'laneID', 0);
-            if(isset($bug->laneID))
-            {
-                $laneID = $bug->laneID;
-                unset($bug->laneID);
-            }
+            $laneID = !empty($bug->laneID) ? zget($output, 'laneID', 0) : $bug->laneID;
+            unset($bug->laneID);
 
             $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
 
@@ -2985,14 +2981,11 @@ class bugModel extends model
                 continue;
             }
 
-            /* Title cannot be empty. */
-            if(empty($bug->title)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
-
             /* Check required fields. */
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($bug->$field) and $field != 'title') dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
+                if($field and empty($bug->$field) and $field != 'title') dao::$errors["{$filed}[{$index}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
             }
         }
 
