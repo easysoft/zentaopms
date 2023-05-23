@@ -95,11 +95,11 @@ class form extends fixer
      * Set form configuration.
      *
      * @param  array  $config
-     * @param  string $type
+     * @param  string $type   single|batch
      * @return $this
      * @throws EndResponseException
      */
-    public function config(array $config, string $type)
+    public function config(array $config, string $type = 'single')
     {
         $this->rawconfig = $config;
         $this->formType  = $type;
