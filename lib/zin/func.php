@@ -1198,3 +1198,13 @@ function entityLabel()
 {
     return createWg('entityLabel',func_get_args());
 }
+
+/**
+ * Zentao table data widget.
+ *
+ * array items
+ */
+function tableData()
+{
+    return createWg('tableData',func_get_args());
+}
