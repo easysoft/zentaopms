@@ -53,7 +53,7 @@ class productTest
         $data = new stdclass();
         foreach($createFields as $field => $defaultValue) $data->$field = zget($param, $field, $defaultValue);
 
-        $objectID = $this->objectModel->create($data, '', $lineName);
+        $objectID = $this->objectModel->create($data, $lineName);
 
         if(dao::isError())
         {
