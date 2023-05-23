@@ -144,7 +144,7 @@ if(isset($executionType) && $executionType == 'kanban')
 /* Field of deadline. */
 $items[] = array
 (
-    'name'     => 'deadline',
+    'name'     => 'deadlines',
     'label'    => $lang->bug->deadline,
     'hidden'   => zget($visibleFields, 'deadline', true, false),
     'control'  => 'date',

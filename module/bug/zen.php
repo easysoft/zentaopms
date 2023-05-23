@@ -1684,13 +1684,13 @@ class bugZen extends bug
      * 为批量创建bug构造数据。
      * Build bugs for the batch creation.
      *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  array     $bugImagesFile
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  array|false $bugImagesFile
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function buildBugsForBatchCreate($productID, $branch, $bugImagesFile)
+    protected function buildBugsForBatchCreate(int $productID, string $branch, array|false $bugImagesFile): array
     {
         $data = form::data($this->config->bug->form->batchCreate)->get();
 
@@ -1706,38 +1706,32 @@ class bugZen extends bug
         $type         = '';
         $pri          = 0;
         $bugs         = array();
-        $extendFields = $this->getFlowExtendFields();
+        $extendFields = $this->bug->getFlowExtendFields();
         foreach($data->title as $index => $title)
         {
             $title = trim($title);
             if(empty($title)) continue;
 
-            if($data->modules[$index]    != 'ditto') $module    = (int)$data->modules[$index];
-            if($data->projects[$index]   != 'ditto') $project   = (int)$data->projects[$index];
-            if($data->executions[$index] != 'ditto') $execution = (int)$data->executions[$index];
-            if($data->types[$index]      != 'ditto') $type      = $data->types[$index];
-            if($data->pris[$index]       != 'ditto') $pri       = $data->pris[$index];
-
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
             $bug->product     = $productID;
-            $bug->branch      = isset($data->branches) ? (int)$data->branches[$index] : 0;
-            $bug->module      = $module;
-            $bug->project     = $project;
-            $bug->execution   = $execution;
-            $bug->openedBuild = isset($data->openedBuilds) ? implode(',', $data->openedBuilds[$index]) : '';
-            $bug->color       = $data->color[$index];
+            $bug->branch      = (int)zget($data->branches, $index, 0);
+            $bug->module      = (int)zget($data->modules, $index, 0);
+            $bug->project     = (int)zget($data->projects, $index, 0);
+            $bug->execution   = (int)zget($data->executions, $index, 0);
+            $bug->openedBuild = isset($data->openedBuilds) && is_array($data->openedBuilds[$index]) ? implode(',', $data->openedBuilds[$index]) : zget($data->openedBuilds, $index);
             $bug->title       = $title;
-            $bug->deadline    = $data->deadlines[$index];
+            $bug->deadline    = zget($data->deadlines, $index, null);
             $bug->steps       = nl2br($data->stepses[$index]);
-            $bug->type        = $type;
-            $bug->pri         = $pri;
+            $bug->type        = zget($data->types, $index);
+            $bug->pri         = zget($data->pris, $index);
             $bug->severity    = $data->severities[$index];
             $bug->keywords    = $data->keywords[$index];
 
             $bugs[$index] = $this->buildDataForBatchCreate($bug, $data, $index, $moduleOwners, $extendFields, $bugImagesFile);
         }
+        return $bugs;
     }
 
     /**
@@ -1753,10 +1747,10 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function buildDataForBatchCreate(object $bug, object $data, int $index, array $moduleOwners, array $extendFields, array $bugImagesFile): object
+    protected function buildDataForBatchCreate(object $bug, object $data, int $index, array $moduleOwners, array $extendFields, array|false $bugImagesFile): object
     {
-        $oses         = array_filter($data->oses[$index]);
-        $browsers     = array_filter($data->browsers[$index]);
+        $oses         = is_array($data->oses[$index]) ? array_filter($data->oses[$index]) : array();
+        $browsers     = is_array($data->browsers[$index]) ? array_filter($data->browsers[$index]) : array();
         $bug->os      = implode(',', $oses);
         $bug->browser = implode(',', $browsers);
 

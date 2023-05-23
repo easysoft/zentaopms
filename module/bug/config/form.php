@@ -124,21 +124,21 @@ $config->bug->form->batchActivate['openedBuildList'] = array('type' => 'array', 
 $config->bug->form->batchActivate['commentList']     = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->bug->form->batchCreate = array();
-$config->bug->form->batchCreate['modules']      = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['projects']     = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['executions']   = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['branches']     = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['lanes']        = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['openedBuilds'] = array('required' => true,  'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['titles']       = array('required' => true,  'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['deadlines']    = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['stepses']      = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['types']        = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['pris']         = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['severities']   = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['oses']         = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['browsers']     = array('required' => false, 'type' => array(), 'default' => array());
-$config->bug->form->batchCreate['keywords']     = array('required' => false, 'type' => array(), 'default' => array());
+$config->bug->form->batchCreate['modules']      = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['projects']     = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['executions']   = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['branches']     = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['lanes']        = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['openedBuilds'] = array('required' => true,  'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['title']        = array('required' => true,  'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['deadlines']    = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['stepses']      = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['types']        = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['pris']         = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['severities']   = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['oses']         = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['browsers']     = array('required' => false, 'type' => 'array', 'default' => array());
+$config->bug->form->batchCreate['keywords']     = array('required' => false, 'type' => 'array', 'default' => array());
 
 $config->bug->form->confirm = array();
 $config->bug->form->confirm['pri']            = array('required' => false, 'type' => 'int',    'default' => 3);

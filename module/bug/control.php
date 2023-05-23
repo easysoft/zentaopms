@@ -266,7 +266,7 @@ class bug extends control
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $this->session->bugImagesFile);
 
             /* Batch create bugs. */
-            $actions = $this->bug->batchCreate($productID, $branch, $output, $this->post->uploadImage, $this->session->bugImagesFile);
+            $actions = $this->bug->batchCreate($bugs, $productID, $output, $this->post->uploadImage, $this->session->bugImagesFile);
 
             helper::setcookie('bugModule', 0, 0);
 
@@ -280,7 +280,7 @@ class bug extends control
                 unset($_SESSION['bugImagesFile']);
             }
 
-            $response = $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $actions);
+            $response = $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $actions ? $actions : array());
             return $this->send($response);
         }
 
