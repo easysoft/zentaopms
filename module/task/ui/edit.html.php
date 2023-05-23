@@ -415,8 +415,18 @@ formPanel
                 set::hidden(true),
                 formGroup
                 (
+                    set::name("lastEditedDate"),
+                    set::value($task->lastEditedDate),
+                    set::control("input"),
+                    set::id("lastEditedDate"),
+                )
+            ),
+            formRow
+            (
+                set::hidden(true),
+                formGroup
+                (
                     set::name("team[]"),
-                    set::value("zenggang"),
                     set::control("picker"),
                     set::id("team"),
                     set::strong(true),
@@ -430,98 +440,6 @@ formPanel
                     )
                 )
             ),
-            formRow
-            (
-                set::hidden(true),
-                formGroup
-                (
-                    set::name("team[]"),
-                    set::value("zenggang"),
-                    set::control("picker"),
-                    set::id("team"),
-                    set::strong(true),
-                    set::items($teamOptions)
-                ),
-                formGroup
-                (
-                    inputGroup
-                    (
-
-                    )
-                )
-            ),
-            formRow
-            (
-                set::hidden(true),
-                formGroup
-                (
-                    set::name("team[]"),
-                    set::control("picker"),
-                    set::id("team"),
-                    set::items($teamOptions)
-                ),
-                formGroup
-                (
-                    inputGroup
-                    (
-
-                    )
-                )
-            ),
-            formRow
-            (
-                set::hidden(true),
-                formGroup
-                (
-                    set::name("team[]"),
-                    set::control("picker"),
-                    set::id("team"),
-                    set::items($teamOptions)
-                ),
-                formGroup
-                (
-                    inputGroup
-                    (
-
-                    )
-                )
-            ),
-            formRow
-            (
-                set::hidden(true),
-                formGroup
-                (
-                    set::name("team[]"),
-                    set::control("picker"),
-                    set::id("team"),
-                    set::items($teamOptions)
-                ),
-                formGroup
-                (
-                    inputGroup
-                    (
-
-                    )
-                )
-            ),
-            formRow
-            (
-                set::hidden(true),
-                formGroup
-                (
-                    set::name("team[]"),
-                    set::control("picker"),
-                    set::id("team"),
-                    set::items($teamOptions)
-                ),
-                formGroup
-                (
-                    inputGroup
-                    (
-
-                    )
-                )
-            )
         )
     )
 );
