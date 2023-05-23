@@ -24,9 +24,15 @@ class taskTao extends taskModel
      */
     protected function doUpdate(object $task, object $oldTask, string $requiredFields): bool
     {
-        if(!empty($task->design)) $design = $this->dao->select('version')->from(TABLE_DESIGN)->where('id')->eq($task->design)->fetch();
+        /* Task link design. */
+        if(!empty($task->design))
+        {
+            $design = $this->dao->select('version')->from(TABLE_DESIGN)->where('id')->eq($task->design)->fetch();
+            $task->designVersion = $design->version;
+        }
 
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+        if($this->isNoStoryExecution($execution)) $task->story = 0;
 
         /* Update children task. */
         if(isset($task->execution) && $task->execution != $oldTask->execution)
@@ -39,20 +45,14 @@ class taskTao extends taskModel
         $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
-            ->setIF($this->isNoStoryExecution($execution), 'story', 0)
-            ->setIF(!empty($task->design), 'designVersion', $design->version)
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
-
             ->checkIF($task->estimate !== false, 'estimate', 'float')
             ->checkIF($task->left     !== false, 'left',     'float')
             ->checkIF($task->consumed !== false, 'consumed', 'float')
-
-            ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
-
+            ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy,finishedDate,canceledBy,canceledDate,closedBy,closedDate,closedReason', 'empty')
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
             ->checkIF($task->status == 'done' && $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
-
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->checkFlow()
             ->where('id')->eq((int)$task->id)
