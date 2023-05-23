@@ -218,13 +218,12 @@ class block extends control
      * 输出一个区块信息。
      * Print a block.
      *
-     * @param  string $blockID
+     * @param  int    $blockID
      * @access public
      * @return string
      */
-    public function printBlock(string $blockID)
+    public function printBlock(int $blockID)
     {
-        $blockID = (int)$blockID;
         $block   = $this->block->getByID($blockID);
 
         /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */

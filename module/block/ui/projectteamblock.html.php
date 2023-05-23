@@ -16,6 +16,7 @@ panel
     set('class', 'projectteam-block'),
     div
     (
+        '项目人力投入',
         '正在开发中...'
     )
 );

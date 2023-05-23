@@ -310,6 +310,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
     return $tabItems;
 }
 
+$longBlock    = $block->width >= 2;
 $blockNavCode = 'nav-' . uniqid();
 div
 (
