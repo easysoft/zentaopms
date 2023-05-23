@@ -84,7 +84,7 @@ js::set('langNormal',       $lang->testcase->normal);
     <?php else:?>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
-    $useDatatable = (isset($config->testcase->useDatatable) and $config->testcase->useDatatable and isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+    $useDatatable = (!empty($config->testcase->useDatatable) and isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
     ?>
     <form class='main-table table-case' data-nested='true' data-expand-nest-child='false' data-checkable='true' data-enable-empty-nested-row='true' data-replace-id='caseTableList' data-preserve-nested='true'
     id='caseForm' method='post' <?php if(!$useDatatable) echo "data-ride='table'";?>>

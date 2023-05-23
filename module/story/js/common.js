@@ -101,7 +101,7 @@ function getStatus(method, params)
  * @access public
  * @return void
  */
-function loadProductUserStories()
+function loadURS()
 {
     var productID       = $('#product').val();
     var branchID        = $('#branch').val();

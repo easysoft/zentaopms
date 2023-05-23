@@ -60,7 +60,7 @@ $(function()
     });
 
     $('#module').on('change', function(){
-        loadProductUserStories();
+        loadURS();
     });
 
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)

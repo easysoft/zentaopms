@@ -46,7 +46,7 @@
             <tr>
               <td class='pd-0'>
                 <?php
-                $closedReasonList = $story->status == 'draft' ? $closedReasonList = array_diff_key($reasonList, array('cancel' => '')) : $reasonList;
+                $closedReasonList = $story->status == 'draft' ? array_diff_key($reasonList, array('cancel' => '')) : $reasonList;
                 echo html::select("closedReasons[$storyID]", $closedReasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");
                 ?>
               </td>

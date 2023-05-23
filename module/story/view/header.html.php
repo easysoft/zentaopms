@@ -48,7 +48,7 @@ function loadProduct(productID)
     oldProductID = $('#product').val();
     loadProductBranches(productID);
     loadProductReviewers(productID);
-    loadProductUserStories();
+    loadURS();
 
     if(typeof(storyType) == 'string' && storyType == 'story')
     {
