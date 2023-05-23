@@ -408,7 +408,7 @@ class product extends control
         if($confirm == 'no') return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
 
         /* Delete product. */
-        $this->product->deleteById($productID);
+        $this->product->deleteByID($productID);
 
         /* Reset session. */
         $this->session->set('product', '');
