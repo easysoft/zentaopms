@@ -1658,9 +1658,13 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu(int $productID = 0, string|int $branch = '', string $extra = '')
+    public function setMenu(int $productID = 0, string|int $branch = '', string $extra = ''): void
     {
-        if(!defined('TUTORIAL') and $productID != 0 and !$this->checkPriv($productID)) return $this->accessDenied($this->lang->product->accessDenied);
+        if(!defined('TUTORIAL') and $productID != 0 and !$this->checkPriv($productID))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return;
+        }
 
         /* 用真实数据替换导航配置的占位符，并删除无用配置项。 */
         $params = array('branch' => $branch);
