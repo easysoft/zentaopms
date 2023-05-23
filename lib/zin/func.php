@@ -1186,3 +1186,15 @@ function section()
 {
     return createWg('section', func_get_args());
 }
+
+/**
+ * Zentao entity label widget.
+ *
+ * string|int|null entityID
+ * string|int|null level
+ * string          text
+ */
+function entityLabel()
+{
+    return createWg('entityLabel',func_get_args());
+}
