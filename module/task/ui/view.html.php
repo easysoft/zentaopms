@@ -136,7 +136,7 @@ div
         )
     ),
     div(
-        setClass('detail-side px-5 py-4 flex-none surface'),
+        setClass('detail-side px-5 py-4 flex-none canvas'),
         tabs
         (
             set::items
