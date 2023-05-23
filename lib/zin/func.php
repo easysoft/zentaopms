@@ -1181,6 +1181,11 @@ function dashboard()
  * string            title
  * string|array|null content
  * bool              useHtml=false
+ *
+ * ====== blocks ======
+ * subTitle => array()
+ * actions  => array()
+ * ====================
  */
 function section()
 {
@@ -1193,6 +1198,10 @@ function section()
  * string|int|null entityID
  * string|int|null level
  * string          text
+ *
+ * ====== blocks ======
+ * suffix = array()
+ * ====================
  */
 function entityLabel()
 {

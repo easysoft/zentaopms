@@ -12,6 +12,10 @@ class entityLabel extends wg
         'text: string'           // 实体文本
     );
 
+    protected static $defineBlocks = array(
+        'suffix' => array()
+    );
+
     protected function onAddChild(mixed $child): mixed
     {
         if(is_string($child) && !$this->props->has('text'))
@@ -47,14 +51,16 @@ class entityLabel extends wg
 
     protected function build(): wg
     {
-        $entityID = $this->buildEntityID();
+        $suffix     = $this->block('suffix');
+        $entityID   = $this->buildEntityID();
         $entityName = $this->buildEntityName();
         return div
         (
             setClass('entity-label', 'flex', 'items-center'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $entityID,
-            $entityName
+            $entityName,
+            $suffix
         );
     }
 }
