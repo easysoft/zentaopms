@@ -1031,7 +1031,7 @@ class bugModel extends model
      * 激活一个bug。
      * Activate a bug.
      *
-     * @param  object $bugID
+     * @param  object $bug
      * @param  array  $kanbanParams
      * @access public
      * @return bool
