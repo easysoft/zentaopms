@@ -2492,7 +2492,7 @@ class execution extends control
     {
         $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
 
-        $executionID = $this->execution->saveState((int)$executionID, $this->executions);
+        $executionID = $this->execution->checkAccess((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
 
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
