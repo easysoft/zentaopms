@@ -180,7 +180,7 @@ panel
                                 array('th' => $lang->bug->productplan,    'tr' => $bug->planName, 'url' => helper::createLink('productplan', 'view', "planID=$bug->plan&type=bug")),
                                 array('th' => $lang->bug->type,           'tr' => zget($lang->bug->typeList, $bug->type)),
                                 array('th' => $lang->bug->status,         'tr' => $this->processStatus('bug', $bug), 'class' => 'status-' . $bug->status),
-                                array('th' => $lang->bug->severity,       'tr' => severityLabel(zget($lang->bug->severityList, $bug->severity), set::level($bug->severity))),
+                                array('th' => $lang->bug->severity,       'tr' => severityLabel(set::level(zget($lang->bug->severityList, $bug->severity)), set::isIcon(true))),
                                 array('th' => $lang->bug->pri,            'tr' => priLabel(zget($lang->bug->priList, $bug->pri))),
                                 array('th' => $lang->bug->activatedCount, 'tr' => $bug->activatedCount),
                                 array('th' => $lang->bug->activatedDate,  'tr' => $bug->activatedDate),

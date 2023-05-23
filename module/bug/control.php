@@ -178,15 +178,14 @@ class bug extends control
      * 创建一个bug。
      * Create a bug.
      *
-     * @param  string $productID
+     * @param  int    $productID
      * @param  string $branch
      * @param  string $extras       Other params, for example, executionID=10,moduleID=10.
      * @access public
      * @return void
      */
-    public function create(string $productID, string $branch = '', string $extras = '')
+    public function create(int $productID, string $branch = '', string $extras = '')
     {
-        $productID = (int)$productID;
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -305,16 +304,15 @@ class bug extends control
      * 查看一个bug。
      * View a bug.
      *
-     * @param  string $bugID
+     * @param  int    $bugID
      * @param  string $form
      * @access public
      * @return void
      */
-    public function view(string $bugID, string $from = 'bug')
+    public function view(int $bugID, string $from = 'bug')
     {
         /* Judge bug exits or not. */
-        $bugID = (int)$bugID;
-        $bug   = $this->bug->getById($bugID, true);
+        $bug = $this->bug->getById($bugID, true);
         if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         $this->session->set('storyList', '', 'product');
@@ -333,16 +331,14 @@ class bug extends control
      * 更新 bug 信息。
      * Edit a bug.
      *
-     * @param  string $bugID
+     * @param  int    $bugID
      * @param  bool   $comment true|false
      * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit(string $bugID, bool $comment = false, string $kanbanGroup = 'default')
+    public function edit(int $bugID, bool $comment = false, string $kanbanGroup = 'default')
     {
-        $bugID = (int)$bugID;
-
         if(!empty($_POST))
         {
             $oldBug   = $this->bug->getByID($bugID);
