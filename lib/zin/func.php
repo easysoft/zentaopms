@@ -1217,3 +1217,17 @@ function tableData()
 {
     return createWg('tableData',func_get_args());
 }
+
+/**
+ * Zentao detail page header widget.
+ *
+ * ====== blocks ======
+ * prefix => array()
+ * title  => array()
+ * suffix => array()
+ * ====================
+ */
+function detailHeader()
+{
+    return createWg('detailHeader', func_get_args());
+}
