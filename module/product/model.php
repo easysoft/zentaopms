@@ -1406,157 +1406,61 @@ class productModel extends model
      * @param  string  $extra
      * @param  bool    $branch
      * @access public
-     * @return void
+     * @return string
      */
-    public function getProductLink($module, $method, $extra, $branch = false)
+    public function getProductLink(string $module, string $method, string $extra = '', bool $branch = false): string
     {
-        $link = '';
-        if(strpos(',programplan,product,roadmap,bug,testcase,testtask,story,qa,testsuite,testreport,build,projectrelease,projectstory,', ',' . $module . ',') !== false)
-        {
-            if($module == 'product' && $method == 'project')
-            {
-                $link = helper::createLink($module, $method, "status=all&productID=%s" . ($branch ? "&branch=%s" : ''));
-            }
-            elseif($module == 'product' && ($method == 'doc' or $method == 'view'))
-            {
-                $link = helper::createLink($module, $method, "productID=%s");
-            }
-            elseif($module == 'product' && $method == 'dynamic')
-            {
-                $link = helper::createLink($module, $method, "productID=%s&type=$extra");
-            }
-            elseif($module == 'product' && ($method == 'create' or $method == 'showimport'))
-            {
-                $link = helper::createLink($module, 'browse', "productID=%s&type=$extra");
-            }
-            elseif($module == 'qa' && $method == 'index')
-            {
-                $link = helper::createLink('bug', 'browse', "productID=%s" . ($branch ? "&branch=%s" : ''));
-            }
-            elseif($module == 'product' && ($method == 'browse' or $method == 'index' or $method == 'all'))
-            {
-                $link = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&browseType=&param=0&$extra");
-            }
-            elseif($module == 'programplan')
-            {
-                $extra = $extra ? $extra : 'gantt';
-                $link  = helper::createLink($module, 'browse', "projectID=%s&productID=%s&type=$extra");
-            }
-            elseif($module == 'story' && $method == 'report')
-            {
-                $link = helper::createLink($module, 'report', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
-            }
-            elseif($module == 'testtask')
-            {
-                $extra = $method != 'browse' ? '' : "&extra=$extra";
-                if(strtolower($method) == 'browseunits')
-                {
-                    $methodName = 'browseUnits';
-                    $param      = '&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1';
-                    $param     .= $this->app->tab == 'project' ? "&projectID={$this->session->project}" : '';
-                }
-                else
-                {
-                    $methodName = 'browse';
-                    $param      = ($branch ? "&branch=%s" : '&branch=0') . $extra;
-                }
+        $branchID    = $branch ? "%s" : 'all';
+        $branchParam = $branch ? "&branch=%s" : '';
+        $params      = explode(',', $extra);
+        $method      = strtolower($method);
+        $link        = helper::createLink($module, $method, "productID=%s{$branchParam}");
 
-                $link = helper::createLink($module, $methodName, "productID=%s" . $param);
-            }
-            elseif($module == 'bug' && $method == 'view')
+        if($module == 'bug'        && $method == 'view')        return helper::createLink('bug',   'browse',      "productID=%s&branch={$branchID}&extra=$extra");
+        if($module == 'product'    && $method == 'project')     return helper::createLink($module, $method,       "status=all&productID=%s{$branchParam}");
+        if($module == 'product'    && $method == 'dynamic')     return helper::createLink($module, $method,       "productID=%s&type=$extra");
+        if($module == 'project'    && $method == 'testcase')    return helper::createLink($module, $method,       "projectID={$params[0]}&productID=%s&branch={$branchID}&browseType={$params[1]}");
+        if($module == 'project'    && $method == 'bug')         return helper::createLink($module, $method,       "projectID={$params[0]}&productID=%s{$branchParam}");
+        if($module == 'qa'         && $method == 'index')       return helper::createLink('bug',   'browse',      "productID=%s{$branchParam}");
+        if($module == 'story'      && $method == 'report')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra=$extra");
+        if($module == 'testcase'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&browseType=$extra");
+        if($module == 'testreport' && $method == 'create')      return helper::createLink($module, $method,       "objectID=&objectType=testtask&extra=%s");
+        if($module == 'testreport' && $method == 'edit')        return helper::createLink($module, 'browse',      "objectID=%s");
+        if($module == 'testtask'   && $method == 'browseunits') return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
+        if($module == 'testtask'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra={$extra}");
+
+        if($module == 'execution' && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
+        if($module == 'product'   && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
+        if($module == 'product'   && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");
+        if($module == 'product'   && in_array($method, array('browse', 'index', 'all'))) return helper::createLink($module,    'browse', "productID=%s&branch={$branchID}&browseType=&param=0&$extra");
+        if($module == 'ticket'    && in_array($method, array('browse', 'view', 'edit'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
+        if($module == 'feedback'  && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
+
+        if($module == 'productplan' && !in_array($method, array('browse', 'create'))) return helper::createLink($module,     'browse', "productID=%s{$branchParam}");
+        if($module == 'release'     && !in_array($method, array('browse', 'create'))) return helper::createLink($module,     'browse', "productID=%s{$branchParam}");
+        if($module == 'testsuite'   && !in_array($method, array('browse', 'create'))) return helper::createLink('testsuite', 'browse', "productID=%s");
+
+        if($module == 'design')      return helper::createLink('design',      'browse',       "productID=%s");
+        if($module == 'execution')   return helper::createLink('execution',   $method,        "objectID=$extra&productID=%s");
+        if($module == 'feedback')    return helper::createLink('feedback',    'admin',        "browseType=byProduct&productID=%s");
+        if($module == 'programplan') return helper::createLink('programplan', 'browse',       "projectID=%s&productID=%s&type=" . ($extra ? $extra : 'gantt'));
+        if($module == 'project')     return helper::createLink('project',     $method,        "objectID=$extra&productID=%s");
+        if($module == 'tree')        return helper::createLink('tree',        $method,        "productID=%s&type=$extra&currentModuleID=0{$branchParam}");
+        if($module == 'ticket')      return helper::createLink('ticket',      $method,        'productID=%s');
+        if($module == 'testtask')    return helper::createLink('testtask',    'browse',       "productID=%s&branch={$branchID}");
+
+        if($module == 'api'         || $module == 'doc')     return helper::createLink('doc',   'productSpace', "objectID=%s");
+        if($module == 'productplan' || $module == 'release') return helper::createLink($module, $method,        "productID=%s{$branchParam}");
+
+        if($module == 'testcase' and in_array($method, array('groupcase', 'zerocase')) and $this->app->tab == 'project')
+        {
+            $projectID = $extra;
+            if(str_contains($extra, 'projectID'))
             {
-                $link = helper::createLink('bug', 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . "&extra=$extra");
+                parse_str($extra, $output);
+                $projectID = zget($output, 'projectID', 0);
             }
-            elseif($module == 'testsuite' && !in_array($method, array('browse', 'create')))
-            {
-                $link = helper::createLink('testsuite', 'browse', "productID=%s");
-            }
-            elseif($module == 'testcase' and in_array($method, array('groupCase', 'zeroCase')) and $this->app->tab == 'project')
-            {
-                $projectID = $extra;
-                if(strpos($extra, 'projecID') !== false)
-                {
-                    parse_str($extra, $output);
-                    $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
-                }
-                $link = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : 'all') . "&groupBy=&projectID=$projectID") . "#app=project";
-            }
-            elseif($module == 'testcase' and $method == 'browse')
-            {
-                $link = helper::createLink('testcase', 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=all') . "&browseType=$extra");
-            }
-            elseif($module == 'testreport' and ($method == 'create' or $method == 'edit'))
-            {
-                $vars   = $method == 'edit' ? "objectID=%s" : "objectID=&objectType=testtask&extra=%s";
-                $method = $method == 'edit' ? 'browse' : $method;
-                $link   = helper::createLink($module, $method, $vars);
-            }
-            else
-            {
-                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
-            }
-        }
-        elseif($module == 'productplan' || $module == 'release')
-        {
-            if($method != 'browse' && $method != 'create') $method = 'browse';
-            $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
-        }
-        elseif($module == 'tree')
-        {
-            $link = helper::createLink($module, $method, "productID=%s&type=$extra&currentModuleID=0" . ($branch ? "&branch=%s" : ''));
-        }
-        elseif($module == 'branch')
-        {
-            $link = helper::createLink($module, $method, "productID=%s");
-        }
-        elseif($module == 'doc' or $module == 'api')
-        {
-            $link = helper::createLink('doc', 'productSpace', "objectID=%s");
-        }
-        elseif($module == 'design')
-        {
-            return helper::createLink('design', 'browse', "productID=%s");
-        }
-        elseif(strpos(',project,execution,', ",$module,") !== false and $method == 'bug')
-        {
-            $params = explode(',', $extra);
-            return helper::createLink($module, $method, "projectID={$params[0]}&productID=%s" . ($branch ? "&branch=%s" : ''));
-        }
-        elseif($module == 'project' and $method == 'testcase')
-        {
-            $params = explode(',', $extra);
-            return helper::createLink('project', 'testcase', "projectID={$params[0]}&productID=%s&branch=" . ($branch ? "%s" : '0') . "&browseType={$params[1]}");
-        }
-        elseif($module == 'execution' and $method == 'testcase')
-        {
-            $params = explode(',', $extra);
-            return helper::createLink('execution', 'testcase', "executionID={$params[0]}&productID=%s" . ($branch ? "&branch=%s" : ''));
-        }
-        elseif($module == 'project' or $module == 'execution')
-        {
-            $objectID = $module == 'project' ? 'projectID' : 'executionID';
-            return helper::createLink($module, $method, "$objectID=$extra&productID=%s");
-        }
-        elseif($module == 'feedback')
-        {
-            if($this->config->vision == 'rnd')
-            {
-                return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
-            }
-            elseif($this->config->vision == 'lite')
-            {
-                return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
-            }
-        }
-        elseif($module == 'ticket')
-        {
-            $params = "productID=%s";
-            if(strpos('browse,view,edit', $method) !== false)
-            {
-                $method = 'browse';
-                $params = "browseType=byProduct&productID=%s";
-            }
-            return helper::createLink('ticket', $method, $params);
+            return helper::createLink($module, $method, "productID=%s&branch={$branchID}&groupBy=&projectID=$projectID") . "#app=project";
         }
 
         return $link;
