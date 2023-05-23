@@ -291,7 +291,8 @@ class productModel extends model
     }
 
     /**
-     * Get shadow products by project id.
+     * 根据项目id获取其对应的影子产品。
+     * Get shadow product by project id.
      *
      * @param  int    $projectID
      * @access public
