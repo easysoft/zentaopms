@@ -1119,6 +1119,7 @@ class taskModel extends model
     }
 
     /**
+     * 批量更改任务所属模块。
      * Batch change the module of task.
      *
      * @param  array  $taskIdList
@@ -1126,7 +1127,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function batchChangeModule($taskIdList, $moduleID)
+    public function batchChangeModule(array $taskIdList, int $moduleID): array
     {
         $now        = helper::now();
         $allChanges = array();

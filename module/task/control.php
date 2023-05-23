@@ -273,21 +273,22 @@ class task extends control
     }
 
     /**
+     * 批量更改任务所属模块。
      * Batch change the module of task.
      *
      * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID)
+    public function batchChangeModule(int $moduleID)
     {
         if($this->post->taskIDList)
         {
-            $taskIDList = $this->post->taskIDList;
+            $taskIDList = (array)$this->post->taskIDList;
             $taskIDList = array_unique($taskIDList);
-            unset($_POST['taskIDList']);
             $allChanges = $this->task->batchChangeModule($taskIDList, $moduleID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             foreach($allChanges as $taskID => $changes)
             {
                 $this->loadModel('action');
@@ -296,7 +297,7 @@ class task extends control
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
