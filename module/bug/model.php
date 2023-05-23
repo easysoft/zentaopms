@@ -2985,7 +2985,7 @@ class bugModel extends model
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($bug->$field) and $field != 'title') dao::$errors["{$filed}[{$index}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
+                if($field and empty($bug->$field) and $field != 'title') dao::$errors["{$field}[{$index}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
             }
         }
 
