@@ -970,21 +970,16 @@ class product extends control
      * @param  int    $productID
      * @param  int    $projectID
      * @param  string $branch
-     * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionsByProject(int $productID, int $projectID = 0, string $branch = '', int $number = 0)
+    public function ajaxGetExecutionsByProject(int $productID, int $projectID = 0, string $branch = '')
     {
+
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
         $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, 'multiple,stagefilter');
 
-        $disabled = $noMultipleExecutionID ? "disabled='disabled'" : '';
-        $html = html::select("executions[{$number}]", array('' => '') + $executions, 0, "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)' $disabled");
-
-        if($noMultipleExecutionID) $html .= html::hidden("executions[{$number}]", $noMultipleExecutionID, "id=executions{$number}");
-
-        return print($html);
+        return $this->send(array('executions' => $executions, 'noMultipleExecutionID' => $noMultipleExecutionID));
     }
 
     /**

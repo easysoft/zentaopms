@@ -242,11 +242,10 @@ formBatchPanel
 (
     set::items($items),
     on::change('[data-name="branches"]', 'setBranchRelated'),
-    on::change('[data-name="projects"]', 'loadProductExecutionsByProject'),
+    on::change('[data-name="project"]', 'loadProductExecutionsByProject'),
     on::change('[data-name="executions"]', 'loadExecutionBuilds'),
     on::change('[data-name="regions"]', 'setLane'),
     formHidden('product', $productID),
 );
 
 render();
-
