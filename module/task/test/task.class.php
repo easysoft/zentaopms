@@ -19,13 +19,14 @@ class taskTest
     public function updateObject($objectID, $param = array())
     {
         global $tester;
-        $object = $tester->dbh->query("SELECT `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
+        $object = $tester->dbh->query("SELECT id, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
             `color`,`desc`,`assignedTo`,`realStarted`,`finishedBy`,`canceledBy`,`closedReason` FROM zt_task WHERE id = $objectID")->fetch();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
             {
-                $_POST[$field] = $param[$field];
+                $_POST[$field]  = $param[$field];
+                $object->$field = $param[$field];
             }
             else
             {
@@ -33,7 +34,7 @@ class taskTest
             }
         }
 
-        $change = $this->objectModel->update($objectID);
+        $change = $this->objectModel->update($object);
         if($change == array()) $change = '没有数据更新';
         unset($_POST);
 
