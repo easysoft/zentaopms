@@ -669,8 +669,11 @@ class task extends control
      * @access public
      * @return void
      */
-    public function finish($taskID, $extra = '')
+    public function finish(int $taskID, string $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $this->taskZen->commonAction($taskID);
         $task        = $this->task->getById($taskID);
         $currentTeam = empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
@@ -681,25 +684,22 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Get and record esitimate for task. */
-            $effort = $this->buildEffortForStart($task, $taskData);
+            $effort = $this->buildEffortForFinish($task, $taskData);
             if($this->post->comment) $effort->work = $this->post->comment;
             if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
             if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $changes  = $this->task->finish($oldTask, $taskData, $extra);
+            $changes = $this->task->finish($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $taskData, $changes, $this->post->comment, $output);
+            $result = $this->task->afterStart($task, $taskData, $changes, 0, $this->post->comment, $output);
             if(is_array($result)) $this->send($result);
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($taskData, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
             return $this->send($response);
         }
 

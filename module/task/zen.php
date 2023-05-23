@@ -1134,7 +1134,7 @@ class taskZen extends task
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = true;
 
-        $execution  = $this->execution->getByID($task->execution);
+        $execution  = $this->execution->getByID((int)$task->execution);
         $kanbanData = $this->getKanbanData($execution, $regionID);
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
@@ -1373,8 +1373,10 @@ class taskZen extends task
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->get();
 
-        if(empty($task->currentConsumed)) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
+        if(!$this->post->currentConsumed) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
         if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
+
+        $task->consumed += (float)$this->post->currentConsumed;
         return $task;
     }
 

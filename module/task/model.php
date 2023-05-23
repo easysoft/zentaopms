@@ -1544,13 +1544,15 @@ class taskModel extends model
     }
 
     /**
+     * 完成任务。
      * Finish a task.
      *
-     * @param  int    $taskID
+     * @param  object     $oldTask
+     * @param  object     $task
      * @access public
-     * @return void
+     * @return bool|array
      */
-    public function finish(object $oldTask, object $task)
+    public function finish(object $oldTask, object $task): bool|array
     {
         $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team) : array();
         if($currentTeam) $task = $this->computeMultipleHours($oldTask, $task);
@@ -1559,7 +1561,7 @@ class taskModel extends model
             ->where('id')->eq((int)$oldTask->id)
             ->exec();
 
-        if(!dao::isError()) return false;
+        if(dao::isError()) return false;
         return common::createChanges($oldTask, $task);
     }
 
