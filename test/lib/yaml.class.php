@@ -268,6 +268,9 @@ class yaml
      */
     public function config($fileName, $useCommon = false)
     {
+        $backtrace = debug_backtrace();
+        $runPath   = $backtrace[count($backtrace)-1]['file'];
+
         if($useCommon)
         {
             $yamlFile = dirname($runPath, 2) . DS . 'yaml' . DS . "{$fileName}.yaml";
@@ -279,9 +282,6 @@ class yaml
 
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
-
-        $backtrace = debug_backtrace();
-        $runPath   = $backtrace[count($backtrace)-1]['file'];
 
         $yamlFile = dirname($runPath) . DS . 'yaml' . DS . $runFileName . DS . "{$fileName}.yaml";
 
