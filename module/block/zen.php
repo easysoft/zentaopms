@@ -281,40 +281,6 @@ class blockZen extends block
     }
 
     /**
-     * 根据来源生成默认区块。
-     * Generate default block by source.
-     *
-     * @param  object    $block
-     * @access protected
-     * @return string
-     */
-    protected function generateDefaultBlockBySource(object $block): string
-    {
-        $this->get->set('mode', 'getblockdata');
-        $this->get->set('blockTitle', $block->title);
-        $this->get->set('module', $block->module);
-        $this->get->set('blockid', $block->code);
-        $this->get->set('param', base64_encode(json_encode($block->params)));
-
-        return $this->fetch('block', 'main', "module={$block->module}&id={$block->id}");
-    }
-
-    /**
-     * 生成指派给我的区块。
-     * Generate assign to me block.
-     *
-     * @param  object    $block
-     * @access protected
-     * @return string
-     */
-    protected function generateAssignToMeBlock(object $block): string
-    {
-        $this->get->set('param', base64_encode(json_encode($block->params)));
-
-        return $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
-    }
-
-    /**
      * 去掉待定和已暂停的任务。
      * Remove undetermined and suspended tasks.
      *
@@ -342,7 +308,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDynamicBlock()
+    protected function printDynamicBlock(): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -358,7 +324,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWelcomeBlock()
+    protected function printWelcomeBlock(): void
     {
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
 
@@ -388,7 +354,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printContributeBlock()
+    protected function printContributeBlock(): void
     {
         $this->view->data = $this->loadModel('user')->getPersonalData();
     }
@@ -396,12 +362,13 @@ class blockZen extends block
     /**
      * Print todo block.
      *
+     * @params object     $block
      * @access protected
      * @return void
      */
-    protected function printTodoListBlock()
+    protected function printTodoListBlock(object $block): void
     {
-        $limit = ($this->viewType == 'json' || !isset($this->params->count)) ? 0 : (int)$this->params->count;
+        $limit = ($this->viewType == 'json' || !isset($block->params->count)) ? 0 : (int)$block->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, null, 'date, begin');
         $uri   = $this->createLink('my', 'index');
 
@@ -419,44 +386,47 @@ class blockZen extends block
     /**
      * Print task block.
      *
+     * @params object     $block
      * @access protected
      * @return void
      */
-    protected function printTaskBlock()
+    protected function printTaskBlock(object $block): void
     {
         $this->session->set('taskList',  $this->createLink('my', 'index'), 'execution');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $account = $this->app->user->account;
-        $type    = $this->params->type;
+        $type    = $block->params->type;
 
         $this->app->loadLang('execution');
-        $this->view->tasks = $this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $this->params->orderBy);
+        $this->view->tasks = $this->loadModel('task')->getUserTasks($account, $type, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $block->params->orderBy);
     }
 
     /**
      * Print bug block.
      *
+     * @params object     $block
      * @access protected
      * @return void
      */
-    protected function printBugBlock()
+    protected function printBugBlock(object $block): void
     {
         $this->session->set('bugList', $this->createLink('my', 'index'), 'qa');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
         $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
-        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->count, null, $projectID);
+        $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $block->params->type, $block->params->orderBy, $this->viewType == 'json' ? 0 : (int)$block->params->count, null, $projectID);
     }
 
     /**
      * Print case block.
      *
+     * @params object     $block
      * @access protected
      * @return void
      */
-    protected function printCaseBlock()
+    protected function printCaseBlock(object $block): void
     {
         $this->session->set('caseList', $this->createLink('my', 'index'), 'qa');
         $this->app->loadLang('testcase');
@@ -466,7 +436,7 @@ class blockZen extends block
         $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
 
         $cases = array();
-        if($this->params->type == 'assigntome')
+        if($block->params->type == 'assigntome')
         {
             $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -477,17 +447,17 @@ class blockZen extends block
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-                ->orderBy($this->params->orderBy)
-                ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+                ->orderBy($block->params->orderBy)
+                ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
                 ->fetchAll();
         }
-        elseif($this->params->type == 'openedbyme')
+        elseif($block->params->type == 'openedbyme')
         {
             $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-                ->orderBy($this->params->orderBy)
-                ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+                ->orderBy($block->params->orderBy)
+                ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
                 ->fetchAll();
         }
         $this->view->cases = $cases;
@@ -496,10 +466,11 @@ class blockZen extends block
     /**
      * Print testtask block.
      *
+     * @params object     $block
      * @access protected
      * @return void
      */
-    protected function printTesttaskBlock()
+    protected function printTesttaskBlock($block): void
     {
         $this->app->loadLang('testtask');
 
@@ -507,7 +478,7 @@ class blockZen extends block
         $this->session->set('productList',  $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
         $this->session->set('buildList',    $uri, 'execution');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
@@ -519,9 +490,9 @@ class blockZen extends block
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.product = t5.product')
-            ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
+            ->beginIF($block->params->type != 'all')->andWhere('t1.status')->eq($block->params->type)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
             ->fetchAll();
     }
 
@@ -532,7 +503,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printStoryBlock($block) :void
+    protected function printStoryBlock(object $block): void
     {
         $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
@@ -554,7 +525,7 @@ class blockZen extends block
      * @access protected
      * @return bool
      */
-    protected function printPlanBlock(object $block): bool
+    protected function printPlanBlock(object $block): void
     {
         $uri = $this->createLink('my', 'index');
         $this->session->set('productList', $uri, 'product');
@@ -566,8 +537,6 @@ class blockZen extends block
 
         $this->view->products = $this->loadModel('product')->getPairs();
         $this->view->plans    = $this->loadModel('productplan')->getList(0, 0, 'all', $pager, 'begin_desc', 'noproduct');
-
-        return !dao::getError();
     }
 
     /**
@@ -578,7 +547,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printReleaseBlock($block)
+    protected function printReleaseBlock(object $block): void
     {
         $uri = $this->createLink('my', 'index');
         $this->session->set('releaseList', $uri, 'product');
@@ -600,10 +569,11 @@ class blockZen extends block
     /**
      * Print Build block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printBuildBlock()
+    protected function printBuildBlock(object $block): void
     {
         $this->session->set('buildList', $this->createLink('my', 'index'), 'execution');
         $this->app->loadLang('build');
@@ -615,24 +585,26 @@ class blockZen extends block
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->view->block->module != 'my' && $this->session->project)->andWhere('t1.project')->eq((int)$this->session->project)->fi()
             ->orderBy('t1.id desc')
-            ->beginIF($this->viewType != 'json')->limit((int)$this->params->count)->fi()
+            ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
             ->fetchAll();
+
         $this->view->builds = $builds;
     }
 
     /**
      * Print project block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProjectBlock()
+    protected function printProjectBlock(object $block): void
     {
         $this->app->loadLang('execution');
         $this->app->loadLang('task');
-        $count   = isset($this->params->count)   ? $this->params->count   : 15;
-        $type    = isset($this->params->type)    ? $this->params->type    : 'all';
-        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
+        $count   = isset($block->params->count)   ? $block->params->count   : 15;
+        $type    = isset($block->params->type)    ? $block->params->type    : 'all';
+        $orderBy = isset($block->params->orderBy) ? $block->params->orderBy : 'id_desc';
 
         $this->view->projects = $this->loadModel('project')->getOverviewList($type, 0, $orderBy, $count);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
@@ -645,7 +617,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printProductListBlock(object $block): bool
+    protected function printProductListBlock(object $block): void
     {
         $this->app->loadClass('pager', $static = true);
         $count = isset($block->params->count) ? (int)$block->params->count : 0;
@@ -658,19 +630,18 @@ class blockZen extends block
 
         $this->view->users        = $this->loadModel('user')->getPairs();
         $this->view->userAvatars  = $this->user->getAvatarPairs();
-
-        return !dao::isError();
     }
 
     /**
      * Print project statistic block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProjectStatisticBlock()
+    protected function printProjectStatisticBlock(object $block): void
     {
-        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         /* Load models and langs. */
         $this->loadModel('project');
@@ -681,8 +652,8 @@ class blockZen extends block
         $this->app->loadLang('bug');
 
         /* Set project status and count. */
-        $status = isset($this->params->type)  ? $this->params->type       : 'all';
-        $count  = isset($this->params->count) ? (int)$this->params->count : 15;
+        $status = isset($block->params->type)  ? $block->params->type       : 'all';
+        $count  = isset($block->params->count) ? (int)$block->params->count : 15;
 
         /* Get projects. */
         $excludedModel = $this->config->edition == 'max' ? '' : 'waterfall';
@@ -690,7 +661,7 @@ class blockZen extends block
         if(empty($projects))
         {
             $this->view->projects = $projects;
-            return false;
+            return;
         }
 
         $today  = helper::today();
@@ -751,7 +722,7 @@ class blockZen extends block
      * @access protected
      * @return bool
      */
-    protected function printProductStatisticBlock(object $block): bool
+    protected function printProductStatisticBlock(object $block): void
     {
         /* 获取需要统计的产品列表。 */
         /* Obtain a list of products that require statistics. */
@@ -846,25 +817,25 @@ class blockZen extends block
         }
 
         $this->view->products = $products;
-        return true;
     }
 
     /**
      * Print execution statistic block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printExecutionStatisticBlock()
+    protected function printExecutionStatisticBlock(object $block): void
     {
-        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->app->loadLang('task');
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
 
-        $status  = isset($this->params->type)  ? $this->params->type : 'undone';
-        $count   = isset($this->params->count) ? (int)$this->params->count : 0;
+        $status  = isset($block->params->type)  ? $block->params->type : 'undone';
+        $count   = isset($block->params->count) ? (int)$block->params->count : 0;
 
         /* Get projects. */
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
@@ -872,7 +843,7 @@ class blockZen extends block
         if(empty($executions))
         {
             $this->view->executions = $executions;
-            return false;
+            return;
         }
 
         $executionIdList = array_keys($executions);
@@ -985,7 +956,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallReportBlock()
+    protected function printWaterfallReportBlock(): void
     {
         $this->app->loadLang('programplan');
         $project = $this->loadModel('project')->getByID($this->session->project);
@@ -1016,7 +987,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallGeneralReportBlock()
+    protected function printWaterfallGeneralReportBlock(): void
     {
         $this->app->loadLang('programplan');
         $this->loadModel('project');
@@ -1040,7 +1011,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallGanttBlock()
+    protected function printWaterfallGanttBlock(): void
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($this->session->project);
         $productID = $this->session->product ? $this->session->product : 0;
@@ -1057,9 +1028,9 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallIssueBlock()
+    protected function printWaterfallIssueBlock(): void
     {
-        return $this->printIssueBlock();
+        $this->printIssueBlock();
     }
 
     /**
@@ -1068,7 +1039,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallRiskBlock()
+    protected function printWaterfallRiskBlock(): void
     {
         $this->printRiskBlock();
     }
@@ -1079,7 +1050,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallEstimateBlock()
+    protected function printWaterfallEstimateBlock(): void
     {
         $this->app->loadLang('durationestimation');
         $this->loadModel('project');
@@ -1103,7 +1074,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printWaterfallProgressBlock()
+    protected function printWaterfallProgressBlock(): void
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
@@ -1136,7 +1107,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printScrumOverviewBlock()
+    protected function printScrumOverviewBlock(): void
     {
         $projectID = $this->session->project;
         $this->app->loadLang('execution');
@@ -1150,14 +1121,15 @@ class blockZen extends block
     /**
      * Print srcum project list block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printScrumListBlock()
+    protected function printScrumListBlock(object $block): void
     {
-        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
-        $count = isset($this->params->count) ? (int)$this->params->count : 15;
-        $type  = isset($this->params->type) ? $this->params->type : 'undone';
+        if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
+        $count = isset($block->params->count) ? (int)$block->params->count : 15;
+        $type  = isset($block->params->type) ? $block->params->type : 'undone';
 
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
@@ -1168,15 +1140,16 @@ class blockZen extends block
     /**
      * Print srcum product block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printScrumProductBlock()
+    protected function printScrumProductBlock(object $block): void
     {
         $stories  = array();
         $bugs     = array();
         $releases = array();
-        $count    = isset($this->params->count) ? (int)$this->params->count : 15;
+        $count    = isset($block->params->count) ? (int)$block->params->count : 15;
 
         $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
         $productIdList = array_keys($products);
@@ -1200,9 +1173,9 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printScrumIssueBlock()
+    protected function printScrumIssueBlock(): void
     {
-        return $this->printIssueBlock();
+        $this->printIssueBlock();
     }
 
     /**
@@ -1211,7 +1184,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printScrumRiskBlock()
+    protected function printScrumRiskBlock(): void
     {
         $this->printRiskBlock();
     }
@@ -1219,30 +1192,32 @@ class blockZen extends block
     /**
      * Print issue block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    private function printIssueBlock()
+    private function printIssueBlock(object $block): void
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('issueList', $uri, 'project');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $block->params->type, $this->viewType == 'json' ? 0 : (int)$block->params->count, $block->params->orderBy);
     }
 
     /**
      * Print risk block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    private function printRiskBlock()
+    private function printRiskBlock(object $block): void
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('riskList', $uri, 'project');
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
+        $this->view->risks = $this->loadModel('risk')->getBlockRisks($this->session->project, $block->params->type, $this->viewType == 'json' ? 0 : (int)$block->params->count, $block->params->orderBy);
     }
 
     /**
@@ -1251,7 +1226,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printSprintBlock()
+    protected function printSprintBlock(): void
     {
         $sprints = $this->dao->select('status, count(*) as sprints')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
@@ -1278,16 +1253,17 @@ class blockZen extends block
     /**
      * Print project dynamic block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProjectDynamicBlock()
+    protected function printProjectDynamicBlock(object $block): void
     {
         $projectID = $this->session->project;
 
         $executions = $this->loadModel('execution')->getPairs($projectID);
         $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $count      = isset($this->params->count) ? (int)$this->params->count : 10;
+        $count      = isset($block->params->count) ? (int)$block->params->count : 10;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1305,7 +1281,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printScrumRoadMapBlock($productID = 0, $roadMapID = 0)
+    protected function printScrumRoadMapBlock($productID = 0, $roadMapID = 0): void
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('releaseList',     $uri, 'product');
@@ -1330,10 +1306,11 @@ class blockZen extends block
     /**
      * Print srcum test block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printScrumTestBlock()
+    protected function printScrumTestBlock(object $block): void
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('testtaskList', $uri, 'qa');
@@ -1342,8 +1319,8 @@ class blockZen extends block
         $this->session->set('buildList',    $uri, 'execution');
         $this->app->loadLang('testtask');
 
-        $count  = zget($this->params, 'count', 10);
-        $status = isset($this->params->type)  ? $this->params->type : 'wait';
+        $count  = zget($block->params, 'count', 10);
+        $status = isset($block->params->type)  ? $block->params->type : 'wait';
 
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')
@@ -1364,16 +1341,17 @@ class blockZen extends block
     /**
      * Print qa statistic block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printQaStatisticBlock()
+    protected function printQaStatisticBlock(object $block): void
     {
-        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
         $this->app->loadLang('bug');
-        $status = isset($this->params->type)  ? $this->params->type : '';
-        $count  = isset($this->params->count) ? (int)$this->params->count : 0;
+        $status = isset($block->params->type)  ? $block->params->type : '';
+        $count  = isset($block->params->count) ? (int)$block->params->count : 0;
 
         $projectID  = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
         $products   = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID, 'all');
@@ -1381,7 +1359,7 @@ class blockZen extends block
         if(empty($products))
         {
             $this->view->products = $products;
-            return false;
+            return;
         }
 
         $productIdList = array_keys($products);
@@ -1444,13 +1422,11 @@ class blockZen extends block
      * @access protected
      * @return bool
      */
-    protected function printProductOverviewBlock(): bool
+    protected function printProductOverviewBlock(): void
     {
         $this->view->totalProductCount       = 1;
         $this->view->productReleasedThisYear = 1;
         $this->view->releaseCount            = $this->loadModel('release')->getReleaseCount('milestone');
-
-        return true;
     }
 
     /**
@@ -1459,7 +1435,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printExecutionOverviewBlock()
+    protected function printExecutionOverviewBlock(): void
     {
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
         $executions = $this->loadModel('execution')->getList($projectID);
@@ -1492,7 +1468,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printQaOverviewBlock()
+    protected function printQaOverviewBlock(): void
     {
         $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
             ->where('1=1')
@@ -1522,15 +1498,16 @@ class blockZen extends block
     /**
      * Print execution block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printExecutionBlock()
+    protected function printExecutionBlock(object $block): void
     {
-        if(!empty($this->params->type) && preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+        if(!empty($block->params->type) && preg_match('/[^a-zA-Z0-9_]/', $block->params->type)) return;
 
-        $count  = isset($this->params->count) ? (int)$this->params->count : 0;
-        $status = isset($this->params->type)  ? $this->params->type : 'all';
+        $count  = isset($block->params->count) ? (int)$block->params->count : 0;
+        $status = isset($block->params->type)  ? $block->params->type : 'all';
 
         $this->loadModel('execution');
         $this->app->loadClass('pager', true);
@@ -1545,11 +1522,13 @@ class blockZen extends block
     /**
      * Print assign to me block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printAssignToMeBlock($longBlock = true)
+    protected function printAssignToMeBlock(object $block): void
     {
+        $longBlock  = $this->block->isLongBlock($block);
         $hasIssue   = helper::hasFeature('issue');
         $hasRisk    = helper::hasFeature('risk');
         $hasMeeting = helper::hasFeature('meeting');
@@ -1566,8 +1545,7 @@ class blockZen extends block
         if(common::hasPriv('feedback', 'view') && in_array($this->config->edition, array('max', 'biz')))                            $hasViewPriv['feedback']    = true;
         if(common::hasPriv('ticket', 'view') && in_array($this->config->edition, array('max', 'biz')))                              $hasViewPriv['ticket']      = true;
 
-        $params          = $this->get->param;
-        $params          = json_decode(base64_decode($params));
+        $params          = $block->params;
         $count           = array();
         $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount', 'requirement' => 'requirementCount');
@@ -1732,7 +1710,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printRecentProjectBlock()
+    protected function printRecentProjectBlock(): void
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1743,14 +1721,15 @@ class blockZen extends block
     /**
      * Print project team block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProjectTeamBlock()
+    protected function printProjectTeamBlock(object $block): void
     {
-        $count   = isset($this->params->count)   ? $this->params->count   : 15;
-        $status  = isset($this->params->type)    ? $this->params->type    : 'all';
-        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_desc';
+        $count   = isset($block->params->count)   ? $block->params->count   : 15;
+        $status  = isset($block->params->type)    ? $block->params->type    : 'all';
+        $orderBy = isset($block->params->orderBy) ? $block->params->orderBy : 'id_desc';
 
         /* Get projects. */
         $this->app->loadLang('task');
@@ -1765,7 +1744,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDocStatisticBlock()
+    protected function printDocStatisticBlock(): void
     {
         $this->view->statistic = $this->loadModel('doc')->getStatisticInfo();
     }
@@ -1776,7 +1755,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDocDynamicBlock()
+    protected function printDocDynamicBlock(): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1792,7 +1771,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDocMyCollectionBlock()
+    protected function printDocMyCollectionBlock(): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1817,7 +1796,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDocRecentUpdateBlock()
+    protected function printDocRecentUpdateBlock(): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1842,7 +1821,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDocViewListBlock()
+    protected function printDocViewListBlock(): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1857,7 +1836,7 @@ class blockZen extends block
      * @access protected
      * @return void
      */
-    protected function printDocCollectListBlock()
+    protected function printDocCollectListBlock(): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1869,16 +1848,17 @@ class blockZen extends block
     /**
      * Print product's document block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProductDocBlock()
+    protected function printProductDocBlock(object $block): void
     {
         $this->loadModel('doc');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
-        $count         = isset($this->params->count) ? (int)$this->params->count : 15;
+        $count         = isset($block->params->count) ? (int)$block->params->count : 15;
         $products      = $this->loadModel('product')->getOrderedProducts('all');
         $involveds     = $this->product->getOrderedProducts('involved');
         $productIdList = array_merge(array_keys($products), array_keys($involveds));
@@ -1915,17 +1895,18 @@ class blockZen extends block
     /**
      * Print project's document block.
      *
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printProjectDocBlock()
+    protected function printProjectDocBlock(object $block): void
     {
         $this->loadModel('doc');
         $this->app->loadLang('project');
         $this->session->set('docList', $this->createLink('doc', 'index'), 'doc');
 
         /* Set project status and count. */
-        $count    = isset($this->params->count) ? (int)$this->params->count : 15;
+        $count    = isset($block->params->count) ? (int)$block->params->count : 15;
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
@@ -1990,17 +1971,17 @@ class blockZen extends block
     /**
      * Print guide block
      *
-     * @param  int    $blockID
+     * @param  object    $block
      * @access protected
      * @return void
      */
-    protected function printGuideBlock($blockID = 0)
+    protected function printGuideBlock($block)
     {
         $this->app->loadLang('custom');
         $this->app->loadLang('my');
         $this->loadModel('setting');
 
-        $this->view->blockID       = $blockID;
+        $this->view->blockID       = $block->id;
         $this->view->programs      = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
         $this->view->programID     = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
         $this->view->URSRList      = $this->loadModel('custom')->getURSRPairs();
