@@ -123,4 +123,4 @@ div
     )
 );
 
-render();
+render('|fragment');
