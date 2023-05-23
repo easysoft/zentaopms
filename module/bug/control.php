@@ -131,16 +131,18 @@ class bug extends control
     }
 
     /**
+     * Bug 的统计报表。
      * The report page.
      *
      * @param  int    $productID
      * @param  string $browseType
      * @param  int    $branchID
      * @param  int    $moduleID
+     * @param  string $chartType
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'default')
+    public function report(int $productID, string $browseType, int $branchID, int $moduleID, string $chartType = 'default')
     {
         $this->loadModel('report');
         $this->view->charts = array();
@@ -149,21 +151,21 @@ class bug extends control
         {
             foreach($this->post->charts as $chart)
             {
-                $chartFunc   = 'getDataOf' . $chart;
-                $chartData   = $this->bug->$chartFunc();
-                $chartOption = $this->lang->bug->report->$chart;
-                if(!empty($chartType) and $chartType != 'default') $chartOption->type = $chartType;
-                $this->bug->mergeChartOption($chart);
+                $chartFunc = 'getDataOf' . $chart;
+                $chartData = $this->bug->$chartFunc();
 
-                $this->view->charts[$chart] = $chartOption;
+                $this->view->charts[$chart] = $this->bug->mergeChartOption($chart, $chartType);
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
 
+        /* 如果是影子产品并且对应的项目不是多迭代项目，删掉迭代 Bug 数量报表*/
+        /* Unset execution bugs report if the product is shadow product and corresponding project is not multiple. */
         $project = $this->loadModel('project')->getByShadowProduct($productID);
-        if(!empty($project) and !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
+        if(!empty($project) && !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
 
         $this->qa->setMenu($this->products, $productID, $branchID);
+
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
