@@ -115,17 +115,18 @@ toolbar
         'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
     ))),
     div(setClass('nav-divider')),
-    $config->systemMode == 'ALM' ? item(set(array
+    $config->systemMode == 'ALM' ? modalTrigger
     (
-        'text'        => $lang->product->editLine,
-        'icon'        => 'edit',
-        'class'       => 'ghost text-primary',
-        'data-url'    => createLink('product', 'manageLine', $browseType),
-        'data-toggle' => 'modal',
-        'data-type'   => 'ajax',
-        'data-title'  => '',
-        'data-size'   => 'lg'
-    ))) : NULL,
+        to::trigger(btn
+        (
+            setClass('ghost text-primary'),
+            set::icon('edit'),
+            $lang->product->editLine
+        )),
+        set::url(createLink('product', 'manageLine', $browseType)),
+        set::type('ajax'),
+        set::title('maintaince')
+    ) : NULL,
     item(set(array
     (
         'text'  => $lang->product->create,

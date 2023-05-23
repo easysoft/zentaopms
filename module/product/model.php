@@ -723,7 +723,7 @@ class productModel extends model
         }
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
     }
 
     /**
