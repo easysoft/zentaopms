@@ -13,6 +13,164 @@ declare(strict_types=1);
 class taskTao extends taskModel
 {
     /**
+     * 计算任务列表中每个任务的进度，包括子任务。
+     * Compute progress of task list, include its' children.
+     *
+     * @param  object[]  $tasks
+     * @access protected
+     * @return object[]
+     */
+    protected function batchComputeProgress(array $tasks): array
+    {
+        foreach($tasks as $task)
+        {
+            $task->progress = $this->computeTaskProgress($task);
+            if(empty($task->children)) continue;
+
+            $task->children = $this->batchComputeProgress($task->children);
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * 将任务的层级改为父子结构。
+     * Change the hierarchy of tasks to a parent-child structure.
+     *
+     * @param  object[]  $tasks
+     * @param  object[]  $parentTasks
+     * @access protected
+     * @return object[]
+     */
+    protected function buildTaskTree(array $tasks, array $parentTasks): array
+    {
+        foreach($tasks as $task)
+        {
+            if($task->parent <= 0) continue;
+            if(isset($tasks[$task->parent]))
+            {
+                if(!isset($tasks[$task->parent]->children)) $tasks[$task->parent]->children = array();
+                $tasks[$task->parent]->children[$task->id] = $task;
+                unset($tasks[$task->id]);
+            }
+            else
+            {
+                $parent = $parentTasks[$task->parent];
+                $task->parentName = $parent->name;
+            }
+        }
+        return $tasks;
+    }
+
+    /**
+     * 检查一个任务是否有子任务。
+     * Check if a task has children.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return bool
+     */
+    protected function checkHasChildren(int $taskID): bool
+    {
+        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
+        if(!$childrenCount) return false;
+        return true;
+    }
+
+    /**
+     * 获取任务的进度。
+     * Compute progress of a task.
+     *
+     * @param  object    $task
+     * @access protected
+     * @return float
+     */
+    protected function computeTaskProgress(object $task): float
+    {
+        if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+        if($task->consumed == 0) return 0;
+        return 100;
+    }
+
+    /**
+     *  计算当前任务的状态。
+     *  Compute the status of the current task.
+     *
+     * @param  object    $currentTask
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @param  bool      $autoStatus  true|false
+     * @param  bool      $hasEfforts  true|false
+     * @param  array     $members
+     * @access protected
+     * @return object
+     */
+    protected function computeTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
+    {
+        /* If the status is not automatic, return the current task. */
+        if(!$autoStatus) return $currentTask;
+
+        /* If consumed of the current task is empty and current task has no efforts, the current task status should be wait. */
+        if($currentTask->consumed == 0 && !$hasEfforts)
+        {
+            if(!isset($task->status)) $currentTask->status = 'wait';
+            $currentTask->finishedBy   = null;
+            $currentTask->finishedDate = null;
+        }
+
+        /* If neither consumed nor left of the current task is empty, the current task status should be doing. */
+        if($currentTask->consumed > 0 && $currentTask->left > 0)
+        {
+            $currentTask->status       = 'doing';
+            $currentTask->finishedBy   = null;
+            $currentTask->finishedDate = null;
+        }
+
+        /* If consumed of the current task is not empty and left of the current task is empty, the current task status should be done or doing. */
+        if($currentTask->consumed > 0 && $currentTask->left == 0)
+        {
+            $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
+            /* If the number of finisher is less than the number of team members , the current task status should be doing. */
+            if(count($finisedUsers) != count($members))
+            {
+                if(strpos('cancel,pause', $oldTask->status) === false || ($oldTask->status == 'closed' && $oldTask->reason == 'done'))
+                {
+                    $currentTask->status       = 'doing';
+                    $currentTask->finishedBy   = null;
+                    $currentTask->finishedDate = null;
+                }
+            }
+            /* If status of old task is wait or doing or pause, the current task status should be done. */
+            elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
+            {
+                $currentTask->status       = 'done';
+                $currentTask->assignedTo   = $oldTask->openedBy;
+                $currentTask->assignedDate = helper::now();
+                $currentTask->finishedBy   = $this->app->user->account;
+                $currentTask->finishedDate = $task->finishedDate;
+            }
+        }
+
+        return $currentTask;
+    }
+
+    /**
+     * 拼接团队成员信息，包括账号、预计、消耗、剩余，用来创建历史记录。例如：团队成员: admin, 预计: 2, 消耗: 0, 剩余: 3。
+     * Concat team info for create history.
+     *
+     * @param  array     $teamInfoList
+     * @param  array     $userPairs
+     * @access protected
+     * @return string
+     */
+    protected function concatTeamInfo(array $teamInfoList, array $userPairs): string
+    {
+        $teamInfo = '';
+        foreach($teamInfoList as $info) $teamInfo .= "{$this->lang->task->teamMember}: " . zget($userPairs, $info->account) . ", {$this->lang->task->estimateAB}: " . (float)$info->estimate . ", {$this->lang->task->consumedAB}: " . (float)$info->consumed . ", {$this->lang->task->leftAB}: " . (float)$info->left . "\n";
+        return $teamInfo;
+    }
+
+    /**
      * 更新一个任务。
      * Update a task.
      *
@@ -77,22 +235,6 @@ class taskTao extends taskModel
 
         $value = isset($task->$field) ? $task->$field : false;
         return (string)$value;
-    }
-
-    /**
-     * 根据报表条件查询任务.
-     * Get task list by report.
-     *
-     * @param  string    $field
-     * @param  string    $condition
-     * @access protected
-     * @return object[]
-     */
-    protected function getListByReportCondition(string $field, string $condition): array
-    {
-        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
-                ->where($condition)
-                ->fetchAll('id');
     }
 
     /**
@@ -203,6 +345,22 @@ class taskTao extends taskModel
     }
 
     /**
+     * 根据报表条件查询任务.
+     * Get task list by report.
+     *
+     * @param  string    $field
+     * @param  string    $condition
+     * @access protected
+     * @return object[]
+     */
+    protected function getListByReportCondition(string $field, string $condition): array
+    {
+        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
+                ->where($condition)
+                ->fetchAll('id');
+    }
+
+    /**
      * 获取edit方法的必填项。
      * Get required fields for edit method.
      *
@@ -246,54 +404,35 @@ class taskTao extends taskModel
     }
 
     /**
-     * 检查一个任务是否有子任务。
-     * Check if a task has children.
+     * 获取团队成员以及他的预计、消耗、剩余工时。
+     * Get team account,estimate,consumed and left info.
      *
-     * @param  int       $taskID
-     * @access protected
-     * @return bool
-     */
-    protected function checkHasChildren(int $taskID): bool
-    {
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
-        if(!$childrenCount) return false;
-        return true;
-    }
-
-    /**
-     * 获取任务的进度。
-     * Compute progress of a task.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return float
-     */
-    protected function computeTaskProgress(object $task): float
-    {
-        if($task->left != 0) return round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-        if($task->consumed == 0) return 0;
-        return 100;
-    }
-
-    /**
-     * 计算任务列表中每个任务的进度，包括子任务。
-     * Compute progress of task list, include its' children.
-     *
-     * @param  object[]  $tasks
+     * @param  array     $teamList
+     * @param  array     $teamSourceList
+     * @param  array     $teamEstimateList
+     * @param  array     $teamConsumedList
+     * @param  array     $teamLeftList
      * @access protected
      * @return object[]
      */
-    protected function batchComputeProgress(array $tasks): array
+    protected function getTeamInfoList(array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
     {
-        foreach($tasks as $task)
+        $teamInfoList = array();
+        foreach($teamList as $index => $account)
         {
-            $task->progress = $this->computeTaskProgress($task);
-            if(empty($task->children)) continue;
+            if(empty($account)) continue;
 
-            $task->children = $this->batchComputeProgress($task->children);
+            $teamInfo = new stdclass();
+            $teamInfo->account  = $account;
+            $teamInfo->source   = $teamSourceList[$index];
+            $teamInfo->estimate = $teamEstimateList[$index];
+            $teamInfo->consumed = $teamConsumedList[$index];
+            $teamInfo->left     = $teamLeftList[$index];
+
+            $teamInfoList[$index] = $teamInfo;
         }
 
-        return $tasks;
+        return $teamInfoList;
     }
 
     /**
@@ -328,94 +467,32 @@ class taskTao extends taskModel
     }
 
     /**
-     * 将任务的层级改为父子结构。
-     * Change the hierarchy of tasks to a parent-child structure.
+     * 维护团队成员信息。
+     * Maintain team member information.
      *
-     * @param  object[]  $tasks
-     * @param  object[]  $parentTasks
+     * @param  object    $member
+     * @param  string    $mode   multi|linear
+     * @param  bool      $inTeam
      * @access protected
-     * @return object[]
+     * @return bool
      */
-    protected function buildTaskTree(array $tasks, array $parentTasks): array
+    protected function setTeamMember(object $member, string $mode, bool $inTeam): bool
     {
-        foreach($tasks as $task)
+        if($mode == 'multi' && $inTeam)
         {
-            if($task->parent <= 0) continue;
-            if(isset($tasks[$task->parent]))
-            {
-                if(!isset($tasks[$task->parent]->children)) $tasks[$task->parent]->children = array();
-                $tasks[$task->parent]->children[$task->id] = $task;
-                unset($tasks[$task->id]);
-            }
-            else
-            {
-                $parent = $parentTasks[$task->parent];
-                $task->parentName = $parent->name;
-            }
+            $this->dao->update(TABLE_TASKTEAM)
+                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
+                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
+                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
+                ->where('task')->eq($member->task)
+                ->andWhere('account')->eq($member->account)
+                ->exec();
         }
-        return $tasks;
-    }
-
-    /**
-     *  计算当前任务的状态。
-     *  Compute the status of the current task.
-     *
-     * @param  object    $currentTask
-     * @param  object    $oldTask
-     * @param  object    $task
-     * @param  bool      $autoStatus  true|false
-     * @param  bool      $hasEfforts  true|false
-     * @param  array     $members
-     * @access protected
-     * @return object
-     */
-    protected function computeTaskStatus(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object
-    {
-        /* If the status is not automatic, return the current task. */
-        if(!$autoStatus) return $currentTask;
-
-        /* If consumed of the current task is empty and current task has no efforts, the current task status should be wait. */
-        if($currentTask->consumed == 0 && !$hasEfforts)
+        else
         {
-            if(!isset($task->status)) $currentTask->status = 'wait';
-            $currentTask->finishedBy   = null;
-            $currentTask->finishedDate = null;
+            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
         }
-
-        /* If neither consumed nor left of the current task is empty, the current task status should be doing. */
-        if($currentTask->consumed > 0 && $currentTask->left > 0)
-        {
-            $currentTask->status       = 'doing';
-            $currentTask->finishedBy   = null;
-            $currentTask->finishedDate = null;
-        }
-
-        /* If consumed of the current task is not empty and left of the current task is empty, the current task status should be done or doing. */
-        if($currentTask->consumed > 0 && $currentTask->left == 0)
-        {
-            $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
-            /* If the number of finisher is less than the number of team members , the current task status should be doing. */
-            if(count($finisedUsers) != count($members))
-            {
-                if(strpos('cancel,pause', $oldTask->status) === false || ($oldTask->status == 'closed' && $oldTask->reason == 'done'))
-                {
-                    $currentTask->status       = 'doing';
-                    $currentTask->finishedBy   = null;
-                    $currentTask->finishedDate = null;
-                }
-            }
-            /* If status of old task is wait or doing or pause, the current task status should be done. */
-            elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
-            {
-                $currentTask->status       = 'done';
-                $currentTask->assignedTo   = $oldTask->openedBy;
-                $currentTask->assignedDate = helper::now();
-                $currentTask->finishedBy   = $this->app->user->account;
-                $currentTask->finishedDate = $task->finishedDate;
-            }
-        }
-
-        return $currentTask;
+        return !dao::isError();
     }
 
     /**
@@ -437,54 +514,6 @@ class taskTao extends taskModel
         $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * 获取团队成员以及他的预计、消耗、剩余工时。
-     * Get team account,estimate,consumed and left info.
-     *
-     * @param  array     $teamList
-     * @param  array     $teamSourceList
-     * @param  array     $teamEstimateList
-     * @param  array     $teamConsumedList
-     * @param  array     $teamLeftList
-     * @access protected
-     * @return object[]
-     */
-    protected function getTeamInfoList(array $teamList, array $teamSourceList, array $teamEstimateList, array $teamConsumedList, array $teamLeftList): array
-    {
-        $teamInfoList = array();
-        foreach($teamList as $index => $account)
-        {
-            if(empty($account)) continue;
-
-            $teamInfo = new stdclass();
-            $teamInfo->account  = $account;
-            $teamInfo->source   = $teamSourceList[$index];
-            $teamInfo->estimate = $teamEstimateList[$index];
-            $teamInfo->consumed = $teamConsumedList[$index];
-            $teamInfo->left     = $teamLeftList[$index];
-
-            $teamInfoList[$index] = $teamInfo;
-        }
-
-        return $teamInfoList;
-    }
-
-    /**
-     * 拼接团队成员信息，包括账号、预计、消耗、剩余，用来创建历史记录。例如：团队成员: admin, 预计: 2, 消耗: 0, 剩余: 3。
-     * Concat team info for create history.
-     *
-     * @param  array     $teamInfoList
-     * @param  array     $userPairs
-     * @access protected
-     * @return string
-     */
-    protected function concatTeamInfo(array $teamInfoList, array $userPairs): string
-    {
-        $teamInfo = '';
-        foreach($teamInfoList as $info) $teamInfo .= "{$this->lang->task->teamMember}: " . zget($userPairs, $info->account) . ", {$this->lang->task->estimateAB}: " . (float)$info->estimate . ", {$this->lang->task->consumedAB}: " . (float)$info->consumed . ", {$this->lang->task->leftAB}: " . (float)$info->left . "\n";
-        return $teamInfo;
     }
 
     /**
@@ -548,34 +577,5 @@ class taskTao extends taskModel
                 $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
             }
         }
-    }
-
-    /**
-     * 维护团队成员信息。
-     * Maintain team member information.
-     *
-     * @param  object    $member
-     * @param  string    $mode   multi|linear
-     * @param  bool      $inTeam
-     * @access protected
-     * @return bool
-     */
-    protected function setTeamMember(object $member, string $mode, bool $inTeam): bool
-    {
-        if($mode == 'multi' && $inTeam)
-        {
-            $this->dao->update(TABLE_TASKTEAM)
-                ->beginIF($member->estimate)->set("estimate= estimate + {$member->estimate}")->fi()
-                ->beginIF($member->left)->set("`left` = `left` + {$member->left}")->fi()
-                ->beginIF($member->consumed)->set("`consumed` = `consumed` + {$member->consumed}")->fi()
-                ->where('task')->eq($member->task)
-                ->andWhere('account')->eq($member->account)
-                ->exec();
-        }
-        else
-        {
-            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
-        }
-        return !dao::isError();
     }
 }
