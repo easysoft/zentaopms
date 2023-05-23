@@ -159,3 +159,39 @@ $config->bug->dtable->fieldList['actions']['type']     = 'actions';
 $config->bug->dtable->fieldList['actions']['width']    = '140';
 $config->bug->dtable->fieldList['actions']['sortType'] = false;
 $config->bug->dtable->fieldList['actions']['fixed']    = 'right';
+
+$config->bug->linkBugs = new stdclass();
+$config->bug->linkBugs->dtable = new stdclass();
+$config->bug->linkBugs->dtable->fieldList['id']['name']  = 'id';
+$config->bug->linkBugs->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->bug->linkBugs->dtable->fieldList['id']['type']  = 'checkID';
+$config->bug->linkBugs->dtable->fieldList['id']['align'] = 'left';
+$config->bug->linkBugs->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->bug->linkBugs->dtable->fieldList['pri']['name']  = 'pri';
+$config->bug->linkBugs->dtable->fieldList['pri']['title'] = $lang->bug->pri;
+$config->bug->linkBugs->dtable->fieldList['pri']['type']  = 'pri';
+
+$config->bug->linkBugs->dtable->fieldList['product']['name']  = 'product';
+$config->bug->linkBugs->dtable->fieldList['product']['title'] = $lang->bug->product;
+$config->bug->linkBugs->dtable->fieldList['product']['type']  = 'text';
+$config->bug->linkBugs->dtable->fieldList['product']['link']  = helper::createLink('product', 'view', "productID={product}");
+
+$config->bug->linkBugs->dtable->fieldList['title']['name']     = 'title';
+$config->bug->linkBugs->dtable->fieldList['title']['title']    = $lang->bug->title;
+$config->bug->linkBugs->dtable->fieldList['title']['type']     = 'text';
+$config->bug->linkBugs->dtable->fieldList['title']['minWidth'] = '200';
+$config->bug->linkBugs->dtable->fieldList['title']['link']     = helper::createLink('bug', 'view', "bugID={id}");
+
+$config->bug->linkBugs->dtable->fieldList['status']['name']      = 'status';
+$config->bug->linkBugs->dtable->fieldList['status']['title']     = $lang->bug->statusAB;
+$config->bug->linkBugs->dtable->fieldList['status']['type']      = 'status';
+$config->bug->linkBugs->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
+
+$config->bug->linkBugs->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->bug->linkBugs->dtable->fieldList['openedBy']['title'] = $lang->bug->openedByAB;
+$config->bug->linkBugs->dtable->fieldList['openedBy']['type']  = 'user';
+
+$config->bug->linkBugs->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
+$config->bug->linkBugs->dtable->fieldList['assignedTo']['title'] = $lang->bug->assignedTo;
+$config->bug->linkBugs->dtable->fieldList['assignedTo']['type']  = 'user';
