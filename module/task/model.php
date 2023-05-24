@@ -1630,9 +1630,7 @@ class taskModel extends model
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $this->loadModel('kanban');
-        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $task->id);
-        if(isset($output['toColID']))  $this->kanban->moveCard($task->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        $this->updateKanbanCell($task->id, $output, $oldTask->execution);
 
         $changes = common::createChanges($oldTask, $task);
         if($changes || $this->post->comment != '')
