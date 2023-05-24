@@ -13,12 +13,9 @@ cid=1
 
 zdTable('task')->config('task')->gen(6);
 zdTable('user')->config('user')->gen(50);
+zdTable('project')->config('project')->gen(20);
 
 su('user12');
-
-$project = zdTable('project');
-$project->id->range('1-100');
-$project->gen(10);
 
 $taskIDlist = array('1','2','3','4','5','6');
 
