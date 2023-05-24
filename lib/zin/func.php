@@ -1199,6 +1199,16 @@ function section()
 }
 
 /**
+ * Zentao detail page section list widget.
+ *
+ * array items
+ */
+function sectionList()
+{
+    return createWg('sectionList', func_get_args());
+}
+
+/**
  * Zentao entity label widget.
  *
  * string|int|null entityID
