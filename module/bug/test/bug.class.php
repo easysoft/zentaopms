@@ -1599,23 +1599,19 @@ class bugTest
     }
 
     /**
+     * 获取版本 bug 数量报表的测试用例。
      * Test get report data of bugs per build.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerBuildTest()
+    public function getDataOfBugsPerBuildTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerBuild();
+        $datas = $this->objectModel->getDataOfBugsPerBuild();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**

@@ -1,0 +1,13 @@
+---
+title: zt_bug
+author: Tingting Dai
+version: "1.0"
+fields:
+- field: openedBuild
+  fields:
+    - field: openedBuild1
+      range: 0,1,1,2,trunk{6}
+    - field: openedBuild2
+      range: "[]{2},2,[]{7}"
+      prefix: ","
+...

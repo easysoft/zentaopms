@@ -1829,50 +1829,57 @@ class bugModel extends model
     }
 
     /**
+     * 获取版本 Bug 数量。
      * Get report data of bugs per build.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getDataOfBugsPerBuild()
+    public function getDataOfBugsPerBuild(): array
     {
-        $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('openedBuild AS name, COUNT(openedBuild) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        /* Judge if all product or not. */
-        $products = $this->session->product;
-        preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
-        if(!empty($matchs) and isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
-        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasdeleted');
 
-        /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data)
         {
-            $openBuildIDList = explode(',', $buildIDList);
-            if(count($openBuildIDList) > 1)
+            if(is_int($buildIDList)) continue;
+            if(strpos(trim($buildIDList, ','), ',') === false) continue;
+
+            $openedBuildIDList = explode(',', $buildIDList);
+
+            /* Bug 可以关联多个影响版本，一个版本被多个 bug 关联时，累加 bug 数量。*/
+            /* Bugs can be associated with multiple builds. When a build is associated with multiple bugs, accumulated bugs.*/
+            foreach($openedBuildIDList as $buildID)
             {
-                foreach($openBuildIDList as $buildID)
+                if(!isset($datas[$buildID]))
                 {
-                    if(isset($datas[$buildID]))
-                    {
-                        $datas[$buildID]->value += $data->value;
-                    }
-                    else
-                    {
-                        if(!isset($datas[$buildID])) $datas[$buildID] = new stdclass();
-                        $datas[$buildID]->name  = $buildID;
-                        $datas[$buildID]->value = $data->value;
-                    }
+                    $datas[$buildID] = new stdclass();
+                    $datas[$buildID]->name  = $buildID;
+                    $datas[$buildID]->value = 0;
                 }
-                unset($datas[$buildIDList]);
+
+                $datas[$buildID]->value += $data->value;
             }
+
+            unset($datas[$buildIDList]);
         }
 
-        $this->app->loadLang('report');
-        foreach($datas as $buildID => $data)
+        /* 获取最后一次查询的所属产品列表。*/
+        /* Get products in the last query. */
+        $products = $this->session->product;
+        if($this->reportCondition() !== true)
         {
-            $data->name = isset($builds[$buildID]) ? $builds[$buildID] : $this->lang->report->undefined;
+            preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
+            if(!empty($matchs) && isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
         }
+
+        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = 'hasdeleted');
+
+        $this->app->loadLang('report');
+        foreach($datas as $buildID => $data) $data->name = zget($builds, $buildID, $this->lang->report->undefined);
+
         ksort($datas);
+
         return $datas;
     }
 
