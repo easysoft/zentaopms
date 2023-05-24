@@ -2016,4 +2016,183 @@ class bugZen extends bug
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList);
     }
+
+    /**
+     * 为批量创建分配变量。
+     * Assign variables for batch edit.
+     *
+     * @param  int $     productID
+     * @param  string    $branch
+     * @access protected
+     * @return void
+     */
+    protected function assignBatchEditVars(int $productID, string $branch)
+    {
+        /* Initialize vars.*/
+        $bugIdList = array_unique($this->post->bugIdList);
+        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
+
+        /* Set menu and get product id list. */
+        if($this->app->tab == 'product') $this->product->setMenu($productID);
+        if($productID)
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+
+            $productIdList = array($productID => $productID);
+        }
+        else
+        {
+            $this->app->loadLang('my');
+            $this->lang->task->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'bug';
+
+            $productIdList = array_column($bugs, 'product', 'product');
+        }
+
+        /* Get products. */
+        $products = $this->product->getByIdList($productIdList);
+
+        /* Get custom Fields. */
+        foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+
+        $this->view->title        = zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG" . $this->lang->bug->batchEdit;
+        $this->view->customFields = $customFields;
+
+        /* Judge whether the editedBugs is too large and set session. */
+        $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo)
+        {
+            $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+            $this->display();
+        }
+
+        /* Assign product related variables. */
+        $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
+
+        /* Assign users. */
+        $this->assignUsersForBatchEdit($bugs, $productIdList, $branchTagOption);
+    }
+
+    /**
+     * 分配产品相关的变量。
+     * Assign product related variables.
+     *
+     * @param  array     $bugs
+     * @param  array     $products
+     * @access protected
+     * @return array
+     */
+    protected function assignProductRelatedVars(array $bugs, array $products): array
+    {
+        /* Get modules, bugs and plans of the products. */
+        $branchProduct   = false;
+        $modules         = array();
+        $branchTagOption = array();
+        $productBugList  = array();
+        $productPlanList = array();
+        foreach($products as $product)
+        {
+            if(!isset($productPlanList[$product->id])) $productPlanList[$product->id] = array();
+
+            $branches = 0;
+            if($product->type != 'normal')
+            {
+                $branchPairs   = $this->loadModel('branch')->getPairs($product->id, 0 ,'withClosed');
+                $branches      = array_keys($branchPairs);
+                $branchProduct = true;
+
+                foreach($branchPairs as $branchID => $branchName)
+                {
+                    $branchTagOption[$product->id][$branchID] = "/{$product->name}/{$branchName}";
+                    $productPlanList[$product->id][$branchID] = $this->loadModel('productplan')->getPairs($product->id, $branchID, '', true);
+                    $productBugList[$product->id][$branchID]  = $this->bug->getProductBugPairs($product->id, "0,{$branchID}");
+                }
+            }
+            else
+            {
+                $productPlanList[$product->id][0] = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
+                $productBugList[$product->id][0]  = $this->bug->getProductBugPairs($product->id, "");
+            }
+
+            $modulePairs           = $this->tree->getOptionMenu($product->id, 'bug', 0, $branches);
+            $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
+        }
+
+        /* Get module of the bugs, and set bug plans. */
+        foreach($bugs as $bug)
+        {
+            if(!isset($modules[$bug->product][$bug->branch]) && isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
+            $bug->plans = isset($productPlanList[$bug->product]) && isset($productPlanList[$bug->product][$bug->branch]) ? $productPlanList[$bug->product][$bug->branch] : array();
+        }
+
+        $this->view->bugs            = $bugs;
+        $this->view->branchProduct   = $branchProduct;
+        $this->view->modules         = $modules;
+        $this->view->productBugList  = $productBugList;
+        $this->view->branchTagOption = $productBugList;
+        return $branchTagOption;
+    }
+
+    /**
+     * 为批量编辑 bugs 分配人员。
+     * Assign users for batch edit.
+     *
+     * @param  array     $bugs
+     * @param  array     $productIdList
+     * @param  array     $branchTagOption
+     * @access protected
+     * @return void
+     */
+    protected function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
+    {
+        /* If current tab is execution or project, get project, execution, product team members of bugs.*/
+        if($this->app->tab == 'execution' || $this->app->tab == 'project')
+        {
+            $projectIdList = array_column($bugs, 'project', 'project');
+            $project       = $this->loadModel('project')->getByID(key($projectIdList));
+            if(!empty($project) && empty($project->multiple))
+            {
+                $this->config->bug->custom->batchEditFields = str_replace('productplan', '', $this->config->bug->custom->batchEditFields);
+                $this->config->bug->list->customBatchEditFields = str_replace(',productplan,', ',', $this->config->bug->list->customBatchEditFields);
+            }
+
+            $productMembers = array();
+            foreach($productIdList as $id)
+            {
+                $branches   = zget($branchTagOption, $id, array());
+                $branchList = array_keys($branches);
+                foreach($branchList as $branchID)
+                {
+                    $members = $this->bug->getProductMemberPairs($id, $branchID);
+                    $productMembers[$id][$branchID] = array_filter($members);
+                }
+            }
+
+            /* Get members of projects. */
+            $projectMembers     = array();
+            $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
+            foreach($projectIdList as $projectID)
+            {
+                $projectTeam = zget($projectMemberGroup, $projectID, array());
+                foreach($projectTeam as $user) $projectMembers[$projectID][$user->account] = $user->realname;
+            }
+
+            /* Get members of executions. */
+            $executionMembers     = array();
+            $executionIdList      = array_column($bugs, 'execution', 'execution');
+            $executionMemberGroup = $this->loadModel('execution')->getMembersByIdList($executionIdList);
+            foreach($executionIdList as $executionID)
+            {
+                $executionTeam = zget($executionMemberGroup, $executionID, array());
+                foreach($executionTeam as $user) $executionMembers[$executionID][$user->account] = $user->realname;
+            }
+
+            $this->view->productMembers   = $productMembers;
+            $this->view->projectMembers   = $projectMembers;
+            $this->view->executionMembers = $executionMembers;
+        }
+
+        $this->view->users = $this->user->getPairs('devfirst');
+    }
 }

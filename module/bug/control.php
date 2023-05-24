@@ -398,160 +398,17 @@ class bug extends control
         /* If there is no bug ID, return to the previous step. */
         if(!$this->post->bugIdList) $this->locate($this->session->bugList);
 
-        /* Initialize vars.*/
-        $bugIdList = array_unique($this->post->bugIdList);
-        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
-
-        $this->view->title = zget($productList, $productID, '', $productList[$productID]->name . $this->lang->colon) . "BUG" . $this->lang->bug->batchEdit;
-
-        /* Set Custom. */
-        foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->bug->custom->batchEditFields;
-
-        /* Judge whether the editedBugs is too large and set session. */
-        $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo)
-        {
-            $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-            $this->display();
-        }
-
-        /* Set menu and get product id list. */
-        if($this->app->tab == 'product') $this->product->setMenu($productID);
-        if($productID)
-        {
-            $this->qa->setMenu($this->products, $productID, $branch);
-
-            $productIdList = array($productID => $productID);
-        }
-        else
-        {
-            $productIdList = array_column($bugs, 'product', 'product');
-
-            /* Set menu. */
-            $this->app->loadLang('my');
-            $this->lang->task->menu = $this->lang->my->menu->work;
-            $this->lang->my->menu->work['subModule'] = 'bug';
-        }
-
-        /* Get branches, modules and plans. */
-        $branchProduct   = false;
-        $branchTagOption = array();
-        $plans           = array();
-        $productBugList  = array();
-        $productList     = $this->product->getByIdList($productIdList);
-        foreach($productList as $product)
-        {
-            if(!isset($plans[$product->id])) $plans[$product->id] = array();
-
-            $branches = 0;
-            if($product->type != 'normal')
-            {
-                $branches = $this->loadModel('branch')->getList($product->id, 0 ,'all');
-                foreach($branches as $branchInfo)
-                {
-                    $branchTagOption[$product->id][$branchInfo->id] = '/' . $product->name . '/' . $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-
-                    $plans[$product->id][$branchInfo->id] = array('' => '') + $this->loadModel('productplan')->getPairs($product->id, $branchInfo->id, '', true);
-
-                    $productBugList[$product->id][$branchInfo->id] = $this->bug->getProductBugPairs($product->id, "0,{$branchInfo->id}");
-                }
-
-                $branches      = array_keys($branches);
-                $branchProduct = true;
-            }
-            else
-            {
-                $plans[$product->id][0] = array('' => '') + $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
-
-                $productBugList[$product->id][0] = $this->bug->getProductBugPairs($product->id, "");
-            }
-
-            $modulePairs = $this->tree->getOptionMenu($product->id, 'bug', 0, $branches);
-            $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
-        }
-
-        /* Get branches, projects, executions of the bugs, and set bug plans. */
-        $branchIdList    = array();
-        $projectIdList   = array();
-        $executionIdList = array();
-        foreach($bugs as $bug)
-        {
-            $projectIdList[$bug->project]              = $bug->project;
-            $executionIdList[$bug->execution]          = $bug->execution;
-            $branchIdList[$bug->product][$bug->branch] = $bug->branch;
-
-            if(!isset($modules[$bug->product][$bug->branch]) && isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
-
-            $bug->plans = isset($plans[$bug->product]) && isset($plans[$bug->product][$bug->branch]) ? $plans[$bug->product][$bug->branch] : array();
-        }
-
-        /* Get assigned to member. */
-        if($this->app->tab == 'execution' || $this->app->tab == 'project')
-        {
-            $project = $this->loadModel('project')->getByID(key($projectIdList));
-            if(!empty($project) && empty($project->multiple))
-            {
-                $this->config->bug->custom->batchEditFields = str_replace('productplan', '', $this->config->bug->custom->batchEditFields);
-                $this->config->bug->list->customBatchEditFields = str_replace(',productplan,', ',', $this->config->bug->list->customBatchEditFields);
-            }
-
-            $productMembers = array();
-            foreach($productIdList as $id)
-            {
-                $branchList = zget($branchIdList, $id, array());
-                foreach($branchList as $branchID)
-                {
-                    $members = $this->bug->getProductMemberPairs($id, $branchID);
-                    $productMembers[$id][$branchID] = array_filter($members);
-                }
-            }
-
-            /* Get members of projects. */
-            $projectMembers     = array();
-            $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
-            foreach($projectIdList as $projectID)
-            {
-                $projectTeam = zget($projectMemberGroup, $projectID, array());
-                foreach($projectTeam as $user)
-                {
-                    $projectMembers[$projectID][$user->account] = $user->realname;
-                }
-            }
-
-            /* Get members of executions. */
-            $executionMembers     = array();
-            $executionMemberGroup = $this->loadModel('execution')->getMembersByIdList($executionIdList);
-            foreach($executionIdList as $executionID)
-            {
-                $executionTeam = zget($executionMemberGroup, $executionID, array());
-                foreach($executionTeam as $user)
-                {
-                    $executionMembers[$executionID][$user->account] = $user->realname;
-                }
-            }
-
-            $this->view->productMembers   = $productMembers;
-            $this->view->projectMembers   = $projectMembers;
-            $this->view->executionMembers = $executionMembers;
-        }
+        $this->bugZen->assignBatchEditVars($productID, $branch);
 
         /* Assign. */
         $this->view->productID        = $productID;
-        $this->view->branchProduct    = $branchProduct;
         $this->view->severityList     = $this->lang->bug->severityList;
         $this->view->typeList         = $this->lang->bug->typeList;
         $this->view->priList          = $this->lang->bug->priList;
         $this->view->resolutionList   = $this->lang->bug->resolutionList;
         $this->view->statusList       = $this->lang->bug->statusList;
-        $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
-        $this->view->users            = $this->user->getPairs('devfirst');
-        $this->view->modules          = $modules;
-        $this->view->branchTagOption  = $branchTagOption;
-        $this->view->productBugList   = $productBugList;
+        $this->view->showFields       = $this->config->bug->custom->batchEditFields;
         $this->display();
     }
 
