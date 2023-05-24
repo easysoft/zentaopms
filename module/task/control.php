@@ -287,20 +287,16 @@ class task extends control
         {
             if(!is_array($this->post->taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}"), 'parent'));
 
-            $this->loadModel('action');
             $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIDList, $this->post->assignedTo);
-            foreach($taskData as $taskID => $task)
+            foreach($taskData as $task)
             {
                 /* Assign task. */
-                $changes = $this->task->assign($task);
+                $this->task->assign($task);
                 if(dao::isError()) return print(js::error(dao::getError()));
-
-                /* Record log. */
-                $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
-                $this->action->logHistory($actionID, $changes);
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
+            
             return print(js::reload('parent'));
         }
     }

@@ -392,6 +392,7 @@ class taskModel extends model
     }
 
     /**
+     * 更新父任务的状态.
      * Update parent status by taskID.
      *
      * @param $taskID
@@ -401,7 +402,7 @@ class taskModel extends model
      */
     public function updateParentStatus($taskID, $parentID = 0, $createAction = true)
     {
-        $childTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $childTask = $this->dao->select('id,assignedTo,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($parentID)) $parentID = $childTask->parent;
         if($parentID <= 0) return true;
 
@@ -1131,7 +1132,7 @@ class taskModel extends model
         $oldTask = $this->getById($task->id);
 
         /* Check task left. */
-        if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
+        if(!in_array($oldTask->status, array('done', 'closed')) && isset($task->left) && $task->left == 0)
         {
             dao::$errors['left'] = sprintf($this->lang->error->notempty, $this->lang->task->left);
             return false;
@@ -1149,11 +1150,13 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
+        $changes = common::createChanges($oldTask, $task);
+
         /* Record log. */
-        $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $task->assignedTo);
+        $actionID = $this->loadModel('action')->create('task', $task->id, 'Assigned', $this->post->comment, $task->assignedTo);
         $this->action->logHistory($actionID, $changes);
 
-        return common::createChanges($oldTask, $task);
+        return $changes;
     }
 
     /**
