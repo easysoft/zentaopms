@@ -2,12 +2,11 @@ $(function()
 {
     var bugIdList = [1, 2];
 
-    $(document).on('click', '.edit-btn', function()
+    $(document).on('click', '.batch-btn', function()
     {
-        var batchEditLink = $.createLink('bug', 'batchEdit', 'productID=' + productID + '&branch=' + branch);
-        var tempform      = document.createElement("form");
-        tempform.action   = batchEditLink;
-        tempform.method   = "post";
+        var tempform    = document.createElement("form");
+        tempform.action = $(this).data('url');
+        tempform.method = "post";
         tempform.style.display = "none";
 
         var opt   = document.createElement("input");
@@ -17,7 +16,5 @@ $(function()
         tempform.appendChild(opt);
         document.body.appendChild(tempform);
         tempform.submit();
-
-        return false;
     });
 })

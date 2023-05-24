@@ -122,10 +122,11 @@ sidebar
 
 $footToolbar = array('items' => array
 (
-    array('size' => 'sm', 'text' => $lang->edit, 'btnType' => 'primary', 'className' => 'edit-btn'),
+    array('size' => 'sm', 'text' => $lang->edit, 'btnType' => 'primary', 'className' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchEdit', "productID=$productID&branch=$branch")),
     array('size' => 'sm', 'icon' => 'caret-up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('size' => 'sm', 'icon' => 'caret-up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' ,'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('size' => 'sm', 'icon' => 'caret-up', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('size' => 'sm', 'icon' => 'caret', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown'),
+    array('size' => 'sm', 'icon' => 'caret-down', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown'),
 ));
 
 $resolveItems = array();
@@ -147,10 +148,16 @@ menu
     ))
 );
 
-$moduleItems = array();
-foreach($modules as $moduleId => $module)
+$branchItems = array();
+foreach($branchTagOption as $branchID => $branchName)
 {
-    $moduleItems[] = array('text' => $module);
+    $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
+}
+
+$moduleItems = array();
+foreach($modules as $moduleID => $module)
+{
+    $moduleItems[] = array('text' => $module, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
 }
 
 menu
@@ -163,7 +170,7 @@ menu
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
-    $assignedToItems[] = array('text' => $value);
+    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "productID={$productID}&type=product"));
 }
 
 menu
