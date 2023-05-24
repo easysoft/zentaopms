@@ -1580,23 +1580,22 @@ class bugTest
     }
 
     /**
+     * 获取执行 bug 数量报表的测试用例。
      * Test get report data of bugs per execution.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerExecutionTest()
+    public function getDataOfBugsPerExecutionTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerExecution();
+        global $tester;
+        $tester->loadModel('report');
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        $datas = $this->objectModel->getDataOfBugsPerExecution();
+
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**

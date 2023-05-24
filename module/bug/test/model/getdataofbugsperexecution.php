@@ -1,33 +1,45 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php"; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+su('admin');
+
+zdTable('bug')->config('execution')->gen(100);
+zdTable('project')->config('type')->gen(90);
 
 /**
 
 title=bugModel->getDataOfBugsPerExecution();
+timeout=0
 cid=1
-pid=1
 
-获取执行101数据 >> 迭代1,4,迭代1
-获取执行102数据 >> 迭代2,4,迭代2
-获取执行103数据 >> 迭代3,4,迭代3
-获取执行131数据 >> 阶段31,3,阶段31
-获取执行132数据 >> 阶段32,3,阶段32
-获取执行133数据 >> 阶段33,3,阶段33
-获取执行161数据 >> 看板61,3,看板61
-获取执行162数据 >> 看板62,3,看板62
-获取执行163数据 >> 看板63,3,看板63
+- 获取迭代11数据
+ - 第11条的name属性 @/PROJECT11
+ - 第11条的value属性 @10
+ - 第11条的title属性 @/PROJECT11
+
+- 获取迭代12数据
+ - 第12条的name属性 @/PROJECT12
+ - 第12条的value属性 @9
+ - 第12条的title属性 @/PROJECT12
+
+- 获取迭代13数据
+ - 第13条的name属性 @/PROJECT13
+ - 第13条的value属性 @8
+ - 第13条的title属性 @/PROJECT13
+
+- 名称很长的迭代展示
+ - 第14条的name属性 @/一个超长的项目名称到底...
+ - 第14条的value属性 @7
+ - 第14条的title属性 @/一个超长的项目名称到底可以有多长就会加上省略号呢14
+
+- 获取迭代15没有bug数据第15条的name属性 @Error: Cannot get index 15.
 
 */
 
-$bug=new bugTest();
-r($bug->getDataOfBugsPerExecutionTest()) && p('101:name,value,title') && e('迭代1,4,迭代1');   // 获取执行101数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('102:name,value,title') && e('迭代2,4,迭代2');   // 获取执行102数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('103:name,value,title') && e('迭代3,4,迭代3');   // 获取执行103数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('131:name,value,title') && e('阶段31,3,阶段31'); // 获取执行131数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('132:name,value,title') && e('阶段32,3,阶段32'); // 获取执行132数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('133:name,value,title') && e('阶段33,3,阶段33'); // 获取执行133数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('161:name,value,title') && e('看板61,3,看板61'); // 获取执行161数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('162:name,value,title') && e('看板62,3,看板62'); // 获取执行162数据
-r($bug->getDataOfBugsPerExecutionTest()) && p('163:name,value,title') && e('看板63,3,看板63'); // 获取执行163数据
+$bug = new bugTest();
+r($bug->getDataOfBugsPerExecutionTest()) && p('11:name,value,title') && e('/PROJECT11,10,/PROJECT11');                                                         // 获取迭代11数据
+r($bug->getDataOfBugsPerExecutionTest()) && p('12:name,value,title') && e('/PROJECT12,9,/PROJECT12');                                                          // 获取迭代12数据
+r($bug->getDataOfBugsPerExecutionTest()) && p('13:name,value,title') && e('/PROJECT13,8,/PROJECT13');                                                          // 获取迭代13数据
+r($bug->getDataOfBugsPerExecutionTest()) && p('14:name,value,title') && e('/一个超长的项目名称到底...,7,/一个超长的项目名称到底可以有多长就会加上省略号呢14'); // 名称很长的迭代展示
+r($bug->getDataOfBugsPerExecutionTest()) && p('15:name')             && e('Error: Cannot get index 15.');                                                      // 获取迭代15没有bug数据

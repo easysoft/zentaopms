@@ -1805,23 +1805,24 @@ class bugModel extends model
     }
 
     /**
+     * 获取执行 bug 数量。
      * Get report data of bugs per execution.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerExecution()
+    public function getDataOfBugsPerExecution(): array
     {
-        $datas = $this->dao->select('execution as name, count(execution) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('execution')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('execution AS name, count(execution) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('execution')->orderBy('value_desc')->fetchAll('name');
         if(!$datas) return array();
-        $executions = $this->loadModel('execution')->getPairs($this->session->project);
 
-        $maxLength = 12;
-        if(common::checkNotCN()) $maxLength = 22;
+        $executionPairs = $this->loadModel('execution')->getPairs($this->session->project);
+        $maxLength      = common::checkNotCN() ? 22 : 12;
         foreach($datas as $executionID => $data)
         {
-            $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
+            $data->name  = zget($executionPairs, $executionID, $this->lang->report->undefined);
             $data->title = $data->name;
+
             if(mb_strlen($data->name, 'UTF-8') > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength, 'UTF-8') . '...';
         }
         return $datas;

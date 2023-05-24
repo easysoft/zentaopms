@@ -3,9 +3,9 @@ title: zt_project
 author: Tingting Dai
 version: "1.0"
 fields:
-- field:  type 
+- field:  type
   range:  'sprint,stage,kanban'
-- field:  name 
+- field:  name
   fields:
     - field: name1
       range: PROJECT{3},`一个超长的项目名称到底可以有多长就会加上省略号呢`,project
