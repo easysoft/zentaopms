@@ -708,9 +708,7 @@ class bug extends control
     {
         if(!empty($_POST) && isset($_POST['bugIdList']))
         {
-            $bugIdList = $this->post->bugIDList;
-            $bugIdList = array_unique($bugIdList);
-            unset($_POST['bugIdList']);
+            $bugIdList = array_unique($this->post->bugIdList);
 
             $bug = form::data($this->config->bug->form->assignTo)->get();
             foreach($bugIdList as $bugID)
@@ -786,6 +784,7 @@ class bug extends control
     }
 
     /**
+     * 批量确认BUG。
      * Batch confirm bugs.
      *
      * @access public
@@ -793,14 +792,22 @@ class bug extends control
      */
     public function batchConfirm()
     {
-        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
+        if(!empty($_POST) && isset($_POST['bugIdList']))
+        {
+            $bugIdList = array_unique($this->post->bugIdList);
 
-        $bugIDList = array_unique($this->post->bugIDList);
-        $this->bug->batchConfirm($bugIDList);
-        if(dao::isError()) return print(js::error(dao::getError()));
-        foreach($bugIDList as $bugID) $this->action->create('bug', $bugID, 'bugConfirmed');
-        $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->session->bugList, 'parent'));
+            $bug = form::data($this->config->bug->form->confirm)->setDefault('confirmed', 1)->get();
+            foreach($bugIdList as $bugID)
+            {
+                $bug->id = $bugID;
+                $this->bug->confirm($bug, array());
+                $message = $this->executeHooks($bugID);
+            }
+            $this->loadModel('score')->create('ajax', 'batchOther');
+        }
+
+        if(empty($message)) $message = $this->lang->saveSuccess;
+        $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
 
     /**
