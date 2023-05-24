@@ -950,7 +950,7 @@ class productTao extends productModel
      */
     protected function getStatCountByID(string $tableName, int $productID): int|float
     {
-        switch ($tableName)
+        switch($tableName)
         {
             case TABLE_PRODUCTPLAN:
                 /* Get unclosed plans count. */

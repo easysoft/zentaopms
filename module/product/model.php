@@ -1271,11 +1271,12 @@ class productModel extends model
     }
 
     /**
-     * Get product line pairs.
+     * 获取项目集下的产品线。
+     * Get product line pairs by program.
      *
      * @param  int    $programID
      * @access public
-     * @return int[]
+     * @return string[]
      */
     public function getLinePairs(int $programID = 0): array
     {
@@ -1287,11 +1288,12 @@ class productModel extends model
     }
 
     /*
-     * Get all lines.
+     * 根据项目集编号获取产品线列表。
+     * Get product lines by program id list.
      *
-     * @param  array $programIdList
+     * @param  array  $programIdList
      * @access public
-     * @return array
+     * @return object[]
      */
     public function getLines(array $programIdList = array()): array
     {
