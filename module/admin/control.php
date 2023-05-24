@@ -68,6 +68,8 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
+        if(defined('USE_INTRANET')) return $this->send(array('result' => 'success'));
+
         $hasInternet = $this->admin->checkInternet();
 
         if($hasInternet)

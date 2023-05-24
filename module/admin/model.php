@@ -14,14 +14,6 @@
 class adminModel extends model
 {
     /**
-     * The api root.
-     *
-     * @var string
-     * @access public
-     */
-    public $apiRoot;
-
-    /**
      * Post data form  API.
      *
      * @param  string $url
@@ -522,18 +514,18 @@ class adminModel extends model
      */
     public function checkInternet()
     {
-        $timeout = 3;
+        $timeout = 1;
         $curl    = curl_init();
         curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         $connected = curl_exec($curl);
         curl_close($curl);
 
-        return $connected ? true : false;
+        return (bool)$connected;
     }
 
     /**
