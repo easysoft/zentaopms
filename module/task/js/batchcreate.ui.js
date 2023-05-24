@@ -2,7 +2,7 @@
 function setStories()
 {
     var moduleID = $(this).val();
-    var index    = $(this).attr('id').substring(7);
+    var index    = $(this).closest('tr').attr('data-index');
     var link     = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&num=' + index + '&type=short');
     $.get(link, function(stories)
     {
@@ -53,7 +53,7 @@ function toggleZeroTaskStory()
 function setStoryRelated()
 {
     var storyID   = $(this).val();
-    var index     = $(this).attr('id').substring(6);
+    var index     = $(this).closest('tr').attr('data-index');
     var storyLink = '#';
     if(storyID != 0  && storyID != 'ditto')
     {
@@ -83,7 +83,7 @@ function setStoryRelated()
 /* Copy story title as task title. */
 function copyStoryTitle()
 {
-    var index      = $(this).attr('id').substring(10);
+    var index      = $(this).closest('tr').attr('data-index');
     var storyTitle = $('#story_' + index).find('option:selected').text();
     var storyValue = $('#story_' + index).find('option:selected').val();
 
@@ -119,7 +119,7 @@ function loadLanes()
 {
     var regionID = $(this).val();
     console.log(regionID);
-    var index    = $(this).attr('id').substring(8);
+    var index    = $(this).closest('tr').attr('data-index');
     var laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&i=' + index);
     $.get(laneLink, function(lanes)
     {
