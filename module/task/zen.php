@@ -322,7 +322,7 @@ class taskZen extends task
 
         list($customFields, $checkedFields) = $this->getCustomFields($execution, 'batchCreate');
 
-        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
+        $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
         $this->view->modules       = $modules;
         $this->view->parent        = $taskID;

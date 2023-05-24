@@ -212,15 +212,18 @@ $items[] = array
 
 /* ====== Define the page structure with zin widgets ====== */
 
-checkbox
-(
-    set::id('zeroTaskStory'),
-    set::text($lang->story->zeroTask),
-    on::change('toggleZeroTaskStory'),
-);
 formBatchPanel
 (
     set::items($items),
+    to::headingActions
+    (
+        checkbox
+        (
+            set::id('zeroTaskStory'),
+            set::text($lang->story->zeroTask),
+            on::change('toggleZeroTaskStory'),
+        ),
+    ),
     on::change('[data-name="module"]', 'setStories'),
     on::change('[data-name="story"]', 'setStoryRelated'),
     on::click('[data-name="copyStory"]', 'copyStoryTitle'),
