@@ -82,10 +82,9 @@ class testtaskModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
-
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
-            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
