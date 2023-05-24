@@ -106,20 +106,23 @@ $config->task->form->batchEdit['closedReasons'] = array('type' => 'array', 'requ
 $config->task->form->batchEdit['deadlines']     = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->batchEdit['pris']          = array('type' => 'array', 'required' => false, 'default' => array());
 
-$config->task->form->batchCreate = common::formConfig('task', 'batchCreate');
-$config->task->form->batchCreate['module']        = array('type' => 'int', 'required' => false, 'default' => 0);
-$config->task->form->batchCreate['parent']        = array('type' => 'int', 'required' => false, 'default' => 0);
-$config->task->form->batchCreate['story']         = array('type' => 'int', 'required' => false,  'default' => 0);
-$config->task->form->batchCreate['name']          = array('type' => 'string', 'required' => false, 'default' => '', 'base' => true);
-$config->task->form->batchCreate['color']         = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->batchCreate['type']          = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->batchCreate['version']       = array('type' => 'int', 'required' => false, 'default' => 1);
-$config->task->form->batchCreate['assignedTo']    = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->batchCreate['estimate']      = array('type' => 'float', 'required' => false, 'default' => 0);
-$config->task->form->batchCreate['estStarted']    = array('type' => 'date', 'required' => false, 'default' => '');
-$config->task->form->batchCreate['deadline']      = array('type' => 'date', 'required' => false, 'default' => '');
-$config->task->form->batchCreate['desc']          = array('type' => 'string', 'required' => false, 'default' => '');
-$config->task->form->batchCreate['pri']           = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchcreate = common::formConfig('task', 'batchCreate');
+$config->task->form->batchcreate['module']        = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchcreate['parent']        = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchcreate['story']         = array('type' => 'int', 'required' => false,  'default' => 0);
+$config->task->form->batchcreate['name']          = array('type' => 'string', 'required' => false, 'default' => '', 'base' => true);
+$config->task->form->batchcreate['color']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchcreate['type']          = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchcreate['version']       = array('type' => 'int', 'required' => false, 'default' => 1);
+$config->task->form->batchcreate['assignedTo']    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchcreate['estimate']      = array('type' => 'float', 'required' => false, 'default' => 0);
+$config->task->form->batchcreate['estStarted']    = array('type' => 'date', 'required' => false, 'default' => null);
+$config->task->form->batchcreate['deadline']      = array('type' => 'date', 'required' => false, 'default' => null);
+$config->task->form->batchcreate['desc']          = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->batchcreate['pri']           = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchcreate['laneID']        = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->batchcreate['openedBy']      = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->batchcreate['openedDate']    = array('type' => 'string', 'required' => false, 'default' => $now);
 
 $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);

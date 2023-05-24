@@ -28,17 +28,3 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: estStarted
-    note: "预计开始"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: deadline
-    note: "截止时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""

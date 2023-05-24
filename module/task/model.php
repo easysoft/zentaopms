@@ -149,55 +149,69 @@ class taskModel extends model
      * 批量创建任务。
      * Batch create tasks.
      *
-     * @param  object $execution
-     * @param  array  $tasks
-     * @param  int    $parentID
-     * @param  array  $output
+     * @param  array       $tasks
+     * @param  array       $output
      * @access public
      * @return array|false
      */
-    public function batchCreate(object $execution, array $tasks, int $parentID, array $output): array|false
+    public function batchCreate(array $tasks, array $output): array|false
     {
-        /* 检查必填项。 Check required fields. */
-        $tasks = $this->checkRequired4BatchCreate($execution, $tasks);
-        if(!$tasks) return false;
-
-        /* 加载模块。 Load module. */
         $this->loadModel('story');
-        $this->loadModel('score');
-        $this->loadModel('action');
 
-        $oldParentTask = $this->dao->findById((int)$parentID)->from(TABLE_TASK)->fetch();
-
-        $taskIdList = array();
+        $parentID      = !empty($tasks) ? current($tasks)->parent : 0;
+        $oldParentTask = $this->dao->findById($parentID)->from(TABLE_TASK)->fetch();
+        $executionID   = !empty($tasks) ? current($tasks)->execution : 0;
+        $execution     = $this->loadModel('execution')->getById($executionID);
+        $taskIdList    = array();
         foreach($tasks as $task)
         {
-            /* 获取当前任务所属泳道并移除laneID属性。 Get the current laneID and remove the laneID from task object. */
-            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-            $laneID = isset($task->laneID) ? $task->laneID : $laneID;
-            if(isset($task->laneID)) unset($task->laneID);
+            /* Get the lane and column of the current task. */
+            $laneID   = $task->laneID;
+            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+            unset($task->laneID);
 
-            /* 将数据插入到任务表中。 Insert the tasks. */
+            /* Create a task. */
             $taskID = $this->create($task);
             if(!$taskID) return false;
 
-            /* 更新任务相关对象信息。 Update the related objects' info, such as story, kanban and so on. */
+            /* Update Kanban and story stage. */
             if($task->story) $this->story->setStage($task->story);
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            $this->updateKanban4BatchCreate($taskID, $execution->id, $laneID, $columnID);
+            $this->updateKanbanForBatchCreate($taskID, $executionID, $laneID, $columnID);
 
-            $this->executeHooks($taskID);
             $taskIdList[$taskID] = $taskID;
         }
-        if(!dao::isError()) $this->score->create('ajax', 'batchCreate'); // Updating scores for the first batch creation operation.
-
-        /* 拆分任务后更新其他数据。 Process other data after split task. */
-        $children = !empty($parentID) ? implode(',', $taskIdList) : '';
-        if($parentID && $taskID) $this->afterSplitTask($oldParentTask, $children);
-
-        /* 更新当前执行下的任务泳道。 Update the task lane under current execution. */
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($execution->id, 'task');
         return $taskIdList;
+    }
+
+    /**
+     * 批量创建任务后的其他数据处理。
+     * Other data process after task batch create.
+     *
+     * @param  array  $taskIdList
+     * @param  int    $parentID
+     * @access public
+     * @return bool
+     */
+    public function afterBatchCreate(array $taskIdList, int $parentID = 0): bool
+    {
+        $this->loadModel('action');
+        $this->loadModel('score');
+        foreach($taskIdList as $taskID)
+        {
+            $this->executeHooks($taskID);
+            $this->action->create('task', $taskID, 'Opened', '');
+            $this->score->create('task', 'create', $taskID);
+        }
+
+        /* Process other data after split task. */
+        if($parentID && empty($taskIdList))
+        {
+            $childrenIdList = !empty($parentID) ? $taskIdList : array();
+            $parentTask     = $this->getByID($parentID);
+            $this->afterSplitTask($parentTask, $childrenIdList);
+        }
+
+        return !dao::isError();
     }
 
     /**
@@ -453,7 +467,7 @@ class taskModel extends model
                 $task->assignedTo   = $parentTask->openedBy;
                 $task->assignedDate = $now;
                 $task->finishedBy   = '';
-                $task->finishedDate = '';
+                $task->finishedDate = null;
                 $task->canceledBy   = $this->app->user->account;
                 $task->canceledDate = $now;
             }
@@ -475,9 +489,9 @@ class taskModel extends model
                     $task->assignedDate = $now;
                 }
                 $task->finishedBy   = '';
-                $task->finishedDate = '';
+                $task->finishedDate = null;
                 $task->closedBy     = '';
-                $task->closedDate   = '';
+                $task->closedDate   = null;
                 $task->closedReason = '';
             }
 
@@ -3663,62 +3677,6 @@ class taskModel extends model
     }
 
     /**
-     * 批量创建前检查必填项。
-     * Check required fields before batch create tasks.
-     *
-     * @param  object         $execution
-     * @param  object[]       $data
-     * @access public
-     * @return object[]|false
-     */
-    public function checkRequired4BatchCreate(object $execution, array $data): array|false
-    {
-        /* 设置必填项。 */
-        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($this->taskTao->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
-        $requiredFields = trim($requiredFields, ',');
-        $requiredFields = array_filter(explode(',', $requiredFields));
-
-        /* check data. */
-        foreach($data as $task)
-        {
-            /* 检查任务是否开启了起止日期必填的配置(limitTaskDate)。 */
-            if(!empty($this->config->limitTaskDate))
-            {
-                $this->checkEstStartedAndDeadline($execution->id, $task->estStarted, $task->deadline);
-                if(dao::isError()) return false;
-            }
-
-            /* 检查任务截止日期是否为空以及是否小于预计开始日期。 */
-            if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
-            {
-                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
-                return false;
-            }
-
-            /* 检查任务预计是否为数字类型。 */
-            if($task->estimate && !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
-            {
-                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
-                return false;
-            }
-
-            /* 验证必填字段。 */
-            foreach($requiredFields as $field)
-            {
-                if(empty($task->$field))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                    return false;
-                }
-            }
-            if($task->estimate) $task->estimate = (float)$task->estimate;
-        }
-
-        return $data;
-    }
-
-    /**
      * 创建任务后的其他数据处理。
      * Other data process after task create.
      *
@@ -3774,32 +3732,34 @@ class taskModel extends model
      * Process other data after split task.
      *
      * @param  object $oldParentTask
-     * @param  string $children
+     * @param  array  $childrenIdList
      * @access public
      * @return bool
      */
-    public function afterSplitTask(object $oldParentTask, string $children = ''): bool
+    public function afterSplitTask(object $oldParentTask, array $childrenIdList = array()): bool
     {
-        $parentID      = (int)$oldParentTask->id;
-        $oneOfChildren = current(explode(',', $children));
+        $parentID = (int)$oldParentTask->id;
 
-        /* 当一个普通任务有消耗时，拆分子任务并更新父任务状态。 */
         /* When a normal task is consumed, create the subtask and update the parent task status. */
         if($oldParentTask->parent == 0 && $oldParentTask->consumed > 0)
         {
-            $inheritTask = $this->taskTao->splitConsumedTask($oldParentTask);
-            if(!$inheritTask) return false;
+            $this->taskTao->copyTaskData($oldParentTask);
+            if(dao::isError()) return false;
         }
 
-        $this->updateParentStatus($oneOfChildren);
+        $this->updateParentStatus(current($childrenIdList));
         $this->computeBeginAndEnd($parentID);
 
-        $newParentTask = $this->dao->findById($parentID)->from(TABLE_TASK)->fetch();
+        /* Create a action. */
+        $extra    = implode(',', $childrenIdList);
+        $actionID = $this->action->create('task', $parentID, 'createChildren', '', trim($extra, ','));
+
+        /* Create a log history. */
+        $newParentTask = $this->getByID($parentID);
         $changes       = common::createChanges($oldParentTask, $newParentTask);
-        $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($children, ','));
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
-        return true;
+        return !dao::isError();
     }
 
     /**
@@ -3811,9 +3771,9 @@ class taskModel extends model
      * @param  int    $laneID
      * @param  int    $columnID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateKanban4BatchCreate(int $taskID, int $executionID, int $laneID, int $columnID): void
+    public function updateKanbanForBatchCreate(int $taskID, int $executionID, int $laneID, int $columnID): bool
     {
         $this->loadModel('kanban');
 
@@ -3826,6 +3786,7 @@ class taskModel extends model
             $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
             if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
         }
+        return !dao::isError();
     }
 
     /**

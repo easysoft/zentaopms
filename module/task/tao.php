@@ -200,6 +200,35 @@ class taskTao extends taskModel
     }
 
     /**
+     * 复制任务数据。
+     * Copy the task data and update the effort to the new task.
+     *
+     * @param  object    $parentTask
+     * @access protected
+     * @return bool
+     */
+    protected function copyTaskData(object $task): bool
+    {
+        /* 复制当前任务信息。 */
+        /* Copy the current task to child task, and change the parent field value. */
+        $copyTask = clone $task;
+        $copyTask->parent = $task->id;
+        unset($copyTask->id);
+
+        $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        /* 将父任务的日志记录更新到子任务下。 */
+        /* Update the logs of the parent task under the subtask. */
+        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($copyTaskID)
+            ->where('objectID')->eq($task->id)
+            ->andWhere('objectType')->eq('task')
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * 更新一个任务。
      * Update a task.
      *
@@ -462,37 +491,6 @@ class taskTao extends taskModel
         }
 
         return $teamInfoList;
-    }
-
-    /**
-     * 拆分已消耗的任务。
-     * Split the consumed task.
-     *
-     * @param  object    $parentTask
-     * @access protected
-     * @return false|int
-     */
-    protected function splitConsumedTask(object $parentTask): false|int
-    {
-        /* 复制当前任务信息。 */
-        /* Copy the current task to child task, and change the parent field value. */
-        $childTask = clone $parentTask;
-        $childTask->parent = $parentTask->id;
-        unset($childTask->id);
-
-        $this->dao->insert(TABLE_TASK)->data($childTask)->autoCheck()->exec();
-        if(dao::isError()) return false;
-
-        /* 将父任务的日志记录更新到子任务下。 */
-        /* Update the logs of the parent task under the subtask. */
-        $childTaskID = $this->dao->lastInsertID();
-        $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($childTaskID)
-            ->where('objectID')->eq($parentTask->id)
-            ->andWhere('objectType')->eq('task')
-            ->exec();
-        if(dao::isError()) return false;
-
-        return (int)$childTaskID;
     }
 
     /**

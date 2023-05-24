@@ -21,7 +21,5 @@ fields:
       range: "#7ec5ff"
     - field: order
       range: 5-10000:5
-    - field: lastEditedTime
-      range: ""
     - field: deleted
       range: "0"

@@ -17,7 +17,7 @@ fields:
     - field: color
       range: "#333"
     - field: limit
-      range: ""
+      range: '`-1`'
     - field: order
       range: 1-4
     - field: archived

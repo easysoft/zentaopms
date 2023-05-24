@@ -8,6 +8,8 @@ fields:
       range: design,devel,test,study,discuss,ui,affair,misc
     - field: status
       range: wait
+    - field: project
+      range: 1
     - field: execution
       range: "2{2},3{2},4{2},5{2}"
     - field: deleted

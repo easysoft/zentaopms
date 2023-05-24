@@ -401,6 +401,7 @@ class taskZen extends task
         $taskIdList     = array_unique($taskIdList);
         $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'account');
         $tasks          = $this->task->getByList($taskIdList);
+
         /* Filter tasks. */
         foreach($tasks as $taskID => $task)
         {
@@ -430,22 +431,33 @@ class taskZen extends task
      * 处理批量创建任务的请求数据。
      * Process the request data for the batch create tasks.
      *
-     * @param  int       $executionID
-     * @param  int       $taskID
+     * @param  object         $execution
+     * @param  int            $taskID
+     * @param  array          $output
      * @access protected
-     * @return object[]
+     * @return false|object[]
      */
-    protected function buildTasksForBatchCreate(int $executionID, int $taskID): array
+    protected function buildTasksForBatchCreate(object $execution, int $taskID, array $output): false|array
     {
-        $tasks = form::batchData($this->config->task->form->batchCreate)->get();
+        $tasks = form::batchData()->get();
         foreach($tasks as $task)
         {
-            $task->execution = $executionID;
+            $task->project   = $execution->project;
+            $task->execution = $execution->id;
             $task->left      = $task->estimate;
+            $task->parent    = $taskID;
+            $task->laneID    = empty($task->laneID) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->laneID;
         }
 
-        /* 去除重复数据。 Deduplicated data. */
-        return $this->removeDuplicate4BatchCreate($executionID, $tasks);
+        /* Remove data with the same task name. */
+        $tasks = $this->removeDuplicateForBatchCreate($execution->id, $tasks);
+        if(dao::isError()) return false;
+
+        /* Check if the input post data meets the requirements. */
+        $this->checkBatchCreateTask($execution->id, $tasks);
+        if(dao::isError()) return false;
+
+        return $tasks;
     }
 
     /**
@@ -458,24 +470,21 @@ class taskZen extends task
      */
     protected function buildTaskForCreate(int $executionID): object
     {
-        $formData  = form::data($this->config->task->form->create);
-        $postData  = $formData->get();
-        $execution = $this->dao->findById($postData->execution)->from(TABLE_EXECUTION)->fetch();
-        $team      = !empty($postData->team) ? array_filter($postData->team) : array();
-        $task      = $formData->setDefault('execution', $executionID)
+        $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $team      = !empty($this->post->team) ? array_filter($this->post->team) : array();
+        $task      = form::data()->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
-            ->setIF($postData->estimate !== false, 'left', $postData->estimate)
-            ->setIF(isset($postData->story), 'storyVersion', isset($postData->story) ? $this->loadModel('story')->getVersion($postData->story) : 0)
-            ->setIF(empty($postData->multiple) || count($team) < 1, 'mode', '')
+            ->setIF($this->post->estimate !== false, 'left', $this->post->estimate)
+            ->setIF($this->post->story, 'storyVersion', isset($this->post->story) ? $this->loadModel('story')->getVersion($this->post->story) : 0)
+            ->setIF(empty($this->post->multiple) || count($team) < 1, 'mode', '')
             ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
-            ->setIF(!empty($postData->assignedTo), 'assignedDate', helper::now())
+            ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
+            ->setIF(!$this->post->estStarted, 'estStarted', '')
+            ->setIF(!$this->post->deadline, 'deadline', '')
             ->get();
 
-        if(empty($postData->estStarted)) unset($task->estStarted);
-        if(empty($postData->deadline)) unset($task->deadline);
-
         /* Processing image link. */
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $postData->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
         /* Check if the input post data meets the requirements. */
         $this->checkCreateTask($task);
@@ -599,63 +608,6 @@ class taskZen extends task
     }
 
     /**
-     * 批量创建任务之前构造数据。
-     * Build data before batch create tasks.
-     *
-     * @param  object    $execution
-     * @param  object    $tasks
-     * @param  int       $index
-     * @param  array     $dittoFields
-     * @param  array     $extendFields
-     * @param  int       $taskID
-     * @access protected
-     * @return object
-     */
-    protected function buildData4BatchCreate(object $execution, object $tasks, int $index, array $dittoFields, array $extendFields, int $taskID): object
-    {
-        extract($dittoFields);
-        $now = helper::now();
-
-        $task             = new stdclass();
-        $task->story      = (int)$story;
-        $task->type       = $type;
-        $task->module     = (int)$module;
-        $task->assignedTo = $assignedTo;
-        $task->color      = isset($tasks->color[$index]) ? $tasks->color[$index] : '';
-        $task->name       = $tasks->name[$index];
-        $task->desc       = nl2br($tasks->desc[$index]);
-        $task->pri        = (int)$tasks->pri[$index];
-        $task->estimate   = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
-        $task->left       = $tasks->estimate[$index] ? $tasks->estimate[$index] : 0;
-        $task->project    = $execution->project;
-        $task->execution  = $execution->id;
-        $task->estStarted = $estStarted;
-        $task->deadline   = $deadline;
-        $task->status     = 'wait';
-        $task->openedBy   = $this->app->user->account;
-        $task->openedDate = $now;
-        $task->parent     = $taskID;
-        $task->vision     = isset($tasks->vision[$index]) ? $tasks->vision[$index] : 'rnd';
-        $task->version    = 1;
-        if($story) $task->storyVersion = (int)$this->dao->findById($task->story)->from(TABLE_STORY)->fetch('version');
-        if($assignedTo) $task->assignedDate = $now;
-        if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false && empty($estStarted)) $task->estStarted = '';
-        if(strpos($this->config->task->create->requiredFields, 'deadline') !== false && empty($deadline))     $task->deadline   = '';
-        if(isset($tasks->lanes[$index])) $task->laneID = $tasks->lanes[$index];
-
-        /* 处理工作流字段。 Process workflow fields. */
-        foreach($extendFields as $extendField)
-        {
-            $task->{$extendField->field} = $tasks->{$extendField->field}[$index];
-            if(is_array($task->{$extendField->field})) $task->{$extendField->field} = implode(',', $task->{$extendField->field});
-
-            $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
-        }
-
-        return $task;
-    }
-
-    /**
      * 处理开始任务的日志数据。
      * Process the effort data for the start task.
      *
@@ -768,6 +720,60 @@ class taskZen extends task
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 批量创建前检查必填项。
+     * Check required fields before batch create tasks.
+     *
+     * @param  int            $executionID
+     * @param  object[]       $tasks
+     * @access protected
+     * @return bool
+     */
+    protected function checkBatchCreateTask(int $executionID, array $tasks): bool
+    {
+        /* Set required fields. */
+        $requiredFields = $this->config->task->create->requiredFields;
+        $execution      = $this->loadModel('execution')->getById($executionID);
+        if($this->task->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', ',' . $requiredFields . ',');
+        $requiredFields = array_filter(explode(',', $requiredFields));
+
+        foreach($tasks as $rowIndex => $task)
+        {
+            /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
+            if(!empty($this->config->limitTaskDate))
+            {
+                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                if(dao::isError()) return false;
+            }
+
+            /* Check start and end date. */
+            if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
+            {
+                dao::$errors["deadline[$rowIndex]"] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
+            /* Check if the estimate is positive. */
+            if($task->estimate < 0)
+            {
+                dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->recordMinus;
+                return false;
+            }
+
+            /* Check if the required fields are empty. */
+            foreach($requiredFields as $field)
+            {
+                if(empty($task->$field))
+                {
+                    dao::$errors[$field . "[$rowIndex]"] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -884,14 +890,13 @@ class taskZen extends task
      * 检查当前用户在该执行中是否是受限用户。
      * Checks if the current user is a limited user in this execution.
      *
-     * @param  string    $executionID
+     * @param  int       $executionID
      * @access protected
      * @return bool
      */
-    protected function isLimitedInExecution(string $executionID): bool
+    protected function isLimitedInExecution(int $executionID): bool
     {
-        $this->execution->getLimitedExecution();
-        $limitedExecutions = !empty($this->session->limitedExecutions) ? $this->session->limitedExecutions : '';
+        $limitedExecutions = $this->execution->getLimitedExecution();
 
         if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) return true;
         return false;
@@ -938,18 +943,6 @@ class taskZen extends task
      */
     protected function getJumpLink(object $execution): string
     {
-        if($this->app->tab == 'my')
-        {
-            return $this->createLink('my', 'work', 'mode=task');
-        }
-        elseif($this->app->tab == 'project' && $execution->multiple)
-        {
-            return $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
-        }
-        else
-        {
-            return $this->createLink('execution', 'browse', "executionID={$execution->id}");
-        }
     }
 
     /**
@@ -1230,6 +1223,40 @@ class taskZen extends task
     }
 
     /**
+     * 处理批量创建任务后的返回信息。
+     * The information return after process the batch create task.
+     *
+     * @param  array     $taskIdList
+     * @param  object    $execution
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterbatchCreate(array $taskIdList, object $execution): array
+    {
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        /* Return task id when call the API. */
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
+
+        if(isonlybody() && $this->app->tab == 'execution' || $this->config->vision == 'lite')
+        {
+            $kanbanData = $this->getKanbanData($execution);
+            if($execution->type == 'kanban') return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
+            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
+        }
+
+        $response['result']  = 'success';
+        $response['message'] = $this->lang->saveSuccess;
+
+        $link = $this->createLink('execution', 'browse', "executionID={$execution->id}");
+        if($this->app->tab == 'my') $link = $this->createLink('my', 'work', 'mode=task');
+        if($this->app->tab == 'project' && $execution->multiple) $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
+        $response['load'] = $link;
+
+        return $response;
+    }
+
+    /**
      * 处理开始任务后的返回信息。
      * The information return after process the start task.
      *
@@ -1254,7 +1281,7 @@ class taskZen extends task
      * @access protected
      * @return array
      */
-    protected function removeDuplicate4BatchCreate(int $executionID, array $tasks): array
+    protected function removeDuplicateForBatchCreate(int $executionID, array $tasks): array
     {
         /* 1. 检查表单是否有重复。 Check duplicate in form data. */
         $duplicateTasks = array();
@@ -1394,7 +1421,7 @@ class taskZen extends task
     {
         $now = helper::now();
         $task = form::data($this->config->task->form->finish)
-            ->setIF(!$this->post->realStarted and helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
+            ->setIF(!$this->post->realStarted && helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->get();
 

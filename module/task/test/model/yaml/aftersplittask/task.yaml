@@ -4,6 +4,8 @@ version: "1.0"
 fields:
     - field: id
       range: 1-9
+    - field: execution
+      range: 2
     - field: parent
       range: 0,1,0,2,0,3,0{3}
     - field: type

@@ -52,71 +52,70 @@ class taskTest
      * Test batch create tasks.
      *
      * @param  array  $data
-     * @param  int    $executionID
-     * @param  int    $taskID
-     * @param  int    $storyID
-     * @param  bool   $verifyScore
+     * @param  string $executionType
      * @param  array  $output
      * @access public
-     * @return array|object|int|false
+     * @return array
      */
-    public function batchCreateObject(array $data = array(), int $executionID = 0, int $taskID = 0, int $storyID = 0, bool $verifyScore = false, array $output = array()): array|object|int|false
+    public function batchCreateObject(array $param = array(), string $executionType = 'sprint', array $output = array()): array
     {
         global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+        $executionIdList = array('sprint' => 2, 'stage' => 3, 'kanban' => 4);
+        $executionID     = zget($executionIdList, $executionType);
 
+        $createFields = array(
+            'project'      => 1,
+            'execution'    => $executionID,
+            'parent'       => 0,
+            'module'       => 0,
+            'story'        => 0,
+            'name'         => '',
+            'type'         => 'test',
+            'assignedTo'   => 'admin',
+            'assignedDate' => helper::now(),
+            'pri'          => 3,
+            'estimate'     => 0,
+            'left'         => 0,
+            'estStarted'   => '2021-01-10',
+            'deadline'     => '2021-03-19',
+            'desc'         => '',
+            'version'      => '1',
+            'openedBy'     => 'admin',
+            'openedDate'   => helper::now(),
+            'laneID'       => 0,
+        );
+
+        $tasks = array();
+        foreach($param as $rowIndex => $data)
+        {
+            $task = new stdclass();
+            foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
+            foreach($data as $key => $value) $task->$key = $value;
+            $tasks[$rowIndex] = $task;
+        }
+
+        $taskIdList = $this->objectModel->batchCreate($tasks, $output);
+
+        if(dao::isError()) return dao::getError();
+        return $taskIdList;
+    }
+
+    /**
+     * 批量创建任务后的其他数据处理。
+     * Other data process after task batch create.
+     *
+     * @param  array  $taskIdList
+     * @param  int    $parentID
+     * @access public
+     * @return bool
+     */
+    public function afterBatchCreateObject(array $taskIdList, int $parentID = 0): bool
+    {
+        global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
 
-        $execution = $tester->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-
-        $lastScore = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
-
-        $objectIdList = $this->objectModel->batchCreate($execution, $data, $taskID, $output);
-
-        $childTask = array();
-        if(!dao::isError()) $childTask = $this->objectModel->getById(current($objectIdList));
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-
-        if(!empty($taskID))
-        {
-            $parentTask = $this->objectModel->getById($childTask->parent);
-            return $parentTask;
-        }
-
-        if(!empty($storyID))
-        {
-            $releatedStory = $tester->loadModel('story')->getById($childTask->story);
-            return $releatedStory;
-        }
-
-        if($verifyScore)
-        {
-            $score = $tester->dao->select('after')->from(TABLE_SCORE)->orderBy('id_desc')->limit(1)->fetch('after');
-            return $score == $lastScore + 1;
-        }
-
-        if(!empty($output))
-        {
-            $laneID   = isset($output['laneID'])   ? $output['laneID']   : 0;
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            $cards    = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
-                ->where('kanban')->eq($executionID)
-                ->andWhere('lane')->eq($laneID)
-                ->andWhere('column')->eq($columnID)
-                ->andWhere('type')->eq('task')
-                ->fetch('cards');
-            $taskIdList   = trim($cards, ',');
-            $taskIdList   = explode(',', $taskIdList);
-            $latestTaskID = current($taskIdList);
-            $task         = $this->objectModel->getById($latestTaskID);
-
-            return $task ? $task : false;
-        }
-
-        return count($objectIdList);
+        return $this->objectModel->afterBatchCreate($taskIdList, $parentID);
     }
 
     /**
@@ -1917,13 +1916,13 @@ class taskTest
      * @access public
      * @return string
      */
-    public function updateKanban4BatchCreateTest(int $taskID, int $executionID, int $laneID, int $columnID, string $vision = 'rnd'): string
+    public function updateKanbanForBatchCreateTest(int $taskID, int $executionID, int $laneID, int $columnID, string $vision = 'rnd'): string
     {
         global $tester;
 
         $tester->config->vision = $vision;
 
-        $this->objectModel->updateKanban4BatchCreate($taskID, $executionID, $laneID, $columnID);
+        $this->objectModel->updateKanbanForBatchCreate($taskID, $executionID, $laneID, $columnID);
         $cards = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
             ->andWhere('lane')->eq($laneID)
@@ -2049,12 +2048,12 @@ class taskTest
      * Process other data after split task.
      *
      * @param  int    $oldParentTaskID
-     * @param  string $children
+     * @param  array  $children
      * @param  string $testObject children|parent|parentAction
      * @access public
-     * @return object|string
+     * @return array|object|string
      */
-    public function afterSplitTaskTest(int $oldParentTaskID = 0, string $children = '', string $testObject = 'parent'): object|string
+    public function afterSplitTaskTest(int $oldParentTaskID = 0, array $children = array(), string $testObject = 'parent'): array|object|string
     {
         global $tester;
         $_SERVER['HTTP_HOST'] = $tester->config->db->host;
@@ -2072,15 +2071,15 @@ class taskTest
     }
 
     /**
-     * 拆分已消耗的任务。
-     * split the consumed task.
+     * 复制任务数据。
+     * Copy the task data and update the effort to the new task.
      *
      * @param  int    $parentTaskID
      * @param  string $testType     subTaskEffort|childrenTask
      * @access public
      * @return object
      */
-    public function splitConsumedTaskTest(int $parentTaskID, string $testType): object
+    public function copyTaskDataTest(int $parentTaskID, string $testType): object
     {
         global $tester;
 
@@ -2090,7 +2089,7 @@ class taskTest
             if(strpos($key, 'Date')) unset($parentTask->$key);
         }
 
-        $taskID = $this->objectModel->splitConsumedTask($parentTask);
+        $taskID = $this->objectModel->copyTaskData($parentTask);
 
         $testResult['subTaskEffort'] = $tester->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
         $testResult['childrenTask']  = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
@@ -2112,10 +2111,7 @@ class taskTest
     public function updateKanbanDataTest(int $executionID, int $taskID, int $laneID, int $columnID): object|bool
     {
         global $tester;
-        $execution = $task = new stdclass();
-        if($executionID) $execution = $tester->loadModel('execution')->getByID($executionID);
-        if($taskID) $task = $this->objectModel->getByID($taskID);
-        $result = $this->objectModel->updateKanbanData($execution, $task, $laneID, $columnID);
+        $result = $this->objectModel->updateKanbanData($executionID, (array)$taskID, $laneID, $columnID);
         if(!$result) return false;
 
         if($laneID) $object = $tester->loadModel('kanban')->getLaneByID($laneID);

@@ -54,41 +54,37 @@ class task extends control
         $execution   = $this->execution->getById($executionID);
 
         /* Check whether the execution has permission to create tasks. */
-        $limitedExecutions = (string)$this->execution->getLimitedExecution();
-        if(strpos(",{$limitedExecutions},", ",{$executionID},") !== false)
-        {
-            return $this->send(array('load' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'message' => $this->lang->task->createDenied));
-        }
+        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'message' => $this->lang->task->createDenied));
 
         /* Submit the data process after create the task form. */
         if(!empty($_POST))
         {
-            $task = $this->taskZen->buildTaskForCreate($executionID);
+            $taskData = $this->taskZen->buildTaskForCreate($this->post->execution);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Check whether a task with the same name is created within the specified time. */
-            $duplicateTaskID = $this->taskZen->checkDuplicateName($task);
+            $duplicateTaskID = $this->taskZen->checkDuplicateName($taskData);
             if($duplicateTaskID) return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->duplicate, $this->lang->task->common), 'load' => $this->createLink('task', 'view', "taskID={$duplicateTaskID}")));
 
             $this->dao->begin();
             if($this->post->type == 'test')
             {
                 /* Prepare to create the data for the test subtask and to check the data format. */
-                $testTasks  = $this->taskZen->buildTestTasksForCreate($task->execution);
-                $taskIdList = $this->task->createTaskOfTest($task, $testTasks);
+                $testTasks  = $this->taskZen->buildTestTasksForCreate($taskData->execution);
+                $taskIdList = $this->task->createTaskOfTest($taskData, $testTasks);
             }
             elseif($this->post->type == 'affair')
             {
-                $taskIdList = $this->task->createTaskOfAffair($task, $this->post->assignedTo);
+                $taskIdList = $this->task->createTaskOfAffair($taskData, $this->post->assignedTo);
             }
             elseif($this->post->multiple)
             {
                 $teamData   = form::data($config->task->form->team->create)->get();
-                $taskIdList = $this->task->createMultiTask($task, $teamData);
+                $taskIdList = $this->task->createMultiTask($taskData, $teamData);
             }
             else
             {
-                $taskIdList = $this->task->create($task);
+                $taskIdList = $this->task->create($taskData);
             }
 
             if(dao::isError())
@@ -102,12 +98,12 @@ class task extends control
             $columnID   = isset($output['columnID']) ? (int)$output['columnID'] : 0;
             $taskIdList = (array)$taskIdList;
             $task->id   = current($taskIdList);
-            $this->task->afterCreate($task, $taskIdList, $bugID, $todoID);
-            $this->task->updateKanbanData($task->execution, $taskIdList, (int)$this->post->lane, $columnID);
+            $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID);
+            $this->task->updateKanbanData($taskData->execution, $taskIdList, (int)$this->post->lane, $columnID);
             helper::setcookie('lastTaskModule', (int)$this->post->module);
 
             /* Get the information returned after a task is created. */
-            $response = $this->taskZen->responseAfterCreate($task, $execution, $this->post->after);
+            $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after);
             return $this->send($response);
         }
 
@@ -129,49 +125,33 @@ class task extends control
      */
     public function batchCreate(int $executionID, int $storyID = 0, int $moduleID = 0, int $taskID = 0, string $cardPosition = '')
     {
-        /* Init vars. */
+        /* Analytic parameter. */
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
-        /* 判断不能访问的执行。 Judge execution without access. */
-        if($this->taskZen->isLimitedInExecution($executionID))
-        {
-            echo js::alert($this->lang->task->createDenied);
-            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
-        }
+        /* Check whether the execution has permission to create tasks. */
+        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'message' => $this->lang->task->createDenied));
 
         $execution = $this->execution->getById($executionID);
 
         if(!empty($_POST))
         {
-            /* 批量创建任务。 Batch create tasks. */
-            $taskData = $this->taskZen->buildTasksForBatchCreate($executionID, $taskID);
+            /* Process the request data for the batch create tasks. */
+            $taskData = $this->taskZen->buildTasksForBatchCreate($execution, $taskID, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $taskIdList = $this->task->batchCreate($execution, $taskData, $taskID, $output);
+            $taskIdList = $this->task->batchCreate($taskData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* 接口调用返回任务编号列表。 Return task id list when call the API. */
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
+            /* Update other data related to the task after it is created. */
+            $this->task->afterBatchCreate($taskIdList);
+            if(!isset($output['laneID']) or !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
 
-            /* 生成跳转链接。 Generate jump link. */
-            $jumpLink = $this->taskZen->getJumpLink($execution);
-            if(!isonlybody()) return $this->send(array('result' => 'success', 'load' => $jumpLink));
-
-            /* 执行应用下或者在运营管理界面下更新看板数据。 */
-            /* Update kanban data under the execution application or under the operation management interface. */
-            if($this->app->tab == 'execution' or $this->config->vision == 'lite')
-            {
-                $kanbanData = $this->taskZen->getKanbanData($execution);
-                if($execution->type == 'kanban') return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-            }
-
-            return $this->send(array('result' => 'success', 'load' => 'true'));
+            $response = $this->taskZen->responseAfterbatchCreate($taskIdList, $execution);
+            return $this->send($response);
         }
 
         $this->taskZen->setMenu($executionID);
-
         $this->taskZen->buildBatchCreateForm($execution, $storyID, $moduleID, $taskID, $output);
     }
 
