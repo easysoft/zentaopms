@@ -743,6 +743,7 @@ class bug extends control
     }
 
     /**
+     * 批量变更bug的指派人。
      * Batch update assign of bug.
      *
      * @param  int     $objectID  projectID|executionID
@@ -750,27 +751,27 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function batchAssignTo($objectID, $type = 'execution')
+    public function batchAssignTo(int $objectID, string $type = 'execution')
     {
-        if(!empty($_POST) && isset($_POST['bugIDList']))
+        if(!empty($_POST) && isset($_POST['bugIdList']))
         {
-            $bugIDList = $this->post->bugIDList;
-            $bugIDList = array_unique($bugIDList);
-            unset($_POST['bugIDList']);
-            foreach($bugIDList as $bugID)
+            $bugIdList = $this->post->bugIDList;
+            $bugIdList = array_unique($bugIdList);
+            unset($_POST['bugIdList']);
+
+            $bug = form::data($this->config->bug->form->assignTo)->get();
+            foreach($bugIdList as $bugID)
             {
-                $this->loadModel('action');
-                $changes = $this->bug->assign($bugID);
-                if(dao::isError()) return print(js::error(dao::getError()));
-                $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
-                $this->action->logHistory($actionID, $changes);
+                $bug->id = $bugID;
+                $this->bug->assign($bug);
             }
+
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        if($type == 'product' || $type == 'my') return print(js::reload('parent'));
-        if($type == 'execution') return print(js::locate($this->createLink('execution', 'bug', "executionID=$objectID")));
-        if($type == 'project')   return print(js::locate($this->createLink('project', 'bug', "projectID=$objectID")));
+        if($type == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'bug', "executionID=$objectID")));
+        if($type == 'project')   return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'bug', "projectID=$objectID")));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
