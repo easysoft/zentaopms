@@ -26,29 +26,30 @@ class tableData extends wg
         );
     }
 
-    private function td(string|array|null $value): ?wg
+    private function buildContent(string|array|null $value)
     {
-        if(!is_array($value))
-        {
-            return h::td
-            (
-                setClass('py-1.5 pl-2'),
-                $value
-            );
-        }
+        if(is_callable($value)) return $value();
+
+        if(!is_array($value)) return $value;
 
         $wgName = "\\zin\\{$value['wg']}";
         unset($value['wg']);
-        if(class_exists($wgName))
-        {
-            return h::td
-            (
-                setClass('py-1.5 pl-2'),
-                new $wgName(set($value))
-            );
-        }
+        if(class_exists($wgName)) return new $wgName(set($value));
 
         return null;
+    }
+
+    private function td(string|array|null $value): ?wg
+    {
+        $content = $this->buildContent($value);
+        if(is_null($content)) return null;
+
+        return h::td
+        (
+            setClass('py-1.5 pl-2'),
+            $content
+        );
+
     }
 
     private function tr(string $name, string|array|null $value)
