@@ -827,17 +827,17 @@ class productModel extends model
         $searchConfig['actionURL'] = $actionURL;
 
         /* Get product plan data. */
-        $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : array($productID);
-        $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
-        $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) or $branchParam == 'all') ? '' : $branchParam);
+        $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
+        $branchParam   = ($this->app->tab == 'project' && empty($productID)) ? '' : $branch;
+        $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
 
         /* Get product data. */
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array();
-        if(empty($product) and isset($products[$productID])) $product = array($productID => $products[$productID]);
+        $product = ($this->app->tab == 'project' && empty($productID)) ? $products : array();
+        if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
         /* Get module data. */
-        $projectID = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
+        $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
         $searchConfig['params']['module']['values'] = array('' => '') + $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
         /* Get branch data. */
@@ -845,7 +845,7 @@ class productModel extends model
         {
             $productInfo = $this->getByID($productID);
             if(!empty($productInfo->shadow)) unset($searchConfig['fields']['product']);
-            if($productInfo->type == 'normal' or $this->app->tab == 'assetlib')
+            if($productInfo->type == 'normal' || $this->app->tab == 'assetlib')
             {
                 unset($searchConfig['fields']['branch']);
                 unset($searchConfig['params']['branch']);
