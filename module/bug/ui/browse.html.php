@@ -123,9 +123,55 @@ sidebar
 $footToolbar = array('items' => array
 (
     array('size' => 'sm', 'text' => $lang->edit, 'btnType' => 'primary', 'className' => 'edit-btn'),
-    array('size' => 'sm', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'className' => 'module-btn'),
-    array('size' => 'sm', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'className' => 'assignto-btn'),
+    array('size' => 'sm', 'icon' => 'caret-up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('size' => 'sm', 'icon' => 'caret-up', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('size' => 'sm', 'icon' => 'caret', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown'),
 ));
+
+$resolveItems = array();
+foreach($lang->bug->resolutionList as $key => $resolution)
+{
+    $resolveItems[] = array('text' => $resolution);
+}
+
+menu
+(
+    set::id('navActions'),
+    set::class('dropdown-menu'),
+    set::items(array
+    (
+        array('text' => $lang->bug->confirm),
+        array('text' => $lang->bug->close),
+        array('text' => $lang->bug->activate),
+        array('text' => $lang->bug->resolve, 'children' => $resolveItems),
+    ))
+);
+
+$moduleItems = array();
+foreach($modules as $moduleId => $module)
+{
+    $moduleItems[] = array('text' => $module);
+}
+
+menu
+(
+    set::id('navModule'),
+    set::class('dropdown-menu'),
+    set::items($moduleItems)
+);
+
+$assignedToItems = array();
+foreach ($memberPairs as $key => $value)
+{
+    $assignedToItems[] = array('text' => $value);
+}
+
+menu
+(
+    set::id('navAssignedTo'),
+    set::class('dropdown-menu'),
+    set::items($assignedToItems)
+);
 
 dtable
 (
