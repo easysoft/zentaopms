@@ -91,7 +91,7 @@ class bugModel extends model
         foreach($bugs as $index => $bug)
         {
             /* Get lane id, remove laneID from bug.  */
-            $laneID = !empty($bug->laneID) ? zget($output, 'laneID', 0) : $bug->laneID;
+            $laneID = !empty($bug->laneID) ? $bug->laneID : zget($output, 'laneID', 0);
             unset($bug->laneID);
 
             $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
