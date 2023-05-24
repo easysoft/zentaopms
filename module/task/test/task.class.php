@@ -392,13 +392,23 @@ class taskTest
      * @access public
      * @return array
      */
-    public function cancelTest($taskID, $param = array())
+    public function cancelTest(int $taskID, array $param = array()): array|object
     {
-        $createFields = array('status' => 'cancel', 'comment' => '单元测试');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->cancel($taskID);
-        unset($_POST);
+        $task = new stdclass();
+        $task->id = $taskID;
+        foreach($param as $key => $value)
+        {
+            if($key == 'comment')
+            {
+                $_POST['comment'] = $value;
+            }
+            else
+            {
+                $task->{$key} = $value;
+            }
+        }
+
+        $this->objectModel->cancel($task);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -406,7 +416,7 @@ class taskTest
         }
         else
         {
-            return $object;
+            return $this->objectModel->getByID($taskID);
         }
     }
 
