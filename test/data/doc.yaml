@@ -118,13 +118,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: collector
-    note: "是否收藏"
-    range: 0,1
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: addedBy
     note: "添加者"
     range: admin
