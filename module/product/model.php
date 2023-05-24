@@ -203,6 +203,7 @@ class productModel extends model
     }
 
     /**
+     * 获取所有与某类型的项目所关联的产品。
      * Get product pairs by project model.
      *
      * @param  string $model all|scrum|waterfall|kanban
@@ -384,7 +385,8 @@ class productModel extends model
     }
 
     /**
-     * Get Multi-branch product pairs.
+     * 获取多分支产品和多平台产品。
+     * Get Multi-branch and Multi-platform product pairs.
      *
      * @param  int    $programID
      * @access public
