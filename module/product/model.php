@@ -807,6 +807,7 @@ class productModel extends model
     }
 
     /**
+     * 构建搜索表单。
      * Build search form.
      *
      * @param  int    $productID
@@ -820,39 +821,43 @@ class productModel extends model
      */
     public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '', int $projectID = 0): void
     {
+        $searchConfig = $this->config->product->search;
+
+        $searchConfig['queryID']   = $queryID;
+        $searchConfig['actionURL'] = $actionURL;
+
+        /* Get product plan data. */
         $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : array($productID);
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
-        $projectID     = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
+        $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) or $branchParam == 'all') ? '' : $branchParam);
 
-        $this->config->product->search['actionURL'] = $actionURL;
-        $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) or $branchParam == 'all') ? '' : $branchParam);
-
+        /* Get product data. */
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array();
         if(empty($product) and isset($products[$productID])) $product = array($productID => $products[$productID]);
+        $searchConfig['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
+        /* Get module data. */
+        $projectID = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
+        $searchConfig['params']['module']['values'] = array('' => '') + $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
+        /* Get branch data. */
         if($productID)
         {
             $productInfo = $this->getByID($productID);
-            if(!empty($productInfo->shadow)) unset($this->config->product->search['fields']['product']);
+            if(!empty($productInfo->shadow)) unset($searchConfig['fields']['product']);
             if($productInfo->type == 'normal' or $this->app->tab == 'assetlib')
             {
-                unset($this->config->product->search['fields']['branch']);
-                unset($this->config->product->search['params']['branch']);
+                unset($searchConfig['fields']['branch']);
+                unset($searchConfig['params']['branch']);
             }
             else
             {
-                $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
-                $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
+                $searchConfig['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+                $searchConfig['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
             }
         }
 
-        /* Get modules. */
-        $this->config->product->search['params']['module']['values'] = array('' => '') + $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
-
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
+        $this->loadModel('search')->setSearchParams($searchConfig);
     }
 
     /**
