@@ -1615,6 +1615,7 @@ class bugTest
     }
 
     /**
+     * 获取模块 bug 数量报表的测试用例。
      * Test get report data of bugs per module.
      *
      * @access public
@@ -1622,16 +1623,11 @@ class bugTest
      */
     public function getDataOfBugsPerModuleTest()
     {
-        $array = $this->objectModel->getDataOfBugsPerModule();
+        $datas = $this->objectModel->getDataOfBugsPerModule();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**

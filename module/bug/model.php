@@ -1893,17 +1893,21 @@ class bugModel extends model
     }
 
     /**
-     * Get report data of bugs per module
+     * 获取模块 bug 数量。
+     * Get report data of bugs per module.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerModule()
+    public function getDataOfBugsPerModule(): array
     {
-        $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('module AS name, COUNT(module) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
-        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
+
+        foreach($datas as $moduleID => $data) $data->name = zget($modules, $moduleID, '/');
+
         return $datas;
     }
 
@@ -2302,7 +2306,7 @@ class bugModel extends model
             if(!$this->session->bugOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->bugQueryCondition) . ')';
             return $this->session->bugQueryCondition;
         }
-        return true;
+        return '1=1';
     }
 
     /**

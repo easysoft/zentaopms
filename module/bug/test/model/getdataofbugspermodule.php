@@ -1,35 +1,38 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php"; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+su('admin');
+
+zdTable('bug')->config('module')->gen(10);
+zdTable('module')->config('grade')->gen(10);
 
 /**
 
 title=bugModel->getDataOfBugsPerModule();
+timeout=0
 cid=1
-pid=1
 
-获取module0数据 >> /,306
-获取module1821数据 >> /产品模块1,1
-获取module1822数据 >> /产品模块2,1
-获取module1823数据 >> /产品模块3,1
-获取module1825数据 >> /产品模块5,1
-获取module1826数据 >> /产品模块6,1
-获取module1827数据 >> /产品模块7,1
-获取module1831数据 >> /产品模块11,1
-获取module1832数据 >> /产品模块12,1
-获取module1833数据 >> /产品模块13,1
+- 获取未设置模块的数据
+ - 第0条的name属性 @/
+ - 第0条的value属性 @2
+
+- 获取一级模块也是父模块module1数据
+ - 第1条的name属性 @/这是一个模块1
+ - 第1条的value属性 @2
+
+- 获取一级模块不是父模块module2数据
+ - 第2条的name属性 @/这是一个模块2
+ - 第2条的value属性 @2
+
+- 获取二级模块module6数据
+ - 第6条的name属性 @/这是一个模块1/这是一个模块6
+ - 第6条的value属性 @1
 
 */
 
-$bug=new bugTest();
-r($bug->getDataOfBugsPerModuleTest()) && p('0:name,value')    && e('/,306');         // 获取module0数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1821:name,value') && e('/产品模块1,1');  // 获取module1821数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1822:name,value') && e('/产品模块2,1');  // 获取module1822数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1823:name,value') && e('/产品模块3,1');  // 获取module1823数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1825:name,value') && e('/产品模块5,1');  // 获取module1825数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1826:name,value') && e('/产品模块6,1');  // 获取module1826数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1827:name,value') && e('/产品模块7,1');  // 获取module1827数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1831:name,value') && e('/产品模块11,1'); // 获取module1831数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1832:name,value') && e('/产品模块12,1'); // 获取module1832数据
-r($bug->getDataOfBugsPerModuleTest()) && p('1833:name,value') && e('/产品模块13,1'); // 获取module1833数据
+$bug = new bugTest();
+r($bug->getDataOfBugsPerModuleTest()) && p('0:name,value')    && e('/,2');                         // 获取未设置模块的数据
+r($bug->getDataOfBugsPerModuleTest()) && p('1:name,value') && e('/这是一个模块1,2');               // 获取一级模块也是父模块module1数据
+r($bug->getDataOfBugsPerModuleTest()) && p('2:name,value') && e('/这是一个模块2,2');               // 获取一级模块不是父模块module2数据
+r($bug->getDataOfBugsPerModuleTest()) && p('6:name,value') && e('/这是一个模块1/这是一个模块6,1'); // 获取二级模块module6数据
