@@ -2009,8 +2009,8 @@ class bugZen extends bug
 
         if(!empty($toTaskIdList))
         {
-            $confirmURL = $this->createLink('task', 'view', 'taskID=' . key($toTaskIdList));
-            $cancelURL  = $this->server->HTTP_REFERER;
+            $confirmedURL = $this->createLink('task', 'view', 'taskID=' . key($toTaskIdList));
+            $canceledURL  = $this->server->HTTP_REFERER;
             return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
         }
 
