@@ -38,6 +38,7 @@ class productModel extends model
     }
 
     /**
+     * 获取1.5级导航。
      * Create the select code of products.
      *
      * @param  array       $products
@@ -169,12 +170,13 @@ class productModel extends model
     }
 
     /**
+     * 获取产品键值对列表。
      * Get product pairs.
      *
      * @param  string       $mode      all|noclosed
      * @param  int          $programID
      * @param  string|array $append
-     * @param  string|int   $shadow    all | 0 | 1
+     * @param  string|int   $shadow    all|0|1
      * @return int[]
      */
     public function getPairs(string $mode = '', int $programID = 0, string|array $append = '', string|int $shadow = 0): array
@@ -184,10 +186,11 @@ class productModel extends model
     }
 
     /**
+     * 根据项目获取关联的产品键值对列表。
      * Get product pairs by project.
      *
      * @param  int          $projectID
-     * @param  string       $status   all|noclosed
+     * @param  string       $status    all|noclosed
      * @param  string|array $append
      * @param  bool         $noDeleted
      * @access public
