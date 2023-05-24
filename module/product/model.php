@@ -1018,13 +1018,11 @@ class productModel extends model
     {
         if(empty($productID)) return array();
 
-        $projects     = $this->loadModel('project')->getByIdList($projectID);
-        $hasWaterfall = false;
-        foreach($projects as $project)
-        {
-            if(in_array($project->model, array('waterfall', 'waterfallplus'))) $hasWaterfall = true;
-        }
-        $waterFallOrderBy = $hasWaterfall ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
+        /* Determine executions order. */
+        $projects         = $this->loadModel('project')->getByIdList($projectID);
+        $hasWaterfall     = in_array('waterfall',     array_column($projects, 'model'));
+        $hasWaterfallplus = in_array('waterfallplus', array_column($projects, 'model'));
+        $waterfallOrderBy = ($hasWaterfall || $hasWaterfallplus) ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
@@ -1037,8 +1035,9 @@ class productModel extends model
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('t2.multiple')->eq('1')->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->orderBy($waterFallOrderBy)
+            ->orderBy($waterfallOrderBy)
             ->fetchAll('id');
+
         if(empty($executions)) return array();
         if($projectID) $executions = $this->loadModel('execution')->resetExecutionSorts($executions);
 
