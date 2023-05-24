@@ -1561,7 +1561,7 @@ class productModel extends model
         /* 产品ID已经被删除，不存在于产品列表中。*/
         /* Product ID does not exsit in products list, it may be deleted. */
         /* Confirm if product exist. */
-        $product = $this->product->getByID($productID);
+        $product = $this->getByID($productID);
         if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
 
         /* If product is invisible for current user, respond access denied message. */

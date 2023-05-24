@@ -31,7 +31,7 @@ class product extends control
         $this->loadModel('user');
 
         /* Get all products, if no, goto the create page. */
-        $this->products = $this->product->getPairs('noclosed', 0, '', 'all');
+        $this->products = $this->product->getPairs('all', 0, '', 'all');
         if($this->product->checkLocateCreate($this->products)) $this->locate($this->createLink('product', 'create'));
 
         $this->view->products = $this->products;
