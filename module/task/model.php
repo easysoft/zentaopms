@@ -1654,6 +1654,7 @@ class taskModel extends model
      */
     public function cancel(object $task, string $extra = ''): bool
     {
+        $oldTask = $this->getById($task->id);
         $this->dao->update(TABLE_TASK)->data($task)
              ->autoCheck()
              ->checkFlow()
@@ -1661,8 +1662,6 @@ class taskModel extends model
              ->exec();
 
         if(dao::isError()) return false;
-
-        $oldTask = $this->getById($task->id);
 
         if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
