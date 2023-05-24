@@ -1071,7 +1071,7 @@ class bugModel extends model
         if($changes or $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->loadModel('action')->create('bug', $bugID, 'Activated', $fileAction . $bug->comment);
+            $actionID   = $this->loadModel('action')->create('bug', $bugID, 'Activated', $fileAction . zget($bug, 'comment', ''));
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
