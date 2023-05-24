@@ -550,6 +550,7 @@ class taskZen extends task
             ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
             ->setDefault('canceledDate, lastEditedDate', $now)
             ->setIF(empty($oldTask->finishedDate), 'finishedDate', '')
+            ->remove('comment')
             ->get();
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);

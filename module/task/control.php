@@ -1010,7 +1010,9 @@ class task extends control
 
             $oldTask = $this->task->getById($taskID);
             $task    = $this->taskZen->buildTaskForCancel($oldTask);
-            $this->task->cancel($task, $output['laneID']);
+            $laneID  = isset($output['laneID']) ? $output['laneID'] : '';
+            $this->task->cancel($task, (string)$laneID);
+
             if(dao::isError()) return print($this->send(array('result' => 'fail', 'message' => dao::getError())));
 
             $this->executeHooks($taskID);
