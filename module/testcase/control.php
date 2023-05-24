@@ -608,7 +608,7 @@ class testcase extends control
         /* Logic of task 44139. */
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories))
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', 1);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
         }
 
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
@@ -1072,7 +1072,7 @@ class testcase extends control
             /* Logic of task 44139. */
             if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories))
             {
-                $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', 1);
+                $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
             }
 
             $this->view->productID        = $productID;
