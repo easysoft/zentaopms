@@ -88,7 +88,7 @@ class moduleMenu extends wg
                 ),
                 $closeBtn
             ),
-            h::main(zui::menutree(inherit($this))),
+            h::main(zui::menutree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKye', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))),
             div
             (
                 setClass('setting-btns'),
