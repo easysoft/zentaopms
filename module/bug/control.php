@@ -871,10 +871,10 @@ class bug extends control
     public function batchClose(int $releaseID = 0, string $viewType = '')
     {
         $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
-        if($bugIDList)
+        if($bugIdList)
         {
-            $bugIDList = array_unique($bugIDList);
-            $bugs      = $this->bug->getByIdList($bugIDList);
+            $bugIdList = array_unique($bugIdList);
+            $bugs      = $this->bug->getByIdList($bugIdList);
             $skipBugs  = array();
             foreach($bugs as $bugID => $bug)
             {
