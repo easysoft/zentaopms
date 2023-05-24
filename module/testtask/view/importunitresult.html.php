@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
-          <td class='w-p35-f'>
+          <td class='w-p35-f required'>
             <div class='input-group' id='buildBox'>
             <?php echo html::select('build', empty($builds) ? '' : $builds, '', "class='form-control chosen'");?>
             <?php if(isset($executionID) and $executionID and empty($builds)):?>
