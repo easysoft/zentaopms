@@ -391,32 +391,14 @@ class bug extends control
 
         if($this->post->titles)
         {
+            /* Build bugs. */
             $bugs = $this->bugZen->buildBugsForBatchEdit();
 
             /* Batch update the bugs. */
-            $allChanges = $this->bug->batchUpdate();
+            $toTaskIdList = $this->bug->batchUpdate();
 
-            /* Record logs. */
-            foreach($allChanges as $bugID => $changes)
-            {
-                if(empty($changes)) continue;
-
-                /* Pop-up confirmation dialog box, when the bug has been converted to a task. */
-                $bug = $this->bug->getById($bugID);
-                if($bug->toTask != 0)
-                {
-                    foreach($changes as $change)
-                    {
-                        if($change['field'] == 'status')
-                        {
-                            $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                            $cancelURL  = $this->server->HTTP_REFERER;
-                            return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->task), $confirmURL, $cancelURL, 'parent', 'parent'));
-                        }
-                    }
-                }
-            }
-            return print(js::locate($this->session->bugList, 'parent'));
+            /* Get response and return. */
+            return $this->send($this->bugZen->responseAfterBatchEdit($toTaskIdList));
         }
 
         /* If there is no bug ID, return to the previous step. */

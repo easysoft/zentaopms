@@ -1994,4 +1994,26 @@ class bugZen extends bug
 
         return $chartOption;
     }
+
+    /**
+     * 获得 batchEdit 方法的response。
+     * Get response for batchEdit.
+     *
+     * @param  array|false $output
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterBatchEdit(array|bool $toTaskIdList): array
+    {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(!empty($toTaskIdList))
+        {
+            $confirmURL = $this->createLink('task', 'view', 'taskID=' . key($toTaskIdList));
+            $cancelURL  = $this->server->HTTP_REFERER;
+            return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+        }
+
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList);
+    }
 }
