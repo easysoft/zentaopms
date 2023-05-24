@@ -1247,3 +1247,19 @@ function detailHeader()
 {
     return createWg('detailHeader', func_get_args());
 }
+
+/**
+ * Zentao detail page side widget.
+ */
+function detailSide()
+{
+    return createWg('detailSide', func_get_args());
+}
+
+/**
+ * Zentao detail page body widget.
+ */
+function detailBody()
+{
+    return createWg('detailBody', func_get_args());
+}
