@@ -1129,13 +1129,12 @@ class taskModel extends model
      * @param  array  $taskIdList
      * @param  int    $moduleID
      * @access public
-     * @return array
+     * @return void
      */
-    public function batchChangeModule(array $taskIdList, int $moduleID): array
+    public function batchChangeModule(array $taskIdList, int $moduleID): void
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldTasks   = $this->getByList($taskIdList);
+        $now      = helper::now();
+        $oldTasks = $this->getByList($taskIdList);
 
         $this->loadModel('action');
         foreach($taskIdList as $taskID)
@@ -1151,14 +1150,11 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
             if(!dao::isError())
             {
-                $changes = common::createChanges($oldTask, $task);
+                $changes  = common::createChanges($oldTask, $task);
                 $actionID = $this->action->create('task', $taskID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-
-                $allChanges[] = $taskID;
             }
         }
-        return $allChanges;
     }
 
     /**
