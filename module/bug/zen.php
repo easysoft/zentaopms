@@ -2195,4 +2195,82 @@ class bugZen extends bug
 
         $this->view->users = $this->user->getPairs('devfirst');
     }
+
+    /**
+     * 设置导出数据源。
+     * Set export data source.
+     *
+     * @param  int       $productID
+     * @param  string    $browseType
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function setExportDataSource(int $productID, string $browseType, int $executionID): void
+    {
+        if(!$productID or $browseType == 'bysearch')
+        {
+            /* Set module data source. */
+            $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+            $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+
+            /* In execution, set data source. */
+            if($executionID)
+            {
+                $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+                $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+            }
+        }
+    }
+
+    /**
+     * 设置导出字段。
+     * Set export fields.
+     *
+     * @param  int $executionID
+     * @param  object $product
+     * @access protected
+     * @return void
+     */
+    protected function setExportFields(int $executionID, object $product): void
+    {
+        if(isset($product->type) and $product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
+            if(!empty($product->shadow)) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
+        }
+    }
+
+    /**
+     * 获取导出文件名。
+     * Get export file name.
+     *
+     * @param  int       $executionID
+     * @param  string    $browseType
+     * @param  object    $product
+     * @access protected
+     * @return string
+     */
+    protected function getExportFileName(int $executionID, string $browseType, object $product): string
+    {
+        $fileName = $this->lang->bug->common;
+        if($executionID)
+        {
+            $executionName = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('name');
+            $fileName      = $executionName . $this->lang->dash . $fileName;
+        }
+        else
+        {
+            $productName = !empty($product->name) ? $product->name : '';
+            $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
+
+            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        return $fileName;
+    }
 }
