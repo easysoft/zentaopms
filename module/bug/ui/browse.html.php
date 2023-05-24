@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('productID', $product->id);
+jsVar('branch',    $branch);
 
 $this->bug->buildOperateMenu(null, 'browse');
 
@@ -118,11 +120,20 @@ sidebar
     )))
 );
 
+$footToolbar = array('items' => array
+(
+    array('size' => 'sm', 'text' => $lang->edit, 'btnType' => 'primary', 'className' => 'edit-btn'),
+    array('size' => 'sm', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'className' => 'module-btn'),
+    array('size' => 'sm', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'className' => 'assignto-btn'),
+));
+
 dtable
 (
     set::cols($cols),
     set::data($data),
     set::footPager(usePager()),
+    set::checkable(true),
+    set::footToolbar($footToolbar),
     set::footer(jsRaw('window.footerGenerator'))
 );
 
