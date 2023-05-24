@@ -1071,16 +1071,16 @@ class productTao extends productModel
         return $this->dao->select('t1.product as productID,t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-            ->where('type')->in('stage,sprint,kanban')
+            ->where('t2.type')->in('stage,sprint,kanban')
             ->andWhere('t2.project')->in($projectIdList)
             ->beginIF(!$this->app->user->admin)
             ->andWhere('t1.project')->in($this->app->user->view->sprints)
             ->fi()
             ->andWhere('t1.product')->in($productIdList)
-            ->andWhere('status')->eq('doing')
-            ->andWhere('multiple')->ne('0')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('id_desc')
+            ->andWhere('t2.status')->eq('doing')
+            ->andWhere('t2.multiple')->ne('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy('t2.id_desc')
             ->fetchGroup('project', 'id');
     }
 
