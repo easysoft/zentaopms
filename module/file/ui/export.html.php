@@ -37,7 +37,6 @@ if($isCustomExport)
 if(isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'calendar')) unset($lang->exportTypeList['selected']);
 
 $hideExportRange = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
-$hideExportRange = true;
 
 /* Generate custom export fields. */
 $customExportRowList = array();
@@ -102,6 +101,8 @@ if($isCustomExport)
 form
 (
     set::target('_self'),
+    set::actions(array('submit')),
+    on::submit('setDownloading'),
     formGroup
     (
         set::width('3/4'),
@@ -109,7 +110,7 @@ form
         set::control('inputControl'),
         set::name('fileName'),
         set::value(isset($fileName) ? $fileName : ''),
-        set::required(true),
+        set::required(true)
     ),
     formGroup
     (
@@ -118,7 +119,9 @@ form
         set::control('select'),
         set::name('fileType'),
         set::items($lang->exportFileTypeList),
-        set::required(true),
+        set::value('csv'),
+        on::change('switchFileType'),
+        set::required(true)
     ),
     formGroup
     (
@@ -128,8 +131,7 @@ form
         set::name('encode'),
         set::items($config->charsets[$this->cookie->lang]),
         set::value('utf-8'),
-        set::required(true),
-        //set::disabled(true)
+        set::required(true)
     ),
     /* Fields for KanBan. */
     formRow(
@@ -141,7 +143,7 @@ form
             set::control('select'),
             set::name('exportType'),
             set::items($lang->exportTypeList),
-            set::required(true),
+            set::required(true)
         )
     ),
     formRow
@@ -166,5 +168,47 @@ form
 );
 
 set::title($lang->export);
+
+js
+(
+<<<JAVASCRIPT
+function setDownloading(event)
+{
+    /* Doesn't support Opera, omit it. */
+    if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;
+
+    $.cookie.set('downloading', 0);
+
+    var time = setInterval(function()
+    {
+        if($.cookie.get('downloading') == 1)
+        {
+            $(event.target).closest('div.modal')[0].classList.remove('show');
+            $.cookie.set('downloading', null);
+            clearInterval(time);
+        }
+
+    }, 300);
+
+    return true;
+}
+
+function switchFileType(event)
+{
+    var fileType = $(event.target).val();
+    var encode   = $('#encode');
+
+    if(fileType === 'csv')
+    {
+        encode.removeAttr('disabled');
+    }
+    else
+    {
+        encode.val('utf-8');
+        encode.attr('disabled', 'disabled');
+    }
+}
+JAVASCRIPT
+);
 
 render('modalDialog');
