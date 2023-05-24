@@ -75,7 +75,7 @@ class section extends wg
         {
             return div
             (
-                setClass('my-4'),
+                setClass('mt-4'),
                 $this->headingTag($x['title']),
                 $this->content($x['content'])
             );
