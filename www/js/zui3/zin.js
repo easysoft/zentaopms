@@ -272,7 +272,6 @@
                 $(document).trigger('pageload.app');
             }
         };
-        console.log('> ajaxOptions', ajaxOptions);
         return $.ajax(ajaxOptions);
     }
 
