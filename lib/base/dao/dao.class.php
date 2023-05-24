@@ -1928,13 +1928,11 @@ class baseSQL
         }
         elseif($arg3 !== null)
         {
-            $value     = $this->quote($arg3);
             $condition = "`$arg1` $arg2 " . $this->quote($arg3);
         }
         else
         {
-            $arg1      = (string)$arg1;
-            $condition = ctype_alnum($arg1) && !ctype_digit($arg1) ? '`' . $arg1 . '`' : $arg1;
+            $condition = ctype_alnum((string)$arg1) ? '`' . $arg1 . '`' : $arg1;
         }
 
         if(!$this->inMark) $this->sql .= ' ' . DAO::WHERE ." $condition ";
@@ -1953,7 +1951,7 @@ class baseSQL
     public function andWhere($condition, $addMark = false)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(ctype_alnum($condition)) $condition = '`' . $condition . '`';
+        if(ctype_alnum((string)$condition)) $condition = '`' . $condition . '`';
 
         $mark = $addMark ? '(' : '';
         $this->sql .= " AND {$mark} $condition ";
@@ -1964,14 +1962,14 @@ class baseSQL
      * 创建OR部分。
      * Create the OR part.
      *
-     * @param  bool  $condition
+     * @param  string $condition
      * @access public
      * @return static|sql the sql object.
      */
     public function orWhere($condition)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(ctype_alnum($condition)) $condition = '`' . $condition . '`';
+        if(ctype_alnum((string)$condition)) $condition = '`' . $condition . '`';
 
         $this->sql .= " OR $condition ";
         return $this;
