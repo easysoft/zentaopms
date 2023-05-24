@@ -53,7 +53,7 @@ class tabs extends wg
         (
             setID($id),
             set::isActive($isActive),
-            $item['data']
+            is_callable($item['data']) ? $item['data']() : $item['data']
         );
     }
 
