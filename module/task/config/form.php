@@ -169,6 +169,15 @@ $config->task->form->finish['assignedDate']    = array('type' => 'string', 'requ
 $config->task->form->finish['finishedBy']      = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->task->form->finish['lastEditedBy']    = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 
+$config->task->form->close = array();
+$config->task->form->close['status']         = array('type' => 'string', 'required' => false, 'default' => 'closed');
+$config->task->form->close['assignedTo']     = array('type' => 'string', 'required' => false, 'default' => 'closed');
+$config->task->form->close['assignedDate']   = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->close['closedBy']       = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->close['closedDate']     = array('type' => 'string', 'required' => false, 'default' => $now);
+$config->task->form->close['lastEditedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->task->form->close['lastEditedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);
+
 $config->task->form->testTask->create = array();
 $config->task->form->testTask->create['testStory']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->testTask->create['testEstStarted']  = array('type' => 'array', 'required' => false, 'default' => array());

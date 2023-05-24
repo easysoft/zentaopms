@@ -633,6 +633,81 @@ class taskZen extends task
     }
 
     /**
+     * 构建并检查完成任务所需的数据。
+     * Build and check the request data for the finish task.
+     *
+     * @param  object    $oldTask
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForFinish(object $oldTask): object
+    {
+        $now = helper::now();
+        $task = form::data($this->config->task->form->finish)
+            ->setIF(!$this->post->realStarted && helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
+            ->setDefault('assignedTo', $oldTask->openedBy)
+            ->get();
+
+        if(!$this->post->currentConsumed) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
+        if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
+
+        $task->consumed += (float)$this->post->currentConsumed;
+        return $task;
+    }
+
+    /**
+     * 处理开始任务的日志数据。
+     * Process the effort data for the start task.
+     *
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @access protected
+     * @return object
+     */
+    protected function buildEffortForFinish(object $oldTask, object $task): object
+    {
+        /* Record consumed and left. */
+        if(empty($oldTask->team))
+        {
+            $task->consumed = $task->consumed - $oldTask->consumed;
+        }
+        else
+        {
+            $currentTeam = $this->task->getTeamByAccount($oldTask->team);
+            $task->consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
+        }
+        if($task->consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
+
+        $estimate = new stdclass();
+        $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
+        $estimate->task     = $oldTask->id;
+        $estimate->left     = 0;
+        $estimate->work     = zget($task, 'work', '');
+        $estimate->account  = $this->app->user->account;
+        $estimate->consumed = $task->consumed;
+
+        return $estimate;
+    }
+
+    /**
+     * 处理关闭任务的请求数据。
+     * Process the request data for the close task.
+     *
+     * @param  object    $oldTask
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForClose(object $oldTask): object
+    {
+        $task = form::data($this->config->task->form->close)->add('id', $oldTask->id)
+            ->setIF($oldTask->status == 'done',   'closedReason', 'done')
+            ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel')
+            ->get();
+
+        return  $this->loadModel('file')->processImgURL($task, $this->config->task->editor->start['id'], $this->post->uid);
+    }
+
+    /**
      * 根据页面是执行还是我的地盘设置参数。
      * Set parameters based on whether the page is execution or my.
      *
@@ -887,22 +962,6 @@ class taskZen extends task
     }
 
     /**
-     * 检查当前用户在该执行中是否是受限用户。
-     * Checks if the current user is a limited user in this execution.
-     *
-     * @param  int       $executionID
-     * @access protected
-     * @return bool
-     */
-    protected function isLimitedInExecution(int $executionID): bool
-    {
-        $limitedExecutions = $this->execution->getLimitedExecution();
-
-        if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) return true;
-        return false;
-    }
-
-    /**
      * 为表单获取自定义字段。
      * Get task's custom fields for form.
      *
@@ -1020,6 +1079,22 @@ class taskZen extends task
             $response['load'] = $this->createLink('projectstory', 'story', "projectID={$projectID}");
         }
         return $response;
+    }
+
+    /**
+     * 检查当前用户在该执行中是否是受限用户。
+     * Checks if the current user is a limited user in this execution.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return bool
+     */
+    protected function isLimitedInExecution(int $executionID): bool
+    {
+        $limitedExecutions = $this->execution->getLimitedExecution();
+
+        if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) return true;
+        return false;
     }
 
     /**
@@ -1267,6 +1342,8 @@ class taskZen extends task
      */
     protected function responseAfterChangeStatus(object $task, string $from): array
     {
+        $this->executeHooks($task->id);
+
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
         if(isonlybody()) return $this->responseModal($task, $from);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
@@ -1407,62 +1484,5 @@ class taskZen extends task
         if($this->app->tab == 'project') $this->project->setMenu($execution->project);
 
         return $executionID;
-    }
-
-    /**
-     * 构建并检查完成任务所需的数据。
-     * Build and check the request data for the finish task.
-     *
-     * @param  object    $oldTask
-     * @access protected
-     * @return object
-     */
-    protected function buildTaskForFinish(object $oldTask): object
-    {
-        $now = helper::now();
-        $task = form::data($this->config->task->form->finish)
-            ->setIF(!$this->post->realStarted && helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
-            ->setDefault('assignedTo', $oldTask->openedBy)
-            ->get();
-
-        if(!$this->post->currentConsumed) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
-        if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
-
-        $task->consumed += (float)$this->post->currentConsumed;
-        return $task;
-    }
-
-    /**
-     * 处理开始任务的日志数据。
-     * Process the effort data for the start task.
-     *
-     * @param  object    $oldTask
-     * @param  object    $task
-     * @access protected
-     * @return object
-     */
-    protected function buildEffortForFinish(object $oldTask, object $task): object
-    {
-        /* Record consumed and left. */
-        if(empty($oldTask->team))
-        {
-            $task->consumed = $task->consumed - $oldTask->consumed;
-        }
-        else
-        {
-            $currentTeam = $this->task->getTeamByAccount($oldTask->team);
-            $task->consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
-        }
-        if($task->consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
-
-        $estimate = new stdclass();
-        $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
-        $estimate->task     = $oldTask->id;
-        $estimate->left     = 0;
-        $estimate->work     = zget($task, 'work', '');
-        $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $task->consumed;
-
-        return $estimate;
     }
 }

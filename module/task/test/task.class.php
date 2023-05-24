@@ -426,20 +426,25 @@ class taskTest
      */
     public function closeTest($taskID, $param = array())
     {
-        $createFields = array('status' => 'closed', 'comment' => '单元测试');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->close($taskID);
-        unset($_POST);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
+        global $tester;
+        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
+
+        $now  = helper::now();
+        $task = new stdclass();
+        $task->id             = $taskID;
+        $task->status         = 'closed';
+        $task->assignedTo     = '';
+        $task->closedBy       = '';
+        $task->lastEditedBy   = '';
+        $task->assignedDate   = $now;
+        $task->closedDate     = $now;
+        $task->lastEditedDate = $now;
+        foreach($param as $key => $value) $task->{$key} = $value;
+
+        $oldTask = $this->objectModel->getByID($taskID);
+        $result  = $this->objectModel->close($oldTask, $task, array());
+        $task    = $this->objectModel->getByID($taskID);
+        return "status-{$oldTask->status}-{$task->status}";
     }
 
     /**

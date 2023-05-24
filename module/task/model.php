@@ -1275,21 +1275,11 @@ class taskModel extends model
     public function afterStart(object $oldTask, object $task, array $changes, int $left, string $comment, array $output): array|bool
     {
         /* Update the data of the parent task. */
-        if($oldTask->parent > 0)
-        {
-            $this->updateParentStatus($oldTask->id);
-            $this->computeBeginAndEnd($oldTask->parent);
-        }
-
-        /* Update the data related to the task. */
-        $this->updateKanbanCell($oldTask->id, $output, $oldTask->execution);
-        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+        if($oldTask->parent > 0) $this->computeBeginAndEnd($oldTask->parent);
 
         /* Create related dynamic and record. */
-        $action   = $left == 0 ? 'Finished' : 'Started';
-        $actionID = $this->loadModel('action')->create('task', $oldTask->id, $action, $comment);
-        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        $action = $left == 0 ? 'Finished' : 'Started';
+        $this->afterChangeStatus($oldTask, $changes, $action, $output);
 
         /* Send Webhook notifications and Synchornize status to execution, project and program. */
         $this->executeHooks($oldTask->id);
@@ -1551,52 +1541,34 @@ class taskModel extends model
     }
 
     /**
+     * 关闭任务。
      * Close a task.
      *
-     * @param  int    $taskID
-     * @param  string $extra
+     * @param  object     $oldTask
+     * @param  object     $task
+     * @param  string     $output
      * @access public
-     * @return array
+     * @return bool|array
      */
-    public function close($taskID, $extra = '')
+    public function close(object $oldTask, object $task, array $output): bool|array
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
+        if(dao::isError()) return false;
 
-        $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $changes = common::createChanges($oldTask, $task);
+        $this->afterChangeStatus($oldTask, $changes, 'Closed', $output);
 
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setDefault('status', 'closed')
-            ->setDefault('assignedTo', 'closed')
-            ->setDefault('assignedDate', $now)
-            ->setDefault('closedBy, lastEditedBy', $this->app->user->account)
-            ->setDefault('closedDate, lastEditedDate', $now)
-            ->stripTags($this->config->task->editor->close['id'], $this->config->allowedTags)
-            ->setIF($oldTask->status == 'done',   'closedReason', 'done')
-            ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel')
-            ->remove('_recPerPage')
-            ->remove('comment')
-            ->get();
-
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->close['id'], $this->post->uid);
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
-
-        if(!dao::isError())
+        if(isset($oldTask->fromIssue) and $oldTask->fromIssue > 0)
         {
-            if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-            if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-            $this->loadModel('score')->create('task', 'close', $taskID);
-
-            $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-            if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-
-            return common::createChanges($oldTask, $task);
+            $fromIssue = $this->loadModel('issue')->getByID($oldTask->fromIssue);
+            if($fromIssue->status != 'closed')
+            {
+                $confirmURL = $this->createLink('issue', 'close', "id=$oldTask->fromIssue");
+                $cancelURL  = $this->createLink('task', 'view', "taskID=$oldTask->id");
+                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindIssue, $oldTask->fromIssue), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+            }
         }
+        return true;
     }
 
     /**
@@ -3948,5 +3920,31 @@ class taskModel extends model
     {
         if(empty($execution)) return false;
         return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
+    }
+
+    /**
+     * 处理状态变化之后的操作。
+     * Process other data after task status changed.
+     *
+     * @param  object $task
+     * @param  array  $changes
+     * @param  string $action
+     * @param  array  $output
+     * @access public
+     * @return bool
+     */
+    public function afterChangeStatus(object $task, array $changes, string $action, array $output): bool
+    {
+        /* Process other data. */
+        if($task->parent > 0) $this->updateParentStatus($task->id);
+        if($task->story) $this->loadModel('story')->setStage($task->story);
+        if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $task->status, $task->status);
+
+        $this->loadModel('score')->create('task', 'close', $task->id);
+        $this->updateKanbanCell($task->id, $output, $task->execution);
+
+        $actionID = $this->loadModel('action')->create('task', $task->id, $action, $this->post->comment);
+        $this->action->logHistory($actionID, $changes);
+        return !dao::isError();
     }
 }
