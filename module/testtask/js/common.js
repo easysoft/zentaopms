@@ -100,6 +100,7 @@ function loadExecutionBuilds(executionID)
     if(!selectedBuild) selectedBuild = 0;
     var link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
     if(executionID == 0) link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=build&build=' + selectedBuild + '&branch=&index=&needCreate=&type=noempty,notrunk,withexecution');
+    if(executionID == 0 && projectID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=build&build=&branch=all&index=&type=notrunk,withexecution');
     $('#buildBox').load(link, function()
     {
         $('#build').chosen();
