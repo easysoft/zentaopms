@@ -1136,10 +1136,12 @@ class taskModel extends model
         $now        = helper::now();
         $allChanges = array();
         $oldTasks   = $this->getByList($taskIdList);
+
+        $this->loadModel('action');
         foreach($taskIdList as $taskID)
         {
-            $oldTask = $oldTasks[$taskID];
-            if($moduleID == $oldTask->module) continue;
+            $oldTask = zget($oldTasks, $taskID, null);
+            if(!$oldTask || $moduleID == $oldTask->module) continue;
 
             $task = new stdclass();
             $task->lastEditedBy   = $this->app->user->account;
@@ -1147,7 +1149,14 @@ class taskModel extends model
             $task->module         = $moduleID;
 
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-            if(!dao::isError()) $allChanges[$taskID] = common::createChanges($oldTask, $task);
+            if(!dao::isError())
+            {
+                $changes = common::createChanges($oldTask, $task);
+                $actionID = $this->action->create('task', $taskID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+
+                $allChanges[] = $taskID;
+            }
         }
         return $allChanges;
     }

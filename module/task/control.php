@@ -286,16 +286,10 @@ class task extends control
         {
             $taskIDList = (array)$this->post->taskIDList;
             $taskIDList = array_unique($taskIDList);
-            $allChanges = $this->task->batchChangeModule($taskIDList, $moduleID);
+            $this->task->batchChangeModule($taskIDList, $moduleID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            foreach($allChanges as $taskID => $changes)
-            {
-                $this->loadModel('action');
-                $actionID = $this->action->create('task', $taskID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
         return $this->send(array('result' => 'success', 'load' => true));
     }
