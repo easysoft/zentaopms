@@ -2656,12 +2656,12 @@ class story extends control
      * @param  int    $limit
      * @param  string $type
      * @param  bool   $hasParent
-     * @param  int    $executionID
+     * @param  int    $objectID projectID || executionID
      * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $number = '')
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $objectID = 0, $number = '')
     {
         if($moduleID)
         {
@@ -2671,9 +2671,9 @@ class story extends control
 
         $storyStatus = $this->story->getStatusList($status);
 
-        if($executionID)
+        if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $moduleID, $type);
         }
         else
         {
