@@ -391,10 +391,15 @@ class yaml
 
             $yamlFile = $this->mergeYaml($runFileDir, $runFileName);
 
-            $genSQL     = "$zdPath -c %s -d %s -n %d -t %s -o %s";
+            $genSQL     = "$zdPath -c %s -d %s -n %d -t %s -o %s 2>&1";
             $execGenSQL = sprintf($genSQL, $configYaml, $yamlFile, $rows, $tableName, $sqlPath);
 
-            system($execGenSQL);
+            exec($execGenSQL, $output, $code);
+            if($code !== 0)
+            {
+                echo $execGenSQL . PHP_EOL;
+                print_r($output);
+            }
         }
 
         $this->insertDB($sqlPath, $this->tableName, $isClear);
