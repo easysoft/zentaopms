@@ -2130,7 +2130,7 @@ class bugZen extends bug
         $this->view->branchProduct   = $branchProduct;
         $this->view->modules         = $modules;
         $this->view->productBugList  = $productBugList;
-        $this->view->branchTagOption = $productBugList;
+        $this->view->branchTagOption = $branchTagOption;
         return $branchTagOption;
     }
 
