@@ -3674,8 +3674,8 @@ class taskModel extends model
     }
 
     /**
-     * 编辑任务后的其他数据处理。
-     * Other actions after edit a task.
+     * 编辑任务后的其他数据处理:记录分数、更改需求阶段、处理父任务变更、更改反馈状态等。
+     * Additional data processing after updating tasks: record scores, change story stage, handle parent task changes, change feedback status.
      *
      * @param  object $oldTask
      * @param  object $task
