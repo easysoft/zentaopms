@@ -94,7 +94,7 @@ class product extends control
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $this->getPMList($projectStats);
+        $this->view->PMList       = $this->productZen->getPMList($projectStats);
         $this->view->product      = $product;
         $this->view->projects     = $projects;
         $this->view->status       = $status;
@@ -488,7 +488,7 @@ class product extends control
         }
 
         /* Get actions. */
-        list($actions, $pager) = $this->getActions4Dynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
+        list($actions, $pager) = $this->productZen->getActions4Dynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
         if(empty($recTotal)) $recTotal = count($actions);
 
         /* Assign. */

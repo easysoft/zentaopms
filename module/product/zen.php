@@ -137,7 +137,7 @@ class productZen extends product
      * 为showErrorNone方法，设置在测试视图中的二级导航配置。
      * Set menu for showErrorNone page in qa.
      *
-     * @param  string $activeMenu
+     * @param  string  $activeMenu
      * @access private
      * @return void
      */
@@ -157,8 +157,8 @@ class productZen extends product
      * 为showErrorNone方法，设置在项目视图中的二级或三级导航配置。
      * Set menu for showErrorNone page in project.
      *
-     * @param  string $activeMenu
-     * @param  int    $projectID
+     * @param  string  $activeMenu
+     * @param  int     $projectID
      * @access private
      * @return void
      */
@@ -501,11 +501,11 @@ class productZen extends product
     /**
      * Get project PM List
      *
-     * @param  array $projectStats
-     * @access private
+     * @param  array     $projectStats
+     * @access protected
      * @return string[]
      */
-    private function getPMList(array $projectStats): array
+    protected function getPMList(array $projectStats): array
     {
         $accounts = array();
         foreach($projectStats as $project) $accounts[] = $project->PM;
