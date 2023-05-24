@@ -1,20 +1,11 @@
-$(function()
+window.batchEditBugs = function(event)
 {
-    var bugIdList = [1, 2];
+    const dtable = zui.DTable.query(event.target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
 
-    $(document).on('click', '.batch-btn', function()
-    {
-        var tempform    = document.createElement("form");
-        tempform.action = $(this).data('url');
-        tempform.method = "post";
-        tempform.style.display = "none";
-
-        var opt   = document.createElement("input");
-        opt.name  = 'bugIdList';
-        opt.value = bugIdList;
-
-        tempform.appendChild(opt);
-        document.body.appendChild(tempform);
-        tempform.submit();
-    });
-})
+    const form = new FormData();
+    const url  = $(event.target).closest('.btn').data('url');
+    checkedList.forEach((id) => form.append('bugIdList[]', id));
+    postAndLoadPage(url, form);
+}

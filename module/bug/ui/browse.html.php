@@ -24,17 +24,17 @@ foreach($bugs as $bug)
     $bug->branch       = zget($branchTagOption, $bug->branch);
     $bug->project      = zget($projectPairs, $bug->project);
     $bug->execution    = zget($executions, $bug->execution);
-    $bug->openedBy     = zget($users, $bug->openedBy); 
-    $bug->assignedTo   = zget($users, $bug->assignedTo); 
-    $bug->resolvedBy   = zget($users, $bug->resolvedBy); 
-    $bug->mailto       = zget($users, $bug->mailto); 
-    $bug->closedBy     = zget($users, $bug->closedBy); 
-    $bug->lastEditedBy = zget($users, $bug->lastEditedBy); 
-    $bug->type         = zget($lang->bug->typeList, $bug->type); 
-    $bug->confirmed    = zget($lang->bug->confirmedList, $bug->confirmed); 
-    $bug->resolution   = zget($lang->bug->resolutionList, $bug->resolution); 
-    $bug->os           = zget($lang->bug->osList, $bug->os); 
-    $bug->browser      = zget($lang->bug->browserList, $bug->browser); 
+    $bug->openedBy     = zget($users, $bug->openedBy);
+    $bug->assignedTo   = zget($users, $bug->assignedTo);
+    $bug->resolvedBy   = zget($users, $bug->resolvedBy);
+    $bug->mailto       = zget($users, $bug->mailto);
+    $bug->closedBy     = zget($users, $bug->closedBy);
+    $bug->lastEditedBy = zget($users, $bug->lastEditedBy);
+    $bug->type         = zget($lang->bug->typeList, $bug->type);
+    $bug->confirmed    = zget($lang->bug->confirmedList, $bug->confirmed);
+    $bug->resolution   = zget($lang->bug->resolutionList, $bug->resolution);
+    $bug->os           = zget($lang->bug->osList, $bug->os);
+    $bug->browser      = zget($lang->bug->browserList, $bug->browser);
 
     $actions = array();
     foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
@@ -122,11 +122,14 @@ sidebar
 
 $footToolbar = array('items' => array
 (
-    array('size' => 'sm', 'text' => $lang->edit, 'btnType' => 'primary', 'className' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchEdit', "productID=$productID&branch=$branch")),
-    array('size' => 'sm', 'icon' => 'caret-up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('size' => 'sm', 'icon' => 'caret-up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' ,'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('size' => 'sm', 'icon' => 'caret-up', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('size' => 'sm', 'icon' => 'caret-down', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown'),
+    array('type' => 'btn-group', 'items' => array
+    (
+        array('text' => $lang->edit, 'onClick' => jsRaw('window.batchEditBugs'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
+        array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    )),
+    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' ,'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown'),
 ));
 
 $resolveItems = array();
