@@ -1933,7 +1933,8 @@ class baseSQL
         }
         else
         {
-            $condition = ctype_alnum($arg1) ? '`' . $arg1 . '`' : $arg1;
+            $arg1      = (string)$arg1;
+            $condition = ctype_alnum($arg1) && !ctype_digit($arg1) ? '`' . $arg1 . '`' : $arg1;
         }
 
         if(!$this->inMark) $this->sql .= ' ' . DAO::WHERE ." $condition ";
