@@ -101,7 +101,7 @@ featureBar
         set::type('checkbox'),
         set::text($lang->product->edit),
         set::checked($this->cookie->editProject)
-    ) : NULL,
+    ) : null,
     li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
@@ -129,7 +129,7 @@ toolbar
         )),
         set::url(createLink('product', 'manageLine', $browseType)),
         set::type('ajax')
-    ) : NULL,
+    ) : null,
     item(set(array
     (
         'text'  => $lang->product->create,
