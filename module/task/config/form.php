@@ -37,7 +37,7 @@ $config->task->form->assign['lastEditedDate'] = array('type' => 'string', 'requi
 
 $config->task->form->cancel = array();
 $config->task->form->cancel['status']  = array('type' => 'string', 'required' => false, 'default' => 'cancel');
-$config->task->form->cancel['comment'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->task->form->cancel['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->task->form->manageTeam = array();
 $config->task->form->manageTeam['status']         = array('type' => 'string', 'required' => false, 'default' => '');

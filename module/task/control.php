@@ -191,8 +191,8 @@ class task extends control
         if(!empty($_POST))
         {
             /* Prepare and check data. */
-            $task = form::data($this->config->task->form->edit)->get();
-            $task = $this->taskZen->buildTaskForEdit($taskID, $task);
+            $task = form::data($this->config->task->form->edit)->add('id', $taskID)->get();
+            $task = $this->taskZen->buildTaskForEdit($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update task. */
@@ -902,7 +902,6 @@ class task extends control
     /**
      * Batch cancel tasks.
      *
-     * @param  string $skipTaskIdList
      * @access public
      * @return void
      */
@@ -910,23 +909,15 @@ class task extends control
     {
         if($this->post->taskIDList)
         {
-            $taskIDList = $this->post->taskIDList;
-            $taskIDList = array_unique($taskIDList);
-            unset($_POST['taskIDList']);
-            unset($_POST['assignedTo']);
-            $this->loadModel('action');
+            $taskIDList = array_unique($this->post->taskIDList);
 
             $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
-                if($task->status == 'done' or $task->status == 'closed' or $task->status == 'cancel') continue;
+                if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
 
-                $changes = $this->task->cancel($taskID);
-                if($changes)
-                {
-                    $actionID = $this->action->create('task', $taskID, 'Canceled', '');
-                    $this->action->logHistory($actionID, $changes);
-                }
+                $task = $this->taskZen->buildTaskForCancel($task);
+                $this->task->cancel($task);
             }
         }
 
@@ -1017,20 +1008,15 @@ class task extends control
         {
             $this->loadModel('action');
 
-            $postData = form::data($this->config->task->form->cancel)->get();
-            $changes  = $this->task->cancel($taskID, $output['laneID']);
-            if(dao::isError()) return print(js::error(dao::getError()));
-
-            if($postData->comment != '' || !empty($changes))
-            {
-                $actionID = $this->action->create('task', $taskID, 'Canceled', $postData->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $oldTask = $this->task->getById($taskID);
+            $task    = $this->taskZen->buildTaskForCancel($oldTask);
+            $this->task->cancel($task, $output['laneID']);
+            if(dao::isError()) return print($this->send(array('result' => 'fail', 'message' => dao::getError())));
 
             $this->executeHooks($taskID);
 
             $task = $this->task->getById($taskID);
-            if(isonlybody()) return $this->taskZen->responseKanban($task, $from, $regionID);
+            if(isonlybody()) return $this->taskZen->responseModal($task, $from, $regionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 

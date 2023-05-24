@@ -344,14 +344,13 @@ class taskZen extends task
      * 构造待更新的任务数据。
      * Build the task data to be update.
      *
-     * @param  int          $taskID
      * @param  object       $task
      * @access protected
      * @return object|false
      */
-    protected function buildTaskForEdit(int $taskID, object $task): object|false
+    protected function buildTaskForEdit(object $task): object|false
     {
-        $oldTask = $this->task->getByID($taskID);
+        $oldTask = $this->task->getByID($task->id);
 
         /* Check if the fields is valid. */
         if($task->estimate < 0 or $task->left < 0 or $task->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
@@ -360,7 +359,7 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit)->add('id', $taskID)
+        $task = form::data($this->config->task->form->edit)
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')
@@ -529,6 +528,31 @@ class taskZen extends task
         if(!$result) return false;
 
         return $task;
+    }
+
+    /**
+     * 构造取消的任务数据。
+     * Build the task data to cancel.
+     *
+     * @param  object    $oldTask
+     * @access protected
+     * @return object
+     */
+    protected function buildTaskForCancel(object $oldTask): object
+    {
+        $now  = helper::now();
+        $task = form::data($this->config->task->form->cancel)
+            ->add('id', $oldTask->id)
+            ->setDefault('status', 'cancel')
+            ->setDefault('assignedTo', $oldTask->openedBy)
+            ->setDefault('assignedDate', $now)
+            ->setDefault('finishedBy', '')
+            ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
+            ->setDefault('canceledDate, lastEditedDate', $now)
+            ->setIF(empty($oldTask->finishedDate), 'finishedDate', '')
+            ->get();
+
+        return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);
     }
 
     /**
