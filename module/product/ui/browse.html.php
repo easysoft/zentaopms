@@ -70,7 +70,7 @@ foreach($stories as $story)
     }
 }
 
-useData('storyBrowseType', $storyBrowseType);
+data('storyBrowseType', $storyBrowseType);
 
 featureBar
 (
@@ -116,14 +116,6 @@ toolbar
     )))
 );
 
-js
-(<<<JS
-    window.footerGenerator = function() {
-        return [{children: '{$summary}', className: "text-dark"}, "flex", "pager"];
-    }
-JS
-);
-
 dtable
 (
     set::className('shadow rounded'),
@@ -131,7 +123,7 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::nested(true),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
+    set::footer(jsRaw("function(){return window.footerGenerator.call(this, '{$summary}');}"))
 );
 
 render();

@@ -220,6 +220,7 @@ class product extends control
         $this->view->modulePairs     = $modulePairs;
         $this->view->project         = $project;
         $this->view->recTotal        = $pager->recTotal;
+        $this->view->isProjectStory  = $isProjectStory;
 
         $this->display();
     }

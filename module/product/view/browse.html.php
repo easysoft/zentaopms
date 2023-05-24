@@ -20,6 +20,7 @@ body {margin-bottom: 25px;}
 .assignedTo{border-radius: 4px !important;}
 </style>
 <?php
+$this->loadModel('story');
 $lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
 $unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories     = zget($unfoldStories, $productID, array());
@@ -313,7 +314,6 @@ js::set('vision',        $this->config->vision);
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
       $canBatchUnlink       = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
       $canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
-
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
