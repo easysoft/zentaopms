@@ -1,7 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace zin;
 
-function usePager()
+/**
+ * Create settings for using pager widget.
+ *
+ * @return array
+ */
+function usePager(): object|null
 {
     $pager = data('pager');
     if(empty($pager)) return null;
@@ -15,9 +22,9 @@ function usePager()
     }
 
     $setting = new \stdClass();
-    $setting->pageID = $pager->pageID;
-    $setting->recTotal = $pager->recTotal;
-    $setting->recPerPage = $pager->recPerPage;
+    $setting->page        = $pager->pageID;
+    $setting->recTotal    = $pager->recTotal;
+    $setting->recPerPage  = $pager->recPerPage;
     $setting->linkCreator = createLink($pager->moduleName, $pager->methodName, $params);
     $setting->items = array();
     $setting->btnProps= ['data-load' => 'table'];
