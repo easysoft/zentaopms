@@ -511,4 +511,34 @@ class bugTao extends bugModel
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq($bugID)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 为批量编辑 bugs 检查数据。
+     * Check bugs for batch update.
+     *
+     * @param  array     $bugs
+     * @access protected
+     * @return bool
+     */
+    protected function checkBugsForBatchUpdate(array $bugs): bool
+    {
+        $requiredFields = explode(',', $this->config->bug->edit->requiredFields);
+        foreach($bugs as $bug)
+        {
+            /* Check required fields. */
+            foreach($requiredFields as $requiredField)
+            {
+                if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
+                {
+                    $fieldName = isset($this->lang->bug->$requiredField) ? $this->lang->bug->$requiredField : $requiredField;
+                    dao::$errors["{$requiredField}[{$bug->id}]"] = sprintf($this->lang->error->notempty, $fieldName);
+                }
+            }
+
+            if(!empty($bug->resolvedBy) && empty($bug->resolution)) dao::$errors["resolution[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->resolution);
+            if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors["duplicateBug[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+        }
+
+        return !dao::isError();
+    }
 }

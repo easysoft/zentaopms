@@ -401,9 +401,6 @@ class bug extends control
             {
                 if(empty($changes)) continue;
 
-                $actionID = $this->action->create('bug', $bugID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-
                 /* Pop-up confirmation dialog box, when the bug has been converted to a task. */
                 $bug = $this->bug->getById($bugID);
                 if($bug->toTask != 0)

@@ -830,66 +830,42 @@ class bugTest
     }
 
     /**
+     * 测试批量更新 bugs。
      * Test batch update bugs.
      *
-     * @param  array  $bugIDList
-     * @param  string $title
-     * @param  string $type
-     * @param  int    $bugID
+     * @param  array  $bugs
      * @access public
      * @return array
      */
-    public function batchUpdateObject($bugIDList, $title, $type, $bugID)
+    public function batchUpdateObject($bugs)
     {
-        $titles       = array('1' => 'BUG1', '2' => 'BUG2', '3' => 'BUG3');
-        $types        = array('1' => 'codeerror', '2' => 'config', '3' => 'install');
-        $severities   = array('1' => '1', '2' => '2', '3' => '3');
-        $pris         = array('1' => '1', '2' => '2', '3' => '3');
-        $colors       = array('1' => '#3da7f5', '2' => '#75c941', '3' => '#2dbdb2');
-        $module       = array('1' => '1821', '2' => '1822', '3' => '1823');
-        $plan         = array('1' => '1', '2' => '1', '3' => '1');
-        $assignedTo   = array('1' => 'admin', '2' => 'admin', '3' => 'admin');
-        $deadline     = array('1' => date('Y-m-d',strtotime('-1 month')), '2' => date('Y-m-d',strtotime('-1 month +1 day')), '3' => date('Y-m-d',strtotime('-1 month +2 day')));
-        $os           = array('1' => '', '2' => '', '3' => 'all');
-        $browser      = array('1' => '', '2' => '', '3' => '');
-        $keyword      = array('1' => '', '2' => '', '3' => '');
-        $resolvedBy   = array('1' => '', '2' => '', '3' => '');
-        $resolution   = array('1' => '', '2' => '', '3' => '');
-        $duplicateBug = array('1' => '', '2' => '', '3' => '');
+        $_SERVER['HTTP_HOST'] = '';
 
-        $titles[$bugID] = $title;
-        $types[$bugID]  = $type;
+        global $tester;
+        $tester->config->global->scoreStatus = true;
+        $oldScore = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
 
-
-        $batchUpdateFields['bugIDList']     = $bugIDList;
-        $batchUpdateFields['types']         = $types;
-        $batchUpdateFields['severities']    = $severities;
-        $batchUpdateFields['pris']          = $pris;
-        $batchUpdateFields['titles']        = $titles;
-        $batchUpdateFields['colors']        = $colors;
-        $batchUpdateFields['modules']       = $module;
-        $batchUpdateFields['plans']         = $plan;
-        $batchUpdateFields['assignedTos']   = $assignedTo;
-        $batchUpdateFields['deadlines']     = $deadline;
-        $batchUpdateFields['os']            = $os;
-        $batchUpdateFields['browsers']      = $browser;
-        $batchUpdateFields['keywords']      = $keyword;
-        $batchUpdateFields['resolvedBys']   = $resolvedBy;
-        $batchUpdateFields['resolutions']   = $resolution;
-        $batchUpdateFields['duplicateBugs'] = $duplicateBug;
-
-        foreach($batchUpdateFields as $field => $value) $_POST[$field] = $value;
-
-        $object = $this->objectModel->batchUpdate();
-        unset($_POST);
+        $object = $this->objectModel->batchUpdate($bugs);
 
         if(dao::isError())
         {
-            return dao::getError();
+            $return = '';
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$key}:{$value}";
+                if(is_array($value))  $return .= "{$key}:" .implode('', $value);
+            }
+            return $return;
         }
         else
         {
-            return $object[$bugID];
+            $score  = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
+            $titles = $tester->dao->select('title')->from(TABLE_BUG)->where('id')->in(array_keys($bugs))->fetchAll('title');
+
+            $titles          = implode(',', array_keys($titles));
+            $scoreDifference = $score - $oldScore;
+            return "scoreDifference:{$scoreDifference};titles:$titles";
         }
     }
 
@@ -2438,6 +2414,70 @@ class bugTest
         else
         {
             return $file;
+        }
+    }
+
+    /**
+     * 测试输入的 bugs 是否符合批量编辑的要求。
+     * Test check bugs for batch edit.
+     *
+     * @param  array  $bugs
+     * @access public
+     * @return string
+     */
+    public function checkBugsForBatchUpdateTest(array $bugs): string
+    {
+        $this->objectModel->checkBugsForBatchUpdate($bugs);
+
+        if(dao::isError())
+        {
+            $return = '';
+            $errors = dao::getError();
+            foreach($errors as $key => $value)
+            {
+                if(is_string($value)) $return .= "{$key}:{$value}";
+                if(is_array($value))  $return .= "{$key}:" .implode('', $value);
+            }
+            return $return;
+        }
+        else
+        {
+            return 'no error';
+        }
+    }
+
+    /**
+     * 测试批量编辑 bug 后的其他处理。
+     * Test processing after batch edit of bug.
+     *
+     * @param  object  $bug
+     * @access public
+     * @return string
+     */
+    public function afterBatchEditTest(object $bug): string
+    {
+        $_SERVER['HTTP_HOST'] = '';
+
+        global $tester;
+
+        $tester->config->global->scoreStatus = true;
+
+        $oldScore = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
+        $oldBug   = $tester->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
+
+        $this->objectModel->afterBatchEdit($bug, $oldBug);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $score = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
+            $action = $tester->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+
+            $scoreDifference = $score - $oldScore;
+            return "scoreDifference:{$scoreDifference};lastAction:{$action->objectType}-{$action->action}-{$action->objectID}";
         }
     }
 }

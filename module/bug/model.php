@@ -419,156 +419,62 @@ class bugModel extends model
     }
 
     /**
+     * 批量更新 bugs。
      * Batch update bugs.
      *
+     * @param  array       $bugs
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function batchUpdate()
+    public function batchUpdate(array $bugs): array|bool
     {
-        $bugs        = array();
-        $allChanges  = array();
-        $now         = helper::now();
-        $data        = fixer::input('post')->get();
-        $bugIDList   = $this->post->bugIDList ? $this->post->bugIDList : array();
-        $unlinkPlans = array();
-        $link2Plans  = array();
+        if(empty($bugs)) return false;
 
-        if(!empty($bugIDList))
+        /* Check bugs for batch update. */
+        $this->bugTao->checkBugsForBatchUpdate($bugs);
+        if(dao::isError()) return false;
+
+        $oldBugs = $this->getByIdList(array_column($bugs, 'id'));
+
+        /* Update bugs. */
+        $toTaskIdList = array();
+        $unlinkPlans  = array();
+        $link2Plans   = array();
+        foreach($bugs as $bugID => $bug)
         {
-            /* Process the data if the value is 'ditto'. */
-            foreach($bugIDList as $bugID)
+            /* Update bug. */
+            $this->dao->update(TABLE_BUG)->data($bug)
+                ->autoCheck()
+                ->checkFlow()
+                ->where('id')->eq((int)$bugID)
+                ->exec();
+            if(dao::isError())
             {
-                if(!isset($data->assignedTos[$bugID])) $data->assignedTos[$bugID] = 'closed';
-                if($data->types[$bugID]       == 'ditto') $data->types[$bugID]       = isset($prev['type'])       ? $prev['type']       : '';
-                if($data->severities[$bugID]  == 'ditto') $data->severities[$bugID]  = isset($prev['severity'])   ? $prev['severity']   : 3;
-                if($data->pris[$bugID]        == 'ditto') $data->pris[$bugID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
-                if($data->plans[$bugID]       == 'ditto') $data->plans[$bugID]       = isset($prev['plan'])       ? $prev['plan'] : '';
-                if($data->assignedTos[$bugID] == 'ditto') $data->assignedTos[$bugID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
-                if($data->resolvedBys[$bugID] == 'ditto') $data->resolvedBys[$bugID] = isset($prev['resolvedBy']) ? $prev['resolvedBy'] : '';
-                if($data->resolutions[$bugID] == 'ditto') $data->resolutions[$bugID] = isset($prev['resolution']) ? $prev['resolution'] : '';
-                if(isset($data->branches[$bugID]) and $data->branches[$bugID] == 'ditto') $data->branches[$bugID] = isset($prev['branch']) ? $prev['branch'] : 0;
-
-                $prev['type']       = $data->types[$bugID];
-                $prev['severity']   = $data->severities[$bugID];
-                $prev['pri']        = $data->pris[$bugID];
-                $prev['branch']     = isset($data->branches[$bugID]) ? $data->branches[$bugID] : '';
-                $prev['plan']       = $data->plans[$bugID];
-                $prev['assignedTo'] = $data->assignedTos[$bugID];
-                $prev['resolvedBy'] = $data->resolvedBys[$bugID];
-                $prev['resolution'] = $data->resolutions[$bugID];
+                dao::$errors['message'][] = 'bug#' . ($bugID) . dao::getError(true);
+                return false;
             }
 
-            /* Initialize bugs from the post data.*/
-            $extendFields = $this->getFlowExtendFields();
-            $oldBugs = $bugIDList ? $this->getByList($bugIDList) : array();
-            foreach($bugIDList as $bugID)
+            /* Processing other operations after update bug. */
+            $oldBug = $oldBugs[$bugID];
+            $this->afterBatchEdit($bug, $oldBug);
+
+            if($oldBug->toTask != 0 && isset($bug->status) && $bug->status != $oldBug->status) $toTaskIdList[$oldBug->toTask] = $oldBug->toTask;
+
+            /* Get changes of plan. */
+            if($bug->plan != $oldBug->plan)
             {
-                $oldBug = $oldBugs[$bugID];
-
-                $os           = array_filter($data->os[$bugID]);
-                $browsers     = array_filter($data->browsers[$bugID]);
-                $duplicateBug = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
-
-                $bug = new stdclass();
-                $bug->id             = $bugID;
-                $bug->lastEditedBy   = $this->app->user->account;
-                $bug->lastEditedDate = $now;
-                $bug->type           = $data->types[$bugID];
-                $bug->severity       = $data->severities[$bugID];
-                $bug->pri            = $data->pris[$bugID];
-                $bug->color          = $data->colors[$bugID];
-                $bug->title          = $data->titles[$bugID];
-                $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
-                $bug->branch         = empty($data->branches[$bugID]) ? 0 : $data->branches[$bugID];
-                $bug->module         = $data->modules[$bugID];
-                $bug->assignedTo     = $oldBug->status == 'closed' ? $oldBug->assignedTo : $data->assignedTos[$bugID];
-                $bug->deadline       = $data->deadlines[$bugID];
-                $bug->resolvedBy     = $data->resolvedBys[$bugID];
-                $bug->keywords       = $data->keywords[$bugID];
-                $bug->os             = implode(',', $os);
-                $bug->browser        = implode(',', $browsers);
-                $bug->resolution     = $data->resolutions[$bugID];
-                $bug->duplicateBug   = ($bug->resolution  != '' and $bug->resolution != 'duplicate') ? 0 : $duplicateBug;
-
-                if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
-                if($bug->resolution != '') $bug->confirmed = 1;
-                if(($bug->resolvedBy != '' or $bug->resolution != '') and strpos(',resolved,closed,', ",{$oldBug->status},") === false)
-                {
-                    $bug->resolvedDate = $now;
-                    $bug->status       = 'resolved';
-                }
-                if($bug->resolution != '' and $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
-                if($bug->resolution != '' and $bug->assignedTo == '')
-                {
-                    $bug->assignedTo   = $oldBug->openedBy;
-                    $bug->assignedDate = $now;
-                }
-
-                foreach($extendFields as $extendField)
-                {
-                    $bug->{$extendField->field} = $this->post->{$extendField->field}[$bugID];
-                    if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = implode(',', $bug->{$extendField->field});
-
-                    $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-                }
-
-                if($bug->plan != $oldBug->plan)
-                {
-                    if($bug->plan != $oldBug->plan and !empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
-                    if($bug->plan != $oldBug->plan and !empty($bug->plan))    $link2Plans[$bug->plan]  = empty($link2Plans[$bug->plan]) ? $bugID : "{$link2Plans[$bug->plan]},$bugID";
-                }
-
-                $bugs[$bugID] = $bug;
-                unset($bug);
-            }
-
-            $isBiz = $this->config->edition == 'biz';
-            $isMax = $this->config->edition == 'max';
-
-            /* Update bugs. */
-            foreach($bugs as $bugID => $bug)
-            {
-                $oldBug = $oldBugs[$bugID];
-
-                $this->dao->update(TABLE_BUG)->data($bug)
-                    ->autoCheck()
-                    ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
-                    ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
-                    ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
-                    ->checkFlow()
-                    ->where('id')->eq((int)$bugID)
-                    ->exec();
-
-                if(!dao::isError())
-                {
-                    if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug);
-
-                    $this->executeHooks($bugID);
-
-                    $allChanges[$bugID] = common::createChanges($oldBug, $bug);
-
-                    if(($isBiz || $isMax) && $oldBug->feedback && !isset($feedbacks[$oldBug->feedback]))
-                    {
-                        $feedbacks[$oldBug->feedback] = $oldBug->feedback;
-                        $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                    }
-                }
-                else
-                {
-                    return helper::end(js::error('bug#' . $bugID . dao::getError(true)));
-                }
+                if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$bugID}";
+                if(!empty($bug->plan))    $link2Plans[$bug->plan]  = empty($link2Plans[$bug->plan]) ? $bugID : "{$link2Plans[$bug->plan]},{$bugID}";
             }
         }
-        if(!dao::isError())
-        {
-            $this->loadModel('score')->create('ajax', 'batchEdit');
 
-            $this->loadModel('action');
-            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
-            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
-        }
-        return $allChanges;
+        $this->loadModel('score')->create('ajax', 'batchEdit');
+
+        $this->loadModel('action');
+        foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+        foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
+
+        return $toTaskIdList;
     }
 
     /**
@@ -3054,5 +2960,31 @@ class bugModel extends model
             unset($file);
         }
         return $actionID;
+    }
+
+    /**
+     * 批量编辑 bug 后的其他处理。
+     * Processing after batch edit of bug.
+     *
+     * @param  object    $bug
+     * @param  object    $oldBug
+     * @access protected
+     * @return bool
+     */
+    protected function afterBatchEdit(object $bug, object $oldBug): bool
+    {
+        $this->executeHooks($bug->id);
+
+        /* Record log. */
+        $changes  = common::createChanges($oldBug, $bug);
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Edited');
+        $this->action->logHistory($actionID, $changes);
+
+        /* Record score when bug is resolved. */
+        if(isset($bug->status) and $bug->status == 'resolved' and $oldBug->status == 'active') $this->loadModel('score')->create('bug', 'resolve', $bug, $bug->resolvedBy);
+
+        if($this->config->edition != 'pms' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
+        return !dao::isError();
     }
 }

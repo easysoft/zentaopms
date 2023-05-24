@@ -1,0 +1,13 @@
+---
+title: zt_bug
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: assignedTo
+  range: user1
+- field: status
+  range: active{3},resolved{2},active{10}
+- field: plan
+  range: 1,0
+...
+
