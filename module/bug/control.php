@@ -732,13 +732,20 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function batchResolve($resolution, $resolvedBuild = '')
+    public function batchResolve(string $resolution, string $resolvedBuild = '')
     {
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
-        $bugIDList = array_unique($this->post->bugIDList);
-        $changes   = $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
+        $bugIdList = array_unique($this->post->bugIDList);
+        $oldBugs   = $this->bug->getByIdList($bugIdList);
+        $bugIdList = $this->bugZen->batchResolveIdFilter($bugIdList, $oldBugs);
+        list($modules, $productQD) = $this->bugZen->getBatchResolveVars($oldBugs);
+
+        $changes = $this->bug->batchResolve($bugIdList, $resolution, $resolvedBuild, $oldBugs, $modules, $productQD);
         if(dao::isError()) return print(js::error(dao::getError()));
+
+        /* Link bug to build and release. */
+        $this->bug->linkBugToBuild($bugIdList, $resolvedBuild);
 
         foreach($changes as $bugID => $bugChanges)
         {

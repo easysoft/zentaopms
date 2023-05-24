@@ -2273,4 +2273,47 @@ class bugZen extends bug
 
         return $fileName;
     }
+
+    /**
+     * 过滤批量解决bug id。
+     * Filter and batch solve bug IDs.
+     *
+     * @param  array     $bugIdList
+     * @param  object[]  $oldBugs
+     * @access protected
+     * @return array
+     */
+    protected function batchResolveIdFilter(array $bugIdList, array $oldBugs): array
+    {
+        foreach($bugIdList as $i => $bugID)
+        {
+            $oldBug = $oldBugs[$bugID];
+            if($oldBug->resolution == 'fixed' || $oldBug->status != 'active')
+            {
+                unset($bugIdList[$i]);
+                continue;
+            }
+        }
+        return $bugIdList;
+    }
+
+    /**
+     * 获取批量解决bug的数据。
+     * Get batch resolve bug data.
+     *
+     * @param  object[]  $oldBugs
+     * @access protected
+     * @return array
+     */
+    protected function getBatchResolveVars(array $oldBugs): array
+    {
+        $bug       = reset($oldBugs);
+        $productID = $bug->product;
+        $product   = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
+        $modules   = array();
+        while($module = $stmt->fetch()) $modules[$module->id] = $module;
+
+        return array($modules, $product->QD);
+    }
 }

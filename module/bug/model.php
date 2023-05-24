@@ -846,41 +846,31 @@ class bugModel extends model
     }
 
     /**
+     * 批量解决bug。
      * Batch resolve bugs.
      *
-     * @param  array    $bugIDList
+     * @param  array    $bugIdList
      * @param  string   $resolution
      * @param  string   $resolvedBuild
+     * @param  object[] $oldBugs
+     * @param  object[] $modules
+     * @param  string   $productQD
      * @access public
-     * @return void
+     * @return array
      */
-    public function batchResolve($bugIDList, $resolution, $resolvedBuild)
+    public function batchResolve(array $bugIdList, string $resolution, string $resolvedBuild, array $oldBugs, array $modules, string $productQD): array
     {
-        $now  = helper::now();
-        $bugs = $this->getByList($bugIDList);
-
-        $bug       = reset($bugs);
-        $productID = $bug->product;
-        $users     = $this->loadModel('user')->getPairs();
-        $product   = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
-        $modules   = array();
-        while($module = $stmt->fetch()) $modules[$module->id] = $module;
-
         $isBiz = $this->config->edition == 'biz';
         $isMax = $this->config->edition == 'max';
 
+        $users   = $this->loadModel('user')->getPairs();
+        $now     = helper::now();
         $changes = array();
-        foreach($bugIDList as $i => $bugID)
+        foreach($bugIdList as $i => $bugID)
         {
-            $oldBug = $bugs[$bugID];
-            if($oldBug->resolution == 'fixed')
-            {
-                unset($bugIDList[$i]);
-                continue;
-            }
-            if($oldBug->status != 'active') continue;
+            $oldBug = $oldBugs[$bugID];
 
+            /* Get bug assignedTo. */
             $assignedTo = $oldBug->openedBy;
             if(!isset($users[$assignedTo]))
             {
@@ -895,22 +885,21 @@ class bugModel extends model
                     }
                     $module = isset($modules[$module->parent]) ? $modules[$module->parent] : '';
                 }
-                if(empty($assignedTo)) $assignedTo = $product->QD;
+                if(empty($assignedTo)) $assignedTo = $productQD;
             }
 
             $bug = new stdClass();
-            $bug->resolution     = $resolution;
-            $bug->resolvedBuild  = $resolution == 'fixed' ? $resolvedBuild : '';
-            $bug->resolvedBy     = $this->app->user->account;
-            $bug->resolvedDate   = $now;
-            $bug->status         = 'resolved';
-            $bug->confirmed      = 1;
-            $bug->assignedTo     = $assignedTo;
-            $bug->assignedDate   = $now;
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
+            $bug->resolution    = $resolution;
+            $bug->resolvedBuild = $resolution == 'fixed' ? $resolvedBuild : '';
+            $bug->resolvedBy    = $this->app->user->account;
+            $bug->resolvedDate  = $now;
+            $bug->status        = 'resolved';
+            $bug->confirmed     = 1;
+            $bug->assignedTo    = $assignedTo;
+            $bug->assignedDate  = $now;
 
-            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+            $this->bugTao->updateByID((int)$bugID, $bug);
+
             $this->executeHooks($bugID);
 
             if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
@@ -922,9 +911,6 @@ class bugModel extends model
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
             }
         }
-
-        /* Link bug to build and release. */
-        $this->linkBugToBuild($bugIDList, $resolvedBuild);
 
         return $changes;
     }
