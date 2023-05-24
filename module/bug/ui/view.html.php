@@ -128,6 +128,12 @@ foreach($linkCommits as $commit)
     );
 }
 
+$files = '';
+foreach($bug->files as $file)
+{
+    $files .= $file->title . ',';
+}
+
 panel
 (
     div
@@ -137,6 +143,27 @@ panel
         (
             set('width', '70%'),
             set('class', 'border-r'),
+            section
+            (
+                set::title($lang->bug->legendSteps),
+                set::content($bug->steps),
+                set::useHtml(true)
+            ),
+            section
+            (
+                set::title($lang->files),
+                set::content($files),
+                set::useHtml(true)
+            ),
+            section
+            (
+                set::title($lang->bug->fromCase),
+                set::content
+                (
+                    "#$bug->case $bug->caseTitle"
+                ),
+                set::useHtml(true)
+            ),
             history(),
             center
             (
@@ -176,7 +203,6 @@ panel
                                 array('th' => $lang->bug->product, 'tr' => $product->name, 'url' => helper::createLink('product', 'view', "productID=$bug->product"), 'data-app' => 'product'),
                                 array('th' => sprintf($lang->product->branch, $lang->product->branchName[$product->type]), 'tr' => $branchName, 'url' => helper::createLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch")),
                                 array('th' => $lang->bug->module,         'tr' => $moduleTitle),
-                                array('th' => $lang->bug->fromCase,       'tr' => icon('sitemap', "{$lang->bug->fromCase}$lang->colon$bug->case"), 'url' => helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), 'data-toggle' => 'modal'),
                                 array('th' => $lang->bug->productplan,    'tr' => $bug->planName, 'url' => helper::createLink('productplan', 'view', "planID=$bug->plan&type=bug")),
                                 array('th' => $lang->bug->type,           'tr' => zget($lang->bug->typeList, $bug->type)),
                                 array('th' => $lang->bug->status,         'tr' => $this->processStatus('bug', $bug), 'class' => 'status-' . $bug->status),
@@ -217,7 +243,16 @@ panel
                 (
                     array
                     (
-                        array('id' => 'legendExecStoryTask', 'label' => (!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask), 'data' => printTable(array()), 'active' => true),
+                        array
+                        (
+                            'id' => 'legendExecStoryTask', 'label' => (!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask), 'data' => printTable(array
+                            (
+                                array('th' => $lang->bug->project, 'tr' => $bug->projectName, 'url' => helper::createLink('project', 'view', "projectID=$bug->project")),
+                                array('th' => (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution, 'tr' => $bug->executionName, 'url' => helper::createLink('execution', 'browse', "executionID=$bug->execution")),
+                                array('th' => $lang->bug->story, 'tr' => "#$bug->story $bug->storyTitle", 'url' => helper::createLink('story', 'view', "storyID=$bug->story"), 'data-toggle' => 'modal'),
+                                array('th' => $lang->bug->task, 'tr' => "$bug->taskName", 'url' => helper::createLink('task', 'view', "taskID=$bug->task"), 'data-toggle' => 'modal'),
+                            )), 'active' => true
+                        ),
                         array
                         (
                             'id' => 'legendMisc', 'label' => $lang->bug->legendMisc, 'data' => printTable(array
