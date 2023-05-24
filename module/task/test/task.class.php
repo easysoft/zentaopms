@@ -71,7 +71,7 @@ class taskTest
             'module'       => 0,
             'story'        => 0,
             'name'         => '',
-            'type'         => 'test',
+            'type'         => '',
             'assignedTo'   => 'admin',
             'assignedDate' => helper::now(),
             'pri'          => 3,
