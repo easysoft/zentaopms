@@ -392,16 +392,18 @@ class productZen extends product
      * 获取导出产品数据。
      * Get export product data.
      *
-     * @param  string $status
-     * @param  string $orderBy
+     * @param  int       $programID
+     * @param  string    $status
+     * @param  string    $orderBy
+     * @param  int       $param
      * @access protected
      * @return array
      */
-    protected function getExportData(string $status, string $orderBy): array
+    protected function getExportData(int $programID, string $status, string $orderBy, int $param = 0): array
     {
         $lines        = $this->product->getLinePairs();
         $users        = $this->user->getPairs('noletter');
-        $products     = $this->product->getList(0, $status);
+        $products     = strtolower($status) == 'bysearch' ? $this->product->getListBySearch($param) : $this->product->getList($programID, $status);
         $productStats = $this->product->getStats(array_keys($products), $orderBy, null, $status);
 
         foreach($productStats as $product)

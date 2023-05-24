@@ -51,9 +51,9 @@ $programMenuLink = createLink(
     $this->app->rawModule,
     $this->app->rawMethod,
     array(
-        'browseType' => $browseType,
+        'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
         'orderBy'    => $orderBy,
-        'param'      => $param,
+        'param'      => $browseType == 'bySearch' ? 0 : $param,
         'recTotal'   => $recTotal,
         'recPerPage' => $recPerPage,
         'pageID'     => $pageID,
@@ -115,7 +115,7 @@ toolbar
             set::icon('export'),
             $lang->export
         )),
-        set::url(createLink('product', 'export', "status=$browseType&orderBy=$orderBy")),
+        set::url(createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param")),
         set::type('ajax')
     ),
     div(setClass('nav-divider')),

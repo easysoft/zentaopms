@@ -98,14 +98,14 @@ toolbar
         'text'  => $lang->export,
         'icon'  => 'export',
         'class' => 'secondary',
-        'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
+        'url'   => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"),
     ))),
     item(set(array
     (
         'text'  => $lang->import,
         'icon'  => 'import',
         'class' => 'secondary',
-        'url'   => createLink('product', 'manageLine', $browseType),
+        'url'   => createLink('story', 'import', "productID=$productID"),
     ))),
     item(set(array
     (

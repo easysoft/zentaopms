@@ -769,18 +769,20 @@ class product extends control
      * 导出产品。
      * Export product.
      *
-     * @param  string    $status
-     * @param  string    $orderBy
+     * @param  int    $programID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function export(string $status, string $orderBy)
+    public function export(int $programID, string $status, string $orderBy, int $param = 0)
     {
         if($_POST)
         {
             /* 获取导出字段和数据。 */
             $fields       = $this->productZen->getExportFields();
-            $productStats = $this->productZen->getExportData($status, $orderBy);
+            $productStats = $this->productZen->getExportData($programID, $status, $orderBy, $param);
             $rowspan      = $this->productZen->getExportRowspan($productStats);
 
             /* 如果只导出选中产品，删除非选中产品。 */
