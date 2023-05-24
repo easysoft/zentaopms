@@ -288,7 +288,7 @@ class yaml
         /* Try to load common yaml file if yaml file not found in $runFileName path.*/
         if(!is_file($yamlFile)) $yamlFile = dirname($runPath, 2) . DS . 'yaml' . DS . "{$fileName}.yaml";
 
-        if(is_file($yamlFile)) $this->configFiles[] = dirname($runPath) . "/yaml/$runFileName/{$fileName}.yaml";
+        if(is_file($yamlFile)) $this->configFiles[] = $yamlFile;
 
         return $this;
     }
