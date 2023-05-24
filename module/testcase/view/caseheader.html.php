@@ -292,7 +292,7 @@
         <li><?php echo html::a($createTestcaseLink, $lang->testcase->create);?></li>
         <li><?php echo html::a($batchCreateLink, $lang->testcase->batchCreate, '', "data-app='{$this->app->tab}'");?></li>
         <?php if(common::hasPriv('testcase', 'createScene')){ ?>
-        <li><?php echo html::a($createSceneLink, $lang->testcase->newScene);?></li>
+        <li><?php echo html::a($createSceneLink, $lang->testcase->newScene, '', "data-app='{$this->app->tab}'");?></li>
         <?php } ?>
       </ul>
       <?php endif;?>

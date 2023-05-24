@@ -2608,8 +2608,15 @@ class testcase extends control
         }
 
         /* Set menu. */
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
-        $this->qa->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
 
         /* Set branch. */
         $product = $this->product->getById($productID);
@@ -2617,7 +2624,7 @@ class testcase extends control
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
