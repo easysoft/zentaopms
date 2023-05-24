@@ -2076,23 +2076,17 @@ class userModel extends model
         /* View management has the highest priority, so there is a substitution. */
         if(!empty($acls['programs']) and !$isAdmin)
         {
-            $grantPrograms = '';
-            foreach($acls['programs'] as $programID) $grantPrograms .= ",{$programID}";
-            $userView->programs = $grantPrograms;
+            $userView->programs = implode(',', $acls['program']);
         }
         if(!empty($acls['projects']) and !$isAdmin)
         {
-            $grantProjects = '';
             /* If is project admin, set projectID to userview. */
             if($projects) $acls['projects'] = array_merge($acls['projects'], explode(',', $projects));
-            foreach($acls['projects'] as $projectID) $grantProjects .= ",{$projectID}";
-            $userView->projects = $grantProjects;
+            $userView->projects = implode(',', $acls['projects']);
         }
         if(!empty($acls['products']) and !$isAdmin)
         {
-            $grantProducts = '';
-            foreach($acls['products'] as $productID) $grantProducts .= ",{$productID}";
-            $userView->products = $grantProducts;
+            $userView->products = implode(',', $acls['products']);
         }
 
         /* Set opened sprints and stages into userview. */
@@ -2107,9 +2101,7 @@ class userModel extends model
 
         if(!empty($acls['sprints']) and !$isAdmin)
         {
-            $grantSprints= '';
-            foreach($acls['sprints'] as $sprintID) $grantSprints .= ",{$sprintID}";
-            $userView->sprints = $grantSprints;
+            $userView->sprints = implode(',', $acls['sprints']);
         }
 
         $userView->products = trim($userView->products, ',');
