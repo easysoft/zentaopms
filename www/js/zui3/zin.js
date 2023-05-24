@@ -208,6 +208,8 @@
      * @param {string} options.url
      * @param {string} options.selectors
      * @param {string} [options.target]
+     * @param {string} [options.method]
+     * @param {string} [options.data]
      * @param {{selector: string, type: string}} [options.zinOptions]
      * @param {function} [options.success]
      * @param {function} [options.error]
@@ -223,10 +225,13 @@
         if(DEBUG) console.log('[APP]', 'request', options);
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
-        return $.ajax(
+        const ajaxOptions =
         {
-            url:      url,
-            headers:  {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
+            url:         url,
+            headers:     {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
+            type:        options.method || 'GET',
+            data:        options.data,
+            contentType: options.contentType,
             beforeSend: () =>
             {
                 updatePerfInfo(options, 'requestBegin');
@@ -266,7 +271,9 @@
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
             }
-        });
+        };
+        console.log('> ajaxOptions', ajaxOptions);
+        return $.ajax(ajaxOptions);
     }
 
     function fetchContent(url, selectors, options)
@@ -315,7 +322,7 @@
         fetchContent(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', {id: '#' + id, target: '#' + id});
     }
 
-    function loadPage(url, selector, id)
+    function loadPage(url, selector, id, options)
     {
         url = url || currentAppUrl;
         if (!selector && url.includes(' '))
@@ -330,7 +337,12 @@
         {
             selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
         }
-        fetchContent(url, selector, id);
+        fetchContent(url, selector, $.extend({id}, options));
+    }
+
+    function postAndLoadPage(url, data, selector, id, options)
+    {
+        loadPage(url, selector, id, $.extend({method: 'POST', data, contentType: false}, options));
     }
 
     function loadCurrentPage(selector)
@@ -455,7 +467,7 @@
         return result;
     }
 
-    $.extend(window, {fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading});
+    $.extend(window, {fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
