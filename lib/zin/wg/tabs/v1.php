@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'tabpane' . DS . 'v1.php';
+
 class tabs extends wg
 {
     protected static $defineProps = array(
@@ -9,6 +11,10 @@ class tabs extends wg
         'direction?:string="h"',
         'items:array',
         'activeID?:string'
+    );
+
+    protected static $defineBlocks = array(
+        'tabPanes' => array()
     );
 
     public static function getPageCSS(): string|false
@@ -43,11 +49,10 @@ class tabs extends wg
     {
         if(!isset($item['data'])) return null;
         $isActive = $this->prop('activeID') == $id || (isset($item['active']) && $item['active']);
-        return div
+        return new tabPane
         (
-            setClass('tab-pane'),
             setID($id),
-            $isActive ? setClass('active') : null,
+            set::isActive($isActive),
             $item['data']
         );
     }
@@ -78,22 +83,14 @@ class tabs extends wg
 
     protected function build(): wg
     {
-        $items = $this->prop('items');
+        $items      = $this->prop('items');
         $isVertical = $this->prop('direction') === 'v';
+        $tabPanes   = $this->block('tabPanes');
 
-        if(empty($items))
-        {
-            return div
-            (
-                set($this->props->skip(array_keys(static::getDefinedProps()))),
-                $isVertical ? setClass('flex') : null,
-
-                $this->children()
-            );
-        }
-
-        $labelViews  = array();
+        $labelViews   = array();
         $contentViews = array();
+        if(is_array($tabPanes)) $contentViews = array_merge($contentViews, $tabPanes);
+
         foreach($items as $item)
         {
             $id = $this->getItemID($item);

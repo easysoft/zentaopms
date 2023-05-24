@@ -910,6 +910,10 @@ function modalDialog()
  * array   items
  * ?string direction='h'
  * ?string activeId
+ *
+ * ====== blocks ======
+ * tabPanes = array()
+ * ====================
  */
 function tabs()
 {
