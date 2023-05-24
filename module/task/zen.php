@@ -359,7 +359,7 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit)
+        $task = form::data($this->config->task->form->edit)->add('id', $task->id)
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')

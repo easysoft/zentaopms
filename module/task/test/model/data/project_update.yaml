@@ -1,0 +1,78 @@
+---
+fields:
+- field: id
+  range: 1-9
+- field: project
+  range: 1-10
+- field: model
+  range: scrum{30},waterfall{30},kanban{30}
+- field: name
+  range: 1-9
+  prefix: 执行
+- field: type
+  range: sprint{4},kanban{2},stage{3}
+- field: status
+  range: doing
+- field: lifetime
+  range: ~
+- field: budget
+  range: 900000-1:100
+- field: budgetUnit
+  range: CNY,USD
+- field: attribute
+  note: Only stage has attribute
+  range: ~
+- field: percent
+  range: 1-100:R
+- field: milestone
+  note: Is it milestone
+  range: 0
+- field: output
+  note: Output document
+  range: ~
+- field: auth
+  note: Only project has auth
+  range: extend
+- field: parent
+  range: "0"
+- field: path
+  range: 1-9
+- field: grade
+  range: "2"
+- field: code
+  range: 1-10000
+  prefix: project
+- field: begin
+  range: (-3M)-(+M):1D
+  type: timestamp
+  format: YY/MM/DD
+- field: end
+  range: (+5w)-(+2M):1D
+  type: timestamp
+  format: YY/MM/DD
+- field: PO
+  range: ~
+- field: PM
+  range: ~
+- field: QD
+  range: ~
+- field: RD
+  range: ~
+- field: team
+  range: ~
+- field: acl
+  range: open,private,program
+- field: order
+  range: 5-10000:5
+- field: openedVersion
+  range: "16.5"
+- field: openedDate
+  range: (-3M)-(+M):1D
+  type: timestamp
+  format: YY/MM/DD
+  postfix: "\t"
+- field: deleted
+  range: 0
+- field: openedBy
+  range: admin,user1
+...

@@ -727,9 +727,7 @@ class taskModel extends model
      */
     public function update(object $task): array|string|false
     {
-        $taskID = $task->id;
-        if($taskID <= 0) return false;
-
+        $taskID  = $task->id;
         $oldTask = $this->getByID($taskID);
 
         if($task->consumed < $oldTask->consumed)
@@ -738,6 +736,7 @@ class taskModel extends model
             return false;
         }
 
+        /* Compute hours and manage team for multi-task. */
         if($this->post->team and count(array_filter($this->post->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
@@ -749,67 +748,14 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
-        /* Multi-task change to normal task. */
-        if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
-
-        if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
-
-        /* Compute task's story stage. */
-        $this->loadModel('story')->setStage($task->story);
-        if($task->story != $oldTask->story) $this->story->setStage($oldTask->story);
-
-        if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
-        if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-        if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
-
-        $isParentChanged = $task->parent != $oldTask->parent;
-
-        /* If there is a parent task before updating the task, update the parent. */
-        if($oldTask->parent > 0)
-        {
-            $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
-            $this->updateParentStatus($taskID, $oldTask->parent, !$isParentChanged);
-            $this->computeBeginAndEnd($oldTask->parent);
-
-            if($isParentChanged)
-            {
-                $oldChildCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
-                if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
-                $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
-                $this->loadModel('action')->create('task', $taskID, 'unlinkParentTask', '', $oldTask->parent, '', false);
-
-                $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $taskID, '', false);
-
-                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
-
-                $changes = common::createChanges($oldParentTask, $newParentTask);
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
-        }
-
-        if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
+        $this->afterUpdate($oldTask, $task);
 
         unset($oldTask->parent, $task->parent);
 
-        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-
         /* Logging history when multi-task team members have changed. */
-        if(isset($oldTask->team))
-        {
-            $users = $this->loadModel('user')->getPairs('noletter|noempty');
+        if(isset($oldTask->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
-            $oldTask->team = '';
-            foreach($oldTask->team as $team) $oldTask->team .= "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left . "\n";
-
-            $task->team = '';
-            foreach($this->post->team as $i => $account)
-            {
-                if(empty($account)) continue;
-                $task->team .= "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($this->post->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($this->post->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($this->post->teamLeft, $i, 0) . "\n";
-            }
-        }
-
-        $this->file->processFile4Object('task', $oldTask, $task);
+        $this->loadModel('file')->processFile4Object('task', $oldTask, $task);
         $changes = common::createChanges($oldTask, $task);
 
         /* Record log. */
@@ -3725,6 +3671,61 @@ class taskModel extends model
             if($task->story) $this->loadModel('story')->setStage($task->story);
         }
         return !dao::isError();
+    }
+
+    /**
+     * 编辑任务后的其他数据处理。
+     * Other actions after edit a task.
+     *
+     * @param  object $oldTask
+     * @param  object $task
+     * @access public
+     * @return void
+     */
+    public function afterUpdate(object $oldTask, object $task): void
+    {
+        /* Multi-task change to normal task. */
+        if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
+
+        if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
+
+        /* Compute task's story stage. */
+        $this->loadModel('story')->setStage($task->story);
+        if($task->story != $oldTask->story) $this->story->setStage($oldTask->story);
+
+        /* Create score. */
+        if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $task->id);
+        if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $task->id);
+
+        if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+
+        $isParentChanged = $task->parent != $oldTask->parent;
+
+        /* If there is a parent task before updating the task, update the parent. */
+        if($oldTask->parent > 0)
+        {
+            $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
+            $this->updateParentStatus($task->id, $oldTask->parent, !$isParentChanged);
+            $this->computeBeginAndEnd($oldTask->parent);
+
+            if($isParentChanged)
+            {
+                $oldChildCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
+                if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
+                $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
+                $this->loadModel('action')->create('task', $task->id, 'unlinkParentTask', '', $oldTask->parent, '', false);
+
+                $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $task->id, '', false);
+
+                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
+
+                $changes = common::createChanges($oldParentTask, $newParentTask);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
     }
 
     /**

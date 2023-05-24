@@ -229,6 +229,32 @@ class taskTao extends taskModel
     }
 
     /**
+     * 多人任务的团队变更后，记录对比历史记录。
+     * Update a task.
+     *
+     * @param  object    $oldTask
+     * @param  object    $task
+     * @access protected
+     * @return bool
+     */
+    protected function createChangesForTeam(object $oldTask, object $task): array
+    {
+        $users = $this->loadModel('user')->getPairs('noletter|noempty');
+
+        $oldTask->team = '';
+        foreach($oldTask->team as $team) $oldTask->team .= "{$this->lang->task->teamMember}: " . zget($users, $team->account) . ", {$this->lang->task->estimateAB}: " . (float)$team->estimate . ", {$this->lang->task->consumedAB}: " . (float)$team->consumed . ", {$this->lang->task->leftAB}: " . (float)$team->left . "\n";
+
+        $task->team = '';
+        foreach($this->post->team as $i => $account)
+        {
+            if(empty($account)) continue;
+            $task->team .= "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($this->post->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($this->post->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($this->post->teamLeft, $i, 0) . "\n";
+        }
+
+        return array($oldTask, $task);
+    }
+
+    /**
      * 更新一个任务。
      * Update a task.
      *
