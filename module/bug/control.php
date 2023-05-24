@@ -456,7 +456,7 @@ class bug extends control
 
                     $plans[$product->id][$branchInfo->id] = array('' => '') + $this->loadModel('productplan')->getPairs($product->id, $branchInfo->id, '', true);
 
-                    $productBugList[$product->id][$branchInfo->id] = $this->bug->getProductBugPairs($bug->product, "0,{$branchInfo->id}");
+                    $productBugList[$product->id][$branchInfo->id] = $this->bug->getProductBugPairs($product->id, "0,{$branchInfo->id}");
                 }
 
                 $branches      = array_keys($branches);
