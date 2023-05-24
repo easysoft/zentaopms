@@ -807,8 +807,8 @@ class productModel extends model
     }
 
     /**
-     * 构建搜索表单。
-     * Build search form.
+     * 在需求列表页面构建搜索表单。
+     * Build search form for story list page.
      *
      * @param  int    $productID
      * @param  array  $products
@@ -861,7 +861,8 @@ class productModel extends model
     }
 
     /**
-     * Build search form for all method of product module.
+     * 在产品列表页面构建搜索表单。
+     * Build search form for product list page.
      *
      * @param  int    $queryID
      * @param  string $actionURL
@@ -875,11 +876,8 @@ class productModel extends model
 
         if($this->config->systemMode == 'ALM')
         {
-            $programPairs = $this->loadModel('program')->getTopPairs('', 'noclosed');
-            $this->config->product->all->search['params']['program']['values'] = array('' => '') + $programPairs;
-
-            $linePairs = $this->getLinePairs();
-            $this->config->product->all->search['params']['line']['values'] = array('' => '') + $linePairs;
+            $this->config->product->all->search['params']['program']['values'] = array('' => '') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+            $this->config->product->all->search['params']['line']['values']    = array('' => '') + $this->getLinePairs();
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->all->search);
