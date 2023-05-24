@@ -401,7 +401,8 @@ class productZen extends product
     {
         $lines        = $this->product->getLinePairs();
         $users        = $this->user->getPairs('noletter');
-        $productStats = $this->product->getStats($orderBy, null, $status);
+        $products     = $this->product->getList(0, $status);
+        $productStats = $this->product->getStats(array_keys($products), $orderBy, null, $status);
 
         foreach($productStats as $product)
         {

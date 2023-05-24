@@ -107,13 +107,17 @@ featureBar
 
 toolbar
 (
-    item(set(array
+    modalTrigger
     (
-        'text'  => $lang->export,
-        'icon'  => 'export',
-        'class' => 'ghost text-darker',
-        'url'   => createLink('product', 'export', $browseType, "status=$browseType&orderBy=$orderBy"),
-    ))),
+        to::trigger(btn
+        (
+            setClass('ghost text-darker'),
+            set::icon('export'),
+            $lang->export
+        )),
+        set::url(createLink('product', 'export', "status=$browseType&orderBy=$orderBy")),
+        set::type('ajax')
+    ),
     div(setClass('nav-divider')),
     $config->systemMode == 'ALM' ? modalTrigger
     (
@@ -124,8 +128,7 @@ toolbar
             $lang->product->editLine
         )),
         set::url(createLink('product', 'manageLine', $browseType)),
-        set::type('ajax'),
-        set::title('maintaince')
+        set::type('ajax')
     ) : NULL,
     item(set(array
     (
