@@ -175,13 +175,10 @@ class taskTest
      * @access public
      * @return array
      */
-    public function batchChangeModuleTest($taskIDList, $moduleID)
+    public function batchChangeModuleTest(array $taskIDList, int $moduleID): array
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $object = $this->objectModel->batchChangeModule($taskIDList, $moduleID);
-        return $object;
+        return $this->objectModel->getByList($taskIDList);
     }
 
     /**
