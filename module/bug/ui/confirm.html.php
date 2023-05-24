@@ -72,4 +72,4 @@ formPanel
     history(),
 );
 
-render();
+render('modalDialog');

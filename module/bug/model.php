@@ -2839,13 +2839,13 @@ class bugModel extends model
         if($this->app->tab == 'execution') $copyParams .= ',executionID={execution}';
 
         $actions = array();
-        $actions['confirm']  = array('icon' => 'ok',         'text' => $this->lang->bug->confirmedAB, 'url' => helper::createLink('bug', 'confirmBug', $defaultParams), 'data-toggle' => 'modal');
-        $actions['assignTo'] = array('icon' => 'hand-right', 'text' => $this->lang->bug->assignTo,    'url' => helper::createLink('bug', 'assignTo',   $defaultParams), 'data-toggle' => 'modal');
-        $actions['resolve']  = array('icon' => 'checked',    'text' => $this->lang->bug->resolve,     'url' => helper::createLink('bug', 'resolve',    $defaultParams), 'data-toggle' => 'modal');
-        $actions['close']    = array('icon' => 'off',        'text' => $this->lang->bug->close,       'url' => helper::createLink('bug', 'close',      $defaultParams), 'data-toggle' => 'modal');
-        $actions['activate'] = array('icon' => 'magic',      'text' => $this->lang->bug->activate,    'url' => helper::createLink('bug', 'activate',   $defaultParams), 'data-toggle' => 'modal');
-        $actions['edit']     = array('icon' => 'edit',       'text' => $this->lang->bug->edit,        'url' => helper::createLink('bug', 'edit',       $defaultParams));
-        $actions['copy']     = array('icon' => 'copy',       'text' => $this->lang->bug->copy,        'url' => helper::createLink('bug', 'create',     $copyParams));
+        $actions['confirm']  = array('icon' => 'ok',         'text' => $this->lang->bug->confirmedAB, 'url' => helper::createLink('bug', 'confirm',  $defaultParams), 'data-toggle' => 'modal');
+        $actions['assignTo'] = array('icon' => 'hand-right', 'text' => $this->lang->bug->assignTo,    'url' => helper::createLink('bug', 'assignTo', $defaultParams), 'data-toggle' => 'modal');
+        $actions['resolve']  = array('icon' => 'checked',    'text' => $this->lang->bug->resolve,     'url' => helper::createLink('bug', 'resolve',  $defaultParams), 'data-toggle' => 'modal');
+        $actions['close']    = array('icon' => 'off',        'text' => $this->lang->bug->close,       'url' => helper::createLink('bug', 'close',    $defaultParams), 'data-toggle' => 'modal');
+        $actions['activate'] = array('icon' => 'magic',      'text' => $this->lang->bug->activate,    'url' => helper::createLink('bug', 'activate', $defaultParams), 'data-toggle' => 'modal');
+        $actions['edit']     = array('icon' => 'edit',       'text' => $this->lang->bug->edit,        'url' => helper::createLink('bug', 'edit',     $defaultParams));
+        $actions['copy']     = array('icon' => 'copy',       'text' => $this->lang->bug->copy,        'url' => helper::createLink('bug', 'create',   $copyParams));
 
         foreach($actions as $action => $actionData)
         {

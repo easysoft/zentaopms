@@ -824,13 +824,13 @@ class bugZen extends bug
         $bug = $this->getBuildsAndStories4Create($bug);
         /* 如果bug有所属项目，查询这个项目。 */
         /* Get project. */
-        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($projectID)));
+        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($bug->projectID)));
         /* 获得产品下拉和项目下拉列表。 */
         /* Get products and projects. */
         $bug = $this->getProductsAndProjects4Create($bug);
         /* 追加下拉列表的内容。 */
         /* Append projects. */
-        $bug = $this->appendProjects4Create($bug, (isset($bugID) ? $bugID : 0));
+        $bug = $this->appendProjects4Create($bug, (isset($bug->id) ? $bug->id : 0));
         /* 获得项目的管理方式。 */
         /* Get project model. */
         $bug = $this->getProjectModel4Create($bug);
@@ -1136,7 +1136,7 @@ class bugZen extends bug
         $projects    = $bug->projects;
         $executions  = array(0 => '');
 
-        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
+        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
         $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
         $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
@@ -1244,7 +1244,7 @@ class bugZen extends bug
 
         /* 获取执行列表。*/
         /* Get execution pairs. */
-        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
+        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (string)$bug->project);
         if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* 获取项目列表。*/
