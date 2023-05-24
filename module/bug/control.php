@@ -805,7 +805,7 @@ class bug extends control
             $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
             $this->bug->close($bug, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
-            $this->bug->afterClose($bug, $oldBug);
+            $this->bug->afterClose($bug, $oldBug, $extra);
 
             $this->executeHooks($bugID);
 
@@ -860,6 +860,7 @@ class bug extends control
     }
 
     /**
+     * 批量关闭BUG。
      * Batch close bugs.
      *
      * @param  int    $releaseID
@@ -867,44 +868,31 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function batchClose($releaseID = '', $viewType = '')
+    public function batchClose(int $releaseID = 0, string $viewType = '')
     {
-        if($releaseID) $this->post->bugIDList = $this->post->unlinkBugs;
-        if($this->post->bugIDList)
+        $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
+        if($bugIDList)
         {
-            $bugIDList = $this->post->bugIDList;
             $bugIDList = array_unique($bugIDList);
-
-            /* Reset $_POST. Do not unset that because the function of close need that in model. */
-            $_POST = array();
-
-            $closedBugs = array();
-            $bugs = $this->bug->getByIdList($bugIDList);
+            $bugs      = $this->bug->getByIdList($bugIDList);
+            $skipBugs  = array();
             foreach($bugs as $bugID => $bug)
             {
-                if($bug->status != 'resolved')
+                if($bug->status == 'resolved')
                 {
-                    if($bug->status != 'closed') $skipBugs[$bugID] = $bugID;
-                    continue;
+                    $this->bug->close($bugID);
                 }
-
-                $changes = $this->bug->close($bugID);
-
-                $actionID = $this->action->create('bug', $bugID, 'Closed');
-                $this->action->logHistory($actionID, $changes);
-                $closedBugs[] = $bugID;
+                else if($bug->status != 'closed')
+                {
+                    $skipBugs[$bugID] = $bugID;
+                }
             }
-
-            $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->in($closedBugs)->exec();
 
             $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)));
-            if($viewType)
-            {
-                return print(js::locate($this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'parent'));
-            }
+            if($viewType) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
         }
-        return print(js::reload('parent'));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**

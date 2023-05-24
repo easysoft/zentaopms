@@ -992,16 +992,24 @@ class bugModel extends model
      *
      * @param  object $bug
      * @access public
-     * @return void
+     * @return bool
      */
-    public function close(object $bug)
+    public function close(object $bug): bool
     {
+        $oldBug = $this->getById($bug->id);
+
         $this->dao->update(TABLE_BUG)
             ->data($bug, 'comment')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq((int)$bug->id)
             ->exec();
+
+        $changes = common::createChanges($oldBug, $bug);
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed');
+        $this->action->logHistory($actionID, $changes);
+
+        return !dao::isError();
     }
 
     /**
@@ -1010,12 +1018,13 @@ class bugModel extends model
      *
      * @param  object $bug
      * @param  object $oldBug
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function afterClose(object $bug, object $oldBug):array
+    public function afterClose(object $bug, object $oldBug, string $extra = ''): array
     {
-        if($oldBug->execution) list($bug, $oldBug) = $this->bugTao->updateKanbanAfterClose($bug, $oldBug);
+        if($oldBug->execution) list($bug, $oldBug) = $this->bugTao->updateKanbanAfterClose($bug, $oldBug, $extra);
         list($bug, $oldBug) = $this->bugTao->updateActionAfterClose($bug, $oldBug);
         $this->updateBugAssignedTo((int)$bug->id);
 

@@ -6,7 +6,7 @@ class bugTao extends bugModel
      * 获取Bug的基础数据。
      * Fetch base info of a bug.
      *
-     * @param  int $bugID
+     * @param  int          $bugID
      * @access protected
      * @return object|false
      */
@@ -19,7 +19,7 @@ class bugTao extends bugModel
      * Get bug details, including all contents of the TABLE_BUG, execution name, associated story name, associated story status, associated story version, associated task name, and associated plan name.
      * 获取bug的详情，包含bug表的所有内容、所属执行名称、关联需求名称、关联需求状态、关联需求版本、关联任务名称、关联计划名称
      *
-     * @param  int   $bugID
+     * @param  int          $bugID
      * @access protected
      * @return object|false
      */
@@ -122,7 +122,7 @@ class bugTao extends bugModel
      * @access public
      * @return array
      */
-    protected function getBySearch(array $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null)
+    protected function getBySearch(array $productIdList, int|string $branch = 0, int $projectID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
     {
         $bugQuery = $this->processSearchQuery($queryID, $productIdList, (string)$branch);
 
@@ -184,7 +184,7 @@ class bugTao extends bugModel
      * Get cases created by bug.
      * 获取bug建的用例。
      *
-     * @param  int    $bugID
+     * @param  int       $bugID
      * @access protected
      * @return array
      */
@@ -210,9 +210,9 @@ class bugTao extends bugModel
      * Get object title/name base on the params.
      * 根据传入的参数，获取对象名称。
      *
-     * @param  int    $objectID
-     * @param  string $table
-     * @param  string $field
+     * @param  int       $objectID
+     * @param  string    $table
+     * @param  string    $field
      * @access protected
      * @return string
      */
@@ -314,7 +314,7 @@ class bugTao extends bugModel
      * Call checkDelayBug in foreach to check if the bug is delay.
      * 循环调用checkDelayBug，检查bug是否延期
      *
-     * @param  array  $bugs
+     * @param  array     $bugs
      * @access protected
      * @return object[]
      */
@@ -329,7 +329,7 @@ class bugTao extends bugModel
      * If the bug is delayed, add the bug->delay field to show the delay time (day).
      * 添加bug->delay字段，内容为延期的时长（天），不延期则为0
      *
-     * @param  object $bug
+     * @param  object    $bug
      * @access protected
      * @return object
      */
@@ -356,12 +356,13 @@ class bugTao extends bugModel
      * 关闭bug后，更新看板的状态。
      * Update kanban status after close bug.
      *
-     * @param  object $bug
-     * @param  object $oldBug
+     * @param  object    $bug
+     * @param  object    $oldBug
+     * @param  string    $extra
      * @access protected
      * @return array
      */
-    protected function updateKanbanAfterClose(object $bug, object $oldBug):array
+    protected function updateKanbanAfterClose(object $bug, object $oldBug, string $extra): array
     {
         $extra  = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -379,12 +380,12 @@ class bugTao extends bugModel
      * 关闭bug后，更新动态
      * Update action after close bug.
      *
-     * @param  object $bug
-     * @param  object $oldBug
+     * @param  object    $bug
+     * @param  object    $oldBug
      * @access protected
      * @return array
      */
-    protected function updateActionAfterClose(object $bug, object $oldBug):array
+    protected function updateActionAfterClose(object $bug, object $oldBug): array
     {
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
