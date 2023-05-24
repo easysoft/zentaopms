@@ -1,0 +1,18 @@
+title: zt_task
+author: Zhaoke
+version: "1.0"
+fields:
+- field: id
+  range: 1-6
+- field: execution
+  range: '2,3,3,4'
+- field: name
+  range: 1-6
+  prefix: '任务'
+- field: left
+  range: 0
+- field: status
+  range: 'wait,doing,done,pause,cancel,closed'
+- field: assignedTo
+  range: 1-6
+  prefix: 'old'
