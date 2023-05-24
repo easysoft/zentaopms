@@ -134,7 +134,6 @@ dtable
     set::footPager(usePager()),
     set::checkable(true),
     set::footToolbar($footToolbar),
-    set::footer(jsRaw('window.footerGenerator'))
 );
 
 render();
