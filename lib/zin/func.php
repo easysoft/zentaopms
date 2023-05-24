@@ -1184,7 +1184,9 @@ function dashboard()
  *
  * string            title
  * string|array|null content
- * bool              useHtml=false
+ * ?bool             useHtml=false
+ * ?callable         subtitle
+ * ?callable         actions
  *
  * ====== blocks ======
  * subTitle => array()

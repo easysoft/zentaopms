@@ -7,11 +7,13 @@ class section extends wg
     protected static $defineProps = array(
         'title: string',          // 标题
         'content?: string|array', // 内容
-        'useHtml?: bool=false'    // 内容是否解析 HTML 标签
+        'useHtml?: bool=false',   // 内容是否解析 HTML 标签
+        'subtitle?: callable',    // 子标题
+        'actions?: callable',     // 操作按钮
     );
 
     protected static $defineBlocks = array(
-        'subTitle' => array(),
+        'subtitle' => array(),
         'actions'  => array(),
     );
 
@@ -26,8 +28,10 @@ class section extends wg
 
     private function title(): wg
     {
-        $title       = $this->prop('title');
-        $actionsView = $this->block('actions');
+        $title   = $this->prop('title');
+        $actions = $this->prop('actions');
+
+        $actionsView = is_callable($actions) ? $actions() : $this->block('actions');
 
         if(empty($actionsView)) return div(setClass('article-h2', 'mb-3'), $title);
 
@@ -78,6 +82,12 @@ class section extends wg
         }, $content);
     }
 
+    private function subtitle(): wg|array|null
+    {
+        $subtitle = $this->prop('subtitle');
+        return is_callable($subtitle) ? $subtitle() : $this->block('subtitle');
+    }
+
     protected function build(): wg
     {
         return div
@@ -85,7 +95,7 @@ class section extends wg
             setClass('section pt-6 px-6 pb-4'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $this->title(),
-            $this->block('subTitle'),
+            $this->subtitle(),
             $this->buildContent(),
             $this->children()
         );
