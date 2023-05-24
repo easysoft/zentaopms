@@ -462,8 +462,8 @@ class productModel extends model
     }
 
     /**
+     * 用对象数据创建产品
      * Create a product.
-     * 直接用对象数据创建产品
      *
      * @param  object  $product
      * @param  string  $lineName
@@ -502,6 +502,7 @@ class productModel extends model
     }
 
     /**
+     * 更新产品数据。
      * Update a product.
      *
      * @param  int    $productID
@@ -598,6 +599,7 @@ class productModel extends model
     }
 
     /**
+     * 关闭产品。
      * Close product.
      *
      * @param  int    $productID
@@ -628,6 +630,7 @@ class productModel extends model
     }
 
     /**
+     * 激活产品。
      * Activate a product.
      *
      * @param  int    $productID.
