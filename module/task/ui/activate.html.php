@@ -128,7 +128,7 @@ if($isMultiple)
     $index = 1;
     foreach($task->team as $member)
     {
-        $member->id           = $index ++;
+        $member->id           = $index;
         $member->team         = $member->account;
         $member->teamSource   = $member->account;
         $member->teamEstimate = $member->estimate;
@@ -136,6 +136,7 @@ if($isMultiple)
         $member->teamLeft     = $member->left;
 
         $teamData[] = $member;
+        $index ++;
     }
 }
 
