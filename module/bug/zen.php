@@ -1795,7 +1795,7 @@ class bugZen extends bug
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
         $this->view->project          = $project;
         $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', 'id_desc', $projectID, 'multiple,stagefilter');
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', $projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
