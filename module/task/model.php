@@ -1646,61 +1646,47 @@ class taskModel extends model
     /**
      * Cancel a task.
      *
-     * @param int    $taskID
-     * @param string $extra
+     * @param object  $task
+     * @param string  $extra
      *
      * @access public
      * @return array
      */
-    public function cancel($taskID, $extra = '')
+    public function cancel(object $task, string $extra = ''): bool
     {
+        $this->dao->update(TABLE_TASK)->data($task)
+             ->autoCheck()
+             ->checkFlow()
+             ->where('id')->eq($task->id)
+             ->exec();
+
+        if(dao::isError()) return false;
+
+        $oldTask = $this->getById($task->id);
+
+        if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
+        if($oldTask->parent > 0) $this->updateParentStatus($task->id);
+
+        /* Cancel a parent task. */
+        if($oldTask->parent == '-1') $this->taskTao->cancelParentTask($task);
+
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $oldTask = $this->getById($taskID);
-
-        $now  = helper::now();
-        $task = fixer::input('post')
-            ->add('id', $taskID)
-            ->setDefault('status', 'cancel')
-            ->setDefault('assignedTo', $oldTask->openedBy)
-            ->setDefault('assignedDate', $now)
-            ->setDefault('finishedBy', '')
-            ->setDefault('finishedDate', '0000-00-00 00:00:00')
-            ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
-            ->setDefault('canceledDate, lastEditedDate', $now)
-            ->stripTags($this->config->task->editor->cancel['id'], $this->config->allowedTags)
-            ->setIF(empty($oldTask->finishedDate), 'finishedDate', '')
-            ->remove('comment')
-            ->get();
-
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
-        if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
-        if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-        if($oldTask->parent == '-1')
-        {
-            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
-            unset($task->assignedTo);
-            unset($task->id);
-            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
-            $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
-            if(!dao::isError() and count($oldChildrenTasks) > 0)
-            {
-                $this->loadModel('action');
-                foreach($oldChildrenTasks as $oldChildrenTask)
-                {
-                    $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
-                    $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-                }
-            }
-        }
-        if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');
-        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $task->id);
+        if(isset($output['toColID']))  $this->kanban->moveCard($task->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        $changes = common::createChanges($oldTask, $task);
+        if($changes || $this->post->comment != '')
+        {
+            $actionID = $this->loadModel('action')->create('task', $task->id, 'Canceled', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
 
