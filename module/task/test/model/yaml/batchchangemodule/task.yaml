@@ -1,0 +1,8 @@
+title: batchchangemodule-task
+author: Yanyi Cao
+version: 1.0
+fields:
+  - field: execution
+    range: 1-6
+  - field: module
+    range: 1-6

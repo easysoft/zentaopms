@@ -1,0 +1,14 @@
+title: batchchangemodule-execution
+author: Yanyi Cao
+version: 1.0
+fields:
+    - field: id
+      range: '1-6'
+    - field: type
+      range: 'project, sprint'
+    - field: project
+      range: '0-1'
+    - field: multiple
+      range: '1,0'
+    - field: status
+      range: 'active'
