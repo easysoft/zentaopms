@@ -1920,7 +1920,8 @@ class bugModel extends model
     public function getDataOfResolvedBugsPerDay(): array
     {
         return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
-            ->where($this->reportCondition())->groupBy('name')
+            ->where($this->reportCondition())
+            ->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('name')
             ->fetchAll();
@@ -1936,9 +1937,11 @@ class bugModel extends model
     public function getDataOfClosedBugsPerDay(): array
     {
         return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
-            ->where($this->reportCondition())->groupBy('name')
+            ->where($this->reportCondition())
+            ->groupBy('name')
             ->having('name != 0000-00-00')
-            ->orderBy('closedDate')->fetchAll();
+            ->orderBy('name')
+            ->fetchAll();
     }
 
     /**
