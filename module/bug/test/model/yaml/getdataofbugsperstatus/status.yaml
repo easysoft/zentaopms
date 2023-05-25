@@ -1,0 +1,8 @@
+---
+title: zt_bug
+author: Tingting Dai
+version: "1.0"
+fields:
+- field: status
+  range: "active{2},resolved{2},closed{6}"
+...
