@@ -55,7 +55,6 @@ $items[] = array
 (
     'name'     => 'module',
     'label'    => $lang->bug->module,
-    'hidden'   => zget($visibleFields, 'module', true, false),
     'control'  => 'select',
     'items'    => $moduleOptionMenu,
     'value'    => $moduleID,
@@ -241,10 +240,10 @@ $items[] = array
 formBatchPanel
 (
     set::items($items),
-    on::change('[data-name="branches"]', 'setBranchRelated'),
+    on::change('[data-name="branch"]', 'setBranchRelated'),
     on::change('[data-name="project"]', 'loadProductExecutionsByProject'),
-    on::change('[data-name="executions"]', 'loadExecutionBuilds'),
-    on::change('[data-name="regions"]', 'setLane'),
+    on::change('[data-name="execution"]', 'loadExecutionBuilds'),
+    on::change('[data-name="region"]', 'setLane'),
     formHidden('product', $productID),
 );
 

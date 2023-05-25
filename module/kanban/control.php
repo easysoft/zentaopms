@@ -1985,8 +1985,9 @@ class kanban extends control
     {
         $lanes = $this->kanban->getLanePairsByRegion($regionID, $type);
 
-        if($i !== '') return print(html::select($field . "[$i]", $lanes, '', "class='form-control'"));
+        if($this->viewType == 'json') return print($lanes);
 
+        if($i !== '') return print(html::select($field . "[$i]", $lanes, '', "class='form-control'"));
         return print(html::select($field, $lanes, '', "class='form-control'"));
     }
 

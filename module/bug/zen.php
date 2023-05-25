@@ -1770,7 +1770,7 @@ class bugZen extends bug
             /* Get builds, stories and branches of this execution. */
             $builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased', $executionID, 'execution');
             $stories         = $this->story->getExecutionStoryPairs($executionID);
-            $productBranches = $product->type != 'normal' ? $this->execution->getBranchByProduct($product->id, $executionID) : array();
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($product->id), $executionID) : array();
             $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
             $branch          = key($branches);
 
@@ -1795,7 +1795,7 @@ class bugZen extends bug
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
         $this->view->project          = $project;
         $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', $projectID, 'multiple,stagefilter');
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (string)$projectID, 'multiple,stagefilter');
         $this->view->executionID      = $executionID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;

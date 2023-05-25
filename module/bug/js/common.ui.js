@@ -460,48 +460,86 @@ function loadAllUsers(event)
 
 function setBranchRelated(event)
 {
-    var branchID = $(event.target).val();
-    var num      = $(event.target).closest('tr').attr('data-index');
-
-    const productID = $('[name="product"]').val();
-
-    var currentModuleID = config.currentMethod == 'batchedit' ? $('#modules_' + num).val() : 0;
-    var moduleLink      = $.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
-    $.get(moduleLink, function(modules)
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const branchID    = $target.val();
+    const productID   = $('[name= "product"]').val();
+    const moduleID    = $currentRow.find('.form-batch-input[data-name="module"]').val() || '0';
+    const moduleLink  = $.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=0&currentModuleID=' + moduleID);
+    $.getJson(moduleLink, function(data)
     {
-        if(!modules) modules = '<select id="modules_' + num + '" name="modules[' + num + ']" class="form-control"></select>';
-        $('#modules_' + num).replaceWith(modules);
+        if(!data || !data.modules) return;
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $module = $row.find('.form-batch-input[data-name="module"]').empty();
+            $.each(data.modules, function(value, text)
+            {
+                $module.append('<option value="' + value + '"' + value == data.currentModuleID ? 'select' : ''  + '>' + text + '</option>');
+            });
+
+            $row = $row.next('tr');
+
+            if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+        }
     });
 
-    var projectLink = $.createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
-    $.get(projectLink, function(projects)
+    var projectLink = $.createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID);
+    $.getJson(projectLink, function(projects)
     {
-        if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
-        $('#projects_' + num).replaceWith(projects);
+        if(!projects) return;
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $project = $row.find('.form-batch-input[data-name="project"]').empty();
+            $.each(projects, function(value, text)
+            {
+                $project.append('<option value="' + value + '">' + text + '</option>');
+            });
+
+            $row = $row.next('tr');
+
+            if(!$row.find('td[data-name="project"][data-ditto="on"]').length) break;
+        }
     });
 
-    var executionLink = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
-    $.get(executionLink, function(executions)
+    var executionLink = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID);
+    $.getJson(executionLink, function(executions)
     {
-        if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
-        $('#executions_' + num).replaceWith(executions);
+        if(!executions) return;
+
+        executions = JSON.parse(executions);
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $execution = $row.find('.form-batch-input[data-name="execution"]').empty();
+            $.each(executions, function(value, text)
+            {
+                $execution.append('<option value="' + value + '">' + text + '</option>');
+            });
+
+            $row = $row.next('tr');
+
+            if(!$row.find('td[data-name="execution"][data-ditto="on"]').length) break;
+        }
     });
 
     /* If the branch of the current row is inconsistent with the one below, clear the module and execution of the nex row. */
     if(config.currentMethod == 'batchcreate')
     {
-        var nextBranchID = $('#branches_' + (num + 1)).val();
+        let $nextRow     = $currentRow.next('tr');
+        let nextBranchID = $nextRow.find('td[data-name="branch"]').val();
         if(nextBranchID != branchID)
         {
-            $('#modules_' + (num + 1)).closest('.form-batch-control').attr('data-ditto', 'off');
-            $('#modules_' + (num + 1)).trigger("chosen:updated");
-
-            $('#executions_' + (num + 1)).closest('.form-batch-control').attr('data-ditto', 'off');
-            $('#executions_' + (num + 1)).trigger("chosen:updated");
+            $nextRow.find('td[data-name="branch"]').attr('data-ditto', 'off');
+            $nextRow.find('td[data-name="execution"]').attr('data-ditto', 'off');
         }
 
-      var buildLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
-      setOpenedBuilds(buildLink, num);
+      var buildLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID);
+      setOpenedBuilds(buildLink, $currentRow);
     }
 
     if(config.currentMethod == 'batchedit')

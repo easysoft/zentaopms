@@ -924,6 +924,7 @@ class product extends control
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch);
 
+        if($this->viewType == 'json') return print($projects);
         return print(html::select('projects' . "[$number]", array('' => '') + $projects, 0, "class='form-control' onchange='loadProductExecutionsByProject($productID, this.value, $number)'"));
     }
 
@@ -982,7 +983,7 @@ class product extends control
     {
 
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, 'multiple,stagefilter');
+        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, 'multiple,stagefilter');
 
         return $this->send(array('executions' => $executions, 'noMultipleExecutionID' => $noMultipleExecutionID));
     }
