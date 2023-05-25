@@ -710,6 +710,7 @@ $lang->navGroup->featureconfig = 'admin';
 $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
+$lang->navGroup->measurement   = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';
