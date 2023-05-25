@@ -5,11 +5,11 @@ namespace zin;
 class section extends wg
 {
     protected static $defineProps = array(
-        'title: string',          // 标题
-        'content?: string|array', // 内容
-        'useHtml?: bool=false',   // 内容是否解析 HTML 标签
-        'subtitle?: callable',    // 子标题
-        'actions?: callable',     // 操作按钮
+        'title: string',                   // 标题
+        'content?: string|array|callable', // 内容
+        'useHtml?: bool=false',            // 内容是否解析 HTML 标签
+        'subtitle?: callable',             // 子标题
+        'actions?: callable',              // 操作按钮
     );
 
     protected static $defineBlocks = array(
@@ -52,14 +52,14 @@ class section extends wg
         );
     }
 
-    private function content(string $text): wg
+    private function content(string|wg $content): wg
     {
-        $useHtml = $this->prop('useHtml');
+        $useHtml = $this->prop('useHtml') === true && is_string($content);
 
         return div
         (
             setClass('article-content'),
-            $useHtml ? html($text) : $text,
+            $useHtml ? html($content) : $content,
         );
 
     }
@@ -70,6 +70,8 @@ class section extends wg
         if(!isset($content)) return null;
 
         if(is_string($content)) return $this->content($content);
+
+        if(is_callable($content)) return $this->content($content());
 
         return array_map(function($x)
         {
