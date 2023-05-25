@@ -1631,23 +1631,19 @@ class bugTest
     }
 
     /**
+     * 统计每天新增 bug 数。
      * Test get report data of opened bugs per day.
      *
      * @access public
      * @return array
      */
-    public function getDataOfOpenedBugsPerDayTest()
+    public function getDataOfOpenedBugsPerDayTest(): array
     {
-        $array = $this->objectModel->getDataOfOpenedBugsPerDay();
+        $datas = $this->objectModel->getDataOfOpenedBugsPerDay();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
