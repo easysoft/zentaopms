@@ -240,7 +240,7 @@ class form extends fixer
             $data = $this->rawdata->$field;
         }
 
-        if(isset($config['default']) && !isset($this->rawdata->$field))
+        if(array_key_exists('default', $config) && !isset($this->rawdata->$field))
         {
             $data = $config['default'];
         }
