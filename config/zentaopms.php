@@ -377,6 +377,12 @@ define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
+if(!defined('TABLE_BASICMEAS'))          define('TABLE_BASICMEAS', '`' . $config->db->prefix . 'basicmeas`');
+if(!defined('TABLE_DERIVEMEAS'))         define('TABLE_DERIVEMEAS', '`' . $config->db->prefix . 'derivemeas`');
+if(!defined('TABLE_MEASRECORDS'))        define('TABLE_MEASRECORDS', '`' . $config->db->prefix . 'measrecords`');
+if(!defined('TABLE_MEASQUEUE'))          define('TABLE_MEASQUEUE', '`' . $config->db->prefix . 'measqueue`');
+if(!defined('TABLE_MEASTEMPLATE'))       define('TABLE_MEASTEMPLATE', '`' . $config->db->prefix . 'meastemplate`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
