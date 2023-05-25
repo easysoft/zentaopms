@@ -11,14 +11,14 @@ class productPlan
     /**
      * Get by ID plan
      *
-     * @param  int  mixed $planID
-     * @param  bool mixed $setImgSize
+     * @param  int  $planID
+     * @param  bool $setImgSize
      * @access public
      * @return array
      */
     public function getByIDPlan($planID, $setImgSize = false)
     {
-        $productplans = $this->productplan->getByID($planID, $setImgSize = false);
+        $productplans = $this->productplan->getByID($planID, $setImgSize);
         if(dao::isError()) return dao::getError();
         return $productplans;
     }
@@ -26,7 +26,7 @@ class productPlan
     /**
      * Get by ID list
      *
-     * @param  array(int)  mixed $planIDList
+     * @param  array  $planIDList
      * @access public
      * @return array
      */
@@ -40,7 +40,7 @@ class productPlan
     /**
      * Get last
      *
-     * @param  int mixed $productID
+     * @param  int $productID
      * @param  int $branch
      * @param  int $parent
      * @access public
@@ -56,10 +56,10 @@ class productPlan
     /**
      * Get list
      *
-     * @param int $product
-     * @param int $branch
+     * @param int    $product
+     * @param int    $branch
      * @param string $browseType
-     * @param mixed $pager
+     * @param object $pager
      * @param string $orderBy
      * @param string $param
      * @access public
@@ -75,16 +75,16 @@ class productPlan
     /**
      * Get pairs
      *
-     * @param int $product
+     * @param int    $product
      * @param string $branch
      * @param string $expired
-     * @param bool mixed $skipParent
+     * @param bool   $skipParent
      * @access public
      * @return array
      */
     public function getPairs($product, $branch = '', $expired = '', $skipParent = false)
     {
-        $productplans = $this->productplan->getPairs($product, $branch = '', $expired = '', $skipParent = false);
+        $productplans = $this->productplan->getPairs($product, $branch, $expired, $skipParent);
         if(dao::isError()) return dao::getError();
         return $productplans;
     }
@@ -92,11 +92,11 @@ class productPlan
     /**
      * Get pairs for story
      *
-     * @param mrray|int mixed $product
-     * @param int       mixed $branch
-     * @param string    mixed $param
+     * @param array|int $product
+     * @param int       $branch
+     * @param string    $param
      * @access public
-     * @return count
+     * @return int
      */
     public function getPairsForStory($product, $branch, $param)
     {
@@ -108,7 +108,7 @@ class productPlan
     /**
      * Get for products
      *
-     * @param  array(int) mixed $products
+     * @param  array  $products
      * @access public
      * @return count
      */
@@ -122,10 +122,10 @@ class productPlan
     /**
      * Get group by product
      *
-     * @param  array(int) mixed $products
-     * @param  string     mixed $param
-     * @param  string     $field
-     * @param  string     $orderBy
+     * @param  array  $products
+     * @param  string $param
+     * @param  string $field
+     * @param  string $orderBy
      * @access public
      * @return count
      */
@@ -139,7 +139,7 @@ class productPlan
     /**
      * Get children
      *
-     * @param  int mixed $planID
+     * @param  int $planID
      * @access public
      * @return count
      */
@@ -153,7 +153,7 @@ class productPlan
     /**
      * Get plans by stories
      *
-     * @param  array(int) mixed $storyIdList
+     * @param  array  $storyIdList
      * @access public
      * @return count
      */
@@ -167,8 +167,8 @@ class productPlan
     /**
      * Get branch plan pairs
      *
-     * @param  int mixed $productID
-     * @param  int mixed $branches
+     * @param  int $productID
+     * @param  int $branches
      * @access public
      * @return array
      */
@@ -204,7 +204,7 @@ class productPlan
     /**
      * Create
      *
-     * @param  array mixed $param
+     * @param  array $param
      * @access public
      * @return array
      */
@@ -226,8 +226,8 @@ class productPlan
     /**
      * Update
      *
-     * @param  int   mixed $planID
-     * @param  array mixed $values
+     * @param  int   $planID
+     * @param  array $values
      * @access public
      * @return array
      */
@@ -246,7 +246,7 @@ class productPlan
     /**
      * Update status
      *
-     * @param  int    mixed $planID
+     * @param  int    $planID
      * @param  string $status
      * @param  string $action
      * @access public
@@ -262,13 +262,13 @@ class productPlan
     /**
      * Update parent status
      *
-     * @param  int   mixed $parentId
+     * @param  int $parentID
      * @access public
      * @return bool
      */
-    public function updateParentStatus($parentId)
+    public function updateParentStatus($parentID)
     {
-        $productplans = $this->productplan->updateParentStatus($parentId);
+        $productplans = $this->productplan->updateParentStatus($parentID);
         if(dao::isError()) return dao::getError();
         return $productplans;
     }
@@ -276,18 +276,18 @@ class productPlan
     /**
      * Batch update
      *
-     * @param  int   mixed $productId
+     * @param  int    $productID
      * @access public
      * @return array(array)
      */
-    public function batchUpdate($productId, $bratch)
+    public function batchUpdate($productID, $bratch)
     {
         $batch = array('id' => array(), 'title' => array(), 'begin' => array(), 'end' => array());
 
         foreach($batch as $field => $defaultvalue) $_POST[$field] = $defaultvalue;
         foreach($bratch as $key => $value) $_POST[$key] = $value;
 
-        $productplans = $this->productplan->batchUpdate($productId);
+        $productplans = $this->productplan->batchUpdate($productID);
         if(dao::isError()) return dao::getError();
         return $productplans;
     }
@@ -295,7 +295,7 @@ class productPlan
     /**
      * Batch change status
      *
-     * @param  string mixed $status
+     * @param  string $status
      * @access public
      * @return array
      */
@@ -313,7 +313,7 @@ class productPlan
     /**
      * Change parent field
      *
-     * @param  int    mixed $planID
+     * @param  int    $planID
      * @access public
      * @return true
      */
@@ -327,8 +327,8 @@ class productPlan
     /**
      * Link story
      *
-     * @param  int   mixed $planID
-     * @param  array(stories => array())mixed $storyID
+     * @param  int    $planID
+     * @param  array  $storyID
      * @access public
      * @return void
      */
@@ -346,8 +346,8 @@ class productPlan
     /**
      * Unlink story
      *
-     * @param  int   mixed $storyID
-     * @param  int   mixed $planID
+     * @param  int   $storyID
+     * @param  int   $planID
      * @access public
      * @return void
      */
@@ -363,8 +363,8 @@ class productPlan
     /**
      * Link bug
      *
-     * @param  int   mixed $planID
-     * @param  array mixed $bugID
+     * @param  int   $planID
+     * @param  array $bugID
      * @access public
      * @return void
      */
@@ -383,7 +383,7 @@ class productPlan
     /**
      * Unlink bug
      *
-     * @param  int   mixed $bugID
+     * @param  int   $bugID
      * @access public
      * @return void
      */
@@ -400,7 +400,7 @@ class productPlan
      * Link project
      *
      * @param  int   $projectID
-     * @param  mixed $newPlans
+     * @param  array $newPlans
      * @access public
      * @return void
      */
@@ -416,7 +416,7 @@ class productPlan
     /**
      * Reorder 4 children
      *
-     * @param  array  mixed $plans
+     * @param  array  $plans
      * @access public
      * @return array
      */
@@ -437,8 +437,8 @@ class productPlan
     /**
      * Is clickable
      *
-     * @param  int    mixed $planID
-     * @param  string mixed $action
+     * @param  int    $planID
+     * @param  string $action
      * @access public
      * @return void
      */

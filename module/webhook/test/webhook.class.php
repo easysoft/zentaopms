@@ -10,7 +10,7 @@ class webhookTest
     /**
      * Get by ID Test
      *
-     * @param  int    mixed $id
+     * @param  int    $id
      * @access public
      * @return array
      */
@@ -26,7 +26,7 @@ class webhookTest
     /**
      * Get by type Test
      *
-     * @param  string mixed $type
+     * @param  string $type
      * @access public
      * @return array
      */
@@ -42,9 +42,9 @@ class webhookTest
     /**
      * Get bind account Test
      *
-     * @param  int    mixed $webhookID
-     * @param  string mixed $webhookType
-     * @param  int    mixed $openID
+     * @param  int    $webhookID
+     * @param  string $webhookType
+     * @param  int    $openID
      * @access public
      * @return string
      */
@@ -61,8 +61,8 @@ class webhookTest
      * Get list Test
      *
      * @param  string $orderBy
-     * @param  int    mixed $pager
-     * @param  bool   mixed $decode
+     * @param  object $pager
+     * @param  bool   $decode
      * @access public
      * @return array
      */
@@ -78,9 +78,9 @@ class webhookTest
     /**
      * Get log list Test
      *
-     * @param  int    mixed $id
+     * @param  int    $id
      * @param  string $orderBy
-     * @param  int    mixed $pager
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -112,7 +112,7 @@ class webhookTest
     /**
      * Get bound users Test
      *
-     * @param  int   mixed $webhookID
+     * @param  int   $webhookID
      * @param  array $users
      * @access public
      * @return int
@@ -200,8 +200,8 @@ class webhookTest
     /**
      * Bind Test
      *
-     * @param  array mixed $create
-     * @param  array mixed $bind
+     * @param  array $create
+     * @param  array $bind
      * @access public
      * @return array
      */
@@ -230,10 +230,10 @@ class webhookTest
     /**
      * Send Test
      *
-     * @param string mixed $objectType
-     * @param int    mixed $objectID
-     * @param string mixed $actionType
-     * @param int    mixed $actionID
+     * @param string $objectType
+     * @param int    $objectID
+     * @param string $actionType
+     * @param int    $actionID
      * @param string $actor
      * @access public
      * @return bool
@@ -250,10 +250,10 @@ class webhookTest
     /**
      * Build data Test
      *
-     * @param  string mixed $objectType
-     * @param  int    mixed $objectID
-     * @param  string mixed $actionType
-     * @param  int    mixed $actionID
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @param  int    $actionID
      * @access public
      * @return bool
      */
@@ -275,8 +275,8 @@ class webhookTest
     /**
      * Get view link Test
      *
-     * @param  string mixed $objectType
-     * @param  int    mixed $objectID
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return string
      */
@@ -292,9 +292,9 @@ class webhookTest
     /**
      * Get dingding data Test
      *
-     * @param  string mixed $title
-     * @param  string mixed $text
-     * @param  string mixed $mobile
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
      * @access public
      * @return array
      */
@@ -309,11 +309,11 @@ class webhookTest
     /**
      * Get bearychat data Test
      *
-     * @param  string mixed $text
-     * @param  string mixed $mobile
-     * @param  string mixed $email
-     * @param  string mixed $objectType
-     * @param  int    mixed $objectID
+     * @param  string $text
+     * @param  string $mobile
+     * @param  string $email
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return array
      */
@@ -329,9 +329,9 @@ class webhookTest
     /**
      * Get weixin data Test
      *
-     * @param  string mixed $title
-     * @param  string mixed $text
-     * @param  string mixed $mobile
+     * @param  string $title
+     * @param  string $text
+     * @param  string $mobile
      * @access public
      * @return array
      */
@@ -347,8 +347,8 @@ class webhookTest
     /**
      * Get feishu data Test
      *
-     * @param  string mixed $title
-     * @param  string mixed $text
+     * @param  string $title
+     * @param  string $text
      * @access public
      * @return array
      */
@@ -364,7 +364,7 @@ class webhookTest
     /**
      * Get open id list Test
      *
-     * @param  int    mixed $actionID
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -386,8 +386,8 @@ class webhookTest
     /**
      * Fetch hook Test
      *
-     * @param  object mixed $webhook
-     * @param  object mixed $sendData
+     * @param  object $webhook
+     * @param  object $sendData
      * @param  int    $actionID
      * @access public
      * @return int
@@ -411,9 +411,9 @@ class webhookTest
     /**
      * Save data Test
      *
-     * @param  int    mixed $webhookID
-     * @param  int    mixed $actionID
-     * @param  string mixed $data
+     * @param  int    $webhookID
+     * @param  int    $actionID
+     * @param  string $data
      * @param  string $actor
      * @access public
      * @return void
@@ -437,10 +437,10 @@ class webhookTest
     /**
      * Save log Test
      *
-     * @param  object mixed $webhook
-     * @param  int    mixed $actionID
-     * @param  string mixed $data
-     * @param  string mixed $result
+     * @param  object $webhook
+     * @param  int    $actionID
+     * @param  string $data
+     * @param  string $result
      * @access public
      * @return void
      */
@@ -456,8 +456,8 @@ class webhookTest
     /**
      * Set sent status Test
      *
-     * @param  array  mixed $idList
-     * @param  string mixed $status
+     * @param  array  $idList
+     * @param  string $status
      * @param  string $time
      * @access public
      * @return void

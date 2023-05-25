@@ -42,7 +42,7 @@ class file extends control
     /**
      * AJAX: get upload request from the web editor.
      *
-     * @param  $uid
+     * @param  string $uid
      * @access public
      * @return void
      */

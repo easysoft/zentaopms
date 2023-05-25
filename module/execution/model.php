@@ -1118,7 +1118,7 @@ class executionModel extends model
      * Change status to suspended or closed.
      *
      * @param  int    $executionID
-     * @param  strint $status
+     * @param  string $status
      * @param  array  $selfAndChildren
      * @access public
      * @return string

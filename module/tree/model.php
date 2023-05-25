@@ -587,8 +587,8 @@ class treeModel extends model
 
     /**
      * Get full task tree
-     * @param  integer $executionID, common value is execution id
-     * @param  integer $productID
+     * @param  int $executionID, common value is execution id
+     * @param  int $productID
      * @access public
      * @return array
      */
@@ -893,7 +893,7 @@ class treeModel extends model
     /**
      * Build tree.
      *
-     * @param  & $&treeMenu
+     * @param  array  &$treeMenu
      * @param  object $module
      * @param  string $type
      * @param  string $userFunc

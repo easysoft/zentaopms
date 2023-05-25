@@ -405,8 +405,8 @@ class customModel extends model
 
     /**
      * Get module menu data, if module is 'main' then return main menu.
-     * @param  string   $module
-     * @param  boolean  $rebuild
+     * @param  string $module
+     * @param  bool   $rebuild
      * @access public
      * @return array
      */
@@ -432,7 +432,7 @@ class customModel extends model
 
     /**
      * Get main menu data
-     * @param  boolean $rebuild
+     * @param  bool $rebuild
      * @access public
      * @return array
      */

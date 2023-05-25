@@ -80,7 +80,7 @@ class scoreTest
     /**
      * Fix action type for score.
      *
-     * @param $string
+     * @param string $string
      *
      * @access public
      * @return string

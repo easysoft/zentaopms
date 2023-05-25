@@ -28,7 +28,7 @@ class projectstoryTest
     /**
      * Get execution stories test
      *
-     * @param  int   mixed $projectID
+     * @param  int   $projectID
      * @param  array $storyIdList
      * @access public
      * @return array

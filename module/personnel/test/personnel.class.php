@@ -30,8 +30,8 @@ class personnelTest
     /**
      * Check if you have permission to view the program
      *
-     * @param  int    mixed $programID
-     * @param  string mixed $account
+     * @param  int    $programID
+     * @param  string $account
      * @access public
      * @return bool
      */
@@ -74,7 +74,7 @@ class personnelTest
     /**
      * Get involved executions test
      *
-     * @param  array  mixed $projectID
+     * @param  array  $projectID
      * @access public
      * @return array
      */
@@ -92,8 +92,8 @@ class personnelTest
     /**
      * Get project task invest test
      *
-     * @param  array  mixed $projects
-     * @param  array  mixed $accounts
+     * @param  array  $projects
+     * @param  array  $accounts
      * @access public
      * @return void
      */
@@ -111,7 +111,7 @@ class personnelTest
     /**
      * GetUserHoursTest
      *
-     * @param  mixed  $projectID
+     * @param  $projectID
      * @param  array  $accounts
      * @access public
      * @return void
@@ -216,7 +216,7 @@ class personnelTest
      *
      * @param  string $objectType
      * @param  int    $objectID
-     * @param  array  mixed $user
+     * @param  array  $user
      * @access public
      * @return void
      */
@@ -235,7 +235,7 @@ class personnelTest
     /**
      * Delete product whitelist Test
      *
-     * @param  int    mixed $productID
+     * @param  int    $productID
      * @param  string $account
      * @access public
      * @return void
@@ -276,8 +276,8 @@ class personnelTest
     /**
      * Delete project whitelist Test
      *
-     * @param  int    mixed $objectID
-     * @param  string mixed $account
+     * @param  int    $objectID
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -296,7 +296,7 @@ class personnelTest
     /**
      * Delete execution whitelist Test
      *
-     * @param  int    mixed $executionID
+     * @param  int    $executionID
      * @param  string $account
      * @access public
      * @return void
