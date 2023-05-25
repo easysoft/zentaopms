@@ -452,7 +452,8 @@ class task extends control
     }
 
     /**
-     * Record consumed and estimate.
+     * 任务查看工时/新增工时的方法。
+     * View and add task's effort.
      *
      * @param  int    $taskID
      * @param  string $from
@@ -460,7 +461,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function recordWorkhour($taskID, $from = '', $orderBy = '')
+    public function recordWorkhour(int $taskID, string $from = '', string $orderBy = '')
     {
         $this->taskZen->commonAction($taskID);
 
@@ -538,7 +539,7 @@ class task extends control
 
         /* Set the fold state of the current task. */
         $referer = strtolower($_SERVER['HTTP_REFERER']);
-        if(strpos($referer, 'recordestimate') and $this->cookie->taskEffortFold !== false)
+        if(strpos($referer, 'recordworkhour') and $this->cookie->taskEffortFold !== false)
         {
             $taskEffortFold = $this->cookie->taskEffortFold;
         }

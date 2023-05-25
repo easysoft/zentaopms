@@ -36,7 +36,7 @@ pid=1
 测试获取objectType product objectId 24 actionType restarted extra 1 的动态信息 >> ,24,;0;0
 测试获取objectType story objectId 25 actionType delayed extra 1 的动态信息 >> ,7,;0;0
 测试获取objectType productplan objectId 26 actionType suspended extra 1 的动态信息 >> ,9,;0;0
-测试获取objectType release objectId 1 actionType recordestimate extra 1 的动态信息 >> ,1,;11;0
+测试获取objectType release objectId 1 actionType recordworkhour extra 1 的动态信息 >> ,1,;11;0
 测试获取objectType project objectId 28 actionType editestimate extra 33 的动态信息 >> ,8,18,98,;28;0
 测试获取objectType task objectId 29 actionType deleteestimate extra 1 的动态信息 >> ,29,;39;129
 测试获取objectType build objectId 1 actionType canceled extra 1 的动态信息 >> ,1,;11;0
@@ -53,7 +53,7 @@ pid=1
 */
 $objectType = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'bug', 'testcase', 'case', 'testtask', 'user', 'doc', 'doclib', 'todo', 'branch', 'module', 'testsuite', 'caselib', 'testreport', 'entry', 'webhook', 'review');
 $objectId   = array(1,2,3,4,5,6,7,8,9,10,1,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,1,28,29,1,31,32,33,1,35,36,37,38,39);
-$actionType = array('common', 'extra', 'opened', 'created', 'changed', 'edited', 'assigned', 'closed', 'deleted', 'deletedfile', 'editfile', 'erased', 'undeleted', 'hidden', 'commented', 'activated', 'blocked', 'moved', 'confirmed', 'caseconfirmed', 'bugconfirmed', 'frombug', 'started', 'restarted', 'delayed', 'suspended', 'recordestimate', 'editestimate', 'deleteestimate', 'canceled', 'svncommited', 'gitcommited', 'finished', 'paused', 'verified', 'diff1', 'diff2', 'diff3', 'linked2bug');
+$actionType = array('common', 'extra', 'opened', 'created', 'changed', 'edited', 'assigned', 'closed', 'deleted', 'deletedfile', 'editfile', 'erased', 'undeleted', 'hidden', 'commented', 'activated', 'blocked', 'moved', 'confirmed', 'caseconfirmed', 'bugconfirmed', 'frombug', 'started', 'restarted', 'delayed', 'suspended', 'recordworkhour', 'editestimate', 'deleteestimate', 'canceled', 'svncommited', 'gitcommited', 'finished', 'paused', 'verified', 'diff1', 'diff2', 'diff3', 'linked2bug');
 $extra      = array('1', '1', '1', '1', '11', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '33', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1');
 
 $action = new actionTest();
@@ -84,7 +84,7 @@ r($action->getRelatedFieldsTest($objectType[22], $objectId[22], $actionType[22],
 r($action->getRelatedFieldsTest($objectType[0],  $objectId[23], $actionType[23], $extra[23])) && p('product;project;execution') && e(',24,;0;0');       // 测试获取objectType product objectId 24 actionType restarted extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[1],  $objectId[24], $actionType[24], $extra[24])) && p('product;project;execution') && e(',7,;0;0');        // 测试获取objectType story objectId 25 actionType delayed extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[2],  $objectId[25], $actionType[25], $extra[25])) && p('product;project;execution') && e(',9,;0;0');        // 测试获取objectType productplan objectId 26 actionType suspended extra 1 的动态信息
-r($action->getRelatedFieldsTest($objectType[3],  $objectId[26], $actionType[26], $extra[26])) && p('product;project;execution') && e(',1,;11;0');       // 测试获取objectType release objectId 1 actionType recordestimate extra 1 的动态信息
+r($action->getRelatedFieldsTest($objectType[3],  $objectId[26], $actionType[26], $extra[26])) && p('product;project;execution') && e(',1,;11;0');       // 测试获取objectType release objectId 1 actionType recordworkhour extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[4],  $objectId[27], $actionType[27], $extra[27])) && p('product;project;execution') && e(',8,18,98,;28;0'); // 测试获取objectType project objectId 28 actionType editestimate extra 33 的动态信息
 r($action->getRelatedFieldsTest($objectType[5],  $objectId[28], $actionType[28], $extra[28])) && p('product;project;execution') && e(',29,;39;129');    // 测试获取objectType task objectId 29 actionType deleteestimate extra 1 的动态信息
 r($action->getRelatedFieldsTest($objectType[6],  $objectId[29], $actionType[29], $extra[29])) && p('product;project;execution') && e(',1,;11;0');       // 测试获取objectType build objectId 1 actionType canceled extra 1 的动态信息

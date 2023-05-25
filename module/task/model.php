@@ -1306,15 +1306,15 @@ class taskModel extends model
      * Record workhour and left of task.
      *
      * @param  int    $taskID
-     * @param  array  $workhour
+     * @param  object $workhour
      * @access public
      * @return array
      */
-    public function recordWorkhour(int $taskID, array $workhour)
+    public function recordWorkhour(int $taskID, object $workhour)
     {
-        $workhour = fixer::input('post')->get();
-        $today  = helper::today();
+        $today = helper::today();
 
+        a($workhour);die;
         /* Fix bug#3036. */
         foreach($workhour->consumed as $id => $item) $workhour->consumed[$id] = trim($item);
         foreach($workhour->consumed as $id => $item)
@@ -2834,7 +2834,7 @@ class taskModel extends model
         if($action == 'close'          and $task->parent < 0) return false;
         if($action == 'batchcreate'    and !empty($task->team))     return false;
         if($action == 'batchcreate'    and $task->parent > 0)       return false;
-        if($action == 'recordestimate' and $task->parent == -1)     return false;
+        if($action == 'recordworkhour' and $task->parent == -1)     return false;
         if($action == 'delete'         and $task->parent < 0)       return false;
 
         if(!empty($task->team))
