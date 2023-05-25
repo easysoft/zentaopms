@@ -1553,7 +1553,7 @@ class taskModel extends model
      * @access public
      * @return bool|array
      */
-    public function close(object $oldTask, object $task, array $output): bool|array
+    public function close(object $oldTask, object $task, array $output = array()): bool|array
     {
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
         if(dao::isError()) return false;
@@ -1561,6 +1561,7 @@ class taskModel extends model
         $changes = common::createChanges($oldTask, $task);
         $this->afterChangeStatus($oldTask, $changes, 'Closed', $output);
 
+        /* Confirm need update issue status. */
         if(isset($oldTask->fromIssue) and $oldTask->fromIssue > 0)
         {
             $fromIssue = $this->loadModel('issue')->getByID($oldTask->fromIssue);
