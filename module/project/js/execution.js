@@ -111,7 +111,7 @@ $(function()
 
                 if(data.status === 'wait') checkedWait++;
                 if(data.status === 'doing') checkedDoing++;
-                if(data.nestPathLevel == 1) executionCount++;
+                if('status' in data) executionCount++;
             });
 
             if(status != 'all') return (checkedTotal ? checkedExecutions : executionSummary).replace('%s', executionCount);
