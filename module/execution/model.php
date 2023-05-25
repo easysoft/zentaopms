@@ -2196,6 +2196,10 @@ class executionModel extends model
         {
             $link = helper::createLink($module, $method, "executionID=%s&type=$extra");
         }
+        elseif($module == 'execution' and $method == 'storyview')
+        {
+            $link = helper::createLink($module, 'story', "executionID=%s");
+        }
         elseif($module == 'execution' and ($method == 'index' or $method == 'all'))
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
