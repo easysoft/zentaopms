@@ -2847,7 +2847,7 @@ class bugModel extends model
     {
         $this->loadModel('common');
 
-        /* Remove the bug with the same name within the specified time. */
+        /* Check whether the bugs meet the requirements, and if not, remove it. */
         foreach($bugs as $index => $bug)
         {
             $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
@@ -2858,13 +2858,12 @@ class bugModel extends model
             }
 
             /* If the bug is not valid data, unset it.*/
-            if($this->common->checkValidRow('bug', $bug, $index))
-            {
-                unset($bugs[$index]);
-                continue;
-            }
+            if($this->common->checkValidRow('bug', $bug, $index)) unset($bugs[$index]);
+        }
 
-            /* Check required fields. */
+        /* Check required fields. */
+        foreach($bugs as $index => $bug)
+        {
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
