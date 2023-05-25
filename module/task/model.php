@@ -649,7 +649,8 @@ class taskModel extends model
     }
 
     /**
-     * Get team by account from task teams.
+     * 获取用户所在多人任务的团队工序。
+     * Get the team process of the multi-task by account.
      *
      * @param  array  $teams
      * @param  string $account
@@ -657,33 +658,37 @@ class taskModel extends model
      * @access public
      * @return object
      */
-    public function getTeamByAccount($teams, $account = '', $extra = array('filter' => 'done'))
+    public function getTeamByAccount(array $teams, string $account = '', array $extra = array('filter' => 'done'))
     {
         if(empty($account)) $account = $this->app->user->account;
 
-        $filter   = zget($extra, 'filter', '');
-        $effortID = zget($extra, 'effortID', '');
+        $filterStatus = zget($extra, 'filter', '');
+        $effortID     = zget($extra, 'effortID', '');
 
-        $duplicates = array();
-        $members    = array();
-        $taskID     = 0;
+        $repeatUsers = array();
+        $taskID      = 0;
         foreach($teams as $team)
         {
             if(isset($extra['order']) and $team->order == $extra['order'] and $team->account == $account) return $team;
 
-            if(empty($taskID)) $taskID = $team->task;
-            if(isset($members[$team->account]))  $duplicates[$team->account] = $team->account;
-            if(!isset($members[$team->account])) $members[$team->account]    = 0;
-            $members[$team->account] += 1;
+            if(empty($taskID) and $effortID) $taskID = $team->task;
+
+            if(isset($repeatUsers[$team->account]))
+            {
+                $repeatUsers[$team->account] = 1;
+            }
+            else
+            {
+                $repeatUsers[$team->account] = 0;
+            }
         }
 
         /*
-         * 1. No duplicate account;
-         * 2. Account is not duplicate account;
-         * 3. Not by effort;
+         * 1. No repeat account or account is not repeat account;
+         * 2. Not by effort;
          * Then direct get team by account.
          */
-        if(empty($duplicates) or (!isset($duplicates[$account])))
+        if(empty($repeatUsers[$account]))
         {
             foreach($teams as $team)
             {
@@ -694,27 +699,25 @@ class taskModel extends model
         {
             foreach($teams as $team)
             {
-                if($filter and $team->status == $filter) continue;
+                if($filterStatus and $team->status == $filterStatus) continue;
                 if($team->account == $account) return $team;
             }
         }
         elseif($effortID)
         {
-            $efforts = $this->getTaskEfforts($taskID, '', $effortID);
-
-            $prevTeam = null;
-            $thisTeam = null;
+            $efforts  = $this->getTaskEfforts($taskID, '', $effortID);
+            $prevTeam = $currentTeam = null;
             foreach($efforts as $effort)
             {
-                $thisTeam = reset($teams);
+                $currentTeam = reset($teams);
                 if($effort->id == $effortID)
                 {
-                    if($effort->account == $thisTeam->account) return $thisTeam;
-                    if($effort->account == $prevTeam->account) return $prevTeam;
+                    if($effort->account == $currentTeam->account) return $currentTeam;
+                    if($effort->account == $prevTeam->account)    return $prevTeam;
                     return false;
                 }
 
-                if($effort->left == 0 and $thisTeam->account == $effort->account) $prevTeam = array_shift($teams);
+                if($effort->left == 0 and $currentTeam->account == $effort->account) $prevTeam = array_shift($teams);
             }
         }
     }
