@@ -1517,6 +1517,8 @@ class taskModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
         return common::createChanges($oldTask, $task);
     }
 
@@ -1563,6 +1565,7 @@ class taskModel extends model
 
         $changes = common::createChanges($oldTask, $task);
         $this->afterChangeStatus($oldTask, $changes, 'Closed', $output);
+        $this->loadModel('score')->create('task', 'close', $task->id);
 
         /* Confirm need update issue status. */
         if(isset($oldTask->fromIssue) and $oldTask->fromIssue > 0)
@@ -3612,7 +3615,6 @@ class taskModel extends model
      */
     public function afterCreate(object $task, array $taskIdList, int $bugID, int $todoID): bool
     {
-        $this->loadModel('score');
         $this->loadModel('file');
 
         $this->setTaskFiles($taskIdList); // Set attachments for tasks.
@@ -3935,7 +3937,7 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  array  $changes
-     * @param  string $action
+     * @param  string $action  Finished|Closed|Started
      * @param  array  $output
      * @access public
      * @return bool
@@ -3947,11 +3949,15 @@ class taskModel extends model
         if($task->story) $this->loadModel('story')->setStage($task->story);
         if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $task->status, $task->status);
 
-        $this->loadModel('score')->create('task', 'close', $task->id);
         $this->updateKanbanCell($task->id, $output, $task->execution);
 
-        $actionID = $this->loadModel('action')->create('task', $task->id, $action, $this->post->comment);
-        $this->action->logHistory($actionID, $changes);
+        $files = $this->loadModel('file')->saveUpload('task', $task->id);
+        if($changes || $this->post->comment)
+        {
+            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $actionID   = $this->loadModel('action')->create('task', $task->id, $action, $fileAction . $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
         return !dao::isError();
     }
 }
