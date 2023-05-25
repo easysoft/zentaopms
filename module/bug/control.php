@@ -556,12 +556,13 @@ class bug extends control
      * 批量变更bug的指派人。
      * Batch update assign of bug.
      *
+     * @param  string  $assignedTo
      * @param  int     $objectID  projectID|executionID
      * @param  string  $type      execution|project|product|my
      * @access public
      * @return void
      */
-    public function batchAssignTo(int $objectID, string $type = 'execution')
+    public function batchAssignTo(string $assignedTo, int $objectID, string $type = 'execution')
     {
         if(!empty($_POST) && isset($_POST['bugIdList']))
         {
@@ -570,7 +571,8 @@ class bug extends control
             $bug = form::data($this->config->bug->form->assignTo)->get();
             foreach($bugIdList as $bugID)
             {
-                $bug->id = $bugID;
+                $bug->id         = (int)$bugID;
+                $bug->assignedTo = $assignedTo;
                 $this->bug->assign($bug);
             }
 
@@ -579,7 +581,7 @@ class bug extends control
 
         if($type == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('execution', 'bug', "executionID=$objectID")));
         if($type == 'project')   return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'bug', "projectID=$objectID")));
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

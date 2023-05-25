@@ -562,7 +562,8 @@ class bugModel extends model
             ->data($bug)
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq($bug->id)->exec();
+            ->where('id')->eq($bug->id)
+            ->exec();
 
         if(dao::isError()) return false;
 

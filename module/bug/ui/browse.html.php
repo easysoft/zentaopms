@@ -124,7 +124,7 @@ $footToolbar = array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
-        array('text' => $lang->edit, 'onClick' => jsRaw('window.batchEditBugs'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
+        array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
         array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     )),
     array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' ,'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
@@ -147,7 +147,7 @@ menu
         array('text' => $lang->bug->confirm),
         array('text' => $lang->bug->close),
         array('text' => $lang->bug->activate),
-        array('text' => $lang->bug->resolve, 'children' => $resolveItems),
+        array('text' => $lang->bug->resolve, 'items' => $resolveItems),
     ))
 );
 
@@ -180,7 +180,7 @@ menu
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
-    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "productID={$productID}&type=product"));
+    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
 }
 
 menu
