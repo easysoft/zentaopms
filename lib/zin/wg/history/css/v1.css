@@ -1,6 +1,7 @@
 .histories .btn-mini {width: 14px; height: 14px; overflow: hidden; color: var(--color-slate-500); border-radius: 1px; border: 1px solid var(--color-slate-500); box-shadow: none;}
 .histories .btn-comment {font-size: 12px; font-weight: 400; color: var(--color-slate-700);}
 .history-list .marker {color: var(--color-slate-700); border-color: var(--color-gray-200); background: var(--color-slate-50);}
+.history-list .comment-content {background: var(--color-gray-200); margin-left: 20px; padding: 5px 5px 5px 10px;}
 .history-list.sort-reverse {flex-direction: column-reverse;}
 .history-changes {display: none;}
 .history-changes.show {display: block; }
