@@ -150,7 +150,7 @@ function loadExecutions(productID, projectID = 0)
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=&from=&mode=stagefilter');
+    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&from=&mode=stagefilter');
     $('#executionBox').load(link);
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
@@ -466,7 +466,7 @@ function setBranchRelated(event)
     const productID   = $('[name= "product"]').val();
     const moduleID    = $currentRow.find('.form-batch-input[data-name="module"]').val() || '0';
     const moduleLink  = $.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=0&currentModuleID=' + moduleID);
-    $.getJson(moduleLink, function(data)
+    $.getJSON(moduleLink, function(data)
     {
         if(!data || !data.modules) return;
 
@@ -474,9 +474,9 @@ function setBranchRelated(event)
         while($row.length)
         {
             const $module = $row.find('.form-batch-input[data-name="module"]').empty();
-            $.each(data.modules, function(value, text)
+            $.each(data.modules, function(index, module)
             {
-                $module.append('<option value="' + value + '"' + value == data.currentModuleID ? 'select' : ''  + '>' + text + '</option>');
+                $module.append('<option value="' + module.value + '"' + (module.value == data.currentModuleID ? 'selected' : '')  + '>' + module.text + '</option>');
             });
 
             $row = $row.next('tr');
@@ -486,17 +486,18 @@ function setBranchRelated(event)
     });
 
     var projectLink = $.createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID);
-    $.getJson(projectLink, function(projects)
+    $.getJSON(projectLink, function(projects)
     {
         if(!projects) return;
 
         let $row = $currentRow;
         while($row.length)
         {
-            const $project = $row.find('.form-batch-input[data-name="project"]').empty();
-            $.each(projects, function(value, text)
+            const currentProjectID = $row.find('.form-batch-input[data-name="project"]').val();
+            const $project         = $row.find('.form-batch-input[data-name="project"]').empty();
+            $.each(projects, function(index, project)
             {
-                $project.append('<option value="' + value + '">' + text + '</option>');
+                $project.append('<option value="' + project.value + '"' + (project.value == currentProjectID ? 'selected' : '')  + '>' + project.text + '</option>');
             });
 
             $row = $row.next('tr');
@@ -505,20 +506,20 @@ function setBranchRelated(event)
         }
     });
 
-    var executionLink = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID);
-    $.getJson(executionLink, function(executions)
+    const currentProjectID = $currentRow.find('.form-batch-input[data-name="project"]').val() || '0';
+    var   executionLink    = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + currentProjectID + '&branch=' + branchID);
+    $.getJSON(executionLink, function(executions)
     {
         if(!executions) return;
-
-        executions = JSON.parse(executions);
 
         let $row = $currentRow;
         while($row.length)
         {
-            const $execution = $row.find('.form-batch-input[data-name="execution"]').empty();
-            $.each(executions, function(value, text)
+            const currentExecutionID = $row.find('.form-batch-input[data-name="execution"]').val();
+            const $execution         = $row.find('.form-batch-input[data-name="execution"]').empty();
+            $.each(executions, function(index, execution)
             {
-                $execution.append('<option value="' + value + '">' + text + '</option>');
+                $execution.append('<option value="' + execution.value + '"' + (execution.value == currentExecutionID ? 'selected' : '')  + '>' + execution.text + '</option>');
             });
 
             $row = $row.next('tr');
@@ -534,8 +535,8 @@ function setBranchRelated(event)
         let nextBranchID = $nextRow.find('td[data-name="branch"]').val();
         if(nextBranchID != branchID)
         {
-            $nextRow.find('td[data-name="branch"]').attr('data-ditto', 'off');
-            $nextRow.find('td[data-name="execution"]').attr('data-ditto', 'off');
+            $nextRow.find('.form-batch-input[data-name="branch"]').attr('data-ditto', 'off');
+            $nextRow.find('.form-batch-input[data-name="execution"]').attr('data-ditto', 'off');
         }
 
       var buildLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID);

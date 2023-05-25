@@ -654,7 +654,14 @@ class tree extends control
         $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
-        $modules = empty($modules) ? array('' => '') : $modules;
+        $modules = empty($modules) ? array('' => '/') : $modules;
+
+        if($viewType == 'bug')
+        {
+            $moduleList = array();
+            foreach($modules as $moduleID => $moduleName) $moduleList[] = array('value' => $moduleID, 'text' => $moduleName);
+            return $this->send(array('modules' => $moduleList, 'currentModuleID' => $currentModuleID));
+        }
 
         if($this->viewType == 'json') return print(array('modules' => $modules, 'currentModuleID' => $currentModuleID));
 

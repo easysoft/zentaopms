@@ -23,16 +23,15 @@ function setOpenedBuilds(link, $currentRow)
     $.getJSON(link, function(builds)
     {
         if(!builds) return;
-        builds = JSON.parse(builds);
 
         let $row = $currentRow;
         while($row.length)
         {
             const $build = $row.find('.form-batch-input[data-name="openedBuild"]').empty();
 
-            $.each(builds, function(value, text)
+            $.each(builds, function(index, build)
             {
-                $build.append('<option value="' + value + '">' + text + '</option>');
+                $build.append('<option value="' + build.value + '">' + build.text + '</option>');
             });
 
             $row = $row.next('tr');
@@ -44,23 +43,23 @@ function setOpenedBuilds(link, $currentRow)
 
 function setLane(event)
 {
-    var regionID = $(event.target).val();
-    var num      = $(event.target).closest('tr').attr('data-index');
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const regionID    = $target.val();
 
-    laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lanes&i=' + num);
+    laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug');
     $.getJSON(laneLink, function(lanes)
     {
         if(!lanes) return;
-        lanes = JSON.parse(builds);
 
         let $row = $currentRow;
         while($row.length)
         {
             const $lane = $row.find('.form-batch-input[data-name="laneID"]').empty();
 
-            $.each(lanes, function(value, text)
+            $.each(lanes, function(index, lane)
             {
-                $lane.append('<option value="' + value + '">' + text + '</option>');
+                $lane.append('<option value="' + lane.value + '">' + lane.text + '</option>');
             });
 
             $row = $row.next('tr');
@@ -104,9 +103,9 @@ function loadProductExecutionsByProject(event)
             }
 
             /* Append all new executions options. */
-            $.each(data.executions, function(value, text)
+            $.each(data.executions, function(index, execution)
             {
-                $execution.append('<option value="' + value + '">' + text + '</option>');
+                $execution.append('<option value="' + execution.value + '">' + execution.text + '</option>');
             });
 
             /* Set next row to current row and continue the loop. */

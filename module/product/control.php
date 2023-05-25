@@ -924,8 +924,9 @@ class product extends control
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch);
 
-        if($this->viewType == 'json') return print($projects);
-        return print(html::select('projects' . "[$number]", array('' => '') + $projects, 0, "class='form-control' onchange='loadProductExecutionsByProject($productID, this.value, $number)'"));
+        $projectList = array();
+        foreach($projects as $projectID => $projectName) $projectList[] = array('value' => $projectID, 'text' => $projectName);
+        return $this->send($projectList);
     }
 
     /**
@@ -934,14 +935,12 @@ class product extends control
      * @param  int    $productID
      * @param  int    $projectID
      * @param  string $branch
-     * @param  string $number
-     * @param  int    $executionID
      * @param  string $from showImport
      * @param  string mode
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions(int $productID, int $projectID = 0, string $branch = '', string $number = '', int $executionID = 0, string $from = '', string $mode = '')
+    public function ajaxGetExecutions(int $productID, int $projectID = 0, string $branch = '', string $from = '', string $mode = '')
     {
         if($this->app->tab == 'execution' and $this->session->execution)
         {
@@ -952,22 +951,13 @@ class product extends control
         if($projectID) $project = $this->loadModel('project')->getByID($projectID);
         $mode .= ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
         $mode .= !$projectID ? ',multiple' : '';
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $from == 'showImport' ? '' : $mode);
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
-        if($number === '')
-        {
-            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
-            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
-        }
-        else
-        {
-            $executions     = empty($executions) ? array('' => '') : $executions;
-            $executionsName = $from == 'showImport' ? "execution[$number]" : "executions[$number]";
-            $misc           = $from == 'showImport' ? "class='form-control' onchange='loadImportExecutionRelated(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
-            return print(html::select($executionsName, $executions, '', $misc));
-        }
+        $executions    = array('' => '') + $executions;
+        $executionList = array();
+        foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
+        return $this->send($executionList);
     }
 
     /**
@@ -981,11 +971,13 @@ class product extends control
      */
     public function ajaxGetExecutionsByProject(int $productID, int $projectID = 0, string $branch = '')
     {
-
         $noMultipleExecutionID = $projectID ? $this->loadModel('execution')->getNoMultipleID($projectID) : '';
-        $executions            = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, 'multiple,stagefilter');
+        $executions            = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, 'multiple,stagefilter');
 
-        return $this->send(array('executions' => $executions, 'noMultipleExecutionID' => $noMultipleExecutionID));
+        $executionList = array();
+        foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
+
+        return $this->send(array('executions' => $executionList, 'noMultipleExecutionID' => $noMultipleExecutionID));
     }
 
     /**

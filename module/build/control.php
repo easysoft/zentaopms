@@ -426,9 +426,10 @@ class build extends control
         }
         if($varName == 'openedBuilds' )
         {
-            $builds = $this->build->getBuildPairs($productID, $branch, 'noempty,noreleased', 0, 'project', $build);
-            if($isJsonView) return print(json_encode($builds));
-            return print(html::select($varName . "[$index][]", $builds, $build, 'size=4 class=form-control multiple'));
+            $builds    = $this->build->getBuildPairs($productID, $branch, 'noempty,noreleased', 0, 'project', $build);
+            $buildList = array();
+            foreach($builds as $buildID => $buildName) $buildList[] = array('value' => $buildID, 'text' => $buildName);
+            return $this->send($buildList);
         }
         if($varName == 'resolvedBuild')
         {
@@ -520,9 +521,10 @@ class build extends control
         {
             if(empty($executionID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
-            $builds = $this->build->getBuildPairs($productID, $branch, 'noempty,noreleased', $executionID, 'execution', $build);
-            if($isJsonView) return print(json_encode($builds));
-            return print(html::select($varName . "[$index][]", $builds , $build, 'size=4 class=form-control multiple'));
+            $builds    = $this->build->getBuildPairs($productID, $branch, 'noempty,noreleased', $executionID, 'execution', $build);
+            $buildList = array();
+            foreach($builds as $buildID => $buildName) $buildList[] = array('value' => $buildID, 'text' => $buildName);
+            return $this->send($buildList);
         }
         if($varName == 'resolvedBuild')
         {

@@ -17,7 +17,7 @@ foreach(explode(',', $showFields) as $field)
     if($field) $visibleFields[$field] = '';
 }
 
-foreach(explode(',', $config->bug->create->requiredFields) as $field)
+foreach(explode(',', $config->bug->custom->batchCreateFields) as $field)
 {
     if($field)
     {
@@ -42,7 +42,7 @@ $items[] = array
 (
     'name'    => 'branch',
     'label'   => $lang->product->branchName[$product->type],
-    'hidden'   => zget($visibleFields, $product->type, true, false),
+    'hidden'  => zget($visibleFields, $product->type, true, false),
     'control' => 'select',
     'items'   => $branches,
     'value'   => $branch,
@@ -127,6 +127,7 @@ if(isset($executionType) && $executionType == 'kanban')
         'value'   => $regionID,
         'items'   => $regionPairs,
         'width'   => '200px',
+        'required' => true,
     );
 
     $items[] = array
@@ -137,6 +138,7 @@ if(isset($executionType) && $executionType == 'kanban')
         'value'   => $laneID,
         'items'   => $lanePairs,
         'width'   => '200px',
+        'required' => true,
     );
 }
 
