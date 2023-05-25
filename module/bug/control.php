@@ -271,6 +271,58 @@ class bug extends control
     }
 
     /**
+     * 指派bug。
+     * Update assign of bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
+    public function assignTo(int $bugID)
+    {
+        /* Get old bug, and check privilege of the execution. */
+        $bug = $this->bug->getById($bugID);
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        /* Set menu. */
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        if(!empty($_POST))
+        {
+            /* Init bug data. */
+            $bug = form::data($this->config->bug->form->assignTo)
+                ->add('id', $bugID)
+                ->get();
+
+            $this->bug->assign($bug, $this->post->comment);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->executeHooks($bugID);
+
+            /* Get response after assigning bug. */
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes));
+        }
+
+        /* Get assigned to member. */
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $users = $this->bugZen->getAssignedToPairs($bug);
+        }
+        else
+        {
+            $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        }
+
+        /* Show the variables associated. */
+        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
+        $this->view->users   = $users;
+        $this->view->bug     = $bug;
+        $this->view->bugID   = $bugID;
+        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->display();
+    }
+
+    /**
      * 确认 bug。
      * confirm a bug.
      *
@@ -329,6 +381,201 @@ class bug extends control
     }
 
     /**
+     * 解决bug。
+     * Resolve a bug.
+     *
+     * @param  int    $bugID
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function resolve(int $bugID, string $extra = '')
+    {
+        /* Get old bug, and check privilege of the execution. */
+        $bug = $this->bug->getById($bugID);
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        if(!empty($_POST))
+        {
+            /* Parse extra, and get variables. */
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
+
+            /* Init bug data. */
+            $bug = $this->bugZen->buildBugForResolve($bug, (int)$this->post->uid);
+
+            $changes = $this->bug->resolve($bug, $output);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->executeHooks($bug->id);
+
+            /* Get response after resolving. */
+            $regionID = zget($output, 'regionID', 0);
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
+        }
+
+        /* Get users who is not closed and get assigned person. */
+        $users      = $this->user->getPairs('noclosed');
+        $assignedTo = $bug->openedBy;
+        if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $bug->product);
+
+        /* Remove 'Convert to story' from the solution list. */
+        unset($this->lang->bug->resolutionList['tostory']);
+
+        /* Set menu. */
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        /* Show the variables associated. */
+        $this->view->title          = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->bug            = $bug;
+        $this->view->users          = $users;
+        $this->view->assignedTo     = $assignedTo;
+        $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $bug->project, 'stagefilter');
+        $this->view->builds         = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'withbranch,noreleased');
+        $this->view->actions        = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->execution      = $bug->execution ? $this->loadModel('execution')->getByID($bug->execution) : '';
+        $this->display();
+    }
+
+    /**
+     * 激活一个bug。
+     * Activate a bug.
+     *
+     * @param  int    $bugID
+     * @param  string $kanbanInfo   a string of kanban info, for example, 'fromColID=1,toColID=2,fromLaneID=1,toLaneID=2,regionID=1'.
+     * @access public
+     * @return void
+     */
+    public function activate(int $bugID, string $kanbanInfo = '')
+    {
+        if(!empty($_POST))
+        {
+            $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
+            parse_str($kanbanInfo, $kanbanParams);
+
+            $bugData = $this->bugZen->buildBugForActivate($bugID);
+            if(!$bugData) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
+
+            $this->bug->activate($bugData, $kanbanParams);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(isonlybody())
+            {
+                $regionID = zget($kanbanParams, 'regionID', 0);
+                $bug      = $this->bug->getBaseInfo($bugID);
+                $this->bugZen->responseInModal($bug->execution, '', $regionID);
+            }
+
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID={$bugID}"), 'closeModal' => true);
+        }
+
+        $this->bugZen->buildActivateForm($bugID);
+    }
+
+    /**
+     * 根据Bug的ID来关闭Bug。
+     * Close a bug.
+     *
+     * @param  int    $bugID
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function close(int $bugID, string $extra = '')
+    {
+        $oldBug = $this->bug->getByID((int)$bugID);
+
+        if(!empty($_POST))
+        {
+            $data = form::data($this->config->bug->form->close);
+
+            $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
+            $this->bug->close($bug);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
+            if($oldBug->execution)
+            {
+                $this->loadModel('kanban');
+                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
+                if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            }
+
+            $this->executeHooks($bugID);
+
+            return $this->send($this->bugZen->responseAfterOperate($bugID));
+        }
+
+        $this->bugZen->checkBugExecutionPriv($oldBug);
+        $this->bugZen->buildCloseForm($oldBug);
+    }
+
+    /**
+     * 删除 bug。
+     * Delete a bug.
+     *
+     * @param  string $bugID
+     * @param  string $confirm yes|no
+     * @param  string $from    taskkanban
+     * @access public
+     * @return void
+     */
+    public function delete(string $bugID, string $confirm = 'no', string $from = '')
+    {
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' =>inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
+
+        $bug = $this->bug->getByID($bugID);
+
+        $this->bug->delete(TABLE_BUG, $bugID);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
+        /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
+        if($bug->toTask)
+        {
+            $result = $this->bugZen->confirm2UpdateTask($bugID, $bug->toTask);
+            if(is_array($result)) return $this->send($result);
+        }
+
+        $this->executeHooks($bugID);
+
+        return $this->send($this->bugZen->responseAfterDelete($bug, $from));
+    }
+
+    /**
+     * 导出bug数据。
+     * Get data to export
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function export(int $productID, string $browseType = '', int $executionID = 0)
+    {
+        if($_POST)
+        {
+            $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+
+            $this->bugZen->setExportDataSource($productID, $browseType, $executionID);
+
+            $this->loadModel('transfer')->export('bug');
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
+
+        $product = $this->loadModel('product')->getByID($productID);
+        $this->bugZen->setExportFields($executionID, $product);
+
+        $this->view->fileName        = $this->bugZen->getExportFileName($executionID, $browseType, $product);
+        $this->view->allExportFields = $this->config->bug->exportFields;
+        $this->view->customExport    = true;
+        $this->display('file', 'export');
+    }
+
+    /**
      * Bug 的统计报表。
      * The report page.
      *
@@ -371,6 +618,45 @@ class bug extends control
         $this->view->moduleID      = $moduleID;
         $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->display();
+    }
+
+    /**
+     * 关联相关 bug。
+     * Link related bugs.
+     *
+     * @param  int    $bugID
+     * @param  bool   $bySearch
+     * @param  string $excludeBugs
+     * @param  int    $queryID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkBugs(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $bug = $this->bug->getByID($bugID);
+
+        /* 检查 bug 所属执行的权限。*/
+        /* Check privilege of bug 所属执行的权限。*/
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        $this->bugZen->buildSearchFormForLinkBugs($bug, $excludeBugs, $queryID);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Assign. */
+        $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
+        $this->view->bug       = $bug;
+        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->pager     = $pager;
         $this->display();
     }
 
@@ -467,58 +753,6 @@ class bug extends control
         $this->view->statusList       = $this->lang->bug->statusList;
         $this->view->branch           = $branch;
         $this->view->showFields       = $this->config->bug->custom->batchEditFields;
-        $this->display();
-    }
-
-    /**
-     * 指派bug。
-     * Update assign of bug.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return void
-     */
-    public function assignTo(int $bugID)
-    {
-        /* Get old bug, and check privilege of the execution. */
-        $bug = $this->bug->getById($bugID);
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        /* Set menu. */
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        if(!empty($_POST))
-        {
-            /* Init bug data. */
-            $bug = form::data($this->config->bug->form->assignTo)
-                ->add('id', $bugID)
-                ->get();
-
-            $this->bug->assign($bug, $this->post->comment);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->executeHooks($bugID);
-
-            /* Get response after assigning bug. */
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes));
-        }
-
-        /* Get assigned to member. */
-        if($this->app->tab == 'project' or $this->app->tab == 'execution')
-        {
-            $users = $this->bugZen->getAssignedToPairs($bug);
-        }
-        else
-        {
-            $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
-        }
-
-        /* Show the variables associated. */
-        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
-        $this->view->users   = $users;
-        $this->view->bug     = $bug;
-        $this->view->bugID   = $bugID;
-        $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
 
@@ -650,7 +884,6 @@ class bug extends control
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
-
     /**
      * 批量确认BUG。
      * Batch confirm bugs.
@@ -686,63 +919,6 @@ class bug extends control
     }
 
     /**
-     * 解决bug。
-     * Resolve a bug.
-     *
-     * @param  int    $bugID
-     * @param  string $extra
-     * @access public
-     * @return void
-     */
-    public function resolve(int $bugID, string $extra = '')
-    {
-        /* Get old bug, and check privilege of the execution. */
-        $bug = $this->bug->getById($bugID);
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        if(!empty($_POST))
-        {
-            /* Parse extra, and get variables. */
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-
-            /* Init bug data. */
-            $bug = $this->bugZen->buildBugForResolve($bug, (int)$this->post->uid);
-
-            $changes = $this->bug->resolve($bug, $output);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->executeHooks($bug->id);
-
-            /* Get response after resolving. */
-            $regionID = zget($output, 'regionID', 0);
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
-        }
-
-        /* Get users who is not closed and get assigned person. */
-        $users      = $this->user->getPairs('noclosed');
-        $assignedTo = $bug->openedBy;
-        if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $bug->product);
-
-        /* Remove 'Convert to story' from the solution list. */
-        unset($this->lang->bug->resolutionList['tostory']);
-
-        /* Set menu. */
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        /* Show the variables associated. */
-        $this->view->title          = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->resolve;
-        $this->view->bug            = $bug;
-        $this->view->users          = $users;
-        $this->view->assignedTo     = $assignedTo;
-        $this->view->executions     = $this->loadModel('product')->getExecutionPairsByProduct($bug->product, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $bug->project, 'stagefilter');
-        $this->view->builds         = $this->loadModel('build')->getBuildPairs($bug->product, $bug->branch, 'withbranch,noreleased');
-        $this->view->actions        = $this->loadModel('action')->getList('bug', $bugID);
-        $this->view->execution      = $bug->execution ? $this->loadModel('execution')->getByID($bug->execution) : '';
-        $this->display();
-    }
-
-    /**
      * Batch resolve bugs.
      *
      * @param  string    $resolution
@@ -773,119 +949,6 @@ class bug extends control
 
         $this->loadModel('score')->create('ajax', 'batchOther');
         return print(js::locate($this->session->bugList, 'parent'));
-    }
-
-    /**
-     * 激活一个bug。
-     * Activate a bug.
-     *
-     * @param  int    $bugID
-     * @param  string $kanbanInfo   a string of kanban info, for example, 'fromColID=1,toColID=2,fromLaneID=1,toLaneID=2,regionID=1'.
-     * @access public
-     * @return void
-     */
-    public function activate(int $bugID, string $kanbanInfo = '')
-    {
-        if(!empty($_POST))
-        {
-            $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
-            parse_str($kanbanInfo, $kanbanParams);
-
-            $bugData = $this->bugZen->buildBugForActivate($bugID);
-            if(!$bugData) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
-
-            $this->bug->activate($bugData, $kanbanParams);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if(isonlybody())
-            {
-                $regionID = zget($kanbanParams, 'regionID', 0);
-                $bug      = $this->bug->getBaseInfo($bugID);
-                $this->bugZen->responseInModal($bug->execution, '', $regionID);
-            }
-
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID={$bugID}"), 'closeModal' => true);
-        }
-
-        $this->bugZen->buildActivateForm($bugID);
-    }
-
-    /**
-     * 根据Bug的ID来关闭Bug。
-     * Close a bug.
-     *
-     * @param  int    $bugID
-     * @param  string $extra
-     * @access public
-     * @return void
-     */
-    public function close(int $bugID, string $extra = '')
-    {
-        $oldBug = $this->bug->getByID((int)$bugID);
-
-        if(!empty($_POST))
-        {
-            $data = form::data($this->config->bug->form->close);
-
-            $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
-            $this->bug->close($bug);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
-            if($oldBug->execution)
-            {
-                $this->loadModel('kanban');
-                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
-                if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-            }
-
-            $this->executeHooks($bugID);
-
-            return $this->send($this->bugZen->responseAfterOperate($bugID));
-        }
-
-        $this->bugZen->checkBugExecutionPriv($oldBug);
-        $this->bugZen->buildCloseForm($oldBug);
-    }
-
-    /**
-     * 关联相关 bug。
-     * Link related bugs.
-     *
-     * @param  int    $bugID
-     * @param  bool   $bySearch
-     * @param  string $excludeBugs
-     * @param  int    $queryID
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function linkBugs(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
-    {
-        $bug = $this->bug->getByID($bugID);
-
-        /* 检查 bug 所属执行的权限。*/
-        /* Check privilege of bug 所属执行的权限。*/
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        $this->bugZen->buildSearchFormForLinkBugs($bug, $excludeBugs, $queryID);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Assign. */
-        $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
-        $this->view->bug       = $bug;
-        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
-        $this->view->users     = $this->user->getPairs('noletter');
-        $this->view->pager     = $pager;
-        $this->display();
     }
 
     /**
@@ -984,39 +1047,6 @@ class bug extends control
         $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
         return print(js::reload('parent'));
-    }
-
-    /**
-     * 删除 bug。
-     * Delete a bug.
-     *
-     * @param  string $bugID
-     * @param  string $confirm yes|no
-     * @param  string $from    taskkanban
-     * @access public
-     * @return void
-     */
-    public function delete(string $bugID, string $confirm = 'no', string $from = '')
-    {
-        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' =>inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
-
-        $bug = $this->bug->getByID($bugID);
-
-        $this->bug->delete(TABLE_BUG, $bugID);
-
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
-        /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
-        if($bug->toTask)
-        {
-            $result = $this->bugZen->confirm2UpdateTask($bugID, $bug->toTask);
-            if(is_array($result)) return $this->send($result);
-        }
-
-        $this->executeHooks($bugID);
-
-        return $this->send($this->bugZen->responseAfterDelete($bug, $from));
     }
 
     /**
@@ -1120,37 +1150,6 @@ class bug extends control
     {
         $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
-    }
-
-    /**
-     * 导出bug数据。
-     * Get data to export
-     *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function export(int $productID, string $browseType = '', int $executionID = 0)
-    {
-        if($_POST)
-        {
-            $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
-
-            $this->bugZen->setExportDataSource($productID, $browseType, $executionID);
-
-            $this->loadModel('transfer')->export('bug');
-            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
-        }
-
-        $product = $this->loadModel('product')->getByID($productID);
-        $this->bugZen->setExportFields($executionID, $product);
-
-        $this->view->fileName        = $this->bugZen->getExportFileName($executionID, $browseType, $product);
-        $this->view->allExportFields = $this->config->bug->exportFields;
-        $this->view->customExport    = true;
-        $this->display('file', 'export');
     }
 
     /**
@@ -1274,7 +1273,6 @@ class bug extends control
 
         return print(html::select('assignedTo', $teamMembers, $selectedUser, 'class="form-control"'));
     }
-
 
     /**
      * Ajax get execution lang.
