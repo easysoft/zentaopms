@@ -10,7 +10,7 @@ zdTable('taskteam')->config('taskteam')->gen(6);
 
 /**
 
-title=taskModel->start();
+title=taskModel->finish();
 timeout=0
 cid=1
 
