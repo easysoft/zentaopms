@@ -158,7 +158,6 @@ class taskModel extends model
     {
         $this->loadModel('story');
 
-        $parentID    = !empty($tasks) ? current($tasks)->parent : 0;
         $executionID = !empty($tasks) ? current($tasks)->execution : 0;
         $taskIdList  = array();
         foreach($tasks as $task)
