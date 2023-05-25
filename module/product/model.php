@@ -1377,6 +1377,7 @@ class productModel extends model
     }
 
     /**
+     * 为产品列表页和详情页构建操作按钮。
      * Build operate menu.
      *
      * @param  object $product
@@ -1489,7 +1490,7 @@ class productModel extends model
     }
 
     /**
-     * Convert predefined HTML entities to characters
+     * Convert predefined HTML entities to characters.
      *
      * @param  array $statsData
      * @return array
