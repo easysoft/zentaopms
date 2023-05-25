@@ -35,3 +35,8 @@ test/www
 !/**/.gitkeep
 .scannerwork
 bin/roadrunner/rr
+
+**/test/model/data/*.yaml
+**/test/model/data/sql/*.sql
+**/test/tao/data/*.yaml
+**/test/tao/data/sql/*.sql
