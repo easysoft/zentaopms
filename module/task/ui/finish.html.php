@@ -43,7 +43,7 @@ else
     jsVar('task', $task);
     jsVar('consumedEmpty', $lang->task->error->consumedEmptyAB);
 
-    $realStarted = substr($task->realStarted, 0, 19);
+    $realStarted = substr((string)$task->realStarted, 0, 19);
     if(helper::isZeroDate($realStarted)) $realStarted = '';
 
     if(!empty($task->team))
