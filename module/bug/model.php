@@ -1800,8 +1800,8 @@ class bugModel extends model
     }
 
     /**
-     * 获取执行 bug 数量。
-     * Get report data of bugs per execution.
+     * 统计迭代 bug 数量。
+     * Statistics by bug execution.
      *
      * @access public
      * @return array
@@ -1824,8 +1824,8 @@ class bugModel extends model
     }
 
     /**
-     * 获取版本 Bug 数量。
-     * Get report data of bugs per build.
+     * 统计版本 Bug 数量。
+     * Statistics by bug build.
      *
      * @access public
      * @return array
@@ -1859,7 +1859,7 @@ class bugModel extends model
             unset($datas[$buildIDList]);
         }
 
-        /* 获取最后一次查询的所属产品列表。*/
+        /* 统计最后一次查询的所属产品列表。*/
         /* Get products in the last query. */
         $products = $this->session->product;
         if($this->reportCondition() !== true)
@@ -1879,8 +1879,8 @@ class bugModel extends model
     }
 
     /**
-     * 获取模块 bug 数量。
-     * Get report data of bugs per module.
+     * 统计模块 bug 数量。
+     * Statistics by bug module.
      *
      * @access public
      * @return array
@@ -1898,23 +1898,25 @@ class bugModel extends model
     }
 
     /**
-     * Get report data of opened bugs per day.
+     * 统计每天新增 bug 数量。
+     * Statistics by the number of created bug daily.
      *
      * @access public
      * @return array
      */
-    public function getDataOfOpenedBugsPerDay()
+    public function getDataOfOpenedBugsPerDay(): array
     {
         return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('openedDate')->fetchAll();
     }
 
     /**
-     * Get report data of resolved bugs per day.
+     * 统计每天解决 bug 数量。
+     * Statistics by the number of resolved bug.
      *
      * @access public
      * @return array
      */
-    public function getDataOfResolvedBugsPerDay()
+    public function getDataOfResolvedBugsPerDay(): array
     {
         return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
@@ -1924,12 +1926,13 @@ class bugModel extends model
     }
 
     /**
-     * Get report data of closed bugs per day.
+     * 统计每天关闭 bug 数量。
+     * Statistics by the number of closed bug.
      *
      * @access public
      * @return array
      */
-    public function getDataOfClosedBugsPerDay()
+    public function getDataOfClosedBugsPerDay(): array
     {
         return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
@@ -1938,163 +1941,192 @@ class bugModel extends model
     }
 
     /**
-     * Get report data of openeded bugs per user.
+     * 统计每人提交的 bug 数量。
+     * Statistics by bug creator.
      *
      * @access public
      * @return array
      */
-    public function getDataOfOpenedBugsPerUser()
+    public function getDataOfOpenedBugsPerUser(): array
     {
         $datas = $this->dao->select('openedBy AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        foreach($datas as $account => $data) $data->name = zget($this->users, $account);
+
         return $datas;
     }
 
     /**
-     * Get report data of resolved bugs per user.
+     * 统计每人解决的 bug 数量。
+     * Statistics by bug resolver.
      *
      * @access public
      * @return array
      */
-    public function getDataOfResolvedBugsPerUser()
+    public function getDataOfResolvedBugsPerUser(): array
     {
         $datas = $this->dao->select('resolvedBy AS name, COUNT(*) AS value')
             ->from(TABLE_BUG)->where($this->reportCondition())
             ->andWhere('resolvedBy')->ne('')
             ->groupBy('name')
-            ->orderBy('value DESC')->fetchAll('name');
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
+
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        foreach($datas as $account => $data) $data->name = zget($this->users, $account);
+
         return $datas;
     }
 
     /**
-     * Get report data of closed bugs per user.
+     * 统计每人关闭的 bug 数量。
+     * Statistics by bug closer.
      *
      * @access public
      * @return array
      */
-    public function getDataOfClosedBugsPerUser()
+    public function getDataOfClosedBugsPerUser(): array
     {
         $datas = $this->dao->select('closedBy AS name, COUNT(*) AS value')
             ->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->andWhere('closedBy')->ne('')
             ->groupBy('name')
-            ->orderBy('value DESC')->fetchAll('name');
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
+
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        foreach($datas as $account => $data) $data->name = zget($this->users, $account);
+
         return $datas;
     }
 
     /**
-     * Get report data of bugs per severity.
+     * 按照 bug 严重程度统计。
+     * Statistics by bug severity
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerSeverity()
+    public function getDataOfBugsPerSeverity(): array
     {
         $datas = $this->dao->select('severity AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $severity => $data) if(isset($this->lang->bug->severityList[$severity])) $data->name = $this->lang->bug->report->bugsPerSeverity->graph->xAxisName . ':' . $this->lang->bug->severityList[$severity];
+
+        foreach($datas as $severity => $data) $data->name = $this->lang->bug->report->bugsPerSeverity->graph->xAxisName . ':' . zget($this->lang->bug->severityList, $severity);
         return $datas;
     }
 
     /**
-     * Get report data of bugs per resolution.
+     * 按照解决方案统计。
+     * Statistics by bug resolution.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerResolution()
+    public function getDataOfBugsPerResolution(): array
     {
         $datas = $this->dao->select('resolution AS name, COUNT(*) AS value')
             ->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->andWhere('resolution')->ne('')
-            ->groupBy('name')->orderBy('value DESC')
+            ->groupBy('name')
+            ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $resolution => $data) if(isset($this->lang->bug->resolutionList[$resolution])) $data->name = $this->lang->bug->resolutionList[$resolution];
+
+        foreach($datas as $resolution => $data) $data->name = zget($this->lang->bug->resolutionList, $resolution);
+
         return $datas;
     }
 
     /**
-     * Get report data of bugs per status.
+     * 按 bug 状态统计。
+     * Statistics by bug status.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerStatus()
+    public function getDataOfBugsPerStatus(): array
     {
         $datas = $this->dao->select('status AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $status => $data) if(isset($this->lang->bug->statusList[$status])) $data->name = $this->lang->bug->statusList[$status];
+
+        foreach($datas as $status => $data) $data->name = zget($this->lang->bug->statusList, $status);
+
         return $datas;
     }
 
     /**
-     * Get report data of bugs per pri
+     * 按照 bug 优先级统计。
+     * Statistics by bug pri.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerPri()
+    public function getDataOfBugsPerPri(): array
     {
         $datas = $this->dao->select('pri AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
         foreach($datas as $data) $data->name = $this->lang->bug->report->bugsPerPri->graph->xAxisName . ':' . zget($this->lang->bug->priList, $data->name);
+
         return $datas;
     }
 
     /**
-     * Get report data of bugs per status.
+     * 按照 bug 激活次数统计。
+     * Statistics by bug activation times.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerActivatedCount()
+    public function getDataOfBugsPerActivatedCount(): array
     {
         $datas = $this->dao->select('activatedCount AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
         foreach($datas as $data) $data->name = $this->lang->bug->report->bugsPerActivatedCount->graph->xAxisName . ':' . $data->name;
+
         return $datas;
     }
 
     /**
-     * Get report data of bugs per type.
+     * 按照 bug 类型统计。
+     * Statistics by bug type.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerType()
+    public function getDataOfBugsPerType(): array
     {
         $datas = $this->dao->select('type AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $type => $data) if(isset($this->lang->bug->typeList[$type])) $data->name = $this->lang->bug->typeList[$type];
+
+        foreach($datas as $type => $data) $data->name = zget($this->lang->bug->typeList, $type);
+
         return $datas;
     }
 
     /**
-     * getDataOfBugsPerAssignedTo
+     * 按照 bug 指派给统计。
+     * Statistics by bug assignment.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getDataOfBugsPerAssignedTo()
+    public function getDataOfBugsPerAssignedTo(): array
     {
-        $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')
-            ->from(TABLE_BUG)->where($this->reportCondition())
-            ->groupBy('name')
-            ->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        foreach($datas as $account => $data) $data->name = zget($this->users, $account);
+
         return $datas;
     }
 
