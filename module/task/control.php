@@ -296,7 +296,7 @@ class task extends control
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            
+
             return print(js::reload('parent'));
         }
     }
@@ -789,10 +789,11 @@ class task extends control
     }
 
     /**
+     * 关闭一个任务。
      * Close a task.
      *
      * @param  int    $taskID
-     * @param  string $extra
+     * @param  string $cardPosition
      * @access public
      * @return void
      */
@@ -852,25 +853,27 @@ class task extends control
     }
 
     /**
+     * 批量关闭任务。
      * Batch close tasks.
      *
+     * @param  string $skipTaskIdList
      * @access public
      * @return void
      */
-    public function batchClose($skipTaskIdList = '')
+    public function batchClose(string $skipTaskIdList = '')
     {
-        if($this->post->taskIDList or $skipTaskIdList)
+        $skipTasks      = array();
+        $parentTasks    = array();
+        $skipTaskIdList = explode(',', $skipTaskIdList);
+        $taskIdList     = $this->post->taskIDList ? array_unique($this->post->taskIDList) : $skipTaskIdList;
+        if(!empty($taskIdList))
         {
-            $taskIDList = $this->post->taskIDList;
-            if($taskIDList)     $taskIDList = array_unique($taskIDList);
-            if($skipTaskIdList) $taskIDList = $skipTaskIdList;
-
-            $this->loadModel('action');
-
-            $tasks = $this->task->getByList($taskIDList);
+            $tasks = $this->task->getByList($taskIdList);
             foreach($tasks as $taskID => $task)
             {
-                if(empty($skipTaskIdList) and ($task->status != 'done' and $task->status != 'cancel'))
+                if($task->status == 'closed') continue;
+
+                if(empty($skipTaskIdList) && !in_array($task->status, array('done', 'cancel')))
                 {
                     $skipTasks[$taskID] = $taskID;
                     continue;
@@ -883,34 +886,14 @@ class task extends control
                     continue;
                 }
 
-                /* Skip closed task when batch close task. */
-                if($task->status == 'closed') continue;
-
-                $changes = $this->task->close($taskID);
-                if($changes)
-                {
-                    $actionID = $this->action->create('task', $taskID, 'Closed', '');
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
-            if(isset($skipTasks) and empty($skipTaskIdList))
-            {
-                $skipTasks  = implode(',', $skipTasks);
-                $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
-                $cancelURL  = $this->server->HTTP_REFERER;
-                return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
-            }
-
-            if(isset($parentTasks))
-            {
-                $parentTasks = implode(',', $parentTasks);
-                return print(js::alert(sprintf($this->lang->task->error->closeParent, $parentTasks)) . js::reload('parent'));
+                $taskData = $this->taskZen->buildTaskForClose($task);
+                $this->task->close($task, $taskData);
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        return $this->send(array('result' => 'success', 'load' => true));
+        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $parentTasks, $skipTaskIdList));
     }
 
     /**
