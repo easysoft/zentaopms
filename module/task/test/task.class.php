@@ -255,7 +255,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function recordEstimateTest($taskID, $param = array())
+    public function recordWorkhourTest($taskID, $param = array())
     {
         $todate   = date("Y-m-d");
         $id       = array('1','2','3');
@@ -266,7 +266,7 @@ class taskTest
         $createFields = array('id' => $id, 'dates' => $dates, 'consumed' => $consumed, 'left' => $left, 'work' => $work);
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->recordEstimate($taskID);
+        $object = $this->objectModel->recordWorkhour($taskID);
         unset($_POST);
         if(dao::isError())
         {

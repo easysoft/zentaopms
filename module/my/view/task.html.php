@@ -41,7 +41,7 @@
     $canBatchClose     = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');
     $canFinish         = common::hasPriv('task', 'finish');
     $canClose          = common::hasPriv('task', 'close');
-    $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
+    $canRecordEstimate = common::hasPriv('task', 'recordWorkhour');
     $canEdit           = common::hasPriv('task', 'edit');
     $canBatchCreate    = common::hasPriv('task', 'batchCreate');
     ?>
@@ -158,7 +158,7 @@
                           echo "<div class='dividing-line'></div>";
                       }
 
-                      common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+                      common::printIcon('task', 'recordWorkhour', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                       common::printIcon('task', 'edit', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='95%'");
                       common::printIcon('task', 'batchCreate', "executionID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=true", $task, 'list', 'split', '', 'iframe', true, "data-width='95%' $attr", $this->lang->task->children);
                   }
@@ -233,7 +233,7 @@
                             echo "<div class='dividing-line'></div>";
                         }
 
-                        common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                        common::printIcon('task', 'recordWorkhour', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
                         common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, "data-width='95%'");
                         common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children);
                     }

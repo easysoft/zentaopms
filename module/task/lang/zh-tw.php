@@ -124,7 +124,7 @@ $lang->task->closedReason      = '關閉原因';
 $lang->task->lastEditedBy      = '最後修改';
 $lang->task->lastEditedDate    = '最後修改日期';
 $lang->task->lastEdited        = '最後編輯';
-$lang->task->recordEstimate    = '工時';
+$lang->task->recordWorkhour    = '工時';
 $lang->task->editEstimate      = '編輯工時';
 $lang->task->deleteEstimate    = '刪除工時';
 $lang->task->colorTag          = '顏色標籤';
@@ -148,7 +148,7 @@ $lang->task->task    = '任務';
 $lang->task->account = '用戶名';
 $lang->task->work    = '工作內容';
 
-$lang->task->recordEstimateAction = '添加工時';
+$lang->task->recordWorkhourAction = '添加工時';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "該任務與上一任務不屬於同一%s！";

@@ -136,7 +136,7 @@ $lang->task->closedReason      = 'CloseReason';
 $lang->task->lastEditedBy      = 'EditedBy';
 $lang->task->lastEditedDate    = 'EditedDate';
 $lang->task->lastEdited        = 'EditedBy';
-$lang->task->recordEstimate    = 'Effort';
+$lang->task->recordWorkhour    = 'Effort';
 $lang->task->editEstimate      = 'Edit Estimates';
 $lang->task->deleteEstimate    = 'Delete Estimates';
 $lang->task->repo              = 'Repo';
@@ -172,7 +172,7 @@ $lang->task->task    = 'Task';
 $lang->task->account = 'Account';
 $lang->task->work    = 'Work';
 
-$lang->task->recordEstimateAction = 'Record Estimate';
+$lang->task->recordWorkhourAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";

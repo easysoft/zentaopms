@@ -224,7 +224,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               </tr>
               <tr>
                 <th><?php echo $lang->task->consumed;?></th>
-                <td><?php echo '<span id=consumedSpan>' . $task->consumed . '</span> '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
+                <td><?php echo '<span id=consumedSpan>' . $task->consumed . '</span> '; common::printIcon('task', 'recordWorkhour', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>

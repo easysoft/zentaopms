@@ -460,13 +460,14 @@ class task extends control
      * @access public
      * @return void
      */
-    public function recordEstimate($taskID, $from = '', $orderBy = '')
+    public function recordWorkhour($taskID, $from = '', $orderBy = '')
     {
         $this->taskZen->commonAction($taskID);
 
         if(!empty($_POST))
         {
-            $changes = $this->task->recordEstimate($taskID);
+            $workhour = form::batchData($this->config->task->form->recordWorkhour)->get();
+            $changes  = $this->task->recordWorkhour($taskID, $workhour);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('common')->syncPPEStatus($taskID);
@@ -582,7 +583,7 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            $url = $this->session->estimateList ? $this->session->estimateList : inlink('recordEstimate', "taskID={$estimate->task}");
+            $url = $this->session->estimateList ? $this->session->estimateList : inlink('recordWorkhour', "taskID={$estimate->task}");
             return print(js::locate($url, 'parent'));
         }
 

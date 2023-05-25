@@ -1948,7 +1948,7 @@ class repoModel extends model
                         }
                         else
                         {
-                            $this->task->recordEstimate($taskID);
+                            $this->task->recordWorkhour($taskID);
                         }
 
                         $action->action     = $scm == 'svn' ? 'svncommited' : 'gitcommited';

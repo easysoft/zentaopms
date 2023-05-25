@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=taskModel->recordEstimate();
+title=taskModel->recordWorkhour();
 cid=1
 pid=1
 
@@ -23,5 +23,5 @@ $work = array('测试','','');
 $create = array('consumed' => $consumed, 'left' => $left, 'work' => $work);
 
 $task = new taskTest('admin');
-r($task->recordEstimateTest($taskIDList[0],$create)) && p('2:field,old,new') && e('status,wait,doing');  // 正常记录工时
-r($task->recordEstimateTest($taskIDList[1],$create)) && p('2:field,old,new') && e('status,pause,doing'); // pause任务记录工时
+r($task->recordWorkhourTest($taskIDList[0],$create)) && p('2:field,old,new') && e('status,wait,doing');  // 正常记录工时
+r($task->recordWorkhourTest($taskIDList[1],$create)) && p('2:field,old,new') && e('status,pause,doing'); // pause任务记录工时

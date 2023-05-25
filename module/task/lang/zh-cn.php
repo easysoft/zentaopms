@@ -136,7 +136,7 @@ $lang->task->closedReason      = '关闭原因';
 $lang->task->lastEditedBy      = '最后修改';
 $lang->task->lastEditedDate    = '最后修改日期';
 $lang->task->lastEdited        = '最后编辑';
-$lang->task->recordEstimate    = '工时';
+$lang->task->recordWorkhour    = '工时';
 $lang->task->editEstimate      = '编辑工时';
 $lang->task->deleteEstimate    = '删除工时';
 $lang->task->repo              = '所属版本库';
@@ -172,7 +172,7 @@ $lang->task->task    = '任务';
 $lang->task->account = '用户名';
 $lang->task->work    = '工作内容';
 
-$lang->task->recordEstimateAction = '添加工时';
+$lang->task->recordWorkhourAction = '添加工时';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "该任务与上一任务不属于同一%s！";

@@ -5065,7 +5065,7 @@ class executionModel extends model
             $buttons  = '';
             $buttons .= common::buildIconButton('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
             $buttons .= common::buildIconButton('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-            $buttons .= common::buildIconButton('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+            $buttons .= common::buildIconButton('task', 'recordWorkhour', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
             if(isset($task->children)) $taskItem->children = $this->formatTasksForTree($task->children);
 
             if($taskItem->storyChanged)

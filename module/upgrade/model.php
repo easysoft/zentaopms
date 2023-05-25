@@ -1820,14 +1820,14 @@ class upgradeModel extends model
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('recordEstimate')
+                ->andWhere('method')->eq('recordWorkhour')
                 ->exec();
             $this->saveLogs($this->dao->get());
             $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
-                ->set('method')->eq('recordEstimate')
+                ->set('method')->eq('recordWorkhour')
                 ->exec();
             $this->saveLogs($this->dao->get());
 

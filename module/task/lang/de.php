@@ -136,7 +136,7 @@ $lang->task->closedReason      = 'Grund';
 $lang->task->lastEditedBy      = 'Bearbeiter';
 $lang->task->lastEditedDate    = 'Bearbeitet am';
 $lang->task->lastEdited        = 'Luletzt bearbeitet';
-$lang->task->recordEstimate    = 'Fortschritt erfassen';
+$lang->task->recordWorkhour    = 'Fortschritt erfassen';
 $lang->task->editEstimate      = 'Schätzung bearbeiten';
 $lang->task->deleteEstimate    = 'Schätzung löschen';
 $lang->task->repo              = 'Repo';
@@ -172,7 +172,7 @@ $lang->task->task    = 'Task';
 $lang->task->account = 'Account';
 $lang->task->work    = 'Work';
 
-$lang->task->recordEstimateAction = 'Record Estimate';
+$lang->task->recordWorkhourAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Dito';
 $lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";

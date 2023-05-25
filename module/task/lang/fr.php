@@ -136,7 +136,7 @@ $lang->task->closedReason      = 'Raison fermeture';
 $lang->task->lastEditedBy      = 'Edité par';
 $lang->task->lastEditedDate    = 'Date Modif';
 $lang->task->lastEdited        = 'Edité par';
-$lang->task->recordEstimate    = 'Effort';
+$lang->task->recordWorkhour    = 'Effort';
 $lang->task->editEstimate      = 'Editer Estimé';
 $lang->task->deleteEstimate    = 'Supprimer Estimés';
 $lang->task->repo              = 'Repo';
@@ -172,7 +172,7 @@ $lang->task->task    = 'Task';
 $lang->task->account = 'Account';
 $lang->task->work    = 'Work';
 
-$lang->task->recordEstimateAction = 'Record Estimate';
+$lang->task->recordWorkhourAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Idem';
 $lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";

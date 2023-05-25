@@ -1308,20 +1308,21 @@ class taskModel extends model
     }
 
     /**
-     * Record estimate and left of task.
+     * Record workhour and left of task.
      *
      * @param  int    $taskID
+     * @param  array  $workhour
      * @access public
      * @return array
      */
-    public function recordEstimate($taskID)
+    public function recordWorkhour(int $taskID, array $workhour)
     {
-        $record = fixer::input('post')->get();
+        $workhour = fixer::input('post')->get();
         $today  = helper::today();
 
         /* Fix bug#3036. */
-        foreach($record->consumed as $id => $item) $record->consumed[$id] = trim($item);
-        foreach($record->consumed as $id => $item)
+        foreach($workhour->consumed as $id => $item) $workhour->consumed[$id] = trim($item);
+        foreach($workhour->consumed as $id => $item)
         {
             if(!is_numeric($item) and !empty($item))
             {
@@ -1329,15 +1330,15 @@ class taskModel extends model
             }
             elseif(is_numeric($item) and $item <= 0)
             {
-                dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
+                dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->workhour, '0');
             }
         }
-        foreach($record->left as $id => $item)
+        foreach($workhour->left as $id => $item)
         {
-            $record->left[$id] = trim($item);
+            $workhour->left[$id] = trim($item);
             if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
         }
-        foreach($record->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+        foreach($workhour->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
         $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
@@ -1352,22 +1353,22 @@ class taskModel extends model
         if(!$inTeam) return false;
 
         $estimates = array();
-        foreach(array_keys($record->dates) as $id)
+        foreach(array_keys($workhour->dates) as $id)
         {
-            if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
+            if(!empty($workhour->work[$id]) or !empty($workhour->consumed[$id]))
             {
-                if(helper::isZeroDate($record->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
-                if(!$record->consumed[$id])                 helper::end(js::alert($this->lang->task->error->consumedThisTime));
-                if($record->left[$id] === '')               helper::end(js::alert($this->lang->task->error->left));
+                if(helper::isZeroDate($workhour->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
+                if(!$workhour->consumed[$id])                 helper::end(js::alert($this->lang->task->error->consumedThisTime));
+                if($workhour->left[$id] === '')               helper::end(js::alert($this->lang->task->error->left));
 
                 $estimates[$id] = new stdclass();
-                $estimates[$id]->date     = $record->dates[$id];
+                $estimates[$id]->date     = $workhour->dates[$id];
                 $estimates[$id]->task     = $taskID;
-                $estimates[$id]->consumed = $record->consumed[$id];
-                $estimates[$id]->left     = $record->left[$id];
-                $estimates[$id]->work     = $record->work[$id];
+                $estimates[$id]->consumed = $workhour->consumed[$id];
+                $estimates[$id]->left     = $workhour->left[$id];
+                $estimates[$id]->work     = $workhour->work[$id];
                 $estimates[$id]->account  = $this->app->user->account;
-                if(isset($record->order[$id])) $estimates[$id]->order = $record->order[$id];
+                if(isset($workhour->order[$id])) $estimates[$id]->order = $workhour->order[$id];
             }
         }
 
@@ -3359,7 +3360,7 @@ class taskModel extends model
 
         $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'recordWorkhour', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'pause',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
         $menu .= $this->buildMenu('task', 'activate',       $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
@@ -3397,7 +3398,7 @@ class taskModel extends model
         $canRestart        = ($task->status == 'pause' and common::hasPriv('task', 'restart'));
         $canFinish         = common::hasPriv('task', 'finish');
         $canClose          = common::hasPriv('task', 'close');
-        $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
+        $canRecordEstimate = common::hasPriv('task', 'recordWorkhour');
         $canEdit           = common::hasPriv('task', 'edit');
         $canBatchCreate    = ($this->config->vision == 'rnd' and common::hasPriv('task', 'batchCreate'));
 
@@ -3411,7 +3412,7 @@ class taskModel extends model
             $menu .= "<div class='dividing-line'></div>";
         }
 
-        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'recordWorkhour', $params, $task, 'browse', 'time', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
         if($this->config->vision == 'rnd')
         {

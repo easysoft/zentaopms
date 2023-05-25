@@ -1,6 +1,6 @@
 <?php
 /**
- * The task recordEstimate entry point of ZenTaoPMS.
+ * The task recordWorkhour entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -28,8 +28,8 @@ class taskRecordEstimateEntry extends entry
         }
         else
         {
-            $control = $this->loadController('task', 'recordEstimate');
-            $control->recordEstimate($taskID);
+            $control = $this->loadController('task', 'recordWorkhour');
+            $control->recordWorkhour($taskID);
         }
 
         $data = $this->getData();
@@ -61,8 +61,8 @@ class taskRecordEstimateEntry extends entry
         {
             $fields = 'id,dates,consumed,left,work';
             $this->batchSetPost($fields);
-            $control = $this->loadController('task', 'recordEstimate');
-            $control->recordEstimate($taskID);
+            $control = $this->loadController('task', 'recordWorkhour');
+            $control->recordWorkhour($taskID);
         }
 
         $data = $this->getData();

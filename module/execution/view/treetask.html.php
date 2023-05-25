@@ -29,7 +29,7 @@
       if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', 'off', '', 'btn btn-info btn-icon iframe', true);
       if($task->status == 'doing') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon iframe', true);
 
-      common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'btn btn-info btn-icon iframe', true);
+      common::printIcon('task', 'recordWorkhour', "taskID=$task->id", $task, 'list', 'time', '', 'btn btn-info btn-icon iframe', true);
       common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon');
       if(empty($task->team) or empty($task->children))
       {
