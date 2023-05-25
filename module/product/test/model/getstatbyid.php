@@ -9,6 +9,7 @@ cid=1
 pid=1
 */
 
+zdTable('product')->gen(50);
 zdTable('story')->gen(50);
 zdTable('productplan')->gen(50);
 zdTable('release')->gen(50);
