@@ -320,6 +320,7 @@ class measurementModel extends model
     public function createBasic(): int
     {
         $data = fixer::input('post')
+            ->add('engine', 'php')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
@@ -394,11 +395,11 @@ class measurementModel extends model
             $newMeasurement[$id]['editedBy']   = $account;
             $newMeasurement[$id]['editedDate'] = $editDate;
 
-            if(in_array($code, $codeList))    die(js::error(sprintf($this->lang->measurement->codeExistence, $code)));
-            if(empty($code))                  die(js::error(sprintf($this->lang->measurement->codeEmpty, $id)));
-            if(empty($data->name[$id]))       die(js::error(sprintf($this->lang->measurement->nameEmpty, $id)));
-            if(empty($data->unit[$id]))       die(js::error(sprintf($this->lang->measurement->unitEmpty, $id)));
-            if(empty($data->definition[$id])) die(js::error(sprintf($this->lang->measurement->definitionEmpty, $id)));
+            if(in_array($code, $codeList))    helper::end(js::error(sprintf($this->lang->measurement->codeExistence, $code)));
+            if(empty($code))                  helper::end(js::error(sprintf($this->lang->measurement->codeEmpty, $id)));
+            if(empty($data->name[$id]))       helper::end(js::error(sprintf($this->lang->measurement->nameEmpty, $id)));
+            if(empty($data->unit[$id]))       helper::end(js::error(sprintf($this->lang->measurement->unitEmpty, $id)));
+            if(empty($data->definition[$id])) helper::end(js::error(sprintf($this->lang->measurement->definitionEmpty, $id)));
             $codeList[$id] = $code;
         }
 
