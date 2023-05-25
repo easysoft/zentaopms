@@ -131,6 +131,33 @@ class bug extends control
     }
 
     /**
+     * 查看一个bug。
+     * View a bug.
+     *
+     * @param  int    $bugID
+     * @param  string $form
+     * @access public
+     * @return void
+     */
+    public function view(int $bugID, string $from = 'bug')
+    {
+        /* Judge bug exits or not. */
+        $bug = $this->bug->getById($bugID, true);
+        if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+
+        $this->session->set('storyList', '', 'product');
+        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        /* Update action. */
+        if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
+
+        if(!isonlybody()) $this->bugZen->setMenu4View($bug);
+        $this->bugZen->setView4View($bug, $from);
+        $this->display();
+    }
+
+    /**
      * Bug 的统计报表。
      * The report page.
      *
@@ -299,33 +326,6 @@ class bug extends control
         $this->view->moduleID  = $moduleID;
         $this->view->product   = $product;
         $this->view->productID = $product->id;
-        $this->display();
-    }
-
-    /**
-     * 查看一个bug。
-     * View a bug.
-     *
-     * @param  int    $bugID
-     * @param  string $form
-     * @access public
-     * @return void
-     */
-    public function view(int $bugID, string $from = 'bug')
-    {
-        /* Judge bug exits or not. */
-        $bug = $this->bug->getById($bugID, true);
-        if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
-
-        $this->session->set('storyList', '', 'product');
-        $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        /* Update action. */
-        if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
-
-        if(!isonlybody()) $this->bugZen->setMenu4View($bug);
-        $this->bugZen->setView4View($bug, $from);
         $this->display();
     }
 
