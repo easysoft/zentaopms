@@ -9,7 +9,8 @@ require_once dirname(__DIR__) . DS . 'risklabel' . DS . 'v1.php';
 class tableData extends wg
 {
     protected static $defineProps = array(
-        'items: array'
+        'items: array',
+        'title?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -21,7 +22,7 @@ class tableData extends wg
     {
         return h::th
         (
-            setClass('py-1.5 pr-2 text-right font-normal'),
+            setClass('py-1.5 pr-2 text-right font-normal nowrap'),
             $text
         );
     }
@@ -71,11 +72,24 @@ class tableData extends wg
         return h::tbody($trs);
     }
 
+    private function caption()
+    {
+        $title = $this->prop('title');
+        if(empty($title)) return null;
+
+        h::caption
+        (
+            setClass('font-normal article-h2 text-left mb-2'),
+            $title
+        )
+    }
+
     protected function build(): wg
     {
         return h::table
         (
             setClass('table-data'),
+            $this->caption(),
             $this->tbody(),
         );
     }
