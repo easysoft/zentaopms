@@ -17,12 +17,12 @@ foreach(explode(',', $showFields) as $field)
     if($field) $visibleFields[$field] = '';
 }
 
-foreach(explode(',', $config->bug->custom->batchCreateFields) as $field)
+foreach(explode(',', $config->bug->create->requiredFields) as $field)
 {
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->bug->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->bug->custom->batchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 
@@ -59,7 +59,7 @@ $items[] = array
     'items'    => $moduleOptionMenu,
     'value'    => $moduleID,
     'width'    => '200px',
-    'required' => zget($requiredFields, 'module', false, true),
+    'required' => isset($requiredFields['module']),
     'ditto'    => true,
 );
 
@@ -73,7 +73,7 @@ $items[] = array
     'items'    => $projects,
     'value'    => $projectID,
     'width'    => '200px',
-    'required' => zget($requiredFields, 'project', false, true),
+    'required' => isset($requiredFields['project']),
     'ditto'    => true,
 );
 
@@ -87,7 +87,7 @@ $items[] = array
     'items'    => $executions,
     'value'    => $executionID,
     'width'    => '200px',
-    'required' => zget($requiredFields, 'execution', false, true),
+    'required' => isset($requiredFields['execution']),
     'ditto'    => true,
 );
 
@@ -150,7 +150,7 @@ $items[] = array
     'hidden'   => zget($visibleFields, 'deadline', true, false),
     'control'  => 'date',
     'width'    => '128px',
-    'required' => zget($requiredFields, 'deadline', false, true),
+    'required' => isset($requiredFields['deadline']),
     'ditto'    => true,
 );
 
@@ -161,7 +161,7 @@ $items[] = array
     'label'    => $lang->bug->steps,
     'hidden'   => zget($visibleFields, 'steps', true, false),
     'width'    => '240px',
-    'required' => zget($requiredFields, 'steps', false, true),
+    'required' => isset($requiredFields['steps']),
 );
 
 /* Field of type. */
@@ -174,7 +174,7 @@ $items[] = array
     'items'    => $lang->bug->typeList,
     'value'    => $type,
     'width'    => '160px',
-    'required' => zget($requiredFields, 'type', false, true),
+    'required' => isset($requiredFields['type']),
     'ditto'    => true,
 );
 
@@ -188,7 +188,7 @@ $items[] = array
     'items'    => $lang->bug->priList,
     'value'    => $pri,
     'width'    => '80px',
-    'required' => zget($requiredFields, 'pri', false, true),
+    'required' => isset($requiredFields['pri']),
 );
 
 /* Field of severity. */
@@ -201,7 +201,7 @@ $items[] = array
     'items'    => $lang->bug->severityList,
     'value'    => 3,
     'width'    => '80px',
-    'required' => zget($requiredFields, 'severity', false, true),
+    'required' => isset($requiredFields['severity']),
 );
 
 /* Field of os. */
@@ -213,7 +213,7 @@ $items[] = array
     'control'  => 'select',
     'items'    => $lang->bug->osList,
     'width'    => '200px',
-    'required' => zget($requiredFields, 'os', false, true),
+    'required' => isset($requiredFields['os']),
 );
 
 /* Field of browser. */
@@ -225,7 +225,7 @@ $items[] = array
     'control'  => 'select',
     'items'    => $lang->bug->browserList,
     'width'    => '200px',
-    'required' => zget($requiredFields, 'browser', false, true),
+    'required' => isset($requiredFields['browser']),
 );
 
 /* Field of keywords. */
@@ -235,7 +235,7 @@ $items[] = array
     'label'    => $lang->bug->keywords,
     'hidden'   => zget($visibleFields, 'keywords', true, false),
     'width'    => '200px',
-    'required' => zget($requiredFields, 'keywords', false, true),
+    'required' => isset($requiredFields['keywords']),
 );
 
 
