@@ -379,6 +379,8 @@ function loadProductExecutions(productID, projectID = 0)
     });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
+
+    loadExecutionRelated(execution);
 }
 
 /**
@@ -512,7 +514,6 @@ function loadExecutionRelated(executionID)
     if(executionID)
     {
         if(currentProjectID == 0) loadProjectByExecutionID(executionID);
-        loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
         loadExecutionBuilds(executionID);
         loadAssignedTo(executionID, $('#assignedTo').val());
@@ -536,6 +537,8 @@ function loadExecutionRelated(executionID)
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
+
+    loadExecutionTasks(executionID);
 }
 
 /**
