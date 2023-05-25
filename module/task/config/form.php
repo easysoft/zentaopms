@@ -190,7 +190,7 @@ $config->task->form->testTask->create['deadlineDitto']   = array('type' => 'arra
 
 $config->task->form->recordWorkhour = array();
 $config->task->form->recordWorkhour['id']       = array('type' => 'int',    'required' => false, 'default' => array());
-$config->task->form->recordWorkhour['dates']    = array('type' => 'date',   'required' => true,  'default' => array());
+$config->task->form->recordWorkhour['date']     = array('type' => 'date',   'required' => true,  'default' => array());
 $config->task->form->recordWorkhour['work']     = array('type' => 'string', 'required' => false, 'default' => array());
 $config->task->form->recordWorkhour['consumed'] = array('type' => 'float',  'required' => true,  'default' => array(), 'base' => true);
 $config->task->form->recordWorkhour['left']     = array('type' => 'float',  'required' => true,  'default' => array());

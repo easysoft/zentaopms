@@ -1130,67 +1130,58 @@ class taskModel extends model
      * Record workhour and left of task.
      *
      * @param  int    $taskID
-     * @param  object $workhour
+     * @param  array  $workhour
      * @access public
      * @return array
      */
-    public function recordWorkhour(int $taskID, object $workhour)
+    public function recordWorkhour(int $taskID, array $workhour)
     {
         $today = helper::today();
 
         /* Fix bug#3036. */
-        foreach($workhour->consumed as $id => $item) $workhour->consumed[$id] = trim($item);
-        foreach($workhour->consumed as $id => $item)
+        foreach($workhour as $id => $record)
         {
-            if(!is_numeric($item) and !empty($item))
+            $consumed = trim($record->consumed);
+            if(!is_numeric($consumed) and !empty($consumed))
             {
                 dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
             }
-            elseif(is_numeric($item) and $item <= 0)
+            elseif(is_numeric($consumed) and $consumed <= 0)
             {
                 dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->workhour, '0');
             }
+
+            $left = trim($record->left);
+            if(!is_numeric($left)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+
+            if($record->date > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         }
-        foreach($workhour->left as $id => $item)
-        {
-            $workhour->left[$id] = trim($item);
-            if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
-        }
-        foreach($workhour->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+
         if(dao::isError()) return false;
 
-        $task       = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $task       = $this->taskTao->fetchByID($taskID);
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+        $inTeam     = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->fetch('id');
 
-        /* Check if the current user is in the team. */
-        $inTeam = empty($task->team);
-        foreach($task->team as $teamMember)
-        {
-            if($teamMember->account == $this->app->user->account) $inTeam = true;
-        }
-        if(!$inTeam) return false;
+        if($task->team && !$inTeam) return false;
 
-        $estimates = array();
-        foreach(array_keys($workhour->dates) as $id)
+        foreach($workhour as $id => $record)
         {
-            if(!empty($workhour->work[$id]) or !empty($workhour->consumed[$id]))
+            if(!$record->work && !$record->consumed)
             {
-                if(helper::isZeroDate($workhour->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
-                if(!$workhour->consumed[$id])                 helper::end(js::alert($this->lang->task->error->consumedThisTime));
-                if($workhour->left[$id] === '')               helper::end(js::alert($this->lang->task->error->left));
-
-                $estimates[$id] = new stdclass();
-                $estimates[$id]->date     = $workhour->dates[$id];
-                $estimates[$id]->task     = $taskID;
-                $estimates[$id]->consumed = $workhour->consumed[$id];
-                $estimates[$id]->left     = $workhour->left[$id];
-                $estimates[$id]->work     = $workhour->work[$id];
-                $estimates[$id]->account  = $this->app->user->account;
-                if(isset($workhour->order[$id])) $estimates[$id]->order = $workhour->order[$id];
+                unset($workhour[$id]);
+                continue;
             }
+
+            if(helper::isZeroDate($record->date)) helper::end(js::alert($this->lang->task->error->dateEmpty));
+            if(!$record->consumed)                helper::end(js::alert($this->lang->task->error->consumedThisTime));
+            if($record->left === '')              helper::end(js::alert($this->lang->task->error->left));
+
+            $record->task    = $taskID;
+            $record->account = $this->app->user->account;
         }
 
-        if(empty($estimates)) return;
+        if(empty($workhour)) return;
 
         $this->loadModel('action');
 
