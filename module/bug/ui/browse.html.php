@@ -157,6 +157,13 @@ foreach($branchTagOption as $branchID => $branchName)
     $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
 }
 
+menu
+(
+    set::id('navBranch'),
+    set::class('dropdown-menu'),
+    set::items($branchItems)
+);
+
 $moduleItems = array();
 foreach($modules as $moduleID => $module)
 {
