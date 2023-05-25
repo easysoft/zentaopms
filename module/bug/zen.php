@@ -452,27 +452,6 @@ class bugZen extends bug
     }
 
     /**
-     * 更新成功后的相关处理。
-     * Relevant processing after updating bug.
-     *
-     * @param  int       $bugID
-     * @param  string    $comment
-     * @param  array     $changes
-     * @access protected
-     * @return void
-     */
-    protected function processAfterEdit(int $bugID, string $comment, array $changes): void
-    {
-        if($this->post->comment || !empty($changes))
-        {
-            $action   = !empty($changes) ? 'Edited' : 'Commented';
-            $actionID = $this->action->create('bug', $bugID, $action, $comment);
-
-            $this->action->logHistory($actionID, $changes);
-        }
-    }
-
-    /**
      * 返回不同的结果。
      * Respond after updating bug.
      *
@@ -494,11 +473,12 @@ class bugZen extends bug
         {
             foreach($changes as $change)
             {
-                if($change['field'] != 'status') continue;
-
-                $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                $canceledURL  = $this->server->http_referer;
-                return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+                if($change['field'] == 'status')
+                {
+                    $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                    $canceledURL  = $this->server->http_referer;
+                    return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+                }
             }
         }
 

@@ -393,12 +393,13 @@ class bugModel extends model
      * Update a bug.
      *
      * @param  object      $bug
-     * @param  object      $oldBug
      * @access public
      * @return array|false
      */
-    public function update(object $bug, object $oldBug): array|false
+    public function update(object $bug): array|false
     {
+        $oldBug = $this->getByID($bug->id);
+
         $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
@@ -413,9 +414,16 @@ class bugModel extends model
 
         if(dao::isError()) return false;
 
-        if(!$this->bugTao->afterUpdate($bug, $oldBug)) return false;
+        $changes = common::createChanges($oldBug, $bug);
+        if($changes || $this->post->comment)
+        {
+            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? 'Edited' : 'Commented', $this->post->comment);
+            if($changes) $this->action->logHistory($actionID, $changes);
+        }
 
-        return common::createChanges($oldBug, $bug);
+        if(dao::isError()) return false;
+
+        return $changes;
     }
 
     /**
@@ -780,25 +788,7 @@ class bugModel extends model
      */
     public function batchChangeModule(array $bugIdList, int $moduleID): bool
     {
-        $this->loadModel('action');
-        $oldBugs = $this->getByIdList($bugIdList);
 
-        foreach($bugIdList as $bugID)
-        {
-            $oldBug = $oldBugs[$bugID];
-            if($moduleID == $oldBug->module) continue;
-
-            /* Change the module of bug. */
-            $bug = new stdclass();
-            $bug->module = $moduleID;
-            $this->bugTao->updateByID((int)$bugID, $bug);
-            if(dao::isError()) return false;
-
-            /* Record logs. */
-            $changes  = common::createChanges($oldBug, $bug);
-            $actionID = $this->action->create('bug', $bugID, 'Edited');
-            $this->action->logHistory($actionID, $changes);
-        }
         return true;
     }
 

@@ -351,11 +351,11 @@ class bug extends control
             $changes = array();
             if(!$comment)
             {
-                $changes = $this->bug->update($bug, $oldBug);
+                $changes = $this->bug->update($bug);
                 if($changes === false) return $this->send($this->bugZen->errorEdit());
+                $this->bug->afterUpdate($bug, $oldBug);
+                if(dao::isError()) $this->send($this->bugZen->errorEdit());
             }
-
-            $this->bugZen->processAfterEdit($bugID, $this->post->comment, $changes);
 
             $this->executeHooks($bugID);
 
@@ -522,14 +522,21 @@ class bug extends control
      */
     public function batchChangeModule(int $moduleID)
     {
-        if($this->post->bugIDList)
+        if($this->post->bugIdList)
         {
-            $bugIdList = array_unique($this->post->bugIDList);
-            $this->bug->batchChangeModule($bugIdList, $moduleID);
+            $bugIdList = array_unique($this->post->bugIdList);
+            foreach($bugIdList as $bugID)
+            {
+                $bug = new stdclass();
+                $bug->id     = (int)$bugID;
+                $bug->module = $moduleID;
+
+                $this->bug->update($bug);
+            }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        return array('load' => $this->session->bugList, 'closeModal' => true);
+        return $this->send(array('result' => 'success', 'load' => $this->session->bugList));
     }
 
     /**
