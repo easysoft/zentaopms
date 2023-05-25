@@ -1647,23 +1647,19 @@ class bugTest
     }
 
     /**
+     * 统计每天解决 bug 数。
      * Test get report data of resolved bugs per day.
      *
      * @access public
      * @return array
      */
-    public function getDataOfResolvedBugsPerDayTest()
+    public function getDataOfResolvedBugsPerDayTest(): array
     {
-        $array = $this->objectModel->getDataOfResolvedBugsPerDay();
+        $datas = $this->objectModel->getDataOfResolvedBugsPerDay();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**

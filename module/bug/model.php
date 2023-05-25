@@ -1922,7 +1922,7 @@ class bugModel extends model
         return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
-            ->orderBy('resolvedDate')
+            ->orderBy('name')
             ->fetchAll();
     }
 
