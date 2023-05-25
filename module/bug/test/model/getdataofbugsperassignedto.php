@@ -1,23 +1,32 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php'; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+su('admin');
+
+zdTable('bug')->config('assignedto')->gen(10);
 
 /**
 
 title=bugModel->getDataOfBugsPerAssignedTo();
+timeout=0
 cid=1
-pid=1
 
-获取用户admin数据 >> admin,85
-获取用户dev1数据 >> 开发1,85
-获取用户test1数据 >> 测试1,85
-获取用户closed数据 >> Closed,20
+- 获取指派给用户 admin 的数据
+ - 第admin条的name属性 @admin
+ - 第admin条的value属性 @5
+
+- 获取指派给用户 zhangsan 的数据
+ - 第zhangsan条的name属性 @zhangsan
+ - 第zhangsan条的value属性 @3
+
+- 获取指派给用户 lisi 的数据
+ - 第lisi条的name属性 @lisi
+ - 第lisi条的value属性 @2
 
 */
 
-$bug=new bugTest();
-r($bug->getDataOfBugsPerAssignedToTest()) && p('admin:name,value')  && e('admin,85');  // 获取用户admin数据
-r($bug->getDataOfBugsPerAssignedToTest()) && p('dev1:name,value')   && e('开发1,85');   // 获取用户dev1数据
-r($bug->getDataOfBugsPerAssignedToTest()) && p('test1:name,value')  && e('测试1,85');  // 获取用户test1数据
-r($bug->getDataOfBugsPerAssignedToTest()) && p('closed:name,value') && e('Closed,20'); // 获取用户closed数据
+$bug = new bugTest();
+r($bug->getDataOfBugsPerAssignedToTest()) && p('admin:name,value')    && e('admin,5');    //获取指派给用户 admin 的数据
+r($bug->getDataOfBugsPerAssignedToTest()) && p('zhangsan:name,value') && e('zhangsan,3'); //获取指派给用户 zhangsan 的数据
+r($bug->getDataOfBugsPerAssignedToTest()) && p('lisi:name,value')     && e('lisi,2');     //获取指派给用户 lisi 的数据
