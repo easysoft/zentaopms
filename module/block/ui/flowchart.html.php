@@ -13,7 +13,7 @@ namespace zin;
 
 /**
  * 展示流程图。
- * Print flow chart. 
+ * Print flow chart.
  */
 function printFlowchart()
 {
@@ -34,7 +34,7 @@ function printFlowchart()
                     set('class', 'flow-item-display'),
                     $flowItem
                 )
-            ); 
+            );
         }
         $charts[] = div
         (
