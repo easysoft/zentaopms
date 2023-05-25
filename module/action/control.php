@@ -346,10 +346,14 @@ class action extends control
         {
             return $this->send(array('status' => 'success', 'data' => $actionID));
         }
-        else
+
+        /* For new UI with ZIN. */
+        if(isset($_GET['zin']) && $_GET['zin'] == 1)
         {
-            echo js::reload('parent');
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
         }
+
+        echo js::reload('parent');
     }
 
     /**
