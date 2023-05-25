@@ -158,52 +158,6 @@ class bug extends control
     }
 
     /**
-     * Bug 的统计报表。
-     * The report page.
-     *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $branchID
-     * @param  int    $moduleID
-     * @param  string $chartType
-     * @access public
-     * @return void
-     */
-    public function report(int $productID, string $browseType, int $branchID, int $moduleID, string $chartType = 'default')
-    {
-        $this->loadModel('report');
-        $this->view->charts = array();
-
-        if(!empty($_POST))
-        {
-            foreach($this->post->charts as $chart)
-            {
-                $chartFunc = 'getDataOf' . $chart;
-                $chartData = $this->bug->$chartFunc();
-
-                $this->view->charts[$chart] = $this->bugZen->mergeChartOption($chart, $chartType);
-                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
-            }
-        }
-
-        /* 如果是影子产品并且对应的项目不是多迭代项目，删掉迭代 Bug 数量报表*/
-        /* Unset execution bugs report if the product is shadow product and corresponding project is not multiple. */
-        $project = $this->loadModel('project')->getByShadowProduct($productID);
-        if(!empty($project) && !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
-
-        $this->qa->setMenu($this->products, $productID, $branchID);
-
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
-        $this->view->productID     = $productID;
-        $this->view->browseType    = $browseType;
-        $this->view->branchID      = $branchID;
-        $this->view->moduleID      = $moduleID;
-        $this->view->chartType     = $chartType;
-        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
-        $this->display();
-    }
-
-    /**
      * 创建一个bug。
      * Create a bug.
      *
@@ -274,6 +228,95 @@ class bug extends control
     }
 
     /**
+     * 更新 bug 信息。
+     * Edit a bug.
+     *
+     * @param  int    $bugID
+     * @param  bool   $comment true|false
+     * @param  string $kanbanGroup
+     * @access public
+     * @return void
+     */
+    public function edit(int $bugID, bool $comment = false, string $kanbanGroup = 'default')
+    {
+        if(!empty($_POST))
+        {
+            $oldBug   = $this->bug->getByID($bugID);
+            $formData = form::data($this->config->bug->form->edit);
+            $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
+            if(!$bug) return $this->send($this->bugZen->errorEdit());
+
+            $changes = array();
+            if(!$comment)
+            {
+                $changes = $this->bug->update($bug);
+                if($changes === false) return $this->send($this->bugZen->errorEdit());
+                $this->bug->afterUpdate($bug, $oldBug);
+                if(dao::isError()) $this->send($this->bugZen->errorEdit());
+            }
+
+            $this->executeHooks($bugID);
+
+            /* Get response after editing bug. */
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup));
+        }
+
+        $bug = $this->bug->getByID($bugID);
+
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        $this->bugZen->setEditMenu($bug);
+
+        $this->bugZen->buildEditForm($bug);
+    }
+
+    /**
+     * Bug 的统计报表。
+     * The report page.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $branchID
+     * @param  int    $moduleID
+     * @param  string $chartType
+     * @access public
+     * @return void
+     */
+    public function report(int $productID, string $browseType, int $branchID, int $moduleID, string $chartType = 'default')
+    {
+        $this->loadModel('report');
+        $this->view->charts = array();
+
+        if(!empty($_POST))
+        {
+            foreach($this->post->charts as $chart)
+            {
+                $chartFunc = 'getDataOf' . $chart;
+                $chartData = $this->bug->$chartFunc();
+
+                $this->view->charts[$chart] = $this->bugZen->mergeChartOption($chart, $chartType);
+                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            }
+        }
+
+        /* 如果是影子产品并且对应的项目不是多迭代项目，删掉迭代 Bug 数量报表*/
+        /* Unset execution bugs report if the product is shadow product and corresponding project is not multiple. */
+        $project = $this->loadModel('project')->getByShadowProduct($productID);
+        if(!empty($project) && !$project->multiple) unset($this->lang->bug->report->charts['bugsPerExecution']);
+
+        $this->qa->setMenu($this->products, $productID, $branchID);
+
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
+        $this->view->productID     = $productID;
+        $this->view->browseType    = $browseType;
+        $this->view->branchID      = $branchID;
+        $this->view->moduleID      = $moduleID;
+        $this->view->chartType     = $chartType;
+        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->display();
+    }
+
+    /**
      * 批量创建bug。
      * Batch create.
      *
@@ -327,49 +370,6 @@ class bug extends control
         $this->view->product   = $product;
         $this->view->productID = $product->id;
         $this->display();
-    }
-
-    /**
-     * 更新 bug 信息。
-     * Edit a bug.
-     *
-     * @param  int    $bugID
-     * @param  bool   $comment true|false
-     * @param  string $kanbanGroup
-     * @access public
-     * @return void
-     */
-    public function edit(int $bugID, bool $comment = false, string $kanbanGroup = 'default')
-    {
-        if(!empty($_POST))
-        {
-            $oldBug   = $this->bug->getByID($bugID);
-            $formData = form::data($this->config->bug->form->edit);
-            $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
-            if(!$bug) return $this->send($this->bugZen->errorEdit());
-
-            $changes = array();
-            if(!$comment)
-            {
-                $changes = $this->bug->update($bug);
-                if($changes === false) return $this->send($this->bugZen->errorEdit());
-                $this->bug->afterUpdate($bug, $oldBug);
-                if(dao::isError()) $this->send($this->bugZen->errorEdit());
-            }
-
-            $this->executeHooks($bugID);
-
-            /* Get response after editing bug. */
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup));
-        }
-
-        $bug = $this->bug->getByID($bugID);
-
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        $this->bugZen->setEditMenu($bug);
-
-        $this->bugZen->buildEditForm($bug);
     }
 
     /**
