@@ -649,7 +649,7 @@ class control extends baseControl
 
         if(is_callable(array($this->{$zenClass}, $method))) return call_user_func_array(array($this->{$zenClass}, $method), $arguments);
 
-        $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+        $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }
 
     /**
@@ -670,6 +670,6 @@ class control extends baseControl
         $zenClass = $moduleName . 'Zen';
         if(is_callable("{$zenClass}::{$method}")) return call_user_func_array("{$zenClass}::{$method}", $arguments);
 
-        $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+        $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }
 }

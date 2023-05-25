@@ -543,7 +543,7 @@ class baseRouter
     {
         if(empty($appRoot))  $this->appRoot = $this->basePath . 'app' . DS . $appName . DS;
         if(!empty($appRoot)) $this->appRoot = realpath($appRoot) . DS;
-        if(!is_dir($this->appRoot)) $this->triggerError("The app you call not found in {$this->appRoot}", __FILE__, __LINE__, $exit = true);
+        if(!is_dir($this->appRoot)) $this->triggerError("The app you call not found in {$this->appRoot}", __FILE__, __LINE__, true);
     }
 
     /**
@@ -1331,7 +1331,7 @@ class baseRouter
         }
         else
         {
-            $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, $exit = true);
+            $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, true);
         }
     }
 
@@ -1588,14 +1588,14 @@ class baseRouter
              * Set the class name of the control.
              */
             $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
+            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, true);
 
             /**
              * 创建control类的实例。
              * Create an instance of the control.
              */
             $module = new $className();
-            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
+            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, true);
             $this->control = $module;
 
             /* include default value for module. */
@@ -1793,7 +1793,7 @@ class baseRouter
         }
         if($checkedModule[$var]) return true;
         if(!$exit) return false;
-        $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
+        $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, true);
     }
 
     /**
@@ -1843,15 +1843,15 @@ class baseRouter
 
         /* 2. 尝试在定制开发目录寻找扩展文件。Then try to find the custom extension file. */
         $this->extActionFile = $moduleExtPaths['custom'] . $this->methodName . '.php';
-        if(file_exists($this->extActionFile)) return true;;
+        if(file_exists($this->extActionFile)) return true;
 
         /* 3. 如果设置过vision，尝试在vision中查找扩展文件。If vision is set, try to find the vision extension file. */
         if($moduleExtPaths['vision']) $this->extActionFile = $moduleExtPaths['vision'] . $this->methodName . '.php';
-        if(file_exists($this->extActionFile)) return true;;
+        if(file_exists($this->extActionFile)) return true;
 
         /* 4. 在喧喧目录中查找扩展文件。Then try to find the xuan extension file. */
         if($moduleExtPaths['xuan']) $this->extActionFile = $moduleExtPaths['xuan'] . $this->methodName . '.php';
-        if(file_exists($this->extActionFile)) return true;;
+        if(file_exists($this->extActionFile)) return true;
 
         /* 5. 最后尝试寻找公共扩展文件。Finally, try to find the common extension file. */
         $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
@@ -2367,7 +2367,7 @@ class baseRouter
         if(!class_exists($targetClass))
         {
             $targetClass = class_exists('ext' . $moduleName. $class) ? 'ext' . $moduleName . $class : $moduleName . $class;
-            if(!class_exists($targetClass)) $this->triggerError(" The $class $targetClass not found", __FILE__, __LINE__, $exit = true);
+            if(!class_exists($targetClass)) $this->triggerError(" The $class $targetClass not found", __FILE__, __LINE__, true);
         }
 
         /**
@@ -2490,7 +2490,7 @@ class baseRouter
             }
             else
             {
-                if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, true);
 
                 $defaultParams[$key] = $defaultItem['default'];
             }
@@ -2568,14 +2568,14 @@ class baseRouter
         $classFile = $this->coreLibRoot . $className;
         if(is_dir($classFile)) $classFile .= DS . $className;
         $classFile .= '.class.php';
-        if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, $exit = true);
+        if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, true);
 
         /* 如果是静态调用，则返回(If static, return) */
         if($static) return true;
 
         /* 实例化该类(Instance it) */
         global ${$className};
-        if(!class_exists($className)) $this->triggerError("the class $className not found in $classFile", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($className)) $this->triggerError("the class $className not found in $classFile", __FILE__, __LINE__, true);
         if(!is_object(${$className})) ${$className} = new $className();
         return ${$className};
     }
@@ -2596,7 +2596,7 @@ class baseRouter
 
         /* 加载主配置文件。 Load the main config file. */
         $mainConfigFile = $this->configRoot . 'config.php';
-        if(!file_exists($mainConfigFile)) $this->triggerError("The main config file $mainConfigFile not found", __FILE__, __LINE__, $exit = true);
+        if(!file_exists($mainConfigFile)) $this->triggerError("The main config file $mainConfigFile not found", __FILE__, __LINE__, true);
         include $mainConfigFile;
     }
 
@@ -2827,7 +2827,7 @@ class baseRouter
     public function connectByPDO(object $params): object|bool
     {
         $dsn = null;
-        if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
+        if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, true);
         if(!isset($params->user)) return false;
         try
         {
@@ -2862,7 +2862,7 @@ class baseRouter
                 header("location: {$this->config->webRoot}checktable.php");
                 helper::end();
             }
-            static::triggerError($message, __FILE__, __LINE__, $exit = true);
+            static::triggerError($message, __FILE__, __LINE__, true);
         }
     }
 

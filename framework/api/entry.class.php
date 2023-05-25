@@ -320,7 +320,7 @@ class baseEntry
          * Set the class name of the control.
          **/
         $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-        if(!class_exists($className)) $app->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($className)) $app->triggerError("the control $className not found", __FILE__, __LINE__, true);
 
         $controller = new $className();
         $controller->viewType = 'json';
@@ -372,7 +372,7 @@ class baseEntry
         if(!class_exists($modelClass))
         {
             $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
+            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, true);
         }
 
         /**

@@ -416,7 +416,7 @@ class baseControl
 
             $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
             $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, true);
 
             $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
@@ -846,16 +846,13 @@ class baseControl
                 $siteActionExtFile = $actionExtPath['site'] . strtolower((string) $methodName) . '.php';
                 $file2Included     = file_exists($siteActionExtFile) ? $siteActionExtFile : $file2Included;
             }
-
-            /* If class name is my{$moduleName} then set classNameToFetch for include this file. */
-            if(str_contains($file2Included, DS . 'ext' . DS) and stripos(file_get_contents($file2Included), "class my{$moduleName} extends $moduleName") !== false) $classNameToFetch = "my{$moduleName}";
         }
 
         /**
          * 加载控制器文件。
          * Load the control file.
          */
-        if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
+        if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, true);
 
         chdir(dirname($file2Included));
         helper::import($file2Included);
@@ -865,7 +862,7 @@ class baseControl
          * Set the name of the class to be called.
          */
         $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-        if(!class_exists($className)) $this->app->triggerError(" The class $className not found", __FILE__, __LINE__, $exit = true);
+        if(!class_exists($className)) $this->app->triggerError(" The class $className not found", __FILE__, __LINE__, true);
 
         /**
          * 解析参数，创建模块control对象。

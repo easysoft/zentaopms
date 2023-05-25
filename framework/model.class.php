@@ -353,7 +353,7 @@ class model extends baseModel
 
         if(is_callable(array($this->{$taoClass}, $method))) return call_user_func_array(array($this->{$taoClass}, $method), $arguments);
 
-        $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+        $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }
 
     /**
@@ -390,6 +390,6 @@ class model extends baseModel
         $taoClass = $moduleName . 'Tao';
         if(method_exists($taoClass, $method)) return call_user_func_array("{$taoClass}::{$method}", $arguments);
 
-        $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+        $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }
 }
