@@ -2,5 +2,8 @@ title: table zt_case
 author: zhouxin
 version: "1.0"
 fields:
+  - field: title
+    range: 1-50
+    prefix: "用例"
   - field: story
     range: 1-10{2}
