@@ -1663,166 +1663,135 @@ class bugTest
     }
 
     /**
+     * 统计每天关闭的 bug 数。
      * Test get report data of closed bugs per day.
      *
      * @access public
      * @return array
      */
-    public function getDataOfClosedBugsPerDayTest()
+    public function getDataOfClosedBugsPerDayTest(): array
     {
-        $array = $this->objectModel->getDataOfClosedBugsPerDay();
+        $datas = $this->objectModel->getDataOfClosedBugsPerDay();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 统计每人提交的 bug 数。
      * Test get report data of openeded bugs per user.
      *
      * @access public
      * @return array
      */
-    public function getDataOfOpenedBugsPerUserTest()
+    public function getDataOfOpenedBugsPerUserTest(): array
     {
-        $array = $this->objectModel->getDataOfOpenedBugsPerUser();
+        $datas = $this->objectModel->getDataOfOpenedBugsPerUser();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 统计每人解决的 bug 数。
      * Test get report data of resolved bugs per user.
      *
      * @access public
      * @return array
      */
-    public function getDataOfResolvedBugsPerUserTest()
+    public function getDataOfResolvedBugsPerUserTest(): array
     {
-        $array = $this->objectModel->getDataOfResolvedBugsPerUser();
+        $datas = $this->objectModel->getDataOfResolvedBugsPerUser();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 统计每人关闭的 bug 数。
      * Test get report data of closed bugs per user.
      *
      * @access public
      * @return array
      */
-    public function getDataOfClosedBugsPerUserTest()
+    public function getDataOfClosedBugsPerUserTest(): array
     {
-        $array = $this->objectModel->getDataOfClosedBugsPerUser();
+        $datas = $this->objectModel->getDataOfClosedBugsPerUser();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 严重程度统计。
      * Test get report data of bugs per severity.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerSeverityTest()
+    public function getDataOfBugsPerSeverityTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerSeverity();
+        $datas = $this->objectModel->getDataOfBugsPerSeverity();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 解决方案统计。
      * Test get report data of bugs per resolution.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerResolutionTest()
+    public function getDataOfBugsPerResolutionTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerResolution();
+        $datas = $this->objectModel->getDataOfBugsPerResolution();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 状态统计。
      * Test get report data of bugs per status.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerStatusTest()
+    public function getDataOfBugsPerStatusTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerStatus();
+        $datas = $this->objectModel->getDataOfBugsPerStatus();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 优先级次数统计。
      * Test get report data of bugs per pri.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerPriTest()
+    public function getDataOfBugsPerPriTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerPri();
+        $datas = $this->objectModel->getDataOfBugsPerPri();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 激活次数统计。
      * Test get report data of bugs per status.
      *
      * @access public
@@ -1830,56 +1799,43 @@ class bugTest
      */
     public function getDataOfBugsPerActivatedCountTest()
     {
-        $array = $this->objectModel->getDataOfBugsPerActivatedCount();
+        $datas = $this->objectModel->getDataOfBugsPerActivatedCount();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 类型统计。
      * Test get report data of bugs per type.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerTypeTest()
+    public function getDataOfBugsPerTypeTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerType();
+        $datas = $this->objectModel->getDataOfBugsPerType();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
+     * 按照 bug 指派给统计。
      * Test get report data of bugs per assignedTo.
      *
      * @access public
      * @return array
      */
-    public function getDataOfBugsPerAssignedToTest()
+    public function getDataOfBugsPerAssignedToTest(): array
     {
-        $array = $this->objectModel->getDataOfBugsPerAssignedTo();
+        $datas = $this->objectModel->getDataOfBugsPerAssignedTo();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $datas;
     }
 
     /**
