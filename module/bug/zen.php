@@ -237,27 +237,19 @@ class bugZen extends bug
         $this->view->product         = $product;
         $this->view->branch          = $branch;
         $this->view->browseType      = $browseType;
-        $this->view->param           = $param;
         $this->view->currentModuleID = $moduleID;
+        $this->view->orderBy         = $orderBy;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
         $this->view->modules         = $this->tree->getOptionMenu($product->id, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $this->bug->getModulesForSidebar($product->id, $branch);
-        $this->view->bugs            = $bugs;
-        $this->view->summary         = $this->bug->summary($bugs);
-        $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
         $this->view->executions      = $executions;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch);
-        $this->view->releasedBuilds  = $this->loadModel('release')->getReleasedBuilds($product->id, $branch);
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($product->id);
-        $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
         $this->view->tasks           = $this->loadModel('task')->getByList($taskIdList);
+        $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
+        $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
-        $this->view->pager           = $pager;
-        $this->view->orderBy         = $orderBy;
-
         $this->display();
     }
 
@@ -1418,56 +1410,6 @@ class bugZen extends bug
             $this->loadModel('product')->setMenu($bug->product);
             $this->lang->product->menu->plan['subModule'] .= ',bug';
         }
-    }
-
-    /**
-     * 为查看bug页面设置View数据。
-     * Set $this->view for view bug page.
-     *
-     * @param  object $bug
-     * @param  string $from
-     * @return void
-     */
-    protected function setView4View(object $bug, string $from): void
-    {
-        $this->loadModel('project');
-        $this->loadModel('product');
-        $this->loadModel('build');
-        $this->loadModel('common');
-        $this->loadModel('repo');
-        $this->loadModel('user');
-
-        $bugID     = $bug->id;
-        $productID = $bug->product;
-        $product   = $this->product->getByID($productID);
-        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
-
-        $projects = $this->product->getProjectPairsByProduct($productID, (string)$bug->branch);
-        $this->session->set("project", key($projects), 'project');
-
-        $this->executeHooks($bugID);
-
-        /* Header and positon. */
-        $this->view->title      = "BUG #$bug->id $bug->title - " . $product->name;
-
-        /* Assign. */
-        $this->view->project     = $this->project->getByID($bug->project);
-        $this->view->productID   = $productID;
-        $this->view->branches    = $branches;
-        $this->view->modulePath  = $this->tree->getParents($bug->module);
-        $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
-        $this->view->bug         = $bug;
-        $this->view->from        = $from;
-        $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->actions     = $this->action->getList('bug', $bugID);
-        $this->view->builds      = $this->build->getBuildPairs($productID, 'all');
-        $this->view->preAndNext  = $this->common->getPreAndNextObject('bug', $bugID);
-        $this->view->product     = $product;
-        $this->view->linkCommits = $this->repo->getCommitsByObject($bugID, 'bug');
-        $this->view->actionList  = $this->bug->buildOperateMenu($bug, 'view');
-
-        $this->view->projects = array('' => '') + $projects;
     }
 
     /**

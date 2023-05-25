@@ -143,7 +143,7 @@ class bug extends control
     {
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
-        if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        if(!$bug) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->notFound, 'confirmed' => $this->createLink('qa', 'index'))));
 
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
@@ -153,7 +153,29 @@ class bug extends control
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
         if(!isonlybody()) $this->bugZen->setMenu4View($bug);
-        $this->bugZen->setView4View($bug, $from);
+
+        $bugID     = $bug->id;
+        $productID = $bug->product;
+        $product   = $this->product->getByID($productID);
+        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
+
+        $projects = $this->product->getProjectPairsByProduct($productID, (string)$bug->branch);
+        $this->session->set("project", key($projects), 'project');
+
+        $this->executeHooks($bugID);
+
+        $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
+        $this->view->product     = $product;
+        $this->view->project     = $this->loadModel('project')->getByID($bug->project);
+        $this->view->bug         = $bug;
+        $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
+        $this->view->modulePath  = $this->loadModel('tree')->getParents($bug->module);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branches    = $branches;
+        $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
+        $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
+        $this->view->actionList  = $this->loadModel('bug')->buildOperateMenu($bug, 'view');
         $this->display();
     }
 
