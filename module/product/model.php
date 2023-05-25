@@ -1386,17 +1386,16 @@ class productModel extends model
      */
     public function buildOperateMenu(object $product, $type = 'view'): string
     {
-        $menu   = '';
-        $params = "product=$product->id";
+        $menu    = '';
+        $params  = "product=$product->id";
+        $divider = "<div class='divider'></div>";
 
         if($type == 'view')
         {
-            $menu .= "<div class='divider'></div>";
-            $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
-            $menu .= "<div class='divider'></div>";
+            $menu .= $divider . $this->buildFlowMenu('product', $product, $type, 'direct') . $divider;
 
             $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
-            $menu .= "<div class='divider'></div>";
+            $menu .= $divider;
         }
 
         $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
