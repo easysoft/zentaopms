@@ -1221,7 +1221,7 @@ class productTao extends productModel
 
         /* Build execution pairs. */
         $this->app->loadLang('project');
-        $executionPairs = array('0' => '');
+        $executionPairs = array();
         foreach($executions as $executionID => $execution)
         {
             if($stageFilter && in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
