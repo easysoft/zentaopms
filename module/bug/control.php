@@ -827,15 +827,19 @@ class bug extends control
             $data = form::data($this->config->bug->form->close);
 
             $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
-            $this->bug->close($bug, $extra);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            $this->bug->afterClose($bug, $oldBug, $extra);
-
-            $this->executeHooks($bugID);
+            $this->bug->close($bug);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
-            $regionID = zget($output, 'regionID', 0);
+            if($oldBug->execution)
+            {
+                $this->loadModel('kanban');
+                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
+                if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            }
+
+            $this->executeHooks($bugID);
 
             return $this->send($this->bugZen->responseAfterOperate($bugID));
         }
@@ -895,28 +899,35 @@ class bug extends control
     public function batchClose(int $releaseID = 0, string $viewType = '')
     {
         $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
-        if($bugIdList)
+        if(!empty($_POST) && $bugIdList)
         {
             $bugIdList = array_unique($bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
-            $skipBugs  = array();
-            foreach($bugs as $bugID => $bug)
+
+            $bug      = form::data($this->config->bug->form->close)->get();
+            $skipBugs = array();
+            foreach($bugIdList as $bugID)
             {
-                if($bug->status == 'resolved')
+                $oldBug = $bugs[$bugID];
+                if($oldBug->status == 'resolved')
                 {
-                    $this->bug->close($bugID);
+                    $bug->id = (int)$bugID;
+                    $this->bug->close($bug);
                 }
-                else if($bug->status != 'closed')
+                else if($oldBug->status != 'closed')
                 {
                     $skipBugs[$bugID] = $bugID;
                 }
             }
 
             $this->loadModel('score')->create('ajax', 'batchOther');
-            if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)));
-            if($viewType) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
         }
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+
+        $load = true;
+        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true');
+
+        if($viewType) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load, 'closeModal' => true));
     }
 
     /**

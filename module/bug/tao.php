@@ -353,51 +353,6 @@ class bugTao extends bugModel
     }
 
     /**
-     * 关闭bug后，更新看板的状态。
-     * Update kanban status after close bug.
-     *
-     * @param  object    $bug
-     * @param  object    $oldBug
-     * @param  string    $extra
-     * @access protected
-     * @return array
-     */
-    protected function updateKanbanAfterClose(object $bug, object $oldBug, string $extra): array
-    {
-        $extra  = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-        if($oldBug->execution)
-        {
-            $this->loadModel('kanban');
-            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
-            if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-        }
-
-        return array($bug, $oldBug);
-    }
-
-    /**
-     * 关闭bug后，更新动态
-     * Update action after close bug.
-     *
-     * @param  object    $bug
-     * @param  object    $oldBug
-     * @access protected
-     * @return array
-     */
-    protected function updateActionAfterClose(object $bug, object $oldBug): array
-    {
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-
-        $this->loadModel('action');
-        $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->action->create('bug', $bug->id, 'Closed', $bug->comment);
-        $this->action->logHistory($actionID, $changes);
-
-        return array($bug, $oldBug);
-    }
-
-    /**
      * 处理搜索的查询语句。
      * Process search query.
      *

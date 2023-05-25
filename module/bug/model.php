@@ -965,46 +965,20 @@ class bugModel extends model
             ->data($bug, 'comment')
             ->autoCheck()
             ->checkFlow()
-            ->where('id')->eq((int)$bug->id)
+            ->where('id')->eq($bug->id)
             ->exec();
+
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         $changes = common::createChanges($oldBug, $bug);
         $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed');
-        $this->action->logHistory($actionID, $changes);
+        if($changes) $this->action->logHistory($actionID, $changes);
+
+        /* 给原bug的抄送人发送完消息后，再处理它。 */
+        /* After sending a message to the cc of the original bug, then process with it. */
+        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bug->id)->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * 关闭bug后的其他处理。
-     * Handle after bug closed.
-     *
-     * @param  object $bug
-     * @param  object $oldBug
-     * @param  string $extra
-     * @access public
-     * @return array
-     */
-    public function afterClose(object $bug, object $oldBug, string $extra = ''): array
-    {
-        if($oldBug->execution) list($bug, $oldBug) = $this->bugTao->updateKanbanAfterClose($bug, $oldBug, $extra);
-        list($bug, $oldBug) = $this->bugTao->updateActionAfterClose($bug, $oldBug);
-        $this->updateBugAssignedTo((int)$bug->id);
-
-        return array($bug, $oldBug);
-    }
-
-    /**
-     * 更新bug的抄送给状态为已关闭。
-     * Update bug assigned to value to closed.
-     *
-     * @param  int $bugID
-     * @access public
-     * @return viod
-     */
-    public function updateBugAssignedTo(int $bugID)
-    {
-        $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bugID)->exec();
     }
 
     /**
