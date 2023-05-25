@@ -29,37 +29,39 @@
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
     <?php endif;?>
   </div>
-  <div class="btn-toolbar pull-right">
-  <?php
-  if($libType == 'api')
-  {
-      if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
-      if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
-      if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
-  }
+  <?php if(!isonlybody()):?>
+    <div class="btn-toolbar pull-right">
+    <?php
+    if($libType == 'api')
+    {
+        if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+        if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
+        if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
+    }
 
-  if($canExport)
-  {
-      $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&moduleID=$moduleID", 'html', true);
-      if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID=$libID&version=0&release=$release&moduleID=$moduleID", 'html', true);
-      echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='{$exportMethod}'");
-  }
+    if($canExport)
+    {
+        $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&moduleID=$moduleID", 'html', true);
+        if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID=$libID&version=0&release=$release&moduleID=$moduleID", 'html', true);
+        echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='{$exportMethod}'");
+    }
 
-  if(common::hasPriv('doc', 'createLib'))
-  {
-      echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
-  }
+    if(common::hasPriv('doc', 'createLib'))
+    {
+        echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    }
 
-  if($libType == 'api')
-  {
-      if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
-  }
-  elseif($libID and common::hasPriv('doc', 'create'))
-  {
-      echo $this->doc->printCreateBtn($lib, $moduleID);
-  }
-  ?>
-  </div>
+    if($libType == 'api')
+    {
+        if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
+    }
+    elseif($libID and common::hasPriv('doc', 'create'))
+    {
+        echo $this->doc->printCreateBtn($lib, $moduleID);
+    }
+    ?>
+    </div>
+  <?php endif;?>
 </div>
 <div id='mainContent'class="fade <?php if(!empty($libTree)) echo 'flex';?>">
 <?php if(empty($libTree)):?>
