@@ -30,7 +30,8 @@ class filesystem
      */
     public function get(string $path, bool $lock = false): string
     {
-        if ($this->isFile($path)) {
+        if ($this->isFile($path))
+        {
             return $lock ? $this->sharedGet($path) : file_get_contents($path);
         }
 
@@ -42,13 +43,16 @@ class filesystem
      */
     public function sharedGet(string $path): string
     {
-        return $this->atomic($path, function ($path) {
+        return $this->atomic($path, function ($path)
+        {
             $contents = '';
             $handle = fopen($path, 'rb');
-            if ($handle) {
+            if ($handle)
+            {
                 $wouldBlock = false;
                 flock($handle, LOCK_SH | LOCK_NB, $wouldBlock);
-                while ($wouldBlock) {
+                while ($wouldBlock)
+                {
                     usleep(1000);
                     flock($handle, LOCK_SH | LOCK_NB, $wouldBlock);
                 }
@@ -71,7 +75,8 @@ class filesystem
      */
     public function getRequire(string $path)
     {
-        if ($this->isFile($path)) {
+        if ($this->isFile($path))
+        {
             return require $path;
         }
 
@@ -110,13 +115,17 @@ class filesystem
      */
     public function put(string $path, $contents, bool $lock = false)
     {
-        if ($lock) {
-            return $this->atomic($path, function ($path) use ($contents) {
+        if ($lock)
+        {
+            return $this->atomic($path, function ($path) use ($contents)
+            {
                 $handle = fopen($path, 'w+');
-                if ($handle) {
+                if ($handle)
+                {
                     $wouldBlock = false;
                     flock($handle, LOCK_EX | LOCK_NB, $wouldBlock);
-                    while ($wouldBlock) {
+                    while ($wouldBlock)
+                    {
                         usleep(1000);
                         flock($handle, LOCK_EX | LOCK_NB, $wouldBlock);
                     }
@@ -157,7 +166,8 @@ class filesystem
      */
     public function prepend(string $path, string $data): int
     {
-        if ($this->exists($path)) {
+        if ($this->exists($path))
+        {
             return $this->put($path, $data . $this->get($path));
         }
 
@@ -177,9 +187,7 @@ class filesystem
      */
     public function chmod(string $path, ?int $mode = null)
     {
-        if ($mode) {
-            return chmod($path, $mode);
-        }
+        if ($mode) return chmod($path, $mode);
 
         return substr(sprintf('%o', fileperms($path)), -4);
     }
@@ -195,12 +203,16 @@ class filesystem
 
         $success = true;
 
-        foreach ($paths as $path) {
+        foreach ($paths as $path)
+        {
             try {
-                if (! @unlink($path)) {
+                if (! @unlink($path))
+                {
                     $success = false;
                 }
-            } catch (ErrorException $e) {
+            }
+            catch (ErrorException $e)
+            {
                 $success = false;
             }
         }
@@ -229,7 +241,8 @@ class filesystem
      */
     public function link(string $target, string $link): bool
     {
-        if (! $this->windowsOs()) {
+        if (! $this->windowsOs())
+        {
             return symlink($target, $link);
         }
 
@@ -354,13 +367,16 @@ class filesystem
     {
         $files = array();
         $iterator = new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS);
-        $filter = new RecursiveCallbackFilterIterator($iterator, function ($fileInfo) use ($hidden) {
-            if (! $hidden && $fileInfo->getFilename()[0] === '.') {
+        $filter = new RecursiveCallbackFilterIterator($iterator, function ($fileInfo) use ($hidden)
+        {
+            if (! $hidden && $fileInfo->getFilename()[0] === '.')
+            {
                 return false;
             }
             return $fileInfo->isFile();
         });
-        foreach (new RecursiveIteratorIterator($filter) as $fileInfo) {
+        foreach (new RecursiveIteratorIterator($filter) as $fileInfo)
+        {
             $files[] = $fileInfo;
         }
         return $files;
@@ -380,8 +396,10 @@ class filesystem
         );
         $files = array();
 
-        foreach ($iterator as $file) {
-            if (! $hidden && $file->getFilename()[0] == '.') {
+        foreach ($iterator as $file)
+        {
+            if (! $hidden && $file->getFilename()[0] == '.')
+            {
                 continue;
             }
             $files[] = new \SplFileInfo($file->getPathname());
@@ -404,8 +422,10 @@ class filesystem
             RecursiveIteratorIterator::CATCH_GET_CHILD
         );
 
-        foreach ($iterator as $path => $dir) {
-            if ($dir->isDir() && !$dir->isLink()) {
+        foreach ($iterator as $path => $dir)
+        {
+            if ($dir->isDir() && !$dir->isLink())
+            {
                 $directories[] = $path;
             }
         }
@@ -420,9 +440,7 @@ class filesystem
      */
     public function makeDirectory(string $path, int $mode = 0755, bool $recursive = false, bool $force = false): bool
     {
-        if ($force) {
-            return @mkdir($path, $mode, $recursive);
-        }
+        if ($force) return @mkdir($path, $mode, $recursive);
 
         return mkdir($path, $mode, $recursive);
     }
@@ -432,9 +450,7 @@ class filesystem
      */
     public function moveDirectory(string $from, string $to, bool $overwrite = false): bool
     {
-        if ($overwrite && $this->isDirectory($to) && ! $this->deleteDirectory($to)) {
-            return false;
-        }
+        if ($overwrite && $this->isDirectory($to) && ! $this->deleteDirectory($to)) return false;
 
         return @rename($from, $to) === true;
     }
@@ -444,31 +460,33 @@ class filesystem
      */
     public function copyDirectory(string $directory, string $destination, int $options = null): bool
     {
-        if (! $this->isDirectory($directory)) {
-            return false;
-        }
+        if (! $this->isDirectory($directory)) return false;
 
         $options = $options ?: FilesystemIterator::SKIP_DOTS;
 
         // If the destination directory does not actually exist, we will go ahead and
         // create it recursively, which just gets the destination prepared to copy
         // the files over. Once we make the directory we'll proceed the copying.
-        if (! $this->isDirectory($destination)) {
+        if (! $this->isDirectory($destination))
+        {
             $this->makeDirectory($destination, 0777, true);
         }
 
         $items = new FilesystemIterator($directory, $options);
 
-        foreach ($items as $item) {
+        foreach ($items as $item)
+        {
             // As we spin through items, we will check to see if the current file is actually
             // a directory or a file. When it is actually a directory we will need to call
             // back into this function recursively to keep copying these nested folders.
             $target = $destination . DIRECTORY_SEPARATOR . $item->getBasename();
 
-            if ($item->isDir()) {
+            if ($item->isDir())
+            {
                 $path = $item->getPathname();
 
-                if (! $this->copyDirectory($path, $target, $options)) {
+                if (! $this->copyDirectory($path, $target, $options))
+                {
                     return false;
                 }
             }
@@ -477,7 +495,8 @@ class filesystem
             // location and keep looping. If for some reason the copy fails we'll bail out
             // and return false, so the developer is aware that the copy process failed.
             else {
-                if (! $this->copy($item->getPathname(), $target)) {
+                if (! $this->copy($item->getPathname(), $target))
+                {
                     return false;
                 }
             }
@@ -493,17 +512,20 @@ class filesystem
      */
     public function deleteDirectory(string $directory, bool $preserve = false): bool
     {
-        if (! $this->isDirectory($directory)) {
+        if (! $this->isDirectory($directory))
+        {
             return false;
         }
 
         $items = new FilesystemIterator($directory);
 
-        foreach ($items as $item) {
+        foreach ($items as $item)
+        {
             // If the item is a directory, we can just recurse into the function and
             // delete that sub-directory otherwise we'll just delete the file and
             // keep iterating through each file until the directory is cleaned.
-            if ($item->isDir() && ! $item->isLink()) {
+            if ($item->isDir() && ! $item->isLink())
+            {
                 $this->deleteDirectory($item->getPathname());
             }
 
@@ -515,7 +537,8 @@ class filesystem
             }
         }
 
-        if (! $preserve) {
+        if (! $preserve)
+        {
             @rmdir($directory);
         }
 
@@ -529,8 +552,10 @@ class filesystem
     {
         $allDirectories = $this->directories($directory);
 
-        if (! empty($allDirectories)) {
-            foreach ($allDirectories as $directoryName) {
+        if (! empty($allDirectories))
+        {
+            foreach ($allDirectories as $directoryName)
+            {
                 $this->deleteDirectory($directoryName);
             }
 
