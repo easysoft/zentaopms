@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('hasInternet', $zentaoData->hasData);?>
+<?php js::set('isIntranet',  $isIntranet);?>
 <div id='mainContent' class='main-content admin'>
   <div class="main <?php if(!$zentaoData->hasData) echo 'without-internet';?>">
     <div class="settings panel">

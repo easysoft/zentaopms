@@ -390,6 +390,14 @@ class helper extends baseHelper
                 return (string)$value;
         }
     }
+
+    /**
+     * @return bool
+     */
+    public static function isIntranet()
+    {
+        return !defined('USE_INTRANET') ? false : USE_INTRANET;
+    }
 }
 
 /**

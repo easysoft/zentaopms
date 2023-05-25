@@ -57,6 +57,7 @@ class admin extends control
         $this->view->dateUsed    = $this->admin->genDateUsed();
         $this->view->langNotCN   = common::checkNotCN();
         $this->view->hasInternet = $this->admin->checkInternet();
+        $this->view->isIntranet  = helper::isIntranet();
         $this->display();
     }
 
@@ -68,7 +69,7 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
-        if(defined('USE_INTRANET')) return $this->send(array('result' => 'success'));
+        if(helper::isIntranet()) return $this->send(array('result' => 'fail'));
 
         $hasInternet = $this->admin->checkInternet();
 

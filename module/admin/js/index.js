@@ -11,5 +11,5 @@ $(function()
         window.open($(this).data('link'));
     });
 
-    if(!hasInternet) $.get(createLink('admin', 'ajaxSetZentaoData'));
+    if(!hasInternet && !isIntranet) $.get(createLink('admin', 'ajaxSetZentaoData'));
 });
