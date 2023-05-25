@@ -18,8 +18,7 @@ class taskTest
      */
     public function updateObject($objectID, $param = array())
     {
-        global $tester;
-        $object = $tester->dbh->query("SELECT id, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
+        $object = $this->objectModel->dbh->query("SELECT id, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
             `color`,`desc`,`assignedTo`,`realStarted`,`finishedBy`,`canceledBy`,`closedReason` FROM zt_task WHERE id = $objectID")->fetch();
         foreach($object as $field => $value)
         {
@@ -59,8 +58,6 @@ class taskTest
      */
     public function batchCreateObject(array $param = array(), string $executionType = 'sprint', array $output = array()): array
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
         $executionIdList = array('sprint' => 2, 'stage' => 3, 'kanban' => 4);
         $executionID     = zget($executionIdList, $executionType);
 
@@ -112,9 +109,6 @@ class taskTest
      */
     public function afterBatchCreateObject(array $taskIdList, int $parentID = 0): bool
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         return $this->objectModel->afterBatchCreate($taskIdList, $parentID);
     }
 
@@ -190,7 +184,6 @@ class taskTest
      */
     public function doUpdateTest(int $taskID, array $param = array()): array|object|string
     {
-        global $tester;
         $oldTask = $this->objectModel->fetchByID($taskID);
         $task    = clone $oldTask;
 
@@ -199,7 +192,7 @@ class taskTest
             if(in_array($field, array_keys($param))) $task->$field = $param[$field];
         }
 
-        $this->objectModel->doUpdate($task, $oldTask, $tester->config->task->edit->requiredFields);
+        $this->objectModel->doUpdate($task, $oldTask, $this->objectModel->config->task->edit->requiredFields);
 
         if(dao::isError())
         {
@@ -243,9 +236,6 @@ class taskTest
      */
     public function afterStartTest(int $taskID, array $param = array(), string $comment = '', array $output = array()): array|bool
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $task        = new stdclass();
         $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => '', 'left' => 0, 'consumed' => 0);
         foreach($startFields as $field => $defaultvalue) $task->{$field} = $defaultvalue;
@@ -301,9 +291,6 @@ class taskTest
      */
     public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): array
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $task = new stdclass();
         $activateFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
         foreach($activateFields as $field => $defaultValue) $task->{$field} = $defaultValue;
@@ -360,12 +347,10 @@ class taskTest
      */
     public function updateTeamTest($taskID, $status, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft, $getTeam = false)
     {
-        global $tester;
-
         $task = new stdclass();
         $task->id           = $taskID;
         $task->status       = $status;
-        $task->lastEditedBy = $tester->app->user->account;
+        $task->lastEditedBy = $this->objectModel->app->user->account;
         $object = $this->objectModel->updateTeam($task, $team, $teamSource, $teamEstimate, $teamConsumed, $teamLeft);
 
         if($getTeam) return $this->objectModel->getTeamMembers($taskID);
@@ -426,9 +411,6 @@ class taskTest
      */
     public function closeTest($taskID, $param = array())
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $now  = helper::now();
         $task = new stdclass();
         $task->id             = $taskID;
@@ -628,8 +610,6 @@ class taskTest
         $task->status         = 'pause';
         $task->lastEditedBy   = 'admin';
         $task->lastEditedDate = helper::now();
-
-        $_SERVER['HTTP_HOST'] = '';
 
         $changes = $this->objectModel->pause($task, array());
 
@@ -1015,14 +995,13 @@ class taskTest
      */
     public function processTasksTest($executionID)
     {
-        global $tester;
-        $tasks = $tester->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetchAll('id');
         $parents = '0';
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents .= ",$task->parent";
         }
-        $parents = $tester->dao->select('*')->from(TABLE_TASK)->where('`id`')->in($parents)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $parents = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('`id`')->in($parents)->andWhere('deleted')->eq('0')->fetchAll('id');
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -1062,14 +1041,13 @@ class taskTest
      */
     public function processData4ReportTest($children, $field)
     {
-        global $tester;
-        $tasks = $tester->dao->select('*')->from(TABLE_TASK)->where('`execution`')->eq('101')->andWhere('deleted')->eq(0)->fetchAll('id');
+        $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('`execution`')->eq('101')->andWhere('deleted')->eq(0)->fetchAll('id');
         $parents = array();
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        $parents = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        $parents = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -1117,8 +1095,7 @@ class taskTest
      */
     public function getDataOfTasksPerExecutionTest($executionID)
     {
-        global $tester;
-        $tester->session->set('taskQueryCondition', "execution  = '{$executionID}' AND  status IN ('','wait','doing','done','pause','cancel') AND  deleted  = '0'");
+        $this->objectModel->session->set('taskQueryCondition', "execution  = '{$executionID}' AND  status IN ('','wait','doing','done','pause','cancel') AND  deleted  = '0'");
         $object = $this->objectModel->getDataOfTasksPerExecution();
 
         if(dao::isError())
@@ -1430,8 +1407,7 @@ class taskTest
         $data->date = date("Y-m-d");
         $this->objectModel->addTaskEffort($data);
 
-        global $tester;
-        $objectID = $tester->dao->lastInsertID();
+        $objectID = $this->objectModel->dao->lastInsertID();
         $object   = $this->objectModel->getEstimateById($objectID);
 
         if(dao::isError())
@@ -1699,12 +1675,11 @@ class taskTest
      */
     public function removeCreateRequiredFieldsTest(object $task, bool $selectTestStory): string|array
     {
-        global $tester;
-        $tester->config->task->create->requiredFields = 'name,type,execution,story,estimate,estStarted,deadline,module';
+        $this->objectModel->config->task->create->requiredFields = 'name,type,execution,story,estimate,estStarted,deadline,module';
         $this->objectModel->removeCreateRequiredFields($task, $selectTestStory);
 
         if(dao::isError()) return dao::getError();
-        return $tester->config->task->create->requiredFields;
+        return $this->objectModel->config->task->create->requiredFields;
     }
 
     /**
@@ -1719,9 +1694,6 @@ class taskTest
      */
     public function createTaskOfTestObject(array $param = array(), array $testTasks = array(), string $requiredField = ''): object|array
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $createFields = array(
             'execution'    => 3,
             'module'       => 0,
@@ -1746,7 +1718,7 @@ class taskTest
         {
             if(!empty($testTasks) and $requiredField == 'estStarted') unset($task->estStarted);
             if(!empty($testTasks) and $requiredField == 'deadline') unset($task->deadline);
-            $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredField . ',';
+            $this->objectModel->config->task->create->requiredFields = $this->objectModel->config->task->create->requiredFields . ',' . $requiredField . ',';
         }
         $objectID = $this->objectModel->createTaskOfTest($task, $testTasks);
 
@@ -1766,9 +1738,6 @@ class taskTest
      */
     public function createTaskOfAffairObject(array $param = array(), array $assignedToList = array(), string $requiredField = ''): object|array
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $createFields = array(
             'execution'    => 3,
             'module'       => 0,
@@ -1787,7 +1756,7 @@ class taskTest
         $task = new stdclass();
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
         foreach($param as $key => $value) $task->$key = $value;
-        if($requiredField) $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredField . ',';
+        if($requiredField) $this->objectModel->config->task->create->requiredFields = $this->objectModel->config->task->create->requiredFields . ',' . $requiredField . ',';
         $objectIdList = $this->objectModel->createTaskOfAffair($task, $assignedToList);
 
         if(dao::isError()) return dao::getError();
@@ -1806,9 +1775,6 @@ class taskTest
      */
     public function createMultiTaskObject(array $param = array(), array $teamData = array(), string $requiredField = ''): object|array
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $createFields = array(
             'execution'    => 3,
             'module'       => 1,
@@ -1835,7 +1801,7 @@ class taskTest
         {
             if(!empty($testTasks) and $requiredField == 'estStarted') unset($task->estStarted);
             if(!empty($testTasks) and $requiredField == 'deadline') unset($task->deadline);
-            $tester->config->task->create->requiredFields = $tester->config->task->create->requiredFields . ',' . $requiredField . ',';
+            $this->objectModel->config->task->create->requiredFields = $this->objectModel->config->task->create->requiredFields . ',' . $requiredField . ',';
         }
         $teamInfo = new stdclass();
         foreach($teamData as $key => $value) $teamInfo->{$key} = $value;
@@ -1890,13 +1856,11 @@ class taskTest
      */
     public function setTaskFilesTest(int|array $taskIdList): bool
     {
-        global $tester;
-
         $taskFiles = array();
         $taskID    = is_array($taskIdList) ? current($taskIdList) : 0;
         if(empty($taskFiles) and $taskID)
         {
-            $files = $tester->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetchAll('id');
+            $files = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetchAll('id');
             foreach($files as $file)
             {
                 $_FILES['files']['name'][]     = $file->title;
@@ -1923,12 +1887,10 @@ class taskTest
      */
     public function updateKanbanForBatchCreateTest(int $taskID, int $executionID, int $laneID, int $columnID, string $vision = 'rnd'): string
     {
-        global $tester;
-
-        $tester->config->vision = $vision;
+        $this->objectModel->config->vision = $vision;
 
         $this->objectModel->updateKanbanForBatchCreate($taskID, $executionID, $laneID, $columnID);
-        $cards = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
+        $cards = $this->objectModel->dao->select('cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
             ->andWhere('lane')->eq($laneID)
             ->andWhere('column')->eq($columnID)
@@ -1950,9 +1912,6 @@ class taskTest
      */
     public function afterCreateTest(int $taskID = 0, array $taskIdList = array(), int $bugID = 0, int $todoID = 0): object|bool
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $task = $this->objectModel->getByID($taskID);
         if(!$task) return false;
 
@@ -1961,19 +1920,19 @@ class taskTest
 
         if($bugID)
         {
-            $object = $tester->dao->findById($bugID)->from(TABLE_BUG)->fetch();
+            $object = $this->objectModel->dao->findById($bugID)->from(TABLE_BUG)->fetch();
         }
         elseif($todoID)
         {
-            $object = $tester->dao->findById($todoID)->from(TABLE_TODO)->fetch();
+            $object = $this->objectModel->dao->findById($todoID)->from(TABLE_TODO)->fetch();
         }
         elseif($task->story)
         {
-            $object = $tester->dao->findById($task->story)->from(TABLE_STORY)->fetch();
+            $object = $this->objectModel->dao->findById($task->story)->from(TABLE_STORY)->fetch();
         }
         else
         {
-            $object = $tester->dao->findById($taskID)->from(TABLE_TASK)->fetch();
+            $object = $this->objectModel->dao->findById($taskID)->from(TABLE_TASK)->fetch();
         }
 
         return $object;
@@ -2016,13 +1975,12 @@ class taskTest
      */
     public function manageTaskTeamMemberTest(string $mode, object $task, object $teamData): string|array
     {
-        global $tester;
-        $tester->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
+        $this->objectModel->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         $teams = $this->objectModel->manageTaskTeamMember($mode, $task, $teamData);
         if(dao::isError()) return dao::getError();
 
-        $taskTeamMember = $tester->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->andWhere('account')->eq(current($teams))->fetch();
+        $taskTeamMember = $this->objectModel->dao->select('task,account,estimate,consumed,`left`,transfer,status')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->andWhere('account')->eq(current($teams))->fetch();
         $taskTeamMember = json_decode(json_encode($taskTeamMember), true);
         return !empty($taskTeamMember) ? implode('|', $taskTeamMember) : '0';
     }
@@ -2036,15 +1994,12 @@ class taskTest
      * @access public
      * @return array|object|bool
      */
-    public function createTestChildTasksTest($taskID = 0, $testTasks = array()): array|object|bool
+    public function createTestChildTasksTest(int $taskID = 0, array $testTasks = array()): array|object|bool
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-
         $this->objectModel->createTestChildTasks($taskID, $testTasks);
         if(dao::isError()) return dao::getError();
 
-        $lastTaskID = $tester->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc')->fetch('objectID');
+        $lastTaskID = $this->objectModel->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc')->fetch('objectID');
         return $this->objectModel->getByID($lastTaskID);
     }
 
@@ -2060,15 +2015,13 @@ class taskTest
      */
     public function afterSplitTaskTest(int $oldParentTaskID = 0, array $children = array(), string $testObject = 'parent'): array|object|string
     {
-        global $tester;
-        $_SERVER['HTTP_HOST'] = $tester->config->db->host;
-        $oldParentTask        = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTaskID)->fetch();
+        $oldParentTask        = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTaskID)->fetch();
 
         $this->objectModel->afterSplitTask($oldParentTask, $children);
 
-        $tasks['children']         = $tester->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($oldParentTask->id)->fetchPairs('id');
-        $tasks['parent']           = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
-        $tasks['parentAction']     = $tester->dao->select('id as actionID')->from(TABLE_ACTION)->where('objectID')->eq($oldParentTask->id)->andWhere('objectType')->eq('task')->fetch();
+        $tasks['children']         = $this->objectModel->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($oldParentTask->id)->fetchPairs('id');
+        $tasks['parent']           = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+        $tasks['parentAction']     = $this->objectModel->dao->select('id as actionID')->from(TABLE_ACTION)->where('objectID')->eq($oldParentTask->id)->andWhere('objectType')->eq('task')->fetch();
         $tasks['parentEstStarted'] = $tasks['parent']->estStarted;
         $tasks['parentDeadline']   = $tasks['parent']->deadline;
 
@@ -2086,9 +2039,7 @@ class taskTest
      */
     public function copyTaskDataTest(int $parentTaskID, string $testType): object
     {
-        global $tester;
-
-        $parentTask = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentTaskID)->fetch();
+        $parentTask = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentTaskID)->fetch();
         foreach($parentTask as $key => $value)
         {
             if(strpos($key, 'Date')) unset($parentTask->$key);
@@ -2096,8 +2047,8 @@ class taskTest
 
         $taskID = $this->objectModel->copyTaskData($parentTask);
 
-        $testResult['subTaskEffort'] = $tester->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
-        $testResult['childrenTask']  = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $testResult['subTaskEffort'] = $this->objectModel->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
+        $testResult['childrenTask']  = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
 
         return $testResult[$testType];
     }
@@ -2115,12 +2066,11 @@ class taskTest
      */
     public function updateKanbanDataTest(int $executionID, int $taskID, int $laneID, int $columnID): object|bool
     {
-        global $tester;
         $result = $this->objectModel->updateKanbanData($executionID, (array)$taskID, $laneID, $columnID);
         if(!$result) return false;
 
-        if($laneID) $object = $tester->loadModel('kanban')->getLaneByID($laneID);
-        if($columnID) $object = $tester->loadModel('kanban')->getColumnByID($columnID);
+        if($laneID) $object = $this->objectModel->loadModel('kanban')->getLaneByID($laneID);
+        if($columnID) $object = $this->objectModel->loadModel('kanban')->getColumnByID($columnID);
         return isset($object) ? $object : false;
     }
 
@@ -2134,8 +2084,7 @@ class taskTest
      */
     public function isNoStoryExecutionTest(int $executionID): int|array
     {
-        global $tester;
-        $execution = $tester->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
+        $execution = $this->objectModel->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
         $result    = $this->objectModel->isNoStoryExecution($execution);
         if(dao::isError())
         {
@@ -2159,16 +2108,14 @@ class taskTest
      */
     public function checkRequired4BatchCreateTest(int $executionID, array $data, bool $checkRequiredItem = false, bool $checkLimitTaskDate = false): array
     {
-        global $tester;
-
-        $execution = $tester->loadModel('execution')->getById($executionID);
+        $execution = $this->objectModel->loadModel('execution')->getById($executionID);
 
         if($checkRequiredItem)
         {
-            $originRequiredFields = $tester->config->task->create->requiredFields;
-            $tester->config->task->create->requiredFields .= ',story';
+            $originRequiredFields = $this->objectModel->config->task->create->requiredFields;
+            $this->objectModel->config->task->create->requiredFields .= ',story';
             $result = $this->objectModel->checkRequired4BatchCreate($execution, $data);
-            $tester->config->task->create->requiredFields = $originRequiredFields;
+            $this->objectModel->config->task->create->requiredFields = $originRequiredFields;
 
             if(dao::isError())
             {
@@ -2216,13 +2163,9 @@ class taskTest
      */
     public function updateKanbanCellTest(int $taskID, int $executionID, array $output): array|string
     {
-        $_SERVER['HTTP_HOST'] = '';
-
         $this->objectModel->updateKanbanCell($taskID, $output, $executionID);
 
-        global $tester;
-        $cells = $tester->dao->select("CONCAT(id, ':', cards) as cards")->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->fetchPairs();
-
+        $cells = $this->objectModel->dao->select("CONCAT(id, ':', cards) as cards")->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->fetchPairs();
         if(dao::isError()) return dao::getError();
 
         return implode('|', $cells);
@@ -2240,12 +2183,34 @@ class taskTest
      */
     public function setTeamMemberObject(array $member, string $mode, bool $inTeam = false): array|object
     {
-        global $tester;
         $memberInfo = new stdclass();
         foreach($member as $field => $value) $memberInfo->{$field} = $value;
         $this->objectModel->setTeamMember($memberInfo, $mode, $inTeam);
 
         if(dao::isError()) return dao::getError();
-        return $tester->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($memberInfo->task)->andWhere('account')->eq($memberInfo->account)->fetch();
+        return $this->objectModel->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($memberInfo->task)->andWhere('account')->eq($memberInfo->account)->fetch();
+    }
+
+    /**
+     * Test afterChangeStatus method.
+     *
+     * @param  int    $taskID
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function afterChangeStatusTest(int $taskID, string $status): array
+    {
+        $task = new stdclass();
+        $task->status = $status;
+
+        $action = 'Started';
+        if($status == 'done')   $action = 'Finished';
+        if($status == 'closed') $action = 'Closed';
+
+        $oldTask = $this->objectModel->getByID($taskID);
+        $changes = common::createChanges($oldTask, $task);
+        $result  = $this->objectModel->afterChangeStatus($oldTask, $changes, $action, array());
+        return $changes;
     }
 }
