@@ -26,7 +26,7 @@ class tableData extends wg
         );
     }
 
-    private function buildContent(string|array|null $value)
+    private function buildContent(string|array|null|callable $value)
     {
         if(is_callable($value)) return $value();
 
@@ -39,7 +39,7 @@ class tableData extends wg
         return null;
     }
 
-    private function td(string|array|null $value): ?wg
+    private function td(string|array|null|callable $value): ?wg
     {
         $content = $this->buildContent($value);
         if(is_null($content)) return null;
@@ -52,7 +52,7 @@ class tableData extends wg
 
     }
 
-    private function tr(string $name, string|array|null $value)
+    private function tr(string $name, string|array|null|callable $value)
     {
         return h::tr
         (
