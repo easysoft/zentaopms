@@ -1365,14 +1365,13 @@ class taskZen extends task
             $skipTasks  = implode(',', $skipTasks);
             $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
             $cancelURL  = $this->server->HTTP_REFERER;
-            return array('result' => 'success', 'load' => true, 'message' => sprintf($this->lang->task->skipClose, $skipTasks));
+            return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
         }
 
         if(!empty($parentTasks))
         {
             $parentTasks = implode(',', $parentTasks);
-            return print(js::alert(sprintf($this->lang->task->error->closeParent, $parentTasks)) . js::reload('parent'));
-            return array('result' => 'success', 'load' => array('alert' => sprintf($this->lang->task->error->closeParent, $parentTasks), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+            return array('result' => 'success', 'load' => true, 'message' => sprintf($this->lang->task->error->closeParent, $parentTasks));
         }
 
         return array('result' => 'success', 'load' => true);
