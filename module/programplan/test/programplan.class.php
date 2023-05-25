@@ -162,8 +162,8 @@ class programplanTest
     /**
      * Test get duration.
      *
-     * @param  date   $begin
-     * @param  date   $end
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return int
      */

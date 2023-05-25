@@ -429,7 +429,7 @@ class product extends control
      * Road map of a product.
      *
      * @param  int    $productID
-     * @param  stirng $branch
+     * @param  string $branch
      * @access public
      * @return void
      */

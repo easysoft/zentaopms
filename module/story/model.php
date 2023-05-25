@@ -2571,8 +2571,8 @@ class storyModel extends model
     /**
      * Batch change the stage of story.
      *
-     * @param $storyIdList
-     * @param $stage
+     * @param array  $storyIdList
+     * @param string $stage
      *
      * @access public
      * @return array

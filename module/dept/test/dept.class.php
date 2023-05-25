@@ -292,7 +292,7 @@ class deptTest
      * @param  string $deptID
      * @param  string $count
      * @param  string $orderBy
-     * @param  null   $pager
+     * @param  object $pager
      * @access public
      * @return array
      */

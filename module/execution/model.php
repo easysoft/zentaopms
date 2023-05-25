@@ -2129,7 +2129,7 @@ class executionModel extends model
      *
      * @param  string  $module
      * @param  string  $method
-     * @param  mix     $extra
+     * @param  mixed   $extra
      * @access public
      * @return void
      */
@@ -4093,8 +4093,8 @@ class executionModel extends model
      *
      * @param  array   $sets
      * @param  int     $itemCounts
-     * @param  date    $begin
-     * @param  date    $end
+     * @param  string  $begin
+     * @param  string  $end
      * @param  string  $mode
      * @access public
      * @return array

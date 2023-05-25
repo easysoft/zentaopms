@@ -1313,7 +1313,7 @@ class user extends control
     /**
      * Ajax get contact list.
      *
-     * @param  $dropdownName mailto|whitelist
+     * @param  string $dropdownName mailto|whitelist
      * @access public
      * @return string
      */

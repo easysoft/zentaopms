@@ -393,7 +393,7 @@ class caselib extends control
      * @param  string  $keywords
      * @param  string  $module
      * @param  string  $method
-     * @param  mix     $extra
+     * @param  mixed   $extra
      * @access public
      * @return void
      */

@@ -1415,7 +1415,7 @@ class productplanModel extends model
      * Get plan list by ids.
      *
      * @param  array  $planIds
-     * @param  boo    $order
+     * @param  bool   $order
      * @access public
      * @return array
      */

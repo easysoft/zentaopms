@@ -399,8 +399,8 @@ class productPlan
     /**
      * Link project
      *
-     * @param  $projectID mixed $projectID
-     * @param  $newPlans  mixed $newPlans
+     * @param  int   $projectID
+     * @param  mixed $newPlans
      * @access public
      * @return void
      */

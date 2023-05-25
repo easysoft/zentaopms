@@ -11,7 +11,7 @@ class buildTest
      * function getByID by test
      *
      * @param  string $buildID
-     * @param  beel   $setImgSize
+     * @param  bool   $setImgSize
      * @access public
      * @return object
      */
@@ -431,7 +431,7 @@ class buildTest
 
     /**
      * Test get build's data for block.
-     * 
+     *
      * @param  int     $projectID
      * @param  string  $orderBy
      * @param  int     $limit

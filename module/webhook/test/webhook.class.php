@@ -160,8 +160,8 @@ class webhookTest
     /**
      * Update Test
      *
-     * @param  aray  mixed $create
-     * @param  int   mixed $id
+     * @param  array $create
+     * @param  int   $id
      * @access public
      * @return int
      */

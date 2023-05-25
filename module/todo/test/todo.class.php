@@ -176,16 +176,14 @@ class todoTest
     /**
      * Test get todo list of a user.
      *
-     * @param string $type
-     * @param string $account
-     * @param string $status
-     * @param int $limit
-     * @param mixed $pager
-     * @param string $orderBy
-     * @param status $status
-     * @param begin" $begin"
+     * @param  string $type
+     * @param  string $account
+     * @param  string $status
+     * @param  int    $limit
+     * @param  object $pager
+     * @param  string $orderBy
      * @access public
-     * @return void
+     * @return int
      */
     public function getListTest($type = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy = "date, status, begin")
     {

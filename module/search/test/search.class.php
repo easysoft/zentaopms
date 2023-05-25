@@ -86,7 +86,7 @@ class searchTest
      * Test get list.
      *
      * @param  string $keywords
-     * @param  sreing $type
+     * @param  string $type
      * @access public
      * @return int
      */

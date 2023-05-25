@@ -389,9 +389,9 @@ class storyTest
     /**
      * Test batch change story plan.
      *
-     * @param  arary  $storyIdList
-     * @param  int    $planID
-     * @param  int    $oldPlanID
+     * @param  array $storyIdList
+     * @param  int   $planID
+     * @param  int   $oldPlanID
      * @access public
      * @return void
      */
@@ -408,7 +408,7 @@ class storyTest
     /**
      * Test batch change story branch.
      *
-     * @param  arary  $storyIdList
+     * @param  array  $storyIdList
      * @param  int    $branchID
      * @param  string $confirm
      * @param  array  $plans
@@ -428,7 +428,7 @@ class storyTest
     /**
      * Test batch change stage.
      *
-     * @param  arrau  $storyIdList
+     * @param  array  $storyIdList
      * @param  string $stage
      * @access public
      * @return void

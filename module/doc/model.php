@@ -2137,7 +2137,7 @@ class docModel extends model
     /**
      * Get project-related document library IDs.
      *
-     * @param  $projectID
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -2730,7 +2730,7 @@ class docModel extends model
     /**
      * Count the number and size of files on the current page.
      *
-     * @param  arary $files
+     * @param  array  $files
      * @access public
      * @return string
      */

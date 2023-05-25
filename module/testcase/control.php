@@ -414,7 +414,7 @@ class testcase extends control
 
     /**
      * Create a test case.
-     * @param        $productID
+     * @param int    $productID
      * @param string $branch
      * @param int    $moduleID
      * @param string $from
@@ -2476,7 +2476,7 @@ class testcase extends control
 
             // if(!empty($_POST['syncToZentao']))
             //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
-            
+
             // $nodeID = $_POST['node'];
             // $node   = $this->zanode->getNodeByID($_POST['node']);
 

@@ -1655,7 +1655,7 @@ class pivotModel extends model
      *
      * @param  array   $columnRows
      * @param  array   $groups
-     * @param  arry    $column
+     * @param  array   $column
      * @param  string  $showColTotal
      * @param  int     $uuName
      * @access public
@@ -2150,10 +2150,12 @@ class pivotModel extends model
 }
 
 /**
- * @param $pre
- * @param $next
+ * Sort summary
  *
- * @return int
+ * @param  array  $pre
+ * @param  array  $next
+ * @access public
+ * @return mixed
  */
 function sortSummary($pre, $next)
 {

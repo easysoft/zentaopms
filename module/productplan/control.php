@@ -896,7 +896,7 @@ class productplan extends control
     /**
      * Batch unlink story.
      *
-     * @param        $planID
+     * @param int    $planID
      * @param string $orderBy
      *
      * @access public

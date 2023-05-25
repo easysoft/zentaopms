@@ -402,9 +402,9 @@ class gitModel extends model
     }
 
     /**
-     * Pring log.
+     * Print log.
      *
-     * @param  sting    $log
+     * @param  string $log
      * @access public
      * @return void
      */

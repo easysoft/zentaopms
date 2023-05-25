@@ -11,7 +11,7 @@ class releaseTest
      * function getByIDTest by release
      *
      * @param  string $releaseID
-     * @param  beel   $setImgSize
+     * @param  bool   $setImgSize
      * @access public
      * @return array
      */

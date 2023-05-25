@@ -949,7 +949,7 @@ class fileModel extends model
     /**
      * Dwordize for imagecreatefrombmp
      *
-     * @param  streing $str
+     * @param  string  $str
      * @access private
      * @return int
      */

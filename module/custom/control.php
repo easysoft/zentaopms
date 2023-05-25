@@ -814,7 +814,7 @@ class custom extends control
     /**
      * Reset required.
      *
-     * @param  srting $module
+     * @param  string $module
      * @param  string $confirm
      * @access public
      * @return void

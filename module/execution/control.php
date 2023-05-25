@@ -3159,7 +3159,7 @@ class execution extends control
      * Manage products.
      *
      * @param  int    $executionID
-     * @param  from   $from
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -3781,7 +3781,7 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $module
      * @param  string $method
-     * @param  mix    $extra
+     * @param  mixed  $extra
      * @access public
      * @return void
      */

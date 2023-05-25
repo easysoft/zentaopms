@@ -1019,7 +1019,7 @@ class testtaskModel extends model
      *
      * @param  int    $taskID
      * @param  int    $user
-     * @param  obejct $pager
+     * @param  object $pager
      * @access public
      * @return array
      */

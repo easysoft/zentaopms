@@ -188,7 +188,7 @@ class convertModel extends model
     /**
      * Get jira data from file.
      *
-     * @param  sting  $module
+     * @param  string $module
      * @param  int    $lastID
      * @param  int    $limit
      * @access public

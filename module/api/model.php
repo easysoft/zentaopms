@@ -884,7 +884,7 @@ class apiModel extends model
      * Get demo data.
      *
      * @param  string   $table
-     * @param  stirng   $version
+     * @param  string   $version
      * @access public
      * @return array
      */

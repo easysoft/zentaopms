@@ -367,7 +367,7 @@ class treeModel extends model
     /**
      * Build tree array.
      *
-     * @param  $&treeMenu
+     * @param  array  $&treeMenu
      * @param  array  $modules
      * @param  object $module
      * @param  string $moduleName

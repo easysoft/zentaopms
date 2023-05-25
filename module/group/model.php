@@ -1968,9 +1968,10 @@ class groupModel extends model
     }
 
     /**
-     * update priv info
+     * Update priv info
      *
-     * @param   void
+     * @param   int    $privID
+     * @param   string $lang
      * @return  void
      **/
     public function updatePriv($privID, $lang)

@@ -72,10 +72,10 @@ class actionTest
     /**
      * Test get product, project, execution of the object.
      *
-     * @param String $objectType
-     * @param Int    $objectID
-     * @param String $actionType
-     * @param String $extra
+     * @param string $objectType
+     * @param int    $objectID
+     * @param string $actionType
+     * @param string $extra
      * @access public
      * @return array
      */

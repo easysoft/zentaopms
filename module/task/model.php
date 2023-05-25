@@ -392,7 +392,7 @@ class taskModel extends model
      * 更新父任务的状态.
      * Update parent status by taskID.
      *
-     * @param $taskID
+     * @param int $taskID
      *
      * @access public
      * @return bool
@@ -3249,10 +3249,10 @@ class taskModel extends model
     /**
      * Build nested list.
      *
-     * @param  objecct $execution
-     * @param  object  $task
-     * @param  bool    $isChild
-     * @param  bool    $showmore
+     * @param  object $execution
+     * @param  object $task
+     * @param  bool   $isChild
+     * @param  bool   $showmore
      * @access public
      * @return string
      */

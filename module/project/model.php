@@ -612,7 +612,7 @@ class projectModel extends model
      * Get project pairs by programID.
      *
      * @param  int          $programID
-     * @param  status       $status    all|wait|doing|suspended|closed|noclosed
+     * @param  string       $status    all|wait|doing|suspended|closed|noclosed
      * @param  bool         $isQueryAll
      * @param  string       $orderBy
      * @param  string       $excludedModel
@@ -2713,9 +2713,9 @@ class projectModel extends model
     /**
      * Get the objects under the project.
      *
-     * @param  constant $table
-     * @param  int      $projectID
-     * @param  string   $type
+     * @param  string $table
+     * @param  int    $projectID
+     * @param  string $type
      * @access public
      * @return object
      */

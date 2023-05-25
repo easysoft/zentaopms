@@ -21,31 +21,31 @@ class syncer
 {
     /**
      * The svn binary svnClient.
-     * 
-     * @var string   
+     *
+     * @var string
      * @access public
      */
     public $svnClient;
 
     /**
      * The zentao client.
-     * 
-     * @var string   
+     *
+     * @var string
      * @access public
      */
     public $zentaoClient;
 
     /**
      * Repos.
-     * 
-     * @var array 
+     *
+     * @var array
      * @access public
      */
-    public $repos = array(); 
+    public $repos = array();
 
     /**
      * The log root.
-     * 
+     *
      * @var string
      * @access public
      */
@@ -53,7 +53,7 @@ class syncer
 
     /**
      * The construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -68,8 +68,8 @@ class syncer
 
     /**
      * Set config.
-     * 
-     * @param  object    $config 
+     *
+     * @param  object    $config
      * @access public
      * @return void
      */
@@ -80,7 +80,7 @@ class syncer
 
    /**
    * Set timezone.
-   * 
+   *
    * @access public
    * @return void
    */
@@ -91,7 +91,7 @@ class syncer
 
     /**
      * Set the repos.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -103,7 +103,7 @@ class syncer
 
     /**
      * Set the log root.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -115,7 +115,7 @@ class syncer
 
     /**
      * Login to zentao.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -127,8 +127,8 @@ class syncer
     }
 
     /**
-     * Run. 
-     * 
+     * Run.
+     *
      * @access public
      * @return void
      */
@@ -148,7 +148,7 @@ class syncer
                 $this->printLog("start from revision $savedRevision");
                 $logs = $this->getRepoLogs($repo, $savedRevision);
                 $revisions = $this->getRevisionsFromLogs($logs);
-                if(!$revisions) 
+                if(!$revisions)
                 {
                     $this->printLog("no logs");
                     continue;
@@ -174,8 +174,8 @@ class syncer
 
     /**
      * Set repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return void
      */
@@ -188,8 +188,8 @@ class syncer
 
     /**
      * Set the svn binary svnClient of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return void
      */
@@ -202,8 +202,8 @@ class syncer
 
     /**
      * Set the log file of a repo.
-     * 
-     * @param  string    $repoName 
+     *
+     * @param  string    $repoName
      * @access public
      * @return void
      */
@@ -214,10 +214,10 @@ class syncer
 
     /**
      * set the root path of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
-     * @return void 
+     * @return void
      */
     public function setRepoRoot($repo)
     {
@@ -230,9 +230,9 @@ class syncer
 
     /**
      * Get repo logs.
-     * 
-     * @param  object  $repo 
-     * @param  int     $fromRevision 
+     *
+     * @param  object  $repo
+     * @param  int     $fromRevision
      * @access public
      * @return string
      */
@@ -249,7 +249,7 @@ class syncer
 
     /**
      * Get the saved revision.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -261,8 +261,8 @@ class syncer
 
     /**
      * Get revisons from logs.
-     * 
-     * @param  string    $logs 
+     *
+     * @param  string    $logs
      * @access public
      * @return array|bool
      */
@@ -275,8 +275,8 @@ class syncer
 
     /**
      * Save the last revision.
-     * 
-     * @param  int    $revision 
+     *
+     * @param  int    $revision
      * @access public
      * @return void
      */
@@ -286,9 +286,9 @@ class syncer
     }
 
     /**
-     * Pring log.
-     * 
-     * @param  sting    $log 
+     * Print log.
+     *
+     * @param  string $log
      * @access public
      * @return void
      */

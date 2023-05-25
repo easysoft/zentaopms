@@ -340,7 +340,7 @@ class taskTest
      * @param  array    $team
      * @param  array    $teamSource
      * @param  array    $teamConsumed
-     * @param  araay    $teamLeft
+     * @param  array    $teamLeft
      * @access public
      * @return object
      */

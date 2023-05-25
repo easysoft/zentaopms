@@ -3828,9 +3828,9 @@ class kanbanModel extends model
     /**
      * Get cards to import.
      *
-     * @param  int $kanbanID
-     * @param  int $excludedID
-     * @param  obj $pager
+     * @param  int    $kanbanID
+     * @param  int    $excludedID
+     * @param  object $pager
      * @access public
      * @return array
      */
