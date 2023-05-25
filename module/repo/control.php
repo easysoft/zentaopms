@@ -428,7 +428,7 @@ class repo extends control
         }
 
         $this->commonAction($repoID, $objectID);
-        if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
+        if($browser['name'] != 'ie' and $repo->SCM == 'gitlab') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
         if($_POST)
         {
@@ -605,32 +605,34 @@ class repo extends control
         $lastRevision = current($revisions);
 
         /* Get files info. */
-        if($repo->SCM == 'Gitlab')
+        $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
+        $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
+        $this->scm->setEngine($repo);
+        if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
         {
-            $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
-            $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
-            if(!$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
+            if($repo->SCM == 'Gitlab')
             {
                 $infos = $this->repo->getFileList($repo, $branchID, $path);
-
-                if($cacheFile)
-                {
-                    if(!file_exists($cacheFile . '.lock'))
-                    {
-                        touch($cacheFile . '.lock');
-                        file_put_contents($cacheFile, serialize($infos));
-                        unlink($cacheFile . '.lock');
-                    }
-                }
             }
             else
             {
-                $infos = unserialize(file_get_contents($cacheFile));
+                $infos        = $this->scm->ls($path, $revision);
+                $revisionList = array_column($infos, 'revision', 'revision');
+                $comments     = $this->repo->getHistory($repoID, $revisionList);
+                foreach($infos as $info)
+                {
+                    if(isset($comments[$info->revision]))
+                    {
+                        $comment = $comments[$info->revision];
+                        $info->comment = $comment->comment;
+                    }
+                }
             }
+            if($cacheFile) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
         }
         else
         {
-            $infos = $this->repo->getFileCommits($repo, $branchID, $path);
+            $infos = unserialize(file_get_contents($cacheFile));
         }
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
