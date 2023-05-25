@@ -271,6 +271,64 @@ class bug extends control
     }
 
     /**
+     * 确认 bug。
+     * confirm a bug.
+     *
+     * @param  int    $bugID
+     * @param  string $kanbanData fromColID=,toColID=,fromLaneID=,toLaneID=,regionID=
+     * @access public
+     * @return void
+     */
+    public function confirm(int $bugID, string $kanbanParams = '')
+    {
+        if(!empty($_POST))
+        {
+            /* 处理看板相关的参数。*/
+            /* Process the params related to kanban. */
+            $kanbanParams = str_replace(array(',', ' '), array('&', ''), $kanbanParams);
+            parse_str($kanbanParams, $kanbanData);
+
+            /* 构造 bug 的表单数据。*/
+            /* Structure the bug form data. */
+            $bug = form::data($this->config->bug->form->confirm)->add('id', $bugID)->setDefault('confirmed', 1)->get();
+            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
+
+            $this->bug->confirm($bug, $kanbanData);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* 执行工作流的扩展动作。*/
+            /* Execute extend actions.*/
+            $message = $this->executeHooks($bugID);
+
+            /* 弹窗内的返回。*/
+            /* Respond in Modal. */
+            if(isonlybody())
+            {
+                $regionID = zget($kanbanData, 'regionID', 0);
+                $this->bugZen->responseInModal($bug->execution, '', $regionID);
+            }
+
+            if(!$message) $message = $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
+        }
+
+        $bug = $this->bug->getByID($bugID);
+
+        /* 检查 bug 所属执行的权限。*/
+        /* Check privilege for execution of the bug. */
+        $this->bugZen->checkBugExecutionPriv($bug);
+
+        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->confirm;
+        $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->assignedTo);
+        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->display();
+    }
+
+    /**
      * Bug 的统计报表。
      * The report page.
      *
@@ -592,63 +650,6 @@ class bug extends control
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
-    /**
-     * 确认 bug。
-     * confirm a bug.
-     *
-     * @param  int    $bugID
-     * @param  string $kanbanData fromColID=,toColID=,fromLaneID=,toLaneID=,regionID=
-     * @access public
-     * @return void
-     */
-    public function confirm(int $bugID, string $kanbanParams = '')
-    {
-        if(!empty($_POST))
-        {
-            /* 处理看板相关的参数。*/
-            /* Process the params related to kanban. */
-            $kanbanParams = str_replace(array(',', ' '), array('&', ''), $kanbanParams);
-            parse_str($kanbanParams, $kanbanData);
-
-            /* 构造 bug 的表单数据。*/
-            /* Structure the bug form data. */
-            $bug = form::data($this->config->bug->form->confirm)->add('id', $bugID)->setDefault('confirmed', 1)->get();
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
-
-            $this->bug->confirm($bug, $kanbanData);
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            /* 执行工作流的扩展动作。*/
-            /* Execute extend actions.*/
-            $message = $this->executeHooks($bugID);
-
-            /* 弹窗内的返回。*/
-            /* Respond in Modal. */
-            if(isonlybody())
-            {
-                $regionID = zget($kanbanData, 'regionID', 0);
-                $this->bugZen->responseInModal($bug->execution, '', $regionID);
-            }
-
-            if(!$message) $message = $this->lang->saveSuccess;
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
-        }
-
-        $bug = $this->bug->getByID($bugID);
-
-        /* 检查 bug 所属执行的权限。*/
-        /* Check privilege for execution of the bug. */
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->confirm;
-        $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('noclosed', $bug->assignedTo);
-        $this->view->actions = $this->action->getList('bug', $bugID);
-        $this->display();
-    }
 
     /**
      * 批量确认BUG。
