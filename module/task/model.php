@@ -1314,7 +1314,6 @@ class taskModel extends model
     {
         $today = helper::today();
 
-        a($workhour);die;
         /* Fix bug#3036. */
         foreach($workhour->consumed as $id => $item) $workhour->consumed[$id] = trim($item);
         foreach($workhour->consumed as $id => $item)
