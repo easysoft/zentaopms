@@ -887,6 +887,7 @@ class productModel extends model
     }
 
     /**
+     * 根据产品列表获取关联的项目列表。
      * Get project pairs by product.
      *
      * @param  array  $productIdList
@@ -906,6 +907,7 @@ class productModel extends model
     }
 
     /**
+     * 获取关联某产品的项目键值对列表。
      * Get project pairs by product.
      *
      * @param  int    $productID
@@ -1256,17 +1258,7 @@ class productModel extends model
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
         /* Build result. */
-        $statsData = array(
-            $programList,
-            $productList,
-            $planList,
-            $projectList,
-            $executionList,
-            $projectProduct,
-            $projectLatestExecutions,
-            $hourList,
-            $releaseList
-        );
+        $statsData = array($programList, $productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList);
         /* Convert predefined HTML entities to characters. */
         $statsData = $this->convertHtmlSpecialChars($statsData);
 
