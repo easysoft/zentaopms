@@ -240,7 +240,7 @@ class task extends control
                 ->add('id', $taskID)
                 ->get();
 
-            $changes = $this->task->assign($task);
+            $this->task->assign($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($taskID);
@@ -430,7 +430,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $taskData, $changes, $this->post->left, $this->post->comment, $output);
+            $result = $this->task->afterStart($task, $changes, $this->post->left, $output);
             if(is_array($result)) $this->send($result);
 
             /* Get the information returned after a task is started. */
@@ -665,7 +665,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $taskData, $changes, 0, $this->post->comment, $output);
+            $result = $this->task->afterStart($task, $changes, 0, $output);
             if(is_array($result)) $this->send($result);
 
             /* Get the information returned after a task is started. */
@@ -841,7 +841,7 @@ class task extends control
             $taskIDList = array_unique($this->post->taskIDList);
 
             $tasks = $this->task->getByList($taskIDList);
-            foreach($tasks as $taskID => $task)
+            foreach($tasks as $task)
             {
                 if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
 

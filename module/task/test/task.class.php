@@ -229,12 +229,11 @@ class taskTest
      *
      * @param  int        $taskID
      * @param  array      $param
-     * @param  string     $comment
      * @param  array      $output
      * @access public
      * @return array|bool
      */
-    public function afterStartTest(int $taskID, array $param = array(), string $comment = '', array $output = array()): array|bool
+    public function afterStartTest(int $taskID, array $param = array(), array $output = array()): array|bool
     {
         $task        = new stdclass();
         $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => '', 'left' => 0, 'consumed' => 0);
@@ -243,7 +242,7 @@ class taskTest
 
         $oldTask = $this->objectModel->getByID($taskID);
         $changes = $this->objectModel->start($oldTask, $task);
-        $result  = $this->objectModel->afterStart($oldTask, $task, $changes, $task->left, $comment, $output);
+        $result  = $this->objectModel->afterStart($oldTask, $changes, $task->left, $output);
         return $result;
     }
 

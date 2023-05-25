@@ -158,11 +158,9 @@ class taskModel extends model
     {
         $this->loadModel('story');
 
-        $parentID      = !empty($tasks) ? current($tasks)->parent : 0;
-        $oldParentTask = $this->dao->findById($parentID)->from(TABLE_TASK)->fetch();
-        $executionID   = !empty($tasks) ? current($tasks)->execution : 0;
-        $execution     = $this->loadModel('execution')->getById($executionID);
-        $taskIdList    = array();
+        $parentID    = !empty($tasks) ? current($tasks)->parent : 0;
+        $executionID = !empty($tasks) ? current($tasks)->execution : 0;
+        $taskIdList  = array();
         foreach($tasks as $task)
         {
             /* Get the lane and column of the current task. */
@@ -1270,15 +1268,13 @@ class taskModel extends model
      * Other data process after task start.
      *
      * @param  object     $oldTask
-     * @param  object     $task
      * @param  array      $changes
      * @param  int        $left
-     * @param  string     $comment
      * @param  array      $output
      * @access public
      * @return array|bool
      */
-    public function afterStart(object $oldTask, object $task, array $changes, int $left, string $comment, array $output): array|bool
+    public function afterStart(object $oldTask, array $changes, int $left, array $output): array|bool
     {
         /* Update the data of the parent task. */
         if($oldTask->parent > 0) $this->computeBeginAndEnd($oldTask->parent);
@@ -3955,7 +3951,7 @@ class taskModel extends model
         $files = $this->loadModel('file')->saveUpload('task', $task->id);
         if($changes || $this->post->comment)
         {
-            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('task', $task->id, $action, $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
