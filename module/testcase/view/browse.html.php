@@ -66,7 +66,7 @@ js::set('langNormal',       $lang->testcase->normal);
           <span class="text-muted"><?php echo $lang->testcase->noScene;?></span>
           <?php if((empty($productID) or common::canModify('product', $product)) and common::hasPriv('testcase', 'createScene') and $browseType != 'bysuite'):?>
           <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-          <?php  echo html::a($this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->newScene, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
+          <?php  if($productID) echo html::a($this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->newScene, '', "class='btn btn-info' data-app='{$this->app->tab}'");?>
            <?php endif;?>
         <?php else: ?>
           <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
