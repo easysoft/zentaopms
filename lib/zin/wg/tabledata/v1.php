@@ -77,11 +77,11 @@ class tableData extends wg
         $title = $this->prop('title');
         if(empty($title)) return null;
 
-        h::caption
+        return h::caption
         (
             setClass('font-normal article-h2 text-left mb-2'),
             $title
-        )
+        );
     }
 
     protected function build(): wg
