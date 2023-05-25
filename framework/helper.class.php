@@ -348,6 +348,14 @@ class helper extends baseHelper
         }
         return $dateInterval;
     }
+
+    /**
+     * @return bool
+     */
+    public static function isIntranet()
+    {
+        return !defined('USE_INTRANET') ? false : USE_INTRANET;
+    }
 }
 
 /**
