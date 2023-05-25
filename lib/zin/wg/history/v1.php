@@ -243,9 +243,11 @@ class history extends wg
     protected function build(): wg
     {
         global $lang;
+
         return new section
         (
             setClass('histories'),
+            setClass($this->prop('class')),
             setID('actionbox'),
             set('data-textdiff', $lang->action->textDiff),
             set('data-original', $lang->action->original),
