@@ -54,7 +54,7 @@ class bugModel extends model
      * @access public
      * @return int|false
      */
-    public function create(object $bug): int|false
+    public function create(object $bug, string $action = 'Opened'): int|false
     {
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()
@@ -63,8 +63,13 @@ class bugModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError()) return $this->dao->lastInsertID();
-        return false;
+        if(dao::isError()) return false;
+
+        $bugID = $this->dao->lastInsertID();
+
+        $this->loadModel('action')->create('bug', $bugID, $action);
+
+        return $bugID;
     }
 
     /**

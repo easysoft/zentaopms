@@ -254,35 +254,6 @@ class bugZen extends bug
     }
 
     /**
-     * 使用表单数据构造一个bug对象。
-     * Prepare a bug object from form data.
-     *
-     * @param  object    $data
-     * @param  string    $uid
-     * @access protected
-     * @return object
-     */
-    protected function prepareCreateExtras(object $data, string $uid): object
-    {
-        $now = helper::now();
-        $bug = $data->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
-            ->setIF($data->data->assignedTo != '', 'assignedDate', $now)
-            ->setIF($data->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($data->data->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $data->data->deadline)
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'execution') !== false, 'execution', $data->data->execution)
-            ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,execution,module,severity')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket,deleteFiles,resultFiles')
-            ->get();
-
-        if(empty($bug->deadline)) unset($bug->deadline);
-
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $uid);
-    }
-
-    /**
      * 检查bug是否已经存在。
      * Check whether bug is exist.
      *
@@ -304,18 +275,17 @@ class bugZen extends bug
      * Save files after create a bug.
      *
      * @param  int       $bugID
-     * @param  object    $rawdata
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function updateFileAfterCreate(int $bugID, object $rawdata): void
+    protected function updateFileAfterCreate(int $bugID): bool
     {
-        if(isset($rawdata->resultFiles))
+        if(isset($this->post->resultFiles))
         {
-            $resultFiles = $rawdata->resultFiles;
-            if(isset($rawdata->deleteFiles))
+            $resultFiles = $this->post->resultFiles;
+            if(isset($this->post->deleteFiles))
             {
-                foreach($rawdata->deleteFiles as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                foreach($this->post->deleteFiles as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
             }
             $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
             foreach($files as $file)
@@ -327,23 +297,24 @@ class bugZen extends bug
             }
         }
 
-        $this->file->updateObjectID($rawdata->uid, $bugID, 'bug');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
         $this->file->saveUpload('bug', $bugID);
+
+        return !dao::isError();
     }
 
     /**
      * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
      * Get kanban laneID and columnID from $_POST and $output from extra().
      *
-     * @param  object    $rawdata
      * @param  array     $output
      * @access protected
      * @return array
      */
-    protected function getKanbanVariable(object $rawdata, array $output): array
+    protected function getKanbanVariable(array $output): array
     {
         $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-        if(!empty($rawdata->lane)) $laneID = $rawdata->lane;
+        if(!empty($this->post->lane)) $laneID = $this->post->lane;
 
         $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
         if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
@@ -534,15 +505,12 @@ class bugZen extends bug
      * @param  array     $output
      * @param  string    $from
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function addAction4Create(object $bug, array $output, string $from): void
+    protected function addAction4Create(object $bug, array $output, string $from): bool
     {
         $bugID    = $bug->id;
         $todoID   = isset($output['todoID']) ? $output['todoID'] : 0;
-
-        $action   = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
-        $this->action->create('bug', $bugID, $action);
 
         /* Add score for create. */
         if(empty($bug->case))
@@ -554,36 +522,17 @@ class bugZen extends bug
             $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
         }
 
-        if(!$todoID) return;
-        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        if($todoID)
         {
-            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+            $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+            $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
+            if($this->config->edition == 'biz' || $this->config->edition == 'max')
+            {
+                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+            }
         }
-    }
-
-    /**
-     * 获得create方法的response。
-     * Get response for create.
-     *
-     * @param  int      $bugID
-     * @param  int      $executionID
-     * @param  array    $output
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterCreate(int $bugID, int $executionID, array $output): array
-    {
-        /* Return bug id when call the API. */
-        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID);
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
-
-        if(isonlybody()) return $this->responseInModal($executionID);
-
-        $location = $this->getLocation4Create($bugID, $executionID, $output);
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location);
+        return !dao::isError();
     }
 
     /**

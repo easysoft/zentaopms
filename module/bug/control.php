@@ -201,32 +201,47 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->bug->form->create);
-            $bug  = $this->bugZen->prepareCreateExtras($data, $this->post->uid);
+            $bug = form::data($this->config->bug->form->create)
+                ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
+                ->setIF($this->post->assignedTo != '', 'assignedDate', helper::now())
+                ->setIF($this->post->story !== false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+                ->get();
+
+            if(empty($bug->deadline)) unset($bug->deadline);
+
+            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
 
             $checkExist = $this->bugZen->checkExistBug($bug);
             if($checkExist['status'] == 'exists') $this->send(array('result' => 'success', 'id' => $checkExist['id'], 'message' => sprintf($this->lang->duplicate, $this->lang->bug->common), 'locate' => $this->createLink('bug', 'view', "bugID={$checkExist['id']}")));
 
-            $bugID = $this->bug->create($bug);
+            $action = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
+            $bugID  = $this->bug->create($bug, $action);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Set from param if there is a object to transfer bug. */
-            helper::setcookie('lastBugModule', (string)$data->data->module);
+            helper::setcookie('lastBugModule', (string)$bug->module);
 
             $bug = $this->bug->getByID($bugID);
 
-            $this->bugZen->updateFileAfterCreate($bugID, $data->data);
-            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($data->data, $output);
+            $this->bugZen->updateFileAfterCreate($bugID);
+            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($output);
             $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
             $this->bugZen->addAction4Create($bug, $output, $from);
 
             $message = $this->executeHooks($bugID);
-            if($message) $this->lang->saveSuccess = $message;
+            if(!$message) $message = $this->lang->saveSuccess;
 
-            $executionID = $bug->execution ? $bug->execution : zget($output, 'executionID', $this->session->execution);
-            $response = $this->bugZen->responseAfterCreate($bugID, (int)$executionID, $output);
-            return $this->send($response);
+            $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
+
+            /* Return bug id when call the API. */
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bugID));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+
+            if(isonlybody()) return $this->send($this->responseInModal($executionID));
+
+            $location = $this->getLocation4Create($bugID, $executionID, $output);
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 
         $productID      = $this->product->saveVisitState($productID, $this->products);
