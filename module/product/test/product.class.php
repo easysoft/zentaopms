@@ -770,17 +770,18 @@ class productTest
      * Test process roadmap.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @access public
      * @return array
      */
-    public function processRoadmapTest($productID)
+    public function processRoadmapTest($productID, $branch = '0')
     {
         global $tester;
-        $releases = $tester->loadModel('release')->getList($productID, '0');
+        $releases = $tester->loadModel('release')->getList($productID, $branch);
 
         $roadmapGroups = array('2022' => array($releases));
 
-        $objects = $this->objectModel->processRoadmap($roadmapGroups);
+        $objects = $this->objectModel->processRoadmap($roadmapGroups, $branch);
 
         if(dao::isError()) return dao::getError();
 
