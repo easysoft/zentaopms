@@ -428,7 +428,8 @@ class repo extends control
         }
 
         $this->commonAction($repoID, $objectID);
-        if($browser['name'] != 'ie' and $repo->SCM == 'gitlab') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
+        $repo = $this->repo->getRepoByID($repoID);
+        if($browser['name'] != 'ie' and $repo->SCM == 'Gitlab') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
         if($_POST)
         {
@@ -439,7 +440,6 @@ class repo extends control
         }
 
         $file     = $entry;
-        $repo     = $this->repo->getRepoByID($repoID);
         $entry    = $this->repo->decodePath($entry);
         $revision = str_replace('*', '-', $revision);
 
