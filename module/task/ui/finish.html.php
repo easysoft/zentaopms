@@ -77,6 +77,20 @@ else
 
     formPanel
     (
+        set::title($lang->task->finishAction),
+        set::headingClass('status-heading'),
+        set::titleClass('form-label .form-grid'),
+        to::headingActions
+        (
+            entityLabel
+            (
+                setClass('my-3 gap-x-3'),
+                set::level(1),
+                set::text($task->name),
+                set::entityID($task->id),
+                set::reverse(true),
+            )
+        ),
         formGroup
         (
             set::width('1/3'),
@@ -134,7 +148,8 @@ else
             set::name('comment'),
             set::label($lang->comment),
             set::control("editor")
-        )
+        ),
+        history()
     );
 }
 

@@ -1,3 +1,5 @@
 div.input-group.no-background .input-group-addon {background: none;}
 .items-center {align-items: center !important;}
 .flex-center {justify-content: center;}
+.panel-form > .panel-heading.status-heading {justify-content: flex-start; padding-bottom: 0px;}
+.panel-form > .panel-heading.status-heading > .panel-title {font-weight: 400; justify-content:flex-end; width: 5rem;}

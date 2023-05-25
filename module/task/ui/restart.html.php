@@ -66,7 +66,20 @@ else
 {
     formPanel
     (
-        set::id('taskStartForm'),
+        set::title($lang->task->restartAction),
+        set::headingClass('status-heading'),
+        set::titleClass('form-label .form-grid'),
+        to::headingActions
+        (
+            entityLabel
+            (
+                setClass('my-3 gap-x-3'),
+                set::level(1),
+                set::text($task->name),
+                set::entityID($task->id),
+                set::reverse(true),
+            )
+        ),
         formGroup
         (
             set::class($task->mode == 'multi' ? 'hidden' : ''),
@@ -125,6 +138,7 @@ else
                 set::rows('5'),
             )
         ),
+        history()
     );
 }
 

@@ -17,7 +17,20 @@ namespace zin;
 formPanel
 (
     set::id('taskPauseForm'),
-    set::title($lang->task->pause),
+    set::title($lang->task->pauseAction),
+    set::headingClass('status-heading'),
+    set::titleClass('form-label .form-grid'),
+    to::headingActions
+    (
+        entityLabel
+        (
+            setClass('my-3 gap-x-3'),
+            set::level(1),
+            set::text($task->name),
+            set::entityID($task->id),
+            set::reverse(true),
+        )
+    ),
     formGroup
     (
         set::label($lang->comment),
@@ -27,6 +40,7 @@ formPanel
             set::rows('5'),
         )
     ),
+    history()
 );
 
 
