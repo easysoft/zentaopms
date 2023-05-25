@@ -393,10 +393,11 @@ class bugModel extends model
      * Update a bug.
      *
      * @param  object      $bug
+     * @param  string      $action
      * @access public
      * @return array|false
      */
-    public function update(object $bug): array|false
+    public function update(object $bug, string $action = 'Edited'): array|false
     {
         $oldBug = $this->getByID($bug->id);
 
@@ -417,7 +418,7 @@ class bugModel extends model
         $changes = common::createChanges($oldBug, $bug);
         if($changes || $this->post->comment)
         {
-            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? 'Edited' : 'Commented', $this->post->comment);
+            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', $this->post->comment);
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
@@ -592,7 +593,7 @@ class bugModel extends model
      * @access public
      * @return bool
      */
-    public function confirm(object $bug, array $kanbanData): bool
+    public function confirm(object $bug, array $kanbanData = array()): bool
     {
         $oldBug = $this->getByID($bug->id);
 
@@ -615,7 +616,7 @@ class bugModel extends model
         /* 记录历史记录。*/
         /* Record history. */
         $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $bug->comment);
+        $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $this->post->comment);
         $this->action->logHistory($actionID, $changes);
 
         return true;
@@ -775,21 +776,6 @@ class bugModel extends model
             if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
         }
         return $allChanges;
-    }
-
-    /**
-     * 批量修改bug所属模块。
-     * Batch change the module of bug.
-     *
-     * @param  array  $bugIdList
-     * @param  int    $moduleID
-     * @access public
-     * @return bool
-     */
-    public function batchChangeModule(array $bugIdList, int $moduleID): bool
-    {
-
-        return true;
     }
 
     /**

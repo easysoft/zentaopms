@@ -522,7 +522,7 @@ class bug extends control
      */
     public function batchChangeModule(int $moduleID)
     {
-        if($this->post->bugIdList)
+        if(!empty($_POST) && isset($_POST['bugIdList']))
         {
             $bugIdList = array_unique($this->post->bugIdList);
             foreach($bugIdList as $bugID)
@@ -534,8 +534,8 @@ class bug extends control
                 $this->bug->update($bug);
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
         return $this->send(array('result' => 'success', 'load' => $this->session->bugList));
     }
 
@@ -575,7 +575,7 @@ class bug extends control
         {
             $bugIdList = array_unique($this->post->bugIdList);
 
-            $bug = form::data($this->config->bug->form->assignTo)->get();
+            $bug = form::data($this->config->bug->form->assignTo)->remove('mailto')->get();
             foreach($bugIdList as $bugID)
             {
                 $bug->id         = (int)$bugID;
@@ -583,6 +583,7 @@ class bug extends control
                 $this->bug->assign($bug);
             }
 
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
@@ -661,19 +662,26 @@ class bug extends control
         if(!empty($_POST) && isset($_POST['bugIdList']))
         {
             $bugIdList = array_unique($this->post->bugIdList);
+            $bugs      = $this->bug->getByList($bugIDList);
 
-            $bug = form::data($this->config->bug->form->confirm)->setDefault('confirmed', 1)->get();
+            $bug = form::data($this->config->bug->form->confirm)->setDefault('confirmed', 1)->remove('pri,type,status,mailto')->get();
             foreach($bugIdList as $bugID)
             {
-                $bug->id = $bugID;
-                $this->bug->confirm($bug, array());
+                if(!empty($bugs[$bugID]->confirmed)) continue;
+
+                $bug->id         = (int)$bugID;
+                $bug->confirmed  = 1;
+                $bug->assignedTo = $this->app->user->account;
+                $this->bug->confirm($bug);
                 $message = $this->executeHooks($bugID);
             }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
         if(empty($message)) $message = $this->lang->saveSuccess;
-        $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
 
     /**

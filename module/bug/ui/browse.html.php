@@ -144,7 +144,7 @@ menu
     set::class('dropdown-menu'),
     set::items(array
     (
-        array('text' => $lang->bug->confirm),
+        array('text' => $lang->bug->confirm, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchConfirm')),
         array('text' => $lang->bug->close),
         array('text' => $lang->bug->activate),
         array('text' => $lang->bug->resolve, 'items' => $resolveItems),
