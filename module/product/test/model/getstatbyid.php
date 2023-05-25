@@ -19,7 +19,7 @@ zdTable('projectproduct')->gen(50);
 zdTable('bug')->gen(50);
 zdTable('doc')->gen(50);
 
-$productIDList = array('1', '2', '3', '1000001');
+$productIDList = array(1, 2, 3, 1000001);
 
 $product = new productTest('admin');
 
