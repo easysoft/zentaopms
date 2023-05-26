@@ -1041,18 +1041,6 @@ class taskZen extends task
     }
 
     /**
-     * 获取跳转链接。
-     * Get jump link.
-     *
-     * @param  object    $execution
-     * @access protected
-     * @return string
-     */
-    protected function getJumpLink(object $execution): string
-    {
-    }
-
-    /**
      * 任务的数据更新之后，获取对应看板的数据。
      * Get R&D kanban's or task kanban's data after task's data is updated.
      *
