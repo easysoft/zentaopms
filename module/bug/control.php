@@ -1087,6 +1087,7 @@ class bug extends control
     }
 
     /**
+     * AJAX: 获取指派给指定用户的BUG。
      * AJAX: get bugs of a user in html select.
      *
      * @param  int    $userID
@@ -1095,9 +1096,9 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserBugs($userID = '', $id = '' , $appendID = 0)
+    public function ajaxGetUserBugs(int $userID = 0, string $id = '' , int $appendID = 0): string
     {
-        if($userID == '') $userID = $this->app->user->id;
+        if($userID == 0) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
         $bugs    = $this->bug->getUserBugPairs($account, true, 0, '', '', $appendID);
