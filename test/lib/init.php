@@ -133,11 +133,11 @@ function p($keys = '', $delimiter = ',')
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
-    if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
+    if(is_array($_result) && isset($_result['code']) && $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
 
     /* Print $_result. */
-    if(!$keys and is_array($_result)) return print_r($_result) . "\n";
-    if(!$keys or !is_array($_result) and !is_object($_result)) return print((string) $_result . "\n");
+    if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
+    if($keys === '' || !is_array($_result) && !is_object($_result)) return print((string) $_result . "\n");
 
     $parts  = explode(';', $keys);
     foreach($parts as $part)
