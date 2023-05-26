@@ -23,7 +23,10 @@ class actionItem extends wg
         'outerProps?:array',
         'outerClass?:string',
         'badge?:string|array|object',
-        'props?:array'
+        'props?:array',
+        'dropdown?:array',
+        'items?:array',
+        'caret?:bool|string'
     );
 
     protected function buildDividerItem()
@@ -48,11 +51,26 @@ class actionItem extends wg
 
     protected function buildDropdownItem()
     {
+        list($dropdown, $items, $icon, $text, $trailingIcon, $active, $disabled, $badge, $props, $caret) = $this->prop(array('dropdown', 'items', 'icon', 'text', 'trailingIcon', 'active', 'disabled', 'badge', 'props', 'caret'));
+
+        if(is_string($badge))     $badge = label($badge);
+        else if(is_array($badge)) $badge = label(set($badge));
+
         $dropdown = new dropdown
         (
-            set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
-            set($this->prop('props')),
-            $this->children()
+            set::items($items),
+            set($dropdown),
+            h::a(
+                setClass(array('active' => $active, 'disabled' => $disabled)),
+                set($this->getRestProps()),
+                set($props),
+                $icon ? icon($icon) : null,
+                $text,
+                $badge,
+                $this->children(),
+                $trailingIcon ? icon($trailingIcon) : null,
+                h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'))
+            )
         );
         return $dropdown;
     }
@@ -88,7 +106,7 @@ class actionItem extends wg
             $tagName,
             set($tagName === 'a' ? array('href' => $url, 'target' => $target) : array('data-url' => $url, 'data-target' => $target)),
             setClass(array('active' => $active, 'disabled' => $disabled)),
-            set($this->props->skip(array_keys(actionItem::getDefinedProps()))),
+            set($this->getRestProps()),
             set($this->prop('props')),
             $icon ? icon($icon) : null,
             $text,
@@ -105,7 +123,7 @@ class actionItem extends wg
         return h::create
         (
             $outerTag,
-            setClass("$name-$type", $outerClass),
+            setClass($type !== 'item' ? 'nav-item' : '', "$name-$type", $outerClass),
             set($outerProps),
             $this->buildItem()
         );

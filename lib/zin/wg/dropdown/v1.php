@@ -41,7 +41,7 @@ class dropdown extends wg
         if(empty($id))     $id = $this->gid;
         if(empty($target)) $target = "#$id";
 
-        if(empty($triggerBlock)) $triggerBlock = h::a($this->children());
+        if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
         $triggerID = '';
         if($triggerBlock instanceof wg)

@@ -9,6 +9,7 @@ class featureBar extends wg
         'items?:array',
         'current?:string',
         'link?:string',
+        'current?:string',
         'linkParams?:string'
     );
 
@@ -37,7 +38,6 @@ class featureBar extends wg
         $recTotal     = data('recTotal');
         $items        = array();
         $link         = $this->prop('link');
-        $currentStory = $this->prop('currentStory', data('storyBrowseType') ?? '');
 
         data('activeFeature', $current);
 
@@ -54,33 +54,35 @@ class featureBar extends wg
 
             $isActive = $item->name == $current;
 
-            if($item->name == 'more' && !empty($lang->$currentModule->moreSelects))
+            $moreSelects = array();
+            if($item->name == 'more' && !empty($lang->$currentModule->moreSelects))    $moreSelects = $lang->$currentModule->moreSelects;
+            if(isset($lang->$currentModule->moreSelects[$currentMethod][$item->name])) $moreSelects = $lang->$currentModule->moreSelects[$currentMethod][$item->name];
+            if(!empty($moreSelects))
             {
-
                 $subItems = array();
                 $callback = $this->prop('moreMenuLinkCallback');
                 $callback = isset($callback[0]) ? $callback[0] : null;
 
-                foreach($lang->$currentModule->moreSelects as $key => $text)
+                foreach($moreSelects as $key => $text)
                 {
                     $subItems[] = array
                     (
                         'text'   => $text,
-                        'active' => $key == $currentStory,
-                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : createLink($app->rawModule, $app->rawMethod),
-                        'props'  => ['data-id' => $key, 'data-load' => 'table']
+                        'active' => $key == $current,
+                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link),
+                        'attrs'  => ['data-id' => $key, 'data-load' => 'table']
                     );
+                    if($key === $current) $isActive = true;
                 }
 
                 $items[] = array
                 (
                     'text'   => $item->text,
                     'active' => $isActive,
-                    'url'    => str_replace('{key}', $item->name, $link),
-                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
                     'type'   => 'dropdown',
+                    'caret'  => 'down',
                     'items'  => $subItems,
-                    'props'  => ['data-id' => $item->name, 'data-load' => 'table']
+                    'props'  => array('data-id' => $item->name)
                 );
 
                 continue;
