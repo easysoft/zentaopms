@@ -376,7 +376,7 @@ class bug extends control
             $bug = form::data($this->config->bug->form->confirm)->add('id', $bugID)->setDefault('confirmed', 1)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
 
-            $this->bug->confirm($bug, $kanbanData);
+            $changes = $this->bug->confirm($bug, $kanbanData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

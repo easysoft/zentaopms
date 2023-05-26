@@ -593,9 +593,9 @@ class bugModel extends model
      * @param  object $bug
      * @param  array  $kanbanData
      * @access public
-     * @return bool
+     * @return array|bool
      */
-    public function confirm(object $bug, array $kanbanData = array()): bool
+    public function confirm(object $bug, array $kanbanData = array()): array|bool
     {
         $oldBug = $this->getByID($bug->id);
 
@@ -619,9 +619,9 @@ class bugModel extends model
         /* Record history. */
         $changes  = common::createChanges($oldBug, $bug);
         $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $this->post->comment);
-        $this->action->logHistory($actionID, $changes);
+        if($changes) $this->action->logHistory($actionID, $changes);
 
-        return !dao::isError();
+        return $changes;
     }
 
     /**
