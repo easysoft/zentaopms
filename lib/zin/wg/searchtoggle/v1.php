@@ -3,7 +3,7 @@ namespace zin;
 
 class searchToggle extends wg
 {
-    protected static $defineProps = 'open?:bool';
+    protected static $defineProps = 'open?:bool,module?:string';
 
     public static function getPageCSS(): string|false
     {
@@ -18,13 +18,15 @@ class searchToggle extends wg
     protected function build()
     {
         global $lang;
+        $module = $this->prop('module');
         return btn
         (
             set::class('ghost search-form-toggle'),
             set::icon('search'),
             set::text($lang->searchAB),
-            on::click('window.toggleSearchForm'),
-            $this->prop('open') ? h::jsCall('~window.toggleSearchForm') : null
+            set('data-module', $this->prop('module')),
+            on::click("window.toggleSearchForm('$module');"),
+            $this->prop('open') ? h::jsCall('~window.toggleSearchForm', $module) : null
         );
     }
 }
