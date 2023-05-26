@@ -3,7 +3,7 @@ namespace zin;
 
 class searchToggle extends wg
 {
-    protected static $defineProps = 'open?:bool,module?:string';
+    protected static $defineProps = 'open?:bool,module?:string=""';
 
     public static function getPageCSS(): string|false
     {
