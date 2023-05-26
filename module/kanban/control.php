@@ -1975,17 +1975,26 @@ class kanban extends control
      * Ajax get lanes by region id.
      *
      * @param  int    $regionID
-     * @param  string $type all|story|task|bug
+     * @param  string $type     all|story|task|bug
+     * @param  string $field    otherLane|lane
+     * @param  string $pageType
      * @access public
      * @return string
      */
-    public function ajaxGetLanes($regionID, $type = 'all')
+    public function ajaxGetLanes($regionID, $type = 'all', $field = 'otherLane', $pageType = '')
     {
-        $lanes    = $this->kanban->getLanePairsByRegion($regionID, $type);
-        $laneList = array();
-        foreach($lanes as $laneID => $laneName) $laneList[] = array('value' => $laneID, 'text' => $laneName);
+        $lanes = $this->kanban->getLanePairsByRegion($regionID, $type);
 
-        return $this->send($laneList);
+        if($this->viewType == 'json') return print($lanes);
+
+        if($pageType == 'batch')
+        {
+            $laneList = array();
+            foreach($lanes as $laneID => $laneName) $laneList[] = array('value' => $laneID, 'text' => $laneName);
+            return $this->send($laneList);
+        }
+
+        return print(html::select($field, $lanes, '', "class='form-control'"));
     }
 
     /**

@@ -47,7 +47,7 @@ function setLane(event)
     const $currentRow = $target.closest('tr');
     const regionID    = $target.val();
 
-    laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug');
+    laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field&pageType=batch');
     $.getJSON(laneLink, function(lanes)
     {
         if(!lanes) return;

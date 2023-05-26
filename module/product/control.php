@@ -935,12 +935,14 @@ class product extends control
      * @param  int    $productID
      * @param  int    $projectID
      * @param  string $branch
+     * @param  string $pageType
+     * @param  int    $executionID
      * @param  string $from showImport
      * @param  string mode
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions(int $productID, int $projectID = 0, string $branch = '', string $from = '', string $mode = '')
+    public function ajaxGetExecutions(int $productID, int $projectID = 0, string $branch = '', string $pageType = '', int $executionID = 0, string $from = '', string $mode = '')
     {
         if($this->app->tab == 'execution' and $this->session->execution)
         {
@@ -954,10 +956,19 @@ class product extends control
         $executions = $this->product->getExecutionPairsByProduct($productID, $branch, (string)$projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
-        $executions    = array('' => '') + $executions;
-        $executionList = array();
-        foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
-        return $this->send($executionList);
+        if($pageType == 'batch')
+        {
+            $executions    = array('' => '') + $executions;
+            $executionList = array();
+            foreach($executions as $executionID => $executionName) $executionList[] = array('value' => $executionID, 'text' => $executionName);
+            return $this->send($executionList);
+        }
+        else
+        {
+            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
+            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
+        }
     }
 
     /**

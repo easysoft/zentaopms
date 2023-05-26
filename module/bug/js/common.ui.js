@@ -150,7 +150,7 @@ function loadExecutions(productID, projectID = 0)
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&from=&mode=stagefilter');
+    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=from=&mode=stagefilter');
     $('#executionBox').load(link);
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
@@ -507,7 +507,7 @@ function setBranchRelated(event)
     });
 
     const currentProjectID = $currentRow.find('.form-batch-input[data-name="project"]').val() || '0';
-    var   executionLink    = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + currentProjectID + '&branch=' + branchID);
+    var   executionLink    = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + currentProjectID + '&branch=' + branchID + '&pageType=batch');
     $.getJSON(executionLink, function(executions)
     {
         if(!executions) return;
