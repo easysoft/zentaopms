@@ -254,7 +254,7 @@ class taskTest
     public function afterStartTest(int $taskID, array $param = array(), array $output = array()): array|bool
     {
         $task        = new stdclass();
-        $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => '', 'left' => 0, 'consumed' => 0);
+        $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => null, 'left' => 0, 'consumed' => 0);
         foreach($startFields as $field => $defaultvalue) $task->{$field} = $defaultvalue;
         foreach($param as $key => $value) $task->{$key} = $value;
 
@@ -1843,9 +1843,11 @@ class taskTest
             'story' => 0,
             'name' => '',
             'type' => '',
+            'mode' => '',
             'assignedTo' => 'admin',
             'pri' => 3,
-            'estimate' => '',
+            'estimate' => 0,
+            'left' => 0,
             'estStarted' => '2021-01-10',
             'deadline' => '2021-03-19',
             'desc' => '',
@@ -1856,7 +1858,7 @@ class taskTest
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
         foreach($param as $key => $value) $task->$key = $value;
 
-        $objectID = $this->objectModel->doCreate($task);
+        $objectID = $this->objectModel->create($task);
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->getByID($objectID);

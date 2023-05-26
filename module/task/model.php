@@ -110,7 +110,7 @@ class taskModel extends model
         /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
         $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($execution && $this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         /* Insert task data. */
         if(empty($task->assignedTo)) unset($task->assignedDate);
