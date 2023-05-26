@@ -83,7 +83,7 @@ function generateManagerInfoItemList($product, $lang, $users, $reviewers)
 };
 
 /* Basic Information. */
-function generateBasicInfoItemList($product, $lang, $hiddenCode, $users)
+function generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
 {
     /* ACL is custom Detail */
     $whitelist = explode(',', $product->whitelist);
@@ -206,7 +206,7 @@ div
             (
                 setClass('detail w-full'),
                 div(setClass('detail-title'), $lang->product->basicInfo),
-                generateBasicInfoItemList($product, $lang, $hiddenCode, $users)
+                generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
             ),
             /* Other information. */
             div
