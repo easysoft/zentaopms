@@ -12,22 +12,19 @@ declare(strict_types=1);
 
 namespace zin;
 
-$reviewerListStr = '';
-foreach($reviewers as $reviewer)
-{
-    if(empty($reviewer)) continue;
-    $reviewerListStr .= (zget($users, $reviewer) . ' ');
-}
+/* Flag variable for hiding product code. */
+$hiddenCode = (!isset($config->setCode) || $config->setCode == 0);
+
+/* Link for float actions. */
+$goBackLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
 
 /* Platform detail. */
-$platformDetail = null;
-if($product->type == 'platform')
+function generatePlatformDetail($product, $branches, $lang)
 {
+    if($product->type != 'platform') return null;
+
     $branchItemList = array();
-    foreach($branches as $branchName)
-    {
-        $branchItemList[] = array('text' => $branchName);
-    }
+    foreach($branches as $branchName) $branchItemList[] = array('text' => $branchName);
     $branchItemList[] = array
     (
         'url'  => createLink('branch', 'manage', "productID={$product->id}"),
@@ -35,7 +32,7 @@ if($product->type == 'platform')
         'text' => $lang->branch->add
     );
 
-    $platformDetail = div
+    return div
     (
         setClass('detail'),
         div(
@@ -52,100 +49,134 @@ if($product->type == 'platform')
             menu(set::items($branchItemList))
         )
     );
-}
+};
 
-/* Basic Information. */
-$hiddenCode = (!isset($config->setCode) || $config->setCode == 0);
-
-/* ACL is custom Detail */
-$whitelist = explode(',', $product->whitelist);
-foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
-$aclCustomDetail = ($product->acl == 'custom') ? div
-    (
-        setClass('w-1/2 flex'),
-        div(setClass('w-1/6 item-label'), $lang->product->whitelist),
-        $whitelist
-    ) : null;
-
-function generateBasicInfoItem($label, $content, $status = '')
+/* Manager Information. */
+function generateManagerInfoItemList($product, $lang, $users, $reviewers)
 {
+    /* String of reviewer list. */
+    $reviewerListStr = '';
+    foreach($reviewers as $reviewer)
+    {
+        if(empty($reviewer)) continue;
+        $reviewerListStr .= (zget($users, $reviewer) . ' ');
+    }
+
+    $fnGenerateItem = function($label, $content)
+    {
+        return div
+        (
+            setClass('w-1/2 flex'),
+            div(setClass('w-1/6 item-label'), icon(setClass('ml-auto pr-1.5'), 'person'), $label),
+            div(setClass('item-content'), $content)
+        );
+    };
+
     return div
     (
-        setClass('w-1/2 flex'),
-        div(setClass('w-1/6 item-label'), span($label)),
-        div(setClass('item-content'), !empty($status) ? setClass($status) : null, $content)
+        setClass('detail-content flex flex-wrap'),
+        $fnGenerateItem($lang->productCommon,     zget($users, $product->PO)),
+        $fnGenerateItem($lang->product->release,  zget($users, $product->RD)),
+        $fnGenerateItem($lang->product->qa,       zget($users, $product->QD)),
+        $fnGenerateItem($lang->product->reviewer, $reviewerListStr),
     );
-}
+};
 
-if($hiddenCode)
+/* Basic Information. */
+function generateBasicInfoItemList($product, $lang, $hiddenCode, $users)
 {
-    $basicInfoDetail = div
+    /* ACL is custom Detail */
+    $whitelist = explode(',', $product->whitelist);
+    foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
+    $aclCustomDetail = ($product->acl == 'custom') ? div
+        (
+            setClass('w-1/2 flex'),
+            div(setClass('w-1/6 item-label'), $lang->product->whitelist),
+            $whitelist
+        ) : null;
+
+    /* Generate UI for each basic information item. */
+    $fnGenerateItem = function($label, $content, $status = '')
+    {
+        return div
+        (
+            setClass('w-1/2 flex'),
+            div(setClass('w-1/6 item-label'), span($label)),
+            div(setClass('item-content'), !empty($status) ? setClass($status) : null, $content)
+        );
+    };
+
+    /* The UI without product code. */
+    if($hiddenCode)
+    {
+        return div
+        (
+            setClass('detail-content flex flex-wrap'),
+            $fnGenerateItem($lang->product->type,                          zget($lang->product->typeList, $product->type)),
+            $fnGenerateItem($lang->product->createdBy,                     zget($users, $product->createdBy)),
+            $fnGenerateItem($lang->productCommon . $lang->product->status, zget($lang->product->statusList, $product->status), $product->status),
+            $fnGenerateItem($lang->product->createdDate,                   formatTime($product->createdDate, DT_DATE1)),
+            $fnGenerateItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
+            $aclCustomDetail
+        );
+    }
+
+    return div
     (
         setClass('detail-content flex flex-wrap'),
-        generateBasicInfoItem($lang->product->type,                          zget($lang->product->typeList, $product->type)),
-        generateBasicInfoItem($lang->product->createdBy,                     zget($users, $product->createdBy)),
-        generateBasicInfoItem($lang->productCommon . $lang->product->status, zget($lang->product->statusList, $product->status), $product->status),
-        generateBasicInfoItem($lang->product->createdDate,                   formatTime($product->createdDate, DT_DATE1)),
-        generateBasicInfoItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
+        $fnGenerateItem($lang->product->code,                          $product->code),
+        $fnGenerateItem($lang->product->createdBy,                     zget($users, $product->createdBy)),
+        $fnGenerateItem($lang->product->type,                          zget($lang->product->typeList, $product->type)),
+        $fnGenerateItem($lang->product->createdDate,                   formatTime($product->createdDate, DT_DATE1)),
+        $fnGenerateItem($lang->productCommon . $lang->product->status, zget($lang->product->statusList, $product->status), $product->status),
+        $fnGenerateItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
         $aclCustomDetail
     );
-}
-else
+};
+
+/* Other information. */
+function generateOtherInfoItemList($product, $lang)
 {
-    $basicInfoDetail = div
+    $space = common::checkNotCN() ? ' ' : '';
+
+    $fnGenerateItem = function($label, $content)
+    {
+        return div(
+            setClass('w-1/3 flex'),
+            div(setClass('w-2/6 item-label'), span($label)),
+            div(setClass('item-content'), $content)
+        );
+    };
+
+    return div
     (
         setClass('detail-content flex flex-wrap'),
-        generateBasicInfoItem($lang->product->code,                          $product->code),
-        generateBasicInfoItem($lang->product->createdBy,                     zget($users, $product->createdBy)),
-        generateBasicInfoItem($lang->product->type,                          zget($lang->product->typeList, $product->type)),
-        generateBasicInfoItem($lang->product->createdDate,                   formatTime($product->createdDate, DT_DATE1)),
-        generateBasicInfoItem($lang->productCommon . $lang->product->status, zget($lang->product->statusList, $product->status), $product->status),
-        generateBasicInfoItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
-        $aclCustomDetail
+        $fnGenerateItem($lang->story->statusList['active'] . $space . $lang->story->common,    $product->stories['active']),
+        $fnGenerateItem($lang->product->plans,                                                 $product->plans),
+        $fnGenerateItem($lang->product->bugs,                                                  $product->bugs),
+        $fnGenerateItem($lang->story->statusList['draft'] . $space . $lang->story->common,     $product->stories['draft']),
+        $fnGenerateItem($lang->product->builds,                                                $product->builds),
+        $fnGenerateItem($lang->product->docs,                                                  $product->docs),
+        $fnGenerateItem($lang->story->statusList['changing'] . $space . $lang->story->common,  $product->stories['changing']),
+        $fnGenerateItem($lang->product->releases,                                              $product->releases),
+        $fnGenerateItem($lang->product->cases,                                                 $product->cases),
+        $fnGenerateItem($lang->story->statusList['reviewing'] . $space . $lang->story->common, $product->stories['reviewing']),
+        $fnGenerateItem($lang->product->projects,                                              $product->projects),
+        $fnGenerateItem($lang->product->executions,                                            $product->executions),
     );
-}
+};
 
-/* Other information detail. */
-$space = common::checkNotCN() ? ' ' : '';
-
-function generateOtherInfoItem($label, $content)
-{
-    return div(
-        setClass('w-1/3 flex'),
-        div(setClass('w-2/6 item-label'), span($label)),
-        div(setClass('item-content'), $content)
-    );
-}
-
-$otherDetail = div
-(
-    setClass('detail-content flex flex-wrap'),
-    generateOtherInfoItem($lang->story->statusList['active'] . $space . $lang->story->common,    $product->stories['active']),
-    generateOtherInfoItem($lang->product->plans,                                                 $product->plans),
-    generateOtherInfoItem($lang->product->bugs,                                                  $product->bugs),
-    generateOtherInfoItem($lang->story->statusList['draft'] . $space . $lang->story->common,     $product->stories['draft']),
-    generateOtherInfoItem($lang->product->builds,                                                $product->builds),
-    generateOtherInfoItem($lang->product->docs,                                                  $product->docs),
-    generateOtherInfoItem($lang->story->statusList['changing'] . $space . $lang->story->common,  $product->stories['changing']),
-    generateOtherInfoItem($lang->product->releases,                                              $product->releases),
-    generateOtherInfoItem($lang->product->cases,                                                 $product->cases),
-    generateOtherInfoItem($lang->story->statusList['reviewing'] . $space . $lang->story->common, $product->stories['reviewing']),
-    generateOtherInfoItem($lang->product->projects,                                              $product->projects),
-    generateOtherInfoItem($lang->product->executions,                                            $product->executions),
-);
-
-/* Float actions. */
-$goBackLink = $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
-
-/* Main content. */
+/* Layout. */
 div
 (
     setClass('flex w-full'),
+    /* Product information. */
     cell
     (
         set::width('70%'),
         panel
         (
+            /* Title. */
             div
             (
                 setClass('detail'),
@@ -157,8 +188,9 @@ div
                     $product->name
                 )
             ),
-            $platformDetail,
-            /* Manager. */
+            /* Platform and branches list. */
+            generatePlatformDetail($product, $branches, $lang),
+            /* Manager list. */
             div
             (
                 setClass('detail'),
@@ -167,96 +199,25 @@ div
                     setClass('detail-title'),
                     $lang->product->manager
                 ),
-                div
-                (
-                    setClass('detail-content flex flex-wrap'),
-                    div
-                    (
-                        setClass('w-1/2 flex'),
-                        div
-                        (
-                            setClass('w-1/6 item-label'),
-                            icon(setClass('ml-auto pr-1.5'), 'person'),
-                            $lang->productCommon
-                        ),
-                        div
-                        (
-                            setClass('item-content'),
-                            zget($users, $product->PO)
-                        )
-                    ),
-                    div
-                    (
-                        setClass('w-1/2 flex'),
-                        div
-                        (
-                            setClass('w-1/6 item-label'),
-                            icon(setClass('ml-auto pr-1.5'), 'person'),
-                            $lang->product->release
-                        ),
-                        div
-                        (
-                            setClass('item-content'),
-                            zget($users, $product->RD)
-                        )
-                    ),
-                    div
-                    (
-                        setClass('w-1/2 flex'),
-                        div
-                        (
-                            setClass('w-1/6 item-label'),
-                            icon(setClass('ml-auto pr-1.5'), 'person'),
-                            $lang->product->qa
-                        ),
-                        div
-                        (
-                            setClass('item-content'),
-                            zget($users, $product->QD)
-                        )
-                    ),
-                    div
-                    (
-                        setClass('w-1/2 flex'),
-                        div
-                        (
-                            setClass('w-1/6 item-label'),
-                            icon(setClass('ml-auto pr-1.5'), 'person'),
-                            $lang->product->reviewer
-                        ),
-                        div
-                        (
-                            setClass('item-content'),
-                            $reviewerListStr
-                        )
-                    )
-                )
+                generateManagerInfoItemList($product, $lang, $users, $reviewers)
             ),
             /* Base information. */
             div
             (
                 setClass('detail w-full'),
-                div
-                (
-                    setClass('detail-title'),
-                    $lang->product->basicInfo
-                ),
-                $basicInfoDetail
+                div(setClass('detail-title'), $lang->product->basicInfo),
+                generateBasicInfoItemList($product, $lang, $hiddenCode, $users)
             ),
             /* Other information. */
             div
             (
                 setClass('detail w-full'),
-                div
-                (
-                    setClass('detail-title'),
-                    $lang->product->otherInfo
-                ),
-                $otherDetail
+                div(setClass('detail-title'), $lang->product->otherInfo),
+                generateOtherInfoItemList($product, $lang)
             )
             /* Extend Fields. */
         ),
-        /* Actions. */
+        /* Float action toolbar. */
         div
         (
             setClass('flex justify-center'),
@@ -269,6 +230,7 @@ div
             )
         )
     ),
+    /* Action list. */
     cell
     (
         setClass('px-4'),
@@ -281,7 +243,7 @@ div
         modal
         (
             set::id('comment-dialog'),
-            set::title('添加备注'),
+            set::title($lang->action->create),
             form
             (
                 set::url(createLink('action', 'comment', "objectType=product&objectID=$product->id&zin=1")),
