@@ -93,6 +93,7 @@ $config->bug->form->assignTo['mailto']         = array('required' => false, 'typ
 
 $config->bug->form->resolve = array();
 $config->bug->form->resolve['status']         = array('required' => false, 'type' => 'string', 'default' => 'resolved');
+$config->bug->form->resolve['confirmed']      = array('required' => false, 'type' => 'int',    'default' => 1);
 $config->bug->form->resolve['resolvedBuild']  = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->resolve['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
@@ -105,8 +106,6 @@ $config->bug->form->resolve['duplicateBug']   = array('required' => false, 'type
 $config->bug->form->resolve['buildName']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['createBuild']    = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->resolve['buildExecution'] = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->resolve['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->resolve['uid']            = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->activate = array();
 $config->bug->form->activate['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');

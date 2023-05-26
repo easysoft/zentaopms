@@ -662,27 +662,18 @@ class bugModel extends model
     public function resolve(object $bug, array $output = array()): array|false
     {
         /* Get old bug. */
-        $oldBug = $this->getById((int)$bug->id);
-
-        /* If status of the bug is closed, skip it. */
-        if($oldBug->status == 'closed') return false;
-
-        /* Can create build when resolving bug. */
-        if(!empty($bug->createBuild))
-        {
-            $this->createBuild($bug, $oldBug);
-            if(dao::isError()) return false;
-        }
+        $oldBug = $this->getById($bug->id);
 
         /* Update bug. */
-        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment,uid')
+        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution')
             ->autoCheck()
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->checkFlow()
-            ->where('id')->eq((int)$bug->id)
+            ->where('id')->eq($bug->id)
             ->exec();
+
         if(dao::isError()) return false;
 
         /* Add score. */
@@ -701,9 +692,9 @@ class bugModel extends model
         /* Save files and record log. */
         $files      = $this->loadModel('file')->saveUpload('bug', $bug->id);
         $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $bug->comment, $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
         $changes    = common::createChanges($oldBug, $bug);
-        $this->action->logHistory($actionID, $changes);
+        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $this->post->comment, $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
+        if($changes) $this->action->logHistory($actionID, $changes);
 
         /* If the edition is not pms, update feedback. */
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);

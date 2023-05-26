@@ -1484,11 +1484,10 @@ class bugZen extends bug
      * Build bug for resolving a bug.
      *
      * @param  object    $oldBug
-     * @param  int       $uid
      * @access protected
      * @return object
      */
-    protected function buildBugForResolve(object $oldBug, int $uid): object
+    protected function buildBugForResolve(object $oldBug): object
     {
         $bug = form::data($this->config->bug->form->resolve)
             ->setDefault('assignedTo', $oldBug->openedBy)
@@ -1506,7 +1505,7 @@ class bugZen extends bug
             if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
         }
 
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $uid);
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
     }
 
     /**
