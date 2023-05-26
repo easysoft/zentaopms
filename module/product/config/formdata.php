@@ -15,7 +15,7 @@ $config->product->form->create['status']         = array('type' => 'string',  'c
 $config->product->form->create['desc']           = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '',        'width'  => 'full');
 $config->product->form->create['acl']            = array('type' => 'string',  'control' => 'radio',        'required' => false, 'default' => 'private', 'width'  => 'full', 'options' => $lang->product->aclList);
 $config->product->form->create['whitelist']      = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => 'users');
-$config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => $app->user->account);
+$config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => (isset($app->user) && isset($app->user->account)) ? $app->user->account : '');
 $config->product->form->create['createdDate']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
 $config->product->form->create['createdVersion'] = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $config->version);
 if($config->systemMode != 'ALM') unset($config->product->form->create['program'], $config->product->form->create['line']);
