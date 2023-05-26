@@ -1905,12 +1905,8 @@ class docModel extends model
         elseif($type == 'project')
         {
             $project     = $this->loadModel('project')->getByID($objectID);
-            $storyIDList = '';
-            if(!$project->hasProduct)
-            {
-                $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->orWhere('project')->eq($objectID)->fetchPairs('id', 'id');
-                $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
-            }
+            $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->orWhere('project')->eq($objectID)->fetchPairs('id', 'id');
+            $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
 
             if($this->config->edition == 'max')
             {
@@ -1933,10 +1929,8 @@ class docModel extends model
         elseif($type == 'execution')
         {
             $execution   = $this->loadModel('execution')->getByID($objectID);
-            $project     = $this->loadModel('project')->getByID($execution->project);
-            $storyIDList = '';
 
-            if(!$project->hasProduct) $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectID)->fetchPairs('story', 'story');
+            $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectID)->fetchPairs('story', 'story');
             if($storyIDList) $storyIDList = join(',', $storyIDList);
 
             $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
