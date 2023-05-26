@@ -111,8 +111,8 @@ class personnelTest
     /**
      * GetUserHoursTest
      *
-     * @param  $projectID
-     * @param  array  $accounts
+     * @param  int   $projectID
+     * @param  array $accounts
      * @access public
      * @return void
      */
