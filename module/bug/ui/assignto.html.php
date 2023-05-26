@@ -12,10 +12,22 @@ namespace zin;
 
 jsVar('page', 'assignedto');
 
-set::title($bug->title);
 /* zin: Define the form in main content. */
-form
+formPanel
 (
+    set::title($lang->bug->assignTo),
+    set::headingClass('status-heading'),
+    to::headingActions
+    (
+        entityLabel
+        (
+            setClass('my-3 gap-x-3'),
+            set::level(1),
+            set::text($bug->title),
+            set::entityID($bug->id),
+            set::reverse(true),
+        )
+    ),
     formGroup
     (
         set::width('1/3'),
@@ -28,7 +40,7 @@ form
     (
         set::label($lang->bug->mailto),
         set::name('mailto[]'),
-        set::value(str_replace(' ', '', $bug->mailto)),
+        set::value(str_replace(' ', '', $bug->mailto ?: '')),
         set::multiple(true),
         set::items($users),
     ),
