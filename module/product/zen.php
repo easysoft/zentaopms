@@ -1022,7 +1022,7 @@ class productZen extends product
         }
         else
         {
-            $branch = $this->cookie->treeBranch;
+            $branch = is_bool($this->cookie->treeBranch) && empty($this->cookie->treeBranch) ? 'all' : $this->cookie->treeBranch;
         }
 
         /* If in project story and not chose product, get project story mdoules. */
