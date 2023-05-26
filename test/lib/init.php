@@ -308,7 +308,7 @@ function genModuleAndMethod($rParams)
         $objArrowCount        = substr_count($param, '->');
         $rParamsStructureList = explode('->', $param);
 
-        if($objArrowCount == 1)
+        if($objArrowCount == 1 && str_contains($rParamsStructureList[1], '('))
         {
             $moduleName  = substr($rParamsStructureList[0], 1);
             $method      = $rParamsStructureList[1];
