@@ -1491,6 +1491,7 @@ class bugZen extends bug
     {
         $bug = form::data($this->config->bug->form->resolve)
             ->setDefault('assignedTo', $oldBug->openedBy)
+            ->setDefault('resolvedDate', helper::now())
             ->add('id',        $oldBug->id)
             ->add('execution', $oldBug->execution)
             ->add('status',    'resolved')
@@ -2204,5 +2205,53 @@ class bugZen extends bug
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
         return array($modules, $product->QD);
+    }
+
+    /**
+     * 在解决bug中，检查必填项。
+     * While resolving a bug, check for required fields during build creation.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return bool
+     */
+    protected function checkRequiredForResolve(object $bug, int $oldExecution): bool
+    {
+        /* Set lang for error. */
+        $this->lang->bug->comment = $this->lang->comment;
+
+        /* When creating a new build, the execution of the build cannot be empty. */
+        if($bug->createBuild == 'on' && empty($bug->buildExecution))
+        {
+            $executionLang = $this->lang->bug->execution;
+            if($oldExecution)
+            {
+                $execution = $this->dao->findByID($oldExecution)->from(TABLE_EXECUTION)->fetch();
+                if($execution and $execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+            }
+            dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
+        }
+
+        /* When creating a new build, the build name cannot be empty. */
+        if($bug->createBuild == 'on' && empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
+
+        /* Check required fields of resolving bug. */
+        foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
+        {
+            if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
+                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+
+        /* If the resolution of bug is duplicate, duplicate bug id cannot be empty. */
+        if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors['duplicateBug'][] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+
+        /* When creating a new build, the build name cannot be empty. */
+        if($bug->resolution == 'fixed' && empty($bug->resolvedBuild)) dao::$errors['resolvedBuild'][] = sprintf($this->lang->error->notempty, $this->lang->bug->resolvedBuild);
+
+        return !dao::isError();
     }
 }

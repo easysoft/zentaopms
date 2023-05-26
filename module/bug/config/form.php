@@ -104,7 +104,7 @@ $config->bug->form->resolve['lastEditedBy']   = array('required' => false, 'type
 $config->bug->form->resolve['lastEditedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
 $config->bug->form->resolve['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->resolve['buildName']      = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->resolve['createBuild']    = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->resolve['createBuild']    = array('required' => false, 'type' => 'string', 'default' => 'off');
 $config->bug->form->resolve['buildExecution'] = array('required' => false, 'type' => 'int',    'default' => 0);
 
 $config->bug->form->activate = array();

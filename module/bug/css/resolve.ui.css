@@ -1,0 +1,3 @@
+.panel-heading.status-heading {justify-content: flex-start; padding-bottom: 0px;}
+.panel-heading.status-heading .panel-title {font-weight: 400; justify-content: flex-end; width: 5rem; font-size: var(--font-size-page)}
+#createBuildBox .items-center {height: 2rem;}

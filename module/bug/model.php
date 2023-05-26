@@ -713,10 +713,6 @@ class bugModel extends model
      */
     public function createBuild(object $bug, object $oldBug): bool
     {
-        /* Check required fields. */
-        $this->bugTao->checkRequired4Resolve($bug, $oldBug->execution);
-        if(dao::isError()) return false;
-
         /* Construct build data. */
         $buildData = new stdclass();
         $buildData->product     = (int)$oldBug->product;
@@ -734,7 +730,17 @@ class bugModel extends model
         $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
             ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
             ->exec();
-        if(dao::isError()) return false;
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            if(isset($error['name']))
+            {
+                $error['buildName'] = $error['name'];
+                unset($error['name']);
+            }
+            dao::$errors = $error;
+            return false;
+        }
 
         /* Get build id, and record log. */
         $buildID = $this->dao->lastInsertID();

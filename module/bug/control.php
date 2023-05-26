@@ -423,8 +423,12 @@ class bug extends control
             /* Init bug data. */
             $bug = $this->bugZen->buildBugForResolve($oldBug);
 
+            /* Check required fields. */
+            $this->bugZen->checkRequiredForResolve($bug, $oldBug->execution);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             /* Can create build when resolving bug. */
-            if(!empty($bug->createBuild))
+            if($bug->createBuild == 'on')
             {
                 $this->bug->createBuild($bug, $oldBug);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -446,9 +450,9 @@ class bug extends control
         /* Show the variables associated. */
         $this->view->title      = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
-        $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldbug->execution) : '';
+        $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
         $this->view->users      = $this->user->getPairs('noclosed');
-        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : 0, 'id_desc', $oldBug->project, 'stagefilter');
+        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : 0, (string)$oldBug->project, 'stagefilter');
         $this->view->builds     = $this->loadModel('build')->getBuildPairs($oldBug->product, $oldBug->branch, 'withbranch,noreleased');
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
@@ -1259,14 +1263,15 @@ class bug extends control
     }
 
     /**
-     * Ajax get product bugs.
+     * AJAX: 获产品的 bugs。
+     * AJAX: Get product bugs.
      *
      * @param  int     $productID
      * @param  int     $bugID
      * @access public
-     * @return string
+     * @return array
      */
-    public function ajaxGetProductBugs($productID, $bugID)
+    public function ajaxGetProductBugs($productID, $bugID): array
     {
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
@@ -1275,7 +1280,9 @@ class bug extends control
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
         unset($productBugs[$bugID]);
 
-        return print(html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'"));
+        $bugList = array();
+        foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName);
+        return $this->send($bugList);
     }
 
     /**
