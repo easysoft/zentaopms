@@ -1,25 +1,30 @@
-/* Get select of stories.*/
-function setStories()
+/**
+ * Get select of stories.
+ *
+ * @access public
+ * @return void
+ */
+function setStories(event)
 {
-    var moduleID = $(this).val();
-    var index    = $(this).closest('tr').attr('data-index');
-    var link     = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&num=' + index + '&type=short');
-    $.get(link, function(stories)
+    const $module     = $(event.target);
+    const $currentRow = $module.closest('tr');
+    const moduleID    = $module.val();
+    const link        = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&pageType=batch&type=short');
+    $.getJSON(link, function(stories)
     {
-        var $story  = $('#story_' + index);
-        var storyID = $story.val();
-        $story.replaceWith(stories);
-        if($('#zeroTaskStory').hasClass('checked'))
+        if(!stories) return;
+        let $row = $currentRow;
+        while($row.length)
         {
-            $story.find('option').each(function()
+            $story = $row.find('.form-batch-input[data-name="story"]').empty();
+            $.each(stories, function(index, story)
             {
-                value = $(this).attr('value');
-                if(value != 'ditto' && storyTasks[value] > 0)
-                {
-                    $(this).hide();
-                    if(storyID == value) $story.val('');
-                }
-            })
+                if(story.value && $('#zeroTaskStory').hasClass('checked') && storyTasks[story.value] > 0) return;
+                $story.append('<option value="' + story.value + '">' + story.text + '</option>');
+            });
+
+            $row = $row.next('tr');
+            if(!$row.find('td[data-name="story"][data-ditto="on"]').length) break;
         }
     });
 }
@@ -49,80 +54,96 @@ function toggleZeroTaskStory()
     });
 }
 
-/* Set preview. */
-function setStoryRelated()
+/**
+ * Set preview.
+ *
+ * @access public
+ * @return void
+ */
+function setStoryRelated(event)
 {
-    var storyID   = $(this).val();
-    var index     = $(this).closest('tr').attr('data-index');
-    var storyLink = '#';
-    if(storyID != 0  && storyID != 'ditto')
+    const $story         = $(event.target);
+    const $currentRow    = $story.closest('tr');
+    const storyID        = $story.val();
+    const $storyEstimate = $currentRow.find('.form-batch-input[data-name="storyEstimate"]');
+    const $storyPri      = $currentRow.find('.form-batch-input[data-name="storyPri"]');
+    const $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
+    const $module        = $currentRow.find('.form-batch-input[data-name="module"]');
+    const $preview       = $currentRow.find('.form-batch-input[data-name="preview"]');
+    if(storyID)
     {
         var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
-        $.getJSON(link, function(storyInfo)
+        $.getJSON(link, function(data)
         {
-            $('#module_' + index).val(parseInt(storyInfo.moduleID));
+            const storyInfo = data['storyInfo'];
+            $module.val(parseInt(storyInfo.moduleID));
 
-            $('#storyEstimate_' + index).val(storyInfo.estimate);
-            $('#storyPri_'      + index).val(storyInfo.pri);
-            $('#storyDesc_'     + index).val(storyInfo.spec);
+            $storyEstimate.val(storyInfo.estimate);
+            $storyPri.val(storyInfo.pri);
+            $storyDesc.val(storyInfo.spec);
         });
 
-        storyLink = $.createLink('story', 'view', "storyID=" + storyID);
-        $('#preview_' + index).removeAttr('disabled');
-        $('#preview_' + index).css('pointer-events', 'auto');
-        $('#preview_' + index).attr('href', storyLink);
+        $preview.removeAttr('disabled');
+        $preview.css('pointer-events', 'auto');
+        $preview.attr('href', $.createLink('story', 'view', "storyID=" + storyID));
     }
     else
     {
-        $('#preview_' + index).attr('disabled', true);
-        $('#preview_' + index).css('pointer-events', 'none');
-        $('#preview_' + index).attr('href', storyLink);
+        $storyEstimate.val('');
+        $storyPri.val(3);
+        $storyDesc.val('');
+
+        $preview.attr('disabled', true);
+        $preview.css('pointer-events', 'none');
+        $preview.attr('href', '#');
     }
 }
 
-/* Copy story title as task title. */
-function copyStoryTitle()
+/**
+ * Copy story title as task title.
+ *
+ * @access public
+ * @return void
+ */
+function copyStoryTitle(event)
 {
-    var index      = $(this).closest('tr').attr('data-index');
-    var storyTitle = $('#story_' + index).find('option:selected').text();
-    var storyValue = $('#story_' + index).find('option:selected').val();
-
-    if(storyValue === 'ditto')
-    {
-        for(var i = index; i <= index && i >= 1; i--)
-        {
-            var selectedValue = $('select[id="story_' + i +'"]').val();
-            var selectedTitle = $('select[id="story_' + i +'"]').find('option:selected').text();
-            if(selectedValue !== 'ditto')
-            {
-                storyTitle = selectedTitle;
-                break;
-            }
-        }
-    }
+    const $currentRow    = $(event.target).closest('tr');
+    const $story         = $currentRow.find('.form-batch-input[data-name="story"]');
+    const $storyEstimate = $currentRow.find('.form-batch-input[data-name="storyEstimate"]');
+    const $storyPri      = $currentRow.find('.form-batch-input[data-name="storyPri"]');
+    const $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
+    const storyValue     = $story.val();
+    var   storyTitle     = $story.find('option[value="' + storyValue + '"]').text();
 
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
 
-    $('#name_' + index).val(storyTitle);
-    $('#estimate_' + index).val($('#storyEstimate_' + index).val());
-    $('#desc_' + index).val(($('#storyDesc_' + index).val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
-
-    var storyPri = $('#storyPri_' + index).val();
-    if(storyPri == 0) $('#pri_' + index ).val('3');
-    if(storyPri != 0) $('#pri_' + index ).val(storyPri);
+    $currentRow.find('.form-batch-input[data-name="name"]').val(storyTitle);
+    $currentRow.find('.form-batch-input[data-name="estimate"]').val($storyEstimate.val());
+    $currentRow.find('.form-batch-input[data-name="pri"]').val($storyPri.val() ? $storyPri.val() : 0);
+    $currentRow.find('.form-batch-input[data-name="desc"]').val(($storyDesc.val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
 }
 
-/* Load lanes. */
-function loadLanes()
+/**
+ * Load lanes.
+ *
+ * @access public
+ * @return void
+ */
+function loadLanes(event)
 {
-    var regionID = $(this).val();
-    console.log(regionID);
-    var index    = $(this).closest('tr').attr('data-index');
-    var laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&i=' + index);
-    $.get(laneLink, function(lanes)
+    const regionID    = $(event.target).val();
+    const $currentRow = $(event.target).closest('tr');
+    const laneLink    = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&pageType=batch');
+    $.getJSON(laneLink, function(lanes)
     {
-        $('#lanes_' + index).replaceWith(lanes);
+        $lane = $currentRow.find('.form-batch-input[data-name="lane"]').empty();
+        if(!lanes) return;
+        $.each(lanes, function(index, lane)
+        {
+            $lane.append('<option value="' + lane.value + '">' + lane.text + '</option>');
+        });
+
     });
 }

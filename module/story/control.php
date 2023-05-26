@@ -2592,14 +2592,13 @@ class story extends control
      * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  string $number
+     * @param  string $pageType batch
      * @param  string $type full
      * @param  string $status all|unclosed
-     * @param  string $from bug
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type = 'full', $status = 'all', $from = '')
+    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $pageType = '', $type = 'full', $status = 'all')
     {
         if($moduleID)
         {
@@ -2615,11 +2614,15 @@ class story extends control
         {
             return print(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'onchange=setStoryRelated()'));
         }
+        elseif($pageType == 'batch')
+        {
+            $storyList = array();
+            foreach($stories as $id => $name) $storyList[] = array('value' => $id, 'text' => $name);
+            return $this->send($storyList);
+        }
         else
         {
-            $storyName = $number === '' ? 'story' : "story[$number]";
-            $misc      = $from   === 'bug' ? 'class=form-control' : 'class=form-control onchange=setStoryRelated(' . $number . ');';
-            return print(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, $misc));
+            return print(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control'));
         }
     }
 
@@ -2743,10 +2746,11 @@ class story extends control
      * AJAX: get module of a story.
      *
      * @param  int    $storyID
+     * @param  string $pageType batch
      * @access public
-     * @return string
+     * @return string|void
      */
-    public function ajaxGetInfo($storyID)
+    public function ajaxGetInfo(int $storyID, string $pageType = '')
     {
         $story = $this->story->getByID($storyID);
         if(empty($story)) return;
@@ -2757,7 +2761,14 @@ class story extends control
         $storyInfo['spec']     = html_entity_decode($story->spec, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
         $storyInfo['status']   = $story->status;
 
-        echo json_encode($storyInfo);
+        if($pageType == 'batch')
+        {
+            return $this->send(array('storyInfo' => $storyInfo));
+        }
+        else
+        {
+            echo json_encode($storyInfo);
+        }
     }
 
     /**

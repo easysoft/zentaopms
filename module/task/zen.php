@@ -336,7 +336,7 @@ class taskZen extends task
         $this->view->storyID       = $storyID;
         $this->view->story         = $story;
         $this->view->moduleID      = $story ? $story->module : $moduleID;
-        $this->view->stories       = $stories;
+        $this->view->stories       = array_filter($stories);
         $this->view->storyTasks    = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
         $this->view->members       = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
         $this->view->taskConsumed  = isset($task) ? $task->consumed : 0;
@@ -454,7 +454,7 @@ class taskZen extends task
             $task->execution = $execution->id;
             $task->left      = $task->estimate;
             $task->parent    = $taskID;
-            $task->laneID    = empty($task->laneID) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->laneID;
+            $task->lane      = empty($task->lane) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->lane;
         }
 
         /* Remove data with the same task name. */
@@ -1061,7 +1061,7 @@ class taskZen extends task
         /* 处理专业研发看板。 Handling professional R&D kanban. */
         if($execution->type == 'kanban')
         {
-            $kanbanData = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+            $kanbanData = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
             return json_encode($kanbanData);
         }
 
@@ -1399,15 +1399,21 @@ class taskZen extends task
         /* Return task id when call the API. */
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
 
-        if(isonlybody() && $this->app->tab == 'execution' || $this->config->vision == 'lite')
-        {
-            $kanbanData = $this->getKanbanData($execution);
-            if($execution->type == 'kanban') return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
-            return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
-        }
-
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
+
+        if(isonlybody() && $this->app->tab == 'execution' || $this->config->vision == 'lite')
+        {
+            $response['closeModal'] = true;
+            $kanbanData = $this->getKanbanData($execution);
+            if($execution->type == 'kanban')
+            {
+                $response['callback'] = "parent.parent.updateKanban($kanbanData, 0)";
+                return $response;
+            }
+            $response['callback'] = "parent.parent.updateKanban(\"task\", $kanbanData)";
+            return $response;
+        }
 
         $link = $this->createLink('execution', 'browse', "executionID={$execution->id}");
         if($this->app->tab == 'my') $link = $this->createLink('my', 'work', 'mode=task');

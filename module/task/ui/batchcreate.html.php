@@ -35,6 +35,7 @@ $items[] = array
     'value'   => $moduleID,
     'items'   => $modules,
     'width'   => '180px',
+    'ditto'   => true,
 );
 
 if(!$hideStory)
@@ -121,22 +122,24 @@ if($execution->type == 'kanban')
 {
     $items[] = array
     (
-        'name'    => 'regions',
-        'label'   => $lang->kanbancard->region,
-        'control' => 'select',
-        'value'   => $regionID,
-        'items'   => $regionPairs,
-        'width'   => '180px',
+        'name'     => 'region',
+        'label'    => $lang->kanbancard->region,
+        'control'  => 'select',
+        'value'    => $regionID,
+        'items'    => $regionPairs,
+        'width'    => '180px',
+        'required' => true,
     );
 
     $items[] = array
     (
-        'name'    => 'lanes',
-        'label'   => $lang->kanbancard->lane,
-        'control' => 'select',
-        'value'   => $laneID,
-        'items'   => $lanePairs,
-        'width'   => '180px',
+        'name'     => 'lane',
+        'label'    => $lang->kanbancard->lane,
+        'control'  => 'select',
+        'value'    => $laneID,
+        'items'    => $lanePairs,
+        'width'    => '180px',
+        'required' => true,
     );
 }
 
@@ -227,7 +230,7 @@ formBatchPanel
     on::change('[data-name="module"]', 'setStories'),
     on::change('[data-name="story"]', 'setStoryRelated'),
     on::click('[data-name="copyStory"]', 'copyStoryTitle'),
-    on::change('[data-name="regions"]', 'loadLanes'),
+    on::change('[data-name="region"]', 'loadLanes'),
 );
 
 /* ====== Render page ====== */

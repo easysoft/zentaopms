@@ -163,9 +163,9 @@ class taskModel extends model
         foreach($tasks as $task)
         {
             /* Get the lane and column of the current task. */
-            $laneID   = $task->laneID;
+            $laneID   = $task->lane;
             $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            unset($task->laneID);
+            unset($task->lane);
 
             /* Create a task. */
             $taskID = $this->create($task);

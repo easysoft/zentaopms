@@ -85,7 +85,7 @@ $config->task->form->team->create['teamLeft']     = array('type' => 'array', 're
 $config->task->form->team->edit = $config->task->form->team->create;
 $config->task->form->team->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
 
-$config->task->form->batchcreate = common::formConfig('task', 'batchEdit');
+$config->task->form->batchedit = common::formConfig('task', 'batchEdit');
 $config->task->form->batchedit['taskIDList']     = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
 $config->task->form->batchedit['module']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchedit['name']           = array('type' => 'string',   'required' => true,  'default' => '');
@@ -120,7 +120,7 @@ $config->task->form->batchcreate['estStarted']    = array('type' => 'date',     
 $config->task->form->batchcreate['deadline']      = array('type' => 'date',     'required' => false, 'default' => null);
 $config->task->form->batchcreate['desc']          = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->batchcreate['pri']           = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->task->form->batchcreate['laneID']        = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->task->form->batchcreate['lane']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['openedBy']      = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->task->form->batchcreate['openedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
