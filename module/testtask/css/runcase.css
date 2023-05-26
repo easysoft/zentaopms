@@ -34,3 +34,4 @@
 
 .result-item .span-warning{color: #f1a325;}
 
+[id^="fileModal"] .modal-body {overflow: auto !important;}
