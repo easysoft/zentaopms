@@ -1310,17 +1310,17 @@ class bug extends control
     }
 
     /**
+     * ajax方式获取执行类别。
      * Ajax get execution lang.
      *
      * @param  int  $projectID
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionLang($projectID)
+    public function ajaxGetExecutionLang(int $projectID)
     {
         $project = $this->loadModel('project')->getByID($projectID);
-        if($project->model == 'kanban') return print($this->lang->bug->kanban);
-        return print($this->lang->bug->execution);
+        return $project->model == 'kanban' ? print($this->lang->bug->kanban) : print($this->lang->bug->execution);
     }
 
     /**
