@@ -2254,4 +2254,44 @@ class bugZen extends bug
 
         return !dao::isError();
     }
+
+    /**
+     * 检查批量创建的bug的数据。
+     * Check the batch created bugs.
+     *
+     * @param  array     $bugs
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function checkBugsForBatchCreate(array $bugs, int $productID): array
+    {
+        $this->loadModel('common');
+
+        /* Check whether the bugs meet the requirements, and if not, remove it. */
+        foreach($bugs as $index => $bug)
+        {
+            $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
+            if(zget($result, 'stop', false) !== false)
+            {
+                unset($bugs[$index]);
+                continue;
+            }
+
+            /* If the bug is not valid data, unset it.*/
+            if($this->common->checkValidRow('bug', $bug, $index)) unset($bugs[$index]);
+        }
+
+        /* Check required fields. */
+        foreach($bugs as $index => $bug)
+        {
+            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field and empty($bug->$field) and $field != 'title') dao::$errors["{$field}[{$index}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
+            }
+        }
+
+        return $bugs;
+    }
 }

@@ -702,6 +702,10 @@ class bug extends control
         {
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $this->session->bugImagesFile);
 
+            /* Check bugs. */
+            $bugs = $this->bugZen->checkBugsForBatchCreate($bugs, $productID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             /* Batch create bugs. */
             $actions = $this->bug->batchCreate($bugs, $productID, $output, $this->post->uploadImage, $this->session->bugImagesFile);
 

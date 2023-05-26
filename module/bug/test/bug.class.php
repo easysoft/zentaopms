@@ -2203,37 +2203,6 @@ class bugTest
      * Test check the batch created bugs.
      *
      * @param  array         $bugs
-     * @param  int           $productID
-     * @access public
-     * @return array|string
-     */
-    public function checkBugsForBatchCreateTest(array $bugs, int $productID): array|string
-    {
-        $bugs = $this->objectModel->checkBugsForBatchCreate($bugs, $productID);
-
-        $return = '';
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$value}";
-                if(is_array($value))  $return .= implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            $return = array_keys($bugs);
-            return implode(',', $return);
-        }
-    }
-
-    /**
-     * 测试检查批量创建的bug的数据。
-     * Test check the batch created bugs.
-     *
-     * @param  array         $bugs
      * @param  string        $required
      * @access public
      * @return array|string

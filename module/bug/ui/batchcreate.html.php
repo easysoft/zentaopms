@@ -22,7 +22,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->bug->custom->batchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->bug->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 
