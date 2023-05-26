@@ -339,7 +339,7 @@ class bug extends control
         /* Get assigned to member. */
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $users = $this->bugZen->getAssignedToPairs($bug);
+            $users = $this->bugZen->getAssignedToPairs($oldBug);
         }
         else
         {
