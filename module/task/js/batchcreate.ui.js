@@ -29,17 +29,22 @@ function setStories(event)
     });
 }
 
-/* Toggle zero task story. */
+/**
+ * Toggle zero task story.
+ *
+ * @access public
+ * @return void
+ */
 function toggleZeroTaskStory()
 {
     var $toggle = $('#zeroTaskStory').toggleClass('checked');
     var zeroTask = $toggle.hasClass('checked');
     $.cookie.set('zeroTask', zeroTask, {expires:config.cookieLife, path:config.webRoot});
-    $('select[name^="story"]').each(function()
+    $('select[data-name="story"]').each(function()
     {
-        var $select = $(this);
-        var selectVal = $select.val();
-        $select.find('option').each(function()
+        var $storySelect = $(this);
+        var selectVal    = $storySelect.val();
+        $storySelect.find('option').each(function()
         {
             var $option = $(this);
             var value = $option.attr('value');
@@ -50,7 +55,6 @@ function toggleZeroTaskStory()
                 if(selectVal == value) selectVal = '';
             }
         })
-        $select.val(selectVal).trigger("chosen:updated");
     });
 }
 
