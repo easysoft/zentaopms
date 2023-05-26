@@ -197,6 +197,13 @@ dtable
     set::footPager(usePager()),
     set::checkable(true),
     set::footToolbar($footToolbar),
+    set::footPager(
+        usePager(),
+        set::page($pager->pageID),
+        set::recPerPage($pager->recPerPage),
+        set::recTotal($pager->recTotal),
+        set::linkCreator(helper::createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
+    ),
 );
 
 render();

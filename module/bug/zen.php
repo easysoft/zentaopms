@@ -239,6 +239,7 @@ class bugZen extends bug
         $this->view->browseType      = $browseType;
         $this->view->currentModuleID = $moduleID;
         $this->view->orderBy         = $orderBy;
+        $this->view->pager           = $pager;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
         $this->view->modules         = $this->tree->getOptionMenu($product->id, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $this->bug->getModulesForSidebar($product->id, $branch);
