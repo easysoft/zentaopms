@@ -262,7 +262,8 @@ class history extends wg
                     $this->commentBtn(),
                 )
             ),
-            div(setClass('mt-3'), $this->historyList())
+            div(setClass('mt-3'), $this->historyList()),
+            commentDialog(set::name('comment'))
         );
     }
 }

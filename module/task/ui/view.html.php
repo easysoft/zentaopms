@@ -134,6 +134,4 @@ detailBody
     )
 );
 
-commentDialog(set::name('comment'));
-
 render();
