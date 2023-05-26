@@ -159,6 +159,63 @@ class taskZen extends task
     }
 
     /**
+     * 展示批量编辑任务的相关变量。
+     * Show the variables associated with the batch edit task.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function assignBatchEditVars(int $executionID): void
+    {
+        /* Set menu and related variables. */
+        if($executionID)
+        {
+            $this->execution->setMenu($executionID);
+            $execution = $this->execution->getById($executionID);
+
+            $this->view->title     = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->execution = $execution;
+            $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
+        }
+        else
+        {
+            $this->loadModel('my');
+            $this->lang->my->menu->work['subModule'] = 'task';
+
+            $this->view->title = $this->lang->task->batchEdit;
+            $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        }
+
+        /* Check if the request data size exceeds the PHP limit. */
+        $tasks           = $this->task->getByList($this->post->taskIDList);
+        $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+
+        foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
+        {
+            if(!empty($execution) && $execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
+            $customFields[$field] = $this->lang->task->$field;
+        }
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->task->custom->batchEditFields;
+
+        $executionIdList = array_unique(array_column($tasks, 'execution'));
+
+        /* Assign. */
+        $this->view->executionID    = $executionID;
+        $this->view->tasks          = $tasks;
+        $this->view->teams          = $this->task->getTeamMembersByIdList($this->post->taskIDList);
+        $this->view->executionTeams = $this->execution->getMembersByIdList($executionIdList);
+        $this->view->executionName  = zget($execution, 'name', '');
+        $this->view->executionType  = zget($execution, 'type', '');
+        $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
+
+        $this->display();
+    }
+
+    /**
      * 构建任务编辑表单。
      * Build task edit form.
      *
@@ -205,56 +262,6 @@ class taskZen extends task
         $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
         $this->view->contactLists  = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
-        $this->display();
-    }
-
-    /**
-     * 创建批量编辑表单。
-     * Build batch edit form.
-     *
-     * @param  array     $taskIdList
-     * @param  int       $executionID
-     * @access protected
-     * @return void
-     */
-    protected function buildBatchEditForm(array $taskIdList, int $executionID): void
-    {
-        /* Get edited tasks. */
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->fetchAll('id');
-        $teams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
-
-        /* Get execution teams. */
-        $executionIdList = array();
-        foreach($tasks as $task) if(!in_array($task->execution, $executionIdList)) $executionIdList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIdList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
-
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-
-        /* Set Custom. */
-        foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
-        {
-            if(!empty($this->view->executionn) && $this->view->execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
-            $customFields[$field] = $this->lang->task->$field;
-        }
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->batchEditFields;
-
-        /* Assign. */
-        $this->view->executionID    = $executionID;
-        $this->view->priList        = array('0' => '', 'ditto' => $this->lang->task->ditto) + $this->lang->task->priList;
-        $this->view->statusList     = array('ditto' => $this->lang->task->ditto) + $this->lang->task->statusList;
-        $this->view->typeList       = array('ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
-        $this->view->taskIDList     = $taskIdList;
-        $this->view->tasks          = $tasks;
-        $this->view->teams          = $teams;
-        $this->view->executionTeams = $executionTeams;
-        $this->view->executionName  = isset($execution) ? $execution->name : '';
-        $this->view->executionType  = isset($execution) ? $execution->type : '';
-        $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
-
         $this->display();
     }
 
@@ -493,6 +500,49 @@ class taskZen extends task
     }
 
     /**
+     * 构造批量编辑的任务数据。
+     * Build the tasks data to batch edit.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildTasksForBatchEdit(): false|array
+    {
+        $taskData = form::batchData()->get();
+        $oldTasks = $this->post->taskIDList ? $this->task->getByList($this->post->taskIDList) : array();
+        $now      = helper::now();
+        foreach($taskData as $taskID => $task)
+        {
+            $oldTask = $oldTasks[$taskID];
+
+            $task->finishedDate = $oldTask->finishedBy == $task->finishedBy ? $oldTask->finishedDate : $now;
+            $task->canceledDate = $oldTask->canceledBy == $task->canceledBy ? $oldTask->canceledDate : $now;
+            $task->closedDate   = $oldTask->closedBy == $task->closedBy ? $oldTask->closedDate : $now;
+            $task->parent       = $oldTask->parent;
+            $task->assignedTo   = $task->status == 'closed' ? 'closed' : $task->assignedTo;
+            $task->assignedDate = !empty($task->assignedTo) && $oldTask->assignedTo != $task->assignedTo ? $now : $oldTask->assignedDate;
+            $task->version      = $oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline ?  $oldTask->version + 1 : $oldTask->version;
+            $task->status       = $task->status == 'done' && $task->closedReason ? 'closed' : $task->status;
+            $task->consumed     = $task->consumed < 0 ? $task->consumed  : $task->consumed + $oldTask->consumed;
+
+            if(empty($task->closedReason) && $task->status == 'closed')
+            {
+                if($oldTask->status == 'done')   $task->closedReason = 'done';
+                if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
+            }
+            $task = $this->processTaskByStatus($task, $oldTask);
+            if($task->assignedTo) $task->assignedDate = $now;
+
+            unset($task->taskIDList);
+        }
+
+        $this->checkBatchEditTask($taskData, $oldTasks);
+        if(dao::isError()) return false;
+
+        return $taskData;
+    }
+
+    /**
      * 构造激活的任务数据。
      * Build the task data to activate.
      *
@@ -502,7 +552,8 @@ class taskZen extends task
      */
     protected function buildTaskForActivate(int $taskID): object
     {
-        $task = form::data($this->config->task->form->activate)->add('id', $taskID)->get();
+        $task = form::data()->add('id', $taskID)->get();
+        unset($task->comment);
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
     }
@@ -709,43 +760,6 @@ class taskZen extends task
     }
 
     /**
-     * 根据页面是执行还是我的地盘设置参数。
-     * Set parameters based on whether the page is execution or my.
-     *
-     * @param  int       $executionID
-     * @access protected
-     * @return void
-     */
-    protected function batchEdit4Pages(int $executionID): void
-    {
-        /* The tasks of execution. */
-        if($executionID)
-        {
-            $execution = $this->execution->getById($executionID);
-            $this->execution->setMenu($execution->id);
-
-            /* Set modules and members. */
-            $showAllModule = isset($this->config->task->allModule) ? $this->config->task->allModule : '';
-            $modules       = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
-            $modules       = array('ditto' => $this->lang->task->ditto) + $modules;
-
-            $this->view->title      = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
-            $this->view->execution  = $execution;
-            $this->view->modules    = $modules;
-        }
-        /* The tasks of my. */
-        else
-        {
-            /* Set my menu. */
-            $this->loadModel('my');
-            $this->lang->my->menu->work['subModule'] = 'task';
-
-            $this->view->title      = $this->lang->task->batchEdit;
-            $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        }
-    }
-
-    /**
      * 任务模块的一些常用操作。
      * Common actions of task module.
      *
@@ -850,6 +864,39 @@ class taskZen extends task
         }
 
         return true;
+    }
+
+    /**
+     * 检查传入的批量编辑数据是否符合要求。
+     * Check if the input post meets the requirements.
+     *
+     * @param  array     $tasks
+     * @param  array     $oldTasks
+     * @access protected
+     * @return bool
+     */
+    protected function checkBatchEditTask(array $tasks, array $oldTasks): bool
+    {
+        foreach($tasks as $taskID => $task)
+        {
+            $oldTask = $oldTasks[$taskID];
+
+            /* Check work hours. */
+            if(in_array($task->status, array('doing', 'pause')) && empty($oldTask->mode) && empty($task->left) && $task->parent >= 0)
+            {
+                dao::$errors["left[{$taskID}]"] = (array)sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
+            }
+            if($task->estimate < 0)  dao::$errors["estimate[$taskID]"]   = (array)sprintf($this->lang->task->error->recordMinus, $this->lang->task->estimateAB);
+            if($task->consumed < 0 ) dao::$errors["consumed[{$taskID}]"] = (array)sprintf($this->lang->task->error->recordMinus, $this->lang->task->consumedThisTime);
+            if($task->left < 0)      dao::$errors["left[$taskID]"]       = (array)sprintf($this->lang->task->error->recordMinus, $this->lang->task->leftAB);
+
+            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, $task->estStarted, $task->deadline, "task:{$taskID} ");
+
+            if($task->status == 'cancel') continue;
+            if($task->status == 'done' && !$task->consumed) dao::$errors["consumed[{$taskID}]"] = (array)sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
+            if(!empty($task->deadline) && $task->estStarted > $task->deadline) dao::$errors["deadline[{$taskID}]"] = (array)$this->lang->task->error->deadlineSmall;
+        }
+        return !dao::isError();
     }
 
     /**
@@ -1115,6 +1162,64 @@ class taskZen extends task
     }
 
     /**
+     * 通过任务状态处理任务的人员、日期字段。
+     * Process the person and date fields of a task by status.
+     *
+     * @param  object    $task
+     * @param  object    $oldTask
+     * @access protected
+     * @return objecy
+     */
+    protected function processTaskByStatus(object $task, object $oldTask): object
+    {
+        $now            = helper::now();
+        $currentAccount = $this->app->user->account;
+        switch($task->status)
+        {
+        case 'done':
+            $task->left = 0;
+            if(!$task->finishedBy)  $task->finishedBy = $currentAccount;
+            if($task->closedReason) $task->closedDate = $now;
+            $task->finishedDate = $oldTask->status == 'done' ? $oldTask->finishedDate : $now;
+            $task->canceledBy   = '';
+            $task->canceledDate = null;
+            break;
+        case 'cancel':
+            $task->canceledBy   = !$task->canceledBy ? $currentAccount : $task->canceledBy;
+            $task->canceledDate = !$task->canceledBy ? $now : $task->canceledDate;
+            $task->assignedTo   = $oldTask->openedBy;
+            $task->assignedDate = $now;
+            $task->finishedBy   = '';
+            $task->finishedDate = null;
+            break;
+        case 'closed':
+            $task->closedBy   = !$task->closedBy ? $currentAccount : $task->closedBy;
+            $task->closedDate = !$task->closedBy ? $now : $task->closedDate;
+            if($task->closedReason == 'cancel' and helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
+            break;
+        case 'wait':
+            if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
+            if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
+            break;
+        case 'pause':
+            $task->finishedDate = null;
+        default:
+            break;
+        }
+        if(in_array($task->status, array('wait', 'doing')))
+        {
+            $task->canceledBy   = '';
+            $task->finishedBy   = '';
+            $task->closedBy     = '';
+            $task->canceledDate = null;
+            $task->finishedDate = null;
+            $task->closedDate   = null;
+            $task->closedReason = '';
+        }
+        return $task;
+    }
+
+    /**
      * 编辑任务后返回响应.
      * Response after edit.
      *
@@ -1168,27 +1273,19 @@ class taskZen extends task
         {
             foreach($allChanges as $taskID => $changes)
             {
-                if(empty($changes)) continue;
-
-                $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-
                 $task = $this->task->getById($taskID);
-                if($task->fromBug != 0)
+                if(!$task->fromBug) continue;
+                foreach($changes as $change)
                 {
-                    foreach($changes as $change)
+                    if($change['field'] == 'status')
                     {
-                        if($change['field'] == 'status')
-                        {
-                            $response['callback'] = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
-                            return $response;
-                        }
+                        $response['callback'] = "parent.confirmBug('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "', {$task->fromBug})";
+                        return $response;
                     }
                 }
             }
         }
 
-        $this->loadModel('score')->create('ajax', 'batchOther');
         $response['load'] = $this->session->taskList;
         return $response;
     }

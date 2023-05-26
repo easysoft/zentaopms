@@ -192,7 +192,7 @@ class task extends control
 
     /**
      * 批量编辑任务。
-     * Batch edit task.
+     * Batch edit tasks.
      *
      * @param  int    $executionID
      * @access public
@@ -200,11 +200,16 @@ class task extends control
      */
     public function batchEdit(int $executionID = 0)
     {
-        if($this->post->names)
+        if($this->post->name)
         {
             /* Batch edit tasks. */
-            $postData   = form::data($this->config->task->form->batchEdit)->get();
-            $allChanges = $this->task->batchUpdate($postData);
+            $taskData = $this->taskZen->buildTasksForBatchEdit();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $allChanges = $this->task->batchUpdate($taskData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->task->afterBatchUpdate($taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->taskZen->responseAfterBatchEdit($allChanges);
@@ -212,12 +217,8 @@ class task extends control
         }
 
         if(!$this->post->taskIDList) $this->locate($this->session->taskList);
-        $taskIdList = array_unique($this->post->taskIDList);
 
-        /* Set parameters based on whether the page is execution or my. */
-        $this->taskZen->batchEdit4Pages($executionID);
-
-        $this->taskZen->buildBatchEditForm($taskIdList, $executionID);
+        $this->taskZen->assignBatchEditVars($executionID);
     }
 
     /**
@@ -958,7 +959,9 @@ class task extends control
         if(!empty($_POST))
         {
             /* Prepare the data information before activate the task. */
-            $task     = $this->taskZen->buildTaskForActivate($taskID);
+            $task = $this->taskZen->buildTaskForActivate($taskID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $teamData = form::data($this->config->task->form->team->edit)->get();
             $changes  = $this->task->activate($task, $this->post->comment, $teamData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

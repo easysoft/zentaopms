@@ -182,7 +182,7 @@ class taskModel extends model
 
     /**
      * 批量创建任务后的其他数据处理。
-     * Other data process after task batch create.
+     * other data process after task batch create.
      *
      * @param  array  $taskIdList
      * @param  int    $parentID
@@ -206,6 +206,57 @@ class taskModel extends model
             $childrenIdList = !empty($parentID) ? $taskIdList : array();
             $parentTask     = $this->getByID($parentID);
             $this->afterSplitTask($parentTask, $childrenIdList);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 批量编辑任务后的其他数据处理。
+     * other data process after task batch edit.
+     *
+     * @param  object[] $tasks
+     * @access public
+     * @return bool
+     */
+    public function afterBatchUpdate(array $tasks): bool
+    {
+        $this->loadModel('story');
+        $this->loadModel('kanban');
+        $this->loadModel('feedback');
+
+        $today          = helper::today();
+        $currentAccount = $this->app->user->account;
+        $oldTasks       = $tasks ? $this->getByList(array_keys($tasks)) : array();
+        foreach($tasks as $taskID => $task)
+        {
+            $oldTask = zget($oldTasks, $taskID);
+
+            /* Record effort. */
+            $record = new stdclass();
+            $record->account  = $currentAccount;
+            $record->task     = $taskID;
+            $record->date     = $today;
+            $record->left     = $task->left;
+            $record->consumed = $task->consumed;
+            $this->addTaskEffort($record);
+
+            /* Update Kanban and story stage. */
+            if($oldTask->story) $this->story->setStage($oldTask->story);
+            if($task->status != $oldTask->status) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+
+            /* Udate parent task's status, date and hour. */
+            if($oldTask->parent > 0)
+            {
+                $this->updateParentStatus($taskID);
+                $this->computeBeginAndEnd($oldTask->parent);
+            }
+
+            if($this->config->edition != 'open' && $oldTask->feedback && !isset($feedbacks[$oldTask->feedback]))
+            {
+                $feedbacks[$oldTask->feedback] = $oldTask->feedback;
+                $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            }
         }
 
         return !dao::isError();
@@ -803,283 +854,56 @@ class taskModel extends model
      * 批量更新任务。
      * Batch update tasks.
      *
-     * @param  object $postData
+     * @param  array $taskData
      * @access public
      * @return array[]|false
      */
-    public function batchUpdate(object $postData): array|false
+    public function batchUpdate(array $taskData): array|false
     {
-        $tasks      = array();
+        $this->loadModel('action');
+        $this->loadModel('score');
+
         $allChanges = array();
-        $now        = helper::now();
-        $today      = date(DT_DATE1);
-        $taskIdList = $postData->taskIDList;
-
-        /* Process data if the value is 'ditto'. */
-        foreach($taskIdList as $taskID)
+        $oldTasks   = $taskData ? $this->getByList(array_keys($taskData)) : array();
+        foreach($taskData as $taskID => $task)
         {
-            if(isset($postData->modules[$taskID]) and ($postData->modules[$taskID] == 'ditto')) $postData->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
-            if($postData->types[$taskID]       == 'ditto') $postData->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
-            if($postData->pris[$taskID]        == 'ditto') $postData->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
-            if($postData->finishedBys[$taskID] == 'ditto') $postData->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
-            if($postData->canceledBys[$taskID] == 'ditto') $postData->canceledBys[$taskID] = isset($prev['canceledBy']) ? $prev['canceledBy'] : '';
-            if($postData->closedBys[$taskID]   == 'ditto') $postData->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
-            if($postData->estStarteds[$taskID] == '0000-00-00') $postData->estStarteds[$taskID] = '';
-            if($postData->deadlines[$taskID]   == '0000-00-00') $postData->deadlines[$taskID]   = '';
-            if(isset($postData->assignedTos[$taskID]) and $postData->assignedTos[$taskID] == 'ditto') $postData->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
-
-            $prev['module']     = $postData->modules[$taskID];
-            $prev['type']       = $postData->types[$taskID];
-            $prev['pri']        = $postData->pris[$taskID];
-            $prev['finishedBy'] = $postData->finishedBys[$taskID];
-            $prev['canceledBy'] = $postData->canceledBys[$taskID];
-            $prev['closedBy']   = $postData->closedBys[$taskID];
-            if(isset($postData->assignedTos[$taskID])) $prev['assignedTo'] = $postData->assignedTos[$taskID];
-        }
-
-        /* Initialize tasks from the post data.*/
-        $extendFields = $this->getFlowExtendFields();
-        $oldTasks     = $taskIdList ? $this->getByList($taskIdList) : array();
-        $tasks        = array();
-        foreach($taskIdList as $taskID)
-        {
-            $oldTask = $oldTasks[$taskID];
-
-            $task = new stdclass();
-            $task->id             = $taskID;
-            $task->color          = $postData->colors[$taskID];
-            $task->name           = $postData->names[$taskID];
-            $task->module         = isset($postData->modules[$taskID]) ? $postData->modules[$taskID] : 0;
-            $task->type           = $postData->types[$taskID];
-            $task->status         = isset($postData->statuses[$taskID]) ? $postData->statuses[$taskID] : $oldTask->status;
-            $task->pri            = $postData->pris[$taskID];
-            $task->estimate       = isset($postData->estimates[$taskID]) ? $postData->estimates[$taskID] : $oldTask->estimate;
-            $task->left           = isset($postData->lefts[$taskID]) ? $postData->lefts[$taskID] : $oldTask->left;
-            $task->estStarted     = $postData->estStarteds[$taskID];
-            $task->deadline       = $postData->deadlines[$taskID];
-            $task->finishedBy     = $postData->finishedBys[$taskID];
-            $task->canceledBy     = $postData->canceledBys[$taskID];
-            $task->closedBy       = $postData->closedBys[$taskID];
-            $task->closedReason   = $postData->closedReasons[$taskID];
-            $task->finishedDate   = $oldTask->finishedBy == $task->finishedBy ? $oldTask->finishedDate : $now;
-            $task->canceledDate   = $oldTask->canceledBy == $task->canceledBy ? $oldTask->canceledDate : $now;
-            $task->closedDate     = $oldTask->closedBy == $task->closedBy ? $oldTask->closedDate : $now;
-            $task->lastEditedBy   = $this->app->user->account;
-            $task->lastEditedDate = $now;
-            $task->consumed       = $oldTask->consumed;
-            $task->parent         = $oldTask->parent;
-
-            if(isset($postData->assignedTos[$taskID])) $task->assignedTo = $postData->assignedTos[$taskID];
-            if($task->status == 'closed')          $task->assignedTo = 'closed';
-            if(isset($task->assignedTo) and $oldTask->assignedTo != $task->assignedTo) $task->assignedDate = $now;
-
-            if(strpos(',doing,pause,', $task->status) and empty($oldTask->mode) and empty($task->left) and $task->parent >= 0)
-            {
-                dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
-                return false;
-            }
-
-            if(!empty($this->config->limitTaskDate))
-            {
-                $this->checkEstStartedAndDeadline($oldTask->execution, $task->estStarted, $task->deadline, "task:{$taskID} ");
-                if(dao::isError()) return false;
-            }
-
-            if(empty($task->closedReason) and $task->status == 'closed')
-            {
-                if($oldTask->status == 'done')   $task->closedReason = 'done';
-                if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
-            }
-
-            if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
-            {
-                $task->version = $oldTask->version + 1;
-            }
-
-            foreach($extendFields as $extendField)
-            {
-                $task->{$extendField->field} = $this->post->{$extendField->field}[$taskID];
-                if(is_array($task->{$extendField->field})) $task->{$extendField->field} = implode(',', $task->{$extendField->field});
-
-                $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
-            }
-
-            if(!empty($postData->consumeds[$taskID]))
-            {
-                if($postData->consumeds[$taskID] < 0)
-                {
-                    dao::$errors[] = sprintf($this->lang->task->error->consumed, $taskID);
-                    return false;
-                }
-                else
-                {
-                    $record = new stdclass();
-                    $record->account  = $this->app->user->account;
-                    $record->task     = $taskID;
-                    $record->date     = $today;
-                    $record->left     = $task->left;
-                    $record->consumed = $postData->consumeds[$taskID];
-                    $this->addTaskEstimate($record);
-
-                    $task->consumed = $oldTask->consumed + $record->consumed;
-                }
-            }
-
-            switch($task->status)
-            {
-            case 'done':
-                $task->left = 0;
-                if(!$task->finishedBy)  $task->finishedBy = $this->app->user->account;
-                if($task->closedReason) $task->closedDate = $now;
-                $task->finishedDate = $oldTask->status == 'done' ? $oldTask->finishedDate : $now;
-
-                $task->canceledBy   = '';
-                $task->canceledDate = '';
-                break;
-            case 'cancel':
-                $task->assignedTo   = $oldTask->openedBy;
-                $task->assignedDate = $now;
-
-                if(!$task->canceledBy)
-                {
-                    $task->canceledBy   = $this->app->user->account;
-                    $task->canceledDate = $now;
-                }
-
-                $task->finishedBy   = '';
-                $task->finishedDate = '';
-                break;
-            case 'closed':
-                if(!$task->closedBy)
-                {
-                    $task->closedBy   = $this->app->user->account;
-                    $task->closedDate = $now;
-                }
-                if($task->closedReason == 'cancel' and helper::isZeroDate($task->finishedDate)) $task->finishedDate = '';
-                break;
-            case 'wait':
-                if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
-                if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
-
-                $task->canceledDate = '';
-                $task->finishedDate = '';
-                $task->closedDate   = '';
-                break;
-            case 'doing':
-                $task->canceledDate = '';
-                $task->finishedDate = '';
-                $task->closedDate   = '';
-                break;
-            case 'pause':
-                $task->finishedDate = '';
-            default:
-                break;
-            }
-            if($task->assignedTo) $task->assignedDate = $now;
-
-            $tasks[$taskID] = $task;
-        }
-
-        /* Check field not empty. */
-        foreach($tasks as $taskID => $task)
-        {
-            if($task->status == 'cancel') continue;
-            if($task->status == 'done' and $task->consumed === false)
-            {
-                dao::$errors[] = 'Task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
-                return false;
-            }
-
-            if(!empty($task->deadline) and $task->estStarted > $task->deadline)
-            {
-                dao::$errors[] = 'Task#' . $taskID . $this->lang->task->error->deadlineSmall;
-                return false;
-            }
-
-            foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if(empty($field)) continue;
-
-                if(!isset($task->$field)) continue;
-                if(!empty($task->$field)) continue;
-                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
-
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                return false;
-            }
-        }
-
-        $isBiz = $this->config->edition == 'biz';
-        $isMax = $this->config->edition == 'max';
-        foreach($tasks as $taskID => $task)
-        {
-            if(strpos(',doing,pause,', $task->status) && empty($oldTask->mode) && $task->parent >= 0 && empty($task->left))
-            {
-                dao::$errors[] = sprintf($this->lang->task->error->leftEmpty, $taskID, $this->lang->task->statusList[$task->status]);
-                return false;
-            }
-
-            $oldTask = $oldTasks[$taskID];
+            /* Update a task.*/
+            $oldTask = zget($oldTasks, $taskID);
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
-
-                ->checkIF($task->estimate !== false, 'estimate', 'float')
-                ->checkIF($task->consumed !== false, 'consumed', 'float')
-                ->checkIF($task->left     !== false, 'left',     'float')
-
-                ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
-
-                ->checkIF($task->status == 'done', 'consumed', 'notempty')
-                ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
-                ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
-
-                ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+                ->batchCheck($this->config->task->edit->requiredFields, 'notempty')
                 ->checkFlow()
-                ->where('id')->eq((int)$taskID)
+                ->where('id')->eq($taskID)
                 ->exec();
+
             if(dao::isError())
             {
-                dao::$errors[] = 'Task#' . $taskID . dao::getError(true);
+                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$taskID}]"] = $error;
                 return false;
             }
 
-            if($task->status == 'done' and $task->closedReason) $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('id')->eq($taskID)->exec();
-
-            if($oldTask->story !== false) $this->loadModel('story')->setStage($oldTask->story);
-            if(!dao::isError())
+            /* Create the task description of the current version in the database. */
+            if($task->version > $oldTask->version)
             {
-                /* Record version change history. */
-                if($task->version > $oldTask->version)
-                {
-                    $taskSpec = new stdclass();
-                    $taskSpec->task       = $taskID;
-                    $taskSpec->version    = $task->version;
-                    $taskSpec->name       = $task->name;
-                    $taskSpec->estStarted = $task->estStarted;
-                    $taskSpec->deadline   = $task->deadline;
+                $taskSpec = new stdclass();
+                $taskSpec->task       = $taskID;
+                $taskSpec->version    = $task->version;
+                $taskSpec->name       = $task->name;
+                $taskSpec->estStarted = $task->estStarted;
+                $taskSpec->deadline   = $task->deadline;
 
-                    $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
-                }
-
-                if($oldTask->parent > 0)
-                {
-                    $this->updateParentStatus($oldTask->id);
-                    $this->computeBeginAndEnd($oldTask->parent);
-                }
-
-                if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
-                if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-                if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task', $oldTask->id);
-                if(($isBiz || $isMax) && $oldTask->feedback && !isset($feedbacks[$oldTask->feedback]))
-                {
-                    $feedbacks[$oldTask->feedback] = $oldTask->feedback;
-                    $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-                }
-                $allChanges[$taskID] = common::createChanges($oldTask, $task);
+                $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             }
+
+            if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
+            if($task->status == 'closed') $this->score->create('task', 'close', $taskID);
+            $actionID = $this->action->create('task', $taskID, 'Edited');
+            $changes  = common::createChanges($oldTask, $task);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+            $allChanges[$taskID] = $changes;
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError()) $this->score->create('ajax', 'batchEdit');
         return $allChanges;
     }
 
@@ -2110,6 +1934,19 @@ class taskModel extends model
 
         $estimate->isLast = $lastID == $estimate->id;
         return $estimate;
+    }
+
+    /**
+     * 通过任务ID列表查询任务团队信息。
+     * Get task team by id list.
+     *
+     * @param  array    $taskIdList
+     * @access public
+     * @return object[]
+     */
+    public function getTeamMembersByIdList(array $taskIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
     }
 
     /**

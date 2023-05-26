@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
+su('admin');
 
 zdTable('project')->config('project')->gen(6);
 zdTable('task')->config('task')->gen(9);

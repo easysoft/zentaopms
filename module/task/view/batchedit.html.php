@@ -78,22 +78,22 @@ js::set('requiredFields', $config->task->edit->requiredFields);
           </tr>
         </thead>
         <tbody>
-          <?php foreach($taskIDList as $taskID):?>
+          <?php foreach($tasks as $taskID => $task):?>
           <?php
           if(!isset($execution))
           {
-              $prjInfo = $this->execution->getById($tasks[$taskID]->execution);
-              $modules = $this->tree->getTaskOptionMenu($tasks[$taskID]->execution, 0, 0, 'allModule');
+              $prjInfo = $this->execution->getById($task->execution);
+              $modules = $this->tree->getTaskOptionMenu($task->execution, 0, 0, 'allModule');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
           }
           ?>
           <tr>
-            <?php $disableAssignedTo = (isset($teams[$taskID]) and (($tasks[$taskID]->assignedTo != $this->app->user->account and $tasks[$taskID]->mode == 'linear') or !isset($teams[$taskID][$app->user->account]))) ? "disabled='disabled'" : '';?>
-            <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
+            <?php $disableAssignedTo = (isset($teams[$taskID]) and (($task->assignedTo != $this->app->user->account and $task->mode == 'linear') or !isset($teams[$taskID][$app->user->account]))) ? "disabled='disabled'" : '';?>
+            <?php $disableHour = (isset($teams[$taskID]) or $task->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
-            $teamAccounts = !empty($executionTeams[$tasks[$taskID]->execution]) ? array_keys($executionTeams[$tasks[$taskID]->execution]) : array();
+            $teamAccounts = !empty($executionTeams[$task->execution]) ? array_column($executionTeams[$task->execution], 'account') : array();
             foreach($teamAccounts as $teamAccount) $members[$teamAccount] = zget($users, $teamAccount);
 
             $taskMembers = array();
@@ -104,52 +104,52 @@ js::set('requiredFields', $config->task->edit->requiredFields);
             }
             else
             {
-                if($tasks[$taskID]->status == 'closed') $members['closed'] = 'Closed';
+                if($task->status == 'closed') $members['closed'] = 'Closed';
                 $taskMembers = $members;
             }
 
-            if($tasks[$taskID]->assignedTo and !isset($taskMembers[$tasks[$taskID]->assignedTo]))
+            if($task->assignedTo and !isset($taskMembers[$task->assignedTo]))
             {
-                $taskMembers[$tasks[$taskID]->assignedTo] = $users[$tasks[$taskID]->assignedTo];
+                $taskMembers[$task->assignedTo] = $users[$task->assignedTo];
             }
             ?>
             <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
-            <td style='overflow:visible' title='<?php echo $tasks[$taskID]->name?>'>
+            <td style='overflow:visible' title='<?php echo $task->name?>'>
               <div class="input-control has-icon-right">
-                <?php echo html::input("names[$taskID]", $tasks[$taskID]->name, "class='form-control'");?>
+                <?php echo html::input("name[$taskID]", $task->name, "class='form-control'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix">
                     <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
                   </ul>
-                  <?php echo html::hidden("colors[$taskID]", $tasks[$taskID]->color, "data-provide='colorpicker' data-wrapper='input-control-icon-right' data-icon='color' data-btn-tip='{$lang->task->colorTag}' data-update-text='#names\\[{$taskID}\\]'");?>
+                  <?php echo html::hidden("color[$taskID]", $task->color, "data-provide='colorpicker' data-wrapper='input-control-icon-right' data-icon='color' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[{$taskID}\\]'");?>
                 </div>
               </div>
             </td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, "class='form-control picker-select' data-drop-width='auto'")?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $taskMembers, $tasks[$taskID]->assignedTo, "class='form-control picker-select' data-drop-width='auto' {$disableAssignedTo}");?></td>
-            <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, "class='form-control'");?></td>
-            <td <?php echo zget($visibleFields, 'status',     "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, "class='form-control' {$disableHour}");?></td>
-            <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>><?php echo html::input("estStarteds[$taskID]", helper::isZeroDate($tasks[$taskID]->estStarted) ? '' : $tasks[$taskID]->estStarted, "class='form-control text-center form-date'");?></td>
-            <td <?php echo zget($visibleFields, 'deadline',   "class='hidden'")?>><?php echo html::input("deadlines[$taskID]", helper::isZeroDate($tasks[$taskID]->deadline) ? '' : $tasks[$taskID]->deadline, "class='form-control text-center form-date'");?></td>
-            <td <?php echo zget($visibleFields, 'pri',        "class='hidden'")?>><?php echo html::select("pris[$taskID]", $priList, $tasks[$taskID]->pri, "class='form-control'");?></td>
-            <td <?php echo zget($visibleFields, 'estimate',   "class='hidden'")?>><?php echo html::input("estimates[$taskID]", $tasks[$taskID]->estimate, "class='form-control text-center' {$disableHour}");?></td>
-            <td <?php echo zget($visibleFields, 'record',     "class='hidden'")?>><?php echo html::input("consumeds[$taskID]", 0, "class='form-control text-center' {$disableHour}");?></td>
-            <td <?php echo zget($visibleFields, 'left',       "class='hidden'")?>><?php echo html::input("lefts[$taskID]", $tasks[$taskID]->left, "class='form-control text-center' {$disableHour}");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'finishedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("finishedBys[$taskID]", $members, $tasks[$taskID]->finishedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'canceledBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("canceledBys[$taskID]", $members, $tasks[$taskID]->canceledBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("closedBys[$taskID]",   $members, $tasks[$taskID]->closedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$taskID]", $modules, $task->module, "class='form-control picker-select' data-drop-width='auto'")?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTo[$taskID]", $taskMembers, $task->assignedTo, "class='form-control picker-select' data-drop-width='auto' {$disableAssignedTo}");?></td>
+            <td><?php echo html::select("type[$taskID]",    $lang->task->typeList, $task->type, "class='form-control'");?></td>
+            <td <?php echo zget($visibleFields, 'status',     "class='hidden'")?>><?php echo html::select("status[$taskID]", $lang->task->statusList, $task->status, "class='form-control' {$disableHour}");?></td>
+            <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>><?php echo html::input("estStarted[$taskID]", helper::isZeroDate($task->estStarted) ? '' : $task->estStarted, "class='form-control text-center form-date'");?></td>
+            <td <?php echo zget($visibleFields, 'deadline',   "class='hidden'")?>><?php echo html::input("deadline[$taskID]", helper::isZeroDate($task->deadline) ? '' : $task->deadline, "class='form-control text-center form-date'");?></td>
+            <td <?php echo zget($visibleFields, 'pri',        "class='hidden'")?>><?php echo html::select("pri[$taskID]", $lang->task->priList, $task->pri, "class='form-control'");?></td>
+            <td <?php echo zget($visibleFields, 'estimate',   "class='hidden'")?>><?php echo html::input("estimate[$taskID]", $task->estimate, "class='form-control text-center' {$disableHour}");?></td>
+            <td <?php echo zget($visibleFields, 'record',     "class='hidden'")?>><?php echo html::input("consumed[$taskID]", 0, "class='form-control text-center' {$disableHour}");?></td>
+            <td <?php echo zget($visibleFields, 'left',       "class='hidden'")?>><?php echo html::input("left[$taskID]", $task->left, "class='form-control text-center' {$disableHour}");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'finishedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("finishedBy[$taskID]", $members, $task->finishedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'canceledBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("canceledBy[$taskID]", $members, $task->canceledBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("closedBy[$taskID]",   $members, $task->closedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>>
               <?php
               $reasonList[''] = '';
-              $closedReason   = $tasks[$taskID]->closedReason;
+              $closedReason   = $task->closedReason;
               if(!empty($closedReason))
               {
                   $reasonList[$closedReason] = $lang->task->reasonList[$closedReason];
               }
               else
               {
-                  $status = $tasks[$taskID]->status;
+                  $status = $task->status;
                   if($status == 'done' or $status == 'cancel')
                   {
                       $reasonList[$status] = $lang->task->reasonList[$status];
@@ -160,10 +160,10 @@ js::set('requiredFields', $config->task->edit->requiredFields);
                   }
               }
 
-              echo html::select("closedReasons[$taskID]", $reasonList, $closedReason, 'class=form-control');
+              echo html::select("closedReason[$taskID]", $reasonList, $closedReason, 'class=form-control');
               ?>
             </td>
-            <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $tasks[$taskID], $extendField->field . "[{$taskID}]") . "</td>";?>
+            <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $task, $extendField->field . "[{$taskID}]") . "</td>";?>
           </tr>
           <?php endforeach;?>
         </tbody>

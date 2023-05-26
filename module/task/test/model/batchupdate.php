@@ -2,6 +2,12 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
+su('admin');
+
+zdTable('user')->gen(5);
+zdTable('project')->config('project')->gen(5);
+zdTable('task')->config('task')->gen(20);
+zdTable('taskspec')->config('taskspec')->gen(20);
 
 /**
 
@@ -9,23 +15,54 @@ title=测试taskModel->batchUpdate();
 timeout=0
 cid=1
 
-- 测试批量修改任务
- - 第0条的field属性 @name
- - 第0条的old属性 @开发任务11
- - 第0条的new属性 @任务改名1
-
 */
 
-$task     = zdTable('task')->gen(10);
-$taskSpec = zdTable('taskspec')->gen(10);
+$taskIdList = range(1, 20);
 
-$names    = array(1 => '任务改名1', 2 => '任务改名2', 3 => '任务改名3');
-$type     = array(1 => 'devel', 2 => 'design', 3 => 'test');
-$statuses = array(1 => 'doing', 2 => 'wait', 3 => 'done');
-$colors   = array(1 => '#ff4e3e', 2 => '', 3 => '');
+$changeName       = array('id' => 1, 'name' => '修改1');
+$changeModule     = array('id' => 2, 'module' => 1);
+$changeType       = array('id' => 3, 'type' => 'devel');
+$changeAssignedTo = array('id' => 4, 'assignedTo' => 'admin');
+$changeStatus     = array('id' => 5, 'status' => 'done');
+$changeEstStarted = array('id' => 6, 'estStarted' => '2023-05-25');
+$changeDeadline   = array('id' => 7, 'estStarted' => '2023-01-02', 'deadline' => '2023-05-25');
+$changePri        = array('id' => 8, 'pri' => 1);
+$changeEstimate   = array('id' => 9, 'estimate' => 1);
+$changeConsumed   = array('id' => 10, 'status' => 'doing', 'consumed' => 1);
+$changeLeft       = array('id' => 11, 'status' => 'doing', 'consumed' => 2, 'left' => 1);
+$changeFinishedBy = array('id' => 12, 'status' => 'done', 'finishedBy' => 'admin');
+$changeClosedBy   = array('id' => 13, 'status' => 'closed', 'closedBy' => 'admin', 'closedReason' => 'closed');
 
-$normal = array('taskIDList' => array(1 => 1, 2 => 2, 3 => 3), 'names' => $names, 'types' => $type);
-$status = array('taskIDList' => array(1 => 1, 2 => 2, 3 => 3), 'names' => $names, 'types' => $type,'statuses'=> $statuses);
+$emptyName       = array('id' => 14, 'name' => '');
+$emptyType       = array('id' => 15, 'type' => '');
+$emptyModule     = array('id' => 16, 'module' => 0);
+$emptyPri        = array('id' => 17, 'pri' => 0);
+$emptyEstimate   = array('id' => 18, 'estimate' => 0);
+$emptyEstStarted = array('id' => 19, 'estStarted' => '');
+$emptyDeadline   = array('id' => 20, 'deadline' => '');
 
-$task = new taskTest();
-r($task->batchUpdateObject($normal)) && p('0:field,old,new') && e('name,开发任务11,任务改名1'); // 测试批量修改任务
+$taskTester = new taskTest();
+
+/* Modify task field. */
+r($taskTester->batchUpdateObject($taskIdList, $changeName))       && p('1[0]:old,new')  && e('开发任务11,修改1');      // 检查修改任务名称
+r($taskTester->batchUpdateObject($taskIdList, $changeModule))     && p('2[0]:old,new')  && e('0,1');                   // 检查修改任务模块
+r($taskTester->batchUpdateObject($taskIdList, $changeType))       && p('3[0]:old,new')  && e('test,devel');            // 检查修改任务类型
+r($taskTester->batchUpdateObject($taskIdList, $changeAssignedTo)) && p('4[0]:old,new')  && e('`^$`,admin');            // 检查修改任务指派人
+r($taskTester->batchUpdateObject($taskIdList, $changeStatus))     && p('5[0]:old,new')  && e('wait,done');             // 检查修改任务状态
+r($taskTester->batchUpdateObject($taskIdList, $changeEstStarted)) && p('6[0]:old,new')  && e('2023-01-02,2023-05-25'); // 检查修改任务开始日期
+r($taskTester->batchUpdateObject($taskIdList, $changeDeadline))   && p('7[0]:old,new')  && e('2023-01-10,2023-05-25'); // 检查修改任务截止日期
+r($taskTester->batchUpdateObject($taskIdList, $changePri))        && p('8[0]:old,new')  && e('3,1');                   // 检查修改任务优先级
+r($taskTester->batchUpdateObject($taskIdList, $changeEstimate))   && p('9[0]:old,new')  && e('3,1');                   // 检查修改任务预计工时
+r($taskTester->batchUpdateObject($taskIdList, $changeConsumed))   && p('10[0]:old,new') && e('0,1');                   // 检查修改任务消耗工时
+r($taskTester->batchUpdateObject($taskIdList, $changeLeft))       && p('11[1]:old,new') && e('3,1');                   // 检查修改任务剩余工时
+r($taskTester->batchUpdateObject($taskIdList, $changeFinishedBy)) && p('12[1]:old,new') && e('`^$`,admin');            // 检查修改任务完成者
+r($taskTester->batchUpdateObject($taskIdList, $changeClosedBy))   && p('13[1]:old,new') && e('`^$`,admin');            // 检查修改任务关闭者
+
+/* Check the required fields. */
+r($taskTester->batchUpdateObject($taskIdList, $emptyName,       'name'))       && p('0') && e('『任务名称』不能为空。'); // 检查任务名称必填项
+r($taskTester->batchUpdateObject($taskIdList, $emptyType,       'type'))       && p('0') && e('『任务类型』不能为空。'); // 检查任务类型必填项
+r($taskTester->batchUpdateObject($taskIdList, $emptyModule,     'module'))     && p('0') && e('『所属模块』不能为空。'); // 检查任务所属模块必填项
+r($taskTester->batchUpdateObject($taskIdList, $emptyPri,        'pri'))        && p('0') && e('『优先级』不能为空。');   // 检查任务优先级必填项
+r($taskTester->batchUpdateObject($taskIdList, $emptyEstimate,   'estimate'))   && p('0') && e('『最初预计』不能为空。'); // 检查任务最初预计必填项
+r($taskTester->batchUpdateObject($taskIdList, $emptyEstStarted, 'estStarted')) && p('0') && e('『预计开始』不能为空。'); // 检查任务预计开始必填项
+r($taskTester->batchUpdateObject($taskIdList, $emptyDeadline,   'deadline'))   && p('0') && e('『截止日期』不能为空。'); // 检查任务截止日期必填项

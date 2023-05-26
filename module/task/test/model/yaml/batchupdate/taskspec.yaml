@@ -1,0 +1,6 @@
+title: zt_taskspec
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: task
+      range: 1-100

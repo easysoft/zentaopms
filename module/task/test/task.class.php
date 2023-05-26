@@ -113,51 +113,69 @@ class taskTest
     }
 
     /**
-     * Test batch update tasks.
+     * 批量更新任务。
+     * Batch update tasks.
      *
-     * @param  array  $param
+     * @param  array  $taskIdList
+     * @param  array  $params
+     * @param  string $requiredField
      * @access public
      * @return array
      */
-    public function batchUpdateObject(array $param = array())
+    public function batchUpdateObject(array $taskIdList, array $params = array(), $requiredField = ''): array
     {
-        $postData = new stdclass();
+        $requiredFields = $this->objectModel->config->task->edit->requiredFields;
+        if($requiredField) $this->objectModel->config->task->edit->requiredFields = $this->objectModel->config->task->edit->requiredFields . ',' . $requiredField . ',';
 
-        foreach($param['taskIDList'] as $taskID)
+        $oldTasks = $this->objectModel->getByList($taskIdList);
+        $taskData = array();
+        foreach($oldTasks as $task)
         {
-            $colors[$taskID]        = '';
-            $name[$taskID]          = '';
-            $modules[$taskID]       =  '0';
-            $assignedTos[$taskID]   = '';
-            $types[$taskID]         = '';
-            $statuses[$taskID]      = 'wait';
-            $estStarteds[$taskID]   =  '';
-            $deadlines[$taskID]     =  '';
-            $pris[$taskID]          =  '3';
-            $finishedBys[$taskID]   =  '';
-            $canceledBys[$taskID]   =  '';
-            $closedBys[$taskID]     =  '';
-            $closedReasons[$taskID] =  '';
-            $consumeds[$taskID]     =  0;
-            $lefts[$taskID]         =  0;
+            if($params['id'] == $task->id)
+            {
+                foreach($params as $key => $value)
+                {
+                    if($key == 'id') continue;
+                    $task->$key = $value;
+                }
+            }
+            $taskData[$task->id] = $task;
         }
-        $createFields = array('modules' => $modules, 'names' => $name, 'types' => $types, 'assignedTos' => $assignedTos,
-            'pris' => $pris, 'estStarteds' => $estStarteds, 'colors' => $colors, 'deadlines' => $deadlines, 'statuses' => $statuses, 'finishedBys'=>$finishedBys,
-            'canceledBys' => $canceledBys, 'closedBys' => $closedBys, 'closedReasons' => $closedReasons, 'consumeds' => $consumeds, 'lefts'=> $lefts);
-        foreach($createFields as $field => $defaultValue) $postData->$field = $defaultValue;
 
-        foreach($param as $key => $value) $postData->$key = $value;
+        $allChanges = $this->objectModel->batchUpdate($taskData);
+        $this->objectModel->config->task->edit->requiredFields = $requiredFields;
 
-        $allChanges = $this->objectModel->batchUpdate($postData);
+        if(dao::isError()) return current(dao::getError());
+        return $allChanges;
+    }
 
-        if(dao::isError())
+    /**
+     * 批量编辑任务后的其他数据处理。
+     * Other data process after task batch edit.
+     *
+     * @param  array  $taskIdList
+     * @param  array  $params
+     * @access public
+     * @return bool
+     */
+    public function afterBatchUpdateObject(array $taskIdList, array $params): bool
+    {
+        $oldTasks = $this->objectModel->getByList($taskIdList);
+        $taskData = array();
+        foreach($oldTasks as $task)
         {
-            return dao::getError();
+            if($params['id'] == $task->id)
+            {
+                foreach($params as $key => $value)
+                {
+                    if($key == 'id') continue;
+                    $task->$key = $value;
+                }
+            }
+            $taskData[$task->id] = $task;
         }
-        else
-        {
-            return array_shift($allChanges);
-        }
+
+        return $this->objectModel->afterBatchUpdate($taskData);
     }
 
     /**
