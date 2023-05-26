@@ -1286,6 +1286,7 @@ class bug extends control
     }
 
     /**
+     * ajax方式获取项目团队成员。
      * Ajax get project team members.
      *
      * @param  int    $projectID
@@ -1293,11 +1294,13 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProjectTeamMembers($projectID, $selectedUser = '')
+    public function ajaxGetProjectTeamMembers(int $projectID, string $selectedUser = '')
     {
-        $users       = $this->loadModel('user')->getPairs('noclosed|all');
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
-        foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
+        foreach($teamMembers as $account => $member)
+        {
+            if($account) $teamMembers[$account] = ucfirst(mb_substr($account, 0, 1)) . ':' . ($member ? $member : $account);
+        }
 
         return print(html::select('assignedTo', $teamMembers, $selectedUser, 'class="form-control"'));
     }
