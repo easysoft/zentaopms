@@ -95,9 +95,9 @@ class task extends control
             $this->dao->commit();
 
             /* Update other data related to the task after it is created. */
-            $columnID   = isset($output['columnID']) ? (int)$output['columnID'] : 0;
-            $taskIdList = (array)$taskIdList;
-            $task->id   = current($taskIdList);
+            $columnID     = isset($output['columnID']) ? (int)$output['columnID'] : 0;
+            $taskIdList   = (array)$taskIdList;
+            $taskData->id = current($taskIdList);
             $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID);
             $this->task->updateKanbanData($taskData->execution, $taskIdList, (int)$this->post->lane, $columnID);
             helper::setcookie('lastTaskModule', (int)$this->post->module);

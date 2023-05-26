@@ -482,13 +482,13 @@ class taskZen extends task
         $team      = !empty($this->post->team) ? array_filter($this->post->team) : array();
         $task      = form::data()->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
-            ->setIF($this->post->estimate !== false, 'left', $this->post->estimate)
+            ->setIF($this->post->estimate, 'left', $this->post->estimate)
             ->setIF($this->post->story, 'storyVersion', isset($this->post->story) ? $this->loadModel('story')->getVersion($this->post->story) : 0)
             ->setIF(empty($this->post->multiple) || count($team) < 1, 'mode', '')
             ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
-            ->setIF(!$this->post->estStarted, 'estStarted', '')
-            ->setIF(!$this->post->deadline, 'deadline', '')
+            ->setIF(!$this->post->estStarted, 'estStarted', null)
+            ->setIF(!$this->post->deadline, 'deadline', null)
             ->get();
 
         /* Processing image link. */
