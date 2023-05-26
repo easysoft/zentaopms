@@ -143,7 +143,7 @@ class bug extends control
     {
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
-        if(!$bug) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->notFound, 'confirmed' => $this->createLink('qa', 'index'))));
+        if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
@@ -276,35 +276,34 @@ class bug extends control
      */
     public function edit(int $bugID, bool $comment = false, string $kanbanGroup = 'default')
     {
+        $oldBug = $this->bug->getByID($bugID);
         if(!empty($_POST))
         {
-            $oldBug   = $this->bug->getByID($bugID);
             $formData = form::data($this->config->bug->form->edit);
             $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
-            if(!$bug) return $this->send($this->bugZen->errorEdit());
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = array();
             if(!$comment)
             {
                 $changes = $this->bug->update($bug);
-                if($changes === false) return $this->send($this->bugZen->errorEdit());
-                $this->bug->afterUpdate($bug, $oldBug);
-                if(dao::isError()) $this->send($this->bugZen->errorEdit());
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $this->bugZen->afterUpdate($bug, $oldBug);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             $this->executeHooks($bugID);
 
             /* Get response after editing bug. */
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup));
+            return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup);
         }
 
-        $bug = $this->bug->getByID($bugID);
+        $this->bugZen->checkBugExecutionPriv($oldBug);
 
-        $this->bugZen->checkBugExecutionPriv($bug);
+        $this->bugZen->setEditMenu($oldBug);
 
-        $this->bugZen->setEditMenu($bug);
-
-        $this->bugZen->buildEditForm($bug);
+        $this->bugZen->buildEditForm($oldBug);
     }
 
     /**
@@ -364,7 +363,7 @@ class bug extends control
      * confirm a bug.
      *
      * @param  int    $bugID
-     * @param  string $kanbanData fromColID=,toColID=,fromLaneID=,toLaneID=,regionID=
+     * @param  string $kanbanParams fromColID=,toColID=,fromLaneID=,toLaneID=,regionID=
      * @access public
      * @return void
      */
@@ -1036,7 +1035,7 @@ class bug extends control
      * Batch activate bugs.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return viod
      */

@@ -2318,6 +2318,46 @@ class bugModel extends model
     }
 
     /**
+     * 更新相关 bug。
+     * Update the linked bug.
+     *
+     * @param  int       $bugID
+     * @param  string    $linkBug
+     * @param  string    $oldLinkBug
+     * @access protected
+     * @return bool
+     */
+    protected function updateLinkBug(int $bugID, string $linkBug, string $oldLinkBug): bool
+    {
+        $linkBugs        = explode(',', $linkBug);
+        $oldLinkBugs     = explode(',', $oldLinkBug);
+        $addedLinkBugs   = array_diff($linkBugs, $oldLinkBugs);
+        $removedLinkBugs = array_diff($oldLinkBugs, $linkBugs);
+        $changedLinkBugs = array_merge($addedLinkBugs, $removedLinkBugs);
+        $changedLinkBugs = $this->dao->select('id, linkbug')->from(TABLE_BUG)->where('id')->in(array_filter($changedLinkBugs))->fetchPairs();
+
+        foreach($changedLinkBugs as $changedBugID => $linkBugs)
+        {
+            if(in_array($changedBugID, $addedLinkBugs))
+            {
+                $linkBugs = explode(',', $linkBugs);
+                if(!empty($linkBugs) && !in_array($bugID, $linkBugs)) $linkBugs[] = $bugID;
+            }
+            else
+            {
+                $linkBugs = explode(',', $linkBugs);
+                unset($linkBugs[array_search($bugID, $linkBugs)]);
+            }
+
+            $currentLinkBug = implode(',', array_filter($linkBugs));
+
+            $this->dao->update(TABLE_BUG)->set('linkBug')->eq($currentLinkBug)->where('id')->eq($changedBugID)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Print cell data.
      *
      * @param  object $col

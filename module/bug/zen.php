@@ -362,7 +362,7 @@ class bugZen extends bug
      */
     protected function prepareEditExtras(form $formData, object $oldBug): object|false
     {
-        if($oldBug->lastEditedDate != $formData->data->lastEditedDate)
+        if(!empty($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
@@ -401,17 +401,52 @@ class bugZen extends bug
     }
 
     /**
-     * 返回错误信息。
-     * return error.
+     * 更新完 bug 后的相关处理。
+     * Relevant processing after updating bug.
      *
+     * @param  object    $bug
+     * @param  object    $oldBug
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function errorEdit(): array
+    protected function afterUpdate(object $bug, object $oldBug): bool
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'error', 'message' => dao::getError());
+        /* 解除旧的版本关联关系，关联新的版本。*/
+        /* Unlink old resolved build and link new resolved build. */
+        if($bug->resolution == 'fixed' && !empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
+        {
+            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, $bug->id);
+            $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
+        }
 
-        return array('result' => 'fail', 'message' => dao::getError());
+        /* 记录解除旧的计划关联关系和关联新的计划的历史。*/
+        /* Create actions for linking new plan and unlinking old plan. */
+        if($bug->plan != $oldBug->plan)
+        {
+            $this->loadModel('action');
+            if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bug->id);
+            if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan, 'linkbug', '', $bug->id);
+        }
+
+        $this->updateLinkBug($bug->id, $bug->linkBug, $oldBug->linkBug);
+
+        /* 给 bug 解决者积分奖励。*/
+        /* Add score to the user who resolved the bug. */
+        if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug->id);
+
+        /* 更新 bug 所属看板的泳道。*/
+        /* Update the lane of the bug kanban. */
+        if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
+
+        /* 更新反馈的状态。*/
+        /* Update the status of feedback. */
+        if(($this->config->edition != 'open') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
+        /* 更新 bug 的附件。*/
+        /* Update the files of bug. */
+        $this->loadModel('file')->processFile4Object('bug', $oldBug, $bug);
+
+        return !dao::isError();
     }
 
     /**
@@ -427,7 +462,7 @@ class bugZen extends bug
      */
     protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0): array
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $bugID);
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
         /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
         /* This bug has been converted to a task, update the status of the related task or not. */
@@ -440,16 +475,16 @@ class bugZen extends bug
                 {
                     $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                     $canceledURL  = $this->server->http_referer;
-                    return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+                    return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
                 }
             }
         }
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isonlybody()) $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
+        if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID"));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
 
     /**
@@ -482,7 +517,7 @@ class bugZen extends bug
                 $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                 $kanbanData    = $this->kanban->getRDKanban($executionID, $laneType, 'id_desc', $regionID, $groupBy, $rdSearchValue);
                 $kanbanData    = json_encode($kanbanData);
-                return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)");
+                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
             }
 
             /* 执行中的看板。*/
@@ -491,10 +526,10 @@ class bugZen extends bug
             $kanbanData      = $this->kanban->getExecutionKanban($executionID, $laneType, $groupBy, $taskSearchValue);
             $kanbanType      = $laneType == 'all' ? 'bug' : key($kanbanData);
             $kanbanData      = json_encode($kanbanData[$kanbanType]);
-            return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
         }
 
-        return array('result' => 'success', 'closeModal' => true, 'load' => true);
+        return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
     }
 
     /**
@@ -1147,10 +1182,6 @@ class bugZen extends bug
         $product   = $this->product->getByID($bug->product);
         $execution = $this->execution->getByID($bug->execution);
 
-        /* 获取影响版本列表和解决版本列表。*/
-        /* Get the affected builds and resolved builds. */
-        list($openedBuildPairs, $resolvedBuildPairs) = $this->getEditBuildPairs($bug);
-
         /* 获取所属模块列表。*/
         /* Get module option menu. */
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
@@ -1185,28 +1216,18 @@ class bugZen extends bug
             $this->view->products = $this->products;
         }
 
-        if($product->shadow) $this->view->project = $this->project->getByShadowProduct($bug->product);
-
-        $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
-        $this->view->bug                   = $bug;
-        $this->view->product               = $product;
-        $this->view->execution             = $execution;
-        $this->view->branchPairs           = $this->getEditBranchPairs($bug);
-        $this->view->moduleOptionMenu      = $moduleOptionMenu;
-        $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
-        $this->view->projects              = $projects;
-        $this->view->executions            = $executions;
-        $this->view->projectExecutionPairs = $this->project->getProjectExecutionPairs();
-        $this->view->stories               = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
-        $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
-        $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->cases                 = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
-        $this->view->productBugs           = $productBugs;
-        $this->view->openedBuildPairs      = $openedBuildPairs;
-        $this->view->resolvedBuildPairs    = array('') + $resolvedBuildPairs;
-        $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->view->assignedToPairs       = $this->getEditAssignedToPairs($bug);
-        $this->view->actions               = $this->action->getList('bug', $bug->id);
+        $this->view->title            = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
+        $this->view->bug              = $bug;
+        $this->view->product          = $product;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
+        $this->view->projects         = $projects;
+        $this->view->executions       = $executions;
+        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
+        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->display();
     }
 
