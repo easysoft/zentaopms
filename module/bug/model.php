@@ -599,7 +599,7 @@ class bugModel extends model
     {
         $oldBug = $this->getByID($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug, $skip = 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
         /* 确认 bug 后的积分变动。*/
@@ -621,7 +621,7 @@ class bugModel extends model
         $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $this->post->comment);
         $this->action->logHistory($actionID, $changes);
 
-        return true;
+        return !dao::isError();
     }
 
     /**

@@ -294,8 +294,6 @@ class bug extends control
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            $this->executeHooks($bugID);
-
             /* Get response after editing bug. */
             return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup);
         }
@@ -328,12 +326,11 @@ class bug extends control
         {
             /* Init bug data. */
             $bug = form::data($this->config->bug->form->assignTo)->add('id', $bugID)->get();
+            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
 
             if($oldBug->status != 'closed') $this->bug->assign($bug);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->executeHooks($bugID);
 
             /* Get response after assigning bug. */
             return $this->send($this->bugZen->responseAfterOperate($bugID));
@@ -383,20 +380,8 @@ class bug extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* 执行工作流的扩展动作。*/
-            /* Execute extend actions.*/
-            $message = $this->executeHooks($bugID);
-
-            /* 弹窗内的返回。*/
-            /* Respond in Modal. */
-            if(isonlybody())
-            {
-                $regionID = zget($kanbanData, 'regionID', 0);
-                $this->bugZen->responseInModal($bug->execution, '', $regionID);
-            }
-
-            if(!$message) $message = $this->lang->saveSuccess;
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
+            $regionID = zget($kanbanData, 'regionID', 0);
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
         }
 
         $bug = $this->bug->getByID($bugID);

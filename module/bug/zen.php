@@ -462,6 +462,7 @@ class bugZen extends bug
      */
     protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0): array
     {
+        $message = $this->executeHooks($bugID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
 
         /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
@@ -484,7 +485,8 @@ class bugZen extends bug
         /* Respond after updating in modal. */
         if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
+        if(!$message) $message = $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
 
     /**

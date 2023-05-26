@@ -168,4 +168,3 @@ $config->bug->form->confirm['assignedTo']     = array('required' => false, 'type
 $config->bug->form->confirm['assignedDate']   = array('required' => false, 'type' => 'string', 'default' => helper::now());
 $config->bug->form->confirm['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->confirm['lastEditedDate'] = array('required' => false, 'type' => 'string', 'default' => helper::now());
-$config->bug->form->confirm['comment']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
