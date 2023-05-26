@@ -70,9 +70,10 @@ $config->bug->dtable->fieldList['confirmed']['name']  = 'confirmed';
 $config->bug->dtable->fieldList['confirmed']['title'] = $lang->bug->confirmed;
 $config->bug->dtable->fieldList['confirmed']['type']  = 'category';
 
-$config->bug->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
-$config->bug->dtable->fieldList['assignedTo']['title'] = $lang->bug->assignedTo;
-$config->bug->dtable->fieldList['assignedTo']['type']  = 'user';
+$config->bug->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
+$config->bug->dtable->fieldList['assignedTo']['title']       = $lang->bug->assignedTo;
+$config->bug->dtable->fieldList['assignedTo']['type']        = 'assign';
+$config->bug->dtable->fieldList['assignedTo']['assignLink']  = helper::createLink('bug', 'assignTo', 'bugID={id}');
 
 $config->bug->dtable->fieldList['assignedDate']['name']  = 'assignedDate';
 $config->bug->dtable->fieldList['assignedDate']['title'] = $lang->bug->assignedDate;
