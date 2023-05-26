@@ -446,7 +446,7 @@ class bug extends control
         /* Show the variables associated. */
         $this->view->title      = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
-        $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($bug->execution) : '';
+        $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldbug->execution) : '';
         $this->view->users      = $this->user->getPairs('noclosed');
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : 0, 'id_desc', $oldBug->project, 'stagefilter');
         $this->view->builds     = $this->loadModel('build')->getBuildPairs($oldBug->product, $oldBug->branch, 'withbranch,noreleased');
