@@ -870,7 +870,7 @@ class bugModel extends model
 
             $this->bugTao->updateByID((int)$bugID, $bug);
 
-            $this->executeHooks($bugID);
+            $this->executeHooks((int)$bugID);
 
             if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
             $changes[$bugID] = common::createChanges($oldBug, $bug);
@@ -1504,38 +1504,21 @@ class bugModel extends model
     }
 
     /**
+     * 获取产品成员键对。
      * get Product member pairs.
      *
      * @param  int    $productID
-     * @param  int    $branchID
+     * @param  string $branchID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getProductMemberPairs($productID, $branchID = '')
+    public function getProductMemberPairs(int $productID, string $branchID = ''): array
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, (string)$branchID);
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branchID);
 
-        $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.root')->in(array_keys($projects))
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fi()
-            ->fetchAll('account');
-
-        if(!$users) return array('' => '');
-
-        foreach($users as $account => $user)
-        {
-            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-            if(!empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
-        }
-
-        $users = $this->loadModel('user')->processAccountSort($users);
-        return array('' => '') + $users;
+        return $this->loadModel('user')->getTeamMemberPairs(array_keys($projects));
     }
 
     /**

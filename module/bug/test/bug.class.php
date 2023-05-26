@@ -1148,7 +1148,9 @@ class bugTest
      */
     public function batchResolveTest($bugIDList, $resolution, $bugID)
     {
-        $object = $this->objectModel->batchResolve($bugIDList, $resolution, 'trunk');
+        $oldBugs = $this->objectModel->getByIdList($bugIDList);
+
+        $object = $this->objectModel->batchResolve($bugIDList, $resolution, 'trunk', $oldBugs, array(), 'user3');
 
         if(dao::isError())
         {

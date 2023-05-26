@@ -947,11 +947,13 @@ class bug extends control
     {
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
+        /* Prepare resolve data. */
         $bugIdList = array_unique($this->post->bugIDList);
         $oldBugs   = $this->bug->getByIdList($bugIdList);
         $bugIdList = $this->bugZen->batchResolveIdFilter($bugIdList, $oldBugs);
         list($modules, $productQD) = $this->bugZen->getBatchResolveVars($oldBugs);
 
+        /* Batch resolve bugs. */
         $changes = $this->bug->batchResolve($bugIdList, $resolution, $resolvedBuild, $oldBugs, $modules, $productQD);
         if(dao::isError()) return print(js::error(dao::getError()));
 
@@ -1128,6 +1130,7 @@ class bug extends control
     }
 
     /**
+     * ajax方式获取产品关联执行的团队成员列表。
      * AJAX: get team members of the latest executions of a product as assignedTo list.
      *
      * @param  int    $productID
@@ -1135,7 +1138,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxLoadExecutionTeamMembers($productID, $selectedUser = '')
+    public function ajaxLoadExecutionTeamMembers(int $productID, string $selectedUser = '')
     {
         $productMembers = $this->bug->getProductMemberPairs($productID);
 

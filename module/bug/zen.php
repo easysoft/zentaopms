@@ -2181,11 +2181,7 @@ class bugZen extends bug
         foreach($bugIdList as $i => $bugID)
         {
             $oldBug = $oldBugs[$bugID];
-            if($oldBug->resolution == 'fixed' || $oldBug->status != 'active')
-            {
-                unset($bugIdList[$i]);
-                continue;
-            }
+            if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') unset($bugIdList[$i]);
         }
         return $bugIdList;
     }
@@ -2202,7 +2198,7 @@ class bugZen extends bug
     {
         $bug       = reset($oldBugs);
         $productID = $bug->product;
-        $product   = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $product   = $this->loadModel('product')->getByID($productID);
         $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
         $modules   = array();
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
