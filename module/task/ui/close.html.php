@@ -30,9 +30,12 @@ formPanel
     ),
     formGroup
     (
-        set::name("comment"),
-        set::label($lang->story->comment),
-        set::control("editor")
+        set::label($lang->comment),
+        editor
+        (
+            set::name('comment'),
+            set::rows('5'),
+        )
     ),
     history()
 );
