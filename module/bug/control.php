@@ -1188,13 +1188,12 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function ajaxGetByID($bugID)
+    public function ajaxGetByID(int $bugID)
     {
-        $bug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
-        $realname = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($bug->assignedTo)->fetch('realname');
+        $bug      = $this->bug->getBaseInfo($bugID);
+        $realname = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($bug->assignedTo)->fetch('realname');
+        $bug->assignedTo = $realname ? $realname : $bug->assignedTo;
 
-        $bug->assignedTo = $bug->assignedTo == 'closed' ? 'Closed' : $bug->assignedTo;
-        $bug->assignedTo = $realname ?: $bug->assignedTo;
         return print(json_encode($bug));
     }
 
