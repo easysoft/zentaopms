@@ -321,11 +321,12 @@ class build extends control
 
         $this->executeHooks($buildID);
         $branchName = '';
+        $this->loadModel('branch');
         if($build->productType != 'normal')
         {
             foreach(explode(',', $build->branch) as $buildBranch)
             {
-                $branchName .= $this->loadModel('branch')->getById($buildBranch);
+                $branchName .= $buildBranch == 0 ? $this->lang->branch->main : $this->branch->getById($buildBranch);
                 $branchName .= ',';
             }
             $branchName = trim($branchName, ',');
