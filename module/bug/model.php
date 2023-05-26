@@ -560,16 +560,13 @@ class bugModel extends model
      * Assign a bug to a user.
      *
      * @param  object $bug
-     * @param  string $comment
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function assign(object $bug, string $comment = ''): array|false
+    public function assign(object $bug): bool
     {
         /* Get old bug. */
         $oldBug = $this->getById($bug->id);
-        /* If status of the bug is closed, skip it. */
-        if($oldBug->status == 'closed') return false;
 
         /* Update assigned of the bug. */
         $this->dao->update(TABLE_BUG)
@@ -583,10 +580,10 @@ class bugModel extends model
 
         /* Record log. */
         $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $comment, $bug->assignedTo);
-        $this->action->logHistory($actionID, $changes);
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $this->post->comment, $bug->assignedTo);
+        if($changes) $this->action->logHistory($actionID, $changes);
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**

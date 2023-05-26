@@ -176,6 +176,7 @@ class bug extends control
         $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
         $this->view->actionList  = $this->loadModel('bug')->buildOperateMenu($bug, 'view');
+        $this->view->actions     = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
 
@@ -317,26 +318,25 @@ class bug extends control
     public function assignTo(int $bugID)
     {
         /* Get old bug, and check privilege of the execution. */
-        $bug = $this->bug->getById($bugID);
-        $this->bugZen->checkBugExecutionPriv($bug);
+        $oldBug = $this->bug->getById($bugID);
+        $this->bugZen->checkBugExecutionPriv($oldBug);
 
         /* Set menu. */
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
         if(!empty($_POST))
         {
             /* Init bug data. */
-            $bug = form::data($this->config->bug->form->assignTo)
-                ->add('id', $bugID)
-                ->get();
+            $bug = form::data($this->config->bug->form->assignTo)->add('id', $bugID)->get();
 
-            $this->bug->assign($bug, $this->post->comment);
+            if($oldBug->status != 'closed') $this->bug->assign($bug);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($bugID);
 
             /* Get response after assigning bug. */
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes));
+            return $this->send($this->bugZen->responseAfterOperate($bugID));
         }
 
         /* Get assigned to member. */
@@ -350,11 +350,9 @@ class bug extends control
         }
 
         /* Show the variables associated. */
-        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
-        $this->view->users   = $users;
-        $this->view->bug     = $bug;
-        $this->view->bugID   = $bugID;
-        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->view->title = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
+        $this->view->users = $users;
+        $this->view->bug   = $oldBug;
         $this->display();
     }
 
