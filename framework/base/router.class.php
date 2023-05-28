@@ -2101,9 +2101,9 @@ class baseRouter
 
             /* 将Hook脚本和老的代码合并在一起，并替换原来的定义。Merge hook codes with old codes and replace back. */
             $oldCodes  = $definedFile == $tmpTargetFile ? $mergedTargetCodes : $mainTargetCodes;
-            $oldCodes  = join("", array_slice($oldCodes, $startLine - 1, $endLine - $startLine + 1));
+            $oldCodes  = implode("", array_slice($oldCodes, $startLine - 1, $endLine - $startLine + 1));
             $openBrace = strpos($oldCodes, '{');
-            $newCodes  = substr($oldCodes, 0, $openBrace + 1) . "\n" . join("\n", $hookCodes[$method]) . substr($oldCodes, $openBrace + 1);
+            $newCodes  = substr($oldCodes, 0, $openBrace + 1) . "\n" . implode("\n", $hookCodes[$method]) . substr($oldCodes, $openBrace + 1);
 
             if($definedFile == $tmpTargetFile) $targetLines = str_replace($oldCodes, $newCodes, $targetLines);
             if($definedFile != $tmpTargetFile) $targetLines = str_replace($replaceMark, $newCodes . "\n$replaceMark", $targetLines);
@@ -2123,7 +2123,7 @@ class baseRouter
      * @access public
      * @return string
      */
-    static public function removePHPTAG(string $fileName): string
+    public static function removePHPTAG(string $fileName): string
     {
         $code = trim(file_get_contents($fileName));
         if(str_starts_with($code, '<?php')) $code = ltrim($code, '<?php');
@@ -2143,7 +2143,7 @@ class baseRouter
      * @access public
      * @return string
      */
-    static public function extractAPIURL(string $fileName): string
+    public static function extractAPIURL(string $fileName): string
     {
         global $config;
 
@@ -2312,7 +2312,8 @@ class baseRouter
      */
     public function loadModule()
     {
-        try {
+        try
+        {
             if(is_null($this->params) and !$this->setParams())
             {
                 $this->outputXhprof();
@@ -2326,7 +2327,9 @@ class baseRouter
             $this->checkAPIFile();
             $this->outputXhprof();
             return $module;
-        } catch (EndResponseException $endResponseException) {
+        }
+        catch (EndResponseException $endResponseException)
+        {
             echo $endResponseException->getContent();
         }
 
@@ -2826,13 +2829,10 @@ class baseRouter
      */
     public function connectByPDO(object $params): object|bool
     {
-        $dsn = null;
         if(!isset($params->driver)) static::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, true);
         if(!isset($params->user)) return false;
         try
         {
-            $dbPassword = helper::decryptPassword($params->password);
-
             $dbh = new dbh($params);
             $dbh->exec("SET NAMES {$params->encoding}");
 
@@ -2847,7 +2847,7 @@ class baseRouter
 
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            if(isset($params->strictMode) and $params->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
+            if(isset($params->strictMode) and !$params->strictMode) $dbh->exec("SET @@sql_mode= ''");
             if(isset($params->emulatePrepare)) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, $params->emulatePrepare);
             if(isset($params->bufferQuery))    $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $params->bufferQuery);
 
@@ -2911,7 +2911,7 @@ class baseRouter
         if(!$this->config->debug) helper::end();
 
         $log = "ERROR: $message in $file on line $line";
-        if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";;
+        if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";
         $trace = debug_backtrace();
         extract($trace[0]);
         extract($trace[1]);
@@ -3018,7 +3018,7 @@ class baseRouter
          * 如果是严重错误，停止程序。
          * If error level is serious, die.
          * */
-        if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
+        if(in_array($level, array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR)))
         {
             if(empty($this->config->debug)) helper::end();
 
@@ -3442,10 +3442,10 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function open(string $savePath, string $sessionName): bool
     {
         $this->sessSavePath = $savePath;
+        $this->sessName     = $sessionName;
         return true;
     }
 
@@ -3455,7 +3455,6 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function close(): bool
     {
         return true;
@@ -3468,7 +3467,6 @@ class ztSessionHandler
      * @access public
      * @return string
      */
-    #[\ReturnTypeWillChange]
     public function read(string $id): string
     {
         $sessFile = $this->getSessionFile($id);
@@ -3488,7 +3486,6 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function write(string $id, string $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
@@ -3506,6 +3503,7 @@ class ztSessionHandler
 
             return true;
         }
+
         return false;
     }
 
@@ -3516,7 +3514,6 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function destroy(string $id): bool
     {
         $sessFile = $this->getSessionFile($id);
@@ -3524,6 +3521,7 @@ class ztSessionHandler
         if(file_exists($this->rawFile)) unlink($this->rawFile);
         touch($sessFile);
         touch($this->rawFile);
+
         return true;
     }
 
@@ -3534,7 +3532,6 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function gc(int $maxlifeTime): bool
     {
         $time = time();
@@ -3542,6 +3539,7 @@ class ztSessionHandler
         {
             if(is_writable($fileName) and filemtime($fileName) + $maxlifeTime < $time) unlink($fileName);
         }
+
         return true;
     }
 }

@@ -291,7 +291,7 @@ class form extends fixer
             case 'trim':
                 return trim($value);
             case 'join':
-                return join(',', $value);
+                return implode(',', $value);
             default:
                 return $value;
         }
