@@ -56,10 +56,13 @@ class filesystem
                     usleep(1000);
                     flock($handle, LOCK_SH | LOCK_NB, $wouldBlock);
                 }
-                try {
+                try
+                {
                     clearstatcache(true, $path);
                     $contents = fread($handle, $this->size($path) ?: 1);
-                } finally {
+                }
+                finally
+                {
                     flock($handle, LOCK_UN);
                     fclose($handle);
                 }
@@ -129,9 +132,12 @@ class filesystem
                         usleep(1000);
                         flock($handle, LOCK_EX | LOCK_NB, $wouldBlock);
                     }
-                    try {
+                    try
+                    {
                         fwrite($handle, $contents);
-                    } finally {
+                    }
+                    finally
+                    {
                         flock($handle, LOCK_UN);
                         fclose($handle);
                     }
@@ -205,7 +211,8 @@ class filesystem
 
         foreach ($paths as $path)
         {
-            try {
+            try
+            {
                 if (! @unlink($path))
                 {
                     $success = false;

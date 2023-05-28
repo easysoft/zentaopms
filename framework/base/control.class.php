@@ -403,7 +403,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
-        $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $viewDir);
+        $viewExtPath = $this->app->getModuleExtPath($moduleName, $viewDir);
 
         $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
         $mainViewFile = $modulePath . $viewDir . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
@@ -442,7 +442,7 @@ class baseControl
          * Find extViewFile in ext/_$siteCode/view first, then try ext/view/.
          */
         $moduleName = basename(dirname(realpath($viewFile), 2));
-        $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
+        $extPath    = $this->app->getModuleExtPath($moduleName, 'view');
 
         $checkedOrder = array('site', 'saas', 'custom', 'vision', 'xuan', 'common');
         $fileName     = basename($viewFile);
@@ -477,7 +477,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath = $this->app->getModulePath($this->appName, $moduleName);
-        $cssExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'css');
+        $cssExtPath = $this->app->getModuleExtPath($moduleName, 'css');
 
         $clientLang = $this->app->getClientLang();
         $notCNLang  = !str_contains('|zh-cn|zh-tw|', "|{$clientLang}|");
@@ -591,7 +591,7 @@ class baseControl
         $methodName = strtolower(trim($methodName));
 
         $modulePath = $this->app->getModulePath($this->appName, $moduleName);
-        $jsExtPath  = $this->app->getModuleExtPath($this->appName, $moduleName, 'js');
+        $jsExtPath  = $this->app->getModuleExtPath($moduleName, 'js');
 
         $js           = '';
         $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . "common{$suffix}.js";
@@ -799,7 +799,7 @@ class baseControl
          */
         $modulePath        = $this->app->getModulePath($appName, $moduleName);
         $moduleControlFile = $modulePath . 'control.php';
-        $actionExtPath     = $this->app->getModuleExtPath($appName, $moduleName, 'control');
+        $actionExtPath     = $this->app->getModuleExtPath($moduleName, 'control');
         $file2Included     = $moduleControlFile;
 
         if(!empty($actionExtPath))
@@ -1027,7 +1027,10 @@ class baseControl
         /* Make sure locate in this tab. */
         global $lang;
         $moduleName = $this->app->rawModule;
-        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab and isset($data['locate']) and $data['locate'][0] == '/' and !helper::inOnlyBodyMode()) $data['locate'] .= "#app={$this->app->tab}";
+        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab)
+        {
+            if(isset($data['locate']) and $data['locate'][0] == '/' and !helper::inOnlyBodyMode()) $data['locate'] .= "#app={$this->app->tab}";
+        }
 
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {

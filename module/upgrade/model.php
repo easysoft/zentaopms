@@ -9157,7 +9157,7 @@ class upgradeModel extends model
                 {
                     $filterDefault = isset($filter->default) ?  $filter->default : '';
                     if($filter->type == 'date') $filterDefault = $this->pivot->processDateVar($filterDefault);
-                    $filterDefault = $filterDefault === NULL ? "NULL" : "'{$filterDefault}'";
+                    $filterDefault = $filterDefault === null ? "NULL" : "'{$filterDefault}'";
 
                     $sql = str_replace('$' . $filter->field, $filterDefault, $sql);
                 }

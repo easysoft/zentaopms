@@ -237,7 +237,7 @@ class baseRouter
      * @var string
      * @access public
      */
-    public $URI;
+    public $uri;
 
     /**
      * url地址传递的参数。
@@ -653,10 +653,10 @@ class baseRouter
     {
         if(isset($_SERVER['REQUEST_URI']))
         {
-            $URI = $_SERVER['REQUEST_URI'];
-            if(str_contains((string) $URI, '?'))
+            $uri = $_SERVER['REQUEST_URI'];
+            if(str_contains((string) $uri, '?'))
             {
-                $parsedURL = parse_url((string) $URI);
+                $parsedURL = parse_url((string) $uri);
                 if(isset($parsedURL['query']))
                 {
                     parse_str($parsedURL['query'], $parsedQuery);
@@ -1109,7 +1109,7 @@ class baseRouter
         {
             helper::restartSession($_GET[$this->config->sessionVar]);
         }
-        else if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
+        elseif(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
         {
             helper::restartSession($_SERVER['HTTP_TOKEN']);
             $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
@@ -1336,8 +1336,8 @@ class baseRouter
     }
 
     /**
-     * PATH_INFO方式解析，获取$URI和$viewType。
-     * Parse PATH_INFO, get the $URI and $viewType.
+     * PATH_INFO方式解析，获取$uri和$viewType。
+     * Parse PATH_INFO, get the $uri and $viewType.
      *
      * @access public
      * @return void
@@ -1413,8 +1413,8 @@ class baseRouter
     }
 
     /**
-     * GET请求方式解析，获取$URI和$viewType。
-     * Parse GET, get $URI and $viewType.
+     * GET请求方式解析，获取$uri和$viewType。
+     * Parse GET, get $uri and $viewType.
      *
      * @access public
      * @return void
@@ -1746,7 +1746,7 @@ class baseRouter
      * @access  public
      * @return  string the extension path.
      */
-    public function getModuleExtPath(string $appName, string $moduleName, string $ext)
+    public function getModuleExtPath(string $moduleName, string $ext)
     {
         $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
 
@@ -1823,7 +1823,7 @@ class baseRouter
      */
     public function setActionExtFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1867,7 +1867,7 @@ class baseRouter
      */
     public function checkAPIFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1928,7 +1928,7 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $targetExtPaths = $this->getModuleExtPath($appName, $moduleName, $class);
+        $targetExtPaths = $this->getModuleExtPath($moduleName, $class);
         foreach($targetExtPaths as $extType => $targetExtPath)
         {
             if(empty($targetExtPath)) continue;
@@ -2968,8 +2968,8 @@ class baseRouter
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
 
-        $URI = $this->getURI();
-        $errorLog .= "when visiting <strong>" . (empty($URI) ? '' : htmlspecialchars($URI)) . "</strong>\n";
+        $uri = $this->getURI();
+        $errorLog .= "when visiting <strong>" . (empty($uri) ? '' : htmlspecialchars($uri)) . "</strong>\n";
 
         /*
          * 为了安全起见，对公网环境隐藏脚本路径。
@@ -3109,7 +3109,7 @@ class baseRouter
             $commonExtFiles = array();
             $siteExtFiles   = array();
 
-            $extPath = $this->getModuleExtPath($appName, $moduleName, $type);
+            $extPath = $this->getModuleExtPath($moduleName, $type);
             if($this->config->framework->extensionLevel >= 1)
             {
                 $clientLang = $type == 'lang' ? $this->clientLang : '';
