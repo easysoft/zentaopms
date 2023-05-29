@@ -2289,7 +2289,7 @@ class bugZen extends bug
      * @access public
      * @return bool
      */
-    protected function batchChangePlan(array $bugIdList, int $planID): bool
+    protected function batchChangePlanZen(array $bugIdList, int $planID): bool
     {
         $oldBugs     = $this->bug->getByIdList($bugIdList);
         $unlinkPlans = array();
@@ -2319,5 +2319,63 @@ class bugZen extends bug
         foreach($link2Plans as $planID => $bugs)  $this->action->create('productplan', $planID, 'linkbug',   '', $bugs);
 
         return !dao::isError();
+    }
+
+    /**
+     * 批量解决bug。
+     * Batch resolve bugs.
+     *
+     * @param  array    $bugIdList
+     * @param  string   $resolution
+     * @param  string   $resolvedBuild
+     * @param  array    $oldBugs
+     * @param  array    $modules
+     * @param  string   $productQD
+     * @access public
+     * @return string
+     */
+    public function batchResolveZen(array $bugIdList, string $resolution, string $resolvedBuild, array $oldBugs, array $modules, string $productQD): string
+    {
+        $users = $this->loadModel('user')->getPairs();
+        $now   = helper::now();
+        foreach($bugIdList as $i => $bugID)
+        {
+            $oldBug = $oldBugs[$bugID];
+
+            /* Get bug assignedTo. */
+            $assignedTo = $oldBug->openedBy;
+            if(!isset($users[$assignedTo]))
+            {
+                $assignedTo = '';
+                $module     = isset($modules[$oldBug->module]) ? $modules[$oldBug->module] : '';
+                while($module)
+                {
+                    if($module->owner and isset($users[$module->owner]))
+                    {
+                        $assignedTo = $module->owner;
+                        break;
+                    }
+                    $module = isset($modules[$module->parent]) ? $modules[$module->parent] : '';
+                }
+                if(empty($assignedTo)) $assignedTo = $productQD;
+            }
+
+            $bug = new stdClass();
+            $bug->id            = (int)$bugID;
+            $bug->resolution    = $resolution;
+            $bug->resolvedBuild = $resolution == 'fixed' ? $resolvedBuild : '';
+            $bug->resolvedBy    = $this->app->user->account;
+            $bug->resolvedDate  = $now;
+            $bug->status        = 'resolved';
+            $bug->confirmed     = 1;
+            $bug->assignedTo    = $assignedTo;
+            $bug->assignedDate  = $now;
+
+            $this->bug->resolve($bug);
+
+            $message = $this->executeHooks($bug->id);
+        }
+
+        return $message;
     }
 }

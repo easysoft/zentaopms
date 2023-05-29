@@ -821,10 +821,10 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        $this->loadModel('score')->create('ajax', 'batchOther');
-        return array('load' => $this->session->bugList, 'closeModal' => true);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
     }
 
     /**
@@ -852,7 +852,8 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        return $this->send(array('result' => 'success', 'load' => $this->session->bugList));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
     }
 
     /**
@@ -868,7 +869,7 @@ class bug extends control
         if(!empty($_POST) && isset($_POST['bugIdList']))
         {
             $bugIdList = array_unique($this->post->bugIdList);
-            $this->bugZen->batchChangePlan($bugIdList, $planID);
+            $this->bugZen->batchChangePlanZen($bugIdList, $planID);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
@@ -955,29 +956,24 @@ class bug extends control
      */
     public function batchResolve(string $resolution, string $resolvedBuild = '')
     {
-        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
-
-        /* Prepare resolve data. */
-        $bugIdList = array_unique($this->post->bugIDList);
-        $oldBugs   = $this->bug->getByIdList($bugIdList);
-        $bugIdList = $this->bugZen->batchResolveIdFilter($bugIdList, $oldBugs);
-        list($modules, $productQD) = $this->bugZen->getBatchResolveVars($oldBugs);
-
-        /* Batch resolve bugs. */
-        $changes = $this->bug->batchResolve($bugIdList, $resolution, $resolvedBuild, $oldBugs, $modules, $productQD);
-        if(dao::isError()) return print(js::error(dao::getError()));
-
-        /* Link bug to build and release. */
-        $this->bug->linkBugToBuild($bugIdList, $resolvedBuild);
-
-        foreach($changes as $bugID => $bugChanges)
+        if(!empty($_POST) && isset($_POST['bugIdList']))
         {
-            $actionID = $this->action->create('bug', $bugID, 'Resolved', '', $resolution);
-            $this->action->logHistory($actionID, $bugChanges);
+            /* Prepare resolve data. */
+            $bugIdList = array_unique($this->post->bugIdList);
+            $bugs      = $this->bug->getByIdList($bugIdList);
+
+            $bugIdList = $this->bugZen->batchResolveIdFilter($bugIdList, $bugs);
+            list($modules, $productQD) = $this->bugZen->getBatchResolveVars($bugs);
+
+            /* Batch resolve bugs. */
+            $message = $this->bug->batchResolveZen($bugIdList, $resolution, $resolvedBuild, $bugs, $modules, $productQD);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->session->bugList, 'parent'));
+        if(empty($message)) $message = $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
 
     /**

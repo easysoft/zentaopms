@@ -727,75 +727,7 @@ class bugModel extends model
         return $allChanges;
     }
 
-    /**
-     * 批量解决bug。
-     * Batch resolve bugs.
-     *
-     * @param  array    $bugIdList
-     * @param  string   $resolution
-     * @param  string   $resolvedBuild
-     * @param  object[] $oldBugs
-     * @param  object[] $modules
-     * @param  string   $productQD
-     * @access public
-     * @return array
-     */
-    public function batchResolve(array $bugIdList, string $resolution, string $resolvedBuild, array $oldBugs, array $modules, string $productQD): array
-    {
-        $isBiz = $this->config->edition == 'biz';
-        $isMax = $this->config->edition == 'max';
 
-        $users   = $this->loadModel('user')->getPairs();
-        $now     = helper::now();
-        $changes = array();
-        foreach($bugIdList as $i => $bugID)
-        {
-            $oldBug = $oldBugs[$bugID];
-
-            /* Get bug assignedTo. */
-            $assignedTo = $oldBug->openedBy;
-            if(!isset($users[$assignedTo]))
-            {
-                $assignedTo = '';
-                $module     = isset($modules[$oldBug->module]) ? $modules[$oldBug->module] : '';
-                while($module)
-                {
-                    if($module->owner and isset($users[$module->owner]))
-                    {
-                        $assignedTo = $module->owner;
-                        break;
-                    }
-                    $module = isset($modules[$module->parent]) ? $modules[$module->parent] : '';
-                }
-                if(empty($assignedTo)) $assignedTo = $productQD;
-            }
-
-            $bug = new stdClass();
-            $bug->resolution    = $resolution;
-            $bug->resolvedBuild = $resolution == 'fixed' ? $resolvedBuild : '';
-            $bug->resolvedBy    = $this->app->user->account;
-            $bug->resolvedDate  = $now;
-            $bug->status        = 'resolved';
-            $bug->confirmed     = 1;
-            $bug->assignedTo    = $assignedTo;
-            $bug->assignedDate  = $now;
-
-            $this->bugTao->updateByID((int)$bugID, $bug);
-
-            $this->executeHooks((int)$bugID);
-
-            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
-            $changes[$bugID] = common::createChanges($oldBug, $bug);
-
-            if(($isBiz || $isMax) && $oldBug->feedback && !isset($feedbacks[$oldBug->feedback]))
-            {
-                $feedbacks[$oldBug->feedback] = $oldBug->feedback;
-                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-            }
-        }
-
-        return $changes;
-    }
 
     /**
      * 激活一个bug。
