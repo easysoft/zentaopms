@@ -142,14 +142,12 @@ class productTao extends productModel
      */
     protected function getPagerProductsWithProgramIn(array $productIDs, object|null $pager) :array
     {
-        $products = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.id')->in($productIDs)
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->page($pager)
             ->fetchAll('id');
-
-        return $products;
     }
 
     /**
