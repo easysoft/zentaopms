@@ -96,6 +96,8 @@ class upgrade extends control
             $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
+        if($_POST) return print(js::locate(helper::createLink('upgrade', 'confirm', "fromVersion={$this->post->fromVersion}")));
+
         $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
         $this->view->position[] = $this->lang->upgrade->common;
         $this->view->version    = $version;
@@ -105,22 +107,26 @@ class upgrade extends control
     /**
      * Confirm the version.
      *
+     * @param  string  $fromVersion
      * @access public
      * @return void
      */
-    public function confirm()
+    public function confirm($fromVersion = '')
     {
-        if(strpos($this->post->fromVersion, 'lite') !== false) $this->post->fromVersion = $this->config->upgrade->liteVersion[$this->post->fromVersion];
-        $confirmSql = $this->upgrade->getConfirm($this->post->fromVersion);
+        if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        $confirmSql = $this->upgrade->getConfirm($fromVersion);
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
         $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->position[]  = $this->lang->upgrade->common;
         $this->view->confirm     = $confirmSql;
-        $this->view->fromVersion = $this->post->fromVersion;
+        $this->view->fromVersion = $fromVersion;
+
         /* When sql is empty then skip it. */
-        if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$this->post->fromVersion}"));
+        if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
+
+        if($_POST) $this->locate(inlink('execute', "fromVersion={$this->post->fromVersion}"));
 
         $this->display();
     }
@@ -142,7 +148,7 @@ class upgrade extends control
         if($result)
         {
             $this->view->result = 'fail';
-            $this->view->errors  = $result;
+            $this->view->errors = $result;
 
             return $this->display();
         }

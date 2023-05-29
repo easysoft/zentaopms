@@ -12,7 +12,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <div class='container'>
-  <form method='post' action='<?php echo inlink('confirm');?>'>
+  <form method='post'>
     <div class='modal-dialog'>
       <div class='modal-header'>
         <strong><?php echo $lang->upgrade->selectVersion;?></strong>
