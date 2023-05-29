@@ -706,7 +706,7 @@ class taskModel extends model
      * @access public
      * @return object
      */
-    public function getTeamByAccount(array $teams, string $account = '', array $extra = array('filter' => 'done'))
+    public function getTeamByAccount(array $teams, string $account = '', array $extra = array('filter' => 'done')): object|bool
     {
         if(empty($account)) $account = $this->app->user->account;
 
@@ -768,6 +768,8 @@ class taskModel extends model
                 if($effort->left == 0 and $currentTeam->account == $effort->account) $prevTeam = array_shift($teams);
             }
         }
+
+        return false;
     }
 
     /**
@@ -1113,16 +1115,10 @@ class taskModel extends model
         /* Remind whether to update status of the bug, if task which from that bug has been finished. */
         if($changes && $this->needUpdateBugStatus($oldTask))
         {
-            foreach($changes as $change)
-            {
-                if($change['field'] == 'status' && $change['new'] == 'done')
-                {
-                    $confirmURL = helper::createLink('bug', 'view', "id={$oldTask->fromBug}");
-                    $cancelURL  = helper::createLink('task', 'view', "taskID={$oldTask->id}");
-                    return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $oldTask->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
-                }
-            }
+            $response = $this->taskTao->getRemindBugLink($task, $changes);
+            if($response) return $response;
         }
+
         return true;
     }
 
@@ -1132,147 +1128,52 @@ class taskModel extends model
      * @param  int    $taskID
      * @param  array  $workhour
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function recordWorkhour(int $taskID, array $workhour)
+    public function recordWorkhour(int $taskID, array $workhour): array|false
     {
-        $today = helper::today();
-
-        /* Fix bug#3036. */
-        foreach($workhour as $id => $record)
-        {
-            $consumed = trim($record->consumed);
-            if(!is_numeric($consumed) and !empty($consumed))
-            {
-                dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
-            }
-            elseif(is_numeric($consumed) and $consumed <= 0)
-            {
-                dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->workhour, '0');
-            }
-
-            $left = trim($record->left);
-            if(!is_numeric($left)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
-
-            if($record->date > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
-        }
-
-        if(dao::isError()) return false;
-
         $task       = $this->taskTao->fetchByID($taskID);
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
-        $inTeam     = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->fetch('id');
 
-        if($task->team && !$inTeam) return false;
+        /* Check if field is valid. */
+        $result = $this->taskTao->checkWorkhour($task, $workhour);
+        if(!$result) return false;
 
-        foreach($workhour as $id => $record)
+        /* Add field to workhour. */
+        $workhour = $this->taskTao->buildWorkhour($taskID, $workhour);
+        if(empty($workhour)) return false;
+
+        $allChanges  = array();
+        $now         = helper::now();
+        $oldStatus   = $task->status;
+        $lastDate    = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
+        $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team) : array();
+
+        foreach($workhour as $record)
         {
-            if(!$record->work && !$record->consumed)
-            {
-                unset($workhour[$id]);
-                continue;
-            }
-
-            if(helper::isZeroDate($record->date)) helper::end(js::alert($this->lang->task->error->dateEmpty));
-            if(!$record->consumed)                helper::end(js::alert($this->lang->task->error->consumedThisTime));
-            if($record->left === '')              helper::end(js::alert($this->lang->task->error->left));
-
-            $record->task    = $taskID;
-            $record->account = $this->app->user->account;
-        }
-
-        if(empty($workhour)) return;
-
-        $this->loadModel('action');
-
-        $allChanges = array();
-        $now        = helper::now();
-        $oldStatus  = $task->status;
-        $lastDate   = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
-
-        foreach($estimates as $estimate)
-        {
-            $this->addTaskEffort($estimate);
-
-            $work       = $estimate->work;
-            $estimateID = $this->dao->lastInsertID();
-
-            $newTask = clone $task;
-            $newTask->consumed      += $estimate->consumed;
-            $newTask->lastEditedBy   = $this->app->user->account;
-            $newTask->lastEditedDate = $now;
-            if(helper::isZeroDate($task->realStarted)) $newTask->realStarted = $now;
-
-            if(empty($lastDate) or $lastDate <= $estimate->date)
-            {
-                $newTask->left = $estimate->left;
-                $lastDate      = $estimate->date;
-            }
-
-            if(!empty($task->team))
-            {
-                $extra = array('filter' => 'done');
-                if(isset($estimate->order)) $extra['order'] = $estimate->order;
-                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
-            }
+            $this->addTaskEffort($record);
+            $effortID = $this->dao->lastInsertID();
 
             $isFinishTask = (empty($currentTeam) && !in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
-            if(!$newTask->left && $isFinishTask)
-            {
-                $newTask->status         = 'done';
-                $newTask->assignedTo     = $task->openedBy;
-                $newTask->assignedDate   = $now;
-                $newTask->finishedBy     = $this->app->user->account;
-                $newTask->finishedDate   = $now;
-                $actionID = $this->action->create('task', $taskID, 'Finished', $work);
-            }
-            elseif($newTask->status == 'wait')
-            {
-                $newTask->status       = 'doing';
-                $newTask->assignedTo   = $this->app->user->account;
-                $newTask->assignedDate = $now;
-                $actionID = $this->action->create('task', $taskID, 'Started', $work);
-            }
-            elseif($newTask->left != 0 and strpos('done,pause,cancel,closed,pause', $task->status) !== false)
-            {
-                $newTask->status         = 'doing';
-                $newTask->assignedTo     = $this->app->user->account;
-                $newTask->finishedBy     = '';
-                $newTask->canceledBy     = '';
-                $newTask->closedBy       = '';
-                $newTask->closedReason   = '';
-                $newTask->finishedDate   = '0000-00-00 00:00:00';
-                $newTask->canceledDate   = '0000-00-00 00:00:00';
-                $newTask->closedDate     = '0000-00-00 00:00:00';
-                $actionID = $this->action->create('task', $taskID, 'Activated', $work);
-            }
-            else
-            {
-                $actionID = $this->action->create('task', $taskID, 'RecordEstimate', $work, (float)$estimate->consumed);
-            }
+            /* Change the workhour and status of tasks through effort. */
+            list($newTask, $actionID) = $this->taskTao->buildTaskForEffort($record, $task, (string)$lastDate, $isFinishTask);
+            if($lastDate <= $record->date) $lastDate = $record->date;
 
             /* Process multi-person task. Update consumed on team table. */
-            if(!empty($task->team))
+            if(!empty($currentTeam))
             {
-                if(!empty($currentTeam))
-                {
-                    $teamStatus = $estimate->left == 0 ? 'done' : 'doing';
-                    $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($estimate->left)->set("consumed = consumed + {$estimate->consumed}")->set('status')->eq($teamStatus)->where('id')->eq($currentTeam->id)->exec();
-                    if($task->mode == 'linear' and empty($estimate->order)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
-                    $currentTeam->consumed += $estimate->consumed;
-                    $currentTeam->left      = $estimate->left;
-                    $currentTeam->status    = $teamStatus;
-                }
-
+                $currentTeam->status = $record->left == 0 ? 'done' : 'doing';
+                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task, $newTask);
                 $newTask = $this->computeMultipleHours($task, $newTask, $task->team);
             }
 
             $changes = common::createChanges($task, $newTask, 'task');
-            if($changes and !empty($actionID)) $this->action->logHistory($actionID, $changes);
+            if($changes and $actionID) $this->loadModel('action')->logHistory($actionID, $changes);
             if($changes) $allChanges = array_merge($allChanges, $changes);
             $task = $newTask;
         }
 
+        /* Update task and do other operations. */
         if($allChanges)
         {
             $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
