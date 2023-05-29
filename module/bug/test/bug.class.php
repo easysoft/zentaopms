@@ -1282,28 +1282,6 @@ class bugTest
     }
 
     /**
-     * Test extract accounts from a bug.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return array
-     */
-    public function extractAccountsFromSingleTest($bugID)
-    {
-        $bug   = $this->objectModel->getByID($bugID);
-        $array = $this->objectModel->extractAccountsFromSingle($bug);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
-    }
-
-    /**
      * Test get user bugs.
      *
      * @param  string $account

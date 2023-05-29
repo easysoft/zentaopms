@@ -1148,24 +1148,6 @@ class bugModel extends model
     }
 
     /**
-     * Extract accounts from a bug.
-     *
-     * @param  object    $bug
-     * @access public
-     * @return array
-     */
-    public function extractAccountsFromSingle($bug)
-    {
-        $accounts = array();
-        if(!empty($bug->openedBy))     $accounts[] = $bug->openedBy;
-        if(!empty($bug->assignedTo))   $accounts[] = $bug->assignedTo;
-        if(!empty($bug->resolvedBy))   $accounts[] = $bug->resolvedBy;
-        if(!empty($bug->closedBy))     $accounts[] = $bug->closedBy;
-        if(!empty($bug->lastEditedBy)) $accounts[] = $bug->lastEditedBy;
-        return array_unique($accounts);
-    }
-
-    /**
      * Get user bugs.
      *
      * @param  string $account
