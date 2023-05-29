@@ -319,9 +319,6 @@ class bug extends control
         $oldBug = $this->bug->getById($bugID);
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
-        /* Set menu. */
-        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
-
         if(!empty($_POST))
         {
             /* Init bug data. */
@@ -329,11 +326,17 @@ class bug extends control
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
 
             if($oldBug->status != 'closed') $this->bug->assign($bug);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $message = $this->executeHooks($bugID);
+            if(!$message) $message = $this->lang->saveSuccess;
 
             /* Response after assigning bug. */
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
+
+        /* Set menu. */
+        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
         /* Get assigned to member. */
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
@@ -375,12 +378,11 @@ class bug extends control
             $bug = form::data($this->config->bug->form->confirm)->add('id', $bugID)->setDefault('confirmed', 1)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
 
-            $changes = $this->bug->confirm($bug, $kanbanData);
-
+            $this->bug->confirm($bug, $kanbanData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($kanbanData, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
 
         $bug = $this->bug->getByID($bugID);
@@ -433,11 +435,11 @@ class bug extends control
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            if($oldBug->status != 'closed') $changes = $this->bug->resolve($bug, $output);
+            if($oldBug->status != 'closed') $this->bug->resolve($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
 
         /* Remove 'Convert to story' from the solution list. */
@@ -477,11 +479,11 @@ class bug extends control
             $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('id', $bugID)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
-            $changes = $this->bug->activate($bug, $kanbanParams);
+            $this->bug->activate($bug, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($kanbanParams, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
 
         $this->checkBugExecutionPriv($oldBug);
@@ -518,11 +520,11 @@ class bug extends control
             $bug = form::data($this->config->bug->form->close)->add('id', $bugID)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
 
-            $changes = $this->bug->close($bug, $output);
+            $this->bug->close($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);

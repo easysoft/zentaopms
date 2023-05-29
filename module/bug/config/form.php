@@ -72,6 +72,7 @@ $config->bug->form->edit['deadline']       = array('required' => false, 'type' =
 $config->bug->form->edit['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->edit['closedDate']     = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->edit['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
+$config->bug->form->edit['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 global $app;
 $config->bug->form->close = array();
@@ -82,6 +83,7 @@ $config->bug->form->close['lastEditedBy']   = array('required' => false, 'type' 
 $config->bug->form->close['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->close['closedBy']       = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->close['closedDate']     = array('required' => false, 'type' => 'date',   'default' => helper::now());
+$config->bug->form->close['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->assignTo = array();
 $config->bug->form->assignTo['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
@@ -89,6 +91,7 @@ $config->bug->form->assignTo['assignedDate']   = array('required' => false, 'typ
 $config->bug->form->assignTo['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->assignTo['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->assignTo['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->assignTo['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->resolve = array();
 $config->bug->form->resolve['status']         = array('required' => false, 'type' => 'string', 'default' => 'resolved');
@@ -105,6 +108,7 @@ $config->bug->form->resolve['duplicateBug']   = array('required' => false, 'type
 $config->bug->form->resolve['buildName']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->resolve['createBuild']    = array('required' => false, 'type' => 'string', 'default' => 'off');
 $config->bug->form->resolve['buildExecution'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->confirm['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->activate = array();
 $config->bug->form->activate['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
@@ -123,6 +127,7 @@ $config->bug->form->activate['closedDate']     = array('required' => false, 'typ
 $config->bug->form->activate['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->activate['toTask']         = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->activate['toStory']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->activate['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->batchActivate = array();
 $config->bug->form->batchActivate['bugIdList']       = array('type' => 'array', 'required' => true);
@@ -178,3 +183,4 @@ $config->bug->form->confirm['assignedTo']     = array('required' => false, 'type
 $config->bug->form->confirm['assignedDate']   = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->confirm['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->confirm['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
+$config->bug->form->confirm['comment']        = array('required' => false, 'type' => 'string', 'default' => '');

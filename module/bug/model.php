@@ -402,7 +402,7 @@ class bugModel extends model
     {
         $oldBug = $this->getByID($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles')
+        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution',  'notempty')
@@ -417,9 +417,9 @@ class bugModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldBug, $bug);
-        if($changes || $this->post->comment)
+        if($changes || $bug->comment)
         {
-            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', $this->post->comment);
+            $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', $bug->comment);
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
@@ -565,18 +565,12 @@ class bugModel extends model
         $oldBug = $this->getById($bug->id);
 
         /* Update assigned of the bug. */
-        $this->dao->update(TABLE_BUG)
-            ->data($bug)
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq($bug->id)
-            ->exec();
-
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
         /* Record log. */
         $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $this->post->comment, $bug->assignedTo);
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $bug->comment, $bug->assignedTo);
         if($changes) $this->action->logHistory($actionID, $changes);
 
         return !dao::isError();
@@ -589,13 +583,13 @@ class bugModel extends model
      * @param  object $bug
      * @param  array  $kanbanData
      * @access public
-     * @return array|bool
+     * @return bool
      */
-    public function confirm(object $bug, array $kanbanData = array()): array|bool
+    public function confirm(object $bug, array $kanbanData = array()): bool
     {
         $oldBug = $this->getByID($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
         /* 确认 bug 后的积分变动。*/
@@ -614,10 +608,10 @@ class bugModel extends model
         /* 记录历史记录。*/
         /* Record history. */
         $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $this->post->comment);
+        $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $bug->comment);
         if($changes) $this->action->logHistory($actionID, $changes);
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**
@@ -653,15 +647,15 @@ class bugModel extends model
      * @param  object      $bugID
      * @param  array       $output
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function resolve(object $bug, array $output = array()): array|false
+    public function resolve(object $bug, array $output = array()): bool
     {
         /* Get old bug. */
         $oldBug = $this->getById($bug->id);
 
         /* Update bug. */
-        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution')
+        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
@@ -689,13 +683,13 @@ class bugModel extends model
         $files      = $this->loadModel('file')->saveUpload('bug', $bug->id);
         $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
         $changes    = common::createChanges($oldBug, $bug);
-        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $this->post->comment, $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
+        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . $bug->comment, $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
         if($changes) $this->action->logHistory($actionID, $changes);
 
         /* If the edition is not pms, update feedback. */
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**
@@ -894,9 +888,9 @@ class bugModel extends model
      * @param  object $bug
      * @param  array  $kanbanParams
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function activate(object $bug, array $kanbanParams = array()): array|false
+    public function activate(object $bug, array $kanbanParams = array()): bool
     {
         $oldBug = $this->getBaseInfo($bug->id);
         if(!$oldBug)
@@ -912,7 +906,7 @@ class bugModel extends model
 
         $bug->activatedCount = $oldBug->activatedCount + 1;
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
         /* Update build. */
@@ -936,11 +930,11 @@ class bugModel extends model
         if($changes or $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $this->post->comment);
+            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $bug->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**
@@ -949,19 +943,19 @@ class bugModel extends model
      *
      * @param  object $bug
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function close(object $bug, array $output): array|false
+    public function close(object $bug, array $output): bool
     {
         $oldBug = $this->getById($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         $changes = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $this->post->comment);
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $bug->comment);
         if($changes) $this->action->logHistory($actionID, $changes);
 
         if($oldBug->execution)
@@ -975,7 +969,7 @@ class bugModel extends model
         /* After sending a message to the cc of the original bug, then process with it. */
         $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bug->id)->exec();
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**
