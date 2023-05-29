@@ -3,64 +3,55 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 
+su('admin');
+
+zdTable('bug')->config('bug_activate')->gen(27);
+zdTable('build')->config('build_activate')->gen(3);
+zdTable('product')->config('product_activate')->gen(1);
+zdTable('project')->config('project_activate')->gen(6);
+zdTable('kanbancell')->config('kanbancell_activate')->gen(27);
+zdTable('kanbancolumn')->config('kanbancolumn_activate')->gen(27);
+zdTable('kanbanlane')->config('kanbanlane_activate')->gen(3);
+zdTable('kanbanregion')->config('kanbanregion_activate')->gen(1);
+
 /**
 
 title=bugModel->activate();
 timeout=0
 cid=1
 
-- 测试激活状态为active的bug1
- - 属性field @activatedCount
- - 属性old @0
- - 属性new @1
-
-- 测试激活状态为active的bug2
- - 属性field @activatedCount
- - 属性old @0
- - 属性new @1
-
-- 测试激活状态为resolved的bug51
- - 属性field @activatedCount
- - 属性old @0
- - 属性new @1
-
-- 测试激活状态为resolved的bug52
- - 属性field @activatedCount
- - 属性old @0
- - 属性new @1
-
-- 测试激活状态为closed的bug81
- - 属性field @activatedCount
- - 属性old @0
- - 属性new @1
-
-- 测试激活状态为closed的bug82
- - 属性field @activatedCount
- - 属性old @0
- - 属性new @1
-
-- 测试激活状态为resolved的bug53，更改版本默认为2个版本
- - 属性field @openedBuild
- - 属性old @trunk
- - 属性new @1,11
-
 */
 
-$bug = zdTable('bug');
-$bug->product->range('1');
-$bug->gen(100);
+global $config;
 
-zdTable('project')->config('execution')->gen(100);
-zdTable('build')->gen(100);
+$_SERVER['HTTP_HOST'] = $config->db->host; // 记日志需要用到 HTTP_HOST
 
-$bugIDList = array(1, 2, 51, 52, 81, 82, 53);
-$buildList = array(1, 11);
+$bug          = new bugTest();
+$kanbanParams = array();
 
-$bug = new bugTest();
-r($bug->activateObject($bugIDList[0]))                            && p('field,old,new')      && e('activatedCount,0,1');     // 测试激活状态为active的bug1
-r($bug->activateObject($bugIDList[1]))                            && p('field,old,new')      && e('activatedCount,0,1');     // 测试激活状态为active的bug2
-r($bug->activateObject($bugIDList[2]))                            && p('field,old,new')      && e('activatedCount,0,1');     // 测试激活状态为resolved的bug51
-r($bug->activateObject($bugIDList[3]))                            && p('field,old,new')      && e('activatedCount,0,1');     // 测试激活状态为resolved的bug52
-r($bug->activateObject($bugIDList[4]))                            && p('field,old,new')      && e('activatedCount,0,1');     // 测试激活状态为closed的bug81
-r($bug->activateObject($bugIDList[5]))                            && p('field,old,new')      && e('activatedCount,0,1');     // 测试激活状态为closed的bug82
-r($bug->activateObject($bugIDList[6], $buildList, 'openedBuild')) && p('field/old/new', '/') && e('openedBuild/trunk/1,11'); // 测试激活状态为resolved的bug53，更改版本默认为2个版本
+r($bug->activateTest(0)) && p() && e('Bug不存在。');                           // 不存在的 bug 不能激活。
+r($bug->activateTest(1)) && p() && e('状态不是已解决或已关闭的Bug不能激活。'); // 状态不是 resolved 或 closed 的 bug 不能激活。
+
+r($bug->activateTest(2)) && p('status,activatedCount') && e('active,1'); // 状态是 resolved 的 bug 激活后的状态是 active，激活次数加 1。
+r($bug->activateTest(3)) && p('status,activatedCount') && e('active,1'); // 状态是 closed   的 bug 激活后的状态是 active，激活次数加 1。
+
+r($bug->activateTest(5, 1, $kanbanParams, 'build')) && p('bugs', ';') && e('4,6'); // 状态是 resolved 的 bug 激活后版本解决的 bug 中不再包含这个 bug。
+r($bug->activateTest(6, 1, $kanbanParams, 'build')) && p('bugs')      && e('4');   // 状态是 closed   的 bug 激活后版本解决的 bug 中不再包含这个 bug。
+
+r($bug->activateTest(8,  0, $kanbanParams, 'action')) && p('0:field,old,new') && e('status,resolved,active'); // 状态是 resolved 的 bug 激活后记录状态改变日志。
+r($bug->activateTest(9,  0, $kanbanParams, 'action')) && p('0:field,old,new') && e('status,closed,active');   // 状态是 closed   的 bug 激活后记录状态改变日志。
+r($bug->activateTest(11, 0, $kanbanParams, 'action')) && p('1:field,old,new') && e('activatedCount,0,1');     // 状态是 resolved 的 bug 激活后记录激活次数改变日志。
+r($bug->activateTest(12, 0, $kanbanParams, 'action')) && p('1:field,old,new') && e('activatedCount,0,1');     // 状态是 closed   的 bug 激活后记录激活次数改变日志。
+
+r($bug->activateTest(14, 0, $kanbanParams, 'kanban')) && p() && e('fixing');    // 状态是 resolved 的 bug 激活后更新研发看板。
+r($bug->activateTest(15, 0, $kanbanParams, 'kanban')) && p() && e('fixing'); // 状态是 closed   的 bug 激活后更新研发看板。
+
+$kanbanParams['fromColID']  = 23;
+$kanbanParams['toColID']    = 22;
+$kanbanParams['fromLaneID'] = 3;
+$kanbanParams['toLaneID']   = 3;
+$kanbanParams['regionID']   = 1;
+r($bug->activateTest(20, 0, $kanbanParams, 'kanban')) && p() && e('fixing');    // 状态是 resolved 的 bug 激活后更新看板执行。
+
+$kanbanParams['fromColID'] = 27;
+r($bug->activateTest(21, 0, $kanbanParams, 'kanban')) && p() && e('fixing'); // 状态是 closed   的 bug 激活后更新看板执行。
