@@ -27,7 +27,7 @@ formPanel
         ),
     ),
     formGroup
-    ( 
+    (
         set::width('1/3'),
         set::name('type'),
         set::label($lang->bug->type),
@@ -35,7 +35,7 @@ formPanel
         set::value($bug->type)
     ),
     formGroup
-    ( 
+    (
         set::width('1/3'),
         set::name('pri'),
         set::label($lang->bug->pri),
@@ -46,7 +46,7 @@ formPanel
     (
         set::class('hidden'),
         formGroup
-        ( 
+        (
             set::width('1/3'),
             set::name('status'),
             set::control('hidden'),
@@ -69,7 +69,7 @@ formPanel
             set::value(),
         )
     ),
-    history(),
 );
+history();
 
 render('modalDialog');

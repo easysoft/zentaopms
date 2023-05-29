@@ -366,6 +366,12 @@ class bug extends control
      */
     public function confirm(int $bugID, string $kanbanParams = '')
     {
+        $oldBug = $this->bug->getByID($bugID);
+
+        /* 检查 bug 所属执行的权限。*/
+        /* Check privilege for execution of the bug. */
+        $this->bugZen->checkBugExecutionPriv($oldBug);
+
         if(!empty($_POST))
         {
             /* 处理看板相关的参数。*/
@@ -385,18 +391,12 @@ class bug extends control
             return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
 
-        $bug = $this->bug->getByID($bugID);
+        $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
-        /* 检查 bug 所属执行的权限。*/
-        /* Check privilege for execution of the bug. */
-        $this->bugZen->checkBugExecutionPriv($bug);
-
-        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        $this->view->title   = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->confirm;
-        $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('noclosed', $bug->assignedTo);
-        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->view->title   = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->confirm;
+        $this->view->bug     = $oldBug;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->assignedTo);
+        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
 
@@ -471,6 +471,8 @@ class bug extends control
     public function activate(int $bugID, string $kanbanInfo = '')
     {
         $oldBug = $this->bug->getByID($bugID);
+        $this->checkBugExecutionPriv($oldBug);
+
         if(!empty($_POST))
         {
             $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
@@ -485,8 +487,6 @@ class bug extends control
             $regionID = zget($kanbanParams, 'regionID', 0);
             return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
-
-        $this->checkBugExecutionPriv($oldBug);
 
         $productID = $oldBug->product;
         $this->qa->setMenu($this->products, $productID, $oldBug->branch);
@@ -511,6 +511,7 @@ class bug extends control
     public function close(int $bugID, string $extra = '')
     {
         $oldBug = $this->bug->getByID($bugID);
+        $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
         {
@@ -527,7 +528,6 @@ class bug extends control
             return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
         }
 
-        $this->bugZen->checkBugExecutionPriv($oldBug);
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('bug', $oldBug->id);
