@@ -40,4 +40,4 @@ formPanel
     history()
 );
 
-render();
+render(isonlybody() ? 'modalDialog' : null);
