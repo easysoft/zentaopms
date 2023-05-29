@@ -213,7 +213,7 @@ class filesystem
         {
             try
             {
-                if (! @unlink($path))
+                if(file_exists($path) && !unlink($path))
                 {
                     $success = false;
                 }
@@ -447,7 +447,19 @@ class filesystem
      */
     public function makeDirectory(string $path, int $mode = 0755, bool $recursive = false, bool $force = false): bool
     {
-        if ($force) return @mkdir($path, $mode, $recursive);
+        if($force)
+        {
+            try
+            {
+                mkdir($path, $mode, $recursive);
+            }
+            catch (ErrorException $e)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         return mkdir($path, $mode, $recursive);
     }
