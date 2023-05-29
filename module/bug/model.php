@@ -143,6 +143,7 @@ class bugModel extends model
     }
 
     /**
+     * 获取计划关联的 bugs。
      * Get bug list of a plan.
      *
      * @param  int    $planID
@@ -150,20 +151,19 @@ class bugModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getPlanBugs(int $planID, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_BUG)
-            ->where('plan')->eq((int)$planID)
+            ->where('plan')->eq($planID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-
         return $bugs;
     }
 
