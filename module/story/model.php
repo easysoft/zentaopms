@@ -1943,66 +1943,34 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function subdivide($storyID, $stories)
+    public function subdivide(int $storyID, array $SRList): void
     {
         $now      = helper::now();
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        /* 如果该需求是用户需求，则为细分操作，记录用户需求和软件需求的关联关系。 */
         if($oldStory->type == 'requirement')
         {
-            foreach($stories as $id)
-            {
-                $data = new stdclass();
-                $data->product  = $oldStory->product;
-                $data->AType    = 'requirement';
-                $data->relation = 'subdivideinto';
-                $data->BType    = 'story';
-                $data->AID      = $storyID;
-                $data->BID      = $id;
-                $data->AVersion = $oldStory->version;
-                $data->BVersion = 1;
-                $data->extra    = 1;
-
-                $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
-
-                $data->AType    = 'story';
-                $data->relation = 'subdividedfrom';
-                $data->BType    = 'requirement';
-                $data->AID      = $id;
-                $data->BID      = $storyID;
-                $data->AVersion = 1;
-                $data->BVersion = $oldStory->version;
-
-                $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
-            }
-
-            if(dao::isError()) return print(js::error(dao::getError()));
+            foreach($SRList as $SRID) $this->storyTao->doCreateURRelations($SRID, array($storyID));
+            return;
         }
-        else
-        {
-            /* Set parent to child story. */
-            $this->dao->update(TABLE_STORY)->set('parent')->eq($storyID)->where('id')->in($stories)->exec();
-            $this->computeEstimate($storyID);
 
-            /* Set childStories. */
-            $childStories = join(',', $stories);
+        /* 如果该需求是软件需求，则为分解子需求操作。 */
+        /* Set parent to child story. */
+        $this->dao->update(TABLE_STORY)->set('parent')->eq($storyID)->where('id')->in($SRList)->exec();
+        $this->computeEstimate($storyID);
 
-            $newStory = new stdClass();
-            $newStory->parent         = '-1';
-            $newStory->plan           = '';
-            $newStory->lastEditedBy   = $this->app->user->account;
-            $newStory->lastEditedDate = $now;
-            $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
+        /* Set childStories. */
+        $childStories = implode(',', $SRList);
+        $newStory     = new stdClass();
+        $newStory->parent         = '-1';
+        $newStory->plan           = '';
+        $newStory->lastEditedBy   = $this->app->user->account;
+        $newStory->lastEditedDate = $now;
+        $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
+        $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
 
-            /* Subdivide story. */
-            $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
-
-            $changes = common::createChanges($oldStory, $newStory);
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('story', $storyID, 'createChildrenStory', '', $childStories);
-                $this->action->logHistory($actionID, $changes);
-            }
-        }
+        $actionID = $this->loadModel('action')->create('story', $storyID, 'createChildrenStory', '', $childStories);
+        $this->action->logHistory($actionID, common::createChanges($oldStory, $newStory));
     }
 
     /**

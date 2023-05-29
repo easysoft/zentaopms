@@ -4,31 +4,37 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+zdTable('product')->gen(2);
+zdTable('relation')->gen(1);
+
+$story = zdTable('story');
+$story->type->range('requirement,story{10}');
+$story->parent->range('0,0,0,0,4,4');
+$story->product->range('1');
+$story->version->range('1');
+$story->gen(6);
+
+$storySpec = zdTable('storyspec');
+$storySpec->story->range('1-6');
+$storySpec->gen(6);
+
 /**
 
 title=测试 storyModel->subdivide();
 cid=1
 pid=1
 
-将用户需求1拆分三个软件需求，查看relation表记录的数量 >> 3
-将用户需求1拆分三个软件需求，查看relation表记录的关系 >> 1,2,subdivideinto
-将用户需求1拆分三个软件需求，查看relation表记录的关系 >> 1,6,subdivideinto
-将软件需求2拆分三个子需求，查看子需求的数量 >> 3
-将软件需求2拆分三个子需求，查看子需求8的parent、title等字段 >> 2,这里是需求来源备注8,8
-将软件需求2拆分三个子需求，查看子需求12的parent、title等字段 >> 2,这里是需求来源备注12,12
-
 */
 
 $story = new storyTest();
-$storyIdList1 = array(2, 4, 6);
-$storyIdList2 = array(8, 10, 12);
+$requirementResult = $story->subdivideTest(1, array(2, 3), 'requirement');
+$childrenResult    = $story->subdivideTest(4, array(5, 6), 'story');
 
-$result1 = $story->subdivideTest(1, $storyIdList1, 'requirement');
-$result2 = $story->subdivideTest(2, $storyIdList2, 'story');
-
-r(count($result1))           && p()                     && e('3');                         // 将用户需求1拆分三个软件需求，查看relation表记录的数量
-r($result1)                  && p('0:AID,BID,relation') && e('1,2,subdivideinto');         // 将用户需求1拆分三个软件需求，查看relation表记录的关系
-r($result1)                  && p('2:AID,BID,relation') && e('1,6,subdivideinto');         // 将用户需求1拆分三个软件需求，查看relation表记录的关系
-r(count($result2->children)) && p()                     && e('3');                         // 将软件需求2拆分三个子需求，查看子需求的数量
-r($result2->children)        && p('8:parent,title,id')  && e('2,这里是需求来源备注8,8');   // 将软件需求2拆分三个子需求，查看子需求8的parent、title等字段
-r($result2->children)        && p('12:parent,title,id') && e('2,这里是需求来源备注12,12'); // 将软件需求2拆分三个子需求，查看子需求12的parent、title等字段
+r(count($requirementResult))            && p()                   && e('4');                  // 将用户需求1拆分两个软件需求，查看relation表记录的数量。
+r($requirementResult[0])                && p('AID,BID,relation') && e('1,2,subdivideinto');  // 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+r($requirementResult[1])                && p('AID,BID,relation') && e('2,1,subdividedfrom'); // 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+r($requirementResult[2])                && p('AID,BID,relation') && e('1,3,subdivideinto');  // 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+r($requirementResult[3])                && p('AID,BID,relation') && e('3,1,subdividedfrom'); // 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+r(count($childrenResult->children))     && p()                   && e('2');                  // 将软件需求2拆分两个子需求，查看子需求的数量。
+r($childrenResult->parent)              && p()                   && e('-1');                 // 将软件需求2拆分两个子需求，查看父需求的parent字段。
+r($childrenResult->children[5]->parent) && p()                   && e('4');                  // 将软件需求2拆分两个子需求，查看子需求5的parent字段。
