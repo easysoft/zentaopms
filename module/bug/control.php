@@ -546,7 +546,7 @@ class bug extends control
      */
     public function delete(string $bugID, string $confirm = 'no', string $from = '')
     {
-        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' =>inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
 
         $bug = $this->bug->getByID($bugID);
 
@@ -556,15 +556,9 @@ class bug extends control
 
         /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
         /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
-        if($bug->toTask)
-        {
-            $result = $this->bugZen->confirm2UpdateTask($bugID, $bug->toTask);
-            if(is_array($result)) return $this->send($result);
-        }
+        if($bug->toTask) $this->bugZen->confirm2UpdateTask($bugID, $bug->toTask);
 
-        $this->executeHooks($bugID);
-
-        return $this->send($this->bugZen->responseAfterDelete($bug, $from));
+        return $this->bugZen->responseAfterDelete($bug, $from);
     }
 
     /**

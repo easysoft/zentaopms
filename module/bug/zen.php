@@ -1321,7 +1321,7 @@ class bugZen extends bug
         $confirmedURL = $this->createLink('task', 'view', "taskID=$taskID");
         unset($_GET['onlybody']);
         $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-        return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+        return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
     }
 
     /**
@@ -1335,11 +1335,14 @@ class bugZen extends bug
      */
     protected function responseAfterDelete(object $bug, string $from): array
     {
-        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess);
+        $message = $this->executeHooks($bugID);
+        if(!$message) $message = $this->lang->saveSuccess;
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
 
         /* 在弹窗中删除 bug 时的返回。*/
         /* Respond when delete bug in modal.。*/
-        if(isonlybody()) return array('result' => 'success', 'load' => true);
+        if(isonlybody()) return $this->send(array('result' => 'success', 'load' => true));
 
         /* 在任务看板中删除 bug 时的返回。*/
         /* Respond when delete in task kanban. */
@@ -1352,10 +1355,10 @@ class bugZen extends bug
             $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
             $kanbanData  = json_encode($kanbanData[$kanbanType]);
 
-            return array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)");
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
         }
 
-        return array('result' => 'success', 'load' => $this->session->bugList ?: inlink('browse', "productID={$bug->product}"));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}")));
     }
 
     /**
