@@ -907,13 +907,7 @@ function modalDialog()
 /**
  * Tabs widget.
  *
- * array   items
  * ?string direction='h'
- * ?string activeId
- *
- * ====== blocks ======
- * tabPanes = array()
- * ====================
  */
 function tabs()
 {
@@ -923,7 +917,9 @@ function tabs()
 /**
  * Tab pane widget.
  *
- * ?bool isActive
+ * ?bool  active
+ * string key
+ * string title
  */
 function tabPane()
 {

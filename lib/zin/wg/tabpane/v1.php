@@ -4,17 +4,21 @@ namespace zin;
 class tabPane extends wg
 {
     protected static $defineProps = array(
-        'isActive?:bool=false',
+        'key: string',
+        'title: string',
+        'active?: bool=false',
     );
 
     protected function build()
     {
-        $isActive = $this->prop('isActive');
-        $className = $isActive ? 'tab-pane active' : 'tab-pane';
+        $key    = $this->prop('key');
+        $active = $this->prop('active');
+
         return div
         (
+            setID($key),
+            setClass('tab-pane', $active ? 'active' : null),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            setClass($className),
             $this->children()
         );
     }
