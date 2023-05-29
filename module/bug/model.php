@@ -257,16 +257,16 @@ class bugModel extends model
      * 获取指定字段的bug列表。
      * Get bugs by ID list.
      *
-     * @param  int|array|string $bugIDList
+     * @param  int|array|string $bugIdList
      * @param  string           $fields
      * @access public
      * @return array
      */
-    public function getByIdList(int|array|string $bugIDList = 0, string $fields = '*'): array
+    public function getByIdList(int|array|string $bugIdList = 0, string $fields = '*'): array
     {
         return $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq('0')
-            ->beginIF($bugIDList)->andWhere('id')->in($bugIDList)->fi()
+            ->beginIF($bugIdList)->andWhere('id')->in($bugIdList)->fi()
             ->fetchAll('id');
     }
 
@@ -618,15 +618,15 @@ class bugModel extends model
     /**
      * Batch confirm bugs.
      *
-     * @param  array $bugIDList
+     * @param  array $bugIdList
      * @access public
      * @return void
      */
-    public function batchConfirm($bugIDList)
+    public function batchConfirm($bugIdList)
     {
         $now  = helper::now();
-        $bugs = $this->getByList($bugIDList);
-        foreach($bugIDList as $bugID)
+        $bugs = $this->getByList($bugIdList);
+        foreach($bugIdList as $bugID)
         {
             if($bugs[$bugID]->confirmed) continue;
 
@@ -745,16 +745,16 @@ class bugModel extends model
      * 批量修改bug分支。
      * Batch change branch.
      *
-     * @param  array  $bugIDList
+     * @param  array  $bugIdList
      * @param  int    $branchID
      * @param  array  $oldBugs
      * @access public
      * @return array
      */
-    public function batchChangeBranch(array $bugIDList, int $branchID, array $oldBugs): array
+    public function batchChangeBranch(array $bugIdList, int $branchID, array $oldBugs): array
     {
         $allChanges = array();
-        foreach($bugIDList as $bugID)
+        foreach($bugIdList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
             if($branchID == $oldBug->branch) continue;
@@ -772,18 +772,18 @@ class bugModel extends model
      * 批量修改bug计划。
      * Batch change the plan of bug.
      *
-     * @param  array  $bugIDList
+     * @param  array  $bugIdList
      * @param  int    $planID
      * @access public
      * @return void
      */
-    public function batchChangePlan(array $bugIDList, int $planID): void
+    public function batchChangePlan(array $bugIdList, int $planID): void
     {
         $this->loadModel('action');
-        $oldBugs     = $this->getByIdList($bugIDList);
+        $oldBugs     = $this->getByIdList($bugIdList);
         $unlinkPlans = array();
         $link2Plans  = array();
-        foreach($bugIDList as $bugID)
+        foreach($bugIdList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
             if($planID == $oldBug->plan) continue;
@@ -1145,11 +1145,11 @@ class bugModel extends model
         $moduleName = $this->app->rawMethod == 'work' ? 'workBug' : 'contributeBug';
         $queryName  = $moduleName . 'Query';
         $formName   = $moduleName . 'Form';
-        $bugIDList  = array();
+        $bugIdList  = array();
         if($moduleName == 'contributeBug')
         {
             $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
-            foreach($bugsAssignedByMe as $bugID => $bug) $bugIDList[$bugID] = $bugID;
+            foreach($bugsAssignedByMe as $bugID => $bug) $bugIdList[$bugID] = $bugID;
         }
 
         if($queryID)
@@ -1187,7 +1187,7 @@ class bugModel extends model
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.resolvedBy')->eq($account)
-            ->orWhere('t1.id')->in($bugIDList)
+            ->orWhere('t1.id')->in($bugIdList)
             ->markRight(1)
             ->fi()
             ->orderBy($orderBy)
