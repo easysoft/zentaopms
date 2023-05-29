@@ -1,4 +1,5 @@
 <?php
+global $app;
 $app->loadLang('story');
 $config->product->search['module']             = 'story';
 $config->product->search['fields']['title']    = $lang->story->title;
