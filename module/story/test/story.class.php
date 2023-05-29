@@ -600,4 +600,24 @@ class storyTest
         $stories = $this->objectModel->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', $excludeStories, $pager);
         return count($stories);
     }
+
+    /**
+     * 测试 updateTwins 方法。
+     * Test updateTwins method.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function updateTwinsTest(array $storyIdList): array
+    {
+        $this->objectModel->updateTwins($storyIdList);
+
+        if(empty($storyIdList)) return array();
+        if($storyIdList)
+        {
+            $twins = $this->objectModel->dao->select('id,twins')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchPairs('id', 'twins');
+            return array_map(function($item){return str_replace(',', ':', $item);}, $twins);
+        }
+    }
 }

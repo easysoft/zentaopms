@@ -798,6 +798,14 @@ class storyTao extends storyModel
         if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
     }
 
+    /**
+     * 更新孪生需求字段。
+     * Update twins.
+     *
+     * @param  array     $storyIdList
+     * @access protected
+     * @return void
+     */
     protected function updateTwins(array $storyIdList): void
     {
         if(count($storyIdList) <= 1) return;
