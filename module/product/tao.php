@@ -162,13 +162,11 @@ class productTao extends productModel
      */
     protected function getPagerProductsIn(array $productIDs, object|null $pager, string $orderBy)
     {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+        return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productIDs)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        return $products;
     }
 
     /**
@@ -273,47 +271,41 @@ class productTao extends productModel
     /* TODO move to productplan module. */
     protected function getPlansTODO(array $productIDs): array
     {
-        $plans = $this->dao->select('product, count(*) AS count')
+        return $this->dao->select('product, count(*) AS count')
             ->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIDs)
             ->andWhere('end')->gt(helper::now())
             ->groupBy('product')
             ->fetchPairs();
-
-        return $plans;
     }
 
     /* TODO move to release module. */
     protected function getReleasesTODO(array $productIDs): array
     {
-        $releases = $this->dao->select('product, count(*) AS count')
+        return $this->dao->select('product, count(*) AS count')
             ->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIDs)
             ->groupBy('product')
             ->fetchPairs();
-
-        return $releases;
     }
 
     /* TODO move to bug module. */
     protected function getBugsTODO(array $productIDs): array
     {
-        $bugs = $this->dao->select('product,count(*) AS conut')
+        return $this->dao->select('product,count(*) AS conut')
             ->from(TABLE_BUG)
             ->where('product')->in($productIDs)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
-
-        return $bugs;
     }
 
     /* TODO move to bug module. */
     protected function getUnResolvedTODO(array $productIDs): array
     {
-        $unResolved = $this->dao->select('product,count(*) AS count')
+        return $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->orWhere('resolution')->eq('postponed')
@@ -321,14 +313,12 @@ class productTao extends productModel
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
-
-        return $unResolved;
     }
 
     /* TODO move to bug module. */
     protected function getFixedBugsTODO(array $productIDs): array
     {
-        $fixedBugs = $this->dao->select('product,count(*) AS count')
+        return $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('closed')
             ->andWhere('product')->in($productIDs)
@@ -336,51 +326,44 @@ class productTao extends productModel
             ->andWhere('resolution')->eq('fixed')
             ->groupBy('product')
             ->fetchPairs();
-
-        return $fixedBugs;
     }
 
     /* TODO move to bug module. */
     protected function getClosedBugsTODO(array $productIDs): array
     {
-        $closedBugs = $this->dao->select('product,count(*) AS count')
+        return $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('closed')
             ->andWhere('product')->in($productIDs)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
-
-        return $closedBugs;
     }
+
     /* TODO move to bug module. */
     protected function getThisWeekBugsTODO(array $productIDs): array
     {
         $this->app->loadClass('date', true);
         $weekDate     = date::getThisWeek();
-        $thisWeekBugs = $this->dao->select('product,count(*) AS count')
+        return $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('openedDate')->between($weekDate['begin'], $weekDate['end'])
             ->andWhere('product')->in($productIDs)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
-
-        return $thisWeekBugs;
     }
 
     /* TODO move to bug module. */
     protected function getAssignToNullTODO(array $productIDs): array
     {
-        $assignToNull = $this->dao->select('product,count(*) AS count')
+        return $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
             ->where('assignedTo')->eq('')
             ->andWhere('product')->in($productIDs)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
-
-        return $assignToNull;
     }
 
     /**
