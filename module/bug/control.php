@@ -330,10 +330,9 @@ class bug extends control
 
             if($oldBug->status != 'closed') $this->bug->assign($bug);
 
+            /* Response after assigning bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            /* Get response after assigning bug. */
-            return $this->send($this->bugZen->responseAfterOperate($bugID));
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
         }
 
         /* Get assigned to member. */
