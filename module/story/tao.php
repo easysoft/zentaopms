@@ -714,15 +714,32 @@ class storyTao extends storyModel
         }
     }
 
-    protected function updateKanbanForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
+    /**
+     * 在创建需求的时候，将需求关联到项目或执行。
+     * Link to execution for create story.
+     *
+     * @param  int       $executionID
+     * @param  int       $storyID
+     * @param  object    $story
+     * @param  string    $extra
+     * @access protected
+     * @return void
+     */
+    protected function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
     {
-        if(empty($executionID) or empty($storyID)) return;
+        if(empty($executionID) || empty($storyID)) return;
 
         $this->linkStory($executionID, $story->product, $storyID);
-        if($this->config->systemMode == 'ALM' and $executionID != $this->session->project) $this->linkStory($this->session->project, $story->product, $storyID);
+        if($this->config->systemMode == 'ALM' && $this->session->project && $executionID != $this->session->project) $this->linkStory((int)$this->session->project, $story->product, $storyID);
 
-        $extra = $this->parseExtra($extra);
+        $this->loadModel('action');
+        $extra  = $this->parseExtra($extra);
         $object = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+        if($object->type == 'project')
+        {
+            $this->action->create('story', $storyID, 'linked2project', '', $object->id);
+            return;
+        }
         if($object->type == 'kanban')
         {
             $laneID = zget($story, 'lane', 0);
@@ -731,20 +748,12 @@ class storyTao extends storyModel
             $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'backlog');
             if(empty($columnID)) $columnID = zget($extra, 'columnID', 0);
 
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
-            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($executionID, 'story');
+            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+            if(empty($laneID)  || empty($columnID))  $this->kanban->updateLane($executionID, 'story');
         }
-
-        $this->loadModel('action');
-        if($object->type == 'project')
-        {
-            $this->action->create('story', $storyID, 'linked2project', '', $executionID);
-            return;
-        }
-
-        $this->action->create('story', $storyID, 'linked2project', '', $object->project);
 
         $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
+        $this->action->create('story', $storyID, 'linked2project', '', $object->project);
         if($object->multiple) $this->action->create('story', $storyID, $actionType, '', $executionID);
     }
 

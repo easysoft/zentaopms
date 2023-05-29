@@ -463,7 +463,7 @@ class storyModel extends model
         $this->storyTao->doCreateReviewer($storyID, $story);
         $this->storyTao->doCreateURRelations($storyID, $story);
 
-        if($executionID) $this->storyTao->updateKanbanForCreate($objectID, $storyID, $story, $extra);
+        if($executionID) $this->storyTao->linkToExecutionForCreate($objectID, $storyID, $story, $extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
         if(!empty($story->parent)) $this->subdivide($story->parent, array($storyID));
         if(!empty($story->plan))
@@ -5169,16 +5169,18 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function linkStory($executionID, $productID, $storyID)
+    public function linkStory(int $executionID, int $productID, int $storyID): void
     {
+        if(empty($executionID) || empty($productID) || empty($storyID)) return;
         $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
-        $this->dao->insert(TABLE_PROJECTSTORY)
-            ->set('project')->eq($executionID)
-            ->set('product')->eq($productID)
-            ->set('story')->eq($storyID)
-            ->set('version')->eq(1)
-            ->set('order')->eq($lastOrder + 1)
-            ->exec();
+
+        $projectStory = new stdclass();
+        $projectStory->project = $executionID;
+        $projectStory->product = $productID;
+        $projectStory->story   = $storyID;
+        $projectStory->version = 1;
+        $projectStory->order   = $lastOrder + 1;
+        $this->dao->insert(TABLE_PROJECTSTORY)->data($projectStory)->exec();
     }
 
     /**

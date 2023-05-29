@@ -657,4 +657,25 @@ class storyTest
         $bug['files'] = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->fetchAll('id');
         return $bug;
     }
+
+    /**
+     * 测试 linkToExecutionForCreate 方法。
+     * Test linkToExecutionForCreate method.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  string $extra
+     * @access public
+     * @return array
+     */
+    public function linkToExecutionForCreateTest(int $executionID, int $storyID, string $extra = ''): array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_PROJECTSTORY)->exec();
+        $this->objectModel->dao->delete()->from(TABLE_ACTION)->exec();
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        if(empty($story)) $story = new stdclass();
+
+        $this->objectModel->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
+        return array_filter((array)$this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch());
+    }
 }
