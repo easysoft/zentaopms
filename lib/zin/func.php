@@ -1181,8 +1181,6 @@ function dashboard()
  * string            title
  * string|array|null content
  * ?bool             useHtml=false
- * ?callable         subtitle
- * ?callable         actions
  *
  * ====== blocks ======
  * subTitle => array()
@@ -1196,8 +1194,6 @@ function section()
 
 /**
  * Zentao detail page section list widget.
- *
- * array items
  */
 function sectionList()
 {

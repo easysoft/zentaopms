@@ -8,36 +8,31 @@ detailHeader
     to::title(entityLabel(set(array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)))),
     to::suffix(btn(set::icon('plus'), set::url(''), set::type('primary'), $lang->task->create))
 );
-
-$sectionSubtitle = function() use($task)
-{
-    return entityLabel
-    (
-        setClass('my-3'),
-        set::entityID($task->storyID),
-        set::level(3),
-        set::text($task->storyTitle),
-    );
-};
-
-$sectionListItems = array(
-    array('title' => $lang->task->legendDesc, 'content' => empty($task->desc) ? $lang->noData : $task->desc),
-    array(
-        'title' => $lang->task->story,
-        'content' => array(
-            array('title' => $lang->story->legendSpec, 'content' => empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec),
-            array('title' => $lang->task->storyVerify, 'content' => empty($task->storyVerify) ? $lang->noData : $task->storyVerify)
-        ),
-        'useHtml' => true,
-        'subtitle' => $sectionSubtitle
-    )
-);
-
 detailBody
 (
     sectionList
     (
-        set::items($sectionListItems),
+        item
+        (
+            set::title($lang->task->legendDesc),
+            empty($task->desc) ? $lang->noData : $task->desc
+        ),
+        item
+        (
+            set::title($lang->task->story),
+            set::content(array(
+                array('title' => $lang->story->legendSpec, 'content' => empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec),
+                array('title' => $lang->task->storyVerify, 'content' => empty($task->storyVerify) ? $lang->noData : $task->storyVerify)
+            )),
+            set::useHtml(true),
+            to::subtitle(entityLabel
+            (
+                setClass('my-3'),
+                set::entityID($task->storyID),
+                set::level(3),
+                set::text($task->storyTitle),
+            ))
+        ),
         history(set(array('actions' => $actions, 'users' => $users, 'methodName' => $methodName)))
     ),
     detailSide
