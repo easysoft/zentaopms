@@ -748,6 +748,15 @@ class storyTao extends storyModel
         if($object->multiple) $this->action->create('story', $storyID, $actionType, '', $executionID);
     }
 
+    /**
+     * 当Bug转需求后，关闭Bug。
+     * Close bug when to story.
+     *
+     * @param  int       $bugID
+     * @param  int       $storyID
+     * @access protected
+     * @return void
+     */
     protected function closeBugWhenToStory(int $bugID, int $storyID): void
     {
         if(empty($bugID) or empty($storyID)) return;

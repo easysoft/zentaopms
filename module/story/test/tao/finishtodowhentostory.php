@@ -20,8 +20,8 @@ pid=1
 
 $storyTest = new storyTest();
 
-r($storyTest->finishTodoWhenToStoryTest(0, 0)) && p() && e('0'); //不传入需求，也不传入产品。
-r($storyTest->finishTodoWhenToStoryTest(1, 0)) && p() && e('0'); //不传入需求，也不传入产品。
-r($storyTest->finishTodoWhenToStoryTest(0, 1)) && p() && e('0'); //不传入需求，也不传入产品。
-r($storyTest->finishTodoWhenToStoryTest(1, 1)) && p() && e('done'); //不传入需求，也不传入产品。
-r($storyTest->finishTodoWhenToStoryTest(2, 2)) && p() && e('done'); //不传入需求，也不传入产品。
+r($storyTest->finishTodoWhenToStoryTest(0, 0)) && p() && e('0');    //不传入待办，也不传入需求。
+r($storyTest->finishTodoWhenToStoryTest(1, 0)) && p() && e('0');    //传入待办，不传入需求。
+r($storyTest->finishTodoWhenToStoryTest(0, 1)) && p() && e('0');    //不传入待办，传入需求。
+r($storyTest->finishTodoWhenToStoryTest(1, 1)) && p() && e('done'); //传入待办，也传入需求。
+r($storyTest->finishTodoWhenToStoryTest(2, 2)) && p() && e('done'); //传入关联反馈的待办，传入需求。

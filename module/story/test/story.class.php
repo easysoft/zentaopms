@@ -5,6 +5,7 @@ class storyTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('story');
+         su('admin');
     }
 
     /**
@@ -635,6 +636,25 @@ class storyTest
         $this->objectModel->finishTodoWhenToStory($todoID, $storyID);
 
         if(empty($todoID) or empty($storyID)) return '';
-        return $this->objectModel->dao->select('id,status')->from(TABLE_TODO)->where('id')->in($todoID)->fetch('status');
+        return $this->objectModel->dao->select('id,status')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch('status');
+    }
+
+    /**
+     * 测试 closeBugWhenToStory 方法。
+     * Test closeBugWhenToStory.
+     *
+     * @param  int    $bugID
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function closeBugWhenToStoryTest(int $bugID, int $storyID): array
+    {
+        $this->objectModel->closeBugWhenToStory($bugID, $storyID);
+
+        if(empty($bugID) or empty($storyID)) return array();
+        $bug = (array)$this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        $bug['files'] = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->fetchAll('id');
+        return $bug;
     }
 }
