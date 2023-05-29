@@ -1165,19 +1165,6 @@ class bug extends control
     }
 
     /**
-     * AJAX: get actions of a bug. for web app.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetDetail($bugID)
-    {
-        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
-        $this->display();
-    }
-
-    /**
      * Ajax get bug by ID.
      *
      * @param  int    $bugID
