@@ -53,7 +53,7 @@ $config->project->dtable->fieldList['name']['name']         = 'name';
 $config->project->dtable->fieldList['name']['width']        = 200;
 $config->project->dtable->fieldList['name']['flex']         = 1;
 $config->project->dtable->fieldList['name']['fixed']        = 'left';
-$config->project->dtable->fieldList['name']['link']         = helper::createLink('project', 'index', 'projectID = {id}');
+$config->project->dtable->fieldList['name']['link']         = helper::createLink('project', 'index', 'projectID={id}');
 
 $config->project->dtable->fieldList['code']['title'] = $lang->project->code;
 $config->project->dtable->fieldList['code']['name']  = 'code';
