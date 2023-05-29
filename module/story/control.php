@@ -50,29 +50,22 @@ class story extends control
      */
     public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
-        $copyStoryID = $storyID;
-
-        /* Get product id according to the project id when lite vision todo transfer story */
-        if($this->config->vision == 'lite' and $productID == 0)
-        {
-            $products = $this->product->getProductPairsByProject($objectID);
-            if(!empty($products)) $productID = key($products);
-        }
-
+        /* Set menu. */
         $this->story->replaceURLang($storyType);
-        $objectID = $this->storyZen->setMenuForCreate($productID, $objectID);
+        $copyStoryID = $storyID;
+        list($productID, $objectID) = $this->storyZen->setMenuForCreate($productID, $objectID);
         if($productID == 0 && $objectID == 0) return $this->locate($this->createLink('product', 'create'));
 
         if(!empty($_POST))
         {
             helper::setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $response['result'] = 'success';
-
+            /* Get story data from post. */
             $storyData = $this->productZen->buildStoryForCreate($objectID, $bugID);
             $response  = $this->productZen->checkRepeatStory($storyData, $objectID);
             if($response) return $this->send($response);
 
+            /* Insert story data. */
             $productID = $this->post->product ? $this->post->product : $productID;
             if(empty($storyData->branches))
             {
@@ -89,7 +82,6 @@ class story extends control
                     $storyData->plan   = $storyData->plans[$key];
 
                     $storyID = $this->story->create($storyData, $objectID, $bugID, $extra);
-
                     $storyIdList[$storyID] = $storyID;
                     if(empty($mainStoryID)) $mainStoryID = $storyID;
                 }
@@ -101,13 +93,13 @@ class story extends control
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->post->status == 'draft' ? $this->lang->story->saveDraftSuccess : $this->lang->saveSuccess;
-            $response['message'] = $message;
-
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $storyID));
 
+            /* Get response when create in modal. */
             $response = $this->storyZen->responseAfterCreateInModal($message);
             if($response) return $this->send($response);
 
+            $response = array('result' => 'success', 'message' => $message);
             if($this->post->newStory)
             {
                 $response['message'] = $message . $this->lang->story->newStory;
@@ -128,7 +120,8 @@ class story extends control
         if($bugID   > 0) $initStory = $this->storyZen->getInitStoryByBug($bugID, $initStory);
         if($todoID  > 0) $initStory = $this->storyZen->getInitStoryByTodo($todoID, $initStory);
 
-        $fields = $this->storyZen->getFormFieldForCreate($productID, $branch, $objectID, $initStory);
+        /* Get form fields. */
+        $fields = $this->storyZen->getFormFieldsForCreate($productID, $branch, $objectID, $initStory);
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
 

@@ -19,16 +19,25 @@ class storyZen extends story
      * @param  int       $productID
      * @param  int       $objectID
      * @access protected
-     * @return int
+     * @return int[]
      */
-    protected function setMenuForCreate(int $productID, int $objectID): int
+    protected function setMenuForCreate(int $productID, int $objectID): array
     {
+        /* Get product id according to the project id when lite vision todo transfer story */
+        if($this->config->vision == 'lite' && $productID == 0)
+        {
+            $products = $this->product->getProductPairsByProject($objectID);
+            if(!empty($products)) $productID = key($products);
+        }
+
+        /* Get objectID by tab. */
         if(empty($objectID))
         {
             if($this->app->tab == 'project')   $objectID = (int)$this->session->project;
             if($this->app->tab == 'execution') $objectID = (int)$this->session->execution;
         }
 
+        /* Set menu by tab. */
         if($this->app->tab == 'product')   $this->product->setMenu($productID);
         if($this->app->tab == 'execution') $this->execution->setMenu($objectID);
         if($this->app->tab == 'project')
@@ -45,7 +54,7 @@ class storyZen extends story
             $this->project->setMenu($projectID);
         }
 
-        return $objectID;
+        return array($productID, $objectID);
     }
 
     /**
@@ -80,6 +89,14 @@ class storyZen extends story
         $this->config->story->form->create['lane']['title']     = $this->lang->kanbancard->lane;
     }
 
+    /**
+     * 初始化创建需求的一些字段的数据。
+     * Init story for create.
+     *
+     * @param  int       $planID
+     * @access protected
+     * @return object
+     */
     protected function initStoryForCreate(int $planID): object
     {
         $initStory = new stdclass();
@@ -97,6 +114,15 @@ class storyZen extends story
         return $initStory;
     }
 
+    /**
+     * 根据复制的需求，初始化创建需求的一些字段数据。
+     * Get init story by copied story.
+     *
+     * @param  int       $storyID
+     * @param  object    $initStory
+     * @access protected
+     * @return object
+     */
     protected function getInitStoryByStory(int $storyID, object $initStory): object
     {
         if(empty($storyID)) return $initStory;
@@ -121,6 +147,15 @@ class storyZen extends story
         return $initStory;
     }
 
+    /**
+     * 根据来源Bug，初始化创建需求的一些字段数据。
+     * Get init story by bug.
+     *
+     * @param  int       $bugID
+     * @param  object    $initStory
+     * @access protected
+     * @return object
+     */
     protected function getInitStoryByBug(int $bugID, object $initStory): object
     {
         if(empty($bugID)) return $initStory;
@@ -137,6 +172,15 @@ class storyZen extends story
         return $initStory;
     }
 
+    /**
+     * 根据来源待办，初始化创建产品的一些字段数据。
+     * Get init story by todo.
+     *
+     * @param  int       $todoID
+     * @param  object    $initStory
+     * @access protected
+     * @return object
+     */
     protected function getInitStoryByTodo(int $todoID, object $initStory): object
     {
         if(empty($todoID)) return $initStory;
@@ -149,6 +193,15 @@ class storyZen extends story
         return $initStory;
     }
 
+    /**
+     * 获取产品和分支列表。
+     * Get products and branches for create.
+     *
+     * @param  int       $productID
+     * @param  int       $objectID
+     * @access protected
+     * @return array
+     */
     protected function getProductsAndBranchesForCreate(int $productID, int $objectID): array
     {
         $products  = array();
@@ -180,7 +233,18 @@ class storyZen extends story
         return array($products, $branches);
     }
 
-    protected function getFormFieldForCreate(int $productID, string $branch, int $objectID, object $initStory): array
+    /**
+     * 获取创建需求的表单字段。
+     * Get form fields for create
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $objectID
+     * @param  object    $initStory
+     * @access protected
+     * @return array
+     */
+    protected function getFormFieldsForCreate(int $productID, string $branch, int $objectID, object $initStory): array
     {
         $account = $this->app->user->account;
         $fields  = $this->config->story->form->create;
@@ -246,6 +310,15 @@ class storyZen extends story
         return $fields;
     }
 
+    /**
+     * 设置模块字段的表单字段。
+     * Set module form field.
+     *
+     * @param  array     $fields
+     * @param  int       $moduleID
+     * @access protected
+     * @return array
+     */
     protected function setModuleField(array $fields, int $moduleID): array
     {
         $productID  = $this->view->productID;
@@ -264,6 +337,15 @@ class storyZen extends story
         return $fields;
     }
 
+    /**
+     * 根据配置，删除非必要的表单字段配置。
+     * Remove form fields for create.
+     *
+     * @param  array     $fields
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
     protected function removeFormFieldsForCreate(array $fields, string $storyType = 'story'): array
     {
        $productID = $this->view->productID;
@@ -271,18 +353,14 @@ class storyZen extends story
        $objectID  = $this->view->objectID;
 
         /* Hidden some fields of projects without products. */
-        $hiddenProduct = false;
-        $hiddenParent  = false;
-        $hiddenPlan    = false;
-        $hiddenURS     = false;
-        $teamUsers     = array();
-        $URS           = array();
+        $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
+        $teamUsers     = $URS = array();
         $showFeedback  = in_array($fields['source']['default'], $this->config->story->feedbackSource);
 
         if($storyType == 'story')
         {
             $moduleIdList = $this->tree->getAllChildId($this->view->moduleID);
-            $URS = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+            $URS          = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
         }
         $fields['URS']['options'] = $URS;
 
@@ -294,8 +372,7 @@ class storyZen extends story
             if(empty($project->hasProduct))
             {
                 $teamUsers     = $this->project->getTeamMemberPairs($project->id);
-                $hiddenProduct = true;
-                $hiddenParent  = true;
+                $hiddenProduct = $hiddenParent = true;
 
                 if($project->model !== 'scrum' or !$project->multiple) $hiddenPlan = true;
                 if($project->model === 'kanban') $hiddenURS  = true;
@@ -309,9 +386,9 @@ class storyZen extends story
         if($storyType != 'story' || !$this->config->URSR || $hiddenURS) unset($fields['URS']);
         if($hiddenProduct)
         {
-            $fields['product']['control']     = 'hidden';
-            $fields['reviewer']['options']    = $teamUsers;
-            $fields['assignedTo']['options']  = $teamUsers;
+            $fields['product']['control']    = 'hidden';
+            $fields['reviewer']['options']   = $teamUsers;
+            $fields['assignedTo']['options'] = $teamUsers;
         }
 
         /* Set Custom. */
@@ -323,6 +400,13 @@ class storyZen extends story
         }
     }
 
+    /**
+     * 获取指派给我的Block编号。
+     * Get assign me block id.
+     *
+     * @access protected
+     * @return int
+     */
     protected function getAssignMeBlockID(): int
     {
         if(!isonlybody()) return 0;
@@ -334,6 +418,15 @@ class storyZen extends story
             ->fetch('id');
     }
 
+    /**
+     * 构建创建需求数据。
+     * Build story for create
+     *
+     * @param  int       $executionID
+     * @param  int       $bugID
+     * @access protected
+     * @return object
+     */
     protected function buildStoryForCreate(int $executionID, int $bugID): object
     {
         $fields       = $this->config->story->form->create;
@@ -361,6 +454,16 @@ class storyZen extends story
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
+    /**
+     * 检查需求是否重复。
+     * Check repeat story.
+     *
+     * @param  object    $story
+     * @param  int       $objectID
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
     protected function checkRepeatStory(object $story, int $objectID, string $storyType = 'story'): array
     {
         /* Check repeat story. */
@@ -381,10 +484,17 @@ class storyZen extends story
         return $response;
     }
 
+    /**
+     * 如果是在弹窗中创建需求，获取创建后的跳转地址。
+     * Get response when after create story in modal.
+     *
+     * @param  string    $message
+     * @access protected
+     * @return array|false
+     */
     protected function responseAfterCreateInModal(string $message): array|false
     {
         if(!isonlybody()) return false;
-
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'reload' => true, 'closedModal' => true);
 
         $execution         = $this->execution->getByID($this->session->execution);
@@ -407,6 +517,19 @@ class storyZen extends story
         return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)");
     }
 
+    /**
+     * 获取创建需求后的跳转地址。
+     * Get location when after create story.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $objectID
+     * @param  int       $storyID
+     * @param  int       $copyStoryID
+     * @param  string    $storyType
+     * @access protected
+     * @return string
+     */
     protected function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, int $copyStoryID, string $storyType): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
