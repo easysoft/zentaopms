@@ -870,13 +870,39 @@ class bug extends control
     {
         if(!empty($_POST) && isset($_POST['bugIdList']))
         {
-            $bugIdList = array_unique($this->post->bugIdList);
-            $this->bugZen->batchChangePlanZen($bugIdList, $planID);
+            $bugIdList   = array_unique($this->post->bugIdList);
+            $oldBugs     = $this->bug->getByIdList($bugIdList);
+            $unlinkPlans = array();
+            $link2Plans  = array();
+            foreach($bugIdList as $bugID)
+            {
+                $oldBug = $oldBugs[$bugID];
+                if($planID == $oldBug->plan) continue;
+
+                /* Bugs link to plans and bugs unlink to plans. */
+                $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+                $link2Plans[$planID]        = empty($link2Plans[$planID])        ? $bugID : "{$link2Plans[$planID]},$bugID";
+
+                /* Update bug plan. */
+                $bug = new stdclass();
+                $bug->id   = $bugID;
+                $bug->plan = $planID;
+
+                $this->bug->update($bug);
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* Record plan action. */
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs)  $this->action->create('productplan', $planID, 'linkbug',   '', $bugs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        return array('load' => $this->session->bugList, 'closeModal' => true);
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
     }
 
     /**
@@ -967,10 +993,47 @@ class bug extends control
             $bugIdList = $this->bugZen->batchResolveIdFilter($bugIdList, $bugs);
             list($modules, $productQD) = $this->bugZen->getBatchResolveVars($bugs);
 
-            /* Batch resolve bugs. */
-            $message = $this->bug->batchResolveZen($bugIdList, $resolution, $resolvedBuild, $bugs, $modules, $productQD);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $users = $this->loadModel('user')->getPairs();
+            $now   = helper::now();
+            foreach($bugIdList as $i => $bugID)
+            {
+                $oldBug = $bugs[$bugID];
 
+                /* Get bug assignedTo. */
+                $assignedTo = $oldBug->openedBy;
+                if(!isset($users[$assignedTo]))
+                {
+                    $assignedTo = '';
+                    $module     = isset($modules[$oldBug->module]) ? $modules[$oldBug->module] : '';
+                    while($module)
+                    {
+                        if($module->owner and isset($users[$module->owner]))
+                        {
+                            $assignedTo = $module->owner;
+                            break;
+                        }
+                        $module = isset($modules[$module->parent]) ? $modules[$module->parent] : '';
+                    }
+                    if(empty($assignedTo)) $assignedTo = $productQD;
+                }
+
+                $bug = new stdClass();
+                $bug->id            = (int)$bugID;
+                $bug->resolution    = $resolution;
+                $bug->resolvedBuild = $resolution == 'fixed' ? $resolvedBuild : '';
+                $bug->resolvedBy    = $this->app->user->account;
+                $bug->resolvedDate  = $now;
+                $bug->status        = 'resolved';
+                $bug->confirmed     = 1;
+                $bug->assignedTo    = $assignedTo;
+                $bug->assignedDate  = $now;
+
+                $this->bug->resolve($bug);
+
+                $message = $this->executeHooks($bug->id);
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
