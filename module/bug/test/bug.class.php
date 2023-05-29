@@ -127,14 +127,15 @@ class bugTest
     }
 
     /**
+     * 测试gitlab问题转bug。
      * Test create bug from gitlab issue.
      *
-     * @param  array  $bug
-     * @param  int    $executionID
+     * @param  object  $bug
+     * @param  int     $executionID
      * @access public
-     * @return object|int
+     * @return object|int|array
      */
-    public function createBugFromGitlabIssueTest($bug, $executionID)
+    public function createBugFromGitlabIssueTest(object $bug, int $executionID): object|int|array
     {
         $objectID = $this->objectModel->createBugFromGitlabIssue($bug, $executionID);
 

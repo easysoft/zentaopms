@@ -124,6 +124,7 @@ class bugModel extends model
     }
 
     /**
+     * gitlab问题转为bug。
      * Create bug from gitlab issue.
      *
      * @param  object    $bug
@@ -131,11 +132,11 @@ class bugModel extends model
      * @access public
      * @return int|bool
      */
-    public function createBugFromGitlabIssue($bug, $executionID)
+    public function createBugFromGitlabIssue(object $bug, int $executionID): int|bool
     {
         $bug->openedBy     = $this->app->user->account;
         $bug->openedDate   = helper::now();
-        $bug->assignedDate = isset($bug->assignedTo) ? helper::now() : 0;
+        $bug->assignedDate = isset($bug->assignedTo) ? helper::now() : null;
         $bug->openedBuild  = 'trunk';
         $bug->story        = 0;
         $bug->task         = 0;
