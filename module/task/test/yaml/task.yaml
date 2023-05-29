@@ -12,3 +12,5 @@ fields:
   range: "wait,doing,done,cancel,closed,wait{3},doing"
 - field: mode
   range: "[]{7},linear,multi"
+- field: deleted
+  range: 0{9},1{3}

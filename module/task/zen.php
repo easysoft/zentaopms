@@ -188,7 +188,7 @@ class taskZen extends task
         }
 
         /* Check if the request data size exceeds the PHP limit. */
-        $tasks           = $this->task->getByList($this->post->taskIDList);
+        $tasks           = $this->task->getByIdList($this->post->taskIDList);
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
@@ -407,7 +407,7 @@ class taskZen extends task
     {
         $taskIdList     = array_unique($taskIdList);
         $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'account');
-        $tasks          = $this->task->getByList($taskIdList);
+        $tasks          = $this->task->getByIdList($taskIdList);
 
         /* Filter tasks. */
         foreach($tasks as $taskID => $task)
@@ -509,7 +509,7 @@ class taskZen extends task
     protected function buildTasksForBatchEdit(): false|array
     {
         $taskData = form::batchData()->get();
-        $oldTasks = $this->post->taskIDList ? $this->task->getByList($this->post->taskIDList) : array();
+        $oldTasks = $this->post->taskIDList ? $this->task->getByIdList($this->post->taskIDList) : array();
         $now      = helper::now();
         foreach($taskData as $taskID => $task)
         {

@@ -842,7 +842,7 @@ class task extends control
         {
             $taskIDList = array_unique($this->post->taskIDList);
 
-            $tasks = $this->task->getByList($taskIDList);
+            $tasks = $this->task->getByIdList($taskIDList);
             foreach($tasks as $task)
             {
                 if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
@@ -871,7 +871,7 @@ class task extends control
         $taskIdList     = $this->post->taskIDList ? array_unique($this->post->taskIDList) : $skipTaskIdList;
         if(!empty($taskIdList))
         {
-            $tasks = $this->task->getByList($taskIdList);
+            $tasks = $this->task->getByIdList($taskIdList);
             foreach($tasks as $taskID => $task)
             {
                 if($task->status == 'closed') continue;

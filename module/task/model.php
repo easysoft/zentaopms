@@ -227,7 +227,7 @@ class taskModel extends model
 
         $today          = helper::today();
         $currentAccount = $this->app->user->account;
-        $oldTasks       = $tasks ? $this->getByList(array_keys($tasks)) : array();
+        $oldTasks       = $tasks ? $this->getByIdList(array_keys($tasks)) : array();
         foreach($tasks as $taskID => $task)
         {
             $oldTask = zget($oldTasks, $taskID);
@@ -864,7 +864,7 @@ class taskModel extends model
         $this->loadModel('score');
 
         $allChanges = array();
-        $oldTasks   = $taskData ? $this->getByList(array_keys($taskData)) : array();
+        $oldTasks   = $taskData ? $this->getByIdList(array_keys($taskData)) : array();
         foreach($taskData as $taskID => $task)
         {
             /* Update a task.*/
@@ -919,7 +919,7 @@ class taskModel extends model
     public function batchChangeModule(array $taskIdList, int $moduleID): void
     {
         $now      = helper::now();
-        $oldTasks = $this->getByList($taskIdList);
+        $oldTasks = $this->getByIdList($taskIdList);
 
         $this->loadModel('action');
         foreach($taskIdList as $taskID)
@@ -1562,18 +1562,19 @@ class taskModel extends model
     }
 
     /**
-     * Get task list.
+     * 通过任务ID列表批量获取任务信息。
+     * Get the task information from the task ID list.
      *
-     * @param  int|array|string    $taskIDList
+     * @param  array    $taskIDList
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getByList($taskIDList = 0)
+    public function getByIdList(array $taskIDList = array()): array
     {
         if(empty($taskIDList)) return array();
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF($taskIDList)->andWhere('id')->in($taskIDList)->fi()
+            ->andWhere('id')->in($taskIDList)
             ->fetchAll('id');
     }
 
@@ -1640,7 +1641,7 @@ class taskModel extends model
             $parentIdList[$task->parent] = $task->parent;
         }
 
-        $parentTasks = $this->getByList($parentIdList);
+        $parentTasks = $this->getByIdList($parentIdList);
         $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks);
         return $this->processTasks($tasks);
     }
@@ -1809,7 +1810,7 @@ class taskModel extends model
             $parentIdList[$task->parent] = $task->parent;
         }
 
-        $parentTasks = $this->getByList($parentIdList);
+        $parentTasks = $this->getByIdList($parentIdList);
         $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks);
         return $this->taskTao->batchComputeProgress($tasks);
     }

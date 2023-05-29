@@ -127,7 +127,7 @@ class taskTest
         $requiredFields = $this->objectModel->config->task->edit->requiredFields;
         if($requiredField) $this->objectModel->config->task->edit->requiredFields = $this->objectModel->config->task->edit->requiredFields . ',' . $requiredField . ',';
 
-        $oldTasks = $this->objectModel->getByList($taskIdList);
+        $oldTasks = $this->objectModel->getByIdList($taskIdList);
         $taskData = array();
         foreach($oldTasks as $task)
         {
@@ -160,7 +160,7 @@ class taskTest
      */
     public function afterBatchUpdateObject(array $taskIdList, array $params): bool
     {
-        $oldTasks = $this->objectModel->getByList($taskIdList);
+        $oldTasks = $this->objectModel->getByIdList($taskIdList);
         $taskData = array();
         foreach($oldTasks as $task)
         {
@@ -189,7 +189,7 @@ class taskTest
     public function batchChangeModuleTest(array $taskIDList, int $moduleID): array
     {
         $object = $this->objectModel->batchChangeModule($taskIDList, $moduleID);
-        return $this->objectModel->getByList($taskIDList);
+        return $this->objectModel->getByIdList($taskIDList);
     }
 
     /**
@@ -469,27 +469,6 @@ class taskTest
         $oldTask = $this->objectModel->getByID($taskID);
         $result  = $this->objectModel->finish($oldTask, $task);
         return $result;
-    }
-
-    /**
-     * Test get task info by Id List.
-     *
-     * @param  int|array|string $taskID
-     * @access public
-     * @return array
-     */
-    public function getByListTest($taskID)
-    {
-        $object = $this->objectModel->getByList($taskID);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
     }
 
     /**
@@ -1610,7 +1589,7 @@ class taskTest
     public function buildTaskTreeTest(array $taskIdList): array
     {
         $tasks = array();
-        if(!empty($taskIdList)) $tasks = $this->objectModel->getByList($taskIdList);
+        if(!empty($taskIdList)) $tasks = $this->objectModel->getByIdList($taskIdList);
 
         $parentIdList = array();
         foreach($tasks as $task)
@@ -1618,7 +1597,7 @@ class taskTest
             if($task->parent <= 0 or isset($tasks[$task->parent]) or isset($parentIdList[$task->parent])) continue;
             $parentIdList[$task->parent] = $task->parent;
         }
-        $parentTasks = $this->objectModel->getByList($parentIdList);
+        $parentTasks = $this->objectModel->getByIdList($parentIdList);
 
         return $this->objectModel->buildTaskTree($tasks, $parentTasks);
     }
@@ -1756,7 +1735,7 @@ class taskTest
         $objectIdList = $this->objectModel->createTaskOfAffair($task, $assignedToList);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->getByList($objectIdList);
+        return $this->objectModel->getByIdList($objectIdList);
     }
 
     /**

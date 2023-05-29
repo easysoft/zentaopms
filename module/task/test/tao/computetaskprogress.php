@@ -20,7 +20,7 @@ cid=1
 $tester->loadModel('task');
 
 $taskIDList = range(1,5);
-$taskList   = $tester->task->getByList($taskIDList);
+$taskList   = $tester->task->getByIdList($taskIDList);
 
 r($tester->task->computeTaskProgress($taskList[1])) && p() && e('0');   //测试任务消耗工时为0，剩余工时为0的情况
 r($tester->task->computeTaskProgress($taskList[2])) && p() && e('100'); //测试任务消耗工时不为0，剩余工时为0的情况

@@ -4,9 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
-zdTable('task')->config('task')->gen(9);
-zdTable('taskteam')->config('taskteam')->gen(6);
+zdTable('project')->config('project', true)->gen(5);
+zdTable('task')->config('task', true)->gen(9);
+zdTable('taskteam')->config('taskteam', true)->gen(6);
 
 /**
 
