@@ -1490,6 +1490,29 @@ class taskTest
     }
 
     /**
+     * Check workhour test. 
+     * 
+     * @param  int    $taskID 
+     * @param  array  $workhour 
+     * @access public
+     * @return array|bool 
+     */
+    public function checkWorkhourTest(int $taskID, array $workhour): array|bool
+    {
+        $task   = $this->objectModel->getByID($taskID);
+        $result = $this->objectModel->checkWorkhour($task, $workhour);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $result;
+        }
+    }
+
+    /**
      * 测试根据类型查询任务。
      * Test fetch tasks of a execution.
      *

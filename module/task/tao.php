@@ -174,7 +174,7 @@ class taskTao extends taskModel
 
     /**
      * 检查录入日志的字段必填性及日志记录人要在多人任务的团队中。
-     * Check that the required fields of the effort must be filled in and the effort recorder must be in the multi-task team..
+     * Check that the required fields of the effort must be filled in and the effort recorder must be in the multi-task team.
      *
      * @param  object    $task
      * @param  array     $workhour
