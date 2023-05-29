@@ -444,262 +444,46 @@ class storyModel extends model
     /**
      * Create a story.
      *
-     * @param  int    $executionID
+     * @param  object $story
      * @param  int    $bugID
-     * @param  string $from
-     * @param  string $extra
      * @access public
-     * @return int|bool the id of the created story or false when error.
+     * @return int|false the id of the created story or false when error.
      */
-    public function create($executionID = 0, $bugID = 0, $from = '', $extra = '')
+    public function create(object $story, int $executionID, int $bugID = 0, string $extra = ''): int|false
     {
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
+        if(defined('TUTORIAL')) return false;
 
-        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer']))
+        $storyID = $this->storyTao->doCreateStory($story);
+        if(!$storyID) return false;
+
+        $this->loadModel('action');
+        $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
+        $files = $this->file->saveUpload($story->type, $storyID, 1);
+        $this->storyTao->doCreateSpec($storyID, $story, $files);
+        $this->storyTao->doCreateReviewer($storyID, $story);
+        $this->storyTao->doCreateURRelations($storyID, $story);
+
+        if($executionID) $this->storyTao->updateKanbanForCreate($objectID, $storyID, $story, $extra);
+        if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
+        if(!empty($story->parent)) $this->subdivide($story->parent, array($storyID));
+        if(!empty($story->plan))
         {
-            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewedBy);
-            return false;
+            $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+            $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
         }
 
-        $now   = helper::now();
-        $story = fixer::input('post')
-            ->cleanInt('product,module,pri,plan')
-            ->callFunc('title', 'trim')
-            ->add('version', 1)
-            ->setDefault('plan,verify,notifyEmail', '')
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setDefault('estimate', 0)
-            ->setIF($this->post->assignedTo, 'assignedDate', $now)
-            ->setIF($this->post->plan > 0, 'stage', 'planned')
-            ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
-            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
-            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
-            ->setIF($executionID > 0, 'stage', 'projected')
-            ->setIF($bugID > 0, 'fromBug', $bugID)
-            ->join('assignedTo', '')
-            ->join('mailto', ',')
-            ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket,branches,modules,plans')
-            ->get();
+        $this->setStage($storyID);
+        $this->loadModel('score')->create('story', 'create',$storyID);
 
-        /* Check repeat story. */
-        $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
-        if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-        if($story->status != 'draft' and $this->checkForceReview()) $story->status = 'reviewing';
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
+        /* Create actions. */
+        $action = $bugID == 0 ? 'Opened' : 'Frombug';
+        $extra  = $bugID == 0 ? '' : $bugID;
+        $this->action->create('story', $storyID, $action, '', $extra);
 
-        $product = $this->loadModel('product')->getById($story->product);
-        if($product->type == 'normal' or $story->type == 'requirement')
-        {
-            $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
-            $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
-            $this->post->plans    = isset($story->plan) ? array($story->plan) : array(0 => 0);
-        }
+        /* Record submit review action. */
+        if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
 
-        /* check module */
-        $requiredFields = "," . $this->config->story->create->requiredFields . ",";
-        if(strpos($requiredFields, ',module,') !== false)
-        {
-            foreach($this->post->modules as $module)
-            {
-                if(empty($module))
-                {
-                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->module);
-                    return false;
-                }
-            }
-        }
-
-        $storyIds    = array();
-        $storyFile   = array();
-        $mainStoryID = 0;
-        foreach($this->post->branches as $key => $branch)
-        {
-            $story->branch = $branch;
-            $story->module = $this->post->modules[$key];
-            $story->plan   = $this->post->plans[$key];
-
-            if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
-            if($story->type == 'requirement') $requiredFields = str_replace(',plan,', ',', $requiredFields);
-            if(strpos($requiredFields, ',estimate,') !== false)
-            {
-                if(strlen(trim($story->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->story->estimate);
-                $requiredFields = str_replace(',estimate,', ',', $requiredFields);
-            }
-
-            $requiredFields = trim($requiredFields, ',');
-
-            $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
-                ->autoCheck()
-                ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
-                ->batchCheck($requiredFields, 'notempty')
-                ->checkFlow()
-                ->exec();
-
-            if(dao::isError()) return false;
-
-            if(!dao::isError())
-            {
-                $storyID = $this->dao->lastInsertID();
-
-                /* Fix bug #21992, user story have no parent story. */
-                if(isset($story->parent) and $story->parent)
-                {
-                    $stories = array($storyID);
-                    $this->subdivide($story->parent, $stories);
-                }
-
-                if(!empty($story->plan))
-                {
-                    $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
-                    $this->loadModel('action')->create('productplan', $story->plan, 'linkstory', '', $storyID);
-                }
-
-                $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
-                $files = $this->file->saveUpload($story->type, $storyID, 1);
-                /* Multi branch sync files */
-                !empty($files) ? $storyFile = $files : $files = $storyFile;
-
-                $data          = new stdclass();
-                $data->story   = $storyID;
-                $data->version = 1;
-                $data->title   = $story->title;
-                $data->spec    = $story->spec;
-                $data->verify  = $story->verify;
-                $data->files   = join(',', array_keys($files));
-                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
-
-                /* Save the story reviewer to storyreview table. */
-                if(isset($_POST['reviewer']))
-                {
-                    foreach($this->post->reviewer as $reviewer)
-                    {
-                        if(empty($reviewer)) continue;
-
-                        $reviewData = new stdclass();
-                        $reviewData->story    = $storyID;
-                        $reviewData->version  = 1;
-                        $reviewData->reviewer = $reviewer;
-                        $reviewData->result   = '';
-                        $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                    }
-                }
-
-                /* Project or execution linked story. */
-                if($executionID != 0)
-                {
-                    $this->linkStory($executionID, $this->post->product, $storyID);
-                    if($this->config->systemMode == 'ALM' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
-
-                    $this->loadModel('kanban');
-
-                    $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-                    if(isset($_POST['lane'])) $laneID = $_POST['lane'];
-
-                    $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
-                    if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-                    if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
-                    if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');
-                }
-
-                if(is_array($this->post->URS))
-                {
-                    foreach($this->post->URS as $URID)
-                    {
-                        $requirement = $this->getByID($URID);
-                        $data = new stdclass();
-                        $data->product  = $story->product;
-                        $data->AType    = 'requirement';
-                        $data->relation = 'subdivideinto';
-                        $data->BType    = 'story';
-                        $data->AID      = $URID;
-                        $data->BID      = $storyID;
-                        $data->AVersion = $requirement->version;
-                        $data->BVersion = 1;
-                        $data->extra    = 1;
-
-                        $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
-
-                        $data->AType    = 'story';
-                        $data->relation = 'subdividedfrom';
-                        $data->BType    = 'requirement';
-                        $data->AID      = $storyID;
-                        $data->BID      = $URID;
-                        $data->AVersion = 1;
-                        $data->BVersion = $requirement->version;
-
-                        $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
-                    }
-                }
-
-                if($bugID > 0)
-                {
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max')) $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
-
-                    $bug = new stdclass();
-                    $bug->toStory      = $storyID;
-                    $bug->status       = 'closed';
-                    $bug->resolution   = 'tostory';
-                    $bug->resolvedBy   = $this->app->user->account;
-                    $bug->resolvedDate = $now;
-                    $bug->closedBy     = $this->app->user->account;
-                    $bug->closedDate   = $now;
-                    $bug->assignedTo   = 'closed';
-                    $bug->assignedDate = $now;
-                    $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
-
-                    $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
-                    $this->action->create('bug', $bugID, 'Closed');
-
-                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
-
-                    /* add files to story from bug. */
-                    $files = $this->dao->select('*')->from(TABLE_FILE)
-                        ->where('objectType')->eq('bug')
-                        ->andWhere('objectID')->eq($bugID)
-                        ->fetchAll();
-                    if(!empty($files))
-                    {
-                        foreach($files as $file)
-                        {
-                            $file->objectType = 'story';
-                            $file->objectID   = $storyID;
-                            unset($file->id);
-                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                        }
-                    }
-                }
-                if(!defined('TUTORIAL')) $this->setStage($storyID);
-                if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
-
-                /* Callback the callable method to process the related data for object that is transfered to story. */
-                if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
-
-                $storyIds[] = $storyID;
-                if(empty($mainStoryID)) $mainStoryID = $storyID;
-            }
-        }
-
-        /* bind twins story id */
-        if(count($storyIds) > 1)
-        {
-            foreach($storyIds as $twinsStoryID)
-            {
-                $twinsArr = array();
-                foreach($storyIds as $idItem)
-                {
-                    if($idItem != $twinsStoryID) $twinsArr[] = $idItem;
-                    $twins = ',' . implode(',', $twinsArr) . ',';
-                    $this->dao->update(TABLE_STORY)->set('twins')->eq($twins)->where('id')->eq($twinsStoryID)->exec();
-                }
-            }
-        }
-
-        return array('status' => 'created', 'id' => $mainStoryID, 'ids' => $storyIds);
+        return $storyID;
     }
 
     /**

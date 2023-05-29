@@ -1,5 +1,5 @@
 <?php
-global $app;
+global $app, $lang;
 $config->product->form = new stdclass();
 $config->product->form->create = array();
 $config->product->form->create['program']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());

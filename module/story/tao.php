@@ -638,4 +638,193 @@ class storyTao extends storyModel
             ->andWhere('product')->in($productIdList)
             ->fetchAll();
     }
+
+    protected function doCreateStory(object $story): int|false
+    {
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane')
+            ->autoCheck()
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->checkFlow()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $storyID = $this->dao->lastInsertID();
+    }
+
+    protected function doCreateSpec(int $storyID, object $story, array $files): void
+    {
+        $spec          = new stdclass();
+        $spec->story   = $storyID;
+        $spec->version = 1;
+        $spec->title   = $story->title;
+        $spec->spec    = $story->spec;
+        $spec->verify  = $story->verify;
+        $spec->files   = join(',', array_keys($files));
+        $this->dao->insert(TABLE_STORYSPEC)->data($spec)->exec();
+    }
+
+    protected function doCreateReviewer(int $storyID, object $story): void
+    {
+        if(empty($storyID) or empty($story->reviewer)) return;
+        foreach($story->reviewer as $reviewer)
+        {
+            if(empty($reviewer)) continue;
+
+            $reviewData = new stdclass();
+            $reviewData->story    = $storyID;
+            $reviewData->version  = 1;
+            $reviewData->reviewer = $reviewer;
+            $reviewData->result   = '';
+            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+        }
+    }
+
+    protected function doCreateURRelations(int $storyID, object $story): void
+    {
+        if(empty($storyID) || empty($story->URS) || !is_array($story->URS)) return;
+
+        $requirements  = $this->getByList($story->URS, 'requirement');
+        $data          = new stdclass();
+        $data->product = $story->product;
+        foreach($story->URS as $URID)
+        {
+            if(!isset($requirements[$URID])) continue;
+
+            $requirement    = $requirements[$URID];
+            $data->AType    = 'requirement';
+            $data->BType    = 'story';
+            $data->relation = 'subdivideinto';
+            $data->AID      = $URID;
+            $data->BID      = $storyID;
+            $data->AVersion = $requirement->version;
+            $data->BVersion = $story->version;
+            $data->extra    = 1;
+
+            $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $data->AType    = 'story';
+            $data->BType    = 'requirement';
+            $data->relation = 'subdividedfrom';
+            $data->AID      = $storyID;
+            $data->BID      = $URID;
+            $data->AVersion = $story->version;
+            $data->BVersion = $requirement->version;
+
+            $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+        }
+    }
+
+    protected function updateKanbanForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
+    {
+        if(empty($executionID) or empty($storyID)) return;
+
+        $this->linkStory($executionID, $story->product, $storyID);
+        if($this->config->systemMode == 'ALM' and $executionID != $this->session->project) $this->linkStory($this->session->project, $story->product, $storyID);
+
+        $extra = $this->parseExtra($extra);
+        $object = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+        if($object->type == 'kanban')
+        {
+            $laneID = zget($story, 'lane', 0);
+            if(empty($laneID)) $laneID = zget($extra, 'laneID', 0);
+
+            $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'backlog');
+            if(empty($columnID)) $columnID = zget($extra, 'columnID', 0);
+
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($executionID, 'story');
+        }
+
+        $this->loadModel('action');
+        if($object->type == 'project')
+        {
+            $this->action->create('story', $storyID, 'linked2project', '', $executionID);
+            return;
+        }
+
+        $this->action->create('story', $storyID, 'linked2project', '', $object->project);
+
+        $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
+        if($object->multiple) $this->action->create('story', $storyID, $actionType, '', $executionID);
+    }
+
+    protected function closeBugWhenToStory(int $bugID, int $storyID): void
+    {
+        if(empty($bugID) or empty($storyID)) return;
+
+        if($this->config->edition != 'open')
+        {
+            $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+            if($oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
+        }
+
+        $now = helper::now();
+        $bug = new stdclass();
+        $bug->toStory      = $storyID;
+        $bug->status       = 'closed';
+        $bug->resolution   = 'tostory';
+        $bug->resolvedBy   = $this->app->user->account;
+        $bug->resolvedDate = $now;
+        $bug->closedBy     = $this->app->user->account;
+        $bug->closedDate   = $now;
+        $bug->assignedTo   = 'closed';
+        $bug->assignedDate = $now;
+        $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+
+        $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
+        $this->action->create('bug', $bugID, 'Closed');
+
+        /* add files to story from bug. */
+        $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetchAll();
+        if(empty($files)) return;
+        foreach($files as $file)
+        {
+            $file->objectType = 'story';
+            $file->objectID   = $storyID;
+            unset($file->id);
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        }
+    }
+
+    protected function finishTodoWhenToStory(int $todoID, int $storyID): void
+    {
+        if(empty($todoID) or empty($storyID)) return;
+
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+        $this->loadModel('action')->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+        if($this->config->edition == 'open')return;
+
+        $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+        if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+    }
+
+    protected function updateTwins(array $storyIdList): void
+    {
+        if(count($storyIdList) <= 1) return;
+
+        foreach($storyIdList as $storyID)
+        {
+            $twinsIdList = $storyIdList;
+            unset($twinsIdList[$storyID]);
+            $this->dao->update(TABLE_STORY)->set('twins')->eq(implode(',', $twinsIdList))->where('id')->eq($storyID)->exec();
+        }
+    }
+
+    /**
+     * 解析extra参数。
+     * Parse extra param.
+     *
+     * @param  string    $extra
+     * @access protected
+     * @return array
+     */
+    protected function parseExtra(string $extra): array
+    {
+        if(empty($extra)) return array();
+
+        /* Whether there is a object to transfer story, for example feedback. */
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+        return $output;
+    }
 }

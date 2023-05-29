@@ -542,6 +542,7 @@ if(!defined('DT_DATE5'))          define('DT_DATE5', 'j/n');
 if(!defined('DT_TIME1'))          define('DT_TIME1', 'H:i:s');
 if(!defined('DT_TIME2'))          define('DT_TIME2', 'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME', '2059-12-31');
+if(!defined('FUTURE_TIME'))       define('FUTURE_TIME', '2030-01-01');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
 if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '100');
