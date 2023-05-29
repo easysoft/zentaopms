@@ -1,0 +1,11 @@
+---
+title: zt_product
+author: Gang Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-100
+- field: name
+  range: 1-100
+  format: "第%d个产品"
+...

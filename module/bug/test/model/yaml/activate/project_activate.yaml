@@ -1,0 +1,16 @@
+---
+title: zt_project
+author: Gang Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-100
+- field: name
+  range: Scrum项目,Scrum执行,瀑布项目,瀑布执行,看板项目,看板执行
+- field: project
+  range: 0,1,0,3,0,5,0,7,0,9,0,11 
+- field: model
+  range: "`scrum`,``,`waterfall`,``,`kanban`,``"
+- field: type
+  range: project,sprint,project,waterfall,project,kanban
+...

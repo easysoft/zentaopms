@@ -1,0 +1,18 @@
+---
+title: zt_kanbancell
+author: Gang Liu
+version: "1.0"
+fields:
+- field: id
+  range: 1-100
+- field: kanban
+  range: 2-200:2{9}
+- field: lane
+  range: 1-100{9}
+- field: column
+  range: 1-100
+- field: type
+  range: bug
+- field: cards
+  range: "`,1,`,`,4,7,`,``,``,`,2,5,8,`,``,``,``,`,3,6,9,`,`,10,`,`,13,16,`,``,``,`,11,14,17,`,``,``,``,`,12,15,18,`,`,19,`,`,22,25,`,``,``,`,20,23,26,`,``,``,``,`,21,24,27,`"
+...

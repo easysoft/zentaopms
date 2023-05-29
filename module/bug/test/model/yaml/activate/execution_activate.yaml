@@ -1,0 +1,16 @@
+---
+title: zt_execution
+author: Gang Liu
+version: "1.0"
+fields:
+- field: id
+  range: 3-4
+- field: name
+  range: "`第1个执行`,`第1个看板`"
+- field: project
+  range: 1-2 
+- field: model
+  range: "``"
+- field: type
+  range: sprint, kanban
+...
