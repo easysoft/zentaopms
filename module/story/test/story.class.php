@@ -620,4 +620,21 @@ class storyTest
             return array_map(function($item){return str_replace(',', ':', $item);}, $twins);
         }
     }
+
+    /**
+     * 测试 finishTodoWhenToStory 方法。
+     * Test finishTodoWhenToStory.
+     *
+     * @param  int    $todoID
+     * @param  int    $storyID
+     * @access public
+     * @return string
+     */
+    public function finishTodoWhenToStoryTest(int $todoID, int $storyID): string
+    {
+        $this->objectModel->finishTodoWhenToStory($todoID, $storyID);
+
+        if(empty($todoID) or empty($storyID)) return '';
+        return $this->objectModel->dao->select('id,status')->from(TABLE_TODO)->where('id')->in($todoID)->fetch('status');
+    }
 }

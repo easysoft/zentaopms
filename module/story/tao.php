@@ -786,6 +786,15 @@ class storyTao extends storyModel
         }
     }
 
+    /**
+     * 当待办转需求后，将待办改为完成。
+     * Finish todo when to story.
+     *
+     * @param  int       $todoID
+     * @param  int       $storyID
+     * @access protected
+     * @return void
+     */
     protected function finishTodoWhenToStory(int $todoID, int $storyID): void
     {
         if(empty($todoID) or empty($storyID)) return;
@@ -794,8 +803,8 @@ class storyTao extends storyModel
         $this->loadModel('action')->create('todo', $todoID, 'finished', '', "STORY:$storyID");
         if($this->config->edition == 'open')return;
 
-        $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-        if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+        $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+        if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
     }
 
     /**
