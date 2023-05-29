@@ -1165,33 +1165,53 @@ class bugTest
      * Test activate a bug.
      *
      * @param  int    $bugID
+     * @param  int    $buildID
+     * @param  array  $kanbanParams
+     * @param  string $returnType   bug|build|action|kanban
      * @access public
-     * @return array
+     * @return string|array|object
      */
-    public function activateObject(int $bugID, array $bulidList = array(), string $returnField = 'activatedCount'): array
+    public function activateTest(int $bugID, int $buildID = 0, array $kanbanParams = array(), string $returnType = 'bug'): string|array|object
     {
-        $oldBug = $this->objectModel->getById($bugID);
-
         $bug = new stdclass();
-        $bug->id             = $bugID;
-        $bug->status         = 'active';
-        $bug->activatedCount = (int)$oldBug->activatedCount;
-        $bug->openedBuild    = implode(',', $bulidList);
-        $changes = $this->objectModel->activate($bug, array());
+        $bug->id      = $bugID;
+        $bug->status  = 'active';
+        $bug->comment = "Activate bug{$bugID}";
 
-        if($changes == array()) $changes = '没有数据更新';
+        $result = $this->objectModel->activate($bug, $kanbanParams);
 
-        if(dao::isError())
+        if(dao::isError()) return str_replace('\n', '', dao::getError(true));
+
+        global $tester;
+        if($returnType == 'build') return $tester->loadModel('build')->getByID($buildID);
+
+        if($returnType == 'action')
         {
-            return dao::getError();
+            $actionID = $tester->dao->select('id')->from(TABLE_ACTION)
+                ->where('objectType')->eq('bug')
+                ->andWhere('objectID')->eq($bugID)
+                ->andWhere('action')->eq('activated')
+                ->orderBy('id_desc')
+                ->limit(1)
+                ->fetch('id');
+            return $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
         }
-        else
+
+        if($returnType == 'kanban')
         {
-            foreach($changes as $change)
-            {
-                if($change['field'] == $returnField) return $change;
-            }
+            unset(dao::$cache[TABLE_KANBANLANE]);
+
+            $bug = $this->objectModel->getBaseInfo($bugID);
+            return $tester->dao->select('t3.type')->from(TABLE_KANBANLANE)->alias('t1')
+                ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane AND t1.execution=t2.kanban')
+                ->leftJoin(TABLE_KANBANCOLUMN)->alias('t3')->on('t2.column=t3.id')
+                ->where('t1.type')->eq('bug')
+                ->andWhere('t1.execution')->eq($bug->execution)
+                ->andWhere("FIND_IN_SET($bugID, t2.cards)")
+                ->fetch('type');
         }
+
+        return $this->objectModel->getBaseInfo($bugID);
     }
 
     /**
