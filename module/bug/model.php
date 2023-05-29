@@ -2183,47 +2183,6 @@ class bugModel extends model
     }
 
     /**
-     * Form customed bugs.
-     *
-     * @param  array    $bugs
-     * @access public
-     * @return array
-     */
-    public function formCustomedBugs($bugs)
-    {
-        /* Get related objects id lists. */
-        $relatedModuleIdList   = array();
-        $relatedStoryIdList    = array();
-        $relatedTaskIdList     = array();
-        $relatedCaseIdList     = array();
-        $relatedExecutionIdList  = array();
-
-        foreach($bugs as $bug)
-        {
-            $relatedModuleIdList[$bug->module]       = $bug->module;
-            $relatedStoryIdList[$bug->story]         = $bug->story;
-            $relatedTaskIdList[$bug->task]           = $bug->task;
-            $relatedCaseIdList[$bug->case]           = $bug->case;
-            $relatedExecutionIdList[$bug->execution] = $bug->execution;
-
-            /* Get related objects title or names. */
-            $relatedModules    = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
-            $relatedStories    = $this->dao->select('id, title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
-            $relatedTasks      = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
-            $relatedCases      = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedExecutions = $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('id')->in($relatedExecutionIdList)->fetchPairs();
-
-            /* fill some field with useful value. */
-            if(isset($relatedModules[$bug->module]))       $bug->module    = $relatedModules[$bug->module];
-            if(isset($relatedStories[$bug->story]))        $bug->story     = $relatedStories[$bug->story];
-            if(isset($relatedTasks[$bug->task]))           $bug->task      = $relatedTasks[$bug->task];
-            if(isset($relatedCases[$bug->case]))           $bug->case      = $relatedCases[$bug->case];
-            if(isset($relatedExecutions[$bug->execution])) $bug->execution = $relatedExecutions[$bug->execution];
-        }
-        return $bugs;
-    }
-
-    /**
      * Adjust the action is clickable.
      *
      * @param  string $bug

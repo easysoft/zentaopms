@@ -1840,28 +1840,6 @@ class bugTest
     }
 
     /**
-     * Test form customed bugs.
-     *
-     * @param  array  $bugIDList
-     * @access public
-     * @return array
-     */
-    public function formCustomedBugsTest($bugIDList)
-    {
-        $bugs  = $this->objectModel->getByIdList($bugIDList);
-        $array = $this->objectModel->formCustomedBugs($bugs);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
-    }
-
-    /**
      * Test adjust the action is clickable.
      *
      * @param  object $bug
