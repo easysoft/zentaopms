@@ -1200,25 +1200,6 @@ class bug extends control
     }
 
     /**
-     * Ajax get bug field options for auto test.
-     *
-     * @param  int    $productID
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetBugFieldOptions($productID, $executionID = 0)
-    {
-        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
-        $builds   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noreleased', $executionID, 'execution');
-        $type     = $this->lang->bug->typeList;
-        $pri      = $this->lang->bug->priList;
-        $severity = $this->lang->bug->severityList;
-
-        return print(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
-    }
-
-    /**
      * Drop menu page.
      *
      * @param  int    $productID
