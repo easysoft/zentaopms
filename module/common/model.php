@@ -2507,16 +2507,16 @@ EOF;
                 }
                 elseif(helper::isAjaxRequest())
                 {
-                    die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout))); // Fix bug #14478.
+                    helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout))); // Fix bug #14478.
                 }
 
                 $referer = helper::safe64Encode($uri);
-                die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+                helper::end(js::locate(helper::createLink('user', 'login', "referer=$referer")));
             }
         }
         catch(EndResponseException $endResponseException)
         {
-            die($endResponseException->getContent());
+            helper::end($endResponseException->getContent());
         }
     }
 
