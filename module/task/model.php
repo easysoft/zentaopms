@@ -1555,9 +1555,9 @@ class taskModel extends model
      *
      * @param  int    $executionID
      * @access public
-     * @return object
+     * @return int
      */
-    public function getProjectID(int $executionID = 0)
+    public function getProjectID(int $executionID = 0): int
     {
         return $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
     }
