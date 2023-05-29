@@ -1121,6 +1121,7 @@ class bug extends control
     }
 
     /**
+     * Ajax 方式加载指派给表单。
      * AJAX: get team members of the executions as assignedTo list.
      *
      * @param  int    $executionID
@@ -1128,12 +1129,15 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxLoadAssignedTo($executionID, $selectedUser = '')
+    public function ajaxLoadAssignedTo(int $executionID, string $selectedUser = ''): string
     {
         $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution');
 
-        $execution = $this->loadModel('execution')->getByID($executionID);
-        if(empty($selectedUser)) $selectedUser = $execution->QD;
+        if(empty($selectedUser))
+        {
+            $execution    = $this->loadModel('execution')->getByID($executionID);
+            $selectedUser = $execution->QD;
+        }
 
         return print(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
