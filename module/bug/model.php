@@ -2098,38 +2098,6 @@ class bugModel extends model
     }
 
     /**
-     * Get bugs to review.
-     *
-     * @param  array       $productIDList
-     * @param  int|string  $branch
-     * @param  array       $modules
-     * @param  array       $executions
-     * @param  string      $orderBy
-     * @param  object      $pager
-     * @param  int         $projectID
-     * @access public
-     * @return array
-     */
-    public function getReviewBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID = 0)
-    {
-        $bugs = $this->dao->select("t1.*, t2.title as planTitle, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
-            ->where('t1.product')->in($productIDList)
-            ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in(array_keys($executions))->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
-
-        return $bugs;
-    }
-
-    /**
      * Get bug query.
      *
      * @param  string $bugQuery
