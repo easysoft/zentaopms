@@ -118,7 +118,7 @@ if(!empty($members) && $task->mode == 'linear')
       </div>
     </div>
     <?php else:?>
-    <form id="recordForm" class='hidden' method='post' target='hiddenwin'>
+    <form id="recordForm" class='hidden form-ajax' method='post'>
       <?php
       $readonly = '';
       $left     = '';
