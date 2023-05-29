@@ -363,7 +363,7 @@ class productModel extends model
         }
         else
         {
-            $products = $this->getList(0, $status, $num, 0, $shadow);
+            $products = $this->productTao->getList(0, $status, $num, 0, $shadow);
         }
         if(empty($products)) return $products;
 
@@ -1222,7 +1222,7 @@ class productModel extends model
         $this->loadModel('program');
 
         /* Get base data. */
-        $productList    = $this->getList();
+        $productList    = $this->productTao->getList();
         $programList    = $this->program->getTopPairs('', '', true);
         $projectList    = $this->program->getProjectStats(0, 'doing');
 
