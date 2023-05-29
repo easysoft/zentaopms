@@ -451,7 +451,7 @@ class task extends control
 
     /**
      * 任务查看工时/新增工时的方法。
-     * View and add task's effort.
+     * View and add task's workhour.
      *
      * @param  int    $taskID
      * @param  string $from
@@ -471,97 +471,12 @@ class task extends control
 
             $this->loadModel('common')->syncPPEStatus($taskID);
 
-            /* Remind whether to update status of the bug, if task which from that bug has been finished. */
-            $task = $this->task->getById($taskID);
-            if($changes and $this->task->needUpdateBugStatus($task))
-            {
-                foreach($changes as $change)
-                {
-                    if($change['field'] == 'status' and $change['new'] == 'done')
-                    {
-                        $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
-                        unset($_GET['onlybody']);
-                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
-                    }
-                }
-            }
-
-            if(isonlybody())
-            {
-                $execution     = $this->execution->getByID($task->execution);
-                $executionLaneType  = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy   = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
-                {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
-
-                    return print(js::reload('parent'));
-                }
-                if($from == 'taskkanban')
-                {
-                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                    $kanbanType      = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-                    $kanbanData      = $kanbanData[$kanbanType];
-                    $kanbanData      = json_encode($kanbanData);
-
-                    return print(js::reload('parent'));
-                }
-                return print(js::reload('parent'));
-            }
-            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            $task     = $this->task->getById($taskID);
+            $response = $this->taskZen->responseAfterRecord($task, $changes, $from);
+            return $this->send($response);
         }
 
-        $uri = $this->app->getURI(true);
-        $this->session->set('estimateList', $uri, 'execution');
-        if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
-
-        $task = $this->task->getById($taskID);
-        if(!empty($task->team) and $task->mode == 'linear')
-        {
-            if(empty($orderBy))
-            {
-                $orderBy = 'id_desc';
-            }
-            else
-            {
-                /* The id sort with order or date style. */
-                $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
-            }
-        }
-
-        if(!$orderBy) $orderBy = 'id_desc';
-
-        /* Set the fold state of the current task. */
-        $referer = strtolower($_SERVER['HTTP_REFERER']);
-        if(strpos($referer, 'recordworkhour') and $this->cookie->taskEffortFold !== false)
-        {
-            $taskEffortFold = $this->cookie->taskEffortFold;
-        }
-        else
-        {
-            $taskEffortFold = 0;
-            $currentAccount = $this->app->user->account;
-            if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
-            if(!empty($task->team))
-            {
-                $teamMember = array_column($task->team, 'account');
-                if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
-            }
-        }
-
-        $this->view->title          = $this->lang->task->record;
-        $this->view->task           = $task;
-        $this->view->from           = $from;
-        $this->view->orderBy        = $orderBy;
-        $this->view->efforts        = $this->task->getTaskEfforts($taskID, '', '', $orderBy);
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->taskEffortFold = $taskEffortFold;
-
-        $this->display();
+        $this->taskZen->buildRecordForm($taskID, $from, $orderBy);
     }
 
     /**
