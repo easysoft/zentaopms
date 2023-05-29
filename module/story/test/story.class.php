@@ -239,15 +239,19 @@ class storyTest
      *
      * @param  int    $storyID
      * @access public
-     * @return void
+     * @return array
      */
-    public function computeEstimateTest($storyID)
+    public function computeEstimateTest(int $storyID): array
     {
+        $oldStory = $this->objectModel->getByID($storyID);
+        if(empty($oldStory)) return array();
+
         $this->objectModel->computeEstimate($storyID);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getByID($storyID);
+        $newStory = $this->objectModel->getByID($storyID);
+        return array('old' => $oldStory->estimate, 'new' => $newStory->estimate);
     }
 
     /**

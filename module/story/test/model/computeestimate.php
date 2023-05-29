@@ -4,6 +4,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+$story = zdTable('story');
+$story->parent->range('0,`-1`,2{3}');
+$story->estimate->range('[1-4]');
+$story->gen(5);
+
 /**
 
 title=测试 storyModel->computeEstimate();
@@ -16,4 +21,8 @@ pid=1
 
 $story = new storyTest();
 
-r() && p() && e();
+r($story->computeEstimateTest(0))  && p()          && e('0');   //不传入需求。
+r($story->computeEstimateTest(1))  && p('old,new') && e('1,1'); //传入普通需求，检查计算前后预计工时变化。
+r($story->computeEstimateTest(2))  && p('old,new') && e('2,8'); //传入父需求，检查计算前后预计工时变化。
+r($story->computeEstimateTest(3))  && p('old,new') && e('3,3'); //传入子需求，检查计算前后预计工时变化。
+r($story->computeEstimateTest(10)) && p()          && e('0');   //传入不存在的需求。

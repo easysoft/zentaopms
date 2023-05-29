@@ -86,11 +86,11 @@ class storyModel extends model
         $story->children = array();
         if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
-        $story->openedDate    = substr($story->openedDate, 0, 19);
-        $story->assignedDate  = substr($story->assignedDate, 0, 19);
-        $story->reviewedDate  = substr($story->reviewedDate, 0, 19);
-        $story->closedDate    = substr($story->closedDate, 0, 19);
-        $story->lastEditedDate= substr($story->lastEditedDate, 0, 19);
+        $story->openedDate    = empty($story->openedDate)    ? '' : substr($story->openedDate,     0, 19);
+        $story->assignedDate  = empty($story->assignedDate)  ? '' : substr($story->assignedDate,   0, 19);
+        $story->reviewedDate  = empty($story->reviewedDate)  ? '' : substr($story->reviewedDate,   0, 19);
+        $story->closedDate    = empty($story->closedDate)    ? '' : substr($story->closedDate,     0, 19);
+        $story->lastEditedDate= empty($story->lastEditedDate)? '' : substr($story->lastEditedDate, 0, 19);
 
         return $story;
     }
@@ -1423,16 +1423,15 @@ class storyModel extends model
      * @access public
      * @return bool
      */
-    public function computeEstimate($storyID)
+    public function computeEstimate(int $storyID): bool
     {
         if(!$storyID) return true;
 
-        $stories = $this->dao->select('`id`,`estimate`,status')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
-        if(empty($stories)) return true;
+        $estimates = $this->dao->select('`id`,`estimate`')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id', 'estimate');
+        if(empty($estimates)) return true;
 
-        $estimate = 0;
-        foreach($stories as $story) $estimate += $story->estimate;
-        $this->dao->update(TABLE_STORY)->set('estimate')->eq($estimate)->autoCheck()->where('id')->eq($storyID)->exec();
+        $estimate = round(array_sum($estimates), 2);
+        $this->dao->update(TABLE_STORY)->set('estimate')->eq($estimate)->where('id')->eq($storyID)->exec();
         return !dao::isError();
     }
 
