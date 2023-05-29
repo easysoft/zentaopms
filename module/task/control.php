@@ -271,7 +271,7 @@ class task extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -279,27 +279,24 @@ class task extends control
      * Batch update assign of task.
      *
      * @param  int    $executionID
+     * @param  string $assignedTo
      * @access public
      * @return void
      */
-    public function batchAssignTo(int $executionID)
+    public function batchAssignTo(int $executionID, string $assignedTo)
     {
-        if(!empty($_POST))
+        if($this->post->taskIdList)
         {
-            if(!is_array($this->post->taskIdList)) return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}"), 'parent'));
-
-            $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIdList, $this->post->assignedTo);
+            $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIdList, $assignedTo);
             foreach($taskData as $task)
             {
-                /* Assign task. */
                 $this->task->assign($task);
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-
-            return print(js::reload('parent'));
         }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
