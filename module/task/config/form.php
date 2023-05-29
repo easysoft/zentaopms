@@ -86,7 +86,7 @@ $config->task->form->team->edit = $config->task->form->team->create;
 $config->task->form->team->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->task->form->batchedit = common::formConfig('task', 'batchEdit');
-$config->task->form->batchedit['taskIDList']     = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
+$config->task->form->batchedit['taskIdList']     = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
 $config->task->form->batchedit['module']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchedit['name']           = array('type' => 'string',   'required' => true,  'default' => '');
 $config->task->form->batchedit['color']          = array('type' => 'string',   'required' => false, 'default' => '');
