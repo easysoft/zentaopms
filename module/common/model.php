@@ -2638,9 +2638,10 @@ EOF;
         $acls   = $app->user->rights['acls'];
 
         /* White list of import method. */
-        if(in_array($module, $app->config->importWhiteList) and $method == 'showimport')
+        $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');
+        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && canImport)
         {
-            if(isset($rights[$module]['import']) and commonModel::hasDBPriv($object, $module, 'import')) return true;
+            return true;
         }
 
         if(isset($rights[$module][$method]))
@@ -2745,16 +2746,16 @@ EOF;
 
         /* Limited execution. */
         $limitedExecution = false;
-        if(!empty($module) and in_array($module, array('task', 'story')) and !empty($object->execution) or
-           !empty($module) and $module == 'execution' and !empty($object->id)
-        )
+        $executionID = 0;
+        if(!empty($module))
         {
-            $objectID = '';
-            if($module == 'execution' and !empty($object->id)) $objectID = $object->id;
-            if(in_array($module, array('task', 'story')) and !empty($object->execution)) $objectID = $object->execution;
-
+            if(in_array($module, array('task', 'story')) and !empty($object->execution)) $executionID = $object->execution;
+            if($module == 'execution' and !empty($object->id)) $executionID = $object->id;
+        }
+        if($executionID)
+        {
             $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
-            if($objectID and strpos(",{$limitedExecutions},", ",$objectID,") !== false) $limitedExecution = true;
+            if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) $limitedExecution = true;
         }
         if(empty($app->user->rights['rights']['my']['limited']) and !$limitedExecution) return true;
 
@@ -2848,7 +2849,7 @@ EOF;
         }
 
         /* If the ip in white list is in IP/CIDR format eg 127.0.0.1/24. Thanks to zcat. */
-        if(strpos($ipWhiteList, '/') == false) $ipWhiteList .= '/32';
+        if(strpos($ipWhiteList, '/') === false) $ipWhiteList .= '/32';
         list($ipWhiteList, $netmask) = explode('/', $ipWhiteList, 2);
 
         $ip          = ip2long($ip);
@@ -2906,7 +2907,7 @@ EOF;
 
         if($notConvertedItems)
         {
-            $convertedPinYin = $pinyin->romanize(join($sign, $notConvertedItems));
+            $convertedPinYin = $pinyin->romanize(implode($sign, $notConvertedItems));
             $itemsPinYin     = explode(trim($sign), $convertedPinYin);
             foreach($notConvertedItems as $item)
             {
@@ -2914,7 +2915,7 @@ EOF;
                 $wordsPinYin = explode("\t", trim($itemPinYin));
 
                 $abbr = '';
-                foreach($wordsPinYin as $i => $wordPinyin)
+                foreach($wordsPinYin as $wordPinyin)
                 {
                     if($wordPinyin)
                     {
@@ -2923,7 +2924,7 @@ EOF;
                     }
                 }
 
-                $allConverted[$item] = mb_strtolower(join($wordsPinYin) . ' ' . $abbr);
+                $allConverted[$item] = mb_strtolower(implode('', $wordsPinYin) . ' ' . $abbr);
             }
         }
 
@@ -3219,7 +3220,7 @@ EOF;
             $field = explode(':', $item);
             if(count($field) < 2) continue;
             $headerKey = array_shift($field);
-            $newHeader[$headerKey] = join('', $field);
+            $newHeader[$headerKey] = implode('', $field);
         }
         curl_close($curl);
 
