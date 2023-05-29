@@ -100,6 +100,7 @@ class tabs extends wg
 
         return div
         (
+            setClass('tabs'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $isVertical ? setClass('flex') : null,
 
