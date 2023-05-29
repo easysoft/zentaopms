@@ -449,7 +449,7 @@ EOT;
             $tracesList['ztfPath'] = $tracesInfo['ztfPath'];
         }
 
-        if($key == '') return $report;
+        if($key == '') return $tracesList;
         return isset($tracesList[$key]) ? $tracesList[$key] : array();
     }
 
