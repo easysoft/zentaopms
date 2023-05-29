@@ -2639,7 +2639,7 @@ EOF;
 
         /* White list of import method. */
         $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');
-        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && canImport)
+        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport)
         {
             return true;
         }
@@ -2741,42 +2741,39 @@ EOF;
         global $app;
 
         if(!empty($app->user->admin)) return true;
-        if($module == 'todo' and ($method == 'create' or $method == 'batchcreate')) return true;
-        if($module == 'effort' and ($method == 'batchcreate' or $method == 'createforobject')) return true;
+        if($module == 'todo' && ($method == 'create' || $method == 'batchcreate')) return true;
+        if($module == 'effort' && ($method == 'batchcreate' || $method == 'createforobject')) return true;
 
         /* Limited execution. */
         $limitedExecution = false;
         $executionID = 0;
         if(!empty($module))
         {
-            if(in_array($module, array('task', 'story')) and !empty($object->execution)) $executionID = $object->execution;
-            if($module == 'execution' and !empty($object->id)) $executionID = $object->id;
+            if(in_array($module, array('task', 'story')) && !empty($object->execution)) $executionID = $object->execution;
+            if($module == 'execution' && !empty($object->id)) $executionID = $object->id;
         }
         if($executionID)
         {
             $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
             if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) $limitedExecution = true;
         }
-        if(empty($app->user->rights['rights']['my']['limited']) and !$limitedExecution) return true;
+        if(empty($app->user->rights['rights']['my']['limited']) && !$limitedExecution) return true;
 
-        if(!empty($method) and strpos($method, 'batch')  === 0) return false;
-        if(!empty($method) and strpos($method, 'link')   === 0) return false;
-        if(!empty($method) and strpos($method, 'create') === 0) return false;
-        if(!empty($method) and strpos($method, 'import') === 0) return false;
+        if(!empty($method) && strpos($method, 'batch')  === 0) return false;
+        if(!empty($method) && strpos($method, 'link')   === 0) return false;
+        if(!empty($method) && strpos($method, 'create') === 0) return false;
+        if(!empty($method) && strpos($method, 'import') === 0) return false;
 
         if(empty($object)) return true;
 
-        if(!empty($object->openedBy)      and $object->openedBy     == $app->user->account or
-            !empty($object->addedBy)      and $object->addedBy      == $app->user->account or
-            !empty($object->account)      and $object->account      == $app->user->account or
-            !empty($object->assignedTo)   and $object->assignedTo   == $app->user->account or
-            !empty($object->finishedBy)   and $object->finishedBy   == $app->user->account or
-            !empty($object->canceledBy)   and $object->canceledBy   == $app->user->account or
-            !empty($object->closedBy)     and $object->closedBy     == $app->user->account or
-            !empty($object->lastEditedBy) and $object->lastEditedBy == $app->user->account)
-        {
-            return true;
-        }
+        if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account) return true;
+        if(!empty($object->addedBy)      && $object->addedBy      == $app->user->account) return true;
+        if(!empty($object->account)      && $object->account      == $app->user->account) return true;
+        if(!empty($object->assignedTo)   && $object->assignedTo   == $app->user->account) return true;
+        if(!empty($object->finishedBy)   && $object->finishedBy   == $app->user->account) return true;
+        if(!empty($object->canceledBy)   && $object->canceledBy   == $app->user->account) return true;
+        if(!empty($object->closedBy)     && $object->closedBy     == $app->user->account) return true;
+        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account) return true;
 
         return false;
     }
@@ -3432,7 +3429,7 @@ EOF;
      * @access public
      * @return void
      */
-    static public function setMenuVars($moduleName, $objectID, $params = array())
+    public static function setMenuVars($moduleName, $objectID, $params = array())
     {
         global $app, $lang;
 
