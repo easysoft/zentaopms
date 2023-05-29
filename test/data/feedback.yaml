@@ -45,6 +45,9 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: source
+    note: "来源"
+    range: ""
   - field: desc
     note: "描述"
     range: 1-10000
@@ -96,18 +99,10 @@ fields:
     format: ""
   - field: result
     note: "转化结果"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "0"
   - field: faq
     note: "FAQ"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "0"
   - field: openedBy
     note: "反馈创建人"
     range: admin
@@ -128,11 +123,9 @@ fields:
     format: ""
   - field: reviewedDate
     note: "评审时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: processedBy
     note: "由谁处理"
     range: ""
@@ -142,11 +135,9 @@ fields:
     format: ""
   - field: processedDate
     note: "处理时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: closedBy
     note: "由谁关闭"
     range: ""
@@ -156,11 +147,9 @@ fields:
     format: ""
   - field: closedDate
     note: "关闭时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: closedReason
     note: "关闭原因"
     range: ""
@@ -177,11 +166,9 @@ fields:
     format: ""
   - field: editedDate
     note: "最后修改时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: assignedTo
     note: "指派给"
     range: ""
@@ -191,11 +178,9 @@ fields:
     format: ""
   - field: assignedDate
     note: "指派时间"
-    range: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: feedbackBy
     note: "反馈者"
     range: ""

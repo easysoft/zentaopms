@@ -61,7 +61,7 @@ fields:
     format: ""
   - field: BID
     note: "被关联需求ID"
-    range: 26,25,28,27,30,29,32,31,34,33,36,35
+    range: "26,25,28,27,30,29,32,31,34,33,36,35"
     prefix: ""
     postfix: ""
     loop: 0
