@@ -1960,26 +1960,6 @@ class bugTest
     }
 
     /**
-     * Test get id list of all projects.
-     *
-     * @access public
-     * @return array
-     */
-    public function getAllProjectIdsTest()
-    {
-        $array = $this->objectModel->getAllProjectIds();
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $array;
-        }
-    }
-
-    /**
      * Test get bug query.
      *
      * @param  string $bugQuery

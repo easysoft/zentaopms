@@ -2147,10 +2147,10 @@ class bugModel extends model
         $allProject = "`project` = 'all'";
         if(strpos($bugQuery, $allProject) !== false)
         {
-            $projectIDList = $this->getAllProjectIds();
-            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $projects = $this->loadModel('project')->getPairs();
+            if(is_array($projects)) $projectIdList = implode(',', array_keys($projects));
             $bugQuery = str_replace($allProject, '1', $bugQuery);
-            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
+            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIdList . ')';
         }
 
         /* Fix bug #2878. */
@@ -2722,21 +2722,6 @@ class bugModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.product')->eq($productID)
             ->fetchPairs();
-    }
-
-    /**
-     * Get ID list of all projects.
-     *
-     * @access public
-     * @return array
-     */
-    public function getAllProjectIds()
-    {
-        return $this->dao->select('id')
-            ->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs('id');
     }
 
     /**
