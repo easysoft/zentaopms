@@ -566,15 +566,15 @@ class router extends baseRouter
     {
         $query = null;
         $path = null;
-        $this->rawURI = $this->URI;
+        $this->rawURI = $this->uri;
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
 
         if($this->config->requestType != 'GET')
         {
-            /* e.g. $this->URI = /$module-close-1.html. */
-            $params = explode($this->config->requestFix, (string) $this->URI);       // $params = array($module, 'close', 1);
+            /* e.g. $this->uri = /$module-close-1.html. */
+            $params = explode($this->config->requestFix, (string) $this->uri);       // $params = array($module, 'close', 1);
 
             /* Remove module and method. */
             $params = array_slice($params, 2);                              // $params = array(1);
@@ -589,13 +589,13 @@ class router extends baseRouter
             array_unshift($params, $methodName);                            // $params = array('operate', 1);
             array_unshift($params, $moduleName);                            // $params = array('flow', 'operate', 1);
 
-            $this->URI = implode($this->config->requestFix, $params);       // $this->URI = flow-operate-1.html;
+            $this->uri = implode($this->config->requestFix, $params);       // $this->uri = flow-operate-1.html;
         }
         else
         {
             /* Extract $path and $query from $params. */
             /* e.g. $tshi->URI = /index.php?m=$module&f=close&id=1. */
-            $params = parse_url((string) $this->URI);                        // $params = array('path' => '/index.php', 'query' => m=$module&f=close&id=1;
+            $params = parse_url((string) $this->uri);                        // $params = array('path' => '/index.php', 'query' => m=$module&f=close&id=1;
             extract($params);                                       // $path = '/index.php'; $query = 'm=$module&f=close&id=1';
             parse_str((string) $query, $params);                             // $params = array('m' => $module, 'f' => 'close', 'id' => 1);
 
@@ -620,7 +620,7 @@ class router extends baseRouter
 
             $params = array_reverse($params);                       // $params = array('m' => 'flow', 'f' => 'operate', 'id' => 1);
 
-            $this->URI = $path . '?' . http_build_query($params);   // $this->URI = '/index.php?m=flow&f=operate&id=1';
+            $this->uri = $path . '?' . http_build_query($params);   // $this->uri = '/index.php?m=flow&f=operate&id=1';
         }
     }
 
@@ -662,7 +662,7 @@ class router extends baseRouter
      */
     public function getURI($full = false)
     {
-        $URI      = !empty($this->rawURI) ? $this->rawURI : $this->URI;
+        $URI      = !empty($this->rawURI) ? $this->rawURI : $this->uri;
         $tidParam = ($this->config->requestType == 'PATH_INFO' and helper::isWithTID()) ? "?tid={$_GET['tid']}" : '';
 
         if($full and $this->config->requestType == 'PATH_INFO')

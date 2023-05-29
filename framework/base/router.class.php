@@ -1350,7 +1350,7 @@ class baseRouter
             $dotPos = strrpos($pathInfo, '.');
             if($dotPos)
             {
-                $this->URI      = substr($pathInfo, 0, $dotPos);
+                $this->uri      = substr($pathInfo, 0, $dotPos);
                 $this->viewType = substr($pathInfo, $dotPos + 1);
                 if(!str_contains((string) $this->config->views, ',' . $this->viewType . ','))
                 {
@@ -1359,7 +1359,7 @@ class baseRouter
             }
             else
             {
-                $this->URI      = $pathInfo;
+                $this->uri      = $pathInfo;
                 $this->viewType = $this->config->default->view;
             }
         }
@@ -1389,9 +1389,9 @@ class baseRouter
         {
             $value = $_SERVER['ORIG_PATH_INFO'];
         }
-        elseif(isset($this->URI))
+        elseif(isset($this->uri))
         {
-            $value = $this->URI;
+            $value = $this->uri;
             $subpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname((string) $_SERVER['SCRIPT_FILENAME']));
             if($subpath != '/') $subpath = '/' . $subpath;
             if($subpath != '' and $subpath != '/' and str_starts_with($value, $subpath)) $value = substr($value, strlen($subpath));
@@ -1430,7 +1430,7 @@ class baseRouter
         {
             $this->viewType = $this->config->default->view;
         }
-        $this->URI = $_SERVER['REQUEST_URI'];
+        $this->uri = $_SERVER['REQUEST_URI'];
     }
 
     /**
@@ -1445,10 +1445,10 @@ class baseRouter
     {
         if($full and $this->config->requestType == 'PATH_INFO')
         {
-            if($this->URI) return $this->config->webRoot . $this->URI . '.' . $this->viewType;
+            if($this->uri) return $this->config->webRoot . $this->uri . '.' . $this->viewType;
             return $this->config->webRoot;
         }
-        return $this->URI;
+        return $this->uri;
     }
 
     /**
@@ -2241,15 +2241,15 @@ class baseRouter
      */
     public function setRouteByPathInfo()
     {
-        if(!empty($this->URI))
+        if(!empty($this->uri))
         {
             /*
              * 根据$requestFix分割符，分割网址。
              * There's the request separator, split the URI by it.
              **/
-            if(str_contains($this->URI, (string) $this->config->requestFix))
+            if(str_contains($this->uri, (string) $this->config->requestFix))
             {
-                $items = explode($this->config->requestFix, $this->URI);
+                $items = explode($this->config->requestFix, $this->uri);
                 $this->setModuleName($items[0]);
                 $this->setMethodName($items[1]);
             }
@@ -2259,7 +2259,7 @@ class baseRouter
              **/
             else
             {
-                $this->setModuleName($this->URI);
+                $this->setModuleName($this->uri);
                 $this->setMethodName($this->config->default->method);
             }
         }
@@ -2402,7 +2402,7 @@ class baseRouter
         if($type != 'fetch')
         {
             /* 分割URI。 Spit the URI. */
-            $items     = explode($this->config->requestFix, (string)$this->URI);
+            $items     = explode($this->config->requestFix, (string)$this->uri);
             $itemCount = count($items);
 
             /**
