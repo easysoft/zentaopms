@@ -63,6 +63,101 @@ class taskTao extends taskModel
     }
 
     /**
+     * 构造日志数据，加上任务ID、记录人字段。
+     * Add fields to workhour.
+     *
+     * @param  int       $taskID
+     * @param  array     $workhour
+     * @access protected
+     * @return array
+     */
+    protected function buildWorkhour(int $taskID, array $workhour): array
+    {
+        foreach($workhour as $id => $record)
+        {
+            if(!$record->work && !$record->consumed)
+            {
+                unset($workhour[$id]);
+                continue;
+            }
+
+            if(helper::isZeroDate($record->date)) helper::end(js::alert($this->lang->task->error->dateEmpty));
+            if(!$record->consumed)                helper::end(js::alert($this->lang->task->error->consumedThisTime));
+            if($record->left === '')              helper::end(js::alert($this->lang->task->error->left));
+
+            $record->task    = $taskID;
+            $record->account = $this->app->user->account;
+        }
+
+        return $workhour;
+    }
+
+    /**
+     * 根据填写的日志，记录历史记录、改变任务的状态、消耗工时等信息并返回。
+     * According to the effort, record the history, change the status of the task, consumed hours and other information and return.
+     *
+     * @param  object    $record
+     * @param  object    $task
+     * @param  string    $lastDate
+     * @param  bool      $isFinishTask
+     * @access protected
+     * @return array
+     */
+    protected function buildTaskForEffort(object $record, object $task, string $lastDate, bool $isFinishTask): array
+    {
+        $this->loadModel('action');
+        $now = helper::now();
+
+        $actionID = 0;
+        $newTask  = clone $task;
+        $newTask->consumed      += $record->consumed;
+        $newTask->lastEditedBy   = $this->app->user->account;
+        $newTask->lastEditedDate = $now;
+        if(!$task->realStarted) $newTask->realStarted = $now;
+
+        if($lastDate <= $record->date) $newTask->left = $record->left;
+
+        /* Finish task by effort. */
+        if(!$newTask->left && $isFinishTask)
+        {
+            $newTask->status         = 'done';
+            $newTask->assignedTo     = $task->openedBy;
+            $newTask->assignedDate   = $now;
+            $newTask->finishedBy     = $this->app->user->account;
+            $newTask->finishedDate   = $now;
+            $actionID = $this->action->create('task', $task->id, 'Finished', $record->work);
+        }
+        /* Start task by effort. */
+        elseif($newTask->status == 'wait')
+        {
+            $newTask->status       = 'doing';
+            $newTask->assignedTo   = $this->app->user->account;
+            $newTask->assignedDate = $now;
+            $actionID = $this->action->create('task', $task->id, 'Started', $record->work);
+        }
+        /* Activate task by effort. */
+        elseif($newTask->left != 0 and strpos('done,pause,cancel,closed,pause', $task->status) !== false)
+        {
+            $newTask->status         = 'doing';
+            $newTask->assignedTo     = $this->app->user->account;
+            $newTask->finishedBy     = '';
+            $newTask->canceledBy     = '';
+            $newTask->closedBy       = '';
+            $newTask->closedReason   = '';
+            $newTask->finishedDate   = null;
+            $newTask->canceledDate   = null;
+            $newTask->closedDate     = null;
+            $actionID = $this->action->create('task', $task->id, 'Activated', $record->work);
+        }
+        else
+        {
+            $actionID = $this->action->create('task', $task->id, 'RecordEstimate', $record->work, (float)$record->consumed);
+        }
+
+        return array($newTask, $actionID);
+    }
+
+    /**
      * 检查一个任务是否有子任务。
      * Check if a task has children.
      *
@@ -74,6 +169,48 @@ class taskTao extends taskModel
     {
         $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
         if(!$childrenCount) return false;
+        return true;
+    }
+
+    /**
+     * 检查录入日志的字段必填性及日志记录人要在多人任务的团队中。
+     * Check that the required fields of the effort must be filled in and the effort recorder must be in the multi-task team..
+     *
+     * @param  object    $task
+     * @param  array     $workhour
+     * @access protected
+     * @return bool
+     */
+    protected function checkWorkhour(object $task, array $workhour): bool
+    {
+        $taskID = $task->id;
+        $today  = helper::today();
+        foreach($workhour as $id => $record)
+        {
+            $consumed = $record->consumed;
+            $left     = $record->left;
+
+            /* Check consumed hours. */
+            if(!is_numeric($consumed) and !empty($consumed))
+            {
+                dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
+            }
+            elseif(is_numeric($consumed) and $consumed <= 0)
+            {
+                dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
+            }
+
+            /* Check left hours. */
+            if(!is_numeric($left)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+
+            if($record->date > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+        }
+
+        if(dao::isError()) return false;
+
+        $inTeam = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->fetch('id');
+        if($task->team && !$inTeam) return false;
+
         return true;
     }
 
@@ -472,6 +609,43 @@ class taskTao extends taskModel
     }
 
     /**
+     * 如果任务是从Bug转来的，并且已经完成了，则获取提醒bug的链接。
+     * Get a link to locate the bug if the task was transferred from the bug and it has already been finished.
+     *
+     * @param  object    $task
+     * @param  array     $changes
+     * @access protected
+     * @return array
+     */
+    protected function getRemindBugLink(object $task, array $changes): array
+    {
+        foreach($changes as $change)
+        {
+            if($change['field'] == 'status' && $change['new'] == 'done')
+            {
+                $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
+                $cancelURL  = helper::createLink('task', 'view', "taskID={$task->id}");
+                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $oldTask->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL));
+            }
+        }
+
+        return array();
+    }
+
+    /**
+     * 通过任务ID列表查询任务团队信息。
+     * Get task team by id list.
+     *
+     * @param  array     $taskIdList
+     * @access protected
+     * @return object[]
+     */
+    protected function getTeamMembersByIdList(array $taskIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
+    }
+
+    /**
      * 获取团队成员以及他的预计、消耗、剩余工时。
      * Get team account,estimate,consumed and left info.
      *
@@ -628,5 +802,29 @@ class taskTao extends taskModel
                 $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
             }
         }
+    }
+
+    /**
+     * 通过填写的日志更新多人任务的团队表，计算多人任务的工时。
+     * Update team of multi-task by effort.
+     *
+     * @param  int       $effortID
+     * @param  object    $record
+     * @param  object    $currentTeam
+     * @param  object    $task
+     * @param  object    $newTask
+     * @access protected
+     * @return void
+     */
+    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task, object $newTask)
+    {
+        $this->dao->update(TABLE_TASKTEAM)
+                  ->set('left')->eq($record->left)
+                  ->set("consumed = consumed + {$record->consumed}")
+                  ->set('status')->eq($currentTeam->status)
+                  ->where('id')->eq($currentTeam->id)
+                  ->exec();
+
+        if($task->mode == 'linear' and empty($record->order)) $this->updateEstimateOrder($effortID, $currentTeam->order);
     }
 }
