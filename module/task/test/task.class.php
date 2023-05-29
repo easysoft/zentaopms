@@ -1,7 +1,6 @@
 <?php
 class taskTest
 {
-
     public function __construct()
     {
         global $tester;
@@ -272,26 +271,16 @@ class taskTest
      * @access public
      * @return array
      */
-    public function recordWorkhourTest($taskID, $param = array())
+    public function recordWorkhourTest(int $taskID, array $param): array|bool
     {
-        $todate   = date("Y-m-d");
-        $id       = array('1','2','3');
-        $dates    = array($todate, $todate, $todate);
-        $consumed = array('','','');
-        $left     = array('','','');
-        $work     = array('','','');
-        $createFields = array('id' => $id, 'dates' => $dates, 'consumed' => $consumed, 'left' => $left, 'work' => $work);
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->recordWorkhour($taskID);
-        unset($_POST);
+        $allChanges = $this->objectModel->recordWorkhour($taskID, $param);
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
-            return $object;
+            return $allChanges;
         }
     }
 
