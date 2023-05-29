@@ -1433,49 +1433,49 @@ class repo extends control
      * @param  int    $repoID
      * @param  string $type
      * @access public
-     * @return void
+     * @return int|void
      */
     public function ajaxSyncCommit($repoID = 0, $type = 'batch')
     {
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) return;
-        if($repo->synced) return print('finish');
+        if($repo->synced) return print($this->config->repo->repoSyncLog->finish);
 
         if(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
-            $logFile = realPath($this->app->getTmpRoot() . "/log/clone.progress." . strtolower($repo->SCM) . ".{$repo->name}.log");
+            $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
             if($logFile)
             {
                 $content  = file($logFile);
-                $lastLine = $content[count($content) - 1];
-
-                if(strpos($lastLine, 'done') === false)
+                foreach($content as $line)
                 {
-                    if(strpos($lastLine, 'empty repository') !== false)
+                    if(strpos($line, $this->config->repo->repoSyncLog->fatal) !== false or strpos($line, $this->config->repo->repoSyncLog->failed) !== false) return print($this->config->repo->repoSyncLog->error);
+                }
+
+                $lastLine = $content[count($content) - 1];
+                if(strpos($lastLine, $this->config->repo->repoSyncLog->done) === false)
+                {
+                    if(strpos($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
                     {
                         @unlink($logFile);
                     }
-                    elseif(strpos($lastLine, 'Total') !== false)
+                    elseif(strpos($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                     {
                         $logContent = file_get_contents($logFile);
-                        if(strpos($logContent, 'Counting objects: 100%') !== false and strpos($logContent, 'Compressing objects: 100%') !== false)
+                        if(strpos($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and strpos($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                         {
                             @unlink($logFile);
                         }
                         else
                         {
-                            return print(1);
+                            return print($this->config->repo->repoSyncLog->one);
                         }
                     }
                     else
                     {
-                        return print(1);
+                        return print($this->config->repo->repoSyncLog->one);
                     }
-                }
-                elseif(strpos($lastLine, 'fatal') !== false)
-                {
-                    return print('finish');
                 }
                 else
                 {
@@ -1553,13 +1553,13 @@ class repo extends control
                 if(empty($branchID))
                 {
                     $this->repo->markSynced($repoID);
-                    return print('finish');
+                    return print($this->config->repo->repoSyncLog->finish);
                 }
             }
         }
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
-        echo $type == 'batch' ?  $commitCount : 'finish';
+        echo $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
     }
 
     /**

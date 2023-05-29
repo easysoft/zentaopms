@@ -39,6 +39,11 @@ $(function(){
                 $('#caption').text('<?php echo $lang->repo->notice->syncComplete?>');
                 return self.location = '<?php echo $browseLink;?>';
             }
+            if(data == 'error')
+            {
+                $('#mainContent .content p').text('<?php echo $lang->repo->notice->syncFailed?>');
+                return;
+            }
             $('#commits').html(parseInt($('#commits').html()) + parseInt(data));
             setTimeout(syncComments, 10);
         });

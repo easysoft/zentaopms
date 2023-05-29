@@ -28,6 +28,19 @@ $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
 $config->repo->synced    = '';
 
+$config->repo->repoSyncLog = new stdclass();
+$config->repo->repoSyncLog->one            = 1;
+$config->repo->repoSyncLog->done           = 'done';
+$config->repo->repoSyncLog->total          = 'Total';
+$config->repo->repoSyncLog->fatal          = 'fatal';
+$config->repo->repoSyncLog->error          = 'error';
+$config->repo->repoSyncLog->failed         = 'failed';
+$config->repo->repoSyncLog->finish         = 'finish';
+$config->repo->repoSyncLog->emptyRepo      = 'empty repository';
+$config->repo->repoSyncLog->finishCount    = 'Counting objects: 100%';
+$config->repo->repoSyncLog->logFilePrefix  = '/log/clone.progress.';
+$config->repo->repoSyncLog->finishCompress = 'Compressing objects: 100%';
+
 $config->repo->editor = new stdclass();
 $config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

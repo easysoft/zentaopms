@@ -177,6 +177,7 @@ $lang->repo->placeholder->gitlabHost = '请填写GitLab访问地址';
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';
 $lang->repo->notice->syncComplete   = '同步完成，正在跳转...';
+$lang->repo->notice->syncFailed     = '同步失败';
 $lang->repo->notice->syncedCount    = '已经同步记录条数';
 $lang->repo->notice->delete         = '是否要删除该代码库？';
 $lang->repo->notice->successDelete  = '已经成功删除代码库。';

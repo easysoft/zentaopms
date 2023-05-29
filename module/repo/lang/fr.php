@@ -177,6 +177,7 @@ $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = 'Synchronisation en cours. Veuillez patienter ...';
 $lang->repo->notice->syncComplete   = 'Synchronisé. Vous allez être redirigé ...';
+$lang->repo->notice->syncFailed     = 'Synchronized failed.';
 $lang->repo->notice->syncedCount    = "Le nombre d'enregistrements synchronisés est ";
 $lang->repo->notice->delete         = 'Etes vous certain de vouloir supprimer ce référentiel ?';
 $lang->repo->notice->successDelete  = 'Le référentiel est supprimé.';

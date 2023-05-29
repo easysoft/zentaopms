@@ -168,7 +168,8 @@ $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
 
 $lang->repo->notice = new stdclass();
 $lang->repo->notice->syncing        = 'Đang đồng bộ. Vui lòng đợi ...';
-$lang->repo->notice->syncComplete   = 'Synchronized. Now redirecting ...';
+$lang->repo->notice->syncComplete   = 'Đồng bộ hóa hoàn tất, nhảy ...';
+$lang->repo->notice->syncFailed     = 'Đồng bộ hóa không thành công.';
 $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
 $lang->repo->notice->delete         = 'Bạn có muốn xóa this repo?';
 $lang->repo->notice->successDelete  = 'Repository is removed.';
