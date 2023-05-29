@@ -559,12 +559,12 @@ class wg
 
     public static function getPageCSS(): string|false
     {
-        return false;
+        return false; // No css
     }
 
     public static function getPageJS(): string|false
     {
-        return false;
+        return false; // No js
     }
 
     protected static function checkPageResources()

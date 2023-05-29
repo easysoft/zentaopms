@@ -53,8 +53,14 @@ class actionItem extends wg
     {
         list($dropdown, $items, $icon, $text, $trailingIcon, $active, $disabled, $badge, $props, $caret) = $this->prop(array('dropdown', 'items', 'icon', 'text', 'trailingIcon', 'active', 'disabled', 'badge', 'props', 'caret'));
 
-        if(is_string($badge))     $badge = label($badge);
-        else if(is_array($badge)) $badge = label(set($badge));
+        if(is_string($badge))
+        {
+            $badge = label($badge);
+        }
+        elseif(is_array($badge))
+        {
+            $badge = label(set($badge));
+        }
 
         $dropdown = new dropdown
         (
