@@ -12,6 +12,10 @@ class coverage
         global $zentaoRoot;
         $this->zentaoRoot       = $zentaoRoot;
         $this->traceFile        = '';
+        $this->backtrace        = debug_backtrace()[count(debug_backtrace())-1];
+        $this->runFile          = $this->backtrace['file'];
+        $this->moduleName       = basename(dirname(dirname(dirname($this->runFile))));
+        $this->testType         = basename(dirname($this->runFile));
         $this->unfilteredTraces = array('control.php', 'zen.php', 'model.php', 'tao.php');
 
         $this->initTraceFile();
@@ -25,13 +29,9 @@ class coverage
      */
     public function initTraceFile(): bool
     {
-        $tracePath     = $this->zentaoRoot . "/tmp/coverage/";
-        $backtrace     = debug_backtrace();
-        $runFile       = $backtrace[count($backtrace)-1]['file'];
-        $moduleName    = basename(dirname(dirname(dirname($runFile))));
-        $testModelName = basename(dirname($runFile));
+        $tracePath = $this->zentaoRoot . "/tmp/coverage/";
 
-        $this->traceFile = $tracePath . $moduleName . '_' . $testModelName. '_' . basename($runFile, '.php') . '.json';
+        $this->traceFile = $tracePath . $this->moduleName . '_' . $this->testType . '_' . basename($this->runFile, '.php') . '.json';
         if(!is_dir($tracePath)) mkdir($tracePath, 0777, true);
         if(!is_file($this->traceFile)) file_put_contents($this->traceFile, json_encode(array()));
 
@@ -65,20 +65,6 @@ class coverage
     }
 
     /**
-     * Load saved traces from file.
-     *
-     * @param  string  $key
-     * @access public
-     * @return array|string
-     */
-    public function loadTraceFromFile(string $key = ''): array|string
-    {
-        $report = json_decode(file_get_contents($this->traceFile), true);
-        if($key == '') return $report;
-        return isset($report[$key]) ? $report[$key] : array();
-    }
-
-    /**
      * Get local trace file path.
      *
      * @access public
@@ -102,62 +88,141 @@ class coverage
     }
 
     /**
-     * Merge traces form local file and this called trace.
-     *
-     * @param  array  $traces
-     * @access private
-     * @return array
-     */
-    private function mergeTraces(array $traces): array
-    {
-        $savedTraces = $this->loadTraceFromFile('traces');
-
-        if(!is_array($savedTraces)) return $traces;
-
-        foreach($traces as $module => $moduleTraces)
-        {
-            if(!isset($savedTraces[$module]))
-            {
-                $savedTraces[$module] = $moduleTraces;
-                continue;
-            }
-
-            foreach($moduleTraces as $file => $fileTraces)
-            {
-                if(!isset($savedTraces[$module][$file]))
-                {
-                    $savedTraces[$module][$file] = $fileTraces;
-                    continue;
-                }
-                else
-                {
-                    $savedTraces[$module][$file] += $fileTraces;
-                }
-            }
-        }
-
-        return $savedTraces;
-    }
-
-    /**
      * Save traces to file.
      *
-     * @param  array  $traces
-     * @access public
+     * @param  array   $traces
+     * @access private
      * @return bool
      */
     private function saveTraces(array $traces): bool
     {
+        if(!file_exists($this->traceFile)) return false ;
+
         $traces = $this->filterTraces($traces);
         $traces = $this->groupTraceByModule($traces);
-        $traces = $this->mergeTraces($traces);
+        $traces = $this->computeMethodCoverage($traces);
 
         $log = new stdclass;
         $log->time    = date('Y-m-d H:i:s');
         $log->ztfPath = getenv('ZTF_REPORT_DIR');
         $log->traces  = $traces;
+        if(!$log->traces) return false;
 
         return file_put_contents($this->traceFile, json_encode($log));
+    }
+
+    /**
+     * Compute the line coverage test method.
+     * @param  array      $traces
+     * @access private
+     * @return array|bool
+     */
+    private function computeMethodCoverage(array $traces): array|bool
+    {
+        if(!isset($traces['executeLines'] )) return false;
+        $executeLines = $traces['executeLines'];
+
+        $testMethod  = $this->getMethodInfo();
+        $methodLines = $this->getMethodLines();
+        $startLine   = (int)$testMethod->getStartLine();
+        $endLine     = (int)$testMethod->getEndLine();
+        foreach($executeLines as $executeLine => $executeCount)
+        {
+            if((int)$executeLine < $startLine || (int)$executeLine > $endLine) unset($executeLines[$executeLine]);
+        }
+        $traces['executeLines'] = $executeLines;
+
+        $methodCoverage = round(count($executeLines)/$methodLines, 2);
+        $traces['coverage'] = $methodCoverage === true ? 1 : $methodCoverage;
+        if($traces['coverage'] > 1) $traces['coverage'] = 1;
+        return $traces;
+    }
+
+    /**
+     * Test method for total number of rows.
+     *
+     * @access private
+     * @return int
+     */
+    private function getMethodLines(): int
+    {
+        $testMethod = $this->getMethodInfo();
+        $funcFile   = $this->getClassFile();
+
+        $startLine = $testMethod->getStartLine();
+        $endLine   = $testMethod->getEndLine();
+        $funcLines = array_slice(explode(PHP_EOL, file_get_contents($funcFile)), $startLine, $endLine - $startLine);
+        $lines     = $this->getEffectiveLines(implode(PHP_EOL, $funcLines));
+
+        return $lines;
+    }
+
+    /**
+     * Get test method info.
+     *
+     * @access private
+     * @return object
+     */
+    private function getMethodInfo(): object
+    {
+        $class = $this->getClassInfo();
+        foreach($class->getMethods() as $method)
+        {
+            $methodName = $method->getName();
+            if(strtolower($methodName) == basename($this->runFile, '.php')) $testMethod = $method;
+        }
+
+        return $testMethod;
+    }
+
+    /**
+     * Get the total number of methods in class.
+     *
+     * @param  string  $moduleName
+     * @param  string  $type
+     * @access private
+     * @return int
+     */
+    private function getClassMethodCount(string $moduleName, string $type): int
+    {
+        $classFileContents = file_get_contents($this->getClassFile($moduleName, $type));
+        preg_match_all('/function\s+\w+\s*\(/', $classFileContents, $matches);
+        $methodCount = count($matches[0]);
+
+        return $methodCount;
+    }
+
+    /**
+     * Get test method file.
+     *
+     * @param  string  $moduleName
+     * @param  string  $type
+     * @access private
+     * @return string
+     */
+    private function getClassFile(string $moduleName = '', string $type = ''): string
+    {
+        if(!$type)       $type       = $this->testType;
+        if(!$moduleName) $moduleName = $this->moduleName;
+        return "{$this->zentaoRoot}/module/{$moduleName}/{$type}.php";
+    }
+
+    /**
+     * Get test class Info.
+     *
+     * @param  string  $moduleName
+     * @param  string  $type
+     * @access private
+     * @return object
+     */
+    private function getClassInfo(string $moduleName = '', string $type = ''): object
+    {
+        if(!$type)       $type       = $this->testType;
+        if(!$moduleName) $moduleName = $this->moduleName;
+        $class = new ReflectionClass($moduleName . ucfirst($type));
+        if($type == 'control') $class = new ReflectionClass($moduleName);
+
+        return $class;
     }
 
     /**
@@ -192,9 +257,12 @@ class coverage
         foreach($traces as $filePath => $fileTrace)
         {
             $moduleName = $this->getModuleByFilePath($filePath);
-            $fileName   = basename($filePath);
+            $fileName   = basename($filePath, '.php');
+            $groupedTraces['module'] = $this->moduleName;
+            $groupedTraces['type']   = $this->testType;
+            $groupedTraces['method'] = $this->getMethodInfo()->getName();
 
-            $groupedTraces[$moduleName][$fileName] = $fileTrace;
+            if($moduleName == $this->moduleName && $fileName == $this->testType) $groupedTraces['executeLines'] = $fileTrace;
         }
 
         return $groupedTraces;
@@ -207,7 +275,7 @@ class coverage
      * @access private
      * @return string  moduleName  eg: bug
      */
-    private function getModuleByFilePath($filePath): string
+    private function getModuleByFilePath(string $filePath): string
     {
         $moduleName = '';
         preg_match('/\/module\/(\w+)\//', $filePath, $matches);
@@ -230,14 +298,18 @@ class coverage
   <thead>
     <tr>
         <th>模块</th>
-        <th>执行行数</th>
-        <th>可执行行数</th>
-        <th>总行数</th>
-        <th>control</th>
-        <th>zen</th>
-        <th>model</th>
-        <th>tao</th>
-        <th>模块</th>
+        <th>control 方法</th>
+        <th>control 覆盖方法</th>
+        <th>zen 方法</th>
+        <th>zen 覆盖方法</th>
+        <th>model 方法</th>
+        <th>model 覆盖方法</th>
+        <th>tao 方法</th>
+        <th>tao 覆盖方法</th>
+        <th>control 覆盖率</th>
+        <th>zen 覆盖率</th>
+        <th>model 覆盖率</th>
+        <th>tao 覆盖率</th>
     </tr>
   </thead>
   <tbody>
@@ -260,44 +332,41 @@ EOT;
      * @access private
      * @return void
      */
-    private function genStatsTableByModule($module, $moduleTraces)
+    private function genStatsTableByModule(string $module, array $moduleTraces)
     {
-        $executedLines      = 0;
-        $effectiveLines     = 0;
-        $totalLines         = 0;
-        $coveragePercent    = 0;
-        $moduleSummaryTable = '';
-        $summaryTable       = '';
+        $modelMethodesCount   = $this->getClassMethodCount($module, 'model');
+        $controlMethodesCount = $this->getClassMethodCount($module, 'control');
+        $zenMethodesCount     = $this->getClassMethodCount($module, 'zen');
+        $taoMethodesCount     = $this->getClassMethodCount($module, 'tao');
+        $controlCoverageCount = isset($moduleTraces['control']) ? count($moduleTraces['control']) : 0;
+        $zenCoverageCount     = isset($moduleTraces['zen']) ? count($moduleTraces['zen']) : 0;
+        $modelCoverageCount   = isset($moduleTraces['model']) ? count($moduleTraces['model']) : 0;
+        $taoCoverageCount     = isset($moduleTraces['tao']) ? count($moduleTraces['tao']) : 0;
 
-        foreach($moduleTraces as $file => $fileTraces)
+        $moduleCoverageList = array();
+
+        foreach($moduleTraces as $type => $methods)
         {
-            $fileName            = str_replace('.php', '', $file);
-            $file                = $this->zentaoRoot . '/module/' . $module . '/' . $file;
-            $content             = file_get_contents($file);
-            $fileExecutedLines   = count($fileTraces);
-            $fileEffectiveLines  = $this->getEffectiveLines($content);
-            $fileTotalLines      = substr_count($content, PHP_EOL);
-            $fileCoveragePercent = array();
-            $fileCoveragePercent[$fileName] = ($fileEffectiveLines > 0) ? round($fileExecutedLines / $fileEffectiveLines * 100, 2) : 0;
-
-            $executedLines  += $fileExecutedLines;
-            $effectiveLines += $fileEffectiveLines;
-            $totalLines     += $fileTotalLines;
+            foreach($methods as $method => $methodCoverage) $moduleCoverageList[$type] += $methodCoverage['coverage'];
         }
 
-        $coveragePercent = ($effectiveLines > 0) ? round($executedLines / $effectiveLines * 100, 2) : 0;
-
         $summaryTable .= "<th>$module</th>" . PHP_EOL;
-        $summaryTable .= '<td>' . $executedLines . '</td>' . PHP_EOL;
-        $summaryTable .= "<td>$effectiveLines</td>" . PHP_EOL;
-        $summaryTable .= "<td>$totalLines</td>" . PHP_EOL;
+        $summaryTable .= "<td>$controlMethodesCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$controlCoverageCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$zenMethodesCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$zenCoverageCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$modelMethodesCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$modelCoverageCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$taoMethodesCount</td>" . PHP_EOL;
+        $summaryTable .= "<td>$taoCoverageCount</td>" . PHP_EOL;
+
         foreach($this->unfilteredTraces as $fileType)
         {
             $fileType = str_replace('.php', '', $fileType);
+            $methodCount = $this->getClassMethodCount($module, $fileType);
 
-            $summaryTable .= isset($fileCoveragePercent[$fileType]) ? "<td><a href='?module=$module&file=$fileType'>" . $fileCoveragePercent[$fileType] . '%</a></td>' . PHP_EOL : '<td>0%</td>' . PHP_EOL;
+            $summaryTable .= isset($moduleCoverageList[$fileType]) ? "<td><a href='?module=$module&file=$fileType'>" . round($moduleCoverageList[$fileType] / $methodCount, 2) * 100 . '%</a></td>' . PHP_EOL : '<td>0%</td>' . PHP_EOL;
         }
-        $summaryTable .= "<td>$coveragePercent%</td>" . PHP_EOL;
         $summaryTable .= '</tr>' . PHP_EOL;
         $summaryTable .= $moduleSummaryTable;
 
@@ -313,9 +382,9 @@ EOT;
      * @access private
      * @return string
      */
-    private function genCoverageTableByFile($module, $file, $fileTraces): string
+    private function genCoverageTableByFile(string $module, string $file, array $fileTraces): string
     {
-        $file = $this->zentaoRoot . DIRECTORY_SEPARATOR . 'module' . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . $file;
+        $file = $this->getClassFile($module, $file);
         $coverageTable = <<<EOT
 <table border="1">
   <caption id="$file">$file</caption>
@@ -330,11 +399,17 @@ EOT;
 EOT;
         $content = file($file);
 
+        $coverageLineList = array();
+        foreach($fileTraces as $method => $methodInfo)
+        {
+            foreach($methodInfo['executeLines'] as $executeLine => $count) $coverageLineList[$executeLine] = $count;
+        }
+
         foreach($content as $line => $code)
         {
             /* The function file() give the line number start from 0, so we offset to end one more on index.  */
-            $isCalled    = in_array($line + 1, array_keys($fileTraces));
-            $calledTimes = $isCalled ? '<span style="color: green;">' . $fileTraces[$line + 1] . '</span>' : '<span style="color: red;">0</span>';
+            $isCalled    = in_array($line + 1, array_keys($coverageLineList));
+            $calledTimes = $isCalled ? '<span style="color: green;">' . $coverageLineList[$line + 1] . '</span>' : '<span style="color: red;">0</span>';
 
             $coverageTable .= '<tr>' . PHP_EOL;
             $coverageTable .= '<td style="text-align: center;">' . $line + 1 . '</td>' . PHP_EOL;
@@ -363,12 +438,17 @@ EOT;
         $tracesList  = array();
         foreach($tracesFiles as $file)
         {
-            $traces = json_decode(file_get_contents($file), true);
-            $tracesList = array_merge_recursive($tracesList, $traces);
+            $tracesInfo = json_decode(file_get_contents($file), true);
+            if(!isset($tracesInfo['traces'])) continue;
+
+            $traces = $tracesInfo['traces'];
+            $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['executeLines'] = $traces['executeLines'];
+            $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['coverage']     = $traces['coverage'];
+
+            $tracesList['time']    = $tracesInfo['time'];
+            $tracesList['ztfPath'] = $tracesInfo['ztfPath'];
         }
 
-        $tracesList['time']    = $tracesList['time'][count($tracesList['time'])-1];
-        $tracesList['ztfPath'] = $tracesList['ztfPath'][count($tracesList['ztfPath'])-1];
         if($key == '') return $report;
         return isset($tracesList[$key]) ? $tracesList[$key] : array();
     }
@@ -388,14 +468,13 @@ EOT;
         $traces     = $this->loadTraceFromFiles($tracesPath, 'traces');
 
         /* Generate report. */
-        $reportHtml = empty($file) ? '<style>td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}</style>' . PHP_EOL: '<style>td { border: 1px solid #ccc;  padding: 8px;}</style>' . PHP_EOL;
+        $reportHtml = empty($file) ? '<style>td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}</style>' . PHP_EOL : '<style>td { border: 1px solid #ccc;  padding: 8px;}</style>' . PHP_EOL;
         if(empty($file))
         {
             $reportHtml .= $this->genModuleStatsReport($traces);
         }
         else
         {
-            $file       .= '.php';
             $reportHtml .= $this->genCoverageTableByFile($module, $file, $traces[$module][$file]);
         }
         $reportHtml .= '</body></html>';
