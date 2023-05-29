@@ -1043,10 +1043,6 @@ class measurementModel extends model
             list($headers, $reportData) = $this->report->processData($dataList, $condition);
 
             $headerNames = $this->report->getHeaderNames($fields, $moduleNames, $condition);
-            $headers     = $headers;
-            $condition   = $condition;
-            $reportData  = $reportData;
-            $groupLang   = $groupLang;
         }
 
         $fields = empty($mergeFields) ? array() : $mergeFields;

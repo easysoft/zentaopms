@@ -19,8 +19,8 @@
         <td><?php echo $template->createdBy;?></td>
         <td><?php echo $template->createdDate;?></td>
         <td class='c-actions'>
-          <?php echo common::printIcon('measurement', 'editTemplate', "id=$template->id", $template, '', 'edit', '', '', '', '', $lang->measurement->editTemplate);?>
-          <?php echo common::printIcon('measurement', 'viewTemplate', "id=$template->id", $template, '', 'eye', '', '', '', $lang->measurement->viewTemplate);?>
+          <?php common::printIcon('measurement', 'editTemplate', "id=$template->id", $template, '', 'edit', '', '', '', '', $lang->measurement->editTemplate);?>
+          <?php common::printIcon('measurement', 'viewTemplate', "id=$template->id", $template, '', 'eye', '', '', '', $lang->measurement->viewTemplate);?>
         </td>
       </tr>
       <?php endforeach;?>
