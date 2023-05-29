@@ -915,11 +915,10 @@ class product extends control
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProjectsByBranch(int $productID, string $branch = '', int $number = 0)
+    public function ajaxGetProjectsByBranch(int $productID, string $branch = '')
     {
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch);
