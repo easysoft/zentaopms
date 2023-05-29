@@ -1472,33 +1472,33 @@ class taskModel extends model
     }
 
     /**
-     * Get tasks list of a execution.
+     * 获取执行下属于moduleIdList的任务信息。
+     * Get task information belong to module ID list under execution.
      *
-     * @param  int           $executionID
-     * @param  array|string  $moduleIdList
-     * @param  string        $status
-     * @param  string        $orderBy
-     * @param  object        $pager
+     * @param  int      $executionID
+     * @param  array    $moduleIdList
+     * @param  string   $orderBy
+     * @param  object   $pager
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getTasksByModule($executionID = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null)
+    public function getTasksByModule(int $executionID = 0, array $moduleIdList = array(), string $orderBy = 'id_desc', object $pager = null): array
     {
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-            ->where('t1.execution')->eq((int)$executionID)
-            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->where('t1.execution')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
 
-        if($tasks) return $this->processTasks($tasks);
-        return array();
+        if(empty($tasks)) return $tasks;
+        return $this->processTasks($tasks);
     }
 
     /**

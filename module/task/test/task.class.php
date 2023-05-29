@@ -512,33 +512,6 @@ class taskTest
     }
 
     /**
-     * Test get tasks list of a execution.
-     *
-     * @param  int    $executionID
-     * @param  array  $moduleIdList
-     * @param  int    $count
-     * @access public
-     * @return array
-     */
-    public function getTasksByModuleTest($executionID, $moduleIdList, $count)
-    {
-        $object = $this->objectModel->getTasksByModule($executionID, $moduleIdList);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get tasks of a user.
      *
      * @param  int    $taskID
