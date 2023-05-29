@@ -248,7 +248,7 @@ class commonModel extends model
         else
         {
             $company = $this->loadModel('company')->getFirst();
-            if(!$company) $this->app->triggerError(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
+            if(!$company) $this->app->triggerError(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, true);
             $this->session->set('company', $company);
             $this->app->company  = $company;
         }
@@ -486,8 +486,6 @@ class commonModel extends model
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-
-                $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
 
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='700'") . '</li>';
 
@@ -926,7 +924,7 @@ class commonModel extends model
         if(!in_array($tab, array('program', 'product', 'project')))
         {
             $nav = $lang->mainNav->$tab;
-            list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+            list(, $currentModule, $currentMethod,) = explode('|', $nav);
             if($tab == 'execution') $currentMethod = 'all';
         }
         else
@@ -1089,7 +1087,7 @@ class commonModel extends model
 
                     $linkPart = explode('|', $menu['link']);
                     if(count($linkPart) < 3) continue;
-                    list($label, $module, $method) = $linkPart;
+                    list(, $module, $method) = $linkPart;
 
                     if(common::hasPriv($module, $method))
                     {
@@ -1160,8 +1158,7 @@ class commonModel extends model
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
         /* Print all main menus. */
-        $menu     = customModel::getMainMenu();
-        $lastMenu = end($menu);
+        $menu = customModel::getMainMenu();
 
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
@@ -1330,7 +1327,6 @@ class commonModel extends model
     {
         global $app, $lang;
         $moduleName = $app->rawModule;
-        $methodName = $app->rawMethod;
 
         $tab = $app->tab;
 
@@ -1482,7 +1478,7 @@ class commonModel extends model
 
         if(is_array($position))
         {
-            foreach($position as $key => $link) echo "<li class='active'>" . $link . '</li>';
+            foreach(array_values($position) as $link) echo "<li class='active'>" . $link . '</li>';
         }
         echo '</ul>';
     }
