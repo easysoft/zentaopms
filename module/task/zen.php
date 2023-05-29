@@ -348,6 +348,55 @@ class taskZen extends task
     }
 
     /**
+     * 构造任务记录日志的表单数据。
+     * Build record workhour form.
+     *
+     * @param  int       $taskID
+     * @param  string    $from
+     * @param  string    $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function buildRecordForm(int $taskID, string $from, string $orderBy): void
+    {
+        $task = $this->task->getById($taskID);
+        if(!empty($task->team) and $task->mode == 'linear')
+        {
+            if(empty($orderBy))
+            {
+                $orderBy = 'id_desc';
+            }
+            else
+            {
+                /* The id sort with order or date style. */
+                $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
+            }
+        }
+
+        if(!$orderBy) $orderBy = 'id_desc';
+
+        /* Set the fold state of the current task. */
+        $taskEffortFold = 0;
+        $currentAccount = $this->app->user->account;
+        if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
+        if(!empty($task->team))
+        {
+            $teamMember = array_column($task->team, 'account');
+            if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
+        }
+
+        $this->view->title          = $this->lang->task->record;
+        $this->view->task           = $task;
+        $this->view->from           = $from;
+        $this->view->orderBy        = $orderBy;
+        $this->view->efforts        = $this->task->getTaskEfforts($task->id, '', '', $orderBy);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->taskEffortFold = $taskEffortFold;
+
+        $this->display();
+    }
+
+    /**
      * 构造待更新的任务数据。
      * Build the task data to be update.
      *
@@ -1466,6 +1515,33 @@ class taskZen extends task
         }
 
         return array('result' => 'success', 'load' => true);
+    }
+
+    /**
+     * 在记录工时后获取跳转链接。
+     * Get response information after record effort.
+     *
+     * @param  object    $task
+     * @param  array     $changes
+     * @param  string    $from
+     * @access protected
+     * @return int|array
+     */
+    protected function responseAfterRecord(object $task, array $changes, string $from): int|array
+    {
+        /* Remind whether to update status of the bug, if task which from that bug has been finished. */
+        if($changes and $this->task->needUpdateBugStatus($task))
+        {
+            $response = $this->taskTao->getRemindBugLink($task, $changes);
+            if($response) return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $response['confirmed'], $response['canceled'], 'parent', 'parent.parent'));
+        }
+
+        if(isonlybody()) return $this->responseModal($task, $from);
+
+        $response['result']  = 'success';
+        $response['message'] = $this->lang->saveSuccess;
+        $response['load']    = $this->createLink('execution', 'browse', "executionID={$task->execution}&tab=task");
+        return $response;
     }
 
     /**
