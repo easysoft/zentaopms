@@ -1010,6 +1010,7 @@ class productModel extends model
     }
 
     /**
+     * 获取关联了某产品的执行列表。
      * Get executions by product and project.
      *
      * @param  int    $productID
