@@ -1442,19 +1442,6 @@ class taskModel extends model
     }
 
     /**
-     * 获取执行的项目ID。
-     * Get the ID of the project to execution ID.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return int
-     */
-    public function getProjectID(int $executionID = 0): int
-    {
-        return $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-    }
-
-    /**
      * 通过任务ID列表批量获取任务信息。
      * Get the task information from the task ID list.
      *
@@ -1540,7 +1527,8 @@ class taskModel extends model
     }
 
     /**
-     * Get execution tasks pairs.
+     * 获取任务 id:name 的数组。
+     * Get an array of task id:name.
      *
      * @param  int    $executionID
      * @param  string $status
@@ -1548,19 +1536,24 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTaskPairs($executionID, $status = 'all', $orderBy = 'finishedBy, id_desc')
+    public function getExecutionTaskPairs(int $executionID, string $status = 'all', string $orderBy = 'finishedBy, id_desc'): array
     {
-        $tasks = array('' => '');
-        $stmt = $this->dao->select('t1.id,t1.name,t1.parent,t2.realname AS finishedByRealName')
+        $tasks = $this->dao->select('t1.id,t1.name,t1.parent,t2.realname AS finishedByRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.finishedBy = t2.account')
             ->where('t1.execution')->eq((int)$executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
-            ->query();
-        while($task = $stmt->fetch()) $tasks[$task->id] = ($task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '') . "$task->id:$task->finishedByRealName:$task->name";
-        return $tasks;
+            ->fetchAll('id');
+
+        $taskPairs = array();
+        foreach($tasks as $taskID => $task)
+        {
+            $prefix = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
+            $taskPairs[$taskID] = $prefix . "{$taskID}:{$task->finishedByRealName}:{$task->name}";
+        }
+        return $taskPairs;
     }
 
     /**

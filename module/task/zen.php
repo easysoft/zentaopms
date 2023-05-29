@@ -1160,8 +1160,8 @@ class taskZen extends task
         $response['load'] = $this->createLink('execution', 'story', "executionID={$executionID}");
         if($this->config->vision == 'lite')
         {
-            $projectID = $this->execution->getProjectID($executionID);
-            $response['load'] = $this->createLink('projectstory', 'story', "projectID={$projectID}");
+            $execution = $this->execution->getByID($executionID);
+            $response['load'] = $this->createLink('projectstory', 'story', "projectID={$execution->project}");
         }
         return $response;
     }
