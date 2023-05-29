@@ -1194,6 +1194,7 @@ class bug extends control
     }
 
     /**
+     * Ajax 方式获取产品下拉菜单。
      * Drop menu page.
      *
      * @param  int    $productID
@@ -1203,7 +1204,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $module, $method, $extra = '')
+    public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '')
     {
         $products = array();
         if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
@@ -1214,13 +1215,13 @@ class bug extends control
             $this->view->lines    = $this->product->getLinePairs();
         }
 
-        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
         $this->view->products  = $products;
         $this->view->projectID = $this->session->project;
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->display();
     }
 
