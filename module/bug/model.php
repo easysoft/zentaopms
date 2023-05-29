@@ -2059,25 +2059,6 @@ class bugModel extends model
     }
 
     /**
-     * Return the file => label pairs of some fields.
-     *
-     * @param  string    $fields
-     * @access public
-     * @return array
-     */
-    public function getFieldPairs($fields)
-    {
-        $fields = explode(',', $fields);
-        foreach($fields as $key => $field)
-        {
-            $field = trim($field);
-            $fields[$field] = $this->lang->bug->$field;
-            unset($fields[$key]);
-        }
-        return $fields;
-    }
-
-    /**
      * Get by Sonarqube id.
      *
      * @param  int    $sonarqubeID
