@@ -10,6 +10,8 @@ title=taskModel->recordWorkhour();
 cid=1
 pid=1
 
+正常记录工时 >> status,wait,doing
+pause任务记录工时 >> status,pause,doing
 */
 $taskIDList = array('1','4');
 
