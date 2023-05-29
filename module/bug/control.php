@@ -1155,14 +1155,15 @@ class bug extends control
     }
 
     /**
+     * Ajax 方式加载所有的用户。
      * AJAX: get all users as assignedTo list.
      *
      * @param  string $selectedUser
-     * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
+     * @param  string $params       noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
      * @access public
      * @return string
      */
-    public function ajaxLoadAllUsers($selectedUser = '', $params = 'devfirst|noclosed')
+    public function ajaxLoadAllUsers(string $selectedUser = '', string $params = 'devfirst|noclosed'): string
     {
         $allUsers = $this->loadModel('user')->getPairs($params);
 
