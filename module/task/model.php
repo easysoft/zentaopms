@@ -1497,7 +1497,7 @@ class taskModel extends model
 
     /**
      * 通过任务ID获取任务的信息。
-     * Get task info by Id.
+     * Get task info by ID.
      *
      * @param  int          $taskID
      * @param  bool         $setImgSize
@@ -1550,13 +1550,14 @@ class taskModel extends model
     }
 
     /**
-     * Get project id.
+     * 获取执行的项目ID。
+     * Get the ID of the project to execution ID.
      *
      * @param  int    $executionID
      * @access public
      * @return object
      */
-    public function getProjectID($executionID = 0)
+    public function getProjectID(int $executionID = 0)
     {
         return $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
     }

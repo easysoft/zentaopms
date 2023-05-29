@@ -804,27 +804,6 @@ class taskTest
     }
 
     /**
-     * Test get project id by execution id.
-     *
-     * @param  int    $executionID
-     * @access public
-     * @return array
-     */
-    public function getProjectIDTest($executionID)
-    {
-        $object = $this->objectModel->getProjectID($executionID);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get story comments.
      *
      * @param  int    $storyID

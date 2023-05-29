@@ -12,7 +12,7 @@ fields:
       - field: name2
         range: 项目,迭代,阶段,看板{2}
   - field: project
-    range: 1
+    range: 0{1},1{4}
   - field: type
     range: project,sprint,stage,kanban{2}
   - field: vision
