@@ -894,12 +894,11 @@ class bugModel extends model
      * @param  object $bug
      * @param  array  $kanbanParams
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function activate(object $bug, array $kanbanParams = array()): bool
+    public function activate(object $bug, array $kanbanParams = array()): array|false
     {
-        $bugID  = (int)$bug->id;
-        $oldBug = $this->getBaseInfo($bugID);
+        $oldBug = $this->getBaseInfo($bug->id);
         if(!$oldBug)
         {
             dao::$errors[] = $this->lang->bug->error->notExist;
@@ -912,13 +911,13 @@ class bugModel extends model
         }
 
         $bug->activatedCount = $oldBug->activatedCount + 1;
-        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
 
         /* Update build. */
-        $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("FIND_IN_SET('$bugID', bugs)")->limit(1)->fetch();
+        $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("FIND_IN_SET('{$bug->id}', bugs)")->limit(1)->fetch();
         if($solveBuild)
         {
-            $buildBugs = trim(str_replace(",$bugID,", ',', ",$solveBuild->bugs,"), ',');
+            $buildBugs = trim(str_replace(",{$bug->id},", ',', ",$solveBuild->bugs,"), ',');
             $this->dao->update(TABLE_BUILD)->set('bugs')->eq($buildBugs)->where('id')->eq($solveBuild->id)->exec();
         }
 
@@ -926,22 +925,20 @@ class bugModel extends model
         if($oldBug->execution)
         {
             $this->loadModel('kanban');
-            if(!isset($kanbanParams['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
-            if(isset($kanbanParams['toColID'])) $this->kanban->moveCard($bugID, $kanbanParams['fromColID'], $kanbanParams['toColID'], $kanbanParams['fromLaneID'], $kanbanParams['toLaneID']);
+            if(!isset($kanbanParams['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
+            if(isset($kanbanParams['toColID'])) $this->kanban->moveCard($bug->id, $kanbanParams['fromColID'], $kanbanParams['toColID'], $kanbanParams['fromLaneID'], $kanbanParams['toLaneID']);
         }
 
         $changes = common::createChanges($oldBug, $bug);
-        $files   = $this->loadModel('file')->saveUpload('bug', $bugID);
+        $files   = $this->loadModel('file')->saveUpload('bug', $bug->id);
         if($changes or $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->loadModel('action')->create('bug', $bugID, 'Activated', $fileAction . zget($bug, 'comment', ''));
+            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
-
-            $this->executeHooks($bugID);
         }
 
-        return !dao::isError();
+        return $changes;
     }
 
     /**

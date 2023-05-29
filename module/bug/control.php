@@ -436,7 +436,7 @@ class bug extends control
             if($oldBug->status != 'closed') $changes = $this->bug->resolve($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $regionID = !empty($output['regionID']) ? $output['regionID'] : 0;
+            $regionID = zget($output, 'regionID', 0);
             return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
         }
 
@@ -450,7 +450,7 @@ class bug extends control
         $this->view->title      = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
-        $this->view->users      = $this->user->getPairs('noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : 0, (string)$oldBug->project, 'stagefilter');
         $this->view->builds     = $this->loadModel('build')->getBuildPairs($oldBug->product, $oldBug->branch, 'withbranch,noreleased');
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
@@ -468,28 +468,33 @@ class bug extends control
      */
     public function activate(int $bugID, string $kanbanInfo = '')
     {
+        $oldBug = $this->bug->getByID($bugID);
         if(!empty($_POST))
         {
             $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
             parse_str($kanbanInfo, $kanbanParams);
 
-            $bugData = $this->bugZen->buildBugForActivate($bugID);
-            if(!$bugData) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
+            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('id', $bugID)->get();
+            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
-            $this->bug->activate($bugData, $kanbanParams);
+            $changes = $this->bug->activate($bug, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(isonlybody())
-            {
-                $regionID = zget($kanbanParams, 'regionID', 0);
-                $bug      = $this->bug->getBaseInfo($bugID);
-                $this->bugZen->responseInModal($bug->execution, '', $regionID);
-            }
-
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'view', "bugID={$bugID}"), 'closeModal' => true);
+            $regionID = zget($kanbanParams, 'regionID', 0);
+            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
         }
 
-        $this->bugZen->buildActivateForm($bugID);
+        $this->checkBugExecutionPriv($oldBug);
+
+        $productID = $oldBug->product;
+        $this->qa->setMenu($this->products, $productID, $oldBug->branch);
+
+        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $this->view->bug     = $oldBug;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->resolvedBy);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $oldBug->branch, 'noempty,noreleased', 0, 'execution', $oldBug->openedBuild);
+        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->display();
     }
 
     /**
