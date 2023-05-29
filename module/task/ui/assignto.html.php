@@ -58,4 +58,4 @@ formPanel
 );
 
 
-render();
+render('modalDialog');
