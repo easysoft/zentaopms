@@ -177,7 +177,6 @@ class form extends fixer
 
                 $rowData->$field = isset($this->rawdata->$field) ? zget($this->rawdata->$field, $rowIndex, $defaultValue) : $defaultValue;
                 $rowData->$field = helper::convertType($rowData->$field, $config['type']);
-                if(isset($config['filter'])) $data = $this->filter($rowData->$field, $config['filter']);
 
                 /* 检查必填字段。Check required fields. */
                 if(isset($config['required']) && $config['required'] && empty($rowData->$field))
@@ -225,14 +224,12 @@ class form extends fixer
             $this->errors[$field][] = "Field '{$field}' need defined type";
         }
 
-        if(isset($config['required']) && $config['required'])
+        $requireValue = isset($config['required']) && $config['required'] && !isset($config['default']);
+        if($requireValue && (!isset($this->rawdata->$field) || $this->rawdata->$field === ''))
         {
-            if(!isset($config['default']) && (!isset($this->rawdata->$field) || $this->rawdata->$field === ''))
-            {
-                if(!isset($this->errors[$field])) $this->errors[$field] = array();
-                $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
-                $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
-            }
+            if(!isset($this->errors[$field])) $this->errors[$field] = array();
+            $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
+            $this->errors[$field][] = sprintf($app->lang->error->notempty, $fieldName);
         }
 
         if(isset($this->rawdata->$field))

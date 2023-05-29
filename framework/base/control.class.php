@@ -1027,12 +1027,14 @@ class baseControl
         /* Make sure locate in this tab. */
         global $lang;
         $moduleName = $this->app->rawModule;
-        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab)
+        $notSameTab = isset($lang->navGroup->{$moduleName}) && $lang->navGroup->{$moduleName} != $this->app->tab;
+        $hasLocate  = isset($data['locate']) && $data['locate'][0] == '/';
+        if($notSameTab && $hasLocate && !helper::inOnlyBodyMode())
         {
-            if(isset($data['locate']) and $data['locate'][0] == '/' and !helper::inOnlyBodyMode()) $data['locate'] .= "#app={$this->app->tab}";
+            $data['locate'] .= "#app={$this->app->tab}";
         }
 
-        if(helper::isAjaxRequest() or $this->viewType == 'json')
+        if(helper::isAjaxRequest() || $this->viewType == 'json')
         {
             /* Process for zh-cn in json. */
             foreach($data as $key => $value)
@@ -1043,7 +1045,7 @@ class baseControl
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }
 
-            if(defined('RUN_MODE') and in_array(RUN_MODE, array('api', 'xuanxuan')))
+            if(defined('RUN_MODE') && in_array(RUN_MODE, array('api', 'xuanxuan')))
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());
@@ -1061,7 +1063,7 @@ class baseControl
          * 响应非ajax的请求。
          * Response request not ajax.
          */
-        if(isset($data['result']) and $data['result'] == 'success')
+        if(isset($data['result']) && $data['result'] == 'success')
         {
             if(!empty($data['message'])) echo js::alert($data['message']);
             $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
@@ -1069,7 +1071,7 @@ class baseControl
             return helper::end($data['message'] ?? 'success');
         }
 
-        if(isset($data['result']) and $data['result'] == 'fail')
+        if(isset($data['result']) && $data['result'] == 'fail')
         {
             if(!empty($data['message']))
             {
