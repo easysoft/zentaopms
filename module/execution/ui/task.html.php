@@ -97,6 +97,29 @@ sidebar
 );
 
 /* zin: Define the dtable in main content. */
+foreach($tasks as &$task)
+{
+    $actions = array();
+    if(!in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion) $actions[] = 'confirmStoryChange';
+
+    if($task->status != 'pause' && common::hasPriv('task', 'start'))   $actions[] = 'start';
+    if($task->status == 'pause' && common::hasPriv('task', 'restart')) $actions[] = 'restart';
+
+    if(common::hasPriv('task', 'finish')) $actions[] = 'finish';
+    if(common::hasPriv('task', 'close'))  $actions[] = 'close';
+
+    if(common::hasPriv('task', 'recordWorkhour')) $actions[] = 'recordWorkhour';
+    if(common::hasPriv('task', 'edit'))           $actions[] = 'edit';
+
+    if($this->config->vision == 'rnd' && common::hasPriv('task', 'batchCreate')) $actions[] = 'batchCreate';
+
+    foreach($actions as &$action)
+    {
+        if(!$this->task->isClickable($task, $action)) $action = array('name' => $action, 'disabled' => true);
+    }
+    $task->actions = $actions;
+}
+
 $firstTask            = reset($tasks);
 $canBatchEdit         = common::hasPriv('firstTask', 'batchEdit', !empty($firstTask) ? $firstTask : null);
 $canBatchClose        = (common::hasPriv('firstTask', 'batchClose', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'closed');
