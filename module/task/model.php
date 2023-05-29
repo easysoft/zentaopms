@@ -1496,59 +1496,55 @@ class taskModel extends model
     }
 
     /**
+     * 通过任务ID获取任务的信息。
      * Get task info by Id.
      *
-     * @param  int  $taskID
-     * @param  bool $setImgSize
-     *
+     * @param  int          $taskID
+     * @param  bool         $setImgSize
      * @access public
-     * @return object|bool
+     * @return false|object
      */
-    public function getByID($taskID, $setImgSize = false)
+    public function getByID(int $taskID, bool $setImgSize = false): false|object
     {
         $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')
-            ->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')
-            ->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.id')->eq((int)$taskID)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
 
+        /* Format data. */
         $task->openedDate     = !empty($task->openedDate)     ? substr($task->openedDate, 0, 19)     : null;
         $task->finishedDate   = !empty($task->finishedDate)   ? substr($task->finishedDate, 0, 19)   : null;
         $task->canceledDate   = !empty($task->canceledDate)   ? substr($task->canceledDate, 0, 19)   : null;
         $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19)     : null;
         $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
         $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19)    : null;
-        $task->mailto         = empty($task->mailto)          ? ''                                   : $task->mailto;
+        $task->mailto         = !empty($task->mailto)         ? $task->mailto                        : null;
 
+        /* Get the child tasks of the parent task. */
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $task->children = $children;
-
-        /* Check parent Task. */
-        if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
-
-        $task->members = array();
-        $task->team    = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
-        foreach($task->team as $member) $task->members[$member->account] = $member->account;
-
         foreach($children as $child)
         {
             $child->team    = array();
             $child->members = array();
         }
+        $task->children = $children;
+
+        if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
+
+        /* Get task team and team members. */
+        $task->members = array();
+        $task->team    = $this->taskTao->getTeamByTask($taskID);
+        foreach($task->team as $member) $task->members[$member->account] = $member->account;
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
+        $task->files = $this->file->getByObject('task', $taskID);
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
 
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
-        $task->files = $this->loadModel('file')->getByObject('task', $taskID);
-
-        /* Get related test cases. */
-        if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
 
         return $this->processTask($task);
     }
@@ -2278,6 +2274,9 @@ class taskModel extends model
             $product = $this->loadModel('product')->getById($task->product);
             if($product) $task->productType = $product->type;
         }
+
+        /* Get related test cases. */
+        if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Set closed realname. */
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';

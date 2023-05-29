@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('task')->config('task')->gen(9);
+zdTable('taskteam')->config('taskteam')->gen(6);
+
+/**
+
+title=taskModel->getTeamByTask();
+timeout=0
+cid=1
+
+*/
+
+$taskIdList = range(1, 10);
+
+$taskModel = $tester->loadModel('task');
+r($taskModel->getTeamByTask($taskIdList[0]))        && p()                            && e('0');               // 获取taskID=1的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[1]))        && p()                            && e('0');               // 获取taskID=2的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[2]))        && p()                            && e('0');               // 获取taskID=3的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[3]))        && p()                            && e('0');               // 获取taskID=4的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[4]))        && p()                            && e('0');               // 获取taskID=5的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[5]))        && p()                            && e('0');               // 获取taskID=6的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[6]))        && p()                            && e('0');               // 获取taskID=7的任务团队成员信息
+r($taskModel->getTeamByTask($taskIdList[7]))        && p('1:account,estimate,status') && e('admin,1.00,wait'); // 获取taskID=8的任务团队成员信息
+r(count($taskModel->getTeamByTask($taskIdList[7]))) && p()                            && e('3');               // 获取taskID=8的任务团队成员数量
+r($taskModel->getTeamByTask($taskIdList[8]))        && p('4:account,estimate,status') && e('admin,4.00,wait'); // 获取taskID=9的任务团队成员信息
+r(count($taskModel->getTeamByTask($taskIdList[8]))) && p()                            && e('3');               // 获取taskID=9的任务团队成员数量
+r($taskModel->getTeamByTask($taskIdList[9]))        && p()                            && e('0');               // 获取不存在的taskID=10的任务团队成员信息
+
+r(implode(',', array_keys($taskModel->getTeamByTask($taskIdList[7], 'order_desc')))) && p() && e('3,2,1'); // 获取taskID=8的任务团队成员信息id
+r(implode(',', array_keys($taskModel->getTeamByTask($taskIdList[8], 'order_desc')))) && p() && e('6,5,4'); // 获取taskID=9的任务团队成员信息id

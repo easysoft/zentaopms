@@ -504,6 +504,20 @@ class taskTao extends taskModel
     }
 
     /**
+     * 通过任务ID获取任务团队信息。
+     * Get the task team information through the task ID.
+     *
+     * @param  int       $taskID
+     * @param  string    $orderBy
+     * @access protected
+     * @return object[]
+     */
+    protected function getTeamByTask(int $taskID, string $orderBy = 'order_asc'): array
+    {
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
+    }
+
+    /**
      * 维护团队成员信息。
      * Maintain team member information.
      *

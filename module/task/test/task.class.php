@@ -472,27 +472,6 @@ class taskTest
     }
 
     /**
-     * Test get task info by Id.
-     *
-     * @param  int   $taskID
-     * @access public
-     * @return object
-     */
-    public function getByIdTest($taskID)
-    {
-        $object = $this->objectModel->getById($taskID);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error[0];
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get task info by Id List.
      *
      * @param  int|array|string $taskID
