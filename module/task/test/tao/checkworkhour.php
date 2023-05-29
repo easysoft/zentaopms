@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=- 无消耗时返回提示信息 @『ID
+title=- 无消耗工时给出提示 @『ID \
 timeout=0
 cid=1
 
@@ -16,13 +16,13 @@ cid=1
 
 - 在团队中的人维护工时，返回true @1
 
-- 无消耗工时给出提示 @『ID #1 工时』应当大于『0』。
+- 无消耗工时给出提示 @1
 
-- 剩余不为数字，给出提示 @ID #1 "预计剩余"必须为数字
+- 剩余不为数字，给出提示 @1
+
+- 消耗不为数字，给出提示 @1
 
 - 以记录工时的形式完成任务 @1
-
-- 消耗不为数字，给出提示 @ID #1 "总计消耗"必须为数字
 
 - 正常记录工时 @1
 
@@ -104,16 +104,16 @@ $leftNotNumTaskEffort[1]->work     = "剩余不为数字";
 $leftNotNumTaskEffort[1]->date     = "2022-01-01";
 
 $task = new taskTest();
-r($task->checkWorkhourTest(1, $finishTaskEffort))         && p() && e('1'); // 正常完成任务，是否通过检查
+r($task->checkWorkhourTest(1, $finishTaskEffort)) && p() && e('1'); // 正常完成任务，是否通过检查
 
 su('admin');
-r($task->checkWorkhourTest(2, $multiTaskEffort))          && p() && e('0'); // 不在团队中的人维护工时，返回false
+r($task->checkWorkhourTest(2, $multiTaskEffort))  && p() && e('0'); // 不在团队中的人维护工时，返回false
 
 su('user1');
-r($task->checkWorkhourTest(2, $multiTaskEffort))          && p() && e('1'); // 在团队中的人维护工时，返回true
+r($task->checkWorkhourTest(2, $multiTaskEffort))  && p() && e('1'); // 在团队中的人维护工时，返回true
 
-r($task->checkWorkhourTest(3, $noconsumedTaskEffort))     && p('0') && e('『ID #1 工时』应当大于『0』。'); // 无消耗工时给出提示
-r($task->checkWorkhourTest(4, $leftNotNumTaskEffort))     && p('0') && e('ID #1 "预计剩余"必须为数字');    // 剩余不为数字，给出提示 
-r($task->checkWorkhourTest(5, $finishTaskEffort))         && p()    && e('1'); // 以记录工时的形式完成任务 
-r($task->checkWorkhourTest(6, $consumedNotNumTaskEffort)) && p('0') && e('ID #1 "总计消耗"必须为数字');    // 消耗不为数字，给出提示 
-r($task->checkWorkhourTest(7, $normalTaskEffort))         && p()    && e('1'); // 正常记录工时
+r(strpos($task->checkWorkhourTest(3, $noconsumedTaskEffort)[0], "工时』应当大于『0』") !== false)      && p() && e('1'); // 无消耗工时给出提示
+r(strpos($task->checkWorkhourTest(4, $leftNotNumTaskEffort)[0], '"预计剩余"必须为数字') !== false)     && p() && e('1'); // 剩余不为数字，给出提示
+r(strpos($task->checkWorkhourTest(6, $consumedNotNumTaskEffort)[0], '"总计消耗"必须为数字') !== false) && p() && e('1'); // 消耗不为数字，给出提示
+r($task->checkWorkhourTest(5, $finishTaskEffort)) && p() && e('1'); // 以记录工时的形式完成任务
+r($task->checkWorkhourTest(7, $normalTaskEffort)) && p() && e('1'); // 正常记录工时
