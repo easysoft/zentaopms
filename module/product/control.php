@@ -824,6 +824,7 @@ class product extends control
     public function track(int $productID, string $branch = '', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        if(is_bool($branch)) $branch = (string)(int)$branch;
 
         /* Set menu. The projectstory module does not execute. */
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
