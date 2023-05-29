@@ -1827,19 +1827,6 @@ class taskModel extends model
     }
 
     /**
-     * 通过任务ID列表查询任务团队信息。
-     * Get task team by id list.
-     *
-     * @param  array    $taskIdList
-     * @access public
-     * @return object[]
-     */
-    public function getTeamMembersByIdList(array $taskIdList): array
-    {
-        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task');
-    }
-
-    /**
      * Check operate effort.
      *
      * @param  object    $task
