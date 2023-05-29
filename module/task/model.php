@@ -1565,16 +1565,16 @@ class taskModel extends model
      * 通过任务ID列表批量获取任务信息。
      * Get the task information from the task ID list.
      *
-     * @param  array    $taskIDList
+     * @param  array    $taskIdList
      * @access public
      * @return object[]
      */
-    public function getByIdList(array $taskIDList = array()): array
+    public function getByIdList(array $taskIdList = array()): array
     {
         if(empty($taskIdList)) return array();
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->in($taskIDList)
+            ->andWhere('id')->in($taskIdList)
             ->fetchAll('id');
     }
 
