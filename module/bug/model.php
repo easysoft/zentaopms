@@ -344,12 +344,12 @@ class bugModel extends model
 
             if($module->owner and isset($users[$module->owner])) return $module->owner;
 
-            $moduleIDList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
-            krsort($moduleIDList);
-            if($moduleIDList)
+            $moduleIdList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
+            krsort($moduleIdList);
+            if($moduleIdList)
             {
-                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIDList)->andWhere('deleted')->eq(0)->fetchAll('id');
-                foreach($moduleIDList as $moduleID)
+                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+                foreach($moduleIdList as $moduleID)
                 {
                     if(isset($modules[$moduleID]))
                     {
@@ -1202,15 +1202,15 @@ class bugModel extends model
      * @param  int       $account
      * @param  bool      $appendProduct
      * @param  int       $limit
-     * @param  array     $skipProductIDList
-     * @param  array     $skipExecutionIDList
+     * @param  array     $skipProductIdList
+     * @param  array     $skipExecutionIdList
      * @param  int|array $appendBugID
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipExecutionIDList = array(), $appendBugID = 0)
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIdList = array(), $skipExecutionIdList = array(), $appendBugID = 0)
     {
-        $deletedProjectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
+        $deletedProjectIdList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
 
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
@@ -1219,9 +1219,9 @@ class bugModel extends model
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.status')->ne('closed')
-            ->beginIF(!empty($deletedProjectIDList))->andWhere('t1.execution')->notin($deletedProjectIDList)->fi()
-            ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
-            ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
+            ->beginIF(!empty($deletedProjectIdList))->andWhere('t1.execution')->notin($deletedProjectIdList)->fi()
+            ->beginIF(!empty($skipProductIdList))->andWhere('t1.product')->notin($skipProductIdList)->fi()
+            ->beginIF(!empty($skipExecutionIdList))->andWhere('t1.execution')->notin($skipExecutionIdList)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!empty($appendBugID))->orWhere('t1.id')->in($appendBugID)->fi()
@@ -1722,16 +1722,16 @@ class bugModel extends model
         $datas = $this->dao->select('openedBuild AS name, COUNT(openedBuild) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
-        foreach($datas as $buildIDList => $data)
+        foreach($datas as $buildIdList => $data)
         {
-            if(is_int($buildIDList)) continue;
-            if(strpos(trim($buildIDList, ','), ',') === false) continue;
+            if(is_int($buildIdList)) continue;
+            if(strpos(trim($buildIdList, ','), ',') === false) continue;
 
-            $openedBuildIDList = explode(',', $buildIDList);
+            $openedBuildIdList = explode(',', $buildIdList);
 
             /* Bug 可以关联多个影响版本，一个版本被多个 bug 关联时，累加 bug 数量。*/
             /* Bugs can be associated with multiple builds. When a build is associated with multiple bugs, accumulated bugs.*/
-            foreach($openedBuildIDList as $buildID)
+            foreach($openedBuildIdList as $buildID)
             {
                 if(!isset($datas[$buildID]))
                 {
@@ -1743,7 +1743,7 @@ class bugModel extends model
                 $datas[$buildID]->value += $data->value;
             }
 
-            unset($datas[$buildIDList]);
+            unset($datas[$buildIdList]);
         }
 
         /* 统计最后一次查询的所属产品列表。*/
