@@ -206,7 +206,7 @@ class taskZen extends task
         /* Assign. */
         $this->view->executionID    = $executionID;
         $this->view->tasks          = $tasks;
-        $this->view->teams          = $this->task->getTeamMembersByIdList($this->post->taskIDList);
+        $this->view->teams          = $this->task->getTeamMembersByIdList($this->post->taskIdList);
         $this->view->executionTeams = $this->execution->getMembersByIdList($executionIdList);
         $this->view->executionName  = zget($execution, 'name', '');
         $this->view->executionType  = zget($execution, 'type', '');
@@ -533,7 +533,7 @@ class taskZen extends task
             $task = $this->processTaskByStatus($task, $oldTask);
             if($task->assignedTo) $task->assignedDate = $now;
 
-            unset($task->taskIDList);
+            unset($task->taskIdList);
         }
 
         $this->checkBatchEditTask($taskData, $oldTasks);

@@ -216,7 +216,7 @@ class task extends control
             return $this->send($response);
         }
 
-        if(!$this->post->taskIDList) $this->locate($this->session->taskList);
+        if(!$this->post->taskIdList) $this->locate($this->session->taskList);
 
         $this->taskZen->assignBatchEditVars($executionID);
     }
@@ -263,10 +263,10 @@ class task extends control
      */
     public function batchChangeModule(int $moduleID)
     {
-        if($this->post->taskIDList)
+        if($this->post->taskIdList)
         {
-            $taskIDList = array_unique($this->post->taskIDList);
-            $this->task->batchChangeModule($taskIDList, $moduleID);
+            $taskIdList = array_unique($this->post->taskIdList);
+            $this->task->batchChangeModule($taskIdList, $moduleID);
 
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
@@ -286,9 +286,9 @@ class task extends control
     {
         if(!empty($_POST))
         {
-            if(!is_array($this->post->taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}"), 'parent'));
+            if(!is_array($this->post->taskIdList)) return print(js::locate($this->createLink('execution', 'task', "executionID={$executionID}"), 'parent'));
 
-            $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIDList, $this->post->assignedTo);
+            $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIdList, $this->post->assignedTo);
             foreach($taskData as $task)
             {
                 /* Assign task. */
@@ -838,9 +838,9 @@ class task extends control
      */
     public function batchCancel()
     {
-        if($this->post->taskIDList)
+        if($this->post->taskIdList)
         {
-            $taskIDList = array_unique($this->post->taskIDList);
+            $taskIdList = array_unique($this->post->taskIdList);
 
             $tasks = $this->task->getByIdList($taskIDList);
             foreach($tasks as $task)
@@ -868,7 +868,7 @@ class task extends control
         $skipTasks      = array();
         $parentTasks    = array();
         $skipTaskIdList = explode(',', $skipTaskIdList);
-        $taskIdList     = $this->post->taskIDList ? array_unique($this->post->taskIDList) : $skipTaskIdList;
+        $taskIdList     = $this->post->taskIdList ? array_unique($this->post->taskIdList) : $skipTaskIdList;
         if(!empty($taskIdList))
         {
             $tasks = $this->task->getByIdList($taskIdList);

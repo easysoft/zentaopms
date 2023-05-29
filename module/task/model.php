@@ -1571,7 +1571,7 @@ class taskModel extends model
      */
     public function getByIdList(array $taskIDList = array()): array
     {
-        if(empty($taskIDList)) return array();
+        if(empty($taskIdList)) return array();
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($taskIDList)
@@ -2820,7 +2820,7 @@ class taskModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('taskIDList', array($task->id => '')) . html::a(helper::createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));
+                    echo html::checkbox('taskIdList', array($task->id => '')) . html::a(helper::createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));
                 }
                 else
                 {
