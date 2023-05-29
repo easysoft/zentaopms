@@ -1131,13 +1131,13 @@ class productModel extends model
         /* Attach statistic data. */
         $product->stories    = $this->productTao->getStoryStatusCountByID($productID, $storyType);
         $product->plans      = $this->productTao->getStatCountByID(TABLE_PRODUCTPLAN,    $productID);
-        $product->releases   = $this->productTao->getStatCountByID(TABLE_BUILD,          $productID);
-        $product->builds     = $this->productTao->getStatCountByID(TABLE_CASE,           $productID);
-        $product->cases      = $this->productTao->getStatCountByID(TABLE_BUG,            $productID);
-        $product->projects   = $this->productTao->getStatCountByID(TABLE_DOC,            $productID);
-        $product->executions = $this->productTao->getStatCountByID(TABLE_RELEASE,        $productID);
-        $product->bugs       = $this->productTao->getStatCountByID(TABLE_PROJECTPRODUCT, $productID);
-        $product->docs       = $this->productTao->getStatCountByID('executions',         $productID);
+        $product->builds     = $this->productTao->getStatCountByID(TABLE_BUILD,          $productID);
+        $product->cases      = $this->productTao->getStatCountByID(TABLE_CASE,           $productID);
+        $product->bugs       = $this->productTao->getStatCountByID(TABLE_BUG,            $productID);
+        $product->docs       = $this->productTao->getStatCountByID(TABLE_DOC,            $productID);
+        $product->releases   = $this->productTao->getStatCountByID(TABLE_RELEASE,        $productID);
+        $product->projects   = $this->productTao->getStatCountByID(TABLE_PROJECTPRODUCT, $productID);
+        $product->executions = $this->productTao->getStatCountByID('executions',         $productID);
         $product->progress   = $this->productTao->getStatCountByID('progress',           $productID);
 
         return $product;
