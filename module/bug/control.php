@@ -761,6 +761,8 @@ class bug extends control
             return $this->send($this->bugZen->responseAfterBatchEdit($toTaskIdList));
         }
 
+        $_POST['bugIdList'] = array(21826, 21827, 21828);
+
         /* If there is no bug ID, return to the previous step. */
         if(!$this->post->bugIdList) $this->locate($this->session->bugList);
 

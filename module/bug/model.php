@@ -230,21 +230,22 @@ class bugModel extends model
     }
 
     /**
+     * 获取激活的未转为bug和任务的 bugs。
      * Get active bugs.
      *
-     * @param  array    $products
-     * @param  int      $branch
-     * @param  array    $executions
-     * @param  array    $excludeBugs
-     * @param  object   $pager
+     * @param  array|int  $products
+     * @param  int|string $branch
+     * @param  string     $executions
+     * @param  array      $excludeBugs
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getActiveBugs($products, $branch, $executions, $excludeBugs, $pager = null)
+    public function getActiveBugs(array|int $products, int|string $branch, string $executions, array $excludeBugs, object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
-            ->andWhere('tostory')->eq(0)
+            ->andWhere('toStory')->eq(0)
             ->andWhere('toTask')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
             ->beginIF($branch !== '' and $branch !== 'all')->andWhere('branch')->in("0,$branch")->fi()
