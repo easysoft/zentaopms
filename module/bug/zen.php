@@ -491,6 +491,88 @@ class bugZen extends bug
     }
 
     /**
+     * 批量创建bug前处理上传图片。
+     * Before batch creating bugs, process the uploaded images.
+     *
+     * @param  object      $bug
+     * @param  string      $uploadImage
+     * @param  array|bool  $bugImagesFiles
+     * @access protected
+     * @return array|false
+     */
+    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
+    {
+        /* When the bug is created by uploading an image, add the image to the step of the bug. */
+        if(!empty($uploadImage))
+        {
+            $this->loadModel('file');
+
+            $file     = $bugImagesFiles[$uploadImage];
+            $realPath = $file['realpath'];
+
+            if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+            {
+                if(in_array($file['extension'], $this->config->file->imageExtensions))
+                {
+                    $file['addedBy']    = $this->app->user->account;
+                    $file['addedDate']  = helper::now();
+                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+
+                    $fileID = $this->dao->lastInsertID();
+                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
+                }
+            }
+            else
+            {
+                unset($file);
+            }
+        }
+
+        return !empty($file) ? $file : false;
+    }
+
+    /**
+     * 批量创建bug后的其他处理。
+     * Processing after batch creation of bug.
+     *
+     * @param  object     $bug
+     * @param  array      $output
+     * @param  string     $uploadImage
+     * @param  array|bool $file
+     * @access protected
+     * @return bool
+     */
+    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array|bool $file): bool
+    {
+        /* If bug has the execution, update kanban data. */
+        if($bug->execution)
+        {
+            /* Get lane id, remove laneID from bug.  */
+            $laneID = !empty($bug->laneID) ? $bug->laneID : zget($output, 'laneID', 0);
+            unset($bug->laneID);
+
+            $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
+            if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
+
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
+            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
+        }
+
+        /* When the bug is created by uploading the image, add the image to the file of the bug. */
+        if(!empty($uploadImage) and !empty($file))
+        {
+            $file['objectType'] = 'bug';
+            $file['objectID']   = $bug->id;
+            $file['addedBy']    = $this->app->user->account;
+            $file['addedDate']  = helper::now();
+            $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+            unset($file);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * 在弹窗中操作后的返回。
      * Respond after operating in modal.
      *
@@ -549,16 +631,6 @@ class bugZen extends bug
     {
         $bugID    = $bug->id;
         $todoID   = isset($output['todoID']) ? $output['todoID'] : 0;
-
-        /* Add score for create. */
-        if(empty($bug->case))
-        {
-            $this->loadModel('score')->create('bug', 'create', $bugID);
-        }
-        else
-        {
-            $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
-        }
 
         if($todoID)
         {
@@ -1522,31 +1594,40 @@ class bugZen extends bug
      * 批量创建bug后返回响应。
      * Response after batch create.
      *
-     * @param int $productID
-     * @param string $branch
-     * @param int $executionID
-     * @param array $actions
+     * @param int        $productID
+     * @param string     $branch
+     * @param int        $executionID
+     * @param array      $bugIDList
+     * @param string     $message
      * @access protected
      * @return void
      */
-    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $actions)
+    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIDList, string $message = '')
     {
+        helper::setcookie('bugModule', '0', 0);
+
+        /* Remove upload image file and session. */
+        if(!empty($this->post->uploadImage) and !empty($this->session->bugImagesFile))
+        {
+            $classFile = $this->app->loadClass('zfile');
+            $file      = current($_SESSION['bugImagesFile']);
+            $realPath  = dirname($file['realpath']);
+            if(is_dir($realPath)) $classFile->removeDir($realPath);
+            unset($_SESSION['bugImagesFile']);
+        }
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         /* Return bug id list when call the API. */
-        if($this->viewType == 'json')
-        {
-            $bugIDList = array_keys($actions);
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $bugIDList);
-        }
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIDList));
 
         /* Respond after updating in modal. */
-        if(isonlybody() && $executionID) $this->responseInModal($executionID);
+        if(isonlybody() && $executionID) return $this->responseInModal($executionID);
 
         /* If link from no head then reload. */
-        if(isonlybody()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc"));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc")));
     }
 
     /**

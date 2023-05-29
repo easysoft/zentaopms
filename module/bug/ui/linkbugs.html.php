@@ -13,8 +13,8 @@ namespace zin;
 foreach($bugs2Link as $bug)
 {
     $bug->productName = zget($products, $bug->product);
-    $bug->openedBy    = zget($users, $bug->openedBy); 
-    $bug->assignedTo  = zget($users, $bug->assignedTo); 
+    $bug->openedBy    = zget($users, $bug->openedBy);
+    $bug->assignedTo  = zget($users, $bug->assignedTo);
 }
 
 $cols = array_values($config->bug->linkBugs->dtable->fieldList);

@@ -92,9 +92,12 @@ foreach($browserList as $browser)
 }
 
 $mailtoList = '';
-foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account)
+if(!empty($bug->mailto))
 {
-    $mailtoList .= ' ' . zget($users, $account);
+    foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account)
+    {
+        $mailtoList .= ' ' . zget($users, $account);
+    }
 }
 
 $linkBugs = array();

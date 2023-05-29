@@ -56,9 +56,9 @@ class bugModel extends model
      */
     public function create(object $bug, string $action = 'Opened'): int|false
     {
-        $this->dao->insert(TABLE_BUG)->data($bug)
+        $this->dao->insert(TABLE_BUG)->data($bug, 'laneID')
             ->autoCheck()
-            ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
+            ->checkIF(!empty($bug->notifyEmail), 'notifyEmail', 'email')
             ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
@@ -69,58 +69,17 @@ class bugModel extends model
 
         $this->loadModel('action')->create('bug', $bugID, $action);
 
-        return $bugID;
-    }
-
-    /**
-     * 批量创建bug
-     * Batch create bugs.
-     *
-     * @param  int        $productID
-     * @param  array      $extra
-     * @param  array|bool $extra
-     * @access public
-     * @return array
-     */
-    public function batchCreate(array $bugs, int $productID, array $output = array(), array|bool $uploadImages = false, array|bool $bugImagesFiles = false)
-    {
-        /* Load module and init vars. */
-        $this->loadModel('action');
-        if(!empty($uploadImages)) $this->loadModel('file');
-
-        $actions = array();
-        foreach($bugs as $index => $bug)
+        /* Add score for create. */
+        if(!empty($bug->case))
         {
-            /* Get lane id, remove laneID from bug.  */
-            $laneID = !empty($bug->laneID) ? $bug->laneID : zget($output, 'laneID', 0);
-            unset($bug->laneID);
-
-            $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
-
-            $file = $this->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
-
-            /* Create a bug. */
-            $this->dao->insert(TABLE_BUG)->data($bug)
-                ->autoCheck()
-                ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
-                ->checkFlow()
-                ->exec();
-            if(dao::isError()) return false;
-
-            $bug->id = $this->dao->lastInsertID();
-
-            /* Processing other operations after batch creation. */
-            $actions[$bug->id] = $this->afterBatchCreate($bug, $laneID, $output, $uploadImage, $file);
-
-            if(dao::isError())
-            {
-                dao::$errors['message'][] = 'bug#' . ($index) . dao::getError(true);
-                return false;
-            }
+            $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+        }
+        else
+        {
+            $this->loadModel('score')->create('bug', 'create', $bugID);
         }
 
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
-        return $actions;
+        return $bugID;
     }
 
     /**
@@ -2696,91 +2655,6 @@ class bugModel extends model
         }
 
         return $index;
-    }
-
-    /**
-     * 批量创建bug前处理上传图片。
-     * Before batch creating bugs, process the uploaded images.
-     *
-     * @param  object      $bug
-     * @param  string      $uploadImage
-     * @param  array|bool  $bugImagesFiles
-     * @access protected
-     * @return array|false
-     */
-    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
-    {
-        /* When the bug is created by uploading an image, add the image to the step of the bug. */
-        if(!empty($uploadImage))
-        {
-            $this->loadModel('file');
-
-            $file     = $bugImagesFiles[$uploadImage];
-            $realPath = $file['realpath'];
-
-            if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
-            {
-                if(in_array($file['extension'], $this->config->file->imageExtensions))
-                {
-                    $file['addedBy']    = $this->app->user->account;
-                    $file['addedDate']  = helper::now();
-                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
-
-                    $fileID = $this->dao->lastInsertID();
-                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                }
-            }
-            else
-            {
-                unset($file);
-            }
-        }
-
-        return !empty($file) ? $file : false;
-    }
-
-    /**
-     * 批量创建bug后的其他处理。
-     * Processing after batch creation of bug.
-     *
-     * @param  object     $bug
-     * @param  int        $laneID
-     * @param  array      $output
-     * @param  string     $uploadImage
-     * @param  array|bool $file
-     * @access protected
-     * @return int|bool
-     */
-    protected function afterBatchCreate(object $bug, int $laneID, array $output, string $uploadImage, array|bool $file): int|bool
-    {
-        /* Record log. */
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Opened');
-
-        $this->loadModel('score')->create('bug', 'create', $bug->id);
-
-        $this->executeHooks($bug->id);
-
-        /* If bug has the execution, update kanban data. */
-        if($bug->execution)
-        {
-            $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
-            if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
-
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
-            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
-        }
-
-        /* When the bug is created by uploading the image, add the image to the file of the bug. */
-        if(!empty($uploadImage) and !empty($file))
-        {
-            $file['objectType'] = 'bug';
-            $file['objectID']   = $bug->id;
-            $file['addedBy']    = $this->app->user->account;
-            $file['addedDate']  = helper::now();
-            $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
-            unset($file);
-        }
-        return $actionID;
     }
 
     /**

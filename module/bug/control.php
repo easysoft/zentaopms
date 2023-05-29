@@ -670,7 +670,6 @@ class bug extends control
 
         /* Assign. */
         $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
-        $this->view->bug       = $bug;
         $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->pager     = $pager;
@@ -702,23 +701,29 @@ class bug extends control
             $bugs = $this->bugZen->checkBugsForBatchCreate($bugs, $productID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Batch create bugs. */
-            $actions = $this->bug->batchCreate($bugs, $productID, $output, $this->post->uploadImage, $this->session->bugImagesFile);
-
-            helper::setcookie('bugModule', 0, 0);
-
-            /* Remove upload image file and session. */
-            if(!empty($this->post->uploadImage) and !empty($this->session->bugImagesFile))
+            $uploadImages   = $this->post->uploadImage;
+            $bugImagesFiles = $this->session->bugImagesFile;
+            $bugIDList      = array();
+            $message        = '';
+            foreach($bugs as $index => $bug)
             {
-                $classFile = $this->app->loadClass('zfile');
-                $file      = current($_SESSION['bugImagesFile']);
-                $realPath  = dirname($file['realpath']);
-                if(is_dir($realPath)) $classFile->removeDir($realPath);
-                unset($_SESSION['bugImagesFile']);
-            }
+                $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
 
-            $response = $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $actions ? $actions : array());
-            return $this->send($response);
+                $file = $this->bugZen->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
+
+                $bug->id = $this->bug->create($bug);
+
+                /* Processing other operations after batch creation. */
+                $this->bugZen->afterBatchCreate($bug, $output, $uploadImage, $file);
+                $message = $this->executeHooks($bug->id);
+
+                $bugIDList[] = $bug->id;
+            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('score')->create('ajax', 'batchCreate');
+
+            if(!$message) $message = $this->lang->saveSuccess;
+            return $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $bugIDList, $message);
         }
 
         /* Get product, then set menu. */
