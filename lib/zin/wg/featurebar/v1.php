@@ -59,6 +59,8 @@ class featureBar extends wg
             if(isset($lang->$currentModule->moreSelects[$currentMethod][$item->name])) $moreSelects = $lang->$currentModule->moreSelects[$currentMethod][$item->name];
             if(!empty($moreSelects))
             {
+                $activeText = $item->text;
+
                 $subItems = array();
                 $callback = $this->prop('moreMenuLinkCallback');
                 $callback = isset($callback[0]) ? $callback[0] : null;
@@ -72,12 +74,17 @@ class featureBar extends wg
                         'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link),
                         'attrs'  => ['data-id' => $key, 'data-load' => 'table']
                     );
-                    if($key === $current) $isActive = true;
+
+                    if($key === $current)
+                    {
+                        $isActive   = true;
+                        $activeText = $text;
+                    }
                 }
 
                 $items[] = array
                 (
-                    'text'   => $item->text,
+                    'text'   => $activeText,
                     'active' => $isActive,
                     'type'   => 'dropdown',
                     'caret'  => 'down',
