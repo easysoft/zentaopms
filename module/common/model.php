@@ -719,6 +719,7 @@ class commonModel extends model
                     $isOnlyBody = true;
                     $attr       = "class='iframe' data-width='75%'";
                     break;
+                default:
             }
 
             $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', "$attr data-app=''") . '</li>';
