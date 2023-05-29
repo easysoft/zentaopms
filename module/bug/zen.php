@@ -1386,41 +1386,6 @@ class bugZen extends bug
     }
 
     /**
-     * 处理关闭bug页面的请求数据。
-     * Prepare close request data.
-     *
-     * @param  object $data
-     * @param  int    $bugID
-     * @access protected
-     * @return object
-     */
-    protected function prepareCloseExtras(object $data, int $bugID): object
-    {
-        $bug = $data->add('id', $bugID)
-            ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
-            ->get();
-
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
-        return $bug;
-    }
-
-    /**
-     * 构建关闭bug页面。
-     * Build the page of close bug.
-     *
-     * @param  object $bug
-     * @access protected
-     * @return void
-     */
-    protected function buildCloseForm(object $bug)
-    {
-        $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('noletter');
-        $this->view->actions = $this->action->getList('bug', $bug->id);
-        $this->display();
-    }
-
-    /**
      * Check bug execution priv.
      *
      * @param  object    $bug

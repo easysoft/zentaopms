@@ -380,7 +380,7 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($kanbanData, 'regionID', 0);
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
+            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
         }
 
         $bug = $this->bug->getByID($bugID);
@@ -437,7 +437,7 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($output, 'regionID', 0);
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
+            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
         }
 
         /* Remove 'Convert to story' from the solution list. */
@@ -481,7 +481,7 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $regionID = zget($kanbanParams, 'regionID', 0);
-            return $this->send($this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID));
+            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
         }
 
         $this->checkBugExecutionPriv($oldBug);
@@ -508,32 +508,28 @@ class bug extends control
      */
     public function close(int $bugID, string $extra = '')
     {
-        $oldBug = $this->bug->getByID((int)$bugID);
+        $oldBug = $this->bug->getByID($bugID);
 
         if(!empty($_POST))
         {
-            $data = form::data($this->config->bug->form->close);
-
-            $bug = $this->bugZen->prepareCloseExtras($data, $bugID);
-            $this->bug->close($bug);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
             parse_str($extra, $output);
-            if($oldBug->execution)
-            {
-                $this->loadModel('kanban');
-                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
-                if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
-            }
 
-            $this->executeHooks($bugID);
+            $bug = form::data($this->config->bug->form->close)->add('id', $bugID)->get();
+            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
 
-            return $this->send($this->bugZen->responseAfterOperate($bugID));
+            $changes = $this->bug->close($bug, $output);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $regionID = zget($output, 'regionID', 0);
+            return $this->bugZen->responseAfterOperate($bugID, $changes, '', $regionID);
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
-        $this->bugZen->buildCloseForm($oldBug);
+        $this->view->bug     = $oldBug;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions = $this->loadModel('action')->getList('bug', $oldBug->id);
+        $this->display();
     }
 
     /**

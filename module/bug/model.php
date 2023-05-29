@@ -911,7 +911,9 @@ class bugModel extends model
         }
 
         $bug->activatedCount = $oldBug->activatedCount + 1;
+
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        if(dao::isError()) return false;
 
         /* Update build. */
         $solveBuild = $this->dao->select('id, bugs')->from(TABLE_BUILD)->where("FIND_IN_SET('{$bug->id}', bugs)")->limit(1)->fetch();
@@ -947,30 +949,33 @@ class bugModel extends model
      *
      * @param  object $bug
      * @access public
-     * @return bool
+     * @return array|false
      */
-    public function close(object $bug): bool
+    public function close(object $bug, array $output): array|false
     {
         $oldBug = $this->getById($bug->id);
 
-        $this->dao->update(TABLE_BUG)
-            ->data($bug, 'comment')
-            ->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq($bug->id)
-            ->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        if(dao::isError()) return false;
 
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         $changes = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed');
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $this->post->comment);
         if($changes) $this->action->logHistory($actionID, $changes);
+
+        if($oldBug->execution)
+        {
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bug->id);
+            if(isset($output['toColID'])) $this->kanban->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        }
 
         /* 给原bug的抄送人发送完消息后，再处理它。 */
         /* After sending a message to the cc of the original bug, then process with it. */
         $this->dao->update(TABLE_BUG)->set('assignedTo')->eq('closed')->where('id')->eq($bug->id)->exec();
 
-        return !dao::isError();
+        return $changes;
     }
 
     /**

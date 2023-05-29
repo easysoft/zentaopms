@@ -82,7 +82,6 @@ $config->bug->form->close['lastEditedBy']   = array('required' => false, 'type' 
 $config->bug->form->close['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->close['closedBy']       = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
 $config->bug->form->close['closedDate']     = array('required' => false, 'type' => 'date',   'default' => helper::now());
-$config->bug->form->close['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->assignTo = array();
 $config->bug->form->assignTo['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
