@@ -90,7 +90,7 @@ toolbar
 sidebar
 (
    // moduleMenu(set(array(
-   //     'modules'   => $moduleTree,
+   //     'modules'   => $modules,
    //     'activeKey' => $moduleID,
    //     'closeLink' => $this->createLink('execution', 'task')
    // )))
@@ -122,11 +122,11 @@ foreach($tasks as &$task)
 
 $firstTask            = reset($tasks);
 $canBatchEdit         = common::hasPriv('firstTask', 'batchEdit', !empty($firstTask) ? $firstTask : null);
-$canBatchClose        = (common::hasPriv('firstTask', 'batchClose', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'closed');
-$canBatchCancel       = (common::hasPriv('firstTask', 'batchCancel', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'cancel');
+$canBatchClose        = common::hasPriv('firstTask', 'batchClose', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'closed';
+$canBatchCancel       = common::hasPriv('firstTask', 'batchCancel', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'cancel';
 $canBatchAssignTo     = common::hasPriv('firstTask', 'batchAssignTo', !empty($firstTask) ? $firstTask : null);
 $canBatchChangeModule = common::hasPriv('firstTask', 'batchChangeModule', !empty($firstTask) ? $firstTask : null);
-$canBatchAction       = ($canBatchEdit || $canBatchClose || $canBatchCancel || $canBatchChangeModule || $canBatchAssignTo);
+$canBatchAction       = in_array(true, array($canBatchEdit, $canBatchClose, $canBatchCancel, $canBatchChangeModule, $canBatchAssignTo));
 
 $footToolbar = array();
 if($canBatchAction)
