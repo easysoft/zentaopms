@@ -679,25 +679,34 @@ class storyTao extends storyModel
         }
     }
 
-    protected function doCreateURRelations(int $storyID, object $story): void
+    /**
+     * 创建用户需求和软件需求的关联关系。
+     * Do create UR and SR relations.
+     *
+     * @param  int       $storyID
+     * @param  array     $URList
+     * @access protected
+     * @return void
+     */
+    protected function doCreateURRelations(int $storyID, array $URList): void
     {
-        if(empty($storyID) || empty($story->URS) || !is_array($story->URS)) return;
+        if(empty($storyID) || empty($URList)) return;
 
-        $requirements  = $this->getByList($story->URS, 'requirement');
-        $data          = new stdclass();
-        $data->product = $story->product;
-        foreach($story->URS as $URID)
+        $requirements = $this->getByList($URList, 'requirement');
+        $data         = new stdclass();
+        foreach($URList as $URID)
         {
             if(!isset($requirements[$URID])) continue;
 
             $requirement    = $requirements[$URID];
+            $data->product  = $requirement->product;
             $data->AType    = 'requirement';
             $data->BType    = 'story';
             $data->relation = 'subdivideinto';
             $data->AID      = $URID;
             $data->BID      = $storyID;
             $data->AVersion = $requirement->version;
-            $data->BVersion = $story->version;
+            $data->BVersion = 1;
             $data->extra    = 1;
 
             $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
@@ -707,7 +716,7 @@ class storyTao extends storyModel
             $data->relation = 'subdividedfrom';
             $data->AID      = $storyID;
             $data->BID      = $URID;
-            $data->AVersion = $story->version;
+            $data->AVersion = 1;
             $data->BVersion = $requirement->version;
 
             $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
