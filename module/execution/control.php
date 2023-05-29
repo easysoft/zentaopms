@@ -2659,8 +2659,6 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        $projectID = $this->loadModel('task')->getProjectID($execution->id);
-
         $taskToOpen = $this->cookie->taskToOpen ? $this->cookie->taskToOpen : 0;
         helper::setcookie('taskToOpen', 0, 0);
 
@@ -2677,8 +2675,8 @@ class execution extends control
         $this->view->productNames     = $productNames;
         $this->view->productNum       = count($products);
         $this->view->branchID         = $branchID;
-        $this->view->projectID        = $projectID;
-        $this->view->project          = $this->loadModel('project')->getByID($projectID);
+        $this->view->projectID        = $execution->project;
+        $this->view->project          = $this->loadModel('project')->getByID($execution->project);
         $this->view->allPlans         = $allPlans;
         $this->view->features         = $features;
         $this->view->kanbanData       = $kanbanData;
