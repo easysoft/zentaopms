@@ -885,7 +885,7 @@ class block extends control
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
-        $pager = pager::init(0, $count , 1);
+        $pager = pager::init(0, $count, 1);
 
         $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
         $productIdList = array();
@@ -966,7 +966,7 @@ class block extends control
         }
 
         $today  = helper::today();
-        $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $monday = date('Ymd', strtotime($this->weekly->getThisMonday($today)));
         $tasks  = $this->dao->select("project,
             sum(consumed) as totalConsumed,
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
@@ -977,12 +977,13 @@ class block extends control
             ->groupBy('project')
             ->fetchAll('project');
 
+        $this->app->loadClass('pager', $static = true);
+
         foreach($projects as $projectID => $project)
         {
             if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
             {
-                $this->app->loadClass('pager', $static = true);
-                $pager = pager::init(0, 3, 1);
+                $pager = pager::init(0, 1, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
             }
@@ -1008,7 +1009,6 @@ class block extends control
         }
 
         $this->view->projects = $projects;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
     }
 
     /**
@@ -1533,10 +1533,6 @@ class block extends control
     public function printProjectDynamicBlock()
     {
         $projectID = $this->session->project;
-
-        $executions = $this->loadModel('execution')->getPairs($projectID);
-        $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $count      = isset($this->params->count) ? (int)$this->params->count : 10;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
