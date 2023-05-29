@@ -246,7 +246,7 @@ formBatchPanel
     on::change('[data-name="project"]', 'loadProductExecutionsByProject'),
     on::change('[data-name="execution"]', 'loadExecutionBuilds'),
     on::change('[data-name="region"]', 'setLane'),
-    formHidden('product', $productID),
+    formHidden('product', $product->id),
 );
 
 render();

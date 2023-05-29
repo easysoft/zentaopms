@@ -365,11 +365,11 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
-            ->checkIF($bug->resolvedBy, 'resolution',  'notempty')
-            ->checkIF($bug->closedBy,   'resolution',  'notempty')
-            ->checkIF($bug->notifyEmail,'notifyEmail', 'email')
-            ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
-            ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
+            ->checkIF(!empty($bug->resolvedBy), 'resolution',  'notempty')
+            ->checkIF(!empty($bug->closedBy),   'resolution',  'notempty')
+            ->checkIF(!empty($bug->notifyEmail),'notifyEmail', 'email')
+            ->checkIF(!empty($bug->resolution) && $bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+            ->checkIF(!empty($bug->resolution) && $bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->checkFlow()
             ->where('id')->eq($bug->id)
             ->exec();
@@ -725,50 +725,6 @@ class bugModel extends model
             if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
         }
         return $allChanges;
-    }
-
-    /**
-     * 批量修改bug计划。
-     * Batch change the plan of bug.
-     *
-     * @param  array  $bugIdList
-     * @param  int    $planID
-     * @access public
-     * @return void
-     */
-    public function batchChangePlan(array $bugIdList, int $planID): void
-    {
-        $this->loadModel('action');
-        $oldBugs     = $this->getByIdList($bugIdList);
-        $unlinkPlans = array();
-        $link2Plans  = array();
-        foreach($bugIdList as $bugID)
-        {
-            $oldBug = $oldBugs[$bugID];
-            if($planID == $oldBug->plan) continue;
-
-            /* Bugs link to plans and bugs unlink to plans. */
-            $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
-            $link2Plans[$planID]        = empty($link2Plans[$planID]) ? $bugID : "{$link2Plans[$planID]},$bugID";
-
-            /* Update bug plan. */
-            $bug = new stdclass();
-            $bug->plan = $planID;
-            $this->bugTao->updateByID((int)$bugID, $bug);
-            if(!dao::isError())
-            {
-                $changes  = common::createChanges($oldBug, $bug);
-                $actionID = $this->action->create('bug', $bugID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-        }
-
-        /* Record plan action. */
-        if(!dao::isError())
-        {
-            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
-            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
-        }
     }
 
     /**

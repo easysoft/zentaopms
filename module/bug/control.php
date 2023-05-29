@@ -696,15 +696,13 @@ class bug extends control
         if(!empty($_POST))
         {
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $this->session->bugImagesFile);
-
-            /* Check bugs. */
             $bugs = $this->bugZen->checkBugsForBatchCreate($bugs, $productID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message        = '';
+            $bugIDList      = array();
             $uploadImages   = $this->post->uploadImage;
             $bugImagesFiles = $this->session->bugImagesFile;
-            $bugIDList      = array();
-            $message        = '';
             foreach($bugs as $index => $bug)
             {
                 $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
@@ -735,10 +733,8 @@ class bug extends control
         $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $this->session->bugImagesFile);
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
-        $this->view->users     = $this->user->getPairs('devfirst|noclosed');
         $this->view->moduleID  = $moduleID;
         $this->view->product   = $product;
-        $this->view->productID = $product->id;
         $this->display();
     }
 
@@ -826,6 +822,7 @@ class bug extends control
                 $this->action->logHistory($actionID, $changes);
             }
         }
+
         $this->loadModel('score')->create('ajax', 'batchOther');
         return array('load' => $this->session->bugList, 'closeModal' => true);
     }
@@ -851,6 +848,7 @@ class bug extends control
 
                 $this->bug->update($bug);
             }
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
@@ -867,13 +865,14 @@ class bug extends control
      */
     public function batchChangePlan(int $planID)
     {
-        if($this->post->bugIDList)
+        if(!empty($_POST) && isset($_POST['bugIdList']))
         {
-            $bugIdList = array_unique($this->post->bugIDList);
-            $this->bug->batchChangePlan($bugIdList, $planID);
+            $bugIdList = array_unique($this->post->bugIdList);
+            $this->bugZen->batchChangePlan($bugIdList, $planID);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
         return array('load' => $this->session->bugList, 'closeModal' => true);
     }
 
@@ -898,6 +897,7 @@ class bug extends control
             {
                 $bug->id         = (int)$bugID;
                 $bug->assignedTo = $assignedTo;
+
                 $this->bug->assign($bug);
             }
 
@@ -932,6 +932,7 @@ class bug extends control
                 $bug->id         = (int)$bugID;
                 $bug->confirmed  = 1;
                 $bug->assignedTo = $this->app->user->account;
+
                 $this->bug->confirm($bug);
                 $message = $this->executeHooks($bugID);
             }

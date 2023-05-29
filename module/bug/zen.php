@@ -2279,4 +2279,45 @@ class bugZen extends bug
 
         return $bugs;
     }
+
+    /**
+     * 批量修改bug计划。
+     * Batch change the plan of bug.
+     *
+     * @param  array  $bugIdList
+     * @param  int    $planID
+     * @access public
+     * @return bool
+     */
+    protected function batchChangePlan(array $bugIdList, int $planID): bool
+    {
+        $oldBugs     = $this->bug->getByIdList($bugIdList);
+        $unlinkPlans = array();
+        $link2Plans  = array();
+        foreach($bugIdList as $bugID)
+        {
+            $oldBug = $oldBugs[$bugID];
+            if($planID == $oldBug->plan) continue;
+
+            /* Bugs link to plans and bugs unlink to plans. */
+            $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+            $link2Plans[$planID]        = empty($link2Plans[$planID])        ? $bugID : "{$link2Plans[$planID]},$bugID";
+
+            /* Update bug plan. */
+            $bug = new stdclass();
+            $bug->id   = $bugID;
+            $bug->plan = $planID;
+
+            $this->bug->update($bug);
+        }
+
+        if(dao::isError()) return false;
+
+        /* Record plan action. */
+        $this->loadModel('action');
+        foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+        foreach($link2Plans as $planID => $bugs)  $this->action->create('productplan', $planID, 'linkbug',   '', $bugs);
+
+        return !dao::isError();
+    }
 }
