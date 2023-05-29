@@ -147,22 +147,13 @@ $config->task->dtable->fieldList['activatedDate']['width'] = '90';
 $config->task->dtable->fieldList['activatedDate']['type']  = 'date';
 
 $config->task->dtable->fieldList['story']['title'] = $lang->task->storyAB;
-$config->task->dtable->fieldList['story']['name']  = 'story';
+$config->task->dtable->fieldList['story']['name']  = 'storyTitle';
 $config->task->dtable->fieldList['story']['width'] = '80';
-$config->task->dtable->fieldList['story']['type']  = 'category';
 
 $config->task->dtable->fieldList['mailto']['title'] = $lang->task->mailto;
 $config->task->dtable->fieldList['mailto']['name']  = 'mailto';
 $config->task->dtable->fieldList['mailto']['width'] = '100';
 $config->task->dtable->fieldList['mailto']['type']  = 'user';
-
-$config->task->dtable->fieldList['module']['title'] = $lang->task->module;
-$config->task->dtable->fieldList['module']['name']  = 'module';
-$config->task->dtable->fieldList['module']['type']  = 'category';
-
-$config->task->dtable->fieldList['desc']['title'] = $lang->task->desc;
-$config->task->dtable->fieldList['desc']['name']  = 'desc';
-$config->task->dtable->fieldList['desc']['type']  = 'desc';
 
 $config->task->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->task->dtable->fieldList['actions']['name']  = 'actions';
