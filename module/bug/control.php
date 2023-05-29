@@ -73,7 +73,7 @@ class bug extends control
                 $products = $this->product->getPairs($mode, $programID = 0, $append = '', $shadow = 'all');
             }
 
-            if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID"));
         }
         else
         {
