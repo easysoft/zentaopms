@@ -11,7 +11,7 @@
  */
 class commonModel extends model
 {
-    static public $requestErrors = array();
+    public static $requestErrors = array();
 
     /**
      * The construc method, to do some auto things.
@@ -1929,7 +1929,7 @@ EOF;
      * @access public
      * @return void
      */
-    static public function printRPN($backLink, $preAndNext = '', $linkTemplate = '')
+    public static function printRPN($backLink, $preAndNext = '', $linkTemplate = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
@@ -1965,7 +1965,7 @@ EOF;
      * @access public
      * @return void
      */
-    static public function printBack($backLink, $class = '', $misc = '')
+    public static function printBack($backLink, $class = '', $misc = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
@@ -3398,21 +3398,21 @@ EOF;
     /**
      * Get relations for two object.
      *
-     * @param  string  $AType
-     * @param  int     $AID
-     * @param  string  $BType
-     * @param  int     $BID
+     * @param  string  $aType
+     * @param  int     $aID
+     * @param  string  $bType
+     * @param  int     $bID
      *
      * @access public
      * @return array
      */
-    public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)
+    public function getRelations($aType = '', $aID = 0, $bType = '', $bID = 0)
     {
         return $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq($AType)
-            ->andWhere('AID')->eq($AID)
-            ->andwhere('BType')->eq($BType)
-            ->beginif($BID)->andwhere('BID')->eq($BID)->fi()
+            ->where('AType')->eq($aType)
+            ->andWhere('AID')->eq($aID)
+            ->andwhere('BType')->eq($bType)
+            ->beginif($BID)->andwhere('BID')->eq($bID)->fi()
             ->fetchAll();
     }
 
@@ -3479,7 +3479,7 @@ EOF;
 
         $tab          = $app->tab;
         $varsReplaced = true;
-        foreach($lang->menu as $menuKey => $menu)
+        foreach($lang->menu as $menu)
         {
             if(isset($menu['link']) and strpos($menu['link'], '%s') !== false) $varsReplaced = false;
             if(!isset($menu['link']) and is_string($menu) and strpos($menu, '%s') !== false) $varsReplaced = false;
@@ -3511,7 +3511,7 @@ EOF;
      * @param  int     $objectID
      * @param  array   $params
      */
-    static public function setMenuVarsEx($menu, $objectID, $params = array())
+    public static function setMenuVarsEx($menu, $objectID, $params = array())
     {
         if(is_array($menu))
         {
@@ -3537,18 +3537,18 @@ EOF;
      * @access public
      * @return string
      */
-    static public function processMarkdown($markdown)
+    public static function processMarkdown($markdown)
     {
         if(empty($markdown)) return false;
 
         global $app;
         $app->loadClass('parsedownextraplugin');
 
-        $Parsedown = new parsedownextraplugin;
+        $parsedown = new parsedownextraplugin;
 
-        $Parsedown->voidElementSuffix = '>'; // HTML5
+        $parsedown->voidElementSuffix = '>'; // HTML5
 
-        return $Parsedown->text($markdown);
+        return $parsedown->text($markdown);
     }
 
     /**
@@ -3601,6 +3601,7 @@ EOF;
     {
         global $lang;
         if(empty($lang->db->custom)) return;
+
         foreach($lang->db->custom as $moduleName => $sectionMenus)
         {
             if(strpos($moduleName, 'Menu') === false) continue;
@@ -3612,41 +3613,60 @@ EOF;
             {
                 foreach($menus as $key => $value)
                 {
-                    /* Get second menu. */
-                    if($isSecondMenu)
-                    {
-                        $isDropMenu = strpos($section, 'DropMenu') !== false;
-                        if(!$isDropMenu)
-                        {
-                            if(!isset($lang->{$moduleName}->{$section})) break;
-                            if(is_object($lang->{$moduleName}->{$section}) and isset($lang->{$moduleName}->{$section}->{$key})) $settingMenu = &$lang->{$moduleName}->{$section}->{$key};
-                            if(is_array($lang->{$moduleName}->{$section})  and isset($lang->{$moduleName}->{$section}[$key]))   $settingMenu = &$lang->{$moduleName}->{$section}[$key];
-                        }
-                        else
-                        {
-                            /* Get drop menu in second menu. */
-                            $dropMenuKey = str_replace('DropMenu', '', $section);
-                            if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) break;
-                            $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
-                        }
-                    }
-                    /* Get third menu. */
-                    elseif(isset($lang->{$moduleName}->menu->{$section}['subMenu']))
-                    {
-                        $subMenu = $lang->{$moduleName}->menu->{$section}['subMenu'];
-                        if(is_object($subMenu) and isset($subMenu->{$key})) $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu']->{$key};
-                        if(is_array($subMenu)  and isset($subMenu[$key]))   $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu'][$key];
-                    }
-
-                    /* Set custom menu lang. */
-                    if(!empty($settingMenu))
-                    {
-                        if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
-                        if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
-                        unset($settingMenu);
-                    }
+                    static::replaceSubMenuLang($isSecondMenu, $moduleName, $section, $key, $value);
                 }
             }
+        }
+    }
+
+    /**
+     * Replace submenu lang.
+     *
+     * @param  bool   $isSecondMenu
+     * @param  string $moduleName
+     * @param  string $section
+     * @param  string $key
+     * @param  string $value
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function replaceSubMenuLang($isSecondMenu, $moduleName, $section, $key, $value)
+    {
+        global $lang;
+
+        /* Get second menu. */
+        if($isSecondMenu)
+        {
+            $isDropMenu = strpos($section, 'DropMenu') !== false;
+            if(!$isDropMenu)
+            {
+                if(!isset($lang->{$moduleName}->{$section})) return;
+                if(is_object($lang->{$moduleName}->{$section}) and isset($lang->{$moduleName}->{$section}->{$key})) $settingMenu = &$lang->{$moduleName}->{$section}->{$key};
+                if(is_array($lang->{$moduleName}->{$section})  and isset($lang->{$moduleName}->{$section}[$key]))   $settingMenu = &$lang->{$moduleName}->{$section}[$key];
+            }
+            else
+            {
+                /* Get drop menu in second menu. */
+                $dropMenuKey = str_replace('DropMenu', '', $section);
+                if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) return;
+                $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
+            }
+        }
+        /* Get third menu. */
+        elseif(isset($lang->{$moduleName}->menu->{$section}['subMenu']))
+        {
+            $subMenu = $lang->{$moduleName}->menu->{$section}['subMenu'];
+            if(is_object($subMenu) and isset($subMenu->{$key})) $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu']->{$key};
+            if(is_array($subMenu)  and isset($subMenu[$key]))   $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu'][$key];
+        }
+
+        /* Set custom menu lang. */
+        if(!empty($settingMenu))
+        {
+            if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
+            if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
+            unset($settingMenu);
         }
     }
 
