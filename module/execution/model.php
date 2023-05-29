@@ -1900,16 +1900,6 @@ class executionModel extends model
             $executionQuery = preg_replace('/(`\w*`)/', 't1.$1',$executionQuery);
         }
 
-        /* Get involved executions. */
-        $myExecutionIDList = array();
-        if($browseType == 'involved')
-        {
-            $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
-                ->where('account')->eq($this->app->user->account)
-                ->andWhere('type')->eq('execution')
-                ->fetchPairs();
-        }
-
         $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
@@ -2036,8 +2026,9 @@ class executionModel extends model
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $limit
-     * @param  string  $pairs
-     * @param  int     $appenedID
+     * @param  bool    $pairs
+     * @param  bool    $devel
+     * @param  int     $appendedID
      * @access public
      * @return array
      */
