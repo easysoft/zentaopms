@@ -1222,8 +1222,6 @@ function entityLabel()
 
 /**
  * Zentao table data widget.
- *
- * array items
  */
 function tableData()
 {

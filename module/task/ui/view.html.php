@@ -51,17 +51,40 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    set::items
+                    item
                     (
-                        array(
-                            array('name' => $lang->task->execution,  'value' => $execution->name),
-                            array('name' => $lang->task->module,     'value' => ''),
-                            array('name' => $lang->task->assignedTo, 'value' => $task->assignedTo ? $task->assignedToRealName : $lang->noData),
-                            array('name' => $lang->task->type,       'value' => zget($this->lang->task->typeList, $task->type, $task->type)),
-                            array('name' => $lang->task->status,     'value' => $this->processStatus('task', $task)),
-                            array('name' => $lang->task->progress,   'value' => $task->progress . ' %'),
-                            array('name' => $lang->task->pri,        'value' => array('wg' => 'priLabel', 'pri' => '1'))
-                        )
+                        set::name($lang->task->execution),
+                        $execution->name
+                    ),
+                    item
+                    (
+                        set::name($lang->task->module),
+                        ''
+                    ),
+                    item
+                    (
+                        set::name($lang->task->assignedTo),
+                        $task->assignedTo ? $task->assignedToRealName : $lang->noData
+                    ),
+                    item
+                    (
+                        set::name($lang->task->type),
+                        zget($this->lang->task->typeList, $task->type, $task->type)
+                    ),
+                    item
+                    (
+                        set::name($lang->task->status),
+                        $this->processStatus('task', $task)
+                    ),
+                    item
+                    (
+                        set::name($lang->task->progress),
+                        $task->progress . ' %'
+                    ),
+                    item
+                    (
+                        set::name($lang->task->pri),
+                        priLabel(1)
                     )
                 )
             ),
@@ -71,16 +94,35 @@ detailBody
                 set::title($lang->task->legendLife),
                 tableData
                 (
-                    set::items
+                    item
                     (
-                        array(
-                            array('name' => $lang->task->openedBy,     'value' => $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData),
-                            array('name' => $lang->task->finishedBy,   'value' => $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData),
-                            array('name' => $lang->task->canceledBy,   'value' => $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : $lang->noData),
-                            array('name' => $lang->task->closedBy,     'value' => $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : $lang->noData),
-                            array('name' => $lang->task->closedReason, 'value' => $task->closedReason ? $lang->task->reasonList[$task->closedReason] : $lang->noData),
-                            array('name' => $lang->task->lastEdited,   'value' => $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : $lang->noData)
-                        )
+                        set::name($lang->task->openedBy),
+                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData
+                    ),
+                    item
+                    (
+                        set::name($lang->task->finishedBy),
+                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData
+                    ),
+                    item
+                    (
+                        set::name($lang->task->canceledBy),
+                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : $lang->noData,
+                    ),
+                    item
+                    (
+                        set::name($lang->task->closedBy),
+                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : $lang->noData,
+                    ),
+                    item
+                    (
+                        set::name($lang->task->closedReason),
+                        $task->closedReason ? $lang->task->reasonList[$task->closedReason] : $lang->noData
+                    ),
+                    item
+                    (
+                        set::name($lang->task->lastEdited),
+                        $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : $lang->noData
                     ),
                 )
             ),
@@ -94,17 +136,36 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    set::items
+                    item
                     (
-                        array(
-                            array('name' => $lang->task->estimate,    'value' => $task->estimate . $lang->workingHour),
-                            array('name' => $lang->task->consumed,    'value' => round($task->consumed, 2) . $lang->workingHour),
-                            array('name' => $lang->task->left,        'value' => $task->left . $lang->workingHour),
-                            array('name' => $lang->task->estStarted,  'value' => $task->estStarted),
-                            array('name' => $lang->task->realStarted, 'value' => helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19)),
-                            array('name' => $lang->task->deadline,    'value' => $task->deadline),
-                        )
-                    )
+                        set::name($lang->task->estimate),
+                        $task->estimate . $lang->workingHour
+                    ),
+                    item
+                    (
+                        set::name($lang->task->consumed),
+                        round($task->consumed, 2) . $lang->workingHour,
+                    ),
+                    item
+                    (
+                        set::name($lang->task->left),
+                        $task->left . $lang->workingHour
+                    ),
+                    item
+                    (
+                        set::name($lang->task->estStarted),
+                        $task->estStarted
+                    ),
+                    item
+                    (
+                        set::name($lang->task->realStarted),
+                        helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19),
+                    ),
+                    item
+                    (
+                        set::name($lang->task->deadline),
+                        $task->deadline
+                    ),
                 )
             ),
             tabPane
@@ -113,12 +174,15 @@ detailBody
                 set::title($lang->task->legendMisc),
                 tableData
                 (
-                    set::items
+                    item
                     (
-                        array(
-                            array('name' => $lang->task->linkMR,     'value' => $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData),
-                            array('name' => $lang->task->linkCommit, 'value' => $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData),
-                        )
+                        set::name($lang->task->linkMR),
+                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData
+                    ),
+                    item
+                    (
+                        set::name($lang->task->linkCommit),
+                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData
                     )
                 )
             )
