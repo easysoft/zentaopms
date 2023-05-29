@@ -15,7 +15,7 @@ $config->task->dtable->fieldList['name']['fixed']    = 'left';
 $config->task->dtable->fieldList['name']['flex']     = 1;
 $config->task->dtable->fieldList['name']['maxWidth'] = 300;
 $config->task->dtable->fieldList['name']['type']     = 'nestedTitle';
-$config->task->dtable->fieldList['name']['link']     = helper::createLink('task', 'view', 'taskID = {id}');
+$config->task->dtable->fieldList['name']['link']     = helper::createLink('task', 'view', 'taskID={id}');
 
 $config->task->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->task->dtable->fieldList['pri']['name']  = 'pri';
