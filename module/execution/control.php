@@ -1098,7 +1098,7 @@ class execution extends control
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
         }
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
 

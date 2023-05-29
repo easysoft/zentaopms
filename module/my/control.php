@@ -1163,7 +1163,7 @@ EOF;
         $bugs    = $bugIdList    ? $this->loadModel('bug')->getByIdList($bugIdList) : array();
         $stories = $storyIdList  ? $this->loadModel('story')->getByList($storyIdList) : array();
         $todos   = $todoIdList   ? $this->loadModel('todo')->getByList($todoIdList) : array();
-        $tasks   = $taskIdList   ? $this->loadModel('task')->getByList($taskIdList) : array();
+        $tasks   = $taskIdList   ? $this->loadModel('task')->getByIdList($taskIdList) : array();
         $tickets = $ticketIdList ? $this->loadModel('ticket')->getByList($ticketIdList) : array();
 
         $products = $this->loadModel('product')->getPairs();

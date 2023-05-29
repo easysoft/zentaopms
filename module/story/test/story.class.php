@@ -461,7 +461,7 @@ class storyTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        return $tester->loadModel('task')->getByList($taskIdList);
+        return $tester->loadModel('task')->getByIdList($taskIdList);
     }
 
     /**
