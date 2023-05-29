@@ -715,9 +715,6 @@ class commonModel extends model
                     $params = "parentProgramID=0&extra=from=global";
                     break;
                 case 'kanbanspace':
-                    $isOnlyBody = true;
-                    $attr       = "class='iframe' data-width='75%'";
-                    break;
                 case 'kanban':
                     $isOnlyBody = true;
                     $attr       = "class='iframe' data-width='75%'";
@@ -915,7 +912,7 @@ class commonModel extends model
      */
     public static function printHomeButton($tab)
     {
-        global $lang, $config, $app;
+        global $lang, $app;
 
         if(!$tab) return;
         if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
@@ -1558,10 +1555,10 @@ class commonModel extends model
      */
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
-        global $lang, $app;
+        global $app;
         if(empty($module)) $module = isset($app->rawModule) ? $app->rawModule : $app->getModuleName();
         if(empty($method)) $method = isset($app->rawMethod) ? $app->rawMethod : $app->getMethodName();
-        $className = 'header';
+
         $isMobile  = $app->viewType === 'mhtml';
 
         $order = explode('_', $orderBy);
