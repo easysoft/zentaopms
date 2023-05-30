@@ -33,19 +33,19 @@ class tree extends control
         {
             $this->product->setMenu($rootID, $branch, 0, '', $viewType);
         }
-        else if($this->app->tab == 'qa' and $viewType != 'caselib')
+        elseif($this->app->tab == 'qa' and $viewType != 'caselib')
         {
             $products = $this->product->getPairs('noclosed');
             $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
-        else if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
+        elseif($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
         {
             $this->loadModel('project')->setMenu($this->session->project);
 
             $products = $this->product->getProducts($this->session->project, 'all', '', false);
             if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
-        else if($this->app->tab == 'feedback')
+        elseif($this->app->tab == 'feedback')
         {
             $branch   = 'all';
             $products = $this->loadModel('feedback')->getGrantProducts();
@@ -283,7 +283,7 @@ class tree extends control
             }
         }
         /* viewType is workflow building category. */
-        else if(strpos($viewType, '_') !== false)
+        elseif(strpos($viewType, '_') !== false)
         {
             $params = explode('_', $viewType);
             if(count($params) == 2)
@@ -396,7 +396,7 @@ class tree extends control
         {
             $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
         }
-        else if($type != 'chart')
+        elseif($type != 'chart')
         {
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch|nodeleted');
         }

@@ -547,7 +547,7 @@ class searchModel extends model
             $pairs = 'id,title';
             $table = TABLE_STORY;
         }
-        else if($module == 'task')
+        elseif($module == 'task')
         {
             $pairs = 'id,name';
             $table = TABLE_TASK;

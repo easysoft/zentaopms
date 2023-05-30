@@ -168,7 +168,7 @@ class screenModel extends model
                     $groupComponent = $this->getLatestChart($groupComponent);
                 }
             }
-            else if($component)
+            elseif($component)
             {
                 $component = $this->getLatestChart($component);
             }
@@ -249,7 +249,7 @@ class screenModel extends model
                 $component->option->yAxis = new stdclass();
                 $component->option->yAxis->show = false;
             }
-            else if($type == 'pivot')
+            elseif($type == 'pivot')
             {
                 $component->option->ineffective = 1;
                 $component->option->header      = array();
@@ -686,7 +686,7 @@ class screenModel extends model
                     {
                         $filter['default'] = null;
                     }
-                    else if(empty($begin) or empty($end))
+                    elseif(empty($begin) or empty($end))
                     {
                         $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
                     }
@@ -1037,7 +1037,7 @@ class screenModel extends model
                     {
                         $value = count($results);
                     }
-                    else if($settings->value->agg === 'sum')
+                    elseif($settings->value->agg === 'sum')
                     {
                         foreach($results as $result)
                         {

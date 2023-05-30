@@ -327,7 +327,7 @@ class caselibModel extends model
                 $link = helper::createLink($module, $method, "libID=%s");
             }
         }
-        else if($module == 'tree')
+        elseif($module == 'tree')
         {
             $link = helper::createLink($module, $method, "libID=%s&type=caselib&currentModuleID=0");
         }

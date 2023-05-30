@@ -1074,7 +1074,7 @@ class bug extends control
                     $bug->id = (int)$bugID;
                     $this->bug->close($bug);
                 }
-                else if($oldBug->status != 'closed')
+                elseif($oldBug->status != 'closed')
                 {
                     $skipBugs[$bugID] = $bugID;
                 }

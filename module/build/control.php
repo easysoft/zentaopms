@@ -637,7 +637,7 @@ class build extends control
             {
                 unset($this->config->product->search['fields']['plan']);
             }
-            else if(!$project->hasProduct and !$project->multiple)
+            elseif(!$project->hasProduct and !$project->multiple)
             {
                 unset($this->config->product->search['fields']['plan']);
             }
@@ -869,7 +869,7 @@ class build extends control
             {
                 unset($this->config->bug->search['fields']['plan']);
             }
-            else if(!$project->hasProduct and !$project->multiple)
+            elseif(!$project->hasProduct and !$project->multiple)
             {
                 unset($this->config->bug->search['fields']['plan']);
             }

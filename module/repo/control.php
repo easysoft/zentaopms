@@ -52,7 +52,7 @@ class repo extends control
         {
             $this->loadModel('project')->setMenu($objectID);
         }
-        else if($tab == 'execution')
+        elseif($tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($objectID);
         }

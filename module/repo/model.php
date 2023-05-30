@@ -1539,7 +1539,7 @@ class repoModel extends model
                 $command = "$client info --username $account --password $password --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache $path 2>&1";
                 if(version_compare($svnVersion, '1.9', '<')) $command = "$client info --username $account --password $password --non-interactive --trust-server-cert --no-auth-cache $path 2>&1";
             }
-            else if(stripos($path, 'file://') === 1)
+            elseif(stripos($path, 'file://') === 1)
             {
                 $command = "$client info --non-interactive --no-auth-cache $path 2>&1";
             }

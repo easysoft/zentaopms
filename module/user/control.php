@@ -962,7 +962,7 @@ class user extends control
                     $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
                     return $this->send($response);
                 }
-                else if($remainTimes <= 3)
+                elseif($remainTimes <= 3)
                 {
                     $response['message'] = sprintf($this->lang->user->lockWarning, $remainTimes);
                     return $this->send($response);

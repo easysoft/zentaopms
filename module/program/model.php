@@ -1608,7 +1608,7 @@ class programModel extends model
                 $menu .= $this->buildMenu('program', 'delete', $params, $program, $type, 'trash', 'hiddenwin', '', '', '', $this->lang->program->delete);
             }
         }
-        else if($program->type == 'project')
+        elseif($program->type == 'project')
         {
             if($program->status == 'wait' || $program->status == 'suspended')
             {

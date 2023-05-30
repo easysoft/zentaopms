@@ -1021,7 +1021,7 @@ class apiModel extends model
             {
                 $normalObjects['project'][$id] = $project->name;
             }
-            else if($project->status == 'done' or $project->status == 'closed')
+            elseif($project->status == 'done' or $project->status == 'closed')
             {
                 $closedObjects['project'][$id] = $project->name;
             }

@@ -763,7 +763,7 @@ class kanbanModel extends model
         {
             $regionIDList = array_keys($regions);
         }
-        else if(!is_array($regionIDList))
+        elseif(!is_array($regionIDList))
         {
             $singleRegion = $regionIDList;
             $regionIDList = array($regionIDList);

@@ -845,7 +845,7 @@ class mrModel extends model
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
             $MR  = json_decode(commonModel::http($url));
         }
-        else if($host->type == 'gitea')
+        elseif($host->type == 'gitea')
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));
@@ -868,7 +868,7 @@ class mrModel extends model
                 $MR->has_conflicts     = empty($diff) ? true : false;
             }
         }
-        else if($host->type == 'gogs')
+        elseif($host->type == 'gogs')
         {
             $url = sprintf($this->loadModel('gogs')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));

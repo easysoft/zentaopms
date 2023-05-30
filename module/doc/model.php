@@ -1752,11 +1752,11 @@ class docModel extends model
                 {
                     $myObjects[$id] = $project->name;
                 }
-                else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+                elseif($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
                 {
                     $normalObjects[$id] = $project->name;
                 }
-                else if($project->status == 'done' or $project->status == 'closed')
+                elseif($project->status == 'done' or $project->status == 'closed')
                 {
                     $closedObjects[$id] = $project->name;
                 }
@@ -1790,11 +1790,11 @@ class docModel extends model
                 {
                     $myObjects[$id] = $execution->name;
                 }
-                else if($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
+                elseif($execution->status != 'done' and $execution->status != 'closed' and !($execution->PM == $this->app->user->account))
                 {
                     $normalObjects[$id] = $execution->name;
                 }
-                else if($execution->status == 'done' or $execution->status == 'closed')
+                elseif($execution->status == 'done' or $execution->status == 'closed')
                 {
                     $closedObjects[$id] = $execution->name;
                 }
@@ -2010,14 +2010,14 @@ class docModel extends model
 
             $iconClass = 'icon-file';
             if(strpos('zip,tar,gz,bz2,rar', $file->extension) !== false) $iconClass = 'icon-file-archive';
-            else if(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
-            else if(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
-            else if(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
-            else if(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
-            else if(strpos('mp3,ogg,wav', $file->extension) !== false) $iconClass = 'icon-file-audio';
-            else if(strpos('avi,mp4,mov', $file->extension) !== false) $iconClass = 'icon-file-video';
-            else if(strpos('txt,md', $file->extension) !== false) $iconClass = 'icon-file-text';
-            else if(strpos('html,htm', $file->extension) !== false) $iconClass = 'icon-globe';
+            elseif(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
+            elseif(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
+            elseif(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
+            elseif(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
+            elseif(strpos('mp3,ogg,wav', $file->extension) !== false) $iconClass = 'icon-file-audio';
+            elseif(strpos('avi,mp4,mov', $file->extension) !== false) $iconClass = 'icon-file-video';
+            elseif(strpos('txt,md', $file->extension) !== false) $iconClass = 'icon-file-text';
+            elseif(strpos('html,htm', $file->extension) !== false) $iconClass = 'icon-globe';
 
             $fileIcon[$file->id] = "<i class='file-icon icon $iconClass'></i>";
         }

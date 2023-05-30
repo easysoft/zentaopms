@@ -1123,7 +1123,7 @@ class fileModel extends model
         {
             return file_exists($file->realPath) ? getimagesize($file->realPath) : array(0, 0, $file->extension);
         }
-        else if($this->config->file->storageType == 's3')
+        elseif($this->config->file->storageType == 's3')
         {
             $this->app->loadClass('ossclient', true);
 

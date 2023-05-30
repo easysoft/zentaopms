@@ -1718,7 +1718,7 @@ EOF;
         {
             $clickable = $extraEnabled;
         }
-        else if(is_object($object))
+        elseif(is_object($object))
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
