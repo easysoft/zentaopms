@@ -35,7 +35,7 @@
           <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->product;?></th>
           <th><?php echo $lang->bug->title;?></th>
-          <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
+          <th class='c-status'><?php echo $lang->bug->abbr->status;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='c-user'><?php echo $lang->assignedToAB;?></th>
         </tr>

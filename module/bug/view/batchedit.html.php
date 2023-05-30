@@ -64,8 +64,8 @@
             <th class='c-os<?php echo zget($visibleFields, 'os', ' hidden') . zget($requiredFields, 'os', '', ' required');?>'><?php echo $lang->bug->os;?></th>
             <th class='c-browser<?php echo zget($visibleFields, 'browser', ' hidden') . zget($requiredFields, 'browser', '', ' required');?>'><?php echo $lang->bug->browser;?></th>
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->bug->keywords;?></th>
-            <th class='c-user<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
-            <th class='c-resolution<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
+            <th class='c-user<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->abbr->resolvedBy;?></th>
+            <th class='c-resolution<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->abbr->resolution;?></th>
             <?php
             $extendFields = $this->bug->getFlowExtendFields();
             foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";

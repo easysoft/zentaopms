@@ -29,7 +29,7 @@ $config->bug->dtable->fieldList['pri']['title'] = $lang->bug->pri;
 $config->bug->dtable->fieldList['pri']['type']  = 'pri';
 
 $config->bug->dtable->fieldList['status']['name']      = 'status';
-$config->bug->dtable->fieldList['status']['title']     = $lang->bug->statusAB;
+$config->bug->dtable->fieldList['status']['title']     = $lang->bug->abbr->status;
 $config->bug->dtable->fieldList['status']['type']      = 'status';
 $config->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 
@@ -54,12 +54,12 @@ $config->bug->dtable->fieldList['plan']['title'] = $lang->bug->plan;
 $config->bug->dtable->fieldList['plan']['width'] = 120;
 
 $config->bug->dtable->fieldList['openedBy']['name']    = 'openedBy';
-$config->bug->dtable->fieldList['openedBy']['title']   = $lang->bug->openedByAB;
+$config->bug->dtable->fieldList['openedBy']['title']   = $lang->bug->abbr->openedBy;
 $config->bug->dtable->fieldList['openedBy']['type']    = 'user';
 $config->bug->dtable->fieldList['openedBy']['userMap'] = array();
 
 $config->bug->dtable->fieldList['openedDate']['name']  = 'openedDate';
-$config->bug->dtable->fieldList['openedDate']['title'] = $lang->bug->openedDateAB;
+$config->bug->dtable->fieldList['openedDate']['title'] = $lang->bug->abbr->openedDate;
 $config->bug->dtable->fieldList['openedDate']['type']  = 'date';
 
 $config->bug->dtable->fieldList['openedBuild']['name']  = 'openedBuild';
@@ -92,7 +92,7 @@ $config->bug->dtable->fieldList['resolution']['title'] = $lang->bug->resolution;
 $config->bug->dtable->fieldList['resolution']['type']  = 'category';
 
 $config->bug->dtable->fieldList['resolvedDate']['name']  = 'assignedDate';
-$config->bug->dtable->fieldList['resolvedDate']['title'] = $lang->bug->resolvedDateAB;
+$config->bug->dtable->fieldList['resolvedDate']['title'] = $lang->bug->abbr->resolvedDate;
 $config->bug->dtable->fieldList['resolvedDate']['type']  = 'date';
 
 $config->bug->dtable->fieldList['resolvedBuild']['name']  = 'resolvedBuild';
@@ -100,7 +100,7 @@ $config->bug->dtable->fieldList['resolvedBuild']['title'] = $lang->bug->resolved
 $config->bug->dtable->fieldList['resolvedBuild']['type']  = 'text';
 
 $config->bug->dtable->fieldList['activatedCount']['name']  = 'activatedCount';
-$config->bug->dtable->fieldList['activatedCount']['title'] = $lang->bug->activatedCountAB;
+$config->bug->dtable->fieldList['activatedCount']['title'] = $lang->bug->abbr->activatedCount;
 $config->bug->dtable->fieldList['activatedCount']['type']  = 'count';
 
 $config->bug->dtable->fieldList['activatedDate']['name']  = 'activatedDate';
@@ -151,7 +151,7 @@ $config->bug->dtable->fieldList['lastEditedBy']['title'] = $lang->bug->lastEdite
 $config->bug->dtable->fieldList['lastEditedBy']['type']  = 'user';
 
 $config->bug->dtable->fieldList['lastEditedDate']['name']  = 'lastEditedDate';
-$config->bug->dtable->fieldList['lastEditedDate']['title'] = $lang->bug->lastEditedDateAB;
+$config->bug->dtable->fieldList['lastEditedDate']['title'] = $lang->bug->abbr->lastEditedDate;
 $config->bug->dtable->fieldList['lastEditedDate']['type']  = 'date';
 
 $config->bug->dtable->fieldList['actions']['name']     = 'actions';
@@ -185,12 +185,12 @@ $config->bug->linkBugs->dtable->fieldList['title']['minWidth'] = '200';
 $config->bug->linkBugs->dtable->fieldList['title']['link']     = helper::createLink('bug', 'view', "bugID={id}");
 
 $config->bug->linkBugs->dtable->fieldList['status']['name']      = 'status';
-$config->bug->linkBugs->dtable->fieldList['status']['title']     = $lang->bug->statusAB;
+$config->bug->linkBugs->dtable->fieldList['status']['title']     = $lang->bug->abbr->status;
 $config->bug->linkBugs->dtable->fieldList['status']['type']      = 'status';
 $config->bug->linkBugs->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 
 $config->bug->linkBugs->dtable->fieldList['openedBy']['name']  = 'openedBy';
-$config->bug->linkBugs->dtable->fieldList['openedBy']['title'] = $lang->bug->openedByAB;
+$config->bug->linkBugs->dtable->fieldList['openedBy']['title'] = $lang->bug->abbr->openedBy;
 $config->bug->linkBugs->dtable->fieldList['openedBy']['type']  = 'user';
 
 $config->bug->linkBugs->dtable->fieldList['assignedTo']['name']  = 'assignedTo';

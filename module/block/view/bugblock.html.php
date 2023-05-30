@@ -28,11 +28,11 @@
         <th class='c-id'><?php echo $lang->idAB?></th>
         <th class='c-name'><?php echo $lang->bug->title;?></th>
         <?php if($longBlock):?>
-        <th class='c-level'><?php echo $lang->bug->severityAB?></th>
+        <th class='c-level'><?php echo $lang->bug->abbr->severity?></th>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <th class='c-date'><?php echo $lang->bug->deadline;?></th>
         <?php endif;?>
-        <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
+        <th class='c-status'><?php echo $lang->bug->abbr->status;?></th>
       </tr>
     </thead>
     <?php

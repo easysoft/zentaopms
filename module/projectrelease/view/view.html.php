@@ -176,9 +176,9 @@
                     <th class='w-100px'>  <?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->status);?></th>
                     <th class='c-build'>  <?php echo $lang->bug->resolvedBuild;?></th>
                     <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-                    <th class='c-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                    <th class='c-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->abbr->openedDate);?></th>
                     <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
-                    <th class='c-date'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+                    <th class='c-date'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->abbr->resolvedDate);?></th>
                     <th class='w-60px'>   <?php echo $lang->actions;?></th>
                   </tr>
                 </thead>
@@ -265,11 +265,11 @@
                       <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                     </th>
                     <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
-                    <th class='w-80px' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+                    <th class='w-80px' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->abbr->severity);?></th>
                     <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->status);?></th>
                     <th class='c-build'><?php echo $lang->bug->openedBuild;?></th>
                     <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                    <th class='c-date'> <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                    <th class='c-date'> <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->abbr->openedDate);?></th>
                     <th class='w-60px'> <?php echo $lang->actions;?></th>
                   </tr>
                 </thead>

@@ -35,10 +35,10 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-severity' title=<?php echo $lang->bug->severity;?>> <?php echo $lang->bug->severityAB;?></th>
+          <th class='c-severity' title=<?php echo $lang->bug->severity;?>> <?php echo $lang->bug->abbr->severity;?></th>
           <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
-          <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
+          <th class='c-status'><?php echo $lang->bug->abbr->status;?></th>
           <th class='c-pri-box <?php echo in_array('pri', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
           <th class='c-assigned-box <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
           <th class='c-estimate-box  <?php echo in_array('estimate', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>

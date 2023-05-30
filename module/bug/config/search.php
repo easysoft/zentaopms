@@ -33,7 +33,7 @@ $config->bug->search['fields']['toStory']        = $lang->bug->toStory;
 
 $config->bug->search['fields']['openedBy']       = $lang->bug->openedBy;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
-$config->bug->search['fields']['lastEditedBy']   = $lang->bug->lastEditedByAB;
+$config->bug->search['fields']['lastEditedBy']   = $lang->bug->abbr->lastEditedBy;
 
 $config->bug->search['fields']['mailto']         = $lang->bug->mailto;
 
@@ -44,7 +44,7 @@ $config->bug->search['fields']['openedDate']     = $lang->bug->openedDate;
 $config->bug->search['fields']['assignedDate']   = $lang->bug->assignedDate;
 $config->bug->search['fields']['resolvedDate']   = $lang->bug->resolvedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
-$config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDateAB;
+$config->bug->search['fields']['lastEditedDate'] = $lang->bug->abbr->lastEditedDate;
 $config->bug->search['fields']['deadline']       = $lang->bug->deadline;
 $config->bug->search['fields']['activatedDate']  = $lang->bug->activatedDate;
 

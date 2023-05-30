@@ -56,15 +56,15 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
-          <th class='c-severity' title='<?php echo $lang->bug->severity;?>'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='c-severity' title='<?php echo $lang->bug->severity;?>'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->abbr->severity);?></th>
           <th class='c-pri' title='<?php echo $lang->bug->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
 
           <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->bug->type);?></th>
           <th class='c-product'><?php common::printOrderLink('product', $orderBy, $vars, $lang->bug->product);?></th>
           <?php if($type != 'openedBy'): ?>
-          <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->bug->openedByAB);?></th>
+          <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->bug->abbr->openedBy);?></th>
           <?php endif;?>
-          <th class='c-confirm' title='<?php echo $lang->bug->confirmedAB;?>'><?php common::printOrderLink('confirmed', $orderBy, $vars, $lang->bug->confirmedAB);?></th>
+          <th class='c-confirm' title='<?php echo $lang->bug->abbr->confirmed;?>'><?php common::printOrderLink('confirmed', $orderBy, $vars, $lang->bug->abbr->confirmed);?></th>
           <?php if($app->rawMethod == 'work'):?>
           <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->bug->deadline);?></th>
           <?php endif;?>
@@ -74,7 +74,7 @@
           <?php if($type != 'resolvedBy'): ?>
           <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <?php endif;?>
-          <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+          <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->abbr->resolution);?></th>
           <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
