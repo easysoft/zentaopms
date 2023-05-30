@@ -1597,7 +1597,7 @@ class taskModel extends model
      * @access public
      * @return object[]
      */
-    public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = "id_desc", int $projectID = 0): array
+    public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
 
@@ -1614,20 +1614,19 @@ class taskModel extends model
     }
 
     /**
-     * Get tasks pairs of a user.
+     * 获取指派给用户的任务 id:name 数组。
+     * Get the task id:name array assigned to the user.
      *
-     * @param  string    $account
-     * @param  string    $status
-     * @param  array     $skipExecutionIDList
-     * @param  int|array $appendTaskID
+     * @param  string  $account
+     * @param  string  $status
+     * @param  array   $skipExecutionIDList
+     * @param  array   $appendTaskID
      * @access public
      * @return array
      */
-    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array(), $appendTaskID = 0)
+    public function getUserTaskPairs(string $account, string $status = 'all', array $skipExecutionIDList = array(), array $appendTaskID = array()): array
     {
-        $deletedProjectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
-
-        $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
+        $tasks = $this->dao->select('t1.id, t1.name, t2.name as executionName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.assignedTo')->eq($account)
@@ -1637,15 +1636,12 @@ class taskModel extends model
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
             ->beginIF(!empty($appendTaskID))->orWhere('t1.id')->in($appendTaskID)->fi()
-            ->beginIF(!empty($deletedProjectIDList))->andWhere('t1.execution')->notin($deletedProjectIDList)->fi()
-            ->query();
+            ->fetchAll('id');
 
-        $tasks = array();
-        while($task = $stmt->fetch())
-        {
-            $tasks[$task->id] = $task->execution . ' / ' . $task->name;
-        }
-        return $tasks;
+        $taskPairs = array();
+        foreach($tasks as $task) $taskPairs[$task->id] = $task->executionName . ' / ' . $task->name;
+
+        return $taskPairs;
     }
 
     /**
