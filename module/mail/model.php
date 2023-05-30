@@ -305,8 +305,8 @@ class mailModel extends model
 
             if(!$toList and !$ccList) return;
             if(!$toList and $ccList) $toList = array(array_shift($ccList));
-            $toList = join(',', $toList);
-            $ccList = join(',', $ccList);
+            $toList = implode(',', $toList);
+            $ccList = implode(',', $ccList);
 
             /* Get realname and email of users. */
             $this->loadModel('user');
@@ -354,7 +354,7 @@ class mailModel extends model
         if($this->config->mail->mta == 'smtp') $this->mta->smtpClose();
 
         /* save errors. */
-        if($this->isError()) $this->app->saveError(2, join(' ', $this->errors), __FILE__, __LINE__, true);
+        if($this->isError()) $this->app->saveError(2, implode(' ', $this->errors), __FILE__, __LINE__, true);
 
         $message = ob_get_contents();
         ob_end_clean();
@@ -524,8 +524,8 @@ class mailModel extends model
         if(!$toList and !$ccList) return;
         if(!$toList and $ccList) $toList = array(array_shift($ccList));
 
-        $toList = join(',', $toList);
-        $ccList = join(',', $ccList);
+        $toList = implode(',', $toList);
+        $ccList = implode(',', $ccList);
         if(empty($toList) or empty($subject)) return true;
 
         $data = new stdclass();
@@ -688,7 +688,6 @@ class mailModel extends model
 
         /* Load module and get vars. */
         $this->loadModel('action');
-        $users      = $this->loadModel('user')->getPairs('noletter');
         $action     = $this->action->getById($actionID);
         $history    = $this->action->getHistory($actionID);
         $objectType = $action->objectType;
@@ -696,19 +695,15 @@ class mailModel extends model
         $nameFields = $this->config->action->objectNameFields[$objectType];
         $title      = zget($object, $nameFields, '');
         $subject    = $this->getSubject($objectType, $object, $title, $action->action);
-        $domain     = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : zget($this->config->mail, 'domain', common::getSysURL());
 
         if($objectType == 'review' and empty($object->auditedBy)) return;
 
-        if($objectType == 'doc')
+        if($objectType == 'doc' && $object->contentType == 'markdown')
         {
-            if($object->contentType == 'markdown')
-            {
-                $object->content = commonModel::processMarkdown($object->content);
-                $object->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $object->content);
-                $object->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $object->content);
-                $object->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $object->content);
-            }
+            $object->content = commonModel::processMarkdown($object->content);
+            $object->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $object->content);
+            $object->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $object->content);
+            $object->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $object->content);
         }
 
         $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
@@ -723,13 +718,12 @@ class mailModel extends model
             }
         }
 
-        if($objectType == 'meeting') $rooms = $this->loadModel('meetingroom')->getpairs();
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         /* Get mail content. */
         if($objectType == 'kanbancard') $objectType = 'kanban';
 
-        $modulePath = $this->app->getModulePath($appName = '', $objectType);
+        $modulePath = $this->app->getModulePath('', $objectType);
         $oldcwd     = getcwd();
         $viewFile   = $modulePath . 'view/sendmail.html.php';
         chdir($modulePath . 'view');
@@ -799,7 +793,7 @@ class mailModel extends model
                 $this->send($toList, $subject, $mailContent, $ccList);
             }
         }
-        if($this->isError()) error_log(join("\n", $this->getError()));
+        if($this->isError()) error_log(implode("\n", $this->getError()));
     }
 
     /**

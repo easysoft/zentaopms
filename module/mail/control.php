@@ -314,7 +314,7 @@ class mail extends control
             if($this->mail->isError())
             {
                 $data->status = 'fail';
-                $data->failReason = join("\n", $this->mail->getError());
+                $data->failReason = implode("\n", $this->mail->getError());
             }
             $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
@@ -360,7 +360,7 @@ class mail extends control
         if($this->mail->isError())
         {
             $data->status     = 'fail';
-            $data->failReason = join("\n", $this->mail->getError());
+            $data->failReason = implode("\n", $this->mail->getError());
         }
         $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
@@ -421,7 +421,7 @@ class mail extends control
         if($confirm == 'no')
         {
             if(empty($_POST)) return print(js::reload('parent'));
-            $idList = join('|', $this->post->mailIDList);
+            $idList = implode('|', $this->post->mailIDList);
 
             $confirmLink  = inlink('batchDelete', "confirm=yes");
             $confirmLink .= strpos($confirmLink, '?') === false ? '?' : '&';
@@ -465,14 +465,14 @@ class mail extends control
                 $result = $this->mail->syncSendCloud($action, $email, $realnameAndEmail->realname);
                 if(!$result->result)
                 {
-                    echo(js::alert($this->lang->mail->sendCloudFail . str_replace("'", '"', $result->message) . "(CODE: $result->statusCode)"));
+                    echo js::alert($this->lang->mail->sendCloudFail . str_replace("'", '"', $result->message) . "(CODE: $result->statusCode)");
                     return print(js::reload('parent'));
                 }
 
                 $actionedEmail[$email] = $email;
             }
 
-            echo(js::alert($this->lang->mail->sendCloudSuccess));
+            echo js::alert($this->lang->mail->sendCloudSuccess);
             return print(js::reload('parent'));
         }
 
