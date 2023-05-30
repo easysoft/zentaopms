@@ -16,7 +16,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$executionID}&status={key}"),
+    set::linkParams("executionID={$execution->id}&status={key}"),
     li(searchToggle(set::module('task')))
 );
 
@@ -26,14 +26,15 @@ $canBatchCreate = hasPriv('task', 'batchCreate');
 $canImportTask  = hasPriv('task', 'importTask');
 $canImportBug   = hasPriv('task', 'importBug');
 
+$this->loadModel('task');
 if(common::canModify('execution', $execution))
 {
     $params          = isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "";
-    $batchCreateLink = $this->createLink('task', 'batchCreate', "executionID={$executionID}{$params}");
-    $createLink      = $this->createLink('task', 'create',      "executionID={$executionID}{$params}");
+    $batchCreateLink = $this->createLink('task', 'batchCreate', "executionID={$execution->id}{$params}");
+    $createLink      = $this->createLink('task', 'create',      "executionID={$execution->id}{$params}");
     if(commonModel::isTutorialMode())
     {
-        $wizardParams   = helper::safe64Encode("executionID={$executionID}{$params}");
+        $wizardParams   = helper::safe64Encode("executionID={$execution->id}{$params}");
         $taskCreateLink = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
     }
 
@@ -53,13 +54,13 @@ toolbar
     (
         'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
+        'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
         'icon'        => 'export',
         'class'       => 'ghost',
-        'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type={$browseType}"),
+        'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,
     (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
@@ -169,7 +170,7 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($memberPairs as $account => $name)
         {
-            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$executionID}&assignedTo={$account}"));
+            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
         }
 
         menu
@@ -186,7 +187,7 @@ if($canBatchAction)
         $footToolbar['items'][] = array(
             'type'  => 'btn-group',
             'items' => array(
-                array('text' => $lang->edit, 'class' => "btn primary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('task', 'batchEdit', "executionID={$executionID}")),
+                array('text' => $lang->edit, 'class' => "btn primary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
                 array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
             )
         );
