@@ -274,7 +274,7 @@ class convert extends control
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
-                if(!$this->convert->checkDBName($dbName)) die('Invalid database name.');
+
                 if(!$dbName)
                 {
                     $response['result']  = 'fail';

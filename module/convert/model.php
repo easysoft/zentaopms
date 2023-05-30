@@ -43,7 +43,7 @@ class convertModel extends model
      */
     public function dbExists($dbName = '')
     {
-        if(!$this->checkDBName($dbName)) die('Invalid database name.');
+        if(!$this->checkDBName($dbName)) return false;
         $statement = $this->dbh->prepare('SHOW DATABASES like ?');
         $statement->execute(array($dbName));
         return $statement->fetch();
