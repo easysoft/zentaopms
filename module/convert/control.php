@@ -376,6 +376,9 @@ class convert extends control
             $statusList     = $this->convert->getJiraDataFromFile('status');
         }
 
+        $dbh = $this->convert->connectDB($this->config->db->name);
+        $this->dao->dbh($dbh);
+
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
         $this->view->issueTypeList  = $issueTypeList;
         $this->view->linkTypeList   = $linkTypeList;

@@ -490,4 +490,16 @@ class dbh
     {
         return $this->pdo->commit();
     }
+
+
+    /**
+     * Prepares a statement for execution and returns a statement object.
+     *
+     * @access public
+     * @return bool
+     */
+    public function prepare($query, $options = array())
+    {
+        return $this->pdo->prepare($query, $options);
+    }
 }
