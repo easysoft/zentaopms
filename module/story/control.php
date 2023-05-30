@@ -1661,8 +1661,8 @@ class story extends control
         }
 
         $errorTips = '';
-        if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, join(',', $closedStory));
-        if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, join(',', $skipStory));
+        if(isset($closedStory)) $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
+        if(isset($skipStory))   $errorTips .= sprintf($this->lang->story->skipStory, implode(',', $skipStory));
         if(isset($skipStory) || isset($closedStory)) echo js::alert($errorTips);
 
         /* The stories of a product. */
@@ -2505,7 +2505,7 @@ class story extends control
         $this->view->moduleID      = $moduleID;
         $this->view->chartType     = $chartType;
         $this->view->projectID     = $projectID;
-        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->view->checkedCharts = $this->post->charts ? implode(',', $this->post->charts) : '';
         $this->display();
     }
 

@@ -234,7 +234,7 @@ class storyTao extends storyModel
         /* 获取关联需求的设计、关联版本库提交。 */
         $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
         $track->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
-            ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
             ->where('t1.AType')->eq('design')
             ->andWhere('t1.BType')->eq('commit')
             ->andWhere('t1.AID')->in(array_keys($track->designs))
@@ -659,7 +659,7 @@ class storyTao extends storyModel
         $spec->title   = $story->title;
         $spec->spec    = $story->spec;
         $spec->verify  = $story->verify;
-        $spec->files   = join(',', array_keys($files));
+        $spec->files   = implode(',', array_keys($files));
         $this->dao->insert(TABLE_STORYSPEC)->data($spec)->exec();
     }
 

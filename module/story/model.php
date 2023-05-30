@@ -623,7 +623,7 @@ class storyModel extends model
             foreach($extendFields as $extendField)
             {
                 $story->{$extendField->field} = $this->post->{$extendField->field}[$i];
-                if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
+                if(is_array($story->{$extendField->field})) $story->{$extendField->field} = implode(',', $story->{$extendField->field});
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                 if(empty($story->{$extendField->field}))
@@ -816,8 +816,8 @@ class storyModel extends model
             {
                 $this->file->updateObjectID($this->post->uid, $storyID, 'story');
                 $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $story->version);
-                $addedFiles = empty($addedFiles) ? '' : join(',', array_keys($addedFiles)) . ',';
-                $storyFiles = $oldStory->files = join(',', array_keys($oldStory->files));
+                $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
+                $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
                 foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
 
                 $data          = new stdclass();
@@ -993,7 +993,7 @@ class storyModel extends model
         if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
         if($oldStory->status == 'changing' and $story->status == 'draft') $story->status = 'changing';
 
-        if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
+        if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(implode(',', $story->plan), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
 
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
@@ -1070,8 +1070,8 @@ class storyModel extends model
 
             if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or !empty($story->deleteFiles) or !empty($addedFiles))
             {
-                $addedFiles = empty($addedFiles) ? '' : join(',', array_keys($addedFiles)) . ',';
-                $storyFiles = $oldStory->files = join(',', array_keys($oldStory->files));
+                $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
+                $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
                 foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
 
                 $data = new stdclass();
@@ -1122,7 +1122,7 @@ class storyModel extends model
                 {
                     $oldChildren = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStory->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
                     if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('parent')->eq(0)->where('id')->eq($oldStory->parent)->exec();
-                    $this->dao->update(TABLE_STORY)->set('childStories')->eq(join(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStory->parent)->exec();
+                    $this->dao->update(TABLE_STORY)->set('childStories')->eq(implode(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStory->parent)->exec();
                     $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStory->parent, '', false);
 
                     $actionID = $this->action->create('story', $oldStory->parent, 'unLinkChildrenStory', '', $storyID, '', false);
@@ -1144,7 +1144,7 @@ class storyModel extends model
                     $children = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
                     $this->dao->update(TABLE_STORY)
                         ->set('parent')->eq('-1')
-                        ->set('childStories')->eq(join(',', $children))
+                        ->set('childStories')->eq(implode(',', $children))
                         ->set('lastEditedBy')->eq($this->app->user->account)
                         ->set('lastEditedDate')->eq(helper::now())
                         ->where('id')->eq($story->parent)
@@ -1526,7 +1526,7 @@ class storyModel extends model
                 foreach($extendFields as $extendField)
                 {
                     $story->{$extendField->field} = $this->post->{$extendField->field}[$storyID];
-                    if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
+                    if(is_array($story->{$extendField->field})) $story->{$extendField->field} = implode(',', $story->{$extendField->field});
 
                     $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                 }
@@ -2852,7 +2852,7 @@ class storyModel extends model
         if(empty($stages)) return;
         if($hasBranch)
         {
-            $stageList   = join(',', array_keys($this->lang->story->stageList));
+            $stageList   = implode(',', array_keys($this->lang->story->stageList));
             $minStagePos = strlen($stageList);
             $minStage    = '';
             foreach($stages as $branch => $stage)
@@ -3300,7 +3300,7 @@ class storyModel extends model
                     $branches[$branch] = $branch;
                 }
 
-                $branches    = join(',', $branches);
+                $branches    = implode(',', $branches);
                 if(!empty($normalProducts)) $storyQuery .= " OR ";
                 $storyQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
             }
@@ -4076,7 +4076,7 @@ class storyModel extends model
             $teamMembers = $this->getTeamMembers($story->id, $actionType);
             if($teamMembers)
             {
-                $ccList .= ',' . join(',', $teamMembers);
+                $ccList .= ',' . implode(',', $teamMembers);
                 $ccList = ltrim($ccList, ',');
             }
         }
@@ -4086,7 +4086,7 @@ class storyModel extends model
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
             unset($reviewerList[$story->assignedTo]);
 
-            $ccList .= ',' . join(',', array_keys($reviewerList));
+            $ccList .= ',' . implode(',', array_keys($reviewerList));
         }
 
         if(empty($toList))
@@ -4667,7 +4667,7 @@ class storyModel extends model
                 $style .= 'overflow: visible;';
 
                 $maxStage    = $story->stage;
-                $stageList   = join(',', array_keys($this->lang->story->stageList));
+                $stageList   = implode(',', array_keys($this->lang->story->stageList));
                 $maxStagePos = strpos($stageList, $maxStage);
                 if(isset($storyStages[$story->id]))
                 {
@@ -5815,7 +5815,7 @@ class storyModel extends model
                     $linkStoryID = trim($linkStoryID);
                     $tmpLinkStories[] = zget($relatedStories, $linkStoryID);
                 }
-                $story->linkStories = join("; \n", $tmpLinkStories);
+                $story->linkStories = implode("; \n", $tmpLinkStories);
             }
 
             if($story->childStories)
@@ -5829,7 +5829,7 @@ class storyModel extends model
                     $childStoryID = trim($childStoryID);
                     $tmpChildStories[] = zget($relatedStories, $childStoryID);
                 }
-                $story->childStories = join("; \n", $tmpChildStories);
+                $story->childStories = implode("; \n", $tmpChildStories);
             }
 
             /* Set related files. */

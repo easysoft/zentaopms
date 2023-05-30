@@ -228,7 +228,7 @@
                 <td>
                 <?php
                 $maxStage    = $story->stage;
-                $stageList   = join(',', array_keys($this->lang->story->stageList));
+                $stageList   = implode(',', array_keys($this->lang->story->stageList));
                 $maxStagePos = strpos($stageList, $maxStage);
                 if($story->stages and $branchTagOption)
                 {
