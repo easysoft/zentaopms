@@ -496,7 +496,7 @@ class measurement extends control
     public function getSqlParams()
     {
         $measurementID = $this->post->measurementID;
-        $measurement   = $this->measurement->getByID($measurementID);
+        $measurement   = $this->measurement->getByID((int)$measurementID);
         if(!$this->post->sql) return print('');
         if($this->post->sql == $measurement->configure) $this->locate($this->server->http_referer);
 
