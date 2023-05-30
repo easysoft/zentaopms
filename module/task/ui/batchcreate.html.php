@@ -27,7 +27,7 @@ if(!$hideStory)
         set::label($lang->task->story),
         set::control('select'),
         set::items($stories),
-        set::width('200px'),
+        set::width('240px'),
         set::ditto(true),
     );
 
@@ -97,7 +97,7 @@ if($execution->type == 'kanban')
         set::control('select'),
         set::value($regionID),
         set::items($regionPairs),
-        set::width('180px'),
+        set::width('160px'),
         set::ditto(true),
         set::required(true),
     );
@@ -107,7 +107,7 @@ if($execution->type == 'kanban')
         set::control('select'),
         set::value($laneID),
         set::items($lanePairs),
-        set::width('180px'),
+        set::width('160px'),
         set::ditto(true),
         set::required(true),
     );
@@ -123,7 +123,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('30px'),
+        set::width('32px'),
     ),
     formBatchItem
     (
@@ -132,7 +132,7 @@ formBatchPanel
         set::control('select'),
         set::value($moduleID),
         set::items($modules),
-        set::width('180px'),
+        set::width('200px'),
         set::ditto(true),
     ),
     $storyItem,
@@ -145,7 +145,7 @@ formBatchPanel
     (
         set::name('name'),
         set::label($lang->task->name),
-        set::width('165px'),
+        set::width('240px'),
     ),
     $regionItem,
     $laneItem,
@@ -155,7 +155,7 @@ formBatchPanel
         set::label($lang->task->type),
         set::control('select'),
         set::items($lang->task->typeList),
-        set::width('100px'),
+        set::width('160px'),
         set::ditto(true),
     ),
     formBatchItem
@@ -164,14 +164,23 @@ formBatchPanel
         set::label($lang->task->assignedTo),
         set::control('select'),
         set::items($members),
-        set::width('130px'),
+        set::width('128px'),
         set::ditto(true),
+    ),
+    formBatchItem
+    (
+        set::name('pri'),
+        set::label($lang->task->pri),
+        set::control('select'),
+        set::value(3),
+        set::items($lang->task->priList),
+        set::width('80px'),
     ),
     formBatchItem
     (
         set::name('estimate'),
         set::label($lang->task->estimateAB),
-        set::width('70px'),
+        set::width('64px'),
         set::control
         (
             array(
@@ -186,7 +195,7 @@ formBatchPanel
         set::name('estStarted'),
         set::label($lang->task->estStarted),
         set::control('date'),
-        set::width('120px'),
+        set::width('128px'),
         set::ditto(true),
     ),
     formBatchItem
@@ -194,7 +203,7 @@ formBatchPanel
         set::name('deadline'),
         set::label($lang->task->deadline),
         set::control('date'),
-        set::width('120px'),
+        set::width('128px'),
         set::ditto(true),
     ),
     formBatchItem
@@ -202,16 +211,7 @@ formBatchPanel
         set::name('desc'),
         set::label($lang->task->desc),
         set::control('editor'),
-        set::width('150px'),
-    ),
-    formBatchItem
-    (
-        set::name('pri'),
-        set::label($lang->task->pri),
-        set::control('select'),
-        set::items($lang->task->priList),
-        set::width('130px'),
-        set::ditto(true),
+        set::width('240px'),
     ),
     to::headingActions
     (
