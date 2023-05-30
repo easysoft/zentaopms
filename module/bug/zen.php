@@ -1491,7 +1491,7 @@ class bugZen extends bug
             $branches = 0;
             if($product->type != 'normal')
             {
-                $branchPairs   = $this->loadModel('branch')->getPairs($product->id, 0 ,'withClosed');
+                $branchPairs   = $this->loadModel('branch')->getPairs($product->id, 'withClosed');
                 $branches      = array_keys($branchPairs);
                 $branchProduct = true;
 
@@ -1515,6 +1515,7 @@ class bugZen extends bug
         /* Get module of the bugs, and set bug plans. */
         foreach($bugs as $bug)
         {
+            if(!isset($modules[$bug->product][0])) $modules[$bug->product][0] = array();
             if(!isset($modules[$bug->product][$bug->branch]) && isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
             $bug->plans = isset($productPlanList[$bug->product]) && isset($productPlanList[$bug->product][$bug->branch]) ? $productPlanList[$bug->product][$bug->branch] : array();
         }
@@ -1524,6 +1525,7 @@ class bugZen extends bug
         $this->view->modules         = $modules;
         $this->view->productBugList  = $productBugList;
         $this->view->branchTagOption = $branchTagOption;
+        $this->view->products        = $products;
         return $branchTagOption;
     }
 
@@ -1557,7 +1559,7 @@ class bugZen extends bug
                 $branchList = array_keys($branches);
                 foreach($branchList as $branchID)
                 {
-                    $members = $this->bug->getProductMemberPairs($id, $branchID);
+                    $members = $this->bug->getProductMemberPairs($id, (string)$branchID);
                     $productMembers[$id][$branchID] = array_filter($members);
                 }
             }
@@ -1998,9 +2000,10 @@ class bugZen extends bug
 
         if(!empty($toTaskIdList))
         {
-            $confirmedURL = $this->createLink('task', 'view', 'taskID=' . key($toTaskIdList));
+            $taskID       = key($toTaskIdList);
+            $confirmedURL = $this->createLink('task', 'view', 'taskID=' . $taskID);
             $canceledURL  = $this->server->HTTP_REFERER;
-            return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+            return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
         }
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList);
