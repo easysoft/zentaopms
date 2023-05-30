@@ -1135,15 +1135,13 @@ class measurementModel extends model
     public function createPhpFunction($php, $measurement): array
     {
         $measFunction = $this->getPhpFunctionName($measurement);
-        $postFunction = $this->measurementTao->parsePostFunction($measurement->code, $php);
 
-        if(!$measFunction or !$postFunction) return array('result' => 'fail', 'errors' => $this->lang->measurement->tips->nameError);
-
-        $php = str_replace($postFunction->methodName, $measFunction, $postFunction->methodCode);
+        if(!$measFunction) return array('result' => 'fail', 'errors' => $this->lang->measurement->tips->nameError);
 
         try
         {
-            $result = $this->measurementTao->testPhpMeas($php);
+            $this->measurementTao->savePhpMeasFile($php, $measurement->code);
+            $result = $this->measurementTao->testPhpMeas($measurement->code, $this->post->queryValue);
         }
         catch(PDOException $exception)
         {
