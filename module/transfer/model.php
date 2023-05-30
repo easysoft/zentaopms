@@ -550,7 +550,7 @@ class transferModel extends model
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
             echo js::alert($rows);
-            die(js::locate('back'));
+            return print(js::locate('back'));
         }
         return $rows;
 
@@ -1076,7 +1076,7 @@ class transferModel extends model
             if(isset($data->id)) $this->session->set('insert', false);
         }
 
-        if(empty($datas)) die(js::locate('back'));
+        if(empty($datas)) return print(js::locate('back'));
         return $result;
     }
 
@@ -1236,7 +1236,7 @@ class transferModel extends model
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
             echo js::alert($this->lang->excel->noData);
-            die(js::locate('back'));
+            return print(js::locate('back'));
         }
 
         return $objectDatas;
@@ -1306,7 +1306,7 @@ class transferModel extends model
             $this->dao->replace($table)->data($data)->autoCheck()->checkFlow()->exec();
             $objectID = $this->dao->lastInsertID();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if(!empty($subDatas)) $this->saveSubTable($objectID, $subDatas);
 
