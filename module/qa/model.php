@@ -21,7 +21,7 @@ class qaModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = '', $extra = '')
+    public function setMenu(array $products, int $productID, string $branch = '', string $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
         {
@@ -32,7 +32,7 @@ class qaModel extends model
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $product = $this->loadModel('product')->getById($productID);
+        $product = $this->loadModel('product')->getByID($productID);
         if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
