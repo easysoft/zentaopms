@@ -195,6 +195,10 @@ if($canBatchAction)
     if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
 }
 
+jsVar('taskSummary',    $lang->execution->taskSummary);
+jsVar('pageSummary',    $lang->execution->pageSummary);
+jsVar('checkedSummary', $lang->execution->checkedSummary);
+
 dtable
 (
     set::userMap($memberPairs),
@@ -205,11 +209,11 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),
-        set::page($pageID),
         set::recPerPage($recPerPage),
         set::recTotal($recTotal),
         set::linkCreator(helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
     ),
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList); }'))
 );
 
 render();
