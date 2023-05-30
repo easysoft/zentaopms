@@ -663,10 +663,20 @@ class storyTao extends storyModel
         $this->dao->insert(TABLE_STORYSPEC)->data($spec)->exec();
     }
 
-    protected function doCreateReviewer(int $storyID, object $story): void
+    /**
+     * 创建需求的时候，关联创建评审人列表。
+     * Do create reviewer when create story.
+     *
+     * @param  int       $storyID
+     * @param  array     $reviewers
+     * @access protected
+     * @return void
+     */
+    protected function doCreateReviewer(int $storyID, array $reviewers): void
     {
-        if(empty($storyID) or empty($story->reviewer)) return;
-        foreach($story->reviewer as $reviewer)
+        if(empty($storyID) or empty($reviewers)) return;
+
+        foreach($reviewers as $reviewer)
         {
             if(empty($reviewer)) continue;
 

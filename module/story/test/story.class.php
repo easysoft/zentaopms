@@ -701,4 +701,22 @@ class storyTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->fetchAll();
     }
+
+    /**
+     * 测试 doCreateReviewer 方法。
+     * 测u8 doCreateReviewer method.
+     *
+     * @param  int    $storyID
+     * @param  array  $reviewer
+     * @access public
+     * @return array
+     */
+    public function doCreateReviewerTest(int $storyID, array $reviewer): array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_STORYREVIEW)->exec();
+        $this->objectModel->doCreateReviewer($storyID, $reviewer);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll();
+    }
 }

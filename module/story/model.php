@@ -460,12 +460,12 @@ class storyModel extends model
         $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
         $files = $this->file->saveUpload($story->type, $storyID, 1);
         $this->storyTao->doCreateSpec($storyID, $story, $files);
-        $this->storyTao->doCreateReviewer($storyID, $story);
 
         if($executionID) $this->storyTao->linkToExecutionForCreate($objectID, $storyID, $story, $extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
-        if(!empty($story->URS))    $this->storyTao->doCreateURRelations($storyID, $story->URS);
-        if(!empty($story->parent)) $this->subdivide($story->parent, array($storyID));
+        if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
+        if(!empty($story->URS))      $this->storyTao->doCreateURRelations($storyID, $story->URS);
+        if(!empty($story->parent))   $this->subdivide($story->parent, array($storyID));
         if(!empty($story->plan))
         {
             $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
