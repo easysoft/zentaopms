@@ -881,4 +881,24 @@ class storyTao extends storyModel
         parse_str($extra, $output);
         return $output;
     }
+
+    /**
+     * Check whether a story can be subdivided.
+     *
+     * @param  object    $story
+     * @param  bool      $isShadowProduct
+     * @access protected
+     * @return bool
+     */
+    protected function checkCanSubdivide($story, $isShadowProduct): bool
+    {
+        if($this->config->vision == 'lite') return true;
+
+        if($story->status != 'active')                       return false;
+        if(!$isShadowProduct && $story->stage != 'wait')     return false;
+        if($isShadowProduct && $story->stage != 'projected') return false;
+        if($story->parent > 0)                               return false;
+
+        return true;
+    }
 }
