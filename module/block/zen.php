@@ -285,7 +285,7 @@ class blockZen extends block
     protected function printDynamicBlock(): void
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
@@ -505,7 +505,7 @@ class blockZen extends block
         $this->session->set('productList', $uri, 'product');
         $this->session->set('productPlanList', $uri, 'product');
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $count = isset($block->params->count) ? (int)$block->params->count : 0;
         $pager = pager::init(0, $count , 1);
 
@@ -593,7 +593,7 @@ class blockZen extends block
      */
     protected function printProductListBlock(object $block): void
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $count = isset($block->params->count) ? (int)$block->params->count : 0;
         $type  = isset($block->params->type) ? $block->params->type : '';
         $pager = pager::init(0, $count , 1);
@@ -666,9 +666,9 @@ class blockZen extends block
                 $current = zget($weeks, $monday, '');
                 $current = substr($current, 0, -11) . substr($current, -6);
 
-                $PVEV = $this->weekly->getPVEV($projectID, $today);
-                $project->pv = $PVEV['PV'];
-                $project->ev = $PVEV['EV'];
+                $pvAndev = $this->weekly->getPVEV($projectID, $today);
+                $project->pv = $pvAndev['PV'];
+                $project->ev = $pvAndev['EV'];
                 $project->ac = $this->weekly->getAC($projectID, $today);
                 $project->sv = $this->weekly->getSV($project->ev, $project->pv);
                 $project->cv = $this->weekly->getCV($project->ev, $project->ac);
@@ -829,7 +829,6 @@ class blockZen extends block
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
-        $tasks = array();
         foreach($taskGroups as $executionID => $taskGroup)
         {
             $undoneTasks       = 0;
@@ -838,7 +837,7 @@ class blockZen extends block
             $totalConsumed     = 0;
             $totalLeft         = 0;
 
-            foreach($taskGroup as $taskID => $task)
+            foreach($taskGroup as $task)
             {
                 if(strpos('wait|doing|pause|cancel', $task->status) !== false) $undoneTasks ++;
                 if(strpos($task->finishedDate, $yesterday) !== false) $yesterdayFinished ++;
@@ -942,9 +941,9 @@ class blockZen extends block
 
         $this->weekly->save($this->session->project, $date);
 
-        $PVEV = $this->weekly->getPVEV($this->session->project, $today);
-        $this->view->pv = (float)$PVEV['PV'];
-        $this->view->ev = (float)$PVEV['EV'];
+        $pvAndev = $this->weekly->getPVEV($this->session->project, $today);
+        $this->view->pv = (float)$pvAndev['PV'];
+        $this->view->ev = (float)$pvAndev['EV'];
         $this->view->ac = (float)$this->weekly->getAC($this->session->project, $today);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
@@ -1125,7 +1124,7 @@ class blockZen extends block
         $releases = array();
         $count    = isset($block->params->count) ? (int)$block->params->count : 15;
 
-        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit(15)->fetchPairs();
+        $products      = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($this->session->program)->limit($count)->fetchPairs();
         $productIdList = array_keys($products);
         if(!empty($productIdList))
         {
@@ -1234,14 +1233,11 @@ class blockZen extends block
     protected function printProjectDynamicBlock(object $block): void
     {
         $projectID = $this->session->project;
-
-        $executions = $this->loadModel('execution')->getPairs($projectID);
-        $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $count      = isset($block->params->count) ? (int)$block->params->count : 10;
+        $count     = isset($block->params->count) ? (int)$block->params->count : 10;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 30, 1);
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $count, 1);
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -1489,8 +1485,7 @@ class blockZen extends block
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
 
-        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
-        $projectID    = $block->module == 'my' ? 0 : (int)$this->session->project;
+        $projectID = $block->module == 'my' ? 0 : (int)$this->session->project;
 
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
     }
@@ -1658,7 +1653,7 @@ class blockZen extends block
         }
 
         $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, $limitCount, 1);
         $reviews = $this->loadModel('my')->getReviewingList('all', 'time_desc', $pager);
         if($reviews)
@@ -1687,7 +1682,7 @@ class blockZen extends block
     protected function printRecentProjectBlock(): void
     {
         /* load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 3, 1);
         $this->view->projects = $this->loadModel('project')->getList('all', 'id_desc', true, $pager);
     }
@@ -1748,7 +1743,7 @@ class blockZen extends block
     protected function printDocMyCollectionBlock(): void
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
         $docList = $this->loadModel('doc')->getDocsByBrowseType('collectedbyme', 0, 0, 'editedDate_desc', $pager);
@@ -1773,7 +1768,7 @@ class blockZen extends block
     protected function printDocRecentUpdateBlock(): void
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
         $docList = $this->loadModel('doc')->getDocsByBrowseType('byediteddate', 0, 0, 'editedDate_desc', $pager);

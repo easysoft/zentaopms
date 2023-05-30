@@ -70,7 +70,8 @@ function printSystemMode()
                 )
             ) : div
             (
-                set('class', 'w-full mode-block ' . ($usedMode != $mode ? 'state' : '')),
+                set('class', 'w-full mode-block'),
+                set('class', $usedMode != $mode ? 'state' : ''),
                 set('data-mode', $mode),
                 img
                 (

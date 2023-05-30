@@ -43,7 +43,7 @@ $('.guide-block').on('click', '.guide-tab', function()
 
 if(localStorage.getItem('guideblock'))
 {
-    const tab = localStorage.getItem('guideblock'); 
+    const tab = localStorage.getItem('guideblock');
     $('.guide-block a.guide-tab[data-tab=' + tab + ']').trigger('click');;
 }
 
