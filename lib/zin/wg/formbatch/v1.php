@@ -161,7 +161,7 @@ class formBatch extends formBase
         $after[] = zui::batchForm
         (
             set::_to('#' . $this->id()),
-            set($this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey')))
+            set($this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey', 'onRenderRow', 'onRenderRowCol')))
         );
         return $after;
     }
