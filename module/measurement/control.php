@@ -455,7 +455,7 @@ class measurement extends control
 
         $defaultParamString = zget($this->config->measurement->scopeParams, $measurement->scope);
         $defaultSQL         = sprintf($this->lang->measurement->sqlTemplate, $this->measurement->getSqlFunctionName($measurement), $defaultParamString);
-        $params             = json_decode($measurement->params, true);
+        $params             = json_decode((string)$measurement->params, true);
 
         $this->view->title         = $this->lang->measurement->design . $this->lang->colon . $measurement->name;
         $this->view->position[]    = $this->lang->measurement->design;
