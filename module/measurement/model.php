@@ -58,9 +58,9 @@ class measurementModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @access public
-     * @return object
+     * @return array
      */
-    public function getList(string $browseType, int $queryID, string $orderBy, object $pager = null): object
+    public function getList(string $browseType, int $queryID, string $orderBy, object $pager = null): array
     {
         $measurementQuery = '';
         if($browseType == 'bysearch')
@@ -972,9 +972,9 @@ class measurementModel extends model
      * @param  int    $reportID
      * @param  int    $controlID
      * @access public
-     * @return void
+     * @return string
      */
-    public function getReportContent($reportID, $controlID): void
+    public function getReportContent($reportID, $controlID): string
     {
         global $lang;
         $report = $this->loadModel('report')->getReportByID($reportID);
