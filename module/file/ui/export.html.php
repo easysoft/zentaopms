@@ -47,7 +47,7 @@ if($isCustomExport)
     (
         formGroup
         (
-            set::width('3/4'),
+            set::width('1/2'),
             set::label($lang->file->tplTitleAB),
             set::control('select'),
             set::name('template'),
@@ -105,7 +105,7 @@ form
     on::submit('setDownloading'),
     formGroup
     (
-        set::width('3/4'),
+        set::width('full'),
         set::label($lang->file->fileName),
         set::control('inputControl'),
         set::name('fileName'),
@@ -114,7 +114,7 @@ form
     ),
     formGroup
     (
-        set::width('3/4'),
+        set::width('1/2'),
         set::label($lang->file->extension),
         set::control('select'),
         set::name('fileType'),
@@ -125,7 +125,7 @@ form
     ),
     formGroup
     (
-        set::width('3/4'),
+        set::width('1/2'),
         set::label($lang->file->encoding),
         set::control('select'),
         set::name('encode'),
@@ -138,7 +138,7 @@ form
         $hideExportRange ? setClass('hidden') : null,
         formGroup
         (
-            set::width('3/4'),
+            set::width('1/2'),
             set::label($lang->file->exportRange),
             set::control('select'),
             set::name('exportType'),
