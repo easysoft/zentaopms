@@ -272,6 +272,95 @@ class bugZen extends bug
     }
 
     /**
+     * 获得项目的模式。
+     * Get project model.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return object
+     */
+    protected function getProjectModel4Create(object $bug): object
+    {
+        $projectID    = $bug->projectID;
+        $executionID  = $bug->executionID;
+        $project      = $bug->project;
+        $projectModel = '';
+
+        if($projectID and $project)
+        {
+            if(!empty($project->model) and $project->model == 'waterfall') $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
+            $projectModel = $project->model;
+
+            if(!$project->multiple) $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
+        }
+
+        return $this->updateBug($bug, array('projectModel' => $projectModel, 'executionID' => $executionID));
+    }
+
+    /**
+     * 获得指派给我的blockID。
+     * Get block id of assigned to me.
+     *
+     * @access protected
+     * @return int
+     */
+    protected function getBlockID4Create(): int
+    {
+        /* Get block id of assinge to me. */
+        if(!isonlybody()) return 0;
+
+        return $this->dao->select('id')->from(TABLE_BLOCK)
+            ->where('block')->eq('assingtome')
+            ->andWhere('module')->eq('my')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->orderBy('order_desc')
+            ->fetch('id');
+    }
+
+    /**
+     * 获得指派给我的blockID。
+     * Get block id of assigned to me.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getCustomFields4Create(): array
+    {
+        $customFields = array();
+        foreach(explode(',', $this->config->bug->list->customCreateFields) as $field)
+        {
+            $customFields[$field] = $this->lang->bug->$field;
+        }
+
+        return $customFields;
+    }
+
+    /**
+     * 获得bug创建页面的products和projects，并绑定到bug上。
+     * Get the executions and projects for the bug create page and bind them to bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return object
+     */
+    protected function getExecutions4Create(object $bug): object
+    {
+        $productID   = $bug->productID;
+        $branch      = $bug->branch;
+        $projectID   = $bug->projectID;
+        $executionID = $bug->executionID;
+
+        $projects    = $bug->projects;
+        $executions  = array(0 => '');
+
+        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
+        $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
+        $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
+
+        return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
+    }
+
+    /**
      * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
      * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
      *
@@ -340,6 +429,66 @@ class bugZen extends bug
         if(($browseType == 'bymodule') && $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
 
         $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
+    }
+
+    /**
+     * 为创建bug设置导航数据。
+     * Set menu for create bug page.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  array     $output
+     * @access protected
+     * @return void
+     */
+    protected function setMenu4Create(int $productID, string $branch, array $output): void
+    {
+        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+
+        /* Unset discarded types. */
+        foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
+
+        if($this->app->tab == 'execution')
+        {
+            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
+            $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
+            if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
+        }
+        elseif($this->app->tab == 'project')
+        {
+            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
+
+        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
+        $this->app->loadLang('release');
+    }
+
+    /**
+     * 设置编辑页面的导航。
+     * Set edit menu.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return void
+     */
+    protected function setEditMenu(object $bug): void
+    {
+        if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
+        if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+        if($this->app->tab == 'devops')
+        {
+            session_write_close();
+
+            $repoPairs = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
+            $this->repo->setMenu($repoPairs);
+
+            $this->lang->navGroup->bug = 'devops';
+        }
     }
 
     /**
@@ -1082,154 +1231,9 @@ class bugZen extends bug
         return $this->updateBug($bug, array('projects' => $projects));
     }
 
-    /**
-     * 获得项目的模式。
-     * Get project model.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return object
-     */
-    protected function getProjectModel4Create(object $bug): object
-    {
-        $projectID    = $bug->projectID;
-        $executionID  = $bug->executionID;
-        $project      = $bug->project;
-        $projectModel = '';
 
-        if($projectID and $project)
-        {
-            if(!empty($project->model) and $project->model == 'waterfall') $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
-            $projectModel = $project->model;
 
-            if(!$project->multiple) $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
-        }
 
-        return $this->updateBug($bug, array('projectModel' => $projectModel, 'executionID' => $executionID));
-    }
-
-    /**
-     * 获得指派给我的blockID。
-     * Get block id of assigned to me.
-     *
-     * @access protected
-     * @return int
-     */
-    protected function getBlockID4Create(): int
-    {
-        /* Get block id of assinge to me. */
-        if(!isonlybody()) return 0;
-
-        return $this->dao->select('id')->from(TABLE_BLOCK)
-            ->where('block')->eq('assingtome')
-            ->andWhere('module')->eq('my')
-            ->andWhere('account')->eq($this->app->user->account)
-            ->orderBy('order_desc')
-            ->fetch('id');
-    }
-
-    /**
-     * 获得指派给我的blockID。
-     * Get block id of assigned to me.
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getCustomFields4Create(): array
-    {
-        $customFields = array();
-        foreach(explode(',', $this->config->bug->list->customCreateFields) as $field)
-        {
-            $customFields[$field] = $this->lang->bug->$field;
-        }
-
-        return $customFields;
-    }
-
-    /**
-     * 获得bug创建页面的products和projects，并绑定到bug上。
-     * Get the executions and projects for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return object
-     */
-    protected function getExecutions4Create(object $bug): object
-    {
-        $productID   = $bug->productID;
-        $branch      = $bug->branch;
-        $projectID   = $bug->projectID;
-        $executionID = $bug->executionID;
-
-        $projects    = $bug->projects;
-        $executions  = array(0 => '');
-
-        if(isset($projects[$projectID])) $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (string)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
-        $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
-        $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
-
-        return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
-    }
-
-    /**
-     * 为创建bug设置导航数据。
-     * Set menu for create bug page.
-     *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  array     $output
-     * @access protected
-     * @return void
-     */
-    protected function setMenu4Create(int $productID, string $branch, array $output): void
-    {
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
-
-        /* Unset discarded types. */
-        foreach($this->config->bug->discardedTypes as $type) unset($this->lang->bug->typeList[$type]);
-
-        if($this->app->tab == 'execution')
-        {
-            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
-            $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
-            if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
-        }
-        elseif($this->app->tab == 'project')
-        {
-            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
-        }
-        else
-        {
-            $this->qa->setMenu($this->products, $productID, $branch);
-        }
-
-        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
-        $this->app->loadLang('release');
-    }
-
-    /**
-     * 设置编辑页面的导航。
-     * Set edit menu.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return void
-     */
-    protected function setEditMenu(object $bug): void
-    {
-        if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
-        if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
-        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-        if($this->app->tab == 'devops')
-        {
-            session_write_close();
-
-            $repoPairs = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
-            $this->repo->setMenu($repoPairs);
-
-            $this->lang->navGroup->bug = 'devops';
-        }
-    }
 
     /**
      * 获取页面所需的变量, 并输出到前台。
