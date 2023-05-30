@@ -348,6 +348,66 @@ class measurement extends control
     }
 
     /**
+     * Design measurement function.
+     *
+     * @param  int    $measurementID
+     * @access public
+     * @return void
+     */
+    public function design(int $measurementID)
+    {
+        $measurement = $this->measurement->getByID($measurementID);
+        if($_POST)
+        {
+            $result = $this->measurement->createPhpFunction($this->post->code, $measurement);
+            if($result['result'] != 'success') return $this->send($result);
+
+            foreach($this->post->varName as $i => $varName)
+            {
+                if(empty($varName)) return $this->send(array('result' => 'fail', 'errors' => $this->lang->measurement->tips->noticeVarName));
+                $params[$varName]['showName'] = zget($this->post->showName, $i, '');
+                $errors = array();
+                if($params[$varName]['showName'] == '') $errors[] = sprintf($this->lang->measurement->tips->showNameMissed, $varName);
+                if(empty($this->post->queryValue[$i]))  $errors[] = sprintf($this->lang->measurement->tips->noticeQueryValue, $varName);
+                if(!empty($errors)) return $this->send(array('result' => 'fail', 'errors' => join("<br>", $errors)));
+
+                $params[$varName]['varName']  = $varName;
+                $params[$varName]['varType']  = zget($this->post->varType, $i, 'input');
+                $params[$varName]['showName'] = zget($this->post->showName, $i, '');
+                $params[$varName]['options']  = $this->post->options[$i];
+                $params[$varName]['defaultValue'] = zget($this->post->defaultValue, $i, '');
+            }
+
+            $this->dao->update(TABLE_BASICMEAS)
+                ->set('configure')->eq($this->post->php)
+                ->set('params')->eq(json_encode($params))
+                ->where('id')->eq($measurementID)
+                ->exec();
+
+            $params       = $this->measurement->processPostParams();
+            $measFunction = $this->measurement->getPhpFunctionName($measurement);
+            $queryResult  = $this->measurement->execPhpMeasurement($measurement, $params, $this->post->action);
+            if($queryResult === false) return $this->send(array('result' => 'fail', 'message' => $this->measurement->errorInfo));
+
+            if($this->post->action == 'save') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'queryResult' => sprintf($this->lang->measurement->saveSqlMeasSuccess, $queryResult)));
+        }
+
+        $defaultParamString = zget($this->config->measurement->scopeParams, $measurement->scope);
+        $defaultCode        = sprintf($this->lang->measurement->phpTemplate, $this->measurement->getPhpFunctionName($measurement), $defaultParamString);
+        $params             = json_decode((string)$measurement->params, true);
+
+        $this->view->title         = $this->lang->measurement->design . $this->lang->colon . $measurement->name;
+        $this->view->position[]    = $this->lang->measurement->design;
+        $this->view->code          = !empty($measurement->configure) ? $measurement->configure : $defaultCode;
+        $this->view->params        = empty($params) ? array() : json_decode($measurement->params, true);
+        $this->view->measurement   = $measurement;
+        $this->view->measurementID = $measurementID;
+        $this->view->programPairs  = $this->loadModel('project')->getPairsByProgram();
+        $this->display();
+    }
+
+    /**
      * Set SQL function.
      *
      * @param  int    $measurementID
