@@ -963,10 +963,10 @@ class storyModel extends model
             ->setDefault('branch', $oldStory->branch)
             ->setIF(!$this->post->linkStories, 'linkStories', '')
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
-            ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
-            ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
-            ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
-            ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
+            ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)
+            ->setIF($this->post->closedBy     || $this->post->closedReason != false, 'status', 'closed')
+            ->setIF($this->post->closedReason && $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
@@ -1511,10 +1511,10 @@ class storyModel extends model
                 if($story->stage != $oldStory->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
                 if($story->title != $oldStory->title and $story->status != 'draft')  $story->status     = 'changing';
-                if($story->closedBy     != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
-                if($story->closedReason != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
-                if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
-                if($story->closedReason != false  and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
+                if($story->closedBy     and $oldStory->closedDate == '')   $story->closedDate = $now;
+                if($story->closedReason and $oldStory->closedDate == '')   $story->closedDate = $now;
+                if($story->closedBy     or  $story->closedReason != false) $story->status     = 'closed';
+                if($story->closedReason and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
 
                 if($story->plan != $oldStory->plan)
                 {
@@ -3715,7 +3715,6 @@ class storyModel extends model
     {
         /* Format these stories. */
         $storyPairs = array(0 => '');
-        $i = 0;
         foreach($stories as $story)
         {
             if($type == 'short')
@@ -4243,7 +4242,7 @@ class storyModel extends model
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'iframe showinonlybody', true, "data-app='{$this->app->tab}'");
 
                 $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow)
+                if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
@@ -5114,15 +5113,13 @@ class storyModel extends model
         $conditionField = $storyType == 'story' ? 'BID' : 'AID';
         $storyType      = $storyType == 'story' ? 'BID, GROUP_CONCAT(`AID` SEPARATOR ",")' : 'AID, GROUP_CONCAT(`BID` SEPARATOR ",")';
 
-        $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
+        return $this->dao->select($storyType)->from(TABLE_RELATION)
             ->where('AType')->eq('requirement')
             ->andWhere('BType')->eq('story')
             ->andWhere('relation')->eq('subdivideinto')
             ->andWhere($conditionField)->in($storyIdList)
             ->groupBy($conditionField)
             ->fetchPairs();
-
-        return $relations;
     }
 
     /**

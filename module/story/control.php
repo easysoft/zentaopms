@@ -817,7 +817,8 @@ class story extends control
             if($story->status == 'closed')
             {
                 $storyProduct = $products[$story->product];
-                $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+                $storyBranch = $story->branch > 0 ? $story->branch : '0';
+                $branch      = $storyProduct->type == 'branch' ? $storyBranch: 'all';
                 if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
             }
 
@@ -1560,7 +1561,8 @@ class story extends control
         if($story->status == 'draft') unset($reasonList['cancel']);
         unset($reasonList['subdivided']);
 
-        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $storyBranch    = $story->branch > 0 ? $story->branch : '0';
+        $branch         = $product->type == 'branch' ? $storyBranch : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
@@ -1595,7 +1597,6 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
-        $productList      = array();
         $ignoreTwins      = array();
         $twinsCount       = array();
         foreach($stories as $story)
@@ -1630,7 +1631,6 @@ class story extends control
 
         if($this->post->comments)
         {
-            $data       = fixer::input('post')->get();
             $allChanges = $this->story->batchClose();
 
             if($allChanges)
@@ -1963,7 +1963,6 @@ class story extends control
         /* Get story and product. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs();
-        $product  = $this->product->getById($story->product);
 
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->story      = $story;
