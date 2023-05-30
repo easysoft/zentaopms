@@ -1585,24 +1585,25 @@ class taskModel extends model
     }
 
     /**
-     * Get tasks of a user.
+     * 通过任务类型获取用户的任务。
+     * Get user tasks by type.
      *
-     * @param  string $account
-     * @param  string $type     the query type
-     * @param  int    $limit
-     * @param  object $pager
-     * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  string   $account
+     * @param  string   $type
+     * @param  int      $limit
+     * @param  object   $pager
+     * @param  string   $orderBy
+     * @param  int      $projectID
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0)
+    public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = "id_desc", int $projectID = 0): array
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
 
         $tasks = $this->taskTao->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
 
-        if(!$tasks) return array();
+        if(empty($tasks)) return $tasks;
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
