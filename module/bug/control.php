@@ -1116,8 +1116,8 @@ class bug extends control
             return print(js::locate($this->session->bugList, 'parent'));
         }
 
-        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
-        $bugIdList = array_unique($this->post->bugIDList);
+        if(!$this->post->bugIdList) return print(js::locate($this->session->bugList, 'parent'));
+        $bugIdList = array_unique($this->post->bugIdList);
 
         $this->qa->setMenu($this->products, $productID, $branch);
 
