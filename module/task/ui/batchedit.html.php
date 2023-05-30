@@ -50,6 +50,7 @@ formBatchPanel
         set::items($modules),
         set::width('200px'),
         set::ditto(true),
+        set::defaultDitto('off'),
     ),
     formBatchItem
     (
@@ -59,6 +60,7 @@ formBatchPanel
         set::items(array()),
         set::width('128px'),
         set::ditto(true),
+        set::defaultDitto('off'),
     ),
     formBatchItem
     (
@@ -68,6 +70,7 @@ formBatchPanel
         set::items($lang->task->typeList),
         set::width('128px'),
         set::ditto(true),
+        set::defaultDitto('off'),
     ),
     formBatchItem
     (
@@ -77,6 +80,7 @@ formBatchPanel
         set::items($lang->task->statusList),
         set::width('128px'),
         set::ditto(true),
+        set::defaultDitto('off'),
     ),
     formBatchItem
     (
