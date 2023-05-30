@@ -403,6 +403,7 @@ class caselibModel extends model
         if(dao::isError()) helper::end(js::error(dao::getError()));
 
         $forceNotReview = $this->testcase->forceNotReview();
+        $this->dao->begin();
         foreach($cases as $key => $caseData)
         {
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
@@ -519,6 +520,7 @@ class caselibModel extends model
                 }
             }
         }
+        $this->dao->commit();
 
         if($this->post->isEndPage)
         {
