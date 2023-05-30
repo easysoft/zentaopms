@@ -63,6 +63,7 @@ cid=1
  - 第2条的new属性 @doing
 
 - 无消耗时返回提示信息 @『ID #1 工时』应当大于『0』。
+
 */
 $task = zdTable('task');
 $task->id->range('1-7');
@@ -87,6 +88,9 @@ $taskteam->gen(5);
 
 $effort = zdTable('effort');
 $effort->gen(1);
+
+$user = zdTable('user');
+$user->gen(20);
 
 $multiTaskEffort = array();
 for($i = 1; $i <= 5; $i++)

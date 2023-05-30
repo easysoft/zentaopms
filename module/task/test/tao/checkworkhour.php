@@ -51,6 +51,9 @@ $taskteam->gen(5);
 $effort = zdTable('effort');
 $effort->gen(1);
 
+$user = zdTable('user');
+$user->gen(20);
+
 $multiTaskEffort = array();
 for($i = 1; $i <= 5; $i++)
 {
