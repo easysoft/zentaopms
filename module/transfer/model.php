@@ -658,7 +658,7 @@ class transferModel extends model
                         $multipleLsit = explode(',', $value);
 
                         foreach($multipleLsit as $key => $tmpValue) $multipleLsit[$key] = zget($exportDatas[$field], $tmpValue);
-                        $multiple = join($separator, $multipleLsit);
+                        $multiple = implode($separator, $multipleLsit);
                         $rows[$id]->$field = $multiple;
                     }
                     else
@@ -739,7 +739,7 @@ class transferModel extends model
                 if(!empty($fieldList[$field]))
                 {
                     $lists[$listName] = $fieldList[$field]['values'];
-                    if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
+                    if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = implode(',', $fieldList[$field]['values']);
                 }
                 if(is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
             }
@@ -978,7 +978,7 @@ class transferModel extends model
                     {
                         $cellValue = explode("\n", $cellValue);
                         foreach($cellValue as &$value) $value = array_search($value, $fieldList[$field]['values'], true);
-                        $datas[$key]->$field = join(',', $cellValue);
+                        $datas[$key]->$field = implode(',', $cellValue);
                     }
                     else
                     {
@@ -1010,7 +1010,7 @@ class transferModel extends model
                             $value = trim(substr($value, strrpos($value,'(#') + 2), ')');
                         }
                         $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
-                        $datas[$key]->$field = join(',', $cellValue);
+                        $datas[$key]->$field = implode(',', $cellValue);
                     }
                 }
             }
