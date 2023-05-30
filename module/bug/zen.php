@@ -948,12 +948,13 @@ class bugZen extends bug
      * @param  string    $browseType
      * @param  int       $moduleID
      * @param  array     $executions
+     * @param  int       $param
      * @param  string    $orderBy
      * @param  object    $pager
      * @access protected
      * @return void
      */
-    protected function buildBrowseView(array $bugs, object $product, string $branch, string $browseType, int $moduleID, array $executions, string $orderBy, object $pager): void
+    protected function buildBrowseView(array $bugs, object $product, string $branch, string $browseType, int $moduleID, array $executions, int $param, string $orderBy, object $pager): void
     {
         $this->loadModel('datatable');
 
@@ -980,6 +981,7 @@ class bugZen extends bug
         $this->view->branch          = $branch;
         $this->view->browseType      = $browseType;
         $this->view->currentModuleID = $moduleID;
+        $this->view->param           = $param;
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();

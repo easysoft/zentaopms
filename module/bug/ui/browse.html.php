@@ -146,7 +146,7 @@ menu
     (
         array('text' => $lang->bug->confirm, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchConfirm')),
         array('text' => $lang->bug->close, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchClose')),
-        array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$productID&branch=$branch")),
+        array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
         array('text' => $lang->bug->resolve, 'items' => $resolveItems),
     ))
 );
@@ -202,7 +202,7 @@ dtable
         set::page($pager->pageID),
         set::recPerPage($pager->recPerPage),
         set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
+        set::linkCreator(helper::createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
     ),
 );
 
