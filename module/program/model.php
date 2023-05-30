@@ -9,7 +9,7 @@ class programModel extends model
      */
     public function accessDenied()
     {
-        echo(js::alert($this->lang->program->accessDenied));
+        echo js::alert($this->lang->program->accessDenied);
 
         if(!$this->server->http_referer) return print(js::locate(helper::createLink('my', 'index')));
 
@@ -124,7 +124,7 @@ class programModel extends model
      *
      * @param  int  $programID
      * @access public
-     * @return array
+     * @return object
      */
     public function getByID($programID = 0)
     {
@@ -160,7 +160,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = array())
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = null, $type = '', $topIdList = array())
     {
         $userViewIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
         $userViewIdList = array_filter(explode(',', $userViewIdList));
@@ -247,7 +247,7 @@ class programModel extends model
             }
         }
 
-        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
+        return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('program')
@@ -255,8 +255,6 @@ class programModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
-
-        return $programs;
     }
 
     /**
@@ -879,8 +877,6 @@ class programModel extends model
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
-        $children = $this->getChildren($programID);
-
 
         if($program->parent)
         {
@@ -1185,14 +1181,12 @@ class programModel extends model
      */
     public function hasUnfinished($program)
     {
-        $unfinished = $this->dao->select("count(IF(id != {$program->id}, 1, null)) as count")->from(TABLE_PROJECT)
+        return $this->dao->select("count(IF(id != {$program->id}, 1, null)) as count")->from(TABLE_PROJECT)
             ->where('type')->in('program, project')
             ->andWhere('path')->like($program->path . '%')
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq('0')
             ->fetch('count');
-
-        return $unfinished;
     }
 
     /**
@@ -1210,7 +1204,7 @@ class programModel extends model
         $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->fetchPairs();
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq((int)$programID)->andWhere('objectType')->eq('program')->exec();
 
-        foreach($accounts as $key => $account)
+        foreach($accounts as $account)
         {
             if(empty($account)) continue;
 
