@@ -205,6 +205,55 @@ class bugZen extends bug
     }
 
     /**
+     * 处理更新请求数据。
+     * Processing request data.
+     *
+     * @param  form         $formData
+     * @param  object       $oldBug
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareEditExtras(form $formData, object $oldBug): object|false
+    {
+        if(!empty($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
+        {
+            dao::$errors[] = $this->lang->error->editedByOther;
+            return false;
+        }
+
+        $now = helper::now();
+        $bug = $formData->add('id', $oldBug->id)
+            ->setDefault('product', $oldBug->product)
+            ->setDefault('deleteFiles', array())
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->join('openedBuild,mailto,linkBug,os,browser', ',')
+            ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
+            ->setIF($formData->data->resolvedBy  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($formData->data->resolution  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($formData->data->resolution  != '' && $formData->data->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
+            ->setIF($formData->data->closedDate  != '' && $formData->data->closedBy     == '', 'closedBy',     $this->app->user->account)
+            ->setIF($formData->data->closedBy    != '' && $formData->data->closedDate   == '', 'closedDate',   $now)
+            ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'assignedTo',   'closed')
+            ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'assignedDate', $now)
+            ->setIF($formData->data->resolution  != '' || $formData->data->resolvedDate != '', 'status',       'resolved')
+            ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'status',       'closed')
+            ->setIF(($formData->data->resolution != '' || $formData->data->resolvedDate != '') && $formData->data->assignedTo == '', 'assignedTo', $oldBug->openedBy)
+            ->setIF(($formData->data->resolution != '' || $formData->data->resolvedDate != '') && $formData->data->assignedTo == '', 'assignedDate', $now)
+            ->setIF($formData->data->resolution  == '' && $formData->data->resolvedDate == '', 'status', 'active')
+            ->setIF($formData->data->resolution  != '' && $formData->data->resolution   != 'duplicate', 'duplicateBug', 0)
+            ->setIF($formData->data->assignedTo  == '' && $oldBug->status               == 'closed', 'assignedTo', 'closed')
+            ->setIF($formData->data->resolution  != '', 'confirmed', 1)
+            ->setIF($formData->data->story && $formData->data->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
+            ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
+            ->get();
+
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $bug->uid);
+
+        return $bug;
+    }
+
+    /**
      * 设置列表页面的搜索表单。
      * Build browse search form.
      *
@@ -290,7 +339,46 @@ class bugZen extends bug
         $this->display();
     }
 
+    /**
+     * 批量创建bug前处理上传图片。
+     * Before batch creating bugs, process the uploaded images.
+     *
+     * @param  object      $bug
+     * @param  string      $uploadImage
+     * @param  array|bool  $bugImagesFiles
+     * @access protected
+     * @return array|false
+     */
+    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
+    {
+        /* When the bug is created by uploading an image, add the image to the step of the bug. */
+        if(!empty($uploadImage))
+        {
+            $this->loadModel('file');
 
+            $file     = $bugImagesFiles[$uploadImage];
+            $realPath = $file['realpath'];
+
+            if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+            {
+                if(in_array($file['extension'], $this->config->file->imageExtensions))
+                {
+                    $file['addedBy']    = $this->app->user->account;
+                    $file['addedDate']  = helper::now();
+                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+
+                    $fileID = $this->dao->lastInsertID();
+                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
+                }
+            }
+            else
+            {
+                unset($file);
+            }
+        }
+
+        return !empty($file) ? $file : false;
+    }
 
     /**
      * 创建bug后存储上传的文件。
@@ -353,56 +441,6 @@ class bugZen extends bug
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
-    }
-
-
-    /**
-     * 处理更新请求数据。
-     * Processing request data.
-     *
-     * @param  form         $formData
-     * @param  object       $oldBug
-     * @access protected
-     * @return object|false
-     */
-    protected function prepareEditExtras(form $formData, object $oldBug): object|false
-    {
-        if(!empty($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
-
-        $now = helper::now();
-        $bug = $formData->add('id', $oldBug->id)
-            ->setDefault('product', $oldBug->product)
-            ->setDefault('deleteFiles', array())
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->join('openedBuild,mailto,linkBug,os,browser', ',')
-            ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
-            ->setIF($formData->data->resolvedBy  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
-            ->setIF($formData->data->resolution  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
-            ->setIF($formData->data->resolution  != '' && $formData->data->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
-            ->setIF($formData->data->closedDate  != '' && $formData->data->closedBy     == '', 'closedBy',     $this->app->user->account)
-            ->setIF($formData->data->closedBy    != '' && $formData->data->closedDate   == '', 'closedDate',   $now)
-            ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'assignedTo',   'closed')
-            ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'assignedDate', $now)
-            ->setIF($formData->data->resolution  != '' || $formData->data->resolvedDate != '', 'status',       'resolved')
-            ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'status',       'closed')
-            ->setIF(($formData->data->resolution != '' || $formData->data->resolvedDate != '') && $formData->data->assignedTo == '', 'assignedTo', $oldBug->openedBy)
-            ->setIF(($formData->data->resolution != '' || $formData->data->resolvedDate != '') && $formData->data->assignedTo == '', 'assignedDate', $now)
-            ->setIF($formData->data->resolution  == '' && $formData->data->resolvedDate == '', 'status', 'active')
-            ->setIF($formData->data->resolution  != '' && $formData->data->resolution   != 'duplicate', 'duplicateBug', 0)
-            ->setIF($formData->data->assignedTo  == '' && $oldBug->status               == 'closed', 'assignedTo', 'closed')
-            ->setIF($formData->data->resolution  != '', 'confirmed', 1)
-            ->setIF($formData->data->story && $formData->data->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($formData->data->story))
-            ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
-            ->get();
-
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $bug->uid);
-
-        return $bug;
     }
 
     /**
@@ -494,46 +532,7 @@ class bugZen extends bug
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
 
-    /**
-     * 批量创建bug前处理上传图片。
-     * Before batch creating bugs, process the uploaded images.
-     *
-     * @param  object      $bug
-     * @param  string      $uploadImage
-     * @param  array|bool  $bugImagesFiles
-     * @access protected
-     * @return array|false
-     */
-    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
-    {
-        /* When the bug is created by uploading an image, add the image to the step of the bug. */
-        if(!empty($uploadImage))
-        {
-            $this->loadModel('file');
 
-            $file     = $bugImagesFiles[$uploadImage];
-            $realPath = $file['realpath'];
-
-            if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
-            {
-                if(in_array($file['extension'], $this->config->file->imageExtensions))
-                {
-                    $file['addedBy']    = $this->app->user->account;
-                    $file['addedDate']  = helper::now();
-                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
-
-                    $fileID = $this->dao->lastInsertID();
-                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                }
-            }
-            else
-            {
-                unset($file);
-            }
-        }
-
-        return !empty($file) ? $file : false;
-    }
 
     /**
      * 批量创建bug后的其他处理。
