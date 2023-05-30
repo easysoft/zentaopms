@@ -47,6 +47,7 @@ class formBatchItem extends wg
         'tipIcon?: string="info-sign"', // 列标题上的提示触发按钮图标。
         'tipProps?: string',            // 列标题上的提示触发按钮其他属性。
         'ditto?: bool',                 // 是否显示同上按钮。
+        'defaultDitto?:string="on"',    // 同上按钮的默认值。
         'hidden?: bool=false'           // 是否隐藏
     );
 
@@ -58,7 +59,7 @@ class formBatchItem extends wg
      */
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $hidden) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'hidden'));
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden'));
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -86,6 +87,7 @@ class formBatchItem extends wg
                 set('data-required', $required),
                 set('data-ditto', $ditto),
                 set('data-name', $name),
+                $ditto ? set('data-default-ditto', $defaultDitto) : null,
                 $asIndex ? set('data-index', $asIndex) : null,
                 set($this->getRestProps()),
                 span
