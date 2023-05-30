@@ -361,6 +361,107 @@ class bugZen extends bug
     }
 
     /**
+     * 获取编辑页面所需要的影响版本和解决版本。
+     * Get affected buils and resolved builds for edit form.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return array
+     */
+    protected function getEditBuildPairs(object $bug): array
+    {
+        $objectType         = $bug->project ? 'project' : 'execution';
+        $objectID           = $bug->execution ? $bug->execution : $bug->project;
+        $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
+        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
+        $resolvedBuildPairs = $openedBuildPairs;
+        if(($bug->resolvedBuild) && isset($allBuildPairs[$bug->resolvedBuild])) $resolvedBuildPairs[$bug->resolvedBuild] = $allBuildPairs[$bug->resolvedBuild];
+
+        return array($openedBuildPairs, $resolvedBuildPairs);
+    }
+
+    /**
+     * 获取编辑页面所需要的分支。
+     * Get branch pairs for edit form.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return array
+     */
+    protected function getEditBranchPairs(object $bug): array
+    {
+        $objectID = 0;
+        if($this->app->tab == 'project')   $objectID = $bug->project;
+        if($this->app->tab == 'execution') $objectID = $bug->execution;
+
+        $branchPairs = $this->loadModel('branch')->getPairs($bug->product, $params = 'noempty,withClosed', $objectID);
+
+        if(!isset($branchPairs[$bug->branch]))
+        {
+            $bugBranch = $this->branch->getByID($bug->branch, $bug->product, '');
+
+            if($bug->branch == BRANCH_MAIN) $branchName = $bugBranch;
+            if($bug->branch != BRANCH_MAIN)
+            {
+                $branchName = $bugBranch->name;
+                if($bugBranch->status == 'closed') $branchName .= " ({$this->lang->branch->statusList['closed']})";
+            }
+
+            $branchPairs[$bug->branch] = $branchName;
+        }
+
+        return $branchPairs;
+    }
+
+    /**
+     * 获取编辑页面指派给用户列表。
+     * Get assignedTo pairs for edit form.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return array
+     */
+    protected function getEditAssignedToPairs(object $bug): array
+    {
+        $assignedToPairs = $this->getAssignedToPairs($bug);
+
+        if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
+
+        return $assignedToPairs;
+    }
+
+    /**
+     * 追加bug创建页面的products和projects，并绑定到bug上。
+     * Append the products and projects for the bug create page and bind them to bug.
+     *
+     * @param  object    $bug
+     * @param  int       $bugID
+     * @access protected
+     * @return object
+     */
+    protected function appendProjects4Create(object $bug, int $bugID): object
+    {
+        $productID = $bug->productID;
+        $branch    = $bug->branch;
+        $projects  = $bug->projects;
+
+        $projectID = $bug->projectID;
+        $project   = $bug->project;
+
+        /* Link all projects to product when copying bug under qa. */
+        if($bugID and $this->app->tab == 'qa')
+        {
+            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        }
+        elseif($projectID and $project)
+        {
+            $projects += array($projectID => $project->name);
+        }
+
+        return $this->updateBug($bug, array('projects' => $projects));
+    }
+
+    /**
      * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
      * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
      *
@@ -717,6 +818,78 @@ class bugZen extends bug
         $this->view->blockID               = $this->getBlockID4Create();
         $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
 
+        $this->display();
+    }
+
+    /**
+     * 获取页面所需的变量, 并输出到前台。
+     * Get the data required by the view page and output.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return void
+     */
+    protected function buildEditForm(object $bug): void
+    {
+        /* 删掉当前 bug 类型不属于的并且已经弃用的类型。*/
+        /* Unset discarded types. */
+        foreach($this->config->bug->discardedTypes as $type)
+        {
+            if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
+        }
+
+        $this->loadModel('project');
+        $this->loadModel('execution');
+
+        $product   = $this->product->getByID($bug->product);
+        $execution = $this->execution->getByID($bug->execution);
+
+        /* 获取所属模块列表。*/
+        /* Get module option menu. */
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
+        if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
+
+        /* 获取该 bug 关联产品和分支下的 bug 列表。*/
+        /* Get bugs of current product. */
+        $branch = '';
+        if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
+        $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
+        unset($productBugs[$bug->id]);
+
+        /* 获取执行列表。*/
+        /* Get execution pairs. */
+        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (string)$bug->project);
+        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
+
+        /* 获取项目列表。*/
+        /* Get project pairs. */
+        $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
+        if(!empty($bug->project) and empty($projects[$bug->project]))
+        {
+            $project = $this->project->getByID($bug->project);
+            $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
+        }
+
+        /* 如果产品列表没有 bug 相关的产品，把该产品加入产品列表。*/
+        /* Add product related to the bug when it is not in the products. */
+        if(!isset($this->products[$bug->product]))
+        {
+            $this->products[$bug->product] = $product->name;
+            $this->view->products = $this->products;
+        }
+
+        $this->view->title            = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
+        $this->view->bug              = $bug;
+        $this->view->product          = $product;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
+        $this->view->projects         = $projects;
+        $this->view->executions       = $executions;
+        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
+        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->display();
     }
 
@@ -1200,182 +1373,15 @@ class bugZen extends bug
 
 
 
-    /**
-     * 追加bug创建页面的products和projects，并绑定到bug上。
-     * Append the products and projects for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @param  int       $bugID
-     * @access protected
-     * @return object
-     */
-    protected function appendProjects4Create(object $bug, int $bugID): object
-    {
-        $productID = $bug->productID;
-        $branch    = $bug->branch;
-        $projects  = $bug->projects;
-
-        $projectID = $bug->projectID;
-        $project   = $bug->project;
-
-        /* Link all projects to product when copying bug under qa. */
-        if($bugID and $this->app->tab == 'qa')
-        {
-            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-        }
-        elseif($projectID and $project)
-        {
-            $projects += array($projectID => $project->name);
-        }
-
-        return $this->updateBug($bug, array('projects' => $projects));
-    }
 
 
 
 
 
-    /**
-     * 获取页面所需的变量, 并输出到前台。
-     * Get the data required by the view page and output.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return void
-     */
-    protected function buildEditForm(object $bug): void
-    {
-        /* 删掉当前 bug 类型不属于的并且已经弃用的类型。*/
-        /* Unset discarded types. */
-        foreach($this->config->bug->discardedTypes as $type)
-        {
-            if($bug->type != $type) unset($this->lang->bug->typeList[$type]);
-        }
 
-        $this->loadModel('project');
-        $this->loadModel('execution');
 
-        $product   = $this->product->getByID($bug->product);
-        $execution = $this->execution->getByID($bug->execution);
 
-        /* 获取所属模块列表。*/
-        /* Get module option menu. */
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
-        if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
 
-        /* 获取该 bug 关联产品和分支下的 bug 列表。*/
-        /* Get bugs of current product. */
-        $branch = '';
-        if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
-        $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
-        unset($productBugs[$bug->id]);
-
-        /* 获取执行列表。*/
-        /* Get execution pairs. */
-        $executions = array('') + $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (string)$bug->project);
-        if(!empty($bug->execution) and empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
-
-        /* 获取项目列表。*/
-        /* Get project pairs. */
-        $projects = array('') + $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
-        if(!empty($bug->project) and empty($projects[$bug->project]))
-        {
-            $project = $this->project->getByID($bug->project);
-            $projects[$project->id] = $project->name . "({$this->lang->bug->deleted})";
-        }
-
-        /* 如果产品列表没有 bug 相关的产品，把该产品加入产品列表。*/
-        /* Add product related to the bug when it is not in the products. */
-        if(!isset($this->products[$bug->product]))
-        {
-            $this->products[$bug->product] = $product->name;
-            $this->view->products = $this->products;
-        }
-
-        $this->view->title            = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
-        $this->view->bug              = $bug;
-        $this->view->product          = $product;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
-        $this->view->projects         = $projects;
-        $this->view->executions       = $executions;
-        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
-        $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
-        $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
-        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->display();
-    }
-
-    /**
-     * 获取编辑页面所需要的影响版本和解决版本。
-     * Get affected buils and resolved builds for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditBuildPairs(object $bug): array
-    {
-        $objectType         = $bug->project ? 'project' : 'execution';
-        $objectID           = $bug->execution ? $bug->execution : $bug->project;
-        $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
-        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
-        $resolvedBuildPairs = $openedBuildPairs;
-        if(($bug->resolvedBuild) && isset($allBuildPairs[$bug->resolvedBuild])) $resolvedBuildPairs[$bug->resolvedBuild] = $allBuildPairs[$bug->resolvedBuild];
-
-        return array($openedBuildPairs, $resolvedBuildPairs);
-    }
-
-    /**
-     * 获取编辑页面所需要的分支。
-     * Get branch pairs for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditBranchPairs(object $bug): array
-    {
-        $objectID = 0;
-        if($this->app->tab == 'project')   $objectID = $bug->project;
-        if($this->app->tab == 'execution') $objectID = $bug->execution;
-
-        $branchPairs = $this->loadModel('branch')->getPairs($bug->product, $params = 'noempty,withClosed', $objectID);
-
-        if(!isset($branchPairs[$bug->branch]))
-        {
-            $bugBranch = $this->branch->getByID($bug->branch, $bug->product, '');
-
-            if($bug->branch == BRANCH_MAIN) $branchName = $bugBranch;
-            if($bug->branch != BRANCH_MAIN)
-            {
-                $branchName = $bugBranch->name;
-                if($bugBranch->status == 'closed') $branchName .= " ({$this->lang->branch->statusList['closed']})";
-            }
-
-            $branchPairs[$bug->branch] = $branchName;
-        }
-
-        return $branchPairs;
-    }
-
-    /**
-     * 获取编辑页面指派给用户列表。
-     * Get assignedTo pairs for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditAssignedToPairs(object $bug): array
-    {
-        $assignedToPairs = $this->getAssignedToPairs($bug);
-
-        if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
-
-        return $assignedToPairs;
-    }
 
     /**
      * 确认是否更新 bug 状态。
