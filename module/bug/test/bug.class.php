@@ -767,25 +767,21 @@ class bugTest
     }
 
     /**
+     * 获取模块的负责人的测试用例。
      * Test get module owner.
      *
      * @param  int    $moduleID
      * @param  int    $productID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getModuleOwnerTest($moduleID, $productID)
+    public function getModuleOwnerTest(int $moduleID, int $productID): array
     {
         $owner = $this->objectModel->getModuleOwner($moduleID, $productID);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $owner;
-        }
+        if(dao::isError()) return dao::getError();
+
+        return $owner;
     }
 
     /**

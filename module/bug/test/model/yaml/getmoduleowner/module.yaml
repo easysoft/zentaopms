@@ -1,0 +1,21 @@
+---
+title: zt_module
+author: Tingting Dai
+version: "1.0"
+fields:
+- field: owner
+  range: "user1,[]{3}"
+- field: parent
+  range: 0{2},[1-2]{2}
+- field: grade
+  range: 1{2},2{2}
+- field: path
+  fields:
+    - field: path1
+      prefix: ","
+      range: "1,2,1,2"
+    - field: path2
+      prefix: ","
+      range: "[]{2},3,4"
+      postfix: ","
+...

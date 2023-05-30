@@ -1,0 +1,8 @@
+---
+title: zt_product
+author: Tingting Dai
+version: "1.0"
+fields:
+- field: QD
+  range: "admin,[]{9}"
+...

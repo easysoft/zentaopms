@@ -284,43 +284,47 @@ class bugModel extends model
     }
 
     /**
-     * Get module owner.
+     * 获取模块的负责人。
+     * Get the owner of module.
      *
      * @param  int    $moduleID
      * @param  int    $productID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getModuleOwner($moduleID, $productID)
+    public function getModuleOwner(int $moduleID, int $productID): array
     {
         $users = $this->loadModel('user')->getPairs('nodeleted');
-        $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
-        $owner = isset($users[$owner]) ? $owner : '';
 
-        if($moduleID)
+        /* 获取所属产品的测试负责人。*/
+        /* Return the QD of the product. */
+        $account  = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
+        $account  = isset($users[$account]) ? $account : '';
+        $realname = zget($users, $account, '');
+
+        /* 如果没有模块 ID，直接返回测试负责人。*/
+        if(!$moduleID) return array($account, $realname);
+
+        /* 获取模块，如果模块为空，直接返回测试负责人。*/
+        $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->andWhere('root')->eq($productID)->fetch();
+        if(empty($module)) return array($account, $realname);
+
+        /* 如果模块有负责人返回模块负责人。*/
+        if($module->owner && isset($users[$module->owner])) return array($module->owner, $users[$module->owner]);
+
+        /* 获取除了模块ID以外的模块的路径，如果没有其他路径，返回测试负责人。*/
+        $moduleIdList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
+        if(!$moduleIdList) return array($account, $realname);
+
+        /* 从上级到下级，如果有模块有负责人，返回模块负责人。*/
+        krsort($moduleIdList);
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        foreach($modules as $module)
         {
-            $module = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->andWhere('root')->eq($productID)->fetch();
-            if(empty($module)) return $owner;
-
-            if($module->owner and isset($users[$module->owner])) return $module->owner;
-
-            $moduleIdList = explode(',', trim(str_replace(",$module->id,", ',', $module->path), ','));
-            krsort($moduleIdList);
-            if($moduleIdList)
-            {
-                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
-                foreach($moduleIdList as $moduleID)
-                {
-                    if(isset($modules[$moduleID]))
-                    {
-                        $module = $modules[$moduleID];
-                        if($module->owner and isset($users[$module->owner])) return $module->owner;
-                    }
-                }
-            }
+            if($module->owner && isset($users[$module->owner])) return array($module->owner, $users[$module->owner]);
         }
 
-        return $owner;
+        return array($account, $realname);
     }
 
     /**
