@@ -87,7 +87,7 @@ if($isCustomExport)
                     hasPriv('file', 'setPublic') ? div
                     (
                         setClass('input-group-addon'),
-                        div(input(set::type('checkbox'), set::name('public'))), 
+                        div(input(set::type('checkbox'), set::name('public'))),
                         div(setClass('ml-2'), $lang->public)
                     ) : null,
                     btn(setClass('primary'), $lang->save),
@@ -130,7 +130,7 @@ form
         set::control('select'),
         set::name('encode'),
         set::items($config->charsets[$this->cookie->lang]),
-        set::value('utf-8'),
+        set::value($this->config->zin->lang == 'zh-cn' ? 'gbk' : 'utf-8'),
         set::required(true)
     ),
     /* Fields for KanBan. */
