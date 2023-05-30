@@ -29,6 +29,6 @@
   </div>
 </div>
 <div class="col-md-9">
-  <iframe id='reportWin' name='reportWin' frameborder='0' scrolling='yes' class='w-p100' height="700"></iframe>
+  <iframe id='reportWin' name='reportWin' frameborder='0' title='Report window' scrolling='yes' class='w-p100' height="700"></iframe>
 </div>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
