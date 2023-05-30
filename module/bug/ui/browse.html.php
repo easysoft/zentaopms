@@ -127,7 +127,7 @@ $footToolbar = array('items' => array
         array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
         array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     )),
-    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' ,'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => $this->session->currentProductType == 'normal' ? 'hidden' : '' , 'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->bug->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown'),
 ));
@@ -165,7 +165,7 @@ zui::menu
 $branchItems = array();
 foreach($branchTagOption as $branchID => $branchName)
 {
-    $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
+    $branchItems[] = array('text' => $branchName, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchChangeBranch', "branchID=$branchID"));
 }
 
 menu

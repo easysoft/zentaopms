@@ -796,9 +796,9 @@ class bug extends control
      */
     public function batchChangeBranch(int $branchID)
     {
-        if($this->post->bugIDList)
+        if(!empty($_POST) && isset($_POST['bugIdList']))
         {
-            $bugIdList = array_unique($this->post->bugIDList);
+            $bugIdList = array_unique($this->post->bugIdList);
             $oldBugs   = $this->bug->getByIdList($bugIdList);
 
             /* Remove condition mismatched bugs. */
@@ -817,8 +817,6 @@ class bug extends control
                 }
             }
 
-            if(!empty($skipBugIdList)) echo js::alert(sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList));
-
             $allChanges = $this->bug->batchChangeBranch($bugIdList, $branchID, $oldBugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -832,7 +830,9 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
+        $load = $this->session->bugList;
+        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load));
     }
 
     /**
