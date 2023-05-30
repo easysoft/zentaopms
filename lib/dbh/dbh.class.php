@@ -239,7 +239,6 @@ class dbh
         {
             case 'dm':
                 return $this->formatDmSQL($sql);
-                return $sql;
 
             default:
                 return $sql;
@@ -303,8 +302,7 @@ class dbh
                         $fieldList[$key] = str_replace($subField, implode(' + ', $fieldParts), $field);
                     }
                     $fields = implode(',', $fieldList);
-                    $sql = substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
-                    return str_replace('CREATE OR REPLACE VIEW ', 'CREATE VIEW ', $sql);
+                    return substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
                 }
                 elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
                 {
