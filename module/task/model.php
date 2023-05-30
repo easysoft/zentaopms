@@ -3102,7 +3102,7 @@ class taskModel extends model
         $canRestart        = ($task->status == 'pause' and common::hasPriv('task', 'restart'));
         $canFinish         = common::hasPriv('task', 'finish');
         $canClose          = common::hasPriv('task', 'close');
-        $canRecordEstimate = common::hasPriv('task', 'recordWorkhour');
+        $canRecordWorkhour = common::hasPriv('task', 'recordWorkhour');
         $canEdit           = common::hasPriv('task', 'edit');
         $canBatchCreate    = ($this->config->vision == 'rnd' and common::hasPriv('task', 'batchCreate'));
 
@@ -3111,7 +3111,7 @@ class taskModel extends model
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
 
-        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, array($canRecordEstimate, $canEdit, $canBatchCreate)))
+        if(in_array(true, array($canStart, $canRestart, $canFinish, $canClose)) and in_array(true, array($canRecordWorkhour, $canEdit, $canBatchCreate)))
         {
             $menu .= "<div class='dividing-line'></div>";
         }

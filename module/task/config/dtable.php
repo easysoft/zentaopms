@@ -187,7 +187,7 @@ $config->task->dtable->fieldList['actions']['actionsMap']['close']['data-toggle'
 
 $config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['icon']        = 'time';
 $config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['hint']        = $lang->task->record;
-$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']         = helper::createLink('task', 'recordEstimate', 'taskID={id}', '', true);
+$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']         = helper::createLink('task', 'recordWorkhour', 'taskID={id}', '', true);
 $config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['data-toggle'] = 'modal';
 
 $config->task->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';

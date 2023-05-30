@@ -151,7 +151,7 @@ class taskTao extends taskModel
         }
         else
         {
-            $actionID = $this->action->create('task', $task->id, 'RecordEstimate', $record->work, (float)$record->consumed);
+            $actionID = $this->action->create('task', $task->id, 'RecordWorkhour', $record->work, (float)$record->consumed);
         }
 
         return array($newTask, $actionID);
