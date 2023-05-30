@@ -113,7 +113,7 @@ class transfer extends control
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
 
-            if(empty($shortName)) die(js::alert($this->lang->excel->emptyFileName));
+            if(empty($shortName)) return print(js::alert($this->lang->excel->emptyFileName));
 
             $extension = $file['extension'];
             $fileName  = $this->file->savePath . $shortName;
@@ -127,12 +127,12 @@ class transfer extends control
             if(!$phpReader->canRead($fileName))
             {
                 $phpReader = new PHPExcel_Reader_Excel5();
-                if(!$phpReader->canRead($fileName))die(js::alert($this->lang->excel->canNotRead));
+                if(!$phpReader->canRead($fileName)) return print(js::alert($this->lang->excel->canNotRead));
             }
             $this->session->set('fileImportFileName', $fileName);
             $this->session->set('fileImportExtension', $extension);
 
-            die(js::locate($locate, 'parent.parent'));
+            return print(js::locate($locate, 'parent.parent'));
         }
 
         $this->view->title = $this->lang->transfer->importCase;
