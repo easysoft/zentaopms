@@ -16,7 +16,7 @@ $config->bug->dtable->fieldList['title']['minWidth'] = '200';
 $config->bug->dtable->fieldList['title']['fixed']    = 'left';
 $config->bug->dtable->fieldList['title']['link']     = helper::createLink('bug', 'view', "bugID={id}");
 
-$config->bug->dtable->fieldList['module']['name']  = 'moduleName';
+$config->bug->dtable->fieldList['module']['name']  = 'module';
 $config->bug->dtable->fieldList['module']['title'] = $lang->bug->module;
 $config->bug->dtable->fieldList['module']['type']  = 'text';
 
