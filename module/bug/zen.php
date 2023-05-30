@@ -593,6 +593,33 @@ class bugZen extends bug
     }
 
     /**
+     * 如果不是弹窗，调用该方法为查看bug设置导航。
+     * If it's not a iframe, call this method to set menu for view bug page.
+     *
+     * @param  object $bug
+     * @return void
+     */
+    protected function setMenu4View(object $bug): void
+    {
+        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
+
+        if($this->app->tab == 'devops')
+        {
+            $repos = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
+            $this->repo->setMenu($repos);
+            $this->lang->navGroup->bug = 'devops';
+        }
+
+        if($this->app->tab == 'product')
+        {
+            $this->loadModel('product')->setMenu($bug->product);
+            $this->lang->product->menu->plan['subModule'] .= ',bug';
+        }
+    }
+
+    /**
      * 处理列表页面的参数。
      * Processing browse params.
      *
@@ -997,26 +1024,7 @@ class bugZen extends bug
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
     }
 
-    /**
-     * 为create方法添加动态。
-     * Add action for create function.
-     *
-     * @param  int       $bug
-     * @param  int       $todoID
-     * @access protected
-     * @return bool
-     */
-    protected function finishTodo(int $bugID, int $todoID): bool
-    {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
-        {
-            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-        }
-        return !dao::isError();
-    }
+
 
     /**
      * 更新完 bug 后的相关处理。
@@ -1194,6 +1202,43 @@ class bugZen extends bug
     }
 
     /**
+     * 删除 bug 后不同的返回结果。
+     * respond after deleting.
+     *
+     * @param  object    $bug
+     * @param  string    $from
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterDelete(object $bug, string $from): array
+    {
+        $message = $this->executeHooks($bugID);
+        if(!$message) $message = $this->lang->saveSuccess;
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
+
+        /* 在弹窗中删除 bug 时的返回。*/
+        /* Respond when delete bug in modal.。*/
+        if(isonlybody()) return $this->send(array('result' => 'success', 'load' => true));
+
+        /* 在任务看板中删除 bug 时的返回。*/
+        /* Respond when delete in task kanban. */
+        if($from == 'taskkanban')
+        {
+            $laneType    = $this->session->executionLaneType ?: 'all';
+            $groupBy     = $this->session->executionGroupBy  ?: 'default';
+            $searchValue = $this->session->taskSearchValue   ?: '';
+            $kanbanData  = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $searchValue);
+            $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
+            $kanbanData  = json_encode($kanbanData[$kanbanType]);
+
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}")));
+    }
+
+    /**
      * 初始化一个默认的bug模板。
      * Init a default bug templete.
      *
@@ -1260,6 +1305,27 @@ class bugZen extends bug
         foreach($fields as $field => $value) $bug->$field = $value;
 
         return $bug;
+    }
+
+    /**
+     * 为create方法添加动态。
+     * Add action for create function.
+     *
+     * @param  int       $bug
+     * @param  int       $todoID
+     * @access protected
+     * @return bool
+     */
+    protected function finishTodo(int $bugID, int $todoID): bool
+    {
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+        }
+        return !dao::isError();
     }
 
     /**
@@ -1403,69 +1469,9 @@ class bugZen extends bug
         return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
     }
 
-    /**
-     * 删除 bug 后不同的返回结果。
-     * respond after deleting.
-     *
-     * @param  object    $bug
-     * @param  string    $from
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterDelete(object $bug, string $from): array
-    {
-        $message = $this->executeHooks($bugID);
-        if(!$message) $message = $this->lang->saveSuccess;
 
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
 
-        /* 在弹窗中删除 bug 时的返回。*/
-        /* Respond when delete bug in modal.。*/
-        if(isonlybody()) return $this->send(array('result' => 'success', 'load' => true));
 
-        /* 在任务看板中删除 bug 时的返回。*/
-        /* Respond when delete in task kanban. */
-        if($from == 'taskkanban')
-        {
-            $laneType    = $this->session->executionLaneType ?: 'all';
-            $groupBy     = $this->session->executionGroupBy  ?: 'default';
-            $searchValue = $this->session->taskSearchValue   ?: '';
-            $kanbanData  = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $searchValue);
-            $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
-            $kanbanData  = json_encode($kanbanData[$kanbanType]);
-
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
-        }
-
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}")));
-    }
-
-    /**
-     * 如果不是弹窗，调用该方法为查看bug设置导航。
-     * If it's not a iframe, call this method to set menu for view bug page.
-     *
-     * @param  object $bug
-     * @return void
-     */
-    protected function setMenu4View(object $bug): void
-    {
-        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
-        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $bug->product, $bug->branch);
-
-        if($this->app->tab == 'devops')
-        {
-            $repos = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
-            $this->repo->setMenu($repos);
-            $this->lang->navGroup->bug = 'devops';
-        }
-
-        if($this->app->tab == 'product')
-        {
-            $this->loadModel('product')->setMenu($bug->product);
-            $this->lang->product->menu->plan['subModule'] .= ',bug';
-        }
-    }
 
     /**
      * Check bug execution priv.
