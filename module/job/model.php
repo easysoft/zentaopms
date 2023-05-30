@@ -235,7 +235,7 @@ class jobModel extends model
             }
         }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
         if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
@@ -362,7 +362,7 @@ class jobModel extends model
             }
         }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
 
         $job->svnDir = '';
         if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')

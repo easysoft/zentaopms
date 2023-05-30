@@ -45,7 +45,7 @@ class job extends control
         /* Set session. */
         $this->loadModel('ci')->setMenu($repoID);
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->app->loadLang('compile');
@@ -333,13 +333,7 @@ class job extends control
     public function exec($jobID)
     {
         $job = $this->job->getByID($jobID);
-        if(strtolower($job->engine) == 'gitlab')
-        {
-            if(!isset($job->reference) or !$job->reference)
-            {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
-            }
-        }
+        if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
