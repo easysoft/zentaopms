@@ -25,6 +25,59 @@ class bugZen extends bug
     }
 
     /**
+     * 获取列表页面的 bug 列表。
+     * Get browse bugs.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $browseType
+     * @param  array     $executions
+     * @param  int       $moduleID
+     * @param  int       $queryID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getBrowseBugs(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager): array
+    {
+        $bugs = $this->bug->getList($browseType, (array)$productID, $this->projectID, $executions, $branch, $moduleID, $queryID, $orderBy, $pager);
+
+        /* 把查询条件保存到 session。*/
+        /* Process the sql, get the conditon partion, save it to session. */
+        $this->loadModel('common')->saveQueryCondition($this->bug->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
+
+        /* 检查 bug 是否有过变更。*/
+        /* Process bug for check story changed. */
+        $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
+
+        /* 处理 bug 的版本信息。*/
+        /* Process the openedBuild and resolvedBuild fields. */
+        return $this->bug->processBuildForBugs($bugs);
+    }
+
+    /**
+     * 获取分支。
+     * Get branch options.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    private function getBranchOptions(int $productID): array
+    {
+        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
+        return array($branchOption, $branchTagOption);
+    }
+
+    /**
      * 处理列表页面的参数。
      * Processing browse params.
      *
@@ -135,58 +188,9 @@ class bugZen extends bug
         $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
     }
 
-    /**
-     * 获取列表页面的 bug 列表。
-     * Get browse bugs.
-     *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $browseType
-     * @param  array     $executions
-     * @param  int       $moduleID
-     * @param  int       $queryID
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @access protected
-     * @return array
-     */
-    protected function getBrowseBugs(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager): array
-    {
-        $bugs = $this->bug->getList($browseType, (array)$productID, $this->projectID, $executions, $branch, $moduleID, $queryID, $orderBy, $pager);
 
-        /* 把查询条件保存到 session。*/
-        /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->bug->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
 
-        /* 检查 bug 是否有过变更。*/
-        /* Process bug for check story changed. */
-        $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
 
-        /* 处理 bug 的版本信息。*/
-        /* Process the openedBuild and resolvedBuild fields. */
-        return $this->bug->processBuildForBugs($bugs);
-    }
-
-    /**
-     * 获取分支。
-     * Get branch options.
-     *
-     * @param  int       $productID
-     * @access protected
-     * @return array
-     */
-    private function getBranchOptions(int $productID): array
-    {
-        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
-
-        foreach($branches as $branchInfo)
-        {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
-            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-        }
-
-        return array($branchOption, $branchTagOption);
-    }
 
     /**
      * 获取浏览页面所需的变量, 并输出到前台。
