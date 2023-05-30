@@ -49,7 +49,7 @@ class customModel extends model
         }
 
         $processedLang = array();
-        foreach($allCustomLang as $id => $customLang)
+        foreach($allCustomLang as $customLang)
         {
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
 
@@ -590,7 +590,7 @@ class customModel extends model
         }
 
         $URSRPairs = array();
-        foreach($langData as $id => $content)
+        foreach($langData as $content)
         {
             $value = json_decode($content->value);
             $URSRPairs[$content->key] = $this->config->URAndSR ? $value->URName . '/' . $value->SRName : $value->SRName;
@@ -672,7 +672,7 @@ class customModel extends model
         }
 
         $URSRList = array();
-        foreach($langData as $id => $content)
+        foreach($langData as $content)
         {
             $value = json_decode($content->value);
             $URSRList[$content->key]['SRName'] = $value->SRName;
@@ -723,7 +723,7 @@ class customModel extends model
                     continue;
                 }
 
-                $fields       = join(',', $data->requiredFields[$method]);
+                $fields       = implode(',', $data->requiredFields[$method]);
                 $systemFields = array_reverse(explode(',', $systemField));
                 foreach($systemFields as $field)
                 {
@@ -757,7 +757,7 @@ class customModel extends model
         $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
         $newConfig = $this->post->sprintConcept;
 
-        foreach($this->config->executionCommonList as $clientLang => $executionCommonList)
+        foreach($this->config->executionCommonList as $executionCommonList)
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('source')->eq('execution')->exec();
         }
@@ -849,7 +849,7 @@ class customModel extends model
         $oldIndex = isset($this->config->custom->storyRequirement) ? $this->config->custom->storyRequirement : '0';
         $newIndex = $this->post->storyRequirement;
 
-        foreach($this->config->storyCommonList as $clientLang => $commonList)
+        foreach($this->config->storyCommonList as $commonList)
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
@@ -944,12 +944,12 @@ class customModel extends model
             {
                 $PM          = zget($programPM, $project->parent, '');
                 $stakeholder = zget($stakeholders, $project->parent, '');
-                if($stakeholder) $stakeholder = join(',', array_keys($stakeholder));
+                if($stakeholder) $stakeholder = implode(',', array_keys($stakeholder));
 
                 $whitelist = rtrim($project->whitelist . ',' . $PM . ',' . $stakeholder);
                 $whitelist = explode(',', $whitelist);
                 $whitelist = array_filter(array_unique($whitelist));
-                $whitelist = join(',', $whitelist);
+                $whitelist = implode(',', $whitelist);
 
                 $data = new stdclass();
                 $data->acl       = 'private';

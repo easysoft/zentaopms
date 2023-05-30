@@ -127,7 +127,7 @@ class custom extends control
                 foreach($postArray->data->keys as $key)
                 {
                     if($module == 'testtask' and $field == 'typeList' and empty($key)) continue;
-                    if($key && in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
+                    if($key && in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));
                     $keys[] = $key;
                 }
             }
@@ -660,7 +660,7 @@ class custom extends control
         if($this->server->request_method == 'POST')
         {
             $fields = $this->post->fields;
-            if(is_array($fields)) $fields = join(',', $fields);
+            if(is_array($fields)) $fields = implode(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
             if(in_array($module, array('task', 'testcase', 'story')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
             if($module == 'bug' and $section == 'custom' and $key == 'batchCreateFields') return;
