@@ -11,7 +11,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$app->loadLang('product');
+$canViewMr          = common::hasPriv('mr', 'view');
+$canViewProduct     = common::hasPriv('product', 'view');
+$canViewPlan        = common::hasPriv('productplan', 'view');
+$canViewProduct     = common::hasPriv('project', 'view');
+$canViewStory       = common::hasPriv('story', 'view');
+$canViewTask        = common::hasPriv('task', 'view');
+$canViewCase        = common::hasPriv('testcase', 'view');
+$canViewRepo        = common::hasPriv('repo', 'revision');
+$canBrowseBug       = common::hasPriv('bug', 'browse');
+$canBrowseExecution = common::hasPriv('execution', 'browse');
+$canCreateBug       = common::hasPriv('bug', 'create');
+
 $moduleTitle = '';
 if(empty($modulePath))
 {
@@ -19,18 +30,13 @@ if(empty($modulePath))
 }
 else
 {
-    if($bugModule->branch and isset($branches[$bugModule->branch]))
-    {
-        $moduleTitle .= $branches[$bugModule->branch] . '/';
-    }
+    if($bugModule->branch and isset($branches[$bugModule->branch])) $moduleTitle .= $branches[$bugModule->branch] . '/';
 
     foreach($modulePath as $key => $module)
     {
         $moduleTitle .= $module->name;
-        if(isset($modulePath[$key + 1]))
-        {
-            $moduleTitle .= '/';
-        }
+
+        if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
     }
 }
 
@@ -67,7 +73,7 @@ foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
 {
     $linkBugs[] = a
     (
-        set('href', helper::createLink('bug', 'view', "bugID=$linkBugID")),
+        set('href', $this->createLink('bug', 'view', "bugID=$linkBugID")),
         set('data-toggle', 'modal'),
         "#$linkBugID $linkBugTitle"
     );
@@ -78,7 +84,7 @@ foreach($bug->linkMRTitles as $MRID => $linkMRTitle)
 {
     $linkMR[] = a
     (
-        set('href', helper::createLink('mr', 'view', "MRID=$MRID")),
+        $canViewMr ? set('href', $this->createLink('mr', 'view', "MRID=$MRID")) : null,
         "#$MRID $linkMRTitle"
     );
 }
@@ -88,13 +94,90 @@ foreach($linkCommits as $commit)
 {
     $linkCommits[] = a
     (
-        set('href', helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")),
+        $canViewRepo ? set('href', $this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")) : null,
         " $commit->comment"
     );
 }
 
 $files = '';
 foreach($bug->files as $file) $files .= $file->title . ',';
+
+/* Prepare variables for legendBasic block.  */
+$app->loadLang('product');
+$branchTitle = sprintf($lang->product->branch, $lang->product->branchName[$product->type]);
+$productLink = $bug->product && $canViewProduct ? $this->createLink('product',     'view',   "productID=$bug->product") : '';
+$branchLink  = $bug->branch  && $canBrowseBug   ? $this->createLink('bug',         'browse', "productID=$bug->product&branch=$bug->branch") : '';
+$planLink    = $bug->plan    && $canViewPlan    ? $this->createLink('productplan', 'view',   "planID=$bug->plan&type=bug") : '';
+
+$legendBasic = array();
+$legendBasic['product']        = array('name' => $lang->bug->product,        'text' => $product->name, 'href' => $productLink, 'attr' => array('data-app' => 'product'));
+$legendBasic['branch']         = array('name' => $branchTitle,               'text' => $branchName,    'href' => $branchLink);
+$legendBasic['module']         = array('name' => $lang->bug->module,         'text' => $moduleTitle);
+$legendBasic['productplan']    = array('name' => $lang->bug->productplan,    'text' => $bug->planName, 'href' => $planLink);
+$legendBasic['type']           = array('name' => $lang->bug->type,           'text' => zget($lang->bug->typeList, $bug->type));
+$legendBasic['status']         = array('name' => $lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
+$legendBasic['severity']       = array('name' => $lang->bug->severity,       'text' => severityLabel(set::level(zget($lang->bug->severityList, $bug->severity)), set::isIcon(true)));
+$legendBasic['pri']            = array('name' => $lang->bug->pri,            'text' => priLabel(zget($lang->bug->priList, $bug->pri)));
+$legendBasic['activatedCount'] = array('name' => $lang->bug->activatedCount, 'text' => $bug->activatedCount);
+$legendBasic['activatedDate']  = array('name' => $lang->bug->activatedDate,  'text' => $bug->activatedDate);
+$legendBasic['confirmed']      = array('name' => $lang->bug->confirmed,      'text' => $lang->bug->confirmedList[$bug->confirmed]);
+$legendBasic['assignedTo']     = array('name' => $lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $lang->at . $bug->assignedDate);
+$legendBasic['deadline']       = array('name' => $lang->bug->deadline,       'text' => $bug->deadline . (isset($bug->delay) ? sprintf($lang->bug->delayWarning, $bug->delay) : ''));
+$legendBasic['feedbackBy']     = array('name' => $lang->bug->feedbackBy,     'text' => $bug->feedbackBy);
+$legendBasic['notifyEmail']    = array('name' => $lang->bug->notifyEmail,    'text' => $bug->notifyEmail);
+$legendBasic['os']             = array('name' => $lang->bug->os,             'text' => $osList);
+$legendBasic['browser']        = array('name' => $lang->bug->browser,        'text' => $browserList);
+$legendBasic['keywords']       = array('name' => $lang->bug->keywords,       'text' => $bug->keywords);
+$legendBasic['mailto']         = array('name' => $lang->bug->mailto,         'text' => $mailtoList);
+
+/* Prepare variables for legendLife block. */
+$duplicateLink = $bug->duplicateBug && $canViewBug ? a
+    (
+        set('href', $this->createLink('bug', 'view', "bugID=$bug->duplicateBug")),
+        set('data-toggle', 'modal'),
+        $bug->duplicateBugTitle
+    ) : '';
+$duplicateBug  = $bug->duplicateBug ? "#$bug->duplicateBug:" . $duplicateLink : '';
+
+$legendLife  = array();
+$legendLife['openedBy']      = array('name' => $lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . ($bug->openedDate ? $lang->at . $bug->openedDate : ''));
+$legendLife['openedBuild']   = array('name' => $lang->bug->openedBuild,   'text' => $openedBuilds);
+$legendLife['resolvedBy']    = array('name' => $lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $lang->at . $bug->resolvedDate : ''));
+$legendLife['resolvedBuild'] = array('name' => $lang->bug->resolvedBuild, 'text' => zget($builds, $bug->resolvedBuild));
+$legendLife['resolution']    = array('name' => $lang->bug->resolution,    'text' => div(zget($lang->bug->resolutionList, $bug->resolution) . $duplicateBug));
+$legendLife['closedBy']      = array('name' => $lang->bug->closedBy,      'text' => zget($users, $bug->closedBy) . ($bug->closedDate ? $lang->at . $bug->closedDate : ''));
+$legendLife['lastEditedBy']  = array('name' => $lang->bug->lblLastEdited, 'text' => zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . ($bug->lastEditedDate ? $lang->at . $bug->lastEditedDate : ''));
+
+/* Prepare variables for legendExecStoryTask block. */
+$executionTitle = (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;
+$storyName      = $bug->story ? "#$bug->story $bug->storyTitle" : '';
+$projectLink    = $bug->project   && $canViewProduct     ? $this->createLink('project',   'view',   "projectID=$bug->project")      : '';
+$executionLink  = $bug->execution && $canBrowseExecution ? $this->createLink('execution', 'browse', "executionID=>$bug->execution") : '';
+$storyLink      = $bug->story     && $canViewStory       ? $this->createLink('story',     'view',   "storyID=>$bug->story")         : '';
+$taskLink       = $bug->task      && $canViewTask        ? $this->createLink('task',      'view',   "taskID=>$bug->task")           : '';
+
+$legendExecStoryTask = array();
+$legendExecStoryTask['project']   = array('name' => $lang->bug->project, 'text' => $bug->projectName,   'href' => $projectLink);
+$legendExecStoryTask['execution'] = array('name' => $executionTitle,     'text' => $bug->executionName, 'href' => $executionLink);
+$legendExecStoryTask['story']     = array('name' => $lang->bug->story,   'text' => $storyName,          'href' => $storyLink, 'attr' => array('data-toggle' => 'modal'));
+$legendExecStoryTask['task']      = array('name' => $lang->bug->task,    'text' => $bug->taskName,      'href' => $taskLink,  'attr' => array('data-toggle' => 'modal'));
+
+/* Prepare variables for legendMisc block. */
+$fromCaseName = $bug->case    ? "#$bug->case $bug->caseTitle"       : '';
+$toStoryName  = $bug->toStory ? "#$bug->toStory $bug->toStoryTitle" : '';
+$toTaskName   = $bug->toTask  ? "#$bug->toTask $bug->toTaskTitle"   : '';
+$fromCaseLink = $bug->case    && $canViewCase  ? $this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion") : '';
+$toStoryLink  = $bug->toStory && $canViewStory ? $this->createLink('story',    'view', "storyID=$bug->toStory")                           : '';
+$toTaskLink   = $bug->toTask  && $canViewTask  ? $this->createLink('task',     'view', "taskID=$bug->toTask")                             : '';
+
+$legendMisc = array();
+$legendMisc['linkBug']    = array('name' => $lang->bug->linkBug,    'text' => $linkBugs);
+$legendMisc['fromCase']   = array('name' => $lang->bug->fromCase,   'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
+$legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $toCases);
+$legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));
+$legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal'));
+$legendMisc['linkMR']     = array('name' => $lang->bug->linkMR,     'text' => $linkMR);
+$legendMisc['linkCommit'] = array('name' => $lang->bug->linkCommit, 'text' => $linkCommits);
 
 detailHeader
 (
@@ -113,7 +196,8 @@ detailHeader
         (
             set::icon('plus'),
             set::type('primary'),
-            set::text($lang->bug->create)
+            set::text($lang->bug->create),
+            $canCreateBug ? set::url($this->createLink('bug', 'create')) : null
         )
     )
 );
@@ -154,9 +238,9 @@ detailBody
                 (
                     array
                     (
-                        array('icon' => 'edit', 'url' => helper::createLink('bug', 'edit', "bugID={$bug->id}")),
-                        array('icon' => 'copy', 'url' => helper::createLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extras=bugID={$bug->id}")),
-                        array('icon' => 'trash', 'url' => helper::createLink('bug', 'delete', "bugID={$bug->id}")),
+                        array('icon' => 'edit',  'url' => $this->createLink('bug', 'edit',   "bugID={$bug->id}")),
+                        array('icon' => 'copy',  'url' => $this->createLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extras=bugID={$bug->id}")),
+                        array('icon' => 'trash', 'url' => $this->createLink('bug', 'delete', "bugID={$bug->id}")),
                     )
                 )
             )
@@ -173,110 +257,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    item
-                    (
-                        set::name($lang->bug->product),
-                        set::url(helper::createLink('product', 'view', "productID=$bug->product")),
-                        set('data-app', 'product'),
-                        $product->name
-                    ),
-                    item
-                    (
-                        set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
-                        set::url(helper::createLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch")),
-                        $branchName
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->module),
-                        $moduleTitle
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->productplan),
-                        set::url(helper::createLink('productplan', 'view', "planID=$bug->plan&type=bug")),
-                        $bug->planName
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->type),
-                        zget($lang->bug->typeList, $bug->type),
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->status),
-                        set::class('status-' . $bug->status),
-                        $this->processStatus('bug', $bug)
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->severity),
-                        severityLabel
-                        (
-                            set::level(zget($lang->bug->severityList, $bug->severity)),
-                            set::isIcon(true)
-                        ),
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->pri),
-                        priLabel(zget($lang->bug->priList, $bug->pri))
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->activatedCount),
-                        $bug->activatedCount
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->activatedDate),
-                        $bug->activatedDate
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->confirmed),
-                        $lang->bug->confirmedList[$bug->confirmed]
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->lblAssignedTo),
-                        zget($users, $bug->assignedTo) . ($bug->assignedDate ? $lang->at . $bug->assignedDate : '')
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->deadline),
-                        $bug->deadline . (isset($bug->delay) ? sprintf($lang->bug->delayWarning, $bug->delay) : '')
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->feedbackBy),
-                        $bug->feedbackBy
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->notifyEmail),
-                        $bug->notifyEmail
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->os),
-                        $osList
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->browser),
-                        $browserList
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->keywords),
-                        $bug->keywords
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->mailto),
-                        $mailtoList
-                    )
+                    buildItems($legendBasic)
                 )
             ),
             tabPane
@@ -285,50 +266,7 @@ detailBody
                 set::title($lang->bug->legendLife),
                 tableData
                 (
-                    item
-                    (
-                        set::name($lang->bug->openedBy),
-                        zget($users, $bug->openedBy) . ($bug->openedDate ? $lang->at . $bug->openedDate : '')
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->openedBuild),
-                        $openedBuilds
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->lblResolved),
-                        zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $lang->at . $bug->resolvedDate : '')
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->resolvedBuild),
-                        zget($builds, $bug->resolvedBuild)
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->resolution),
-                        div
-                        (
-                            zget($lang->bug->resolutionList, $bug->resolution) . ($bug->duplicateBug ?  "#$bug->duplicateBug:" : ''),
-                            $bug->duplicateBug ? a
-                            (
-                                set('href', createLink('bug', 'view', "bugID=$bug->duplicateBug")),
-                                set('data-toggle', 'modal'),
-                                $bug->duplicateBugTitle
-                            ) : ''
-                        )
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->closedBy),
-                        zget($users, $bug->closedBy) . ($bug->closedDate ? $lang->at . $bug->closedDate : '')
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->lblLastEdited),
-                        zget($users, $bug->lastEditedBy) . ($bug->lastEditedDate ? $lang->at . $bug->lastEditedDate : '')
-                    )
+                    buildItems($legendLife)
                 )
             )
         ),
@@ -341,38 +279,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    item
-                    (
-                        set::name($lang->bug->project),
-                        set::url(helper::createLink('project', 'view', "projectID=$bug->project")),
-                        $bug->projectName
-                    ),
-                    item
-                    (
-                        set::name((isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution),
-                        set::url(helper::createLink('execution', 'browse', "executionID=$bug->execution")),
-                        $bug->executionName
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->story),
-                        $bug->story ? a
-                        (
-                            set::href(helper::createLink('story', 'view', "storyID=$bug->story")),
-                            set('data-toggle', 'modal'),
-                            "#$bug->story $bug->storyTitle"
-                        ) : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->task),
-                        $bug->task ? a
-                        (
-                            set::href(helper::createLink('task', 'view', "taskID=$bug->task")),
-                            set('data-toggle', 'modal'),
-                            "$bug->taskName"
-                        ) : ''
-                    )
+                    buildItems($legendExecStoryTask)
                 )
             ),
             tabPane
@@ -381,56 +288,7 @@ detailBody
                 set::title($lang->bug->legendMisc),
                 tableData
                 (
-                    item
-                    (
-                        set::name($lang->bug->linkBug),
-                        $linkBugs
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->fromCase),
-                        $bug->case ? a
-                        (
-                            set::href(helper::createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion")),
-                            set('data-toggle', 'modal'),
-                            "#$bug->case $bug->caseTitle"
-                        ) : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->toCase),
-                        $toCases
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->toStory),
-                        $bug->toStory ? a
-                        (
-                            set::href(helper::createLink('story', 'view', "storyID=$bug->toStory")),
-                            set('data-toggle', 'modal'),
-                            "#$bug->toStory $bug->toStoryTitle"
-                        ) : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->toTask),
-                        $bug->toTask ? a
-                        (
-                            set::href(helper::createLink('task', 'view', "taskID=$bug->toTask")),
-                            set('data-toggle', 'modal'),
-                            "#$bug->toTask $bug->toTaskTitle",
-                        ) : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->linkMR),
-                        $linkMR
-                    ),
-                    item
-                    (
-                        set::name($lang->bug->linkCommit),
-                        $linkCommits
-                    )
+                    buildItems($legendMisc)
                 )
             )
         )
@@ -438,3 +296,30 @@ detailBody
 );
 
 render();
+
+/**
+ * Build content of table data.
+ *
+ * @param  array  $items
+ * @access public
+ * @return string
+ */
+function buildItems($items)
+{
+    $itemList = array();
+    foreach($items as $item)
+    {
+        $itemList[] = item
+        (
+            set::name($item['name']),
+            !empty($item['href']) ? a
+            (
+                set::href($item['href']),
+                !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
+                $item['text']
+            ) : $item['text']
+        );
+    }
+
+    return $itemList;
+}
