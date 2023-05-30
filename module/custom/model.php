@@ -425,7 +425,7 @@ class customModel extends model
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
 
-        $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
+        $menu = static::setMenuByConfig($allMenu, $customMenu, $module);
 
         return $menu;
     }
@@ -438,7 +438,7 @@ class customModel extends model
      */
     public static function getMainMenu($rebuild = false)
     {
-        return self::getModuleMenu('main', $rebuild);
+        return static::getModuleMenu('main', $rebuild);
     }
 
     /**
@@ -459,7 +459,7 @@ class customModel extends model
         $customMenu = '';
         if(!commonModel::isTutorialMode() && isset($config->customMenu->$configKey)) $customMenu = $config->customMenu->$configKey;
         if(!empty($customMenu) && is_string($customMenu)) $customMenu = json_decode($customMenu);
-        return $allMenu ? self::setMenuByConfig($allMenu, $customMenu) : null;
+        return $allMenu ? static::setMenuByConfig($allMenu, $customMenu) : null;
     }
 
     /**
