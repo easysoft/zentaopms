@@ -805,6 +805,16 @@ class product extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        /* Get filename to export. */
+        $fileName = '';
+        if($programID)
+        {
+            $program = $this->loadModel('program')->getByID($programID);
+            if($program) $fileName = $program->name;
+        }
+        if(!$programID || !$fileName) $fileName = $this->lang->product->common;
+
+        $this->view->fileName = $fileName . '-' . $this->lang->product->featureBar['all'][$status];
         $this->display();
     }
 
