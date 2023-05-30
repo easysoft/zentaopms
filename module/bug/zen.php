@@ -992,6 +992,7 @@ class bugZen extends bug
         $this->view->executions      = $executions;
         $this->view->tasks           = $this->loadModel('task')->getByIdList($taskIdList);
         $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch);
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');

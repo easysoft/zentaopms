@@ -136,7 +136,17 @@ $resolveItems = array();
 foreach($lang->bug->resolutionList as $key => $resolution)
 {
     if($key == 'duplicate' || $key == 'tostory') continue;
-    $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchResolve', "resolution=$key"));
+    if($key == 'fixed')
+    {
+        $buildItems = array();
+        foreach($builds as $key => $build) $buildItems[] = array('text' => $build, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key"));
+
+        $resolveItems[] = array('text' => $resolution, 'class' => 'not-hide-menu', 'items' => $buildItems);
+    }
+    else
+    {
+        $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchResolve', "resolution=$key"));
+    }
 }
 
 zui::menu
