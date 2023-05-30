@@ -112,7 +112,8 @@ form
         set::label($lang->file->fileName),
         set::control('inputControl'),
         set::name('fileName'),
-        set::value(isset($fileName) ? $fileName : ''),
+        set::value(isset($fileName) ? $fileName : $lang->file->untitled),
+        on::change('onChangeFileName'),
         set::required(true)
     ),
     formGroup
@@ -122,8 +123,7 @@ form
         set::control('select'),
         set::name('fileType'),
         set::items($lang->exportFileTypeList),
-        set::value('csv'),
-        on::change('switchFileType'),
+        on::change('onChangeFileType'),
         set::required(true)
     ),
     formGroup
@@ -190,13 +190,13 @@ function setDownloading(event)
             $.cookie.set('downloading', null);
             clearInterval(time);
         }
-
     }, 300);
 
     return true;
 }
 
-function switchFileType(event)
+/* If file type is CSV, then user can select encode type. */
+function onChangeFileType(event)
 {
     var fileType = $(event.target).val();
     var encode   = $('#encode');
@@ -204,11 +204,21 @@ function switchFileType(event)
     if(fileType === 'csv')
     {
         encode.removeAttr('disabled');
+        return;
     }
-    else
+
+    encode.val('utf-8');
+    encode.attr('disabled', 'disabled');
+}
+
+function onChangeFileName(event)
+{
+    var objFileName = $(event.target);
+
+    if(objFileName.val() == '')
     {
-        encode.val('utf-8');
-        encode.attr('disabled', 'disabled');
+        objFileName.val('{$lang->file->untitled}');
+        return;
     }
 }
 JAVASCRIPT
