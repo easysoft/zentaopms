@@ -135,19 +135,20 @@ $footToolbar = array('items' => array
 $resolveItems = array();
 foreach($lang->bug->resolutionList as $key => $resolution)
 {
-    $resolveItems[] = array('text' => $resolution);
+    if($key == 'duplicate' || $key == 'tostory') continue;
+    $resolveItems[] = array('text' => $resolution, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchResolve', "resolution=$key"));
 }
 
-menu
+zui::menu
 (
     set::id('navActions'),
-    set::class('dropdown-menu'),
+    set::class('menu dropdown-menu'),
     set::items(array
     (
         array('text' => $lang->bug->confirm, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchConfirm')),
         array('text' => $lang->bug->close, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchClose')),
         array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$product->id&branch=$branch")),
-        array('text' => $lang->bug->resolve, 'items' => $resolveItems),
+        array('text' => $lang->bug->resolve, 'class' => 'not-hide-menu', 'items' => $resolveItems),
     ))
 );
 
