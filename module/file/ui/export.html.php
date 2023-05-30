@@ -20,16 +20,18 @@ if($isCustomExport)
     $allExportFields  = explode(',', $allExportFields);
     $hasDefaultField  = isset($selectedFields);
     $selectedFields   = $hasDefaultField ? explode(',', $selectedFields) : array();
+    $moduleName       = $this->moduleName;
+    $moduleLang       = $lang->$moduleName;
+
     $exportFieldPairs = array();
-    $moduleName = $this->moduleName;
-    $moduleLang = $lang->$moduleName;
     foreach($allExportFields as $key => $field)
     {
-        $field                    = trim($field);
-        $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
-        if(!is_string($exportFieldPairs[$field])) $exportFieldPairs[$field] = $field;
-        if(!$hasDefaultField)$selectedFields[] = $field;
+        $field     = trim($field);
+        $fieldName = isset($lang->$field) && is_string($lang->$field) ? $lang->$field : $field;
+        $exportFieldPairs[$field] = isset($moduleLang->$field) && is_string($moduleLang->$field) ? $moduleLang->$field : $fieldName;
+        if(!$hasDefaultField) $selectedFields[] = $field;
     }
+
     jsVar('defaultExportFields', join(',', $selectedFields));
 }
 
