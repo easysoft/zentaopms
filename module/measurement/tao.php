@@ -12,60 +12,37 @@ declare(strict_types=1);
 class measurementTao extends measurementModel
 {
     /**
-     * Parsing php function.
+     * Save new php meas file.
      *
-     * @param  string $php
-     * @access public
-     * @return object|false
+     * @param  string $code
+     * @param  string $measCode
+     * @access protected
+     * @return bool
      */
-    public function parsePostFunction(string $measCode, string $code): object|false
+    protected function savePhpMeasFile(string $code, string $measCode): bool
     {
-        $phpFile = $this->saveTmpPhpFile($measCode, $code);
-        if(!$phpFile) return false;
-
-        include_once($phpFile);
-        $class   = new ReflectionClass('meas');
-        $methods = $class->getMethods();
-
-        $methodInfo = new stdclass();
-
-        if(empty($methods)) return false;
-        $method     = current($methods);
-        $methodInfo->methodName = $method->name;
-
-        $methodInfo->methodCode = $this->pickPhpFunction($phpFile, $methodInfo->methodName);
-        return $methodInfo;
+        $measCode = strtolower($measCode);
+        $measFile = $this->app->getExtensionRoot() . 'custom' . DS . 'meas' .DS . 'ext' . DS . 'model' . DS . $measCode . '.php';
+        $result   = file_put_contents($measFile, $code);
+        return $result !== false;
     }
 
     /**
-     * Append new php function to meas class.
+     * Test if one php meas can be used.
      *
-     * @param  int    $code
-     * @param  int    $measFile
-     * @access public
-     * @return viod
+     * @param  string $measCode
+     * @param  array  $params
+     * @access protected
+     * @return mixed
      */
-    public function appendPhpFunction(string $code, string $measFile): string|false
+    protected function testPhpMeas($measCode, $params = array()): mixed
     {
-        $activeCode = $this->getActivePhpCode();
-        $activeCode .= $code;
-        $measCode = sprintf($this->config->meas);
+        $meas = $this->loadModel('meas');
+        return call_user_func_array(array($meas, $measCode), $params);
     }
 
     /**
-     * Get active php code.
-     *
-     * @access public
-     * @return string
-     */
-    public function getActivePhpCode(): string
-    {
-        $meas = $this->dao->select('configure')->from(TABLE_BASICMEAS)->where('engine')->eq('php')->fetchAll();
-        return implode(PHP_EOL, $meas);
-    }
-
-    /**
-     * Save tmp php file.
+     * Save php meas code to one tmp file.
      *
      * @param  string $measCode
      * @param  string $code
