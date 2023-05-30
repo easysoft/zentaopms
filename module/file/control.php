@@ -129,7 +129,7 @@ class file extends control
 
         if(!$this->file->checkPriv($file))
         {
-            echo(js::alert($this->lang->file->accessDenied));
+            echo js::alert($this->lang->file->accessDenied);
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::locate(helper::createLink('my', 'index'), 'parent.parent'));
         }
@@ -355,7 +355,7 @@ class file extends control
                 $extension = end($title);
                 if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
                 array_pop($title);
-                $file->title = join('.', $title);
+                $file->title = implode('.', $title);
             }
 
             $this->view->file = $file;
@@ -371,7 +371,7 @@ class file extends control
      */
     public function ajaxPasteImg($uid = '')
     {
-        if($_POST) return print($this->file->pasteImage($this->post->editor, $uid, $safe = true));
+        if($_POST) return print($this->file->pasteImage($this->post->editor, $uid, true));
     }
 
     /**
@@ -460,7 +460,7 @@ class file extends control
         $templateID = $this->file->saveExportTemplate($module);
         if(dao::isError())
         {
-            echo js::error(dao::getError(), $full = false);
+            echo js::error(dao::getError(), false);
             $templateID = 0;
         }
         return print($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));

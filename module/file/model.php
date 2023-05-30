@@ -136,7 +136,7 @@ class fileModel extends model
         $now        = helper::today();
         $files      = $this->getUpload($filesName, $labelsName);
 
-        foreach($files as $id => $file)
+        foreach($files as $file)
         {
             if($file['size'] == 0) continue;
             if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
@@ -209,7 +209,7 @@ class fileModel extends model
         {
             if(empty($_FILES[$htmlTagName]['name'])) return $files;
             extract($_FILES[$htmlTagName]);
-            if(!validater::checkFileName($name)) return array();;
+            if(!validater::checkFileName($name)) return array();
             $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
@@ -361,8 +361,7 @@ class fileModel extends model
      */
     public function getSaveName($pathName)
     {
-        $saveName = strpos($pathName, '.') === false ? $pathName : substr($pathName, 0, strpos($pathName, '.'));
-        return $saveName;
+        return strpos($pathName, '.') === false ? $pathName : substr($pathName, 0, strpos($pathName, '.'));
     }
 
     /**
@@ -391,7 +390,7 @@ class fileModel extends model
     {
         return $this->dao->select('id,title,content,public')->from(TABLE_USERTPL)
             ->where('type')->eq("export$module")
-            ->andwhere('account', $markLeft = true)->eq($this->app->user->account)
+            ->andwhere('account', true)->eq($this->app->user->account)
             ->orWhere('public')->eq('1')
             ->markRight(1)
             ->orderBy('id')
@@ -858,7 +857,7 @@ class fileModel extends model
 
         if(!empty($_SESSION['album'][$uid]))
         {
-            foreach($_SESSION['album'][$uid] as $i => $imageID)
+            foreach($_SESSION['album'][$uid] as $imageID)
             {
                 if(isset($imageIdList[$imageID])) $_SESSION['album']['used'][$uid][$imageID] = $imageID;
             }
@@ -938,9 +937,7 @@ class fileModel extends model
             $row = fread($f, $wid2);
             $pixels = str_split($row, 3);
 
-            for ($x = 0; $x < $wid; $x++) {
-                imagesetpixel($img, $x, $y, $this->dwordize($pixels[$x]));
-            }
+            for ($x = 0; $x < $wid; $x++) imagesetpixel($img, $x, $y, $this->dwordize($pixels[$x]));
         }
         fclose($f);
         return $img;
@@ -977,7 +974,7 @@ class fileModel extends model
         $data = new stdclass();
         $data->objectID   = $objectID;
         $data->objectType = $objectType;
-        if(!defined('RUN_MODE') OR RUN_MODE != 'api') $data->extra = 'editor';
+        if(!defined('RUN_MODE') || RUN_MODE != 'api') $data->extra = 'editor';
         if(isset($_SESSION['album']['used'][$uid]) and $_SESSION['album']['used'][$uid])
         {
             $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();
@@ -1047,7 +1044,7 @@ class fileModel extends model
     {
         if(!empty($_SESSION['album'][$uid]))
         {
-            foreach($_SESSION['album'][$uid] as $i => $imageID)
+            foreach($_SESSION['album'][$uid] as $imageID)
             {
                 if(!isset($_SESSION['album']['used'][$uid][$imageID]))
                 {
@@ -1197,10 +1194,10 @@ class fileModel extends model
 
         $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
-        $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
+        $addedFiles = empty($addedFiles) ? '' : ',' . implode(',', array_keys($addedFiles));
 
         $newObject->files = trim($oldFiles . $addedFiles, ',');
-        $oldObject->files = join(',', array_keys($oldObject->files));
+        $oldObject->files = implode(',', array_keys($oldObject->files));
     }
 
     /**
