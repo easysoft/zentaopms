@@ -192,7 +192,7 @@ class bug extends control
      */
     public function create(int $productID, string $branch = '', string $extras = '')
     {
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        if($branch === '') $branch = (string)$this->cookie->preBranch;
 
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
