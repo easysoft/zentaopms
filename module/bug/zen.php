@@ -154,6 +154,124 @@ class bugZen extends bug
     }
 
     /**
+     * 获取bug创建页面的branches和branch，并绑定到bug上。
+     * Get the branches and branch for the bug create page and bind them to bug.
+     *
+     * @param  object    $bug
+     * @param  object    $currentProduct
+     * @access protected
+     * @return object
+     */
+    protected function getBranches4Create(object $bug, object $currentProduct): object
+    {
+        $productID = $bug->productID;
+        $branch    = $bug->branch;
+
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $objectID        = $this->app->tab == 'project' ? $bug->projectID : $bug->executionID;
+            $productBranches = $currentProduct->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
+        return $this->updateBug($bug, array('branches' => $branches, 'branch' => $branch));
+    }
+
+    /**
+     * 获取bug创建页面的builds和stories，并绑定到bug上。
+     * Get the builds and stories for the bug create page and bind them to bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return object
+     */
+    protected function getBuildsAndStories4Create(object $bug): object
+    {
+        $this->loadModel('build');
+        $productID   = $bug->productID;
+        $branch      = $bug->branch;
+        $projectID   = $bug->projectID;
+        $executionID = $bug->executionID;
+        $moduleID    = $bug->moduleID ? $bug->moduleID : 0;
+
+        if($executionID)
+        {
+            $builds  = $this->build->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
+            $stories = $this->story->getExecutionStoryPairs($executionID);
+            if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        }
+        else
+        {
+            $builds   = $this->build->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
+        }
+
+        return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
+    }
+
+    /**
+     * 获取bug创建页面的产品成员。
+     * Get the product members for bug create page.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return array
+     */
+    protected function getProductMembers4Create(object $bug): array
+    {
+        $productMembers = $this->bug->getProductMemberPairs($bug->productID, $bug->branch);
+        $productMembers = array_filter($productMembers);
+        if(empty($productMembers)) $productMembers = $this->view->users;
+
+        return $productMembers;
+    }
+
+    /**
+     * 获取bug创建页面的products和projects，并绑定到bug上。
+     * Get the products and projects for the bug create page and bind them to bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return object
+     */
+    protected function getProductsAndProjects4Create(object $bug): object
+    {
+        $productID   = $bug->productID;
+        $branch      = $bug->branch;
+        $projectID   = $bug->projectID;
+        $executionID = $bug->executionID;
+        $projects    = array(0 => '');
+        $products    = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
+
+        if($executionID)
+        {
+            $products       = array();
+            $linkedProducts = $this->product->getProducts($executionID);
+            foreach($linkedProducts as $product) $products[$product->id] = $product->name;
+        }
+        elseif($projectID)
+        {
+            $products    = array();
+            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
+            foreach($productList as $product) $products[$product->id] = $product->name;
+
+            /* Set project menu. */
+            if($this->app->tab == 'project') $this->project->setMenu($projectID);
+        }
+        else
+        {
+            $projects += $this->product->getProjectPairsByProduct($productID, (string)$branch);
+        }
+
+        return $this->updateBug($bug, array('products' => $products, 'projects' => $projects));
+    }
+
+    /**
      * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
      * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
      *
@@ -396,6 +514,60 @@ class bugZen extends bug
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
+        $this->display();
+    }
+
+    /**
+     *
+     * 构建创建bug页面数据。
+     * Build form fields for create bug.
+     *
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $from
+     * @access protected
+     * @return void
+     */
+    protected function buildCreateForm(object $bug, array $output, string $from): void
+    {
+        extract($output);
+        $currentProduct = $this->product->getByID($bug->productID);
+
+        /* 获得版本下拉和需求下拉列表。 */
+        /* Get builds and stroies. */
+        $bug = $this->getBuildsAndStories4Create($bug);
+        /* 如果bug有所属项目，查询这个项目。 */
+        /* Get project. */
+        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($bug->projectID)));
+        /* 获得产品下拉和项目下拉列表。 */
+        /* Get products and projects. */
+        $bug = $this->getProductsAndProjects4Create($bug);
+        /* 追加下拉列表的内容。 */
+        /* Append projects. */
+        $bug = $this->appendProjects4Create($bug, (isset($bug->id) ? $bug->id : 0));
+        /* 获得项目的管理方式。 */
+        /* Get project model. */
+        $bug = $this->getProjectModel4Create($bug);
+        /* 获得执行下拉列表。 */
+        /* Get executions. */
+        $bug = $this->getExecutions4Create($bug);
+
+        $this->extractBugTemplete($bug);
+
+        $this->view->title        = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->view->customFields = $this->getCustomFields4Create();
+        $this->view->showFields   = $this->config->bug->custom->createFields;
+
+        $this->view->productMembers        = $this->getProductMembers4Create($bug);
+        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
+        $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
+        $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
+        $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
+        $this->view->product               = $currentProduct;
+        $this->view->blockID               = $this->getBlockID4Create();
+        $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
+
         $this->display();
     }
 
@@ -768,8 +940,6 @@ class bugZen extends bug
         return $bug;
     }
 
-
-
     /**
      * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。
      * Extract extras, if bug come from an object(bug, case, testtask, todo), get some value from object.
@@ -829,59 +999,7 @@ class bugZen extends bug
         return $bug;
     }
 
-    /**
-     *
-     * 构建创建bug页面数据。
-     * Build form fields for create bug.
-     *
-     * @param  object    $bug
-     * @param  array     $output
-     * @param  string    $from
-     * @access protected
-     * @return void
-     */
-    protected function buildCreateForm(object $bug, array $output, string $from): void
-    {
-        extract($output);
-        $currentProduct = $this->product->getByID($bug->productID);
 
-        /* 获得版本下拉和需求下拉列表。 */
-        /* Get builds and stroies. */
-        $bug = $this->getBuildsAndStories4Create($bug);
-        /* 如果bug有所属项目，查询这个项目。 */
-        /* Get project. */
-        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($bug->projectID)));
-        /* 获得产品下拉和项目下拉列表。 */
-        /* Get products and projects. */
-        $bug = $this->getProductsAndProjects4Create($bug);
-        /* 追加下拉列表的内容。 */
-        /* Append projects. */
-        $bug = $this->appendProjects4Create($bug, (isset($bug->id) ? $bug->id : 0));
-        /* 获得项目的管理方式。 */
-        /* Get project model. */
-        $bug = $this->getProjectModel4Create($bug);
-        /* 获得执行下拉列表。 */
-        /* Get executions. */
-        $bug = $this->getExecutions4Create($bug);
-
-        $this->extractBugTemplete($bug);
-
-        $this->view->title        = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->customFields = $this->getCustomFields4Create();
-        $this->view->showFields   = $this->config->bug->custom->createFields;
-
-        $this->view->productMembers        = $this->getProductMembers4Create($bug);
-        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
-        $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
-        $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
-        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
-        $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
-        $this->view->product               = $currentProduct;
-        $this->view->blockID               = $this->getBlockID4Create();
-        $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
-
-        $this->display();
-    }
 
     /**
      * 将$bug对象的属性添加到view对象中。
@@ -931,123 +1049,7 @@ class bugZen extends bug
         $this->view->isStepsTemplate = $bug->steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
     }
 
-    /**
-     * 获取bug创建页面的branches和branch，并绑定到bug上。
-     * Get the branches and branch for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @param  object    $currentProduct
-     * @access protected
-     * @return object
-     */
-    protected function getBranches4Create(object $bug, object $currentProduct): object
-    {
-        $productID = $bug->productID;
-        $branch    = $bug->branch;
 
-        if($this->app->tab == 'execution' or $this->app->tab == 'project')
-        {
-            $objectID        = $this->app->tab == 'project' ? $bug->projectID : $bug->executionID;
-            $productBranches = $currentProduct->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
-        }
-        else
-        {
-            $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        }
-
-        return $this->updateBug($bug, array('branches' => $branches, 'branch' => $branch));
-    }
-
-    /**
-     * 获取bug创建页面的builds和stories，并绑定到bug上。
-     * Get the builds and stories for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return object
-     */
-    protected function getBuildsAndStories4Create(object $bug): object
-    {
-        $this->loadModel('build');
-        $productID   = $bug->productID;
-        $branch      = $bug->branch;
-        $projectID   = $bug->projectID;
-        $executionID = $bug->executionID;
-        $moduleID    = $bug->moduleID ? $bug->moduleID : 0;
-
-        if($executionID)
-        {
-            $builds  = $this->build->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
-            $stories = $this->story->getExecutionStoryPairs($executionID);
-            if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-        }
-        else
-        {
-            $builds   = $this->build->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
-            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
-        }
-
-        return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
-    }
-
-    /**
-     * 获取bug创建页面的产品成员。
-     * Get the product members for bug create page.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getProductMembers4Create(object $bug): array
-    {
-        $productMembers = $this->bug->getProductMemberPairs($bug->productID, $bug->branch);
-        $productMembers = array_filter($productMembers);
-        if(empty($productMembers)) $productMembers = $this->view->users;
-
-        return $productMembers;
-    }
-
-    /**
-     * 获取bug创建页面的products和projects，并绑定到bug上。
-     * Get the products and projects for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return object
-     */
-    protected function getProductsAndProjects4Create(object $bug): object
-    {
-        $productID   = $bug->productID;
-        $branch      = $bug->branch;
-        $projectID   = $bug->projectID;
-        $executionID = $bug->executionID;
-        $projects    = array(0 => '');
-        $products    = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
-
-        if($executionID)
-        {
-            $products       = array();
-            $linkedProducts = $this->product->getProducts($executionID);
-            foreach($linkedProducts as $product) $products[$product->id] = $product->name;
-        }
-        elseif($projectID)
-        {
-            $products    = array();
-            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
-            foreach($productList as $product) $products[$product->id] = $product->name;
-
-            /* Set project menu. */
-            if($this->app->tab == 'project') $this->project->setMenu($projectID);
-        }
-        else
-        {
-            $projects += $this->product->getProjectPairsByProduct($productID, (string)$branch);
-        }
-
-        return $this->updateBug($bug, array('products' => $products, 'projects' => $projects));
-    }
 
     /**
      * 追加bug创建页面的products和projects，并绑定到bug上。
