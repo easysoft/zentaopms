@@ -201,13 +201,16 @@ class taskZen extends task
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
 
-        $executionIdList = array_unique(array_column($tasks, 'execution'));
+        $executionTeams    = array();
+        $executionIdList   = array_unique(array_column($tasks, 'execution'));
+        $executionTeamList = $this->execution->getMembersByIdList($executionIdList);
+        foreach($executionIdList as $id) $executionTeams[$id] = array_column($executionTeamList[$id], 'account');
 
         /* Assign. */
         $this->view->executionID    = $executionID;
         $this->view->tasks          = $tasks;
         $this->view->teams          = $this->task->getTeamMembersByIdList($this->post->taskIdList);
-        $this->view->executionTeams = $this->execution->getMembersByIdList($executionIdList);
+        $this->view->executionTeams = $executionTeams;
         $this->view->executionName  = zget($execution, 'name', '');
         $this->view->executionType  = zget($execution, 'type', '');
         $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
