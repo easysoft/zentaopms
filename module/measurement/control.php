@@ -469,6 +469,25 @@ class measurement extends control
     }
 
     /**
+     * Get php params from post php code.
+     *
+     * @access public
+     * @return void
+     */
+    public function getPhpParams()
+    {
+        $measurementID = (int)$this->post->measurementID;
+        $measurement   = $this->measurement->getByID($measurementID);
+        if(!$this->post->code) return print('');
+        if($this->post->code == $measurement->configure) $this->locate($this->server->http_referer);
+
+        $this->view->params        = $this->measurement->getPhpMeasParams($this->post->code, $measurement->code);
+        $this->view->measurement   = $measurement;
+        $this->view->measurementID = $measurementID;
+        $this->display();
+    }
+
+    /**
      * Get sql params from sql.
      *
      * @access public
