@@ -228,7 +228,8 @@ class bug extends control
             list($laneID, $columnID) = $this->bugZen->getKanbanVariable($output);
             $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
-            $this->bugZen->addAction4Create($bug, $output, $from);
+            $todoID = isset($output['todoID']) ? $output['todoID'] : 0;
+            if($todoID) $this->bugZen->finishTodo($bug->id, $todoID);
 
             $message = $this->executeHooks($bugID);
             if(!$message) $message = $this->lang->saveSuccess;

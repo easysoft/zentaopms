@@ -154,6 +154,26 @@ class bugZen extends bug
     }
 
     /**
+     * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
+     * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
+     *
+     * @param  object    $bug
+     * @param  object    $currentProduct
+     * @access protected
+     * @return object
+     */
+    protected function setOptionMenu(object $bug, object $currentProduct): object
+    {
+        $bug = $this->getBranches4Create($bug, $currentProduct);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
+
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+
+        return $bug;
+    }
+
+    /**
      * 设置浏览页面的 cookie。
      * Set cookie in browse view.
      *
@@ -484,6 +504,27 @@ class bugZen extends bug
     }
 
     /**
+     * 为create方法添加动态。
+     * Add action for create function.
+     *
+     * @param  int       $bug
+     * @param  int       $todoID
+     * @access protected
+     * @return bool
+     */
+    protected function finishTodo(int $bugID, int $todoID): bool
+    {
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+        }
+        return !dao::isError();
+    }
+
+    /**
      * 更新完 bug 后的相关处理。
      * Relevant processing after updating bug.
      *
@@ -659,36 +700,6 @@ class bugZen extends bug
     }
 
     /**
-     * 为create方法添加动态。
-     * Add action for create function.
-     *
-     * @param  object    $bug
-     * @param  array     $output
-     * @param  string    $from
-     * @access protected
-     * @return bool
-     */
-    protected function addAction4Create(object $bug, array $output, string $from): bool
-    {
-        $bugID    = $bug->id;
-        $todoID   = isset($output['todoID']) ? $output['todoID'] : 0;
-
-        if($todoID)
-        {
-            $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-            $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
-            if($this->config->edition == 'biz' || $this->config->edition == 'max')
-            {
-                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-            }
-        }
-        return !dao::isError();
-    }
-
-
-
-    /**
      * 初始化一个默认的bug模板。
      * Init a default bug templete.
      *
@@ -757,25 +768,6 @@ class bugZen extends bug
         return $bug;
     }
 
-    /**
-     * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
-     * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
-     *
-     * @param  object    $bug
-     * @param  object    $currentProduct
-     * @access protected
-     * @return object
-     */
-    protected function setOptionMenu(object $bug, object $currentProduct): object
-    {
-        $bug = $this->getBranches4Create($bug, $currentProduct);
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
-        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
-
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-
-        return $bug;
-    }
 
 
     /**
