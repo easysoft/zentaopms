@@ -200,7 +200,7 @@ detailHeader
             set::icon('plus'),
             set::type('primary'),
             set::text($lang->bug->create),
-            $canCreateBug ? set::url($this->createLink('bug', 'create')) : null
+            $canCreateBug ? set::url($this->createLink('bug', 'create', "productID=$product->id")) : null
         )
     )
 );
