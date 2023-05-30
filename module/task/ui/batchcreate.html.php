@@ -99,6 +99,7 @@ if($execution->type == 'kanban')
         set::items($regionPairs),
         set::width('180px'),
         set::ditto(true),
+        set::required(true),
     );
     $laneItem = formBatchItem(
         set::name('lane'),
@@ -108,6 +109,7 @@ if($execution->type == 'kanban')
         set::items($lanePairs),
         set::width('180px'),
         set::ditto(true),
+        set::required(true),
     );
 }
 
