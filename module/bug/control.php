@@ -66,11 +66,11 @@ class bug extends control
             $objectID = ($tab == 'project' or $tab == 'execution') ? $this->session->{$tab} : 0;
             if($tab == 'project' or $tab == 'execution')
             {
-                $products = $this->product->getProducts($objectID, $mode, $orderBy = '', $withBranch = false);
+                $products = $this->product->getProducts($objectID, $mode, '', false);
             }
             else
             {
-                $products = $this->product->getPairs($mode, $programID = 0, $append = '', $shadow = 'all');
+                $products = $this->product->getPairs($mode, 0, '', 'all');
             }
 
             if(empty($products) and !helper::isAjaxRequest()) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID"));
@@ -673,7 +673,7 @@ class bug extends control
         $this->bugZen->buildSearchFormForLinkBugs($bug, $excludeBugs, $queryID);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
@@ -1001,7 +1001,7 @@ class bug extends control
 
             $users = $this->loadModel('user')->getPairs();
             $now   = helper::now();
-            foreach($bugIdList as $i => $bugID)
+            foreach($bugIdList as $bugID)
             {
                 $oldBug = $bugs[$bugID];
 
@@ -1177,10 +1177,9 @@ class bug extends control
      */
     public function ajaxGetModuleOwner(int $moduleID, int $productID = 0): string
     {
-
         list($account, $realname) = $this->bugZen->getModuleOwner($moduleID, $productID);
 
-        return print(json_encode(array($account, $realName)));
+        return print(json_encode(array($account, $realname)));
     }
 
     /**
