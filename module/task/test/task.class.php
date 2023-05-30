@@ -722,6 +722,30 @@ class taskTest
     }
 
     /**
+     * Test update team by effort.
+     *
+     * @param  int    $estimateID
+     * @param  object $record
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID): array
+    {
+        $task        = $this->objectModel->getByID($taskID);
+        $currentTeam = $this->objectModel->getTeamByAccount($task->team);
+        $this->objectModel->updateTeamByEffort($effortID, $record, $currentTeam, $task);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchAll();
+        }
+    }
+
+    /**
      * Test delete estimate.
      *
      * @param  int    $estimateID
