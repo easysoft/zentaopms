@@ -197,6 +197,7 @@ $config->execution->datatable->fieldList['name']['title']        = $lang->execut
 $config->execution->datatable->fieldList['name']['width']        = '356';
 $config->execution->datatable->fieldList['name']['type']         = 'html';
 $config->execution->datatable->fieldList['name']['fixed']        = 'left';
+$config->execution->datatable->fieldList['name']['sortType']     = true;
 $config->execution->datatable->fieldList['name']['nestedToggle'] = true;
 $config->execution->datatable->fieldList['name']['iconRender']   = true;
 $config->execution->datatable->fieldList['name']['required']     = 'yes';
@@ -214,6 +215,7 @@ $config->execution->datatable->fieldList['project']['width']    = '220';
 $config->execution->datatable->fieldList['project']['flex']     = 1;
 $config->execution->datatable->fieldList['project']['fixed']    = 'no';
 $config->execution->datatable->fieldList['project']['required'] = 'no';
+$config->execution->datatable->fieldList['project']['sortType'] = true;
 
 $config->execution->datatable->fieldList['status']['title']    = 'execStatus';
 $config->execution->datatable->fieldList['status']['type']     = 'status';
