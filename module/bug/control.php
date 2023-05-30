@@ -127,7 +127,7 @@ class bug extends control
         $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
         $bugs       = $this->bugZen->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
-        $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $param, $moduleID, $executions, $orderBy, $pager);
+        $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $moduleID, $executions, $orderBy, $pager);
     }
 
     /**
@@ -139,7 +139,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function view(int $bugID, string $from = 'bug')
+    public function view(int $bugID)
     {
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);

@@ -948,7 +948,6 @@ class bugZen extends bug
      * @param  object    $product
      * @param  string    $branch
      * @param  string    $browseType
-     * @param  int       $param
      * @param  int       $moduleID
      * @param  array     $executions
      * @param  string    $orderBy
@@ -956,7 +955,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function buildBrowseView(array $bugs, object $product, string $branch, string $browseType, int $param, int $moduleID, array $executions, string $orderBy, object $pager): void
+    protected function buildBrowseView(array $bugs, object $product, string $branch, string $browseType, int $moduleID, array $executions, string $orderBy, object $pager): void
     {
         $this->loadModel('datatable');
 
@@ -1166,13 +1165,12 @@ class bugZen extends bug
      * 为批量创建bug构造数据。
      * Build bugs for the batch creation.
      *
-     * @param  int         $productID
-     * @param  string      $branch
-     * @param  array|false $bugImagesFile
+     * @param  int       $productID
+     * @param  string    $branch
      * @access protected
      * @return array
      */
-    protected function buildBugsForBatchCreate(int $productID, string $branch, array|false $bugImagesFile): array
+    protected function buildBugsForBatchCreate(int $productID, string $branch): array
     {
         $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
 
