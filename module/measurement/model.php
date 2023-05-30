@@ -1125,6 +1125,49 @@ class measurementModel extends model
     }
 
     /**
+     * Create php function.
+     *
+     * @param  string $php
+     * @param  object $measurement
+     * @access public
+     * @return array
+     */
+    public function createPhpFunction($php, $measurement): array
+    {
+        $measFunction = $this->getPhpFunctionName($measurement);
+        $postFunction = $this->measurementTao->parsePostFunction($measurement->code, $php);
+
+        if(!$measFunction or !$postFunction) return array('result' => 'fail', 'errors' => $this->lang->measurement->tips->nameError);
+
+        $php = str_replace($postFunction->methodName, $measFunction, $postFunction->methodCode);
+
+        try
+        {
+            $result = $this->measurementTao->testPhpMeas($php);
+        }
+        catch(PDOException $exception)
+        {
+            $message = sprintf($this->lang->measurement->tips->createError, $exception->getMessage());
+            return array('result' => 'fail', 'errors' => $message);
+        }
+
+        return array('result' => 'success');
+    }
+
+    /**
+     * Get sql function name of a measurement.
+     *
+     * @param  object    $measurement
+     * @access public
+     * @return string
+     */
+    public function getPhpFunctionName($measurement): string
+    {
+        if(!is_object($measurement) or !isset($measurement->code)) return '';
+        return strtolower("{$measurement->code}");
+    }
+
+    /**
      * Create sql function.
      *
      * @param  string $sql
