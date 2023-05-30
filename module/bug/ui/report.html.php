@@ -13,7 +13,7 @@ namespace zin;
 toolbar
 (
     item(set(
-    [ 
+    [
         'text'  => $lang->goback,
         'icon'  => 'back',
         'class' => 'ghost',
@@ -70,7 +70,7 @@ foreach($lang->report->typeList as $type => $name)
 {
     $chartTypeList[] = item
     (
-        set::text($name), 
+        set::text($name),
         set::url('javascript:chageChartType(\"$type\")'),
         set::icon($type == 'default' ? 'list-box' : "chart-{$type}"),
         setClass('btn ghost' . ($type == $chartType ? ' btn-active-line' : ''))
