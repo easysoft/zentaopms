@@ -212,8 +212,7 @@ class bug extends control
 
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
 
-            $checkExist = $this->bugZen->checkExistBug($bug);
-            if($checkExist['status'] == 'exists') $this->send(array('result' => 'success', 'id' => $checkExist['id'], 'message' => sprintf($this->lang->duplicate, $this->lang->bug->common), 'locate' => $this->createLink('bug', 'view', "bugID={$checkExist['id']}")));
+            $this->bugZen->checkExistBug($bug);
 
             $action = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
             $bugID  = $this->bug->create($bug, $action);
@@ -242,8 +241,7 @@ class bug extends control
 
             if(isonlybody()) return $this->send($this->responseInModal($executionID));
 
-            $location = $this->getLocation4Create($bugID, $executionID, $output);
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
+            return $this->responseAfterCreate($bug, $executionID, $output, $message);
         }
 
         $productID      = $this->product->saveVisitState($productID, $this->products);
@@ -472,7 +470,7 @@ class bug extends control
     public function activate(int $bugID, string $kanbanInfo = '')
     {
         $oldBug = $this->bug->getByID($bugID);
-        $this->checkBugExecutionPriv($oldBug);
+        $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
         {
@@ -557,7 +555,16 @@ class bug extends control
 
         /* 如果 bug 转任务，删除 bug 时确认是否更新任务状态。*/
         /* If the bug has been transfered to a task, confirm to update task when delete the bug. */
-        if($bug->toTask) $this->bugZen->confirm2UpdateTask($bugID, $bug->toTask);
+        if($bug->toTask)
+        {
+            $task = $this->task->getByID($bug->toTask);
+            if(!$task->deleted)
+            {
+                $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
+                $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+                return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+            }
+        }
 
         return $this->bugZen->responseAfterDelete($bug, $from);
     }

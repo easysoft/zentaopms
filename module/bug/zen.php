@@ -8,45 +8,30 @@ class bugZen extends bug
      *
      * @param  object    $bug
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function checkExistBug(object $bug): array
+    protected function checkExistBug(object $bug): bool
     {
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if($result and $result['stop'])
+        {
+            $message = sprintf($this->lang->duplicate, $this->lang->bug->common);
+            return $this->send(array('result' => 'success', 'id' => $result['duplicate'], 'message' => $message, 'locate' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
+        }
 
-        return array('status' => 'success');
+        return true;
     }
 
     /**
-     * 确认是否更新 bug 状态。
-     * Confirm to update task.
-     *
-     * @param  int        $bugID
-     * @param  int        $taskID
-     * @access protected
-     * @return array|true
-     */
-    protected function confirm2UpdateTask(int $bugID, int $taskID): array
-    {
-        $task = $this->task->getByID($taskID);
-        if($task->deleted) return true;
-
-        $confirmedURL = $this->createLink('task', 'view', "taskID=$taskID");
-        unset($_GET['onlybody']);
-        $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-        return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
-    }
-
-    /**
+     * 检查用户是否拥有所属执行的权限。
      * Check bug execution priv.
      *
-     * @param  object    $bug
+     * @param  object $bug
      * @access public
-     * @return void
+     * @return boll|string
      */
-    public function checkBugExecutionPriv($bug)
+    protected function checkBugExecutionPriv(object $bug): bool|string
     {
         if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
         {
@@ -54,15 +39,16 @@ class bugZen extends bug
 
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
-            if($this->app->tab == 'my') print(js::reload('parent'));
+            if($this->app->tab == 'my') return print(js::reload('parent'));
 
             return print(js::locate('back'));
         }
+        return true;
     }
 
     /**
-     * 在解决bug中，检查必填项。
-     * While resolving a bug, check for required fields during build creation.
+     * 检查解决bug时表单数据的完整性。
+     * Check the integrity of form data when resolving bug.
      *
      * @param  object    $bug
      * @access protected
@@ -109,7 +95,7 @@ class bugZen extends bug
     }
 
     /**
-     * 检查批量创建的bug的数据。
+     * 检查批量创建bug时表单数据的完整性。
      * Check the batch created bugs.
      *
      * @param  array     $bugs
@@ -242,45 +228,7 @@ class bugZen extends bug
         return array($laneID, $columnID);
     }
 
-    /**
-     * 获得create方法的返回url。
-     * Get response url for create.
-     *
-     * @param  int       $bugID
-     * @param  int       $executionID
-     * @param  string    $branch
-     * @access protected
-     * @return string
-     */
-    protected function getLocation4Create(int $bugID, int $executionID, array $output): string
-    {
-        $bug = $this->bug->getByID($bugID);
 
-        if($this->app->tab == 'execution')
-        {
-            if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
-            {
-                $location = $this->session->bugList;
-            }
-            else
-            {
-                $location = $this->createLink('execution', 'bug', "executionID=$executionID");
-            }
-
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
-        }
-        else
-        {
-            helper::setcookie('bugModule', '0', 0);
-            $location = $this->createLink('bug', 'browse', "productID={$bug->product}&branch=$bug->branch&browseType=byModule&param={$bug->module}&orderBy=id_desc");
-        }
-        if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
-
-        return $location;
-    }
 
     /**
      * 获取bug创建页面的branches和branch，并绑定到bug上。
@@ -1932,6 +1880,45 @@ class bugZen extends bug
         }
 
         return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+    }
+
+    /**
+     * 创建 bug 后的返回结果。
+     * respond after deleting.
+     *
+     * @param  object    $bug
+     * @param  int       $executionID
+     * @param  array     $output
+     * @param  string    $message
+     * @access protected
+     * @return string
+     */
+    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message): string
+    {
+        if($this->app->tab == 'execution')
+        {
+            if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
+            {
+                $location = $this->session->bugList;
+            }
+            else
+            {
+                $location = $this->createLink('execution', 'bug', "executionID=$executionID");
+            }
+
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
+        }
+        else
+        {
+            helper::setcookie('bugModule', '0', 0);
+            $location = $this->createLink('bug', 'browse', "productID={$bug->product}&branch=$bug->branch&browseType=byModule&param={$bug->module}&orderBy=id_desc");
+        }
+        if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID={$bug->id}", 'html');
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
     }
 
     /**
