@@ -14,210 +14,203 @@ jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
 
 /* zin: Set variables to define picker options for form. */
-
-$items = array();
-
-/* Field of ID. */
-$items[] = array
-(
-    'name'    => 'id',
-    'label'   => $lang->idAB,
-    'control' => 'index',
-    'width'   => '30px',
-);
-
-/* Field of module. */
-$items[] = array
-(
-    'name'    => 'module',
-    'label'   => $lang->task->module,
-    'control' => 'select',
-    'value'   => $moduleID,
-    'items'   => $modules,
-    'width'   => '180px',
-    'ditto'   => true,
-);
-
+$storyItem         = '';
+$previewItem       = '';
+$copyStoryItem     = '';
+$storyEstimateItem = '';
+$storyDescItem     = '';
+$storyPriItem      = '';
 if(!$hideStory)
 {
-    /* Field of story. */
-    $items[] = array
-    (
-        'name'    => 'story',
-        'label'   => $lang->task->story,
-        'control' => 'select',
-        'items'   => $stories,
-        'width'   => '200px',
-        'ditto'   => true,
+    $storyItem = formBatchItem(
+        set::name('story'),
+        set::label($lang->task->story),
+        set::control('select'),
+        set::items($stories),
+        set::width('200px'),
+        set::ditto(true),
     );
 
-    /* Field of view story. */
-    $items[] = array
-    (
-        'name'       => 'preview',
-        'label'      => '',
-        'labelClass' => 'hidden',
-        'width'      => '40px',
-        'control'    => array
+    $previewItem = formBatchItem(
+        set::name('preview'),
+        set::label(''),
+        set('labelClass', 'hidden'),
+        set::width('40px'),
+        set::control('hidden'),
+        btn
         (
-            'type'        => 'btn',
-            'icon'        => 'eye',
-            'class'       => 'btn-link',
-            'hint'        => $lang->preview,
-            'tagName'     => 'a',
-            'url'         => '#',
-            'data-toggle' => 'modal',
+            set('type', 'btn'),
+            set('icon', 'eye'),
+            set('class', 'btn-link'),
+            set('hint', $lang->preview),
+            set('tagName', 'a'),
+            set('url', '#'),
+            set('data-toggle', 'modal'),
         )
     );
 
-    /* Field of copy story. */
-    $items[] = array
-    (
-        'name'       => 'copyStory',
-        'label'      => '',
-        'labelClass' => 'hidden',
-        'width'      => '40px',
-        'control'    => array
+    $copyStoryItem = formBatchItem(
+        set::name('copyStory'),
+        set::label(''),
+        set('labelClass', 'hidden'),
+        set::width('40px'),
+        set::control('hidden'),
+        btn
         (
-            'type'  => 'btn',
-            'icon'  => 'arrow-right',
-            'class' => 'btn-link',
-            'hint'  => $lang->task->copyStoryTitle,
+            set('type', 'btn'),
+            set('icon', 'arrow-right'),
+            set('class', 'btn-link'),
+            set('hint', $lang->task->copyStoryTitle),
         )
     );
 
-    /* Hidden fields related to story. */
-    $items[] = array
-    (
-        'name'  => 'storyEstimate',
-        'label' => '',
-        'labelClass' => 'hidden',
+    $storyEstimateItem = formBatchItem(
+        set::name('storyEstimate'),
+        set::label(''),
+        set('labelClass', 'hidden'),
+        set::control('hidden'),
     );
 
-    $items[] = array
-    (
-        'name'  => 'storyDesc',
-        'label' => '',
-        'labelClass' => 'hidden',
+    $storyDescItem = formBatchItem(
+        set::name('storyDesc'),
+        set::label(''),
+        set('labelClass', 'hidden'),
+        set::control('hidden'),
     );
 
-    $items[] = array
-    (
-        'name'  => 'storyPri',
-        'label' => '',
-        'labelClass' => 'hidden',
+    $storyPriItem = formBatchItem(
+        set::name('storyPri'),
+        set::label(''),
+        set('labelClass', 'hidden'),
+        set::control('hidden'),
     );
 }
-
-/* Field of name. */
-$items[] = array
-(
-    'name'  => 'name',
-    'label' => $lang->task->name,
-    'width' => '165px',
-);
 
 /* Field of region and lane. */
+$regionItem = '';
+$laneItem   = '';
 if($execution->type == 'kanban')
 {
-    $items[] = array
-    (
-        'name'     => 'region',
-        'label'    => $lang->kanbancard->region,
-        'control'  => 'select',
-        'value'    => $regionID,
-        'items'    => $regionPairs,
-        'width'    => '180px',
-        'required' => true,
+    $regionItem = formBatchItem(
+        set::name('region'),
+        set::label($lang->kanbancard->region),
+        set::control('select'),
+        set::value($regionID),
+        set::items($regionPairs),
+        set::width('180px'),
+        set::ditto(true),
     );
-
-    $items[] = array
-    (
-        'name'     => 'lane',
-        'label'    => $lang->kanbancard->lane,
-        'control'  => 'select',
-        'value'    => $laneID,
-        'items'    => $lanePairs,
-        'width'    => '180px',
-        'required' => true,
+    $laneItem = formBatchItem(
+        set::name('lane'),
+        set::label($lang->kanbancard->lane),
+        set::control('select'),
+        set::value($laneID),
+        set::items($lanePairs),
+        set::width('180px'),
+        set::ditto(true),
     );
 }
 
-/* Field of type. */
-$items[] = array
-(
-    'name'    => 'type',
-    'label'   => $lang->task->type,
-    'control' => 'select',
-    'items'   => $lang->task->typeList,
-    'width'   => '100px',
-    'ditto'   => true,
-);
-
-/* Field of assignedTo. */
-$items[] = array
-(
-    'name'    => 'assignedTo',
-    'label'   => $lang->task->assignedTo,
-    'control' => 'select',
-    'items'   => $members,
-    'width'   => '130px',
-    'ditto'   => true,
-);
-
-/* Field of estimate. */
-$items[] = array
-(
-    'name'  => 'estimate',
-    'label' => $lang->task->estimateAB,
-    'width' => '70px',
-);
-
-/* Field of estStarted. */
-$items[] = array
-(
-    'name'    => 'estStarted',
-    'label'   => $lang->task->estStarted,
-    'control' => 'date',
-    'width'   => '120px',
-    'ditto'   => true,
-);
-
-/* Field of deadline. */
-$items[] = array
-(
-    'name'    => 'deadline',
-    'label'   => $lang->task->deadline,
-    'control' => 'date',
-    'width'   => '120px',
-    'ditto'   => true,
-);
-
-/* Field of desc. */
-$items[] = array
-(
-    'name'    => 'desc',
-    'label'   => $lang->task->desc,
-    'control' => 'editor',
-    'width'   => '150px',
-);
-
-/* Field of pri. */
-$items[] = array
-(
-    'name'    => 'pri',
-    'label'   => $lang->task->pri,
-    'control' => 'select',
-    'items'   => $lang->task->priList,
-    'width'   => '130px',
-    'ditto'   => true,
-);
 
 /* ====== Define the page structure with zin widgets ====== */
 
 formBatchPanel
 (
-    set::items($items),
+    formBatchItem
+    (
+        set::name('id'),
+        set::label($lang->idAB),
+        set::control('index'),
+        set::width('30px'),
+    ),
+    formBatchItem
+    (
+        set::name('module'),
+        set::label($lang->task->module),
+        set::control('select'),
+        set::value($moduleID),
+        set::items($modules),
+        set::width('180px'),
+        set::ditto(true),
+    ),
+    $storyItem,
+    $previewItem,
+    $copyStoryItem,
+    $storyEstimateItem,
+    $storyDescItem,
+    $storyPriItem,
+    formBatchItem
+    (
+        set::name('name'),
+        set::label($lang->task->name),
+        set::width('165px'),
+    ),
+    $regionItem,
+    $laneItem,
+    formBatchItem
+    (
+        set::name('type'),
+        set::label($lang->task->type),
+        set::control('select'),
+        set::items($lang->task->typeList),
+        set::width('100px'),
+        set::ditto(true),
+    ),
+    formBatchItem
+    (
+        set::name('assignedTo'),
+        set::label($lang->task->assignedTo),
+        set::control('select'),
+        set::items($members),
+        set::width('130px'),
+        set::ditto(true),
+    ),
+    formBatchItem
+    (
+        set::name('estimate'),
+        set::label($lang->task->estimateAB),
+        set::width('70px'),
+        set::control
+        (
+            array(
+                'type' => 'inputControl',
+                'suffix' => $lang->task->suffixHour,
+                'suffixWidth' => 20
+            )
+        )
+    ),
+    formBatchItem
+    (
+        set::name('estStarted'),
+        set::label($lang->task->estStarted),
+        set::control('date'),
+        set::width('120px'),
+        set::ditto(true),
+    ),
+    formBatchItem
+    (
+        set::name('deadline'),
+        set::label($lang->task->deadline),
+        set::control('date'),
+        set::width('120px'),
+        set::ditto(true),
+    ),
+    formBatchItem
+    (
+        set::name('desc'),
+        set::label($lang->task->desc),
+        set::control('editor'),
+        set::width('150px'),
+    ),
+    formBatchItem
+    (
+        set::name('pri'),
+        set::label($lang->task->pri),
+        set::control('select'),
+        set::items($lang->task->priList),
+        set::width('130px'),
+        set::ditto(true),
+    ),
     to::headingActions
     (
         checkbox
