@@ -1167,6 +1167,7 @@ class bug extends control
     }
 
     /**
+     * AJAX：获取 bug 模块的负责人。
      * AJAX: Get bug owner of a module.
      *
      * @param  int    $moduleID
@@ -1174,17 +1175,11 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetModuleOwner($moduleID, $productID = 0)
+    public function ajaxGetModuleOwner(int $moduleID, int $productID = 0): string
     {
-        $account  = $this->bug->getModuleOwner($moduleID, $productID);
-        $realName = '';
-        if(!empty($account))
-        {
-            $user        = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
-            if(!empty($this->config->isINT)) $firstLetter = '';
-            $realName = $firstLetter . ($user->realname ? $user->realname : $account);
-        }
+
+        list($account, $realname) = $this->bugZen->getModuleOwner($moduleID, $productID);
+
         return print(json_encode(array($account, $realName)));
     }
 
