@@ -37,6 +37,7 @@ $lang->file->beginUpload   = 'Upload';
 $lang->file->uploadSuccess = 'Hochgeladen!';
 $lang->file->batchExport   = 'Export in batches';
 $lang->file->downloadFile  = 'Download';
+$lang->file->exportData    = "Daten exportieren";
 
 $lang->file->pathname  = 'Pfadname';
 $lang->file->title     = 'Titel';

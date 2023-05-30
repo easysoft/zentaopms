@@ -167,7 +167,7 @@ form
     $customExportRowList
 );
 
-set::title($lang->export);
+set::title($lang->file->exportData);
 
 js
 (
