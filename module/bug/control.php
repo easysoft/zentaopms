@@ -749,7 +749,7 @@ class bug extends control
      */
     public function batchEdit(int $productID = 0, string $branch = '0')
     {
-        if($this->post->title)
+        if($this->post->id)
         {
             /* Build bugs. */
             $bugs = $this->bugZen->buildBugsForBatchEdit();
@@ -760,8 +760,6 @@ class bug extends control
             /* Get response and return. */
             return $this->send($this->bugZen->responseAfterBatchEdit($toTaskIdList));
         }
-
-        $_POST['bugIdList'] = array(21826, 21827, 21828);
 
         /* If there is no bug ID, return to the previous step. */
         if(!$this->post->bugIdList) $this->locate($this->session->bugList);

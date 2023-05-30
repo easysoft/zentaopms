@@ -1799,7 +1799,7 @@ class bugZen extends bug
     protected function buildBugsForBatchEdit(): array
     {
         /* Get bug ID list. */
-        $bugIdList = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $bugIdList = $this->post->id ? $this->post->id : array();
         if(empty($bugIdList)) return array();
 
         /* Get bugs and old bugs. */

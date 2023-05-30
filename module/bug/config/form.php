@@ -155,7 +155,7 @@ $config->bug->form->batchCreate['browser']     =  array('required' => false, 'ty
 $config->bug->form->batchCreate['keywords']    =  array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->batchEdit = common::formConfig('bug', 'batchEdit');
-$config->bug->form->batchEdit['id']             = array('required' => false, 'type' => 'int');
+$config->bug->form->batchEdit['id']             = array('required' => false, 'type' => 'int',    'base' => true);
 $config->bug->form->batchEdit['type']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['severity']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['pri']            = array('required' => false, 'type' => 'int',    'default' => 0);
