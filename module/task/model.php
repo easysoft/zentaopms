@@ -3430,6 +3430,12 @@ class taskModel extends model
             if(dao::isError()) return false;
         }
 
+        $parentTask = new stdclass();
+        $parentTask->parent         = '-1';
+        $parentTask->lastEditedBy   = $this->app->user->account;
+        $parentTask->lastEditedDate = helper::now();
+        $this->dao->update(TABLE_TASK)->data($parentTask)->where('id')->eq($parentID)->exec();
+
         $this->updateParentStatus(current($childrenIdList));
         $this->computeBeginAndEnd($parentID);
 
