@@ -240,7 +240,7 @@ class transferModel extends model
             {
                 foreach($data as $key => $value)
                 {
-                    if(is_array($value)) $value = join(',', $value);
+                    if(is_array($value)) $value = implode(',', $value);
                     $objectData[$key][$field] = $value;
                 }
             }
@@ -271,7 +271,7 @@ class transferModel extends model
 
         $fieldList = array();
         /* build module fieldList. */
-        foreach($fields as $key => $field)
+        foreach($fields as $field)
         {
             $field = trim($field);
             if($model == 'bug' and $this->session->currentProductType == 'normal' and $field == 'branch') continue;
@@ -363,8 +363,7 @@ class transferModel extends model
     /**
      * Init Control.
      *
-     * @param  int    $model
-     * @param  int    $field
+     * @param  string $field
      * @access public
      * @return void
      */
@@ -601,10 +600,7 @@ class transferModel extends model
                 if(!empty($pairs[0])) $valuePairs[$value[$pairs[0]]] = $value[$pairs[1]];
             }
             $values = $valuePairs;
-            if(reset($values))
-            {
-                if(current($values) or (current($values) == 0)) $values = array('');
-            }
+            if(reset($values) and (current($values) or (current($values) == 0))) $values = array('');
         }
 
         return $values;
@@ -1219,14 +1215,7 @@ class transferModel extends model
                 $tmpArray->$field = $cellValue;
             }
 
-            if(!empty($tmpArray->title))
-            {
-                $objectDatas[$currentRow] = $tmpArray;
-            }
-            elseif(!empty($tmpArray->name))
-            {
-                $objectDatas[$currentRow] = $tmpArray;
-            }
+            if(!empty($tmpArray->title) and !empty($tmpArray->name)) $objectDatas[$currentRow] = $tmpArray;
             unset($tmpArray);
         }
 
@@ -1335,7 +1324,7 @@ class transferModel extends model
     {
         $table = zget($this->config->objectTables, $datas['name']);
 
-        foreach($datas['datas'] as $key => $value)
+        foreach($datas['datas'] as $value)
         {
             $value[$datas['foreignkey']] = $lastInsertID;
             $this->dao->replace($table)->data($value)->autoCheck()->exec();
@@ -1452,10 +1441,7 @@ class transferModel extends model
                 $values   = $value['values'];
                 $name     = "{$field}[$row]";
                 $selected = isset($object->$field) ? $object->$field : '';
-                if($model)
-                {
-                    if($control == 'hidden' and isset($this->session->{$model.'TransferParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'TransferParams'}[$field. 'ID'];
-                }
+                if($model and $control == 'hidden' and isset($this->session->{$model.'TransferParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'TransferParams'}[$field. 'ID'];
 
                 $options = array();
                 if($control == 'select')
