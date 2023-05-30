@@ -228,8 +228,6 @@ class bugZen extends bug
         return array($laneID, $columnID);
     }
 
-
-
     /**
      * 获取bug创建页面的branches和branch，并绑定到bug上。
      * Get the branches and branch for the bug create page and bind them to bug.
@@ -1705,8 +1703,6 @@ class bugZen extends bug
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
     }
 
-
-
     /**
      * 更新完 bug 后的相关处理。
      * Relevant processing after updating bug.
@@ -2219,18 +2215,6 @@ class bugZen extends bug
         $this->view->isStepsTemplate = $bug->steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 将报表的默认设置合并到当前报表。
      * Merge the default chart settings and the settings of current chart.
@@ -2256,12 +2240,6 @@ class bugZen extends bug
 
         return $chartOption;
     }
-
-
-
-
-
-
 
     /**
      * 过滤批量解决bug id。
