@@ -103,6 +103,9 @@ form
     set::target('_self'),
     set::actions(array('submit')),
     on::submit('setDownloading'),
+    setCssVar('--form-grid-label-width', '4rem'),
+    css('.form-grid .form-label.required:after{content:""}'), // Remove required tag.
+    css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
     formGroup
     (
         set::width('full'),
