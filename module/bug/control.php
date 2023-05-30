@@ -755,7 +755,7 @@ class bug extends control
             $bugs = $this->bugZen->buildBugsForBatchEdit();
 
             /* Batch update the bugs. */
-            $toTaskIdList = $this->bug->batchUpdate();
+            $toTaskIdList = $this->bug->batchUpdate($bugs);
 
             /* Get response and return. */
             return $this->send($this->bugZen->responseAfterBatchEdit($toTaskIdList));
