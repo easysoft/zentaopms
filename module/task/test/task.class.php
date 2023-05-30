@@ -512,24 +512,24 @@ class taskTest
     }
 
     /**
-     * Test get tasks of a user.
+     * 通过任务类型获取用户的任务。
+     * Get user tasks by type.
      *
      * @param  int    $taskID
      * @param  string $assignedTo
+     * @param  int    $limit
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  int    $projectID
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getUserTasksTest($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = 'id_desc', $projectID = 0)
+    public function getUserTasksTest(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
     {
         $object = $this->objectModel->getUserTasks($account, $type, $limit, $pager, $orderBy, $projectID);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+        return $object;
     }
 
     /**
@@ -553,31 +553,6 @@ class taskTest
         if(dao::isError()) return dao::getError();
 
         return $changes;
-    }
-
-    /**
-     * Test get tasks pairs of a user.
-     *
-     * @param  int    $taskID
-     * @param  string $assignedTo
-     * @access public
-     * @return array
-     */
-    public function getUserTaskPairsTest($taskID, $assignedTo)
-    {
-        $createFields = array('assignedTo' => $assignedTo, 'status' => 'doing', 'comment' => '');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        $this->objectModel->assign($taskID);
-        $object = $this->objectModel->getUserTaskPairs($assignedTo);
-        unset($_POST);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
     }
 
     /**
@@ -1499,12 +1474,12 @@ class taskTest
     }
 
     /**
-     * Check workhour test. 
-     * 
-     * @param  int    $taskID 
-     * @param  array  $workhour 
+     * Check workhour test.
+     *
+     * @param  int    $taskID
+     * @param  array  $workhour
      * @access public
-     * @return array|bool 
+     * @return array|bool
      */
     public function checkWorkhourTest(int $taskID, array $workhour): array|bool
     {
