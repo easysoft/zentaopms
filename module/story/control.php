@@ -883,8 +883,6 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
-
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($this->session->execution);
@@ -1619,9 +1617,6 @@ class story extends control
                 unset($stories[$story->id]);
             }
 
-            $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
-            $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-
             if(!empty($story->twins))
             {
                 $twinsCount[$story->id] = 0;
@@ -1706,7 +1701,7 @@ class story extends control
 
         unset($this->lang->story->reasonList['subdivided']);
 
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'story');
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;

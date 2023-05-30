@@ -3826,7 +3826,7 @@ class storyModel extends model
         if(!$datas) return array();
 
         $branchIDList = array();
-        foreach($datas as $key => $project)
+        foreach($datas as $project)
         {
             if(!$project->branch) continue;
             $branchIDList[$project->branch] = $project->branch;
@@ -4511,7 +4511,7 @@ class storyModel extends model
             }
             else
             {
-                foreach($stories as $id => $story)
+                foreach($stories as $story)
                 {
                     if(!isset($story->children)) continue;
                     if(isset($story->children[$storyID]))
@@ -4671,7 +4671,7 @@ class storyModel extends model
                 $maxStagePos = strpos($stageList, $maxStage);
                 if(isset($storyStages[$story->id]))
                 {
-                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
+                    foreach($storyStages[$story->id] as $storyStage)
                     {
                         if(strpos($stageList, $storyStage->stage) !== false and strpos($stageList, $storyStage->stage) > $maxStagePos)
                         {
@@ -5094,13 +5094,11 @@ class storyModel extends model
         if(empty($relations)) return array();
 
         $fields = empty($fields) ? '*' : implode(',', $fields);
-        $story  = $this->dao->select($fields)->from(TABLE_STORY)
+        return $this->dao->select($fields)->from(TABLE_STORY)
             ->where('id')->in($relations)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id_desc')
             ->fetchAll();
-
-        return $story;
     }
 
     /**
@@ -5227,14 +5225,12 @@ class storyModel extends model
         $selectField    = ($storyType == 'story') ? 'AID' : 'BID';
         $conditionField = ($storyType == 'story') ? 'BID' : 'AID';
 
-        $relations = $this->dao->select('count('. $selectField .') as id')->from(TABLE_RELATION)
+        return $this->dao->select('count('. $selectField .') as id')->from(TABLE_RELATION)
             ->where('AType')->eq('requirement')
             ->andWhere('BType')->eq('story')
             ->andWhere('relation')->eq('subdivideinto')
             ->andWhere($conditionField)->eq($storyID)
             ->fetch('id');
-
-        return $relations;
     }
 
     /**
@@ -5447,7 +5443,7 @@ class storyModel extends model
         $revertCount  = 0;
         $clarifyCount = 0;
         $reviewRule   = $this->config->story->reviewRules;
-        foreach($reviewerList as $reviewer => $result)
+        foreach($reviewerList as $result)
         {
             $passCount    = $result == 'pass'    ? $passCount    + 1 : $passCount;
             $rejectCount  = $result == 'reject'  ? $rejectCount  + 1 : $rejectCount;
@@ -5550,11 +5546,7 @@ class storyModel extends model
 
         $comment = isset($_POST['comment']) ? $this->post->comment : '';
 
-        if($isSuperReviewer !== false and $this->app->rawMethod != 'edit')
-        {
-            $actionID = $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . '|superReviewer');
-            return $actionID;
-        }
+        if($isSuperReviewer !== false and $this->app->rawMethod != 'edit') return $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . '|superReviewer');
 
         $reasonParam = $result == 'reject' ? ',' . $reason : '';
         $actionID    = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
@@ -5704,7 +5696,6 @@ class storyModel extends model
         }
         else
         {
-            $field = $executionID ? 't2.id' : 't1.id';
             if($this->post->exportType == 'selected')
             {
                 $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . " ORDER BY " . strtr($orderBy, '_', ' '));
@@ -5749,7 +5740,6 @@ class storyModel extends model
 
         /* Get users, products and relations. */
         $users           = $this->loadModel('user')->getPairs('noletter');
-        $products        = $this->loadModel('product')->getPairs('nocode');
         $relatedStoryIds = array();
 
         foreach($stories as $story) $relatedStoryIds[$story->id] = $story->id;
@@ -5763,7 +5753,7 @@ class storyModel extends model
         $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($relatedStoryIds)->fetchPairs('id', 'title');
 
         $fileIdList = array();
-        foreach($relatedSpecs as $storyID => $relatedSpec)
+        foreach($relatedSpecs as $relatedSpec)
         {
             if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
         }
@@ -5947,7 +5937,7 @@ class storyModel extends model
      */
     public function getLastReviewer($storyID)
     {
-        $lastReviewer = $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
+        return $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
             ->where('t1.objectType')->eq('story')
             ->andWhere('t1.objectID')->eq($storyID)
@@ -5955,8 +5945,6 @@ class storyModel extends model
             ->andWhere('t2.new')->ne('')
             ->orderBy('t1.id_desc')
             ->fetch('new');
-
-        return $lastReviewer;
     }
 
     /**

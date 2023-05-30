@@ -648,7 +648,7 @@ class storyTao extends storyModel
             ->exec();
         if(dao::isError()) return false;
 
-        $storyID = $this->dao->lastInsertID();
+        return $this->dao->lastInsertID();
     }
 
     protected function doCreateSpec(int $storyID, object $story, array $files): void
