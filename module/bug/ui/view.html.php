@@ -69,14 +69,17 @@ if(!empty($bug->mailto))
 }
 
 $linkBugs = array();
-foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+if(!empty($bug->linkBugTitles))
 {
-    $linkBugs[] = a
-    (
-        set('href', $this->createLink('bug', 'view', "bugID=$linkBugID")),
-        set('data-toggle', 'modal'),
-        "#$linkBugID $linkBugTitle"
-    );
+    foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+    {
+        $linkBugs[] = a
+            (
+                set('href', $this->createLink('bug', 'view', "bugID=$linkBugID")),
+                set('data-toggle', 'modal'),
+                "#$linkBugID $linkBugTitle"
+            );
+    }
 }
 
 $linkMR = array();
@@ -137,7 +140,7 @@ $duplicateLink = $bug->duplicateBug && $canViewBug ? a
         set('data-toggle', 'modal'),
         $bug->duplicateBugTitle
     ) : '';
-$duplicateBug  = $bug->duplicateBug ? "#$bug->duplicateBug:" . $duplicateLink : '';
+$duplicateBug = $bug->duplicateBug ? "#$bug->duplicateBug:" . $duplicateLink : '';
 
 $legendLife  = array();
 $legendLife['openedBy']      = array('name' => $lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . ($bug->openedDate ? $lang->at . $bug->openedDate : ''));
@@ -157,10 +160,10 @@ $storyLink      = $bug->story     && $canViewStory       ? $this->createLink('st
 $taskLink       = $bug->task      && $canViewTask        ? $this->createLink('task',      'view',   "taskID=>$bug->task")           : '';
 
 $legendExecStoryTask = array();
-$legendExecStoryTask['project']   = array('name' => $lang->bug->project, 'text' => $bug->projectName,   'href' => $projectLink);
-$legendExecStoryTask['execution'] = array('name' => $executionTitle,     'text' => $bug->executionName, 'href' => $executionLink);
-$legendExecStoryTask['story']     = array('name' => $lang->bug->story,   'text' => $storyName,          'href' => $storyLink, 'attr' => array('data-toggle' => 'modal'));
-$legendExecStoryTask['task']      = array('name' => $lang->bug->task,    'text' => $bug->taskName,      'href' => $taskLink,  'attr' => array('data-toggle' => 'modal'));
+$legendExecStoryTask['project']   = array('name' => $lang->bug->project, 'text' => zget($bug, 'projectName', ''), 'href' => $projectLink);
+$legendExecStoryTask['execution'] = array('name' => $executionTitle,     'text' => $bug->executionName,           'href' => $executionLink);
+$legendExecStoryTask['story']     = array('name' => $lang->bug->story,   'text' => $storyName,                    'href' => $storyLink, 'attr' => array('data-toggle' => 'modal'));
+$legendExecStoryTask['task']      = array('name' => $lang->bug->task,    'text' => $bug->taskName,                'href' => $taskLink,  'attr' => array('data-toggle' => 'modal'));
 
 /* Prepare variables for legendMisc block. */
 $fromCaseName = $bug->case    ? "#$bug->case $bug->caseTitle"       : '';
@@ -173,7 +176,7 @@ $toTaskLink   = $bug->toTask  && $canViewTask  ? $this->createLink('task',     '
 $legendMisc = array();
 $legendMisc['linkBug']    = array('name' => $lang->bug->linkBug,    'text' => $linkBugs);
 $legendMisc['fromCase']   = array('name' => $lang->bug->fromCase,   'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
-$legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $toCases);
+$legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
 $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));
 $legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal'));
 $legendMisc['linkMR']     = array('name' => $lang->bug->linkMR,     'text' => $linkMR);
