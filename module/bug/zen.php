@@ -3,6 +3,23 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
+     * 检查bug是否已经存在。
+     * Check whether bug is exist.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return array
+     */
+    protected function checkExistBug(object $bug): array
+    {
+        /* Check repeat bug. */
+        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
+        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+
+        return array('status' => 'success');
+    }
+
+    /**
      * 获取列表页面的 branch 参数。
      * Get browse branch param.
      *
@@ -78,43 +95,22 @@ class bugZen extends bug
     }
 
     /**
-     * 处理列表页面的参数。
-     * Processing browse params.
+     * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
+     * Get kanban laneID and columnID from $_POST and $output from extra().
      *
-     * @param  string    $browseType
-     * @param  int       $param
-     * @param  string    $orderBy
-     * @param  int       $recTotal
-     * @param  int       $recPerPage
-     * @param  int       $pageID
+     * @param  array     $output
      * @access protected
      * @return array
      */
-    protected function prepareBrowseParams(string $browseType, int $param, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    protected function getKanbanVariable(array $output): array
     {
-        /* 设置模块 ID。*/
-        /* Set module id. */
-        $moduleID = 0;
-        if($this->cookie->bugModule)  $moduleID = $this->cookie->bugModule;
-        if($browseType == 'bymodule') $moduleID = $param;
+        $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+        if(!empty($this->post->lane)) $laneID = $this->post->lane;
 
-        /* 设置搜索查询 ID。*/
-        /* Set query id. */
-        $queryID = $browseType == 'bysearch' ? $param : 0;
+        $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
+        if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
-        /* 设置 id 为第二排序规则。*/
-        /* Append id for second sort rule. */
-        $realOrderBy = common::appendOrder($orderBy);
-
-        /* 加载分页器。*/
-        /* Load pager. */
-        $viewType = $this->app->getViewType();
-        if($viewType == 'mhtml' || $viewType == 'xhtml') $recPerPage = 10;
-
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        return array($moduleID, $queryID, $realOrderBy, $pager);
+        return array($laneID, $columnID);
     }
 
     /**
@@ -169,6 +165,46 @@ class bugZen extends bug
     }
 
     /**
+     * 处理列表页面的参数。
+     * Processing browse params.
+     *
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  int       $recTotal
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @access protected
+     * @return array
+     */
+    protected function prepareBrowseParams(string $browseType, int $param, string $orderBy, int $recTotal, int $recPerPage, int $pageID): array
+    {
+        /* 设置模块 ID。*/
+        /* Set module id. */
+        $moduleID = 0;
+        if($this->cookie->bugModule)  $moduleID = $this->cookie->bugModule;
+        if($browseType == 'bymodule') $moduleID = $param;
+
+        /* 设置搜索查询 ID。*/
+        /* Set query id. */
+        $queryID = $browseType == 'bysearch' ? $param : 0;
+
+        /* 设置 id 为第二排序规则。*/
+        /* Append id for second sort rule. */
+        $realOrderBy = common::appendOrder($orderBy);
+
+        /* 加载分页器。*/
+        /* Load pager. */
+        $viewType = $this->app->getViewType();
+        if($viewType == 'mhtml' || $viewType == 'xhtml') $recPerPage = 10;
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        return array($moduleID, $queryID, $realOrderBy, $pager);
+    }
+
+    /**
      * 设置列表页面的搜索表单。
      * Build browse search form.
      *
@@ -187,10 +223,6 @@ class bugZen extends bug
 
         $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
     }
-
-
-
-
 
     /**
      * 获取浏览页面所需的变量, 并输出到前台。
@@ -258,22 +290,7 @@ class bugZen extends bug
         $this->display();
     }
 
-    /**
-     * 检查bug是否已经存在。
-     * Check whether bug is exist.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function checkExistBug(object $bug): array
-    {
-        /* Check repeat bug. */
-        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        return array('status' => 'success');
-    }
 
     /**
      * 创建bug后存储上传的文件。
@@ -308,24 +325,7 @@ class bugZen extends bug
         return !dao::isError();
     }
 
-    /**
-     * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
-     * Get kanban laneID and columnID from $_POST and $output from extra().
-     *
-     * @param  array     $output
-     * @access protected
-     * @return array
-     */
-    protected function getKanbanVariable(array $output): array
-    {
-        $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-        if(!empty($this->post->lane)) $laneID = $this->post->lane;
 
-        $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'unconfirmed');
-        if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-
-        return array($laneID, $columnID);
-    }
 
     /**
      * 创建bug后更新执行看板。
