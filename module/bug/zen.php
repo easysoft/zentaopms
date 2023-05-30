@@ -20,6 +20,47 @@ class bugZen extends bug
     }
 
     /**
+     * 确认是否更新 bug 状态。
+     * Confirm to update task.
+     *
+     * @param  int        $bugID
+     * @param  int        $taskID
+     * @access protected
+     * @return array|true
+     */
+    protected function confirm2UpdateTask(int $bugID, int $taskID): array
+    {
+        $task = $this->task->getByID($taskID);
+        if($task->deleted) return true;
+
+        $confirmedURL = $this->createLink('task', 'view', "taskID=$taskID");
+        unset($_GET['onlybody']);
+        $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+        return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+    }
+
+    /**
+     * Check bug execution priv.
+     *
+     * @param  object    $bug
+     * @access public
+     * @return void
+     */
+    public function checkBugExecutionPriv($bug)
+    {
+        if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
+        {
+            echo js::alert($this->lang->bug->executionAccessDenied);
+
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
+            if($this->app->tab == 'my') print(js::reload('parent'));
+
+            return print(js::locate('back'));
+        }
+    }
+
+    /**
      * 获取列表页面的 branch 参数。
      * Get browse branch param.
      *
@@ -428,6 +469,45 @@ class bugZen extends bug
         if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
 
         return $assignedToPairs;
+    }
+
+    /**
+     * 基于当前bug获取指派给。
+     * Get assigned pairs by bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return string[]
+     */
+    protected function getAssignedToPairs(object $bug): array
+    {
+        /* If the execution of the bug is not empty, get the team members for the execution. */
+        if($bug->execution)
+        {
+            $users = $this->loadModel('user')->getTeamMemberPairs($bug->execution, 'execution');
+        }
+        /* If the project of the bug is not empty, get the team members for the project. */
+        elseif($bug->project)
+        {
+            $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
+        }
+        /* If the execution and project of the bug are both empty, get the team member of the bug's product. */
+        else
+        {
+            $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
+            $users = array_filter($users);
+            /* If the team member of the product is empty, get all user. */
+            if(empty($users)) $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        }
+
+        /* If the assigned person doesn't exist in the user list and the assigned person is not closed, append it. */
+        if($bug->assignedTo && !isset($users[$bug->assignedTo]) && $bug->assignedTo != 'closed')
+        {
+            $assignedTo = $this->user->getByID($bug->assignedTo);
+            $users[$bug->assignedTo] = $assignedTo->realname;
+        }
+
+        return $users;
     }
 
     /**
@@ -918,6 +998,76 @@ class bugZen extends bug
         $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
         $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->display();
+    }
+
+    /**
+     * 为解决bug构造bug数据。
+     * Build bug for resolving a bug.
+     *
+     * @param  object    $oldBug
+     * @access protected
+     * @return object
+     */
+    protected function buildBugForResolve(object $oldBug): object
+    {
+        $bug = form::data($this->config->bug->form->resolve)
+            ->setDefault('assignedTo', $oldBug->openedBy)
+            ->setDefault('resolvedDate', helper::now())
+            ->add('id',        $oldBug->id)
+            ->add('execution', $oldBug->execution)
+            ->add('status',    'resolved')
+            ->add('confirmed', 1)
+            ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
+            ->get();
+
+        /* If the resolved build is not the trunk, get test plan id. */
+        if(isset($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk')
+        {
+            $testtaskID = (int)$this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
+        }
+
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
+    }
+
+    /**
+     * 为批量创建bug构造数据。
+     * Build bugs for the batch creation.
+     *
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  array|false $bugImagesFile
+     * @access protected
+     * @return array
+     */
+    protected function buildBugsForBatchCreate(int $productID, string $branch, array|false $bugImagesFile): array
+    {
+        $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
+
+        /* Get pairs(moduleID => moduleOwner) for bug. */
+        $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', 0, $branch));
+        $moduleOwners = array();
+        while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
+
+        /* Construct data. */
+        foreach($bugs as $bug)
+        {
+            $bug->openedBy    = $this->app->user->account;
+            $bug->openedDate  = helper::now();
+            $bug->openedBuild = implode(',', $bug->openedBuild);
+            $bug->product     = $productID;
+            $bug->steps       = nl2br($bug->steps);
+            $bug->os          = implode(',', $bug->os);
+            $bug->browser     = implode(',', $bug->browser);
+
+            /* Assign the bug to the person in charge of the module. */
+            if(!empty($moduleOwners[$bug->module]))
+            {
+                $bug->assignedTo   = $moduleOwners[$bug->module];
+                $bug->assignedDate = helper::now();
+            }
+        }
+        return $bugs;
     }
 
     /**
@@ -1442,166 +1592,6 @@ class bugZen extends bug
 
 
 
-
-
-
-
-
-
-
-    /**
-     * 确认是否更新 bug 状态。
-     * Confirm to update task.
-     *
-     * @param  int        $bugID
-     * @param  int        $taskID
-     * @access protected
-     * @return array|true
-     */
-    protected function confirm2UpdateTask(int $bugID, int $taskID): array
-    {
-        $task = $this->task->getByID($taskID);
-        if($task->deleted) return true;
-
-        $confirmedURL = $this->createLink('task', 'view', "taskID=$taskID");
-        unset($_GET['onlybody']);
-        $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-        return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
-    }
-
-
-
-
-
-    /**
-     * Check bug execution priv.
-     *
-     * @param  object    $bug
-     * @access public
-     * @return void
-     */
-    public function checkBugExecutionPriv($bug)
-    {
-        if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
-        {
-            echo js::alert($this->lang->bug->executionAccessDenied);
-
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
-            if($this->app->tab == 'my') print(js::reload('parent'));
-
-            return print(js::locate('back'));
-        }
-    }
-
-    /**
-     * 基于当前bug获取指派给。
-     * Get assigned pairs by bug.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return string[]
-     */
-    protected function getAssignedToPairs(object $bug): array
-    {
-        /* If the execution of the bug is not empty, get the team members for the execution. */
-        if($bug->execution)
-        {
-            $users = $this->loadModel('user')->getTeamMemberPairs($bug->execution, 'execution');
-        }
-        /* If the project of the bug is not empty, get the team members for the project. */
-        elseif($bug->project)
-        {
-            $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
-        }
-        /* If the execution and project of the bug are both empty, get the team member of the bug's product. */
-        else
-        {
-            $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
-            $users = array_filter($users);
-            /* If the team member of the product is empty, get all user. */
-            if(empty($users)) $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
-        }
-
-        /* If the assigned person doesn't exist in the user list and the assigned person is not closed, append it. */
-        if($bug->assignedTo && !isset($users[$bug->assignedTo]) && $bug->assignedTo != 'closed')
-        {
-            $assignedTo = $this->user->getByID($bug->assignedTo);
-            $users[$bug->assignedTo] = $assignedTo->realname;
-        }
-
-        return $users;
-    }
-
-    /**
-     * 为解决bug构造bug数据。
-     * Build bug for resolving a bug.
-     *
-     * @param  object    $oldBug
-     * @access protected
-     * @return object
-     */
-    protected function buildBugForResolve(object $oldBug): object
-    {
-        $bug = form::data($this->config->bug->form->resolve)
-            ->setDefault('assignedTo', $oldBug->openedBy)
-            ->setDefault('resolvedDate', helper::now())
-            ->add('id',        $oldBug->id)
-            ->add('execution', $oldBug->execution)
-            ->add('status',    'resolved')
-            ->add('confirmed', 1)
-            ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
-            ->get();
-
-        /* If the resolved build is not the trunk, get test plan id. */
-        if(isset($bug->resolvedBuild) && $bug->resolvedBuild != 'trunk')
-        {
-            $testtaskID = (int)$this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
-            if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
-        }
-
-        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
-    }
-
-    /**
-     * 为批量创建bug构造数据。
-     * Build bugs for the batch creation.
-     *
-     * @param  int         $productID
-     * @param  string      $branch
-     * @param  array|false $bugImagesFile
-     * @access protected
-     * @return array
-     */
-    protected function buildBugsForBatchCreate(int $productID, string $branch, array|false $bugImagesFile): array
-    {
-        $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
-
-        /* Get pairs(moduleID => moduleOwner) for bug. */
-        $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', 0, $branch));
-        $moduleOwners = array();
-        while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
-
-        /* Construct data. */
-        foreach($bugs as $bug)
-        {
-            $bug->openedBy    = $this->app->user->account;
-            $bug->openedDate  = helper::now();
-            $bug->openedBuild = implode(',', $bug->openedBuild);
-            $bug->product     = $productID;
-            $bug->steps       = nl2br($bug->steps);
-            $bug->os          = implode(',', $bug->os);
-            $bug->browser     = implode(',', $bug->browser);
-
-            /* Assign the bug to the person in charge of the module. */
-            if(!empty($moduleOwners[$bug->module]))
-            {
-                $bug->assignedTo   = $moduleOwners[$bug->module];
-                $bug->assignedDate = helper::now();
-            }
-        }
-        return $bugs;
-    }
 
     /**
      * 批量创建bug后返回响应。
