@@ -1552,6 +1552,23 @@ class taskTest
     }
 
     /**
+     * 测试通过记录日志改变任务的工时及状态。
+     * Test change task's status and workhour by record effort.
+     *
+     * @param  object   $record
+     * @param  int      $taskID
+     * @param  string   $lastDate
+     * @param  bool     $isFinishTask
+     * @access public
+     * @return array[]
+     */
+    public function buildTaskForEffortTest(object $record, int $taskID, string $lastDate, bool $isFinishTask): array
+    {
+        $task = $this->objectModel->getByID($taskID);
+        return $this->objectModel->buildTaskForEffort($record, $task, $lastDate, $isFinishTask);
+    }
+
+    /**
      * Get the assignedTo for the multiply linear task.
      *
      * @param  int    $taskID
