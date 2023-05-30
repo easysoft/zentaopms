@@ -1253,3 +1253,11 @@ function detailBody()
 {
     return createWg('detailBody', func_get_args());
 }
+
+/**
+ * ECharts widget.
+ */
+function echarts(): \zin\echarts
+{
+    return createWg('echarts', func_get_args());
+}

@@ -19,11 +19,18 @@ require_once __DIR__ . DS . 'toggle.class.php';
 
 class zui extends wg
 {
-    static $defineProps = '_name:string, _to?:string, _tag:string="div", _toProps?: array';
+    protected static $defineProps = array(
+        '_name:string',
+        '_to?:string',
+        '_tag:string="div"',
+        '_toProps?: array',
+        '_size?: array'
+    );
 
     protected function build()
     {
-        list($name, $target, $tagName, $targetProps) = $this->prop(array('_name', '_to', '_tag', '_toProps'));
+        list($name, $target, $tagName, $targetProps, $size) = $this->prop(array('_name', '_to', '_tag', '_toProps', '_size'));
+        list($width, $height) = $size;
         $selector = empty($target) ? "[data-zin-id='$this->gid']" : $target;
         $options = $this->props->skip(array_keys(static::getDefinedProps()));
         return array
@@ -32,7 +39,9 @@ class zui extends wg
             (
                 $tagName,
                 set($targetProps),
-                set('data-zin-id', $this->gid)
+                set('data-zin-id', $this->gid),
+                setStyle('width', $width),
+                setStyle('height', $height),
             ) : null,
             $this->children(),
             h::jsCall('~zui.create', $name, $selector, $options)
