@@ -629,23 +629,7 @@ class programModel extends model
             $path    = $program->path;
         }
 
-        if($queryID)
-        {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
-            {
-                $this->session->set('projectQuery', $query->sql);
-                $this->session->set('projectForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('projectQuery', ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($browseType == 'bySearch' and $this->session->projectQuery == false) $this->session->set('projectQuery', ' 1 = 1');
-        }
+        $this->loadModel('search')->setQuery('project', $queryID);
 
         $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
         $projectList = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
