@@ -202,10 +202,10 @@ else
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 $lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
-//$lang->product->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';
 
-$lang->product->acls['private'] = "Privat {$lang->productCommon}";
-$lang->product->acls['open']    = "Standard";
+$lang->product->abbr = new stdclass();
+$lang->product->abbr->aclList['private'] = "Private {$lang->productCommon}";
+$lang->product->abbr->aclList['open']    = 'Default';
 
 $lang->product->aclTips['open']    = "Benutzer mit Rechten für {$lang->productCommon} können zugreifen.";
 $lang->product->aclTips['private'] = "{$lang->executionCommon} Nur Teammitglieder";

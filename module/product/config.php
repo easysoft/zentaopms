@@ -4,12 +4,9 @@ global $lang, $app;
 $config->product = new stdclass();
 $config->product->showAllProjects = 0;
 
-$config->product->customBatchEditFields = 'PO,QD,RD,status,type,acl';
-if($config->systemMode == 'ALM') $config->product->customBatchEditFields = 'program,line,' . $config->product->customBatchEditFields;
-
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
-$config->product->custom->batchEditFields = 'PO,QD,RD';
+$config->product->custom->batchEditFields = 'PO,QD,RD,status,type,acl';
 if($config->systemMode == 'ALM') $config->product->custom->batchEditFields .= ',program,line';
 
 /* Export fields of product list page. */

@@ -201,10 +201,11 @@ else
 {
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联{$lang->projectCommon}的团队成员和关系人可访问)";
 }
-$lang->product->aclList['open']    = "公开(有{$lang->productCommon}视图权限，即可访问)";
+$lang->product->aclList['open'] = "公开(有{$lang->productCommon}视图权限，即可访问)";
 
-$lang->product->acls['private'] = '私有';
-$lang->product->acls['open']    = "公开";
+$lang->product->abbr = new stdclass();
+$lang->product->abbr->aclList['private'] = '私有';
+$lang->product->abbr->aclList['open']    = '公开';
 
 $lang->product->aclTips['open']    = "有{$lang->productCommon}视图权限，即可访问";
 $lang->product->aclTips['private'] = "{$lang->productCommon}相关负责人、所属项目集的干系人、相关联{$lang->projectCommon}的团队成员和干系人可访问";

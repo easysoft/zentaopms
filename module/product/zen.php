@@ -633,49 +633,6 @@ class productZen extends product
     }
 
     /**
-     * 预处理批量编辑产品数据，将按字段分组数据重组为产品分组的数据。
-     * Prepare batch edit extras.
-     *
-     * @param  form $data
-     * @access protected
-     * @return array
-     */
-    protected function prepareBatchEditExtras(form $data): array
-    {
-        $formConfig = $data->rawconfig;
-        $editForm   = $this->config->product->form->edit;
-        $data       = $data->get();
-        $products   = array();
-
-        /* 将按字段分组数据重组为产品分组的数据。 */
-        foreach($data->name as $productID => $productName)
-        {
-            $productID = (int)$productID;
-
-            /* 根据表单配置构造产品数据。*/
-            $product     = new stdClass();
-            $product->id = $productID;
-            foreach($formConfig as $field => $attr)
-            {
-                /* 获取对应的字段数据。*/
-                $product->{$field} = zget($data->{$field}, $productID, $attr['default']);
-
-                /* 根据配置规则，格式化字段数据。 */
-                if(isset($editForm[$field]) and $editForm[$field]['type'] == 'int') $product->{$field} = (int)$product->{$field};
-                if(!empty($attr['filter']) and $attr['filter'] == 'trim') $product->{$field} = trim($product->{$field});
-                if(is_array($product->$field)) $product->{$field} = implode(',', $product->{$field});
-
-                /* 检查必填项。 */
-                if(!empty($attr['required']) and validater::checkEmpty($product->{$field})) dao::$errors[] = 'product #' . $productID . sprintf($this->lang->error->notempty, zget($attr, 'title', zget($this->lang->product, $field)));
-            }
-
-            $products[$productID] = $product;
-        }
-
-        return $products;
-    }
-
-    /**
      * 构建关闭产品数据。
      * Build product data for close.
      *
