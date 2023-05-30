@@ -52,62 +52,8 @@ class measurementTao extends measurementModel
     public function saveTmpPhpFile(string $measCode, string $code): string|false
     {
         $phpFile = $this->app->getTmpRoot() . DS . 'meas' . DS . $measCode . '.php';
+        $code    = sprintf($this->config->measurement->phpTemplate, $code);
         $result  = file_put_contents($phpFile, $code);
         return $result ? $phpFile : false;
-    }
-
-    /**
-     * Pick function code.
-     *
-     * @param  array  $option
-     * @param  string $option[0] file
-     * @param  string $option[1] function
-     * @access public
-     * @return string
-     */
-    public function pickPhpFunction($file, $method): string
-    {
-        $position = $this->getFuncPosition($file, 'meas', $method);
-        $code     = $this->getFileSlice($file, $position->startLine, $position->endLine);
-        return $code;
-    }
-
-    /**
-     * Get function's first line and last line.
-     *
-     * @param  string  $file
-     * @param  string  $class
-     * @param  string  $function
-     * @return object
-     */
-    private function getFuncPosition($file, $class, $method)
-    {
-        if(!class_exists($class)) include $file;
-
-        $reflection = new ReflectionMethod($class, $method);
-
-        $position = new stdclass;
-        $position->startLine = $reflection->getStartLine();
-        $position->endLine   = $reflection->getEndLine();
-        return $position;
-    }
-
-    /**
-     * Extract a slice of the file.
-     *
-     * @param  string $file
-     * @param  int $start
-     * @param  int $end
-     * @access public
-     * @return string
-     */
-    public function getFileSlice(string $file, int $start, int $end): string
-    {
-        if(!is_file($file)) return 'file error';
-        if($end < $start) return '';
-        $lines = file($file);
-        $start = $start - 1;
-        $lines = array_slice($lines, $start, $end - $start);
-        return implode('', $lines);
     }
 }
