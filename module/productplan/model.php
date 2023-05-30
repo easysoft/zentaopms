@@ -190,10 +190,11 @@ class productplanModel extends model
                     $order = 1;
                     foreach($storyPairs as $storyID => $estimate)
                     {
+                        $order ++;
                         $planStory = new stdclass();
-                        $planStory->plan = $plan->id;
+                        $planStory->plan  = $plan->id;
                         $planStory->story = $storyID;
-                        $planStory->order = $order ++;
+                        $planStory->order = $order;
                         $this->dao->replace(TABLE_PLANSTORY)->data($planStory)->exec();
                     }
                 }
@@ -232,15 +233,13 @@ class productplanModel extends model
      */
     public function getTopPlanPairs($productID, $exclude = '')
     {
-        $planPairs = $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
+        return $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF($exclude)->andWhere('status')->notin($exclude)
             ->orderBy('id_desc')
             ->fetchPairs();
-
-        return $planPairs;
     }
 
     /**
@@ -404,7 +403,6 @@ class productplanModel extends model
 
         $plans = $this->relationBranch($plans);
 
-        $parentTitle = array();
         $planGroup   = array();
         foreach($plans as $plan)
         {
@@ -792,7 +790,6 @@ class productplanModel extends model
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
         $config->set('Cache.DefinitionImpl', null);
-        $purifier = new HTMLPurifier($config);
 
         $plans = array();
         $extendFields = $this->getFlowExtendFields();
@@ -805,11 +802,8 @@ class productplanModel extends model
                 return helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->product->branch)));
             }
 
-            $isFuture = isset($data->future[$planID]) ? true : false;
-            if(isset($data->status[$planID]) and $data->status[$planID] != 'wait') $isFuture = false;
-
             $plan = new stdclass();
-            $plan->branch = isset($data->branch[$planID]) ? join(',', $data->branch[$planID]) : $oldPlans[$planID]->branch;
+            $plan->branch = isset($data->branch[$planID]) ? implode(',', $data->branch[$planID]) : $oldPlans[$planID]->branch;
             $plan->title  = $data->title[$planID];
             $plan->begin  = isset($data->begin[$planID]) ? $data->begin[$planID] : '';
             $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
@@ -826,7 +820,7 @@ class productplanModel extends model
             foreach($extendFields as $extendField)
             {
                 $plan->{$extendField->field} = $this->post->{$extendField->field}[$planID];
-                if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = join(',', $plan->{$extendField->field});
+                if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = implode(',', $plan->{$extendField->field});
 
                 $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
             }
@@ -1004,7 +998,6 @@ class productplanModel extends model
         $this->loadModel('action');
 
         $stories = $this->story->getByList($this->post->stories);
-        $plan    = $this->getByID($planID);
 
         foreach($this->post->stories as $storyID)
         {
@@ -1036,7 +1029,7 @@ class productplanModel extends model
     {
         $story = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch();
         $plans = array_unique(explode(',', trim(str_replace(",$planID,", ',', ',' . trim($story->plan) . ','). ',')));
-        $this->dao->update(TABLE_STORY)->set('plan')->eq(join(',', $plans))->where('id')->eq((int)$storyID)->exec();
+        $this->dao->update(TABLE_STORY)->set('plan')->eq(implode(',', $plans))->where('id')->eq((int)$storyID)->exec();
 
         /* Delete the story in the sort of the plan. */
         $this->loadModel('story');

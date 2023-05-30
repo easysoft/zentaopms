@@ -211,7 +211,7 @@ class productplan extends control
         $this->view->title      = $this->lang->productplan->batchEdit;
         $this->view->plans      = $plans;
         $this->view->oldBranch  = $oldBranch;
-        $this->view->product    = $this->loadModel('product')->getById($productID);;
+        $this->view->product    = $this->loadModel('product')->getById($productID);
         $this->view->parentList = $this->productplan->getByIDList($parentIdList);
 
         $this->display();
@@ -237,11 +237,7 @@ class productplan extends control
         }
         else
         {
-            if($this->post->comments)
-            {
-                $allChanges = $this->productplan->batchChangeStatus($status);
-                return print(js::locate(inlink('browse', "product=$productID")));
-            }
+            if($this->post->comments) return print(js::locate(inlink('browse', "product=$productID")));
 
             $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->fetchAll('id');
 
@@ -484,7 +480,7 @@ class productplan extends control
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
         $this->view->canBeChanged = $canBeChanged;
-        $this->view->storyCases   = $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);;
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         if($this->app->getViewType() == 'json')
         {
@@ -922,7 +918,7 @@ class productplan extends control
         {
             $oldBranch = '';
             $newBranch = '';
-            foreach($changes as $changeId => $change)
+            foreach($changes as $change)
             {
                 if($change['field'] == 'branch')
                 {
@@ -974,12 +970,12 @@ class productplan extends control
         $conflictBugCounts   = 0;
         if($oldBranch)
         {
-            foreach($planStories as $storyID => $story)
+            foreach($planStories as $story)
             {
                 if($story->branch and strpos(",$newBranch,", ",$story->branch,") === false) $conflictStoryCounts ++;
             }
 
-            foreach($planBugs as $bugID => $bug)
+            foreach($planBugs as $bug)
             {
                 if($bug->branch and strpos(",$newBranch,", ",$bug->branch,") === false) $conflictBugCounts ++;
             }
