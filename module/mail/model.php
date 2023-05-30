@@ -169,8 +169,8 @@ class mailModel extends model
     {
         $mta = $this->config->mail->mta;
         $className = ($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'phpmailer';
-        if(self::$instance == null) self::$instance = new $className(true);
-        $this->mta = self::$instance;
+        if(static::$instance == null) static::$instance = new $className(true);
+        $this->mta = static::$instance;
         $this->mta->CharSet = $this->config->charset;
         $funcName = "set{$this->config->mail->mta}";
         if(!method_exists($this, $funcName)) $this->app->triggerError("The MTA {$this->config->mail->mta} not supported now.", __FILE__, __LINE__, $exit = true);
