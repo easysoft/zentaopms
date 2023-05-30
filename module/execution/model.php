@@ -1954,6 +1954,7 @@ class executionModel extends model
         $parentList = array();
         foreach($executions as $key => $execution)
         {
+            $execution->projectName = htmlspecialchars_decode($execution->projectName);
             $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
 
             /* Process the end time. */
