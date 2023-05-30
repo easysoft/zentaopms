@@ -1557,30 +1557,31 @@ class taskModel extends model
     }
 
     /**
-     * Get execution parent tasks pairs.
+     * 获取父任务 id:name 的数组。
+     * Get an array of parent task id:name.
      *
      * @param  int    $executionID
-     * @param  string $append
+     * @param  string $appendIdList
      * @access public
      * @return array
      */
-    public function getParentTaskPairs($executionID, $append = '')
+    public function getParentTaskPairs(int $executionID, string $appendIdList = ''): array
     {
-        $tasks = $this->dao->select('id, name')->from(TABLE_TASK)
+        $taskPairs = $this->dao->select('id, name')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('status')->notin('cancel,closed')
             ->andWhere('consumed')->eq('0')
             ->andWhere('execution')->eq($executionID)
-            ->beginIF($append)->orWhere('id')->in($append)->fi()
+            ->beginIF($appendIdList)->orWhere('id')->in($appendIdList)->fi()
             ->fetchPairs();
 
-        $taskTeams = $this->dao->select('task, count(*) as count')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->groupBy('task')->fetchPairs('task', 'count');
-        foreach($tasks as $id => $name)
+        $taskTeams = $this->dao->select('task')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($taskPairs))->fetchPairs('task', 'task');
+        foreach($taskPairs as $id => $name)
         {
-            if(!empty($taskTeams[$id])) unset($tasks[$id]);
+            if(!empty($taskTeams[$id])) unset($taskPairs[$id]);
         }
-        return array('' => '') + $tasks ;
+        return $taskPairs;
     }
 
     /**

@@ -9,12 +9,12 @@ fields:
 - field: story
   range: 1,0{9}
 - field: consumed
-  range: 0,2{4},0{3},3
+  range: 0,2{4},0{3},3,0{2}
 - field: parent
-  range: "0{5},`-1`,6,0{2}"
+  range: "0{5},`-1`,6,0{2},`-1`,10"
 - field: status
-  range: "wait,doing,done,cancel,closed,wait{3},doing"
+  range: "wait,doing,done,cancel,closed,wait{3},doing,wait{2}"
 - field: mode
-  range: "[]{7},linear,multi"
+  range: "[]{7},linear,multi,[]{2}"
 - field: deleted
-  range: 0{9},1{3}
+  range: 0
