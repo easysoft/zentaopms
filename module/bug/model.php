@@ -791,10 +791,11 @@ class bugModel extends model
      * Close a bug.
      *
      * @param  object $bug
+     * @param  array  $output
      * @access public
      * @return bool
      */
-    public function close(object $bug, array $output): bool
+    public function close(object $bug, array $output = array()): bool
     {
         $oldBug = $this->getById($bug->id);
 

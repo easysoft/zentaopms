@@ -144,9 +144,9 @@ menu
     set::class('dropdown-menu'),
     set::items(array
     (
-        array('text' => $lang->bug->confirm, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchConfirm')),
-        array('text' => $lang->bug->close, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchClose')),
-        array('text' => $lang->bug->activate),
+        array('text' => $lang->bug->confirm, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchConfirm')),
+        array('text' => $lang->bug->close, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchClose')),
+        array('text' => $lang->bug->activate, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchActivate', "productID=$productID&branch=$branch")),
         array('text' => $lang->bug->resolve, 'items' => $resolveItems),
     ))
 );
@@ -167,7 +167,7 @@ menu
 $moduleItems = array();
 foreach($modules as $moduleID => $module)
 {
-    $moduleItems[] = array('text' => $module, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
+    $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
 }
 
 menu
@@ -180,7 +180,7 @@ menu
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
-    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
+    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
 }
 
 menu

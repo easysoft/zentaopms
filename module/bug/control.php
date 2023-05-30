@@ -1078,7 +1078,7 @@ class bug extends control
         }
 
         $load = true;
-        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true');
+        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true', 'canceled' => 'true');
 
         if($viewType) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load, 'closeModal' => true));
