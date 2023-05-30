@@ -144,11 +144,11 @@ $lang->measurement->analysisMethod   = '分析方法';
 $lang->measurement->placeholder = new stdclass();
 $lang->measurement->placeholder->sql = '请填写完整的mysql自定义函数语句。';
 $lang->measurement->placeholder->php = '请按照系统要求的编码，类名不能修改，必须包含get 方法。';
-$lang->measurement->codeTemplate = <<<EOT
+$lang->measurement->phpTemplate = <<<EOT
 <?php
-class %sModel extends model
+class meas extends basicmeas
 {
-    public function get(\$param1)
+    public function %s(%s)
     {
         return \$param1 + \$param2;
     }

@@ -1,97 +1,94 @@
-$(document).on('click', '#reDesignButton', function()
+$().ready(function()
 {
-    location.href = createLink('measurement', 'design', "measurementID=" + measurementID + "&step=1&type=reDesign");
+    $.setAjaxForm('#measForm', function(response)
+    {
+        if(response.result == 'success')
+        {
+            $('#responseBox').removeClass('text-danger').html(response.queryResult);
+            $('#submit').prop('disabled', false).addClass('btn-primary');
+            if(typeof(response.locate) != 'undefined') location.href = response.locate;
+        }
+        else
+        {
+            $('#responseBox').addClass('text-danger').html(response.errors);
+        }
+        return false;
+    });
+
+    $(document).on('click', '#testBtn', function()
+    {
+        $('#action').val('test');
+        $('#measForm').submit();
+    });
+
+    $(document).on('click', '#submit', function()
+    {
+        $('#action').val('save');
+        $('#measForm').submit();
+    });
+
+    $('#code').change(function()
+    {
+        $('#submit').prop('disabled', true).removeClass('btn-primary');
+        $.post(createLink('measurement', 'getsqlparams'),
+        {
+             sql: $('#code').val(), measurementID:measurementID},
+             function(response)
+             {
+                 $('#paramBox').html(response);
+             }
+        );
+    });
 });
 
-$(document).on('change', "select[name^='options']", function()
+$('[name^=varType]').change();
+
+function togglParamList(obj)
 {
-    var $tr = $(this).closest('tr');
-    var optionType  = $(this).val();
-    updateParamControl($tr, 'select', optionType);
-})
-
-function setParams(data)
-{
-    if(data)
-    {
-        var tbodyHtml = $('#setParams table tbody').html();
-        $('#tmpDataBox').append(tbodyHtml);
-        $('#setParams table tbody').empty();
-
-        var html = $('#templateBox table tbody tr.template').html();
-        for(i in data)
-        {
-            if(data[i].indexOf('|')) 
-            {
-                params = data[i].split('|');
-                paramName    = params[0];
-                defaultValue = params[1];
-            }
-            else
-            {
-                paramName    = data[i];
-                defaultValue = '';
-            }
-            if($('#tmpDataBox').find('#' + paramName).length)
-            {
-                $('#setParams table tbody').append($('#tmpDataBox').find('#' + paramName).prop('outerHTML'));
-            }
-            else
-            {
-                $('#setParams table tbody').append('<tr id=>' + paramName + html + '</tr>');
-                $('#setParams table tbody tr:last td:first').find('span:first').html(paramName);
-                $('#setParams table tbody tr:last td:first').find('input:hidden').val(paramName);
-            }
-
-            $('#setParams table tbody tr:last input[name^="defaultValue"]').val(defaultValue);
-
-            var index = $('#setParams table tbody tr:last').index();
-            $('#setParams table tbody tr:last td').eq(2).find('input:radio').attr('name', 'varType[' + index + ']');
-        }
-        $('#submit').prop('disabled', false);
-        $('#setParams').modal('show');
-    }
-}
-
-function hideParamForm()
-{
-    $('#setParams').modal('hide');
-    location.href = createLink('measurement', 'design', "measurementID=" + measurementID + "&step=3");
+   var varType = $(obj).parents('td').find('select[name*=varType]');
+   toggleSelectList(varType);
 }
 
 function toggleSelectList(obj)
 {
-    controlType = $(obj).val();
-    if(controlType == 'select')
-    {   
-        $(obj).parents('td').find('select').removeClass('hidden');
-    }   
+    isSelect = $(obj).val() == 'select';
+    if(isSelect)
+    {
+        $(obj).parents('td').find('select[name*=options]').removeClass('hidden');
+    }
     else
     {
-        $(obj).parents('td').find('select').addClass('hidden');
-    }   
+        $(obj).parents('td').find('select[name*=options]').addClass('hidden');
+    }
 
-    var optionType = $(obj).parents('td').find('select').val();
-    var $tr = $(obj).closest('tr');
-    updateParamControl($tr, controlType, optionType);
+    var optionType = $(obj).parents('td').find('select[name*=options]').val();
+    var tr = $(obj).closest('tr');
+    controlType = $(obj).val();
+    updateParamControl(tr, controlType, optionType);
 }
 
-function updateParamControl($tr, controlType, optionType)
+function updateParamControl(tr, controlType, optionType)
 {
-    var defaultValue = $tr.find('[name^=defaultValue]').val();
+    var defaultValue = tr.find('[name^=defaultValue]').val();
     defaultValue     = window.btoa(defaultValue);
     $.get(createLink('measurement', 'ajaxGetParamControl', "controlType=" + controlType + "&optionType=" + optionType + '&defaultValue=' + defaultValue), function(data)
     {
-        $tr.find("td:last").remove();
-        $tr.find("td:last").remove();
-        $tr.append(data);
-        $tr.find("td input").each(function()
+        tr.find("td:last").remove();
+        tr.find("td:last").remove();
+        tr.append(data);
+        tr.find("td input").each(function()
         {
             if($(this).hasClass('form-date')) $(this).datepicker();
         });
-        $tr.find("td select").each(function()
+        tr.find("td select").each(function()
         {
             if($(this).hasClass('chosen')) $(this).chosen();
         });
     });
+}
+
+function submitForm(value)
+{
+    $('#action').val(value);
+    $('#measForm').submit();
 }
