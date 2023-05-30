@@ -87,12 +87,16 @@ $config->product->dtable->fieldList['execution']['sortType'] = false;
 $config->product->dtable->fieldList['execution']['border']   = 'right';
 $config->product->dtable->fieldList['execution']['align']    = 'center';
 
-$config->product->dtable->fieldList['testCaseCoverage']['name']     = 'testCaseCoverage';
-$config->product->dtable->fieldList['testCaseCoverage']['title']    = $lang->product->testCaseCoverage;
-$config->product->dtable->fieldList['testCaseCoverage']['minWidth'] = 86;
-$config->product->dtable->fieldList['testCaseCoverage']['type']     = 'progress';
-$config->product->dtable->fieldList['testCaseCoverage']['sortType'] = false;
-$config->product->dtable->fieldList['testCaseCoverage']['border']   = 'right';
+$config->product->dtable->fieldList['testCaseCoverage']['name']             = 'testCaseCoverage';
+$config->product->dtable->fieldList['testCaseCoverage']['title']            = $lang->product->testCaseCoverage;
+$config->product->dtable->fieldList['testCaseCoverage']['minWidth']         = 86;
+$config->product->dtable->fieldList['testCaseCoverage']['type']             = 'progress'; /* 将单元格渲染为环形进度条。 */
+$config->product->dtable->fieldList['testCaseCoverage']['sortType']         = false;
+$config->product->dtable->fieldList['testCaseCoverage']['border']           = 'right';
+$config->product->dtable->fieldList['testCaseCoverage']['circleSize']       = 24;        /* 自定义环形进度条的样式：环形直径。 */
+$config->product->dtable->fieldList['testCaseCoverage']['circleBgColor']    = '#E3E4E9'; /* 环形背景颜色。 */
+$config->product->dtable->fieldList['testCaseCoverage']['circleColor']      = '#48D1A0'; /* 设置环形进度颜色。 */
+$config->product->dtable->fieldList['testCaseCoverage']['circleBorderSize'] = 1;         /* 设置环形边框大小。 */
 
 $config->product->dtable->fieldList['unResolvedBugs']['name']     = 'unResolvedBugs';
 $config->product->dtable->fieldList['unResolvedBugs']['title']    = $lang->product->activatedBug;
