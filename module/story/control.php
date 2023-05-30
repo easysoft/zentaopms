@@ -339,7 +339,7 @@ class story extends control
         $branchData = explode(',', $branch);
         $branch     = current($branchData);
 
-        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
         /* Get reviewers. */
@@ -448,7 +448,7 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story', 0, $story->branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'story', 0, $story->branch);
 
         /* Set menu. */
         if($this->app->tab == 'project')
@@ -541,8 +541,7 @@ class story extends control
         foreach($products as $product)
         {
             if($product->status == 'normal' and $product->PO == $this->app->user->account) $myProducts[$product->id] = $product->name;
-            if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
-            if($product->status == 'closed') continue;
+            if($product->status == 'normal' and $product->PO != $this->app->user->account) $othersProducts[$product->id] = $product->name;
         }
         $products = $myProducts + $othersProducts;
 
@@ -607,7 +606,8 @@ class story extends control
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
-        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $storyBranch    = $story->branch > 0 ? $story->branch : '0';
+        $branch         = $product->type == 'branch' ? $storyBranch : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
@@ -652,7 +652,7 @@ class story extends control
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
             $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
@@ -666,15 +666,15 @@ class story extends control
                 $this->execution->setMenu($executionID);
             }
         }
-        else if($this->app->tab == 'execution')
+        elseif($this->app->tab == 'execution')
         {
             $this->execution->setMenu($executionID);
         }
-        else if($this->app->tab == 'qa')
+        elseif($this->app->tab == 'qa')
         {
             $this->loadModel('qa')->setMenu('', $productID);
         }
-        else if($this->app->tab == 'my')
+        elseif($this->app->tab == 'my')
         {
             $this->loadModel('my');
             if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
@@ -1050,7 +1050,6 @@ class story extends control
         }
 
         $buildApp   = $tab == 'product' ?   'project' : $tab;
-        $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         if(!isonlybody()) $this->session->set('buildList', $uri, $buildApp);
         $this->app->loadLang('bug');
@@ -1125,7 +1124,6 @@ class story extends control
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $reviewers  = $this->story->getReviewerPairs($storyID, $story->version);
-        $reviewedBy = trim($story->reviewedBy, ',');
 
         $this->executeHooks($storyID);
 
