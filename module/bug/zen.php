@@ -199,14 +199,12 @@ class bugZen extends bug
     private function getBranchOptions(int $productID): array
     {
         $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
-
         foreach($branches as $branchInfo)
         {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
-        return array($branchOption, $branchTagOption);
+        return $branchTagOption;
     }
 
     /**
@@ -962,7 +960,7 @@ class bugZen extends bug
         /* 获取分支列表。*/
         /* Get branch options. */
         $branchTagOption = array();
-        if($product->type != 'normal') list($branchOption, $branchTagOption) = $this->getBranchOptions($product->id);
+        if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
 
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
