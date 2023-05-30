@@ -116,6 +116,7 @@ toolbar
             set::icon('export'),
             $lang->export
         )),
+        set::size('sm'),
         set::url(createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param")),
         set::type('ajax')
     ),
