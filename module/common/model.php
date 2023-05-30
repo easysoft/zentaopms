@@ -770,9 +770,8 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function createMenuLink($menuItem, $group)
+    public static function createMenuLink($menuItem)
     {
-        global $app;
         $link = $menuItem->link;
         if(is_array($menuItem->link))
         {
@@ -1021,7 +1020,7 @@ class commonModel extends model
             if(common::hasPriv($currentModule, $currentMethod)) $display = true;
 
             /* 2. If the module is assetLib, need judge more methods. */
-            if($currentModule == 'assetlib' and $display == false)
+            if($currentModule == 'assetlib' && !$display)
             {
                 $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
                 foreach($methodList as $method)
@@ -1199,7 +1198,7 @@ class commonModel extends model
                     $target = '';
                     $module = '';
                     $method = '';
-                    $link   = commonModel::createMenuLink($menuItem, $tab);
+                    $link   = commonModel::createMenuLink($menuItem);
 
                     if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'other') $link = 'javascript:void(0);';
 
@@ -1377,7 +1376,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem, $tab);
+                $link   = commonModel::createMenuLink($menuItem);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -1861,7 +1860,6 @@ EOF;
         if(defined('TUTORIAL')) return;
         global $app, $config, $lang;
 
-        $pipelinePairs = array();
         $condition     = '';
         if(!$app->user->admin)
         {
