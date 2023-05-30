@@ -43,7 +43,4 @@ formPanel
     history()
 );
 
-
-/* ====== Render page ====== */
-
-render();
+render(isonlybody() ? 'modalDialog' : 'page');

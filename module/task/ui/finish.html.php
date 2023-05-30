@@ -153,4 +153,4 @@ else
     );
 }
 
-render(isonlybody() ? 'modalDialog' : null);
+render(isonlybody() ? 'modalDialog' : 'page');

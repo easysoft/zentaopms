@@ -144,4 +144,4 @@ else
 }
 
 /* ====== Render page ====== */
-render(isonlybody() ? 'modalDialog' : null);
+render(isonlybody() ? 'modalDialog' : 'page');

@@ -143,4 +143,4 @@ else
 }
 
 /* ====== Render page ====== */
-render();
+render(isonlybody() ? 'modalDialog' : 'page');
