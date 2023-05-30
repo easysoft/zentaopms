@@ -642,7 +642,7 @@ class bug extends control
         $this->view->branchID      = $branchID;
         $this->view->moduleID      = $moduleID;
         $this->view->chartType     = $chartType;
-        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->view->checkedCharts = $this->post->charts ? implode(',', $this->post->charts) : '';
         $this->display();
     }
 
