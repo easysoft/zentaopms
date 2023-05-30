@@ -145,9 +145,24 @@ dtable
 (
     set::cols($cols),
     set::data($data),
-    set::footPager(usePager()),
-    set::nested(true),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
+    set::checkable(true),
+    set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::footToolbar(array
+    (
+        'type'  => 'btn-group',
+        'items' => array
+        (
+            array('text' => $lang->edit, 'btnType' => 'primary', 'url' => createLink('product', 'batchEdit'))
+        )
+    )),
+    set::footPager
+    (
+        usePager(),
+        set::page($pager->pageID),
+        set::recPerPage($pager->recPerPage),
+        set::recTotal($pager->recTotal),
+        set::linkCreator(createLink('product', 'all', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
+    )
 );
 
 render();
