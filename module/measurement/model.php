@@ -1153,6 +1153,41 @@ class measurementModel extends model
     }
 
     /**
+     * Get params from code of one php meas.
+     *
+     * @param  string $code
+     * @param  string $measCode
+     * @access public
+     * @return array
+     */
+    public function getPhpMeasParams(string $code, string $measCode): array
+    {
+        $phpFile = $this->measurementTao->saveTmpPhpFile($measCode, $code);
+        if(!$phpFile) return false;
+
+        $this->loadModel('meas');
+        include_once($phpFile);
+        $method = new ReflectionMethod('meas', $measCode);
+
+        $paramList = array();
+        $params    = $method->getParameters();
+
+        $paramItem = array();
+        $paramItem['showName']     = '';
+        $paramItem['varType']      = '';
+        $paramItem['options']      = '';
+        $paramItem['defaultValue'] = '';
+        $paramItem['queryValue']   = '';
+
+        foreach($params as $param)
+        {
+            $paramItem['varName'] = $param->getName();
+            $paramList[] = $paramItem;
+        }
+        return $paramList;
+    }
+
+    /**
      * Get sql function name of a measurement.
      *
      * @param  object    $measurement
