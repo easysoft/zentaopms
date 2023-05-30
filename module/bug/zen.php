@@ -1071,6 +1071,224 @@ class bugZen extends bug
     }
 
     /**
+     * 展示批量创建bug的相关变量。
+     * Show the variables associated with the batch creation bugs.
+     *
+     * @param  int        $executionID
+     * @param  object     $product
+     * @param  string     $branch
+     * @param  array      $output
+     * @param  array|bool $bugImagesFile
+     * @access protected
+     * @return void
+     */
+    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
+    {
+        if($executionID)
+        {
+            /* Get builds, stories and branches of this execution. */
+            $builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased', $executionID, 'execution');
+            $stories         = $this->story->getExecutionStoryPairs($executionID);
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($product->id), $executionID) : array();
+            $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
+            $branch          = key($branches);
+
+            /* Get the variables associated with kanban. */
+            $execution = $this->loadModel('execution')->getById($executionID);
+            if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
+        }
+        else
+        {
+            /* Get builds, stories and branches of the product. */
+            $builds   = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased');
+            $stories  = $this->story->getProductStoryPairs($product->id, $branch);
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
+        }
+
+        /* Get project information. */
+        $projectID = isset($execution) ? $execution->project : 0;
+        $project   = $this->loadModel('project')->getByID($projectID);
+
+        $this->assignVarsForBatchCreate($product, $project, $bugImagesFile);
+
+        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
+        $this->view->project          = $project;
+        $this->view->projectID        = $projectID;
+        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (string)$projectID, 'multiple,stagefilter');
+        $this->view->executionID      = $executionID;
+        $this->view->stories          = $stories;
+        $this->view->builds           = $builds;
+        $this->view->branch           = $branch;
+        $this->view->branches         = $branches;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 0 : $branch);
+    }
+
+    /**
+     * 展示看板的相关变量。
+     * Show the variables associated with the kanban.
+     *
+     * @param  object    $execution
+     * @param  array     $output
+     * @access protected
+     * @return void
+     */
+    protected function assignKanbanVars(object $execution, array $output)
+    {
+        $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
+        $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
+        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
+        $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+        $this->view->executionType = $execution->type;
+        $this->view->regionID      = $regionID;
+        $this->view->laneID        = $laneID;
+        $this->view->regionPairs   = $regionPairs;
+        $this->view->lanePairs     = $lanePairs;
+    }
+
+    /**
+     * 展示字段相关变量。
+     * Show the variables associated with the batch created fields.
+     *
+     * @param  object      $product
+     * @param  object|bool $project
+     * @param  array|bool  $bugImagesFile
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForBatchCreate(object $product, object|bool $project, array|bool $bugImagesFile)
+    {
+        /* Set custom fields. */
+        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
+        {
+            $customFields[$field] = $this->lang->bug->$field;
+        }
+        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+        if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
+
+        /* Set display fields. */
+        $showFields = $this->config->bug->custom->batchCreateFields;
+        if($product->type != 'normal')
+        {
+            $showFields = sprintf($showFields, $product->type);
+            $showFields = str_replace(array(",branch,", ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+        else
+        {
+            $showFields = trim(sprintf($showFields, ''), ',');
+        }
+
+        /* Get titles from uploaded images. */
+        if(!empty($bugImagesFile))
+        {
+            foreach($bugImagesFile as $fileName => $file)
+            {
+                $title = $file['title'];
+                $titles[$title] = $fileName;
+            }
+            $this->view->titles = $titles;
+        }
+
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
+    }
+
+    /**
+     * 设置关联相关 bug 页面的搜索表单。
+     * Build search form for link related bugs page.
+     *
+     * @param  object    $bug
+     * @param  string    $excludeBugs
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchFormForLinkBugs(object $bug, string $excludeBugs, int $queryID): void
+    {
+        /* 无产品项目搜索时隐藏产品、执行和所属计划字段。*/
+        /* Hide plan, execution and product in no product project. */
+        if($bug->project && $this->app->tab != 'qa')
+        {
+            $project = $this->loadModel('project')->getByID($bug->project);
+            if(!$project->hasProduct)
+            {
+                unset($this->config->bug->search['fields']['product']);
+
+                /* 单迭代项目搜索时隐藏执行和所属计划字段。*/
+                /* Hide execution and plan in single project. */
+                if(!$project->multiple)
+                {
+                    unset($this->config->bug->search['fields']['execution']);
+                    unset($this->config->bug->search['fields']['plan']);
+                }
+            }
+        }
+
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bySearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
+        $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
+    }
+
+    /**
+     * 为批量编辑 bugs 构造数据。
+     * Build bugs for the batch edit.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function buildBugsForBatchEdit(): array
+    {
+        /* Get bug ID list. */
+        $bugIdList = $this->post->id ? $this->post->id : array();
+        if(empty($bugIdList)) return array();
+
+        /* Get bugs and old bugs. */
+        $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
+        $oldBugs = $this->bug->getByIdList($bugIdList);
+
+        /* Process bugs. */
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        foreach($bugs as $bug)
+        {
+            $oldBug = $oldBugs[$bug->id];
+
+            $bug->os      = implode(',', $bug->os);
+            $bug->browser = implode(',', $bug->browser);
+
+            /* If bug is closed, the assignee will not be changed. */
+            if($oldBug->status == 'closed') $bug->assignedTo = $oldBug->assignedTo;
+
+            /* If resolution of the bug is not duplicate, duplicateBug is zero. */
+            if($bug->resolution != '' && $bug->resolution != 'duplicate') $bug->duplicateBug = 0;
+
+            /* If assignee is changes, set the assigned date. */
+            if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
+
+            /* If resolution is not empty, set the confirmed. */
+            if($bug->resolution != '') $bug->confirmed = 1;
+
+            /* If the bug is resolved, set resolved date and bug status. */
+            if(($bug->resolvedBy != '' || $bug->resolution != '') && strpos(',resolved,closed,', ",{$oldBug->status},") === false)
+            {
+                $bug->resolvedDate = $now;
+                $bug->status       = 'resolved';
+            }
+
+            /* If the bug without resolver is resolved, set resolver. */
+            if($bug->resolution != '' && $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
+
+            /* If the bug without assignee is resolved, set assignee and assigned date. */
+            if($bug->resolution != '' && $bug->assignedTo == '')
+            {
+                $bug->assignedTo   = $oldBug->openedBy;
+                $bug->assignedDate = $now;
+            }
+        }
+        return $bugs;
+    }
+
+    /**
      * 批量创建bug前处理上传图片。
      * Before batch creating bugs, process the uploaded images.
      *
@@ -1389,6 +1607,46 @@ class bugZen extends bug
     }
 
     /**
+     * 批量创建bug后返回响应。
+     * Response after batch create.
+     *
+     * @param int        $productID
+     * @param string     $branch
+     * @param int        $executionID
+     * @param array      $bugIDList
+     * @param string     $message
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIDList, string $message = '')
+    {
+        helper::setcookie('bugModule', '0', 0);
+
+        /* Remove upload image file and session. */
+        if(!empty($this->post->uploadImage) and !empty($this->session->bugImagesFile))
+        {
+            $classFile = $this->app->loadClass('zfile');
+            $file      = current($_SESSION['bugImagesFile']);
+            $realPath  = dirname($file['realpath']);
+            if(is_dir($realPath)) $classFile->removeDir($realPath);
+            unset($_SESSION['bugImagesFile']);
+        }
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        /* Return bug id list when call the API. */
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIDList));
+
+        /* Respond after updating in modal. */
+        if(isonlybody() && $executionID) return $this->responseInModal($executionID);
+
+        /* If link from no head then reload. */
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc")));
+    }
+
+    /**
      * 初始化一个默认的bug模板。
      * Init a default bug templete.
      *
@@ -1593,263 +1851,11 @@ class bugZen extends bug
 
 
 
-    /**
-     * 批量创建bug后返回响应。
-     * Response after batch create.
-     *
-     * @param int        $productID
-     * @param string     $branch
-     * @param int        $executionID
-     * @param array      $bugIDList
-     * @param string     $message
-     * @access protected
-     * @return void
-     */
-    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIDList, string $message = '')
-    {
-        helper::setcookie('bugModule', '0', 0);
 
-        /* Remove upload image file and session. */
-        if(!empty($this->post->uploadImage) and !empty($this->session->bugImagesFile))
-        {
-            $classFile = $this->app->loadClass('zfile');
-            $file      = current($_SESSION['bugImagesFile']);
-            $realPath  = dirname($file['realpath']);
-            if(is_dir($realPath)) $classFile->removeDir($realPath);
-            unset($_SESSION['bugImagesFile']);
-        }
 
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        /* Return bug id list when call the API. */
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIDList));
 
-        /* Respond after updating in modal. */
-        if(isonlybody() && $executionID) return $this->responseInModal($executionID);
 
-        /* If link from no head then reload. */
-        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
-
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc")));
-    }
-
-    /**
-     * 展示批量创建bug的相关变量。
-     * Show the variables associated with the batch creation bugs.
-     *
-     * @param  int        $executionID
-     * @param  object     $product
-     * @param  string     $branch
-     * @param  array      $output
-     * @param  array|bool $bugImagesFile
-     * @access protected
-     * @return void
-     */
-    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
-    {
-        if($executionID)
-        {
-            /* Get builds, stories and branches of this execution. */
-            $builds          = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased', $executionID, 'execution');
-            $stories         = $this->story->getExecutionStoryPairs($executionID);
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($product->id), $executionID) : array();
-            $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
-            $branch          = key($branches);
-
-            /* Get the variables associated with kanban. */
-            $execution = $this->loadModel('execution')->getById($executionID);
-            if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
-        }
-        else
-        {
-            /* Get builds, stories and branches of the product. */
-            $builds   = $this->loadModel('build')->getBuildPairs($product->id, $branch, 'noempty,noreleased');
-            $stories  = $this->story->getProductStoryPairs($product->id, $branch);
-            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
-        }
-
-        /* Get project information. */
-        $projectID = isset($execution) ? $execution->project : 0;
-        $project   = $this->loadModel('project')->getByID($projectID);
-
-        $this->assignVarsForBatchCreate($product, $project, $bugImagesFile);
-
-        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
-        $this->view->project          = $project;
-        $this->view->projectID        = $projectID;
-        $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($product->id, $branch ? "0,{$branch}" : '0', (string)$projectID, 'multiple,stagefilter');
-        $this->view->executionID      = $executionID;
-        $this->view->stories          = $stories;
-        $this->view->builds           = $builds;
-        $this->view->branch           = $branch;
-        $this->view->branches         = $branches;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 0 : $branch);
-    }
-
-    /**
-     * 展示看板的相关变量。
-     * Show the variables associated with the kanban.
-     *
-     * @param  object    $execution
-     * @param  array     $output
-     * @access protected
-     * @return void
-     */
-    protected function assignKanbanVars(object $execution, array $output)
-    {
-        $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
-        $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-        $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
-        $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
-
-        $this->view->executionType = $execution->type;
-        $this->view->regionID      = $regionID;
-        $this->view->laneID        = $laneID;
-        $this->view->regionPairs   = $regionPairs;
-        $this->view->lanePairs     = $lanePairs;
-    }
-
-    /**
-     * 展示字段相关变量。
-     * Show the variables associated with the batch created fields.
-     *
-     * @param  object      $product
-     * @param  object|bool $project
-     * @param  array|bool  $bugImagesFile
-     * @access protected
-     * @return void
-     */
-    protected function assignVarsForBatchCreate(object $product, object|bool $project, array|bool $bugImagesFile)
-    {
-        /* Set custom fields. */
-        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
-        {
-            $customFields[$field] = $this->lang->bug->$field;
-        }
-        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
-        if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
-
-        /* Set display fields. */
-        $showFields = $this->config->bug->custom->batchCreateFields;
-        if($product->type != 'normal')
-        {
-            $showFields = sprintf($showFields, $product->type);
-            $showFields = str_replace(array(",branch,", ",platform,"), '', ",$showFields,");
-            $showFields = trim($showFields, ',');
-        }
-        else
-        {
-            $showFields = trim(sprintf($showFields, ''), ',');
-        }
-
-        /* Get titles from uploaded images. */
-        if(!empty($bugImagesFile))
-        {
-            foreach($bugImagesFile as $fileName => $file)
-            {
-                $title = $file['title'];
-                $titles[$title] = $fileName;
-            }
-            $this->view->titles = $titles;
-        }
-
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $showFields;
-    }
-
-    /**
-     * 设置关联相关 bug 页面的搜索表单。
-     * Build search form for link related bugs page.
-     *
-     * @param  object    $bug
-     * @param  string    $excludeBugs
-     * @param  int       $queryID
-     * @access protected
-     * @return void
-     */
-    protected function buildSearchFormForLinkBugs(object $bug, string $excludeBugs, int $queryID): void
-    {
-        /* 无产品项目搜索时隐藏产品、执行和所属计划字段。*/
-        /* Hide plan, execution and product in no product project. */
-        if($bug->project && $this->app->tab != 'qa')
-        {
-            $project = $this->loadModel('project')->getByID($bug->project);
-            if(!$project->hasProduct)
-            {
-                unset($this->config->bug->search['fields']['product']);
-
-                /* 单迭代项目搜索时隐藏执行和所属计划字段。*/
-                /* Hide execution and plan in single project. */
-                if(!$project->multiple)
-                {
-                    unset($this->config->bug->search['fields']['execution']);
-                    unset($this->config->bug->search['fields']['plan']);
-                }
-            }
-        }
-
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bySearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
-        $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
-    }
-
-    /**
-     * 为批量编辑 bugs 构造数据。
-     * Build bugs for the batch edit.
-     *
-     * @access protected
-     * @return array
-     */
-    protected function buildBugsForBatchEdit(): array
-    {
-        /* Get bug ID list. */
-        $bugIdList = $this->post->id ? $this->post->id : array();
-        if(empty($bugIdList)) return array();
-
-        /* Get bugs and old bugs. */
-        $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
-        $oldBugs = $this->bug->getByIdList($bugIdList);
-
-        /* Process bugs. */
-        $now     = helper::now();
-        $account = $this->app->user->account;
-        foreach($bugs as $bug)
-        {
-            $oldBug = $oldBugs[$bug->id];
-
-            $bug->os      = implode(',', $bug->os);
-            $bug->browser = implode(',', $bug->browser);
-
-            /* If bug is closed, the assignee will not be changed. */
-            if($oldBug->status == 'closed') $bug->assignedTo = $oldBug->assignedTo;
-
-            /* If resolution of the bug is not duplicate, duplicateBug is zero. */
-            if($bug->resolution != '' && $bug->resolution != 'duplicate') $bug->duplicateBug = 0;
-
-            /* If assignee is changes, set the assigned date. */
-            if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
-
-            /* If resolution is not empty, set the confirmed. */
-            if($bug->resolution != '') $bug->confirmed = 1;
-
-            /* If the bug is resolved, set resolved date and bug status. */
-            if(($bug->resolvedBy != '' || $bug->resolution != '') && strpos(',resolved,closed,', ",{$oldBug->status},") === false)
-            {
-                $bug->resolvedDate = $now;
-                $bug->status       = 'resolved';
-            }
-
-            /* If the bug without resolver is resolved, set resolver. */
-            if($bug->resolution != '' && $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
-
-            /* If the bug without assignee is resolved, set assignee and assigned date. */
-            if($bug->resolution != '' && $bug->assignedTo == '')
-            {
-                $bug->assignedTo   = $oldBug->openedBy;
-                $bug->assignedDate = $now;
-            }
-        }
-        return $bugs;
-    }
 
     /**
      * 将报表的默认设置合并到当前报表。
