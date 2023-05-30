@@ -246,9 +246,10 @@ class productZen extends product
         }
 
         /* 设置下拉菜单内容。 */
-        $fields['PO']['options'] = $poUsers;
-        $fields['QD']['options'] = $qdUsers;
-        $fields['RD']['options'] = $rdUsers;
+        if(isset($fields['PO']))      $fields['PO']['options']      = $poUsers;
+        if(isset($fields['QD']))      $fields['QD']['options']      = $qdUsers;
+        if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
+        if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('', 'noclosed');
         if($programID and isset($fields['line'])) $fields['line']['options'] = $this->product->getLinePairs($programID);
 

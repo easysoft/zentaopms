@@ -14,6 +14,7 @@ $config->product->form->create['type']           = array('type' => 'string',  'c
 $config->product->form->create['status']         = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => 'normal');
 $config->product->form->create['desc']           = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '',        'width'  => 'full');
 $config->product->form->create['acl']            = array('type' => 'string',  'control' => 'radio',        'required' => false, 'default' => 'private', 'width'  => 'full', 'options' => $lang->product->aclList);
+$config->product->form->create['groups']         = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => array());
 $config->product->form->create['whitelist']      = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => 'users');
 $config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => (isset($app->user) && isset($app->user->account)) ? $app->user->account : '');
 $config->product->form->create['createdDate']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
@@ -33,6 +34,7 @@ $config->product->form->edit['type']      = array('type' => 'string',  'control'
 $config->product->form->edit['status']    = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'normal',  'options' => $lang->product->statusList);
 $config->product->form->edit['desc']      = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '',        'width'   => 'full');
 $config->product->form->edit['acl']       = array('type' => 'string',  'control' => 'radio',        'required' => false, 'default' => 'private', 'width'   => 'full', 'options' => $lang->product->aclList);
+$config->product->form->edit['groups']    = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => array());
 $config->product->form->edit['whitelist'] = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'width'   => 'full', 'filter'  => 'join', 'options' => 'users');
 if($config->systemMode != 'ALM') unset($config->product->form->edit['program'], $config->product->form->edit['line']);
 

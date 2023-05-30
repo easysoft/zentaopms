@@ -242,7 +242,7 @@ class product extends control
             $productData = $this->productZen->buildProductForCreate();
 
             $productID = $this->product->create($productData, zget($_POST, 'lineName', ''));
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(empty($productID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->productZen->responseAfterCreate($productID, $productData->program);
             return $this->send($response);

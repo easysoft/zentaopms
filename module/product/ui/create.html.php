@@ -4,6 +4,11 @@
  */
 namespace zin;
 
+$defaultWidth = '1/2';
+$groupsField  = $fields['groups'];
+$usersField   = $fields['whitelist'];
+unset($fields['groups'], $fields['whitelist']);
+
 /* zin: Define the form in main content */
 $formItems = array();
 foreach($fields as $field => $attr)
@@ -11,7 +16,7 @@ foreach($fields as $field => $attr)
     if(empty($attr['control'])) continue;
 
     $fieldName     = zget($attr, 'name', $field);
-    $attr['width'] = zget($attr, 'width', '1/2');
+    $attr['width'] = zget($attr, 'width', $defaultWidth);
 
     $control = array();
     $control['type'] = $attr['control'];
@@ -79,8 +84,52 @@ foreach($fields as $field => $attr)
 
 $formItems['program']->add(on::change('setParentProgram(e.target);'));
 $formItems['acl']->add(on::change('setWhite(e.target);'));
-$formItems['whitelist'] = formRow(set::id('whitelistBox'), $formItems['whitelist']);
 if(empty($programID)) $formItems['line'] = formRow(set::hidden(true), $formItems['line']);
+
+/* Set whitelist box. */
+$formItems['whitelist'] = formRow
+(
+    set::id('whitelistBox'),
+    formGroup
+    (
+        set::width('full'),
+        set::label($lang->product->whitelist),
+        div
+        (
+            setClass('w-full check-list'),
+            div
+            (
+                inputGroup
+                (
+                    $lang->product->groups,
+                    select
+                    (
+                        set::name($groupsField['name'] . '[]'),
+                        set::control(array('type' => 'picker')),
+                        set::multiple(true),
+                        set::items($groupsField['options']),
+                        set::value($groupsField['default'])
+                    )
+                )
+            ),
+            div
+            (
+                inputGroup
+                (
+                    $lang->product->users,
+                    select
+                    (
+                        set::name($usersField['name'] . '[]'),
+                        set::control(array('type' => 'picker')),
+                        set::multiple(true),
+                        set::items($usersField['options']),
+                        set::value($usersField['default'])
+                    )
+                )
+            )
+        ),
+    )
+);
 
 formPanel($formItems);
 
