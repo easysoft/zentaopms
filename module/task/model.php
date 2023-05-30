@@ -1521,8 +1521,6 @@ class taskModel extends model
             $parentIdList[$task->parent] = $task->parent;
         }
 
-        $parentTasks = $this->getByIdList($parentIdList);
-        $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks);
         return $this->processTasks($tasks);
     }
 

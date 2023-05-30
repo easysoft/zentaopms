@@ -754,7 +754,7 @@ class task extends control
         {
             $taskIdList = array_unique($this->post->taskIdList);
 
-            $tasks = $this->task->getByIdList($taskIDList);
+            $tasks = $this->task->getByIdList($taskIdList);
             foreach($tasks as $task)
             {
                 if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
