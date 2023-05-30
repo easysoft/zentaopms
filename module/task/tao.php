@@ -812,11 +812,10 @@ class taskTao extends taskModel
      * @param  object    $record
      * @param  object    $currentTeam
      * @param  object    $task
-     * @param  object    $newTask
      * @access protected
      * @return void
      */
-    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task, object $newTask)
+    protected function updateTeamByEffort(int $effortID, object $record, object $currentTeam, object $task)
     {
         $this->dao->update(TABLE_TASKTEAM)
                   ->set('left')->eq($record->left)
