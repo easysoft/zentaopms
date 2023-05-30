@@ -448,7 +448,7 @@ class bugZen extends bug
         $objectType         = $bug->project ? 'project' : 'execution';
         $objectID           = $bug->execution ? $bug->execution : $bug->project;
         $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
-        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, $params = 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
+        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
         $resolvedBuildPairs = $openedBuildPairs;
         if(($bug->resolvedBuild) && isset($allBuildPairs[$bug->resolvedBuild])) $resolvedBuildPairs[$bug->resolvedBuild] = $allBuildPairs[$bug->resolvedBuild];
 
@@ -469,7 +469,7 @@ class bugZen extends bug
         if($this->app->tab == 'project')   $objectID = $bug->project;
         if($this->app->tab == 'execution') $objectID = $bug->execution;
 
-        $branchPairs = $this->loadModel('branch')->getPairs($bug->product, $params = 'noempty,withClosed', $objectID);
+        $branchPairs = $this->loadModel('branch')->getPairs($bug->product, 'noempty,withClosed', $objectID);
 
         if(!isset($branchPairs[$bug->branch]))
         {
@@ -865,7 +865,7 @@ class bugZen extends bug
         $viewType = $this->app->getViewType();
         if($viewType == 'mhtml' || $viewType == 'xhtml') $recPerPage = 10;
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         return array($moduleID, $queryID, $realOrderBy, $pager);
@@ -961,15 +961,8 @@ class bugZen extends bug
 
         /* 获取分支列表。*/
         /* Get branch options. */
-        $showBranch      = false;
-        $branchOption    = array();
         $branchTagOption = array();
-        if($product->type != 'normal')
-        {
-            $showBranch = $this->loadModel('branch')->showBranch($product->id);
-
-            list($branchOption, $branchTagOption) = $this->getBranchOptions($product->id);
-        }
+        if($product->type != 'normal') list($branchOption, $branchTagOption) = $this->getBranchOptions($product->id);
 
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
@@ -992,7 +985,7 @@ class bugZen extends bug
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
-        $this->view->modules         = $this->tree->getOptionMenu($product->id, $viewType = 'bug', $startModuleID = 0, $branch);
+        $this->view->modules         = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch);
         $this->view->moduleTree      = $this->bug->getModulesForSidebar($product->id, $branch);
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
@@ -1084,7 +1077,7 @@ class bugZen extends bug
 
         /* 获取所属模块列表。*/
         /* Get module option menu. */
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, $viewType = 'bug', $startModuleID = 0, $bug->branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
 
         /* 获取该 bug 关联产品和分支下的 bug 列表。*/
@@ -1378,7 +1371,6 @@ class bugZen extends bug
 
         /* Process bugs. */
         $now     = helper::now();
-        $account = $this->app->user->account;
         foreach($bugs as $bug)
         {
             $oldBug = $oldBugs[$bug->id];
