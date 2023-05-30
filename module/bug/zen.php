@@ -61,6 +61,94 @@ class bugZen extends bug
     }
 
     /**
+     * 在解决bug中，检查必填项。
+     * While resolving a bug, check for required fields during build creation.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return bool
+     */
+    protected function checkRequiredForResolve(object $bug, int $oldExecution): bool
+    {
+        /* Set lang for error. */
+        $this->lang->bug->comment = $this->lang->comment;
+
+        /* When creating a new build, the execution of the build cannot be empty. */
+        if($bug->createBuild == 'on' && empty($bug->buildExecution))
+        {
+            $executionLang = $this->lang->bug->execution;
+            if($oldExecution)
+            {
+                $execution = $this->dao->findByID($oldExecution)->from(TABLE_EXECUTION)->fetch();
+                if($execution and $execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+            }
+            dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
+        }
+
+        /* When creating a new build, the build name cannot be empty. */
+        if($bug->createBuild == 'on' && empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
+
+        /* Check required fields of resolving bug. */
+        foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
+        {
+            if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
+                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+
+        /* If the resolution of bug is duplicate, duplicate bug id cannot be empty. */
+        if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors['duplicateBug'][] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+
+        /* When creating a new build, the build name cannot be empty. */
+        if($bug->resolution == 'fixed' && empty($bug->resolvedBuild)) dao::$errors['resolvedBuild'][] = sprintf($this->lang->error->notempty, $this->lang->bug->resolvedBuild);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 检查批量创建的bug的数据。
+     * Check the batch created bugs.
+     *
+     * @param  array     $bugs
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function checkBugsForBatchCreate(array $bugs, int $productID): array
+    {
+        $this->loadModel('common');
+
+        /* Check whether the bugs meet the requirements, and if not, remove it. */
+        foreach($bugs as $index => $bug)
+        {
+            $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
+            if(zget($result, 'stop', false) !== false)
+            {
+                unset($bugs[$index]);
+                continue;
+            }
+
+            /* If the bug is not valid data, unset it.*/
+            if($this->common->checkValidRow('bug', $bug, $index)) unset($bugs[$index]);
+        }
+
+        /* Check required fields. */
+        foreach($bugs as $index => $bug)
+        {
+            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field and empty($bug->$field) and $field != 'title') dao::$errors["{$field}[{$index}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
+            }
+        }
+
+        return $bugs;
+    }
+
+    /**
      * 获取列表页面的 branch 参数。
      * Get browse branch param.
      *
@@ -511,6 +599,55 @@ class bugZen extends bug
     }
 
     /**
+     * 获取导出文件名。
+     * Get export file name.
+     *
+     * @param  int       $executionID
+     * @param  string    $browseType
+     * @param  object    $product
+     * @access protected
+     * @return string
+     */
+    protected function getExportFileName(int $executionID, string $browseType, object $product): string
+    {
+        $fileName = $this->lang->bug->common;
+        if($executionID)
+        {
+            $executionName = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('name');
+            $fileName      = $executionName . $this->lang->dash . $fileName;
+        }
+        else
+        {
+            $productName = !empty($product->name) ? $product->name : '';
+            $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
+
+            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        return $fileName;
+    }
+
+    /**
+     * 获取批量解决bug的数据。
+     * Get batch resolve bug data.
+     *
+     * @param  object[]  $oldBugs
+     * @access protected
+     * @return array
+     */
+    protected function getBatchResolveVars(array $oldBugs): array
+    {
+        $bug       = reset($oldBugs);
+        $productID = $bug->product;
+        $product   = $this->loadModel('product')->getByID($productID);
+        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
+        $modules   = array();
+        while($module = $stmt->fetch()) $modules[$module->id] = $module;
+
+        return array($modules, $product->QD);
+    }
+
+    /**
      * 追加bug创建页面的products和projects，并绑定到bug上。
      * Append the products and projects for the bug create page and bind them to bug.
      *
@@ -696,6 +833,55 @@ class bugZen extends bug
         {
             $this->loadModel('product')->setMenu($bug->product);
             $this->lang->product->menu->plan['subModule'] .= ',bug';
+        }
+    }
+
+    /**
+     * 设置导出数据源。
+     * Set export data source.
+     *
+     * @param  int       $productID
+     * @param  string    $browseType
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function setExportDataSource(int $productID, string $browseType, int $executionID): void
+    {
+        if(!$productID or $browseType == 'bysearch')
+        {
+            /* Set module data source. */
+            $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+            $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+
+            /* In execution, set data source. */
+            if($executionID)
+            {
+                $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+                $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+            }
+        }
+    }
+
+    /**
+     * 设置导出字段。
+     * Set export fields.
+     *
+     * @param  int $executionID
+     * @param  object $product
+     * @access protected
+     * @return void
+     */
+    protected function setExportFields(int $executionID, object $product): void
+    {
+        if(isset($product->type) and $product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
+            if(!empty($product->shadow)) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
         }
     }
 
@@ -1289,6 +1475,185 @@ class bugZen extends bug
     }
 
     /**
+     * 为批量创建分配变量。
+     * Assign variables for batch edit.
+     *
+     * @param  int $     productID
+     * @param  string    $branch
+     * @access protected
+     * @return void
+     */
+    protected function assignBatchEditVars(int $productID, string $branch)
+    {
+        /* Initialize vars.*/
+        $bugIdList = array_unique($this->post->bugIdList);
+        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
+
+        /* Set menu and get product id list. */
+        if($this->app->tab == 'product') $this->product->setMenu($productID);
+        if($productID)
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+
+            $productIdList = array($productID => $productID);
+        }
+        else
+        {
+            $this->app->loadLang('my');
+            $this->lang->task->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'bug';
+
+            $productIdList = array_column($bugs, 'product', 'product');
+        }
+
+        /* Get products. */
+        $products = $this->product->getByIdList($productIdList);
+
+        /* Get custom Fields. */
+        foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+
+        $this->view->title        = zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG" . $this->lang->bug->batchEdit;
+        $this->view->customFields = $customFields;
+
+        /* Judge whether the editedBugs is too large and set session. */
+        $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo)
+        {
+            $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+            $this->display();
+        }
+
+        /* Assign product related variables. */
+        $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
+
+        /* Assign users. */
+        $this->assignUsersForBatchEdit($bugs, $productIdList, $branchTagOption);
+    }
+
+    /**
+     * 分配产品相关的变量。
+     * Assign product related variables.
+     *
+     * @param  array     $bugs
+     * @param  array     $products
+     * @access protected
+     * @return array
+     */
+    protected function assignProductRelatedVars(array $bugs, array $products): array
+    {
+        /* Get modules, bugs and plans of the products. */
+        $branchProduct   = false;
+        $modules         = array();
+        $branchTagOption = array();
+        $productBugList  = array();
+        $productPlanList = array();
+        foreach($products as $product)
+        {
+            if(!isset($productPlanList[$product->id])) $productPlanList[$product->id] = array();
+
+            $branches = 0;
+            if($product->type != 'normal')
+            {
+                $branchPairs   = $this->loadModel('branch')->getPairs($product->id, 0 ,'withClosed');
+                $branches      = array_keys($branchPairs);
+                $branchProduct = true;
+
+                foreach($branchPairs as $branchID => $branchName)
+                {
+                    $branchTagOption[$product->id][$branchID] = "/{$product->name}/{$branchName}";
+                    $productPlanList[$product->id][$branchID] = $this->loadModel('productplan')->getPairs($product->id, $branchID, '', true);
+                    $productBugList[$product->id][$branchID]  = $this->bug->getProductBugPairs($product->id, "0,{$branchID}");
+                }
+            }
+            else
+            {
+                $productPlanList[$product->id][0] = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
+                $productBugList[$product->id][0]  = $this->bug->getProductBugPairs($product->id, "");
+            }
+
+            $modulePairs           = $this->tree->getOptionMenu($product->id, 'bug', 0, $branches);
+            $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
+        }
+
+        /* Get module of the bugs, and set bug plans. */
+        foreach($bugs as $bug)
+        {
+            if(!isset($modules[$bug->product][$bug->branch]) && isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
+            $bug->plans = isset($productPlanList[$bug->product]) && isset($productPlanList[$bug->product][$bug->branch]) ? $productPlanList[$bug->product][$bug->branch] : array();
+        }
+
+        $this->view->bugs            = $bugs;
+        $this->view->branchProduct   = $branchProduct;
+        $this->view->modules         = $modules;
+        $this->view->productBugList  = $productBugList;
+        $this->view->branchTagOption = $branchTagOption;
+        return $branchTagOption;
+    }
+
+    /**
+     * 为批量编辑 bugs 分配人员。
+     * Assign users for batch edit.
+     *
+     * @param  array     $bugs
+     * @param  array     $productIdList
+     * @param  array     $branchTagOption
+     * @access protected
+     * @return void
+     */
+    protected function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
+    {
+        /* If current tab is execution or project, get project, execution, product team members of bugs.*/
+        if($this->app->tab == 'execution' || $this->app->tab == 'project')
+        {
+            $projectIdList = array_column($bugs, 'project', 'project');
+            $project       = $this->loadModel('project')->getByID(key($projectIdList));
+            if(!empty($project) && empty($project->multiple))
+            {
+                $this->config->bug->custom->batchEditFields = str_replace('productplan', '', $this->config->bug->custom->batchEditFields);
+                $this->config->bug->list->customBatchEditFields = str_replace(',productplan,', ',', $this->config->bug->list->customBatchEditFields);
+            }
+
+            $productMembers = array();
+            foreach($productIdList as $id)
+            {
+                $branches   = zget($branchTagOption, $id, array());
+                $branchList = array_keys($branches);
+                foreach($branchList as $branchID)
+                {
+                    $members = $this->bug->getProductMemberPairs($id, $branchID);
+                    $productMembers[$id][$branchID] = array_filter($members);
+                }
+            }
+
+            /* Get members of projects. */
+            $projectMembers     = array();
+            $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
+            foreach($projectIdList as $projectID)
+            {
+                $projectTeam = zget($projectMemberGroup, $projectID, array());
+                foreach($projectTeam as $user) $projectMembers[$projectID][$user->account] = $user->realname;
+            }
+
+            /* Get members of executions. */
+            $executionMembers     = array();
+            $executionIdList      = array_column($bugs, 'execution', 'execution');
+            $executionMemberGroup = $this->loadModel('execution')->getMembersByIdList($executionIdList);
+            foreach($executionIdList as $executionID)
+            {
+                $executionTeam = zget($executionMemberGroup, $executionID, array());
+                foreach($executionTeam as $user) $executionMembers[$executionID][$user->account] = $user->realname;
+            }
+
+            $this->view->productMembers   = $productMembers;
+            $this->view->projectMembers   = $projectMembers;
+            $this->view->executionMembers = $executionMembers;
+        }
+
+        $this->view->users = $this->user->getPairs('devfirst');
+    }
+
+    /**
      * 批量创建bug前处理上传图片。
      * Before batch creating bugs, process the uploaded images.
      *
@@ -1647,6 +2012,28 @@ class bugZen extends bug
     }
 
     /**
+     * 获得 batchEdit 方法的response。
+     * Get response for batchEdit.
+     *
+     * @param  array|false $output
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterBatchEdit(array|bool $toTaskIdList): array
+    {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(!empty($toTaskIdList))
+        {
+            $confirmedURL = $this->createLink('task', 'view', 'taskID=' . key($toTaskIdList));
+            $canceledURL  = $this->server->HTTP_REFERER;
+            return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+        }
+
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList);
+    }
+
+    /**
      * 初始化一个默认的bug模板。
      * Init a default bug templete.
      *
@@ -1883,284 +2270,11 @@ class bugZen extends bug
         return $chartOption;
     }
 
-    /**
-     * 获得 batchEdit 方法的response。
-     * Get response for batchEdit.
-     *
-     * @param  array|false $output
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterBatchEdit(array|bool $toTaskIdList): array
-    {
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        if(!empty($toTaskIdList))
-        {
-            $confirmedURL = $this->createLink('task', 'view', 'taskID=' . key($toTaskIdList));
-            $canceledURL  = $this->server->HTTP_REFERER;
-            return array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
-        }
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList);
-    }
 
-    /**
-     * 为批量创建分配变量。
-     * Assign variables for batch edit.
-     *
-     * @param  int $     productID
-     * @param  string    $branch
-     * @access protected
-     * @return void
-     */
-    protected function assignBatchEditVars(int $productID, string $branch)
-    {
-        /* Initialize vars.*/
-        $bugIdList = array_unique($this->post->bugIdList);
-        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
 
-        /* Set menu and get product id list. */
-        if($this->app->tab == 'product') $this->product->setMenu($productID);
-        if($productID)
-        {
-            $this->qa->setMenu($this->products, $productID, $branch);
 
-            $productIdList = array($productID => $productID);
-        }
-        else
-        {
-            $this->app->loadLang('my');
-            $this->lang->task->menu = $this->lang->my->menu->work;
-            $this->lang->my->menu->work['subModule'] = 'bug';
-
-            $productIdList = array_column($bugs, 'product', 'product');
-        }
-
-        /* Get products. */
-        $products = $this->product->getByIdList($productIdList);
-
-        /* Get custom Fields. */
-        foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
-
-        $this->view->title        = zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG" . $this->lang->bug->batchEdit;
-        $this->view->customFields = $customFields;
-
-        /* Judge whether the editedBugs is too large and set session. */
-        $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo)
-        {
-            $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-            $this->display();
-        }
-
-        /* Assign product related variables. */
-        $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
-
-        /* Assign users. */
-        $this->assignUsersForBatchEdit($bugs, $productIdList, $branchTagOption);
-    }
-
-    /**
-     * 分配产品相关的变量。
-     * Assign product related variables.
-     *
-     * @param  array     $bugs
-     * @param  array     $products
-     * @access protected
-     * @return array
-     */
-    protected function assignProductRelatedVars(array $bugs, array $products): array
-    {
-        /* Get modules, bugs and plans of the products. */
-        $branchProduct   = false;
-        $modules         = array();
-        $branchTagOption = array();
-        $productBugList  = array();
-        $productPlanList = array();
-        foreach($products as $product)
-        {
-            if(!isset($productPlanList[$product->id])) $productPlanList[$product->id] = array();
-
-            $branches = 0;
-            if($product->type != 'normal')
-            {
-                $branchPairs   = $this->loadModel('branch')->getPairs($product->id, 0 ,'withClosed');
-                $branches      = array_keys($branchPairs);
-                $branchProduct = true;
-
-                foreach($branchPairs as $branchID => $branchName)
-                {
-                    $branchTagOption[$product->id][$branchID] = "/{$product->name}/{$branchName}";
-                    $productPlanList[$product->id][$branchID] = $this->loadModel('productplan')->getPairs($product->id, $branchID, '', true);
-                    $productBugList[$product->id][$branchID]  = $this->bug->getProductBugPairs($product->id, "0,{$branchID}");
-                }
-            }
-            else
-            {
-                $productPlanList[$product->id][0] = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
-                $productBugList[$product->id][0]  = $this->bug->getProductBugPairs($product->id, "");
-            }
-
-            $modulePairs           = $this->tree->getOptionMenu($product->id, 'bug', 0, $branches);
-            $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
-        }
-
-        /* Get module of the bugs, and set bug plans. */
-        foreach($bugs as $bug)
-        {
-            if(!isset($modules[$bug->product][$bug->branch]) && isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
-            $bug->plans = isset($productPlanList[$bug->product]) && isset($productPlanList[$bug->product][$bug->branch]) ? $productPlanList[$bug->product][$bug->branch] : array();
-        }
-
-        $this->view->bugs            = $bugs;
-        $this->view->branchProduct   = $branchProduct;
-        $this->view->modules         = $modules;
-        $this->view->productBugList  = $productBugList;
-        $this->view->branchTagOption = $branchTagOption;
-        return $branchTagOption;
-    }
-
-    /**
-     * 为批量编辑 bugs 分配人员。
-     * Assign users for batch edit.
-     *
-     * @param  array     $bugs
-     * @param  array     $productIdList
-     * @param  array     $branchTagOption
-     * @access protected
-     * @return void
-     */
-    protected function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
-    {
-        /* If current tab is execution or project, get project, execution, product team members of bugs.*/
-        if($this->app->tab == 'execution' || $this->app->tab == 'project')
-        {
-            $projectIdList = array_column($bugs, 'project', 'project');
-            $project       = $this->loadModel('project')->getByID(key($projectIdList));
-            if(!empty($project) && empty($project->multiple))
-            {
-                $this->config->bug->custom->batchEditFields = str_replace('productplan', '', $this->config->bug->custom->batchEditFields);
-                $this->config->bug->list->customBatchEditFields = str_replace(',productplan,', ',', $this->config->bug->list->customBatchEditFields);
-            }
-
-            $productMembers = array();
-            foreach($productIdList as $id)
-            {
-                $branches   = zget($branchTagOption, $id, array());
-                $branchList = array_keys($branches);
-                foreach($branchList as $branchID)
-                {
-                    $members = $this->bug->getProductMemberPairs($id, $branchID);
-                    $productMembers[$id][$branchID] = array_filter($members);
-                }
-            }
-
-            /* Get members of projects. */
-            $projectMembers     = array();
-            $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
-            foreach($projectIdList as $projectID)
-            {
-                $projectTeam = zget($projectMemberGroup, $projectID, array());
-                foreach($projectTeam as $user) $projectMembers[$projectID][$user->account] = $user->realname;
-            }
-
-            /* Get members of executions. */
-            $executionMembers     = array();
-            $executionIdList      = array_column($bugs, 'execution', 'execution');
-            $executionMemberGroup = $this->loadModel('execution')->getMembersByIdList($executionIdList);
-            foreach($executionIdList as $executionID)
-            {
-                $executionTeam = zget($executionMemberGroup, $executionID, array());
-                foreach($executionTeam as $user) $executionMembers[$executionID][$user->account] = $user->realname;
-            }
-
-            $this->view->productMembers   = $productMembers;
-            $this->view->projectMembers   = $projectMembers;
-            $this->view->executionMembers = $executionMembers;
-        }
-
-        $this->view->users = $this->user->getPairs('devfirst');
-    }
-
-    /**
-     * 设置导出数据源。
-     * Set export data source.
-     *
-     * @param  int       $productID
-     * @param  string    $browseType
-     * @param  int       $executionID
-     * @access protected
-     * @return void
-     */
-    protected function setExportDataSource(int $productID, string $browseType, int $executionID): void
-    {
-        if(!$productID or $browseType == 'bysearch')
-        {
-            /* Set module data source. */
-            $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-            $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
-
-            /* In execution, set data source. */
-            if($executionID)
-            {
-                $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-                $projectID = $object->type == 'project' ? $object->id : $object->parent;
-                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
-                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
-            }
-        }
-    }
-
-    /**
-     * 设置导出字段。
-     * Set export fields.
-     *
-     * @param  int $executionID
-     * @param  object $product
-     * @access protected
-     * @return void
-     */
-    protected function setExportFields(int $executionID, object $product): void
-    {
-        if(isset($product->type) and $product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
-        if($this->app->tab == 'project' or $this->app->tab == 'execution')
-        {
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
-            if(!empty($product->shadow)) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
-        }
-    }
-
-    /**
-     * 获取导出文件名。
-     * Get export file name.
-     *
-     * @param  int       $executionID
-     * @param  string    $browseType
-     * @param  object    $product
-     * @access protected
-     * @return string
-     */
-    protected function getExportFileName(int $executionID, string $browseType, object $product): string
-    {
-        $fileName = $this->lang->bug->common;
-        if($executionID)
-        {
-            $executionName = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('name');
-            $fileName      = $executionName . $this->lang->dash . $fileName;
-        }
-        else
-        {
-            $productName = !empty($product->name) ? $product->name : '';
-            $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
-
-            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
-        }
-
-        return $fileName;
-    }
 
     /**
      * 过滤批量解决bug id。
@@ -2179,113 +2293,5 @@ class bugZen extends bug
             if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') unset($bugIdList[$i]);
         }
         return $bugIdList;
-    }
-
-    /**
-     * 获取批量解决bug的数据。
-     * Get batch resolve bug data.
-     *
-     * @param  object[]  $oldBugs
-     * @access protected
-     * @return array
-     */
-    protected function getBatchResolveVars(array $oldBugs): array
-    {
-        $bug       = reset($oldBugs);
-        $productID = $bug->product;
-        $product   = $this->loadModel('product')->getByID($productID);
-        $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
-        $modules   = array();
-        while($module = $stmt->fetch()) $modules[$module->id] = $module;
-
-        return array($modules, $product->QD);
-    }
-
-    /**
-     * 在解决bug中，检查必填项。
-     * While resolving a bug, check for required fields during build creation.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return bool
-     */
-    protected function checkRequiredForResolve(object $bug, int $oldExecution): bool
-    {
-        /* Set lang for error. */
-        $this->lang->bug->comment = $this->lang->comment;
-
-        /* When creating a new build, the execution of the build cannot be empty. */
-        if($bug->createBuild == 'on' && empty($bug->buildExecution))
-        {
-            $executionLang = $this->lang->bug->execution;
-            if($oldExecution)
-            {
-                $execution = $this->dao->findByID($oldExecution)->from(TABLE_EXECUTION)->fetch();
-                if($execution and $execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
-            }
-            dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
-        }
-
-        /* When creating a new build, the build name cannot be empty. */
-        if($bug->createBuild == 'on' && empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
-
-        /* Check required fields of resolving bug. */
-        foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
-        {
-            if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
-            {
-                $fieldName = $requiredField;
-                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
-                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
-            }
-        }
-
-        /* If the resolution of bug is duplicate, duplicate bug id cannot be empty. */
-        if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors['duplicateBug'][] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
-
-        /* When creating a new build, the build name cannot be empty. */
-        if($bug->resolution == 'fixed' && empty($bug->resolvedBuild)) dao::$errors['resolvedBuild'][] = sprintf($this->lang->error->notempty, $this->lang->bug->resolvedBuild);
-
-        return !dao::isError();
-    }
-
-    /**
-     * 检查批量创建的bug的数据。
-     * Check the batch created bugs.
-     *
-     * @param  array     $bugs
-     * @param  int       $productID
-     * @access protected
-     * @return array
-     */
-    protected function checkBugsForBatchCreate(array $bugs, int $productID): array
-    {
-        $this->loadModel('common');
-
-        /* Check whether the bugs meet the requirements, and if not, remove it. */
-        foreach($bugs as $index => $bug)
-        {
-            $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
-            if(zget($result, 'stop', false) !== false)
-            {
-                unset($bugs[$index]);
-                continue;
-            }
-
-            /* If the bug is not valid data, unset it.*/
-            if($this->common->checkValidRow('bug', $bug, $index)) unset($bugs[$index]);
-        }
-
-        /* Check required fields. */
-        foreach($bugs as $index => $bug)
-        {
-            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if($field and empty($bug->$field) and $field != 'title') dao::$errors["{$field}[{$index}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
-            }
-        }
-
-        return $bugs;
     }
 }
