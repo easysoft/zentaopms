@@ -114,19 +114,9 @@ class execution extends control
      */
     public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $this->loadModel('tree');
-        $this->loadModel('search');
-        $this->loadModel('task');
-        $this->loadModel('datatable');
-        $this->loadModel('setting');
-        $this->loadModel('product');
-        $this->loadModel('user');
-
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
-
-        if($executionID) $this->session->set("storyList", $this->createLink("execution", "story", "&executionID=" . $executionID));
 
         /* Set browse type. */
         $browseType = strtolower($status);
@@ -137,7 +127,7 @@ class execution extends control
         if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Get products by execution. */
-        $products = $this->product->getProductPairsByProject($executionID);
+        $products = $this->loadModel('product')->getProductPairsByProject($executionID);
         helper::setcookie('preExecutionID', $executionID);
 
         /* Save the recently five executions visited in the cookie. */
@@ -148,6 +138,7 @@ class execution extends control
         $recentExecutions = join(',', $recentExecutions);
         if($this->session->multiple)
         {
+            $this->loadModel('setting');
             if(!isset($this->config->execution->recentExecutions) or $this->config->execution->recentExecutions != $recentExecutions) $this->setting->updateItem($this->app->user->account . 'common.execution.recentExecutions', $recentExecutions);
             if(!isset($this->config->execution->lastExecution)    or $this->config->execution->lastExecution != $executionID)         $this->setting->updateItem($this->app->user->account . 'common.execution.lastExecution', $executionID);
         }
@@ -200,17 +191,6 @@ class execution extends control
 
         /* Get tasks. */
         $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
-        if(empty($tasks) and $pageID > 1)
-        {
-            $pager = pager::init(0, $recPerPage, 1);
-            $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
-        }
-
-        /* Get product. */
-        $product = $this->product->getById($productID);
-
-        /* Display of branch label. */
-        $showBranch = $this->loadModel('branch')->showBranch($productID, $moduleID, $executionID);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
@@ -221,38 +201,25 @@ class execution extends control
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
-        $memberPairs = $this->user->processAccountSort($memberPairs);
+        $memberPairs = $this->loadModel('user')->processAccountSort($memberPairs);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $extra         = (isset($this->config->execution->task->allModule) && $this->config->execution->task->allModule == 1) ? 'allModule' : '';
-        $showModule    = !empty($this->config->datatable->executionTask->showModule) ? $this->config->datatable->executionTask->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
 
         /* Assign. */
         $this->view->tasks        = $tasks;
-        $this->view->tabID        = 'task';
         $this->view->pager        = $pager;
         $this->view->recTotal     = $pager->recTotal;
         $this->view->recPerPage   = $pager->recPerPage;
         $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->status       = $status;
-        $this->view->users        = $this->user->getPairs('noletter|all');
         $this->view->param        = $param;
-        $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
-        $this->view->productID    = $productID;
-        $this->view->product      = $product;
-        $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
         $this->view->moduleID     = $moduleID;
+        $this->view->modules      = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->setModule    = (bool)$execution->multiple;
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->showBranch   = $showBranch;
-        $this->view->projectName  = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
-
         $this->display();
     }
 
@@ -761,7 +728,6 @@ class execution extends control
         }
 
         $type      = strtolower($type);
-        $param     = $param;
         $productID = 0;
         helper::setcookie('storyPreExecutionID', $executionID);
         if($this->cookie->storyPreExecutionID != $executionID)
