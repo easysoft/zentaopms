@@ -114,6 +114,46 @@ class bugZen extends bug
     }
 
     /**
+     * 获得create方法的返回url。
+     * Get response url for create.
+     *
+     * @param  int       $bugID
+     * @param  int       $executionID
+     * @param  string    $branch
+     * @access protected
+     * @return string
+     */
+    protected function getLocation4Create(int $bugID, int $executionID, array $output): string
+    {
+        $bug = $this->bug->getByID($bugID);
+
+        if($this->app->tab == 'execution')
+        {
+            if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
+            {
+                $location = $this->session->bugList;
+            }
+            else
+            {
+                $location = $this->createLink('execution', 'bug', "executionID=$executionID");
+            }
+
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
+        }
+        else
+        {
+            helper::setcookie('bugModule', '0', 0);
+            $location = $this->createLink('bug', 'browse', "productID={$bug->product}&branch=$bug->branch&browseType=byModule&param={$bug->module}&orderBy=id_desc");
+        }
+        if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
+
+        return $location;
+    }
+
+    /**
      * 设置浏览页面的 cookie。
      * Set cookie in browse view.
      *
@@ -493,48 +533,6 @@ class bugZen extends bug
     }
 
     /**
-     * 返回不同的结果。
-     * Respond after updating bug.
-     *
-     * @param  int       $bugID
-     * @param  array     $changes
-     * @param  string    $kanbanGroup
-     * @param  int       $regionID
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0): array
-    {
-        $message = $this->executeHooks($bugID);
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
-
-        /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
-        /* This bug has been converted to a task, update the status of the related task or not. */
-        $bug = $this->bug->getByID($bugID);
-        if($bug->toTask and !empty($changes))
-        {
-            foreach($changes as $change)
-            {
-                if($change['field'] == 'status')
-                {
-                    $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                    $canceledURL  = $this->server->http_referer;
-                    return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
-                }
-            }
-        }
-
-        /* 在弹窗里编辑 bug 时的返回。*/
-        /* Respond after updating in modal. */
-        if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
-
-        if(!$message) $message = $this->lang->saveSuccess;
-        return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
-    }
-
-
-
-    /**
      * 批量创建bug后的其他处理。
      * Processing after batch creation of bug.
      *
@@ -573,6 +571,46 @@ class bugZen extends bug
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 返回不同的结果。
+     * Respond after updating bug.
+     *
+     * @param  int       $bugID
+     * @param  array     $changes
+     * @param  string    $kanbanGroup
+     * @param  int       $regionID
+     * @access protected
+     * @return array
+     */
+    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0): array
+    {
+        $message = $this->executeHooks($bugID);
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+
+        /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
+        /* This bug has been converted to a task, update the status of the related task or not. */
+        $bug = $this->bug->getByID($bugID);
+        if($bug->toTask and !empty($changes))
+        {
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'status')
+                {
+                    $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                    $canceledURL  = $this->server->http_referer;
+                    return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                }
+            }
+        }
+
+        /* 在弹窗里编辑 bug 时的返回。*/
+        /* Respond after updating in modal. */
+        if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
+
+        if(!$message) $message = $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
 
     /**
@@ -648,45 +686,7 @@ class bugZen extends bug
         return !dao::isError();
     }
 
-    /**
-     * 获得create方法的返回url。
-     * Get response url for create.
-     *
-     * @param  int       $bugID
-     * @param  int       $executionID
-     * @param  string    $branch
-     * @access protected
-     * @return string
-     */
-    protected function getLocation4Create(int $bugID, int $executionID, array $output): string
-    {
-        $bug = $this->bug->getByID($bugID);
 
-        if($this->app->tab == 'execution')
-        {
-            if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
-            {
-                $location = $this->session->bugList;
-            }
-            else
-            {
-                $location = $this->createLink('execution', 'bug', "executionID=$executionID");
-            }
-
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
-        }
-        else
-        {
-            helper::setcookie('bugModule', '0', 0);
-            $location = $this->createLink('bug', 'browse', "productID={$bug->product}&branch=$bug->branch&browseType=byModule&param={$bug->module}&orderBy=id_desc");
-        }
-        if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
-
-        return $location;
-    }
 
     /**
      * 初始化一个默认的bug模板。
