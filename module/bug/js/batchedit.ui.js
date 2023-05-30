@@ -84,8 +84,6 @@ window.renderRowData = function($row, index, row)
         }
     }
     $assignedTo.find('option[value="closed"]').remove();
-
-    $row.find('[data-ditto]').attr('data-ditto', 'off');
 }
 
 function setDuplicate(event)

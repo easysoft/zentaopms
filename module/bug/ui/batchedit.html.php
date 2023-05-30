@@ -68,7 +68,7 @@ formBatchPanel
         set::width('160px'),
         set::required(isset($requiredFields['type'])),
         set::ditto(true),
-        set('data-ditto', 'off'),
+        set::defaultDitto('off')
     ),
     /* Field of severity. */
     formBatchItem
@@ -121,6 +121,7 @@ formBatchPanel
         set::width('200px'),
         set::required(isset($requiredFields['module'])),
         set::ditto(true),
+        set::defaultDitto('off')
     ),
     /* Field of assignedTo. */
     formBatchItem
@@ -132,6 +133,7 @@ formBatchPanel
         set::width('200px'),
         set::required(isset($requiredFields['assignedTo'])),
         set::ditto(true),
+        set::defaultDitto('off')
     ),
     /* Field of deadline. */
     formBatchItem
@@ -182,6 +184,7 @@ formBatchPanel
         set::width('200px'),
         set::required(isset($requiredFields['resolvedBy'])),
         set::ditto(true),
+        set::defaultDitto('off')
     ),
     /* Field of resolution. */
     formBatchItem
