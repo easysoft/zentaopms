@@ -844,7 +844,7 @@ class bugModel extends model
 
         $excludeBugs .= ",{$bug->id},{$bug->linkBug}";
 
-        if($bySearch) return $this->bugTao->getBySearch((array)$bug->product, $branch = 'all', $projectID = 0, $queryID, $excludeBugs, $orderBy = 'id desc', $pager);
+        if($bySearch) return $this->bugTao->getBySearch((array)$bug->product, 'all', 0, $queryID, $excludeBugs, 'id desc', $pager);
 
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq('0')
