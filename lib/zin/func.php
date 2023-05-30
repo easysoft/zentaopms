@@ -33,7 +33,7 @@ require_once __DIR__ . DS . 'zentao' . DS . 'zentao.func.php';
  * ?bool   autocomplete=false
  * ?bool   disabled
  */
-function input()
+function input(): \zin\input
 {
     return createWg('input', func_get_args());
 }
@@ -50,7 +50,7 @@ function input()
  * ?bool   required
  * ?string placeholder
  */
-function textarea()
+function textarea(): \zin\textarea
 {
     return createWg('textarea', func_get_args());
 }
@@ -68,7 +68,7 @@ function textarea()
  * ?string typeClass
  * ?string rootClass
  */
-function radio()
+function radio(): \zin\radio
 {
     return createWg('radio', func_get_args());
 }
@@ -86,7 +86,7 @@ function radio()
  * ?string typeClass
  * ?string rootClass
  */
-function switcher()
+function switcher(): \zin\switcher
 {
     return createWg('switcher', func_get_args());
 }
@@ -104,7 +104,7 @@ function switcher()
  * ?string typeClass
  * ?string rootClass
  */
-function checkbox()
+function checkbox(): \zin\checkbox
 {
     return createWg('checkbox', func_get_args());
 }
@@ -121,7 +121,7 @@ function checkbox()
  * ?string submitBtnText
  * ?string cancelBtnText
  */
-function formBase()
+function formBase(): \zin\formBase
 {
     return createWg('formBase',  func_get_args());
 }
@@ -140,7 +140,7 @@ function formBase()
  * ?bool   grid
  * ?int    labelWidth
  */
-function form()
+function form(): \zin\form
 {
     return createWg('form',  func_get_args());
 }
@@ -156,7 +156,7 @@ function form()
  * ?bool   grid
  * ?int    labelWidth
  */
-function formPanel()
+function formPanel(): \zin\formPanel
 {
     return createWg('formPanel', func_get_args());
 }
@@ -176,7 +176,7 @@ function formPanel()
  * ?array  data
  * ?string mode='add'
  */
-function formBatch()
+function formBatch(): \zin\formBatch
 {
     return createWg('formBatch', func_get_args());
 }
@@ -197,7 +197,7 @@ function formBatch()
  * ?string          placeholder
  * ?bool            hidden=false
  */
-function formBatchItem()
+function formBatchItem(): \zin\formBatchItem
 {
     return createWg('formBatchItem', func_get_args());
 }
@@ -217,7 +217,7 @@ function formBatchItem()
  * ?array  data
  * ?string mode='add'
  */
-function formBatchPanel()
+function formBatchPanel(): \zin\formBatchPanel
 {
     return createWg('formBatchPanel', func_get_args());
 }
@@ -236,7 +236,7 @@ function formBatchPanel()
  * ?string form
  * ?array  items
  */
-function control()
+function control(): \zin\control
 {
     return createWg('control', func_get_args());
 }
@@ -254,7 +254,7 @@ function control()
  * ?array  items
  * ?int    size
  */
-function select()
+function select(): \zin\select
 {
     return createWg('select', func_get_args());
 }
@@ -266,7 +266,7 @@ function select()
  * ?bool   required
  * ?string for
  */
-function formLabel()
+function formLabel(): \zin\formLabel
 {
     return createWg('formLabel', func_get_args());
 }
@@ -289,7 +289,7 @@ function formLabel()
  * string|array|null value
  * array|string|null control
  */
-function formGroup()
+function formGroup(): \zin\formGroup
 {
     return createWg('formGroup', func_get_args());
 }
@@ -301,7 +301,7 @@ function formGroup()
  * ?array  items
  * ?bool   hidden
  */
-function formRow()
+function formRow(): \zin\formRow
 {
     return createWg('formRow', func_get_args());
 }
@@ -314,7 +314,7 @@ function formRow()
  * string|int prefixWidth
  * string|int suffixWidth
  */
-function inputControl()
+function inputControl(): \zin\inputControl
 {
     return createWg('inputControl', func_get_args());
 }
@@ -325,7 +325,7 @@ function inputControl()
  * ?array items
  * ?bool  seg
  */
-function inputGroup()
+function inputGroup(): \zin\inputGroup
 {
     return createWg('inputGroup', func_get_args());
 }
@@ -339,7 +339,7 @@ function inputGroup()
  * ?bool             inline
  * string|array|null value
  */
-function checkList()
+function checkList(): \zin\checkList
 {
     return createWg('checkList', func_get_args());
 }
@@ -353,7 +353,7 @@ function checkList()
  * ?bool             inline
  * string|array|null value
  */
-function radioList()
+function radioList(): \zin\radioList
 {
     return createWg('radioList', func_get_args());
 }
@@ -371,7 +371,7 @@ function radioList()
  * ?bool   disabled
  * ?bool   autocomplete=false
  */
-function colorPicker()
+function colorPicker(): \zin\colorPicker
 {
     return createWg('colorPicker', func_get_args());
 }
@@ -389,7 +389,7 @@ function colorPicker()
  * ?bool   disabled
  * ?bool   autocomplete=false
  */
-function datePicker()
+function datePicker(): \zin\datePicker
 {
     return createWg('datePicker', func_get_args());
 }
@@ -407,7 +407,7 @@ function datePicker()
  * ?bool   disabled
  * ?bool   autocomplete=false
  */
-function datetimePicker()
+function datetimePicker(): \zin\datetimePicker
 {
     return createWg('datetimePicker', func_get_args());
 }
@@ -425,7 +425,7 @@ function datetimePicker()
  * ?bool   disabled
  * ?bool   autocomplete=false
  */
-function timePicker()
+function timePicker(): \zin\timePicker
 {
     return createWg('timePicker', func_get_args());
 }
@@ -443,7 +443,7 @@ function timePicker()
  * ?bool   disabled
  * ?bool   autocomplete=false
  */
-function fileInput()
+function fileInput(): \zin\fileInput
 {
     return createWg('fileInput', func_get_args());
 }
@@ -466,7 +466,7 @@ function fileInput()
  * footer = array()
  * ====================
  */
-function pageForm()
+function pageForm(): \zin\pageForm
 {
     return createWg('pageForm', func_get_args());
 }
@@ -477,7 +477,7 @@ function pageForm()
  * string          name
  * string|int|null size
  */
-function icon()
+function icon(): \zin\icon
 {
     return createWg('icon', func_get_args());
 }
@@ -499,7 +499,7 @@ function icon()
  * string|int|null  size
  * string|bool|null caret
  */
-function btn()
+function btn(): \zin\btn
 {
     return createWg('btn', func_get_args());
 }
@@ -514,7 +514,7 @@ function btn()
  * array|string|null bodyClass
  * string|array|null metas=array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
  */
-function pageBase()
+function pageBase(): \zin\pageBase
 {
     return createWg('pageBase', func_get_args());
 }
@@ -536,7 +536,7 @@ function pageBase()
  * footer = array()
  * ====================
  */
-function page()
+function page(): \zin\page
 {
     return createWg('page',    func_get_args());
 }
@@ -545,7 +545,7 @@ function page()
  * Fragment widget.
  * Let you group elements without a wrapper node.
  */
-function fragment()
+function fragment(): \zin\fragment
 {
     return createWg('fragment',    func_get_args());
 }
@@ -557,7 +557,7 @@ function fragment()
  * ?bool   disabled
  * ?string size
  */
-function btnGroup()
+function btnGroup(): \zin\btnGroup
 {
     return createWg('btnGroup', func_get_args());
 }
@@ -569,7 +569,7 @@ function btnGroup()
  * ?array btnGroup
  * ?array others
  */
-function mainMenu()
+function mainMenu(): \zin\mainMenu
 {
     return createWg('mainMenu', func_get_args());
 }
@@ -580,7 +580,7 @@ function mainMenu()
  * ?string justify
  * ?string align
  */
-function row()
+function row(): \zin\row
 {
     return createWg('row', func_get_args());
 }
@@ -591,7 +591,7 @@ function row()
  * ?string justify
  * ?string align
  */
-function col()
+function col(): \zin\col
 {
     return createWg('col', func_get_args());
 }
@@ -599,7 +599,7 @@ function col()
 /**
  * Center widget.
  */
-function center()
+function center(): \zin\center
 {
     return createWg('center', func_get_args());
 }
@@ -615,7 +615,7 @@ function center()
  * string     align
  * string     flex
  */
-function cell()
+function cell(): \zin\cell
 {
     return createWg('cell', func_get_args());
 }
@@ -639,7 +639,7 @@ function cell()
  * ?props  array
  * string|array|object|null badge
  */
-function actionItem()
+function actionItem(): \zin\actionItem
 {
     return createWg('actionItem', func_get_args());
 }
@@ -649,7 +649,7 @@ function actionItem()
  *
  * ?array items
  */
-function nav()
+function nav(): \zin\nav
 {
     return createWg('nav', func_get_args());
 }
@@ -659,7 +659,7 @@ function nav()
  *
  * ?string text
  */
-function label()
+function label(): \zin\label
 {
     return createWg('label', func_get_args());
 }
@@ -667,7 +667,7 @@ function label()
 /**
  * DTable widget.
  */
-function dtable()
+function dtable(): \zin\dtable
 {
     return createWg('dtable', func_get_args());
 }
@@ -677,7 +677,7 @@ function dtable()
  *
  * ?array items
  */
-function menu()
+function menu(): \zin\menu
 {
     return createWg('menu', func_get_args());
 }
@@ -700,7 +700,7 @@ function menu()
  * ?bool   hasIcons
  * ?bool   staticMenu
  */
-function dropdown()
+function dropdown(): \zin\dropdown
 {
     return createWg('dropdown', func_get_args());
 }
@@ -714,7 +714,7 @@ function dropdown()
  * toolbar = array('map' => 'btn')
  * ====================
  */
-function header()
+function header(): \zin\header
 {
     return createWg('header', func_get_args());
 }
@@ -725,7 +725,7 @@ function header()
  * array items
  * ?bool showAppName=true
  */
-function heading()
+function heading(): \zin\heading
 {
     return createWg('heading', func_get_args());
 }
@@ -735,7 +735,7 @@ function heading()
  *
  * ?array items
  */
-function navbar()
+function navbar(): \zin\navbar
 {
     return createWg('navbar', func_get_args());
 }
@@ -748,7 +748,7 @@ function navbar()
  * sidebar = array('map' => 'sidebar')
  * ====================
  */
-function main()
+function main(): \zin\main
 {
     return createWg('main', func_get_args());
 }
@@ -759,7 +759,7 @@ function main()
  * ?string side='left'
  * ?bool   showToggle=true
  */
-function sidebar()
+function sidebar(): \zin\sidebar
 {
     return createWg('sidebar', func_get_args());
 }
@@ -778,7 +778,7 @@ function sidebar()
  * trailing = array()
  * ====================
  */
-function featureBar()
+function featureBar(): \zin\featureBar
 {
     return createWg('featureBar', func_get_args());
 }
@@ -801,7 +801,7 @@ function featureBar()
  * ?int        lightness=0.6
  * ?string     src
  */
-function avatar()
+function avatar(): \zin\avatar
 {
     return createWg('avatar', func_get_args());
 }
@@ -828,7 +828,7 @@ function avatar()
  * string       realname?
  * array|object user?
  */
-function userAvatar()
+function userAvatar(): \zin\userAvatar
 {
     return createWg('userAvatar', func_get_args());
 }
@@ -836,7 +836,7 @@ function userAvatar()
 /**
  * Pager widget.
  */
-function pager()
+function pager(): \zin\pager
 {
     return createWg('pager', func_get_args());
 }
@@ -847,7 +847,7 @@ function pager()
  * ?string id="$GID"
  * ?array  modalProps=array()
  */
-function modal()
+function modal(): \zin\modal
 {
     return createWg('modal', func_get_args());
 }
@@ -881,7 +881,7 @@ function modal()
  * modal = array('map' => 'modal')
  * ====================
  */
-function modalTrigger()
+function modalTrigger(): \zin\modalTrigger
 {
     return createWg('modalTrigger', func_get_args());
 }
@@ -899,7 +899,7 @@ function modalTrigger()
  * ?array          footerProps
  * bool|array|null closeBtn=true
  */
-function modalDialog()
+function modalDialog(): \zin\modalDialog
 {
     return createWg('modalDialog', func_get_args());
 }
@@ -909,7 +909,7 @@ function modalDialog()
  *
  * ?string direction='h'
  */
-function tabs()
+function tabs(): \zin\tabs
 {
     return createWg('tabs', func_get_args());
 }
@@ -921,7 +921,7 @@ function tabs()
  * string key
  * string title
  */
-function tabPane()
+function tabPane(): \zin\tabPane
 {
     return createWg('tabPane', func_get_args());
 }
@@ -943,7 +943,7 @@ function tabPane()
  * ?string footerClass
  * ?array  footerProps
  */
-function panel()
+function panel(): \zin\panel
 {
     return createWg('panel', func_get_args());
 }
@@ -951,7 +951,7 @@ function panel()
 /**
  * Tooltip widget.
  */
-function tooltip()
+function tooltip(): \zin\tooltip
 {
     return createWg('tooltip', func_get_args());
 }
@@ -963,7 +963,7 @@ function tooltip()
  * ?string btnClass
  * ?array  btnProps
  */
-function toolbar()
+function toolbar(): \zin\toolbar
 {
     return createWg('toolbar', func_get_args());
 }
@@ -971,7 +971,7 @@ function toolbar()
 /**
  * Zentao search form widget.
  */
-function searchForm()
+function searchForm(): \zin\searchForm
 {
     return createWg('searchForm', func_get_args());
 }
@@ -981,7 +981,7 @@ function searchForm()
  *
  * ?bool open
  */
-function searchToggle()
+function searchToggle(): \zin\searchToggle
 {
     return createWg('searchToggle', func_get_args());
 }
@@ -995,7 +995,7 @@ function searchToggle()
  * ?string activeKey
  * ?string closeLink
  */
-function programMenu()
+function programMenu(): \zin\programMenu
 {
     return createWg('programMenu', func_get_args());
 }
@@ -1007,7 +1007,7 @@ function programMenu()
  * int    activeKey
  * string closeLink
  */
-function moduleMenu()
+function moduleMenu(): \zin\moduleMenu
 {
     return createWg('moduleMenu', func_get_args());
 }
@@ -1019,7 +1019,7 @@ function moduleMenu()
  * ?array  users
  * ?string methodName
  */
-function history()
+function history(): \zin\history
 {
     return createWg('history', func_get_args());
 }
@@ -1035,7 +1035,7 @@ function history()
  * dropdowns = array()
  * ====================
  */
-function floatToolbar()
+function floatToolbar(): \zin\floatToolbar
 {
     return createWg('floatToolbar', func_get_args());
 }
@@ -1050,7 +1050,7 @@ function floatToolbar()
  * ?array  items
  * ?array  value
  */
-function formItemDropdown()
+function formItemDropdown(): \zin\formItemDropdown
 {
     return createWg('formItemDropdown', func_get_args());
 }
@@ -1067,7 +1067,7 @@ function formItemDropdown()
  * ?int     rows
  * ?int     cols
  */
-function editor()
+function editor(): \zin\editor
 {
     return createWg('editor', func_get_args());
 }
@@ -1092,7 +1092,7 @@ function editor()
  * string|int|null  size
  * string|bool|null caret
  */
-function commentBtn()
+function commentBtn(): \zin\commentBtn
 {
     return createWg('commentBtn', func_get_args());
 }
@@ -1106,7 +1106,7 @@ function commentBtn()
  * ?string name='comment'
  * ?string method='POST'
  */
-function commentDialog()
+function commentDialog(): \zin\commentDialog
 {
     return createWg('commentDialog', func_get_args());
 }
@@ -1118,7 +1118,7 @@ function commentDialog()
  * ?string name='comment'
  * ?string method='POST'
  */
-function commentForm()
+function commentForm(): \zin\commentForm
 {
     return createWg('commentForm', func_get_args());
 }
@@ -1128,7 +1128,7 @@ function commentForm()
  *
  * int pri
  */
-function priLabel()
+function priLabel(): \zin\priLabel
 {
     return createWg('priLabel', func_get_args());
 }
@@ -1139,7 +1139,7 @@ function priLabel()
  * ?string text
  * ?string level 'h'|'m'|'l'
  */
-function riskLabel()
+function riskLabel(): \zin\riskLabel
 {
     return createWg('riskLabel', func_get_args());
 }
@@ -1150,7 +1150,7 @@ function riskLabel()
  * ?string     text
  * ?int|string level 1|2|3|4
  */
-function severityLabel()
+function severityLabel(): \zin\severityLabel
 {
     return createWg('severityLabel', func_get_args());
 }
@@ -1170,7 +1170,7 @@ function severityLabel()
  *  ?array               blockMenu          区块菜单。
  *  ?function            onLayoutChange     布局变更事件。
  */
-function dashboard()
+function dashboard(): \zin\dashboard
 {
     return createWg('dashboard', func_get_args());
 }
@@ -1187,7 +1187,7 @@ function dashboard()
  * actions  => array()
  * ====================
  */
-function section()
+function section(): \zin\section
 {
     return createWg('section', func_get_args());
 }
@@ -1195,7 +1195,7 @@ function section()
 /**
  * Zentao detail page section list widget.
  */
-function sectionList()
+function sectionList(): \zin\sectionList
 {
     return createWg('sectionList', func_get_args());
 }
@@ -1211,7 +1211,7 @@ function sectionList()
  * suffix = array()
  * ====================
  */
-function entityLabel()
+function entityLabel(): \zin\entityLabel
 {
     return createWg('entityLabel',func_get_args());
 }
@@ -1219,7 +1219,7 @@ function entityLabel()
 /**
  * Zentao table data widget.
  */
-function tableData()
+function tableData(): \zin\tableData
 {
     return createWg('tableData',func_get_args());
 }
@@ -1233,7 +1233,7 @@ function tableData()
  * suffix => array()
  * ====================
  */
-function detailHeader()
+function detailHeader(): \zin\detailHeader
 {
     return createWg('detailHeader', func_get_args());
 }
@@ -1241,7 +1241,7 @@ function detailHeader()
 /**
  * Zentao detail page side widget.
  */
-function detailSide()
+function detailSide(): \zin\detailSide
 {
     return createWg('detailSide', func_get_args());
 }
@@ -1249,7 +1249,7 @@ function detailSide()
 /**
  * Zentao detail page body widget.
  */
-function detailBody()
+function detailBody(): \zin\detailBody
 {
     return createWg('detailBody', func_get_args());
 }
