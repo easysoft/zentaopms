@@ -296,7 +296,7 @@ class task extends control
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('execution', 'task', "executionID={$executionID}")));
     }
 
     /**
