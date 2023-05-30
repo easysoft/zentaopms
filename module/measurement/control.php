@@ -379,14 +379,15 @@ class measurement extends control
             }
 
             $this->dao->update(TABLE_BASICMEAS)
-                ->set('configure')->eq($this->post->php)
+                ->set('configure')->eq($this->post->code)
                 ->set('params')->eq(json_encode($params))
                 ->where('id')->eq($measurementID)
                 ->exec();
 
             $params       = $this->measurement->processPostParams();
             $measFunction = $this->measurement->getPhpFunctionName($measurement);
-            $queryResult  = $this->measurement->execPhpMeasurement($measurement, $params, $this->post->action);
+            $saveRecord   = $this->post->action == 'save';
+            $queryResult  = $this->measurement->execPhpMeasurement($measurement, $params, $saveRecord);
             if($queryResult === false) return $this->send(array('result' => 'fail', 'message' => $this->measurement->errorInfo));
 
             if($this->post->action == 'save') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
