@@ -293,7 +293,6 @@ class treeModel extends model
                 $startModulePath = $startModule->path . '%';
                 $modulePaths = explode(",", $startModulePath);
                 $rootModule  = $this->getById($modulePaths[0]);
-                $productID   = $rootModule->root;
             }
         }
         $treeMenu   = array();

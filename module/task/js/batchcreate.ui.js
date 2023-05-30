@@ -76,7 +76,7 @@ function setStoryRelated(event)
     const $preview       = $currentRow.find('.form-batch-input[data-name="preview"]');
     if(storyID)
     {
-        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID + '&pageType=batch');
         $.getJSON(link, function(data)
         {
             const storyInfo = data['storyInfo'];

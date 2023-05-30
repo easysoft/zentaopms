@@ -574,7 +574,6 @@ class tree extends control
             {
                 $changeFunc = '';
                 if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
-                if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
                 $field = $fieldID !== '' ? "modules[$fieldID]" : 'module';
 
                 $currentModule   = $this->tree->getById($currentModuleID);

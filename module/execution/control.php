@@ -3487,7 +3487,7 @@ class execution extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);

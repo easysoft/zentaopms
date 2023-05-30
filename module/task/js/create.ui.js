@@ -6,6 +6,11 @@ $(function()
         $("input[name='after'][value='continueAdding']").parent().hide();
         $("input[name='after'][value='toTaskList']").prop('checked', true);
     }
+
+    $('#module').on('change', function()
+    {
+        loadExecutionStories();
+    });
 })
 
 /**
@@ -253,6 +258,7 @@ function setStoryRelated()
 {
     setPreview();
     setStoryModule();
+    setAfter();
 }
 
 /**
@@ -335,7 +341,7 @@ function setAfter()
     {
         /* If the exeuction has stories, show the selections of story. */
         if(!toTaskList) $('input[value="continueAdding"]').prop('checked', true);
-        $('input[value="continueAdding"]').attr('disabled', false);
-        $('input[value="toStoryList"]').attr('disabled', false);
+        $('input[value="continueAdding"]').removeAttr('disabled');
+        $('input[value="toStoryList"]').removeAttr('disabled');
     }
 }
