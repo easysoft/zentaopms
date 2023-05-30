@@ -782,7 +782,6 @@ class transferModel extends model
                 if(empty($table)) continue;
 
                 $fieldIDList     = array_keys($lists[$fieldList]);
-                $linkFieldIDList = array_keys($lists[$linkFieldList]);
                 $fieldDatas      = $this->dao->select("id, $linkFiled")->from($table)->where('id')->in($fieldIDList)->fetchPairs();
 
                 if(empty($fieldDatas)) continue;
@@ -803,11 +802,10 @@ class transferModel extends model
      *
      * @param  int    $model
      * @param  int    $fieldList
-     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function getRows($model, $fieldList, $orderBy = 'id_desc')
+    public function getRows($model, $fieldList)
     {
         $modelDatas = $this->getQueryDatas($model);
 
@@ -1431,7 +1429,8 @@ class transferModel extends model
             {
                 $sub = " <sub style='vertical-align:sub;color:gray'>{$this->lang->transfer->new}</sub>";
                 if($model == 'task') $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$this->lang->task->children}</sub>" : $sub;
-                $html .= $addID++ . $sub;
+                $addID ++;
+                $html .= $addID . $sub;
             }
             $html .= "</td>";
 
