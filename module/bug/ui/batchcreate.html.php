@@ -172,7 +172,7 @@ $items[] = array
     'hidden'   => zget($visibleFields, 'type', true, false),
     'control'  => 'select',
     'items'    => $lang->bug->typeList,
-    'value'    => $type,
+    'value'    => '',
     'width'    => '160px',
     'required' => isset($requiredFields['type']),
     'ditto'    => true,
@@ -186,7 +186,7 @@ $items[] = array
     'hidden'   => zget($visibleFields, 'pri', true, false),
     'control'  => 'select',
     'items'    => $lang->bug->priList,
-    'value'    => $pri,
+    'value'    => '',
     'width'    => '80px',
     'required' => isset($requiredFields['pri']),
 );
