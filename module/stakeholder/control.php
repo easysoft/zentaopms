@@ -59,7 +59,6 @@ class stakeholder extends control
                 return $this->send($response);
             }
 
-            $actionID = $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
             $moduleName = $this->app->tab == 'program' ? 'program'              : $this->moduleName;
@@ -374,7 +373,6 @@ class stakeholder extends control
         $this->commonAction($userID, 'stakeholder');
         if(!empty($_POST))
         {
-            $result = $this->stakeholder->communicate($userID);
             if(dao::isError()) return print(js::error(dao::getError()));
             if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
         }

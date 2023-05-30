@@ -144,7 +144,7 @@ class stakeholderModel extends model
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->exec();
 
         $stakeholderList = array();
-        foreach($accounts as $key => $account)
+        foreach($accounts as $account)
         {
             if(empty($account)) continue;
 
@@ -246,7 +246,7 @@ class stakeholderModel extends model
      */
     public function getStakeholders($projectID, $browseType = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $stakeholders = $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.objectID=t4.id')
@@ -258,8 +258,6 @@ class stakeholderModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        return $stakeholders;
     }
 
     /**
@@ -271,14 +269,12 @@ class stakeholderModel extends model
      */
     public function getStakeHolderPairs($projectID)
     {
-        $stakeholders = $this->dao->select('t1.user, t2.realname')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t1.user, t2.realname')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.objectID')->eq($projectID)
             ->orderBy('t1.id_desc')
             ->fetchPairs();
-
-        return $stakeholders;
     }
 
     /**
@@ -347,13 +343,11 @@ class stakeholderModel extends model
      */
     public function getListByType()
     {
-        $stakeholders = $this->dao->select('t2.realname as name, t2.account, t1.type, t2.role')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.realname as name, t2.account, t1.type, t2.role')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.objectID')->eq($this->session->project)
             ->fetchGroup('type');
-
-        return $stakeholders;
     }
 
     /**
@@ -365,13 +359,11 @@ class stakeholderModel extends model
      */
     public function getByID($userID)
     {
-        $stakeholder = $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t3.id as company')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t1.*, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t3.id as company')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.id')->eq($userID)
             ->fetch();
-
-        return $stakeholder;
     }
 
     /**
@@ -382,12 +374,10 @@ class stakeholderModel extends model
      */
     public function getProcessGroup()
     {
-        $group = $this->dao->select('process, activity')->from(TABLE_PROGRAMACTIVITY)
+        return $this->dao->select('process, activity')->from(TABLE_PROGRAMACTIVITY)
             ->where('project')->eq($this->session->project)
             ->andWhere('result')->eq('yes')
             ->fetchGroup('process');
-
-        return $group;
     }
 
     /**
@@ -457,8 +447,6 @@ class stakeholderModel extends model
      */
     public function communicate($stakeholderID)
     {
-        $stakeholder = $this->getByID($stakeholderID);
-
         $data = fixer::input('post')
             ->stripTags($this->config->stakeholder->editor->communicate['id'], $this->config->allowedTags)
             ->get();
@@ -601,14 +589,12 @@ class stakeholderModel extends model
      */
     public function getStakeholderUsers()
     {
-        $users = $this->dao->select("t1.id, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select("t1.id, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.objectID')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchPairs('id', 'realname');
-
-        return $users;
     }
 
     /**
@@ -619,14 +605,12 @@ class stakeholderModel extends model
      */
     public function getStakeholders4Issue()
     {
-        $users = $this->dao->select("t1.user, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select("t1.user, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->where('t1.objectID')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchPairs('user', 'realname');
-
-        return $users;
     }
 
     /**
@@ -682,12 +666,11 @@ class stakeholderModel extends model
      */
     public function getStakeholderIssue($account)
     {
-        $issueList = $this->dao->select('*')->from(TABLE_ISSUE)
+        return $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('project')->eq($this->session->project)
             ->andWhere('owner')->eq($account)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
-        return $issueList;
     }
 }
