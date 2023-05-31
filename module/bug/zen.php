@@ -1034,22 +1034,21 @@ class bugZen extends bug
         /* Get executions. */
         $bug = $this->getExecutions4Create($bug);
 
-        $this->extractBugTemplete($bug);
-
-        $this->view->title        = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->customFields = $this->getCustomFields4Create();
-        $this->view->showFields   = $this->config->bug->custom->createFields;
-
+        $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->view->customFields          = $this->getCustomFields4Create();
+        $this->view->showFields            = $this->config->bug->custom->createFields;
         $this->view->productMembers        = $this->getProductMembers4Create($bug);
         $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->projects              = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
+        $this->view->products              = $bug->products;
+        $this->view->branches              = $bug->branches;
+        $this->view->executions            = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
         $this->view->blockID               = $this->getBlockID4Create();
-        $this->view->issueKey              = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
-
         $this->display();
     }
 
@@ -2157,56 +2156,6 @@ class bugZen extends bug
         }
 
         return $bug;
-    }
-
-
-
-    /**
-     * 将$bug对象的属性添加到view对象中。
-     * Add the prop of the $bug object to the view object.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return void
-     */
-    protected function extractBugTemplete(object $bug): void
-    {
-        $this->view->projectID   = $bug->projectID;
-        $this->view->moduleID    = $bug->moduleID;
-        $this->view->productID   = $bug->productID;
-        $this->view->products    = $bug->products;
-        $this->view->stories     = $bug->stories;
-        $this->view->projects    = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
-        $this->view->executions  = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
-        $this->view->builds      = $bug->builds;
-        $this->view->execution   = $bug->execution;
-        $this->view->taskID      = $bug->taskID;
-        $this->view->storyID     = $bug->storyID;
-        $this->view->buildID     = $bug->buildID;
-        $this->view->caseID      = $bug->caseID;
-        $this->view->runID       = $bug->runID;
-        $this->view->version     = $bug->version;
-        $this->view->testtask    = $bug->testtask;
-        $this->view->bugTitle    = $bug->title;
-        $this->view->pri         = $bug->pri;
-        $this->view->steps       = htmlSpecialString($bug->steps);
-        $this->view->os          = $bug->os;
-        $this->view->browser     = $bug->browser;
-        $this->view->assignedTo  = $bug->assignedTo;
-        $this->view->deadline    = $bug->deadline;
-        $this->view->mailto      = $bug->mailto;
-        $this->view->keywords    = $bug->keywords;
-        $this->view->severity    = $bug->severity;
-        $this->view->type        = $bug->type;
-        $this->view->branch      = $bug->branch;
-        $this->view->branches    = $bug->branches;
-        $this->view->color       = $bug->color;
-        $this->view->feedbackBy  = $bug->feedbackBy;
-        $this->view->notifyEmail = $bug->notifyEmail;
-
-        $this->view->projectModel    = $bug->projectModel;
-        $this->view->stepsRequired   = strpos($this->config->bug->create->requiredFields, 'steps');
-        $this->view->isStepsTemplate = $bug->steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
     }
 
     /**

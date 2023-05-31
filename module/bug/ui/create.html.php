@@ -11,12 +11,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('oldProjectID', $projectID);
-jsVar('oldProductID', $productID);
-jsVar('moduleID', $moduleID);
+jsVar('oldProjectID', $bug->projectID);
+jsVar('oldProductID', $bug->productID);
+jsVar('moduleID', $bug->moduleID);
 jsVar('tab', $this->app->tab);
-if($this->app->tab == 'execution') jsVar('objectID', zget($execution, 'id', ''));
-if($this->app->tab == 'project')   jsVar('objectID', $projectID);
+if($this->app->tab == 'execution') jsVar('objectID', zget($bug->execution, 'id', ''));
+if($this->app->tab == 'project')   jsVar('objectID', $bug->projectID);
 
 foreach(explode(',', $config->bug->create->requiredFields) as $field)
 {
@@ -59,14 +59,14 @@ formPanel
                 (
                     set::name('product'),
                     set::items($products),
-                    set::value($productID)
+                    set::value($bug->productID)
                 ),
-                $product->type != 'normal' && isset($products[$productID]) ? select
+                $product->type != 'normal' && isset($products[$bug->productID]) ? select
                 (
                     set::width('100px'),
                     set::name('branch'),
                     set::items($branches),
-                    set::value($branch)
+                    set::value($bug->branch)
                 ) : null
             )
         ),
@@ -81,7 +81,7 @@ formPanel
                 (
                     set::name('project'),
                     set::items($projects),
-                    set::value($projectID)
+                    set::value($bug->projectID)
                 )
             )
         )
@@ -99,7 +99,7 @@ formPanel
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
-                    set::value($moduleID)
+                    set::value($bug->moduleID)
                 ),
                 count($moduleOptionMenu) == 1 ? span
                 (
@@ -107,7 +107,7 @@ formPanel
                     a
                     (
                         set('class', 'mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$branch")),
+                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch={$bug->branch}")),
                         set('data-toggle', 'modal'),
                         $lang->tree->manage
                     ),
@@ -125,7 +125,7 @@ formPanel
         (
             set::class($showExecution ? '' : 'hidden'),
             set::width('1/2'),
-            set::label($projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution),
+            set::label($bug->projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution),
             inputGroup
             (
                 set('id', 'executionBox'),
@@ -133,7 +133,7 @@ formPanel
                 (
                     set::name('execution'),
                     set::items($executions),
-                    set::value(zget($execution, 'id', ''))
+                    set::value(zget($bug->execution, 'id', ''))
                 )
             )
         )
@@ -150,8 +150,8 @@ formPanel
                 (
                     set::multiple(true),
                     set::name('openedBuild[]'),
-                    set::items($builds),
-                    set::value(empty($buildID) ? '' : $buildID)
+                    set::items($bug->builds),
+                    set::value(empty($bug->buildID) ? '' : $bug->buildID)
                 ),
                 span
                 (
@@ -175,7 +175,7 @@ formPanel
                 (
                     set::name('assignedTo'),
                     set::items($productMembers),
-                    set::value($assignedTo)
+                    set::value($bug->assignedTo)
                 ),
                 span
                 (
@@ -200,7 +200,7 @@ formPanel
             datePicker
             (
                 set::name('deadline'),
-                set::value($deadline)
+                set::value($bug->deadline)
             )
         ),
         formGroup
@@ -209,7 +209,7 @@ formPanel
             set::class($showNoticefeedbackBy ? '' : 'hidden'),
             set::label($lang->bug->feedbackBy),
             set::name('feedbackBy'),
-            set::value(isset($feedbackBy) ? $feedbackBy : '')
+            set::value(isset($bug->feedbackBy) ? $bug->feedbackBy : '')
         )
     ),
     formRow
@@ -220,7 +220,7 @@ formPanel
             set::class($showNoticefeedbackBy ? '' : 'hidden'),
             set::label($lang->bug->notifyEmail),
             set::name('notifyEmail'),
-            set::value($notifyEmail)
+            set::value($bug->notifyEmail)
         ),
         formGroup
         (
@@ -228,7 +228,7 @@ formPanel
             set::label($lang->bug->type),
             set::control(array('type' => 'select', 'items' => $lang->bug->typeList)),
             set::name('type'),
-            set::value($type)
+            set::value($bug->type)
         )
     ),
     formRow
@@ -240,7 +240,7 @@ formPanel
             set::label($lang->bug->os),
             set::control(array('type' => 'select', 'items' => $lang->bug->osList, 'multiple' => true)),
             set::name('os[]'),
-            set::value($os)
+            set::value($bug->os)
         ),
         formGroup
         (
@@ -249,7 +249,7 @@ formPanel
             set::label($lang->bug->browser),
             set::control(array('type' => 'select', 'items' => $lang->bug->browserList)),
             set::name('browser'),
-            set::value($browser)
+            set::value($bug->browser)
         )
     ),
     formRow
@@ -258,7 +258,7 @@ formPanel
         (
             set::label($lang->bug->title),
             set::name('title'),
-            set::value($bugTitle)
+            set::value($bug->title)
         ),
         formGroup
         (
@@ -267,7 +267,7 @@ formPanel
             set::label($lang->bug->severity),
             set::control(array('type' => 'select', 'items' => $lang->bug->severityList)),
             set::name('severity'),
-            set::value($severity)
+            set::value($bug->severity)
         ),
         formGroup
         (
@@ -276,7 +276,7 @@ formPanel
             set::label($lang->bug->pri),
             set::control(array('type' => 'select', 'items' => $lang->bug->priList)),
             set::name('pri'),
-            set::value($pri)
+            set::value($bug->pri)
         )
     ),
     formRow
@@ -287,7 +287,7 @@ formPanel
             editor
             (
                 set::name('steps'),
-                set::value($steps)
+                set::value($bug->steps ? htmlSpecialString($bug->steps) : '')
             )
         ),
     ),
@@ -304,8 +304,8 @@ formPanel
                 select
                 (
                     set::name('story'),
-                    set::items((empty($stories) ? '' : $stories)),
-                    set::value($storyID)
+                    set::items((empty($bug->stories) ? '' : $bug->stories)),
+                    set::value($bug->storyID)
                 )
             )
         ),
@@ -316,7 +316,7 @@ formPanel
             set::label($lang->bug->task),
             set::control(array('type' => 'select', 'items' => '')),
             set::name('task'),
-            set::value($taskID)
+            set::value($bug->taskID)
         )
     ),
     formRow
@@ -328,7 +328,7 @@ formPanel
             set::label($lang->bug->lblMailto),
             set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
             set::name('mailto[]'),
-            set::value(str_replace(' ', '', $mailto))
+            set::value($bug->mailto ? str_replace(' ', '', $bug->mailto) : '')
         ),
         formGroup
         (
@@ -336,7 +336,7 @@ formPanel
             set::class($showKeywords ? '' : 'hidden'),
             set::label($lang->bug->keywords),
             set::name('keywords'),
-            set::value($keywords)
+            set::value($bug->keywords)
         )
     ),
     formRow
