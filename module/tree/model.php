@@ -504,7 +504,7 @@ class treeModel extends model
         if(!$this->isMergeModule($rootID, 'task') || !$products)
         {
             $extra['tip'] = false;
-            return $this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra);
+            return (array)$this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra);
         }
 
         /* createdVersion > 4.1. */
@@ -534,7 +534,6 @@ class treeModel extends model
             }
 
             /* tree menu. */
-            $tree = '';
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
