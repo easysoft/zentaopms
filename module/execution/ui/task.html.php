@@ -100,6 +100,15 @@ sidebar
 /* zin: Define the dtable in main content. */
 foreach($tasks as &$task)
 {
+    /* Set parent task attribute. */
+    $task->isParent = false;
+    if($task->parent == -1)
+    {
+        /* When the parent task is -1, the hierarchical structure is displayed incorrectly. */
+        $task->parent   = 0;
+        $task->isParent = true;
+    }
+
     $actions = array();
     if(!in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion) $actions[] = 'confirmStoryChange';
 
