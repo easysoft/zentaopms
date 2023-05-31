@@ -426,7 +426,7 @@ class mail extends control
             $confirmLink  = inlink('batchDelete', "confirm=yes");
             $confirmLink .= strpos($confirmLink, '?') === false ? '?' : '&';
             $confirmLink .= "idList=$idList";
-            die(js::confirm($this->lang->mail->confirmDelete, $confirmLink));
+            return print(js::confirm($this->lang->mail->confirmDelete, $confirmLink));
         }
         $idList = array();
         if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);

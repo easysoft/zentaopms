@@ -503,8 +503,7 @@ class custom extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('custom', 'deleteStoryConcept', "key=$key&confirm=yes"), '');
-            die;
+            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('custom', 'deleteStoryConcept', "key=$key&confirm=yes"), ''));
         }
         else
         {
