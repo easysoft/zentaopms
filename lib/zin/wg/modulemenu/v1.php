@@ -9,7 +9,8 @@ class moduleMenu extends wg
     protected static $defineProps = array(
         'modules:array',
         'activeKey:int',
-        'closeLink:string'
+        'closeLink:string',
+        'activeText:string=""'
     );
 
     public static function getPageCSS(): string|false
@@ -52,7 +53,7 @@ class moduleMenu extends wg
             if($module->id == $activeKey) return $module->name;
         }
 
-        return '';
+        return $this->prop('activeText');
     }
 
     protected function build(): wg
@@ -79,7 +80,7 @@ class moduleMenu extends wg
         return div
         (
             setClass('module-menu rounded shadow-sm'),
-            h::header
+            $title ? h::header
             (
                 span
                 (
@@ -87,7 +88,7 @@ class moduleMenu extends wg
                     $title
                 ),
                 $closeBtn
-            ),
+            ) : null,
             h::main(zui::menutree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKye', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))),
             div
             (
