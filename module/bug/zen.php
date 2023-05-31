@@ -1726,22 +1726,6 @@ class bugZen extends bug
     }
 
     /**
-     * 更新bug模板。
-     * Update bug templete.
-     *
-     * @param  object    $bug
-     * @param  array     $fields
-     * @access protected
-     * @return object
-     */
-    private function updateBug(object $bug, array $fields): object
-    {
-        foreach($fields as $field => $value) $bug->$field = $value;
-
-        return $bug;
-    }
-
-    /**
      * 为create方法添加动态。
      * Add action for create function.
      *
@@ -1759,7 +1743,24 @@ class bugZen extends bug
             $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
             if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
         }
+
         return !dao::isError();
+    }
+
+    /**
+     * 更新bug模板。
+     * Update bug templete.
+     *
+     * @param  object    $bug
+     * @param  array     $fields
+     * @access protected
+     * @return object
+     */
+    private function updateBug(object $bug, array $fields): object
+    {
+        foreach($fields as $field => $value) $bug->$field = $value;
+
+        return $bug;
     }
 
     /**
@@ -1770,9 +1771,9 @@ class bugZen extends bug
      * @param  array     $output
      * @param  string    $from
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function afterCreate(object $bug, array $output, string $from = '')
+    protected function afterCreate(object $bug, array $output, string $from = ''): bool
     {
         /* Set from param if there is a object to transfer bug. */
         helper::setcookie('lastBugModule', (string)$bug->module);
