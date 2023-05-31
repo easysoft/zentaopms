@@ -232,9 +232,9 @@ class release extends control
                 ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
                 ->page($leftBugPager)
                 ->fetchAll();
-        }
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+        }
 
         $this->commonAction($release->product);
         $product = $this->product->getById($release->product);
