@@ -11,17 +11,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$canViewMr          = common::hasPriv('mr', 'view');
-$canViewProduct     = common::hasPriv('product', 'view');
-$canViewPlan        = common::hasPriv('productplan', 'view');
-$canViewProduct     = common::hasPriv('project', 'view');
-$canViewStory       = common::hasPriv('story', 'view');
-$canViewTask        = common::hasPriv('task', 'view');
-$canViewCase        = common::hasPriv('testcase', 'view');
-$canViewRepo        = common::hasPriv('repo', 'revision');
-$canBrowseBug       = common::hasPriv('bug', 'browse');
-$canBrowseExecution = common::hasPriv('execution', 'browse');
-$canCreateBug       = common::hasPriv('bug', 'create');
+$canViewMr          = hasPriv('mr', 'view');
+$canViewProduct     = hasPriv('product', 'view');
+$canViewPlan        = hasPriv('productplan', 'view');
+$canViewProduct     = hasPriv('project', 'view');
+$canViewStory       = hasPriv('story', 'view');
+$canViewTask        = hasPriv('task', 'view');
+$canViewCase        = hasPriv('testcase', 'view');
+$canViewRepo        = hasPriv('repo', 'revision');
+$canBrowseBug       = hasPriv('bug', 'browse');
+$canBrowseExecution = hasPriv('execution', 'browse');
+$canCreateBug       = hasPriv('bug', 'create');
 
 $moduleTitle = '';
 if(empty($modulePath))
