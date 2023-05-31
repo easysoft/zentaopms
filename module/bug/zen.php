@@ -602,6 +602,29 @@ class bugZen extends bug
     }
 
     /**
+     * 获取导出字段。
+     * Get export fields.
+     *
+     * @param  int       $executionID
+     * @param  object    $product
+     * @access protected
+     * @return string
+     */
+    protected function getExportFields(int $executionID, object $product): string
+    {
+        $exportFields = $this->config->bug->exportFields;
+        if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace('branch,', '', $exportFields);
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $exportFields = str_replace('execution,', '', $exportFields);
+            if(!empty($product->shadow))    $exportFields = str_replace('product,',   '', $exportFields);
+        }
+
+        return $exportFields;
+    }
+
+    /**
      * 获取批量解决bug的数据。
      * Get batch resolve bug data.
      *
@@ -837,29 +860,6 @@ class bugZen extends bug
                 $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
             }
         }
-    }
-
-    /**
-     * 获取导出字段。
-     * Get export fields.
-     *
-     * @param  int       $executionID
-     * @param  object    $product
-     * @access protected
-     * @return string
-     */
-    protected function getExportFields(int $executionID, object $product): string
-    {
-        $exportFields = $this->config->bug->exportFields;
-        if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace('branch,', '', $exportFields);
-        if($this->app->tab == 'project' or $this->app->tab == 'execution')
-        {
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            if(empty($execution->multiple)) $exportFields = str_replace('execution,', '', $exportFields);
-            if(!empty($product->shadow))    $exportFields = str_replace('product,',   '', $exportFields);
-        }
-
-        return $exportFields;
     }
 
     /**
@@ -2164,8 +2164,6 @@ class bugZen extends bug
 
         return $bug;
     }
-
-
 
     /**
      * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。
