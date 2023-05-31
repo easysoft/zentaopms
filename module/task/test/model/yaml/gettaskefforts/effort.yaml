@@ -1,0 +1,20 @@
+title: table zt_effort
+desc: "任务工时记录"
+author: caoyanyi
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: objectType
+    note: "对象类型"
+    range: task
+  - field: objectID
+    range: 1-5
+  - field: consumed
+    range: 1-5
+  - field: account
+    range: admin
+  - field: date
+    range: "(-1M)-(w):1D"
+    type: timestamp
+    format: "YYYY-MM-DD"

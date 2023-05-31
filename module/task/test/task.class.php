@@ -632,22 +632,16 @@ class taskTest
      *
      * @param  int    $taskID
      * @param  string $account
-     * @param  string $append
+     * @param  int    $effortID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getTaskEffortsTest($taskID, $account = '', $append = '')
+    public function getTaskEffortsTest(int $taskID, string $account = '', int $effortID = 0): array
     {
-        $object = $this->objectModel->getTaskEfforts($taskID, $account, $append);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $object;
-        }
+        $object = $this->objectModel->getTaskEfforts($taskID, $account, $effortID);
+        if(dao::isError()) return dao::getError();
+
+        return $object;
     }
 
     /**
