@@ -804,7 +804,7 @@ class bug extends control
             $skipBugIdList = '';
             foreach($bugIdList as $bugID)
             {
-                $oldBug = $bugs[$bugID];
+                $oldBug = $oldBugs[$bugID];
                 if($branchID != $oldBug->branch)
                 {
                     if(empty($oldBug->module))
