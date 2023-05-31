@@ -1103,35 +1103,19 @@ class bug extends control
      */
     public function batchActivate(int $productID, string $branch = '0')
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->id)
         {
             $activateBugs = form::batchData($this->config->bug->form->batchActivate)->get();
 
-            $bugIdList = array_unique($this->post->bugIdList);
-            $bugs      = $this->bug->getByIdList($bugIdList);
+            $oldBugs = $this->bug->getByIdList($this->post->id);
 
-            $now     = helper::now();
-            $account = $this->app->user->account;
             foreach($activateBugs as $bugID => $bug)
             {
-                $oldBug = $bugs[$bugID];
-                if($oldBug->status != 'resolved' && $oldBug->status != 'closed') continue;
+                if($bug->status != 'resolved' && $bug->status != 'closed') continue;
+                $oldBug = $oldBugs[$bugID];
 
-                $bug->openedBuild    = implode(',', $bug->openedBuild);
-                $bug->activatedDate  = $now;
-                $bug->assignedDate   = $now;
-                $bug->resolution     = '';
                 $bug->status         = 'active';
-                $bug->resolvedDate   = null;
-                $bug->resolvedBy     = '';
-                $bug->resolvedBuild  = '';
-                $bug->closedBy       = '';
-                $bug->closedDate     = null;
-                $bug->duplicateBug   = 0;
-                $bug->toTask         = 0;
-                $bug->toStory        = 0;
-                $bug->lastEditedBy   = $account;
-                $bug->lastEditedDate = $now;
+                $bug->openedBuild    = implode(',', $bug->openedBuild);
                 $bug->activatedCount = $oldBug->activatedCount + 1;
 
                 $this->bug->activate($bug);

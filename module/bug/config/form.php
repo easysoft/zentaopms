@@ -130,11 +130,24 @@ $config->bug->form->activate['toStory']        = array('required' => false, 'typ
 $config->bug->form->activate['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->batchActivate = common::formConfig('bug', 'batchActivate');
-$config->bug->form->batchActivate['id']          = array('required' => false, 'type' => 'int',    'base' => true);
-$config->bug->form->batchActivate['status']      = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->batchActivate['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->batchActivate['openedBuild'] = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
-$config->bug->form->batchActivate['comment']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['id']             = array('required' => false, 'type' => 'int',    'base'    => true);
+$config->bug->form->batchActivate['status']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['openedBuild']    = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchActivate['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['activatedDate']  = array('required' => false, 'type' => 'date',   'default' => helper::now());
+$config->bug->form->batchActivate['assignedDate']   = array('required' => false, 'type' => 'date',   'default' => helper::now());
+$config->bug->form->batchActivate['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => null);
+$config->bug->form->batchActivate['resolvedBuild']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['closedBy']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['closedDate']     = array('required' => false, 'type' => 'date',   'default' => null);
+$config->bug->form->batchActivate['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchActivate['toTask']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchActivate['toStory']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchActivate['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => $app->user->account);
+$config->bug->form->batchActivate['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 
 $config->bug->form->batchCreate = common::formConfig('bug', 'batchCreate');
 $config->bug->form->batchCreate['module']      =  array('required' => false, 'type' => 'int',    'default' => 0);

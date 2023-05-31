@@ -652,6 +652,8 @@ class bugModel extends model
      */
     public function activate(object $bug, array $kanbanParams = array()): bool
     {
+        $oldBug = $this->getBaseInfo($bug->id);
+
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
@@ -664,7 +666,6 @@ class bugModel extends model
         }
 
         /* Update kanban. */
-        $oldBug = $this->getBaseInfo($bug->id);
         if($oldBug->execution)
         {
             $this->loadModel('kanban');
