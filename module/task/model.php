@@ -1619,13 +1619,14 @@ class taskModel extends model
     }
 
     /**
-     * Get suspended tasks of a user.
+     * 获取暂停的项目和执行下，指派给指定用户的任务信息。
+     * Get tasks assigned to the user for the suspended project and execution.
      *
-     * @param  string $account
+     * @param  string   $account
      * @access public
      * @return object[]
      */
-    public function getUserSuspendedTasks($account): array
+    public function getUserSuspendedTasks(string $account): array
     {
         return $this->dao->select('t1.*')
             ->from(TABLE_TASK)->alias('t1')
