@@ -823,7 +823,7 @@ class bug extends control
      */
     public function batchChangeBranch(int $branchID)
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
             $oldBugs   = $this->bug->getByIdList($bugIdList);
@@ -868,7 +868,7 @@ class bug extends control
      */
     public function batchChangeModule(int $moduleID)
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
             foreach($bugIdList as $bugID)
@@ -897,7 +897,7 @@ class bug extends control
      */
     public function batchChangePlan(int $planID)
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList   = array_unique($this->post->bugIdList);
             $oldBugs     = $this->bug->getByIdList($bugIdList);
@@ -946,7 +946,7 @@ class bug extends control
      */
     public function batchAssignTo(string $assignedTo, int $objectID, string $type = 'execution')
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
 
@@ -977,7 +977,7 @@ class bug extends control
      */
     public function batchConfirm()
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
             $bugs      = $this->bug->getByList($bugIDList);
@@ -1013,7 +1013,7 @@ class bug extends control
      */
     public function batchResolve(string $resolution, string $resolvedBuild = '')
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             /* Prepare resolve data. */
             $bugIdList = array_unique($this->post->bugIdList);
@@ -1082,7 +1082,7 @@ class bug extends control
     public function batchClose(int $releaseID = 0, string $viewType = '')
     {
         $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
-        if(!empty($_POST) && $bugIdList)
+        if($bugIdList)
         {
             $bugIdList = array_unique($bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
