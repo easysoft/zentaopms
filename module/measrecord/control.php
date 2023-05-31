@@ -14,7 +14,7 @@ class measrecord extends control
     public function browse($program = 0, $measID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('measurement');
-        $this->app->loadClass('pager', $static=true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->lang->navGroup->measrecord = 'project';
