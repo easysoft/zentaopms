@@ -588,7 +588,7 @@ class bug extends control
         $product = $this->loadModel('product')->getByID($productID);
 
         $this->view->fileName        = $this->bugZen->getExportFileName($executionID, $browseType, $product);
-        $this->view->allExportFields = $this->bugZen->getExportFields($executionID, $product);;
+        $this->view->allExportFields = $this->bugZen->getExportFields($executionID, $product);
         $this->view->customExport    = true;
         $this->display('file', 'export');
     }
