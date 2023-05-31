@@ -651,11 +651,23 @@ class storyTao extends storyModel
         return $this->dao->lastInsertID();
     }
 
-    protected function doCreateSpec(int $storyID, object $story, array $files): void
+    /**
+     * 创建需求描述和验收标准。
+     * Do create story spec.
+     *
+     * @param  int       $storyID
+     * @param  object    $story    must has title,spec,verify,version items.
+     * @param  array     $files    e.g. array(fileID => fileName)
+     * @access protected
+     * @return void
+     */
+    protected function doCreateSpec(int $storyID, object $story, array $files = array()): void
     {
+        if(empty($storyID)) return;
+
         $spec          = new stdclass();
         $spec->story   = $storyID;
-        $spec->version = 1;
+        $spec->version = zget($story, 'version', 1);
         $spec->title   = $story->title;
         $spec->spec    = $story->spec;
         $spec->verify  = $story->verify;

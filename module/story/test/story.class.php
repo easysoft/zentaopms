@@ -719,4 +719,23 @@ class storyTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll();
     }
+
+    /**
+     * 测试 doCreateSpec 方法。
+     * Test doCreateSpec method.
+     *
+     * @param  int    $storyID
+     * @param  object $story
+     * @param  array  $files
+     * @access public
+     * @return array
+     */
+    public function doCreateSpecTest(int $storyID, object $story, array $files = array()): array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_STORYSPEC)->exec();
+        $this->objectModel->doCreateSpec($storyID, $story, $files);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll();
+    }
 }
