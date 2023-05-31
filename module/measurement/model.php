@@ -1259,7 +1259,7 @@ class measurementModel extends model
         $pattern = "/create\s+function\s+`{0,1}([\$,a-z,A-z,_,0-9,\(,|)]+`{0,1})\(+/Ui";
         preg_match_all($pattern, $sql, $matches);
 
-        if(empty($matches[1][0])) return null;
+        if(empty($matches[1][0])) return '';
         return trim($matches[1][0], '`');
     }
 
