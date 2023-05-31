@@ -26,9 +26,12 @@ class programMenu extends wg
         foreach($children as $child)
         {
             $item = array('key' => $child->id, 'text' => $child->name, 'items' => array());
+            if(isset($child->icon)) $item['icon'] = $child->icon;
+
             $items = $this->buildMenuTree($item['items'], $child->id);
             if(count($items) !== 0) $item['items'] = $items;
             else                    unset($item['items']);
+
             $parent[] = $item;
         }
         return $parent;
