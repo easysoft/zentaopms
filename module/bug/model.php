@@ -394,65 +394,6 @@ class bugModel extends model
     }
 
     /**
-     * 批量更新 bugs。
-     * Batch update bugs.
-     *
-     * @param  array       $bugs
-     * @access public
-     * @return array|false
-     */
-    public function batchUpdate(array $bugs): array|bool
-    {
-        if(empty($bugs)) return false;
-
-        /* Check bugs for batch update. */
-        $this->bugTao->checkBugsForBatchUpdate($bugs);
-        if(dao::isError()) return false;
-
-        $oldBugs = $this->getByIdList(array_column($bugs, 'id'));
-
-        /* Update bugs. */
-        $toTaskIdList = array();
-        $unlinkPlans  = array();
-        $link2Plans   = array();
-        foreach($bugs as $bugID => $bug)
-        {
-            /* Update bug. */
-            $this->dao->update(TABLE_BUG)->data($bug)
-                ->autoCheck()
-                ->checkFlow()
-                ->where('id')->eq((int)$bugID)
-                ->exec();
-            if(dao::isError())
-            {
-                dao::$errors['message'][] = 'bug#' . ($bugID) . dao::getError(true);
-                return false;
-            }
-
-            /* Processing other operations after update bug. */
-            $oldBug = $oldBugs[$bugID];
-            $this->afterBatchEdit($bug, $oldBug);
-
-            if($oldBug->toTask != 0 && isset($bug->status) && $bug->status != $oldBug->status) $toTaskIdList[$oldBug->toTask] = $oldBug->toTask;
-
-            /* Get changes of plan. */
-            if($bug->plan != $oldBug->plan)
-            {
-                if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$bugID}";
-                if(!empty($bug->plan))    $link2Plans[$bug->plan]  = empty($link2Plans[$bug->plan]) ? $bugID : "{$link2Plans[$bug->plan]},{$bugID}";
-            }
-        }
-
-        $this->loadModel('score')->create('ajax', 'batchEdit');
-
-        $this->loadModel('action');
-        foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
-        foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
-
-        return $toTaskIdList;
-    }
-
-    /**
      * 将任务指派给一个用户。
      * Assign a bug to a user.
      *
@@ -2444,31 +2385,5 @@ class bugModel extends model
         }
 
         return $index;
-    }
-
-    /**
-     * 批量编辑 bug 后的其他处理。
-     * Processing after batch edit of bug.
-     *
-     * @param  object    $bug
-     * @param  object    $oldBug
-     * @access protected
-     * @return bool
-     */
-    protected function afterBatchEdit(object $bug, object $oldBug): bool
-    {
-        $this->executeHooks($bug->id);
-
-        /* Record log. */
-        $changes  = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Edited');
-        $this->action->logHistory($actionID, $changes);
-
-        /* Record score when bug is resolved. */
-        if(isset($bug->status) and $bug->status == 'resolved' and $oldBug->status == 'active') $this->loadModel('score')->create('bug', 'resolve', $bug, $bug->resolvedBy);
-
-        if($this->config->edition != 'pms' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-
-        return !dao::isError();
     }
 }

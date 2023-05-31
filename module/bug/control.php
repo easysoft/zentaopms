@@ -767,12 +767,46 @@ class bug extends control
             /* Build bugs. */
             $bugs = $this->bugZen->buildBugsForBatchEdit();
 
-            /* Batch update the bugs. */
-            $toTaskIdList = $this->bug->batchUpdate($bugs);
+            $this->bugZen->checkBugsForBatchUpdate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $oldBugs = $this->getByIdList(array_column($bugs, 'id'));
+
+            /* Update bugs. */
+            $message      = '';
+            $toTaskIdList = array();
+            $unlinkPlans  = array();
+            $link2Plans   = array();
+            foreach($bugs as $bugID => $bug)
+            {
+                $this->bug->update($bug);
+
+                /* Record score when bug is resolved. */
+                $oldBug = $oldBugs[$bugID];
+                if(isset($bug->status) and $bug->status == 'resolved' and $oldBug->status == 'active') $this->loadModel('score')->create('bug', 'resolve', $bug, $bug->resolvedBy);
+
+                if($this->config->edition != 'pms' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
+                if($oldBug->toTask != 0 && isset($bug->status) && $bug->status != $oldBug->status) $toTaskIdList[$oldBug->toTask] = $oldBug->toTask;
+
+                /* Get changes of plan. */
+                if($bug->plan != $oldBug->plan)
+                {
+                    if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$bugID}";
+                    if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bugID : "{$link2Plans[$bug->plan]},{$bugID}";
+                }
+                $message = $this->executeHooks($bug->id);
+            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('score')->create('ajax', 'batchEdit');
+
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs)  $this->action->create('productplan', $planID, 'linkbug',   '', $bugs);
+
             /* Get response and return. */
-            return $this->bugZen->responseAfterBatchEdit($toTaskIdList);
+            return $this->bugZen->responseAfterBatchEdit($toTaskIdList, $message);
         }
 
         /* If there is no bug ID, return to the previous step. */

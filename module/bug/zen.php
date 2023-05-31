@@ -135,6 +135,36 @@ class bugZen extends bug
     }
 
     /**
+     * 为批量编辑 bugs 检查数据。
+     * Check bugs for batch update.
+     *
+     * @param  array     $bugs
+     * @access protected
+     * @return bool
+     */
+    protected function checkBugsForBatchUpdate(array $bugs): bool
+    {
+        $requiredFields = explode(',', $this->config->bug->edit->requiredFields);
+        foreach($bugs as $bug)
+        {
+            /* Check required fields. */
+            foreach($requiredFields as $requiredField)
+            {
+                if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
+                {
+                    $fieldName = isset($this->lang->bug->$requiredField) ? $this->lang->bug->$requiredField : $requiredField;
+                    dao::$errors["{$requiredField}[{$bug->id}]"] = sprintf($this->lang->error->notempty, $fieldName);
+                }
+            }
+
+            if(!empty($bug->resolvedBy) && empty($bug->resolution)) dao::$errors["resolution[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->resolution);
+            if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors["duplicateBug[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * 获取列表页面的 branch 参数。
      * Get browse branch param.
      *
@@ -1879,9 +1909,9 @@ class bugZen extends bug
      * @param  array     $output
      * @param  string    $message
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message = ''): void
+    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message = ''): bool
     {
         if($this->app->tab == 'execution')
         {
@@ -1918,9 +1948,9 @@ class bugZen extends bug
      * @param  string    $from
      * @param  string    $message
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function responseAfterDelete(object $bug, string $from, string $message = ''): void
+    protected function responseAfterDelete(object $bug, string $from, string $message = ''): bool
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
@@ -1956,9 +1986,9 @@ class bugZen extends bug
      * @param  array      $bugIdList
      * @param  string     $message
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIdList, string $message = ''): void
+    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIdList, string $message = ''): bool
     {
         helper::setcookie('bugModule', '0', 0);
 
@@ -1992,16 +2022,16 @@ class bugZen extends bug
      * @param  array     $output
      * @param  string    $message
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function responseAfterBatchEdit(array $toTaskIdList, string $message = ''): void
+    protected function responseAfterBatchEdit(array $toTaskIdList, string $message = ''): bool
     {
         if(!empty($toTaskIdList))
         {
             $taskID       = key($toTaskIdList);
             $confirmedURL = $this->createLink('task', 'view', 'taskID=' . $taskID);
             $canceledURL  = $this->server->HTTP_REFERER;
-            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
         }
 
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList));
