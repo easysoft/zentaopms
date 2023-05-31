@@ -1294,34 +1294,6 @@ class taskTest
     }
 
     /**
-     * Test get toList and ccList.
-     *
-     * @param  int    $taskID
-     * @param  bool   $skipMailto
-     * @access public
-     * @return array
-     */
-    public function getToAndCcListTest($taskID, $skipMailto = false)
-    {
-        $task = $this->objectModel->getByID($taskID);
-        if(empty($task)) return 0;
-        if($skipMailto) $task->mailto = '';
-
-        $object = $this->objectModel->getToAndCcList($task);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            if(isset($object[0])) $object[2] = $object[0];
-            if(isset($object[1]) and $object[1] == '') $object[1] = 0;
-            return $object;
-        }
-    }
-
-    /**
      * Test for get team by account.
      *
      * @param  array  $users
