@@ -145,15 +145,10 @@ $lang->measurement->placeholder = new stdclass();
 $lang->measurement->placeholder->sql = '请填写完整的mysql自定义函数语句。';
 $lang->measurement->placeholder->php = '请按照系统要求的编码，类名不能修改，必须包含get 方法。';
 $lang->measurement->phpTemplate = <<<EOT
-<?php
-class meas extends basicmeas
+public function %s(%s)
 {
-    public function %s(%s)
-    {
-        return \$param1 + \$param2;
-    }
+
 }
-?>
 EOT;
 
 $lang->measurement->sqlTemplate = <<<EOT
