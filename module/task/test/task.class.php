@@ -2134,4 +2134,30 @@ class taskTest
         $result  = $this->objectModel->afterChangeStatus($oldTask, $changes, $action, array());
         return $changes;
     }
+
+    /**
+     * Test resetEffortLeft method.
+     *
+     * @param  int    $taskID
+     * @param  string $account
+     * @access public
+     * @return object|bool
+     */
+    public function resetEffortLeftTest(int $taskID, string $account): object|bool
+    {
+        $this->objectModel->resetEffortLeft($taskID, array($account));
+        if(dao::isError())
+        {
+            return !dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_EFFORT)
+                ->where('objectID')->eq($taskID)
+                ->andWhere('account')->eq($account)
+                ->andWhere('objectType')->eq('task')
+                ->orderBy('date_desc,id_desc')
+                ->fetch();
+        }
+    }
 }
