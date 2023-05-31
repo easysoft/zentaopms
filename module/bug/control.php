@@ -998,7 +998,6 @@ class bug extends control
             $bugIdList = array_unique($this->post->bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
 
-            $bugIdList = $this->bugZen->batchResolveIdFilter($bugIdList, $bugs);
             list($modules, $productQD) = $this->bugZen->getBatchResolveVars($bugs);
 
             $users = $this->loadModel('user')->getPairs();
@@ -1006,6 +1005,7 @@ class bug extends control
             foreach($bugIdList as $bugID)
             {
                 $oldBug = $bugs[$bugID];
+                if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') continue;
 
                 /* Get bug assignedTo. */
                 $assignedTo = $oldBug->openedBy;

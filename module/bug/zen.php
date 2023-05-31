@@ -2234,23 +2234,4 @@ class bugZen extends bug
 
         return $chartOption;
     }
-
-    /**
-     * 过滤批量解决bug id。
-     * Filter and batch solve bug IDs.
-     *
-     * @param  array     $bugIdList
-     * @param  object[]  $oldBugs
-     * @access protected
-     * @return array
-     */
-    protected function batchResolveIdFilter(array $bugIdList, array $oldBugs): array
-    {
-        foreach($bugIdList as $i => $bugID)
-        {
-            $oldBug = $oldBugs[$bugID];
-            if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') unset($bugIdList[$i]);
-        }
-        return $bugIdList;
-    }
 }
