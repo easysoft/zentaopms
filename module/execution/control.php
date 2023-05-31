@@ -204,7 +204,7 @@ class execution extends control
         $memberPairs = $this->loadModel('user')->processAccountSort($memberPairs);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $extra         = (isset($this->config->execution->task->allModule) && $this->config->execution->task->allModule == 1) ? 'allModule' : '';
+        $extra         = $showAllModule ? 'allModule' : '';
 
         /* Assign. */
         $this->view->tasks        = $tasks;
@@ -217,7 +217,7 @@ class execution extends control
         $this->view->param        = $param;
         $this->view->execution    = $execution;
         $this->view->moduleID     = $moduleID;
-        $this->view->modules      = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+        $this->view->modules      = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $extra);
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
         $this->display();

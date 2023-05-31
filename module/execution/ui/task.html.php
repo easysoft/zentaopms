@@ -90,11 +90,11 @@ toolbar
 /* zin: Define the sidebar in main content. */
 sidebar
 (
-   // moduleMenu(set(array(
-   //     'modules'   => $modules,
-   //     'activeKey' => $moduleID,
-   //     'closeLink' => $this->createLink('execution', 'task')
-   // )))
+    moduleMenu(set(array(
+        'modules'   => $moduleTree,
+        'activeKey' => $moduleID,
+        'closeLink' => $this->createLink('execution', 'task')
+    )))
 );
 
 /* zin: Define the dtable in main content. */

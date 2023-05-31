@@ -495,20 +495,20 @@ class treeModel extends model
      */
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
     {
-        $extra = array('executionID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
+        $extra = array('tip' => true, 'extra' => $extra);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $products      = $this->loadModel('product')->getProductPairsByProject($rootID);
         $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
 
-        if(!$this->isMergeModule($rootID, 'task') or !$products)
+        if(!$this->isMergeModule($rootID, 'task') || !$products)
         {
             $extra['tip'] = false;
             return $this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra);
         }
 
         /* createdVersion > 4.1. */
-        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-task'>";
+        $menu = array();
 
         /* Set the start module. */
         $startModulePath = '';
@@ -527,15 +527,10 @@ class treeModel extends model
         $productNum = count($products);
         foreach($products as $id => $product)
         {
-            $extra['productID'] = $id;
-            if($manage)
+            if(!$manage && $productNum > 1)
             {
-                $menu .= "<li>" . $product;
-            }
-            else
-            {
-                $link  = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
-                if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+                $product->url = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
+                $menu[] = $product;
             }
 
             /* tree menu. */
@@ -543,7 +538,6 @@ class treeModel extends model
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
-                $treeMenu = array();
                 $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                     ->andWhere('deleted')->eq(0)
@@ -553,21 +547,16 @@ class treeModel extends model
                 while($module = $stmt->fetch())
                 {
                     if(!$manage and !isset($executionModules[$module->id]) and strpos($extra['extra'], 'allModule') === false) continue;
-                    $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-                }
-                if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
-                $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
-            }
 
-            if($tree && ($productNum > 1 or $manage)) $tree = "<ul>" . $tree . "</ul>\n</li>";
-            $menu .= $tree;
+                    $module->url = helper::createLink('execution', 'task', "executionID={$rootID}&type=byModule&param={$module->id}");
+                    $menu[] = $module;
+                }
+            }
         }
 
         /* Get execution module. */
         if($startModule == 0)
         {
-            /* tree menu. */
-            $treeMenu = array();
             $query = $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->andWhere('type')->eq('task')
@@ -575,12 +564,12 @@ class treeModel extends model
                 ->orderBy('grade desc, `order`, type')
                 ->get();
             $stmt  = $this->dbh->query($query);
-            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-
-            $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
-            $menu .= $tree . '</li>';
+            while($module = $stmt->fetch())
+            {
+                $module->url = helper::createLink('execution', 'task', "executionID={$rootID}&type=byModule&param={$module->id}");
+                $menu[] = $module;
+            }
         }
-        $menu .= '</ul>';
         return $menu;
     }
 
