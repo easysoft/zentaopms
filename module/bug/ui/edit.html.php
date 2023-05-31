@@ -402,7 +402,7 @@ panel
                 ),
                 formGroup
                 (
-                    set::label($lang->bug->linkBug),
+                    set::label($lang->bug->relatedBug),
                     inputGroup
                     (
                         set('id', 'linkBugsBox'),

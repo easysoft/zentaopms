@@ -288,7 +288,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             <table class='table table-form'>
               <tbody>
                 <tr class='text-top'>
-                  <th class='thWidth'><?php echo $lang->bug->linkBug;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->relatedBug;?></th>
                   <td><?php if(common::hasPriv('bug', 'linkBugs')) echo html::a('#', $lang->bug->linkBugs, '', "class='text-primary' id='linkBugsLink'");?></td>
                 </tr>
                 <tr <?php if(!isset($bug->linkBugTitles)) echo 'class="hidden"';?>>

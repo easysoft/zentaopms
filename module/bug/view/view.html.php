@@ -382,7 +382,7 @@
             <table class="table table-data">
               <tbody>
                 <tr class='text-top'>
-                  <th class='w-90px'><?php echo $lang->bug->linkBug;?></th>
+                  <th class='w-90px'><?php echo $lang->bug->relatedBug;?></th>
                   <td>
                     <?php
                     if(isset($bug->linkBugTitles))
