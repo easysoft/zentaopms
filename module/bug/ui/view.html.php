@@ -174,7 +174,7 @@ $toStoryLink  = $bug->toStory && $canViewStory ? $this->createLink('story',    '
 $toTaskLink   = $bug->toTask  && $canViewTask  ? $this->createLink('task',     'view', "taskID=$bug->toTask")                             : '';
 
 $legendMisc = array();
-$legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug,    'text' => $relatedBugs);
+$legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug, 'text' => $relatedBugs);
 $legendMisc['fromCase']   = array('name' => $lang->bug->fromCase,   'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
 $legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
 $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));
