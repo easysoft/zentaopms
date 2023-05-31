@@ -1151,6 +1151,7 @@ class story extends control
             $showFields = str_replace('plan',  '', $showFields);
             $showFields = str_replace('stage', '', $showFields);
         }
+        if(!$branchProduct) unset($customFields['branch']);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
