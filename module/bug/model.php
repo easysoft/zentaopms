@@ -457,32 +457,6 @@ class bugModel extends model
     }
 
     /**
-     * Batch confirm bugs.
-     *
-     * @param  array $bugIdList
-     * @access public
-     * @return void
-     */
-    public function batchConfirm($bugIdList)
-    {
-        $now  = helper::now();
-        $bugs = $this->getByList($bugIdList);
-        foreach($bugIdList as $bugID)
-        {
-            if($bugs[$bugID]->confirmed) continue;
-
-            $bug = new stdclass();
-            $bug->assignedTo     = $this->app->user->account;
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
-            $bug->confirmed      = 1;
-
-            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
-            $this->executeHooks($bugID);
-        }
-    }
-
-    /**
      * 解决一个bug。
      * Resolve a bug.
      *
