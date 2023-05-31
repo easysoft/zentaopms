@@ -2033,29 +2033,29 @@ class bugTest
      * The test for updatelinkbug function.
      *
      * @param  string $bugID
-     * @param  string $linkBug
-     * @param  string $oldLinkBug
+     * @param  string $relatedBug
+     * @param  string $oldRelatedBug
      * @access public
      * @return array
      */
-    public function updateLinkBugTest($bugID, $linkBug, $oldLinkBug)
+    public function updateRelatedBugTest($bugID, $relatedBug, $oldRelatedBug)
     {
-        $this->objectModel->updateLinkBug($bugID, $linkBug, $oldLinkBug);
+        $this->objectModel->updateRelatedBug($bugID, $relatedBug, $oldRelatedBug);
 
-        $linkBugs           = explode(',', $linkBug);
-        $oldLinkBugs        = explode(',', $oldLinkBug);
-        $addedLinkBugs      = array_diff($linkBugs, $oldLinkBugs);
-        $removedLinkBugs    = array_diff($oldLinkBugs, $linkBugs);
-        $allRelatedLinkBugs = array_merge($addedLinkBugs, $removedLinkBugs, array($bugID));
+        $relatedBugs           = explode(',', $relatedBug);
+        $oldRelatedBugs        = explode(',', $oldRelatedBug);
+        $addedRelatedBugs      = array_diff($relatedBugs, $oldRelatedBugs);
+        $removedRelatedBugs    = array_diff($oldRelatedBugs, $relatedBugs);
+        $allRelatedRelatedBugs = array_merge($addedRelatedBugs, $removedRelatedBugs, array($bugID));
 
         global $tester;
-        $linkBugPairs = $tester->dao->select('id, linkBug')->from(TABLE_BUG)
-            ->where('id')->in(array_filter($allRelatedLinkBugs))
+        $relatedBugPairs = $tester->dao->select('id, relatedBug')->from(TABLE_BUG)
+            ->where('id')->in(array_filter($allRelatedRelatedBugs))
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
 
         if(dao::isError()) return dao::getError();
-        return $linkBugPairs;
+        return $relatedBugPairs;
     }
 
     /**

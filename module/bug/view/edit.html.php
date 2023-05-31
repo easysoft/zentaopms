@@ -291,18 +291,18 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th class='thWidth'><?php echo $lang->bug->relatedBug;?></th>
                   <td><?php if(common::hasPriv('bug', 'linkBugs')) echo html::a('#', $lang->bug->linkBugs, '', "class='text-primary' id='linkBugsLink'");?></td>
                 </tr>
-                <tr <?php if(!isset($bug->linkBugTitles)) echo 'class="hidden"';?>>
+                <tr <?php if(!isset($bug->relatedBugTitles)) echo 'class="hidden"';?>>
                   <th></th>
                   <td>
                     <ul class='list-unstyled'>
                       <?php
-                      if(isset($bug->linkBugTitles))
+                      if(isset($bug->relatedBugTitles))
                       {
-                          foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                          foreach($bug->relatedBugTitles as $relatedBugID => $relatedBugTitle)
                           {
                               echo "<li><div class='checkbox-primary'>";
-                              echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$linkBugID />";
-                              echo "<label>#{$linkBugID} {$linkBugTitle}</label>";
+                              echo "<input type='checkbox' checked='checked' name='relatedBug[]' value=$relatedBugID />";
+                              echo "<label>#{$relatedBugID} {$relatedBugTitle}</label>";
                               echo '</div></li>';
                           }
                       }

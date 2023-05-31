@@ -85,7 +85,7 @@ $(function()
         $('#linkBugsForm').find('tr.checked').each(function(){
             var bugID    = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
             var bugTitle = "#" + bugID + ' ' + $(this).find('td').eq(3).attr('title');
-            var checkbox  = "<li><div class='checkbox-primary'><input type='checkbox' checked='checked' name='linkBug[]' " + "value=" + bugID + " /><label>" + bugTitle + "</label></div></li>";
+            var checkbox  = "<li><div class='checkbox-primary'><input type='checkbox' checked='checked' name='relatedBug[]' " + "value=" + bugID + " /><label>" + bugTitle + "</label></div></li>";
 
             output += checkbox;
         });

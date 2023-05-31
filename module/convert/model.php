@@ -1148,7 +1148,7 @@ class convertModel extends model
             }
             elseif($sourceObjectType == 'bug' and $destObjectType == 'bug')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("linkBug=concat(linkBug, ',{$issueBugs[$dest]}')")->where('id')->eq($issueBugs[$source])->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("relatedBug=concat(relatedBug, ',{$issueBugs[$dest]}')")->where('id')->eq($issueBugs[$source])->exec();
             }
         }
     }

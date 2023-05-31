@@ -385,11 +385,11 @@
                   <th class='w-90px'><?php echo $lang->bug->relatedBug;?></th>
                   <td>
                     <?php
-                    if(isset($bug->linkBugTitles))
+                    if(isset($bug->relatedBugTitles))
                     {
-                        foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                        foreach($bug->relatedBugTitles as $relatedBugID => $relatedBugTitle)
                         {
-                            echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID", '', true), "#$linkBugID $linkBugTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                            echo html::a($this->createLink('bug', 'view', "bugID=$relatedBugID", '', true), "#$relatedBugID $relatedBugTitle", '', "class='iframe' data-width='80%'") . '<br />';
                         }
                     }
                     ?>

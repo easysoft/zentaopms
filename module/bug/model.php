@@ -202,7 +202,7 @@ class bugModel extends model
         if($bug->project)      $bug->projectName       = $this->bugTao->getNameFromTable($bug->project, TABLE_PROJECT, 'name');
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->bugTao->getNameFromTable($bug->duplicateBug, TABLE_BUG, 'title');
         if($bug->case)         $bug->caseTitle         = $this->bugTao->getNameFromTable($bug->case, TABLE_CASE, 'title');
-        if($bug->linkBug)      $bug->linkBugTitles     = $this->bugTao->getBugPairsByList($bug->linkBug);
+        if($bug->relatedBug)   $bug->relatedBugTitles  = $this->bugTao->getBugPairsByList($bug->relatedBug);
         if($bug->toStory)      $bug->toStoryTitle      = $this->bugTao->getNameFromTable($bug->toStory, TABLE_STORY, 'title');
         if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask, TABLE_TASK, 'name');
 
@@ -737,7 +737,7 @@ class bugModel extends model
     {
         $bug = $this->getByID($bugID);
 
-        $excludeBugs .= ",{$bug->id},{$bug->linkBug}";
+        $excludeBugs .= ",{$bug->id},{$bug->relatedBug}";
 
         if($bySearch) return $this->bugTao->getBySearch((array)$bug->product, 'all', 0, $queryID, $excludeBugs, 'id desc', $pager);
 
@@ -1906,39 +1906,39 @@ class bugModel extends model
 
     /**
      * 更新相关 bug。
-     * Update the linked bug.
+     * Update the related bug.
      *
-     * @param  int       $bugID
-     * @param  string    $linkBug
-     * @param  string    $oldLinkBug
-     * @access protected
+     * @param  int    $bugID
+     * @param  string $relatedBug
+     * @param  string $oldRelatedBug
+     * @access public
      * @return bool
      */
-    protected function updateLinkBug(int $bugID, string $linkBug, string $oldLinkBug): bool
+    public function updateRelatedBug(int $bugID, string $relatedBug, string $oldRelatedBug): bool
     {
-        $linkBugs        = explode(',', $linkBug);
-        $oldLinkBugs     = explode(',', $oldLinkBug);
-        $addedLinkBugs   = array_diff($linkBugs, $oldLinkBugs);
-        $removedLinkBugs = array_diff($oldLinkBugs, $linkBugs);
-        $changedLinkBugs = array_merge($addedLinkBugs, $removedLinkBugs);
-        $changedLinkBugs = $this->dao->select('id, linkbug')->from(TABLE_BUG)->where('id')->in(array_filter($changedLinkBugs))->fetchPairs();
+        $relatedBugs        = explode(',', $relatedBug);
+        $oldRelatedBugs     = explode(',', $oldRelatedBug);
+        $addedRelatedBugs   = array_diff($relatedBugs, $oldRelatedBugs);
+        $removedRelatedBugs = array_diff($oldRelatedBugs, $relatedBugs);
+        $changedRelatedBugs = array_merge($addedRelatedBugs, $removedRelatedBugs);
+        $changedRelatedBugs = $this->dao->select('id, relatedBug')->from(TABLE_BUG)->where('id')->in(array_filter($changedRelatedBugs))->fetchPairs();
 
-        foreach($changedLinkBugs as $changedBugID => $linkBugs)
+        foreach($changedRelatedBugs as $changedBugID => $relatedBugs)
         {
-            if(in_array($changedBugID, $addedLinkBugs))
+            if(in_array($changedBugID, $addedRelatedBugs))
             {
-                $linkBugs = explode(',', $linkBugs);
-                if(!empty($linkBugs) && !in_array($bugID, $linkBugs)) $linkBugs[] = $bugID;
+                $relatedBugs = explode(',', $relatedBugs);
+                if(!empty($relatedBugs) && !in_array($bugID, $relatedBugs)) $relatedBugs[] = $bugID;
             }
             else
             {
-                $linkBugs = explode(',', $linkBugs);
-                unset($linkBugs[array_search($bugID, $linkBugs)]);
+                $relatedBugs = explode(',', $relatedBugs);
+                unset($relatedBugs[array_search($bugID, $relatedBugs)]);
             }
 
-            $currentLinkBug = implode(',', array_filter($linkBugs));
+            $currentRelatedBug = implode(',', array_filter($relatedBugs));
 
-            $this->dao->update(TABLE_BUG)->set('linkBug')->eq($currentLinkBug)->where('id')->eq($changedBugID)->exec();
+            $this->dao->update(TABLE_BUG)->set('relatedBug')->eq($currentRelatedBug)->where('id')->eq($changedBugID)->exec();
         }
 
         return !dao::isError();

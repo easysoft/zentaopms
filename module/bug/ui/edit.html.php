@@ -410,14 +410,14 @@ panel
                         (
                             set::multiple(true),
                             set::name('resolvedBuild[]'),
-                            set::items($bug->linkBugTitles)
+                            set::items($bug->relatedBugTitles)
                         ),
                         span
                         (
                             set('class', 'input-group-addon'),
                             a
                             (
-                                set('id', 'linkBug'),
+                                set('id', 'relatedBug'),
                                 set('href', 'javascript:;'),
                                 $lang->bug->linkBugs
                             )

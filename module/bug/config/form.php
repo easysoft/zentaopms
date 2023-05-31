@@ -66,7 +66,7 @@ $config->bug->form->edit['notifyEmail']    = array('required' => false, 'type' =
 $config->bug->form->edit['uid']            = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->edit['os']             = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['browser']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
-$config->bug->form->edit['linkBug']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->edit['relatedBug']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->edit['resolvedDate']   = array('required' => false, 'type' => 'date',   'default' => null);

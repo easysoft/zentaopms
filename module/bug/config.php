@@ -25,7 +25,7 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
     closedBy, closedDate,
-    duplicateBug, linkBug,
+    duplicateBug, relatedBug,
     case,
     lastEditedBy,
     lastEditedDate';
@@ -39,7 +39,7 @@ $config->bug->exportFields = 'id, product, branch, module, project, execution, s
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
     closedBy, closedDate,
-    duplicateBug, linkBug,
+    duplicateBug, relatedBug,
     case,
     lastEditedBy,
     lastEditedDate, files ,feedbackBy, notifyEmail';

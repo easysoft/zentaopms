@@ -6898,11 +6898,11 @@ class upgradeModel extends model
      */
     public function processBugLinkBug()
     {
-        $bugs = $this->dao->select('id,linkBug')->from(TABLE_BUG)->where('linkBug')->ne('')->fetchPairs();
-        foreach($bugs as $bugID => $linkBugs)
+        $bugs = $this->dao->select('id,relatedBug')->from(TABLE_BUG)->where('relatedBug')->ne('')->fetchPairs();
+        foreach($bugs as $bugID => $relatedBugs)
         {
-            $linkBugs = explode(',', $linkBugs);
-            $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from CONCAT(linkbug, ',$bugID'))")->where('id')->in($linkBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', linkBug, ',')")->notlike("%,$bugID,%")->exec();
+            $relatedBugs = explode(',', $relatedBugs);
+            $this->dao->update(TABLE_BUG)->set("relatedBug = TRIM(BOTH ',' from CONCAT(relatedbug, ',$bugID'))")->where('id')->in($relatedBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', relatedBug, ',')")->notlike("%,$bugID,%")->exec();
         }
 
         return !dao::isError();

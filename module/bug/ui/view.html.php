@@ -68,16 +68,16 @@ if(!empty($bug->mailto))
     }
 }
 
-$linkBugs = array();
-if(!empty($bug->linkBugTitles))
+$relatedBugs = array();
+if(!empty($bug->relatedBugTitles))
 {
-    foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+    foreach($bug->relatedBugTitles as $relatedBugID => $relatedBugTitle)
     {
-        $linkBugs[] = a
+        $relatedBugs[] = a
         (
-            set('href', $this->createLink('bug', 'view', "bugID=$linkBugID")),
+            set('href', $this->createLink('bug', 'view', "bugID=$relatedBugID")),
             set('data-toggle', 'modal'),
-            "#$linkBugID $linkBugTitle"
+            "#$relatedBugID $relatedBugTitle"
         );
     }
 }
@@ -174,7 +174,7 @@ $toStoryLink  = $bug->toStory && $canViewStory ? $this->createLink('story',    '
 $toTaskLink   = $bug->toTask  && $canViewTask  ? $this->createLink('task',     'view', "taskID=$bug->toTask")                             : '';
 
 $legendMisc = array();
-$legendMisc['linkBug']    = array('name' => $lang->bug->linkBug,    'text' => $linkBugs);
+$legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug,    'text' => $relatedBugs);
 $legendMisc['fromCase']   = array('name' => $lang->bug->fromCase,   'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
 $legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
 $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));

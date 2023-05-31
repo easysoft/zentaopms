@@ -892,7 +892,7 @@ class bugZen extends bug
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->join('openedBuild,mailto,linkBug,os,browser', ',')
+            ->join('openedBuild,mailto,relatedBug,os,browser', ',')
             ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
             ->setIF($formData->data->resolvedBy  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($formData->data->resolution  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
@@ -1723,7 +1723,7 @@ class bugZen extends bug
             if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan, 'linkbug', '', $bug->id);
         }
 
-        $this->updateLinkBug($bug->id, $bug->linkBug, $oldBug->linkBug);
+        $this->bug->updateRelatedBug($bug->id, $bug->relatedBug, $oldBug->relatedBug);
 
         /* 给 bug 解决者积分奖励。*/
         /* Add score to the user who resolved the bug. */

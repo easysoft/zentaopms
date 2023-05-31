@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `duplicateBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `linkBug` varchar(255) NOT NULL DEFAULT '',
+  `relatedBug` varchar(255) NOT NULL DEFAULT '',
   `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `caseVersion` smallint(6) NOT NULL DEFAULT '1',
   `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',

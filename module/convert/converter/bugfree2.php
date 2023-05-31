@@ -228,7 +228,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             howFound   AS found, 
             reproSteps AS steps,
             bugStatus AS status,
-            linkID    AS linkBug,
+            linkID    AS relatedBug,
             duplicateID AS duplicateBug,
             caseID AS `case`,
             1      AS caseVersion,
