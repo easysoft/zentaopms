@@ -32,7 +32,7 @@ if($isCustomExport)
         if(!$hasDefaultField) $selectedFields[] = $field;
     }
 
-    jsVar('defaultExportFields', join(',', $selectedFields));
+    jsVar('defaultExportFields', implode(',', $selectedFields));
 }
 
 /* Unset useless export type. */
