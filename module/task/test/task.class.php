@@ -765,27 +765,6 @@ class taskTest
     }
 
     /**
-     * Test get story comments.
-     *
-     * @param  int    $storyID
-     * @access public
-     * @return array
-     */
-    public function getStoryCommentsTest($storyID)
-    {
-        $object = $this->objectModel->getStoryComments($storyID);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test compute parent task working hours.
      *
      * @param  int    $taskID
