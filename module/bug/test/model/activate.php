@@ -43,7 +43,7 @@ r($bug->activateTest(9,  0, $kanbanParams, 'action')) && p('0:field,old,new') &&
 r($bug->activateTest(11, 0, $kanbanParams, 'action')) && p('1:field,old,new') && e('activatedCount,0,1');     // 状态是 resolved 的 bug 激活后记录激活次数改变日志。
 r($bug->activateTest(12, 0, $kanbanParams, 'action')) && p('1:field,old,new') && e('activatedCount,0,1');     // 状态是 closed   的 bug 激活后记录激活次数改变日志。
 
-r($bug->activateTest(14, 0, $kanbanParams, 'kanban')) && p() && e('fixing');    // 状态是 resolved 的 bug 激活后更新研发看板。
+r($bug->activateTest(14, 0, $kanbanParams, 'kanban')) && p() && e('fixing'); // 状态是 resolved 的 bug 激活后更新研发看板。
 r($bug->activateTest(15, 0, $kanbanParams, 'kanban')) && p() && e('fixing'); // 状态是 closed   的 bug 激活后更新研发看板。
 
 $kanbanParams['fromColID']  = 23;
@@ -51,7 +51,7 @@ $kanbanParams['toColID']    = 22;
 $kanbanParams['fromLaneID'] = 3;
 $kanbanParams['toLaneID']   = 3;
 $kanbanParams['regionID']   = 1;
-r($bug->activateTest(20, 0, $kanbanParams, 'kanban')) && p() && e('fixing');    // 状态是 resolved 的 bug 激活后更新看板执行。
+r($bug->activateTest(20, 0, $kanbanParams, 'kanban')) && p() && e('fixing'); // 状态是 resolved 的 bug 激活后更新看板执行。
 
 $kanbanParams['fromColID'] = 27;
 r($bug->activateTest(21, 0, $kanbanParams, 'kanban')) && p() && e('fixing'); // 状态是 closed   的 bug 激活后更新看板执行。
