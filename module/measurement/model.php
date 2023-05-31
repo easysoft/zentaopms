@@ -1201,6 +1201,23 @@ class measurementModel extends model
     }
 
     /**
+     * Exec a php measurement.
+     *
+     * @param  object $measurement
+     * @param  array  $vars
+     * @param  bool   $saveRecord
+     * @access public
+     * @return mixed
+     */
+    public function execPhpMeasurement(object $measurement, array $vars, bool $saveRecord = true): mixed
+    {
+        $meas = $this->loadModel('meas');
+        $result = call_user_func_array(array($meas, $measurement->code), $vars);
+        if($saveRecord) $this->loadModel('measrecord')->save($measurement, $vars, $result);
+        return $result;
+    }
+
+    /**
      * Create sql function.
      *
      * @param  string $sql
