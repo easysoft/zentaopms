@@ -223,12 +223,16 @@ class release extends control
         if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
 
-        $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->beginIF($release->leftBugs)->andWhere('id')->in($release->leftBugs)->fi()
-            ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
-            ->page($leftBugPager)
-            ->fetchAll();
+        $leftBugs = array();
+        if($release->leftBugs)
+        {
+            $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($release->leftBugs)
+                ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
+                ->page($leftBugPager)
+                ->fetchAll();
+        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
