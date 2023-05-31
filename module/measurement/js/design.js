@@ -30,9 +30,9 @@ $().ready(function()
     $('#code').change(function()
     {
         $('#submit').prop('disabled', true).removeClass('btn-primary');
-        $.post(createLink('measurement', 'getsqlparams'),
+        $.post(createLink('measurement', 'getphpparams'),
         {
-             sql: $('#code').val(), measurementID:measurementID},
+             code: $('#code').val(), measurementID:measurementID},
              function(response)
              {
                  $('#paramBox').html(response);
