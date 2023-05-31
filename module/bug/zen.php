@@ -840,23 +840,26 @@ class bugZen extends bug
     }
 
     /**
-     * 设置导出字段。
-     * Set export fields.
+     * 获取导出字段。
+     * Get export fields.
      *
-     * @param  int $executionID
-     * @param  object $product
+     * @param  int       $executionID
+     * @param  object    $product
      * @access protected
-     * @return void
+     * @return string
      */
-    protected function setExportFields(int $executionID, object $product): void
+    protected function getExportFields(int $executionID, object $product): string
     {
-        if(isset($product->type) and $product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
+        $exportFields = $this->config->bug->exportFields;
+        if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace('branch,', '', $exportFields);
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
-            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
-            if(!empty($product->shadow)) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
+            if(empty($execution->multiple)) $exportFields = str_replace('execution,', '', $exportFields);
+            if(!empty($product->shadow))    $exportFields = str_replace('product,',   '', $exportFields);
         }
+
+        return $exportFields;
     }
 
     /**
@@ -1026,7 +1029,6 @@ class bugZen extends bug
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
-        $this->display();
     }
 
     /**
@@ -1081,7 +1083,6 @@ class bugZen extends bug
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
         $this->view->blockID               = $this->getBlockID4Create();
-        $this->display();
     }
 
     /**
@@ -1153,7 +1154,6 @@ class bugZen extends bug
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
         $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->display();
     }
 
     /**
@@ -1222,6 +1222,7 @@ class bugZen extends bug
                 $bug->assignedDate = helper::now();
             }
         }
+
         return $bugs;
     }
 
@@ -1229,15 +1230,15 @@ class bugZen extends bug
      * 展示批量创建bug的相关变量。
      * Show the variables associated with the batch creation bugs.
      *
-     * @param  int        $executionID
-     * @param  object     $product
-     * @param  string     $branch
-     * @param  array      $output
-     * @param  array|bool $bugImagesFile
+     * @param  int       $executionID
+     * @param  object    $product
+     * @param  string    $branch
+     * @param  array     $output
+     * @param  array     $bugImagesFile
      * @access protected
      * @return void
      */
-    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
+    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array $bugImagesFile)
     {
         if($executionID)
         {
@@ -1264,6 +1265,7 @@ class bugZen extends bug
         $projectID = isset($execution) ? $execution->project : 0;
         $project   = $this->loadModel('project')->getByID($projectID);
 
+        if(!$project) $project = new stdclass();
         $this->assignVarsForBatchCreate($product, $project, $bugImagesFile);
 
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
@@ -1287,7 +1289,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignKanbanVars(object $execution, array $output)
+    protected function assignKanbanVars(object $execution, array $output): void
     {
         $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
         $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
@@ -1305,13 +1307,13 @@ class bugZen extends bug
      * 展示字段相关变量。
      * Show the variables associated with the batch created fields.
      *
-     * @param  object      $product
-     * @param  object|bool $project
-     * @param  array|bool  $bugImagesFile
+     * @param  object    $product
+     * @param  object    $project
+     * @param  array     $bugImagesFile
      * @access protected
      * @return void
      */
-    protected function assignVarsForBatchCreate(object $product, object|bool $project, array|bool $bugImagesFile)
+    private function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
     {
         /* Set custom fields. */
         foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
@@ -1455,7 +1457,7 @@ class bugZen extends bug
     {
         /* Initialize vars.*/
         $bugIdList = array_unique($this->post->bugIdList);
-        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
+        $bugs      = $this->bug->getByIdList($bugIdList);
 
         /* Set menu and get product id list. */
         if($this->app->tab == 'product') $this->product->setMenu($productID);
@@ -1508,7 +1510,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function assignProductRelatedVars(array $bugs, array $products): array
+    private function assignProductRelatedVars(array $bugs, array $products): array
     {
         /* Get modules, bugs and plans of the products. */
         $branchProduct   = false;
@@ -1558,6 +1560,7 @@ class bugZen extends bug
         $this->view->productBugList  = $productBugList;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->products        = $products;
+
         return $branchTagOption;
     }
 
@@ -1571,7 +1574,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
+    private function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
     {
         /* If current tab is execution or project, get project, execution, product team members of bugs.*/
         if($this->app->tab == 'execution' || $this->app->tab == 'project')
@@ -1629,11 +1632,11 @@ class bugZen extends bug
      *
      * @param  object      $bug
      * @param  string      $uploadImage
-     * @param  array|bool  $bugImagesFiles
+     * @param  array       $bugImagesFiles
      * @access protected
-     * @return array|false
+     * @return array
      */
-    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
+    protected function processImageForBatchCreate(object $bug, string $uploadImage, array $bugImagesFiles): array
     {
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         if(!empty($uploadImage))
@@ -1661,7 +1664,7 @@ class bugZen extends bug
             }
         }
 
-        return !empty($file) ? $file : false;
+        return !empty($file) ? $file : array();
     }
 
     /**
@@ -1844,11 +1847,11 @@ class bugZen extends bug
      * @param  object     $bug
      * @param  array      $output
      * @param  string     $uploadImage
-     * @param  array|bool $file
+     * @param  array      $file
      * @access protected
      * @return bool
      */
-    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array|bool $file): bool
+    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array $file): bool
     {
         /* If bug has the execution, update kanban data. */
         if($bug->execution)

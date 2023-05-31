@@ -128,6 +128,7 @@ class bug extends control
         $bugs       = $this->bugZen->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->display();
     }
 
     /**
@@ -243,6 +244,7 @@ class bug extends control
         /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
         /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
         $this->bugZen->buildCreateForm($bug, $output, $from);
+        $this->display();
     }
 
     /**
@@ -280,10 +282,9 @@ class bug extends control
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
-
         $this->bugZen->setEditMenu($oldBug);
-
         $this->bugZen->buildEditForm($oldBug);
+        $this->display();
     }
 
     /**
@@ -585,10 +586,9 @@ class bug extends control
         }
 
         $product = $this->loadModel('product')->getByID($productID);
-        $this->bugZen->setExportFields($executionID, $product);
 
         $this->view->fileName        = $this->bugZen->getExportFileName($executionID, $browseType, $product);
-        $this->view->allExportFields = $this->config->bug->exportFields;
+        $this->view->allExportFields = $this->bugZen->getExportFields($executionID, $product);;
         $this->view->customExport    = true;
         $this->display('file', 'export');
     }
@@ -703,7 +703,7 @@ class bug extends control
             $message        = '';
             $bugIdList      = array();
             $uploadImages   = $this->post->uploadImage;
-            $bugImagesFiles = $this->session->bugImagesFile;
+            $bugImagesFiles = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
             foreach($bugs as $index => $bug)
             {
                 $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
@@ -730,7 +730,8 @@ class bug extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
-        $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $this->session->bugImagesFile);
+        $bugImagesFile = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
+        $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->moduleID  = $moduleID;
