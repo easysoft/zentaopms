@@ -228,7 +228,7 @@ class bug extends control
 
         $productID      = $this->product->saveVisitState($productID, $this->products);
         $currentProduct = $this->product->getByID($productID);
-        $this->bugZen->setMenu4Create($productID, $branch, $output);
+        $this->bugZen->setCreateMenu($productID, $branch, $output);
 
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */

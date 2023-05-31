@@ -645,15 +645,14 @@ class bugZen extends bug
     }
 
     /**
-     * 追加bug创建页面的products和projects，并绑定到bug上。
-     * Append the products and projects for the bug create page and bind them to bug.
+     * 获取bug创建页面的projects，并绑定到bug上。
+     * Append the projects for the bug create page and bind them to bug.
      *
      * @param  object    $bug
-     * @param  int       $bugID
      * @access protected
      * @return object
      */
-    protected function appendProjects4Create(object $bug, int $bugID): object
+    private function getProjectsForCreate(object $bug): object
     {
         $productID = $bug->productID;
         $branch    = $bug->branch;
@@ -663,7 +662,7 @@ class bugZen extends bug
         $project   = $bug->project;
 
         /* Link all projects to product when copying bug under qa. */
-        if($bugID and $this->app->tab == 'qa')
+        if($this->app->tab == 'qa')
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
@@ -673,6 +672,61 @@ class bugZen extends bug
         }
 
         return $this->updateBug($bug, array('projects' => $projects));
+    }
+
+    /**
+     * 设置浏览页面的 cookie。
+     * Set cookie in browse view.
+     *
+     * @param  object    $product
+     * @param  string    $branch
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @access protected
+     * @return bool
+     */
+    protected function setBrowseCookie(object $product, string $branch, string $browseType, int $param, string $orderBy): bool
+    {
+        /* 如果产品或者分支变了，清空 bug 模块的 cookie。*/
+        /* Clear cookie of bug module if the product or the branch is changed. */
+        $productChanged = $this->cookie->preProductID != $product->id;
+        $branchChanged  = $product->type != 'normal' && $this->cookie->preBranch != $branch;
+        if($productChanged || $branchChanged) helper::setcookie('bugModule', '0', 0);
+
+        /* 如果浏览类型为按模块浏览或者浏览类型为空，设置 bug 模块的 cookie 为当前模块，清空 bug 分支的 cookie。*/
+        /* Set cookie of bug module and clear cookie of bug branch if browse type is by module or is empty. */
+        if($browseType == 'bymodule' || $browseType == '')
+        {
+            helper::setcookie('bugModule', (string)$param, 0);
+            helper::setcookie('bugBranch', '0', 0);
+        }
+
+        /* 设置测试应用的 bug 排序 cookie。*/
+        /* Set the cookie of bug order in qa. */
+        helper::setcookie('qaBugOrder', $orderBy, 0);
+
+        return true;
+    }
+
+    /**
+     * 设置浏览界面的 session。
+     * Set session in browse view.
+     *
+     * @param  string    $browseType
+     * @access protected
+     * @return bool
+     */
+    protected function setBrowseSession(string $browseType): bool
+    {
+        /* 设置浏览方式的 session，记录刚刚是搜索还是按模块浏览。*/
+        /* Set session of browse type. */
+        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
+        if(($browseType == 'bymodule') && $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
+
+        $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
+
+        return true;
     }
 
     /**
@@ -696,57 +750,6 @@ class bugZen extends bug
     }
 
     /**
-     * 设置浏览页面的 cookie。
-     * Set cookie in browse view.
-     *
-     * @param  object    $product
-     * @param  string    $branch
-     * @param  string    $browseType
-     * @param  int       $param
-     * @param  string    $orderBy
-     * @access protected
-     * @return void
-     */
-    protected function setBrowseCookie(object $product, string $branch, string $browseType, int $param, string $orderBy): void
-    {
-        /* 如果产品或者分支变了，清空 bug 模块的 cookie。*/
-        /* Clear cookie of bug module if the product or the branch is changed. */
-        $productChanged = $this->cookie->preProductID != $product->id;
-        $branchChanged  = $product->type != 'normal' && $this->cookie->preBranch != $branch;
-        if($productChanged || $branchChanged) helper::setcookie('bugModule', '0', 0);
-
-        /* 如果浏览类型为按模块浏览或者浏览类型为空，设置 bug 模块的 cookie 为当前模块，清空 bug 分支的 cookie。*/
-        /* Set cookie of bug module and clear cookie of bug branch if browse type is by module or is empty. */
-        if($browseType == 'bymodule' || $browseType == '')
-        {
-            helper::setcookie('bugModule', (string)$param, 0);
-            helper::setcookie('bugBranch', '0', 0);
-        }
-
-        /* 设置测试应用的 bug 排序 cookie。*/
-        /* Set the cookie of bug order in qa. */
-        helper::setcookie('qaBugOrder', $orderBy, 0);
-    }
-
-    /**
-     * 设置浏览界面的 session。
-     * Set session in browse view.
-     *
-     * @param  string    $browseType
-     * @access protected
-     * @return void
-     */
-    protected function setBrowseSession(string $browseType): void
-    {
-        /* 设置浏览方式的 session，记录刚刚是搜索还是按模块浏览。*/
-        /* Set session of browse type. */
-        if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
-        if(($browseType == 'bymodule') && $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
-
-        $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
-    }
-
-    /**
      * 为创建bug设置导航数据。
      * Set menu for create bug page.
      *
@@ -754,9 +757,9 @@ class bugZen extends bug
      * @param  string    $branch
      * @param  array     $output
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setMenu4Create(int $productID, string $branch, array $output): void
+    protected function setCreateMenu(int $productID, string $branch, array $output): bool
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -780,6 +783,8 @@ class bugZen extends bug
 
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
+
+        return true;
     }
 
     /**
@@ -1064,7 +1069,7 @@ class bugZen extends bug
         $bug = $this->getProductsAndProjects4Create($bug);
         /* 追加下拉列表的内容。 */
         /* Append projects. */
-        $bug = $this->appendProjects4Create($bug, (isset($bug->id) ? $bug->id : 0));
+        $bug = $this->getProjectsForCreate($bug);
         /* 获得项目的管理方式。 */
         /* Get project model. */
         $bug = $this->getProjectModel4Create($bug);
