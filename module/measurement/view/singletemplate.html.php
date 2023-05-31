@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th class='w-50px'><?php echo $lang->meastemplate->id?></th>
-          <th width='160'><?php echo $lang->meastemplate->name?></th>
+          <th class='w-160px'><?php echo $lang->meastemplate->name?></th>
           <th><?php echo $lang->meastemplate->desc?></th>
           <th class='w-130px'><?php echo $lang->actions?></th>
         </tr>
