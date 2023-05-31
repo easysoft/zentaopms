@@ -1407,6 +1407,7 @@ class bug extends control
     }
 
     /**
+     * Ajax 方式获取已发布的版本。
      * Ajax get released builds.
      *
      * @param  int        $productID
@@ -1414,7 +1415,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetReleasedBuilds($productID, $branch = 'all')
+    public function ajaxGetReleasedBuilds(int $productID, int|string $branch = 'all'): string
     {
         $releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
 
