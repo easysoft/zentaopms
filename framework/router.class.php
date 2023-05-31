@@ -656,21 +656,21 @@ class router extends baseRouter
      * 获取$URL。
      * Get the $URL.
      *
-     * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
+     * @param  bool   $full The URI contains the webRoot if $full is true else only the URI will be return.
      * @access public
      * @return string
      */
     public function getURI($full = false)
     {
-        $URI      = !empty($this->rawURI) ? $this->rawURI : $this->uri;
+        $theURI   = !empty($this->rawURI) ? $this->rawURI : $this->uri;
         $tidParam = ($this->config->requestType == 'PATH_INFO' and helper::isWithTID()) ? "?tid={$_GET['tid']}" : '';
 
         if($full and $this->config->requestType == 'PATH_INFO')
         {
-            if($URI) return $this->config->webRoot . $URI . '.' . $this->viewType . $tidParam;
+            if($theURI) return $this->config->webRoot . $theURI . '.' . $this->viewType . $tidParam;
             return $this->config->webRoot . $tidParam;
         }
-        return $URI . $tidParam;
+        return $theURI . $tidParam;
     }
 
     /**
