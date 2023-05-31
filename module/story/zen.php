@@ -94,10 +94,13 @@ class storyZen extends story
      * Init story for create.
      *
      * @param  int       $planID
+     * @param  int       $storyID
+     * @param  int       $bugID
+     * @param  int       $todoID
      * @access protected
      * @return object
      */
-    protected function initStoryForCreate(int $planID): object
+    protected function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID): object
     {
         $initStory = new stdclass();
         $initStory->source     = '';
@@ -111,6 +114,10 @@ class storyZen extends story
         $initStory->mailto     = '';
         $initStory->color      = '';
         $initStory->plan       = $planID;
+
+        if($storyID > 0) $initStory = $this->getInitStoryByStory($copyStoryID, $initStory);
+        if($bugID   > 0) $initStory = $this->getInitStoryByBug($bugID, $initStory);
+        if($todoID  > 0) $initStory = $this->getInitStoryByTodo($todoID, $initStory);
         return $initStory;
     }
 

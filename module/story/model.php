@@ -484,6 +484,38 @@ class storyModel extends model
     }
 
     /**
+     * 创建孪生需求。
+     * Create twins stories.
+     *
+     * @param  object $storyData
+     * @param  int    $objectID
+     * @param  int    $bugID
+     * @param  string $extra
+     * @access public
+     * @return int
+     */
+    public function createTwins(object $storyData, int $objectID, int $bugID, string $extra = ''): int
+    {
+        if(empty($storyData->branches)) return $this->create($storyData, $objectID, $bugID, $extra);
+
+        $storyIdList = array();
+        $mainStoryID = 0;
+        foreach($storyData->branches as $key => $branchID)
+        {
+            $storyData->branch = $branchID;
+            $storyData->module = $storyData->modules[$key];
+            $storyData->plan   = $storyData->plans[$key];
+
+            $storyID = $this->create($storyData, $objectID, $bugID, $extra);
+            $storyIdList[$storyID] = $storyID;
+            if(empty($mainStoryID)) $mainStoryID = $storyID;
+        }
+
+        $this->storyTao->updateTwins($storyIdList);
+        return $mainStoryID;
+    }
+
+    /**
      * Create story from gitlab issue.
      *
      * @param  object    $story

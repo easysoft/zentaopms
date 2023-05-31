@@ -66,32 +66,12 @@ class story extends control
             if($response) return $this->send($response);
 
             /* Insert story data. */
-            $productID = $this->post->product ? $this->post->product : $productID;
-            if(empty($storyData->branches))
-            {
-                $storyID = $this->story->create($storyData, $objectID, $bugID, $extra);
-            }
-            else
-            {
-                $storyIdList = array();
-                $mainStoryID = 0;
-                foreach($storyData->branches as $key => $branchID)
-                {
-                    $storyData->branch = $branchID;
-                    $storyData->module = $storyData->modules[$key];
-                    $storyData->plan   = $storyData->plans[$key];
-
-                    $storyID = $this->story->create($storyData, $objectID, $bugID, $extra);
-                    $storyIdList[$storyID] = $storyID;
-                    if(empty($mainStoryID)) $mainStoryID = $storyID;
-                }
-
-                $this->story->updateTwins($storyIdList);
-                $storyID = $mainStoryID;
-            }
+            $createFunction = empty($storyData->branches) ? 'create' : 'createTwins';
+            $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($storyID);
+            $productID = $this->post->product ? $this->post->product : $productID;
+            $message   = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->post->status == 'draft' ? $this->lang->story->saveDraftSuccess : $this->lang->saveSuccess;
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $storyID));
 
@@ -111,16 +91,11 @@ class story extends control
             return $this->send($response);
         }
 
-        $output = $this->story->parseExtra($extra);
-        $this->storyZen->setViewVarsForKanban($objectID, $output);
-
         /* Init vars. */
-        $initStory = $this->storyZen->initStoryForCreate($planID);
-        if($storyID > 0) $initStory = $this->storyZen->getInitStoryByStory($copyStoryID, $initStory);
-        if($bugID   > 0) $initStory = $this->storyZen->getInitStoryByBug($bugID, $initStory);
-        if($todoID  > 0) $initStory = $this->storyZen->getInitStoryByTodo($todoID, $initStory);
+        $initStory = $this->storyZen->initStoryForCreate($planID, $copyStoryID, $bugID, $todoID);
 
         /* Get form fields. */
+        $this->storyZen->setViewVarsForKanban($objectID, $this->story->parseExtra($extra));
         $fields = $this->storyZen->getFormFieldsForCreate($productID, $branch, $objectID, $initStory);
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
@@ -129,7 +104,6 @@ class story extends control
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
 
         $this->view->title        = $this->view->product->name . $this->lang->colon . $this->lang->story->create;
-        $this->view->gobackLink   = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'browse', "productID={$this->view->productID}") : '';
         $this->view->fields       = $fields;
         $this->view->blockID      = $this->storyZen->getAssignMeBlockID();
         $this->view->type         = $storyType;
