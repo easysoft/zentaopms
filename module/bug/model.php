@@ -453,36 +453,6 @@ class bugModel extends model
     }
 
     /**
-     * 批量激活bug。
-     * Batch active bugs.
-     *
-     * @param  array  $activateBugs
-     * @access public
-     * @return bool
-     */
-    public function batchActivate(array $activateBugs): bool
-    {
-        if(empty($activateBugs)) return false;
-
-        /* Update bugs. */
-        foreach($activateBugs as $bug)
-        {
-            $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->where('id')->eq($bug->id)->exec();
-            if(dao::isError())
-            {
-                dao::$errors['message'][] = 'bug#' . $bug->id . dao::getError(true);
-                return false;
-            }
-            $this->loadModel('action')->create('bug', $bug->id, 'Activated', $bug->comment);
-
-            $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($bug->id)->exec();
-            $this->executeHooks($bug->id);
-        }
-
-        return !dao::isError();
-    }
-
-    /**
      * 将任务指派给一个用户。
      * Assign a bug to a user.
      *
@@ -682,20 +652,6 @@ class bugModel extends model
      */
     public function activate(object $bug, array $kanbanParams = array()): bool
     {
-        $oldBug = $this->getBaseInfo($bug->id);
-        if(!$oldBug)
-        {
-            dao::$errors[] = $this->lang->bug->error->notExist;
-            return false;
-        }
-        if($oldBug->status != 'resolved' && $oldBug->status != 'closed')
-        {
-            dao::$errors[] = $this->lang->bug->error->cannotActivate;
-            return false;
-        }
-
-        $bug->activatedCount = $oldBug->activatedCount + 1;
-
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
@@ -708,6 +664,7 @@ class bugModel extends model
         }
 
         /* Update kanban. */
+        $oldBug = $this->getBaseInfo($bug->id);
         if($oldBug->execution)
         {
             $this->loadModel('kanban');

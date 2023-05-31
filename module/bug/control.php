@@ -477,8 +477,14 @@ class bug extends control
             $kanbanInfo = str_replace(array(',', ' '), array('&', ''), $kanbanInfo);
             parse_str($kanbanInfo, $kanbanParams);
 
-            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('id', $bugID)->get();
+            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->get();
             $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
+
+            if($oldBug->status != 'resolved' && $oldBug->status != 'closed')
+            {
+                dao::$errors[] = $this->lang->bug->error->cannotActivate;
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             $this->bug->activate($bug, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1097,19 +1103,19 @@ class bug extends control
      */
     public function batchActivate(int $productID, string $branch = '0')
     {
-        if($this->post->id)
+        if(!empty($_POST) && isset($_POST['bugIdList']))
         {
             $activateBugs = form::batchData($this->config->bug->form->batchActivate)->get();
+
+            $bugIdList = array_unique($this->post->bugIdList);
+            $bugs      = $this->bug->getByIdList($bugIdList);
 
             $now     = helper::now();
             $account = $this->app->user->account;
             foreach($activateBugs as $bugID => $bug)
             {
-                if($bug->status == 'active')
-                {
-                    unset($activateBugs[$bugID]);
-                    continue;
-                }
+                $oldBug = $bugs[$bugID];
+                if($oldBug->status != 'resolved' && $oldBug->status != 'closed') continue;
 
                 $bug->openedBuild    = implode(',', $bug->openedBuild);
                 $bug->activatedDate  = $now;
@@ -1126,13 +1132,17 @@ class bug extends control
                 $bug->toStory        = 0;
                 $bug->lastEditedBy   = $account;
                 $bug->lastEditedDate = $now;
+                $bug->activatedCount = $oldBug->activatedCount + 1;
+
+                $this->bug->activate($bug);
+                $message = $this->executeHooks($bug->id);
             }
 
-            $this->bug->batchActivate($activateBugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
             $this->loadModel('score')->create('ajax', 'batchOther');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
+
+            if(empty($message)) $message = $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList));
         }
 
         if(!$this->post->bugIdList) $this->locate($this->session->bugList);
