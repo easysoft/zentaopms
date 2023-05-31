@@ -1013,7 +1013,7 @@ class bugZen extends bug
         $this->view->customFields          = $this->getCustomFieldsForCreate();
         $this->view->showFields            = $this->config->bug->custom->createFields;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
-        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
+        $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->projects              = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
