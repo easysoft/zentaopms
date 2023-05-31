@@ -1950,15 +1950,15 @@ class bugZen extends bug
      * 批量创建bug后返回响应。
      * Response after batch create.
      *
-     * @param int        $productID
-     * @param string     $branch
-     * @param int        $executionID
-     * @param array      $bugIDList
-     * @param string     $message
+     * @param  int        $productID
+     * @param  string     $branch
+     * @param  int        $executionID
+     * @param  array      $bugIdList
+     * @param  string     $message
      * @access protected
      * @return void
      */
-    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIDList, string $message = '')
+    protected function responseAfterBatchCreate(int $productID, string $branch, int $executionID, array $bugIdList, string $message = ''): void
     {
         helper::setcookie('bugModule', '0', 0);
 
@@ -1972,10 +1972,8 @@ class bugZen extends bug
             unset($_SESSION['bugImagesFile']);
         }
 
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
         /* Return bug id list when call the API. */
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIDList));
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIdList));
 
         /* Respond after updating in modal. */
         if(isonlybody() && $executionID) return $this->responseInModal($executionID);
@@ -1992,9 +1990,9 @@ class bugZen extends bug
      *
      * @param  array|false $output
      * @access protected
-     * @return array
+     * @return void
      */
-    protected function responseAfterBatchEdit(array $toTaskIdList): array
+    protected function responseAfterBatchEdit(array $toTaskIdList): void
     {
         if(!empty($toTaskIdList))
         {
@@ -2015,7 +2013,7 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function initBug($fields): object
+    protected function initBug(array $fields): object
     {
         $bug = new stdclass();
         $bug->projectID   = 0;

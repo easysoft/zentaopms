@@ -714,7 +714,7 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message        = '';
-            $bugIDList      = array();
+            $bugIdList      = array();
             $uploadImages   = $this->post->uploadImage;
             $bugImagesFiles = $this->session->bugImagesFile;
             foreach($bugs as $index => $bug)
@@ -729,13 +729,13 @@ class bug extends control
                 $this->bugZen->afterBatchCreate($bug, $output, $uploadImage, $file);
                 $message = $this->executeHooks($bug->id);
 
-                $bugIDList[] = $bug->id;
+                $bugIdList[] = $bug->id;
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchCreate');
 
             if(!$message) $message = $this->lang->saveSuccess;
-            return $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $bugIDList, $message);
+            return $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $bugIdList, $message);
         }
 
         /* Get product, then set menu. */
