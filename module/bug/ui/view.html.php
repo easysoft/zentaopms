@@ -74,11 +74,11 @@ if(!empty($bug->linkBugTitles))
     foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
     {
         $linkBugs[] = a
-            (
-                set('href', $this->createLink('bug', 'view', "bugID=$linkBugID")),
-                set('data-toggle', 'modal'),
-                "#$linkBugID $linkBugTitle"
-            );
+        (
+            set('href', $this->createLink('bug', 'view', "bugID=$linkBugID")),
+            set('data-toggle', 'modal'),
+            "#$linkBugID $linkBugTitle"
+        );
     }
 }
 
