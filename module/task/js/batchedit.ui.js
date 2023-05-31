@@ -14,7 +14,7 @@ window.renderRowData = function($row, index, row)
         teamAccounts = teams[row.id];
         $.each(teamAccounts, function(index, teamAccount)
         {
-            taskMembers[teamAccount] = users[teamAccount];
+            taskMembers[teamAccount.account] = users[teamAccount.account];
         });
     }
     else
@@ -23,11 +23,23 @@ window.renderRowData = function($row, index, row)
         taskMembers = members;
     }
 
-    if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     let $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]').empty();
+    if(teams[row.id] != undefined && ((row.assignedTo != currentUser && row.mode == 'linear') || taskMembers[currentUser] == undefined))
+    {
+        $assignedTo.attr('disabled', 'disabled');
+    }
+
+    if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     $assignedTo.append('<option value=""></option>');
     for(let account in taskMembers)
     {
-        $assignedTo.append('<option value="' + account + '">' + taskMembers[account] + '</option>');
+        $assignedTo.append('<option value="' + account +'"' + (row.assignedTo == account ? 'selected' : '') + '>' + taskMembers[account] + '</option>');
+    }
+
+    if(teams[row.id] != undefined || row.parent < 0)
+    {
+        $row.find('.form-batch-input[data-name="estimate"]').attr('disabled', 'disabled');
+        $row.find('.form-batch-input[data-name="consumed"]').attr('disabled', 'disabled');
+        $row.find('.form-batch-input[data-name="left"]').attr('disabled', 'disabled');
     }
 }
