@@ -1721,16 +1721,18 @@ class taskModel extends model
     }
 
     /**
+     * 更新串行任务工时日志的排序。
      * Update estimate order for linear task team.
      *
      * @param  int    $effortID
      * @param  int    $order
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateEstimateOrder($effortID, $order)
+    public function updateEstimateOrder(int $effortID, int $order): bool
     {
         $this->dao->update(TABLE_EFFORT)->set('`order`')->eq((int)$order)->where('id')->eq($effortID)->exec();
+        return !dao::isError();
     }
 
     /**
