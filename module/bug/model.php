@@ -710,6 +710,7 @@ class bugModel extends model
     }
 
     /**
+     * 构造搜索表单。
      * Build search form.
      *
      * @param  int    $productID
@@ -720,20 +721,24 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $branch = 0): void
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
-        $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
+
+        /* Get product params. */
+        $productParams = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
         $productParams = $productParams + array('all' => $this->lang->all);
+
+        /* Get project params. */
         $projectParams = $this->getProjects($productID);
         $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
         /* Get all modules. */
-        $modules = array();
         $this->loadModel('tree');
         if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
         if(!$productID)
         {
+            $modules = array();
             foreach($products as $id => $productName) $modules += $this->tree->getOptionMenu($id, 'bug');
         }
 
@@ -747,6 +752,7 @@ class bugModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
