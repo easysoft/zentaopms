@@ -26,8 +26,8 @@ $bug->gen(100);
 
 zdTable('build')->gen(100);
 
-$bugIDList = array('1' => '1', '53' => '53', '82' => '82');
-$buildList = array('53' => 11, '82' => 11);
+$bugIDList = array(1 => 1, 53 => 53, 82 => 82);
+$buildList = array(1 => 'trunk', 53 => 11, 82 => 11);
 
 $bug = new bugTest();
 r($bug->batchActivateObject(array('53' => '53')))                    && p('53:status')      && e('active'); // 测试激活bug一个

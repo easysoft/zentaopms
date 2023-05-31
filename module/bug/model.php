@@ -456,64 +456,30 @@ class bugModel extends model
      * 批量激活bug。
      * Batch active bugs.
      *
-     * @param  object $activateData
-     * @param  array  $postExtendData
+     * @param  array  $activateBugs
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function batchActivate(object $activateData, array $postExtendData): array|false
+    public function batchActivate(array $activateBugs): bool
     {
-        $activateBugs = array();
-        $bugIdList    = $activateData->bugIdList ? $activateData->bugIdList : array();
-        if(empty($bugIdList)) return $activateBugs;
-
-        $now = helper::now();
-        foreach($bugIdList as $bugID)
-        {
-            if($activateData->statusList[$bugID] == 'active') continue;
-
-            $activateBugs[$bugID]['assignedTo']  = $activateData->assignedToList[$bugID];
-            $activateBugs[$bugID]['openedBuild'] = $activateData->openedBuildList[$bugID];
-            $activateBugs[$bugID]['comment']     = $activateData->commentList[$bugID];
-
-            $activateBugs[$bugID]['activatedDate']  = $now;
-            $activateBugs[$bugID]['assignedDate']   = $now;
-            $activateBugs[$bugID]['resolution']     = '';
-            $activateBugs[$bugID]['status']         = 'active';
-            $activateBugs[$bugID]['resolvedDate']   = '0000-00-00';
-            $activateBugs[$bugID]['resolvedBy']     = '';
-            $activateBugs[$bugID]['resolvedBuild']  = '';
-            $activateBugs[$bugID]['closedBy']       = '';
-            $activateBugs[$bugID]['closedDate']     = '0000-00-00';
-            $activateBugs[$bugID]['duplicateBug']   = 0;
-            $activateBugs[$bugID]['toTask']         = 0;
-            $activateBugs[$bugID]['toStory']        = 0;
-            $activateBugs[$bugID]['lastEditedBy']   = $this->app->user->account;
-            $activateBugs[$bugID]['lastEditedDate'] = $now;
-
-            foreach($postExtendData as $field => $postFieldData)
-            {
-                if(is_array($postFieldData[$bugID])) $postFieldData[$bugID] = implode(',', $postFieldData[$bugID]);
-                $activateBugs[$bugID][$field] = htmlSpecialString($postFieldData[$bugID]);
-            }
-        }
+        if(empty($activateBugs)) return false;
 
         /* Update bugs. */
-        foreach($activateBugs as $bugID => $bug)
+        foreach($activateBugs as $bug)
         {
-            $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
+            $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->where('id')->eq($bug->id)->exec();
             if(dao::isError())
             {
-                dao::$errors['message'][] = 'bug#' . $bugID . dao::getError(true);
+                dao::$errors['message'][] = 'bug#' . $bug->id . dao::getError(true);
                 return false;
             }
-            $this->loadModel('action')->create('bug', $bugID, 'Activated', $bug['comment']);
+            $this->loadModel('action')->create('bug', $bug->id, 'Activated', $bug->comment);
 
-            $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
-            $this->executeHooks($bugID);
+            $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq($bug->id)->exec();
+            $this->executeHooks($bug->id);
         }
 
-        return $activateBugs;
+        return !dao::isError();
     }
 
     /**

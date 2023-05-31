@@ -869,25 +869,32 @@ class bugTest
     /**
      * Test batch activate bugs.
      *
-     * @param  array  $bugIDList
+     * @param  array  $bugIdList
      * @param  array  $buildList
      * @access public
      * @return array
      */
-    public function batchActivateObject(array $bugIDList, array $buildList = array())
+    public function batchActivateObject(array $bugIdList, array $buildList = array())
     {
-        $statusList      = array('1' => 'active', '53' => 'resolved', '82' => 'closed');
-        $assignedToList  = array('1' => 'admin',  '53' => 'admin',    '82' => 'admin');
-        $openedBuildList = $buildList ? $buildList : array('1' => 'trunk',  '53' => 'trunk',    '82' => 'trunk');
-        $commentList     = array('1' => '',       '53' => '',         '82' => '');
+        $statusList      = array(1 => 'active', 53 => 'resolved', 82 => 'closed');
+        $assignedToList  = array(1 => 'admin',  53 => 'admin',    82 => 'admin');
+        $openedBuildList = $buildList ? $buildList : array(1 => 'trunk',  53 => 'trunk',    82 => 'trunk');
+        $commentList     = array(1 => '', 53 => '', 82 => '');
 
-        $batchActivateFields['bugIDList']       = $bugIDList;
-        $batchActivateFields['statusList']      = $statusList;
-        $batchActivateFields['assignedToList']  = $assignedToList;
-        $batchActivateFields['openedBuildList'] = $openedBuildList;
-        $batchActivateFields['commentList']     = $commentList;
+        $bugs = array();
+        foreach($bugIdList as $bugID)
+        {
+            $bug = new stdclass();
+            $bug->id          = (int)$bugID;
+            $bug->status      = 'active';
+            $bug->assignedTo  = $assignedToList[$bugID];
+            $bug->openedBuild = $openedBuildList[$bugID];
+            $bug->comment     = $commentList[$bugID];
 
-        $object = $this->objectModel->batchActivate((object)$batchActivateFields, array());
+            $bugs[$bugID] = $bug;
+        }
+
+        $this->objectModel->batchActivate($bugs);
 
         if(dao::isError())
         {
@@ -895,7 +902,7 @@ class bugTest
         }
         else
         {
-            return $object;
+            return $this->objectModel->getByIdList($bugIdList);
         }
     }
 
