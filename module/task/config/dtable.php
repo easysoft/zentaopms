@@ -18,8 +18,6 @@ $config->task->dtable->fieldList['name']['link']     = helper::createLink('task'
 
 $config->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->fieldList['pri']['name']     = 'pri';
-$config->task->dtable->fieldList['pri']['fixed']    = 'left';
-$config->task->dtable->fieldList['pri']['flex']     = 1;
 $config->task->dtable->fieldList['pri']['type']     = 'pri';
 $config->task->dtable->fieldList['pri']['sortType'] = true;
 
