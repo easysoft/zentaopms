@@ -54,7 +54,7 @@ class bugTao extends bugModel
     {
         $browseType = strtolower($browseType);
 
-        if($browseType == 'bysearch')    return $this->getBySearch($productIdList, $branch, $queryID, $orderBy, '', $pager, $projectID);
+        if($browseType == 'bysearch')    return $this->getBySearch($productIdList, $branch, $projectID, $queryID, $orderBy, '', $pager, $projectID);
         if($browseType == 'needconfirm') return $this->getNeedConfirmList($productIdList, $projectID, $executionIdList, $branch, $moduleIdList, $orderBy, $pager);
 
         $lastEditedDate = '';
