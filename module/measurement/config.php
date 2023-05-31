@@ -1,5 +1,7 @@
 <?php
 $config->measurement = new stdclass();
+$config->measurement->phpTemplate = "<?php class meas{ %s }";
+
 $config->measurement->editor = new stdclass();
 $config->measurement->editor->createtemplate = array('id' => 'content', 'tools' => 'measurementTools');
 $config->measurement->editor->edittemplate   = array('id' => 'content', 'tools' => 'measurementTools');
