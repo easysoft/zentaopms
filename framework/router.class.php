@@ -429,20 +429,15 @@ class router extends baseRouter
      * Export config.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function exportConfig()
     {
-        ob_start();
-        parent::exportConfig();
-        $view = ob_get_contents();
-        ob_end_clean();
+        $view = json_decode(parent::exportConfig());
+        $view->rand = $view->random;
+        $this->session->set('rand', $view->rand);
 
-        $view = json_decode($view);
-        $view->rand = $this->session->random;
-        $this->session->set('rand', $this->session->random);
-
-        echo json_encode($view);
+        return json_encode($view);
     }
 
     /**

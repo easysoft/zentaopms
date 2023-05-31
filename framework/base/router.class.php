@@ -2699,7 +2699,7 @@ class baseRouter
      * Export the config params to the client, thus the client can adjust it's logic according the config.
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function exportConfig()
     {
@@ -2723,7 +2723,7 @@ class baseRouter
         $view->expiredTime = ini_get('session.gc_maxlifetime');
         $view->serverTime  = time();
 
-        echo json_encode($view);
+        return json_encode($view);
     }
 
     /**
