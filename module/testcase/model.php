@@ -4602,4 +4602,24 @@ class testcaseModel extends model
         // Return node as array
         return array($xml->getName() => $propertiesArray);
     }
+
+    /**
+     * Append case fails.
+     *
+     * @param  object $case
+     * @param  string $from
+     * @param  int    $taskID
+     * @access public
+     * @return object
+     */
+    public function appendCaseFails(object $case, string $from, int $taskID): object
+    {
+        $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)
+            ->where('caseResult')->eq('fail')
+            ->andwhere('`case`')->eq($case->id)
+            ->beginIF($from == 'testtask')->andwhere('`run`')->eq($taskID)->fi()
+            ->fetch('count');
+        $case->caseFails = $caseFails;
+        return $case;
+    }
 }

@@ -115,7 +115,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php $case->isLibCase = $isLibCase;?>
         <?php $case->caseFails = $caseFails;?>
-        <?php $case->runID     = $runID;?>
+        <?php $case->runID     = $from == 'testcase' ? 0 : $run->id;?>
         <?php echo $this->testcase->buildOperateMenu($case, 'view');?>
       </div>
     </div>
@@ -148,7 +148,7 @@
             <?php else:?>
             <tr class='<?php if($product->shadow) echo 'hide';?>'>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
-              <td><?php echo (common::hasPriv('product', 'browse') and $productName) ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
+              <td><?php echo (common::hasPriv('product', 'browse') and $product->name) ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $product->name) : $product->name;?></td>
             </tr>
             <?php if($product->type != 'normal'):?>
             <tr>
