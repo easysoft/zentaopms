@@ -801,32 +801,28 @@ class bug extends control
             $bugIdList = array_unique($this->post->bugIdList);
             $oldBugs   = $this->bug->getByIdList($bugIdList);
 
-            /* Remove condition mismatched bugs. */
             $skipBugIdList = '';
-            foreach($bugIdList as $key => $bugID)
+            foreach($bugIdList as $bugID)
             {
-                $oldBug = $oldBugs[$bugID];
-                if($branchID == $oldBug->branch)
+                $oldBug = $bugs[$bugID];
+                if($branchID != $oldBug->branch)
                 {
-                    unset($bugIdList[$key]);
-                }
-                elseif($branchID != $oldBug->branch and !empty($oldBug->module))
-                {
-                    $skipBugIdList .= '[' . $bugID . ']';
-                    unset($bugIdList[$key]);
+                    if(empty($oldBug->module))
+                    {
+                        $bug = new stdclass();
+                        $bug->id     = (int)$bugID;
+                        $bug->branch = $branchID;
+
+                        $this->bug->update($bug);
+                    }
+                    else
+                    {
+                        $skipBugIdList .= '[' . $bugID . ']';
+                    }
                 }
             }
 
-            $allChanges = $this->bug->batchChangeBranch($bugIdList, $branchID, $oldBugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            /* Record log. */
-            $this->loadModel('action');
-            foreach($allChanges as $bugID => $changes)
-            {
-                $actionID = $this->action->create('bug', $bugID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 

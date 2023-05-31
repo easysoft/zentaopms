@@ -147,7 +147,7 @@ class bugZen extends bug
     {
         if($productType == 'normal') return 'all';
 
-        if($this->cookie->preBranch !== '' && $branch === '') $branch = $this->cookie->preBranch;
+        if($this->cookie->preBranch !== '' && $branch === '') $branch = (string)$this->cookie->preBranch;
 
         /* 如果是多分支产品时，设置分支的 cookie。*/
         /* Set branch cookie if product is multi-branch. */

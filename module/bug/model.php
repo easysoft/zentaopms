@@ -672,35 +672,6 @@ class bugModel extends model
     }
 
     /**
-     * 批量修改bug分支。
-     * Batch change branch.
-     *
-     * @param  array  $bugIdList
-     * @param  int    $branchID
-     * @param  array  $oldBugs
-     * @access public
-     * @return array
-     */
-    public function batchChangeBranch(array $bugIdList, int $branchID, array $oldBugs): array
-    {
-        $allChanges = array();
-        foreach($bugIdList as $bugID)
-        {
-            $oldBug = $oldBugs[$bugID];
-            if($branchID == $oldBug->branch) continue;
-
-            $bug = new stdclass();
-            $bug->branch = $branchID;
-            $this->bugTao->updateByID((int)$bugID, $bug);
-
-            if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
-        }
-        return $allChanges;
-    }
-
-
-
-    /**
      * 激活一个bug。
      * Activate a bug.
      *
