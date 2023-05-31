@@ -572,7 +572,9 @@ class bug extends control
             }
         }
 
-        return $this->bugZen->responseAfterDelete($bug, $from);
+        $message = $this->executeHooks($bugID);
+        if(!$message) $message = $this->lang->saveSuccess;
+        return $this->bugZen->responseAfterDelete($bug, $from, $message);
     }
 
     /**

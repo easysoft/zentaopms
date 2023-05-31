@@ -1915,14 +1915,12 @@ class bugZen extends bug
      *
      * @param  object    $bug
      * @param  string    $from
+     * @param  string    $message
      * @access protected
-     * @return array
+     * @return void
      */
-    protected function responseAfterDelete(object $bug, string $from): array
+    protected function responseAfterDelete(object $bug, string $from, string $message): void
     {
-        $message = $this->executeHooks($bugID);
-        if(!$message) $message = $this->lang->saveSuccess;
-
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
 
         /* 在弹窗中删除 bug 时的返回。*/
@@ -1933,9 +1931,9 @@ class bugZen extends bug
         /* Respond when delete in task kanban. */
         if($from == 'taskkanban')
         {
-            $laneType    = $this->session->executionLaneType ?: 'all';
-            $groupBy     = $this->session->executionGroupBy  ?: 'default';
-            $searchValue = $this->session->taskSearchValue   ?: '';
+            $laneType    = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+            $groupBy     = $this->session->executionGroupBy  ? $this->session->executionGroupBy  : 'default';
+            $searchValue = $this->session->taskSearchValue   ? $this->session->taskSearchValue   : '';
             $kanbanData  = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $laneType, $groupBy, $searchValue);
             $kanbanType  = $laneType == 'all' ? 'bug' : key($kanbanData);
             $kanbanData  = json_encode($kanbanData[$kanbanType]);
