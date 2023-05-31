@@ -311,7 +311,7 @@ class control extends baseControl
             }
 
             if(!is_file($viewFile)) $viewFile = dirname((string) $viewExtPath['common'], 2) . DS . 'view' . DS . $this->devicePrefix . $methodName . ".{$viewType}.php";
-            if(!is_file($viewFile)) die(js::error($this->lang->notPage) . js::locate('back'));
+            if(!is_file($viewFile)) helper::end(js::error($this->lang->notPage) . js::locate('back'));
 
             /* Get ext hook files. */
             $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");

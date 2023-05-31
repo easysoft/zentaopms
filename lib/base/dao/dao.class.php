@@ -2204,12 +2204,12 @@ class baseSQL
         if(!empty($limit))
         {
             $trimedLimit = trim(str_replace('limit', '', $limit));
-            if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $trimedLimit)) die("Limit is bad query, The limit is " . htmlspecialchars($limit));
+            if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $trimedLimit)) helper::end("Limit is bad query, The limit is " . htmlspecialchars($limit));
         }
 
         $orders = trim($orders);
         if(empty($orders)) return $this;
-        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders)) die("Order is bad request, The order is " . htmlspecialchars($orders));
+        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders)) helper::end("Order is bad request, The order is " . htmlspecialchars($orders));
 
         $orders = explode(',', $orders);
         foreach($orders as $i => $order)
@@ -2255,7 +2255,7 @@ class baseSQL
         if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $limit))
         {
             $limit = htmlspecialchars($limit);
-            die("Limit is bad query, The limit is $limit");
+            helper::end("Limit is bad query, The limit is $limit");
         }
         $this->sql .= ' ' . DAO::LIMIT . " $limit ";
         return $this;
@@ -2275,7 +2275,7 @@ class baseSQL
         if(!preg_match('/^\w+[a-zA-Z0-9_`.]+$/', $groupBy))
         {
             $groupBy = htmlspecialchars($groupBy);
-            die("Group is bad query, The group is $groupBy");
+            helper::end("Group is bad query, The group is $groupBy");
         }
         $this->sql .= ' ' . DAO::GROUPBY . " $groupBy";
         return $this;

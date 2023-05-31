@@ -879,7 +879,7 @@ class baseFixer
                 break;
 
             default:
-                die('scope not supported, should be post|get|server|session|cookie|env');
+                helper::end('scope not supported, should be post|get|server|session|cookie|env');
         }
     }
 

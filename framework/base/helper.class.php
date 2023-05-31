@@ -708,7 +708,8 @@ class baseHelper
     public static function header301($locate): never
     {
         header('HTTP/1.1 301 Moved Permanently');
-        die(header('Location:' . $locate));
+        header('Location:' . $locate);
+        throw EndResponseException::create();
     }
 
     /**
@@ -786,7 +787,7 @@ class baseHelper
             if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable)
             {
                 header("location: " . $config->webRoot . 'checktable.php');
-                exit;
+                throw EndResponseException::create();
             }
             return $lang->repairTable;
         }
