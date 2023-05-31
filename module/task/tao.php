@@ -742,6 +742,31 @@ class taskTao extends taskModel
     }
 
     /**
+     * 将日志表中剩余设置为0。
+     * Set effort left to 0.
+     *
+     * @param  int       $taskID
+     * @param  array     $members
+     * @access protected
+     * @return bool
+     */
+    protected function resetEffortLeft(int $taskID, array $members): bool
+    {
+        foreach($members as $account)
+        {
+            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)
+                ->where('account')->eq($account)
+                ->andWhere('objectID')->eq($taskID)
+                ->andWhere('objectType')->eq('task')
+                ->orderBy('date_desc,id_desc')
+                ->limit('1')
+                ->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * 通过拖动甘特图修改任务的预计开始日期和截止日期。
      * Update task estimate date and deadline through gantt.
      *

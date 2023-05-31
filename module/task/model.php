@@ -626,7 +626,7 @@ class taskModel extends model
             $removedMembers = array_diff($oldMembers, $teams);
             $changeUsers    = array_merge($changeUsers, $removedMembers);
         }
-        if($changeUsers) $this->resetEffortLeft($task->id, $changeUsers);
+        if($changeUsers) $this->taskTao->resetEffortLeft($task->id, $changeUsers);
 
         return $teams;
     }
@@ -1185,28 +1185,6 @@ class taskModel extends model
         }
 
         return $allChanges;
-    }
-
-    /**
-     * Set effort left to 0.
-     *
-     * @param  int    $taskID
-     * @param  array  $members
-     * @access public
-     * @return void
-     */
-    public function resetEffortLeft($taskID, $members)
-    {
-        foreach($members as $account)
-        {
-            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)
-                ->where('account')->eq($account)
-                ->andWhere('objectID')->eq($taskID)
-                ->andWhere('objectType')->eq('task')
-                ->orderBy('date_desc,id_desc')
-                ->limit('1')
-                ->exec();
-        }
     }
 
     /**
