@@ -1270,6 +1270,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `feedback` varchar(30) NOT NULL DEFAULT '',
   `ticket` varchar(30) NOT NULL DEFAULT '',
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
+  `groups` text NULL,
   `whitelist` text NULL,
   `reviewer` text NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',

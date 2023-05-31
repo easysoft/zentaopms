@@ -26,3 +26,5 @@ UPDATE `zt_project` SET `stageBy` = 'product' WHERE `division` = '1';
 ALTER TABLE `zt_project` DROP `division`;
 
 ALTER TABLE `zt_bug` CHANGE `linkBug` `relatedBug` varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `zt_product` ADD COLUMN `groups` text NULL AFTER `acl`;
