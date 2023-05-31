@@ -265,7 +265,7 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function getBranches4Create(object $bug, object $currentProduct): object
+    private function getBugBranches(object $bug, object $currentProduct): object
     {
         $productID = $bug->productID;
         $branch    = $bug->branch;
@@ -293,7 +293,7 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function getBuildsAndStories4Create(object $bug): object
+    private function getBuildsAndStoriesForCreate(object $bug): object
     {
         $this->loadModel('build');
         $productID   = $bug->productID;
@@ -325,7 +325,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function getProductMembers4Create(object $bug): array
+    private function getProductMembersForCreate(object $bug): array
     {
         $productMembers = $this->bug->getProductMemberPairs($bug->productID, $bug->branch);
         $productMembers = array_filter($productMembers);
@@ -342,7 +342,7 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function getProductsAndProjects4Create(object $bug): object
+    private function getProductsAndProjectsForCreate(object $bug): object
     {
         $productID   = $bug->productID;
         $branch      = $bug->branch;
@@ -382,7 +382,7 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function getProjectModel4Create(object $bug): object
+    private function getProjectModelForCreate(object $bug): object
     {
         $projectID    = $bug->projectID;
         $executionID  = $bug->executionID;
@@ -407,7 +407,7 @@ class bugZen extends bug
      * @access protected
      * @return int
      */
-    protected function getBlockID4Create(): int
+    private function getBlockIDForCreate(): int
     {
         /* Get block id of assinge to me. */
         if(!isonlybody()) return 0;
@@ -427,7 +427,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function getCustomFields4Create(): array
+    private function getCustomFieldsForCreate(): array
     {
         $customFields = array();
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field)
@@ -446,7 +446,7 @@ class bugZen extends bug
      * @access protected
      * @return object
      */
-    protected function getExecutions4Create(object $bug): object
+    private function getExecutionsForCreate(object $bug): object
     {
         $productID   = $bug->productID;
         $branch      = $bug->branch;
@@ -464,73 +464,33 @@ class bugZen extends bug
     }
 
     /**
-     * 获取编辑页面所需要的影响版本和解决版本。
-     * Get affected buils and resolved builds for edit form.
+     * 获取bug创建页面的projects，并绑定到bug上。
+     * Append the projects for the bug create page and bind them to bug.
      *
      * @param  object    $bug
      * @access protected
-     * @return array
+     * @return object
      */
-    protected function getEditBuildPairs(object $bug): array
+    private function getProjectsForCreate(object $bug): object
     {
-        $objectType         = $bug->project ? 'project' : 'execution';
-        $objectID           = $bug->execution ? $bug->execution : $bug->project;
-        $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
-        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
-        $resolvedBuildPairs = $openedBuildPairs;
-        if(($bug->resolvedBuild) && isset($allBuildPairs[$bug->resolvedBuild])) $resolvedBuildPairs[$bug->resolvedBuild] = $allBuildPairs[$bug->resolvedBuild];
+        $productID = $bug->productID;
+        $branch    = $bug->branch;
+        $projects  = $bug->projects;
 
-        return array($openedBuildPairs, $resolvedBuildPairs);
-    }
+        $projectID = $bug->projectID;
+        $project   = $bug->project;
 
-    /**
-     * 获取编辑页面所需要的分支。
-     * Get branch pairs for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditBranchPairs(object $bug): array
-    {
-        $objectID = 0;
-        if($this->app->tab == 'project')   $objectID = $bug->project;
-        if($this->app->tab == 'execution') $objectID = $bug->execution;
-
-        $branchPairs = $this->loadModel('branch')->getPairs($bug->product, 'noempty,withClosed', $objectID);
-
-        if(!isset($branchPairs[$bug->branch]))
+        /* Link all projects to product when copying bug under qa. */
+        if($this->app->tab == 'qa')
         {
-            $bugBranch = $this->branch->getByID($bug->branch, $bug->product, '');
-
-            if($bug->branch == BRANCH_MAIN) $branchName = $bugBranch;
-            if($bug->branch != BRANCH_MAIN)
-            {
-                $branchName = $bugBranch->name;
-                if($bugBranch->status == 'closed') $branchName .= " ({$this->lang->branch->statusList['closed']})";
-            }
-
-            $branchPairs[$bug->branch] = $branchName;
+            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        }
+        elseif($projectID and $project)
+        {
+            $projects += array($projectID => $project->name);
         }
 
-        return $branchPairs;
-    }
-
-    /**
-     * 获取编辑页面指派给用户列表。
-     * Get assignedTo pairs for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditAssignedToPairs(object $bug): array
-    {
-        $assignedToPairs = $this->getAssignedToPairs($bug);
-
-        if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
-
-        return $assignedToPairs;
+        return $this->updateBug($bug, array('projects' => $projects));
     }
 
     /**
@@ -644,35 +604,7 @@ class bugZen extends bug
         return array($modules, $product->QD);
     }
 
-    /**
-     * 获取bug创建页面的projects，并绑定到bug上。
-     * Append the projects for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return object
-     */
-    private function getProjectsForCreate(object $bug): object
-    {
-        $productID = $bug->productID;
-        $branch    = $bug->branch;
-        $projects  = $bug->projects;
 
-        $projectID = $bug->projectID;
-        $project   = $bug->project;
-
-        /* Link all projects to product when copying bug under qa. */
-        if($this->app->tab == 'qa')
-        {
-            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-        }
-        elseif($projectID and $project)
-        {
-            $projects += array($projectID => $project->name);
-        }
-
-        return $this->updateBug($bug, array('projects' => $projects));
-    }
 
     /**
      * 设置浏览页面的 cookie。
@@ -740,7 +672,7 @@ class bugZen extends bug
      */
     protected function setOptionMenu(object $bug, object $currentProduct): object
     {
-        $bug = $this->getBranches4Create($bug, $currentProduct);
+        $bug = $this->getBugBranches($bug, $currentProduct);
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
@@ -1060,27 +992,27 @@ class bugZen extends bug
 
         /* 获得版本下拉和需求下拉列表。 */
         /* Get builds and stroies. */
-        $bug = $this->getBuildsAndStories4Create($bug);
+        $bug = $this->getBuildsAndStoriesForCreate($bug);
         /* 如果bug有所属项目，查询这个项目。 */
         /* Get project. */
         if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($bug->projectID)));
         /* 获得产品下拉和项目下拉列表。 */
         /* Get products and projects. */
-        $bug = $this->getProductsAndProjects4Create($bug);
+        $bug = $this->getProductsAndProjectsForCreate($bug);
         /* 追加下拉列表的内容。 */
         /* Append projects. */
         $bug = $this->getProjectsForCreate($bug);
         /* 获得项目的管理方式。 */
         /* Get project model. */
-        $bug = $this->getProjectModel4Create($bug);
+        $bug = $this->getProjectModelForCreate($bug);
         /* 获得执行下拉列表。 */
         /* Get executions. */
-        $bug = $this->getExecutions4Create($bug);
+        $bug = $this->getExecutionsForCreate($bug);
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->customFields          = $this->getCustomFields4Create();
+        $this->view->customFields          = $this->getCustomFieldsForCreate();
         $this->view->showFields            = $this->config->bug->custom->createFields;
-        $this->view->productMembers        = $this->getProductMembers4Create($bug);
+        $this->view->productMembers        = $this->getProductMembersForCreate($bug);
         $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
@@ -1093,7 +1025,7 @@ class bugZen extends bug
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
-        $this->view->blockID               = $this->getBlockID4Create();
+        $this->view->blockID               = $this->getBlockIDForCreate();
     }
 
     /**
