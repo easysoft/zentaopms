@@ -49,7 +49,7 @@ function generatePlatformDetail($product, $branches, $lang)
             menu(set::items($branchItemList))
         )
     );
-};
+}
 
 /* Manager Information. */
 function generateManagerInfoItemList($product, $lang, $users, $reviewers)
@@ -80,7 +80,7 @@ function generateManagerInfoItemList($product, $lang, $users, $reviewers)
         $fnGenerateItem($lang->product->qa,       zget($users, $product->QD)),
         $fnGenerateItem($lang->product->reviewer, $reviewerListStr),
     );
-};
+}
 
 /* Basic Information. */
 function generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
@@ -132,7 +132,7 @@ function generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups
         $fnGenerateItem($lang->product->acl,                           $lang->product->aclList[$product->acl]),
         $aclCustomDetail
     );
-};
+}
 
 /* Other information. */
 function generateOtherInfoItemList($product, $lang)
@@ -164,7 +164,7 @@ function generateOtherInfoItemList($product, $lang)
         $fnGenerateItem($lang->product->projects,                                              $product->projects),
         $fnGenerateItem($lang->product->executions,                                            $product->executions),
     );
-};
+}
 
 /* Layout. */
 div
