@@ -2160,4 +2160,26 @@ class taskTest
                 ->fetch();
         }
     }
+
+    /**
+     * Test updateEstimateOrder method.
+     *
+     * @param  int         $effortID
+     * @access public
+     * @return object|bool
+     */
+    public function updateEstimateOrderTest(int $effortID): object|bool
+    {
+        $this->objectModel->updateEstimateOrder($effortID, 1);
+        if(dao::isError())
+        {
+            return !dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->dao->select('*')->from(TABLE_EFFORT)
+                ->where('id')->eq($effortID)
+                ->fetch();
+        }
+    }
 }
