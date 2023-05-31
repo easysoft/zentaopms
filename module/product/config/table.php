@@ -62,7 +62,8 @@ $config->product->dtable->fieldList['storyCompleteRate']['title']    = $lang->pr
 $config->product->dtable->fieldList['storyCompleteRate']['minWidth'] = 64;
 $config->product->dtable->fieldList['storyCompleteRate']['type']     = 'progress';
 $config->product->dtable->fieldList['storyCompleteRate']['sortType'] = false;
-$config->product->dtable->fieldList['storyCompleteRate']['border']   = 'center';
+$config->product->dtable->fieldList['storyCompleteRate']['border']   = 'right';
+$config->product->dtable->fieldList['storyCompleteRate']['align']    = 'center';
 
 $config->product->dtable->fieldList['plans']['name']     = 'plans';
 $config->product->dtable->fieldList['plans']['title']    = $lang->product->plan;
