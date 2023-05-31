@@ -231,7 +231,6 @@ class bug extends control
             if($todoID) $this->bugZen->finishTodo($bug->id, $todoID);
 
             $message = $this->executeHooks($bugID);
-            if(!$message) $message = $this->lang->saveSuccess;
 
             $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
 
@@ -573,7 +572,6 @@ class bug extends control
         }
 
         $message = $this->executeHooks($bugID);
-        if(!$message) $message = $this->lang->saveSuccess;
         return $this->bugZen->responseAfterDelete($bug, $from, $message);
     }
 
@@ -736,7 +734,6 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('score')->create('ajax', 'batchCreate');
 
-            if(!$message) $message = $this->lang->saveSuccess;
             return $this->bugZen->responseAfterBatchCreate($productID, $branch, $executionID, $bugIdList, $message);
         }
 

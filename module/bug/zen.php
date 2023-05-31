@@ -1879,9 +1879,9 @@ class bugZen extends bug
      * @param  array     $output
      * @param  string    $message
      * @access protected
-     * @return string
+     * @return void
      */
-    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message): string
+    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message = ''): void
     {
         if($this->app->tab == 'execution')
         {
@@ -1906,6 +1906,7 @@ class bugZen extends bug
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID={$bug->id}", 'html');
 
+        if(!$message) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
     }
 
@@ -1919,8 +1920,9 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function responseAfterDelete(object $bug, string $from, string $message): void
+    protected function responseAfterDelete(object $bug, string $from, string $message = ''): void
     {
+        if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
 
         /* 在弹窗中删除 bug 时的返回。*/
@@ -1970,6 +1972,7 @@ class bugZen extends bug
             unset($_SESSION['bugImagesFile']);
         }
 
+        if(!$message) $message = $this->lang->saveSuccess;
         /* Return bug id list when call the API. */
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIdList));
 
@@ -1986,11 +1989,12 @@ class bugZen extends bug
      * 获得 batchEdit 方法的response。
      * Get response for batchEdit.
      *
-     * @param  array|false $output
+     * @param  array     $output
+     * @param  string    $message
      * @access protected
      * @return void
      */
-    protected function responseAfterBatchEdit(array $toTaskIdList): void
+    protected function responseAfterBatchEdit(array $toTaskIdList, string $message = ''): void
     {
         if(!empty($toTaskIdList))
         {
@@ -2000,7 +2004,7 @@ class bugZen extends bug
             return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList));
     }
 
     /**
