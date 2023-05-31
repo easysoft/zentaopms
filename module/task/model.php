@@ -1738,38 +1738,23 @@ class taskModel extends model
      * 根据任务、人员和日志ID查询并排序任务的日志列表。
      * Get task efforts by taskID, account or effortID.
      *
-     * @param  int    $taskID
-     * @param  string $account
-     * @param  int    $effortID
-     * @param  string $orderBy
+     * @param  int|array $taskIdList
+     * @param  string    $account
+     * @param  int       $effortID
+     * @param  string    $orderBy
      * @access public
      * @return array
      */
-    public function getTaskEfforts(int $taskID, string $account = '', int $effortID = 0, string $orderBy = 'date,id'): array
+    public function getTaskEfforts(int|array $taskIdList, string $account = '', int $effortID = 0, string $orderBy = 'date,id'): array
     {
-        return $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
-            ->andWhere('objectType')->eq('task')
+        return $this->dao->select('*')->from(TABLE_EFFORT)
+            ->where('objectType')->eq('task')
+            ->andWhere('objectID')->in($taskIdList)
             ->andWhere('deleted')->eq('0')
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->beginIF($effortID)->orWhere('id')->eq($effortID)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
-    }
-
-    /**
-     * Get taskList date record.
-     *
-     * @param  int|array $taskID
-     * @access public
-     * @return array
-     */
-    public function getTaskDateRecord($taskID)
-    {
-        return $this->dao->select('id,date')->from(TABLE_EFFORT)->where('objectID')->in($taskID)
-            ->andWhere('objectType')->eq('task')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('date')
-            ->fetchAll('id');
     }
 
     /**
