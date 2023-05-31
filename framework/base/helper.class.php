@@ -825,7 +825,10 @@ function cycle($items)
     static $i = 0;
     if(!is_array($items)) $items = explode(',', $items);
     if(!isset($items[$i])) $i = 0;
-    return $items[$i++];
+
+    $result = $items[$i];
+    $i++;
+    return $result;
 }
 
 /**
