@@ -639,9 +639,17 @@ class storyTao extends storyModel
             ->fetchAll();
     }
 
+    /**
+     * 将需求数据插入到需求表。
+     * Do create story data.
+     *
+     * @param  object    $story
+     * @access protected
+     * @return int|false
+     */
     protected function doCreateStory(object $story): int|false
     {
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane')
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules')
             ->autoCheck()
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->checkFlow()

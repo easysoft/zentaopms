@@ -738,4 +738,21 @@ class storyTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll();
     }
+
+    /**
+     * 测试 doCreateStory 方法。
+     * Test doCreateStory method.
+     *
+     * @param  object $story
+     * @access public
+     * @return object|array
+     */
+    public function doCreateStoryTest(object $story): object|array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_STORY)->exec();
+        $storyID = $this->objectModel->doCreateStory($story);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
 }
