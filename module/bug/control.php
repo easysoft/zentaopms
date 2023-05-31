@@ -153,7 +153,7 @@ class bug extends control
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
-        if(!isonlybody()) $this->bugZen->setMenu4View($bug);
+        if(!isonlybody()) $this->bugZen->setViewMenu($bug);
 
         $bugID     = $bug->id;
         $productID = $bug->product;

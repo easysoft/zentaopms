@@ -788,9 +788,9 @@ class bugZen extends bug
      *
      * @param  object    $bug
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setEditMenu(object $bug): void
+    protected function setEditMenu(object $bug): bool
     {
         if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
@@ -804,6 +804,8 @@ class bugZen extends bug
 
             $this->lang->navGroup->bug = 'devops';
         }
+
+        return true;
     }
 
     /**
@@ -811,9 +813,9 @@ class bugZen extends bug
      * If it's not a iframe, call this method to set menu for view bug page.
      *
      * @param  object $bug
-     * @return void
+     * @return bool
      */
-    protected function setMenu4View(object $bug): void
+    protected function setViewMenu(object $bug): bool
     {
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
@@ -831,6 +833,8 @@ class bugZen extends bug
             $this->loadModel('product')->setMenu($bug->product);
             $this->lang->product->menu->plan['subModule'] .= ',bug';
         }
+
+        return true;
     }
 
     /**
@@ -841,9 +845,9 @@ class bugZen extends bug
      * @param  string    $browseType
      * @param  int       $executionID
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setExportDataSource(int $productID, string $browseType, int $executionID): void
+    protected function setExportDataSource(int $productID, string $browseType, int $executionID): bool
     {
         if(!$productID or $browseType == 'bysearch')
         {
@@ -860,6 +864,8 @@ class bugZen extends bug
                 $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
             }
         }
+
+        return true;
     }
 
     /**
