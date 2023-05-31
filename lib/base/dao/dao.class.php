@@ -2105,7 +2105,7 @@ class baseSQL
     public function in($ids)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= $ids === NULL ? ' IS NULL' : helper::dbIN($ids);
+        $this->sql .= is_null($ids) ? ' IS NULL' : helper::dbIN($ids);
         return $this;
     }
 
