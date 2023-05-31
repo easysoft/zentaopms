@@ -150,7 +150,7 @@ formPanel
                 (
                     set::multiple(true),
                     set::name('openedBuild[]'),
-                    set::items($bug->builds),
+                    set::items($builds),
                     set::value(empty($bug->buildID) ? '' : $bug->buildID)
                 ),
                 span

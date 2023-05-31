@@ -245,7 +245,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function getKanbanVariable(array $output): array
+    private function getKanbanVariable(array $output): array
     {
         $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
         if(!empty($this->post->lane)) $laneID = $this->post->lane;
@@ -1074,6 +1074,8 @@ class bugZen extends bug
         $this->view->projects              = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
         $this->view->products              = $bug->products;
         $this->view->branches              = $bug->branches;
+        $this->view->builds                = $bug->builds;
+        $this->view->bug                   = $bug;
         $this->view->executions            = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
@@ -1670,7 +1672,7 @@ class bugZen extends bug
      * @access protected
      * @return bool
      */
-    protected function updateFileAfterCreate(int $bugID): bool
+    private function updateFileAfterCreate(int $bugID): bool
     {
         if(isset($this->post->resultFiles))
         {
@@ -1695,8 +1697,6 @@ class bugZen extends bug
         return !dao::isError();
     }
 
-
-
     /**
      * 创建bug后更新执行看板。
      * Update execution kanban after create a bug.
@@ -1708,7 +1708,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
+    private function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
     {
         $bugID       = $bug->id;
         $executionID = $bug->execution;
@@ -1718,11 +1718,73 @@ class bugZen extends bug
             $this->loadModel('kanban');
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', $bugID);
-            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'bug');
+            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($executionID, 'bug');
         }
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+    }
+
+    /**
+     * 更新bug模板。
+     * Update bug templete.
+     *
+     * @param  object    $bug
+     * @param  array     $fields
+     * @access protected
+     * @return object
+     */
+    private function updateBug(object $bug, array $fields): object
+    {
+        foreach($fields as $field => $value) $bug->$field = $value;
+
+        return $bug;
+    }
+
+    /**
+     * 为create方法添加动态。
+     * Add action for create function.
+     *
+     * @param  int       $bug
+     * @param  int       $todoID
+     * @access protected
+     * @return bool
+     */
+    private function updateTodoAfterCreate(int $bugID, int $todoID): bool
+    {
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 创建完 bug 后的相关处理。
+     * Relevant processing after create bug.
+     *
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $from
+     * @access protected
+     * @return void
+     */
+    protected function afterCreate(object $bug, array $output, string $from = '')
+    {
+        /* Set from param if there is a object to transfer bug. */
+        helper::setcookie('lastBugModule', (string)$bug->module);
+
+        $this->updateFileAfterCreate($bug->id);
+        list($laneID, $columnID) = $this->getKanbanVariable($output);
+        $this->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
+
+        $todoID = isset($output['todoID']) ? $output['todoID'] : 0;
+        if($todoID) $this->updateTodoAfterCreate($bug->id, $todoID);
+
+        return !dao::isError();
     }
 
     /**
@@ -1750,7 +1812,7 @@ class bugZen extends bug
         {
             $this->loadModel('action');
             if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bug->id);
-            if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan, 'linkbug', '', $bug->id);
+            if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan,    'linkbug',   '', $bug->id);
         }
 
         $this->bug->updateRelatedBug($bug->id, $bug->relatedBug, $oldBug->relatedBug);
@@ -1798,7 +1860,7 @@ class bugZen extends bug
             if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
-            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
+            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($bug->execution, 'bug');
         }
 
         /* When the bug is created by uploading the image, add the image to the file of the bug. */
@@ -1907,14 +1969,22 @@ class bugZen extends bug
      * respond after deleting.
      *
      * @param  object    $bug
-     * @param  int       $executionID
      * @param  array     $output
      * @param  string    $message
      * @access protected
      * @return bool
      */
-    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message = ''): bool
+    protected function responseAfterCreate(object $bug, array $output, string $message = ''): bool
     {
+        $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
+
+        /* Return bug id when call the API. */
+        if(!$message) $message = $this->lang->saveSuccess;
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bugID));
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+
+        if(isonlybody()) return $this->send($this->responseInModal($executionID));
+
         if($this->app->tab == 'execution')
         {
             if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
@@ -1938,7 +2008,6 @@ class bugZen extends bug
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID={$bug->id}", 'html');
 
-        if(!$message) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
     }
 
@@ -2092,42 +2161,7 @@ class bugZen extends bug
         return $bug;
     }
 
-    /**
-     * 更新bug模板。
-     * Update bug templete.
-     *
-     * @param  object    $bug
-     * @param  array     $fields
-     * @access protected
-     * @return object
-     */
-    protected function updateBug(object $bug, array $fields): object
-    {
-        foreach($fields as $field => $value) $bug->$field = $value;
 
-        return $bug;
-    }
-
-    /**
-     * 为create方法添加动态。
-     * Add action for create function.
-     *
-     * @param  int       $bug
-     * @param  int       $todoID
-     * @access protected
-     * @return bool
-     */
-    protected function finishTodo(int $bugID, int $todoID): bool
-    {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
-        {
-            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-        }
-        return !dao::isError();
-    }
 
     /**
      * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。

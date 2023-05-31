@@ -218,29 +218,11 @@ class bug extends control
             $bugID  = $this->bug->create($bug, $action);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Set from param if there is a object to transfer bug. */
-            helper::setcookie('lastBugModule', (string)$bug->module);
-
-            $bug = $this->bug->getByID($bugID);
-
-            $this->bugZen->updateFileAfterCreate($bugID);
-            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($output);
-            $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
-
-            $todoID = isset($output['todoID']) ? $output['todoID'] : 0;
-            if($todoID) $this->bugZen->finishTodo($bug->id, $todoID);
+            $bug->id = $bugID;
+            $this->bugZen->afterCreate($bug, $output, $from);
 
             $message = $this->executeHooks($bugID);
-
-            $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
-
-            /* Return bug id when call the API. */
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bugID));
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
-
-            if(isonlybody()) return $this->send($this->responseInModal($executionID));
-
-            return $this->responseAfterCreate($bug, $executionID, $output, $message);
+            return $this->responseAfterCreate($bug, $output, $message);
         }
 
         $productID      = $this->product->saveVisitState($productID, $this->products);
