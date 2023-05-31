@@ -1391,27 +1391,6 @@ class taskTest
     }
 
     /**
-     * Test check whether need update status of bug.
-     *
-     * @param  object $task
-     * @access public
-     * @return int
-     */
-    public function needUpdateBugStatusTest($task)
-    {
-        $object = $this->objectModel->needUpdateBugStatus($task);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object ? 1 : 2;
-        }
-    }
-
-    /**
      * Get the users who finished the multiple task.
      *
      * @param  int          $taskID

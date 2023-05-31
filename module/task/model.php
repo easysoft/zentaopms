@@ -2148,13 +2148,13 @@ class taskModel extends model
     }
 
     /**
-     * Check whether need update status of bug.
+     * When task is finish, check whether need update status of bug.
      *
      * @param  object  $task
      * @access public
-     * @return void
+     * @return bool
      */
-    public function needUpdateBugStatus($task)
+    public function needUpdateBugStatus(object $task): bool
     {
         /* If task is not from bug, return false. */
         if($task->fromBug == 0) return false;
