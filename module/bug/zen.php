@@ -1981,8 +1981,8 @@ class bugZen extends bug
 
         /* Return bug id when call the API. */
         if(!$message) $message = $this->lang->saveSuccess;
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bugID));
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bug->id));
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bug->id));
 
         if(isonlybody()) return $this->send($this->responseInModal($executionID));
 
