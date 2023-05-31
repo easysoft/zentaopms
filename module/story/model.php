@@ -273,7 +273,6 @@ class storyModel extends model
      *
      * @param  string       $executionIdList
      * @param  int          $productID
-     * @param  string|int   $branch
      * @param  string       $orderBy
      * @param  string       $type            bybranch
      * @param  string       $param
@@ -283,7 +282,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function batchGetExecutionStories(string $executionIdList = '', int $productID = 0, string|int $branch = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function batchGetExecutionStories(string $executionIdList = '', int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
         if(empty($executionIdList)) return array();
 
@@ -411,12 +410,10 @@ class storyModel extends model
      *
      * @param  int    $planID
      * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getPlanStoryPairs($planID, $status = 'all')
     {
         return $this->dao->select('*')->from(TABLE_STORY)
             ->where('plan')->eq($planID)
@@ -563,19 +560,18 @@ class storyModel extends model
 
         foreach($stories->title as $i => $title)
         {
-            if(empty($title) and $this->common->checkValidRow('story', $stories, $i))
-            {
-                dao::$errors["title$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
-            }
+            if(empty($title) and $this->common->checkValidRow('story', $stories, $i)) dao::$errors["title$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
 
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
-            $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : '';
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
             $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
+            $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
+            $plan   = isset($stories->plan[$i])       ? $plan   : '';
+
             $stories->module[$i] = (int)$module;
-            $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
             $stories->source[$i] = $source;
+            $stories->plan[$i]   = $plan;
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -592,10 +588,7 @@ class storyModel extends model
             $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
             $stories->reviewer[$i] = $reviewers;
             $_POST['reviewer'][$i] = $reviewers;
-            if(empty($stories->reviewer[$i]) and $forceReview)
-            {
-                dao::$errors["reviewer$i"][] = $this->lang->story->errorEmptyReviewedBy;
-            }
+            if(empty($stories->reviewer[$i]) and $forceReview) dao::$errors["reviewer$i"][] = $this->lang->story->errorEmptyReviewedBy;
 
             $story = new stdclass();
             $story->type       = $type;
@@ -1210,7 +1203,6 @@ class storyModel extends model
             }
 
             $changes = common::createChanges($oldStory, $story);
-            if($this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -2678,7 +2670,6 @@ class storyModel extends model
         $this->loadModel('kanban');
 
         $storyID = (int)$storyID;
-        $account = $this->app->user->account;
 
         /* Get projects which status is doing. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
@@ -3250,7 +3241,7 @@ class storyModel extends model
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
-        $products    = empty($executionID) ? $this->product->getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 'all') : $this->product->getProducts($executionID);
+        $products    = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
 
         $this->loadModel('search')->setQuery('story', $queryID);
 
@@ -3594,7 +3585,7 @@ class storyModel extends model
      */
     public function getZeroCase($productID, $branchID = 0, $orderBy = 'id_desc')
     {
-        $allStories   = $this->getProductStories($productID, $branchID, 0, 'all', 'story', $orderBy, $hasParent = false, '', null);
+        $allStories   = $this->getProductStories($productID, $branchID, 0, 'all', 'story', $orderBy, false, '', null);
         $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
 
         foreach($allStories as $key => $story)
@@ -4573,7 +4564,6 @@ class storyModel extends model
 
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('story', $story);
-        $canOrder     = common::hasPriv('execution', 'storySort');
 
         $canBatchEdit         = common::hasPriv('story',        'batchEdit');
         $canBatchClose        = common::hasPriv($story->type,   'batchClose');

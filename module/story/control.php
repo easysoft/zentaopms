@@ -107,7 +107,7 @@ class story extends control
                 return $this->send($response);
             }
 
-            $response['locate'] = $this->storyZen->getAfterCreateLocation($productID, $branch, $objectID, $storyID, $copyStoryID, $storyType);
+            $response['locate'] = $this->storyZen->getAfterCreateLocation($productID, $branch, $objectID, $storyID, $storyType);
             return $this->send($response);
         }
 

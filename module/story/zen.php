@@ -525,12 +525,11 @@ class storyZen extends story
      * @param  string    $branch
      * @param  int       $objectID
      * @param  int       $storyID
-     * @param  int       $copyStoryID
      * @param  string    $storyType
      * @access protected
      * @return string
      */
-    protected function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, int $copyStoryID, string $storyType): string
+    protected function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
 
@@ -541,7 +540,6 @@ class storyZen extends story
         }
 
         helper::setcookie('storyModule', '0', 0);
-        $moduleID = $this->post->module ? $this->post->module : 0;
         $branchID = $this->post->branch  ? $this->post->branch  : $branch;
         if(!$this->session->storyList) return $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
         if(!empty($_POST['branches']) and count($_POST['branches']) > 1) return preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);

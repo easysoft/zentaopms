@@ -535,7 +535,7 @@ class release extends control
         }
         else
         {
-            $allStories = $this->story->batchGetExecutionStories($executionIdList, $release->product, 0, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
+            $allStories = $this->story->batchGetExecutionStories($executionIdList, $release->product, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;
