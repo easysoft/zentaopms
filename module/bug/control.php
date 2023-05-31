@@ -770,9 +770,10 @@ class bug extends control
 
             /* Batch update the bugs. */
             $toTaskIdList = $this->bug->batchUpdate($bugs);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Get response and return. */
-            return $this->send($this->bugZen->responseAfterBatchEdit($toTaskIdList));
+            return $this->bugZen->responseAfterBatchEdit($toTaskIdList);
         }
 
         /* If there is no bug ID, return to the previous step. */
@@ -781,14 +782,14 @@ class bug extends control
         $this->bugZen->assignBatchEditVars($productID, $branch);
 
         /* Assign. */
-        $this->view->productID        = $productID;
-        $this->view->severityList     = $this->lang->bug->severityList;
-        $this->view->typeList         = $this->lang->bug->typeList;
-        $this->view->priList          = $this->lang->bug->priList;
-        $this->view->resolutionList   = $this->lang->bug->resolutionList;
-        $this->view->statusList       = $this->lang->bug->statusList;
-        $this->view->branch           = $branch;
-        $this->view->showFields       = $this->config->bug->custom->batchEditFields;
+        $this->view->productID      = $productID;
+        $this->view->severityList   = $this->lang->bug->severityList;
+        $this->view->typeList       = $this->lang->bug->typeList;
+        $this->view->priList        = $this->lang->bug->priList;
+        $this->view->resolutionList = $this->lang->bug->resolutionList;
+        $this->view->statusList     = $this->lang->bug->statusList;
+        $this->view->branch         = $branch;
+        $this->view->showFields     = $this->config->bug->custom->batchEditFields;
         $this->display();
     }
 

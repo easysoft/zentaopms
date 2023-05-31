@@ -1994,19 +1994,17 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function responseAfterBatchEdit(array|bool $toTaskIdList): array
+    protected function responseAfterBatchEdit(array $toTaskIdList): array
     {
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
         if(!empty($toTaskIdList))
         {
             $taskID       = key($toTaskIdList);
             $confirmedURL = $this->createLink('task', 'view', 'taskID=' . $taskID);
             $canceledURL  = $this->server->HTTP_REFERER;
-            return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL));
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
         }
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
     }
 
     /**
