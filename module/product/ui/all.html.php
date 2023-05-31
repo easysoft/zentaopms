@@ -60,6 +60,11 @@ $programMenuLink = createLink(
         'programID'  => '%d'
     )
 );
+$programs = array_map(function($program)
+{
+    $program->icon = 'icon-cards-view';
+    return $program;
+}, $programList);
 
 featureBar
 (
@@ -83,17 +88,14 @@ featureBar
         programMenu
         (
             setStyle(array('margin-right' => '20px')),
-            set
+            set(array
             (
-                array
-                (
-                    'title'       => $lang->program->all,
-                    'programs'    => $programList,
-                    'activeKey'   => !empty($programList) ? $programID : null,
-                    'closeLink'   => sprintf($programMenuLink, 0),
-                    'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
-                )
-            )
+                'title'       => $lang->program->all,
+                'programs'    => $programs,
+                'activeKey'   => !empty($programList) ? $programID : null,
+                'closeLink'   => sprintf($programMenuLink, 0),
+                'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
+            ))
         )
     ),
     hasPriv('product', 'batchEdit') ? item
