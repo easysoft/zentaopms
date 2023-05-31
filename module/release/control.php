@@ -257,7 +257,7 @@ class release extends control
         $this->view->storyPager    = $storyPager;
         $this->view->bugPager      = $bugPager;
         $this->view->leftBugPager  = $leftBugPager;
-        $this->view->builds        = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
+        $this->view->builds        = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject|hasdeleted', 0, 'execution', '', true);
         $this->view->summary       = $this->product->summary($stories);
         $this->view->storyCases    = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
 
