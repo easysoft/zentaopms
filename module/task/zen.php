@@ -392,7 +392,7 @@ class taskZen extends task
         $this->view->task           = $task;
         $this->view->from           = $from;
         $this->view->orderBy        = $orderBy;
-        $this->view->efforts        = $this->task->getTaskEfforts($task->id, '', '', $orderBy);
+        $this->view->efforts        = $this->task->getTaskEfforts($task->id, '', 0, $orderBy);
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->taskEffortFold = $taskEffortFold;
 
