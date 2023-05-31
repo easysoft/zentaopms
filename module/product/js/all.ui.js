@@ -22,3 +22,9 @@ window.programMenuOnClick = function(data, url)
 {
     location.href = url.replace('%d', data.item.key);
 }
+
+onRenderPage(function(info)
+{
+    loadCurrentPage('#mainMenu>*');
+    return false;
+});
