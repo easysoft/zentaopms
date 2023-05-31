@@ -47,27 +47,47 @@ foreach($productStats as $productID => $product)
     $data[] = $item;
 }
 
-$programMenuLink = createLink(
-    $this->app->rawModule,
-    $this->app->rawMethod,
-    array(
-        'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
-        'orderBy'    => $orderBy,
-        'param'      => $browseType == 'bySearch' ? 0 : $param,
-        'recTotal'   => $recTotal,
-        'recPerPage' => $recPerPage,
-        'pageID'     => $pageID,
-        'programID'  => '%d'
-    )
-);
-$programs = array_map(function($program)
+/* Closure function for generate program menu. */
+$fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseType, $orderBy, $param, $recTotal, $recPerPage, $pageID)
 {
-    $program->icon = 'icon-cards-view';
-    return $program;
-}, $programList);
+    $programMenuLink = createLink(
+        $this->app->rawModule,
+        $this->app->rawMethod,
+        array(
+            'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
+            'orderBy'    => $orderBy,
+            'param'      => $browseType == 'bySearch' ? 0 : $param,
+            'recTotal'   => $recTotal,
+            'recPerPage' => $recPerPage,
+            'pageID'     => $pageID,
+            'programID'  => '%d'
+        )
+    );
+
+    /* Attach icon to each program. */
+    $programs = array_map(function($program)
+    {
+        $program->icon = 'icon-cards-view';
+        return $program;
+    }, $programList);
+
+    return programMenu
+    (
+        setStyle(array('margin-right' => '20px')),
+        set(array
+        (
+            'title'       => $lang->program->all,
+            'programs'    => $programs,
+            'activeKey'   => !empty($programList) ? $programID : null,
+            'closeLink'   => sprintf($programMenuLink, 0),
+            'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
+        ))
+    );
+};
 
 featureBar
 (
+    to::before($fnGenerateProgramMenu($programList)),
     set::link(createLink
     (
         $this->app->rawModule,
@@ -83,21 +103,6 @@ featureBar
             'programID'  => $programID
         )
     )),
-    to::before
-    (
-        programMenu
-        (
-            setStyle(array('margin-right' => '20px')),
-            set(array
-            (
-                'title'       => $lang->program->all,
-                'programs'    => $programs,
-                'activeKey'   => !empty($programList) ? $programID : null,
-                'closeLink'   => sprintf($programMenuLink, 0),
-                'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
-            ))
-        )
-    ),
     hasPriv('product', 'batchEdit') ? item
     (
         set::type('checkbox'),
