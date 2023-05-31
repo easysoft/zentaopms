@@ -25,7 +25,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('renderRowData')),
     formBatchItem
     (
-        set::name('taskIdList'),
+        set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
         set::hidden(true),

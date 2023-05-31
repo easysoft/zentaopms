@@ -1144,7 +1144,6 @@ class taskModel extends model
         if(empty($workhour)) return false;
 
         $allChanges  = array();
-        $now         = helper::now();
         $oldStatus   = $task->status;
         $lastDate    = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
         $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team) : array();
@@ -1392,7 +1391,6 @@ class taskModel extends model
         $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19)     : null;
         $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
         $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19)    : null;
-        $task->mailto         = !empty($task->mailto)         ? $task->mailto                        : null;
 
         /* Get the child tasks of the parent task. */
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');

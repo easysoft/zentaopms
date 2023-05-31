@@ -86,7 +86,7 @@ $config->task->form->team->edit = $config->task->form->team->create;
 $config->task->form->team->edit['deleteFiles']  = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->task->form->batchedit = common::formConfig('task', 'batchEdit');
-$config->task->form->batchedit['taskIdList']     = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
+$config->task->form->batchedit['id']             = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
 $config->task->form->batchedit['module']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchedit['name']           = array('type' => 'string',   'required' => true,  'default' => '');
 $config->task->form->batchedit['color']          = array('type' => 'string',   'required' => false, 'default' => '');
@@ -97,10 +97,6 @@ $config->task->form->batchedit['assignedTo']     = array('type' => 'string',   '
 $config->task->form->batchedit['estimate']       = array('type' => 'float',    'required' => false, 'default' => 0);
 $config->task->form->batchedit['consumed']       = array('type' => 'float',    'required' => false, 'default' => 0);
 $config->task->form->batchedit['left']           = array('type' => 'float',    'required' => false, 'default' => 0);
-$config->task->form->batchedit['finishedBy']     = array('type' => 'string',   'required' => false, 'default' => '');
-$config->task->form->batchedit['canceledBy']     = array('type' => 'string',   'required' => false, 'default' => '');
-$config->task->form->batchedit['closedBy']       = array('type' => 'string',   'required' => false, 'default' => '');
-$config->task->form->batchedit['closedReason']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->batchedit['estStarted']     = array('type' => 'date',     'required' => false, 'default' => null);
 $config->task->form->batchedit['deadline']       = array('type' => 'date',     'required' => false, 'default' => null);
 $config->task->form->batchedit['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
