@@ -14,7 +14,6 @@ $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'ID';
 $lang->bug->product          = $lang->productCommon;
 $lang->bug->branch           = 'Branch/Platform';
-$lang->bug->productplan      = 'Kế hoạch';
 $lang->bug->module           = 'Module';
 $lang->bug->project          = 'Project';
 $lang->bug->execution        = $lang->execution->common;

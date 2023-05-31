@@ -116,7 +116,7 @@ $legendBasic = array();
 $legendBasic['product']        = array('name' => $lang->bug->product,        'text' => $product->name, 'href' => $productLink, 'attr' => array('data-app' => 'product'));
 $legendBasic['branch']         = array('name' => $branchTitle,               'text' => $branchName,    'href' => $branchLink);
 $legendBasic['module']         = array('name' => $lang->bug->module,         'text' => $moduleTitle);
-$legendBasic['productplan']    = array('name' => $lang->bug->productplan,    'text' => $bug->planName, 'href' => $planLink);
+$legendBasic['productplan']    = array('name' => $lang->bug->plan,           'text' => $bug->planName, 'href' => $planLink);
 $legendBasic['type']           = array('name' => $lang->bug->type,           'text' => zget($lang->bug->typeList, $bug->type));
 $legendBasic['status']         = array('name' => $lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
 $legendBasic['severity']       = array('name' => $lang->bug->severity,       'text' => severityLabel(set::level(zget($lang->bug->severityList, $bug->severity)), set::isIcon(true)));

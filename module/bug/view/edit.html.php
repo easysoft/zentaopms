@@ -126,7 +126,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   </td>
                 </tr>
                 <tr class='<?php if($product->shadow and isset($project) and empty($project->multiple)) echo 'hide'?>'>
-                  <th><?php echo $lang->bug->productplan;?></th>
+                  <th><?php echo $lang->bug->plan;?></th>
                   <td>
                     <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
                   </td>

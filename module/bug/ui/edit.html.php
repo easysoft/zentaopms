@@ -131,7 +131,7 @@ panel
                 ),
                 formGroup
                 (
-                    set::label($lang->bug->productplan),
+                    set::label($lang->bug->plan),
                     inputGroup
                     (
                         set('id', 'planBox'),

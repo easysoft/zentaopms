@@ -15,7 +15,7 @@ $config->bug->search['fields']['story']          = $lang->bug->story;
 $config->bug->search['fields']['project']        = $lang->bug->project;
 $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
-$config->bug->search['fields']['plan']           = $lang->bug->productplan;
+$config->bug->search['fields']['plan']           = $lang->bug->plan;
 $config->bug->search['fields']['id']             = $lang->bug->id;
 $config->bug->search['fields']['execution']      = $lang->bug->execution;
 
