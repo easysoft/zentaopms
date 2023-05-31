@@ -21,7 +21,7 @@ js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refreshIcon);
 js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
-js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
+js::set('stepsNotEmpty', $lang->bug->error->stepsNotEmpty);
 js::set('isStepsTemplate', $isStepsTemplate);
 js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);

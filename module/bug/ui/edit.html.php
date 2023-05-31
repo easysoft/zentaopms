@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('confirmChangeProduct', $lang->bug->confirmChangeProduct);
+jsVar('confirmChangeProduct', $lang->bug->notice->confirmChangeProduct);
 jsVar('oldProjectID',         $bug->project);
 jsVar('oldProductID',         $product->id);
 jsVar('oldStoryID',           $bug->story);

@@ -538,7 +538,7 @@ class bug extends control
      */
     public function delete(string $bugID, string $confirm = 'no', string $from = '')
     {
-        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
 
         $bug = $this->bug->getByID($bugID);
 
@@ -555,7 +555,7 @@ class bug extends control
             {
                 $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
                 $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
             }
         }
 
@@ -855,7 +855,7 @@ class bug extends control
         }
 
         $load = $this->session->bugList;
-        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
+        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->notice->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load));
     }
 
@@ -1108,7 +1108,7 @@ class bug extends control
         }
 
         $load = true;
-        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true', 'canceled' => 'true');
+        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->notice->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true', 'canceled' => 'true');
 
         if($viewType) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load, 'closeModal' => true));

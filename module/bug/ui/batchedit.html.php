@@ -204,9 +204,9 @@ formBatchPanel
             select
             (
                 setClass('hidden'),
-                set::name('duplicateBug'),
+                set::name('duplicate'),
                 set::items(array()),
-                set::placeholder($lang->bug->duplicateTip),
+                set::placeholder($lang->bug->placeholder->duplicate),
                 set::required(true),
             ),
         ),

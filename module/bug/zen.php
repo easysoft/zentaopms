@@ -35,7 +35,7 @@ class bugZen extends bug
     {
         if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
         {
-            echo js::alert($this->lang->bug->executionAccessDenied);
+            echo js::alert($this->lang->bug->notice->executionAccessDenied);
 
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
@@ -1915,7 +1915,7 @@ class bugZen extends bug
                 {
                     $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                     $canceledURL  = $this->server->http_referer;
-                    return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                    return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => $this->lang->bug->notice->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
                 }
             }
         }
@@ -2112,7 +2112,7 @@ class bugZen extends bug
             $taskID       = key($toTaskIdList);
             $confirmedURL = $this->createLink('task', 'view', 'taskID=' . $taskID);
             $canceledURL  = $this->server->HTTP_REFERER;
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => sprintf($this->lang->bug->notice->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
         }
 
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList));

@@ -57,7 +57,7 @@
     <div class='cell'>
       <?php if(!$moduleTree):?>
       <hr class="space">
-      <div class="text-center text-muted"><?php echo $lang->bug->noModule;?></div>
+      <div class="text-center text-muted"><?php echo $lang->bug->notice->noModule;?></div>
       <hr class="space">
       <?php else:?>
       <?php echo $moduleTree;?>
@@ -70,7 +70,7 @@
     <?php if(empty($bugs)):?>
     <div class="table-empty-tip">
       <p>
-        <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
+        <span class="text-muted"><?php echo $lang->bug->notice->noBug;?></span>
         <?php if(common::canModify('project', $project) and common::hasPriv('bug', 'create')):?>
         <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='project'");?>
         <?php endif;?>

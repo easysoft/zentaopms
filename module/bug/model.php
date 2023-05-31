@@ -2168,7 +2168,7 @@ class bugModel extends model
     {
         $btnTextClass   = '';
         $btnClass       = '';
-        $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
+        $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->assignToNull;
         if(empty($bug->assignedTo)) $btnClass = $btnTextClass = 'assigned-none';
         if($bug->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
         if(!empty($bug->assignedTo) and $bug->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
@@ -2232,7 +2232,7 @@ class bugModel extends model
             if($bug->status != 'resolved' && $bug->status != 'closed') $unresolved++;
         }
 
-        return sprintf($this->lang->bug->summary, count($bugs), $unresolved);
+        return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
     }
 
     /**

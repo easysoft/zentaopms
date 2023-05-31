@@ -17,14 +17,14 @@ include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
 js::set('changeExecutionConfirmed' , false);
-js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
+js::set('confirmChangeProduct'   , $lang->bug->notice->confirmChangeProduct);
 js::set('planID'                 , $bug->plan);
 js::set('oldProjectID'           , $bug->project);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuildPairs, $bug->resolvedBuild)));
+js::set('confirmUnlinkBuild'     , sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuildPairs, $bug->resolvedBuild)));
 js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
@@ -270,7 +270,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
                   <th><?php echo $lang->bug->duplicateBug;?></th>
-                  <td class='required'><?php echo html::select('duplicateBug', $productBugs, $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?></td>
+                  <td class='required'><?php echo html::select('duplicateBug', $productBugs, $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->placeholder->duplicate}'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->closedBy;?></th>

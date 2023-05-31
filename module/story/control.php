@@ -2760,6 +2760,6 @@ class story extends control
         $story   = $this->story->getByID($storyID);
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
-        return print html::select("duplicateStoryIDList[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'");
+        return print html::select("duplicateStoryIDList[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->bug->placeholder->duplicate}'");
     }
 }

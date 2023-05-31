@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
-<?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
+<?php js::set('confrimToStory', $lang->bug->notice->confirmToStory);?>
 <?php js::set('tab', $app->tab);?>
 <?php js::set('bugID', $bug->id);?>
 <?php js::set('branchID', $bug->branch);?>
@@ -223,7 +223,7 @@
                   <td>
                     <?php
                     if($bug->deadline) echo helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
-                    if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
+                    if(isset($bug->delay)) printf($lang->bug->notice->delayWarning, $bug->delay);
                     ?>
                   </td>
                 </tr>

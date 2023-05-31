@@ -320,7 +320,7 @@
               <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
                 <th class='w-100px'><?php echo $lang->story->duplicateStory;?></th>
-                <td><?php echo html::select('duplicateStory', array('' => '') + $productStories, $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td>
+                <td><?php echo html::select('duplicateStory', array('' => '') + $productStories, $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->placeholder->duplicate}'"); ?></td>
               </tr>
               <?php endif;?>
               <tr class='text-top'>

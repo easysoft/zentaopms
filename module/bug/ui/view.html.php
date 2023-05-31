@@ -125,7 +125,7 @@ $legendBasic['activatedCount'] = array('name' => $lang->bug->activatedCount, 'te
 $legendBasic['activatedDate']  = array('name' => $lang->bug->activatedDate,  'text' => $bug->activatedDate);
 $legendBasic['confirmed']      = array('name' => $lang->bug->confirmed,      'text' => $lang->bug->confirmedList[$bug->confirmed]);
 $legendBasic['assignedTo']     = array('name' => $lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $lang->at . $bug->assignedDate);
-$legendBasic['deadline']       = array('name' => $lang->bug->deadline,       'text' => $bug->deadline . (isset($bug->delay) ? sprintf($lang->bug->delayWarning, $bug->delay) : ''));
+$legendBasic['deadline']       = array('name' => $lang->bug->deadline,       'text' => $bug->deadline . (isset($bug->delay) ? sprintf($lang->bug->notice->delayWarning, $bug->delay) : ''));
 $legendBasic['feedbackBy']     = array('name' => $lang->bug->feedbackBy,     'text' => $bug->feedbackBy);
 $legendBasic['notifyEmail']    = array('name' => $lang->bug->notifyEmail,    'text' => $bug->notifyEmail);
 $legendBasic['os']             = array('name' => $lang->bug->os,             'text' => $osList);
