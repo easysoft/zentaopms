@@ -23,7 +23,7 @@ foreach($lines as $line)
         )
     );
 
-    $formRowList[] = item(formRow
+    $formRowList[] = formRow
     (
         set::width('full'),
         formGroup
@@ -51,24 +51,26 @@ foreach($lines as $line)
             set::width('1/5'),
             setClass('ml-4')
         )
-    ));
+    );
 }
 
 /* Attach input group rows. */
 for($i = 0; $i <= 5; $i++)
 {
-    $formRowList[] = item(formRow
+    $formRowList[] = formRow
     (
         set::width('full'),
         formGroup(set::width('2/5'), input(set::name('modules[]'))),
         formGroup(set::width('2/5'), setClass('ml-4'), $this->config->systemMode == 'ALM' ? select(set::name('programs[]'), set::items($programs)) : ''),
         formGroup(set::width('1/5'), setClass('ml-4'), btn(icon('plus')), btn(icon('close')))
-    ));
+    );
 }
 
 div(
     on::click('window.onClickPanel'),
     setClass('w-full flex'),
+
+    /* Product line list. */
     cell
     (
         setClass('w-2/6'),
@@ -78,6 +80,7 @@ div(
             menu($lineMenuList)
         )
     ),
+    /* Manage product line. */
     cell
     (
         setClass('w-4/6 pl-6'),
@@ -104,7 +107,5 @@ div(
         )
     )
 );
-
-setStyle('min-width', '1024px');
 
 render('modalDialog');
