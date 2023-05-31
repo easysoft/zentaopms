@@ -129,12 +129,12 @@ $config->bug->form->activate['toTask']         = array('required' => false, 'typ
 $config->bug->form->activate['toStory']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->activate['comment']        = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->bug->form->batchActivate = array();
-$config->bug->form->batchActivate['bugIdList']       = array('type' => 'array', 'required' => true);
-$config->bug->form->batchActivate['statusList']      = array('type' => 'array', 'required' => false, 'default' => array());
-$config->bug->form->batchActivate['assignedToList']  = array('type' => 'array', 'required' => false, 'default' => array());
-$config->bug->form->batchActivate['openedBuildList'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->bug->form->batchActivate['commentList']     = array('type' => 'array', 'required' => false, 'default' => array());
+$config->bug->form->batchActivate = common::formConfig('bug', 'batchActivate');
+$config->bug->form->batchActivate['id']          = array('required' => false, 'type' => 'int',    'base' => true);
+$config->bug->form->batchActivate['status']      = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchActivate['openedBuild'] = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchActivate['comment']     = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->batchCreate = common::formConfig('bug', 'batchCreate');
 $config->bug->form->batchCreate['module']      =  array('required' => false, 'type' => 'int',    'default' => 0);

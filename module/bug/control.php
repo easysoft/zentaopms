@@ -1101,29 +1101,52 @@ class bug extends control
      */
     public function batchActivate(int $productID, string $branch = '0')
     {
-        if($this->post->statusList)
+        if($this->post->id)
         {
-            /* Get acitvate form data and extend data. */
-            $activateData   = form::data($this->config->bug->form->batchActivate)->get();
-            $postExtendData = array();
-            $extendFields   = $this->bug->getFlowExtendFields();
-            foreach($extendFields as $extendField) $postExtendData[$extendField->field] = $this->post->{$extendField->field};
+            $activateBugs = form::batchData($this->config->bug->form->batchActivate)->get();
 
-            $this->bug->batchActivate($activateData, $postExtendData);
+            $now     = helper::now();
+            $account = $this->app->user->account;
+            foreach($activateBugs as $bugID => $bug)
+            {
+                if($bug->status == 'active')
+                {
+                    unset($activateBugs[$bugID]);
+                    continue;
+                }
+
+                $bug->openedBuild    = implode(',', $bug->openedBuild);
+                $bug->activatedDate  = $now;
+                $bug->assignedDate   = $now;
+                $bug->resolution     = '';
+                $bug->status         = 'active';
+                $bug->resolvedDate   = null;
+                $bug->resolvedBy     = '';
+                $bug->resolvedBuild  = '';
+                $bug->closedBy       = '';
+                $bug->closedDate     = null;
+                $bug->duplicateBug   = 0;
+                $bug->toTask         = 0;
+                $bug->toStory        = 0;
+                $bug->lastEditedBy   = $account;
+                $bug->lastEditedDate = $now;
+            }
+
+            $this->bug->batchActivate($activateBugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('score')->create('ajax', 'batchOther');
-            return print(js::locate($this->session->bugList, 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->bugList));
         }
 
-        if(!$this->post->bugIdList) return print(js::locate($this->session->bugList, 'parent'));
+        if(!$this->post->bugIdList) $this->locate($this->session->bugList);
         $bugIdList = array_unique($this->post->bugIdList);
 
         $this->qa->setMenu($this->products, $productID, $branch);
 
         $this->view->title  = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
         $this->view->bugs   = $this->bug->getByIdList($bugIdList);
-        $this->view->users  = $this->user->getPairs();
+        $this->view->users  = $this->user->getPairs('noclosed');
         $this->view->builds = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noreleased');
 
         $this->display();
