@@ -74,7 +74,17 @@ function isFieldRequired($name)
     return $required;
 }
 
-function isAjaxRequest()
+/**
+ * Determine whether the request is ajax.
+ *
+ * @param string|null $type 'zin'|null
+ */
+function isAjaxRequest(string|null $type = null): bool
 {
-    return \helper::isAjaxRequest();
+    $isAjax = \helper::isAjaxRequest();
+    if($isAjax === false) return false;
+
+    if($type === 'zin') return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
+
+    return $isAjax;
 }
