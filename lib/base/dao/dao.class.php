@@ -1390,7 +1390,7 @@ class baseDAO
             $message = '';
             foreach($errors as $item)
             {
-                is_array($item) ? $message .= join('\n', $item) . '\n' : $message .= $item . '\n';
+                is_array($item) ? $message .= implode('\n', $item) . '\n' : $message .= $item . '\n';
             }
             return $message;
         }
@@ -2228,10 +2228,10 @@ class baseSQL
                 $orderParse[$key] = isset($table) ? $table . '.' . $field :  $field;
                 unset($table);
             }
-            $orders[$i] = join(' ', $orderParse);
+            $orders[$i] = implode(' ', $orderParse);
             if(empty($orders[$i])) unset($orders[$i]);
         }
-        $order = join(',', $orders) . ' ' . $limit;
+        $order = implode(',', $orders) . ' ' . $limit;
 
         $this->sql .= ' ' . DAO::ORDERBY . " $order";
         return $this;
