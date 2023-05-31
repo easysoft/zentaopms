@@ -293,7 +293,8 @@ class bug extends control
             }
 
             /* Get response after editing bug. */
-            return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup);
+            $message = $this->executeHooks($bugID);
+            return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup, 0, $message);
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
@@ -385,8 +386,9 @@ class bug extends control
             $this->bug->confirm($bug, $kanbanData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($kanbanData, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
@@ -436,8 +438,9 @@ class bug extends control
             if($oldBug->status != 'closed') $this->bug->resolve($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         /* Remove 'Convert to story' from the solution list. */
@@ -488,8 +491,9 @@ class bug extends control
             $this->bug->activate($bug, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($kanbanParams, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         $productID = $oldBug->product;
@@ -528,8 +532,9 @@ class bug extends control
             $this->bug->close($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         $this->view->bug     = $oldBug;
