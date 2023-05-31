@@ -24,6 +24,12 @@ class echarts extends wg
         return $this;
     }
 
+    public function responsive(bool $value): echarts
+    {
+        $this->setProp('responsive', $value);
+        return $this;
+    }
+
     protected function build()
     {
         return zui::echarts(inherit($this));
