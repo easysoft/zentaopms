@@ -1405,28 +1405,26 @@ class storyModel extends model
      * Update the story order of plan.
      *
      * @param  int    $storyID
-     * @param  string $oldPlanIDList
-     * @param  string $planIDList
+     * @param  string $planIdList
+     * @param  string $oldPlanIdList
      * @access public
      * @return void
      */
-    public function updateStoryOrderOfPlan($storyID, $planIDList = '', $oldPlanIDList = '')
+    public function updateStoryOrderOfPlan(int $storyID, string $planIdList = '', string $oldPlanIdList = ''): void
     {
-        $planIDList    = $planIDList ? explode(',', $planIDList) : array();
-        $oldPlanIDList = $oldPlanIDList ? explode(',', $oldPlanIDList) : array();
+        $planIdList    = $planIdList    ? explode(',', $planIdList)    : array();
+        $oldPlanIdList = $oldPlanIdList ? explode(',', $oldPlanIdList) : array();
 
         /* Get the ids to be inserted and deleted by comparing plan ids. */
-        $plansTobeInsert = array_diff($planIDList, $oldPlanIDList);
-        $plansTobeDelete = array_diff($oldPlanIDList, $planIDList);
+        $plansTobeInsert = array_diff($planIdList,    $oldPlanIdList);
+        $plansTobeDelete = array_diff($oldPlanIdList, $planIdList);
 
         /* Delete old story sort of plan. */
         if(!empty($plansTobeDelete)) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in($plansTobeDelete)->exec();
-
         if(!empty($plansTobeInsert))
         {
             /* Get last story order of plan list. */
             $maxOrders = $this->dao->select('plan, max(`order`) as `order`')->from(TABLE_PLANSTORY)->where('plan')->in($plansTobeInsert)->groupBy('plan')->fetchPairs();
-
             foreach($plansTobeInsert as $planID)
             {
                 /* Set story order in new plan. */
@@ -2697,222 +2695,37 @@ class storyModel extends model
      * @access public
      * @return bool
      */
-    public function setStage($storyID)
+    public function setStage(int $storyID): bool
     {
-        $this->loadModel('kanban');
-
-        $storyID = (int)$storyID;
-
         /* Get projects which status is doing. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
-        $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        if(!empty($story->stagedBy) and $story->status != 'closed') return false;
-
-        $product    = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
-        $executions = $this->dao->select('t1.project,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
-            ->where('t1.story')->eq($storyID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchPairs('project', 'branch');
-
+        /* 手动设置了阶段，就不需要字段计算阶段了。 */
+        $story     = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $product   = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $hasBranch = ($product and $product->type != 'normal' and empty($story->branch));
-        $stages    = array();
-        if($hasBranch and $story->plan)
-        {
-            $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchPairs('branch', 'branch');
-            foreach($plans as $branch) $stages[$branch] = 'planned';
-        }
+        if(!empty($story->stagedBy) and $story->status != 'closed') return true;
+
+        /* 获取需求关联的分支和项目。 */
+        list($linkedBranches, $linkedProjects) = $this->storyTao->getLinkedBranchesAndProjects($storyID);
+
+        /* 设置默认阶段。 */
+        $stages = array();
+        if($hasBranch) $stages = $this->storyTao->getDefaultStages($story->plan, $linkedProjects ? $linkedBranches : array());
 
         /* When the status is closed, stage is also changed to closed. */
-        if($story->status == 'closed')
-        {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
-            foreach($stages as $branch => $stage) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
-            foreach($executions as $execution => $branch)
-            {
-                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
-                $this->kanban->updateLane($execution, 'story', $storyID);
-            }
-            return false;
-        }
+        if($story->status == 'closed') return $this->storyTao->setStageToClosed($storyID, array_merge($linkedBranches, array_keys($stages)), $linkedProjects);
 
         /* If no executions, in plan, stage is planned. No plan, wait. */
-        if(!$executions)
-        {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan', true)->eq('')->orWhere('plan')->eq(0)->markRight(1)->exec();
+        if(!$linkedProjects) return $this->storyTao->setStageToPlanned($storyID, $stages, $oldStages);
 
-            foreach($stages as $branch => $stage)
-            {
-                if(isset($oldStages[$branch]))
-                {
-                    $oldStage = $oldStages[$branch];
-                    if(!empty($oldStage->stagedBy))
-                    {
-                        $this->dao->replace(TABLE_STORYSTAGE)->data($oldStage)->exec();
-                        continue;
-                    }
-                }
-                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
-            }
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere("(plan != '' AND plan != '0')")->exec();
-        }
+        /* 根据需求关联的任务，计算需求的阶段。 */
+        $stages = $this->storyTao->computeStagesByTasks($storyID, $linkedProjects, $stages);
+        if(empty($stages)) return true;
 
-        if($hasBranch)
-        {
-            foreach($executions as $executionID => $branch) $stages[$branch] = 'projected';
-        }
-
-        /* Search related tasks. */
-        $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('type')->in('devel,test')
-            ->andWhere('story')->eq($storyID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('status')->ne('cancel')
-            ->andWhere('closedReason')->ne('cancel')
-            ->fetchGroup('type');
-
-        /* No tasks, then the stage is projected. */
-        if(!$tasks and $executions)
-        {
-            foreach($stages as $branch => $stage)
-            {
-                if(isset($oldStages[$branch]))
-                {
-                    $oldStage = $oldStages[$branch];
-                    if(!empty($oldStage->stagedBy))
-                    {
-                        $this->dao->replace(TABLE_STORYSTAGE)->data($oldStage)->exec();
-                        continue;
-                    }
-                }
-                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('projected')->exec();
-            }
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq($storyID)->exec();
-        }
-
-        /* Get current stage and set as default value. */
-        $currentStage = $story->stage;
-        $stage        = $currentStage;
-
-        /* Cycle all tasks, get counts of every type and every status. */
-        $branchStatusList = array();
-        $branchDevelTasks = array();
-        $branchTestTasks  = array();
-        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done'=> 0, 'pause' => 0);
-        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done'=> 0, 'pause' => 0);
-        foreach($tasks as $type => $typeTasks)
-        {
-            foreach($typeTasks as $task)
-            {
-                $status = $task->status ? $task->status : 'wait';
-                $status = $status == 'closed' ? 'done' : $status;
-
-                $branch = $executions[$task->execution];
-                if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
-                if(!isset($branchStatusList[$branch][$task->type])) $branchStatusList[$branch][$task->type] = array();
-                if(!isset($branchStatusList[$branch][$task->type][$status])) $branchStatusList[$branch][$task->type][$status] = 0;
-                $branchStatusList[$branch][$task->type][$status] ++;
-                if($type == 'devel')
-                {
-                    if(!isset($branchDevelTasks[$branch])) $branchDevelTasks[$branch] = 0;
-                    $branchDevelTasks[$branch] ++;
-                }
-                elseif($type == 'test')
-                {
-                    if(!isset($branchTestTasks[$branch])) $branchTestTasks[$branch] = 0;
-                    $branchTestTasks[$branch] ++;
-                }
-            }
-        }
-
-        /**
-         * Judge stage according to the devel and test tasks' status.
-         *
-         * 1. one doing devel task, all test tasks waiting, set stage as developing.
-         * 2. some devel tasks done, all test tasks not done, set stage as developing.
-         * 3. all devel tasks done, all test tasks waiting, set stage as developed.
-         * 4. one test task doing, set stage as testing.
-         * 5. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
-         * 6. all test tasks done, all devel tasks done, set stage as tested.
-         */
-        foreach($branchStatusList as $branch => $statusList)
-        {
-            $stage      = 'projected';
-            $testTasks  = isset($branchTestTasks[$branch]) ? $branchTestTasks[$branch] : 0;
-            $develTasks = isset($branchDevelTasks[$branch]) ? $branchDevelTasks[$branch] : 0;
-            if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
-            if($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
-            if(($statusList['devel']['doing'] > 0 or ($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0)) and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'developing';
-            if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
-            if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'testing';
-            if($statusList['test']['doing'] > 0 or $statusList['test']['pause'] > 0) $stage = 'testing';
-            if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
-            if($statusList['devel']['done'] == $develTasks and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
-
-            $stages[$branch] = $stage;
-        }
-
-        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
-        foreach($releases as $branches)
-        {
-            $branches = trim($branches, ',');
-            foreach(explode(',', $branches) as $branch) $stages[$branch] = 'released';
-        }
-
-        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        if($story->stage != $currentStory->stage)
-        {
-            foreach($executions as $executionID => $branch)
-            {
-                $this->kanban->updateLane($executionID, 'story', $storyID);
-            }
-        }
-
-        if(empty($stages)) return;
-        if($hasBranch)
-        {
-            $stageList   = implode(',', array_keys($this->lang->story->stageList));
-            $minStagePos = strlen($stageList);
-            $minStage    = '';
-            foreach($stages as $branch => $stage)
-            {
-                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
-                if(isset($oldStages[$branch]))
-                {
-                    $oldStage = $oldStages[$branch];
-                    if(!empty($oldStage->stagedBy))
-                    {
-                        $this->dao->replace(TABLE_STORYSTAGE)->data($oldStage)->exec();
-                        $stage = $oldStage->$stage;
-                    }
-                }
-                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
-                {
-                    $minStage    = $stage;
-                    $minStagePos = strpos($stageList, $stage);
-                }
-            }
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($minStage)->where('id')->eq($storyID)->exec();
-        }
-        else
-        {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq(current($stages))->where('id')->eq($storyID)->exec();
-        }
-
-        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        if($story->stage != $currentStory->stage)
-        {
-            foreach($executions as $executionID => $branch)
-            {
-                $this->kanban->updateLane($executionID, 'story', $storyID);
-            }
-        }
-
-        return;
+        $this->storyTao->updateStage($storyID, $linkedProjects, $stages, $oldStages);
+        return true;
     }
 
     /**
