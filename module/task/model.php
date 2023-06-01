@@ -2086,7 +2086,7 @@ class taskModel extends model
 
     /**
      * 处理任务，计算进度、获取相关信息。
-     * Process a task, compute it's progress and get it's relates.
+     * Process a task, compute its progress and get its relates.
      *
      * @param  object $task
      * @access public
