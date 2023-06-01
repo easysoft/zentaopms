@@ -134,7 +134,7 @@
             <div class='row'>
               <div class='col-xs-4'>
                 <div><span class='statistics-title'><?php echo $lang->project->progress;?></span></div>
-                <?php echo html::ring($project->hours->progress); ?>
+                <?php echo html::ring($project->progress); ?>
               </div>
               <div class='col-xs-4'>
                 <span class='statistics-title'><?php echo $lang->project->leftTasks;?></span>

@@ -3178,4 +3178,30 @@ class projectModel extends model
 
         return $repoPairs;
     }
+
+
+    /**
+     * Get project left tasks for project browseByCard view.
+     *
+     * @param  array    $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getProjectLeftTasks($projectIdList)
+    {
+        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->in($projectIdList)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs('id');
+
+        $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t1.execution')->in($executionIdList)
+            ->andWhere('t1.status')->notIn('cancel,closed')
+            ->groupBy('t2.parent')
+            ->fetchAll('project');
+
+        return $leftTasks;
+    }
 }

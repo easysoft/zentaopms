@@ -1456,6 +1456,8 @@ class programModel extends model
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
         if(empty($projects)) return array();
 
+        $leftTasks = ($this->cookie->projectType and $this->cookie->projectType == 'bycard') ? $this->loadModel('project')->getProjectLeftTasks(array_keys($projects)) : array();
+
         /* Get the members of project teams. */
         $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
@@ -1465,7 +1467,7 @@ class programModel extends model
             ->fetchGroup('root', 'account');
 
         /* Process projects. */
-        foreach($projects as $key => $project)
+        foreach($projects as $projectID => $project)
         {
             if($project->end == '0000-00-00') $project->end = '';
 
@@ -1476,12 +1478,13 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+            $project->teamMembers = isset($teamMembers[$projectID]) ? array_keys($teamMembers[$projectID]) : array();
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->tasks : '—';
 
             /* Convert predefined HTML entities to characters. */
             $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
-            $stats[$key] = $project;
+            $stats[$projectID] = $project;
         }
 
         return $stats;
