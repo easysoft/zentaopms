@@ -311,7 +311,7 @@
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
-              <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
+              <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugData->title, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>

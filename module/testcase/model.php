@@ -494,7 +494,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugTitle      = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
+        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title, severity, openedDate')->fetch();
 
         $case->toBugs = array();
         $toBugs       = $this->dao->select('id, title, severity, openedDate')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
