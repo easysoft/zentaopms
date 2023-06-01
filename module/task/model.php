@@ -2635,6 +2635,49 @@ class taskModel extends model
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
+    /**
+     * 获取指派用户和抄送给用户列表。
+     * Get toList and ccList.
+     *
+     * @param  object      $task
+     * @access public
+     * @return array|false
+     */
+    public function getToAndCcList(object $task): array|false
+    {
+        /* Set toList and ccList. */
+        $toList         = $task->assignedTo;
+        $ccList         = trim($task->mailto, ',');
+        $toTeamTaskList = '';
+        if($task->mode == 'multi')
+        {
+            $toTeamTaskList = $this->getTeamMembers($task->id);
+            $toTeamTaskList = implode(',', $toTeamTaskList);
+            $toList         = $toTeamTaskList;
+        }
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+        elseif(strtolower($toList) == 'closed')
+        {
+            $toList = $task->finishedBy;
+        }
+
+        return array($toList, $ccList);
+    }
 
     /**
      * Get task's team member pairs.
