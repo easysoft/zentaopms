@@ -2171,39 +2171,4 @@ class bugTest
             return 'no error';
         }
     }
-
-    /**
-     * 测试批量编辑 bug 后的其他处理。
-     * Test processing after batch edit of bug.
-     *
-     * @param  object  $bug
-     * @access public
-     * @return string
-     */
-    public function afterBatchEditTest(object $bug): string
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-
-        $tester->config->global->scoreStatus = true;
-
-        $oldScore = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
-        $oldBug   = $tester->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
-
-        $this->objectModel->afterBatchEdit($bug, $oldBug);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $score = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
-            $action = $tester->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-
-            $scoreDifference = $score - $oldScore;
-            return "scoreDifference:{$scoreDifference};lastAction:{$action->objectType}-{$action->action}-{$action->objectID}";
-        }
-    }
 }
