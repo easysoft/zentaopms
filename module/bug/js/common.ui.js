@@ -29,7 +29,7 @@ function changeProduct(event)
         loadExecutions(productID);
         loadAssignedTo();
         loadProductPlans(productID);
-        loadProductStories(productID);
+        loadProductStories(productID, bug.story);
     }
 }
 
@@ -43,7 +43,7 @@ function changeBranch(event)
     loadAssignedTo();
     loadProductBuilds(productID);
     loadProductPlans(productID);
-    loadProductStories(productID);
+    loadProductStories(productID, bug.story);
 }
 
 function changeProject(event)
@@ -73,7 +73,7 @@ function changeExecution(event)
     }
     else
     {
-        loadProductStories(productID);
+        loadProductStories(productID, bug.story);
         loadTestTasks(productID);
         if(projectID == 0)
         {
@@ -93,8 +93,10 @@ function changeModule(event)
     const moduleID  = $(event.target).val();
     const productID = $('#product').val();
     const storyID   = $('#story').val();
+    let executionID = $('#execution').val();
+    if(typeof(executionID) == 'undefined') executionID = 0;
     loadAssignedToByModule(moduleID, productID);
-    loadProductStories(moduleID, productID, storyID);
+    loadProductStories(productID, storyID, executionID, moduleID);
 }
 
 function clickRefresh(event)
@@ -365,16 +367,12 @@ function loadProductPlans(productID)
     $('#planBox').load(link);
 }
 
-function loadProductStories(productID, moduleID = 0, oldStoryID = 0)
+function loadProductStories(productID, storyID, moduleID = 0, executionID = 0)
 {
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
 
-    let executionID = $('#execution').val();
-    if(typeof(executionID) == 'undefined') executionID = 0;
-
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
     $('#storyBox').load(link);
 }
 
@@ -384,10 +382,9 @@ function loadExecutionStories(executionID, num)
 
     const productID = $('#product' + num).val();
     let   branch    = $('#branch' + num).val();
-    if(typeof(branch) == 'undefined')     branch     = 0;
-    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
+    if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID + '&number=' + num + '&type=full&status=all&from=bug');
+    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + bug.story + '&number=' + num + '&type=full&status=all&from=bug');
     $('#storyBox' + num).load(link);
 }
 
