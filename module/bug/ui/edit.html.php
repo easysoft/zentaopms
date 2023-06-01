@@ -361,9 +361,10 @@ panel
                         set('id', 'resolvedBuildBox'),
                         select
                         (
-                            set::name('resolvedBuild'),
+                            set::name('resolvedBuild[]'),
                             set::items($resolvedBuilds),
-                            set::value($bug->resolvedBuild)
+                            set::value($bug->resolvedBuild),
+                            set::multiple(true)
                         ),
                         span
                         (
