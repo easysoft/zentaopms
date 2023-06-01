@@ -286,7 +286,6 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
 {
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(typeof(oldOpenedBuild) == 'undefined') oldOpenedBuild = 0;
 
     if(config.currentMethod == 'create')
     {
@@ -303,10 +302,10 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     {
         if(buildBox == 'all' || buildBox == 'openedBuildBox')
         {
-            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=' + type);
+            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + branch + '&index=0&type=' + type);
             $('#openedBuildBox').load(openedLink, function()
             {
-                $(this).find('select').val(oldOpenedBuild);
+                $(this).find('select').val(bug.openedBuild);
             });
         }
 
