@@ -1695,23 +1695,26 @@ class taskModel extends model
     }
 
     /**
-     * Get counts of some stories' tasks.
+     * 获取关联需求的任务数。
+     * Get the number of tasks linked with the story.
      *
      * @param  array  $stories
      * @param  int    $executionID
      * @access public
-     * @return int
+     * @return array
      */
-    public function getStoryTaskCounts($stories, $executionID = 0)
+    public function getStoryTaskCounts(array $stories, int $executionID = 0): array
     {
         if(empty($stories)) return array();
-        $taskCounts = $this->dao->select('story, COUNT(*) AS tasks')
+
+        $taskCounts = $this->dao->select('story, COUNT(id) AS tasks')
             ->from(TABLE_TASK)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->groupBy('story')
             ->fetchPairs();
+
         foreach($stories as $storyID)
         {
             if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;

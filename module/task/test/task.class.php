@@ -607,27 +607,6 @@ class taskTest
     }
 
     /**
-     * Test get counts of some stories' tasks.
-     *
-     * @param  array  $storyIDList
-     * @access public
-     * @return int
-     */
-    public function getStoryTaskCountsTest($storyIDList)
-    {
-        $object = $this->objectModel->getStoryTaskCounts($storyIDList);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get task efforts.
      *
      * @param  int    $taskID
