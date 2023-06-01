@@ -1405,7 +1405,6 @@ class bugModel extends model
         foreach($datas as $buildIdList => $data)
         {
             if(is_int($buildIdList)) continue;
-            if(strpos(trim($buildIdList, ','), ',') === false) continue;
 
             $openedBuildIdList = explode(',', $buildIdList);
 
