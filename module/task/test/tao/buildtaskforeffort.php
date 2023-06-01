@@ -6,83 +6,17 @@ su('admin');
 
 /**
 
-title=- 无消耗工时给出提示 @『ID \
+title= 测试buildTaskforEffort方法
 timeout=0
 cid=1
 
-- 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
- - 第0条的consumed属性 @8
- - 第0条的left属性 @0
- - 第0条的estimate属性 @0
- - 第0条的status属性 @done
-
-- 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
- - 第0条的consumed属性 @8
- - 第0条的left属性 @1
- - 第0条的estimate属性 @0
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况
- - 第0条的consumed属性 @8
- - 第0条的left属性 @0
- - 第0条的estimate属性 @0
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况
- - 第0条的consumed属性 @8
- - 第0条的left属性 @1
- - 第0条的estimate属性 @0
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
- - 第0条的consumed属性 @9
- - 第0条的left属性 @5
- - 第0条的estimate属性 @1
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
- - 第0条的consumed属性 @9
- - 第0条的left属性 @2
- - 第0条的estimate属性 @1
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况
- - 第0条的consumed属性 @9
- - 第0条的left属性 @5
- - 第0条的estimate属性 @1
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况
- - 第0条的consumed属性 @9
- - 第0条的left属性 @2
- - 第0条的estimate属性 @1
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
- - 第0条的consumed属性 @10
- - 第0条的left属性 @5
- - 第0条的estimate属性 @2
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
- - 第0条的consumed属性 @10
- - 第0条的left属性 @3
- - 第0条的estimate属性 @2
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况
- - 第0条的consumed属性 @10
- - 第0条的left属性 @5
- - 第0条的estimate属性 @2
- - 第0条的status属性 @doing
-
-- 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况
- - 第0条的consumed属性 @10
- - 第0条的left属性 @3
- - 第0条的estimate属性 @2
- - 第0条的status属性 @doing
-
 */
+$task = zdTable('project');
+$task->id->range('1-7');
+$task->name->prefix("执行")->range('1-7');
+$task->type->range('sprint');
+$task->gen(7);
+
 $task = zdTable('task');
 $task->id->range('1-7');
 $task->execution->range('1-7');
@@ -135,11 +69,11 @@ $task = new taskTest();
 r($task->buildTaskForEffortTest($finishRecord, 1, '2021-01-01', true))  && p('0:consumed,left,estimate,status') && e('8,0,0,done');   // 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
 r($task->buildTaskForEffortTest($finishRecord, 1, '2023-01-01', true))  && p('0:consumed,left,estimate,status') && e('8,1,0,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
 r($task->buildTaskForEffortTest($finishRecord, 1, '2021-01-01', false)) && p('0:consumed,left,estimate,status') && e('8,0,0,doing');  // 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况
-r($task->buildTaskForEffortTest($finishRecord, 1, '2023-01-01', false)) && p('0:consumed,left,estimate,status') && e('8,1,0,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况 
+r($task->buildTaskForEffortTest($finishRecord, 1, '2023-01-01', false)) && p('0:consumed,left,estimate,status') && e('8,1,0,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况
 r($task->buildTaskForEffortTest($startRecord, 2, '2021-01-01', true))   && p('0:consumed,left,estimate,status') && e('9,5,1,doing');  // 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
 r($task->buildTaskForEffortTest($startRecord, 2, '2023-01-01', true))   && p('0:consumed,left,estimate,status') && e('9,2,1,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
 r($task->buildTaskForEffortTest($startRecord, 2, '2021-01-01', false))  && p('0:consumed,left,estimate,status') && e('9,5,1,doing');  // 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况
-r($task->buildTaskForEffortTest($startRecord, 2, '2023-01-01', false))  && p('0:consumed,left,estimate,status') && e('9,2,1,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况 
+r($task->buildTaskForEffortTest($startRecord, 2, '2023-01-01', false))  && p('0:consumed,left,estimate,status') && e('9,2,1,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且不是完成任务的情况
 r($task->buildTaskForEffortTest($normalRecord, 3, '2021-01-01', true))  && p('0:consumed,left,estimate,status') && e('10,5,2,doing'); // 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
 r($task->buildTaskForEffortTest($normalRecord, 3, '2023-01-01', true))  && p('0:consumed,left,estimate,status') && e('10,3,2,doing'); // 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
 r($task->buildTaskForEffortTest($normalRecord, 3, '2021-01-01', false)) && p('0:consumed,left,estimate,status') && e('10,5,2,doing'); // 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况
