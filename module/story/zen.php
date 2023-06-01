@@ -250,7 +250,7 @@ class storyZen extends story
         $fields  = $this->config->story->form->create;
 
         /* 准备数据。*/
-        list($products, $branches) = $this->storyZen->getProductsAndBranchesForCreate($productID, $objectID);
+        list($products, $branches) = $this->getProductsAndBranchesForCreate($productID, $objectID);
         if($objectID)
         {
             $branch    = key($branches);
