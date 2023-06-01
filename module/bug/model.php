@@ -258,15 +258,16 @@ class bugModel extends model
     }
 
     /**
+     * 获取激活和延期处理的 bug 列表。
      * Get active and postponed bugs.
      *
-     * @param  int    $products
+     * @param  array  $products
      * @param  int    $executionID
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function getActiveAndPostponedBugs($products, $executionID, $pager = null)
+    public function getActiveAndPostponedBugs(array $products, int $executionID, object $pager = null): array
     {
         return $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product = t2.product')
@@ -277,7 +278,7 @@ class bugModel extends model
             ->beginIF(empty($products))->andWhere('t1.execution')->eq($executionID)->fi()
             ->andWhere('t2.project')->eq($executionID)
             ->andWhere("(t2.branch = '0' OR t1.branch = '0' OR t2.branch = t1.branch)")
-            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll('id');

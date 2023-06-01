@@ -737,33 +737,21 @@ class bugTest
     }
 
     /**
+     * 获取激活和延期处理的 bug 列表。
      * Test get active and postponed bugs.
      *
-     * @param  string $bugIDList
+     * @param  array  $products
      * @param  int    $executionID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getActiveAndPostponedBugsTest($products, $executionID)
+    public function getActiveAndPostponedBugsTest(array $products, int $executionID): array
     {
         $bugs = $this->objectModel->getActiveAndPostponedBugs($products, $executionID);
 
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
+        return $bugs;
     }
 
     /**

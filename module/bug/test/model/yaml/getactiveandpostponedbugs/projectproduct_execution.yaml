@@ -1,0 +1,12 @@
+---
+title: zt_projectproduct
+author: Tingting Dai
+version: "1.0"
+fields:
+- field: project
+  range: 1-10 
+- field: product
+  range: 1-10{3}
+- field: branch
+  range: 0{6},1{4}
+...
