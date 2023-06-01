@@ -535,6 +535,7 @@ class bugModel extends model
         $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
         $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
             ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
+            ->batchCheck('name,execution', 'notempty')
             ->exec();
         if(dao::isError())
         {
@@ -543,6 +544,17 @@ class bugModel extends model
             {
                 $error['buildName'] = $error['name'];
                 unset($error['name']);
+            }
+            if(isset($error['execution']))
+            {
+                $executionLang = $this->lang->bug->execution;
+                if($oldBug->execution)
+                {
+                    $execution = $this->dao->findByID($oldBug->execution)->from(TABLE_EXECUTION)->fetch();
+                    if($execution and $execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+                }
+                $error['buildExecution'] = sprintf($this->lang->error->notempty, $executionLang);
+                unset($error['execution']);
             }
             dao::$errors = $error;
             return false;
