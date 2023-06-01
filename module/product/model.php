@@ -1806,7 +1806,7 @@ class productModel extends model
                 ->fetchAll('id');
         }
 
-        /* Recalculate productKeys after pageing. */
+        /* Recalculate productKeys after paging. */
         $productKeys = array_keys($products);
 
         $linePairs = $this->getLinePairs();
