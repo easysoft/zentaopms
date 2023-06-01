@@ -3404,7 +3404,7 @@ EOF;
             ->where('AType')->eq($aType)
             ->andWhere('AID')->eq($aID)
             ->andwhere('BType')->eq($bType)
-            ->beginif($BID)->andwhere('BID')->eq($bID)->fi()
+            ->beginIF($bID)->andwhere('BID')->eq($bID)->fi()
             ->fetchAll();
     }
 
