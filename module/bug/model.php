@@ -711,7 +711,6 @@ class bugModel extends model
         {
             $bugCount = $this->dao->select("count(id) as num, date_format($field, '%m/%d') as date")->from(TABLE_BUG)
                 ->where('product')->eq($productID)
-                ->andWhere($field)->ne('0000-00-00 00:00:00')
                 ->andWhere('deleted')->eq(0)
                 ->andWhere($field)->between($startDate, $endDate . ' 23:50:59')
                 ->groupBy('date')
