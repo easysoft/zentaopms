@@ -2020,13 +2020,14 @@ class taskModel extends model
     }
 
     /**
-     * Append lane field to tasks;
+     * 在任务信息中追加泳道名称。
+     * Append the lane name to the task information.
      *
      * @param  array  $tasks
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function appendLane($tasks)
+    public function appendLane(array $tasks): array
     {
         $executionIdList = array();
         foreach($tasks as $task)
@@ -2050,11 +2051,10 @@ class taskModel extends model
             foreach($lanes as $lane)
             {
                 if($lane->kanban != $task->execution) continue;
-                if(strpos(",{$lane->cards},", ",{$task->id},") !== false)
-                {
-                    $task->lane = $lane->name;
-                    break;
-                }
+                if(strpos(",{$lane->cards},", ",{$task->id},") === false) continue;
+
+                $task->lane = $lane->name;
+                break;
             }
         }
 

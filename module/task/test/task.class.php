@@ -2106,4 +2106,18 @@ class taskTest
                 ->fetch();
         }
     }
+
+    /**
+     * 在任务信息中追加泳道名称。
+     * Append the lane name to the task information.
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return object[]
+     */
+    public function appendLaneObject(array $taskIdList): array
+    {
+        $tasks = $this->objectModel->getByIdList($taskIdList);
+        return $this->objectModel->appendLane($tasks);
+    }
 }
