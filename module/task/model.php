@@ -2085,13 +2085,14 @@ class taskModel extends model
     }
 
     /**
-     * Process a task, judge it's status.
+     * 处理任务，计算进度、获取相关信息。
+     * Process a task, compute it's progress and get it's relates.
      *
-     * @param  object    $task
+     * @param  object $task
      * @access public
      * @return object
      */
-    public function processTask($task)
+    public function processTask(object $task): object
     {
         $today = helper::today();
 
