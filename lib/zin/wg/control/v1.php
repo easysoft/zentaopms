@@ -27,7 +27,12 @@ class control extends wg
 
     protected function created()
     {
-        $this->setDefaultProps(array('id' => $this->prop('name')));
+        if($this->prop('id') === null && $this->prop('name') !== null)
+        {
+            $name = $this->prop('name');
+            $id   = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
+            $this->setProp('id', $id);
+        }
     }
 
     /**
