@@ -76,10 +76,11 @@ class taskTest
             'estStarted'   => '2021-01-10',
             'deadline'     => '2021-03-19',
             'desc'         => '',
+            'mailto'       => '',
             'version'      => '1',
             'openedBy'     => 'admin',
             'openedDate'   => helper::now(),
-            'laneID'       => 0,
+            'lane'         => 0,
         );
 
         $tasks = array();
