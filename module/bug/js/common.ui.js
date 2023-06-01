@@ -390,7 +390,7 @@ function loadExecutionStories(executionID, num)
 
 function loadExecutionTasks(executionID)
 {
-    const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + oldTaskID);
+    const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + bug.task);
     $.post(link, function(data)
     {
         $('#task').replaceWith(data);
