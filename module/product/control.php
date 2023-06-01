@@ -537,7 +537,7 @@ class product extends control
         $this->view->users    = $this->user->getPairs('noletter');
         $this->view->lines    = array('') + $this->product->getLinePairs();
         $this->view->dynamics = $this->productZen->getActions4Dashboard($productID);
-        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->roadmaps = $this->product->getRoadmap($productID, '0', 6);
 
         $this->display();
     }
