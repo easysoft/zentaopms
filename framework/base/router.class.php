@@ -1437,7 +1437,7 @@ class baseRouter
      * 获取$URL。
      * Get the $URL.
      *
-     * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
+     * @param  bool   $full The URI contains the webRoot if $full is true else only the URI will be return.
      * @access public
      * @return string
      */
