@@ -320,10 +320,10 @@ panel
                         set('id', 'openedBuildBox'),
                         select
                         (
-                            set::multiple(true),
                             set::name('openedBuild[]'),
                             set::items($openedBuilds),
-                            set::value($bug->openedBuild)
+                            set::value($bug->openedBuild),
+                            set::multiple(true)
                         ),
                         span
                         (
