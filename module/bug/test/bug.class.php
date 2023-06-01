@@ -2107,49 +2107,6 @@ class bugTest
     }
 
     /**
-     * 测试检查批量创建的bug的数据。
-     * Test check the batch created bugs.
-     *
-     * @param  array         $bugs
-     * @param  string        $required
-     * @access public
-     * @return array|string
-     */
-    public function afterBatchCreateTest(int $bugID, int $laneID, array $output, string $uploadImage, array|bool $file): array|string
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-        $bug  = $tester->dao->findByID($bugID)->from(TABLE_BUG)->fetch();
-
-        $actionID = $this->objectModel->afterBatchCreate($bug, $laneID, $output, $uploadImage, $file);
-
-        $return = '';
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$value}";
-                if(is_array($value))  $return .= implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            $fileID = $tester->dao->select('id')->from(TABLE_FILE)->where('objectID')->eq($bugID)->andWhere('objectType')->eq('bug')->fetch('id');
-            $cards  = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
-                ->where('kanban')->eq($bug->execution)
-                ->andWhere('lane')->eq($laneID)
-                ->andWhere('column')->eq(zget($output, 'columnID', 0))
-                ->andWhere('type')->eq('bug')
-                ->fetch('cards');
-
-            return "action:{$actionID},file:{$fileID},cards:{$cards}";
-        }
-    }
-
-    /**
      * 测试批量创建bug前处理上传图片。
      * Test process the uploaded images before batch creating bugs.
      *
