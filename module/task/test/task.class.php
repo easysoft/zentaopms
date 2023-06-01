@@ -451,7 +451,7 @@ class taskTest
         $task = new stdclass();
         $task->id           = $taskID;
         $task->left         = 0;
-        $task->status       = 'doing';
+        $task->status       = 'done';
         $task->consumed     = 0;
         $task->assignedTo   = '';
         $task->realstarted  = helper::now();
