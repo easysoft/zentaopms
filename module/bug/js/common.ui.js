@@ -17,7 +17,7 @@ function changeProduct(event)
             }
             else
             {
-                $('#product').val(oldProductID); // Revert old product id if confirm is no.
+                $('#product').val(bug.product); // Revert old product id if confirm is no.
             }
         }});
     }
