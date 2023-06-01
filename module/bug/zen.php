@@ -1573,7 +1573,7 @@ class bugZen extends bug
                 {
                     $file['addedBy']    = $this->app->user->account;
                     $file['addedDate']  = helper::now();
-                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+                    $this->loadModel('file')->saveFile($file, 'realpath');
 
                     $fileID = $this->dao->lastInsertID();
                     $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
