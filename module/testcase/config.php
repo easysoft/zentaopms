@@ -17,6 +17,10 @@ $config->testcase->editor->review = array('id' => 'comment', 'tools' => 'simpleT
 $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');
 
+$config->testcase->actions = new stdclass();
+$config->testcase->actions->browse = 'results,runcase,edit,review,createBug,create,showscript';
+$config->testcase->actions->view   = 'results,runcase';
+
 $config->testcase->exportFields = '
     id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, real, keywords,

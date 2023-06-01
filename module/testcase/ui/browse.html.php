@@ -10,11 +10,27 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$this->testcase->buildOperateMenu(null, 'browse');
+
+foreach($cases as $case)
+{
+    $actions = array();
+    foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
+    {
+        $isClickable = $this->testcase->isClickable($case, $actionCode);
+
+        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
+    }
+    $case->actions = $actions;
+}
+
+$cols = array_values($config->testcase->dtable->fieldList);
+$data = array_values($cases);
 
 dtable
 (
-    set::cols(),
-    set::data()
+    set::cols($cols),
+    set::data($data),
 );
 
 render();
