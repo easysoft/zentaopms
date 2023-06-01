@@ -47,7 +47,7 @@ $record5->consumed = 9;
 
 $task = new taskTest();
 r($task->addTaskEffortTest($record1)) && p('objectID,left,consumed') && e("1,0,3"); // 插入task为1 left为0 consumed为3的任务
-r($task->addTaskEffortTest($record2)) && p('objectID,left,consumed') && e("2,0,3"); // 插入task为601 left为0 consumed为3的任务
-r($task->addTaskEffortTest($record3)) && p('objectID,left,consumed') && e("3,1,4"); // 插入task为601 left为1 consumed为4的任务
-r($task->addTaskEffortTest($record4)) && p('objectID,left,consumed') && e("4,3,6"); // 插入task为904 left为3 consumed为6的任务
-r($task->addTaskEffortTest($record5)) && p('objectID,left,consumed') && e("5,6,9"); // 插入task为907 left为6 consumed为9的任务
+r($task->addTaskEffortTest($record2)) && p('objectID,left,consumed') && e("2,0,3"); // 插入task为2 left为0 consumed为3的任务
+r($task->addTaskEffortTest($record3)) && p('objectID,left,consumed') && e("3,1,4"); // 插入task为3 left为1 consumed为4的任务
+r($task->addTaskEffortTest($record4)) && p('objectID,left,consumed') && e("4,3,6"); // 插入task为4 left为3 consumed为6的任务
+r($task->addTaskEffortTest($record5)) && p('objectID,left,consumed') && e("5,6,9"); // 插入task为5 left为6 consumed为9的任务
