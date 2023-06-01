@@ -444,7 +444,7 @@ class task extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
-        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
         $this->display();
     }
@@ -601,7 +601,7 @@ class task extends control
         $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->members         = $members;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->display();
     }
 
@@ -698,7 +698,7 @@ class task extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->members         = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
-        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
         $this->display();
     }

@@ -1040,22 +1040,6 @@ class taskZen extends task
     }
 
     /**
-     * 检查是否能记录任务的日志。
-     * Check if the task effort can be recorded.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return bool
-     */
-    protected function checkRecordEffort(object $task): bool
-    {
-        if(empty($task->team)) return true;
-        if($task->assignedTo != $this->app->user->account && $task->mode == 'linear') return false;
-        if(!isset($task->members[$this->app->user->account])) return false;
-        return true;
-    }
-
-    /**
      * 为表单获取自定义字段。
      * Get task's custom fields for form.
      *
