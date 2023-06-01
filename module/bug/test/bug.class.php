@@ -1178,9 +1178,10 @@ class bugTest
     public function activateTest(int $bugID, int $buildID = 0, array $kanbanParams = array(), string $returnType = 'bug'): string|array|object
     {
         $bug = new stdclass();
-        $bug->id      = $bugID;
-        $bug->status  = 'active';
-        $bug->comment = "Activate bug{$bugID}";
+        $bug->id             = $bugID;
+        $bug->status         = 'active';
+        $bug->comment        = "Activate bug{$bugID}";
+        $bug->activatedCount = 1;
 
         $result = $this->objectModel->activate($bug, $kanbanParams);
 
