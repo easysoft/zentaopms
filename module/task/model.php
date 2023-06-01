@@ -1761,17 +1761,19 @@ class taskModel extends model
     }
 
     /**
-     * Get estimate by id.
+     * 根据日志ID获取日志信息和是否最后一次日志。
+     * Get estimate data and check last by id.
      *
      * @param  int    $effortID
      * @access public
-     * @return object.
+     * @return false|object
      */
-    public function getEstimateById($effortID)
+    public function getEstimateByID(int $effortID): false|object
     {
         $estimate = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('id')->eq($effortID)
             ->fetch();
+        if(!$estimate) return false;
 
         /* If the estimate is the last of its task, status of task will be checked. */
         $lastID = $this->dao->select('id')->from(TABLE_EFFORT)
@@ -1823,7 +1825,7 @@ class taskModel extends model
      */
     public function updateEstimate($estimateID)
     {
-        $oldEstimate = $this->getEstimateById($estimateID);
+        $oldEstimate = $this->getEstimateByID($estimateID);
         $today       = helper::today();
         $estimate    = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
@@ -1908,7 +1910,7 @@ class taskModel extends model
      */
     public function deleteEstimate($estimateID)
     {
-        $estimate = $this->getEstimateById($estimateID);
+        $estimate = $this->getEstimateByID($estimateID);
         $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
