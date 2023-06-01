@@ -142,7 +142,7 @@
               </div>
               <div class='col-xs-4'>
                 <span class='statistics-title'><?php echo $lang->project->leftHours;?></span>
-                <span class='totalLeft' title="<?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHour;?>"><?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHourUnit;?></span>
+                <span class='totalLeft' title="<?php echo empty($project->left) ? '—' : $project->left . $lang->execution->workHour;?>"><?php echo empty($project->left) ? '—' : $project->left . $lang->execution->workHourUnit;?></span>
               </div>
             </div>
           </div>
