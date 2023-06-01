@@ -638,7 +638,7 @@ class taskTao extends taskModel
      *
      * @param  array     $taskIdList
      * @access protected
-     * @return object[]
+     * @return array[]
      */
     protected function getTeamMembersByIdList(array $taskIdList): array
     {
