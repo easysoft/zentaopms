@@ -922,6 +922,14 @@ class storyTao extends storyModel
         return true;
     }
 
+    /**
+     * 获取需求关联的分支和项目。
+     * Get linked branches and projects.
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return array
+     */
     protected function getLinkedBranchesAndProjects(int $storyID): array
     {
         $projects = $this->dao->select('t2.id,t2.model,t2.type,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
