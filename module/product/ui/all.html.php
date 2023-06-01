@@ -23,42 +23,47 @@ foreach($cols as &$col)
     break;
 }
 
-$data         = array();
-$totalStories = 0;
-
-foreach($productStats as $productID => $product)
+/* Closure function for generating table data. */
+$fnGenerateTableData = function($productList) use($users, $avatarList)
 {
-    $item = new stdClass();
-
-    if(!empty($product->PO))
+    $data = array();
+    foreach($productList as $product)
     {
-        $item->PO        = zget($users, $product->PO);
-        $item->POAvatar  = $avatarList[$product->PO];
-        $item->POAccount = $product->PO;
+        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+        $totalBugs    = $product->unResolved + $product->fixedBugs;
+
+        $item = new stdClass();
+
+        if(!empty($product->PO))
+        {
+            $item->PO        = zget($users, $product->PO);
+            $item->POAvatar  = $avatarList[$product->PO];
+            $item->POAccount = $product->PO;
+        }
+
+        $item->name              = $product->name;
+        $item->id                = $product->id;
+        $item->type              = 'product';
+        $item->draftStories      = $product->stories['draft'];
+        $item->activeStories     = $product->stories['active'];
+        $item->changingStories   = $product->stories['changing'];
+        $item->reviewingStories  = $product->stories['reviewing'];
+        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+        $item->unResolvedBugs    = $product->unResolved;
+        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
+        $item->plans             = $product->plans;
+        $item->releases          = $product->releases;
+        $item->productLine       = $product->lineName;
+        $item->execution         = $product->executions;
+        $item->testCaseCoverage  = $product->coverage;
+
+        $data[] = $item;
     }
-    $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
-    $item->name              = $product->name;
-    $item->id                = $product->id;
-    $item->type              = 'product';
-    $item->draftStories      = $product->stories['draft'];
-    $item->activeStories     = $product->stories['active'];
-    $item->changingStories   = $product->stories['changing'];
-    $item->reviewingStories  = $product->stories['reviewing'];
-    $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-    $item->unResolvedBugs    = $product->unResolved;
-    $item->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
-    $item->plans             = $product->plans;
-    $item->releases          = $product->releases;
-    $item->productLine       = $product->lineName;
-    $item->execution         = $product->executions;
-    $item->testCaseCoverage  = $product->coverage;
-    $item->releasesOld       = rand(0, 10);
+    return $data;
+};
 
-    $data[] = $item;
-}
-
-/* Closure function for generate program menu. */
+/* Closure function for generating program menu. */
 $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseType, $orderBy, $param, $recTotal, $recPerPage, $pageID)
 {
     $programMenuLink = createLink(
@@ -96,6 +101,7 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
     );
 };
 
+/* ====== Define the page structure with zin widgets ====== */
 featureBar
 (
     to::before($fnGenerateProgramMenu($programList)),
@@ -159,11 +165,10 @@ toolbar
     )))
 );
 
-jsVar('langSummary', $lang->product->pageSummary);
 dtable
 (
     set::cols($cols),
-    set::data($data),
+    set::data($fnGenerateTableData($productStats)),
     set::checkable(true),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
@@ -183,5 +188,7 @@ dtable
         set::linkCreator(createLink('product', 'all', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
     )
 );
+
+jsVar('langSummary', $lang->product->pageSummary);
 
 render();
