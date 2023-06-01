@@ -953,16 +953,32 @@ class storyTao extends storyModel
         return array($linkedBranches, $linkedProjects);
     }
 
-    protected function setStageToPlanned(int $storyID, array $stages, array $oldStages): bool
+    /**
+     * 将阶段设置为 planned。
+     * Set stage to planned.
+     *
+     * @param  int       $storyID
+     * @param  array     $stages
+     * @param  array     $oldStages
+     * @access protected
+     * @return bool
+     */
+    protected function setStageToPlanned(int $storyID, array $stages = array(), array $oldStages = array()): bool
     {
-        $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere("(plan = '' OR plan = '0')")->exec();
-        $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->andWhere("(plan != '' AND plan != '0')")->exec();
-        if(empty($stages)) return true;
+        if(empty($storyID)) return false;
 
+        $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($story->plan))
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->exec();
+            return true;
+        }
+
+        $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq($storyID)->exec();
         foreach($stages as $branchID => $stage)
         {
             $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('planned')->exec();
-            if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy)) $this->dao->replace(TABLE_STORYSTAGE)->data($oldStage)->exec();
+            if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy)) $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
         }
         return true;
     }
@@ -992,7 +1008,7 @@ class storyTao extends storyModel
                 $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq($stage)->exec();
                 if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy))
                 {
-                    $this->dao->replace(TABLE_STORYSTAGE)->data($oldStage)->exec();
+                    $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
                     $stage = $oldStages[$branchID]->$stage;
                 }
 

@@ -755,4 +755,24 @@ class storyTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
     }
+
+    /**
+     * 测试 setStageToPlanned 方法。
+     * Test setStageToPlanned method.
+     *
+     * @param  int    $storyID
+     * @param  array  $stages
+     * @param  array  $oldStages
+     * @access public
+     * @return object|array
+     */
+    public function setStageToPlannedTest(int $storyID, array $stages = array(), array $oldStages = array()): object|array
+    {
+        $this->objectModel->setStageToPlanned($storyID, $stages, $oldStages);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
 }
