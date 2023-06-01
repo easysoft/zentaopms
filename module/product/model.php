@@ -272,11 +272,10 @@ class productModel extends model
      * @param  int        $limit
      * @param  int        $line
      * @param  string|int $shadow       all | 0 | 1
-     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0, $pager = null)
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0)
     {
         $products = $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
@@ -304,7 +303,6 @@ class productModel extends model
             ->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
             ->fetchAll('id');
 
         return $products;
