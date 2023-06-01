@@ -1894,31 +1894,6 @@ class bugTest
     }
 
     /**
-     * Test get project list.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return string
-     */
-    public function getProjectsTest($productID)
-    {
-        $array = $this->objectModel->getProjects($productID);
-
-        $title = '';
-        foreach($array as $id => $project) $title .= ',' . $project;
-        $title = trim($title, ',');
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
-    /**
      * Test get bug query.
      *
      * @param  string $bugQuery

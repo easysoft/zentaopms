@@ -741,7 +741,7 @@ class bugModel extends model
         $productParams = $productParams + array('all' => $this->lang->all);
 
         /* Get project params. */
-        $projectParams = $this->getProjects($productID);
+        $projectParams = $this->loadModel('product')->getProjectPairsByProduct($productID, 'all');
         $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
         /* Get all modules. */
@@ -2250,24 +2250,6 @@ class bugModel extends model
         }
 
         return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
-    }
-
-    /**
-     * Get project list.
-     *
-     * @param  int $productID
-     * @access public
-     * @return array
-     */
-    public function getProjects($productID)
-    {
-        return $this->dao->select('t1.id,t1.name')
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.type')->eq('project')
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.product')->eq($productID)
-            ->fetchPairs();
     }
 
     /**
