@@ -601,6 +601,7 @@ class upgradeModel extends model
                 break;
             case '18_4_alpha1':
                 if($this->config->edition != 'open') $this->processDataset();
+                $this->setURSwitchStatus($fromVersion);
                 break;
         }
 
@@ -9256,6 +9257,32 @@ class upgradeModel extends model
                 if(!isset($users[$collector])) continue;
                 $this->doc->createAction($doc->id, 'collect', $collector);
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Set UR switch status in feature switch.
+     *
+     * @param  string  $fromVersion
+     * @access public
+     * @return bool
+     */
+    public function setURSwitchStatus($fromVersion)
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.2', '>=')) return true;
+        if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.2', '>=')) return true;
+        if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.2', '>=')) return true;
+
+        $URSwitchStatus = $this->loadModel('setting')->getItem("owner=system&module=custom&key=URAndSR");
+        if(!$URSwitchStatus)
+        {
+            $closedFeatures = $this->setting->getItem('owner=system&module=common&key=closedFeatures');
+            if(strpos($closedFeatures, 'productUR') === false) $closedFeatures .= ',productUR';
+            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
         }
 
         return true;
