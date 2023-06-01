@@ -2142,33 +2142,4 @@ class bugTest
             return $file;
         }
     }
-
-    /**
-     * 测试输入的 bugs 是否符合批量编辑的要求。
-     * Test check bugs for batch edit.
-     *
-     * @param  array  $bugs
-     * @access public
-     * @return string
-     */
-    public function checkBugsForBatchUpdateTest(array $bugs): string
-    {
-        $this->objectModel->checkBugsForBatchUpdate($bugs);
-
-        if(dao::isError())
-        {
-            $return = '';
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$key}:{$value}";
-                if(is_array($value))  $return .= "{$key}:" .implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            return 'no error';
-        }
-    }
 }
