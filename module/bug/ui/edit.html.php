@@ -410,7 +410,7 @@ panel
                         select
                         (
                             set::multiple(true),
-                            set::name('resolvedBuild[]'),
+                            set::name('relatedBug[]'),
                             set::items($bug->relatedBugTitles)
                         ),
                         span
@@ -418,7 +418,7 @@ panel
                             set('class', 'input-group-addon'),
                             a
                             (
-                                set('id', 'relatedBug'),
+                                set('id', 'linkBug'),
                                 set('href', 'javascript:;'),
                                 $lang->bug->linkBugs
                             )
