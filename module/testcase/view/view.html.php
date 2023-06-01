@@ -318,9 +318,9 @@
             <tr>
               <td class='linkBugTitles'>
               <?php
-              foreach($case->toBugs as $bugID => $bugTitle)
+              foreach($case->toBugs as $bugID => $bug)
               {
-                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%' title='$bugTitle'") . '<br />';
+                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bug->title, '', "class='iframe' data-width='80%' title='$bug->title'") . '<br />';
               }
               ?>
               </td>
