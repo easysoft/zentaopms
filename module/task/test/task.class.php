@@ -188,6 +188,8 @@ class taskTest
     public function batchChangeModuleTest(array $taskIDList, int $moduleID): array
     {
         $object = $this->objectModel->batchChangeModule($taskIDList, $moduleID);
+
+        if(dao::isError()) return dao::getError();
         return $this->objectModel->getByIdList($taskIDList);
     }
 

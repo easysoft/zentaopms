@@ -916,9 +916,9 @@ class taskModel extends model
      * @param  array  $taskIdList
      * @param  int    $moduleID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchChangeModule(array $taskIdList, int $moduleID): void
+    public function batchChangeModule(array $taskIdList, int $moduleID): bool
     {
         $now      = helper::now();
         $oldTasks = $this->getByIdList($taskIdList);
@@ -934,14 +934,19 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $task->module         = $moduleID;
 
-            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-            if(!dao::isError())
-            {
-                $changes  = common::createChanges($oldTask, $task);
-                $actionID = $this->action->create('task', $taskID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->dao->update(TABLE_TASK)->data($task)
+                ->autoCheck()
+                ->check('module', 'ge', 0)
+                ->where('id')->eq((int)$taskID)
+                ->exec();
+
+            if(dao::isError()) return false;
+
+            $changes  = common::createChanges($oldTask, $task);
+            $actionID = $this->action->create('task', $taskID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
         }
+        return true;
     }
 
     /**
