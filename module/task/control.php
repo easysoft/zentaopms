@@ -488,7 +488,7 @@ class task extends control
      */
     public function editEstimate($estimateID)
     {
-        $estimate = $this->task->getEstimateById($estimateID);
+        $estimate = $this->task->getEstimateByID($estimateID);
         if(!empty($_POST))
         {
             $changes = $this->task->updateEstimate($estimateID);
@@ -517,7 +517,7 @@ class task extends control
      */
     public function deleteEstimate($estimateID, $confirm = 'no')
     {
-        $estimate = $this->task->getEstimateById($estimateID);
+        $estimate = $this->task->getEstimateByID($estimateID);
         $taskID   = $estimate->objectID;
         $task     = $this->task->getById($taskID);
         if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)

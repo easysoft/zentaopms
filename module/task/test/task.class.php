@@ -628,18 +628,18 @@ class taskTest
      *
      * @param  int    $estimateID
      * @access public
-     * @return object
+     * @return false|object
      */
-    public function getEstimateByIdTest($estimateID)
+    public function getEstimateByIdTest(int $estimateID): false|object
     {
-        $object = $this->objectModel->getEstimateById($estimateID);
-        if(dao::isError())
+        $object = $this->objectModel->getEstimateByID($estimateID);
+        if(!$object)
         {
-            $error = dao::getError();
-            return $error;
+            return false;
         }
         else
         {
+            $object->isLast = (int)$object->isLast;
             return $object;
         }
     }
@@ -1263,7 +1263,7 @@ class taskTest
         $this->objectModel->addTaskEffort($data);
 
         $objectID = $this->objectModel->dao->lastInsertID();
-        $object   = $this->objectModel->getEstimateById($objectID);
+        $object   = $this->objectModel->getEstimateByID($objectID);
 
         if(dao::isError())
         {
