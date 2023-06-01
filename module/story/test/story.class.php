@@ -776,9 +776,40 @@ class storyTest
         return $story;
     }
 
+    /**
+     * 测试 setStageToClosed 方法。
+     * Test setStageToClosed method.
+     *
+     * @param  int    $storyID
+     * @param  array  $linkedBranches
+     * @param  array  $linkedProjects
+     * @access public
+     * @return object|array
+     */
     public function setStageToClosedTest(int $storyID, array $linkedBranches = array(), array $linkedProjects = array()): object|array
     {
         $this->objectModel->setStageToClosed($storyID, $linkedBranches, $linkedProjects);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
+
+    /**
+     * 测试 updateStage 方法。
+     * Test updateStage method.
+     *
+     * @param  int    $storyID
+     * @param  array  $stages
+     * @param  array  $oldStages
+     * @param  array  $linkedProjects
+     * @access public
+     * @return object|array
+     */
+    public function updateStageTest(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): object|array
+    {
+        $this->objectModel->updateStage($storyID, $stages, $oldStages, $linkedProjects);
         if(dao::isError()) return dao::getError();
 
         $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();

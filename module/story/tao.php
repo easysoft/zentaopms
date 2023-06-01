@@ -1003,11 +1003,23 @@ class storyTao extends storyModel
         return true;
     }
 
-    protected function updateStage(int $storyID, array $linkedProjects, array $stages, array $oldStages): bool
+    /**
+     * 更新需求阶段。
+     * Update stage.
+     *
+     * @param  int       $storyID
+     * @param  array     $stages
+     * @param  array     $oldStages
+     * @param  array     $linkedProjects
+     * @access protected
+     * @return bool
+     */
+    protected function updateStage(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): bool
     {
-        $story   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
+        $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($story)) return false;
 
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         if($product and $product->type != 'normal' and empty($story->branch))
         {
             $stageList   = implode(',', array_keys($this->lang->story->stageList));
@@ -1019,7 +1031,7 @@ class storyTao extends storyModel
                 if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy))
                 {
                     $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
-                    $stage = $oldStages[$branchID]->$stage;
+                    $stage = $oldStages[$branchID]->stage;
                 }
 
                 $position = strpos($stageList, $stage);

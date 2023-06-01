@@ -2724,7 +2724,7 @@ class storyModel extends model
         $stages = $this->storyTao->computeStagesByTasks($storyID, $linkedProjects, $stages);
         if(empty($stages)) return true;
 
-        $this->storyTao->updateStage($storyID, $linkedProjects, $stages, $oldStages);
+        $this->storyTao->updateStage($storyID, $stages, $oldStages, $linkedProjects);
         return true;
     }
 
