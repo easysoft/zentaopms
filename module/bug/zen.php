@@ -27,8 +27,8 @@ class bugZen extends bug
      * 检查用户是否拥有所属执行的权限。
      * Check bug execution priv.
      *
-     * @param  object $bug
-     * @access public
+     * @param  object      $bug
+     * @access protected
      * @return boll|string
      */
     protected function checkBugExecutionPriv(object $bug): bool|string
@@ -43,6 +43,7 @@ class bugZen extends bug
 
             return print(js::locate('back'));
         }
+
         return true;
     }
 
@@ -222,8 +223,8 @@ class bugZen extends bug
      * 获取分支。
      * Get branch options.
      *
-     * @param  int       $productID
-     * @access protected
+     * @param  int     $productID
+     * @access private
      * @return array
      */
     private function getBranchOptions(int $productID): array
@@ -241,8 +242,8 @@ class bugZen extends bug
      * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
      * Get kanban laneID and columnID from $_POST and $output from extra().
      *
-     * @param  array     $output
-     * @access protected
+     * @param  array   $output
+     * @access private
      * @return array
      */
     private function getKanbanVariable(array $output): array
@@ -260,9 +261,9 @@ class bugZen extends bug
      * 获取bug创建页面的branches和branch，并绑定到bug上。
      * Get the branches and branch for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @param  object    $currentProduct
-     * @access protected
+     * @param  object  $bug
+     * @param  object  $currentProduct
+     * @access private
      * @return object
      */
     private function getBugBranches(object $bug, object $currentProduct): object
@@ -289,8 +290,8 @@ class bugZen extends bug
      * 获取bug创建页面的builds和stories，并绑定到bug上。
      * Get the builds and stories for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
     private function getBuildsAndStoriesForCreate(object $bug): object
@@ -321,8 +322,8 @@ class bugZen extends bug
      * 获取bug创建页面的产品成员。
      * Get the product members for bug create page.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return array
      */
     private function getProductMembersForCreate(object $bug): array
@@ -338,8 +339,8 @@ class bugZen extends bug
      * 获取bug创建页面的products和projects，并绑定到bug上。
      * Get the products and projects for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
     private function getProductsAndProjectsForCreate(object $bug): object
@@ -378,8 +379,8 @@ class bugZen extends bug
      * 获得项目的模式。
      * Get project model.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
     private function getProjectModelForCreate(object $bug): object
@@ -401,30 +402,10 @@ class bugZen extends bug
     }
 
     /**
-     * 获得指派给我的blockID。
-     * Get block id of assigned to me.
+     * 获得创建页面的自定义字段。
+     * Get custom fields.
      *
-     * @access protected
-     * @return int
-     */
-    private function getBlockIDForCreate(): int
-    {
-        /* Get block id of assinge to me. */
-        if(!isonlybody()) return 0;
-
-        return $this->dao->select('id')->from(TABLE_BLOCK)
-            ->where('block')->eq('assingtome')
-            ->andWhere('module')->eq('my')
-            ->andWhere('account')->eq($this->app->user->account)
-            ->orderBy('order_desc')
-            ->fetch('id');
-    }
-
-    /**
-     * 获得指派给我的blockID。
-     * Get block id of assigned to me.
-     *
-     * @access protected
+     * @access private
      * @return array
      */
     private function getCustomFieldsForCreate(): array
@@ -442,8 +423,8 @@ class bugZen extends bug
      * 获得bug创建页面的products和projects，并绑定到bug上。
      * Get the executions and projects for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
     private function getExecutionsForCreate(object $bug): object
@@ -467,8 +448,8 @@ class bugZen extends bug
      * 获取bug创建页面的projects，并绑定到bug上。
      * Append the projects for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
     private function getProjectsForCreate(object $bug): object
@@ -603,8 +584,6 @@ class bugZen extends bug
 
         return array($modules, $product->QD);
     }
-
-
 
     /**
      * 设置浏览页面的 cookie。
@@ -1025,7 +1004,6 @@ class bugZen extends bug
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
-        $this->view->blockID               = $this->getBlockIDForCreate();
     }
 
     /**
@@ -1181,7 +1159,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array $bugImagesFile)
+    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array $bugImagesFile): void
     {
         if($executionID)
         {
@@ -1250,10 +1228,10 @@ class bugZen extends bug
      * 展示字段相关变量。
      * Show the variables associated with the batch created fields.
      *
-     * @param  object    $product
-     * @param  object    $project
-     * @param  array     $bugImagesFile
-     * @access protected
+     * @param  object  $product
+     * @param  object  $project
+     * @param  array   $bugImagesFile
+     * @access private
      * @return void
      */
     private function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
@@ -1396,7 +1374,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignBatchEditVars(int $productID, string $branch)
+    protected function assignBatchEditVars(int $productID, string $branch): void
     {
         /* Initialize vars.*/
         $bugIdList = array_unique($this->post->bugIdList);
@@ -1448,9 +1426,9 @@ class bugZen extends bug
      * 分配产品相关的变量。
      * Assign product related variables.
      *
-     * @param  array     $bugs
-     * @param  array     $products
-     * @access protected
+     * @param  array   $bugs
+     * @param  array   $products
+     * @access private
      * @return array
      */
     private function assignProductRelatedVars(array $bugs, array $products): array
@@ -1511,13 +1489,13 @@ class bugZen extends bug
      * 为批量编辑 bugs 分配人员。
      * Assign users for batch edit.
      *
-     * @param  array     $bugs
-     * @param  array     $productIdList
-     * @param  array     $branchTagOption
-     * @access protected
+     * @param  array   $bugs
+     * @param  array   $productIdList
+     * @param  array   $branchTagOption
+     * @access private
      * @return void
      */
-    private function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
+    private function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption): void
     {
         /* If current tab is execution or project, get project, execution, product team members of bugs.*/
         if($this->app->tab == 'execution' || $this->app->tab == 'project')
@@ -1573,9 +1551,9 @@ class bugZen extends bug
      * 批量创建bug前处理上传图片。
      * Before batch creating bugs, process the uploaded images.
      *
-     * @param  object      $bug
-     * @param  string      $uploadImage
-     * @param  array       $bugImagesFiles
+     * @param  object    $bug
+     * @param  string    $uploadImage
+     * @param  array     $bugImagesFiles
      * @access protected
      * @return array
      */
@@ -1614,8 +1592,8 @@ class bugZen extends bug
      * 创建bug后存储上传的文件。
      * Save files after create a bug.
      *
-     * @param  int       $bugID
-     * @access protected
+     * @param  int     $bugID
+     * @access private
      * @return bool
      */
     private function updateFileAfterCreate(int $bugID): bool
@@ -1647,11 +1625,11 @@ class bugZen extends bug
      * 创建bug后更新执行看板。
      * Update execution kanban after create a bug.
      *
-     * @param  object $bug
-     * @param  int       $laneID
-     * @param  int       $columnID
-     * @param  string    $from
-     * @access protected
+     * @param  object  $bug
+     * @param  int     $laneID
+     * @param  int     $columnID
+     * @param  string  $from
+     * @access private
      * @return void
      */
     private function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
@@ -1675,9 +1653,9 @@ class bugZen extends bug
      * 为create方法添加动态。
      * Add action for create function.
      *
-     * @param  int       $bug
-     * @param  int       $todoID
-     * @access protected
+     * @param  int     $bug
+     * @param  int     $todoID
+     * @access private
      * @return bool
      */
     private function updateTodoAfterCreate(int $bugID, int $todoID): bool
@@ -1697,9 +1675,9 @@ class bugZen extends bug
      * 更新bug模板。
      * Update bug templete.
      *
-     * @param  object    $bug
-     * @param  array     $fields
-     * @access protected
+     * @param  object  $bug
+     * @param  array   $fields
+     * @access private
      * @return object
      */
     private function updateBug(object $bug, array $fields): object
@@ -1787,10 +1765,10 @@ class bugZen extends bug
      * 批量创建bug后的其他处理。
      * Processing after batch creation of bug.
      *
-     * @param  object     $bug
-     * @param  array      $output
-     * @param  string     $uploadImage
-     * @param  array      $file
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $uploadImage
+     * @param  array     $file
      * @access protected
      * @return bool
      */
@@ -1998,11 +1976,11 @@ class bugZen extends bug
      * 批量创建bug后返回响应。
      * Response after batch create.
      *
-     * @param  int        $productID
-     * @param  string     $branch
-     * @param  int        $executionID
-     * @param  array      $bugIdList
-     * @param  string     $message
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @param  array     $bugIdList
+     * @param  string    $message
      * @access protected
      * @return bool
      */
@@ -2171,9 +2149,9 @@ class bugZen extends bug
      * 将报表的默认设置合并到当前报表。
      * Merge the default chart settings and the settings of current chart.
      *
-     * @param  string $chartCode
-     * @param  string $chartType
-     * @access public
+     * @param  string    $chartCode
+     * @param  string    $chartType
+     * @access protected
      * @return object
      */
     protected function mergeChartOption(string $chartCode, string $chartType = 'default'): object

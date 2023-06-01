@@ -717,11 +717,11 @@ class bugModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $branch = 0): void
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
