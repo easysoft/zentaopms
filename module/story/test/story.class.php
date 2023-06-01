@@ -775,4 +775,14 @@ class storyTest
         $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
         return $story;
     }
+
+    public function setStageToClosedTest(int $storyID, array $linkedBranches = array(), array $linkedProjects = array()): object|array
+    {
+        $this->objectModel->setStageToClosed($storyID, $linkedBranches, $linkedProjects);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
 }

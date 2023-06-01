@@ -965,9 +965,8 @@ class storyTao extends storyModel
      */
     protected function setStageToPlanned(int $storyID, array $stages = array(), array $oldStages = array()): bool
     {
-        if(empty($storyID)) return false;
-
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($story)) return false;
         if(empty($story->plan))
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->exec();
@@ -983,9 +982,20 @@ class storyTao extends storyModel
         return true;
     }
 
-    protected function setStageToClosed(int $storyID, array $linkedBranches, array $linkedProjects): bool
+    /**
+     * 将阶段设置为 closed。
+     * Set stage to closed.
+     *
+     * @param  int       $storyID
+     * @param  array     $linkedBranches
+     * @param  array     $linkedProjects
+     * @access protected
+     * @return bool
+     */
+    protected function setStageToClosed(int $storyID, array $linkedBranches = array(), array $linkedProjects = array()): bool
     {
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($story)) return false;
 
         $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
         foreach($linkedBranches as $branchID) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('closed')->exec();
@@ -1086,7 +1096,7 @@ class storyTao extends storyModel
         return array($branchStatusList, $branchDevelCount, $branchTestCount);
     }
 
-    protected function updateLinkedLane(int $storyID, array $linkedProjects): void
+    protected function updateLinkedLane(int $storyID, array $linkedProjects = array()): void
     {
         $this->loadModel('kanban');
         $linkedKanbans = array_filter(array_map(function($project){return $project->kanban;}, $linkedProjects));
