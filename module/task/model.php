@@ -1810,7 +1810,7 @@ class taskModel extends model
         /* Check for edit and delete effort. */
         if($task->mode == 'linear')
         {
-            if(!in_array($task->status, $this->config->task->unfinishedStatus)) return false;
+            if(in_array($task->status, array('pause', 'cancel', 'closed'))) return false;
             if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
         if($this->app->user->account == $effort->account) return true;

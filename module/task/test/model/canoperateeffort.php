@@ -65,7 +65,7 @@ r($taskTest->canOperateEffort($task)) && p() && e('1');  //判断当前用户在
 $effort = new stdclass();
 $effort->account = 'admin';
 
-$task->mode   = 'multi';
+$task->mode   = 'linear';
 $task->status = 'done';
 r($taskTest->canOperateEffort($task, $effort)) && p() && e('1');  //判断已完成多人任务并且日志创建者和当前用户一致
 
