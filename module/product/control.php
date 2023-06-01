@@ -327,7 +327,7 @@ class product extends control
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
         /* 构造批量编辑页面表单配置数据。*/
-        $this->productZen->buildBatchEditForm($programID, explode(',', $productIdList));
+        $this->productZen->buildBatchEditForm($programID, $productIdList);
     }
 
     /**
