@@ -28,3 +28,52 @@ onRenderPage(function(info)
     loadCurrentPage('#mainMenu>*');
     return false;
 });
+
+/**
+ * Submit data to product batch edit page by html form while click on the batch edit button.
+ *
+ * @param  object event
+ * @access public
+ * @return void
+ */
+onClickBatchEdit = function(event)
+{
+    /* Get checked product ID list. */
+    const idList  = new Array();
+    const rowList = $('#dtable').find('.dtable-row');
+    Object.keys(rowList).forEach(function(index)
+    {
+        const row = $(rowList[index]);
+
+        const checkboxList = row.find('input[type=checkbox]');
+        if(checkboxList.length !== 1) return;
+        if(!$(checkboxList[0]).is(':checked')) return;
+
+        const id  = row.data('id');
+        if( !id || id === 'HEADER') return;
+
+        idList.push(id);
+    });
+
+    if(idList.length === 0) return;
+
+    /* Create form. */
+    const f = document.createElement("form");
+    f.action = $(event.target).attr('href');
+    f.method = "POST";
+
+    /* Create element to carry data. */
+    idList.forEach(function(id)
+    {
+        const item = document.createElement('input');
+        item.name  = 'productIDList[]';
+        item.value = id;
+
+        f.appendChild(item);
+    });
+
+    /* Append form to body. */
+    document.body.appendChild(f);
+
+    f.submit();
+}

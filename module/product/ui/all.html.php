@@ -174,10 +174,13 @@ dtable
     set::footToolbar(array
     (
         'type'  => 'btn-group',
-        'items' => array
+        'items' => array(array
         (
-            array('text' => $lang->edit, 'btnType' => 'primary', 'url' => createLink('product', 'batchEdit'))
-        )
+            'text'    => $lang->edit,
+            'btnType' => 'primary',
+            'url'     => createLink('product', 'batchEdit'),
+            'onClick' => jsRaw('onClickBatchEdit')
+        ))
     )),
     set::footPager
     (
