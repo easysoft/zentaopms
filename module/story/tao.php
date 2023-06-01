@@ -1098,7 +1098,7 @@ class storyTao extends storyModel
         $taskStat = $this->getLinkedTaskStat($storyID, $linkedProjects);
         if(empty($taskStat))
         {
-            if($linkedProjects) $stages = array_map(function($stage){return 'projected';}, $stages);
+            if($linkedProjects) $stages = array_map(function(){return 'projected';}, $stages);
             return $stages;
         }
 
