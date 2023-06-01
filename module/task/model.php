@@ -1115,7 +1115,7 @@ class taskModel extends model
         /* Remind whether to update status of the bug, if task which from that bug has been finished. */
         if($changes && $this->needUpdateBugStatus($oldTask))
         {
-            $response = $this->taskTao->getRemindBugLink($task, $changes);
+            $response = $this->taskTao->getRemindBugLink($oldTask, $changes);
             if($response) return $response;
         }
 
