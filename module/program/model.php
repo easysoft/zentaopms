@@ -632,51 +632,48 @@ class programModel extends model
     /**
      * Get program and project progress list.
      *
+     * @param  array  $programIdList
      * @access public
      * @return array
      */
-    public function getProgressList()
+    public function getProgressList($programIdList = array())
     {
+        $programPairs = $this->getPairs();
+        $projectStats = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
+
+        $existProgramIdList = array_intersect($programIdList, array_keys($programPairs));
+        $existProjectIdList = array_intersect($programIdList, array_keys($projectStats));
+
         $totalProgress = array();
         $projectCount  = array();
         $userPRJCount  = array();
         $progressList  = array();
-        $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
 
-        /* Add program progress. */
-        foreach(array_keys($programPairs) as $programID)
+        foreach($existProgramIdList as $programID)
         {
             $totalProgress[$programID] = 0;
             $projectCount[$programID]  = 0;
             $userPRJCount[$programID]  = 0;
             $progressList[$programID]  = 0;
 
-            foreach($projectStats as $project)
+            foreach($existProjectIdList as $projectID)
             {
-                if(strpos($project->path, ',' . $programID . ',') === false) continue;
+                if(strpos($projectStats[$projectID]->path, ",{$programID},") === false) continue;
 
                 /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPRJCount[$programID] ++;
+                if(strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false) $userPRJCount[$programID] ++;
 
-                $totalProgress[$programID] += $project->progress;
+                $totalProgress[$programID] += $projectStats[$projectID]->progress;
                 $projectCount[$programID] ++;
             }
 
             if(empty($projectCount[$programID])) continue;
 
-            /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $userPRJCount[$programID] != $projectCount[$programID])
-            {
-                unset($progressList[$programID]);
-                continue;
-            }
-
             $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
         }
 
         /* Add project progress. */
-        foreach($projectStats as $project) $progressList[$project->id] = $project->progress;
+        foreach($existProjectIdList as $projectID) $progressList[$projectID] = $projectStats[$projectID]->progress;
 
         return $progressList;
     }

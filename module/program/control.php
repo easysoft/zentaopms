@@ -107,7 +107,7 @@ class program extends control
         $this->view->pager        = $pager;
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
-        $this->view->progressList = $this->program->getProgressList();
+        $this->view->progressList = $this->program->getProgressList(array_keys($programs));
         $this->view->hasProject   = $hasProject;
 
         $this->display();
