@@ -2645,38 +2645,30 @@ class taskModel extends model
      */
     public function getToAndCcList(object $task): array|false
     {
-        /* Set toList and ccList. */
-        $toList         = $task->assignedTo;
-        $ccList         = trim($task->mailto, ',');
-        $toTeamTaskList = '';
+        /* Set assignedTo and mailto. */
+        $assignedTo = $task->assignedTo;
+        $mailto     = explode(',', trim($task->mailto, ','));
         if($task->mode == 'multi')
         {
-            $toTeamTaskList = $this->getTeamMembers($task->id);
-            $toTeamTaskList = implode(',', $toTeamTaskList);
-            $toList         = $toTeamTaskList;
+            $teamList   = $this->getTeamMembers($task->id);
+            $teamList   = implode(',', $teamList);
+            $assignedTo = $teamList;
         }
 
-        if(empty($toList))
+        /* If the assignor is empty, consider the first one with the cc as the assignor. */
+        if(empty($assignedTo))
         {
-            if(empty($ccList)) return false;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
+            if(empty($mailto)) return false;
+
+            $assignedTo = array_shift($mailto);
         }
-        elseif(strtolower($toList) == 'closed')
+        elseif(strtolower($assignedTo) == 'closed')
         {
-            $toList = $task->finishedBy;
+            /* If the assignor is closed, treat the completion person as the assignor. */
+            $assignedTo = $task->finishedBy;
         }
 
-        return array($toList, $ccList);
+        return array($assignedTo, implode(',', $mailto));
     }
 
     /**

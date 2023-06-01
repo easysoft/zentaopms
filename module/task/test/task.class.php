@@ -1276,6 +1276,21 @@ class taskTest
     }
 
     /**
+     * Test get toList and ccList.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array|false
+     */
+    public function getToAndCcListTest(int $taskID): array|false
+    {
+        $task = $this->objectModel->getByID($taskID);
+        if(empty($task)) return false;
+
+        return $this->objectModel->getToAndCcList($task);
+    }
+
+    /**
      * Test for get team by account.
      *
      * @param  array  $users
