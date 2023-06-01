@@ -141,7 +141,7 @@ function loadProductProjects(productID)
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
+    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + bug.project);
     $('#projectBox').load(link);
 }
 
