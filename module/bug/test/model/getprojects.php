@@ -3,19 +3,14 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php'; su('admin');
 include dirname(__FILE__, 2) . '/bug.class.php';
 
+zdTable('project')->gen(20);
+zdTable('product')->gen(10);
+
 /**
 
 title=bugModel->getProjects();
 cid=1
 pid=1
-
-测试获取productID为1的项目 >> 项目1,项目11
-测试获取productID为2的项目 >> 项目2,项目12
-测试获取productID为3的项目 >> 项目3,项目13
-测试获取productID为4的项目 >> 项目4,项目14
-测试获取productID为5的项目 >> 项目5,项目15
-测试获取productID为6的项目 >> 项目6,项目16
-测试获取不存在的product的项目 >> 0
 
 */
 
