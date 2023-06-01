@@ -1306,14 +1306,15 @@ class taskTest
     }
 
     /**
-     * Test for can operate effort;
+     * 检查当前登录用户是否可以操作日志。
+     * Check if the current user can operate effort.
      *
-     * @param  object  $task
-     * @param  object  $effort
+     * @param  object $task
+     * @param  object $effort
      * @access public
-     * @return bool
+     * @return int
      */
-    public function canOperateEffort($task, $effort = null)
+    public function canOperateEffort(object $task, object $effort = null): int
     {
         $result = $this->objectModel->canOperateEffort($task, $effort);
         return $result ? 1 : 0;

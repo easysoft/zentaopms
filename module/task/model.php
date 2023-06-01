@@ -1786,14 +1786,15 @@ class taskModel extends model
     }
 
     /**
-     * Check operate effort.
+     * 检查当前登录用户是否可以操作日志。
+     * Check if the current user can operate effort.
      *
-     * @param  object    $task
-     * @param  object    $effort
+     * @param  object $task
+     * @param  object $effort
      * @access public
      * @return bool
      */
-    public function canOperateEffort($task, $effort = null)
+    public function canOperateEffort(object $task, object $effort = null): bool
     {
         if(empty($task->team)) return true;
 
@@ -1809,7 +1810,7 @@ class taskModel extends model
         /* Check for edit and delete effort. */
         if($task->mode == 'linear')
         {
-            if(strpos('|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
+            if(!in_array($task->status, $this->config->task->unfinishedStatus)) return false;
             if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
         if($this->app->user->account == $effort->account) return true;
