@@ -272,10 +272,11 @@ class productModel extends model
      * @param  int        $limit
      * @param  int        $line
      * @param  string|int $shadow       all | 0 | 1
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0)
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0, $pager = null)
     {
         $products = $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
@@ -303,6 +304,7 @@ class productModel extends model
             ->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
+            ->page($pager)
             ->fetchAll('id');
 
         return $products;
@@ -1774,6 +1776,7 @@ class productModel extends model
      * @param  int    $line
      * @param  string $storyType requirement|story
      * @param  int    $programID
+     * @param  int    $param
      * @access public
      * @return array
      */
@@ -1805,8 +1808,26 @@ class productModel extends model
                 ->fetchAll('id');
         }
 
+        /* Recalculate productKeys after pageing. */
+        $productKeys = array_keys($products);
+
         $linePairs = $this->getLinePairs();
         foreach($products as $product) $product->lineName = zget($linePairs, $product->line, '');
+
+        if(empty($programID))
+        {
+            $programKeys = array(0 => 0);
+            foreach($products as $product) $programKeys[] = $product->program;
+            $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
+                ->where('id')->in(array_unique($programKeys))
+                ->fetchAll('id');
+
+            foreach($products as $product)
+            {
+                $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
+                $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
+            }
+        }
 
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
@@ -1825,11 +1846,10 @@ class productModel extends model
             ->fetchGroup('product', 'status');
 
         /* Padding the stories to sure all products have records. */
-        $emptyStory = array_keys($this->lang->story->statusList);
         foreach($productKeys as $productID)
         {
-            if(!isset($stories[$productID]))      $stories[$productID]      = $emptyStory;
-            if(!isset($requirements[$productID])) $requirements[$productID] = $emptyStory;
+            if(!isset($stories[$productID]))      $stories[$productID]      = array();
+            if(!isset($requirements[$productID])) $requirements[$productID] = array();
         }
 
         /* Padding the stories to sure all status have records. */
@@ -1932,21 +1952,6 @@ class productModel extends model
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
-
-        if(empty($programID))
-        {
-            $programKeys = array(0 => 0);
-            foreach($products as $product) $programKeys[] = $product->program;
-            $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
-                ->where('id')->in(array_unique($programKeys))
-                ->fetchAll('id');
-
-            foreach($products as $product)
-            {
-                $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
-                $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
-            }
-        }
 
         $stats = array();
         foreach($products as $key => $product)

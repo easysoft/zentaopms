@@ -1271,6 +1271,10 @@ class product extends control
      *
      * @param  string $browseType
      * @param  string $orderBy
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1280,7 +1284,7 @@ class product extends control
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
 
         if($this->app->viewType == 'mhtml')
         {
