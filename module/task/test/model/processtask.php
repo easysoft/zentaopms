@@ -7,88 +7,83 @@ su('admin');
 /**
 
 title=taskModel->processTask();
+timeout=0
 cid=1
-pid=1
 
-根据taskID计算wait 未延迟的任务进度 >> ,,normal,75
-根据taskID计算wait 延迟的任务进度 >> 1,,normal,75
-根据taskID计算doing 延迟的任务进度 >> 1,,normal,80
-根据taskID计算doing 未延迟的任务进度 >> ,,normal,80
-根据taskID计算done 延迟的任务进度 >> ,,normal,100
-根据taskID计算算done 未延迟的任务进度 >> ,,normal,100
+- 计算一个不存在的任务进度 @任务未找到
+
+- 根据taskID计算wait的任务进度
+ - 属性productType @normal
+ - 属性progress @75
+
+- 根据taskID计算wait的任务进度及任务团队
+ - 属性productType @branch
+ - 属性progress @80
+ - 属性teamMembers @用户1,用户2,用户3,用户4,用户5
+
+- 根据taskID计算doing的任务进度
+ - 属性productType @platform
+ - 属性progress @83
+
+- 根据taskID计算done的任务进度
+ - 属性productType @normal
+ - 属性progress @100
+
+- 根据taskID计算pause的任务进度
+ - 属性productType @branch
+ - 属性progress @88
 
 */
 
-$task1 = new stdclass();
-$task1->status             = 'wait';
-$task1->deadline           = '+1day';
-$task1->storyStatus        = 'draft';
-$task1->latestStoryVersion = '1';
-$task1->storyVersion       = '1';
-$task1->product            = '1';
-$task1->assignedTo         = 'po82';
-$task1->consumed           = '3';
-$task1->left               = '1';
+$task = zdTable('task');
+$task->id->range('1-7');
+$task->execution->range('1-7');
+$task->name->prefix("任务")->range('1-7');
+$task->left->range('1,1,1,0,1,0,0');
+$task->story->range('1-5');
+$task->storyVersion->range('1,2,4,4,5');
+$task->mode->range(" , multi, , , , ,");
+$task->estStarted->range('2022\-01\-01');
+$task->deadline->range('2022\-01\-01');
+$task->assignedTo->prefix("user")->range('1-7');
+$task->status->range("wait,wait,doing,done,pause,cancel,closed");
+$task->gen(5);
 
-$task2 = new stdclass();
-$task2->status             = 'doing';
-$task2->deadline           = '-1day';
-$task2->storyStatus        = 'draft';
-$task2->latestStoryVersion = '1';
-$task2->storyVersion       = '1';
-$task2->product            = '9';
-$task2->assignedTo         = '';
-$task2->consumed           = '3';
-$task2->left               = '1';
+$story = zdTable('story');
+$story->id->range('1-5');
+$story->product->range('1-5');
+$story->title->prefix('需求')->range('1-5');
+$story->status->range('active');
+$story->version->range('1-5');
+$story->gen(5);
 
-$task3 = new stdclass();
-$task3->status             = 'doing';
-$task3->deadline           = '-1day';
-$task3->storyStatus        = 'draft';
-$task3->latestStoryVersion = '1';
-$task3->storyVersion       = '1';
-$task3->product            = '2';
-$task3->assignedTo         = '';
-$task3->consumed           = '4';
-$task3->left               = '1';
+$product = zdTable('product');
+$product->id->range('1-5');
+$product->name->prefix('产品')->range('1-5');
+$product->type->range('normal,branch,platform');
+$product->status->range('normal,closed');
+$product->gen(5);
 
-$task4 = new stdclass();
-$task4->status             = 'doing';
-$task4->deadline           = '+1day';
-$task4->storyStatus        = 'draft';
-$task4->latestStoryVersion = '1';
-$task4->storyVersion       = '1';
-$task4->product            = '2';
-$task4->assignedTo         = '';
-$task4->consumed           = '4';
-$task4->left               = '1';
+$taskteam = zdTable('taskteam');
+$taskteam->id->range('1-5');
+$taskteam->task->range('2');
+$taskteam->account->prefix("user")->range('1-5');
+$taskteam->estimate->range('5');
+$taskteam->consumed->range('0');
+$taskteam->left->range('5');
+$taskteam->status->range("wait");
+$taskteam->gen(5);
 
-$task5 = new stdclass();
-$task5->status             = 'done';
-$task5->deadline           = '-1day';
-$task5->storyStatus        = 'draft';
-$task5->latestStoryVersion = '1';
-$task5->storyVersion       = '1';
-$task5->product            = '9';
-$task5->assignedTo         = '';
-$task5->consumed           = '11';
-$task5->left               = '0';
+$effort = zdTable('effort');
+$effort->gen(1);
 
-$task6 = new stdclass();
-$task6->status             = 'done';
-$task6->deadline           = '+1day';
-$task6->storyStatus        = 'draft';
-$task6->latestStoryVersion = '1';
-$task6->storyVersion       = '1';
-$task6->product            = '9';
-$task6->assignedTo         = '';
-$task6->consumed           = '11';
-$task6->left               = '0';
+$user = zdTable('user');
+$user->gen(20);
 
 $task = new taskTest();
-r($task->processTaskTest($task1)) && p('delay,needConfirm,productType,progress') && e(',,normal,75');   //根据taskID计算wait 未延迟的任务进度
-r($task->processTaskTest($task2)) && p('delay,needConfirm,productType,progress') && e('1,,normal,75');  //根据taskID计算wait 延迟的任务进度
-r($task->processTaskTest($task3)) && p('delay,needConfirm,productType,progress') && e('1,,normal,80');  //根据taskID计算doing 延迟的任务进度
-r($task->processTaskTest($task4)) && p('delay,needConfirm,productType,progress') && e(',,normal,80');   //根据taskID计算doing 未延迟的任务进度
-r($task->processTaskTest($task5)) && p('delay,needConfirm,productType,progress') && e(',,normal,100'); //根据taskID计算done 延迟的任务进度
-r($task->processTaskTest($task6)) && p('delay,needConfirm,productType,progress') && e(',,normal,100'); //根据taskID计算算done 未延迟的任务进度
+r($task->processTaskTest(0)) && p() && e('任务未找到'); //计算一个不存在的任务进度
+r($task->processTaskTest(1)) && p('productType,progress') && e('normal,75');   //根据taskID计算wait的任务进度
+r($task->processTaskTest(2)) && p('productType|progress|teamMembers', '|') && e('branch|80|用户1,用户2,用户3,用户4,用户5'); //根据taskID计算wait的任务进度及任务团队
+r($task->processTaskTest(3)) && p('productType,progress') && e('platform,83'); //根据taskID计算doing的任务进度
+r($task->processTaskTest(4)) && p('productType,progress') && e('normal,100');  //根据taskID计算done的任务进度
+r($task->processTaskTest(5)) && p('productType,progress') && e('branch,88');   //根据taskID计算pause的任务进度

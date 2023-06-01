@@ -819,13 +819,16 @@ class taskTest
     /**
      * Test process a task, judge it's status.
      *
-     * @param  object $task
+     * @param  int $task
      * @access public
-     * @return object
+     * @return string|object|array
      */
-    public function processTaskTest($task)
+    public function processTaskTest(int $taskID): string|object|array
     {
-        $task->deadline = $task->deadline == '-1day' ? date('Y-m-d',strtotime('-1 day')) : date('Y-m-d',strtotime('+1 day'));
+        $task = $this->objectModel->getByID($taskID);
+        if(!$task) return '任务未找到';
+
+        $task->product = $task->id;
         $object = $this->objectModel->processTask($task);
 
         if(dao::isError())
