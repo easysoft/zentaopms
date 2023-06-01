@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('bug',          $bug);
 jsVar('oldProjectID', $bug->projectID);
 jsVar('oldProductID', $bug->productID);
 jsVar('moduleID', $bug->moduleID);
