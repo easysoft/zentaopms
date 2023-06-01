@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
-zdTable('storyspec')->gen(1);
+zdTable('storyspec')->gen(0);
 
 /**
 
