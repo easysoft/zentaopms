@@ -1319,6 +1319,11 @@ class baseRouter
      */
     public function parseRequest()
     {
+        if(str_starts_with($_SERVER['REQUEST_URI'], '/data/upload') && !is_file($this->wwwRoot . $_SERVER['REQUEST_URI']))
+        {
+            header("HTTP/1.1 404 Not Found", true, 404);
+        }
+
         if($this->config->requestType == 'PATH_INFO' or $this->config->requestType == 'PATH_INFO2')
         {
             $this->parsePathInfo();
