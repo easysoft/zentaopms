@@ -105,7 +105,6 @@ class program extends control
         $this->view->orderBy      = $orderBy;
         $this->view->summary      = isset($summary) ? $summary : '';
         $this->view->pager        = $pager;
-        $this->view->users        = $this->user->getPairs('noletter');
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
