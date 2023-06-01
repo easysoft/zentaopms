@@ -2105,41 +2105,4 @@ class bugTest
         global $tester;
         return $tester->config->bug->dtable->fieldList['actions']['actionsMap'];
     }
-
-    /**
-     * 测试批量创建bug前处理上传图片。
-     * Test process the uploaded images before batch creating bugs.
-     *
-     * @param  object       $bug
-     * @param  string       $uploadImage
-     * @param  array        $bugImagesFile
-     * @access public
-     * @return array|string
-     */
-    public function processImageForBatchCreateTest(object $bug, string $uploadImage, array $bugImagesFiles): array|string
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-        $tester->loadModel('file');
-        $tester->file->savePath = $tester->app->tmpRoot;
-
-        $file = $this->objectModel->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
-
-        if(dao::isError())
-        {
-            $return = '';
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$value}";
-                if(is_array($value))  $return .= implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            return $file;
-        }
-    }
 }
