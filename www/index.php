@@ -14,6 +14,7 @@
 /* Set the error reporting. */
 error_reporting(E_ALL);
 define('IN_USE', true);
+define('USE_INTRANET', false);
 
 /* Start output buffer. */
 ob_start();

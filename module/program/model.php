@@ -632,51 +632,48 @@ class programModel extends model
     /**
      * Get program and project progress list.
      *
+     * @param  array  $programIdList
      * @access public
      * @return array
      */
-    public function getProgressList()
+    public function getProgressList($programIdList = array())
     {
+        $programPairs = $this->getPairs();
+        $projectStats = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
+
+        $existProgramIdList = array_intersect($programIdList, array_keys($programPairs));
+        $existProjectIdList = array_intersect($programIdList, array_keys($projectStats));
+
         $totalProgress = array();
         $projectCount  = array();
         $userPRJCount  = array();
         $progressList  = array();
-        $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
 
-        /* Add program progress. */
-        foreach(array_keys($programPairs) as $programID)
+        foreach($existProgramIdList as $programID)
         {
             $totalProgress[$programID] = 0;
             $projectCount[$programID]  = 0;
             $userPRJCount[$programID]  = 0;
             $progressList[$programID]  = 0;
 
-            foreach($projectStats as $project)
+            foreach($existProjectIdList as $projectID)
             {
-                if(strpos($project->path, ',' . $programID . ',') === false) continue;
+                if(strpos($projectStats[$projectID]->path, ",{$programID},") === false) continue;
 
                 /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPRJCount[$programID] ++;
+                if(strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false) $userPRJCount[$programID] ++;
 
-                $totalProgress[$programID] += $project->progress;
+                $totalProgress[$programID] += $projectStats[$projectID]->progress;
                 $projectCount[$programID] ++;
             }
 
             if(empty($projectCount[$programID])) continue;
 
-            /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $userPRJCount[$programID] != $projectCount[$programID])
-            {
-                unset($progressList[$programID]);
-                continue;
-            }
-
             $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
         }
 
         /* Add project progress. */
-        foreach($projectStats as $project) $progressList[$project->id] = $project->progress;
+        foreach($existProjectIdList as $projectID) $progressList[$projectID] = $projectStats[$projectID]->progress;
 
         return $progressList;
     }
@@ -1456,6 +1453,8 @@ class programModel extends model
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
         if(empty($projects)) return array();
 
+        $leftTasks = ($this->cookie->projectType and $this->cookie->projectType == 'bycard') ? $this->loadModel('project')->getProjectLeftTasks(array_keys($projects)) : array();
+
         /* Get the members of project teams. */
         $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
@@ -1465,7 +1464,7 @@ class programModel extends model
             ->fetchGroup('root', 'account');
 
         /* Process projects. */
-        foreach($projects as $key => $project)
+        foreach($projects as $projectID => $project)
         {
             if($project->end == '0000-00-00') $project->end = '';
 
@@ -1476,12 +1475,13 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+            $project->teamMembers = isset($teamMembers[$projectID]) ? array_keys($teamMembers[$projectID]) : array();
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->tasks : '—';
 
             /* Convert predefined HTML entities to characters. */
             $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
-            $stats[$key] = $project;
+            $stats[$projectID] = $project;
         }
 
         return $stats;
