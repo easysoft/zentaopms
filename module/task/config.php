@@ -166,6 +166,12 @@ $config->task->actionList['pause']['text']        = $lang->task->pause;
 $config->task->actionList['pause']['url']         = helper::createLink('task', 'pause', 'taskID={id}', '', true);
 $config->task->actionList['pause']['data-toggle'] = 'modal';
 
+$config->task->actionList['activate']['icon']        = 'magic';
+$config->task->actionList['activate']['hint']        = $lang->task->activate;
+$config->task->actionList['activate']['text']        = $lang->task->activate;
+$config->task->actionList['activate']['url']         = helper::createLink('task', 'activate', 'taskID={id}', '', true);
+$config->task->actionList['activate']['data-toggle'] = 'modal';
+
 $config->task->actionList['assignTo']['icon']        = 'hand-right';
 $config->task->actionList['assignTo']['hint']        = $lang->task->assign;
 $config->task->actionList['assignTo']['text']        = $lang->task->assign;
