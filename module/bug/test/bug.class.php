@@ -1106,29 +1106,6 @@ class bugTest
     }
 
     /**
-     * Test update bug by id.
-     *
-     * @param  int    $bugID
-     * @param  array  $data
-     * @access public
-     * @return viod
-     */
-    public function updateByIDTest(int $bugID, array $data, $getBug = false)
-    {
-        $oldBug = $this->objectModel->getByID($bugID);
-
-        $result = $this->objectModel->updateByID($bugID, (object)$data);
-
-        if(dao::isError()) return dao::getError();
-
-        $newBug = $this->objectModel->getByID($bugID);
-        if($getBug) return $newBug;
-
-        $changes = common::createChanges($oldBug, $newBug);
-        return $changes;
-    }
-
-    /**
      * Test activate a bug.
      *
      * @param  int    $bugID
