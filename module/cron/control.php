@@ -212,7 +212,7 @@ class cron extends control
                         elseif(isset($crons[$id]) and $crons[$id]->type == 'system')
                         {
                             exec($cron['command'], $output, $return);
-                            if($output) $output = join("\n", $output);
+                            if($output) $output = implode("\n", $output);
                         }
 
                         /* Save log. */
