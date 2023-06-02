@@ -207,6 +207,7 @@
       <?php echo html::checkbox('onlyScene', array('1' => $lang->testcase->onlyScene), '', $this->cookie->onlyScene ? 'checked=checked' : '');?>
     </div>
     <?php endif;?>
+    <?php $moduleID = isset($moduleID) ? (int)$moduleID : 0;?>
     <?php if(!empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
@@ -258,12 +259,11 @@
     </div>
     <?php endif;?>
 
-    <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <div class='btn-group dropdown'>
       <?php
-      $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-      $batchCreateLink    = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-      $createSceneLink = $this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule");
+      $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID");
+      $batchCreateLink    = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
+      $createSceneLink    = $this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$moduleID");
 
       $buttonLink  = '';
       $buttonTitle = '';
