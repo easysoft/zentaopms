@@ -2720,9 +2720,9 @@ class storyModel extends model
         /* If no executions, in plan, stage is planned. No plan, wait. */
         if(!$linkedProjects) return $this->storyTao->setStageToPlanned($storyID, $stages, $oldStages);
 
-        /* 根据需求关联的任务，计算需求的阶段。 */
-        $stages = $this->storyTao->computeStagesByTasks($storyID, $linkedProjects, $stages);
-        if(empty($stages)) return true;
+        /* 根据需求关联的任务状态统计，计算需求的阶段。 */
+        $taskStat = $this->storyTao->getLinkedTaskStat($storyID, $linkedProjects);
+        $stages   = $this->storyTao->computeStagesByTasks($storyID, $taskStat, $stages, $linkedProjects);
 
         $this->storyTao->updateStage($storyID, $stages, $oldStages, $linkedProjects);
         return true;

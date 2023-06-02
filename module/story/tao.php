@@ -1016,6 +1016,9 @@ class storyTao extends storyModel
      */
     protected function updateStage(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): bool
     {
+        if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
+        if(empty($stages)) return false;
+
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($story)) return false;
 
@@ -1145,15 +1148,30 @@ class storyTao extends storyModel
         return count($linkedKanbans);
     }
 
-    protected function computeStagesByTasks(int $storyID, array $linkedProjects, array $stages): array
+    /**
+     * 根据任务状态统计，计算需求阶段。
+     * Compute stages by tasks status statistics.
+     *
+     * @param  int       $storyID
+     * @param  array     $taskStat
+     * @param  array     $stages
+     * @param  array     $linkedProjects
+     * @access protected
+     * @return array
+     */
+    protected function computeStagesByTasks(int $storyID, array $taskStat = array(), array $stages = array(), array $linkedProjects = array()): array
     {
-        $taskStat = $this->getLinkedTaskStat($storyID, $linkedProjects);
+        /* 设置关联的项目的分支阶段为已立项。 */
         if(empty($taskStat))
         {
-            if($linkedProjects) $stages = array_map(function(){return 'projected';}, $stages);
+            foreach($linkedProjects as $linkedProject)
+            {
+                foreach($linkedProject->branches as $branchID) $stages[$branchID] = 'projected';
+            }
             return $stages;
         }
 
+        /* 根据任务状态统计信息，计算该需求所处的阶段。 */
         list($branchStatusList, $branchDevelCount, $branchTestCount) = $taskStat;
         foreach($branchStatusList as $branch => $statusList)
         {
@@ -1161,10 +1179,10 @@ class storyTao extends storyModel
             $testCount  = isset($branchTestCount[$branch])  ? $branchTestCount[$branch]  : 0;
             $develCount = isset($branchDevelCount[$branch]) ? $branchDevelCount[$branch] : 0;
 
-            $doingDevelTask   = $statusList['devel']['wait'] > 0 && $statusList['devel']['wait'] != $develCount;
+            $doingDevelTask   = $statusList['devel']['wait'] < $develCount && $statusList['devel']['done'] < $develCount && $develCount > 0;
             $doneDevelTask    = $statusList['devel']['done'] == $develCount && $develCount > 0;
             $notStartTestTask = $statusList['test']['wait'] == $testCount;
-            $doingTestTask    = $statusList['test']['wait'] > 0 && $statusList['test']['wait'] != $testCount;
+            $doingTestTask    = $statusList['test']['wait'] < $testCount && $statusList['test']['done'] < $testCount && $testCount > 0;
             $doneTestTask     = $statusList['test']['done'] == $testCount && $testCount > 0;
             $hasDoingTestTask = $statusList['test']['doing'] > 0 || $statusList['test']['pause'] > 0;
             $notDoingTestTask = $statusList['test']['doing'] == 0;
@@ -1180,6 +1198,7 @@ class storyTao extends storyModel
             $stages[$branch] = $stage;
         }
 
+        /* 检查该需求是否已经发布，如果已经发布，阶段则为已发布。 */
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
         foreach($releases as $branches)
         {
