@@ -841,9 +841,9 @@ class transferModel extends model
      */
     public function updateLinkStories($stories)
     {
-        $productID = array();
-        foreach($stories as $values) $productID[] = $values->product;
-        $product = array_unique($productID);
+        $productIDList = array();
+        foreach($stories as $story) $productIDList[] = $story->product;
+        $productIDList = array_unique($productIDList);
 
         $storyDatas = end($stories);
         $lastBranch = $storyDatas->branch;
@@ -851,7 +851,7 @@ class transferModel extends model
 
         if($storyDatas->type == 'requirement')
         {
-            $stories = $this->loadModel('story')->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
+            $stories = $this->loadModel('story')->mergePlanTitle($productIDList , $stories, $lastBranch, $lastType);
         }
         elseif($storyDatas->type == 'story')
         {
