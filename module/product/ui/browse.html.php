@@ -74,6 +74,8 @@ data('storyBrowseType', $storyBrowseType);
 
 featureBar
 (
+    set::current($browseType),
+    set::linkParams("productID={$productID}&browseType={key}"),
     set::moreMenuLinkCallback
     (
         function($key, $value) use($projectIDParam, $productID, $branch, $storyType)
