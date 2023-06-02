@@ -7,12 +7,40 @@ function changeProduct(event)
     loadScenes(productID);
 }
 
+function changeBranch(event)
+{
+    const productID = $('#product').val();
+    loadProductModules(productID);
+    loadProductStories(productID);
+}
+
+function clickRefresh(event)
+{
+    const productID = $('#product').val();
+    loadProductModules(productID);
+}
+
+function changeStory(event)
+{
+    const storyID = $(event.target).val();
+    if(storyID)
+    {
+        const storyLink = $.createLink('story', 'view', 'storyID=' + storyID);
+        $('#preview').parent().removeClass('hidden');
+        $('#preview').attr('href', storyLink);
+    }
+    else
+    {
+        $('#preview').parent().addClass('hidden');
+    }
+}
+
 function loadProductBranchs(productID)
 {
     var param     = config.currentMethod == 'create' ? 'active' : 'all';
     var oldBranch = config.currentMethod == 'edit' ? caseBranch : 0;
-    var param     = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + param;
-    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
+    var param     = 'productID=' + productID + '&oldBranch=' + oldBranch + '&param=' + param;
+    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += '&projectID=' + objectID;
 
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {

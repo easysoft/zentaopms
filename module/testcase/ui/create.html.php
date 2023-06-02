@@ -17,9 +17,10 @@ if($app->tab == 'project')   jsVar('objectID', $projectID);
 
 formPanel
 (
-    on::change('#product',   'changeProduct'),
-    on::change('#branch',    'loadBranchNew'),
-    on::click('#refresh',    'loadProductModulesNew'),
+    on::change('#product', 'changeProduct'),
+    on::change('#branch',  'changeBranch'),
+    on::change('#story',   'changeStory'),
+    on::click('#refresh',  'clickRefresh'),
     to::headingActions(icon('cog-outline')),
     formRow
     (
@@ -156,6 +157,18 @@ formPanel
                     set::name('story'),
                     set::items($stories),
                     set::value($storyID)
+                ),
+                span
+                (
+                    set('class', 'input-group-addon'),
+                    set('class' , !$storyID ? 'hidden' : ''),
+                    a
+                    (
+                        set::id('preview'),
+                        set::href(helper::createLink('story', 'view', "storyID={$storyID}")),
+                        set('data-toggle', 'modal'),
+                        $lang->preview
+                    )
                 )
             )
         )
