@@ -47,7 +47,7 @@ class upgradeModel extends model
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
             $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
         }
-        if($fromEdition == 'open' and $toEdtion == 'open') return $versions;
+        if($fromEdition == 'open' and $toEdition == 'open') return $versions;
 
         /* Update pro sql if fromEdtion is open|pro and toEdition is pro. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
