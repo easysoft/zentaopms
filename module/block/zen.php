@@ -840,7 +840,7 @@ class blockZen extends block
             foreach($taskGroup as $task)
             {
                 if(strpos('wait|doing|pause|cancel', $task->status) !== false) $undoneTasks ++;
-                if(strpos($task->finishedDate, $yesterday) !== false) $yesterdayFinished ++;
+                if($task->finishedDate && strpos($task->finishedDate, $yesterday) !== false) $yesterdayFinished ++;
 
                 if($task->parent == '-1') continue;
 
