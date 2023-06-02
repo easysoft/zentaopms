@@ -1506,14 +1506,15 @@ class bugTest
     }
 
     /**
+     * 测试获取需求关联的 bug 数量。
      * Test get counts of some stories' bugs.
      *
      * @param  array  $storyIDList
      * @param  int    $executionID
      * @access public
-     * @return int
+     * @return array
      */
-    public function getStoryBugCountsTest($storyIDList, $executionID = 0)
+    public function getStoryBugCountsTest(array $storyIDList, int $executionID = 0): array
     {
         $array = $this->objectModel->getStoryBugCounts($storyIDList, $executionID);
 
@@ -1528,14 +1529,15 @@ class bugTest
     }
 
     /**
+     * 测试从测试结果中获取 bug 信息。
      * Test get bug info from a result.
      *
      * @param  int    $runID
      * @param  int    $caseID
      * @access public
-     * @return string
+     * @return string|int|array
      */
-    public function getBugInfoFromResultTest($resultID, $caseID = 0)
+    public function getBugInfoFromResultTest(int $resultID, int $caseID = 0): string|int|array
     {
         $array = $this->objectModel->getBugInfoFromResult($resultID, $caseID);
 
