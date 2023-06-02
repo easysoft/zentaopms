@@ -797,6 +797,24 @@ class storyTest
     }
 
     /**
+     * 测试 setStage 方法。
+     * Test setStage method.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return object|array
+     */
+    public function setStageTest(int $storyID): object|array
+    {
+        $this->objectModel->setStage($storyID);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
+
+    /**
      * 测试 updateStage 方法。
      * Test updateStage method.
      *

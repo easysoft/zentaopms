@@ -2697,12 +2697,14 @@ class storyModel extends model
      */
     public function setStage(int $storyID): bool
     {
-        /* Get projects which status is doing. */
+        $story  = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($story)) return false;
+
+        /* 获取已经存在的分支阶段. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
         /* 手动设置了阶段，就不需要字段计算阶段了。 */
-        $story     = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $product   = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $hasBranch = ($product and $product->type != 'normal' and empty($story->branch));
         if(!empty($story->stagedBy) and $story->status != 'closed') return true;
