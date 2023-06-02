@@ -199,39 +199,6 @@ class bugTest
     }
 
     /**
-     * Test get bugs of assign to me.
-     *
-     * @param  string $productIDList
-     * @param  string $moduleIDList
-     * @access public
-     * @return string
-     */
-    public function getByAssigntomeTest($productIDList, $moduleIDList)
-    {
-        global $tester;
-        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
-
-        $bugs = $this->objectModel->getByAssigntome($productIDList, 'all', $moduleIDList, $executions, 'id_desc', null, 0);
-
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
-    /**
      * Test get by Sonarqube id.
      *
      * @param  int    $sonarqubeID
