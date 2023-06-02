@@ -369,8 +369,7 @@ class task extends control
         $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
         $this->view->linkCommits  = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
         $this->view->methodName   = $this->methodName;
-        // $this->display();
-        $this->render();
+        $this->display();
     }
 
     /**
