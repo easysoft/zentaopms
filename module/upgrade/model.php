@@ -30,7 +30,9 @@ class upgradeModel extends model
     /**
      * Get versions to update
      *
-     * @param  mixed $openVersion
+     * @param  mixed  $openVersion
+     * @param  string $fromEdition open|pro|biz|max
+     * @param  string $toEdition   open|pro|biz|max
      * @access public
      * @return array
      */
@@ -47,21 +49,21 @@ class upgradeModel extends model
         }
         if($fromEdition == 'open' and $toEdtion == 'open') return $versions;
 
-        /* Update pro sql from pro|biz|max. */
+        /* Update pro sql if fromEdtion is open|pro and toEdition is pro. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
         }
          if(in_array($fromEdition, array('open', 'pro')) and $toEdition == 'pro') return $versions;
 
-        /* Update biz sql from biz|max. */
+        /* Update biz sql if fromEdtion is open|pro|biz and toEdition is biz. */
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
         }
         if(in_array($fromEdition, array('open', 'pro', 'biz')) and $toEdition == 'biz') return $versions;
 
-        /* Update max sql only from max. */
+        /* Update max sql if fromEdtion is open|pro|biz|max and toEdition is max. */
         foreach($this->config->upgrade->maxVersion as $max => $open)
         {
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
