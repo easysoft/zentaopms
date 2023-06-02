@@ -1214,11 +1214,22 @@ class bugTest
      * @access public
      * @return array
      */
-    public function closeObject($bugID)
+    public function closeObject(int $bugID, array $output = array())
     {
-        $change = $this->objectModel->close($bugID, '');
+        $now = helper::now();
 
-        if($change == array()) $change = '没有数据更新';
+        $bug = new stdclass();
+        $bug->id             = $bugID;
+        $bug->status         = 'closed';
+        $bug->confirmed      = 1;
+        $bug->assignedDate   = $now;
+        $bug->lastEditedBy   = 'admin';
+        $bug->lastEditedDate = $now;
+        $bug->closedBy       = 'admin';
+        $bug->closedDate     = $now;
+        $bug->comment        = '';
+
+        $this->objectModel->close($bug, $output);
 
         if(dao::isError())
         {
@@ -1226,7 +1237,8 @@ class bugTest
         }
         else
         {
-            return $change;
+            $bug = $this->objectModel->fetchBugInfo($bugID);
+            return $bug;
         }
     }
 
