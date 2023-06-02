@@ -1076,36 +1076,6 @@ class bugTest
     }
 
     /**
-     * Test batch change plan.
-     *
-     * @param  array  $bugIDList
-     * @param  int    $planID
-     * @param  int    $bugID
-     * @access public
-     * @return array
-     */
-    public function batchChangePlanTest(array $bugIDList, int $planID, int $bugID)
-    {
-        $oldBugs = $this->objectModel->getByIdList($bugIDList);
-
-        $object = $this->objectModel->batchChangePlan($bugIDList, $planID);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $newBugs = $this->objectModel->getByIdList($bugIDList);
-            if(!empty($newBugs[$bugID]))
-            {
-                $changes = common::createChanges($oldBugs[$bugID], $newBugs[$bugID]);
-                return $changes;
-            }
-        }
-    }
-
-    /**
      * Test activate a bug.
      *
      * @param  int    $bugID
