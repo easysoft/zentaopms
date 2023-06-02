@@ -6,29 +6,89 @@ su('admin');
 
 /**
 
-title=taskModel->processTasks();
+title=taskModel->processTask();
+timeout=0
 cid=1
-pid=1
 
-根据tasks计算executionID为1的执行下所有任务的进度 任务1 >> ,100
-根据tasks计算executionID为1的执行下所有任务的进度 任务601 >> 7,100
-根据tasks计算executionID为1的执行下所有任务的进度 任务602 >> 8,80
-根据tasks计算executionID为1的执行下所有任务的进度 任务603 >> ,71
-根据tasks计算executionID为2的执行下所有任务的进度 任务2 >> ,80
-根据tasks计算executionID为2的执行下所有任务的进度 任务604 >> 10,67
-根据tasks计算executionID为2的执行下所有任务的进度 任务605 >> ,64
-根据tasks计算executionID为2的执行下所有任务的进度 任务606 >> ,62
+- 查看处理后的执行1下的任务数量 @6
+
+- 根据executionID计算其下任务的进度及相关信息
+ - 第1条的productType属性 @normal
+ - 第1条的progress属性 @75
+
+- 根据executionID计算其下任务的进度及相关信息
+ - 第2条的productType属性 @branch
+ - 第2条的progress属性 @80
+
+- 根据executionID计算其下任务的进度及相关信息
+ - 第3条的productType属性 @platform
+ - 第3条的progress属性 @83
+
+- 根据executionID计算其下任务的进度及相关信息
+ - 第4条的productType属性 @normal
+ - 第4条的progress属性 @100
+
+- 根据executionID计算其下任务的进度及相关信息
+ - 第5条的productType属性 @branch
+ - 第5条的progress属性 @88
 
 */
 
-$executionID = array('101', '102');
+$task = zdTable('task');
+$task->id->range('1-30');
+$task->execution->range('1-5');
+$task->name->prefix("任务")->range('1-30');
+$task->left->range('1,1,1,0,1,0,0');
+$task->story->range('1-30');
+$task->storyVersion->range('1,2,4,4,5');
+$task->mode->range(" , multi, , , , ,");
+$task->estStarted->range('2022\-01\-01');
+$task->deadline->range('2022\-01\-01');
+$task->assignedTo->prefix("user")->range('1-7');
+$task->status->range("wait,wait,doing,done,pause,cancel,closed");
+$task->gen(30);
+
+$execution = zdTable('project');
+$execution->id->range('1-5');
+$execution->type->range('sprint');
+$execution->name->prefix('执行')->range('1-5');
+$execution->gen(5);
+
+$story = zdTable('story');
+$story->id->range('1-30');
+$story->product->range('1-5');
+$story->title->prefix('需求')->range('1-5');
+$story->status->range('active');
+$story->version->range('1-5');
+$story->gen(30);
+
+$product = zdTable('product');
+$product->id->range('1-5');
+$product->name->prefix('产品')->range('1-5');
+$product->type->range('normal,branch,platform');
+$product->status->range('normal,closed');
+$product->gen(5);
+
+$taskteam = zdTable('taskteam');
+$taskteam->id->range('1-5');
+$taskteam->task->range('2');
+$taskteam->account->prefix("user")->range('1-5');
+$taskteam->estimate->range('5');
+$taskteam->consumed->range('0');
+$taskteam->left->range('5');
+$taskteam->status->range("wait");
+$taskteam->gen(5);
+
+$effort = zdTable('effort');
+$effort->gen(1);
+
+$user = zdTable('user');
+$user->gen(20);
 
 $task = new taskTest();
-r($task->processTasksTest($executionID['0'])) && p('1:delay,progress')   && e(',100');  //根据tasks计算executionID为1的执行下所有任务的进度 任务1
-r($task->processTasksTest($executionID['0'])) && p('601:delay,progress') && e('7,100');  //根据tasks计算executionID为1的执行下所有任务的进度 任务601
-r($task->processTasksTest($executionID['0'])) && p('602:delay,progress') && e('8,80');   //根据tasks计算executionID为1的执行下所有任务的进度 任务602
-r($task->processTasksTest($executionID['0'])) && p('603:delay,progress') && e(',71');   //根据tasks计算executionID为1的执行下所有任务的进度 任务603
-r($task->processTasksTest($executionID['1'])) && p('2:delay,progress')   && e(',80');   //根据tasks计算executionID为2的执行下所有任务的进度 任务2
-r($task->processTasksTest($executionID['1'])) && p('604:delay,progress') && e('10,67'); //根据tasks计算executionID为2的执行下所有任务的进度 任务604
-r($task->processTasksTest($executionID['1'])) && p('605:delay,progress') && e(',64');   //根据tasks计算executionID为2的执行下所有任务的进度 任务605
-r($task->processTasksTest($executionID['1'])) && p('606:delay,progress') && e(',62');   //根据tasks计算executionID为2的执行下所有任务的进度 任务606
+r(count($task->processTasksTest(1))) && p() && e('6'); //查看处理后的执行1下的任务数量
+r($task->processTasksTest(1)) && p('1:productType,progress') && e('normal,75');   //根据executionID计算其下任务的进度及相关信息
+r($task->processTasksTest(2)) && p('2:productType,progress') && e('branch,80');   //根据executionID计算其下任务的进度及相关信息
+r($task->processTasksTest(3)) && p('3:productType,progress') && e('platform,83'); //根据executionID计算其下任务的进度及相关信息
+r($task->processTasksTest(4)) && p('4:productType,progress') && e('normal,100');  //根据executionID计算其下任务的进度及相关信息
+r($task->processTasksTest(5)) && p('5:productType,progress') && e('branch,88');   //根据executionID计算其下任务的进度及相关信息

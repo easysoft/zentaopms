@@ -851,13 +851,14 @@ class taskTest
      * @access public
      * @return array
      */
-    public function processTasksTest($executionID)
+    public function processTasksTest(int $executionID): array
     {
         $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetchAll('id');
         $parents = '0';
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents .= ",$task->parent";
+            $task->product = $task->execution;
         }
         $parents = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('`id`')->in($parents)->andWhere('deleted')->eq('0')->fetchAll('id');
         foreach($tasks as $task)

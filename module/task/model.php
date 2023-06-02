@@ -2070,13 +2070,14 @@ class taskModel extends model
     }
 
     /**
-     * Batch process tasks.
+     * 批量处理任务，计算进度、获取相关信息。
+     * Batch process tasks, compute their progress and get their relates.
      *
-     * @param  int    $tasks
+     * @param  array  $tasks
      * @access public
-     * @return void
+     * @return array
      */
-    public function processTasks($tasks)
+    public function processTasks(array $tasks): array
     {
         foreach($tasks as $task)
         {
@@ -2089,6 +2090,7 @@ class taskModel extends model
                 }
             }
         }
+
         return $tasks;
     }
 
