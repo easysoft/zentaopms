@@ -56,10 +56,61 @@ toolbar
     )
 );
 
+$footToolbar = array('items' => array
+(
+    array('type' => 'btn-group', 'items' => array
+    (
+        array('text' => $lang->testtask->runCase, 'className' => 'batch-btn', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")),
+        array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
+        array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    )),
+    array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('text' => $lang->testcase->importToLib, 'btnType' => 'primary', 'data-toggle' => 'modal', 'data-url' => '#importToLib'),
+    array('caret' => 'up', 'text' => $lang->testcase->scene, 'btnType' => 'primary', 'url' => '#navScene','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+));
+
+$typeItems = array();
+foreach($lang->testcase->typeList as $key => $result) $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result=$key"));
+
+zui::menu
+(
+    set::id('navActions'),
+    set::class('menu dropdown-menu'),
+    set::items(array
+    (
+        array('text' => $lang->delete, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID")),
+        array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems),
+        array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID")),
+    ))
+);
+
+$moduleItems = array();
+foreach($modules as $moduleId => $module) $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleId"));
+
+menu
+(
+    set::id('navModule'),
+    set::class('dropdown-menu'),
+    set::items($moduleItems)
+);
+
+$sceneItems = array();
+foreach($iscenes as $sceneID => $scene) $sceneItems[] = array('text' => $scene, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeScene', "sceneId=$sceneID"));
+
+menu
+(
+    set::id('navScene'),
+    set::class('dropdown-menu'),
+    set::items($sceneItems)
+);
+
 dtable
 (
     set::cols($cols),
     set::data($data),
+    set::footPager(usePager()),
+    set::checkable(true),
+    set::footToolbar($footToolbar),
 );
 
 render();
