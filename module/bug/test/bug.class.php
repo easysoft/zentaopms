@@ -1021,31 +1021,6 @@ class bugTest
     }
 
     /**
-     * Test batch change branch.
-     *
-     * @param  array  $bugIDList
-     * @param  int    $branchID
-     * @param  int    $bugID
-     * @access public
-     * @return array
-     */
-    public function batchChangeBranchTest($bugIDList, $branchID, $bugID)
-    {
-        $oldBugs = $this->objectModel->getByIdList($bugIDList);
-
-        $object = $this->objectModel->batchChangeBranch($bugIDList, $branchID, $oldBugs);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return !empty($object[$bugID]) ? $object[$bugID] : 0;
-        }
-    }
-
-    /**
      * Test activate a bug.
      *
      * @param  int    $bugID
