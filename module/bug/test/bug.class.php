@@ -1129,31 +1129,6 @@ class bugTest
     }
 
     /**
-     * Test batch resolve bugs.
-     *
-     * @param  array  $bugIDList
-     * @param  string $resolution
-     * @param  int    $bugID
-     * @access public
-     * @return array
-     */
-    public function batchResolveTest($bugIDList, $resolution, $bugID)
-    {
-        $oldBugs = $this->objectModel->getByIdList($bugIDList);
-
-        $object = $this->objectModel->batchResolve($bugIDList, $resolution, 'trunk', $oldBugs, array(), 'user3');
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return !empty($object[$bugID]) ? $object[$bugID] : 0;
-        }
-    }
-
-    /**
      * Test activate a bug.
      *
      * @param  int    $bugID
