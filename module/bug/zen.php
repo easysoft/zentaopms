@@ -2103,12 +2103,12 @@ class bugZen extends bug
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
         if(isset($runID) and $runID and isset($resultID) and $resultID)
         {
-            $fields = $this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+            $fields = $this->bug->getBugInfoFromResult($resultID, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
             $bug    = $this->updateBug($bug, $fields);
         }
         if(isset($runID) and !$runID and isset($caseID) and $caseID)
         {
-            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
+            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
             $bug    = $this->updateBug($bug, $fields);
         }
 

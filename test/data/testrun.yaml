@@ -37,14 +37,14 @@ fields:
       - field: openedBy1
         range: admin,user,test,dev
       - field: openedBy2
-        range: [],2-4
+        range: "[],2-4"
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: lastRunner
     note: "最后执行人"
-    range: []{40},admin{30}
+    range: "[]{40},admin{30}"
     prefix: ""
     postfix: ""
     loop: 0
@@ -59,7 +59,7 @@ fields:
     format: "YYYY-MM-DD"
   - field: lastRunResult
     note: "最后执行结果"
-    range: [pass,fail]{20!},[pass,pass,fail]{15!}
+    range: "[pass,fail]{20!},[pass,pass,fail]{15!}"
     prefix: ""
     postfix: ""
     loop: 0

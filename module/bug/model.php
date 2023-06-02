@@ -1293,21 +1293,20 @@ class bugModel extends model
     }
 
     /**
+     * 从测试结果中获取bug信息。
      * Get bug info from a result.
      *
      * @param  int    $resultID
      * @param  int    $caseID
-     * @param  int    $version
+     * @param  string $caseID
      * @access public
      * @return array
      */
-    public function getBugInfoFromResult($resultID, $caseID = 0, $version = 0, $stepIdList = '')
+    public function getBugInfoFromResult(int $resultID, int $caseID = 0, string $stepIdList = ''): array
     {
-        $title    = '';
-        $bugSteps = '';
-        $steps    = explode('_', trim($stepIdList, '_'));
-
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
+        if(!$result) return array();
+
         if($caseID > 0)
         {
             $run = new stdclass();
@@ -1318,45 +1317,34 @@ class bugModel extends model
             $run = $this->loadModel('testtask')->getRunById($result->run);
         }
 
-        $title       = $run->case->title;
-        $caseSteps   = $run->case->steps;
         $stepResults = unserialize($result->stepResults);
-        if($run->case->precondition != '')
-        {
-            $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
-        }
-
         if(!empty($stepResults))
         {
             $bugStep   = '';
-            $bugResult = isset($stepResults[0]) ? $stepResults[0]['real'] : '';
+            $bugResult = isset($stepResults[0]) ? zget($stepResults[0], 'real') : '';
             $bugExpect = '';
+            $caseSteps = $run->case->steps;
+            $steps     = explode('_', trim($stepIdList, '_'));
             foreach($steps as $stepId)
             {
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                $i = $this->getCaseStepIndex($step);
-
                 $stepDesc   = str_replace("\n", "<br />", $step->desc);
                 $stepExpect = str_replace("\n", "<br />", $step->expect);
                 $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
 
+                $i          = $this->getCaseStepIndex($step);
                 $bugStep   .= $i . '. ' . $stepDesc . "<br />";
                 $bugResult .= $i . '. ' . $stepResult . "<br />";
                 $bugExpect .= $i . '. ' . $stepExpect . "<br />";
             }
+        }
 
-            $bugSteps .= $bugStep   ? str_replace('<br/>', '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
-            $bugSteps .= $bugResult ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
-            $bugSteps .= $bugExpect ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
-        }
-        else
-        {
-            $bugSteps .= $this->lang->bug->tplStep;
-            $bugSteps .= $this->lang->bug->tplResult;
-            $bugSteps .= $this->lang->bug->tplExpect;
-        }
+        $bugSteps  = $run->case->precondition != '' ? "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition : '';
+        $bugSteps .= !empty($stepResults) && !empty($bugStep)   ? str_replace('<br/>', '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
+        $bugSteps .= !empty($stepResults) && !empty($bugResult) ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
+        $bugSteps .= !empty($stepResults) && !empty($bugExpect) ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
 
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
@@ -1364,7 +1352,7 @@ class bugModel extends model
         if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
 
-        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
+        return array('title' => $run->case->title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
     }
 
     /**
