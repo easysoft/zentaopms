@@ -66,6 +66,18 @@ fields:
   - field: notify
     range: PO,PD
     postfix: ","
+  - field: createdBy
+    note: "由谁创建"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
 
   - field: deleted
     range: 0
