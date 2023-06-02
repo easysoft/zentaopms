@@ -112,25 +112,22 @@ class storyTest
     /**
      * Test create story.
      *
+     * @param  object $story
      * @param  int    $executionID
      * @param  int    $bugID
-     * @param  string $from
      * @param  string $extra
-     * @param  string $params
      * @access public
-     * @return void
+     * @return object|array
      */
-    public function createTest($executionID = 0, $bugID = 0, $from = '', $extra = '', $params = '')
+    public function createTest(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): object|array
     {
-        $_POST  = $params;
-        $result = $this->objectModel->create($executionID, $bugID, $from, $extra);
-        unset($_POST);
-
+        $storyID = $this->objectModel->create($story, $executionID, $bugID, $extra);
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $storyID = $result['id'];
-        return $tester->loadModel('story')->getById($storyID);
+        $story = $this->objectModel->loadModel('story')->getByID($storyID);
+        if($executionID) $story->linkedProjects = $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+        if($bugID)       $story->linkedBug      = $this->objectModel->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        return $story;
     }
 
     /**
@@ -222,9 +219,9 @@ class storyTest
      * @param  string $planIDList
      * @param  string $oldPlanIDList
      * @access public
-     * @return void
+     * @return object|array
      */
-    public function updateStoryOrderOfPlanTest($storyID, $planIDList = '', $oldPlanIDList = '')
+    public function updateStoryOrderOfPlanTest(int $storyID, string $planIDList = '', string $oldPlanIDList = ''): object|array
     {
         $this->objectModel->updateStoryOrderOfPlan($storyID, $planIDList, $oldPlanIDList);
 
@@ -833,5 +830,21 @@ class storyTest
         $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
         return $story;
+    }
+
+    /**
+     * 测试 linkStory 方法。
+     * Test linkStory method.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function linkStoryTest(int $executionID, int $productID, int $storyID): array
+    {
+        $this->objectModel->linkStory($executionID, $productID, $storyID);
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
     }
 }

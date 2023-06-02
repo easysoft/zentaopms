@@ -446,19 +446,22 @@ class storyModel extends model
      * @access public
      * @return int|false the id of the created story or false when error.
      */
-    public function create(object $story, int $executionID, int $bugID = 0, string $extra = ''): int|false
+    public function create(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): int|false
     {
         if(defined('TUTORIAL')) return false;
 
         $storyID = $this->storyTao->doCreateStory($story);
         if(!$storyID) return false;
 
+        /* Upload files. */
         $this->loadModel('action');
-        $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $story->type);
         $files = $this->file->saveUpload($story->type, $storyID, 1);
+
+        /* Add story spec verify. */
         $this->storyTao->doCreateSpec($storyID, $story, $files);
 
-        if($executionID) $this->storyTao->linkToExecutionForCreate($objectID, $storyID, $story, $extra);
+        if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
         if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
         if(!empty($story->URS))      $this->storyTao->doCreateURRelations($storyID, $story->URS);

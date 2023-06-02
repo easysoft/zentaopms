@@ -4,47 +4,65 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+zdTable('product')->gen(2);
+zdTable('project')->gen(2);
+zdTable('bug')->gen(2);
+zdTable('relation')->gen(0);
+zdTable('storyreview')->gen(0);
+zdTable('projectstory')->gen(0);
+
+$story = zdTable('story');
+$story->type->range('requirement,story{10}');
+$story->parent->range('0,0,0,0');
+$story->product->range('1');
+$story->version->range('1');
+$story->gen(4);
+
+$storySpec = zdTable('storyspec');
+$storySpec->story->range('1-6');
+$storySpec->gen(4);
+
 /**
 
 title=测试 storyModel->create();
 cid=1
 pid=1
 
-不勾选由谁评审并且不传入评审人的情况，报错 >> 『由谁评审』不能为空。
-不勾选由谁评审传入评审人的情况，正常插入 >> 0,projected,1
-勾选由谁评审，不传入executionID的情况，阶段为wait >> 测试需求3,2,wait
-勾选由谁评审，传入executionID和fromBug的情况，阶段为projected >> 『研发需求名称』不能为空。
-
 */
 
-$story  = new storyTest();
-$story1['title']    = '测试需求1'; 
-$story1['pri']      = '3'; 
-$story1['product']  = 1; 
-$story1['spec']     = '测试需求的描述111'; 
-$story1['verify']   = '测试需求的验收标准111'; 
-$story1['estimate'] = 3; 
-$story1['mailto']   = array('user2', 'test2', 'admin'); 
+$data  = new stdclass();
+$data->product     = 1;
+$data->module      = 0;
+$data->modules     = array(0);
+$data->plans       = array(0);
+$data->plan        = 1;
+$data->assignedTo  = '';
+$data->source      = '';
+$data->sourceNote  = '';
+$data->feedbackBy  = '';
+$data->notifyEmail = '';
+$data->parent      = 0;
+$data->title       = 'test story';
+$data->color       = '';
+$data->category    = 'feature';
+$data->pri         = 3;
+$data->estimate    = 1;
+$data->spec        = 'test spec';
+$data->verify      = 'test verify';
+$data->keywords    = '';
+$data->type        = 'story';
+$data->status      = 'active';
+$data->version     = 1;
+$data->openedBy    = 'admin';
+$data->openedDate  = date('Y-m-d H:i:s');
+$data->mailto      = '';
+$data->URS[]       = 1;
+$data->reviewer[]  = 'admin';
 
-$story2 = $story1;
-$story2['reviewer'] = array('admin');
-$story2['title']    = '测试需求2';
-
-$story3 = $story1;
-$story3['needNotReview'] = true;
-$story3['product']       = 2;
-$story3['title']         = '测试需求3';
-
-$story4 = $story1;
-$story4['needNotReview'] = true;
-$story4['title']         = '';
-
-$result1 = $story->createTest(11, 0, '', '', $story1);
-$result2 = $story->createTest(11, 0, '', '', $story2);
-$result3 = $story->createTest(0,  2, '', '', $story3);
-$result4 = $story->createTest(12, 2, '', '', $story4);
-
-r($result1[0]) && p()                        && e('『由谁评审』不能为空。');     //不勾选由谁评审并且不传入评审人的情况，报错
-r($result2)    && p('fromBug,stage,product') && e('0,projected,1');              //不勾选由谁评审传入评审人的情况，正常插入
-r($result3)    && p('title,fromBug,stage')   && e('测试需求3,2,wait');           //勾选由谁评审，不传入executionID的情况，阶段为wait
-r($result4)    && p('title:0')               && e('『研发需求名称』不能为空。'); //勾选由谁评审，传入executionID和fromBug的情况，阶段为projected
+$story = new storyTest();
+$test1 = $story->createTest($data);
+$test2 = $story->createTest($data, 11);
+$test3 = $story->createTest($data, 0, 1);
+r((array)$test1)                 && p('id,title') && e('5,test story'); //检查创建后的数据。
+r(count($test2->linkedProjects)) && p()           && e('1');            //如果传入执行，检查需求是否已经关联到执行了。
+r($test3->linkedBug->status)     && p()           && e('closed');       //如果传入Bug，检查Bug是否已经关闭了。

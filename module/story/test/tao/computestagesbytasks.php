@@ -7,7 +7,6 @@ su('admin');
 $release = zdTable('release');
 $release->stories->range('2');
 $release->branch->range('0,1,2');
-$release->createdBy->range('admin');
 $release->gen(3);
 
 /**

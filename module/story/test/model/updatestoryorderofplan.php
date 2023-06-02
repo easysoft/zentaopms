@@ -4,16 +4,13 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+zdTable('planstory')->gen(5);
+
 /**
 
 title=测试 storyModel->updateStoryOrderOfPlan();
 cid=1
 pid=1
-
-把需求1迁移到计划1下，获取更新后的planstory >> 1,1,21
-把需求1迁移到计划1下，获取更新后的planstory数量 >> 4
-把需求1迁移到计划2下，获取更新后的planstory >> 2,1,1
-把需求1迁移到计划2下，获取更新后的planstory数量 >> 1
 
 */
 
