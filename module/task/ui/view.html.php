@@ -15,7 +15,7 @@ detailBody
         item
         (
             set::title($lang->task->legendDesc),
-            empty($task->desc) ? $lang->noData : $task->desc
+            set::content(empty($task->desc) ? $lang->noData : $task->desc)
         ),
         item
         (

@@ -46,7 +46,6 @@ function input(): input
  * int     cols
  * ?string id
  * ?string class='form-control'
- * ?string value
  * ?bool   required
  * ?string placeholder
  */

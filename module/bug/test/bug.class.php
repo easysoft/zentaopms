@@ -737,33 +737,21 @@ class bugTest
     }
 
     /**
+     * 获取激活和延期处理的 bug 列表。
      * Test get active and postponed bugs.
      *
-     * @param  string $bugIDList
+     * @param  array  $products
      * @param  int    $executionID
      * @access public
-     * @return string
+     * @return array
      */
-    public function getActiveAndPostponedBugsTest($products, $executionID)
+    public function getActiveAndPostponedBugsTest(array $products, int $executionID): array
     {
         $bugs = $this->objectModel->getActiveAndPostponedBugs($products, $executionID);
 
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
+        if(dao::isError()) return dao::getError();
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
+        return $bugs;
     }
 
     /**
@@ -1178,9 +1166,10 @@ class bugTest
     public function activateTest(int $bugID, int $buildID = 0, array $kanbanParams = array(), string $returnType = 'bug'): string|array|object
     {
         $bug = new stdclass();
-        $bug->id      = $bugID;
-        $bug->status  = 'active';
-        $bug->comment = "Activate bug{$bugID}";
+        $bug->id             = $bugID;
+        $bug->status         = 'active';
+        $bug->comment        = "Activate bug{$bugID}";
+        $bug->activatedCount = 1;
 
         $result = $this->objectModel->activate($bug, $kanbanParams);
 
@@ -1893,31 +1882,6 @@ class bugTest
     }
 
     /**
-     * Test get project list.
-     *
-     * @param  int    $productID
-     * @access public
-     * @return string
-     */
-    public function getProjectsTest($productID)
-    {
-        $array = $this->objectModel->getProjects($productID);
-
-        $title = '';
-        foreach($array as $id => $project) $title .= ',' . $project;
-        $title = trim($title, ',');
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
-    /**
      * Test get bug query.
      *
      * @param  string $bugQuery
@@ -1935,39 +1899,6 @@ class bugTest
         else
         {
             return $array;
-        }
-    }
-
-    /**
-     * Test get bugs of assigned by me.
-     *
-     * @param  string $productIDList
-     * @param  string $moduleIDList
-     * @access public
-     * @return string
-     */
-    public function getByAssignedbymeTest($productIDList, $moduleIDList)
-    {
-        global $tester;
-        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
-
-        $bugs = $this->objectModel->getByAssignedbyme($productIDList, 'all', $moduleIDList, $executions, 'id_desc', null, 0);
-
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
         }
     }
 
@@ -2086,166 +2017,6 @@ class bugTest
         {
             $build = $tester->dao->findByID($bug->resolvedBuild)->from(TABLE_BUILD)->fetch();
             return $build;
-        }
-    }
-
-    /*
-     * 测试设置操作按钮。
-     * Test for setting operate actions.
-     *
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function setOperateActionsTest(string $type = 'browse'): array
-    {
-        $this->objectModel->setOperateActions($type);
-
-        global $tester;
-        return $tester->config->bug->dtable->fieldList['actions']['actionsMap'];
-    }
-
-    /**
-     * 测试检查批量创建的bug的数据。
-     * Test check the batch created bugs.
-     *
-     * @param  array         $bugs
-     * @param  string        $required
-     * @access public
-     * @return array|string
-     */
-    public function afterBatchCreateTest(int $bugID, int $laneID, array $output, string $uploadImage, array|bool $file): array|string
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-        $bug  = $tester->dao->findByID($bugID)->from(TABLE_BUG)->fetch();
-
-        $actionID = $this->objectModel->afterBatchCreate($bug, $laneID, $output, $uploadImage, $file);
-
-        $return = '';
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$value}";
-                if(is_array($value))  $return .= implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            $fileID = $tester->dao->select('id')->from(TABLE_FILE)->where('objectID')->eq($bugID)->andWhere('objectType')->eq('bug')->fetch('id');
-            $cards  = $tester->dao->select('cards')->from(TABLE_KANBANCELL)
-                ->where('kanban')->eq($bug->execution)
-                ->andWhere('lane')->eq($laneID)
-                ->andWhere('column')->eq(zget($output, 'columnID', 0))
-                ->andWhere('type')->eq('bug')
-                ->fetch('cards');
-
-            return "action:{$actionID},file:{$fileID},cards:{$cards}";
-        }
-    }
-
-    /**
-     * 测试批量创建bug前处理上传图片。
-     * Test process the uploaded images before batch creating bugs.
-     *
-     * @param  object       $bug
-     * @param  string       $uploadImage
-     * @param  array        $bugImagesFile
-     * @access public
-     * @return array|string
-     */
-    public function processImageForBatchCreateTest(object $bug, string $uploadImage, array $bugImagesFiles): array|string
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-        $tester->loadModel('file');
-        $tester->file->savePath = $tester->app->tmpRoot;
-
-        $file = $this->objectModel->processImageForBatchCreate($bug, $uploadImage, $bugImagesFiles);
-
-        if(dao::isError())
-        {
-            $return = '';
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$value}";
-                if(is_array($value))  $return .= implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            return $file;
-        }
-    }
-
-    /**
-     * 测试输入的 bugs 是否符合批量编辑的要求。
-     * Test check bugs for batch edit.
-     *
-     * @param  array  $bugs
-     * @access public
-     * @return string
-     */
-    public function checkBugsForBatchUpdateTest(array $bugs): string
-    {
-        $this->objectModel->checkBugsForBatchUpdate($bugs);
-
-        if(dao::isError())
-        {
-            $return = '';
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$key}:{$value}";
-                if(is_array($value))  $return .= "{$key}:" .implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            return 'no error';
-        }
-    }
-
-    /**
-     * 测试批量编辑 bug 后的其他处理。
-     * Test processing after batch edit of bug.
-     *
-     * @param  object  $bug
-     * @access public
-     * @return string
-     */
-    public function afterBatchEditTest(object $bug): string
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-
-        $tester->config->global->scoreStatus = true;
-
-        $oldScore = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
-        $oldBug   = $tester->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
-
-        $this->objectModel->afterBatchEdit($bug, $oldBug);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $score = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
-            $action = $tester->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-
-            $scoreDifference = $score - $oldScore;
-            return "scoreDifference:{$scoreDifference};lastAction:{$action->objectType}-{$action->action}-{$action->objectID}";
         }
     }
 }

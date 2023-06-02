@@ -258,15 +258,16 @@ class bugModel extends model
     }
 
     /**
+     * 获取激活和延期处理的 bug 列表。
      * Get active and postponed bugs.
      *
-     * @param  int    $products
+     * @param  array  $products
      * @param  int    $executionID
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function getActiveAndPostponedBugs($products, $executionID, $pager = null)
+    public function getActiveAndPostponedBugs(array $products, int $executionID, object $pager = null): array
     {
         return $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product = t2.product')
@@ -277,7 +278,7 @@ class bugModel extends model
             ->beginIF(empty($products))->andWhere('t1.execution')->eq($executionID)->fi()
             ->andWhere('t2.project')->eq($executionID)
             ->andWhere("(t2.branch = '0' OR t1.branch = '0' OR t2.branch = t1.branch)")
-            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq('0')
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll('id');
@@ -457,32 +458,6 @@ class bugModel extends model
     }
 
     /**
-     * Batch confirm bugs.
-     *
-     * @param  array $bugIdList
-     * @access public
-     * @return void
-     */
-    public function batchConfirm($bugIdList)
-    {
-        $now  = helper::now();
-        $bugs = $this->getByList($bugIdList);
-        foreach($bugIdList as $bugID)
-        {
-            if($bugs[$bugID]->confirmed) continue;
-
-            $bug = new stdclass();
-            $bug->assignedTo     = $this->app->user->account;
-            $bug->lastEditedBy   = $this->app->user->account;
-            $bug->lastEditedDate = $now;
-            $bug->confirmed      = 1;
-
-            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
-            $this->executeHooks($bugID);
-        }
-    }
-
-    /**
      * 解决一个bug。
      * Resolve a bug.
      *
@@ -561,6 +536,7 @@ class bugModel extends model
         $this->lang->build->name = $this->lang->bug->placeholder->newBuildName;
         $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
             ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
+            ->batchCheck('name,execution', 'notempty')
             ->exec();
         if(dao::isError())
         {
@@ -569,6 +545,17 @@ class bugModel extends model
             {
                 $error['buildName'] = $error['name'];
                 unset($error['name']);
+            }
+            if(isset($error['execution']))
+            {
+                $executionLang = $this->lang->bug->execution;
+                if($oldBug->execution)
+                {
+                    $execution = $this->dao->findByID($oldBug->execution)->from(TABLE_EXECUTION)->fetch();
+                    if($execution and $execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+                }
+                $error['buildExecution'] = sprintf($this->lang->error->notempty, $executionLang);
+                unset($error['execution']);
             }
             dao::$errors = $error;
             return false;
@@ -725,7 +712,6 @@ class bugModel extends model
         {
             $bugCount = $this->dao->select("count(id) as num, date_format($field, '%m/%d') as date")->from(TABLE_BUG)
                 ->where('product')->eq($productID)
-                ->andWhere($field)->ne('0000-00-00 00:00:00')
                 ->andWhere('deleted')->eq(0)
                 ->andWhere($field)->between($startDate, $endDate . ' 23:50:59')
                 ->groupBy('date')
@@ -736,30 +722,35 @@ class bugModel extends model
     }
 
     /**
+     * 构造搜索表单。
      * Build search form.
      *
      * @param  int    $productID
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
-        $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
+
+        /* Get product params. */
+        $productParams = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
         $productParams = $productParams + array('all' => $this->lang->all);
-        $projectParams = $this->getProjects($productID);
+
+        /* Get project params. */
+        $projectParams = $this->loadModel('product')->getProjectPairsByProduct($productID, 'all');
         $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
         /* Get all modules. */
-        $modules = array();
         $this->loadModel('tree');
         if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
         if(!$productID)
         {
+            $modules = array();
             foreach($products as $id => $productName) $modules += $this->tree->getOptionMenu($id, 'bug');
         }
 
@@ -773,6 +764,7 @@ class bugModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
@@ -1301,21 +1293,20 @@ class bugModel extends model
     }
 
     /**
+     * 从测试结果中获取bug信息。
      * Get bug info from a result.
      *
      * @param  int    $resultID
      * @param  int    $caseID
-     * @param  int    $version
+     * @param  string $caseID
      * @access public
      * @return array
      */
-    public function getBugInfoFromResult($resultID, $caseID = 0, $version = 0, $stepIdList = '')
+    public function getBugInfoFromResult(int $resultID, int $caseID = 0, string $stepIdList = ''): array
     {
-        $title    = '';
-        $bugSteps = '';
-        $steps    = explode('_', trim($stepIdList, '_'));
-
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
+        if(!$result) return array();
+
         if($caseID > 0)
         {
             $run = new stdclass();
@@ -1326,45 +1317,34 @@ class bugModel extends model
             $run = $this->loadModel('testtask')->getRunById($result->run);
         }
 
-        $title       = $run->case->title;
-        $caseSteps   = $run->case->steps;
         $stepResults = unserialize($result->stepResults);
-        if($run->case->precondition != '')
-        {
-            $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
-        }
-
         if(!empty($stepResults))
         {
             $bugStep   = '';
-            $bugResult = isset($stepResults[0]) ? $stepResults[0]['real'] : '';
+            $bugResult = isset($stepResults[0]) ? zget($stepResults[0], 'real') : '';
             $bugExpect = '';
+            $caseSteps = $run->case->steps;
+            $steps     = explode('_', trim($stepIdList, '_'));
             foreach($steps as $stepId)
             {
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                $i = $this->getCaseStepIndex($step);
-
                 $stepDesc   = str_replace("\n", "<br />", $step->desc);
                 $stepExpect = str_replace("\n", "<br />", $step->expect);
                 $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
 
+                $i          = $this->getCaseStepIndex($step);
                 $bugStep   .= $i . '. ' . $stepDesc . "<br />";
                 $bugResult .= $i . '. ' . $stepResult . "<br />";
                 $bugExpect .= $i . '. ' . $stepExpect . "<br />";
             }
+        }
 
-            $bugSteps .= $bugStep   ? str_replace('<br/>', '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
-            $bugSteps .= $bugResult ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
-            $bugSteps .= $bugExpect ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
-        }
-        else
-        {
-            $bugSteps .= $this->lang->bug->tplStep;
-            $bugSteps .= $this->lang->bug->tplResult;
-            $bugSteps .= $this->lang->bug->tplExpect;
-        }
+        $bugSteps  = $run->case->precondition != '' ? "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition : '';
+        $bugSteps .= !empty($stepResults) && !empty($bugStep)   ? str_replace('<br/>', '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
+        $bugSteps .= !empty($stepResults) && !empty($bugResult) ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
+        $bugSteps .= !empty($stepResults) && !empty($bugExpect) ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
 
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
@@ -1372,7 +1352,7 @@ class bugModel extends model
         if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
 
-        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
+        return array('title' => $run->case->title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
     }
 
     /**
@@ -1414,7 +1394,6 @@ class bugModel extends model
         foreach($datas as $buildIdList => $data)
         {
             if(is_int($buildIdList)) continue;
-            if(strpos(trim($buildIdList, ','), ',') === false) continue;
 
             $openedBuildIdList = explode(',', $buildIdList);
 
@@ -2194,7 +2173,7 @@ class bugModel extends model
     {
         $btnTextClass   = '';
         $btnClass       = '';
-        $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
+        $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->assignToNull;
         if(empty($bug->assignedTo)) $btnClass = $btnTextClass = 'assigned-none';
         if($bug->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
         if(!empty($bug->assignedTo) and $bug->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
@@ -2258,25 +2237,7 @@ class bugModel extends model
             if($bug->status != 'resolved' && $bug->status != 'closed') $unresolved++;
         }
 
-        return sprintf($this->lang->bug->summary, count($bugs), $unresolved);
-    }
-
-    /**
-     * Get project list.
-     *
-     * @param  int $productID
-     * @access public
-     * @return array
-     */
-    public function getProjects($productID)
-    {
-        return $this->dao->select('t1.id,t1.name')
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.type')->eq('project')
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.product')->eq($productID)
-            ->fetchPairs();
+        return sprintf($this->lang->bug->notice->summary, count($bugs), $unresolved);
     }
 
     /**

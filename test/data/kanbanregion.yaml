@@ -19,7 +19,5 @@ fields:
       range: "admin"
     - field: lastEditedBy
       range: ""
-    - field: lastEditedDate
-      range: ""
     - field: deleted
       range: "0"

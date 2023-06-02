@@ -561,20 +561,16 @@ class taskZen extends task
     protected function buildTasksForBatchEdit(): false|array
     {
         $taskData = form::batchData()->get();
-        $oldTasks = $this->post->taskIdList ? $this->task->getByIdList($this->post->taskIdList) : array();
+        $oldTasks = $taskData ? $this->task->getByIdList(array_keys($taskData)) : array();
         $now      = helper::now();
         foreach($taskData as $taskID => $task)
         {
             $oldTask = $oldTasks[$taskID];
 
-            $task->finishedDate = $oldTask->finishedBy == $task->finishedBy ? $oldTask->finishedDate : $now;
-            $task->canceledDate = $oldTask->canceledBy == $task->canceledBy ? $oldTask->canceledDate : $now;
-            $task->closedDate   = $oldTask->closedBy == $task->closedBy ? $oldTask->closedDate : $now;
             $task->parent       = $oldTask->parent;
             $task->assignedTo   = $task->status == 'closed' ? 'closed' : $task->assignedTo;
             $task->assignedDate = !empty($task->assignedTo) && $oldTask->assignedTo != $task->assignedTo ? $now : $oldTask->assignedDate;
             $task->version      = $oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline ?  $oldTask->version + 1 : $oldTask->version;
-            $task->status       = $task->status == 'done' && $task->closedReason ? 'closed' : $task->status;
             $task->consumed     = $task->consumed < 0 ? $task->consumed  : $task->consumed + $oldTask->consumed;
 
             if(empty($task->closedReason) && $task->status == 'closed')
@@ -584,8 +580,6 @@ class taskZen extends task
             }
             $task = $this->processTaskByStatus($task, $oldTask);
             if($task->assignedTo) $task->assignedDate = $now;
-
-            unset($task->taskIdList);
         }
 
         $this->checkBatchEditTask($taskData, $oldTasks);
@@ -1046,22 +1040,6 @@ class taskZen extends task
     }
 
     /**
-     * 检查是否能记录任务的日志。
-     * Check if the task effort can be recorded.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return bool
-     */
-    protected function checkRecordEffort(object $task): bool
-    {
-        if(empty($task->team)) return true;
-        if($task->assignedTo != $this->app->user->account && $task->mode == 'linear') return false;
-        if(!isset($task->members[$this->app->user->account])) return false;
-        return true;
-    }
-
-    /**
      * 为表单获取自定义字段。
      * Get task's custom fields for form.
      *
@@ -1218,23 +1196,22 @@ class taskZen extends task
         {
         case 'done':
             $task->left = 0;
-            if(!$task->finishedBy)  $task->finishedBy = $currentAccount;
-            if($task->closedReason) $task->closedDate = $now;
+            $task->finishedBy   = $oldTask->status == 'done' ? $oldTask->finishedBy : $currentAccount;
             $task->finishedDate = $oldTask->status == 'done' ? $oldTask->finishedDate : $now;
             $task->canceledBy   = '';
             $task->canceledDate = null;
             break;
         case 'cancel':
-            $task->canceledBy   = !$task->canceledBy ? $currentAccount : $task->canceledBy;
-            $task->canceledDate = !$task->canceledBy ? $now : $task->canceledDate;
+            $task->canceledBy   = $oldTask->status == 'cancel' ? $oldTask->canceledBy : $currentAccount;
+            $task->canceledDate = $oldTask->status == 'cancel' ? $oldTask->canceledDate : $now;
             $task->assignedTo   = $oldTask->openedBy;
             $task->assignedDate = $now;
             $task->finishedBy   = '';
             $task->finishedDate = null;
             break;
         case 'closed':
-            $task->closedBy   = !$task->closedBy ? $currentAccount : $task->closedBy;
-            $task->closedDate = !$task->closedBy ? $now : $task->closedDate;
+            $task->closedBy   = $oldTask->status == 'closed' ? $oldTask->closedBy : $currentAccount;
+            $task->closedDate = $oldTask->status == 'closed' ? $oldTask->closedDate : $now;
             if($task->closedReason == 'cancel' and helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
             break;
         case 'wait':

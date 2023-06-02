@@ -39,7 +39,7 @@
         </tr>  
         <tr id='duplicateStoryBox' style='display:none'>
           <th><?php echo $lang->story->duplicateStory;?></th>
-          <td class='required'><?php echo html::select('duplicateStory', array('' => '') + $productStories, '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td><td></td>
+          <td class='required'><?php echo html::select('duplicateStory', array('' => '') + $productStories, '', "class='form-control' placeholder='{$lang->bug->placeholder->duplicate}'"); ?></td><td></td>
         </tr>
         <tr id='childStoriesBox' style='display:none'>
           <th><?php echo $lang->story->childStories;?></th>

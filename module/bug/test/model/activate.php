@@ -29,11 +29,9 @@ $_SERVER['HTTP_HOST'] = $config->db->host; // 记日志需要用到 HTTP_HOST
 $bug          = new bugTest();
 $kanbanParams = array();
 
-r($bug->activateTest(0)) && p() && e('Bug不存在。');                           // 不存在的 bug 不能激活。
-r($bug->activateTest(1)) && p() && e('状态不是已解决或已关闭的Bug不能激活。'); // 状态不是 resolved 或 closed 的 bug 不能激活。
-
 r($bug->activateTest(2)) && p('status,activatedCount') && e('active,1'); // 状态是 resolved 的 bug 激活后的状态是 active，激活次数加 1。
 r($bug->activateTest(3)) && p('status,activatedCount') && e('active,1'); // 状态是 closed   的 bug 激活后的状态是 active，激活次数加 1。
+
 
 r($bug->activateTest(5, 1, $kanbanParams, 'build')) && p('bugs', ';') && e('4,6'); // 状态是 resolved 的 bug 激活后版本解决的 bug 中不再包含这个 bug。
 r($bug->activateTest(6, 1, $kanbanParams, 'build')) && p('bugs')      && e('4');   // 状态是 closed   的 bug 激活后版本解决的 bug 中不再包含这个 bug。

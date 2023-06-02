@@ -1,4 +1,15 @@
 <?php
+declare(strict_types=1);
+/**
+* The UI file of product module of ZenTaoPMS.
+*
+* @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+* @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+* @author      chen.tao <chentao@easycorp.ltd>
+* @package     product
+* @link        https://www.zentao.net
+*/
+
 namespace zin;
 
 /* Get column settings of the data table. */
@@ -12,62 +23,88 @@ foreach($cols as &$col)
     break;
 }
 
-$data         = array();
-$totalStories = 0;
-
-foreach($productStats as $productID => $product)
+/* Closure function for generating table data. */
+$fnGenerateTableData = function($productList) use($users, $avatarList)
 {
-    $item = new stdClass();
-
-    if(!empty($product->PO))
+    $data = array();
+    foreach($productList as $product)
     {
-        $item->PO        = zget($users, $product->PO);
-        $item->POAvatar  = $avatarList[$product->PO];
-        $item->POAccount = $product->PO;
+        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+        $totalBugs    = $product->unResolved + $product->fixedBugs;
+
+        $item = new stdClass();
+
+        if(!empty($product->PO))
+        {
+            $item->PO        = zget($users, $product->PO);
+            $item->POAvatar  = $avatarList[$product->PO];
+            $item->POAccount = $product->PO;
+        }
+
+        $item->name              = $product->name;
+        $item->id                = $product->id;
+        $item->type              = 'product';
+        $item->draftStories      = $product->stories['draft'];
+        $item->activeStories     = $product->stories['active'];
+        $item->changingStories   = $product->stories['changing'];
+        $item->reviewingStories  = $product->stories['reviewing'];
+        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+        $item->unResolvedBugs    = $product->unResolved;
+        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
+        $item->plans             = $product->plans;
+        $item->releases          = $product->releases;
+        $item->productLine       = $product->lineName;
+        $item->execution         = $product->executions;
+        $item->testCaseCoverage  = $product->coverage;
+
+        $data[] = $item;
     }
-    $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
 
-    $item->name              = $product->name;
-    $item->id                = $product->id;
-    $item->type              = 'product';
-    $item->draftStories      = $product->stories['draft'];
-    $item->activeStories     = $product->stories['active'];
-    $item->changingStories   = $product->stories['changing'];
-    $item->reviewingStories  = $product->stories['reviewing'];
-    $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-    $item->unResolvedBugs    = $product->unResolved;
-    $item->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100);
-    $item->plans             = $product->plans;
-    $item->releases          = $product->releases;
-    $item->productLine       = $product->lineName;
-    $item->execution         = $product->executions;
-    $item->testCaseCoverage  = $product->coverage;
-    $item->releasesOld       = rand(0, 10);
+    return $data;
+};
 
-    $data[] = $item;
-}
-
-$programMenuLink = createLink(
-    $this->app->rawModule,
-    $this->app->rawMethod,
-    array(
-        'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
-        'orderBy'    => $orderBy,
-        'param'      => $browseType == 'bySearch' ? 0 : $param,
-        'recTotal'   => $recTotal,
-        'recPerPage' => $recPerPage,
-        'pageID'     => $pageID,
-        'programID'  => '%d'
-    )
-);
-$programs = array_map(function($program)
+/* Closure function for generating program menu. */
+$fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseType, $orderBy, $param, $recTotal, $recPerPage, $pageID)
 {
-    $program->icon = 'icon-cards-view';
-    return $program;
-}, $programList);
+    $programMenuLink = createLink(
+        $this->app->rawModule,
+        $this->app->rawMethod,
+        array(
+            'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
+            'orderBy'    => $orderBy,
+            'param'      => $browseType == 'bySearch' ? 0 : $param,
+            'recTotal'   => $recTotal,
+            'recPerPage' => $recPerPage,
+            'pageID'     => $pageID,
+            'programID'  => '%d'
+        )
+    );
 
+    /* Attach icon to each program. */
+    $programs = array_map(function($program)
+    {
+        $program->icon = 'icon-cards-view';
+        return $program;
+    }, $programList);
+
+    return programMenu
+    (
+        setStyle(array('margin-right' => '20px')),
+        set(array
+        (
+            'title'       => $lang->program->all,
+            'programs'    => $programs,
+            'activeKey'   => !empty($programList) ? $programID : null,
+            'closeLink'   => sprintf($programMenuLink, 0),
+            'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
+        ))
+    );
+};
+
+/* ====== Define the page structure with zin widgets ====== */
 featureBar
 (
+    to::before($fnGenerateProgramMenu($programList)),
     set::link(createLink
     (
         $this->app->rawModule,
@@ -83,21 +120,6 @@ featureBar
             'programID'  => $programID
         )
     )),
-    to::before
-    (
-        programMenu
-        (
-            setStyle(array('margin-right' => '20px')),
-            set(array
-            (
-                'title'       => $lang->program->all,
-                'programs'    => $programs,
-                'activeKey'   => !empty($programList) ? $programID : null,
-                'closeLink'   => sprintf($programMenuLink, 0),
-                'onClickItem' => jsRaw("function(data){window.programMenuOnClick(data, '$programMenuLink');}")
-            ))
-        )
-    ),
     hasPriv('product', 'batchEdit') ? item
     (
         set::type('checkbox'),
@@ -143,20 +165,22 @@ toolbar
     )))
 );
 
-jsVar('langSummary', $lang->product->pageSummary);
 dtable
 (
     set::cols($cols),
-    set::data($data),
+    set::data($fnGenerateTableData($productStats)),
     set::checkable(true),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
     (
         'type'  => 'btn-group',
-        'items' => array
+        'items' => array(array
         (
-            array('text' => $lang->edit, 'btnType' => 'primary', 'url' => createLink('product', 'batchEdit'))
-        )
+            'text'    => $lang->edit,
+            'btnType' => 'primary',
+            'url'     => createLink('product', 'batchEdit'),
+            'onClick' => jsRaw('onClickBatchEdit')
+        ))
     )),
     set::footPager
     (
@@ -167,5 +191,7 @@ dtable
         set::linkCreator(createLink('product', 'all', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
     )
 );
+
+jsVar('langSummary', $lang->product->pageSummary);
 
 render();

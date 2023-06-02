@@ -34,7 +34,7 @@ class formPanel extends panel
      */
     protected static $defineProps = array
     (
-        'class?: string="panel-form rounded-md shadow ring-0 canvas px-4 pb-4 mb-4 mx-auto"', // 类名。
+        'class?: string="panel-form rounded-md ring-0 canvas px-4 pb-4 mb-4 mx-auto"', // 类名。
         'size?: string="lg"',                          // 额外尺寸。
         'id?: string="$GID"',                          // ID，如果不指定则自动生成（使用 zin 部件 GID）。
         'method?: "get"|"post"="post"',                // 表单提交方式。
@@ -47,7 +47,8 @@ class formPanel extends panel
         'items?: array',                               // 使用一个列定义对象数组来定义表单项。
         'grid?: bool=true',                            // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int',                            // 标签宽度，单位为像素。
-        'batch?: bool'                                 // 是否为批量操作表单。
+        'batch?: bool',                                // 是否为批量操作表单。
+        'shadow?: bool=true',                          // 是否显示阴影层。
     );
 
     /**
@@ -95,7 +96,8 @@ class formPanel extends panel
     protected function buildProps(): array
     {
         $props = parent::buildProps();
-        if($this->prop('batch')) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($this->prop('batch'))  $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($this->prop('shadow')) $props[] = setClass('shadow');
         return $props;
     }
 

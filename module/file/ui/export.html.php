@@ -32,7 +32,7 @@ if($isCustomExport)
         if(!$hasDefaultField) $selectedFields[] = $field;
     }
 
-    jsVar('defaultExportFields', join(',', $selectedFields));
+    jsVar('defaultExportFields', implode(',', $selectedFields));
 }
 
 /* Unset useless export type. */
@@ -102,12 +102,13 @@ if($isCustomExport)
 
 form
 (
-    set::target('_self'),
-    set::actions(array('submit')),
-    on::submit('setDownloading'),
-    setCssVar('--form-grid-label-width', '4rem'),
     css('.form-grid .form-label.required:after{content:""}'), // Remove required tag.
     css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
+    setCssVar('--form-grid-label-width', '4rem'),
+    set::target('_self'),
+    set::actions(array('submit')),
+    set::submitBtnText($lang->export),
+    on::submit('setDownloading'),
     formGroup
     (
         set::width('full'),

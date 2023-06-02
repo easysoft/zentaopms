@@ -426,6 +426,44 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
+        if(!empty($_POST))
+        {
+            $case = form::data($this->config->testcase->form->create)
+                ->setIF($from == 'bug', 'fromBug', $param)
+                ->setIF($this->post->auto, 'auto', 'auto')
+                ->setIF($this->post->auto && $this->post->script, 'script', htmlentities($this->post->script))
+                ->setIF($this->forceNotReview() || $this->post->forceNotReview, 'status', 'normal')
+                ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
+                ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
+                ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+                ->get();
+
+            $this->testcaseZen->checkCreateFormData($case);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            helper::setcookie('lastCaseModule', $case->module);
+            helper::setcookie('lastCaseScene',  $case->scene);
+
+            $caseID = $this->testcase->create($case);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            /* If the story is linked project, make the case link the project. */
+            $this->testcase->syncCase2Project($case, $caseID);
+
+            $message = $this->executeHooks($caseID);
+            if(!$message) $message = $this->lang->saveSuccess;
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $caseID));
+            /* If link from no head then reload. */
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+
+            helper::setcookie('caseModule', 0);
+            /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
+            $useSession = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
+            $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $useSession ? $this->session->caseList : $locateLink));
+        }
+
         $testcaseID  = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
         $bugID       = $from == 'bug' ? $param : 0;
         $executionID = $from == 'execution' ? $param : 0;
@@ -433,53 +471,6 @@ class testcase extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        $this->loadModel('story');
-        if(!empty($_POST))
-        {
-            if(!empty($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
-            $response['result'] = 'success';
-
-            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            setcookie('lastCaseScene', (int)$this->post->scene, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $caseResult = $this->testcase->create($bugID);
-            if(!$caseResult or dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
-            $caseID = $caseResult['id'];
-            if($caseResult['status'] == 'exists')
-            {
-                $response['message'] = sprintf($this->lang->duplicate, $this->lang->testcase->common);
-                $response['locate']  = $this->createLink('testcase', 'view', "caseID=$caseID");
-                return $this->send($response);
-            }
-
-            $this->loadModel('action');
-            $this->action->create('case', $caseID, 'Opened');
-            if($this->testcase->getStatus('create') == 'wait') $this->action->create('case', $caseID, 'submitReview');
-
-            /* If the story is linked project, make the case link the project. */
-            $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
-
-            $message = $this->executeHooks($caseID);
-            if($message) $this->lang->saveSuccess = $message;
-            $response['message'] = $this->lang->saveSuccess;
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
-            /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-
-            /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
-            $useSession         = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
-            $locateLink         = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
-            $response['locate'] = $useSession ? $this->session->caseList : $locateLink;
-            return $this->send($response);
-        }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         /* Init vars. */
@@ -525,7 +516,7 @@ class testcase extends control
         }
 
         /* Set productID and branch. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveVisitState($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
 
         /* Set menu. */
@@ -594,7 +585,7 @@ class testcase extends control
             $modules        = $this->tree->getAllChildID($modules);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'full', 'story', false);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, 'active', 'id_desc', 50, 'full', 'story', false);
         if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;

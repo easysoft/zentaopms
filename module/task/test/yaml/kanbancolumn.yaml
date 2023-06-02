@@ -1,0 +1,20 @@
+title: table zt_kanbancolumn
+desc: "看板列"
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: parent
+      range: "0"
+    - field: name
+      range: 1-18
+      prefix: "column"
+    - field: region
+      range: "1{6},2{6},3{6}"
+    - field: region
+      range: "1{6},2{6},3{6}"
+    - field: type
+      range: wait,developing,developed,pause,canceled,closed
+    - field: color
+      range: "#333"
+    - field: deleted
+      range: "0"

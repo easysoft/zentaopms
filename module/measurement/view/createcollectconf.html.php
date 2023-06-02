@@ -44,7 +44,7 @@
     </div>
     <?php echo html::hidden('config[type]', 'week')?>
   </td>
-</tr>  
+</tr>
 <script>
 $(function()
 {
@@ -76,7 +76,7 @@ $(function()
     });
 
     $('ul.nav-tabs a').click(function()
-    {   
+    {
         if($(this).data('type'))$('input[id*=type][id*=config]').val($(this).data('type'));
     });
 });

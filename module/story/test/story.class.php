@@ -719,4 +719,101 @@ class storyTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll();
     }
+
+    /**
+     * 测试 doCreateSpec 方法。
+     * Test doCreateSpec method.
+     *
+     * @param  int    $storyID
+     * @param  object $story
+     * @param  array  $files
+     * @access public
+     * @return array
+     */
+    public function doCreateSpecTest(int $storyID, object $story, array $files = array()): array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_STORYSPEC)->exec();
+        $this->objectModel->doCreateSpec($storyID, $story, $files);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll();
+    }
+
+    /**
+     * 测试 doCreateStory 方法。
+     * Test doCreateStory method.
+     *
+     * @param  object $story
+     * @access public
+     * @return object|array
+     */
+    public function doCreateStoryTest(object $story): object|array
+    {
+        $this->objectModel->dao->delete()->from(TABLE_STORY)->exec();
+        $storyID = $this->objectModel->doCreateStory($story);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
+
+    /**
+     * 测试 setStageToPlanned 方法。
+     * Test setStageToPlanned method.
+     *
+     * @param  int    $storyID
+     * @param  array  $stages
+     * @param  array  $oldStages
+     * @access public
+     * @return object|array
+     */
+    public function setStageToPlannedTest(int $storyID, array $stages = array(), array $oldStages = array()): object|array
+    {
+        $this->objectModel->setStageToPlanned($storyID, $stages, $oldStages);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
+
+    /**
+     * 测试 setStageToClosed 方法。
+     * Test setStageToClosed method.
+     *
+     * @param  int    $storyID
+     * @param  array  $linkedBranches
+     * @param  array  $linkedProjects
+     * @access public
+     * @return object|array
+     */
+    public function setStageToClosedTest(int $storyID, array $linkedBranches = array(), array $linkedProjects = array()): object|array
+    {
+        $this->objectModel->setStageToClosed($storyID, $linkedBranches, $linkedProjects);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
+
+    /**
+     * 测试 updateStage 方法。
+     * Test updateStage method.
+     *
+     * @param  int    $storyID
+     * @param  array  $stages
+     * @param  array  $oldStages
+     * @param  array  $linkedProjects
+     * @access public
+     * @return object|array
+     */
+    public function updateStageTest(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): object|array
+    {
+        $this->objectModel->updateStage($storyID, $stages, $oldStages, $linkedProjects);
+        if(dao::isError()) return dao::getError();
+
+        $story = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $story->stages = $this->objectModel->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->orderBy('branch')->fetchAll();
+        return $story;
+    }
 }

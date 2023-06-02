@@ -11,20 +11,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('confirmChangeProduct', $lang->bug->confirmChangeProduct);
-jsVar('oldProjectID',         $bug->project);
-jsVar('oldProductID',         $product->id);
-jsVar('oldStoryID',           $bug->story);
-jsVar('oldTaskID',            $bug->task);
-jsVar('oldOpenedBuild',       $bug->openedBuild);
-jsVar('oldResolvedBuild',     $bug->resolvedBuild);
+jsVar('bug',                  $bug);
+jsVar('confirmChangeProduct', $lang->bug->notice->confirmChangeProduct);
 jsVar('moduleID',             $moduleID);
 jsVar('tab',                  $this->app->tab);
-jsVar('bugBranch',            $bug->branch);
-jsVar('isClosedBug',          $bug->status == 'closed');
 jsVar('released',             $lang->build->released);
-if($this->app->tab == 'execution') jsVar('objectID', $bug->execution);
-if($this->app->tab == 'project')   jsVar('objectID', $bug->project);
 
 panel
 (
@@ -320,10 +311,10 @@ panel
                         set('id', 'openedBuildBox'),
                         select
                         (
-                            set::multiple(true),
                             set::name('openedBuild[]'),
                             set::items($openedBuilds),
-                            set::value($bug->openedBuild)
+                            set::value($bug->openedBuild),
+                            set::multiple(true)
                         ),
                         span
                         (
@@ -361,9 +352,10 @@ panel
                         set('id', 'resolvedBuildBox'),
                         select
                         (
-                            set::name('resolvedBuild'),
+                            set::name('resolvedBuild[]'),
                             set::items($resolvedBuilds),
-                            set::value($bug->resolvedBuild)
+                            set::value($bug->resolvedBuild),
+                            set::multiple(true)
                         ),
                         span
                         (
@@ -409,7 +401,7 @@ panel
                         select
                         (
                             set::multiple(true),
-                            set::name('resolvedBuild[]'),
+                            set::name('relatedBug[]'),
                             set::items($bug->relatedBugTitles)
                         ),
                         span
@@ -417,7 +409,7 @@ panel
                             set('class', 'input-group-addon'),
                             a
                             (
-                                set('id', 'relatedBug'),
+                                set('id', 'linkBug'),
                                 set('href', 'javascript:;'),
                                 $lang->bug->linkBugs
                             )

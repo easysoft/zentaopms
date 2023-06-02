@@ -251,7 +251,7 @@ class taskTao extends taskModel
         if($currentTask->consumed == 0 && !$hasEfforts)
         {
             if(!isset($task->status)) $currentTask->status = 'wait';
-            $currentTask->finishedBy   = null;
+            $currentTask->finishedBy   = '';
             $currentTask->finishedDate = null;
         }
 
@@ -259,7 +259,7 @@ class taskTao extends taskModel
         if($currentTask->consumed > 0 && $currentTask->left > 0)
         {
             $currentTask->status       = 'doing';
-            $currentTask->finishedBy   = null;
+            $currentTask->finishedBy   = '';
             $currentTask->finishedDate = null;
         }
 
@@ -273,7 +273,7 @@ class taskTao extends taskModel
                 if(strpos('cancel,pause', $oldTask->status) === false || ($oldTask->status == 'closed' && $oldTask->reason == 'done'))
                 {
                     $currentTask->status       = 'doing';
-                    $currentTask->finishedBy   = null;
+                    $currentTask->finishedBy   = '';
                     $currentTask->finishedDate = null;
                 }
             }
@@ -638,7 +638,7 @@ class taskTao extends taskModel
      *
      * @param  array     $taskIdList
      * @access protected
-     * @return object[]
+     * @return array[]
      */
     protected function getTeamMembersByIdList(array $taskIdList): array
     {

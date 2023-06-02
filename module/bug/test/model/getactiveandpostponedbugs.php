@@ -4,41 +4,50 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 su('admin');
 
+zdTable('product')->config('product_type')->gen(10);
+zdTable('project')->config('project_type')->gen(10);
+zdTable('projectproduct')->config('projectproduct_execution')->gen(10);
+zdTable('bug')->config('bug_status')->gen(10);
+
 /**
 
 title=bugModel->getActiveAndPostponedBugs();
+timeout=0
 cid=1
-pid=1
 
-查询产品1 2 3 不存在的产品1000001 execution为101下的bug >> BUG3,BUG2,BUG1
-查询产品1 2 3 不存在的产品1000001 execution为102下的bug >> BUG6,BUG5,BUG4
-查询产品1 2 3 不存在的产品1000001 execution为103下的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询产品1 3 execution为101下的bug >> BUG3,BUG2,BUG1
-查询产品1 3 execution为102下的bug >> 0
-查询产品1 3 execution为103下的bug >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询产品1 execution为101下的bug >> BUG3,BUG2,BUG1
-查询产品1 execution为102下的bug >> 0
-查询产品1 execution为103下的bug >> 0
-查询不存在的产品1000001 execution为101下的bug >> 0
-查询不存在的产品1000001 execution为102下的bug >> 0
-查询不存在的产品1000001 execution为103下的bug >> 0
+- 查询普通产品1 2 执行1 下的 bug 数量 @3
+
+- 查询普通产品1 2 执行7 下的 bug 数量 @0
+
+- 查询多分支产品3 执行1 下的 bug 数量 @0
+
+- 查询多分支产品3 执行7 下的 bug 数量 @2
+
+- 查询普通产品1 2 执行1 下的 bug 的状态和分支
+ - 第3条的status属性 @active
+ - 第3条的branch属性 @0
+
+- 查询多分支产品3 执行7 下的 bug7 的状态和分支
+ - 第7条的status属性 @resolved
+ - 第7条的resolution属性 @postponed
+ - 第7条的branch属性 @0
+
+- 查询多分支产品3 执行7 下的 bug8 的状态和分支
+ - 第8条的status属性 @resolved
+ - 第8条的resolution属性 @postponed
+ - 第8条的branch属性 @1
 
 */
 
-$productIDList = array('1,2,3,1000001', '1,3', '1', '1000001');
-$executionList = array('101', '102', '103');
+$productIDList = array(array(1, 2), array(3), array(1000001), array());
+$executionList = array(1, 4, 7);
 
-$bug=new bugTest();
+$bug = new bugTest();
 
-r($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[0])) && p() && e('BUG3,BUG2,BUG1'); // 查询产品1 2 3 不存在的产品1000001 execution为101下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[1])) && p() && e('BUG6,BUG5,BUG4'); // 查询产品1 2 3 不存在的产品1000001 execution为102下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[2])) && p() && e('BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7'); // 查询产品1 2 3 不存在的产品1000001 execution为103下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[0])) && p() && e('BUG3,BUG2,BUG1'); // 查询产品1 3 execution为101下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[1])) && p() && e('0');              // 查询产品1 3 execution为102下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[2])) && p() && e('BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7'); // 查询产品1 3 execution为103下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[2], $executionList[0])) && p() && e('BUG3,BUG2,BUG1'); // 查询产品1 execution为101下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[2], $executionList[1])) && p() && e('0');              // 查询产品1 execution为102下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[2], $executionList[2])) && p() && e('0');              // 查询产品1 execution为103下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[3], $executionList[0])) && p() && e('0');              // 查询不存在的产品1000001 execution为101下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[3], $executionList[1])) && p() && e('0');              // 查询不存在的产品1000001 execution为102下的bug
-r($bug->getActiveAndPostponedBugsTest($productIDList[3], $executionList[2])) && p() && e('0');              // 查询不存在的产品1000001 execution为103下的bug
+r(count($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[0]))) && p('') && e('3');                  // 查询普通产品1 2 执行1 下的 bug 数量
+r(count($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[2]))) && p('') && e('0');                  // 查询普通产品1 2 执行7 下的 bug 数量
+r(count($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[0]))) && p('') && e('0');                  // 查询多分支产品3 执行1 下的 bug 数量
+r(count($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[2]))) && p('') && e('2');                  // 查询多分支产品3 执行7 下的 bug 数量
+r($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[0])) && p('3:status,branch') && e('active,0');   // 查询普通产品1 2 执行1 下的 bug 的状态和分支
+r($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[2])) && p('7:status,resolution,branch') && e('resolved,postponed,0'); // 查询多分支产品3 执行7 下的 bug7 的状态和分支
+r($bug->getActiveAndPostponedBugsTest($productIDList[1], $executionList[2])) && p('8:status,resolution,branch') && e('resolved,postponed,1'); // 查询多分支产品3 执行7 下的 bug8 的状态和分支

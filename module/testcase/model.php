@@ -33,89 +33,57 @@ class testcaseModel extends model
     /**
      * Create a case.
      *
-     * @param int $bugID
+     * @param  object $case
      * @access public
-     * @return void
+     * @return bool|int
      */
-    function create($bugID)
+    public function create($case): bool|int
     {
-        $steps   = $this->post->steps;
-        $expects = $this->post->expects;
-        foreach($expects as $key => $value)
-        {
-            if(!empty($value) and empty($steps[$key]))
-            {
-                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
-                return false;
-            }
-        }
-
-        if(!empty($_POST['auto']))
-        {
-            $_POST['auto'] = 'auto';
-            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
-        }
-        else
-        {
-            unset($_POST['script']);
-        }
-
-        $now    = helper::now();
-        $status = $this->getStatus('create');
-        $case   = fixer::input('post')
-            ->add('status', $status)
-            ->add('version', 1)
-            ->add('fromBug', $bugID)
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setIF($this->app->tab == 'project', 'project', $this->session->project)
-            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->remove('steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
-            ->setDefault('story', 0)
-            ->cleanInt('story,product,branch,module')
-            ->join('stage', ',')
-            ->get();
-
-        $param = '';
-        if(!empty($case->lib))$param = "lib={$case->lib}";
-        if(!empty($case->product))$param = "product={$case->product}";
-        $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
-        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-
         if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
-
         /* Value of story may be showmore. */
-        $case->story = (int)$case->story;
-        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
-        if(!$this->dao->isError())
+        $this->dao->insert(TABLE_CASE)->data($case)
+            ->autoCheck()
+            ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+            ->checkFlow()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $caseID = $this->dao->lastInsertID();
+
+        $this->loadModel('action');
+        $this->action->create('case', $caseID, 'Opened');
+        if($case->status == 'wait') $this->action->create('case', $caseID, 'submitReview');
+
+        $this->config->dangers = '';
+        $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
+        $this->loadModel('file')->saveUpload('testcase', $caseID);
+
+        $this->loadModel('score')->create('testcase', 'create', $caseID);
+
+        $parentStepID = 0;
+        foreach($case->steps as $stepID => $stepDesc)
         {
-            $caseID = $this->dao->lastInsertID();
-            $this->config->dangers = '';
-            $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
-            $this->loadModel('file')->saveUpload('testcase', $caseID);
-            $parentStepID = 0;
-            $this->loadModel('score')->create('testcase', 'create', $caseID);
+            if(empty($stepDesc)) continue;
 
-            $data = fixer::input('post')->get();
-            foreach($data->steps as $stepID => $stepDesc)
-            {
-                if(empty($stepDesc)) continue;
-                $stepType      = $this->post->stepType;
-                $step          = new stdClass();
-                $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
-                $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
-                $step->case    = $caseID;
-                $step->version = 1;
-                $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                if($step->type == 'step')  $parentStepID = 0;
-            }
+            $stepType      = $this->post->stepType;
+            $step          = new stdClass();
+            $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+            $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
+            $step->case    = $caseID;
+            $step->version = 1;
+            $step->desc    = rtrim(htmlSpecialString($stepDesc));
+            $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($case->expects[$stepID]));
 
-            return array('status' => 'created', 'id' => $caseID, 'caseInfo' => $case);
+            $this->dao->insert(TABLE_CASESTEP)->data($step)
+                ->autoCheck()
+                ->exec();
+
+            if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+            if($step->type == 'step')  $parentStepID = 0;
         }
+        if(dao::isError()) return false;
+
+        return $caseID;
     }
 
     /**
@@ -494,11 +462,11 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugTitle      = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
+        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title, severity, openedDate')->fetch();
 
         $case->toBugs = array();
-        $toBugs       = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
-        foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug->title;
+        $toBugs       = $this->dao->select('id, title, severity, openedDate')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
+        foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug;
 
         if($case->linkCase or $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
         if($version == 0) $version = $case->version;
@@ -2635,129 +2603,55 @@ class testcaseModel extends model
     }
 
     /**
-     * Build test case menu.
+     * 构造详情页或列表页需要的操作菜单。
+     * Build action menu.
      *
      * @param  object $case
      * @param  string $type
      * @access public
      * @return string
      */
-    public function buildOperateMenu($case, $type = 'view')
+    public function buildOperateMenu(object $case = null, string $type = 'view'): array
     {
-        $function = 'buildOperate' . ucfirst($type) . 'Menu';
-        return $this->$function($case);
-    }
+        $caseID         = $case ? $case->id             : '{id}';
+        $runID          = $case ? $case->runID          : '0';
+        $version        = $case ? $case->version        : '';
+        $currentVersion = $case ? $case->currentVersion : '{version}';
+        $product        = $case ? $case->product        : '{product}';
+        $branch         = $case ? $case->branch         : '{branch}';
+        $module         = $case ? $case->module         : '{module}';
 
-    /**
-     * Build test case view menu.
-     *
-     * @param  object $case
-     * @access public
-     * @return string
-     */
-    public function buildOperateViewMenu($case)
-    {
-        if($case->deleted) return '';
+        $params      = "caseID={$caseID}";
+        $extraParams = "runID={$runID}&{$params}";
+        $editParams  = $params;
+        if($this->app->tab == 'project')   $editParams = "{$params}&comment=false&projectID={$this->session->project}";
+        if($this->app->tab == 'execution') $editParams = "{$params}&comment=false&executionID={$this->session->execution}";
+        $createBugParams = "product={$product}&branch={$branch}&extra=caseID={$caseID},version={$version},runID=";
+        $copyParams      = "productID={$product}&branch={$branch}&moduleID={$module}&from=testcase&param={$caseID}";
 
-        $menu        = '';
-        $params      = "caseID=$case->id";
-        $extraParams = "runID=$case->runID&$params";
-        if(!$case->needconfirm)
+        $actions = array();
+        $actions['results']    = array('icon' => 'list-alt',  'text' => '结果',           'url' => helper::createLink('testcase', 'results',    "{$params}&version={$version}"),        'data-toggle' => 'modal');
+        $actions['runcase']    = array('icon' => 'play',      'text' => '执行',           'url' => helper::createLink('testcase', 'runCase',    "{$params}&version={$currentVersion}"), 'data-toggle' => 'modal');
+        $actions['edit']       = array('icon' => 'edit',      'text' => '编辑',           'url' => helper::createLink('testcase', 'edit',       $editParams));
+        $actions['review']     = array('icon' => 'review',    'text' => '审批',           'url' => helper::createLink('testcase', 'review',     $params), 'data-toggle' => 'modal');
+        $actions['createBug']  = array('icon' => 'bug',       'text' => '转Bug',          'url' => helper::createLink('testcase', 'createBug',  $createBugParams), 'data-toggle' => 'modal');
+        $actions['create']     = array('icon' => 'copy',      'text' => '复制',           'url' => helper::createLink('testcase', 'create',     $copyParams));
+        $actions['showscript'] = array('icon' => 'file-code', 'text' => '查看自动化脚本', 'url' => helper::createLink('testcase', 'showScript', $params), 'data-toggle' => 'modal');
+
+        foreach($actions as $action => $actionData)
         {
-            if(!$case->isLibCase)
+            $actionsConfig = $this->config->testcase->actions->{$type};
+            if(strpos(",{$actionsConfig},", ",{$action},") === false)
             {
-                if($this->app->getViewType() == 'xhtml')
-                {
-                    $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
-                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
-                }
-                else
-                {
-                    $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
-                    $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
-                    if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'importToLib', $params,                $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
-                }
-                if($case->caseFails > 0)
-                {
-                    $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=$params,version=$case->version,runID=$case->runID", $case, 'view', 'bug', '', 'iframe', '', "data-width='90%'");
-                }
+                unset($actions[$action]);
+                continue;
             }
-            if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
-            {
-                $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'view', '', '', 'showinonlybody iframe', '', '', $this->lang->testcase->reviewAB);
-            }
-        }
-        else
-        {
-            $menu .= $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'view', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+            $actions[$action]['hint'] = $actions[$action]['text'];
+            if($type == 'browse') unset($actions[$action]['text']);
         }
 
-        $menu .= "<div class='divider'></div>";
-        $menu .= $this->buildFlowMenu('testcase', $case, 'view', 'direct');
-        $menu .= "<div class='divider'></div>";
-
-        if(!$case->needconfirm)
-        {
-            if(!isonlybody())
-            {
-                $editParams = $params;
-                if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
-                if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
-                $menu .= $this->buildMenu('testcase', 'edit', $editParams, $case, 'view', '', '', 'showinonlybody');
-            }
-            if(!$case->isLibCase && $case->auto != 'unit')
-            {
-                $menu .= $this->buildMenu('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'view', 'copy');
-            }
-            if($case->isLibCase && common::hasPriv('caselib', 'createCase'))
-            {
-                echo html::a(helper::createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$this->lang->testcase->copy}'");
-            }
-
-            $menu .= $this->buildMenu('testcase', 'delete', $params, $case, 'view', 'trash', 'hiddenwin', '');
-        }
-
-        return $menu;
-    }
-
-    /**
-     * Build test case browse menu.
-     *
-     * @param  object $case
-     * @access public
-     * @return string
-     */
-    public function buildOperateBrowseMenu($case)
-    {
-        $canBeChanged = common::canBeChanged('case', $case);
-        if(!$canBeChanged) return '';
-
-        $menu   = '';
-        $params = "caseID=$case->id";
-
-        if($case->needconfirm || $case->browseType == 'needconfirm')
-        {
-            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'ok', 'hiddenwin', '', '', '', $this->lang->confirm);
-        }
-
-        $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");
-        $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
-
-        $editParams = $params;
-        if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
-        if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
-        $menu .= $this->buildMenu('testcase', 'edit', $editParams, $case, 'browse');
-
-        if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
-        {
-            common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'showinonlybody iframe');
-        }
-        $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'browse', 'bug', '', 'iframe', '', "data-width='90%'");
-        $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');
-        if($case->auto == 'auto') $menu .= $this->buildMenu('testcase', 'showScript', $params, $case, 'browse', 'file-code', '', 'runCase iframe', false);
-
-        return $menu;
+        if($type == 'browse') $this->config->testcase->dtable->fieldList['actions']['actionsMap'] = $actions;
+        return $actions;
     }
 
     /**

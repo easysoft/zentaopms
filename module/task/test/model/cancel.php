@@ -10,47 +10,24 @@ title=taskModel->cancel();
 timeout=0
 cid=1
 
-- wait状态任务取消
- - 属性id @1
- - 属性name @任务1
- - 属性status @cancel
-
-- doing状态任务取消
- - 属性id @2
- - 属性name @任务2
- - 属性status @cancel
-
-- done状态任务取消
- - 属性id @3
- - 属性name @任务3
- - 属性status @cancel
-
-- pause状态任务取消
- - 属性id @4
- - 属性name @任务4
- - 属性status @cancel
-
-- cancel状态任务取消
- - 属性id @5
- - 属性name @任务5
- - 属性status @cancel
-
-- closed状态任务取消
- - 属性id @6
- - 属性name @任务6
- - 属性status @cancel
-
 */
 
 $task = zdTable('task');
 $task->id->range('1-6');
-$task->execution->range('1-6');
+$task->execution->range('2');
 $task->name->prefix("任务")->range('1-6');
 $task->left->range('0-5');
+$task->story->range('0{4},1{2}');
 $task->estStarted->range('2022\-01\-01');
 $task->assignedTo->prefix("old")->range('1-6');
 $task->status->range("wait,doing,done,pause,cancel,closed");
 $task->gen(6);
+
+zdTable('story')->gen(1);
+zdTable('product')->gen(1);
+zdTable('kanbanlane')->config('kanbanlane', true)->gen(10);
+zdTable('kanbancolumn')->config('kanbancolumn', true)->gen(18);
+zdTable('kanbancell')->config('kanbancell', true)->gen(18);
 
 $taskIDlist = array(1, 2, 3, 4, 5, 6);
 

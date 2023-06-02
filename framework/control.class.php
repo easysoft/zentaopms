@@ -436,11 +436,11 @@ class control extends baseControl
      *
      * @param  int    $objectID     The id of an object. The object maybe a bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask.
      * @access public
-     * @return void
+     * @return string
      */
-    public function executeHooks(int $objectID)
+    public function executeHooks(int $objectID): string
     {
-        if($this->config->edition == 'open') return false;
+        if($this->config->edition == 'open') return '';
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->executeHooks($objectID);

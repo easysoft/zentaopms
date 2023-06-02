@@ -31,7 +31,7 @@
   <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <?php if(empty($bugs)):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span></p>
+    <p><span class="text-muted"><?php echo $lang->bug->notice->noBug;?></span></p>
   </div>
   <?php else:?>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>

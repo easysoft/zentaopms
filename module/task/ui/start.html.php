@@ -71,6 +71,7 @@ else
         set::title($lang->task->startAction),
         set::headingClass('status-heading'),
         set::titleClass('form-label .form-grid'),
+        set::shadow(!isonlybody()),
         to::headingActions
         (
             entityLabel
@@ -139,9 +140,12 @@ else
                 set::rows('5'),
             )
         ),
-        history()
     );
 }
+
+h::hr(set::class('mt-6'));
+
+history();
 
 /* ====== Render page ====== */
 render(isonlybody() ? 'modalDialog' : 'page');

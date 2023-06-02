@@ -311,16 +311,16 @@
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
-              <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
+              <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugData->title, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
               <td class='linkBugTitles'>
               <?php
-              foreach($case->toBugs as $bugID => $bugTitle)
+              foreach($case->toBugs as $bugID => $bug)
               {
-                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%' title='$bugTitle'") . '<br />';
+                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bug->title, '', "class='iframe' data-width='80%' title='$bug->title'") . '<br />';
               }
               ?>
               </td>

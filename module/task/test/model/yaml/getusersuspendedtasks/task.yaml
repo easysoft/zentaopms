@@ -1,0 +1,18 @@
+title: zt_task
+author: Shujie Tian
+version: "1.0"
+fields:
+- field: project
+  range: 1{5},2{4}
+- field: execution
+  range: 3{3},4{2},5{2},6{2}
+- field: parent
+  range: "0{5},`-1`,6,0{2}"
+- field: status
+  range: "wait,doing,done,cancel,closed,wait{3},doing"
+- field: mode
+  range: "[]{7},linear,multi"
+- field: assignedTo
+  range: "admin,user1,user2"
+- field: deleted
+  range: "1{1},0{8}"

@@ -1,24 +1,31 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
 su('admin');
+
+zdTable('task')->config('task')->gen(10);
 
 /**
 
 title=taskModel->getStoryTaskCounts();
+timeout=0
 cid=1
-pid=1
-
-根据需求1查看任务数量 >> 6
-根据需求5查看任务数量 >> 6
-根据需求9查看任务数量 >> 6
 
 */
 
-$storyIDList = array('1','5','9');
+$storyIdList     = array(array(), array(1, 2, 3), array(4), array(1, 2, 3, 4));
+$executionIdList = array(2, 3);
 
-$task = new taskTest();
-r($task->getStoryTaskCountsTest($storyIDList)) && p('1') && e('6'); // 根据需求1查看任务数量
-r($task->getStoryTaskCountsTest($storyIDList)) && p('5') && e('6'); // 根据需求5查看任务数量
-r($task->getStoryTaskCountsTest($storyIDList)) && p('9') && e('6'); // 根据需求9查看任务数量
+$taskModel = $tester->loadModel('task');
+r($taskModel->getStoryTaskCounts($storyIdList[0])) && p()    && e('0'); // 测试传入空数据
+r($taskModel->getStoryTaskCounts($storyIdList[1])) && p('2') && e('2'); // 测试获取所有关联需求1、2、3的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[2])) && p('4') && e('0'); // 测试获取所有关联需求4的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[3])) && p('3') && e('2'); // 测试获取所有关联需求1、2、3、4的任务数量
+
+r($taskModel->getStoryTaskCounts($storyIdList[0], $executionIdList[0])) && p()    && e('0'); // 测试执行ID为2需求为空数组的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[1], $executionIdList[0])) && p('1') && e('1'); // 测试执行ID为2需求为1、2、3的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[2], $executionIdList[0])) && p('4') && e('0'); // 测试执行ID为2需求为4的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[3], $executionIdList[0])) && p('2') && e('1'); // 测试执行ID为2需求为1、2、3、4的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[1], $executionIdList[1])) && p('2') && e('1'); // 测试执行ID为3需求为1、2、3的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[2], $executionIdList[1])) && p('4') && e('0'); // 测试执行ID为3需求为4的任务数量
+r($taskModel->getStoryTaskCounts($storyIdList[3], $executionIdList[1])) && p('2') && e('1'); // 测试执行ID为3需求为1、2、3、4的任务数量

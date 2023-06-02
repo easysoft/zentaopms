@@ -1,9 +1,8 @@
 ---
 title: zt_project
-author: Mengyi Liu
+author: Tingting Dai
 version: "1.0"
 fields:
 - field: type
-  range: scrum
+  range: "sprint{10}"
 ...
-

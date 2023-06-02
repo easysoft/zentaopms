@@ -1,4 +1,4 @@
-<?php 
+<?php
 $this->app->loadLang('measurement');
 js::set('methodName', $this->app->methodName);
 ?>

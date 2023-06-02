@@ -13,7 +13,7 @@
 </div>
 <div id='mainContent' class='main-row'>
   <div class="main-col">
-    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='measurement'></div>
+    <div class="cell<?php echo ($browseType == 'bysearch') ? ' show' : '';?>" id="queryBox" data-module='measurement'></div>
     <form class="main-table" data-ride='table' method='post' action='<?php echo $this->createLink('measurement', 'batchEdit');?>'>
       <table class="table table-fixed has-sort-head" id='measList'>
         <thead>

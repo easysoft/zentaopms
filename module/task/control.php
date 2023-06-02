@@ -268,8 +268,10 @@ class task extends control
             $taskIdList = array_unique($this->post->taskIdList);
             $this->task->batchChangeModule($taskIdList, $moduleID);
 
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
@@ -444,7 +446,7 @@ class task extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
-        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
         $this->display();
     }
@@ -488,7 +490,7 @@ class task extends control
      */
     public function editEstimate($estimateID)
     {
-        $estimate = $this->task->getEstimateById($estimateID);
+        $estimate = $this->task->getEstimateByID($estimateID);
         if(!empty($_POST))
         {
             $changes = $this->task->updateEstimate($estimateID);
@@ -517,7 +519,7 @@ class task extends control
      */
     public function deleteEstimate($estimateID, $confirm = 'no')
     {
-        $estimate = $this->task->getEstimateById($estimateID);
+        $estimate = $this->task->getEstimateByID($estimateID);
         $taskID   = $estimate->objectID;
         $task     = $this->task->getById($taskID);
         if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)
@@ -601,7 +603,7 @@ class task extends control
         $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->members         = $members;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->display();
     }
 
@@ -698,7 +700,7 @@ class task extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->members         = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
-        $this->view->canRecordEffort = $this->taskZen->checkRecordEffort($task);
+        $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
         $this->display();
     }

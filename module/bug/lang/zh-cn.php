@@ -18,10 +18,8 @@ $lang->bug->module           = '所属模块';
 $lang->bug->project          = '所属' . $lang->projectCommon;
 $lang->bug->execution        = '所属' . $lang->execution->common;
 $lang->bug->kanban           = '所属看板';
-$lang->bug->story            = "相关需求";
 $lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '标题颜色';
-$lang->bug->task             = '相关任务';
 $lang->bug->title            = 'Bug标题';
 $lang->bug->severity         = '严重程度';
 $lang->bug->pri              = '优先级';
@@ -65,10 +63,6 @@ $lang->bug->closedBy         = '由谁关闭';
 $lang->bug->closedDate       = '关闭日期';
 $lang->bug->duplicateBug     = '重复Bug';
 $lang->bug->lastEditedBy     = '最后修改者';
-$lang->bug->relatedBug       = '相关Bug';
-$lang->bug->linkBugs         = '关联相关Bug';
-$lang->bug->unlinkBug        = '移除相关Bug';
-$lang->bug->case             = '相关用例';
 $lang->bug->caseVersion      = '用例版本';
 $lang->bug->testtask         = '测试单';
 $lang->bug->files            = '附件';
@@ -83,6 +77,12 @@ $lang->bug->selectProjects   = '选择' . $lang->projectCommon;
 $lang->bug->nextStep         = '下一步';
 $lang->bug->noProject        = "还没有选择{$lang->projectCommon}！";
 $lang->bug->noExecution      = "还没有选择{$lang->execution->common}！";
+$lang->bug->story            = "相关需求";
+$lang->bug->task             = '相关任务';
+$lang->bug->relatedBug       = '相关Bug';
+$lang->bug->case             = '相关用例';
+$lang->bug->linkMR           = '相关合并请求';
+$lang->bug->linkCommit       = '相关代码版本';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = '模块';
@@ -114,7 +114,6 @@ $lang->bug->batchEdit          = '批量编辑';
 $lang->bug->view               = 'Bug详情';
 $lang->bug->delete             = '删除';
 $lang->bug->deleteAction       = '删除Bug';
-$lang->bug->deleted            = '已删除';
 $lang->bug->confirm            = '确认';
 $lang->bug->confirmAction      = '确认Bug';
 $lang->bug->batchConfirm       = '批量确认';
@@ -139,6 +138,8 @@ $lang->bug->search             = '搜索';
 $lang->bug->batchChangeModule  = '批量修改模块';
 $lang->bug->batchChangeBranch  = '批量修改分支';
 $lang->bug->batchChangePlan    = '批量修改计划';
+$lang->bug->linkBugs           = '关联相关Bug';
+$lang->bug->unlinkBug          = '移除相关Bug';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe         = '指派给我';
@@ -164,19 +165,12 @@ $lang->bug->yesterdayResolved  = '昨天解决Bug数';
 $lang->bug->yesterdayConfirmed = '昨天确认';
 $lang->bug->yesterdayClosed    = '昨天关闭';
 
-$lang->bug->ditto          = '同上';
-$lang->bug->dittoNotice    = "该bug与上一bug不属于同一{$lang->productCommon}！";
-$lang->bug->noAssigned     = '未指派';
-$lang->bug->noBug          = '暂时没有Bug。';
-$lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
-$lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->deleted        = '已删除';
 $lang->bug->labelConfirmed = '已确认';
 $lang->bug->labelPostponed = '被延期';
 $lang->bug->changed        = '已变动';
 $lang->bug->storyChanged   = '需求变动';
-$lang->bug->linkMR         = '相关合并请求';
-$lang->bug->linkCommit     = '相关代码版本';
-$lang->bug->duplicateTip   = '请输入关键字';
+$lang->bug->ditto          = '同上';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = '当前指派';
@@ -201,21 +195,6 @@ $lang->bug->legendLife                  = 'Bug的一生';
 $lang->bug->legendMisc                  = '其他相关';
 $lang->bug->legendRelated               = '其他信息';
 $lang->bug->legendThisWeekCreated       = '本周新增';
-
-/* 功能按钮。*/
-$lang->bug->buttonConfirm = '确认';
-
-/* 交互提示。*/
-$lang->bug->summary               = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
-$lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->SRCommon}和任务发生变化，确定吗？";
-$lang->bug->confirmDelete         = '您确认要删除该Bug吗？';
-$lang->bug->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
-$lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭，将自动忽略。';
-$lang->bug->executionAccessDenied = "您无权访问该Bug所属的{$lang->executionCommon}！";
-$lang->bug->stepsNotEmpty         = "重现步骤不能为空。";
-$lang->bug->confirmUnlinkBuild    = "更换解决版本将取消与旧版本的关联，您确定取消该bug与%s的关联吗？";
-$lang->bug->noSwitchBranch        = 'Bug%s所属模块不在当前分支下，将自动忽略。';
-$lang->bug->confirmToStory        = '转需求后Bug将自动关闭，关闭原因为转为需求。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p><br/>";
@@ -412,10 +391,6 @@ $lang->bug->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$
 $lang->bug->action->linkrelatedbug       = array('main' => '$date, 由 <strong>$actor</strong> 关联相关Bug <strong>$extra</strong>。');
 $lang->bug->action->unlinkrelatedbug     = array('main' => '$date, 由 <strong>$actor</strong> 移除相关Bug <strong>$extra</strong>。');
 
-$lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->chooseBuilds = '选择相关版本...';
-$lang->bug->placeholder->newBuildName = '新版本名称';
-
 $lang->bug->featureBar['browse']['all']          = '全部';
 $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
@@ -433,6 +408,28 @@ $lang->bug->moreSelects['browse']['more']['postponedbugs'] = $lang->bug->postpon
 $lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
 
+$lang->bug->placeholder = new stdclass();
+$lang->bug->placeholder->chooseBuilds = '选择相关版本...';
+$lang->bug->placeholder->newBuildName = '新版本名称';
+$lang->bug->placeholder->duplicate    = '请输入关键字';
+
+/* 交互提示。*/
+$lang->bug->notice = new stdclass();
+$lang->bug->notice->summary               = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
+$lang->bug->notice->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->SRCommon}和任务发生变化，确定吗？";
+$lang->bug->notice->confirmDelete         = '您确认要删除该Bug吗？';
+$lang->bug->notice->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
+$lang->bug->notice->skipClose             = 'Bug %s 不是已解决状态，不能关闭，将自动忽略。';
+$lang->bug->notice->executionAccessDenied = "您无权访问该Bug所属的{$lang->executionCommon}！";
+$lang->bug->notice->confirmUnlinkBuild    = "更换解决版本将取消与旧版本的关联，您确定取消该bug与%s的关联吗？";
+$lang->bug->notice->noSwitchBranch        = 'Bug%s所属模块不在当前分支下，将自动忽略。';
+$lang->bug->notice->confirmToStory        = '转需求后Bug将自动关闭，关闭原因为转为需求。';
+$lang->bug->notice->productDitto          = "该 bug 与上一 bug 不属于同一{$lang->productCommon}！";
+$lang->bug->notice->noBug                 = '暂时没有 Bug。';
+$lang->bug->notice->noModule              = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
+$lang->bug->notice->delayWarning          = " <strong class='text-danger'> 延期%s天 </strong>";
+
 $lang->bug->error = new stdclass();
 $lang->bug->error->notExist       = 'Bug不存在。';
 $lang->bug->error->cannotActivate = '状态不是已解决或已关闭的Bug不能激活。';
+$lang->bug->error->stepsNotEmpty  = "重现步骤不能为空。";

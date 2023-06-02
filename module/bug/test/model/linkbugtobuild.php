@@ -2,6 +2,12 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+
+zdTable('bug')->gen(10);
+zdTable('user')->gen(1);
+zdTable('build')->gen(10);
+zdTable('release')->config('release')->gen(10);
+
 su('admin');
 
 /**
@@ -9,12 +15,6 @@ su('admin');
 title=测试bugModel->linkBugToBuild();
 cid=1
 pid=1
-
-把bug 1 2关联到build 1 >> 1,2
-把bug 3 4关联到build 3 >> 3,4
-把bug 5 6关联到build 5 >> 5,6
-把bug 5 6关联到build 1 >> 1,2,7,8
-把bug 5 6关联到build 1 >> 1,2,7,8,9,10
 
 */
 
@@ -27,8 +27,8 @@ $bugIDList5 = array('9', '10');
 $buildList = array('1', '3', '5');
 
 $bug = new bugTest();
-r($bug->linkBugToBuildTest($bugIDList1, $buildList[0])) && p('bugs')  && e('1,2');   // 把bug 1 2关联到build 1
-r($bug->linkBugToBuildTest($bugIDList2, $buildList[1])) && p('bugs')  && e('3,4');   // 把bug 3 4关联到build 3
-r($bug->linkBugToBuildTest($bugIDList3, $buildList[2])) && p('bugs')  && e('5,6');   // 把bug 5 6关联到build 5
-r($bug->linkBugToBuildTest($bugIDList4, $buildList[0])) && p('bugs')  && e('1,2,7,8');   // 把bug 5 6关联到build 1
-r($bug->linkBugToBuildTest($bugIDList5, $buildList[0])) && p('bugs')  && e('1,2,7,8,9,10');   // 把bug 5 6关联到build 1
+r($bug->linkBugToBuildTest($bugIDList1, $buildList[0])) && p('bugs', '-')  && e('1,2');   // 把bug 1 2关联到build 1
+r($bug->linkBugToBuildTest($bugIDList2, $buildList[1])) && p('bugs', '-')  && e('3,4');   // 把bug 3 4关联到build 3
+r($bug->linkBugToBuildTest($bugIDList3, $buildList[2])) && p('bugs', '-')  && e('5,6');   // 把bug 5 6关联到build 5
+r($bug->linkBugToBuildTest($bugIDList4, $buildList[0])) && p('bugs', '-')  && e('1,2,7,8');   // 把bug 5 6关联到build 1
+r($bug->linkBugToBuildTest($bugIDList5, $buildList[0])) && p('bugs', '-')  && e('1,2,7,8,9,10');   // 把bug 5 6关联到build 1

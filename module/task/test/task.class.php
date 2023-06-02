@@ -76,10 +76,11 @@ class taskTest
             'estStarted'   => '2021-01-10',
             'deadline'     => '2021-03-19',
             'desc'         => '',
+            'mailto'       => '',
             'version'      => '1',
             'openedBy'     => 'admin',
             'openedDate'   => helper::now(),
-            'laneID'       => 0,
+            'lane'         => 0,
         );
 
         $tasks = array();
@@ -188,6 +189,8 @@ class taskTest
     public function batchChangeModuleTest(array $taskIDList, int $moduleID): array
     {
         $object = $this->objectModel->batchChangeModule($taskIDList, $moduleID);
+
+        if(dao::isError()) return dao::getError();
         return $this->objectModel->getByIdList($taskIDList);
     }
 
@@ -448,7 +451,7 @@ class taskTest
         $task = new stdclass();
         $task->id           = $taskID;
         $task->left         = 0;
-        $task->status       = 'doing';
+        $task->status       = 'done';
         $task->consumed     = 0;
         $task->assignedTo   = '';
         $task->realstarted  = helper::now();
@@ -607,27 +610,6 @@ class taskTest
     }
 
     /**
-     * Test get counts of some stories' tasks.
-     *
-     * @param  array  $storyIDList
-     * @access public
-     * @return int
-     */
-    public function getStoryTaskCountsTest($storyIDList)
-    {
-        $object = $this->objectModel->getStoryTaskCounts($storyIDList);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
-    /**
      * Test get task efforts.
      *
      * @param  int    $taskID
@@ -649,18 +631,18 @@ class taskTest
      *
      * @param  int    $estimateID
      * @access public
-     * @return object
+     * @return false|object
      */
-    public function getEstimateByIdTest($estimateID)
+    public function getEstimateByIdTest(int $estimateID): false|object
     {
-        $object = $this->objectModel->getEstimateById($estimateID);
-        if(dao::isError())
+        $object = $this->objectModel->getEstimateByID($estimateID);
+        if(!$object)
         {
-            $error = dao::getError();
-            return $error;
+            return false;
         }
         else
         {
+            $object->isLast = (int)$object->isLast;
             return $object;
         }
     }
@@ -840,13 +822,16 @@ class taskTest
     /**
      * Test process a task, judge it's status.
      *
-     * @param  object $task
+     * @param  int $task
      * @access public
-     * @return object
+     * @return string|object|array
      */
-    public function processTaskTest($task)
+    public function processTaskTest(int $taskID): string|object|array
     {
-        $task->deadline = $task->deadline == '-1day' ? date('Y-m-d',strtotime('-1 day')) : date('Y-m-d',strtotime('+1 day'));
+        $task = $this->objectModel->getByID($taskID);
+        if(!$task) return '任务未找到';
+
+        $task->product = $task->id;
         $object = $this->objectModel->processTask($task);
 
         if(dao::isError())
@@ -866,13 +851,14 @@ class taskTest
      * @access public
      * @return array
      */
-    public function processTasksTest($executionID)
+    public function processTasksTest(int $executionID): array
     {
         $tasks = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetchAll('id');
         $parents = '0';
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents .= ",$task->parent";
+            $task->product = $task->execution;
         }
         $parents = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('`id`')->in($parents)->andWhere('deleted')->eq('0')->fetchAll('id');
         foreach($tasks as $task)
@@ -1281,7 +1267,7 @@ class taskTest
         $this->objectModel->addTaskEffort($data);
 
         $objectID = $this->objectModel->dao->lastInsertID();
-        $object   = $this->objectModel->getEstimateById($objectID);
+        $object   = $this->objectModel->getEstimateByID($objectID);
 
         if(dao::isError())
         {
@@ -1297,28 +1283,15 @@ class taskTest
      * Test get toList and ccList.
      *
      * @param  int    $taskID
-     * @param  bool   $skipMailto
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getToAndCcListTest($taskID, $skipMailto = false)
+    public function getToAndCcListTest(int $taskID): array|false
     {
         $task = $this->objectModel->getByID($taskID);
-        if(empty($task)) return 0;
-        if($skipMailto) $task->mailto = '';
+        if(empty($task)) return false;
 
-        $object = $this->objectModel->getToAndCcList($task);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            if(isset($object[0])) $object[2] = $object[0];
-            if(isset($object[1]) and $object[1] == '') $object[1] = 0;
-            return $object;
-        }
+        return $this->objectModel->getToAndCcList($task);
     }
 
     /**
@@ -1352,14 +1325,15 @@ class taskTest
     }
 
     /**
-     * Test for can operate effort;
+     * 检查当前登录用户是否可以操作日志。
+     * Check if the current user can operate effort.
      *
-     * @param  object  $task
-     * @param  object  $effort
+     * @param  object $task
+     * @param  object $effort
      * @access public
-     * @return bool
+     * @return int
      */
-    public function canOperateEffort($task, $effort = null)
+    public function canOperateEffort(object $task, object $effort = null): int
     {
         $result = $this->objectModel->canOperateEffort($task, $effort);
         return $result ? 1 : 0;
@@ -2154,5 +2128,19 @@ class taskTest
                 ->where('id')->eq($effortID)
                 ->fetch();
         }
+    }
+
+    /**
+     * 在任务信息中追加泳道名称。
+     * Append the lane name to the task information.
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return object[]
+     */
+    public function appendLaneObject(array $taskIdList): array
+    {
+        $tasks = $this->objectModel->getByIdList($taskIdList);
+        return $this->objectModel->appendLane($tasks);
     }
 }

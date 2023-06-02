@@ -15,7 +15,7 @@
           <th><?php echo $lang->measurement->content;?></th>
           <td colspan='2' class='tips'>
             <?php echo html::textarea('content', $template->content, "class='form-control'");?>
-            <i class="icon icon-exclamation-sign icon-rotate-180"></i> 
+            <i class="icon icon-exclamation-sign icon-rotate-180"></i>
             <?php echo $lang->measurement->tips->click2InsertData;?>
           </td>
         </tr>

@@ -7,7 +7,6 @@ class textarea extends wg
         'name: string',
         'id?: string',
         'class?: string',
-        'value?: string',
         'required?: bool',
         'placeholder?: string',
         'rows?: int',
@@ -21,6 +20,6 @@ class textarea extends wg
 
     protected function build()
     {
-        return h::textarea(set($this->props));
+        return h::textarea(set($this->props), $this->children());
     }
 }

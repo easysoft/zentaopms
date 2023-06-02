@@ -18,10 +18,8 @@ $lang->bug->module           = 'Module';
 $lang->bug->project          = $lang->projectCommon;
 $lang->bug->execution        = $lang->execution->common;
 $lang->bug->kanban           = 'Kanban';
-$lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->color            = 'Color';
-$lang->bug->task             = 'Task';
 $lang->bug->title            = 'Title';
 $lang->bug->severity         = 'Severity';
 $lang->bug->pri              = 'Priority';
@@ -54,7 +52,6 @@ $lang->bug->openedDate       = 'ReportedDate';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'AssignTo';
 $lang->bug->assignedToMe     = 'AssignToMe';
-$lang->bug->assignBug        = 'AssignedTo';
 $lang->bug->assignedDate     = 'AssignedDate';
 $lang->bug->resolvedBy       = 'ResolvedBy';
 $lang->bug->resolution       = 'Resolution';
@@ -66,10 +63,6 @@ $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'ClosedDate';
 $lang->bug->duplicateBug     = 'Duplicated Bug';
 $lang->bug->lastEditedBy     = 'EditedBy';
-$lang->bug->relatedBug       = 'Related Bugs';
-$lang->bug->linkBugs         = 'Link Bug';
-$lang->bug->unlinkBug        = 'Unlink';
-$lang->bug->case             = 'Cases';
 $lang->bug->caseVersion      = 'Case Version';
 $lang->bug->testtask         = 'Request';
 $lang->bug->files            = 'Files';
@@ -84,6 +77,12 @@ $lang->bug->selectProjects   = "Select {$lang->projectCommon}s";
 $lang->bug->nextStep         = 'Next Step';
 $lang->bug->noProject        = "Haven’t chosen a {$lang->projectCommon} yet.";
 $lang->bug->noExecution      = 'Haven’t chosen a ' . strtolower($lang->execution->common) . ' yet.';
+$lang->bug->story            = 'Story';
+$lang->bug->task             = 'Task';
+$lang->bug->relatedBug       = 'Related Bugs';
+$lang->bug->case             = 'Cases';
+$lang->bug->linkMR           = 'Related MRs';
+$lang->bug->linkCommit       = 'Related Commits';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = 'Module';
@@ -115,7 +114,6 @@ $lang->bug->batchEdit          = 'Batch Edit';
 $lang->bug->view               = 'Bug Detail';
 $lang->bug->delete             = 'Delete';
 $lang->bug->deleteAction       = 'Delete Bug';
-$lang->bug->deleted            = 'Deleted';
 $lang->bug->confirm            = 'Confirm';
 $lang->bug->confirmAction      = 'Confirm Bug';
 $lang->bug->batchConfirm       = 'Batch Confirm';
@@ -140,6 +138,8 @@ $lang->bug->search             = 'Search';
 $lang->bug->batchChangeModule  = 'Batch Edit Modules';
 $lang->bug->batchChangeBranch  = 'Batch Edit Branches';
 $lang->bug->batchChangePlan    = 'Batch Edit Plans';
+$lang->bug->linkBugs           = 'Link Bug';
+$lang->bug->unlinkBug          = 'Unlink';
 
 /* Query condition list. */
 $lang->bug->assignToMe         = 'AssignedToMe';
@@ -165,19 +165,12 @@ $lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
 $lang->bug->yesterdayClosed    = 'Bug Closed Yesterday ';
 
-$lang->bug->ditto          = 'Ditto';
-$lang->bug->dittoNotice    = "This bug is not linked to the same {$lang->productCommon} as the last one is!";
-$lang->bug->noAssigned     = 'Unassigned';
-$lang->bug->noBug          = 'No bugs yet.';
-$lang->bug->noModule       = '<div>You have no modules.</div><div>Manage now</div>';
-$lang->bug->delayWarning   = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->deleted        = 'Deleted';
 $lang->bug->labelConfirmed = 'Confirmed';
 $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
-$lang->bug->linkMR         = 'Related MRs';
-$lang->bug->linkCommit     = 'Related Commits';
-$lang->bug->duplicateTip   = 'Please enter keyword search';
+$lang->bug->ditto          = 'Ditto';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';
@@ -202,21 +195,6 @@ $lang->bug->legendLife                  = 'Bug Life';
 $lang->bug->legendMisc                  = 'Misc.';
 $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->legendThisWeekCreated       = 'This Week Created';
-
-/* Button. */
-$lang->bug->buttonConfirm = 'Confirm';
-
-/* Interactive prompt. */
-$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
-$lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->executionCommon}s, stories and tasks change. Do you want to do this?";
-$lang->bug->confirmDelete         = 'Do you want to delete this bug?';
-$lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is/are Not Resolved states and cannot be closed. They will be ignored automatically.';
-$lang->bug->executionAccessDenied = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
-$lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
-$lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
-$lang->bug->noSwitchBranch        = 'The linked module of Bug%s is not in the current branch. It will be omitted.';
-$lang->bug->confirmToStory        = 'The bug will be closed automatically after transferring to requirements, and the reason for closing is that the bug has been converted to requirements status.';
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
@@ -413,16 +391,11 @@ $lang->bug->action->unlinkedfromrevision = array('main' => '$date, unlinked by <
 $lang->bug->action->linkrelatedbug       = array('main' => '$date, linked by <strong>$actor</strong> to Bug <strong>$extra</strong>.');
 $lang->bug->action->unlinkrelatedbug     = array('main' => '$date, unlinked by <strong>$actor</strong> from Bug <strong>$extra</strong>.');
 
-$lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->chooseBuilds = 'Select Build';
-$lang->bug->placeholder->newBuildName = 'New Build Name';
-
 $lang->bug->featureBar['browse']['all']          = 'All';
 $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
-
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
@@ -435,6 +408,28 @@ $lang->bug->moreSelects['browse']['more']['postponedbugs'] = $lang->bug->postpon
 $lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
 
+$lang->bug->placeholder = new stdclass();
+$lang->bug->placeholder->chooseBuilds = 'Select Build';
+$lang->bug->placeholder->newBuildName = 'New Build Name';
+$lang->bug->placeholder->duplicate    = 'Please enter keyword search';
+
+/* Interactive prompt. */
+$lang->bug->notice = new stdclass();
+$lang->bug->notice->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
+$lang->bug->notice->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->executionCommon}s, stories and tasks change. Do you want to do this?";
+$lang->bug->notice->confirmDelete         = 'Do you want to delete this bug?';
+$lang->bug->notice->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
+$lang->bug->notice->skipClose             = 'Bug %s is/are Not Resolved states and cannot be closed. They will be ignored automatically.';
+$lang->bug->notice->executionAccessDenied = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
+$lang->bug->notice->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
+$lang->bug->notice->noSwitchBranch        = 'The linked module of Bug%s is not in the current branch. It will be omitted.';
+$lang->bug->notice->confirmToStory        = 'The bug will be closed automatically after transferring to requirements, and the reason for closing is that the bug has been converted to requirements status.';
+$lang->bug->notice->productDitto          = "This bug is not linked to the same {$lang->productCommon} as the last one is!";
+$lang->bug->notice->noBug                 = 'No bugs yet.';
+$lang->bug->notice->noModule              = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->notice->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
+
 $lang->bug->error = new stdclass();
 $lang->bug->error->notExist       = "Bug doesn't exist.";
 $lang->bug->error->cannotActivate = 'Bugs with a status other than Resolved or Closed cannot be activated.';
+$lang->bug->error->stepsNotEmpty  = "The reproduction step cannot be empty.";

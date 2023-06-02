@@ -1319,6 +1319,11 @@ class baseRouter
      */
     public function parseRequest()
     {
+        if(str_starts_with($_SERVER['REQUEST_URI'], '/data/upload') && !is_file($this->wwwRoot . $_SERVER['REQUEST_URI']))
+        {
+            header("HTTP/1.1 404 Not Found", true, 404);
+        }
+
         if($this->config->requestType == 'PATH_INFO' or $this->config->requestType == 'PATH_INFO2')
         {
             $this->parsePathInfo();
@@ -1437,7 +1442,7 @@ class baseRouter
      * 获取$URL。
      * Get the $URL.
      *
-     * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
+     * @param  bool   $full The URI contains the webRoot if $full is true else only the URI will be return.
      * @access public
      * @return string
      */

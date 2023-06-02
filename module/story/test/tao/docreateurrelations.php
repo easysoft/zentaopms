@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('product')->gen(2);
-zdTable('relation')->gen(1);
+zdTable('relation')->gen(0);
 
 $story = zdTable('story');
 $story->type->range('requirement,story{10}');

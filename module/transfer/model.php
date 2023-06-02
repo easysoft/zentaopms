@@ -684,8 +684,8 @@ class transferModel extends model
     /**
      * Get files by model.
      *
-     * @param  int    $model
-     * @param  int    $datas
+     * @param  string $model
+     * @param  array  $datas
      * @access public
      * @return void
      */

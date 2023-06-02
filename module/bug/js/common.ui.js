@@ -17,7 +17,7 @@ function changeProduct(event)
             }
             else
             {
-                $('#product').val(oldProductID); // Revert old product id if confirm is no.
+                $('#product').val(bug.product); // Revert old product id if confirm is no.
             }
         }});
     }
@@ -29,7 +29,7 @@ function changeProduct(event)
         loadExecutions(productID);
         loadAssignedTo();
         loadProductPlans(productID);
-        loadProductStories(productID);
+        loadProductStories(productID, bug.story);
     }
 }
 
@@ -43,7 +43,7 @@ function changeBranch(event)
     loadAssignedTo();
     loadProductBuilds(productID);
     loadProductPlans(productID);
-    loadProductStories(productID);
+    loadProductStories(productID, bug.story);
 }
 
 function changeProject(event)
@@ -73,7 +73,7 @@ function changeExecution(event)
     }
     else
     {
-        loadProductStories(productID);
+        loadProductStories(productID, bug.story);
         loadTestTasks(productID);
         if(projectID == 0)
         {
@@ -93,8 +93,10 @@ function changeModule(event)
     const moduleID  = $(event.target).val();
     const productID = $('#product').val();
     const storyID   = $('#story').val();
+    let executionID = $('#execution').val();
+    if(typeof(executionID) == 'undefined') executionID = 0;
     loadAssignedToByModule(moduleID, productID);
-    loadProductStories(moduleID, productID, storyID);
+    loadProductStories(productID, storyID, executionID, moduleID);
 }
 
 function clickRefresh(event)
@@ -108,9 +110,9 @@ function loadProductBranches(productID)
     $('#branch').remove();
 
     const branchStatus = config.currentMethod == 'create' ? 'active' : 'all';
-    const oldBranch    = config.currentMethod == 'edit' ? bugBranch : 0;
+    const oldBranch    = config.currentMethod == 'edit' ? bug.branch : 0;
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
-    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
+    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + bug[tab];
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
@@ -141,7 +143,7 @@ function loadProductProjects(productID)
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + oldProjectID);
+    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + bug.project);
     $('#projectBox').load(link);
 }
 
@@ -284,7 +286,6 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
 {
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(typeof(oldOpenedBuild) == 'undefined') oldOpenedBuild = 0;
 
     if(config.currentMethod == 'create')
     {
@@ -301,10 +302,10 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     {
         if(buildBox == 'all' || buildBox == 'openedBuildBox')
         {
-            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=' + type);
+            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + branch + '&index=0&type=' + type);
             $('#openedBuildBox').load(openedLink, function()
             {
-                $(this).find('select').val(oldOpenedBuild);
+                $(this).find('select').val(bug.openedBuild);
             });
         }
 
@@ -365,16 +366,12 @@ function loadProductPlans(productID)
     $('#planBox').load(link);
 }
 
-function loadProductStories(productID, moduleID = 0, oldStoryID = 0)
+function loadProductStories(productID, storyID, moduleID = 0, executionID = 0)
 {
     let branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
 
-    let executionID = $('#execution').val();
-    if(typeof(executionID) == 'undefined') executionID = 0;
-
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
     $('#storyBox').load(link);
 }
 
@@ -384,16 +381,15 @@ function loadExecutionStories(executionID, num)
 
     const productID = $('#product' + num).val();
     let   branch    = $('#branch' + num).val();
-    if(typeof(branch) == 'undefined')     branch     = 0;
-    if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
+    if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID + '&number=' + num + '&type=full&status=all&from=bug');
+    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + bug.story + '&number=' + num + '&type=full&status=all&from=bug');
     $('#storyBox' + num).load(link);
 }
 
 function loadExecutionTasks(executionID)
 {
-    const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + oldTaskID);
+    const link = $.createLink('task', 'ajaxGetExecutionTasks', 'executionID=' + executionID + '&taskID=' + bug.task);
     $.post(link, function(data)
     {
         $('#task').replaceWith(data);
@@ -439,10 +435,9 @@ function loadAllBuilds(event)
 
 function loadAllUsers(event)
 {
-    isClosedBug = typeof isClosedBug == 'undefined' ? false : isClosedBug;
-
-    const params = isClosedBug ? '&params=devfirst' : '';
-    const link   = $.createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
+    const isClosedBug = bug.status = 'closed';
+    const params      = isClosedBug ? '&params=devfirst' : '';
+    const link        = $.createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
     $.get(link, function(data)
     {
         if(data)

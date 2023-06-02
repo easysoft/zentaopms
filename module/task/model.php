@@ -916,9 +916,9 @@ class taskModel extends model
      * @param  array  $taskIdList
      * @param  int    $moduleID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchChangeModule(array $taskIdList, int $moduleID): void
+    public function batchChangeModule(array $taskIdList, int $moduleID): bool
     {
         $now      = helper::now();
         $oldTasks = $this->getByIdList($taskIdList);
@@ -934,14 +934,19 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $task->module         = $moduleID;
 
-            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-            if(!dao::isError())
-            {
-                $changes  = common::createChanges($oldTask, $task);
-                $actionID = $this->action->create('task', $taskID, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->dao->update(TABLE_TASK)->data($task)
+                ->autoCheck()
+                ->check('module', 'ge', 0)
+                ->where('id')->eq((int)$taskID)
+                ->exec();
+
+            if(dao::isError()) return false;
+
+            $changes  = common::createChanges($oldTask, $task);
+            $actionID = $this->action->create('task', $taskID, 'Edited');
+            $this->action->logHistory($actionID, $changes);
         }
+        return true;
     }
 
     /**
@@ -1115,7 +1120,7 @@ class taskModel extends model
         /* Remind whether to update status of the bug, if task which from that bug has been finished. */
         if($changes && $this->needUpdateBugStatus($oldTask))
         {
-            $response = $this->taskTao->getRemindBugLink($task, $changes);
+            $response = $this->taskTao->getRemindBugLink($oldTask, $changes);
             if($response) return $response;
         }
 
@@ -1128,23 +1133,22 @@ class taskModel extends model
      * @param  int    $taskID
      * @param  array  $workhour
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function recordWorkhour(int $taskID, array $workhour): array|false
+    public function recordWorkhour(int $taskID, array $workhour): array
     {
         $task       = $this->taskTao->fetchByID($taskID);
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if field is valid. */
         $result = $this->taskTao->checkWorkhour($task, $workhour);
-        if(!$result) return false;
+        if(!$result) return array();
 
         /* Add field to workhour. */
         $workhour = $this->taskTao->buildWorkhour($taskID, $workhour);
-        if(empty($workhour)) return false;
+        if(empty($workhour)) return array();
 
         $allChanges  = array();
-        $now         = helper::now();
         $oldStatus   = $task->status;
         $lastDate    = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
         $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team) : array();
@@ -1392,7 +1396,6 @@ class taskModel extends model
         $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19)     : null;
         $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
         $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19)    : null;
-        $task->mailto         = !empty($task->mailto)         ? $task->mailto                        : null;
 
         /* Get the child tasks of the parent task. */
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -1621,13 +1624,14 @@ class taskModel extends model
     }
 
     /**
-     * Get suspended tasks of a user.
+     * 获取暂停的项目和执行下，指派给指定用户的任务信息。
+     * Get tasks assigned to the user for the suspended project and execution.
      *
-     * @param  string $account
+     * @param  string   $account
      * @access public
      * @return object[]
      */
-    public function getUserSuspendedTasks($account): array
+    public function getUserSuspendedTasks(string $account): array
     {
         return $this->dao->select('t1.*')
             ->from(TABLE_TASK)->alias('t1')
@@ -1696,23 +1700,26 @@ class taskModel extends model
     }
 
     /**
-     * Get counts of some stories' tasks.
+     * 获取关联需求的任务数。
+     * Get the number of tasks linked with the story.
      *
      * @param  array  $stories
      * @param  int    $executionID
      * @access public
-     * @return int
+     * @return array
      */
-    public function getStoryTaskCounts($stories, $executionID = 0)
+    public function getStoryTaskCounts(array $stories, int $executionID = 0): array
     {
         if(empty($stories)) return array();
-        $taskCounts = $this->dao->select('story, COUNT(*) AS tasks')
+
+        $taskCounts = $this->dao->select('story, COUNT(id) AS tasks')
             ->from(TABLE_TASK)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
             ->groupBy('story')
             ->fetchPairs();
+
         foreach($stories as $storyID)
         {
             if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
@@ -1739,17 +1746,18 @@ class taskModel extends model
      * 根据任务、人员和日志ID查询并排序任务的日志列表。
      * Get task efforts by taskID, account or effortID.
      *
-     * @param  int    $taskID
-     * @param  string $account
-     * @param  int    $effortID
-     * @param  string $orderBy
+     * @param  int|array $taskIdList
+     * @param  string    $account
+     * @param  int       $effortID
+     * @param  string    $orderBy
      * @access public
      * @return array
      */
-    public function getTaskEfforts(int $taskID, string $account = '', int $effortID = 0, string $orderBy = 'date,id'): array
+    public function getTaskEfforts(int|array $taskIdList, string $account = '', int $effortID = 0, string $orderBy = 'date,id'): array
     {
-        return $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
-            ->andWhere('objectType')->eq('task')
+        return $this->dao->select('*')->from(TABLE_EFFORT)
+            ->where('objectType')->eq('task')
+            ->andWhere('objectID')->in($taskIdList)
             ->andWhere('deleted')->eq('0')
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->beginIF($effortID)->orWhere('id')->eq($effortID)->fi()
@@ -1758,33 +1766,19 @@ class taskModel extends model
     }
 
     /**
-     * Get taskList date record.
-     *
-     * @param  int|array $taskID
-     * @access public
-     * @return array
-     */
-    public function getTaskDateRecord($taskID)
-    {
-        return $this->dao->select('id,date')->from(TABLE_EFFORT)->where('objectID')->in($taskID)
-            ->andWhere('objectType')->eq('task')
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('date')
-            ->fetchAll('id');
-    }
-
-    /**
-     * Get estimate by id.
+     * 根据日志ID获取日志信息和是否最后一次日志。
+     * Get estimate data and check last by id.
      *
      * @param  int    $effortID
      * @access public
-     * @return object.
+     * @return false|object
      */
-    public function getEstimateById($effortID)
+    public function getEstimateByID(int $effortID): false|object
     {
         $estimate = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('id')->eq($effortID)
             ->fetch();
+        if(!$estimate) return false;
 
         /* If the estimate is the last of its task, status of task will be checked. */
         $lastID = $this->dao->select('id')->from(TABLE_EFFORT)
@@ -1797,14 +1791,15 @@ class taskModel extends model
     }
 
     /**
-     * Check operate effort.
+     * 检查当前登录用户是否可以操作日志。
+     * Check if the current user can operate effort.
      *
-     * @param  object    $task
-     * @param  object    $effort
+     * @param  object $task
+     * @param  object $effort
      * @access public
      * @return bool
      */
-    public function canOperateEffort($task, $effort = null)
+    public function canOperateEffort(object $task, object $effort = null): bool
     {
         if(empty($task->team)) return true;
 
@@ -1820,7 +1815,7 @@ class taskModel extends model
         /* Check for edit and delete effort. */
         if($task->mode == 'linear')
         {
-            if(strpos('|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
+            if(in_array($task->status, array('pause', 'cancel', 'closed'))) return false;
             if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
         if($this->app->user->account == $effort->account) return true;
@@ -1836,7 +1831,7 @@ class taskModel extends model
      */
     public function updateEstimate($estimateID)
     {
-        $oldEstimate = $this->getEstimateById($estimateID);
+        $oldEstimate = $this->getEstimateByID($estimateID);
         $today       = helper::today();
         $estimate    = fixer::input('post')
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
@@ -1921,7 +1916,7 @@ class taskModel extends model
      */
     public function deleteEstimate($estimateID)
     {
-        $estimate = $this->getEstimateById($estimateID);
+        $estimate = $this->getEstimateByID($estimateID);
         $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
@@ -2033,13 +2028,14 @@ class taskModel extends model
     }
 
     /**
-     * Append lane field to tasks;
+     * 在任务信息中追加泳道名称。
+     * Append the lane name to the task information.
      *
      * @param  array  $tasks
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function appendLane($tasks)
+    public function appendLane(array $tasks): array
     {
         $executionIdList = array();
         foreach($tasks as $task)
@@ -2063,11 +2059,10 @@ class taskModel extends model
             foreach($lanes as $lane)
             {
                 if($lane->kanban != $task->execution) continue;
-                if(strpos(",{$lane->cards},", ",{$task->id},") !== false)
-                {
-                    $task->lane = $lane->name;
-                    break;
-                }
+                if(strpos(",{$lane->cards},", ",{$task->id},") === false) continue;
+
+                $task->lane = $lane->name;
+                break;
             }
         }
 
@@ -2075,13 +2070,14 @@ class taskModel extends model
     }
 
     /**
-     * Batch process tasks.
+     * 批量处理任务，计算进度、获取相关信息。
+     * Batch process tasks, compute their progress and get their relates.
      *
-     * @param  int    $tasks
+     * @param  array  $tasks
      * @access public
-     * @return void
+     * @return array
      */
-    public function processTasks($tasks)
+    public function processTasks(array $tasks): array
     {
         foreach($tasks as $task)
         {
@@ -2094,17 +2090,19 @@ class taskModel extends model
                 }
             }
         }
+
         return $tasks;
     }
 
     /**
-     * Process a task, judge it's status.
+     * 处理任务，计算进度、获取相关信息。
+     * Process a task, compute its progress and get its relates.
      *
-     * @param  object    $task
+     * @param  object $task
      * @access public
      * @return object
      */
-    public function processTask($task)
+    public function processTask(object $task): object
     {
         $today = helper::today();
 
@@ -2592,199 +2590,6 @@ class taskModel extends model
     }
 
     /**
-     * Print cell data.
-     *
-     * @param object $col
-     * @param object $task
-     * @param array  $users
-     * @param string $browseType
-     * @param array  $branchGroups
-     * @param array  $modulePairs
-     * @param bool   $showBranch
-     * @access public
-     * @return void
-     */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $showBranch = false)
-    {
-        $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
-        $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
-        $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
-        $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
-        $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
-
-        $canBatchAction = in_array(true, array($canBatchEdit, $canBatchClose, $canBatchCancel, $canBatchChangeModule, $canBatchAssignTo));
-        $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));
-
-        $canView  = common::hasPriv('task', 'view');
-        $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
-        $account  = $this->app->user->account;
-        $id       = $col->id;
-        if($col->show)
-        {
-            $class = "c-{$id}";
-            if($id == 'status') $class .= ' task-' . $task->status;
-            if($id == 'id')     $class .= ' cell-id';
-            if($id == 'name')   $class .= ' text-left';
-            if($id == 'deadline') $class .= ' text-center';
-            if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
-            if($id == 'assignedTo') $class .= ' has-btn text-left';
-            if($id == 'lane') $class .= ' text-left';
-            if(strpos('progress', $id) !== false) $class .= ' text-right';
-
-            $title = '';
-            if($id == 'name')
-            {
-                $title = " title='{$task->name}'";
-                if(!empty($task->children)) $class .= ' has-child';
-            }
-            if($id == 'story') $title = " title='{$task->storyTitle}'";
-            if($id == 'estimate' || $id == 'consumed' || $id == 'left')
-            {
-                $value = round($task->$id, 1);
-                $title = " title='{$value} {$this->lang->execution->workHour}'";
-            }
-            if($id == 'lane') $title = " title='{$task->lane}'";
-            if($id == 'finishedBy') $title  = " title='" . zget($users, $task->finishedBy) . "'";
-            if($id == 'openedBy') $title  = " title='" . zget($users, $task->openedBy) . "'";
-            if($id == 'lastEditedBy') $title  = " title='" . zget($users, $task->lastEditedBy) . "'";
-
-            echo "<td class='" . $class . "'" . $title . ">";
-            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
-            switch($id)
-            {
-            case 'id':
-                if($canBatchAction)
-                {
-                    echo html::checkbox('taskIdList', array($task->id => '')) . html::a(helper::createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));
-                }
-                else
-                {
-                    printf('%03d', $task->id);
-                }
-                break;
-            case 'pri':
-                $priClass = $task->pri ? "label-pri label-pri-{$task->pri}" : '';
-                echo "<span class='$priClass' title='" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
-                echo zget($this->lang->task->priList, $task->pri, $task->pri);
-                echo "</span>";
-                break;
-            case 'name':
-                if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
-                if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
-                if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $showBranch) echo "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                if($task->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
-                if(!empty($task->team)) echo '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
-                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
-                if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
-                if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
-                break;
-            case 'type':
-                echo zget($this->lang->task->typeList, $task->type, $task->type);
-                break;
-            case 'status':
-                $storyChanged ? print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}' title='{$this->processStatus('task', $task)}'> " . $this->processStatus('task', $task) . "</span>");
-                break;
-            case 'estimate':
-                echo round($task->estimate, 1) . $this->lang->execution->workHourUnit;
-                break;
-            case 'consumed':
-                echo round($task->consumed, 1) . $this->lang->execution->workHourUnit;
-                break;
-            case 'left':
-                echo round($task->left, 1)     . $this->lang->execution->workHourUnit;
-                break;
-            case 'progress':
-                echo round($task->progress, 2) . '%';
-                break;
-            case 'deadline':
-                if($task->deadline && substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
-                break;
-            case 'openedBy':
-                echo zget($users, $task->openedBy);
-                break;
-            case 'openedDate':
-                echo substr($task->openedDate, 5, 11);
-                break;
-            case 'estStarted':
-                echo helper::isZeroDate($task->estStarted) ? '' : substr($task->estStarted, 5, 11);
-                break;
-            case 'realStarted':
-                echo helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 5, 11);
-                break;
-            case 'assignedTo':
-                $this->printAssignedHtml($task, $users);
-                break;
-            case 'lane':
-                echo mb_substr($task->lane, 0, 8);
-                break;
-            case 'assignedDate':
-                echo helper::isZeroDate($task->assignedDate) ? '' : substr($task->assignedDate, 5, 11);
-                break;
-            case 'finishedBy':
-                echo zget($users, $task->finishedBy);
-                break;
-            case 'finishedDate':
-                echo helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate, 5, 11);
-                break;
-            case 'canceledBy':
-                echo zget($users, $task->canceledBy);
-                break;
-            case 'canceledDate':
-                echo helper::isZeroDate($task->canceledDate) ? '' : substr($task->canceledDate, 5, 11);
-                break;
-            case 'closedBy':
-                echo zget($users, $task->closedBy);
-                break;
-            case 'closedDate':
-                echo helper::isZeroDate($task->closedDate) ? '' : substr($task->closedDate, 5, 11);
-                break;
-            case 'closedReason':
-                echo $this->lang->task->reasonList[$task->closedReason];
-                break;
-            case 'story':
-                if(!empty($task->storyID))
-                {
-                    if(common::hasPriv('story', 'view'))
-                    {
-                        echo html::a(helper::createLink('story', 'view', "storyid=$task->storyID", 'html', true), "<i class='icon icon-{$this->lang->icons['story']}'></i>", '', "class='iframe' data-width='1050' title='{$task->storyTitle}'");
-                    }
-                    else
-                    {
-                        echo "<i class='icon icon-{$this->lang->icons['story']}' title='{$task->storyTitle}'></i>";
-                    }
-                }
-                break;
-            case 'mailto':
-                $mailto = explode(',', $task->mailto);
-                foreach($mailto as $account)
-                {
-                    $account = trim($account);
-                    if(empty($account)) continue;
-                    echo zget($users, $account) . ' &nbsp;';
-                }
-                break;
-            case 'lastEditedBy':
-                echo zget($users, $task->lastEditedBy);
-                break;
-            case 'lastEditedDate':
-                echo helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 5, 11);
-                break;
-            case 'activatedDate':
-                echo helper::isZeroDate($task->activatedDate) ? '' : substr($task->activatedDate, 5, 11);
-                break;
-            case 'actions':
-                echo $this->buildOperateMenu($task, 'browse');
-                break;
-            default:
-                echo '';
-                break;
-            }
-            echo '</td>';
-        }
-    }
-
-    /**
      * Print assigned html
      *
      * @param  object $task
@@ -2839,46 +2644,39 @@ class taskModel extends model
     }
 
     /**
+     * 获取指派用户和抄送给用户列表。
      * Get toList and ccList.
      *
-     * @param  object    $task
+     * @param  object      $task
      * @access public
-     * @return bool|array
+     * @return array|false
      */
-    public function getToAndCcList($task)
+    public function getToAndCcList(object $task): array|false
     {
-        /* Set toList and ccList. */
-        $toList         = $task->assignedTo;
-        $ccList         = trim($task->mailto, ',');
-        $toTeamTaskList = '';
+        /* Set assignedTo and mailto. */
+        $assignedTo = $task->assignedTo;
+        $mailto     = explode(',', trim($task->mailto, ','));
         if($task->mode == 'multi')
         {
-            $toTeamTaskList = $this->getTeamMembers($task->id);
-            $toTeamTaskList = implode(',', $toTeamTaskList);
-            $toList         = $toTeamTaskList;
+            $teamList   = $this->getTeamMembers($task->id);
+            $teamList   = implode(',', $teamList);
+            $assignedTo = $teamList;
         }
 
-        if(empty($toList))
+        /* If the assignor is empty, consider the first one with the cc as the assignor. */
+        if(empty($assignedTo))
         {
-            if(empty($ccList)) return false;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
+            if(empty($mailto)) return false;
+
+            $assignedTo = array_shift($mailto);
         }
-        elseif(strtolower($toList) == 'closed')
+        elseif(strtolower($assignedTo) == 'closed')
         {
-            $toList = $task->finishedBy;
+            /* If the assignor is closed, treat the completion person as the assignor. */
+            $assignedTo = $task->finishedBy;
         }
 
-        return array($toList, $ccList);
+        return array($assignedTo, implode(',', $mailto));
     }
 
     /**

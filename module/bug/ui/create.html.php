@@ -11,12 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('oldProjectID', $bug->projectID);
-jsVar('oldProductID', $bug->productID);
+jsVar('bug',      $bug);
 jsVar('moduleID', $bug->moduleID);
 jsVar('tab', $this->app->tab);
-if($this->app->tab == 'execution') jsVar('objectID', zget($bug->execution, 'id', ''));
-if($this->app->tab == 'project')   jsVar('objectID', $bug->projectID);
 
 foreach(explode(',', $config->bug->create->requiredFields) as $field)
 {
@@ -107,7 +104,7 @@ formPanel
                     a
                     (
                         set('class', 'mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch={$bug->branch}")),
+                        set('href', $this->createLink('tree', 'browse', "rootID=$bug->productID&view=bug&currentModuleID=0&branch={$bug->branch}")),
                         set('data-toggle', 'modal'),
                         $lang->tree->manage
                     ),
@@ -150,7 +147,7 @@ formPanel
                 (
                     set::multiple(true),
                     set::name('openedBuild[]'),
-                    set::items($bug->builds),
+                    set::items($builds),
                     set::value(empty($bug->buildID) ? '' : $bug->buildID)
                 ),
                 span

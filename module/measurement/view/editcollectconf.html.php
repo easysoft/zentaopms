@@ -55,7 +55,7 @@ if($measurement->collectType == 'crontab')
     <?php if($measurement->collectType == 'crontab') echo html::hidden('config[type]', $measurement->collectConf->type)?>
     <?php if($measurement->collectType == 'action')  echo html::hidden('config[type]', 'week')?>
   </td>
-</tr>  
+</tr>
 <script>
 $(function()
 {
@@ -77,9 +77,8 @@ $(function()
     $('#collectType').change();
 
     $('ul.nav-tabs a').click(function()
-    {   
+    {
         if($(this).data('type'))$('input[id*=type][id*=config]').val($(this).data('type'));
     });
-    
 });
 </script>

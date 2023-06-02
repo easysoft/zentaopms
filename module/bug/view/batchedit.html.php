@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('dittoNotice', $this->lang->bug->dittoNotice);?>
+<?php js::set('dittoNotice', $this->lang->bug->notice->productDitto);?>
 <?php js::set('showFields', $showFields);?>
 <?php js::set('requiredFields', $config->bug->edit->requiredFields);?>
 <div id='mainContent' class='main-content fade'>
@@ -139,12 +139,12 @@
               <table class='table-borderless table no-margin table-form'>
                 <tr>
                   <td class='pd-0'><?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class='form-control' onchange=setDuplicate(this.value,$bugID)");?></td>
-                  <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
+                  <td class='pd-0 w-p50' id='<?php echo 'duplicateBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
                     <?php
                     $productBugs = $productBugList[$bug->product][$bug->branch];
                     if(isset($productBugs[$bug->id])) unset($productBugs[$bug->id]);
                     ?>
-                    <?php echo html::select("duplicateBugs[$bugID]", $productBugs, $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>
+                    <?php echo html::select("duplicates[$bugID]", $productBugs, $bug->duplicate, "class='form-control' placeholder='{$lang->bug->placeholder->duplicate}'");?>
                   </td>
                 </tr>
               </table>

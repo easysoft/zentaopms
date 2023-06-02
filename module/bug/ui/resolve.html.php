@@ -60,14 +60,14 @@ formPanel
     formRow
     (
         setClass('hidden'),
-        set::id('duplicateBugBox'),
+        set::id('duplicateBox'),
         formGroup
         (
             set::width('1/3'),
-            set::name('duplicateBug'),
-            set::label($lang->bug->duplicateBug),
+            set::name('duplicate'),
+            set::label($lang->bug->duplicate),
             set::items(array()),
-            set::placeholder($lang->bug->duplicateTip),
+            set::placeholder($lang->bug->placeholder->duplicate),
             set::value(''),
             set::required(true),
         ),

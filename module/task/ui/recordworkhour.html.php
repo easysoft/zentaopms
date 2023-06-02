@@ -46,10 +46,10 @@ $items[] = array
     'width'   => '100px',
 );
 
-formBatchPanel
+formBatch
 (
     set::items($items),
 );
 
 /* ====== Render page ====== */
-render();
+render(isonlybody() ? 'modalDialog' : 'page');

@@ -311,21 +311,21 @@ class model extends baseModel
      *
      * @param  int    $objectID
      * @access public
-     * @return void
+     * @return string
      */
-    public function executeHooks(int $objectID)
+    public function executeHooks(int $objectID): string
     {
-        if($this->config->edition == 'open') return false;
+        if($this->config->edition == 'open') return '';
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName);
-        if(empty($action) or $action->extensionType == 'none') return false;
+        if(empty($action) or $action->extensionType == 'none') return '';
 
         $this->loadModel('file');
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
-        $fields = $this->workflowaction->getFields($moduleName, $action->action, false);
+        $fields = $this->workflowaction->getFields($moduleName, $action->action, '');
         foreach($fields as $field)
         {
             if($field->control == 'file' && $field->show && !$field->readonly)

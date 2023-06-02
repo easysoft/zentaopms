@@ -65,7 +65,7 @@ $(function()
     if(method == 'C') return definition.del();
 
     definition.setFormula(method,'method');
-  })  
+  })
 
   $('#basicmeas').change(function()
   {
@@ -106,7 +106,7 @@ var definition = {
     {
       var methodObj = $('#formula-box span');
       var methods = [];
-      
+
       methodObj.each(function()
       {
         methods.push($(this).attr('data-method'));

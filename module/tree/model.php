@@ -504,7 +504,7 @@ class treeModel extends model
         if(!$this->isMergeModule($rootID, 'task') || !$products)
         {
             $extra['tip'] = false;
-            return $this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra);
+            return (array)$this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra);
         }
 
         /* createdVersion > 4.1. */
@@ -529,12 +529,14 @@ class treeModel extends model
         {
             if(!$manage && $productNum > 1)
             {
-                $product->url = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
-                $menu[] = $product;
+                $menuItem = new stdclass();
+                $menuItem->id   = $id;
+                $menuItem->name = $product;
+                $menuItem->url  = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
+                $menu[] = $menuItem;
             }
 
             /* tree menu. */
-            $tree = '';
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {

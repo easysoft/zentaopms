@@ -17,6 +17,7 @@ formPanel
     set::title($lang->task->cancelAction),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
+    set::shadow(!isonlybody()),
     to::headingActions
     (
         entityLabel
@@ -37,7 +38,10 @@ formPanel
             set::rows('5'),
         )
     ),
-    history()
 );
+
+h::hr(set::class('mt-6'));
+
+history();
 
 render(isonlybody() ? 'modalDialog' : 'page');

@@ -72,9 +72,10 @@ class history extends wg
         global $lang;
         return button
         (
-            setClass('btn btn-link px-0 btn-edit-comment'),
+            setClass('btn btn-link btn-edit-comment right-0'),
             set::title($lang->action->editComment),
             h::i(setClass('icon icon-pencil')),
+            on::click('editComment')
         );
     }
 
@@ -119,12 +120,14 @@ class history extends wg
     private function comment(object $action): wg
     {
         $comment = $this->getComment($action);
+        $canEdit = $this->checkEditCommentPriv($action);
         return div
         (
-            setClass('article-content comment'),
+            setClass('article-content comment relative'),
+            $canEdit ? $this->editCommentBtn() : null,
             div
             (
-                setClass('comment-content'),
+                setClass('comment-content mt-2 ml-6 p-2.5'),
                 $comment,
             ),
         );
@@ -133,38 +136,24 @@ class history extends wg
     private function commentEditForm(object $action): wg
     {
         global $lang;
+
         return form
         (
-            setClass('comment-edit-form'),
+            setClass('comment-edit-form hidden'),
             set::method('post'),
             set::action(createLink('action', 'editComment', "actionID=$action->id")),
-            div
+            textarea
             (
-                setClass('form-group'),
-                textarea
-                (
-                    htmlSpecialString($action->comment),
-                    set::name('lastComment'),
-                    set::rows('8'),
-                    set::autofocus('autofocus'),
-                ),
+                setClass('mt-2 ml-6'),
+                set::name('lastComment'),
+                set::rows('8'),
+                set::autofocus('autofocus'),
+                htmlSpecialString($action->comment)
             ),
-            div
-            (
-                setClass('form-group form-actions'),
-                button
-                (
-                    setClass('btn btn-wide btn-primary'),
-                    setID('submit'),
-                    set::type('submit'),
-                    $lang->save,
-                ),
-                button
-                (
-                    setClass('btn btn-wide btn-hide-form'),
-                    $lang->close,
-                ),
-            ),
+            set::actions(array(
+                'submit',
+                array('text' => $lang->close, 'id' => 'btn-close-form')
+            ))
         );
     }
 
@@ -191,10 +180,9 @@ class history extends wg
             }
             if(strlen(trim(($action->comment))) !== 0)
             {
-                $canEditComment = $this->checkEditCommentPriv($action);
-                if($canEditComment) $actionItemView->add($this->editCommentBtn());
-
                 $actionItemView->add($this->comment($action));
+
+                $canEditComment = $this->checkEditCommentPriv($action);
                 if($canEditComment) $actionItemView->add($this->commentEditForm($action));
             }
             $historiesListView->add($actionItemView);

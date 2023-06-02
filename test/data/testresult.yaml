@@ -47,7 +47,7 @@ fields:
     format: ""
   - field: caseResult
     note: "测试结果"
-    range: [pass,fail]{20!},[pass,pass,fail]{15!}
+    range: "[pass,fail]{20!},[pass,pass,fail]{15!}"
     prefix: ""
     postfix: ""
     loop: 0

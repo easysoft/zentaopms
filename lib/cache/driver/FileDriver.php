@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 
-namespace ZenTao\cache\driver;
+namespace ZenTao\Cache\Driver;
 
 use ZenTao\Cache\SimpleCache\CacheInterface;
 use ZenTao\Cache\SimpleCache\InvalidArgumentException;

@@ -94,10 +94,13 @@ class storyZen extends story
      * Init story for create.
      *
      * @param  int       $planID
+     * @param  int       $storyID
+     * @param  int       $bugID
+     * @param  int       $todoID
      * @access protected
      * @return object
      */
-    protected function initStoryForCreate(int $planID): object
+    protected function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID): object
     {
         $initStory = new stdclass();
         $initStory->source     = '';
@@ -111,6 +114,10 @@ class storyZen extends story
         $initStory->mailto     = '';
         $initStory->color      = '';
         $initStory->plan       = $planID;
+
+        if($storyID > 0) $initStory = $this->getInitStoryByStory($copyStoryID, $initStory);
+        if($bugID   > 0) $initStory = $this->getInitStoryByBug($bugID, $initStory);
+        if($todoID  > 0) $initStory = $this->getInitStoryByTodo($todoID, $initStory);
         return $initStory;
     }
 
@@ -250,7 +257,7 @@ class storyZen extends story
         $fields  = $this->config->story->form->create;
 
         /* 准备数据。*/
-        list($products, $branches) = $this->storyZen->getProductsAndBranchesForCreate($productID, $objectID);
+        list($products, $branches) = $this->getProductsAndBranchesForCreate($productID, $objectID);
         if($objectID)
         {
             $branch    = key($branches);
@@ -258,12 +265,13 @@ class storyZen extends story
         }
         $branch = current(explode(',', $branch));
 
-        $product    = $this->product->getByID($productID);
-        $users      = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $stories    = $this->story->getParentStoryPairs($productID);
-        $plans      = $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed');
-        $plans      = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
-        $needReview = ($account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0 || !$this->story->checkForceReview());
+        $product     = $this->product->getByID($productID);
+        $users       = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+        $stories     = $this->story->getParentStoryPairs($productID);
+        $plans       = $this->loadModel('productplan')->getPairsForStory($productID, $branch == 0 ? '' : $branch, 'skipParent|unexpired|noclosed');
+        $plans       = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
+        $forceReview = $this->story->checkForceReview();
+        $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0 || !$forceReview);
 
         $reviewers  = $product->reviewer;
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
@@ -295,17 +303,20 @@ class storyZen extends story
         if(empty($fields['branch']['default']))   $fields['branch']['default']   = $branch;
         if(empty($fields['branches']['default'])) $fields['branches']['default'] = $branch;
         if(empty($fields['plans']['default']))    $fields['plans']['default']    = zget($initStory, 'plan', 0);
-        if(empty($needReview))                    $fields['reviewer']['default'] = $product->PO;
+
+        if(empty($needReview)) $fields['reviewer']['default']  = $product->PO;
+        if($forceReview)       $fields['reviewer']['required'] = true;
 
         /* 删除不需要的字段。 */
         if(empty($branches)) unset($fields['branch'], $fields['branches'], $fields['modules'], $fields['plans']);
 
-        $this->view->productID  = $productID;
-        $this->view->product    = $product;
-        $this->view->branch     = $branch;
-        $this->view->branches   = $branches;
-        $this->view->objectID   = $objectID;
-        $this->view->needReview = $needReview;
+        $this->view->productID   = $productID;
+        $this->view->product     = $product;
+        $this->view->branch      = $branch;
+        $this->view->branches    = $branches;
+        $this->view->objectID    = $objectID;
+        $this->view->forceReview = $forceReview;
+        $this->view->needReview  = $needReview;
 
         return $fields;
     }
@@ -393,11 +404,13 @@ class storyZen extends story
 
         /* Set Custom. */
         $customFields = explode(',', $this->config->story->list->customCreateFields);
-        $showFields   = explode(',', trim($this->config->story->custom->createFields, ','));
+        $showFields   = trim($this->config->story->custom->createFields, ',');
         foreach($customFields as $field)
         {
-            if(!str_contains($showFields, $field)) $fields[$field]['control'] = '';
+            if(!str_contains($showFields, $field)) unset($fields[$field]['control']);
         }
+
+        return $fields;
     }
 
     /**

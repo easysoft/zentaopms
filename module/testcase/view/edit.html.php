@@ -293,11 +293,11 @@
                     <?php
                     if(isset($case->toBugs))
                     {
-                        foreach($case->toBugs as $bugID => $bugTitle)
+                        foreach($case->toBugs as $bugID => $bug)
                         {
-                            echo "<li title='$bugTitle'><div class='checkbox-primary'>";
+                            echo "<li title='$bug->title'><div class='checkbox-primary'>";
                             echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$bugID />";
-                            echo "<label class='linkBugTitle'>#{$bugID} {$bugTitle}</label>";
+                            echo "<label class='linkBugTitle'>#{$bugID} {$bug->title}</label>";
                             echo '</div></li>';
                         }
                     }

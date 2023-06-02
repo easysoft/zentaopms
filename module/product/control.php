@@ -327,7 +327,7 @@ class product extends control
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
         /* 构造批量编辑页面表单配置数据。*/
-        $this->productZen->buildBatchEditForm($programID, explode(',', $productIdList));
+        $this->productZen->buildBatchEditForm($programID, $productIdList);
     }
 
     /**
@@ -537,7 +537,7 @@ class product extends control
         $this->view->users    = $this->user->getPairs('noletter');
         $this->view->lines    = array('') + $this->product->getLinePairs();
         $this->view->dynamics = $this->productZen->getActions4Dashboard($productID);
-        $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->roadmaps = $this->product->getRoadmap($productID, '0', 6);
 
         $this->display();
     }

@@ -27,15 +27,15 @@ class bugZen extends bug
      * 检查用户是否拥有所属执行的权限。
      * Check bug execution priv.
      *
-     * @param  object $bug
-     * @access public
+     * @param  object      $bug
+     * @access protected
      * @return boll|string
      */
     protected function checkBugExecutionPriv(object $bug): bool|string
     {
         if($bug->execution and !$this->loadModel('execution')->checkPriv($bug->execution))
         {
-            echo js::alert($this->lang->bug->executionAccessDenied);
+            echo js::alert($this->lang->bug->notice->executionAccessDenied);
 
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
@@ -43,6 +43,7 @@ class bugZen extends bug
 
             return print(js::locate('back'));
         }
+
         return true;
     }
 
@@ -222,8 +223,8 @@ class bugZen extends bug
      * 获取分支。
      * Get branch options.
      *
-     * @param  int       $productID
-     * @access protected
+     * @param  int     $productID
+     * @access private
      * @return array
      */
     private function getBranchOptions(int $productID): array
@@ -241,11 +242,11 @@ class bugZen extends bug
      * 通过$_POST的值和解析出来的$output，获得看板的laneID和columnID。
      * Get kanban laneID and columnID from $_POST and $output from extra().
      *
-     * @param  array     $output
-     * @access protected
+     * @param  array   $output
+     * @access private
      * @return array
      */
-    protected function getKanbanVariable(array $output): array
+    private function getKanbanVariable(array $output): array
     {
         $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
         if(!empty($this->post->lane)) $laneID = $this->post->lane;
@@ -260,12 +261,12 @@ class bugZen extends bug
      * 获取bug创建页面的branches和branch，并绑定到bug上。
      * Get the branches and branch for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @param  object    $currentProduct
-     * @access protected
+     * @param  object  $bug
+     * @param  object  $currentProduct
+     * @access private
      * @return object
      */
-    protected function getBranches4Create(object $bug, object $currentProduct): object
+    private function getBugBranches(object $bug, object $currentProduct): object
     {
         $productID = $bug->productID;
         $branch    = $bug->branch;
@@ -289,11 +290,11 @@ class bugZen extends bug
      * 获取bug创建页面的builds和stories，并绑定到bug上。
      * Get the builds and stories for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
-    protected function getBuildsAndStories4Create(object $bug): object
+    private function getBuildsAndStoriesForCreate(object $bug): object
     {
         $this->loadModel('build');
         $productID   = $bug->productID;
@@ -321,11 +322,11 @@ class bugZen extends bug
      * 获取bug创建页面的产品成员。
      * Get the product members for bug create page.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return array
      */
-    protected function getProductMembers4Create(object $bug): array
+    private function getProductMembersForCreate(object $bug): array
     {
         $productMembers = $this->bug->getProductMemberPairs($bug->productID, $bug->branch);
         $productMembers = array_filter($productMembers);
@@ -338,11 +339,11 @@ class bugZen extends bug
      * 获取bug创建页面的products和projects，并绑定到bug上。
      * Get the products and projects for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
-    protected function getProductsAndProjects4Create(object $bug): object
+    private function getProductsAndProjectsForCreate(object $bug): object
     {
         $productID   = $bug->productID;
         $branch      = $bug->branch;
@@ -378,11 +379,11 @@ class bugZen extends bug
      * 获得项目的模式。
      * Get project model.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
-    protected function getProjectModel4Create(object $bug): object
+    private function getProjectModelForCreate(object $bug): object
     {
         $projectID    = $bug->projectID;
         $executionID  = $bug->executionID;
@@ -401,33 +402,13 @@ class bugZen extends bug
     }
 
     /**
-     * 获得指派给我的blockID。
-     * Get block id of assigned to me.
+     * 获得创建页面的自定义字段。
+     * Get custom fields.
      *
-     * @access protected
-     * @return int
-     */
-    protected function getBlockID4Create(): int
-    {
-        /* Get block id of assinge to me. */
-        if(!isonlybody()) return 0;
-
-        return $this->dao->select('id')->from(TABLE_BLOCK)
-            ->where('block')->eq('assingtome')
-            ->andWhere('module')->eq('my')
-            ->andWhere('account')->eq($this->app->user->account)
-            ->orderBy('order_desc')
-            ->fetch('id');
-    }
-
-    /**
-     * 获得指派给我的blockID。
-     * Get block id of assigned to me.
-     *
-     * @access protected
+     * @access private
      * @return array
      */
-    protected function getCustomFields4Create(): array
+    private function getCustomFieldsForCreate(): array
     {
         $customFields = array();
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field)
@@ -442,11 +423,11 @@ class bugZen extends bug
      * 获得bug创建页面的products和projects，并绑定到bug上。
      * Get the executions and projects for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
-    protected function getExecutions4Create(object $bug): object
+    private function getExecutionsForCreate(object $bug): object
     {
         $productID   = $bug->productID;
         $branch      = $bug->branch;
@@ -464,73 +445,33 @@ class bugZen extends bug
     }
 
     /**
-     * 获取编辑页面所需要的影响版本和解决版本。
-     * Get affected buils and resolved builds for edit form.
+     * 获取bug创建页面的projects，并绑定到bug上。
+     * Append the projects for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @access protected
-     * @return array
+     * @param  object  $bug
+     * @access private
+     * @return object
      */
-    protected function getEditBuildPairs(object $bug): array
+    private function getProjectsForCreate(object $bug): object
     {
-        $objectType         = $bug->project ? 'project' : 'execution';
-        $objectID           = $bug->execution ? $bug->execution : $bug->project;
-        $allBuildPairs      = $this->loadModel('build')->getBuildPairs($bug->product, 'all', 'noempty');
-        $openedBuildPairs   = $this->build->getBuildPairs($bug->product, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $objectID, $objectType, $bug->openedBuild);
-        $resolvedBuildPairs = $openedBuildPairs;
-        if(($bug->resolvedBuild) && isset($allBuildPairs[$bug->resolvedBuild])) $resolvedBuildPairs[$bug->resolvedBuild] = $allBuildPairs[$bug->resolvedBuild];
+        $productID = $bug->productID;
+        $branch    = $bug->branch;
+        $projects  = $bug->projects;
 
-        return array($openedBuildPairs, $resolvedBuildPairs);
-    }
+        $projectID = $bug->projectID;
+        $project   = $bug->project;
 
-    /**
-     * 获取编辑页面所需要的分支。
-     * Get branch pairs for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditBranchPairs(object $bug): array
-    {
-        $objectID = 0;
-        if($this->app->tab == 'project')   $objectID = $bug->project;
-        if($this->app->tab == 'execution') $objectID = $bug->execution;
-
-        $branchPairs = $this->loadModel('branch')->getPairs($bug->product, 'noempty,withClosed', $objectID);
-
-        if(!isset($branchPairs[$bug->branch]))
+        /* Link all projects to product when copying bug under qa. */
+        if($this->app->tab == 'qa')
         {
-            $bugBranch = $this->branch->getByID($bug->branch, $bug->product, '');
-
-            if($bug->branch == BRANCH_MAIN) $branchName = $bugBranch;
-            if($bug->branch != BRANCH_MAIN)
-            {
-                $branchName = $bugBranch->name;
-                if($bugBranch->status == 'closed') $branchName .= " ({$this->lang->branch->statusList['closed']})";
-            }
-
-            $branchPairs[$bug->branch] = $branchName;
+            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        }
+        elseif($projectID and $project)
+        {
+            $projects += array($projectID => $project->name);
         }
 
-        return $branchPairs;
-    }
-
-    /**
-     * 获取编辑页面指派给用户列表。
-     * Get assignedTo pairs for edit form.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return array
-     */
-    protected function getEditAssignedToPairs(object $bug): array
-    {
-        $assignedToPairs = $this->getAssignedToPairs($bug);
-
-        if($bug->status == 'closed') $assignedToPairs['closed'] = 'Closed';
-
-        return $assignedToPairs;
+        return $this->updateBug($bug, array('projects' => $projects));
     }
 
     /**
@@ -602,6 +543,29 @@ class bugZen extends bug
     }
 
     /**
+     * 获取导出字段。
+     * Get export fields.
+     *
+     * @param  int       $executionID
+     * @param  object    $product
+     * @access protected
+     * @return string
+     */
+    protected function getExportFields(int $executionID, object $product): string
+    {
+        $exportFields = $this->config->bug->exportFields;
+        if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace('branch,', '', $exportFields);
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            if(empty($execution->multiple)) $exportFields = str_replace('execution,', '', $exportFields);
+            if(!empty($product->shadow))    $exportFields = str_replace('product,',   '', $exportFields);
+        }
+
+        return $exportFields;
+    }
+
+    /**
      * 获取批量解决bug的数据。
      * Get batch resolve bug data.
      *
@@ -622,57 +586,6 @@ class bugZen extends bug
     }
 
     /**
-     * 追加bug创建页面的products和projects，并绑定到bug上。
-     * Append the products and projects for the bug create page and bind them to bug.
-     *
-     * @param  object    $bug
-     * @param  int       $bugID
-     * @access protected
-     * @return object
-     */
-    protected function appendProjects4Create(object $bug, int $bugID): object
-    {
-        $productID = $bug->productID;
-        $branch    = $bug->branch;
-        $projects  = $bug->projects;
-
-        $projectID = $bug->projectID;
-        $project   = $bug->project;
-
-        /* Link all projects to product when copying bug under qa. */
-        if($bugID and $this->app->tab == 'qa')
-        {
-            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-        }
-        elseif($projectID and $project)
-        {
-            $projects += array($projectID => $project->name);
-        }
-
-        return $this->updateBug($bug, array('projects' => $projects));
-    }
-
-    /**
-     * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
-     * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
-     *
-     * @param  object    $bug
-     * @param  object    $currentProduct
-     * @access protected
-     * @return object
-     */
-    protected function setOptionMenu(object $bug, object $currentProduct): object
-    {
-        $bug = $this->getBranches4Create($bug, $currentProduct);
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
-        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
-
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-
-        return $bug;
-    }
-
-    /**
      * 设置浏览页面的 cookie。
      * Set cookie in browse view.
      *
@@ -682,9 +595,9 @@ class bugZen extends bug
      * @param  int       $param
      * @param  string    $orderBy
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setBrowseCookie(object $product, string $branch, string $browseType, int $param, string $orderBy): void
+    protected function setBrowseCookie(object $product, string $branch, string $browseType, int $param, string $orderBy): bool
     {
         /* 如果产品或者分支变了，清空 bug 模块的 cookie。*/
         /* Clear cookie of bug module if the product or the branch is changed. */
@@ -703,6 +616,8 @@ class bugZen extends bug
         /* 设置测试应用的 bug 排序 cookie。*/
         /* Set the cookie of bug order in qa. */
         helper::setcookie('qaBugOrder', $orderBy, 0);
+
+        return true;
     }
 
     /**
@@ -711,9 +626,9 @@ class bugZen extends bug
      *
      * @param  string    $browseType
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setBrowseSession(string $browseType): void
+    protected function setBrowseSession(string $browseType): bool
     {
         /* 设置浏览方式的 session，记录刚刚是搜索还是按模块浏览。*/
         /* Set session of browse type. */
@@ -721,6 +636,28 @@ class bugZen extends bug
         if(($browseType == 'bymodule') && $this->session->bugBrowseType == 'bysearch') $this->session->set('bugBrowseType', 'unclosed');
 
         $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
+
+        return true;
+    }
+
+    /**
+     * 获取模块下拉菜单，如果是空的，则返回到模块维护页面。
+     * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
+     *
+     * @param  object    $bug
+     * @param  object    $currentProduct
+     * @access protected
+     * @return object
+     */
+    protected function setOptionMenu(object $bug, object $currentProduct): object
+    {
+        $bug = $this->getBugBranches($bug, $currentProduct);
+        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 0 : $bug->branch);
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
+
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+
+        return $bug;
     }
 
     /**
@@ -731,9 +668,9 @@ class bugZen extends bug
      * @param  string    $branch
      * @param  array     $output
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setMenu4Create(int $productID, string $branch, array $output): void
+    protected function setCreateMenu(int $productID, string $branch, array $output): bool
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -757,6 +694,8 @@ class bugZen extends bug
 
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
+
+        return true;
     }
 
     /**
@@ -765,9 +704,9 @@ class bugZen extends bug
      *
      * @param  object    $bug
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setEditMenu(object $bug): void
+    protected function setEditMenu(object $bug): bool
     {
         if($this->app->tab == 'project')   $this->project->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
@@ -781,6 +720,8 @@ class bugZen extends bug
 
             $this->lang->navGroup->bug = 'devops';
         }
+
+        return true;
     }
 
     /**
@@ -788,9 +729,9 @@ class bugZen extends bug
      * If it's not a iframe, call this method to set menu for view bug page.
      *
      * @param  object $bug
-     * @return void
+     * @return bool
      */
-    protected function setMenu4View(object $bug): void
+    protected function setViewMenu(object $bug): bool
     {
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
@@ -808,6 +749,8 @@ class bugZen extends bug
             $this->loadModel('product')->setMenu($bug->product);
             $this->lang->product->menu->plan['subModule'] .= ',bug';
         }
+
+        return true;
     }
 
     /**
@@ -818,9 +761,9 @@ class bugZen extends bug
      * @param  string    $browseType
      * @param  int       $executionID
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function setExportDataSource(int $productID, string $browseType, int $executionID): void
+    protected function setExportDataSource(int $productID, string $browseType, int $executionID): bool
     {
         if(!$productID or $browseType == 'bysearch')
         {
@@ -837,26 +780,8 @@ class bugZen extends bug
                 $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
             }
         }
-    }
 
-    /**
-     * 设置导出字段。
-     * Set export fields.
-     *
-     * @param  int $executionID
-     * @param  object $product
-     * @access protected
-     * @return void
-     */
-    protected function setExportFields(int $executionID, object $product): void
-    {
-        if(isset($product->type) and $product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
-        if($this->app->tab == 'project' or $this->app->tab == 'execution')
-        {
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            if(empty($execution->multiple)) $this->config->bug->exportFields = str_replace('execution,', '', $this->config->bug->exportFields);
-            if(!empty($product->shadow)) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
-        }
+        return true;
     }
 
     /**
@@ -1026,7 +951,6 @@ class bugZen extends bug
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
-        $this->display();
     }
 
     /**
@@ -1047,39 +971,39 @@ class bugZen extends bug
 
         /* 获得版本下拉和需求下拉列表。 */
         /* Get builds and stroies. */
-        $bug = $this->getBuildsAndStories4Create($bug);
+        $bug = $this->getBuildsAndStoriesForCreate($bug);
         /* 如果bug有所属项目，查询这个项目。 */
         /* Get project. */
         if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($bug->projectID)));
         /* 获得产品下拉和项目下拉列表。 */
         /* Get products and projects. */
-        $bug = $this->getProductsAndProjects4Create($bug);
+        $bug = $this->getProductsAndProjectsForCreate($bug);
         /* 追加下拉列表的内容。 */
         /* Append projects. */
-        $bug = $this->appendProjects4Create($bug, (isset($bug->id) ? $bug->id : 0));
+        $bug = $this->getProjectsForCreate($bug);
         /* 获得项目的管理方式。 */
         /* Get project model. */
-        $bug = $this->getProjectModel4Create($bug);
+        $bug = $this->getProjectModelForCreate($bug);
         /* 获得执行下拉列表。 */
         /* Get executions. */
-        $bug = $this->getExecutions4Create($bug);
+        $bug = $this->getExecutionsForCreate($bug);
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->customFields          = $this->getCustomFields4Create();
+        $this->view->customFields          = $this->getCustomFieldsForCreate();
         $this->view->showFields            = $this->config->bug->custom->createFields;
-        $this->view->productMembers        = $this->getProductMembers4Create($bug);
-        $this->view->gobackLink            = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
+        $this->view->productMembers        = $this->getProductMembersForCreate($bug);
+        $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->projects              = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs()   : $bug->projects;
         $this->view->products              = $bug->products;
         $this->view->branches              = $bug->branches;
+        $this->view->builds                = $bug->builds;
+        $this->view->bug                   = $bug;
         $this->view->executions            = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
-        $this->view->blockID               = $this->getBlockID4Create();
-        $this->display();
     }
 
     /**
@@ -1151,7 +1075,6 @@ class bugZen extends bug
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
         $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
-        $this->display();
     }
 
     /**
@@ -1220,6 +1143,7 @@ class bugZen extends bug
                 $bug->assignedDate = helper::now();
             }
         }
+
         return $bugs;
     }
 
@@ -1227,15 +1151,15 @@ class bugZen extends bug
      * 展示批量创建bug的相关变量。
      * Show the variables associated with the batch creation bugs.
      *
-     * @param  int        $executionID
-     * @param  object     $product
-     * @param  string     $branch
-     * @param  array      $output
-     * @param  array|bool $bugImagesFile
+     * @param  int       $executionID
+     * @param  object    $product
+     * @param  string    $branch
+     * @param  array     $output
+     * @param  array     $bugImagesFile
      * @access protected
      * @return void
      */
-    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array|bool $bugImagesFile)
+    protected function assignBatchCreateVars(int $executionID, object $product, string $branch, array $output, array $bugImagesFile): void
     {
         if($executionID)
         {
@@ -1262,6 +1186,7 @@ class bugZen extends bug
         $projectID = isset($execution) ? $execution->project : 0;
         $project   = $this->loadModel('project')->getByID($projectID);
 
+        if(!$project) $project = new stdclass();
         $this->assignVarsForBatchCreate($product, $project, $bugImagesFile);
 
         $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($product->id, $branch ? "0,{$branch}" : '0');
@@ -1285,7 +1210,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignKanbanVars(object $execution, array $output)
+    protected function assignKanbanVars(object $execution, array $output): void
     {
         $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
         $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
@@ -1303,13 +1228,13 @@ class bugZen extends bug
      * 展示字段相关变量。
      * Show the variables associated with the batch created fields.
      *
-     * @param  object      $product
-     * @param  object|bool $project
-     * @param  array|bool  $bugImagesFile
-     * @access protected
+     * @param  object  $product
+     * @param  object  $project
+     * @param  array   $bugImagesFile
+     * @access private
      * @return void
      */
-    protected function assignVarsForBatchCreate(object $product, object|bool $project, array|bool $bugImagesFile)
+    private function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
     {
         /* Set custom fields. */
         foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
@@ -1449,11 +1374,11 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function assignBatchEditVars(int $productID, string $branch)
+    protected function assignBatchEditVars(int $productID, string $branch): void
     {
         /* Initialize vars.*/
         $bugIdList = array_unique($this->post->bugIdList);
-        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIdList)->fetchAll('id');
+        $bugs      = $this->bug->getByIdList($bugIdList);
 
         /* Set menu and get product id list. */
         if($this->app->tab == 'product') $this->product->setMenu($productID);
@@ -1501,12 +1426,12 @@ class bugZen extends bug
      * 分配产品相关的变量。
      * Assign product related variables.
      *
-     * @param  array     $bugs
-     * @param  array     $products
-     * @access protected
+     * @param  array   $bugs
+     * @param  array   $products
+     * @access private
      * @return array
      */
-    protected function assignProductRelatedVars(array $bugs, array $products): array
+    private function assignProductRelatedVars(array $bugs, array $products): array
     {
         /* Get modules, bugs and plans of the products. */
         $branchProduct   = false;
@@ -1556,6 +1481,7 @@ class bugZen extends bug
         $this->view->productBugList  = $productBugList;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->products        = $products;
+
         return $branchTagOption;
     }
 
@@ -1563,13 +1489,13 @@ class bugZen extends bug
      * 为批量编辑 bugs 分配人员。
      * Assign users for batch edit.
      *
-     * @param  array     $bugs
-     * @param  array     $productIdList
-     * @param  array     $branchTagOption
-     * @access protected
+     * @param  array   $bugs
+     * @param  array   $productIdList
+     * @param  array   $branchTagOption
+     * @access private
      * @return void
      */
-    protected function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption)
+    private function assignUsersForBatchEdit(array $bugs, array $productIdList, array $branchTagOption): void
     {
         /* If current tab is execution or project, get project, execution, product team members of bugs.*/
         if($this->app->tab == 'execution' || $this->app->tab == 'project')
@@ -1625,13 +1551,13 @@ class bugZen extends bug
      * 批量创建bug前处理上传图片。
      * Before batch creating bugs, process the uploaded images.
      *
-     * @param  object      $bug
-     * @param  string      $uploadImage
-     * @param  array|bool  $bugImagesFiles
+     * @param  object    $bug
+     * @param  string    $uploadImage
+     * @param  array     $bugImagesFiles
      * @access protected
-     * @return array|false
+     * @return array
      */
-    protected function processImageForBatchCreate(object $bug, string $uploadImage, array|bool $bugImagesFiles): array|false
+    protected function processImageForBatchCreate(object $bug, string $uploadImage, array $bugImagesFiles): array
     {
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         if(!empty($uploadImage))
@@ -1647,7 +1573,7 @@ class bugZen extends bug
                 {
                     $file['addedBy']    = $this->app->user->account;
                     $file['addedDate']  = helper::now();
-                    $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
+                    $this->loadModel('file')->saveFile($file, 'realpath');
 
                     $fileID = $this->dao->lastInsertID();
                     $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
@@ -1659,18 +1585,18 @@ class bugZen extends bug
             }
         }
 
-        return !empty($file) ? $file : false;
+        return !empty($file) ? $file : array();
     }
 
     /**
      * 创建bug后存储上传的文件。
      * Save files after create a bug.
      *
-     * @param  int       $bugID
-     * @access protected
+     * @param  int     $bugID
+     * @access private
      * @return bool
      */
-    protected function updateFileAfterCreate(int $bugID): bool
+    private function updateFileAfterCreate(int $bugID): bool
     {
         if(isset($this->post->resultFiles))
         {
@@ -1695,20 +1621,18 @@ class bugZen extends bug
         return !dao::isError();
     }
 
-
-
     /**
      * 创建bug后更新执行看板。
      * Update execution kanban after create a bug.
      *
-     * @param  object $bug
-     * @param  int       $laneID
-     * @param  int       $columnID
-     * @param  string    $from
-     * @access protected
+     * @param  object  $bug
+     * @param  int     $laneID
+     * @param  int     $columnID
+     * @param  string  $from
+     * @access private
      * @return void
      */
-    protected function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
+    private function updateKanbanAfterCreate(object $bug, int $laneID, int $columnID, string $from): void
     {
         $bugID       = $bug->id;
         $executionID = $bug->execution;
@@ -1718,11 +1642,74 @@ class bugZen extends bug
             $this->loadModel('kanban');
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', $bugID);
-            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'bug');
+            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($executionID, 'bug');
         }
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */
         if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+    }
+
+    /**
+     * 为create方法添加动态。
+     * Add action for create function.
+     *
+     * @param  int     $bug
+     * @param  int     $todoID
+     * @access private
+     * @return bool
+     */
+    private function updateTodoAfterCreate(int $bugID, int $todoID): bool
+    {
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
+        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        {
+            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 更新bug模板。
+     * Update bug templete.
+     *
+     * @param  object  $bug
+     * @param  array   $fields
+     * @access private
+     * @return object
+     */
+    private function updateBug(object $bug, array $fields): object
+    {
+        foreach($fields as $field => $value) $bug->$field = $value;
+
+        return $bug;
+    }
+
+    /**
+     * 创建完 bug 后的相关处理。
+     * Relevant processing after create bug.
+     *
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $from
+     * @access protected
+     * @return bool
+     */
+    protected function afterCreate(object $bug, array $output, string $from = ''): bool
+    {
+        /* Set from param if there is a object to transfer bug. */
+        helper::setcookie('lastBugModule', (string)$bug->module);
+
+        $this->updateFileAfterCreate($bug->id);
+        list($laneID, $columnID) = $this->getKanbanVariable($output);
+        $this->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
+
+        $todoID = isset($output['todoID']) ? $output['todoID'] : 0;
+        if($todoID) $this->updateTodoAfterCreate($bug->id, $todoID);
+
+        return !dao::isError();
     }
 
     /**
@@ -1750,7 +1737,7 @@ class bugZen extends bug
         {
             $this->loadModel('action');
             if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bug->id);
-            if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan, 'linkbug', '', $bug->id);
+            if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan,    'linkbug',   '', $bug->id);
         }
 
         $this->bug->updateRelatedBug($bug->id, $bug->relatedBug, $oldBug->relatedBug);
@@ -1778,14 +1765,14 @@ class bugZen extends bug
      * 批量创建bug后的其他处理。
      * Processing after batch creation of bug.
      *
-     * @param  object     $bug
-     * @param  array      $output
-     * @param  string     $uploadImage
-     * @param  array|bool $file
+     * @param  object    $bug
+     * @param  array     $output
+     * @param  string    $uploadImage
+     * @param  array     $file
      * @access protected
      * @return bool
      */
-    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array|bool $file): bool
+    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array $file): bool
     {
         /* If bug has the execution, update kanban data. */
         if($bug->execution)
@@ -1798,7 +1785,7 @@ class bugZen extends bug
             if(empty($columnID)) $columnID = zget($output, 'columnID', 0);
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bug->id);
-            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
+            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($bug->execution, 'bug');
         }
 
         /* When the bug is created by uploading the image, add the image to the file of the bug. */
@@ -1823,13 +1810,14 @@ class bugZen extends bug
      * @param  array     $changes
      * @param  string    $kanbanGroup
      * @param  int       $regionID
+     * @param  string    $message
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0): array
+    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool
     {
-        $message = $this->executeHooks($bugID);
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
+        if(!$message) $message = $this->lang->saveSuccess;
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
 
         /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
         /* This bug has been converted to a task, update the status of the related task or not. */
@@ -1842,16 +1830,15 @@ class bugZen extends bug
                 {
                     $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                     $canceledURL  = $this->server->http_referer;
-                    return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                    return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => $this->lang->bug->notice->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
                 }
             }
         }
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID);
+        if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID, $message);
 
-        if(!$message) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
 
@@ -1862,13 +1849,15 @@ class bugZen extends bug
      * @param  int       $executionID
      * @param  string    $kanbanGroup
      * @param  int       $regionID
+     * @param  string    $message
      * @access protected
-     * @return array
+     * @return bool
      */
-    protected function responseInModal(int $executionID, string $kanbanGroup = '', int $regionID = 0): array
+    protected function responseInModal(int $executionID, string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool
     {
         /* 在执行应用下，编辑看板中的 bug 数据时，更新看板数据。*/
         /* Update kanban data after updating bug in kanban. */
+        if(!$message) $message = $this->lang->saveSuccess;
         if($this->app->tab == 'execution')
         {
             $this->loadModel('kanban');
@@ -1885,7 +1874,7 @@ class bugZen extends bug
                 $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                 $kanbanData    = $this->kanban->getRDKanban($executionID, $laneType, 'id_desc', $regionID, $groupBy, $rdSearchValue);
                 $kanbanData    = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
+                return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
             }
 
             /* 执行中的看板。*/
@@ -1897,7 +1886,7 @@ class bugZen extends bug
             return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
         }
 
-        return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
     }
 
     /**
@@ -1905,14 +1894,22 @@ class bugZen extends bug
      * respond after deleting.
      *
      * @param  object    $bug
-     * @param  int       $executionID
      * @param  array     $output
      * @param  string    $message
      * @access protected
      * @return bool
      */
-    protected function responseAfterCreate(object $bug, int $executionID, array $output, string $message = ''): bool
+    protected function responseAfterCreate(object $bug, array $output, string $message = ''): bool
     {
+        $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
+
+        /* Return bug id when call the API. */
+        if(!$message) $message = $this->lang->saveSuccess;
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bug->id));
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bug->id));
+
+        if(isonlybody()) return $this->send($this->responseInModal($executionID));
+
         if($this->app->tab == 'execution')
         {
             if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
@@ -1936,7 +1933,6 @@ class bugZen extends bug
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID={$bug->id}", 'html');
 
-        if(!$message) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
     }
 
@@ -1980,11 +1976,11 @@ class bugZen extends bug
      * 批量创建bug后返回响应。
      * Response after batch create.
      *
-     * @param  int        $productID
-     * @param  string     $branch
-     * @param  int        $executionID
-     * @param  array      $bugIdList
-     * @param  string     $message
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @param  array     $bugIdList
+     * @param  string    $message
      * @access protected
      * @return bool
      */
@@ -2031,7 +2027,7 @@ class bugZen extends bug
             $taskID       = key($toTaskIdList);
             $confirmedURL = $this->createLink('task', 'view', 'taskID=' . $taskID);
             $canceledURL  = $this->server->HTTP_REFERER;
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => sprintf($this->lang->bug->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => array('confirm' => sprintf($this->lang->bug->notice->remindTask, $taskID), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
         }
 
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList));
@@ -2091,43 +2087,6 @@ class bugZen extends bug
     }
 
     /**
-     * 更新bug模板。
-     * Update bug templete.
-     *
-     * @param  object    $bug
-     * @param  array     $fields
-     * @access protected
-     * @return object
-     */
-    protected function updateBug(object $bug, array $fields): object
-    {
-        foreach($fields as $field => $value) $bug->$field = $value;
-
-        return $bug;
-    }
-
-    /**
-     * 为create方法添加动态。
-     * Add action for create function.
-     *
-     * @param  int       $bug
-     * @param  int       $todoID
-     * @access protected
-     * @return bool
-     */
-    protected function finishTodo(int $bugID, int $todoID): bool
-    {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
-        $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
-        {
-            $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-            if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
-        }
-        return !dao::isError();
-    }
-
-    /**
      * 解析extras，如果bug来源于某个对象 (bug, case, testtask, todo) ，使用对象的一些属性对bug赋值。
      * Extract extras, if bug come from an object(bug, case, testtask, todo), get some value from object.
      *
@@ -2144,12 +2103,12 @@ class bugZen extends bug
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
         if(isset($runID) and $runID and isset($resultID) and $resultID)
         {
-            $fields = $this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+            $fields = $this->bug->getBugInfoFromResult($resultID, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
             $bug    = $this->updateBug($bug, $fields);
         }
         if(isset($runID) and !$runID and isset($caseID) and $caseID)
         {
-            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
+            $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
             $bug    = $this->updateBug($bug, $fields);
         }
 
@@ -2190,9 +2149,9 @@ class bugZen extends bug
      * 将报表的默认设置合并到当前报表。
      * Merge the default chart settings and the settings of current chart.
      *
-     * @param  string $chartCode
-     * @param  string $chartType
-     * @access public
+     * @param  string    $chartCode
+     * @param  string    $chartType
+     * @access protected
      * @return object
      */
     protected function mergeChartOption(string $chartCode, string $chartType = 'default'): object

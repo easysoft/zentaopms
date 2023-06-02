@@ -128,6 +128,7 @@ class bug extends control
         $bugs       = $this->bugZen->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->display();
     }
 
     /**
@@ -152,7 +153,7 @@ class bug extends control
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
-        if(!isonlybody()) $this->bugZen->setMenu4View($bug);
+        if(!isonlybody()) $this->bugZen->setViewMenu($bug);
 
         $bugID     = $bug->id;
         $productID = $bug->product;
@@ -218,34 +219,16 @@ class bug extends control
             $bugID  = $this->bug->create($bug, $action);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Set from param if there is a object to transfer bug. */
-            helper::setcookie('lastBugModule', (string)$bug->module);
-
-            $bug = $this->bug->getByID($bugID);
-
-            $this->bugZen->updateFileAfterCreate($bugID);
-            list($laneID, $columnID) = $this->bugZen->getKanbanVariable($output);
-            $this->bugZen->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
-
-            $todoID = isset($output['todoID']) ? $output['todoID'] : 0;
-            if($todoID) $this->bugZen->finishTodo($bug->id, $todoID);
+            $bug->id = $bugID;
+            $this->bugZen->afterCreate($bug, $output, $from);
 
             $message = $this->executeHooks($bugID);
-
-            $executionID = $bug->execution ? $bug->execution : (int)zget($output, 'executionID', $this->session->execution);
-
-            /* Return bug id when call the API. */
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bugID));
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
-
-            if(isonlybody()) return $this->send($this->responseInModal($executionID));
-
-            return $this->responseAfterCreate($bug, $executionID, $output, $message);
+            return $this->responseAfterCreate($bug, $output, $message);
         }
 
         $productID      = $this->product->saveVisitState($productID, $this->products);
         $currentProduct = $this->product->getByID($productID);
-        $this->bugZen->setMenu4Create($productID, $branch, $output);
+        $this->bugZen->setCreateMenu($productID, $branch, $output);
 
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */
@@ -261,6 +244,7 @@ class bug extends control
         /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
         /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
         $this->bugZen->buildCreateForm($bug, $output, $from);
+        $this->display();
     }
 
     /**
@@ -293,14 +277,14 @@ class bug extends control
             }
 
             /* Get response after editing bug. */
-            return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup);
+            $message = $this->executeHooks($bugID);
+            return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup, 0, $message);
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
-
         $this->bugZen->setEditMenu($oldBug);
-
         $this->bugZen->buildEditForm($oldBug);
+        $this->display();
     }
 
     /**
@@ -385,8 +369,9 @@ class bug extends control
             $this->bug->confirm($bug, $kanbanData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($kanbanData, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
@@ -436,8 +421,9 @@ class bug extends control
             if($oldBug->status != 'closed') $this->bug->resolve($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         /* Remove 'Convert to story' from the solution list. */
@@ -488,8 +474,9 @@ class bug extends control
             $this->bug->activate($bug, $kanbanParams);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($kanbanParams, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         $productID = $oldBug->product;
@@ -528,8 +515,9 @@ class bug extends control
             $this->bug->close($bug, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message  = $this->executeHooks($bugID);
             $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID);
+            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
         $this->view->bug     = $oldBug;
@@ -550,7 +538,7 @@ class bug extends control
      */
     public function delete(string $bugID, string $confirm = 'no', string $from = '')
     {
-        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->confirmDelete, 'confirmed' => inlink('delete', "bugID=$bugID&confirm=yes&from=$from"))));
 
         $bug = $this->bug->getByID($bugID);
 
@@ -567,7 +555,7 @@ class bug extends control
             {
                 $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
                 $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->bug->notice->remindTask, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
             }
         }
 
@@ -598,10 +586,9 @@ class bug extends control
         }
 
         $product = $this->loadModel('product')->getByID($productID);
-        $this->bugZen->setExportFields($executionID, $product);
 
         $this->view->fileName        = $this->bugZen->getExportFileName($executionID, $browseType, $product);
-        $this->view->allExportFields = $this->config->bug->exportFields;
+        $this->view->allExportFields = $this->bugZen->getExportFields($executionID, $product);
         $this->view->customExport    = true;
         $this->display('file', 'export');
     }
@@ -716,7 +703,7 @@ class bug extends control
             $message        = '';
             $bugIdList      = array();
             $uploadImages   = $this->post->uploadImage;
-            $bugImagesFiles = $this->session->bugImagesFile;
+            $bugImagesFiles = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
             foreach($bugs as $index => $bug)
             {
                 $uploadImage = !empty($uploadImages[$index]) ? $uploadImages[$index] : '';
@@ -743,7 +730,8 @@ class bug extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
 
-        $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $this->session->bugImagesFile);
+        $bugImagesFile = $this->session->bugImagesFile ? $this->session->bugImagesFile : array();
+        $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->moduleID  = $moduleID;
@@ -836,7 +824,7 @@ class bug extends control
      */
     public function batchChangeBranch(int $branchID)
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
             $oldBugs   = $this->bug->getByIdList($bugIdList);
@@ -867,7 +855,7 @@ class bug extends control
         }
 
         $load = $this->session->bugList;
-        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
+        if(!empty($skipBugIdList)) $load = array('confirm' => sprintf($this->lang->bug->notice->noSwitchBranch, $skipBugIdList), 'confirmed' => 'true', 'canceled' => 'true');
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load));
     }
 
@@ -881,7 +869,7 @@ class bug extends control
      */
     public function batchChangeModule(int $moduleID)
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
             foreach($bugIdList as $bugID)
@@ -910,7 +898,7 @@ class bug extends control
      */
     public function batchChangePlan(int $planID)
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList   = array_unique($this->post->bugIdList);
             $oldBugs     = $this->bug->getByIdList($bugIdList);
@@ -959,7 +947,7 @@ class bug extends control
      */
     public function batchAssignTo(string $assignedTo, int $objectID, string $type = 'execution')
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
 
@@ -990,7 +978,7 @@ class bug extends control
      */
     public function batchConfirm()
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
             $bugs      = $this->bug->getByList($bugIDList);
@@ -1026,7 +1014,7 @@ class bug extends control
      */
     public function batchResolve(string $resolution, string $resolvedBuild = '')
     {
-        if(!empty($_POST) && isset($_POST['bugIdList']))
+        if($this->post->bugIdList)
         {
             /* Prepare resolve data. */
             $bugIdList = array_unique($this->post->bugIdList);
@@ -1095,7 +1083,7 @@ class bug extends control
     public function batchClose(int $releaseID = 0, string $viewType = '')
     {
         $bugIdList = $releaseID ? $this->post->unlinkBugs : $this->post->bugIdList;
-        if(!empty($_POST) && $bugIdList)
+        if($bugIdList)
         {
             $bugIdList = array_unique($bugIdList);
             $bugs      = $this->bug->getByIdList($bugIdList);
@@ -1120,7 +1108,7 @@ class bug extends control
         }
 
         $load = true;
-        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true', 'canceled' => 'true');
+        if($skipBugs) $load = array('confirm' => sprintf($this->lang->bug->notice->skipClose, implode(',', $skipBugs)), 'confirmed' => 'true', 'canceled' => 'true');
 
         if($viewType) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'closeModal' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load, 'closeModal' => true));
@@ -1224,7 +1212,7 @@ class bug extends control
      */
     public function ajaxGetModuleOwner(int $moduleID, int $productID = 0): string
     {
-        list($account, $realname) = $this->bugZen->getModuleOwner($moduleID, $productID);
+        list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
 
         return print(json_encode(array($account, $realname)));
     }
@@ -1407,6 +1395,7 @@ class bug extends control
     }
 
     /**
+     * Ajax 方式获取已发布的版本。
      * Ajax get released builds.
      *
      * @param  int        $productID
@@ -1414,7 +1403,7 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetReleasedBuilds($productID, $branch = 'all')
+    public function ajaxGetReleasedBuilds(int $productID, int|string $branch = 'all'): string
     {
         $releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
 
