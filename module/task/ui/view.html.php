@@ -6,7 +6,7 @@ global $lang;
 detailHeader
 (
     to::title(entityLabel(set(array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)))),
-    to::suffix(btn(set::icon('plus'), set::url(''), set::type('primary'), $lang->task->create))
+    common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
 
 /* Build replace url param, replace {id} to $task->id. */
