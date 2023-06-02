@@ -166,11 +166,11 @@ $config->task->actionList['pause']['text']        = $lang->task->pause;
 $config->task->actionList['pause']['url']         = helper::createLink('task', 'pause', 'taskID={id}', '', true);
 $config->task->actionList['pause']['data-toggle'] = 'modal';
 
-$config->task->actionList['assignedTo']['icon']        = 'hand-right';
-$config->task->actionList['assignedTo']['hint']        = $lang->task->assign;
-$config->task->actionList['assignedTo']['text']        = $lang->task->assign;
-$config->task->actionList['assignedTo']['url']         = helper::createLink('task', 'assginedTo', 'taskID={id}', '', true);
-$config->task->actionList['assignedTo']['data-toggle'] = 'modal';
+$config->task->actionList['assignTo']['icon']        = 'hand-right';
+$config->task->actionList['assignTo']['hint']        = $lang->task->assign;
+$config->task->actionList['assignTo']['text']        = $lang->task->assign;
+$config->task->actionList['assignTo']['url']         = helper::createLink('task', 'assginedTo', 'taskID={id}', '', true);
+$config->task->actionList['assignTo']['data-toggle'] = 'modal';
 
 $config->task->view->operateList['main']   = array('batchCreate', 'assignTo', 'start', 'restart', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
 $config->task->view->operateList['common'] = array('edit', 'create', 'delete', 'view');
