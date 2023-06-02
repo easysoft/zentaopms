@@ -797,14 +797,12 @@ class bugModel extends model
         foreach($bugs as $bug)
         {
             $openBuildIdList = explode(',', $bug->openedBuild);
+
             $openedBuild = '';
-            foreach($openBuildIdList as $buildID)
-            {
-                $openedBuild .= isset($builds[$buildID]) ? $builds[$buildID] : $buildID;
-                $openedBuild .= ',';
-            }
+            foreach($openBuildIdList as $buildID) $openedBuild .= zget($builds, $buildID) . ',';
+
             $bug->openedBuild   = rtrim($openedBuild, ',');
-            $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
+            $bug->resolvedBuild = zget($builds, $bug->resolvedBuild);
         }
         return $bugs;
     }
