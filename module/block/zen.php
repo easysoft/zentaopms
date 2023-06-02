@@ -735,7 +735,7 @@ class blockZen extends block
             ->andWhere('product')->in($productIdList)
             ->andWhere('type')->eq('story')
             ->andWhere('openedDate')->ge(date('Y-m', strtotime('-5 month')))
-            ->groupBy('date', 'product')
+            ->groupBy('date, product')
             ->fetchGroup('date', 'product');
 
         /* 将按照年月分组的需求列表调整为按照产品和年月分组。 */
