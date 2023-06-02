@@ -1046,36 +1046,6 @@ class bugTest
     }
 
     /**
-     * Test batch change module.
-     *
-     * @param  array  $bugIDList
-     * @param  int    $moduleID
-     * @param  int    $bugID
-     * @access public
-     * @return array
-     */
-    public function batchChangeModuleTest(array $bugIDList, int $moduleID, int $bugID)
-    {
-        $oldBugs = $this->objectModel->getByIdList($bugIDList);
-
-        $this->objectModel->batchChangeModule($bugIDList, $moduleID);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $newBugs = $this->objectModel->getByIdList($bugIDList);
-            if(!empty($newBugs[$bugID]))
-            {
-                $changes = common::createChanges($oldBugs[$bugID], $newBugs[$bugID]);
-                return $changes;
-            }
-        }
-    }
-
-    /**
      * Test activate a bug.
      *
      * @param  int    $bugID
