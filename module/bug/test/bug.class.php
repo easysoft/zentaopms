@@ -814,46 +814,6 @@ class bugTest
     }
 
     /**
-     * 测试批量更新 bugs。
-     * Test batch update bugs.
-     *
-     * @param  array  $bugs
-     * @access public
-     * @return array
-     */
-    public function batchUpdateObject($bugs)
-    {
-        $_SERVER['HTTP_HOST'] = '';
-
-        global $tester;
-        $tester->config->global->scoreStatus = true;
-        $oldScore = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
-
-        $object = $this->objectModel->batchUpdate($bugs);
-
-        if(dao::isError())
-        {
-            $return = '';
-            $errors = dao::getError();
-            foreach($errors as $key => $value)
-            {
-                if(is_string($value)) $return .= "{$key}:{$value}";
-                if(is_array($value))  $return .= "{$key}:" .implode('', $value);
-            }
-            return $return;
-        }
-        else
-        {
-            $score  = $tester->dao->select('score')->from(TABLE_USER)->where('account')->eq('admin')->fetch('score');
-            $titles = $tester->dao->select('title')->from(TABLE_BUG)->where('id')->in(array_keys($bugs))->fetchAll('title');
-
-            $titles          = implode(',', array_keys($titles));
-            $scoreDifference = $score - $oldScore;
-            return "scoreDifference:{$scoreDifference};titles:$titles";
-        }
-    }
-
-    /**
      * 测试指派一个bug。
      * Test assign a bug to a user again.
      *
