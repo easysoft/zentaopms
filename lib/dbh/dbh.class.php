@@ -254,8 +254,10 @@ class dbh
      */
     public function formatDmSQL($sql)
     {
-        $sql       = trim($sql);
-        $sql       = str_replace(array('\r', '\n'), ' ', $sql);
+        $sql = trim($sql);
+        $sql = str_replace(array('\r', '\n'), ' ', $sql);
+        $sql = $this->formatFunction($sql);
+
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
@@ -354,6 +356,28 @@ class dbh
         {
             case 'dm':
                 $sql = str_replace('`', '"', $sql);
+                return $sql;
+
+            default:
+                return $sql;
+        }
+    }
+
+    /**
+     * Format function.
+     *
+     * @param string $sql
+     * @access public
+     * @return string
+     */
+    public function formatFunction($sql)
+    {
+        switch($this->config->driver)
+        {
+            case 'dm':
+                /* DATE convert to TO_CHAR. */
+                $sql = preg_replace("/\bDATE\(([^)]*)\)/",  "TO_CHAR($1, 'yyyy-mm-dd')", $sql, -1);
+
                 return $sql;
 
             default:
