@@ -785,24 +785,23 @@ class bugTest
         global $tester;
         $object = $tester->dbh->query("SELECT * FROM " . TABLE_BUG  ." WHERE id = $bugID")->fetch();
 
+        $bug = new stdclass();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
             {
-                $_POST[$field] = $param[$field];
+                $bug->$field = $param[$field];
             }
             else
             {
-                $_POST[$field] = $value;
+                $bug->$field = $value;
             }
         }
-        $_POST['deleteFiles'] = array();
+        $bug->deleteFiles = array();
+        $bug->comment     = '';
 
-        $object->files = array();
-
-        $change = $this->objectModel->update((object)$_POST, $object);
+        $change = $this->objectModel->update($bug, 'Edit');
         if($change == array()) $change = '没有数据更新';
-        unset($_POST);
 
         if(dao::isError())
         {
