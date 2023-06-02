@@ -5565,6 +5565,8 @@ class upgradeModel extends model
     public function updateLibType()
     {
         $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->fetchAll('id');
+        if(empty($executionList)) return true;
+
         $this->dao->update(TABLE_DOCLIB)->set('type')->eq('execution')->where('execution')->in(array_keys($executionList))->exec();
 
         return true;
