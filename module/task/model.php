@@ -1133,20 +1133,20 @@ class taskModel extends model
      * @param  int    $taskID
      * @param  array  $workhour
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function recordWorkhour(int $taskID, array $workhour): array|false
+    public function recordWorkhour(int $taskID, array $workhour): array
     {
         $task       = $this->taskTao->fetchByID($taskID);
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if field is valid. */
         $result = $this->taskTao->checkWorkhour($task, $workhour);
-        if(!$result) return false;
+        if(!$result) return array();
 
         /* Add field to workhour. */
         $workhour = $this->taskTao->buildWorkhour($taskID, $workhour);
-        if(empty($workhour)) return false;
+        if(empty($workhour)) return array();
 
         $allChanges  = array();
         $oldStatus   = $task->status;
