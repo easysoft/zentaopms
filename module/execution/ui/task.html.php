@@ -175,6 +175,8 @@ if($canBatchAction)
     if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
 }
 
+jsVar('orderBy',        $orderBy);
+jsVar('sortLink',       helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"));
 jsVar('taskSummary',    $lang->execution->taskSummary);
 jsVar('pageSummary',    $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
@@ -185,7 +187,7 @@ dtable
     set::cols(array_values($config->task->dtable->fieldList)),
     set::data($tableData),
     set::checkable($canBatchAction),
-    set::sortLink(helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::sortLink(jsRaw('createSortLink')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),

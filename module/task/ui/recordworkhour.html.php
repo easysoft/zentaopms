@@ -9,46 +9,53 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
 /* zin: Set variables to define picker options for form. */
-
-$items = array();
-
-$items[] = array
-(
-    'name'    => 'date',
-    'label'   => $lang->task->date,
-    'control' => 'date',
-    'width'   => '120px',
-    'value'   => helper::today(),
-);
-
-$items[] = array
-(
-    'name'    => 'work',
-    'label'   => $lang->task->work,
-    'control' => 'input',
-    'width'   => 'auto',
-);
-
-$items[] = array
-(
-    'name'    => 'consumed',
-    'label'   => $lang->task->consumed,
-    'control' => 'input',
-    'width'   => '100px',
-);
-
-$items[] = array
-(
-    'name'    => 'left',
-    'label'   => $lang->task->left,
-    'control' => 'input',
-    'width'   => '100px',
-);
-
 formBatch
 (
-    set::items($items),
+    formBatchItem
+    (
+        set::name('date'),
+        set::label($lang->task->date),
+        set::width('120px'),
+        set::control('date'),
+        set::value(helper::today())
+    ),
+    formBatchItem
+    (
+        set::name('work'),
+        set::label($lang->task->work),
+        set::width('auto'),
+        set::control('input')
+    ),
+    formBatchItem
+    (
+        set::name('consumed'),
+        set::label($lang->task->consumed),
+        set::width('80px'),
+        set::control
+        (
+            array(
+                'type' => 'inputControl',
+                'suffix' => $lang->task->suffixHour,
+                'suffixWidth' => 20
+            )
+        )
+    ),
+    formBatchItem
+    (
+        set::name('left'),
+        set::label($lang->task->left),
+        set::width('80px'),
+        set::control
+        (
+            array(
+                'type' => 'inputControl',
+                'suffix' => $lang->task->suffixHour,
+                'suffixWidth' => 20
+            )
+        )
+    )
 );
 
 /* ====== Render page ====== */
