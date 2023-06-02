@@ -25,7 +25,7 @@ $config->task->dtable->fieldList['assignedTo']['title']       = $lang->task->ass
 $config->task->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->task->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->task->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
-$config->task->dtable->fieldList['assignedTo']['assignLink']  = helper::createLink('task', 'assignTo', "executionID={execution}&taskID={id}");
+$config->task->dtable->fieldList['assignedTo']['assignLink']  = helper::createLink('task', 'assignTo', "executionID={execution}&taskID={id}", '', true);
 $config->task->dtable->fieldList['assignedTo']['sortType']    = true;
 
 $config->task->dtable->fieldList['assignedDate']['title']    = $lang->task->assignedDate;
