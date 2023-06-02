@@ -248,6 +248,7 @@ class bugTest
         }
         $title = trim($title, ',');
         $title = str_replace("'", '', $title);
+        $title = str_replace("@", '', $title);
 
         if(dao::isError())
         {
