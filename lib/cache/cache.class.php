@@ -15,7 +15,6 @@ helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'InvalidArgumentEx
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'ApcuDriver.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'YacDriver.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'FileDriver.php');
-helper::import(dirname(__FILE__, 2) . DS . 'filesystem' . DS . 'filesystem.class.php');
 
 use ZenTao\Cache\SimpleCache\InvalidArgumentException;
 
@@ -37,13 +36,13 @@ class cache
         $driver = ucfirst(strtolower($driver));
         switch($driver)
         {
-            case 'Apcu':
+            case self::DRIVER_APCU:
                 $className = 'ZenTao\Cache\Driver\ApcuDriver';
                 break;
-            case 'Yac':
+            case self::DRIVER_YAC:
                 $className = 'ZenTao\Cache\Driver\YacDriver';
                 break;
-            case 'File':
+            case self::DRIVER_FILE:
                 $className = 'ZenTao\Cache\Driver\FileDriver';
                 break;
             default:

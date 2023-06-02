@@ -25,11 +25,6 @@ class FileDriver implements CacheInterface
     protected $directory;
 
     /**
-     * @var \filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var string
      */
     private $namespace;
@@ -49,7 +44,6 @@ class FileDriver implements CacheInterface
             $results = mkdir($this->getPrefix(), 0777, true);
             if(!$results) throw new CacheException('Has no permission to create cache directory!');
         }
-        $this->filesystem = new \filesystem();
     }
 
     public function getCacheKey(string $key)
@@ -62,7 +56,7 @@ class FileDriver implements CacheInterface
         $file = $this->getCacheKey($key);
         if(!file_exists($file)) return $default;
 
-        $content = unserialize($this->filesystem->get($file));
+        $content = unserialize(file_get_contents($file));
         if($this->isExpired($content)) return $default;
 
         return $content['data'];
@@ -73,9 +67,9 @@ class FileDriver implements CacheInterface
         $file    = $this->getCacheKey($key);
         $content = serialize($this->generatePayload($value, $ttl));
 
-        $result = $this->filesystem->put($file, $content);
+        $result = file_put_contents($file, $content);
 
-        return (bool) $result;
+        return (bool)$result;
     }
 
     public function delete($key): bool
@@ -159,13 +153,13 @@ class FileDriver implements CacheInterface
 
     protected function genLifeTime($ttl = null)
     {
-        if(is_null($ttl)) return $this->defaultLifetime;
+        if(is_null($ttl)) return time() + $this->defaultLifetime;
         if($ttl > time()) return $ttl;
         return time() + $ttl;
     }
 
     protected function getPrefix()
     {
-        return $this->directory . DS . $this->namespace;
+        return $this->directory . $this->namespace;
     }
 }
