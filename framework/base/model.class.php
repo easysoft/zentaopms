@@ -333,7 +333,6 @@ class baseModel
      */
     public function loadCache()
     {
-        if($this->config->cache->enable != true) return;
         $this->app->loadClass('cache', $static = true);
         $namespace   = isset($this->session->user->account) ? $this->session->user->account : 'guest';
         $this->cache = cache::create($this->config->cache->driver, $namespace, $this->config->cache->lifetime);

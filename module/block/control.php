@@ -1884,8 +1884,6 @@ class block extends control
             $objectCountList += array('feedback' => 'feedbackCount', 'ticket' => 'ticketCount');
         }
 
-        $enableCache = $this->config->cache->enable;
-
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($objectCountList as $objectType => $objectCount)
         {
