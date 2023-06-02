@@ -94,25 +94,7 @@ class productplanModel extends model
      */
     public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '', $queryID = 0)
     {
-        if(!empty($queryID))
-        {
-            $query = $this->loadModel('search')->getQuery($queryID);
-            if($query)
-            {
-                $this->session->set('productplanQuery', $query->sql);
-                $this->session->set('productplanForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('productplanQuery', ' 1 = 1');
-            }
-        }
-        else
-        {
-            if($this->session->productplanQuery == false) $this->session->set('productplanQuery', ' 1 = 1');
-        }
-
-        $productplanQuery = $this->session->productplanQuery;
+        $this->loadModel('search')->setQuery('productplan', $queryID);
 
         $date     = date('Y-m-d');
         $products = (strpos($param, 'noproduct') !== false and empty($product)) ? $this->loadModel('product')->getList() : array(0);
@@ -123,7 +105,7 @@ class productplanModel extends model
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(strpos(',all,undone,bySearch,review,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
-            ->beginIF($browseType == 'bySearch')->andWhere($productplanQuery)->fi()
+            ->beginIF($browseType == 'bySearch')->andWhere($this->session->productplanQuery)->fi()
             ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
