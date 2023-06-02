@@ -48,7 +48,7 @@ class FileDriver implements CacheInterface
 
     public function getCacheKey(string $key)
     {
-        return $this->getPrefix() . DS . $key . '.cache';
+        return $this->getPrefix() . DS . md5($key) . '.cache';
     }
 
     public function get($key, $default = null): mixed
