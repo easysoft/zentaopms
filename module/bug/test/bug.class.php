@@ -297,38 +297,6 @@ class bugTest
     }
 
     /**
-     * Test get bugs of nobody to do.
-     *
-     * @param  string $productIDList
-     * @access public
-     * @return string
-     */
-    public function getByAssigntonullTest($productIDList)
-    {
-        global $tester;
-        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
-
-        $bugs = $this->objectModel->getByAssigntonull($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
-
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
-    /**
      * Test get by Sonarqube id.
      *
      * @param  int    $sonarqubeID
