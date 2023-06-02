@@ -166,3 +166,105 @@ foreach($config->task->dtable->operateList as $operate)
 
     $config->task->dtable->fieldList['actions']['actionsMap'][$operate] = $settings;
 }
+
+$config->task->dtable->fieldList['actions']['title']  = $lang->actions;
+$config->task->dtable->fieldList['actions']['name']   = 'actions';
+$config->task->dtable->fieldList['actions']['fixed']  = 'right';
+$config->task->dtable->fieldList['actions']['width']  = '180';
+$config->task->dtable->fieldList['actions']['type']   = 'actions';
+
+$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['icon']  = 'search';
+$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['hint']  = $lang->task->activate;
+$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['url']   = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
+$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['order'] = 5;
+$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['show']  = 'clickable';
+
+$config->task->dtable->fieldList['actions']['actionsMap']['start']['icon']        = 'play';
+$config->task->dtable->fieldList['actions']['actionsMap']['start']['hint']        = $lang->task->start;
+$config->task->dtable->fieldList['actions']['actionsMap']['start']['url']         = helper::createLink('task', 'start', 'taskID={id}', '', true);
+$config->task->dtable->fieldList['actions']['actionsMap']['start']['data-toggle'] = 'modal';
+$config->task->dtable->fieldList['actions']['actionsMap']['start']['order']       = 10;
+$config->task->dtable->fieldList['actions']['actionsMap']['start']['show']        = 'default';
+
+$config->task->dtable->fieldList['actions']['actionsMap']['restart']['icon']        = 'icon-restart';
+$config->task->dtable->fieldList['actions']['actionsMap']['restart']['hint']        = $lang->task->restart;
+$config->task->dtable->fieldList['actions']['actionsMap']['restart']['url']         = helper::createLink('task', 'restart', 'taskID={id}', '', true);
+$config->task->dtable->fieldList['actions']['actionsMap']['restart']['data-toggle'] = 'modal';
+$config->task->dtable->fieldList['actions']['actionsMap']['restart']['order']       = 10;
+$config->task->dtable->fieldList['actions']['actionsMap']['restart']['show']        = 'clickable';
+
+$config->task->dtable->fieldList['actions']['actionsMap']['finish']['icon']        = 'checked';
+$config->task->dtable->fieldList['actions']['actionsMap']['finish']['hint']        = $lang->task->finish;
+$config->task->dtable->fieldList['actions']['actionsMap']['finish']['url']         = helper::createLink('task', 'finish', 'taskID={id}', '', true);
+$config->task->dtable->fieldList['actions']['actionsMap']['finish']['data-toggle'] = 'modal';
+$config->task->dtable->fieldList['actions']['actionsMap']['finish']['order']       = 15;
+
+$config->task->dtable->fieldList['actions']['actionsMap']['close']['icon']        = 'off';
+$config->task->dtable->fieldList['actions']['actionsMap']['close']['hint']        = $lang->task->close;
+$config->task->dtable->fieldList['actions']['actionsMap']['close']['url']         = helper::createLink('task', 'close', 'taskID={id}', '', true);
+$config->task->dtable->fieldList['actions']['actionsMap']['close']['data-toggle'] = 'modal';
+$config->task->dtable->fieldList['actions']['actionsMap']['close']['order']       = 20;
+
+$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['icon']        = 'time';
+$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['hint']        = $lang->task->record;
+$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']         = helper::createLink('task', 'recordWorkhour', 'taskID={id}', '', true);
+$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['data-toggle'] = 'modal';
+$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['order']       = 25;
+
+$config->task->dtable->fieldList['actions']['actionsMap']['edit']['icon']  = 'edit';
+$config->task->dtable->fieldList['actions']['actionsMap']['edit']['hint']  = $lang->task->edit;
+$config->task->dtable->fieldList['actions']['actionsMap']['edit']['url']   = helper::createLink('task', 'edit', 'taskID={id}');
+$config->task->dtable->fieldList['actions']['actionsMap']['edit']['order'] = 30;
+
+$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon']  = 'split';
+$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint']  = $lang->task->batchCreate;
+$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['url']   = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
+$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['order'] = 35;
+
+/* Record effort page. */
+$config->task->effortTable = new stdclass();
+
+$config->task->effortTable->fieldList['id']['title']    = $lang->idAB;
+$config->task->effortTable->fieldList['id']['name']     = 'id';
+$config->task->effortTable->fieldList['id']['checkbox'] = false;
+$config->task->effortTable->fieldList['id']['width']    = '80';
+
+$config->task->effortTable->fieldList['account']['title']    = $lang->task->recordedBy;
+$config->task->effortTable->fieldList['account']['name']     = 'account';
+$config->task->effortTable->fieldList['account']['checkbox'] = false;
+$config->task->effortTable->fieldList['account']['width']    = '120';
+
+$config->task->effortTable->fieldList['work']['title']    = $lang->task->work;
+$config->task->effortTable->fieldList['work']['name']     = 'work';
+$config->task->effortTable->fieldList['work']['checkbox'] = false;
+$config->task->effortTable->fieldList['work']['width']    = '280';
+$config->task->effortTable->fieldList['work']['flex']     = '1';
+
+$config->task->effortTable->fieldList['consumed']['title']    = $lang->task->consumed;
+$config->task->effortTable->fieldList['consumed']['name']     = 'consumed';
+$config->task->effortTable->fieldList['consumed']['checkbox'] = false;
+$config->task->effortTable->fieldList['consumed']['width']    = '80';
+
+$config->task->effortTable->fieldList['left']['title']    = $lang->task->left;
+$config->task->effortTable->fieldList['left']['name']     = 'consumed';
+$config->task->effortTable->fieldList['left']['checkbox'] = false;
+$config->task->effortTable->fieldList['left']['width']    = '80';
+
+$config->task->effortTable->fieldList['actions']['title']    = $lang->actions;
+$config->task->effortTable->fieldList['actions']['name']     = 'actions';
+$config->task->effortTable->fieldList['actions']['fixed']    = 'right';
+$config->task->effortTable->fieldList['actions']['width']    = '100';
+$config->task->effortTable->fieldList['actions']['type']     = 'actions';
+$config->task->effortTable->fieldList['actions']['sortType'] = false;
+
+$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['icon']  = 'edit';
+$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['hint']  = $lang->task->editWorkhour;
+$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['url']   = helper::createLink('task', 'editWorkhour', 'taskID={id}', '', true);
+$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['order'] = 5;
+$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['show']  = 'clickable';
+
+$config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['icon']  = 'trash';
+$config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['hint']  = $lang->task->deleteWorkhour;
+$config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['url']   = helper::createLink('task', 'deleteWorkhour', 'taskID={id}');
+$config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['order'] = 10;
+$config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['show']  = 'clickable';

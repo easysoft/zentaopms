@@ -10,7 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Set variables to define picker options for form. */
+$tableData = initTableData($efforts, $config->task->effortTable->fieldList['actions'], $this->task);
+dtable
+(
+    set::cols(array_values($config->task->effortTable->fieldList)),
+    set::data($tableData),
+);
+
 formBatch
 (
     formBatchItem
@@ -58,5 +64,4 @@ formBatch
     )
 );
 
-/* ====== Render page ====== */
 render(isonlybody() ? 'modalDialog' : 'page');
