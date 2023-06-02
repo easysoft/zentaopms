@@ -1125,11 +1125,24 @@ class storyTao extends storyModel
         return array($branchStatusList, $branchDevelCount, $branchTestCount);
     }
 
-    protected function updateLinkedLane(int $storyID, array $linkedProjects = array()): void
+    /**
+     * 更新关联的看板泳道。
+     * Update linked lane.
+     *
+     * @param  int       $storyID
+     * @param  array     $linkedProjects
+     * @access protected
+     * @return int
+     */
+    protected function updateLinkedLane(int $storyID, array $linkedProjects = array()): int
     {
+        if(empty($storyID) || empty($linkedProjects)) return 0;
+
         $this->loadModel('kanban');
-        $linkedKanbans = array_filter(array_map(function($project){return $project->kanban;}, $linkedProjects));
-        foreach($linkedKanbans  as $projectID => $project) $this->kanban->updateLane($projectID, 'story', $storyID);
+        $linkedKanbans = array_keys(array_filter(array_map(function($project){return $project->kanban;}, $linkedProjects)));
+        foreach($linkedKanbans as $projectID) $this->kanban->updateLane($projectID, 'story', $storyID);
+
+        return count($linkedKanbans);
     }
 
     protected function computeStagesByTasks(int $storyID, array $linkedProjects, array $stages): array
