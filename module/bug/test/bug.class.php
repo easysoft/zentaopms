@@ -940,32 +940,6 @@ class bugTest
     }
 
     /**
-     * Test batch confirm bugs.
-     *
-     * @param  array  $bugIDList
-     * @access public
-     * @return array
-     */
-    public function batchConfirmTest($bugIDList)
-    {
-        $this->objectModel->batchConfirm($bugIDList);
-
-        $bugs = $this->objectModel->getByIdList($bugIDList);
-
-        $confirm = '';
-        foreach($bugs as $bug) $confirm .= ',' . $bug->confirmed;
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $confirm;
-        }
-    }
-
-    /**
      * Test confirm a bug.
      *
      * @param  object        $bug
