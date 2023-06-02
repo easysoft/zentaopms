@@ -996,6 +996,7 @@ class bugTest
         $bug->createBuild    = 0;
         $bug->buildExecution = 0;
         $bug->uid            = '';
+        $bug->comment        = '';
 
         foreach($param as $key => $value) $bug->{$key} = $value;
 
