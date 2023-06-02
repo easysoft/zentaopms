@@ -5,9 +5,10 @@ $config->testcase->batchCreate  = 10;
 $config->testcase->needReview   = 0;
 
 $config->testcase->create = new stdclass();
-$config->testcase->edit   = new stdclass();
-$config->testcase->create->requiredFields = 'title,type';
-$config->testcase->edit->requiredFields   = 'title,type';
+$config->testcase->create->requiredFields = 'product,title,type';
+
+$config->testcase->edit = new stdclass();
+$config->testcase->edit->requiredFields = 'title,type';
 
 $config->testcase->editor = new stdclass();
 $config->testcase->editor->edit   = array('id' => 'comment', 'tools' => 'simpleTools');

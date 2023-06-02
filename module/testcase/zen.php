@@ -49,5 +49,35 @@ class testcaseZen extends testcase
         $this->view->modulePath = $this->tree->getParents($case->module);
         $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
     }
+
+    /**
+     * 创建测试用例前检验表单数据是否正确。
+     * check from data for create case.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return bool
+     */
+    protected function checkCreateFormData(object $case): bool
+    {
+        $steps   = $case->steps;
+        $expects = $case->expects;
+        foreach($expects as $key => $value)
+        {
+            if(!empty($value) and empty($steps[$key])) dao::$errors['message']["steps$key"] = sprintf($this->lang->testcase->stepsEmpty, $key);
+        }
+        if(dao::isError()) return false;
+
+        $param = '';
+        if(!empty($case->lib))     $param = "lib={$case->lib}";
+        if(!empty($case->product)) $param = "product={$case->product}";
+
+        $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
+        if($result and $result['stop'])
+        {
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
+        }
+        return true;
+    }
 }
 

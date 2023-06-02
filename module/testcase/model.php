@@ -33,89 +33,57 @@ class testcaseModel extends model
     /**
      * Create a case.
      *
-     * @param int $bugID
+     * @param  object $case
      * @access public
-     * @return void
+     * @return bool|int
      */
-    function create($bugID)
+    public function create($case): bool|int
     {
-        $steps   = $this->post->steps;
-        $expects = $this->post->expects;
-        foreach($expects as $key => $value)
-        {
-            if(!empty($value) and empty($steps[$key]))
-            {
-                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
-                return false;
-            }
-        }
-
-        if(!empty($_POST['auto']))
-        {
-            $_POST['auto'] = 'auto';
-            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
-        }
-        else
-        {
-            unset($_POST['script']);
-        }
-
-        $now    = helper::now();
-        $status = $this->getStatus('create');
-        $case   = fixer::input('post')
-            ->add('status', $status)
-            ->add('version', 1)
-            ->add('fromBug', $bugID)
-            ->setDefault('openedBy', $this->app->user->account)
-            ->setDefault('openedDate', $now)
-            ->setIF($this->app->tab == 'project', 'project', $this->session->project)
-            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->remove('steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
-            ->setDefault('story', 0)
-            ->cleanInt('story,product,branch,module')
-            ->join('stage', ',')
-            ->get();
-
-        $param = '';
-        if(!empty($case->lib))$param = "lib={$case->lib}";
-        if(!empty($case->product))$param = "product={$case->product}";
-        $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
-        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
-
         if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
-
         /* Value of story may be showmore. */
-        $case->story = (int)$case->story;
-        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
-        if(!$this->dao->isError())
+        $this->dao->insert(TABLE_CASE)->data($case)
+            ->autoCheck()
+            ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+            ->checkFlow()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $caseID = $this->dao->lastInsertID();
+
+        $this->loadModel('action');
+        $this->action->create('case', $caseID, 'Opened');
+        if($case->status == 'wait') $this->action->create('case', $caseID, 'submitReview');
+
+        $this->config->dangers = '';
+        $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
+        $this->loadModel('file')->saveUpload('testcase', $caseID);
+
+        $this->loadModel('score')->create('testcase', 'create', $caseID);
+
+        $parentStepID = 0;
+        foreach($case->steps as $stepID => $stepDesc)
         {
-            $caseID = $this->dao->lastInsertID();
-            $this->config->dangers = '';
-            $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
-            $this->loadModel('file')->saveUpload('testcase', $caseID);
-            $parentStepID = 0;
-            $this->loadModel('score')->create('testcase', 'create', $caseID);
+            if(empty($stepDesc)) continue;
 
-            $data = fixer::input('post')->get();
-            foreach($data->steps as $stepID => $stepDesc)
-            {
-                if(empty($stepDesc)) continue;
-                $stepType      = $this->post->stepType;
-                $step          = new stdClass();
-                $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
-                $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
-                $step->case    = $caseID;
-                $step->version = 1;
-                $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                if($step->type == 'step')  $parentStepID = 0;
-            }
+            $stepType      = $this->post->stepType;
+            $step          = new stdClass();
+            $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+            $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
+            $step->case    = $caseID;
+            $step->version = 1;
+            $step->desc    = rtrim(htmlSpecialString($stepDesc));
+            $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
 
-            return array('status' => 'created', 'id' => $caseID, 'caseInfo' => $case);
+            $this->dao->insert(TABLE_CASESTEP)->data($step)
+                ->autoCheck()
+                ->exec();
+
+            if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+            if($step->type == 'step')  $parentStepID = 0;
         }
+        if(dao::isError()) return false;
+
+        return $caseID;
     }
 
     /**

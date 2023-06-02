@@ -27,6 +27,35 @@ foreach($cases as $case)
 $cols = array_values($config->testcase->dtable->fieldList);
 $data = array_values($cases);
 
+featureBar();
+toolbar
+(
+    btngroup
+    (
+        btn
+        (
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::url(helper::createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule")),
+            $lang->testcase->create
+        ),
+        dropdown
+        (
+            btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items
+            (
+                array
+                (
+                    array('text' => $lang->testcase->create,      'url' => helper::createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule")),
+                    array('text' => $lang->testcase->batchCreate, 'url' => helper::createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule")),
+                    array('text' => $lang->testcase->newScene,    'url' => helper::createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$initModule"))
+                )
+            ),
+            set::placement('bottom-end'),
+        )
+    )
+);
+
 dtable
 (
     set::cols($cols),
