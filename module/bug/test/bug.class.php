@@ -1231,13 +1231,14 @@ class bugTest
     }
 
     /**
+     * 测试获取 bugs 的影响版本和解决版本。
      * Test process the openedBuild and resolvedBuild fields for bugs.
      *
      * @param  array  $bugIDList
      * @access public
      * @return array
      */
-    public function processBuildForBugsTest($bugIDList)
+    public function processBuildForBugsTest(array $bugIDList): array
     {
         $bugs  = $this->objectModel->getByIdList($bugIDList);
         $array = $this->objectModel->processBuildForBugs($bugs);

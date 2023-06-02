@@ -780,13 +780,14 @@ class bugModel extends model
     }
 
     /**
+     * 获取 bugs 的影响版本和解决版本。
      * Process the openedBuild and resolvedBuild fields for bugs.
      *
      * @param  array  $bugs
      * @access public
      * @return array
      */
-    public function processBuildForBugs($bugs)
+    public function processBuildForBugs(array $bugs): array
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
