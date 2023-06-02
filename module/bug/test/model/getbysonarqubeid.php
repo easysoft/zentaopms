@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php'; su('admin');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
+
+zdTable('bug')->config('bug_getbysonarqubeid')->gen(10);
 
 /**
 
@@ -14,9 +16,13 @@ pid=1
 
 */
 
-$sonarqubeIDList = array('0', '2');
+$sonarqubeIDList = array(0, 1, 2, 3, 4, 5);
 
 $bug=new bugTest();
 
 r($bug->getBySonarqubeIDTest($sonarqubeIDList[0])) && p() && e('0'); //获取sonarqubeID为0的bug issueKey数量
-r($bug->getBySonarqubeIDTest($sonarqubeIDList[1])) && p() && e('1'); //获取sonarqubeID为2的bug issueKey数量
+r($bug->getBySonarqubeIDTest($sonarqubeIDList[1])) && p() && e('3'); //获取sonarqubeID为1的bug issueKey数量
+r($bug->getBySonarqubeIDTest($sonarqubeIDList[2])) && p() && e('3'); //获取sonarqubeID为2的bug issueKey数量
+r($bug->getBySonarqubeIDTest($sonarqubeIDList[3])) && p() && e('2'); //获取sonarqubeID为3的bug issueKey数量
+r($bug->getBySonarqubeIDTest($sonarqubeIDList[4])) && p() && e('2'); //获取sonarqubeID为4的bug issueKey数量
+r($bug->getBySonarqubeIDTest($sonarqubeIDList[5])) && p() && e('0'); //获取sonarqubeID为5的bug issueKey数量

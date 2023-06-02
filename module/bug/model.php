@@ -1689,13 +1689,14 @@ class bugModel extends model
     }
 
     /**
+     * 通过 sonarqube id 获取bug。
      * Get by Sonarqube id.
      *
-     * @param  int    $sonarqubeID
+     * @param  int         $sonarqubeID
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getBySonarqubeID($sonarqubeID)
+    public function getBySonarqubeID(int $sonarqubeID): array|bool
     {
         return $this->dao->select('issueKey')->from(TABLE_BUG)
             ->where('issueKey')->like("$sonarqubeID:%")
