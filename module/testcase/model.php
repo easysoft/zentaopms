@@ -72,7 +72,7 @@ class testcaseModel extends model
             $step->case    = $caseID;
             $step->version = 1;
             $step->desc    = rtrim(htmlSpecialString($stepDesc));
-            $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
+            $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($case->expects[$stepID]));
 
             $this->dao->insert(TABLE_CASESTEP)->data($step)
                 ->autoCheck()
