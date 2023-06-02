@@ -4,7 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/bug.class.php';
 su('admin');
 
-zdTable('bug')->gen(100);
+zdTable('bug')->gen(82);
+zdTable('user')->gen(10);
+zdTable('project')->config('project_confirm')->gen(100);
+zdTable('product')->gen(82);
 
 /**
 

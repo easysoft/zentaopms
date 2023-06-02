@@ -768,6 +768,7 @@ class bugTest
         $oldBug = $this->objectModel->getByID($bug['id']);
 
         $bug['confirmed'] = 1;
+        $bug['comment']   = '';
 
         $this->objectModel->confirm((object)$bug, array());
 
