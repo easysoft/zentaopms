@@ -80,6 +80,7 @@ else
         set::title($lang->task->finishAction),
         set::headingClass('status-heading'),
         set::titleClass('form-label .form-grid'),
+        set::shadow(!isonlybody()),
         to::headingActions
         (
             entityLabel
@@ -149,8 +150,11 @@ else
             set::label($lang->comment),
             set::control("editor")
         ),
-        history()
     );
 }
+
+h::hr(set::class('mt-6'));
+
+history();
 
 render(isonlybody() ? 'modalDialog' : 'page');

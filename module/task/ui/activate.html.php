@@ -92,6 +92,7 @@ formPanel
     set::title($lang->task->activateAction),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
+    set::shadow(!isonlybody()),
     to::headingActions
     (
         entityLabel
@@ -218,6 +219,10 @@ modalTrigger
         ),
     )
 );
+
+h::hr(set::class('mt-6'));
+
+history();
 
 /* ====== Render page ====== */
 render(isonlybody() ? 'modalDialog' : 'page');
