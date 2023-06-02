@@ -23,6 +23,16 @@ foreach($cols as &$col)
     break;
 }
 
+$extendFieldList = $this->product->getFlowExtendFields();
+foreach($extendFieldList as $field => $name)
+{
+    $extCol = $config->product->dtable->extendField;
+    $extCol['name']  = $field;
+    $extCol['title'] = $name;
+
+    $cols[] = $extCol;
+}
+
 /* Closure function for generating table data. */
 $fnGenerateTableData = function($productList) use($users, $avatarList)
 {

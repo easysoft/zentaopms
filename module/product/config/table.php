@@ -109,3 +109,12 @@ $config->product->dtable->fieldList['releases']['minWidth'] = 64;
 $config->product->dtable->fieldList['releases']['type']     = 'number';
 $config->product->dtable->fieldList['releases']['sortType'] = false;
 $config->product->dtable->fieldList['releases']['align']    = 'center';
+
+/* Default definition of WorkFlow extend fields. */
+$config->product->dtable->extendField['name']     = 'field';
+$config->product->dtable->extendField['title']    = 'name';
+$config->product->dtable->extendField['minWidth'] = 64;
+$config->product->dtable->extendField['type']     = 'number';
+$config->product->dtable->extendField['sortType'] = false;
+$config->product->dtable->extendField['align']    = 'center';
+$config->product->dtable->extendField['border']   = 'left';
