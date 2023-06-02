@@ -808,6 +808,7 @@ class bugModel extends model
     }
 
     /**
+     * 测试获取当前用户的 bugs。
      * Get user bugs.
      *
      * @param  string $account
@@ -820,18 +821,13 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null, $executionID = 0, $queryID = 0)
+    public function getUserBugs(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $limit = 0, object $pager = null, int $executionID = 0, int $queryID = 0): array
     {
+        if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
+
         $moduleName = $this->app->rawMethod == 'work' ? 'workBug' : 'contributeBug';
         $queryName  = $moduleName . 'Query';
         $formName   = $moduleName . 'Form';
-        $bugIdList  = array();
-        if($moduleName == 'contributeBug')
-        {
-            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
-            foreach($bugsAssignedByMe as $bugID => $bug) $bugIdList[$bugID] = $bugID;
-        }
-
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -852,7 +848,7 @@ class bugModel extends model
         $query = $this->session->$queryName;
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
 
-        if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
+        if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
         return $this->dao->select("t1.*, t2.name AS productName, t2.shadow, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
@@ -867,7 +863,7 @@ class bugModel extends model
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.resolvedBy')->eq($account)
-            ->orWhere('t1.id')->in($bugIdList)
+            ->orWhere('t1.id')->in(!empty($bugsAssignedByMe) ? array_keys($bugsAssignedByMe) : array())
             ->markRight(1)
             ->fi()
             ->orderBy($orderBy)

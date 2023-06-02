@@ -552,16 +552,31 @@ class bugTest
     }
 
     /**
+     * 测试获取用户的 bugs。
      * Test get user bugs.
      *
-     * @param  string $account
-     * @param  string $type
+     * @param  string      $account
+     * @param  string      $type
+     * @param  int         $limit
+     * @param  int         $executionID
+     * @param  int         $queryID
+     * @param  string      $rawMethod
+     * @param  string|bool $query
      * @access public
      * @return array
      */
-    public function getUserBugsTest($account, $type = 'assignedTo')
+    public function getUserBugsTest(string $account, string $type = 'assignedTo', int $limit = 0, int $executionID = 0, int $queryID = 0, string $rawMethod = 'work', string|bool $query = false): array|int
     {
-        $array = $this->objectModel->getUserBugs($account, $type);
+        global $tester;
+        if($type == 'bySearch')
+        {
+            $moduleName = $rawMethod == 'work' ? 'workBug' : 'contributeBug';
+            $queryName  = $moduleName . 'Query';
+            $formName   = $moduleName . 'Form';
+            if($query) $tester->session->set($queryName, $query);
+        }
+
+        $array = $this->objectModel->getUserBugs($account, $type, 'id_desc', $limit, null, $executionID, $queryID);
 
         if(dao::isError())
         {
