@@ -70,14 +70,15 @@ class bugTest
     }
 
     /**
-     * Test check delay bug.
+     * 测试添加bug->delay字段，内容为延期的时长（天），不延期则为0
+     * Test if the bug is delayed, add the bug->delay field to show the delay time (day).
      *
-     * @param  object $bug
-     * @param  string $status
+     * @param  object       $bug
+     * @param  string       $status
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function appendDelayedDaysTest($bug, $status)
+    public function appendDelayedDaysTest($bug, $status): object|array
     {
         $bug->status       = $status;
         $bug->deadline     = $bug->deadline     ? date('Y-m-d',strtotime("$bug->deadline day"))     : '0000-00-00';
@@ -97,13 +98,14 @@ class bugTest
     }
 
     /**
-     * Test check delay bugs.
+     * 测试为 bugs 批量添加延期天数。
+     * Test call checkDelayBug in foreach to check if the bug is delay.
      *
-     * @param  string $productIDList
+     * @param  int          $productID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function batchAppendDelayedDaysTest($productID)
+    public function batchAppendDelayedDaysTest($productID): array|string
     {
         global $tester;
 
