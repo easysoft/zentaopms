@@ -110,13 +110,14 @@ if(!isonlybody())
     );
 }
 
+$closeLink = $browseType == 'bymodule' ? createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
 sidebar
 (
     moduleMenu(set(array
     (
         'modules'   => $moduleTree,
         'activeKey' => $currentModuleID,
-        'closeLink' => createLink('bug', 'browse', "productID=$product->id&branch=$branch")
+        'closeLink' => $closeLink
     )))
 );
 
