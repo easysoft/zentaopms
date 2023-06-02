@@ -49,7 +49,7 @@ class cache
                 throw new InvalidArgumentException("Driver {$driver} is not supported.");
         }
 
-        if($driver != 'File' && !extension_loaded($driver)) throw new InvalidArgumentException("Driver ext-{$driver} is not loaded.");
+        if($driver != self::DRIVER_FILE && !extension_loaded($driver)) throw new InvalidArgumentException("Driver ext-{$driver} is not loaded.");
 
         global $app;
         $this->client = new $className($namespace, $defaultLifetime, $app->getCacheRoot());

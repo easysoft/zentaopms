@@ -57,7 +57,11 @@ class FileDriver implements CacheInterface
         if(!file_exists($file)) return $default;
 
         $content = unserialize(file_get_contents($file));
-        if($this->isExpired($content)) return $default;
+        if($this->isExpired($content))
+        {
+            $this->delete($key);
+            return $default;
+        }
 
         return $content['data'];
     }
@@ -122,7 +126,16 @@ class FileDriver implements CacheInterface
     {
         $file = $this->getCacheKey($key);
 
-        return file_exists($file);
+        if(!file_exists($file)) return false;
+
+        $content = unserialize(file_get_contents($file));
+        if($this->isExpired($content))
+        {
+            $this->delete($key);
+            return false;
+        }
+
+        return true;
     }
 
     public function clearPrefix(string $prefix): bool
