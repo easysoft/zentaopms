@@ -377,7 +377,7 @@ class productplan extends control
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
-        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', $status = 'noclosed', 'multiple');
+        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', 'noclosed', 'multiple');
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->view->queryID          = $queryID;
         $this->display();

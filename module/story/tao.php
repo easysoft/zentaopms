@@ -1072,7 +1072,6 @@ class storyTao extends storyModel
 
     protected function getLinkedTaskStat(int $storyID, array $linkedProjects): array
     {
-        $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)->where('execution')->in(array_keys($linkedProjects))
             ->andWhere('type')->in('devel,test')
             ->andWhere('story')->eq($storyID)
