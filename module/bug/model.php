@@ -1271,14 +1271,15 @@ class bugModel extends model
     }
 
     /**
+     * 获取需求关联的 bug 数量。
      * Get counts of some stories' bugs.
      *
      * @param  array  $stories
      * @param  int    $executionID
      * @access public
-     * @return int
+     * @return array
      */
-    public function getStoryBugCounts($stories, $executionID = 0)
+    public function getStoryBugCounts(array $stories, int $executionID = 0): array
     {
         if(empty($stories)) return array();
         $bugCounts = $this->dao->select('story, COUNT(*) AS bugs')

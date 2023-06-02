@@ -1509,13 +1509,13 @@ class bugTest
      * Test get counts of some stories' bugs.
      *
      * @param  array  $storyIDList
-     * @param  int    $storyID
+     * @param  int    $executionID
      * @access public
      * @return int
      */
-    public function getStoryBugCountsTest($storyIDList, $storyID)
+    public function getStoryBugCountsTest($storyIDList, $executionID = 0)
     {
-        $array = $this->objectModel->getStoryBugCounts($storyIDList);
+        $array = $this->objectModel->getStoryBugCounts($storyIDList, $executionID);
 
         if(dao::isError())
         {
@@ -1523,7 +1523,7 @@ class bugTest
         }
         else
         {
-            return isset($array[$storyID]) ? $array[$storyID] : 0;
+            return $array;
         }
     }
 
