@@ -1,3 +1,3 @@
 window.footerGenerator = function(summary) {
-    return [{children: summary, className: "text-dark"}, "flex", "pager"];
+    return [{html: summary, className: "text-dark"}, "flex", "pager"];
 }
