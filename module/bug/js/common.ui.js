@@ -110,7 +110,7 @@ function loadProductBranches(productID)
     $('#branch').remove();
 
     const branchStatus = config.currentMethod == 'create' ? 'active' : 'all';
-    const oldBranch    = config.currentMethod == 'edit' ? bugBranch : 0;
+    const oldBranch    = config.currentMethod == 'edit' ? bug.branch : 0;
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
