@@ -34,7 +34,7 @@ class upgradeModel extends model
      * @access public
      * @return array
      */
-    public function getVersionsToUpdate($openVersion, $fromEdition)
+    public function getVersionsToUpdate($openVersion, $fromEdition, $toEdition)
     {
         $versions = array();
 
@@ -45,21 +45,21 @@ class upgradeModel extends model
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
             $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
         }
-        if($fromEdition == 'open') return $versions;
+        if($fromEdition == 'open' and $toEdtion == 'open') return $versions;
 
         /* Update pro sql from pro|biz|max. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
         }
-        if($fromEdition == 'pro') return $versions;
+         if(in_array($fromEdition, array('open', 'pro')) and $toEdition == 'pro') return $versions;
 
         /* Update biz sql from biz|max. */
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
         }
-        if($fromEdition == 'biz') return $versions;
+        if(in_array($fromEdition, array('open', 'pro', 'biz')) and $toEdition == 'biz') return $versions;
 
         /* Update max sql only from max. */
         foreach($this->config->upgrade->maxVersion as $max => $open)
@@ -84,13 +84,14 @@ class upgradeModel extends model
         if(!isset($this->app->user)) $this->loadModel('user')->su();
 
         $fromEdition = $this->getEditionByVersion($fromVersion);
+        $toEdition   = $this->getEditionByVersion($this->config->version);
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
 
         /* Execute. */
         $fromOpenVersion = $this->getOpenVersion($fromVersion);
-        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
+        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition, $toEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
