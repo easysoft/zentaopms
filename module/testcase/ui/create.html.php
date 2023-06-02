@@ -10,10 +10,14 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+jsVar('executionID', $executionID);
+jsVar('tab', $this->app->tab);
+if($app->tab == 'execution') jsVar('objectID', $executionID);
+if($app->tab == 'project')   jsVar('objectID', $projectID);
 
 formPanel
 (
-    on::change('#product',   'loadAllNew'),
+    on::change('#product',   'changeProduct'),
     on::change('#branch',    'loadBranchNew'),
     on::click('#refresh',    'loadProductModulesNew'),
     to::headingActions(icon('cog-outline')),
