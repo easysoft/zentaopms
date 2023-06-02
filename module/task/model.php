@@ -2497,15 +2497,13 @@ class taskModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'start'          and $task->parent < 0) return false;
-        if($action == 'finish'         and $task->parent < 0) return false;
-        if($action == 'pause'          and $task->parent < 0) return false;
-        if($action == 'assignto'       and $task->parent < 0) return false;
-        if($action == 'close'          and $task->parent < 0) return false;
-        if($action == 'batchcreate'    and !empty($task->team))     return false;
-        if($action == 'batchcreate'    and $task->parent > 0)       return false;
-        if($action == 'recordworkhour' and $task->parent == -1)     return false;
-        if($action == 'delete'         and $task->parent < 0)       return false;
+        if(!common::hasPriv('task', $action)) return false;
+
+        /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
+        if($task->parent < 0 && !in_array($action, array('edit', 'batchcreate'))) return false;
+
+        /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
+        if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0))     return false;
 
         if(!empty($task->team))
         {
@@ -2531,6 +2529,7 @@ class taskModel extends model
             }
         }
 
+        /* 根据状态判断是否可以点击。 Check clickable by status. */
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
         if($action == 'pause')    return $task->status == 'doing';
@@ -2539,6 +2538,8 @@ class taskModel extends model
         if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status  == 'cancel';
         if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed'  and $task->status != 'cancel';
         if($action == 'cancel')   return $task->status != 'done'   and $task->status != 'closed'  and $task->status != 'cancel';
+
+        if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion;
 
         return true;
     }

@@ -48,6 +48,8 @@ if(common::canModify('execution', $execution))
     }
 }
 
+$tableData = initTableData($tasks, $config->task->dtable->fieldList['actions'], $this->task);
+
 toolbar
 (
     hasPriv('task', 'report') ? item(set(array
@@ -96,39 +98,6 @@ sidebar
         'closeLink' => $this->createLink('execution', 'task')
     )))
 );
-
-/* zin: Define the dtable in main content. */
-foreach($tasks as &$task)
-{
-    /* Set parent task attribute. */
-    $task->isParent = false;
-    if($task->parent == -1)
-    {
-        /* When the parent task is -1, the hierarchical structure is displayed incorrectly. */
-        $task->parent   = 0;
-        $task->isParent = true;
-    }
-
-    $actions = array();
-    if(!in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion) $actions[] = 'confirmStoryChange';
-
-    if($task->status != 'pause' && common::hasPriv('task', 'start'))   $actions[] = 'start';
-    if($task->status == 'pause' && common::hasPriv('task', 'restart')) $actions[] = 'restart';
-
-    if(common::hasPriv('task', 'finish')) $actions[] = 'finish';
-    if(common::hasPriv('task', 'close'))  $actions[] = 'close';
-
-    if(common::hasPriv('task', 'recordWorkhour')) $actions[] = 'recordWorkhour';
-    if(common::hasPriv('task', 'edit'))           $actions[] = 'edit';
-
-    if($this->config->vision == 'rnd' && common::hasPriv('task', 'batchCreate')) $actions[] = 'batchCreate';
-
-    foreach($actions as &$action)
-    {
-        if(!$this->task->isClickable($task, $action)) $action = array('name' => $action, 'disabled' => true);
-    }
-    $task->actions = $actions;
-}
 
 $firstTask            = reset($tasks);
 $canBatchEdit         = common::hasPriv('firstTask', 'batchEdit', !empty($firstTask) ? $firstTask : null);
@@ -214,7 +183,7 @@ dtable
 (
     set::userMap($memberPairs),
     set::cols(array_values($config->task->dtable->fieldList)),
-    set::data(array_values($tasks)),
+    set::data($tableData),
     set::checkable($canBatchAction),
     set::sortLink(helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar($footToolbar),

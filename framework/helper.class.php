@@ -429,6 +429,70 @@ function formatTime(string|null $time, string $format = ''): string
 }
 
 /**
+ * Init table data of zin.
+ *
+ * @param  array  $items
+ * @param  array  $actionConfig
+ * @param  object $checkModel
+ * @access public
+ * @return void
+ */
+function initTableData($items, $actionConfig, $checkModel)
+{
+    global $app;
+
+    /* Order actions. */
+    $orderActions = array();
+    foreach($actionConfig['actionsMap'] as $actionKey => $action)
+    {
+        $order = zget($action, 'order', 0);
+        if(!isset($orderActions[$order])) $orderActions[$order] = array();
+        $orderActions[$order][$actionKey] = $action;
+    }
+    ksort($orderActions);
+
+    /* Append actions field. */
+    $itemList = array();
+    foreach($items as $item)
+    {
+        $actions = array();
+        foreach($orderActions as $order => $configs)
+        {
+            foreach($configs as $actionName => $config)
+            {
+                $show = zget($config, 'show', 'default');
+                if($checkModel->isClickable($item, $actionName))
+                {
+                    $actions[$order] = array('name' => $actionName);
+                }
+                elseif($show == 'always')
+                {
+                    $actions[$order] = array('name' => $actionName, 'disabled' => true);
+                }
+                elseif($show == 'default' && !isset($actions[$order]))
+                {
+                    $actions[$order] = array('name' => $actionName, 'disabled' => true);
+                }
+            }
+        }
+        $item->actions = array_values($actions);
+
+        /* Set parent attribute. */
+        $item->isParent = false;
+        if($item->parent == -1)
+        {
+            /* When the parent is -1, the hierarchical structure is displayed incorrectly. */
+            $item->parent   = 0;
+            $item->isParent = true;
+        }
+
+        $itemList[] = $item;
+    }
+
+    return $itemList;
+}
+
+/**
  * Fix for session error.
  *
  * @param  string    $class
