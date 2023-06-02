@@ -394,40 +394,6 @@ class bugTest
         }
     }
 
-
-    /**
-     * Test get bugs the status is active or unclosed.
-     *
-     * @param  string $productIDList
-     * @param  string $modules
-     * @access public
-     * @return string
-     */
-    public function getByStatusTest($productIDList, $modules, $status)
-    {
-        global $tester;
-        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
-
-        $bugs = $this->objectModel->getByStatus($productIDList, 'all', $modules, $executions, $status, 'id_desc', null, 0);
-
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
     /**
      * Test get by Sonarqube id.
      *
