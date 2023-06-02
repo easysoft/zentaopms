@@ -873,9 +873,10 @@ class bugModel extends model
     }
 
     /**
+     * 测试获取用户的bugs的 id => title 数组。
      * Get bug pairs of a user.
      *
-     * @param  int       $account
+     * @param  string    $account
      * @param  bool      $appendProduct
      * @param  int       $limit
      * @param  array     $skipProductIdList
@@ -884,9 +885,9 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIdList = array(), $skipExecutionIdList = array(), $appendBugID = 0)
+    public function getUserBugPairs(string $account, bool $appendProduct = true, int $limit = 0, array $skipProductIdList = array(), array $skipExecutionIdList = array(), array|int $appendBugID = 0): array
     {
-        $deletedProjectIdList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
+        $deletedProjectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs();
 
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')

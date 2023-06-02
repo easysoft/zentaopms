@@ -589,15 +589,21 @@ class bugTest
     }
 
     /**
+     * 测试获取取用户的bugs的 id => title 数组。
      * Test get bug pairs of a user.
      *
      * @param  string $account
+     * @param  bool      $appendProduct
+     * @param  int       $limit
+     * @param  array     $skipProductIdList
+     * @param  array     $skipExecutionIdList
+     * @param  int|array $appendBugID
      * @access public
      * @return array
      */
-    public function getUserBugPairsTest($account)
+    public function getUserBugPairsTest(string $account, bool $appendProduct = true, int $limit = 0, array $skipProductIdList = array(), array $skipExecutionIdList = array(), array|int $appendBugID = 0): array|int
     {
-        $array = $this->objectModel->getUserBugPairs($account);
+        $array = $this->objectModel->getUserBugPairs($account, $appendProduct, $limit, $skipProductIdList, $skipExecutionIdList, $appendBugID);
 
         if(dao::isError())
         {
