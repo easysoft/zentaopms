@@ -265,38 +265,6 @@ class bugTest
     }
 
     /**
-     * Test get bugs of resolved by me.
-     *
-     * @param  string $productIDList
-     * @access public
-     * @return string
-     */
-    public function getByResolvedbymeTest($productIDList)
-    {
-        global $tester;
-        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
-
-        $bugs = $this->objectModel->getByResolvedbyme($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
-
-        $title = '';
-        foreach($bugs as $bug)
-        {
-            $title .= ',' . $bug->title;
-        }
-        $title = trim($title, ',');
-        $title = str_replace("'", '', $title);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $title;
-        }
-    }
-
-    /**
      * Test get by Sonarqube id.
      *
      * @param  int    $sonarqubeID
