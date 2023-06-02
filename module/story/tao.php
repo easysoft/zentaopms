@@ -1054,6 +1054,15 @@ class storyTao extends storyModel
         return true;
     }
 
+    /**
+     * 根据计划和关联的项目的分支，获取默认的阶段值。
+     * Get default stages by plans and linked branches.
+     *
+     * @param  string    $planIdList     e.g. 1,2
+     * @param  array     $linkedBranches e.g. array(0, 1, branchID)
+     * @access protected
+     * @return array
+     */
     protected function getDefaultStages(string $planIdList, array $linkedBranches): array
     {
         if(empty($planIdList) && empty($linkedBranches)) return array();
