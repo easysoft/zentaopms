@@ -260,10 +260,10 @@ class storyZen extends story
         list($products, $branches) = $this->getProductsAndBranchesForCreate($productID, $objectID);
         if($objectID)
         {
-            $branch    = key($branches);
+            $branch    = is_array($branches) && !empty($branches) ? key($branches) : $branch;
             $productID = (!empty($productID) && isset($products[$productID])) ? $productID : key($products);
         }
-        $branch = current(explode(',', $branch));
+        $branch = str_contains($branch, ',') ? current(explode(',', $branch)) : $branch;
 
         $product     = $this->product->getByID($productID);
         $users       = $this->user->getPairs('pdfirst|noclosed|nodeleted');
