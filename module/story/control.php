@@ -2052,8 +2052,8 @@ class story extends control
 
         if($type == 'remove')
         {
-            $result = $this->story->unlinkStory($storyID, $linkedStoryID);
-            helprt::end();
+            $this->story->unlinkStory($storyID, $linkedStoryID);
+            helper::end();
         }
 
         if($_POST)
