@@ -1079,6 +1079,15 @@ class storyTao extends storyModel
         return $stages;
     }
 
+    /**
+     * 根据关联执行，获取关联该需求的任务状态统计数。
+     * Get linked task status statistics for this story by linked projects.
+     *
+     * @param  int       $storyID
+     * @param  array     $linkedProjects e.g. linkedProjects = array(projectID => stdclass('branch' => array(branchID)))
+     * @access protected
+     * @return array
+     */
     protected function getLinkedTaskStat(int $storyID, array $linkedProjects): array
     {
         $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)->where('execution')->in(array_keys($linkedProjects))
@@ -1100,7 +1109,7 @@ class storyTao extends storyModel
             foreach($typeTasks as $task)
             {
                 $status = $task->status ? $task->status : 'wait';
-                if(!isset($statusList[$type][$status])) $status = 'done'; //如果任务状态是已取消，或已关闭，则安装完成状态处理。
+                if(!isset($statusList[$type][$status])) $status = 'done'; //如果任务状态不在默认统计状态列表中，则按照完成状态处理。
 
                 $branches = $linkedProjects[$task->execution]->branches;
                 foreach($branches as $branch)
