@@ -435,10 +435,9 @@ function loadAllBuilds(event)
 
 function loadAllUsers(event)
 {
-    isClosedBug = typeof isClosedBug == 'undefined' ? false : isClosedBug;
-
-    const params = isClosedBug ? '&params=devfirst' : '';
-    const link   = $.createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
+    const isClosedBug = bug.status = 'closed';
+    const params      = isClosedBug ? '&params=devfirst' : '';
+    const link        = $.createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
     $.get(link, function(data)
     {
         if(data)
