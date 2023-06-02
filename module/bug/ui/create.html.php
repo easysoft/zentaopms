@@ -11,13 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('bug',          $bug);
-jsVar('oldProjectID', $bug->projectID);
-jsVar('oldProductID', $bug->productID);
+jsVar('bug',      $bug);
 jsVar('moduleID', $bug->moduleID);
 jsVar('tab', $this->app->tab);
-if($this->app->tab == 'execution') jsVar('objectID', zget($bug->execution, 'id', ''));
-if($this->app->tab == 'project')   jsVar('objectID', $bug->projectID);
 
 foreach(explode(',', $config->bug->create->requiredFields) as $field)
 {
