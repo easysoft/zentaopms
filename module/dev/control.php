@@ -44,11 +44,8 @@ class dev extends control
     public function restAPI($apiID = 1)
     {
         list($api, $typeList, $menu) = $this->dev->getAPIData($apiID);
-        if($api)
-        {
-            $moduleID  = $api->module;
-            $api->desc = htmlspecialchars_decode($api->desc);
-        }
+        if($api) $api->desc = htmlspecialchars_decode($api->desc);
+
         $this->view->title          = $this->lang->dev->api;
         $this->view->selectedModule = 'restapi';
         $this->view->moduleTree     = $menu;

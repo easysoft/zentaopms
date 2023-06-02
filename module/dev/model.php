@@ -156,7 +156,7 @@ class devModel extends model
             if($method->class == 'baseControl' or $method->class == 'control' or $method->name == '__construct') continue;
             $api = array('name' => $method->name, 'post' => false, 'param' => array(), 'desc' => '');
             $methodReflect = new ReflectionMethod($module, $method->name);
-            foreach($methodReflect->getParameters() as $key => $param)
+            foreach($methodReflect->getParameters() as $param)
             {
                 $paramName = $param->getName();
                 $api['param'][$paramName] = array('var' => $paramName, 'type' => '', 'desc' => '');
@@ -875,7 +875,7 @@ class devModel extends model
         if($type == 'tag')
         {
             $methods = array();
-            foreach($menuTree as $index => $menuItem)
+            foreach($menuTree as $menuItem)
             {
                 foreach($menuItem->children as $subIndex => $subMenuItem)
                 {
@@ -1128,7 +1128,6 @@ class devModel extends model
     public function getAPIData($apiID = 0, $version = '16.0')
     {
         $modules     = $this->loadModel('api')->getDemoData('module', $version);
-        $moduleNames = array();
         foreach($modules as $index => $module)
         {
             $modules[$module->order] = $module;
