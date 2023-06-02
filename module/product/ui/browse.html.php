@@ -84,7 +84,7 @@ featureBar
             return createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType");
         }
     ),
-    li(searchToggle())
+    li(searchToggle(set::module('story')))
 );
 
 toolbar
