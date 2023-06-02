@@ -56,6 +56,7 @@ $data->version     = 1;
 $data->openedBy    = 'admin';
 $data->openedDate  = date('Y-m-d H:i:s');
 $data->mailto      = '';
+$data->parent      = 1;
 $data->URS[]       = 1;
 $data->reviewer[]  = 'admin';
 

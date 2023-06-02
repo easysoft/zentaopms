@@ -739,7 +739,7 @@ class storyTao extends storyModel
             $data->BVersion = 1;
             $data->extra    = 1;
 
-            $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
 
             $data->AType    = 'story';
             $data->BType    = 'requirement';
@@ -749,7 +749,7 @@ class storyTao extends storyModel
             $data->AVersion = 1;
             $data->BVersion = $requirement->version;
 
-            $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
     }
 
