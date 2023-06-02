@@ -380,7 +380,16 @@ class block extends control
     {
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
 
-        $data = $this->block->getWelcomeBlockData();
+        $cacheKey = 'welcomeBlockData';
+        if($this->config->cache->enable and $this->cache->has($cacheKey))
+        {
+            $data = $this->cache->get($cacheKey);
+        }
+        else
+        {
+            $data = $this->block->getWelcomeBlockData();
+            if($this->config->cache->enable) $this->cache->set($cacheKey, $data);
+        }
 
         $this->view->tasks      = $data['tasks'];
         $this->view->doneTasks  = $data['doneTasks'];
@@ -965,47 +974,57 @@ class block extends control
             return false;
         }
 
-        $today  = helper::today();
-        $monday = date('Ymd', strtotime($this->weekly->getThisMonday($today)));
-        $tasks  = $this->dao->select("project,
-            sum(consumed) as totalConsumed,
-            sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-            ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($projects))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('project')
-            ->fetchAll('project');
-
-        $this->app->loadClass('pager', $static = true);
-
-        foreach($projects as $projectID => $project)
+        $cacheKey = __FUNCTION__ . $status . $count . $excludedModel;
+        if($this->config->cache->enable and $this->cache->has($cacheKey))
         {
-            if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
+            $projects = $this->cache->get($cacheKey);
+        }
+        else
+        {
+            $today  = helper::today();
+            $monday = date('Ymd', strtotime($this->weekly->getThisMonday($today)));
+            $tasks  = $this->dao->select("project,
+                sum(consumed) as totalConsumed,
+                sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
+                ->from(TABLE_TASK)
+                ->where('project')->in(array_keys($projects))
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('parent')->lt(1)
+                ->groupBy('project')
+                ->fetchAll('project');
+
+            $this->app->loadClass('pager', $static = true);
+
+            foreach($projects as $projectID => $project)
             {
-                $pager = pager::init(0, 1, 1);
-                $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+                if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
+                {
+                    $pager = pager::init(0, 1, 1);
+                    $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
+                    $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
+                }
+                elseif(in_array($project->model, array('waterfall', 'waterfallplus')))
+                {
+                    $begin   = $project->begin;
+                    $weeks   = $this->weekly->getWeekPairs($begin);
+                    $current = zget($weeks, $monday, '');
+                    $current = substr($current, 0, -11) . substr($current, -6);
+
+                    $PVEV = $this->weekly->getPVEV($projectID, $today);
+                    $project->pv = $PVEV['PV'];
+                    $project->ev = $PVEV['EV'];
+                    $project->ac = $this->weekly->getAC($projectID, $today);
+                    $project->sv = $this->weekly->getSV($project->ev, $project->pv);
+                    $project->cv = $this->weekly->getCV($project->ev, $project->ac);
+
+                    $progress = isset($tasks[$projectID]) ? (($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft)) ? round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100 : 0 : 0;
+
+                    $project->current  = $current;
+                    $project->progress = $progress;
+                }
             }
-            elseif(in_array($project->model, array('waterfall', 'waterfallplus')))
-            {
-                $begin   = $project->begin;
-                $weeks   = $this->weekly->getWeekPairs($begin);
-                $current = zget($weeks, $monday, '');
-                $current = substr($current, 0, -11) . substr($current, -6);
 
-                $PVEV = $this->weekly->getPVEV($projectID, $today);
-                $project->pv = $PVEV['PV'];
-                $project->ev = $PVEV['EV'];
-                $project->ac = $this->weekly->getAC($projectID, $today);
-                $project->sv = $this->weekly->getSV($project->ev, $project->pv);
-                $project->cv = $this->weekly->getCV($project->ev, $project->ac);
-
-                $progress = isset($tasks[$projectID]) ? (($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft)) ? round($tasks[$projectID]->totalConsumed / ($tasks[$projectID]->totalConsumed + $tasks[$projectID]->totalLeft), 3) * 100 : 0 : 0;
-
-                $project->current  = $current;
-                $project->progress = $progress;
-            }
+            if($this->config->cache->enable) $this->cache->set($cacheKey, $projects);
         }
 
         $this->view->projects = $projects;
@@ -1865,6 +1884,8 @@ class block extends control
             $objectCountList += array('feedback' => 'feedbackCount', 'ticket' => 'ticketCount');
         }
 
+        $enableCache = $this->config->cache->enable;
+
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($objectCountList as $objectType => $objectCount)
         {
@@ -2007,8 +2028,19 @@ class block extends control
     {
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 3, 1);
-        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager, 1);
+        $pager    = new pager(0, 3, 1);
+        $cacheKey = __FUNCTION__;
+        if($this->config->cache->enable and $this->cache->has($cacheKey))
+        {
+            $this->app->loadLang('project');
+            $projects = $this->cache->get($cacheKey);
+        }
+        else
+        {
+            $projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager, 1);
+            if($this->config->cache->enable) $this->cache->set($cacheKey, $projects);
+        }
+        $this->view->projects = $projects;
     }
 
     /**

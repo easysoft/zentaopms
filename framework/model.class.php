@@ -88,7 +88,6 @@ class model extends baseModel
      * @access public
      * @return string
      */
-
     public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
     {
         if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);

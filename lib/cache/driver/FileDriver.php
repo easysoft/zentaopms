@@ -51,18 +51,22 @@ class FileDriver implements CacheInterface
         return $this->getPrefix() . DS . md5($key) . '.cache';
     }
 
-    public function get($key, $default = null): mixed
+    public function get($key, $default = null)
     {
         $file = $this->getCacheKey($key);
         if(!file_exists($file)) return $default;
 
         $content = unserialize(file_get_contents($file));
-        if($this->isExpired($content)) return $default;
+        if($this->isExpired($content))
+        {
+            $this->delete($key);
+            return $default;
+        }
 
         return $content['data'];
     }
 
-    public function set($key, $value, $ttl = null): bool
+    public function set($key, $value, $ttl = null)
     {
         $file    = $this->getCacheKey($key);
         $content = serialize($this->generatePayload($value, $ttl));
@@ -72,7 +76,7 @@ class FileDriver implements CacheInterface
         return (bool)$result;
     }
 
-    public function delete($key): bool
+    public function delete($key)
     {
         $file = $this->getCacheKey($key);
         if(file_exists($file))
@@ -89,7 +93,7 @@ class FileDriver implements CacheInterface
         return $this->clearPrefix('');
     }
 
-    public function getMultiple($keys, $default = null): iterable
+    public function getMultiple($keys, $default = null)
     {
         if(!is_array($keys)) throw new InvalidArgumentException('The keys is invalid!');
 
@@ -99,7 +103,7 @@ class FileDriver implements CacheInterface
         return $result;
     }
 
-    public function setMultiple($values, $ttl = null): bool
+    public function setMultiple($values, $ttl = null)
     {
         if(!is_array($values)) throw new InvalidArgumentException('The values is invalid!');
 
@@ -109,7 +113,7 @@ class FileDriver implements CacheInterface
         return true;
     }
 
-    public function deleteMultiple($keys): bool
+    public function deleteMultiple($keys)
     {
         if(!is_array($keys)) throw new InvalidArgumentException('The keys is invalid!');
 
@@ -118,14 +122,22 @@ class FileDriver implements CacheInterface
         return true;
     }
 
-    public function has($key): bool
+    public function has($key)
     {
         $file = $this->getCacheKey($key);
 
-        return file_exists($file);
+        if(!file_exists($file)) return false;
+
+        $content = unserialize(file_get_contents($file));
+        if($this->isExpired($content))
+        {
+            $this->delete($key);
+            return false;
+        }
+        return true;
     }
 
-    public function clearPrefix(string $prefix): bool
+    public function clearPrefix(string $prefix)
     {
         $files = glob($this->getPrefix() . DS . $prefix . '*');
         foreach($files as $file)
