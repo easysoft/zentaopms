@@ -1834,28 +1834,28 @@ class upgradeModel extends model
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('editEstimate')
+                ->andWhere('method')->eq('editWorkhour')
                 ->exec();
             $this->saveLogs($this->dao->get());
             $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
-                ->set('method')->eq('editEstimate')
+                ->set('method')->eq('editWorkhour')
                 ->exec();
             $this->saveLogs($this->dao->get());
 
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('deleteEstimate')
+                ->andWhere('method')->eq('deleteWorkhour')
                 ->exec();
             $this->saveLogs($this->dao->get());
             $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
-                ->set('method')->eq('deleteEstimate')
+                ->set('method')->eq('deleteWorkhour')
                 ->exec();
             $this->saveLogs($this->dao->get());
         }

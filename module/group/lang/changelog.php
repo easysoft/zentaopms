@@ -116,8 +116,8 @@ $lang->changelog['4.0'][] = 'testtask-start';
 $lang->changelog['4.0'][] = 'testtask-close';
 $lang->changelog['4.0'][] = 'action-hideOne';
 $lang->changelog['4.0'][] = 'action-hideAll';
-$lang->changelog['4.0'][] = 'task-editEstimate';
-$lang->changelog['4.0'][] = 'task-deleteEstimate';
+$lang->changelog['4.0'][] = 'task-editWorkhour';
+$lang->changelog['4.0'][] = 'task-deleteWorkhour';
 
 $lang->changelog['4.1'][] = 'todo-batchFinish';
 $lang->changelog['4.1'][] = 'productplan-batchUnlinkStory';

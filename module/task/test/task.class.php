@@ -703,9 +703,9 @@ class taskTest
      * @access public
      * @return array
      */
-    public function deleteEstimateTest($estimateID)
+    public function deleteWorkhourTest($estimateID)
     {
-        $object = $this->objectModel->deleteEstimate($estimateID);
+        $object = $this->objectModel->deleteWorkhour($estimateID);
         unset($_POST);
         if(dao::isError())
         {

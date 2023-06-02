@@ -487,7 +487,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function editEstimate($estimateID)
+    public function editWorkhour($estimateID)
     {
         $estimate = $this->task->getEstimateByID($estimateID);
         if(!empty($_POST))
@@ -502,7 +502,7 @@ class task extends control
             return print(js::locate($url, 'parent'));
         }
 
-        $this->view->title    = $this->lang->task->editEstimate;
+        $this->view->title    = $this->lang->task->editWorkhour;
         $this->view->estimate = $estimate;
         $this->view->task     = $this->task->getById($estimate->objectID);
         $this->display();
@@ -516,22 +516,22 @@ class task extends control
      * @access public
      * @return void
      */
-    public function deleteEstimate($estimateID, $confirm = 'no')
+    public function deleteWorkhour($estimateID, $confirm = 'no')
     {
         $estimate = $this->task->getEstimateByID($estimateID);
         $taskID   = $estimate->objectID;
         $task     = $this->task->getById($taskID);
         if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)
         {
-            return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
+            return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes")));
         }
         elseif($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
         {
-            return print(js::confirm($this->lang->task->confirmDeleteLastEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
+            return print(js::confirm($this->lang->task->confirmDeleteLastEstimate, $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes")));
         }
         else
         {
-            $changes = $this->task->deleteEstimate($estimateID);
+            $changes = $this->task->deleteWorkhour($estimateID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');

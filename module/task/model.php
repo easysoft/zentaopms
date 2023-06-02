@@ -1914,7 +1914,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function deleteEstimate($estimateID)
+    public function deleteWorkhour($estimateID)
     {
         $estimate = $this->getEstimateByID($estimateID);
         $task     = $this->getById($estimate->objectID);

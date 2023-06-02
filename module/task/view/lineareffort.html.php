@@ -96,10 +96,10 @@ ksort($myOrders);
               <td align='center' class='c-actions'>
                 <?php
                 $canOperateEffort = $this->task->canOperateEffort($task, $effort);
-                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'editEstimate' : 'edit', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'editWorkhour' : 'edit', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
                 $deleteDisable = false;
                 if(!$canOperateEffort or ($myLastID[$order] == $effort->id and $effort->left == 0)) $deleteDisable = true;
-                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $deleteDisable ? 'disabled' : '');
+                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteWorkhour' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $deleteDisable ? 'disabled' : '');
                 ?>
               </td>
             </tr>
