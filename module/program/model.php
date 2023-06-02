@@ -638,11 +638,9 @@ class programModel extends model
      */
     public function getProgressList($programIdList = array())
     {
-        $programPairs = $this->getPairs();
-        $projectStats = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
-
+        $programPairs       = $this->getPairs();
         $existProgramIdList = array_intersect($programIdList, array_keys($programPairs));
-        $existProjectIdList = array_intersect($programIdList, array_keys($projectStats));
+        $projectStats       = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
 
         $totalProgress = array();
         $projectCount  = array();
@@ -656,7 +654,7 @@ class programModel extends model
             $userPRJCount[$programID]  = 0;
             $progressList[$programID]  = 0;
 
-            foreach($existProjectIdList as $projectID)
+            foreach($projectStats as $projectID => $project)
             {
                 if(strpos($projectStats[$projectID]->path, ",{$programID},") === false) continue;
 
@@ -673,6 +671,8 @@ class programModel extends model
         }
 
         /* Add project progress. */
+        /* First calculate the overall progress of the program, and then filter the unqualified projects. */
+        $existProjectIdList = array_intersect($programIdList, array_keys($projectStats));
         foreach($existProjectIdList as $projectID) $progressList[$projectID] = $projectStats[$projectID]->progress;
 
         return $progressList;
