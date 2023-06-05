@@ -910,20 +910,8 @@ class treeModel extends model
             $extra = array();
             $extra['branchID'] = $branch;
         }
-        $linkHtml = call_user_func($userFunc, $type, $module, $extra);
 
-        if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
-        {
-            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
-            $treeMenu[$module->parent] .= "<li class='closed'>$linkHtml";
-            $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
-        }
-        else
-        {
-            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = "";
-            $treeMenu[$module->parent] .= "<li>$linkHtml\n";
-        }
-        $treeMenu[$module->parent] .= "</li>\n";
+        return call_user_func($userFunc, $type, $module, $parent, $extra);
     }
 
     /**
