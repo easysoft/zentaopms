@@ -596,7 +596,7 @@ class taskTest
     {
         $object = $this->objectModel->getListByStory($storyID, $executionID, $projectID);
 
-        if(dao::isError()) return  dao::getError();
+        if(dao::isError()) return dao::getError();
         return $object;
     }
 
