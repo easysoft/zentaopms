@@ -73,5 +73,4 @@ if(!$app->setParams()) return;
 $common->checkPriv();
 $common->checkIframe();
 
-/* Flush the buffer. */
 echo $app->outputPage();
