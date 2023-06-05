@@ -87,7 +87,7 @@ if(!empty($members) && $task->mode == 'linear')
           <td align='center' class='c-actions'>
             <?php
             $canOperateEffort = $this->task->canOperateEffort($task, $effort);
-            common::printIcon('task', 'editWorkhour', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+            common::printIcon('task', 'editEffort', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
             common::printIcon('task', 'deleteWorkhour', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $canOperateEffort ? '' : 'disabled');
             ?>
           </td>

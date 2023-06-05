@@ -914,7 +914,7 @@ $lang->resource->task->view               = 'view';
 $lang->resource->task->export             = 'exportAction';
 $lang->resource->task->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->task->recordWorkhour     = 'recordWorkhourAction';
-$lang->resource->task->editWorkhour       = 'editWorkhour';
+$lang->resource->task->editEffort       = 'editEffort';
 $lang->resource->task->deleteWorkhour     = 'deleteWorkhour';
 $lang->resource->task->report             = 'reportChart';
 
@@ -937,7 +937,7 @@ $lang->task->methodOrder[80]  = 'view';
 $lang->task->methodOrder[85]  = 'export';
 $lang->task->methodOrder[90]  = 'confirmStoryChange';
 $lang->task->methodOrder[95]  = 'recordWorkhour';
-$lang->task->methodOrder[100] = 'editWorkhour';
+$lang->task->methodOrder[100] = 'editEffort';
 $lang->task->methodOrder[105] = 'deleteWorkhour';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';

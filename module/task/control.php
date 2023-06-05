@@ -481,28 +481,27 @@ class task extends control
     }
 
     /**
-     * Edit consumed and estimate.
+     * Edit a effort.
      *
-     * @param  int    $estimateID
+     * @param  int    $effortID
      * @access public
      * @return void
      */
-    public function editWorkhour($workhourID)
+    public function editEffort(int $effortID)
     {
-        $workhour = $this->task->getEstimateByID($workhourID);
+        $workhour = $this->task->getEffortByID($workhourID);
         if(!empty($_POST))
         {
-            $changes = $this->task->updateEstimate($estimateID);
+            $changes = $this->task->updateWorkhour($estimateID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate', $this->post->work);
+            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditWorkhour', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            $url = $this->session->estimateList ? $this->session->estimateList : inlink('recordWorkhour', "taskID={$estimate->task}");
-            return print(js::locate($url, 'parent'));
+            return print(js::locate(inlink('recordWorkhour', "taskID={$workhour->task}"), 'parent'));
         }
 
-        $this->view->title    = $this->lang->task->editWorkhour;
+        $this->view->title    = $this->lang->task->editEffort;
         $this->view->workhour = $workhour;
         $this->view->task     = $this->task->getById($workhour->objectID);
         $this->display();
@@ -518,7 +517,7 @@ class task extends control
      */
     public function deleteWorkhour($estimateID, $confirm = 'no')
     {
-        $estimate = $this->task->getEstimateByID($estimateID);
+        $estimate = $this->task->getEffortByID($estimateID);
         $taskID   = $estimate->objectID;
         $task     = $this->task->getById($taskID);
         if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)

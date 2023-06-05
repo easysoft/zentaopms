@@ -15,7 +15,7 @@ $readonly = (!empty($task->team) and $work->left == 0);
 
 formPanel
 (
-    set::title($lang->task->editWorkhour),
+    set::title($lang->task->editEffort),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
     set::shadow(!isonlybody()),

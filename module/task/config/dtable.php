@@ -203,11 +203,11 @@ $config->task->effortTable->fieldList['actions']['width']    = '100';
 $config->task->effortTable->fieldList['actions']['type']     = 'actions';
 $config->task->effortTable->fieldList['actions']['sortType'] = false;
 
-$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['icon']  = 'edit';
-$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['hint']  = $lang->task->editWorkhour;
-$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['url']   = helper::createLink('task', 'editWorkhour', 'taskID={id}', '', true);
-$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['order'] = 5;
-$config->task->effortTable->fieldList['actions']['actionsMap']['editWorkhour']['show']  = 'clickable';
+$config->task->effortTable->fieldList['actions']['actionsMap']['editEffort']['icon']  = 'edit';
+$config->task->effortTable->fieldList['actions']['actionsMap']['editEffort']['hint']  = $lang->task->editEffort;
+$config->task->effortTable->fieldList['actions']['actionsMap']['editEffort']['url']   = helper::createLink('task', 'editEffort', 'taskID={id}', '', true);
+$config->task->effortTable->fieldList['actions']['actionsMap']['editEffort']['order'] = 5;
+$config->task->effortTable->fieldList['actions']['actionsMap']['editEffort']['show']  = 'clickable';
 
 $config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['icon']  = 'trash';
 $config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['hint']  = $lang->task->deleteWorkhour;

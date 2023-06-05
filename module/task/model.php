@@ -1767,13 +1767,13 @@ class taskModel extends model
 
     /**
      * 根据日志ID获取日志信息和是否最后一次日志。
-     * Get estimate data and check last by id.
+     * Get effort data and check last by id.
      *
      * @param  int    $effortID
      * @access public
      * @return false|object
      */
-    public function getEstimateByID(int $effortID): false|object
+    public function getEffortByID(int $effortID): false|object
     {
         $estimate = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('id')->eq($effortID)

@@ -1,6 +1,6 @@
 <?php
 /**
- * The editWorkhour view of task module of ZenTaoPMS.
+ * The editEffort view of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -17,7 +17,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block mw-600px'>
     <div class='main-header'>
-      <h2><?php echo $lang->task->editWorkhour;?></h2>
+      <h2><?php echo $lang->task->editEffort;?></h2>
     </div>
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
