@@ -417,6 +417,7 @@ class baseEntry
      */
     public function setPost($key, $value)
     {
+        if(in_array($key, array('desc', 'spec', 'verify', 'steps'))) $value = htmlspecialchars($value);
         $_POST[$key] = $value;
     }
 
