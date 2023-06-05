@@ -74,17 +74,13 @@ sidebar
 );
 
 /* zin: Define the dtable in main content. */
-jsVar('langSummary', $lang->project->summary);
 dtable
 (
-    set::className('shadow rounded'),
     set::cols(array_values($config->project->dtable->fieldList)),
     set::data($projectStats),
-    set::plugins(array("checkable")),
     set::checkable(true),
     set::sortLink(helper::createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
 );
 
 render();

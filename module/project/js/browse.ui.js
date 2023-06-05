@@ -1,10 +1,3 @@
-window.footerGenerator = function()
-{
-    const rows = this.layout.allRows.filter((x) => x.data.type === "project");
-    const statistic = langSummary.replace('%s', rows.length);
-    return [{children: statistic, className: "text-dark"}, "flex", "pager"];
-}
-
 window.programMenuOnClick = function(data, url)
 {
     location.href = url.replace('%d', data.item.key);
