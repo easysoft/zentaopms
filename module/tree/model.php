@@ -440,13 +440,13 @@ class treeModel extends model
         $executionModules = array();
         if($branch and empty($projectID))
         {
-            $branchName = $this->branch->getById($branch);
+            $branchName = $this->branch->getByID($branch);
             $branches   = array($branch => $branchName);
             $extra      = $userFunc[1] == 'createTestTaskLink' ? $extra : array('rootID' => $rootID, 'branch' => $branch);
         }
 
         $manage  = $userFunc[1] == 'createManageLink' ? true : false;
-        $product = $this->loadModel('product')->getById($rootID);
+        $product = $this->loadModel('product')->getByID($rootID);
 
         $onlyGetLinked = ($projectID and $this->config->vision != 'lite');
         if(strpos('story|bug|case', $type) !== false and $branch === 'all' and empty($projectID))
