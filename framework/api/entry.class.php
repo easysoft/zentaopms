@@ -417,7 +417,6 @@ class baseEntry
      */
     public function setPost($key, $value)
     {
-        if(in_array($key, array('desc', 'spec', 'verify', 'steps'))) $value = htmlspecialchars($value);
         $_POST[$key] = $value;
     }
 
@@ -450,6 +449,12 @@ class baseEntry
             }
 
             $this->setPost($field, $value);
+        }
+
+        /* Use htmlspecialcharts for rich text fields. */
+        foreach($fields as $field)
+        {
+            if(in_array($field, array('desc', 'spec', 'verify', 'steps'))) $_POST[$field] = htmlspecialchars($_POST[$field]);
         }
     }
 
