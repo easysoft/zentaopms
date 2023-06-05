@@ -32,11 +32,9 @@ class upgradeModel extends model
      *
      * @param  mixed  $openVersion
      * @param  string $fromEdition open|pro|biz|max
-     * @param  string $toEdition   open|pro|biz|max
-     * @access public
      * @return array
      */
-    public function getVersionsToUpdate($openVersion, $fromEdition, $toEdition)
+    public function getVersionsToUpdate($openVersion, $fromEdition)
     {
         $versions = array();
 
@@ -47,23 +45,23 @@ class upgradeModel extends model
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
             $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
         }
-        if($fromEdition == 'open' and $toEdition == 'open') return $versions;
+        if($fromEdition == 'open') return $versions;
 
-        /* Update pro sql if fromEdtion is open|pro and toEdition is pro. */
+        /* Update pro sql from pro|biz|max. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
         }
-         if(in_array($fromEdition, array('open', 'pro')) and $toEdition == 'pro') return $versions;
+        if($fromEdition == 'pro') return $versions;
 
-        /* Update biz sql if fromEdtion is open|pro|biz and toEdition is biz. */
+        /* Update biz sql from biz|max. */
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
         }
-        if(in_array($fromEdition, array('open', 'pro', 'biz')) and $toEdition == 'biz') return $versions;
+        if($fromEdition == 'biz') return $versions;
 
-        /* Update max sql if fromEdtion is open|pro|biz|max and toEdition is max. */
+        /* Update max sql only from max. */
         foreach($this->config->upgrade->maxVersion as $max => $open)
         {
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
@@ -86,14 +84,13 @@ class upgradeModel extends model
         if(!isset($this->app->user)) $this->loadModel('user')->su();
 
         $fromEdition = $this->getEditionByVersion($fromVersion);
-        $toEdition   = $this->getEditionByVersion($this->config->version);
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
 
         /* Execute. */
         $fromOpenVersion = $this->getOpenVersion($fromVersion);
-        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition, $toEdition);
+        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
