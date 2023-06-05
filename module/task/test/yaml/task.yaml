@@ -2,6 +2,8 @@ title: zt_task
 author: Mengyi Liu
 version: "1.0"
 fields:
+  - field: id
+    range: 1-100
   - field: execution
     range: 3
   - field: module
