@@ -190,21 +190,6 @@ class taskTao extends taskModel
             $data->assignedTo   = $task->openedBy;
         }
 
-        if(!empty($task->team))
-        {
-            $currentTeam = $this->getTeamByAccount($task->team, $oldEffort->account, array('order' => $oldEffort->order));
-            if($currentTeam)
-            {
-                $newTeamInfo = new stdclass();
-                $newTeamInfo->consumed = $currentTeam->consumed + $effort->consumed - $oldEffort->consumed;
-                if($currentTeam->status != 'done') $newTeamInfo->left = $left;
-                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
-                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
-
-                $data = $this->computeMultipleHours($task, $data);
-            }
-        }
-
         return $data;
     }
 
