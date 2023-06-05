@@ -68,16 +68,16 @@ class treeModel extends model
     /**
      * Build the sql query.
      *
-     * @param  int        $rootID
-     * @param  string     $type
-     * @param  int        $startModule
-     * @param  string|int $branch
-     * @param  string     $param
-     * @param  int        $grade
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  int    $startModule
+     * @param  string $branch
+     * @param  string $param
+     * @param  int    $grade
      * @access public
-     * @return void
+     * @return string
      */
-    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all', $param = 'nodeleted', $grade = 0)
+    public function buildMenuQuery(int $rootID, string $type, int $startModule = 0, string $branch = 'all', string $param = 'nodeleted', int $grade = 0): string
     {
         /* Set the start module. */
         $startModulePath = '';
