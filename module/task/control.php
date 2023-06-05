@@ -489,21 +489,21 @@ class task extends control
      */
     public function editEffort(int $effortID)
     {
-        $workhour = $this->task->getEffortByID($workhourID);
+        $effort = $this->task->getEffortByID($effortID);
         if(!empty($_POST))
         {
-            $changes = $this->task->updateWorkhour($estimateID);
+            $changes = $this->task->updateEffort($effortID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditWorkhour', $this->post->work);
+            $actionID = $this->loadModel('action')->create('task', $effort->task, 'EditEffort', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            return print(js::locate(inlink('recordWorkhour', "taskID={$workhour->task}"), 'parent'));
+            return print(js::locate(inlink('recordWorkhour', "taskID={$effort->task}"), 'parent'));
         }
 
-        $this->view->title    = $this->lang->task->editEffort;
-        $this->view->workhour = $workhour;
-        $this->view->task     = $this->task->getById($workhour->objectID);
+        $this->view->title  = $this->lang->task->editEffort;
+        $this->view->effort = $effort;
+        $this->view->task   = $this->task->getById($effort->objectID);
         $this->display();
     }
 
