@@ -177,7 +177,6 @@ if($canBatchAction)
 
 jsVar('orderBy',        $orderBy);
 jsVar('sortLink',       helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"));
-jsVar('taskSummary',    $lang->execution->taskSummary);
 jsVar('pageSummary',    $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
 

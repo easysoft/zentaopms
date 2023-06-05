@@ -10,7 +10,6 @@ $(document).on('click', '.batch-btn', function()
     postAndLoadPage(url, form);
 });
 
-
 /**
  * 计算表格任务信息的统计。
  * Set task summary for table footer.
