@@ -11,11 +11,19 @@ declare(strict_types=1);
 namespace zin;
 
 //$this->testcase->buildOperateMenu(null, 'browse');
+$config->testtask->dtable->fieldList['owner']['userMap'] = $users;
 
 $cols = array_values($config->testtask->dtable->fieldList);
 $data = array_values($tasks);
 
-featureBar();
+$scope  = $this->session->testTaskVersionScope;
+$status = $this->session->testTaskVersionStatus;
+featureBar
+(
+    set::current($status),
+    set::linkParams("productID={$productID}&branch=$branch&type={$scope},{key}")
+);
+
 toolbar
 (
     btngroup
@@ -30,10 +38,13 @@ toolbar
     )
 );
 
+$footerHTML = $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
 dtable
 (
     set::cols($cols),
     set::data($data),
+    set::fixedLeftWidth('0.44'),
+    set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
 );
 

@@ -127,6 +127,7 @@ class testtask extends control
         $this->view->beginTime   = $beginTime;
         $this->view->endTime     = $endTime;
         $this->view->product     = $product;
+        $this->view->type        = $type;
 
         $this->display();
     }
