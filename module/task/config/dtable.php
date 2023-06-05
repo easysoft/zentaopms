@@ -167,60 +167,6 @@ foreach($config->task->dtable->operateList as $operate)
     $config->task->dtable->fieldList['actions']['actionsMap'][$operate] = $settings;
 }
 
-$config->task->dtable->fieldList['actions']['title']  = $lang->actions;
-$config->task->dtable->fieldList['actions']['name']   = 'actions';
-$config->task->dtable->fieldList['actions']['fixed']  = 'right';
-$config->task->dtable->fieldList['actions']['width']  = '180';
-$config->task->dtable->fieldList['actions']['type']   = 'actions';
-
-$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['icon']  = 'search';
-$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['hint']  = $lang->task->activate;
-$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['url']   = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
-$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['order'] = 5;
-$config->task->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['show']  = 'clickable';
-
-$config->task->dtable->fieldList['actions']['actionsMap']['start']['icon']        = 'play';
-$config->task->dtable->fieldList['actions']['actionsMap']['start']['hint']        = $lang->task->start;
-$config->task->dtable->fieldList['actions']['actionsMap']['start']['url']         = helper::createLink('task', 'start', 'taskID={id}', '', true);
-$config->task->dtable->fieldList['actions']['actionsMap']['start']['data-toggle'] = 'modal';
-$config->task->dtable->fieldList['actions']['actionsMap']['start']['order']       = 10;
-$config->task->dtable->fieldList['actions']['actionsMap']['start']['show']        = 'default';
-
-$config->task->dtable->fieldList['actions']['actionsMap']['restart']['icon']        = 'icon-restart';
-$config->task->dtable->fieldList['actions']['actionsMap']['restart']['hint']        = $lang->task->restart;
-$config->task->dtable->fieldList['actions']['actionsMap']['restart']['url']         = helper::createLink('task', 'restart', 'taskID={id}', '', true);
-$config->task->dtable->fieldList['actions']['actionsMap']['restart']['data-toggle'] = 'modal';
-$config->task->dtable->fieldList['actions']['actionsMap']['restart']['order']       = 10;
-$config->task->dtable->fieldList['actions']['actionsMap']['restart']['show']        = 'clickable';
-
-$config->task->dtable->fieldList['actions']['actionsMap']['finish']['icon']        = 'checked';
-$config->task->dtable->fieldList['actions']['actionsMap']['finish']['hint']        = $lang->task->finish;
-$config->task->dtable->fieldList['actions']['actionsMap']['finish']['url']         = helper::createLink('task', 'finish', 'taskID={id}', '', true);
-$config->task->dtable->fieldList['actions']['actionsMap']['finish']['data-toggle'] = 'modal';
-$config->task->dtable->fieldList['actions']['actionsMap']['finish']['order']       = 15;
-
-$config->task->dtable->fieldList['actions']['actionsMap']['close']['icon']        = 'off';
-$config->task->dtable->fieldList['actions']['actionsMap']['close']['hint']        = $lang->task->close;
-$config->task->dtable->fieldList['actions']['actionsMap']['close']['url']         = helper::createLink('task', 'close', 'taskID={id}', '', true);
-$config->task->dtable->fieldList['actions']['actionsMap']['close']['data-toggle'] = 'modal';
-$config->task->dtable->fieldList['actions']['actionsMap']['close']['order']       = 20;
-
-$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['icon']        = 'time';
-$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['hint']        = $lang->task->record;
-$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']         = helper::createLink('task', 'recordWorkhour', 'taskID={id}', '', true);
-$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['data-toggle'] = 'modal';
-$config->task->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['order']       = 25;
-
-$config->task->dtable->fieldList['actions']['actionsMap']['edit']['icon']  = 'edit';
-$config->task->dtable->fieldList['actions']['actionsMap']['edit']['hint']  = $lang->task->edit;
-$config->task->dtable->fieldList['actions']['actionsMap']['edit']['url']   = helper::createLink('task', 'edit', 'taskID={id}');
-$config->task->dtable->fieldList['actions']['actionsMap']['edit']['order'] = 30;
-
-$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon']  = 'split';
-$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint']  = $lang->task->batchCreate;
-$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['url']   = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
-$config->task->dtable->fieldList['actions']['actionsMap']['batchCreate']['order'] = 35;
-
 /* Record effort page. */
 $config->task->effortTable = new stdclass();
 
