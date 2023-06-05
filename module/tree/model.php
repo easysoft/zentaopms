@@ -424,14 +424,13 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  string $type
      * @param  int    $startModule
-     * @param  string $userFunc     the function used to create link
-     * @param  string $extra        extra params
+     * @param  array  $userFunc     the function used to create link
+     * @param  array  $extra        extra params
      * @param  string $branch       product branch
-     * @param  string $extraParams  extra params
      * @access public
-     * @return string
+     * @return array
      */
-    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc = '', $extra = '', $branch = 0, $extraParams = '')
+    public function getTreeMenu(int $rootID, string $type = 'root', int $startModule = 0, array $userFunc = array(), array $extra = array(), string $branch = '0'): array
     {
         if($type == 'line') $rootID = 0;
 
