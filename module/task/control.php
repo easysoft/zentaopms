@@ -492,13 +492,14 @@ class task extends control
         $effort = $this->task->getEffortByID($effortID);
         if(!empty($_POST))
         {
-            $changes = $this->task->updateEffort($effortID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $formData = form::data($this->config->task->form->editEffort)->add('id', $effortID)->get();
+            $changes  = $this->task->updateEffort($formData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('task', $effort->task, 'EditEffort', $this->post->work);
+            $actionID = $this->loadModel('action')->create('task', $effort->objectID, 'EditEffort', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            return print(js::locate(inlink('recordWorkhour', "taskID={$effort->task}"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('recordWorkhour', "taskID={$effort->objectID}")));
         }
 
         $this->view->title  = $this->lang->task->editEffort;

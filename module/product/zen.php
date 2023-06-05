@@ -968,9 +968,9 @@ class productZen extends product
      * @param  string    $storyType
      * @param  string    $browseType
      * @access protected
-     * @return string
+     * @return array|string
      */
-    protected function getModuleTree(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): string
+    protected function getModuleTree(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): array|string
     {
         /* Set moduleTree. */
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
@@ -983,7 +983,7 @@ class productZen extends product
             $branch = is_bool($this->cookie->treeBranch) && empty($this->cookie->treeBranch) ? 'all' : $this->cookie->treeBranch;
         }
 
-        /* If in project story and not chose product, get project story mdoules. */
+        /* If invoked by projectstory module and not choose product, then get the modules of project story. */
         if(!isset($this->tree)) $this->loadModel('tree');
         if(empty($productID) && $this->app->rawModule == 'projectstory')
         {
@@ -994,7 +994,8 @@ class productZen extends product
         $userFunc = array('treeModel', $createModuleLink);
         $extra    = array('projectID' => $projectID, 'productID' => $productID);
 
-        return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType");
+        /* return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType"); */
+        return $this->product->getModuleTree($productID, $branch, $userFunc, $extra);
     }
 
     /**

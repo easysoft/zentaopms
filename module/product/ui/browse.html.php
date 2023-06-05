@@ -72,6 +72,15 @@ foreach($stories as $story)
 
 data('storyBrowseType', $storyBrowseType);
 
+sidebar
+(
+    moduleMenu(set(array(
+        'modules'   => $moduleTree,
+        'activeKey' => $moduleID,
+        'closeLink' => createLink('execution', 'task')
+    )))
+);
+
 featureBar
 (
     set::current($browseType),

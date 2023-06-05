@@ -1,15 +1,17 @@
 title: zt_task
-author: Mengyi Liu
+author: Shujie Tian
 version: "1.0"
 fields:
   - field: id
     range: 1-100
+  - field: project
+    range: 1
   - field: execution
-    range: 3
+    range: 3{3},4{3},5{6}
   - field: module
     range: 0{3},1{3},2{3},3{3}
   - field: story
-    range: 1,0{9}
+    range: 1{2},2{2},0{8}
   - field: consumed
     range: 0,2{4},0{3},3
   - field: parent

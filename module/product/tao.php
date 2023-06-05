@@ -494,12 +494,12 @@ class productTao extends productModel
      * @param  string|int $branch
      * @param  string     $currentModule
      * @param  string     $currentMethod
-     * @param  string     $extra
+     * @param  string|int $extra
      * @param  bool       $withBranch
      * @access protected
      * @return string
      */
-    protected function getBranchDropMenu4Select(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = '', bool $withBranch = true): string
+    protected function getBranchDropMenu4Select(object $product, string|int $branch, string $currentModule, string $currentMethod, string|int $extra = '', bool $withBranch = true): string
     {
         $showBranch = (isset($product->type) and $product->type != 'normal' && $withBranch && $currentModule != 'programplan');
         if(!$showBranch)
@@ -1218,5 +1218,32 @@ class productTao extends productModel
         }
 
         return $executionPairs;
+    }
+
+    /**
+     * 获取需求关联所有模块的树形结构数组。
+     * Get the tree structure of stories releated modules.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  array     $userFunc
+     * @param  array     $extra
+     * @access protected
+     * @return array
+     */
+    protected function getModuleTree($productID, $branch, $userFunc, $extra): array
+    {
+        $moduleTree = array();
+        $extra['branchID'] = $branch;
+
+        $this->loadModel('tree');
+        $stmt = $this->dbh->query($this->tree->buildMenuQuery($productID, 'story', 0, $branch));
+        while($module = $stmt->fetch())
+        {
+            $module->url  = call_user_func_array(array($this->tree, $userFunc[1]), array('story', $module, $extra));
+            $moduleTree[] = $module;
+        }
+
+        return $moduleTree;
     }
 }

@@ -13,7 +13,6 @@ namespace ZenTao\Cache\Driver;
 
 use ZenTao\Cache\SimpleCache\CacheInterface;
 use ZenTao\Cache\SimpleCache\InvalidArgumentException;
-use ZenTao\Cache\SimpleCache\CacheException;
 
 class FileDriver implements CacheInterface
 {
@@ -39,11 +38,7 @@ class FileDriver implements CacheInterface
         $this->namespace       = $namespace;
         $this->defaultLifetime = $defaultLifetime;
         $this->directory       = $directory;
-        if(!is_dir($this->getPrefix()))
-        {
-            $results = mkdir($this->getPrefix(), 0777, true);
-            if(!$results) throw new CacheException('Has no permission to create cache directory!');
-        }
+        if(!is_dir($this->getPrefix()) && is_writable($this->directory)) mkdir($this->getPrefix(), 0777, true);
     }
 
     public function getCacheKey(string $key)

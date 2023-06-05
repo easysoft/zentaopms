@@ -985,7 +985,7 @@ class project extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
         $bugs = $this->bug->processBuildForBugs($bugs);
-        $bugs = $this->bug->checkDelayedBugs($bugs);
+        $bugs = $this->bug->batchAppendDelayedDays($bugs);
 
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();

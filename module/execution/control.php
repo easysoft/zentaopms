@@ -1018,7 +1018,7 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $type, $param, $sort, '', $pager);
-        $bugs  = $this->bug->checkDelayedBugs($bugs);
+        $bugs  = $this->bug->batchAppendDelayedDays($bugs);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -1084,7 +1084,7 @@ class execution extends control
         }
         else
         {
-            $moduleTree = '';
+            $moduleTree = array();
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
