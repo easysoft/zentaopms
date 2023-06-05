@@ -2279,6 +2279,7 @@ class baseRouter
 
         if($cache->has($cacheKey))
         {
+            if(!headers_sent()) header('X-Zt-Hit-Cache: 1');
             $content = $cache->get($cacheKey);
         }
         else
