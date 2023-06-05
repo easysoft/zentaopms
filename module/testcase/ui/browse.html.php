@@ -10,6 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$closeLink = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+sidebar
+(
+    moduleMenu(set(array
+    (
+        'modules'   => $moduleTree,
+        'activeKey' => $moduleID,
+        'closeLink' => $closeLink
+    )))
+);
+
 $this->testcase->buildOperateMenu(null, 'browse');
 
 foreach($cases as $case)
