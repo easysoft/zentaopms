@@ -203,7 +203,7 @@ class release extends control
             ->andWhere('t1.deleted')->eq(0)
             ->groupBy('t1.id')
             ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager)
+            ->page($storyPager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
