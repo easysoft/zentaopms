@@ -2495,8 +2495,6 @@ class taskModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::hasPriv('task', $action)) return false;
-
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if($task->parent < 0 && !in_array($action, array('edit', 'batchcreate'))) return false;
 

@@ -460,6 +460,8 @@ function initTableData($items, $actionConfig, $checkModel)
         {
             foreach($configs as $actionName => $config)
             {
+                if(!common::hasPriv('task', $actionName)) continue;
+
                 $show = zget($config, 'show', 'default');
                 if($checkModel->isClickable($item, $actionName))
                 {
