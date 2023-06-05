@@ -89,6 +89,7 @@ class featureBar extends wg
                     'type'   => 'dropdown',
                     'caret'  => 'down',
                     'items'  => $subItems,
+                    'badge'  => $isActive && !empty($recTotal) ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
                     'props'  => array('data-id' => $item->name)
                 );
 
