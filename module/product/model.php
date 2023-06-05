@@ -65,8 +65,8 @@ class productModel extends model
         if($this->app->tab == 'project' and stripos(',zeroCase,browseUnits,groupCase,', ",$currentMethod,") !== false) $isQaModule = true;
         if($isQaModule)
         {
-            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : $this->session->project;
-            if($this->app->tab == 'execution') $extra = $this->session->execution;
+            if($this->app->tab == 'project')   $extra = strpos(',testcase,groupCase,zeroCase,', ",$currentMethod,") !== false ? $extra : (string)$this->session->project;
+            if($this->app->tab == 'execution') $extra = (string)$this->session->execution;
         }
 
         /* 查询产品数据。*/

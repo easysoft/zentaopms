@@ -204,6 +204,7 @@ menu
 
 dtable
 (
+    set::userMap($users),
     set::cols($cols),
     set::data($data),
     set::footPager(usePager()),

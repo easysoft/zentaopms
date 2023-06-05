@@ -56,7 +56,6 @@ $config->bug->dtable->fieldList['plan']['width'] = 120;
 $config->bug->dtable->fieldList['openedBy']['name']    = 'openedBy';
 $config->bug->dtable->fieldList['openedBy']['title']   = $lang->bug->abbr->openedBy;
 $config->bug->dtable->fieldList['openedBy']['type']    = 'user';
-$config->bug->dtable->fieldList['openedBy']['userMap'] = array();
 
 $config->bug->dtable->fieldList['openedDate']['name']  = 'openedDate';
 $config->bug->dtable->fieldList['openedDate']['title'] = $lang->bug->abbr->openedDate;
@@ -72,7 +71,7 @@ $config->bug->dtable->fieldList['confirmed']['type']  = 'category';
 
 $config->bug->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->bug->dtable->fieldList['assignedTo']['title']       = $lang->bug->assignedTo;
-$config->bug->dtable->fieldList['assignedTo']['type']        = 'assign';
+$config->bug->dtable->fieldList['assignedTo']['type']        = 'user';
 $config->bug->dtable->fieldList['assignedTo']['assignLink']  = helper::createLink('bug', 'assignTo', 'bugID={id}');
 
 $config->bug->dtable->fieldList['assignedDate']['name']  = 'assignedDate';
