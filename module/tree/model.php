@@ -12,6 +12,14 @@
 class treeModel extends model
 {
     /**
+     * The global moduleID.
+     *
+     * @var    int
+     * @access private
+     */
+    private $moduleID = 0;
+
+    /**
      * Get module by ID.
      *
      * @param  int    $moduleID
