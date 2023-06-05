@@ -633,9 +633,9 @@ class taskTest
      * @access public
      * @return false|object
      */
-    public function getEstimateByIdTest(int $estimateID): false|object
+    public function getEffortByIDTest(int $estimateID): false|object
     {
-        $object = $this->objectModel->getEstimateByID($estimateID);
+        $object = $this->objectModel->getEffortByID($estimateID);
         if(!$object)
         {
             return false;
@@ -1869,7 +1869,7 @@ class taskTest
         if(dao::isError()) return dao::getError();
 
         $lastTaskID = $this->objectModel->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('Opened')->orderBy('`date` desc')->fetch('objectID');
-        return $this->objectModel->getByID($lastTaskID);
+        return $this->objectModel->getByID((int)$lastTaskID);
     }
 
     /**
