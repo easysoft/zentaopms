@@ -70,6 +70,8 @@ $lang->testreport->bugStageList['generated'] = 'Generated Bugs';
 $lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
 $lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
+$lang->testreport->featureBar['browse']['all'] = 'all';
+
 $lang->testreport->caseSummary     = ' <strong>%s</strong> Fälle in Summe : <strong>%s</strong> ausgeführt, <strong>%s</strong> Ergebnisse, <strong>%s</strong> fehlgeschlagen.';
 $lang->testreport->buildSummary    = 'Getsetetes <strong>%s</strong> Build.';
 $lang->testreport->confirmDelete   = 'Möchten Sie diesen Bericht löschen?';

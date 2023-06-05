@@ -25,6 +25,7 @@ $tableData = initTableData($reports, $config->testreport->dtable->fieldList['act
 $cols = array_values($config->testreport->dtable->fieldList);
 $data = array_values($tableData);
 
+if($app->rawModule != 'testreport' && $app->rawMethod != 'browse' && !isset($lang->{$app->rawModule}->featureBar["{$app->rawMethod}"])) $lang->{$app->rawModule}->featureBar["{$app->rawMethod}"] = $lang->testreport->featureBar['browse'];
 featureBar
 (
     set::current('all'),
