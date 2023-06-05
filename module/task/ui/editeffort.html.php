@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The start view file of task module of ZenTaoPMS.
+ * The edit effort view file of task module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('confirmRecord', $lang->task->confirmRecord);
 $readonly = (!empty($task->team) and $work->left == 0);
 
 formPanel
@@ -35,7 +36,8 @@ formPanel
         set::width('1/3'),
         set::label($lang->task->date),
         set::name('date'),
-        set::value($workhour->date)
+        set::control('date'),
+        set::value($effort->date)
     ),
     formGroup
     (
@@ -46,7 +48,7 @@ formPanel
             input
             (
                 set::name('consumed'),
-                set::value($workhour->consumed),
+                set::value($effort->consumed),
             ),
             to::suffix($lang->task->suffixHour),
             set::suffixWidth(20),
@@ -61,7 +63,7 @@ formPanel
             input
             (
                 set::name('left'),
-                set::value($workhour->left),
+                set::value($effort->left),
                 set::readonly($readonly),
             ),
             to::suffix($lang->task->suffixHour),
