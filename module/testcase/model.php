@@ -2609,7 +2609,7 @@ class testcaseModel extends model
      * @param  object $case
      * @param  string $type
      * @access public
-     * @return string
+     * @return array
      */
     public function buildOperateMenu(object $case = null, string $type = 'view'): array
     {

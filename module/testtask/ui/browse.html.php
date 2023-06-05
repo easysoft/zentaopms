@@ -10,7 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
-//$this->testcase->buildOperateMenu(null, 'browse');
+$this->testtask->buildOperateMenu(null, 'browse');
+foreach($tasks as $task)
+{
+    $actions = array();
+    foreach($this->config->testtask->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
+    {
+        $isClickable = $this->testtask->isClickable($task, $actionCode);
+        $actions[]   = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
+    }
+    $task->actions = $actions;
+}
+
 $config->testtask->dtable->fieldList['owner']['userMap'] = $users;
 
 $cols = array_values($config->testtask->dtable->fieldList);

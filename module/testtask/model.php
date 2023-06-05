@@ -2367,78 +2367,44 @@ class testtaskModel extends model
     }
 
     /**
-     * Build test task menu.
+     * 构造详情页或列表页需要的操作菜单。
+     * Build action menu.
      *
      * @param  object $task
      * @param  string $type
      * @access public
-     * @return string
+     * @return array
      */
-    public function buildOperateMenu($task, $type = 'view')
+    public function buildOperateMenu(object $task = null, string $type = 'view'): array
     {
-        $function = 'buildOperate' . ucfirst($type) . 'Menu';
-        return $this->$function($task);
-    }
+        $params = $task ? "taskID={$task->id}" : 'taskID={id}';
 
-    /**
-     * Build test task view menu.
-     *
-     * @param  object $task
-     * @access public
-     * @return string
-     */
-    public function buildOperateViewMenu($task)
-    {
-        if($task->deleted) return '';
+        $actions = array();
+        $actions['start']    = array('icon' => 'play',     'text' => $this->lang->testtask->start,      'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
+        $actions['close']    = array('icon' => 'off',      'text' => $this->lang->testtask->close,      'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
+        $actions['block']    = array('icon' => 'pause',    'text' => $this->lang->testtask->block,      'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
+        $actions['activate'] = array('icon' => 'magic',    'text' => $this->lang->testtask->view,       'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
+        $actions['cases']    = array('icon' => 'sitemap',  'text' => $this->lang->testtask->cases,      'url' => helper::createLink('testtask',   'cases',    $params));
+        $actions['linkCase'] = array('icon' => 'link',     'text' => $this->lang->testtask->linkCase,   'url' => helper::createLink('testtask',   'linkCase', "{$params}&type=all&param=myQueryID"));
+        $actions['report']   = array('icon' => 'summary',  'text' => $this->lang->testtask->testreport, 'url' => helper::createLink('testreport', 'browse',   "objectID={$task->product}&objectType=product&extra={$task->id}"));
+        $actions['view']     = array('icon' => 'list-alt', 'text' => $this->lang->testtask->view,       'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
+        $actions['edit']     = array('icon' => 'edit',     'text' => $this->lang->edit,                 'url' => helper::createLink('testtask',   'edit',     $params));
+        $actions['delete']   = array('icon' => 'trash',    'text' => $this->lang->delete,               'url' => helper::createLink('testtask',   'delete',   $params));
 
-        $menu   = '';
-        $params = "taskID=$task->id";
-
-        $menu .= $this->buildMenu('testtask', 'start',    $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('testtask', 'close',    $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('testtask', 'block',    $params, $task, 'view', 'pause', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('testtask', 'activate', $params, $task, 'view', 'magic', '', 'iframe showinonlybody', true);
-        $menu .= $this->buildMenu('testtask', 'cases',    $params, $task, 'view', 'sitemap');
-        $menu .= $this->buildMenu('testtask', 'linkCase', $params, $task, 'view', 'link');
-
-        $menu  .= "<div class='divider'></div>";
-        $menu  .= $this->buildFlowMenu('testtask', $task, 'view', 'direct');
-        $menu  .= "<div class='divider'></div>";
-
-        $menu .= $this->buildMenu('testtask', 'edit',   $params, $task, 'view');
-        $menu .= $this->buildMenu('testtask', 'delete', $params, $task, 'view', 'trash', 'hiddenwin');
-
-        return $menu;
-    }
-
-    /**
-     * Build test task browse menu.
-     *
-     * @param  object $task
-     * @access public
-     * @return string
-     */
-    public function buildOperateBrowseMenu($task)
-    {
-        $menu   = '';
-        $params = "taskID=$task->id";
-
-        $menu .= '<div id="action-divider">';
-        $menu .= $this->buildMenu('testtask',   'cases',    $params, $task, 'browse', 'sitemap');
-        $menu .= $this->buildMenu('testtask',   'linkCase', "$params&type=all&param=myQueryID", $task, 'browse', 'link');
-        $menu .= $this->buildMenu('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'browse', 'summary', '', '', false, '', $this->lang->testreport->common);
-        $menu .= '</div>';
-        $menu .= $this->buildMenu('testtask',   'view',     $params, $task, 'browse', 'list-alt', '', 'iframe', true, "data-width='90%'");
-        $menu .= $this->buildMenu('testtask',   'edit',     $params, $task, 'browse');
-        $clickable = $this->buildMenu('testtask', 'delete', $params, $task, 'browse', '', '', '', '', '', '', false);
-        if(common::hasPriv('testtask', 'delete', $task))
+        foreach($actions as $action => $actionData)
         {
-            $deleteURL = helper::createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-            $class = 'btn';
-            if(!$clickable) $class .= ' disabled';
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$this->lang->testtask->delete}' class='{$class}'");
+            $actionsConfig = $this->config->testtask->actions->{$type};
+            if(strpos(",{$actionsConfig},", ",{$action},") === false)
+            {
+                unset($actions[$action]);
+                continue;
+            }
+            $actions[$action]['hint'] = $actions[$action]['text'];
+            if($type == 'browse') unset($actions[$action]['text']);
         }
-        return $menu;
+
+        if($type == 'browse') $this->config->testtask->dtable->fieldList['actions']['actionsMap'] = $actions;
+        return $actions;
     }
 
     /**

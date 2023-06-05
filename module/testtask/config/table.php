@@ -36,14 +36,12 @@ $config->testtask->dtable->fieldList['end']['name']  = 'end';
 $config->testtask->dtable->fieldList['end']['title'] = $lang->testtask->end;
 $config->testtask->dtable->fieldList['end']['type']  = 'date';
 
-$config->testtask->dtable->fieldList['status']['name']       = 'status';
-$config->testtask->dtable->fieldList['status']['title']      = $lang->testtask->status;
-$config->testtask->dtable->fieldList['status']['type']       = 'status';
-$config->testtask->dtable->fieldList['status']['statusMap']  = $lang->testtask->statusList;
+$config->testtask->dtable->fieldList['status']['name']      = 'status';
+$config->testtask->dtable->fieldList['status']['title']     = $lang->testtask->status;
+$config->testtask->dtable->fieldList['status']['type']      = 'status';
+$config->testtask->dtable->fieldList['status']['statusMap'] = $lang->testtask->statusList;
 
 $config->testtask->dtable->fieldList['actions']['name']     = 'actions';
 $config->testtask->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testtask->dtable->fieldList['actions']['type']     = 'actions';
-$config->testtask->dtable->fieldList['actions']['width']    = '180';
 $config->testtask->dtable->fieldList['actions']['sortType'] = false;
-$config->testtask->dtable->fieldList['actions']['fixed']    = 'right';
