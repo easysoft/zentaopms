@@ -1510,6 +1510,27 @@ class taskTest
     }
 
     /**
+     * 测试通过编辑日志修改任务信息的方法。
+     * Test the method for update task information by updating the effort.
+     *
+     * @param  int     $taskID
+     * @param  int     $effortID
+     * @param  object  $param
+     * @access public
+     * @return object
+     */
+    public function buildTaskForUpdateEffortTest(int $taskID, int $effortID, object $param): object
+    {
+        $task      = $this->objectModel->getByID($taskID);
+        $oldEffort = $this->objectModel->getEffortByID($effortID);
+
+        $effort = clone $oldEffort;
+        foreach($param as $key => $value) $effort->{$key} = $value;
+
+        return $this->objectModel->buildTaskForUpdateEffort($task, $oldEffort, $effort);
+    }
+
+    /**
      * Get the assignedTo for the multiply linear task.
      *
      * @param  int    $taskID
