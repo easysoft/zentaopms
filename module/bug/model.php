@@ -1159,17 +1159,18 @@ class bugModel extends model
     }
 
     /**
+     * 通过版本 id 和产品 id 获取 bugs。
      * Get bugs according to buildID and productID.
      *
-     * @param  int|string $buildIdList
-     * @param  int        $productID
-     * @param  string     $branch
-     * @param  string     $linkedBugs
-     * @param  object     $pager
+     * @param  array  $buildIdList
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $linkedBugs
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getReleaseBugs($buildIdList, $productID, $branch = 0, $linkedBugs = '', $pager = null)
+    public function getReleaseBugs(array $buildIdList, int $productID, int $branch = 0, string $linkedBugs = '', object $pager = null): array
     {
         $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
@@ -1184,8 +1185,8 @@ class bugModel extends model
         }
 
         return $this->dao->select('*')->from(TABLE_BUG)
-            ->where('resolvedDate')->ge($minBegin)
-            ->andWhere('resolution')->ne('postponed')
+            ->where('resolution')->ne('postponed')
+            ->beginIF(!empty($minBegin))->andWhere('resolvedDate')->ge($minBegin)->fi()
             ->andWhere('product')->eq($productID)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()

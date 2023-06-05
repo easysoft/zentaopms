@@ -745,16 +745,17 @@ class bugTest
     }
 
     /**
+     * 测试通过版本 id 和产品 id 获取 bugs。
      * Test get bugs according to buildID and productID.
      *
      * @param  int    $buildID
      * @param  int    $productID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getReleaseBugsTest($buildID, $productID)
+    public function getReleaseBugsTest(int $buildID, int $productID): string|array
     {
-        $array = $this->objectModel->getReleaseBugs($buildID, $productID);
+        $array = $this->objectModel->getReleaseBugs(array($buildID), $productID);
 
         $title = '';
         foreach($array as $bug) $title .= ',' . $bug->title;
