@@ -72,6 +72,7 @@ $execution->gen(9);
 $task = zdTable('task');
 $task->id->range('1-9');
 $task->execution->range('1-9');
+$task->story->range('1-9');
 $task->name->prefix("任务")->range('1-9');
 $task->left->range('0-8');
 $task->estStarted->range('2022\-01\-01');

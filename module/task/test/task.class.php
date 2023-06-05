@@ -639,27 +639,26 @@ class taskTest
     }
 
     /**
-     * Test update estimate.
+     * Test update effort.
      *
-     * @param  int    $estimateID
-     * @param  array  $param
+     * @param  object $effort
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function updateEstimateTest($estimateID, $param = array())
+    public function updateEffortTest(int $effortID, object $param): array|bool
     {
-        $createFields = array('date' => '0000-00-00', 'consumed' => '1', 'left' => '1', 'work' => '这里是工作内容1');
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-        $object = $this->objectModel->updateEstimate($estimateID);
-        unset($_POST);
+        $effort  = $this->objectModel->getEffortByID($effortID);
+        foreach($param as $key => $value) $effort->{$key} = $value;
+
+        $changes = $this->objectModel->updateEffort($effort);
+
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
-            return $object;
+            return $changes;
         }
     }
 
@@ -1389,6 +1388,31 @@ class taskTest
         if(dao::isError()) return dao::getError();
 
         return $object;
+    }
+
+    /**
+     * Test check effort.
+     *
+     * @param  int    $effortID
+     * @param  array  $effort
+     * @access public
+     * @return array|bool
+     */
+    public function checkEffortTest(int $effortID, object $param): array|bool
+    {
+        $effort = $this->objectModel->getEffortByID($effortID);
+
+        foreach($param as $key => $value) $effort->{$key} = $value;
+        $result = $this->objectModel->checkEffort($effort);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $result;
+        }
     }
 
     /**
