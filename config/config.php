@@ -71,12 +71,6 @@ $config->slaveDB->driver     = 'mysql';
 $config->slaveDB->encoding   = 'UTF8';
 $config->slaveDB->strictMode = false;
 
-/* 缓存设置。Cache settings. */
-$config->cache = new stdclass();
-$config->cache->enable   = false;         // 是否开启缓存。Enable cache or not.
-$config->cache->lifetime = 5 * 60;        // 缓存生存时间。The lifetime of cache.
-$config->cache->driver   = 'File';        // 缓存驱动。   The driver of cache. can be File|Yac|Apcu.
-
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
 $config->domainPostfix .= "|eu|fm|gov.cn|gs|hk|im|in|info|jp|kr|la|me|";
@@ -176,6 +170,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 /* 引用数据库的配置。 Include the database config file. */
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
+
+/* 引用缓存的配置。 Include the cache config file. */
+$cacheConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache.php';
+if(file_exists($cacheConfig)) include $cacheConfig;
 
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';

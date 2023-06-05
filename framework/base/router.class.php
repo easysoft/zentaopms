@@ -2250,9 +2250,46 @@ class baseRouter
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
+            return false;
         }
 
         return isset($module) ? $module : false;
+    }
+
+    /**
+     * 输出内容。
+     * Output the content.
+     *
+     * @return string
+     */
+    public function outputPage()
+    {
+        $cacheEnable = $this->config->cache->enableFullPage;
+        /* If caching is not turned on, pages that do not need to be cached, or when searching, they are not cached. */
+        if(!$cacheEnable || !in_array("{$this->moduleName}|{$this->methodName}", $this->config->cache->fullPages) || stripos($this->server->request_uri, 'search') !== false)
+        {
+            $this->loadModule();
+            return helper::removeUTF8Bom(ob_get_clean());
+        }
+
+        $this->loadClass('cache', $static = true);
+        $cacheKey  = md5($this->server->request_uri);
+        $namespace = isset($this->session->user->account) ? $this->session->user->account : 'guest';
+        $cache     = cache::create($this->config->cache->fullPageDriver, $namespace, $this->config->cache->fullPageLifetime);
+
+        if($cache->has($cacheKey))
+        {
+            $content = $cache->get($cacheKey);
+        }
+        else
+        {
+            ob_start();
+            $result  = $this->loadModule();
+            $content = helper::removeUTF8Bom(ob_get_clean());
+            /* If the module is loaded successfully, cache the content. */
+            if($result !== false) $cache->set($cacheKey, $content);
+        }
+        return $content;
     }
 
     /**

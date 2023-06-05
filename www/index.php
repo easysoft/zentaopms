@@ -72,7 +72,6 @@ $app->parseRequest();
 if(!$app->setParams()) return;
 $common->checkPriv();
 $common->checkIframe();
-$app->loadModule();
 
 /* Flush the buffer. */
-echo helper::removeUTF8Bom(ob_get_clean());
+echo $app->outputPage();
