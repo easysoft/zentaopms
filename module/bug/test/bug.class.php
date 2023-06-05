@@ -786,6 +786,7 @@ class bugTest
         foreach($array as $bug) $title .= ',' . $bug->title;
         $title = trim($title, ',');
         $title = str_replace("'", '', $title);
+        $title = str_replace("@", '', $title);
 
         if(dao::isError())
         {
