@@ -377,6 +377,7 @@ class doc extends control
 
         if(!empty($_POST))
         {
+            if($this->loadModel('common')->checkPrivByObject($objectType, $libID) === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);

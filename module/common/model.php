@@ -3632,6 +3632,44 @@ EOF;
 
         return false;
     }
+
+    /**
+     * Check object priv.
+     *
+     * @param  string   $objectType
+     * @param  int      $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivByObject($objectType, $objectID)
+    {
+        $objectType = strtolower($objectType);
+        $canVisit   = true;
+        switch($objectType)
+        {
+            case 'custom':
+                $doclib = $this->loadModel('doc')->getLibById($objectID);
+                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, (string)$this->app->user->account) === false) $canVisit = false;
+                break;
+            case 'product':
+                $doclib   = $this->loadModel('doc')->getLibById($objectID);
+                $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
+                break;
+            case 'project':
+                $doclib   = $this->loadModel('doc')->getLibById($objectID);
+                $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
+                break;
+            case 'execution':
+                $doclib   = $this->loadModel('doc')->getLibById($objectID);
+                $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
+                break;
+            default:
+                break;
+        }
+
+        return $canVisit;
+    }
+
 }
 
 class common extends commonModel
