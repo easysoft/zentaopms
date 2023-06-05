@@ -494,8 +494,6 @@ class upgradeModel extends model
                 }
 
                 $this->updateGroup4Lite();
-
-                if($this->config->edition != 'open') $this->importLiteModules();
                 break;
             case '16_5':
                 $this->updateProjectStatus();
@@ -770,6 +768,9 @@ class upgradeModel extends model
                 $this->processFeedbackField();
                 $this->addFileFields();
                 $this->addReportActions();
+                break;
+            case 'biz6_4':
+                $this->importLiteModules();
                 break;
         }
     }
