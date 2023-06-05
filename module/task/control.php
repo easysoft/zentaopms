@@ -487,9 +487,9 @@ class task extends control
      * @access public
      * @return void
      */
-    public function editWorkhour($estimateID)
+    public function editWorkhour($workhourID)
     {
-        $estimate = $this->task->getEstimateByID($estimateID);
+        $workhour = $this->task->getEstimateByID($workhourID);
         if(!empty($_POST))
         {
             $changes = $this->task->updateEstimate($estimateID);
@@ -503,8 +503,8 @@ class task extends control
         }
 
         $this->view->title    = $this->lang->task->editWorkhour;
-        $this->view->estimate = $estimate;
-        $this->view->task     = $this->task->getById($estimate->objectID);
+        $this->view->workhour = $workhour;
+        $this->view->task     = $this->task->getById($workhour->objectID);
         $this->display();
     }
 
