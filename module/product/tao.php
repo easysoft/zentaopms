@@ -494,12 +494,12 @@ class productTao extends productModel
      * @param  string|int $branch
      * @param  string     $currentModule
      * @param  string     $currentMethod
-     * @param  string     $extra
+     * @param  string|int $extra
      * @param  bool       $withBranch
      * @access protected
      * @return string
      */
-    protected function getBranchDropMenu4Select(object $product, string|int $branch, string $currentModule, string $currentMethod, string $extra = '', bool $withBranch = true): string
+    protected function getBranchDropMenu4Select(object $product, string|int $branch, string $currentModule, string $currentMethod, string|int $extra = '', bool $withBranch = true): string
     {
         $showBranch = (isset($product->type) and $product->type != 'normal' && $withBranch && $currentModule != 'programplan');
         if(!$showBranch)
