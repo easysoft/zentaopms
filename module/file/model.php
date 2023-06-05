@@ -961,25 +961,24 @@ class fileModel extends model
     /**
      * Update objectID.
      *
-     * @param  int    $uid
+     * @param  string $uid
      * @param  int    $objectID
      * @param  string $objectType
      * @access public
      * @return bool
      */
-    public function updateObjectID($uid, $objectID, $objectType)
+    public function updateObjectID(string $uid, int $objectID, string $objectType): bool
     {
         if(empty($uid)) return true;
+        if(empty($_SESSION['album']['used'][$uid])) return true;
 
         $data = new stdclass();
         $data->objectID   = $objectID;
         $data->objectType = $objectType;
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $data->extra = 'editor';
-        if(isset($_SESSION['album']['used'][$uid]) and $_SESSION['album']['used'][$uid])
-        {
-            $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();
-            return !dao::isError();
-        }
+
+        $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();
+        return !dao::isError();
     }
 
     /**
