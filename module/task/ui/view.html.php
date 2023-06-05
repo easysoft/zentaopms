@@ -75,7 +75,6 @@ detailBody
         history(),
         center
         (
-            setID('floatToolbar'),
             floatToolbar
             (
                 set::prefix
