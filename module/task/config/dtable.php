@@ -1,6 +1,5 @@
 <?php
 $config->task->dtable = new stdclass();
-$config->task->dtable->operateList = array('batchCreate', 'confirmStoryChange', 'start', 'restart', 'recordWorkhour', 'finish', 'close', 'edit');
 
 $config->task->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->task->dtable->fieldList['id']['name']     = 'id';
@@ -152,20 +151,13 @@ $config->task->dtable->fieldList['mailto']['name']     = 'mailto';
 $config->task->dtable->fieldList['mailto']['type']     = 'user';
 $config->task->dtable->fieldList['mailto']['sortType'] = true;
 
-$config->task->dtable->fieldList['actions']['title']      = $lang->actions;
-$config->task->dtable->fieldList['actions']['name']       = 'actions';
-$config->task->dtable->fieldList['actions']['fixed']      = 'right';
-$config->task->dtable->fieldList['actions']['width']      = '180';
-$config->task->dtable->fieldList['actions']['type']       = 'actions';
-$config->task->dtable->fieldList['actions']['actionsMap'] = array();
-
-foreach($config->task->dtable->operateList as $operate)
-{
-    $settings = $config->task->actionList[$operate];
-    $settings['text'] = '';
-
-    $config->task->dtable->fieldList['actions']['actionsMap'][$operate] = $settings;
-}
+$config->task->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->task->dtable->fieldList['actions']['name']  = 'actions';
+$config->task->dtable->fieldList['actions']['fixed'] = 'right';
+$config->task->dtable->fieldList['actions']['width'] = '180';
+$config->task->dtable->fieldList['actions']['type']  = 'actions';
+$config->task->dtable->fieldList['actions']['list']  = $config->task->actionList;
+$config->task->dtable->fieldList['actions']['menu']  = array(array('confirmStoryChange'), array('start|restart', 'finish', 'close', 'recordWorkhour', 'edit', 'batchCreate'));
 
 /* Record effort page. */
 $config->task->effortTable = new stdclass();

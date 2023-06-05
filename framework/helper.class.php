@@ -432,52 +432,97 @@ function formatTime(string|null $time, string $format = ''): string
  * Init table data of zin.
  *
  * @param  array  $items
- * @param  array  $actionConfig
+ * @param  array  $fieldList
  * @param  object $checkModel
  * @access public
  * @return void
  */
-function initTableData($items, $actionConfig, $checkModel)
+function initTableData($items, &$fieldList, $checkModel)
 {
-    global $app;
-
-    /* Order actions. */
-    $orderActions = array();
-    foreach($actionConfig['actionsMap'] as $actionKey => $action)
+    foreach($fieldList['actions']['menu'] as $actionMenu)
     {
-        $order = zget($action, 'order', 0);
-        if(!isset($orderActions[$order])) $orderActions[$order] = array();
-        $orderActions[$order][$actionKey] = $action;
-    }
-    ksort($orderActions);
-
-    /* Append actions field. */
-    $itemList = array();
-    foreach($items as $item)
-    {
-        $actions = array();
-        foreach($orderActions as $order => $configs)
+        if(is_array($actionMenu))
         {
-            foreach($configs as $actionName => $config)
+            foreach($actionMenu as $actionName)
             {
-                if(!common::hasPriv('task', $actionName)) continue;
-
-                $show = zget($config, 'show', 'default');
-                if($checkModel->isClickable($item, $actionName))
+                $actions = explode('|', $actionName);
+                foreach($actions as $action)
                 {
-                    $actions[$order] = array('name' => $actionName);
-                }
-                elseif($show == 'always')
-                {
-                    $actions[$order] = array('name' => $actionName, 'disabled' => true);
-                }
-                elseif($show == 'default' && !isset($actions[$order]))
-                {
-                    $actions[$order] = array('name' => $actionName, 'disabled' => true);
+                    $fieldList['actions']['actionsMap'][$action] = $fieldList['actions']['list'][$action];
+                    $fieldList['actions']['actionsMap'][$action]['text'] = '';
                 }
             }
         }
-        $item->actions = array_values($actions);
+        else
+        {
+            $actions = explode('|', $actionMenu);
+            foreach($actions as $action)
+            {
+                $fieldList['actions']['actionsMap'][$action] = $fieldList['actions']['list'][$action];
+                $fieldList['actions']['actionsMap'][$action]['text'] = '';
+            }
+        }
+    }
+
+    foreach($items as $item)
+    {
+        $item->actions = array();
+        foreach($fieldList['actions']['menu'] as $actionMenu)
+        {
+            /*
+             * Menu可能会有多套，如果只有一套可以直接用一维数组。
+             * There are maybe two or more groups of action menus.
+             */
+            if(is_array($actionMenu))       // Two or more grups.
+            {
+                $item->actions = array();
+                $break         = false;     // If the action is clickable, use this group.
+                foreach($actionMenu as $actionName)
+                {
+                    $actions = explode('|', $actionName);
+                    $action = $actions[0];
+                    foreach($actions as $actionName)
+                    {
+                        if($checkModel->isClickable($item, $actionName))
+                        {
+                            $action = $actionName;
+                            $break  = true;
+                        }
+                    }
+
+                    if(!common::hasPriv('task', $action)) continue;
+                    if($checkModel->isClickable($item, $action))
+                    {
+                        $item->actions[] = array('name' => $action);
+                    }
+                    else
+                    {
+                        $item->actions[] = array('name' => $action, 'disabled' => true);
+                    }
+                }
+
+                if($break) break;
+            }
+            else // Only one group of action menus.
+            {
+                $actions = explode('|', $actionMenu);
+                $action = $actions[0];
+                foreach($actions as $actionName)
+                {
+                    if($checkModel->isClickable($item, $actionName)) $action = $actionName;
+                }
+
+                if(!common::hasPriv('task', $action)) continue;
+                if($checkModel->isClickable($item, $action))
+                {
+                    $item->actions[] = array('name' => $action);
+                }
+                else
+                {
+                    $item->actions[] = array('name' => $action, 'disabled' => true);
+                }
+            }
+        }
 
         /* Set parent attribute. */
         $item->isParent = false;
@@ -487,11 +532,9 @@ function initTableData($items, $actionConfig, $checkModel)
             $item->parent   = 0;
             $item->isParent = true;
         }
-
-        $itemList[] = $item;
     }
 
-    return $itemList;
+    return array_values($items);
 }
 
 /**

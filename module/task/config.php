@@ -85,7 +85,7 @@ $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toTas
 $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toStoryList'], 'value' => 'toStoryList');
 
 $config->task->actionList['confirmStoryChange']['icon']  = 'search';
-$config->task->actionList['confirmStoryChange']['hint']  = $lang->task->activate;
+$config->task->actionList['confirmStoryChange']['hint']  = $lang->task->confirmStoryChange;
 $config->task->actionList['confirmStoryChange']['url']   = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
 $config->task->actionList['confirmStoryChange']['order'] = 5;
 $config->task->actionList['confirmStoryChange']['show']  = 'clickable';

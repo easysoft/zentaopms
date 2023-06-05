@@ -48,7 +48,7 @@ if(common::canModify('execution', $execution))
     }
 }
 
-$tableData = initTableData($tasks, $config->task->dtable->fieldList['actions'], $this->task);
+$tableData = initTableData($tasks, $config->task->dtable->fieldList, $this->task);
 
 toolbar
 (
