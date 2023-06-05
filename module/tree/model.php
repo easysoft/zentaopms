@@ -702,12 +702,12 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  string $userFunc
+     * @param  array  $userFunc
      * @param  string $extra
      * @access public
-     * @return void
+     * @return array
      */
-    public function getCaseTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
+    public function getCaseTreeMenu(int $rootID, int $productID = 0, int $startModule = 0, array $userFunc = array(), string $extra = ''): array
     {
         $extra = array('projectID' => $rootID, 'executionID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
@@ -850,16 +850,16 @@ class treeModel extends model
     /**
      * Build tree.
      *
-     * @param  array  &$treeMenu
      * @param  object $module
      * @param  string $type
-     * @param  string $userFunc
+     * @param  int    $parent
+     * @param  array  $userFunc
      * @param  array  $extra
      * @param  int    $branch
      * @access public
-     * @return void
+     * @return false|object
      */
-    public function buildTree(& $treeMenu, $module, $type, $userFunc, $extra, $branch = 'all')
+    public function buildTree(object $module, string $type, int $parent = 0, array $userFunc = array(), array $extra = array(), string $branch = 'all'): false|object
     {
         /* Add for task #1945. check the module has case or no. */
         if((isset($extra['rootID']) and isset($extra['branch']) and $branch === 'null') or ($type == 'case' and is_numeric($extra)))
