@@ -1852,8 +1852,8 @@ class taskModel extends model
             {
                 $newTeamInfo = new stdclass();
                 $newTeamInfo->consumed = $currentTeam->consumed + $effort->consumed - $oldEffort->consumed;
-                if($currentTeam->status != 'done') $newTeamInfo->left = $left;
-                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
+                if($currentTeam->status != 'done') $newTeamInfo->left = $data->left;
+                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $data->left == 0) $newTeamInfo->status = 'done';
                 $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
 
                 $data = $this->computeMultipleHours($task, $data);
