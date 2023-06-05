@@ -587,4 +587,18 @@ class testreportModel extends model
             ->orderBy('id_desc')
             ->fetchPairs();
     }
+
+    /**
+     * 判断操作是否可以点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $report
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $report, string $action): bool
+    {
+        return true;
+    }
 }

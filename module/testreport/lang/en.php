@@ -10,7 +10,7 @@ $lang->testreport->exportAction = 'Export Report';
 $lang->testreport->view         = 'Report Detail';
 $lang->testreport->recreate     = 'ReCreate';
 
-$lang->testreport->title       = 'Title';
+$lang->testreport->title       = 'Report Title';
 $lang->testreport->product     = $lang->productCommon;
 $lang->testreport->bugTitle    = 'Bug';
 $lang->testreport->storyTitle  = 'Story';

@@ -135,7 +135,7 @@ class testreport extends control
             $executions[$report->execution] = $report->execution;
             foreach(explode(',', $report->tasks) as $taskID) $tasks[$taskID] = $taskID;
         }
-        if($executions) $executions = $this->dao->select('id,name,multiple')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchAll('id');
+        if($executions) $executions = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchPairs();
         if($tasks)      $tasks      = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
 
         $this->view->title      = $title . $this->lang->colon . $this->lang->testreport->common;
@@ -597,14 +597,14 @@ class testreport extends control
     {
         if($objectType == 'product')
         {
-            $productID = $this->product->saveState($objectID, $this->products);
+            $productID = $this->product->saveVisitState($objectID, $this->products);
             $this->loadModel('qa')->setMenu($this->products, $productID);
             return $productID;
         }
         elseif($objectType == 'execution')
         {
             $executions  = $this->execution->getPairs();
-            $executionID = $this->execution->saveState($objectID, $executions);
+            $executionID = $this->execution->checkAccess($objectID, $executions);
             $this->execution->setMenu($executionID);
             return $executionID;
         }
@@ -635,7 +635,7 @@ class testreport extends control
             $chartFunc   = 'getDataOf' . $chart;
             $chartData   = $this->testtask->$chartFunc($taskID);
             $chartOption = $this->testtask->mergeChartOption($chart);
-            if(!empty($chartType)) $chartOption->type = $chartType;
+            if(isset($chartType) && !empty($chartType)) $chartOption->type = $chartType;
 
             $this->view->charts[$chart] = $chartOption;
             if(isset($this->view->datas[$chart]))

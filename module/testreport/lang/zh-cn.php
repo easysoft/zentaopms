@@ -10,7 +10,7 @@ $lang->testreport->exportAction = '导出报告';
 $lang->testreport->view         = '报告详情';
 $lang->testreport->recreate     = '重新生成报告';
 
-$lang->testreport->title       = '标题';
+$lang->testreport->title       = '报告标题';
 $lang->testreport->product     = "所属{$lang->productCommon}";
 $lang->testreport->bugTitle    = 'Bug 标题';
 $lang->testreport->storyTitle  = "{$lang->SRCommon}标题";
@@ -69,6 +69,8 @@ $lang->testreport->bugStageList = array();
 $lang->testreport->bugStageList['generated'] = '产生的Bug';
 $lang->testreport->bugStageList['legacy']    = '遗留的Bug';
 $lang->testreport->bugStageList['resolved']  = '解决的Bug';
+
+$lang->testreport->featureBar['browse']['all'] = '全部';
 
 $lang->testreport->caseSummary     = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
 $lang->testreport->buildSummary    = '共测试了<strong>%s</strong>个版本。';
