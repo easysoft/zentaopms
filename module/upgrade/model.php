@@ -494,10 +494,14 @@ class upgradeModel extends model
                 }
 
                 $this->updateGroup4Lite();
+
+                if($this->config->edition != 'open') $this->importLiteModules();
                 break;
             case '16_5':
                 $this->updateProjectStatus();
                 $this->updateStoryReviewer($fromVersion);
+
+                if($this->config->edition == 'max') $this->moveResult2Node();
                 break;
             case '17_0_beta1':
                 if(!$executedXuanxuan)
@@ -505,6 +509,8 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+
+                if($this->config->edition != 'open') $this->processViewFields();
                 break;
             case '17_0_beta2':
                 $this->changeStoryNeedReview();
@@ -512,6 +518,8 @@ class upgradeModel extends model
             case '17_0':
                 $this->replaceSetLanePriv();
                 $this->updateProjectData();
+
+                if($this->config->edition != 'open') $this->processFlowPosition();
                 break;
             case '17_1':
                 if(!$executedXuanxuan)
@@ -525,6 +533,9 @@ class upgradeModel extends model
                 }
                 $this->moveProjectAdmins();
                 $this->addStoryViewPriv();
+                break;
+            case '17_2':
+                if($this->config->edition == 'max') $this->addReviewIssusApprovalData();
                 break;
             case '17_3':
                 $this->processBugLinkBug();
@@ -540,6 +551,17 @@ class upgradeModel extends model
                     {
                         $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
                     }
+                }
+
+                if($this->config->edition != 'open')
+                {
+                    $this->processCreatedInfo();
+                    $this->processCreatedBy();
+                    $this->updateApproval();
+                    $this->addDefaultRuleToWorkflow();
+                    $this->processReviewLinkages();
+                    $this->addFlowActions('biz7.4');
+                    $this->addFlowFields('biz7.4');
                 }
                 break;
             case '17_5':
@@ -566,6 +588,7 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+                if($this->config->edition != 'open') $this->processFeedbackModule();
                 break;
             case '17_8':
                 if(!$executedXuanxuan)
@@ -583,6 +606,8 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+
+                if($this->config->edition == 'max') $this->initReviewEfforts();
                 break;
             case '18_0_beta3':
                 $this->updateMyBlocks();
@@ -598,6 +623,14 @@ class upgradeModel extends model
                 $this->createDefaultDimension();
                 $this->convertDocCollect();
                 $this->addBIUpdateMark();
+
+                if($this->config->edition != 'open')
+                {
+                    $this->processDataset();
+                    $this->processChart();
+                    $this->processReport();
+                    $this->processDashboard();
+                }
                 break;
             case '18_4_alpha1':
                 if($this->config->edition != 'open') $this->processDataset();
@@ -738,33 +771,6 @@ class upgradeModel extends model
                 $this->addFileFields();
                 $this->addReportActions();
                 break;
-            case 'biz6_4':
-                $this->importLiteModules();
-                break;
-            case 'biz7_0_beta1':
-                $this->processViewFields();
-                break;
-            case 'biz7_0':
-                $this->processFlowPosition();
-                break;
-            case 'biz7_4':
-                $this->processCreatedInfo();
-                $this->processCreatedBy();
-                $this->updateApproval();
-                $this->addDefaultRuleToWorkflow();
-                $this->processReviewLinkages();
-                $this->addFlowActions('biz7.4');
-                $this->addFlowFields('biz7.4');
-                break;
-            case 'biz7_6_2':
-                $this->processFeedbackModule();
-                break;
-            case 'biz8_3':
-                $this->processDataset();
-                $this->processChart();
-                $this->processReport();
-                $this->processDashboard();
-                break;
         }
     }
 
@@ -781,15 +787,6 @@ class upgradeModel extends model
         {
             case 'max2_2':
                 $this->addDefaultKanbanPri();
-                break;
-            case 'max3_0':
-                $this->moveResult2Node();
-                break;
-            case 'max3_3':
-                $this->addReviewIssusApprovalData();
-                break;
-            case 'max4_0_beta1':
-                $this->initReviewEfforts();
                 break;
         }
     }
