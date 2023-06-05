@@ -1267,7 +1267,7 @@ class taskTest
         $this->objectModel->addTaskEffort($data);
 
         $objectID = $this->objectModel->dao->lastInsertID();
-        $object   = $this->objectModel->getEstimateByID($objectID);
+        $object   = $this->objectModel->getEffortByID($objectID);
 
         if(dao::isError())
         {
