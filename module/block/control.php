@@ -418,7 +418,16 @@ class block extends control
      */
     public function contribute()
     {
-        $this->view->data = $this->loadModel('user')->getPersonalData();
+        if($this->config->cache->enable && $this->cache->has('contributeBlockData'))
+        {
+            $data = $this->cache->get('contributeBlockData');
+        }
+        else
+        {
+            $data = $this->loadModel('user')->getPersonalData();
+            if($this->config->cache->enable) $this->cache->set('contributeBlockData', $data);
+        }
+        $this->view->data = $data;
         $this->display();
     }
 
