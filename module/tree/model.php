@@ -467,15 +467,16 @@ class treeModel extends model
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra)) $this->loadModel('testtask');
 
-        $stmt       = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branch));
-        $moduleTree = array();
+        $modules = array();
+        $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branch));
         while($module = $stmt->fetch())
         {
-            $module->url  = call_user_func($userFunc, $type, $module, $extra);
-            $moduleTree[] = $module;
+            if($onlyGetLinked && !isset($executionModules[$module->id]) && empty($product->shadow)) continue;
+
+            $modules[] = $this->buildTree($module, $type, 0, $userFunc, $extra, $branch);
         }
 
-        return $moduleTree;
+        return $modules;
     }
 
     /**
@@ -731,9 +732,6 @@ class treeModel extends model
             }
         }
 
-        /* createdVersion > 4.1. */
-        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-case'>";
-
         /* Set the start module. */
         $startModulePath = '';
         if($startModule > 0)
@@ -750,19 +748,23 @@ class treeModel extends model
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
         $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
         $param      = $this->app->tab == 'execution' ? "executionID={$rootID}&" : $param;
-        foreach($products as $id => $product)
-        {
-            $extra['productID'] = $id;
-            $link  = helper::createLink($moduleName, $methodName, $param . "productID=$id");
-            $menu .= "<li>" . html::a($link, is_object($product) ? $product->name : $product, '_self', "id='product$id' data-app='{$this->app->tab}'");
 
-            /* tree menu. */
-            $tree = '';
-            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
-            foreach($branchGroups[$id] as $branch => $branchName)
+        $modules = array();
+        foreach($products as $productID => $product)
+        {
+            $extra['productID'] = $productID;
+
+            $data = new stdclass();
+            $data->id     = ++$this->moduleID;
+            $data->parent = 0;
+            $data->name   = is_object($product) ? $product->name : $product;
+            $data->url    = helper::createLink($moduleName, $methodName, $param . "productID=$productID");
+            $modules[] = $module;
+
+            if(empty($branchGroups[$productID])) $branchGroups[$productID]['0'] = '';
+            foreach($branchGroups[$productID] as $branch => $branchName)
             {
-                $treeMenu = array();
-                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $id and type = 'case' and branch = '$branch') OR (root = $id and type = 'story' and branch = '$branch'))")
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $productID and type = 'case' and branch = '$branch') OR (root = $productID and type = 'story' and branch = '$branch'))")
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
@@ -770,16 +772,11 @@ class treeModel extends model
                 $stmt = $this->dbh->query($query);
                 while($module = $stmt->fetch())
                 {
-                    if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra, $branch);
+                    if(isset($executionModules[$module->id])) $modules[] = $this->buildTree($module, 'case', $data->id, $userFunc, $extra, $branch);
                 }
-                $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }
-
-            if($tree) $tree = "<ul>" . $tree . "</ul>\n</li>";
-            $menu .= $tree;
         }
-        $menu .= '</ul>';
-        return $menu;
+        return $modules;
     }
 
     /**
