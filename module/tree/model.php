@@ -901,7 +901,7 @@ class treeModel extends model
                     break;
                 }
             }
-            if(!$hasObjects) return;
+            if(!$hasObjects) return false;
         }
 
         if(is_array($extra)) $extra['branchID'] = $branch;
