@@ -41,13 +41,14 @@ onClickBatchEdit = function(event)
     /* Get checked product ID list. */
     const idList  = new Array();
     const rowList = $('#dtable').find('.dtable-row');
+
     Object.keys(rowList).forEach(function(index)
     {
         const row = $(rowList[index]);
 
-        const checkboxList = row.find('input[type=checkbox]');
+        const checkboxList = row.find('div.dtable-checkbox');
         if(checkboxList.length !== 1) return;
-        if(!$(checkboxList[0]).is(':checked')) return;
+        if(!$(checkboxList[0]).hasClass('checked')) return;
 
         const id  = row.data('id');
         if( !id || id === 'HEADER') return;
