@@ -587,26 +587,17 @@ class taskTest
      * Test get task pairs of a story.
      *
      * @param  int    $storyID
-     * @param  int    $count
+     * @param  int    $executionID
+     * @param  int    $projectID
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getListByStoryTest($storyID, $count)
+    public function getListByStoryTest(int $storyID, int $executionID = 0, int $projectID = 0)
     {
-        $object = $this->objectModel->getListByStory($storyID);
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == "1")
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
+        $object = $this->objectModel->getListByStory($storyID, $executionID, $projectID);
+
+        if(dao::isError()) return  dao::getError();
+        return $object;
     }
 
     /**
