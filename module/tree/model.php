@@ -12,14 +12,6 @@
 class treeModel extends model
 {
     /**
-     * The global moduleID.
-     *
-     * @var    int
-     * @access private
-     */
-    private $moduleID = 0;
-
-    /**
      * Get module by ID.
      *
      * @param  int    $moduleID
@@ -755,7 +747,7 @@ class treeModel extends model
             $extra['productID'] = $productID;
 
             $data = new stdclass();
-            $data->id     = ++$this->moduleID;
+            $data->id     = uniqid();
             $data->parent = 0;
             $data->name   = is_object($product) ? $product->name : $product;
             $data->url    = helper::createLink($moduleName, $methodName, $param . "productID=$productID");
@@ -1232,8 +1224,8 @@ class treeModel extends model
         $param      = $this->app->tab == 'execution' ? "executionID={$extra['projectID']}&" : $param;
 
         $data = new stdclass();
-        $data->id     = $parent ? ++$this->moduleID : $module->id;
-        $data->parent = $parent ? $parent: $module->parent;
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink($moduleName, $methodName, $param . "productID={$module->root}&branch={$extra['branchID']}&browseType=byModule&param={$module->id}");
 
