@@ -2655,7 +2655,7 @@ class taskModel extends model
     {
         /* Set assignedTo and mailto. */
         $assignedTo = $task->assignedTo;
-        $mailto     = explode(',', trim($task->mailto, ','));
+        $mailto     = is_null($task->mailto) ? array() : explode(',', trim($task->mailto, ','));
         if($task->mode == 'multi')
         {
             $teamList   = $this->getTeamMembers($task->id);
