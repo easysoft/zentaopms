@@ -158,6 +158,57 @@ class taskTao extends taskModel
     }
 
     /**
+     * 编辑日志后，构造待更新的任务数据。
+     * After editing the effort, build the task data to be updated.
+     *
+     * @param  object      $task
+     * @access public
+     * @return array|false
+     */
+    protected function buildTaskForUpdateEffort(object $task, object $oldEffort, object $effort): object
+    {
+        $lastEffort = $this->dao->select('*')->from(TABLE_EFFORT)
+            ->where('objectID')->eq($task->id)
+            ->andWhere('objectType')->eq('task')
+            ->orderBy('date_desc,id_desc')->limit(1)->fetch();
+
+        $consumed = $task->consumed + $effort->consumed - $oldEffort->consumed;
+        $left     = ($lastEffort and $effort->id == $lastEffort->id) ? $effort->left : $task->left;
+
+        $now  = helper::now();
+        $data = new stdclass();
+        $data->consumed       = $consumed;
+        $data->left           = $left;
+        $data->status         = $task->status;
+        $data->lastEditedBy   = $this->app->user->account;
+        $data->lastEditedDate = $now;
+        if(empty($left) and strpos('wait,doing,pause', $task->status) !== false)
+        {
+            $data->status       = 'done';
+            $data->finishedBy   = $this->app->user->account;
+            $data->finishedDate = $now;
+            $data->assignedTo   = $task->openedBy;
+        }
+
+        if(!empty($task->team))
+        {
+            $currentTeam = $this->getTeamByAccount($task->team, $oldEffort->account, array('order' => $oldEffort->order));
+            if($currentTeam)
+            {
+                $newTeamInfo = new stdclass();
+                $newTeamInfo->consumed = $currentTeam->consumed + $effort->consumed - $oldEffort->consumed;
+                if($currentTeam->status != 'done') $newTeamInfo->left = $left;
+                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
+                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
+
+                $data = $this->computeMultipleHours($task, $data);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * 检查一个任务是否有子任务。
      * Check if a task has children.
      *
@@ -212,6 +263,25 @@ class taskTao extends taskModel
         if($task->team && !$inTeam) return false;
 
         return true;
+    }
+
+    /**
+     * 编辑日志时，检查输入是否合法。
+     * When editing a effort, check that the input is legal.
+     *
+     * @param  object  $effort
+     * @access public
+     * @return bool
+     */
+    protected function checkEffort(object $effort): bool
+    {
+        $today = helper::today();
+        if(helper::isZeroDate($effort->date)) dao::$errors[] = $this->lang->task->error->dateEmpty;
+        if($effort->date > $today)            dao::$errors[] = $this->lang->task->error->date;
+        if($effort->consumed <= 0)            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
+        if($effort->left < 0)                 dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
+
+        return !dao::isError();
     }
 
     /**

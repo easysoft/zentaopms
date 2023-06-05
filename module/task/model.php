@@ -1775,19 +1775,19 @@ class taskModel extends model
      */
     public function getEffortByID(int $effortID): false|object
     {
-        $estimate = $this->dao->select('*')->from(TABLE_EFFORT)
+        $effort = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('id')->eq($effortID)
             ->fetch();
-        if(!$estimate) return false;
+        if(!$effort ) return false;
 
         /* If the estimate is the last of its task, status of task will be checked. */
         $lastID = $this->dao->select('id')->from(TABLE_EFFORT)
-            ->where('objectID')->eq($estimate->objectID)
+            ->where('objectID')->eq($effort->objectID)
             ->andWhere('objectType')->eq('task')
             ->orderBy('date_desc,id_desc')->limit(1)->fetch('id');
 
-        $estimate->isLast = $lastID == $estimate->id;
-        return $estimate;
+        $effort->isLast = $lastID == $effort->id;
+        return $effort;
     }
 
     /**
@@ -1823,88 +1823,45 @@ class taskModel extends model
     }
 
     /**
-     * Update estimate.
+     * 编辑任务的日志。
+     * Update effort of task.
      *
-     * @param  int    $estimateID
+     * @param  object  $effort
      * @access public
-     * @return void
+     * @return array|false
      */
-    public function updateEstimate($estimateID)
+    public function updateEffort(object $effort): array|false
     {
-        $oldEstimate = $this->getEstimateByID($estimateID);
-        $today       = helper::today();
-        $estimate    = fixer::input('post')
-            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
-            ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
-            ->get();
+        $oldEffort = $this->getEffortByID($effort->id);
 
-        if(helper::isZeroDate($estimate->date)) return dao::$errors[] = $this->lang->task->error->dateEmpty;
-        if($estimate->date > $today)            return dao::$errors[] = $this->lang->task->error->date;
-        if($estimate->consumed <= 0)            return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
-        if($estimate->left < 0)                 return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
+        if(!$this->taskTao->checkEffort($effort)) return false;
 
-        $task = $this->getById($oldEstimate->objectID);
-        $this->dao->update(TABLE_EFFORT)->data($estimate)
+        $this->dao->update(TABLE_EFFORT)->data($effort)
             ->autoCheck()
-            ->where('id')->eq((int)$estimateID)
+            ->where('id')->eq((int)$effort->id)
             ->exec();
 
-        $lastEstimate = $this->dao->select('*')->from(TABLE_EFFORT)
-            ->where('objectID')->eq($task->id)
-            ->andWhere('objectType')->eq('task')
-            ->orderBy('date_desc,id_desc')->limit(1)->fetch();
-
-        $consumed = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
-        $left     = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
-
-        $now  = helper::now();
-        $data = new stdclass();
-        $data->consumed       = $consumed;
-        $data->left           = $left;
-        $data->status         = $task->status;
-        $data->lastEditedBy   = $this->app->user->account;
-        $data->lastEditedDate = $now;
-        if(empty($left) and strpos('wait,doing,pause', $task->status) !== false)
-        {
-            $data->status       = 'done';
-            $data->finishedBy   = $this->app->user->account;
-            $data->finishedDate = $now;
-            $data->assignedTo   = $task->openedBy;
-        }
-
-        if(!empty($task->team))
-        {
-            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('order' => $oldEstimate->order));
-            if($currentTeam)
-            {
-                $newTeamInfo = new stdclass();
-                $newTeamInfo->consumed = $currentTeam->consumed + $estimate->consumed - $oldEstimate->consumed;
-                if($currentTeam->status != 'done') $newTeamInfo->left = $left;
-                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
-                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
-
-                $data = $this->computeMultipleHours($task, $data);
-            }
-        }
+        $task = $this->getById($oldEffort->objectID);
+        $data = $this->buildTaskForUpdateEffort($task, $oldEffort, $effort);
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
-        if(!dao::isError())
-        {
-            if($task->parent > 0) $this->updateParentStatus($task->id);
-            if($task->story)  $this->loadModel('story')->setStage($task->story);
 
-            $oldTask = new stdclass();
-            $oldTask->consumed = $task->consumed;
-            $oldTask->left     = $task->left;
-            $oldTask->status   = $task->status;
+        if(dao::isError()) return false;
 
-            $newTask = new stdclass();
-            $newTask->consumed = $data->consumed;
-            $newTask->left     = $data->left;
-            $newTask->status   = $data->status;
+        if($task->parent > 0) $this->updateParentStatus($task->id);
+        if($task->story)      $this->loadModel('story')->setStage($task->story);
 
-            return common::createChanges($oldTask, $newTask);
-        }
+        $oldTask = new stdclass();
+        $oldTask->consumed = $task->consumed;
+        $oldTask->left     = $task->left;
+        $oldTask->status   = $task->status;
+
+        $newTask = new stdclass();
+        $newTask->consumed = $data->consumed;
+        $newTask->left     = $data->left;
+        $newTask->status   = $data->status;
+
+        return common::createChanges($oldTask, $newTask);
     }
 
     /**
