@@ -1227,21 +1227,29 @@ class treeModel extends model
     }
 
     /**
-     * Create link of a test case.
+     * Create module of a test case.
      *
      * @param  string $type
      * @param  object $module
+     * @param  int    $parent
      * @param  array  $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createCaseLink($type, $module, $extra = array())
+    public function createCaseLink(string $type, object $module, int $parent, array $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
         $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : "";
         $param      = $this->app->tab == 'execution' ? "executionID={$extra['projectID']}&" : $param;
-        return html::a(helper::createLink($moduleName, $methodName, $param . "root={$module->root}&branch={$extra['branchID']}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
+
+        $data = new stdclass();
+        $data->id     = $parent ? ++$this->moduleID : $module->id;
+        $data->parent = $parent ? $parent: $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink($moduleName, $methodName, $param . "productID={$module->root}&branch={$extra['branchID']}&browseType=byModule&param={$module->id}");
+
+        return $data;
     }
 
     /**
