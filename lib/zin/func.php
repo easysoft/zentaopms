@@ -1260,3 +1260,23 @@ function echarts(): echarts
 {
     return createWg('echarts', func_get_args());
 }
+
+/**
+ * Popovers widget.
+ *
+ * ?string     placement='bottom'
+ * ?string     strategy='fixed'
+ * ?bool       flip=true
+ * ?array|bool shift=array('padding' => 5)
+ * ?bool       arrow=false
+ * ?int        offset=1
+ *
+ * ====== blocks ======
+ * trigger = array()
+ * target = array()
+ * ====================
+ */
+function popovers(): popovers
+{
+    return createWg('popovers', func_get_args());
+}
