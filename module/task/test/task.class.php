@@ -1383,15 +1383,16 @@ class taskTest
 
     /**
      * Get the users who finished the multiple task.
+     *
      * @param  int    $executionID
      * @param  string $estStarted
      * @param  string $deadline
-     *
      * @access public
      * @return array
      */
     public function checkEstStartedAndDeadlineTest($executionID, $estStarted, $deadline)
     {
+        $this->objectModel->config->limitTaskDate = 1;
         $object = $this->objectModel->checkEstStartedAndDeadline($executionID, $estStarted, $deadline);
 
         if(dao::isError()) return dao::getError();
