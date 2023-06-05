@@ -272,7 +272,7 @@ class testreport extends control
 
             if($this->app->tab == 'qa')
             {
-                $productID = $this->product->saveState(key($productIdList), $this->products);
+                $productID = $this->product->saveVisitState(key($productIdList), $this->products);
                 $this->loadModel('qa')->setMenu($this->products, $productID);
             }
             elseif($this->app->tab == 'project')
