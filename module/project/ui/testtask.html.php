@@ -24,25 +24,7 @@ foreach($tasks as $task)
 featureBar
 (
     set::current('all'),
-    set::linkParams("projectID={$projectID}"),
-    inputGroup
-    (
-        set::class('ml-4'),
-        $lang->testtask->beginAndEnd,
-        input
-        (
-            set::name('begin'),
-            set::type('date'),
-            set::value($beginTime),
-        ),
-        $lang->testtask->to,
-        input
-        (
-            set::name('end'),
-            set::type('date'),
-            set::value($endTime),
-        )
-    )
+    set::linkParams("projectID={$projectID}")
 );
 
 $cols = array_values($config->testtask->dtable->fieldList);
