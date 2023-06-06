@@ -18,7 +18,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->apiKey;?></th>
-      <td><?php echo $modelConfig->key;?></td>
+      <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ('<code>' . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->proxyType;?></th>
@@ -26,7 +26,7 @@
     </tr>
     <tr <?php if(empty($modelConfig->proxyType)) echo 'style="display: none;"'; ?>>
       <th><?php echo $lang->ai->models->proxyAddr;?></th>
-      <td><?php echo $modelConfig->proxyAddr;?></td>
+      <td><?php echo empty($modelConfig->proxyAddr) ? $lang->ai->models->unconfigured : ('<code>' . substr_replace($modelConfig->proxyAddr, '://...', strpos($modelConfig->proxyAddr, ':')) . '</code>');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->description;?></th>
