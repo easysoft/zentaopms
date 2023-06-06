@@ -42,6 +42,7 @@ featureBar
     to::before($productDropdown),
     inputGroup
     (
+        set::class('ml-4'),
         $lang->testtask->beginAndEnd,
         input
         (

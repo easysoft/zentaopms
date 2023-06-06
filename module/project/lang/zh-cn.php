@@ -325,6 +325,8 @@ $lang->project->featureBar['testcase']['zerocase']    = "零用例{$lang->SRComm
 $lang->project->featureBar['testcase']['suite']       = '套件';
 $lang->project->featureBar['testcase']['autocase']    = '自动化';
 
+$lang->project->featureBar['testtask']['all'] = '测试单列表';
+
 $lang->project->featureBar['build']['all'] = '全部版本';
 
 $lang->project->aclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
