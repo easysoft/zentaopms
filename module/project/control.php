@@ -967,8 +967,9 @@ class project extends control
         }
         else
         {
-            $moduleTree = '';
+            $moduleTree = array();
         }
+
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
         /* Process the openedBuild and resolvedBuild fields. */

@@ -41,7 +41,7 @@ sidebar
 (
     moduleMenu(set(array
     (
-        'modules'   => array(),
+        'modules'   => $moduleTree,
         'activeKey' => $moduleID,
         'closeLink' => $closeLink
     )))

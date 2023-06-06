@@ -645,47 +645,52 @@ class treeModel extends model
     }
 
     /**
-     * Get the tree menu of bug in html.
+     * 获取 bug 的模块。
+     * Get the modules of bug.
      *
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  string $userFunc
-     * @param  string $extra
+     * @param  array  $userFunc
+     * @param  array  $extra
      * @access public
      * @return void
      */
-    public function getBugTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
+    public function getBugTreeMenu(int $rootID, int $productID = 0, int $startModule = 0, array $userFunc = array(), array $extra = array()): array
     {
         $extra += array('executionID' => $rootID, 'projectID' => $rootID, 'productID' => $productID, 'tip' => true);
         $tab    = $this->app->tab;
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
-        $products      = $tab == 'execution' ? $this->loadModel('product')->getProducts($rootID) : $this->loadModel('product')->getProductPairsByProject($rootID);
-        $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $products     = $tab == 'execution' ? $this->loadModel('product')->getProducts($rootID) : $this->loadModel('product')->getProductPairsByProject($rootID);
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
 
         /* Set the start module. */
         $startModulePath = '';
         if($startModule > 0)
         {
-            $startModule = $this->getById($startModule);
+            $startModule = $this->getByID($startModule);
             if($startModule) $startModulePath = $startModule->path . '%';
         }
-
-        $executionModules = $this->getTaskTreeModules($rootID, true, 'bug');
 
         /* Get module according to product. */
         $productNum = count($products);
         $moduleName = strpos(',project,execution,', ",$tab,") !== false ? $this->app->tab  : 'bug';
         $methodName = strpos(',project,execution,', ",$tab,") !== false ? 'bug' : 'browse';
         $param      = strpos(',project,execution,', ",$tab,") !== false ? "{$tab}ID={$rootID}&" : '';
-        $moduleTree = array();
+
+        $modules = array();
         foreach($products as $id => $product)
         {
-            $product->url = helper::createLink($moduleName, $methodName, "{$param}productID=$id");
-            $moduleTree[] = $product;
+            $data = new stdclass();
+            $data->id     = uniqid();
+            $data->parent = 0;
+            $data->name   = is_object($product) ? $product->name : $product;
+            $data->url    = helper::createLink($moduleName, $methodName, "{$param}productID=$id");
+            $modules[] = $module;
         }
-        return $menuTree;
+
+        return $modules;
     }
 
     /**
