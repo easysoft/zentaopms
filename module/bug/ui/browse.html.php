@@ -9,65 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
 jsVar('productID', $product->id);
 jsVar('branch',    $branch);
-
-$this->bug->buildOperateMenu(null, 'browse');
-
-foreach($bugs as $bug)
-{
-    $bug->productName  = zget($products, $bug->product);
-    $bug->storyName    = zget($stories, $bug->story);
-    $bug->taskName     = zget($tasks, $bug->task);
-    $bug->toTaskName   = zget($tasks, $bug->toTask);
-    $bug->module       = zget($modulePairs, $bug->module);
-    $bug->branch       = zget($branchTagOption, $bug->branch);
-    $bug->project      = zget($projectPairs, $bug->project);
-    $bug->execution    = zget($executions, $bug->execution);
-    if(!empty($bug->openedBy))     $bug->openedBy     = zget($users, $bug->openedBy);
-    if(!empty($bug->assignedTo))   $bug->assignedTo   = zget($users, $bug->assignedTo);
-    if(!empty($bug->resolvedBy))   $bug->resolvedBy   = zget($users, $bug->resolvedBy);
-    if(!empty($bug->mailto))       $bug->mailto       = zget($users, $bug->mailto);
-    if(!empty($bug->closedBy))     $bug->closedBy     = zget($users, $bug->closedBy);
-    if(!empty($bug->lastEditedBy)) $bug->lastEditedBy = zget($users, $bug->lastEditedBy);
-    $bug->type         = zget($lang->bug->typeList, $bug->type);
-    $bug->confirmed    = zget($lang->bug->confirmedList, $bug->confirmed);
-    $bug->resolution   = zget($lang->bug->resolutionList, $bug->resolution);
-    $bug->os           = zget($lang->bug->osList, $bug->os);
-    $bug->browser      = zget($lang->bug->browserList, $bug->browser);
-
-    $actions = array();
-    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->bug->isClickable($bug, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $bug->actions = $actions;
-}
-
-$cols = array_values($config->bug->dtable->fieldList);
-$data = array_values($bugs);
-
-$canCreate      = false;
-$canBatchCreate = false;
-if(common::canModify('product', $product))
-{
-    $canCreate      = hasPriv('bug', 'create');
-    $canBatchCreate = hasPriv('bug', 'batchCreate');
-
-    $selectedBranch  = $branch != 'all' ? $branch : 0;
-    $createLink      = $this->createLink('bug', 'create', "productID={$product->id}&branch=$selectedBranch&extra=moduleID=$currentModuleID");
-    $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID={$product->id}&branch=$branch&executionID=0&moduleID=$currentModuleID");
-    if(commonModel::isTutorialMode())
-    {
-        $wizardParams = helper::safe64Encode("productID={$product->id}&branch=$branch&extra=moduleID=$currentModuleID");
-        $createLink   = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
-    }
-
-    $createItem      = array('text' => $lang->bug->create,      'url' => $createLink);
-    $batchCreateItem = array('text' => $lang->bug->batchCreate, 'url' => $batchCreateLink);
-}
 
 featureBar
 (
@@ -78,6 +22,26 @@ featureBar
 
 if(!isonlybody())
 {
+    $canCreate      = false;
+    $canBatchCreate = false;
+    if(common::canModify('product', $product))
+    {
+        $canCreate      = hasPriv('bug', 'create');
+        $canBatchCreate = hasPriv('bug', 'batchCreate');
+
+        $selectedBranch  = $branch != 'all' ? $branch : 0;
+        $createLink      = $this->createLink('bug', 'create', "productID={$product->id}&branch=$selectedBranch&extra=moduleID=$currentModuleID");
+        $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID={$product->id}&branch=$branch&executionID=0&moduleID=$currentModuleID");
+        if(commonModel::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode("productID={$product->id}&branch=$branch&extra=moduleID=$currentModuleID");
+            $createLink   = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+        }
+
+        $createItem      = array('text' => $lang->bug->create,      'url' => $createLink);
+        $batchCreateItem = array('text' => $lang->bug->batchCreate, 'url' => $batchCreateLink);
+    }
+
     toolbar
     (
         hasPriv('bug', 'report') ? item(set(array
@@ -121,6 +85,32 @@ sidebar
     )))
 );
 
+$this->bug->buildOperateMenu(null, 'browse');
+
+$config->bug->dtable->fieldList['module']['map']    = $modulePairs;
+$config->bug->dtable->fieldList['product']['map']   = $products;
+$config->bug->dtable->fieldList['story']['map']     = $stories;
+$config->bug->dtable->fieldList['task']['map']      = $tasks;
+$config->bug->dtable->fieldList['toTask']['map']    = $tasks;
+$config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
+$config->bug->dtable->fieldList['project']['map']   = $projectPairs;
+$config->bug->dtable->fieldList['execution']['map'] = $executions;
+
+foreach($bugs as $bug)
+{
+    $actions = array();
+    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
+    {
+        $isClickable = $this->bug->isClickable($bug, $actionCode);
+
+        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
+    }
+    $bug->actions = $actions;
+}
+
+$cols = array_values($config->bug->dtable->fieldList);
+$data = array_values($bugs);
+
 $footToolbar = array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
@@ -150,7 +140,7 @@ foreach($lang->bug->resolutionList as $key => $resolution)
     }
 }
 
-zui::menu
+menu
 (
     set::id('navActions'),
     set::class('menu dropdown-menu'),
@@ -210,7 +200,8 @@ dtable
     set::footPager(usePager()),
     set::checkable(true),
     set::footToolbar($footToolbar),
-    set::footPager(
+    set::footPager
+    (
         usePager(),
         set::page($pager->pageID),
         set::recPerPage($pager->recPerPage),

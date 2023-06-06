@@ -40,6 +40,7 @@ $config->bug->dtable->fieldList['branch']['type']  = 'text';
 $config->bug->dtable->fieldList['type']['name']  = 'type';
 $config->bug->dtable->fieldList['type']['title'] = $lang->bug->type;
 $config->bug->dtable->fieldList['type']['type']  = 'category';
+$config->bug->dtable->fieldList['type']['map']   = $lang->bug->typeList;
 
 $config->bug->dtable->fieldList['project']['name']  = 'project';
 $config->bug->dtable->fieldList['project']['title'] = $lang->bug->project;
@@ -68,6 +69,7 @@ $config->bug->dtable->fieldList['openedBuild']['type']  = 'text';
 $config->bug->dtable->fieldList['confirmed']['name']  = 'confirmed';
 $config->bug->dtable->fieldList['confirmed']['title'] = $lang->bug->confirmed;
 $config->bug->dtable->fieldList['confirmed']['type']  = 'category';
+$config->bug->dtable->fieldList['confirmed']['map']   = $lang->bug->confirmedList;
 
 $config->bug->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->bug->dtable->fieldList['assignedTo']['title']       = $lang->bug->assignedTo;
@@ -89,6 +91,7 @@ $config->bug->dtable->fieldList['resolvedBy']['type']  = 'user';
 $config->bug->dtable->fieldList['resolution']['name']  = 'resolution';
 $config->bug->dtable->fieldList['resolution']['title'] = $lang->bug->resolution;
 $config->bug->dtable->fieldList['resolution']['type']  = 'category';
+$config->bug->dtable->fieldList['resolution']['map']   = $lang->bug->resolutionList;
 
 $config->bug->dtable->fieldList['resolvedDate']['name']  = 'assignedDate';
 $config->bug->dtable->fieldList['resolvedDate']['title'] = $lang->bug->abbr->resolvedDate;
@@ -128,10 +131,12 @@ $config->bug->dtable->fieldList['keywords']['type']  = 'text';
 $config->bug->dtable->fieldList['os']['name']  = 'os';
 $config->bug->dtable->fieldList['os']['title'] = $lang->bug->os;
 $config->bug->dtable->fieldList['os']['type']  = 'category';
+$config->bug->dtable->fieldList['os']['map']   = $lang->bug->osList;
 
 $config->bug->dtable->fieldList['browser']['name']  = 'browser';
 $config->bug->dtable->fieldList['browser']['title'] = $lang->bug->browser;
 $config->bug->dtable->fieldList['browser']['type']  = 'category';
+$config->bug->dtable->fieldList['browser']['map']   = $lang->bug->browserList;
 
 $config->bug->dtable->fieldList['mailto']['name']  = 'mailto';
 $config->bug->dtable->fieldList['mailto']['title'] = $lang->bug->mailto;
