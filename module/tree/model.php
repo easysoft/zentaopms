@@ -682,11 +682,11 @@ class treeModel extends model
         $modules = array();
         foreach($products as $id => $product)
         {
-            $data = new stdclass();
-            $data->id     = uniqid();
-            $data->parent = 0;
-            $data->name   = is_object($product) ? $product->name : $product;
-            $data->url    = helper::createLink($moduleName, $methodName, "{$param}productID=$id");
+            $module = new stdclass();
+            $module->id     = uniqid();
+            $module->parent = 0;
+            $module->name   = is_object($product) ? $product->name : $product;
+            $module->url    = helper::createLink($moduleName, $methodName, "{$param}productID=$id");
             $modules[] = $module;
         }
 
