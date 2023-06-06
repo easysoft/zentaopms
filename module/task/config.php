@@ -87,57 +87,46 @@ $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toSto
 $config->task->actionList['confirmStoryChange']['icon']  = 'search';
 $config->task->actionList['confirmStoryChange']['hint']  = $lang->task->confirmStoryChange;
 $config->task->actionList['confirmStoryChange']['url']   = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
-$config->task->actionList['confirmStoryChange']['order'] = 5;
-$config->task->actionList['confirmStoryChange']['show']  = 'clickable';
 
 $config->task->actionList['start']['icon']        = 'play';
 $config->task->actionList['start']['hint']        = $lang->task->start;
 $config->task->actionList['start']['text']        = $lang->task->start;
 $config->task->actionList['start']['url']         = helper::createLink('task', 'start', 'taskID={id}', '', true);
 $config->task->actionList['start']['data-toggle'] = 'modal';
-$config->task->actionList['start']['order']       = 10;
-$config->task->actionList['start']['show']        = 'default';
 
 $config->task->actionList['restart']['icon']        = 'restart';
 $config->task->actionList['restart']['hint']        = $lang->task->restart;
 $config->task->actionList['restart']['text']        = $lang->task->restart;
 $config->task->actionList['restart']['url']         = helper::createLink('task', 'restart', 'taskID={id}', '', true);
 $config->task->actionList['restart']['data-toggle'] = 'modal';
-$config->task->actionList['restart']['order']       = 10;
-$config->task->actionList['restart']['show']        = 'clickable';
 
 $config->task->actionList['finish']['icon']        = 'checked';
 $config->task->actionList['finish']['hint']        = $lang->task->finish;
 $config->task->actionList['finish']['text']        = $lang->task->finish;
 $config->task->actionList['finish']['url']         = helper::createLink('task', 'finish', 'taskID={id}', '', true);
 $config->task->actionList['finish']['data-toggle'] = 'modal';
-$config->task->actionList['finish']['order']       = 15;
 
 $config->task->actionList['close']['icon']        = 'off';
 $config->task->actionList['close']['hint']        = $lang->task->close;
 $config->task->actionList['close']['text']        = $lang->task->close;
 $config->task->actionList['close']['url']         = helper::createLink('task', 'close', 'taskID={id}', '', true);
 $config->task->actionList['close']['data-toggle'] = 'modal';
-$config->task->actionList['close']['order']       = 20;
 
 $config->task->actionList['recordWorkhour']['icon']        = 'time';
 $config->task->actionList['recordWorkhour']['hint']        = $lang->task->record;
 $config->task->actionList['recordWorkhour']['text']        = $lang->task->record;
 $config->task->actionList['recordWorkhour']['url']         = helper::createLink('task', 'recordWorkhour', 'taskID={id}', '', true);
 $config->task->actionList['recordWorkhour']['data-toggle'] = 'modal';
-$config->task->actionList['recordWorkhour']['order']       = 25;
 
 $config->task->actionList['edit']['icon']  = 'edit';
 $config->task->actionList['edit']['hint']  = $lang->task->edit;
 $config->task->actionList['edit']['text']  = $lang->task->edit;
 $config->task->actionList['edit']['url']   = helper::createLink('task', 'edit', 'taskID={id}');
-$config->task->actionList['edit']['order'] = 30;
 
 $config->task->actionList['batchCreate']['icon']  = 'split';
 $config->task->actionList['batchCreate']['hint']  = $lang->task->batchCreate;
 $config->task->actionList['batchCreate']['text']  = $lang->task->batchCreate;
 $config->task->actionList['batchCreate']['url']   = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
-$config->task->actionList['batchCreate']['order'] = 35;
 
 $config->task->actionList['create']['icon'] = 'copy';
 $config->task->actionList['create']['hint'] = $lang->task->children;
