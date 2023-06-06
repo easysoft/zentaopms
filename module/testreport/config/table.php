@@ -1,8 +1,6 @@
 <?php
 $config->testreport->dtable = new stdclass();
 
-$config->testreport->dtable->operateList = array('edit', 'delete');
-
 global $lang;
 
 $config->testreport->actionList['edit']['icon']        = 'edit';
