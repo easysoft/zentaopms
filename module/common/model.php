@@ -3648,8 +3648,9 @@ EOF;
         switch($objectType)
         {
             case 'custom':
-                $doclib = $this->loadModel('doc')->getLibById($objectID);
-                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, (string)$this->app->user->account) === false) $canVisit = false;
+                $doclib  = $this->loadModel('doc')->getLibById($objectID);
+                $account = (string)$this->app->user->account;
+                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
                 break;
             case 'product':
                 $doclib   = $this->loadModel('doc')->getLibById($objectID);

@@ -15,3 +15,4 @@ $config->cache->fullPages[] = 'program|browse';
 $config->cache->fullPages[] = 'product|all';
 $config->cache->fullPages[] = 'project|browse';
 $config->cache->fullPages[] = 'block|printblock';
+$config->cache->fullPages[] = 'screen|view';
