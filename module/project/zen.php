@@ -1049,6 +1049,22 @@ class projectZen extends project
         $actions[] = 'whitelist';
         $actions[] = 'delete';
 
+        foreach($actions as &$action)
+        {
+            if(strpos($action, ':'))
+            {
+                $actionList = explode(':', $action);
+                $action     = $actionList[0] . ':';
+                foreach(explode(',', $actionList[1]) as $actionName)
+                {
+                    if(!$this->project->isClickable($project, $actionName)) $action .= "-$actionName";
+                }
+
+                continue;
+            }
+            if(!$this->project->isClickable($project, $action)) $action = array('name' => $action, 'disabled' => true);
+        }
+
         return $actions;
     }
 }

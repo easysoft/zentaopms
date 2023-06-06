@@ -368,29 +368,18 @@ class project extends control
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
         $this->project->buildSearchForm($queryID, $actionURL);
 
-        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
+        $programTitle = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=project&key=programTitle");
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
-        $this->view->title          = $this->lang->project->browse;
-        $this->view->projectStats   = $this->projectZen->processProjectListData($projectStats);
-        $this->view->pager          = $pager;
-        $this->view->programID      = $programID;
-        $this->view->program        = $this->program->getByID($programID);
-        $this->view->programTree    = $this->project->getProgramTree();
-        $this->view->programs       = array('0' => '') + $this->program->getParentPairs();
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->userIdPairs    = $this->loadModel('user')->getPairs('nodeleted|showid');
-        $this->view->usersAvatar    = $this->user->getAvatarPairs();
-        $this->view->browseType     = $browseType;
-        $this->view->projectType    = $projectType;
-        $this->view->param          = $param;
-        $this->view->orderBy        = $orderBy;
-        $this->view->recTotal       = $pager->recTotal;
-        $this->view->recPerPage     = $recPerPage;
-        $this->view->pageID         = $pageID;
-        $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
-        $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
-        $this->view->actionURL      = $actionURL;
+        $this->view->title         = $this->lang->project->browse;
+        $this->view->projectStats  = $this->projectZen->processProjectListData($projectStats);
+        $this->view->pager         = $pager;
+        $this->view->programID     = $programID;
+        $this->view->programTree   = $this->project->getProgramTree();
+        $this->view->browseType    = $browseType;
+        $this->view->param         = $param;
+        $this->view->orderBy       = $orderBy;
+        $this->view->showBatchEdit = $this->cookie->showProjectBatchEdit;
 
         $this->display();
     }

@@ -25,6 +25,7 @@ featureBar
     item(set(array
     (
         'type' => "checkbox",
+        'name' => 'involved',
         'text' => $lang->project->mine
     ))),
     li(searchToggle())
@@ -56,10 +57,11 @@ toolbar
     ))),
     item(set(array
     (
-        'icon'  => 'plus',
-        'text'  => $lang->project->create,
-        'class' => "primary create-project-btn",
-        'href'  => $this->createLink('project', 'createGuide')
+        'icon'       => 'plus',
+        'text'       => $lang->project->create,
+        'class'      => "primary create-project-btn",
+        'url'        => $this->createLink('project', 'createGuide', '', '', true),
+        'data-modal' => 'modal'
     )))
 );
 
