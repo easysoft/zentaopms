@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$scope    = $this->session->testTaskVersionScope;
+$status   = $this->session->testTaskVersionStatus;
+$viewName = $scope == 'local'? $productName : $lang->testtask->all;
+jsVar('condition', "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
 $this->testtask->buildOperateMenu(null, 'browse');
 foreach($tasks as $task)
@@ -23,18 +27,46 @@ foreach($tasks as $task)
 }
 
 $config->testtask->dtable->fieldList['owner']['userMap'] = $users;
-
-$cols = array_values($config->testtask->dtable->fieldList);
-$data = array_values($tasks);
-
-$scope  = $this->session->testTaskVersionScope;
-$status = $this->session->testTaskVersionStatus;
+$productDropdown = dropdown
+(
+    to('trigger', btn($viewName)),
+    to('menu', menu
+    (
+        set::class('dropdown-menu'),
+        set::items
+        ([
+            ['text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")],
+            ['text' => $productName, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status")],
+        ])
+    )
+    ),
+);
 featureBar
 (
     set::current($status),
-    set::linkParams("productID={$productID}&branch=$branch&type={$scope},{key}")
+    set::linkParams("productID={$productID}&branch=$branch&type={$scope},{key}"),
+    to::before($productDropdown),
+    inputGroup
+    (
+        $lang->testtask->beginAndEnd,
+        input
+        (
+            set::name('begin'),
+            set::type('date'),
+            set::value($beginTime),
+        ),
+        $lang->testtask->to,
+        input
+        (
+            set::name('end'),
+            set::type('date'),
+            set::value($endTime),
+        )
+    )
 );
 
+$cols = array_values($config->testtask->dtable->fieldList);
+$data = array_values($tasks);
 toolbar
 (
     btngroup
