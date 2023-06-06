@@ -133,14 +133,17 @@ $lang->my->guideChangeTheme = <<<EOT
 </div>
 EOT;
 
-$lang->my->featureBar['todo']['all']             = '指派自己';
-$lang->my->featureBar['todo']['before']          = '未完';
-$lang->my->featureBar['todo']['future']          = '待定';
-$lang->my->featureBar['todo']['thisWeek']        = '本周';
-$lang->my->featureBar['todo']['thisMonth']       = '本月';
-$lang->my->featureBar['todo']['thisYear']        = '本年';
-$lang->my->featureBar['todo']['assignedToOther'] = '指派他人';
-$lang->my->featureBar['todo']['cycle']           = '周期';
+$lang->my->featureBar['todo']['all']       = '指派给我';
+$lang->my->featureBar['todo']['before']    = '未完成';
+$lang->my->featureBar['todo']['future']    = '待定';
+$lang->my->featureBar['todo']['today']     = '今日';
+$lang->my->featureBar['todo']['thisWeek']  = '本周';
+$lang->my->featureBar['todo']['thisMonth'] = '本月';
+$lang->my->featureBar['todo']['more']      = '更多';
+
+$lang->my->moreSelects['todo']['more']['thisYear']        = '本年';
+$lang->my->moreSelects['todo']['more']['assignedToOther'] = '指派他人';
+$lang->my->moreSelects['todo']['more']['cycle']           = '周期';
 
 $lang->my->featureBar['audit']['all']      = '全部';
 $lang->my->featureBar['audit']['story']    = '需求';

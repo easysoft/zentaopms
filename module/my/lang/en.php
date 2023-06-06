@@ -133,14 +133,17 @@ $lang->my->guideChangeTheme = <<<EOT
 </div>
 EOT;
 
-$lang->my->featureBar['todo']['all']             = 'Assigned To Yourself';
-$lang->my->featureBar['todo']['before']          = 'Unfinished';
-$lang->my->featureBar['todo']['future']          = 'TBD';
-$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
-$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
-$lang->my->featureBar['todo']['thisYear']        = 'This Year';
-$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
-$lang->my->featureBar['todo']['cycle']           = 'Recurrence';
+$lang->my->featureBar['todo']['all']       = 'Assigned To Yourself';
+$lang->my->featureBar['todo']['before']    = 'Unfinished';
+$lang->my->featureBar['todo']['future']    = 'TBD';
+$lang->my->featureBar['todo']['today']     = 'Today';
+$lang->my->featureBar['todo']['thisWeek']  = 'This Week';
+$lang->my->featureBar['todo']['thisMonth'] = 'This Month';
+$lang->my->featureBar['todo']['more']      = 'More';
+
+$lang->my->moreSelects['todo']['more']['thisYear']        = 'This Year';
+$lang->my->moreSelects['todo']['more']['assignedToOther'] = 'Assigned To Other';
+$lang->my->moreSelects['todo']['more']['cycle']           = 'Recurrence';
 
 $lang->my->featureBar['audit']['all']      = 'All';
 $lang->my->featureBar['audit']['story']    = 'Story';
