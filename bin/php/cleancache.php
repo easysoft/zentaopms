@@ -45,4 +45,4 @@ function viewFileContent($file)
 $cleanNum = 0;
 traverseDirectory(rtrim($app->getCacheRoot(), DS), $cleanNum);
 
-echo "Cleaned $cleanNum cache files.\n";
+echo "Cleaned {$cleanNum} cache files.", PHP_EOL;
