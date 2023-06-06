@@ -153,8 +153,6 @@ $config->task->dtable->fieldList['mailto']['sortType'] = true;
 
 $config->task->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->task->dtable->fieldList['actions']['name']  = 'actions';
-$config->task->dtable->fieldList['actions']['fixed'] = 'right';
-$config->task->dtable->fieldList['actions']['width'] = '180';
 $config->task->dtable->fieldList['actions']['type']  = 'actions';
 $config->task->dtable->fieldList['actions']['list']  = $config->task->actionList;
 $config->task->dtable->fieldList['actions']['menu']  = array(array('confirmStoryChange'), array('start|restart', 'finish', 'close', 'recordWorkhour', 'edit', 'batchCreate'));
