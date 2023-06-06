@@ -464,6 +464,7 @@ function initTableData($items, &$fieldList, $checkModel)
         }
     }
 
+    global $app;
     foreach($items as $item)
     {
         $item->actions = array();
@@ -490,7 +491,7 @@ function initTableData($items, &$fieldList, $checkModel)
                         }
                     }
 
-                    if(!common::hasPriv('task', $action)) continue;
+                    if(!common::hasPriv($app->rawModule, $action)) continue;
                     if($checkModel->isClickable($item, $action))
                     {
                         $item->actions[] = array('name' => $action);
