@@ -1291,3 +1291,11 @@ function popovers(): popovers
 {
     return createWg('popovers', func_get_args());
 }
+
+/**
+ * Draggable ul widget.
+ */
+function dragUl(): dragUl
+{
+    return createWg('dragUl', func_get_args());
+}
