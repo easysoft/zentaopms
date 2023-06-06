@@ -262,10 +262,6 @@ $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featureBar['browse']['group']       = 'Group View';
-$lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
-$lang->testcase->featureBar['browse']['suite']       = 'Suite';
-$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 
 $lang->testcase->importXmind     = "Import XMIND";
 $lang->testcase->exportXmind     = "Export XMIND";

@@ -262,10 +262,6 @@ $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <st
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
-$lang->testcase->featureBar['browse']['group']       = '分组查看';
-$lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
-$lang->testcase->featureBar['browse']['suite']       = '套件';
-$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 
 $lang->testcase->importXmind     = "导入XMIND";
 $lang->testcase->exportXmind     = "导出XMIND";
