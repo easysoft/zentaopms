@@ -9,11 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-$scope    = $this->session->testTaskVersionScope;
-$status   = $this->session->testTaskVersionStatus;
-$viewName = $scope == 'local'? $productName : $lang->testtask->all;
-jsVar('condition', "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
-
 $this->testtask->buildOperateMenu(null, 'browse');
 foreach($tasks as $task)
 {
@@ -26,20 +21,10 @@ foreach($tasks as $task)
     $task->actions = $actions;
 }
 
-$productDropdown = productMenu
-(
-    set::title($viewName),
-    set::items(array
-    (
-        array('text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")),
-        array('text' => $productName, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"))
-    ))
-);
 featureBar
 (
-    set::current($status),
-    set::linkParams("productID={$productID}&branch=$branch&type={$scope},{key}"),
-    to::before($productDropdown),
+    set::current($type),
+    set::linkParams("projectID={$projectID}&type={key}"),
     inputGroup
     (
         $lang->testtask->beginAndEnd,
@@ -75,7 +60,7 @@ toolbar
     )
 );
 
-$footerHTML = $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
+$footerHTML = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 dtable
 (
     set::cols($cols),

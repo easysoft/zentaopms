@@ -1102,11 +1102,21 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $productTasks = array();
-
         $project = $this->project->getByID($projectID);
-        $tasks = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
-        foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
+        $tasks   = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
+
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        foreach($tasks as $key => $task)
+        {
+            if($task->status == 'wait')    $waitCount ++;
+            if($task->status == 'doing')   $testingCount ++;
+            if($task->status == 'blocked') $blockedCount ++;
+            if($task->status == 'done')    $doneCount ++;
+
+        }
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->common;
         $this->view->project      = $project;
@@ -1114,11 +1124,15 @@ class project extends control
         $this->view->projectName  = $project->name;
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
-        $this->view->tasks        = $productTasks;
+        $this->view->tasks        = $tasks;
+        $this->view->waitCount    = $waitCount;
+        $this->view->testingCount = $testingCount;
+        $this->view->blockedCount = $blockedCount;
+        $this->view->doneCount    = $doneCount;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products     = $this->loadModel('product')->getPairs('', 0);
         $this->view->canBeChanged = common::canModify('project', $project); // Determines whether an object is editable.
-
+        $this->view->actions      = $this->loadModel('action')->getList('testtask', $projectID);
         $this->display();
     }
 

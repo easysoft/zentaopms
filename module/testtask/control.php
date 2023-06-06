@@ -116,19 +116,36 @@ class testtask extends control
         if($product->type == 'normal') $branch = 'all';
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->productID   = $productID;
-        $this->view->productName = $this->products[$productID];
-        $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $tasks;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->pager       = $pager;
-        $this->view->branch      = $branch;
-        $this->view->beginTime   = $beginTime;
-        $this->view->endTime     = $endTime;
-        $this->view->product     = $product;
-        $this->view->type        = $type;
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        foreach($tasks as $key => $task)
+        {
+            $productTasks[$task->product][] = $task;
+            if($task->status == 'wait')    $waitCount ++;
+            if($task->status == 'doing')   $testingCount ++;
+            if($task->status == 'blocked') $blockedCount ++;
+            if($task->status == 'done')    $doneCount ++;
 
+        }
+
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->productID    = $productID;
+        $this->view->productName  = $this->products[$productID];
+        $this->view->orderBy      = $orderBy;
+        $this->view->tasks        = $tasks;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->pager        = $pager;
+        $this->view->branch       = $branch;
+        $this->view->beginTime    = $beginTime;
+        $this->view->endTime      = $endTime;
+        $this->view->product      = $product;
+        $this->view->type         = $type;
+        $this->view->waitCount    = $waitCount;
+        $this->view->testingCount = $testingCount;
+        $this->view->blockedCount = $blockedCount;
+        $this->view->doneCount    = $doneCount;
         $this->display();
     }
 
