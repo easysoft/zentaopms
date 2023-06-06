@@ -94,19 +94,18 @@ class fileModel extends model
     /**
      * Get files by ID list.
      *
-     * @param  int    $fileIdList
+     * @param  string $fileIdList
      * @access public
      * @return array
      */
-    public function getByIdList($fileIdList)
+    public function getByIdList(string $fileIdList): array
     {
         if(empty($fileIdList)) return array();
 
         $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIdList)->orderBy('id')->fetchAll('id');
-
         foreach($files as $file)
         {
-            if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
+            if($file->objectType == 'traincourse' || $file->objectType == 'traincontents')
             {
                 $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
                 $file->webPath  = 'data/course/' . $file->pathname;
@@ -359,9 +358,10 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function getSaveName($pathName)
+    public function getSaveName(string $pathName): string
     {
-        return strpos($pathName, '.') === false ? $pathName : substr($pathName, 0, strpos($pathName, '.'));
+        $position = strpos($pathName, '.');
+        return $position === false ? $pathName : substr($pathName, 0, $position);
     }
 
     /**
@@ -371,7 +371,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function getRealPathName($pathName)
+    public function getRealPathName(string $pathName): string
     {
         $realPath = $this->savePath . $pathName;
         if(file_exists($realPath)) return $pathName;
@@ -487,7 +487,7 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function setFileWebAndRealPaths(&$file)
+    public function setFileWebAndRealPaths(object $file): void
     {
         $pathName       = $this->getRealPathName($file->pathname);
         $file->realPath = $this->savePath . $pathName;
@@ -502,7 +502,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function setImgSize($content, $maxSize = 0)
+    public function setImgSize(string $content, int $maxSize = 0): string
     {
         if(empty($content)) return $content;
 
