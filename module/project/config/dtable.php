@@ -12,7 +12,7 @@ $config->project->dtable->fieldList['name']['title']      = $lang->project->name
 $config->project->dtable->fieldList['name']['name']       = 'name';
 $config->project->dtable->fieldList['name']['type']       = 'title';
 $config->project->dtable->fieldList['name']['link']       = helper::createLink('project', 'index', 'projectID={id}');
-$config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if([\'scrum\', \'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
+$config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
 $config->project->dtable->fieldList['name']['group']      = 1;
 
 if(!empty($config->setCode))
