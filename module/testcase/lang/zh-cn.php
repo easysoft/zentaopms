@@ -165,7 +165,7 @@ $lang->testcase->insertAfter  = '之后添加';
 
 $lang->testcase->assignToMe   = '指派给我的用例';
 $lang->testcase->openedByMe   = '我建的用例';
-$lang->testcase->allCases     = '所有';
+$lang->testcase->allCases     = '全部';
 $lang->testcase->allTestcases = '所有用例';
 $lang->testcase->needConfirm  = "{$lang->common->story}变动";
 $lang->testcase->bySearch     = '搜索';
