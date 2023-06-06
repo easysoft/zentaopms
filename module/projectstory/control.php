@@ -34,7 +34,7 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story(int $projectID = 0, int $productID = 0, string $branch = '0', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Get productID for none-product project. */
         if($projectID)
@@ -49,7 +49,20 @@ class projectStory extends control
         $this->session->set('exportProductList', $this->products);
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
-        echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
+
+        echo $this->fetch('product', 'browse', array
+        (
+            'productID'  => $productID,
+            'branch'     => $branch,
+            'browseType' => $browseType,
+            'param'      => $param,
+            'storyType'  => $storyType,
+            'orderBy'    => $orderBy,
+            'recTotal'   => $recTotal,
+            'recPerPage' => $recPerPage,
+            'pageID'     => $pageID,
+            'projectID'  => $projectID
+        ));
     }
 
     /**
