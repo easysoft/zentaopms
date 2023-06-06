@@ -36,7 +36,7 @@ sidebar
     moduleMenu(set(array(
         'modules'   => $moduleTree,
         'activeKey' => $moduleID,
-        'closeLink' => $this->createLink('execution', 'bug')
+        'closeLink' => $this->createLink('execution', 'testcase', "executionID={$execution->id}")
     )))
 );
 
@@ -83,6 +83,7 @@ dtable
     set::cols(array_values($config->bug->dtable->fieldList)),
     set::data(array_values($bugs)),
     set::checkable($canBatchAssignTo),
+    set::sortLink(jsRaw('createSortLink')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),
