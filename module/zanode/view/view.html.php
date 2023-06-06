@@ -26,7 +26,7 @@
 <?php $browseLink = $this->session->zanodeList ? $this->session->zanodeList : $this->createLink('zanode', 'browse', "");?>
 <?php
 $vars    = "id={$zanode->id}&orderBy=%s";
-$account = strpos($zanode->osName, "windows") ? $config->zanode->defaultWinAccount : $config->zanode->defaultAccount;
+$account = strpos(strtolower($zanode->osName), "windows") !== false ? $config->zanode->defaultWinAccount : $config->zanode->defaultAccount;
 $ssh = $zanode->hostType == 'physics' ? ('ssh ' . $zanode->extranet) : ($zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : '');
 ?>
 <div id='mainMenu' class='clearfix'>
