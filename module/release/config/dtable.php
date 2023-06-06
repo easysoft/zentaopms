@@ -14,11 +14,11 @@ $config->release->dtable->story->fieldList['id']['type']     = 'checkID';
 $config->release->dtable->story->fieldList['id']['sortType'] = 'desc';
 $config->release->dtable->story->fieldList['id']['checkbox'] = true;
 
-$config->release->dtable->story->fieldList['title']['title']      = $lang->story->title;
-$config->release->dtable->story->fieldList['title']['name']       = 'title';
-$config->release->dtable->story->fieldList['title']['type']       = 'title';
-$config->release->dtable->story->fieldList['title']['link']       = helper::createLink('story', 'view', 'storyID = {id}', '', true);
-$config->release->dtable->story->fieldList['title']['data-modal'] = 'modal';
+$config->release->dtable->story->fieldList['title']['title']       = $lang->story->title;
+$config->release->dtable->story->fieldList['title']['name']        = 'title';
+$config->release->dtable->story->fieldList['title']['type']        = 'title';
+$config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}', '', true);
+$config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
 
 $config->release->dtable->story->fieldList['pri']['title'] = $lang->priAB;
 $config->release->dtable->story->fieldList['pri']['name']  = 'pri';
@@ -53,4 +53,4 @@ $config->release->dtable->story->fieldList['actions']['menu']  = array('unlinkSt
 
 $config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['icon'] = 'unlink';
 $config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['hint'] = $lang->release->unlinkStory;
-$config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['url']  = helper::createLink('release', 'unlinkStory', "releaseID={id}&story={story}");
+$config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['url']  = 'javascript: unlinkStory("{id}")';
