@@ -1186,15 +1186,17 @@ class treeModel extends model
     }
 
     /**
-     * Create link of a bug.
+     * 设置Bug模块树的点击链接。
+     * Click link to set Bug module tree.
      *
      * @param  string $type
      * @param  object $module
+     * @param  int    $parent
      * @param  array  $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createBugLink($type, $module, $extra = array())
+    public function createBugLink(string $type, object $module, int $parent, array $extra = array())
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
@@ -1203,7 +1205,14 @@ class treeModel extends model
         $extra['type'] = (isset($extra['type']) and $extra['type'] != 'bysearch') ? $extra['type'] : 'all';
         if($this->app->tab == 'execution') $param = "execuitonID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         if($this->app->tab == 'project') $param = "projectID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
-        return helper::createLink($moduleName, $methodName, $param);
+
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink($moduleName, $methodName, $param);
+
+        return $data;
     }
 
     /**
