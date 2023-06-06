@@ -94,7 +94,7 @@ $config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
 $config->bug->dtable->fieldList['project']['map']   = $projectPairs;
 $config->bug->dtable->fieldList['execution']['map'] = $executions;
 
-$tableData = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
+$bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
 
 $cols = array_values($config->bug->dtable->fieldList);
 $data = array_values($bugs);

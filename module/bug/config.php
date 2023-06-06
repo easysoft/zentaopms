@@ -89,35 +89,36 @@ global $lang;
 $config->bug->actionList = array();
 $config->bug->actionList['confirm']['icon']        = 'ok';
 $config->bug->actionList['confirm']['text']        = $lang->bug->abbr->confirmed;
+$config->bug->actionList['confirm']['hint']        = $lang->bug->abbr->confirmed;
 $config->bug->actionList['confirm']['url']         = helper::createLink('bug', 'confirm',"bugID={id}");
 $config->bug->actionList['confirm']['data-toggle'] = 'modal';
 
-$config->bug->actionList['assignTo']['icon']        = 'hand-right';
-$config->bug->actionList['assignTo']['text']        = $lang->bug->assignTo;
-$config->bug->actionList['assignTo']['url']         = helper::createLink('bug', 'assignTo',"bugID={id}");
-$config->bug->actionList['assignTo']['data-toggle'] = 'modal';
-
 $config->bug->actionList['resolve']['icon']        = 'checked';
 $config->bug->actionList['resolve']['text']        = $lang->bug->resolve;
+$config->bug->actionList['resolve']['hint']        = $lang->bug->resolve;
 $config->bug->actionList['resolve']['url']         = helper::createLink('bug', 'resolve',"bugID={id}");
 $config->bug->actionList['resolve']['data-toggle'] = 'modal';
 
 $config->bug->actionList['close']['icon']        = 'off';
 $config->bug->actionList['close']['text']        = $lang->bug->close;
+$config->bug->actionList['close']['hint']        = $lang->bug->close;
 $config->bug->actionList['close']['url']         = helper::createLink('bug', 'close',"bugID={id}");
 $config->bug->actionList['close']['data-toggle'] = 'modal';
 
 $config->bug->actionList['activate']['icon']        = 'magic';
 $config->bug->actionList['activate']['text']        = $lang->bug->activate;
+$config->bug->actionList['activate']['hint']        = $lang->bug->activate;
 $config->bug->actionList['activate']['url']         = helper::createLink('bug', 'activate',"bugID={id}");
 $config->bug->actionList['activate']['data-toggle'] = 'modal';
 
 $config->bug->actionList['edit']['icon'] = 'edit';
 $config->bug->actionList['edit']['text'] = $lang->bug->edit;
+$config->bug->actionList['edit']['hint'] = $lang->bug->edit;
 $config->bug->actionList['edit']['url']  = helper::createLink('bug', 'edit',"bugID={id}");
 
 $config->bug->actionList['copy']['icon'] = 'copy';
 $config->bug->actionList['copy']['text'] = $lang->bug->copy;
+$config->bug->actionList['copy']['hint'] = $lang->bug->copy;
 $config->bug->actionList['copy']['url']  = helper::createLink('bug', 'create',"productID={product}&branch={branch}&extra=bugID={id}");
 
 include 'config/form.php';
