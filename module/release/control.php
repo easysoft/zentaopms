@@ -580,7 +580,7 @@ class release extends control
     public function batchUnlinkStory($releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
-        echo js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent');
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**

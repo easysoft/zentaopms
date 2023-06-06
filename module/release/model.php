@@ -797,23 +797,43 @@ class releaseModel extends model
         $canBeChanged = common::canBeChanged('release', $release);
         if($release->deleted || !$canBeChanged || isonlybody()) return '';
 
-        $menu   = '';
+        $menu   = array();
         $params = "releaseID=$release->id";
 
         if(common::hasPriv('release', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-            $menu .= html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $this->lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link' title='{$this->lang->release->changeStatusList[$changedStatus]}'");
+
+            $menu[] = array(
+                'text' => $this->lang->release->changeStatusList[$changedStatus],
+                'icon' => $release->status == 'normal' ? 'pause' : 'play',
+                'url'  => inlink('changeStatus', "releaseID=$release->id&status=$changedStatus")
+            );
         }
 
-        $menu .= "<div class='divider'></div>";
-        $menu .= $this->buildFlowMenu('release', $release, 'view', 'direct');
-        $menu .= "<div class='divider'></div>";
+        $menu[] = array(
+            'type' => 'divider'
+        );
 
-        $editClickable   = $this->buildMenu('release', 'edit',   $params, $release, 'view', '', '', '', '', '', '', false);
-        $deleteClickable = $this->buildMenu('release', 'delete', $params, $release, 'view', '', '', '', '', '', '', false);
-        if(common::hasPriv('release', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('release', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('release', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('release', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        //$menu .= $this->buildFlowMenu('release', $release, 'view', 'direct');
+
+        if(common::hasPriv('release', 'edit'))
+        {
+            $menu[] = array(
+                'text' => $this->lang->edit,
+                'icon' => 'edit',
+                'url'  => inlink('edit', $params)
+            );
+        }
+
+        if(common::hasPriv('release', 'delete'))
+        {
+            $menu[] = array(
+                'text' => $this->lang->delete,
+                'icon' => 'delete',
+                'url'  => inlink('delete', $params)
+            );
+        }
 
         return $menu;
     }
