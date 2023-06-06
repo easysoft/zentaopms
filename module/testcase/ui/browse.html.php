@@ -10,14 +10,24 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$canModify          = common::canModify('product', $product);
+$canExport          = hasPriv('testcase', 'export');
+$canExportTemplate  = hasPriv('testcase', 'exportTemplate');
+$canExportXmind     = hasPriv('testcase', 'exportXmind');
+$canImport          = hasPriv('testcase', 'import');
+$canImportFromLib   = hasPriv('testcase', 'importFromLib');
+$canImportXmind     = hasPriv('testcase', 'importXmind');
+$canBrowseGroupCase = hasPriv('testcase', 'groupcase');
+$canBrowseZeroCase  = hasPriv('testcase', 'zerocase');
+$canBrowseUnits     = hasPriv('testtask', 'browseunits');
+
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
 
-$hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
-$dropdownItems = array();
+$caseTypeItems = array();
 foreach($lang->testcase->typeList as $type => $typeName)
 {
-    if($hasUnitPriv and $type == 'unit')
+    if($canBrowseUnits and $type == 'unit')
     {
         $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
         $text = $lang->testcase->browseUnits;
@@ -33,29 +43,145 @@ foreach($lang->testcase->typeList as $type => $typeName)
         $text = $typeName;
     }
 
-    $dropdownItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
+    $caseTypeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
 }
 
-$currentTypeName = zget($lang->testcase->typeList, $caseType, '');
-$currentLabel    = empty($currentTypeName) ? $lang->testcase->allType : $currentTypeName;
+$suiteItems = array();
+if(empty($suiteList))
+{
+    if(empty($productID) or common::canModify('product', $product))
+    {
+        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
+    }
+}
+else
+{
+    foreach($suiteList as $suiteID => $suite)
+    {
+        $suiteItems[] = array('text' => $suite->name, 'url' => $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), 'active' => $suiteID == (int)$currentSuiteID);
+    }
+}
+
+$otherItems = array();
+$otherItems[] = array('text' => $lang->testcase->onlyScene);
+
+$currentCaseType = zget($lang->testcase->typeList, $caseType, '');
+$currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
+
+$currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
+$currentSuite     = zget($suiteList, $currentSuiteID, '');
+$currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
+
+$currentOtherName = $this->cookie->onlyScene ? $lang->testcase->onlyScene : $lang->other;
+
 featureBar
 (
     to::before
     (
-        dropdown
+        productMenu
         (
-            btn
-            (
-                setClass('dropdown-toggle'),
-                $currentLabel
-            ),
-            set::items($dropdownItems)
+            set::title($currentTypeName),
+            set::items($caseTypeItems)
         )
-    )
+    ),
+    set::linkParams($projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType=$caseType"),
+    $canBrowseZeroCase ? li
+    (
+        set::class('nav-item'),
+        a
+        (
+            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=" . ($isProjectApp ? $this->session->project : 0))),
+            set('data-app', $app->tab),
+            set('data-id', 'zerocaseTab'),
+            $lang->testcase->zeroCase
+        )
+    ) : null,
+    dropdown
+    (
+        btn
+        (
+            setClass('ghost'),
+            $currentSuiteName
+        ),
+        set::items($suiteItems)
+    ),
+    dropdown
+    (
+        btn
+        (
+            setClass('ghost'),
+            $currentOtherName
+        ),
+        set::items($otherItems)
+    ),
+    li(searchToggle(set::open($browseType == 'bysearch'))),
+    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
 );
+
+$exportItems = array();
+$importItems = array();
+if(!empty($productID))
+{
+    if($canExport)
+    {
+        $link = $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType");
+        $exportItems[] = array('text' => $lang->testcase->export, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+    }
+    if($canExportTemplate)
+    {
+        $link = $this->createLink('testcase', 'exportTemplate', "productID=$productID");
+        $exportItems[] = array('text' => $lang->testcase->exportTemplate, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab, 'data-width' => '65%');
+    }
+    if($canExportXmind)
+    {
+        $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch");
+        $exportItems[] = array('text' => $lang->testcase->xmindExport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+    }
+
+    if($canModify)
+    {
+        if($canImport)
+        {
+            $link = $this->createlink('testcase', 'import', "productID=$productID&branch=$branch");
+            $importItems[] = array('text' => $lang->testcase->fileImport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+        }
+
+        if($canImportFromLib)
+        {
+            $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
+            $importItems[] = array('url' => $link, 'text' => $lang->testcase->importFromLib, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+        }
+
+        if($canImportXmind)
+        {
+            $link = $this->createLink('testcase', 'importXmind', "productID=$productID&branch=$branch");
+            $importItems[] = array('url' => $link, 'text' => $lang->testcase->xmindImport, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+        }
+    }
+}
 
 toolbar
 (
+    $exportItems ? dropdown
+    (
+        btn(
+            setClass('btn btn-link ghost square'),
+            set::icon('export')
+        ),
+        set::arrow(false),
+        set::items($exportItems),
+        set::placement('bottom-end'),
+    ) : null,
+    $importItems ? dropdown
+    (
+        btn(
+            setClass('btn btn-link ghost square'),
+            set::icon('import')
+        ),
+        set::arrow(false),
+        set::items($importItems),
+        set::placement('bottom-end'),
+    ) : null,
     btngroup
     (
         btn
@@ -107,9 +233,6 @@ foreach($cases as $case)
     $case->actions = $actions;
 }
 
-$cols = array_values($config->testcase->dtable->fieldList);
-$data = array_values($cases);
-
 $footToolbar = array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
@@ -126,6 +249,7 @@ $footToolbar = array('items' => array
 $typeItems = array();
 foreach($lang->testcase->typeList as $key => $result) $typeItems[] = array('text' => $result, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchCaseTypeChange', "result=$key"));
 
+/*
 zui::menu
 (
     set::id('navActions'),
@@ -157,11 +281,13 @@ menu
     set::class('dropdown-menu'),
     set::items($sceneItems)
 );
+ */
 
 dtable
 (
-    set::cols($cols),
-    set::data($data),
+    set::userMap($users),
+    set::cols(array_values($config->testcase->dtable->fieldList)),
+    set::data(array_values($cases)),
     set::footPager(usePager()),
     set::checkable(true),
     set::footToolbar($footToolbar),
