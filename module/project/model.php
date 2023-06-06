@@ -3043,4 +3043,64 @@ class projectModel extends model
             ->andWhere('t1.account')->eq($account)
             ->fetchPairs();
     }
+
+    /**
+     * 根据项目状态和权限生成列表中操作列按钮。
+     * Build table action menu for project browse page.
+     *
+     * @param  object $project
+     * @access public
+     * @return array
+     */
+    public function buildActionList(object $project): array
+    {
+        $actions = array();
+        /* Set status button. */
+        if($project->status == 'wait' || $project->status == 'suspended') $actions[] = 'start';
+        if($project->status == 'doing')  $actions[] = 'close';
+        if($project->status == 'closed') $actions[] = 'active';
+
+        /* A drop-down button to set the status. */
+        $canClose    = common::hasPriv('project', 'close') && $project->status != 'doing';
+        $canActivate = common::hasPriv('project', 'activate') && $project->status != 'closed';
+        if(common::hasPriv('project', 'suspend') || $canClose || $canActivate)
+        {
+            $menu = 'pause';
+            if($project->status != 'doing')  $menu .= ',close';
+            if($project->status != 'closed') $menu .= ',active';
+
+            $actions[] = 'other:' . $menu;
+        }
+
+        $actions[] = 'edit';
+        $actions[] = 'group';
+        if($this->config->vision != 'lite')
+        {
+            $actions[] = 'perm';
+            if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')) $actions[] = 'more:link,whitelist,delete';
+        }
+        else
+        {
+            $actions[] = 'whitelist';
+            $actions[] = 'delete';
+        }
+
+        /* Set whether the button can be clicked. */
+        foreach($actions as &$action)
+        {
+            if(strpos($action, ':'))
+            {
+                $actionList = explode(':', $action);
+                $action     = $actionList[0] . ':';
+                foreach(explode(',', $actionList[1]) as $actionName)
+                {
+                    if(!$this->isClickable($project, $actionName)) $action .= '-';
+                    $action .= $actionName . ',';
+                }
+                continue;
+            }
+            if(!$this->isClickable($project, $action)) $action = array('name' => $action, 'disabled' => true);
+        }
+        return $actions;
+    }
 }

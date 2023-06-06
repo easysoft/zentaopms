@@ -964,6 +964,7 @@ class projectZen extends project
     {
         $userList = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
 
+        $this->app->loadConfig('execution');
         foreach($projectList as $project)
         {
             $project->from       = 'project';
@@ -973,6 +974,7 @@ class projectZen extends project
             $project->consume    = $project->hours->totalConsumed . $this->lang->project->workHourUnit;
             $project->surplus    = $project->hours->totalLeft     . $this->lang->project->workHourUnit;
             $project->progress   = $project->hours->progress;
+            $project->invested   = !empty($this->config->execution->defaultWorkhours) ? round($project->hours->totalConsumed / $this->config->execution->defaultWorkhours, 2) : 0;
 
             $projectBudget   = $this->project->getBudgetWithUnit($project->budget);
             $project->budget = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
@@ -987,84 +989,9 @@ class projectZen extends project
                 $project->PMAccount = $project->PM;
             }
 
-            $project->actions = $this->buildOperateBrowseMenu($project);
+            $project->actions = $this->project->buildActionList($project);
         }
 
         return array_values($projectList);
-    }
-
-    /**
-     * 根据项目状态和权限生成列表中操作列按钮。
-     * Build table action menu for project browse page.
-     *
-     * @param  object $project
-     * @access public
-     * @return array
-     */
-    protected function buildOperateBrowseMenu(object $project): array
-    {
-        $actions    = array();
-        $moduleName = 'project';
-
-        if($project->status == 'wait' || $project->status == 'suspended') $actions[] = 'start';
-
-        $canClose = common::hasPriv($moduleName, 'close');
-        if($project->status == 'doing')
-        {
-            $actions[] = 'close';
-            $canClose  = false;
-        }
-
-        $canActivate = common::hasPriv($moduleName, 'activate');
-        if($project->status == 'closed')
-        {
-            $actions[]   = 'active';
-            $canActivate = false;
-        }
-
-        if(common::hasPriv($moduleName, 'suspend') || $canClose || $canActivate)
-        {
-            $menu = 'pause';
-            if($project->status != 'doing')  $menu .= ',close';
-            if($project->status != 'closed') $menu .= ',active';
-
-            $actions[] = 'other:' . $menu;
-        }
-
-        $actions[] = 'edit';
-
-        if($this->config->vision != 'lite')
-        {
-            $actions[] = 'group';
-            $actions[] = 'perm';
-
-            if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
-            {
-                $actions[] = 'more:link,whitelist,delete';
-            }
-            return $actions;
-        }
-
-        $actions[] = 'group';
-        $actions[] = 'whitelist';
-        $actions[] = 'delete';
-
-        foreach($actions as &$action)
-        {
-            if(strpos($action, ':'))
-            {
-                $actionList = explode(':', $action);
-                $action     = $actionList[0] . ':';
-                foreach(explode(',', $actionList[1]) as $actionName)
-                {
-                    if(!$this->project->isClickable($project, $actionName)) $action .= "-$actionName";
-                }
-
-                continue;
-            }
-            if(!$this->project->isClickable($project, $action)) $action = array('name' => $action, 'disabled' => true);
-        }
-
-        return $actions;
     }
 }

@@ -20,11 +20,6 @@ featureBar
     item(set(array
     (
         'type' => "checkbox",
-        'text' => $lang->project->edit
-    ))),
-    item(set(array
-    (
-        'type' => "checkbox",
         'name' => 'involved',
         'text' => $lang->project->mine
     ))),
@@ -75,12 +70,26 @@ sidebar
     )))
 );
 
+$canBatchEdit = common::hasPriv('project', 'batchEdit');
+$footToolbar  = array();
+if($canBatchEdit)
+{
+    $footToolbar['items'][] = array(
+        'type'  => 'btn-group',
+        'items' => array(
+            array('text' => $lang->edit, 'class' => 'btn secondary size-sm batch-btn', 'btnType' => 'primary', 'data-url' => createLink('project', 'batchEdit')),
+        )
+    );
+}
+
 /* zin: Define the dtable in main content. */
 dtable
 (
+    set::groupDivider(true),
     set::cols(array_values($config->project->dtable->fieldList)),
     set::data($projectStats),
-    set::checkable(true),
+    set::checkable($canBatchEdit),
+    set::footToolbar($footToolbar),
     set::sortLink(helper::createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
 );

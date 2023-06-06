@@ -359,6 +359,7 @@ class project extends control
 
         $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
         $browseType  = strtolower($browseType);
+        if(!in_array($browseType, array('all', 'undone'))) unset($this->config->project->dtable->fieldList['status']);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
