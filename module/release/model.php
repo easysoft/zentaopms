@@ -805,33 +805,32 @@ class releaseModel extends model
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
 
             $menu[] = array(
-                'text' => $this->lang->release->changeStatusList[$changedStatus],
-                'icon' => $release->status == 'normal' ? 'pause' : 'play',
-                'url'  => inlink('changeStatus', "releaseID=$release->id&status=$changedStatus")
+                'text'  => $this->lang->release->changeStatusList[$changedStatus],
+                'icon'  => $release->status == 'normal' ? 'pause' : 'play',
+                'url'   => inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),
+                'class' => 'btn ghost'
             );
         }
-
-        $menu[] = array(
-            'type' => 'divider'
-        );
 
         //$menu .= $this->buildFlowMenu('release', $release, 'view', 'direct');
 
         if(common::hasPriv('release', 'edit'))
         {
             $menu[] = array(
-                'text' => $this->lang->edit,
-                'icon' => 'edit',
-                'url'  => inlink('edit', $params)
+                'text'  => $this->lang->edit,
+                'icon'  => 'edit',
+                'url'   => inlink('edit', $params),
+                'class' => 'btn ghost'
             );
         }
 
         if(common::hasPriv('release', 'delete'))
         {
             $menu[] = array(
-                'text' => $this->lang->delete,
-                'icon' => 'delete',
-                'url'  => inlink('delete', $params)
+                'text'  => $this->lang->delete,
+                'icon'  => 'trash',
+                'url'   => inlink('delete', $params),
+                'class' => 'btn ghost'
             );
         }
 
