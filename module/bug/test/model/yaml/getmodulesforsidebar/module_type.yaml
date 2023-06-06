@@ -1,7 +1,0 @@
-title: table zt_module
-author: Dai Tingting
-version: "1.0"
-fields:
-- field: type
-  range: bug
-...
