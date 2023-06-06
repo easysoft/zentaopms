@@ -1303,9 +1303,11 @@ function dragUl(): dragUl
 /**
  * Zentao custom table columns widget.
  *
- * ?array leftItems
- * ?array flexItems
- * ?array rightItems
+ * ?array  leftItems
+ * ?array  flexItems
+ * ?array  rightItems
+ * string  url
+ * ?string method
  */
 function editCols(): editCols
 {

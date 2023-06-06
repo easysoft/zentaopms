@@ -5,10 +5,14 @@ namespace zin;
 class editCols extends wg
 {
     protected static $defineProps = array(
-        'leftItems?: array', // 左侧固定列
-        'flexItems?: array', // 中间弹性列
-        'rightItems?: array' // 右侧固定列
+        'leftItems?: array',     // 左侧固定列
+        'flexItems?: array',     // 中间弹性列
+        'rightItems?: array',    // 右侧固定列
+        'url?: string',          // 表单地址
+        'method?: string="post"' // 表单方法
     );
+
+    private $formGID;
 
     public static function getPageCSS(): string|false
     {
@@ -23,6 +27,7 @@ class editCols extends wg
         return li
         (
             setClass('row', 'items-center', 'border', 'px-5', 'h-9'),
+            set('data-key', $item['name']),
             $isRequired ? setClass('required-col') : null,
             checkbox
             (
@@ -52,33 +57,69 @@ class editCols extends wg
 
     private function buildBody()
     {
-        global $lang;
-        $itemsList = $this->prop(array('leftItems', 'flexItems', 'rightItems'));
+        $itemsList = array(
+            'left'  => $this->prop('leftItems'),
+            'flex'  => $this->prop('flexItems'),
+            'right' => $this->prop('rightItems'),
+        );
+
         $body = form
         (
-            set::grid(false),
             setClass('col', 'gap-0.5'),
+            set::grid(false),
             set::actions(null),
         );
-        foreach($itemsList as $items)
+
+        foreach($itemsList as $key => $items)
         {
-            $ul = dragUl();
+            if(empty($items)) continue;
+
+            $ul = dragUl(setClass("{$key}-cols"));
             foreach ($items as $item) $ul->add($this->onBuildItem($item));
             $body->add($ul);
         }
-        $body->add
-        (
-            toolbar
-            (
-                setClass('modal-footer justify-center'),
-                item
-                (
-                    set(array('text' => $lang->save, 'type' => 'primary', 'btnType' => 'submit', 'class' => 'w-28', 'data-dismiss' => 'modal')),
-                    on::click('loadTable();')
-                )
-            )
-        );
+
+        $body->setProp('data-zin-gid', $body->gid);
+        $this->formGID = $body->gid;
         return $body;
+    }
+
+    private function submitFunc()
+    {
+        $url    = $this->prop('url');
+        $method = $this->prop('method');
+
+        return <<<FUNC
+            const formData = [];
+            let index = 0;
+            const types = ['left', 'flex', 'right'];
+            const getSelector = (value) => '[data-zin-gid="{$this->formGID}"] .drag-ul.' + value + '-cols';
+            const colsList = types.map(x => document.querySelector(getSelector(x)));
+
+            for(let i = 0; i < colsList.length; i++)
+            {
+                const cols = colsList[i];
+                if(!cols) continue;
+
+                const children = Array.from(cols.children);
+                for(let j = 0; j < children.length; j++)
+                {
+                    const li = children[j];
+                    const checkbox = li.querySelector('input[type="checkbox"]');
+                    const input = li.querySelector('input[type="text"]');
+                    formData.push({
+                        id: li.dataset.key,
+                        order: ++index,
+                        show: checkbox.checked,
+                        width: input.value + 'px',
+                        fixed: types[i] === 'flex' ? 'no' : types[i],
+                    });
+                }
+            }
+
+            fetch('{$url}', {method: '{$method}', body: JSON.stringify(formData)})
+                .then(() => loadTable());
+        FUNC;
     }
 
     protected function build()
@@ -90,9 +131,20 @@ class editCols extends wg
         (
             setClass('edit-cols'),
             set::title($lang->datatable->custom),
-            set::footerClass('justify-center'),
             to::header(span($lang->datatable->customTip, setClass('text-gray', 'text-md'))),
+            set::footerClass('justify-center'),
             $this->buildBody(),
+            to::footer
+            (
+                toolbar
+                (
+                    item
+                    (
+                        set(array('text' => $lang->save, 'type' => 'primary', 'class' => 'w-28', 'data-dismiss' => 'modal')),
+                        on::click($this->submitFunc())
+                    )
+                )
+            ),
         );
     }
 }

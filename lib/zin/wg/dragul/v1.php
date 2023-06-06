@@ -104,6 +104,7 @@ class dragUl extends wg
     {
         $ul = ul
         (
+            setClass('drag-ul'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $this->children(),
         );
