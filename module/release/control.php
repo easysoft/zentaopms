@@ -556,18 +556,11 @@ class release extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($releaseID, $storyID, $confirm = 'no')
+    public function unlinkStory($releaseID, $storyID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->release->confirmUnlinkStory, inlink('unlinkstory', "releaseID=$releaseID&storyID=$storyID&confirm=yes")));
-        }
-        else
-        {
-            $this->release->unlinkStory($releaseID, $storyID);
+        $this->release->unlinkStory($releaseID, $storyID);
 
-            return print(js::reload('parent'));
-        }
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
