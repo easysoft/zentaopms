@@ -215,4 +215,20 @@ class testsuiteTest
 
         return $objects;
     }
+
+    /**
+     * 测试判断操作是否可以点击。
+     * Test judge an action is clickable or not.
+     *
+     * @param  object     $report
+     * @param  string     $action
+     * @access public
+     * @return int|array
+     */
+    public function isClickableTest(object $report, string $action): int|array
+    {
+        $isClickable = $this->objectModel->isClickable($report, $action);
+        if(dao::isError()) return dao::getError();
+        return $isClickable ? 1 : 0;
+    }
 }
