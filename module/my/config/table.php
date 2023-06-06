@@ -1,8 +1,5 @@
 <?php
-global $lang,$app;
-$app->loadLang('todo');
-
-$config->my->todo = new stdclass();
+global $lang,$config;
 $config->my->todo->dtable = new stdclass();
 $config->my->todo->dtable->fieldList['id']['name']  = 'id';
 $config->my->todo->dtable->fieldList['id']['title'] = $lang->idAB;
@@ -55,3 +52,5 @@ $config->my->todo->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->todo->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->todo->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->todo->dtable->fieldList['actions']['sortType'] = false;
+$config->my->todo->dtable->fieldList['actions']['list']     = $config->my->todo->actionList;
+$config->my->todo->dtable->fieldList['actions']['menu']     = array('start', 'activate|assignTo', 'close|finish', 'edit', 'delete');

@@ -329,12 +329,11 @@ class todoModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'finish' || $action == 'start')
-        {
-            if(!empty($todo->cycle)) return false;
-            return $action == 'finish' ? ($todo->status != 'done') : ($todo->status == 'wait');
-        }
-
+        if($action == 'start')    return $todo->status == 'wait' && !$todo->cycle;
+        if($action == 'activate') return $todo->status == 'done' or $todo->status == 'closed';
+        if($action == 'close')    return $todo->status == 'done';
+        if($action == 'assignTo') return $todo->status != 'done' && $todo->status != 'closed';
+        if($action == 'finish')   return $todo->status != 'done' && $todo->status != 'closed' && !$todo->cycle;
         return true;
     }
 
