@@ -3919,7 +3919,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function all(string $status = 'undone', string $orderBy = 'order_asc', int $productID = 0, string $param = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
@@ -3944,13 +3944,12 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchForm($queryID, $actionURL);
 
-        $this->view->title      = $this->lang->execution->allExecutions;
-
         $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
 
         $allExecutionsNum = $this->execution->getStatData(0, 'all');
         $this->view->allExecutionsNum = count($allExecutionsNum);
 
+        $this->view->title          = $this->lang->execution->allExecutions;
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
@@ -3962,6 +3961,7 @@ class execution extends control
         $this->view->from           = $from;
         $this->view->param          = $param;
         $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
+        $this->view->avatarList     = $this->user->getAvatarPairs('');
 
         $this->display();
     }

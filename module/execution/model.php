@@ -5528,11 +5528,12 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $users
+     * @param  array  $avatarList
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return array
      */
-    public function generateRow($executions, $users, $productID)
+    public function generateRow(array $executions, array $users, array $avatarList, int $productID): array
     {
         $today = helper::today();
         $rows  = array();
@@ -5540,16 +5541,25 @@ class executionModel extends model
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
-            $execution->name     = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');;
-            $execution->project  = $execution->projectName;
-            $execution->parent   = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
-            $execution->asParent = !empty($execution->children);
-            $execution->status   = zget($this->lang->execution->statusList, $execution->status);
-            $execution->PM       = zget($users, $execution->PM);
-            $execution->progress = $execution->hours->progress;
-            $execution->estimate = $execution->hours->totalEstimate;
-            $execution->consumed = $execution->hours->totalConsumed;
-            $execution->left     = $execution->hours->totalLeft;
+            $execution->name          = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');
+            $execution->project       = $execution->projectName;
+            $execution->parent        = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
+            $execution->asParent      = !empty($execution->children);
+            $execution->progress      = $execution->hours->progress;
+            $execution->totalEstimate = $execution->hours->totalEstimate;
+            $execution->totalConsumed = $execution->hours->totalConsumed;
+            $execution->totalLeft     = $execution->hours->totalLeft;
+
+            /* For user's avatar. */
+            if($execution->PM)
+            {
+                $realname = zget($users, $execution->PM);
+                if(empty($realname)) continue;
+
+                $execution->PM        = $realname;
+                $execution->PMAvatar  = zget($avatarList, $execution->PM);
+                $execution->PMAccount = $execution->PM;
+            }
 
             $children = isset($execution->children) ? $execution->children : array();
             unset($execution->children);
@@ -5558,7 +5568,7 @@ class executionModel extends model
 
             if(!empty($children))
             {
-                $rows = array_merge($rows, $this->generateRow($children, $users, $productID));
+                $rows = array_merge($rows, $this->generateRow($children, $users, $avatarList, $productID));
             }
         }
 
