@@ -1,0 +1,6 @@
+.edit-cols .modal-title {flex: none;}
+.edit-cols .border:not(:last-child) {border-bottom: none;}
+.edit-cols .border {border-color: #D8DBDE;}
+.edit-cols .required-col {background: #F4F5F7 !important;}
+.edit-cols .required-col input {background: inherit;}
+.edit-cols li:hover {background: #E6F0FF;}

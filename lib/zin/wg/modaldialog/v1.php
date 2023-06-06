@@ -63,8 +63,8 @@ class modalDialog extends wg
 
     protected function buildFooter()
     {
-        list($footerActions) = $this->prop(array('footerActions'));
-        $footerBlock         = $this->block('footer');
+        $footerActions = $this->prop('footerActions');
+        $footerBlock   = $this->block('footer');
 
         if(empty($footerActions) && empty($footerBlock)) return;
 

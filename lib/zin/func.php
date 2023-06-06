@@ -1299,3 +1299,15 @@ function dragUl(): dragUl
 {
     return createWg('dragUl', func_get_args());
 }
+
+/**
+ * Zentao custom table columns widget.
+ *
+ * ?array leftItems
+ * ?array flexItems
+ * ?array rightItems
+ */
+function editCols(): editCols
+{
+    return createWg('editCols', func_get_args());
+}
