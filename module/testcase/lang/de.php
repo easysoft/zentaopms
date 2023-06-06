@@ -259,7 +259,6 @@ $lang->testcase->action->unlinkedfromproject   = array('main' => '$date, removed
 $lang->testcase->action->linked2execution      = array('main' => '$date, linked ' . $lang->executionCommon . ' by  <strong>$actor</strong> to <strong>$extra</strong>.');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
 
-$lang->testcase->featureBar['browse']['casetype']    = $lang->testcase->caseType;
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'Wartend';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
