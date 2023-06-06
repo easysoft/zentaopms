@@ -1207,9 +1207,13 @@ class treeModel extends model
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
         $param      = "root={$module->root}&branch=&type=byModule&param={$module->id}";
 
-        $extra['type'] = (isset($extra['type']) and $extra['type'] != 'bysearch') ? $extra['type'] : 'all';
-        if($this->app->tab == 'execution') $param = "execuitonID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
-        if($this->app->tab == 'project') $param = "projectID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
+        $type      = (isset($extra['type']) and $extra['type'] != 'bysearch') ? $extra['type'] : 'all';
+        $projectID = zget($extra, 'projectID', 0);
+        $branchID  = zget($extra, 'branchID', 0);
+        $orderBy   = zget($extra, 'orderBy', '');
+        $build     = zget($extra, 'build', 0);
+        if($this->app->tab == 'execution') $param = "execuitonID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$type}&param={$module->id}";
+        if($this->app->tab == 'project')   $param = "projectID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$type}&param={$module->id}";
 
         $data = new stdclass();
         $data->id     = $parent ? uniqid() : $module->id;
