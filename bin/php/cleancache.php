@@ -6,7 +6,13 @@ include './framework/control.class.php';
 include './framework/model.class.php';
 include './framework/helper.class.php';
 
-$app = router::createApp('pms', dirname(dirname(dirname(__FILE__))), 'router');
+$app         = router::createApp('pms', dirname(dirname(dirname(__FILE__))), 'router');
+$cacheConfig = $app->config->cache;
+if(!$cacheConfig->enable && !$cacheConfig->enableFullPage)
+{
+    echo 'Cache is disabled.', PHP_EOL;
+    exit;
+}
 
 function traverseDirectory($directory, &$cleanNum)
 {
