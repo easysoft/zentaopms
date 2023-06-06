@@ -616,6 +616,15 @@ class storyZen extends story
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
+    /**
+     * 构建批量创建需求数据。
+     * Build stories for batch create.
+     *
+     * @param  int       $productID
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
     protected function buildStoriesForBatchCreate(int $productID, string $storyType): array
     {
         $forceReview = $this->story->checkForceReview();
@@ -629,14 +638,15 @@ class storyZen extends story
         foreach($stories as $i => $story)
         {
             $story->type       = $storyType;
-            $story->status     = $saveDraft ? 'draft' : ((empty($story->reviewer) and !$forceReview) ? 'active' : 'reviewing');
+            $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
             $story->stage      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->product    = $productID;
             $story->openedBy   = $account;
             $story->vision     = $this->config->vision;
             $story->openedDate = $now;
             $story->version    = 1;
-            if($this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
+            if($this->post->status == 'draft') $story->status      = 'draft';
+            if($this->post->uploadImage[$i])   $story->uploadImage = $this->post->uploadImage[$i];
         }
 
         return $stories;
