@@ -92,15 +92,15 @@ if(!$config->systemScore) unset($lang->my->menu->score, $lang->my->menuOrder[45]
 
 $lang->my->menu->work['subMenu']              = new stdclass();
 $lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task');
-$lang->my->menu->work['subMenu']->requirement = "$lang->URCommon|my|work|mode=requirement";
 $lang->my->menu->work['subMenu']->story       = "$lang->SRCommon|my|work|mode=story";
+$lang->my->menu->work['subMenu']->requirement = "$lang->URCommon|my|work|mode=requirement";
 $lang->my->menu->work['subMenu']->bug         = "{$lang->bug->common}|my|work|mode=bug";
 $lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome", 'subModule' => 'testtask');
 $lang->my->menu->work['subMenu']->testtask    = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';
-$lang->my->menu->work['menuOrder'][10] = 'requirement';
-$lang->my->menu->work['menuOrder'][15] = 'story';
+$lang->my->menu->work['menuOrder'][10] = 'story';
+$lang->my->menu->work['menuOrder'][15] = 'requirement';
 $lang->my->menu->work['menuOrder'][20] = 'bug';
 $lang->my->menu->work['menuOrder'][25] = 'testcase';
 $lang->my->menu->work['menuOrder'][30] = 'testtask';
