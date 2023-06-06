@@ -1000,6 +1000,17 @@ function programMenu(): programMenu
 }
 
 /**
+ * Zentao product menu widget.
+ *
+ * ?string title
+ * ?array  items
+ */
+function productMenu(): productMenu
+{
+    return createWg('productMenu', func_get_args());
+}
+
+/**
  * Zentao module menu widget.
  *
  * array  modules

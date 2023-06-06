@@ -27,19 +27,14 @@ foreach($tasks as $task)
 }
 
 $config->testtask->dtable->fieldList['owner']['userMap'] = $users;
-$productDropdown = dropdown
+$productDropdown = productMenu
 (
-    to('trigger', btn($viewName)),
-    to('menu', menu
+    set::title($viewName),
+    set::items(array
     (
-        set::class('dropdown-menu'),
-        set::items
-        ([
-            ['text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")],
-            ['text' => $productName, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status")],
-        ])
-    )
-    ),
+        array('text' => $lang->testtask->all, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=0&type=all,$status")),
+        array('text' => $productName, 'url' => helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"))
+    ))
 );
 featureBar
 (
