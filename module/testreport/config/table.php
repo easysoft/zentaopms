@@ -57,13 +57,6 @@ $config->testreport->dtable->fieldList['actions']['name']       = 'actions';
 $config->testreport->dtable->fieldList['actions']['title']      = $lang->actions;
 $config->testreport->dtable->fieldList['actions']['type']       = 'actions';
 $config->testreport->dtable->fieldList['actions']['width']      = '140';
-$config->testreport->dtable->fieldList['actions']['sortType']   = false;
 $config->testreport->dtable->fieldList['actions']['fixed']      = 'right';
-$config->testreport->dtable->fieldList['actions']['actionsMap'] = array();
-foreach($config->testreport->dtable->operateList as $operate)
-{
-    $settings = $config->testreport->actionList[$operate];
-    $settings['text'] = '';
-
-    $config->testreport->dtable->fieldList['actions']['actionsMap'][$operate] = $settings;
-}
+$config->testreport->dtable->fieldList['actions']['list']       = $config->testreport->actionList;
+$config->testreport->dtable->fieldList['actions']['menu']       = array('create', 'edit', 'delete');

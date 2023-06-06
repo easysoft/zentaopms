@@ -20,17 +20,19 @@ foreach($reports as $report)
 $config->testreport->dtable->fieldList['execution']['map']     = $executions;
 $config->testreport->dtable->fieldList['createdBy']['userMap'] = $users;
 
-$tableData = initTableData($reports, $config->testreport->dtable->fieldList['actions'], $this->testreport);
+$tableData = initTableData($reports, $config->testreport->dtable->fieldList, $this->testreport);
 
 $cols = array_values($config->testreport->dtable->fieldList);
 $data = array_values($tableData);
 
-if($app->rawModule != 'testreport' && $app->rawMethod != 'browse' && !isset($lang->{$app->rawModule}->featureBar["{$app->rawMethod}"])) $lang->{$app->rawModule}->featureBar["{$app->rawMethod}"] = $lang->testreport->featureBar['browse'];
 featureBar
 (
+    set::module('testreport'),
+    set::method('browse'),
     set::current('all'),
     set::linkParams("objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"),
 );
+
 toolbar
 (
     btngroup
