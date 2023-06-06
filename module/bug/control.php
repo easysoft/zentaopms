@@ -164,8 +164,17 @@ class bug extends control
         if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Get executios. */
-        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+        /* Get executions. */
+        $cacheKey = "bugBrowse{$this->projectID}";
+        if($this->config->cache->enable && $this->cache->has($cacheKey))
+        {
+            $executions = $this->cache->get($cacheKey);
+        }
+        else
+        {
+            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+            if($this->config->cache->enable) $this->cache->set($cacheKey, $executions);
+        }
 
         /* Get product id list. */
         $productIDList = $productID ? $productID : array_keys($this->products);
