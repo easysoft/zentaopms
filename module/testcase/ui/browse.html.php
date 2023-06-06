@@ -10,39 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$closeLink = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-sidebar
-(
-    moduleMenu(set(array
-    (
-        'modules'   => $moduleTree,
-        'activeKey' => $moduleID,
-        'closeLink' => $closeLink
-    )))
-);
-
-$this->testcase->buildOperateMenu(null, 'browse');
-
-foreach($cases as $case)
-{
-    $actions = array();
-    foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->testcase->isClickable($case, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $case->actions = $actions;
-}
-
-$cols = array_values($config->testcase->dtable->fieldList);
-$data = array_values($cases);
-
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
 
-$hasUnitPriv = common::hasPriv('testtask', 'browseunits');
-$typeItems = array();
+$hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
+$dropdownItems = array();
 foreach($lang->testcase->typeList as $type => $typeName)
 {
     if($hasUnitPriv and $type == 'unit')
@@ -61,7 +33,7 @@ foreach($lang->testcase->typeList as $type => $typeName)
         $text = $typeName;
     }
 
-    $typeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
+    $dropdownItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
 }
 
 $currentTypeName = zget($lang->testcase->typeList, $caseType, '');
@@ -77,10 +49,11 @@ featureBar
                 setClass('dropdown-toggle'),
                 $currentLabel
             ),
-            set::items($typeItems)
+            set::items($dropdownItems)
         )
     )
 );
+
 toolbar
 (
     btngroup
@@ -108,6 +81,34 @@ toolbar
         )
     )
 );
+
+$closeLink = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+sidebar
+(
+    moduleMenu(set(array
+    (
+        'modules'   => $moduleTree,
+        'activeKey' => $moduleID,
+        'closeLink' => $closeLink
+    )))
+);
+
+$this->testcase->buildOperateMenu(null, 'browse');
+
+foreach($cases as $case)
+{
+    $actions = array();
+    foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
+    {
+        $isClickable = $this->testcase->isClickable($case, $actionCode);
+
+        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
+    }
+    $case->actions = $actions;
+}
+
+$cols = array_values($config->testcase->dtable->fieldList);
+$data = array_values($cases);
 
 $footToolbar = array('items' => array
 (
