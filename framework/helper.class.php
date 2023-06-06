@@ -527,7 +527,7 @@ function initTableData($items, &$fieldList, $checkModel)
 
         /* Set parent attribute. */
         $item->isParent = false;
-        if($item->parent == -1)
+        if(isset($item->parent) && $item->parent == -1)
         {
             /* When the parent is -1, the hierarchical structure is displayed incorrectly. */
             $item->parent   = 0;
