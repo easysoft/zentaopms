@@ -32,11 +32,14 @@ class admin extends control
 
     /**
      * Index page.
+     *
      * @access public
      * @return void
      */
     public function index()
     {
+        set_time_limit(0);
+
         $community = zget($this->config->global, 'community', '');
         if(!$community or $community == 'na')
         {
