@@ -497,7 +497,7 @@ class bugZen extends bug
         /* If the execution and project of the bug are both empty, get the team member of the bug's product. */
         else
         {
-            $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
+            $users = $this->bug->getProductMemberPairs($bug->product, (string)$bug->branch);
             $users = array_filter($users);
             /* If the team member of the product is empty, get all user. */
             if(empty($users)) $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
