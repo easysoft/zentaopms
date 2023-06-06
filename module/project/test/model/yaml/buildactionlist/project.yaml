@@ -1,0 +1,24 @@
+title: zt_project
+author: Shujie Tian
+version: "1.0"
+fields:
+    - field: id
+      range: 1-7
+    - field: project
+      range: 0
+    - field: model
+      range: '[],scrum,waterfall,kanban,agileplus,waterfallplus,kanban'
+    - field: type
+      range: 'program,project{6}'
+    - field: status
+      range: 'doing,wait,doing,suspended,closed'
+    - field: parent
+      range: '0,1{5}'
+    - field: path
+      range: '`,1,`, `,1,2,`, `,1,3,`, `,1,4,`, `,1,5,`, `,1,6,`, `,7,`'
+    - field: hasProduct
+      range: '1{5},0'
+    - field: name
+      range: '项目集,敏捷项目,瀑布项目,看板项目,融合敏捷项目,融合瀑布项目,迅捷项目'
+    - field: vision
+      range: 'rnd{6},lite'

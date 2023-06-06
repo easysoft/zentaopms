@@ -267,4 +267,22 @@ class Project
 
         return true;
     }
+
+    /**
+     * 根据项目状态和权限生成列表中操作列按钮。
+     * Build table action menu for project browse page.
+     *
+     * @param  int    $projectID
+     * @param  string $vision
+     * @access public
+     * @return string
+     */
+    public function buildActionListObject(int $projectID, string $vision = 'rnd')
+    {
+        $this->project->config->vision = $vision;
+
+        $project = $this->project->getByID($projectID);
+        $actions = $this->project->buildActionList($project);
+        return current($actions);
+    }
 }
