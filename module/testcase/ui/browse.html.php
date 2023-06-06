@@ -38,7 +38,49 @@ foreach($cases as $case)
 $cols = array_values($config->testcase->dtable->fieldList);
 $data = array_values($cases);
 
-featureBar();
+$lang->testcase->typeList[''] = $lang->testcase->allType;
+if(!isset($param)) $param = 0;
+
+$hasUnitPriv = common::hasPriv('testtask', 'browseunits');
+$typeItems = array();
+foreach($lang->testcase->typeList as $type => $typeName)
+{
+    if($hasUnitPriv and $type == 'unit')
+    {
+        $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
+        $text = $lang->testcase->browseUnits;
+    }
+    elseif(isset($groupBy))
+    {
+        $url  = $this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type");
+        $text = $typeName;
+    }
+    else
+    {
+        $url  = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
+        $text = $typeName;
+    }
+
+    $typeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
+}
+
+$currentTypeName = zget($lang->testcase->typeList, $caseType, '');
+$currentLabel    = empty($currentTypeName) ? $lang->testcase->allType : $currentTypeName;
+featureBar
+(
+    to::before
+    (
+        dropdown
+        (
+            btn
+            (
+                setClass('dropdown-toggle'),
+                $currentLabel
+            ),
+            set::items($typeItems)
+        )
+    )
+);
 toolbar
 (
     btngroup
