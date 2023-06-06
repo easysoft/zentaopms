@@ -58,6 +58,78 @@ class storyZen extends story
     }
 
     /**
+     * 为批量创建需求页面设置导航。
+     * Set menu for batch create.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @access protected
+     * @return void
+     */
+    protected function setMenuForBatchCreate(int $productID, string $branch = '', int $executionID = 0): void
+    {
+        $this->view->hiddenProduct = false;
+        $this->view->hiddenPlan    = false;
+
+        /* Set menu. */
+        if($this->app->tab == 'project' and $this->config->vision == 'lite')
+        {
+            $this->project->setMenu($this->session->project);
+            return;
+        }
+
+        if(empty($executionID))
+        {
+            $this->product->setMenu($productID, $branch);
+            return;
+        }
+
+        $execution = $this->dao->findById((int)$executionID)->from(TABLE_EXECUTION)->fetch();
+        $this->view->execution = $execution;
+        if($execution->type == 'project')
+        {
+            $this->project->setMenu($executionID);
+            $this->lang->navGroup->story = 'project';
+
+            $model = $execution->model == 'waterfallplus' ? 'waterfall' : $execution->model;
+            if($execution->model == 'agileplus') $model = 'scrum';
+            $this->lang->product->menu = $this->lang->{$model}->menu;
+        }
+        else
+        {
+            $this->execution->setMenu($executionID);
+            $this->lang->navGroup->story = 'execution';
+
+            if($execution->type == 'kanban')
+            {
+                $this->loadModel('kanban');
+                $output      = $this->story->parseExtra($extra);
+                $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+                $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+                $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+                $this->view->regionID    = $regionID;
+                $this->view->laneID      = $laneID;
+                $this->view->regionPairs = $regionPairs;
+                $this->view->lanePairs   = $lanePairs;
+            }
+        }
+
+        if($this->app->tab != 'project' && $this->app->tab != 'execution') return;
+
+        /* Hidden some fields of projects without products. */
+        $project = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+        if($project->project)    $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
+        if($project->hasProduct) return;
+
+        $this->view->hiddenProduct = true;
+        if($project->model !== 'scrum') $this->view->hiddenPlan = true;
+        if(!$project->multiple)         $this->view->hiddenPlan = true;
+    }
+
+    /**
      * 如果是看板执行，设置界面中要用到关于看板的视图变量。
      * Set view vars for kanban.
      *
@@ -272,10 +344,7 @@ class storyZen extends story
         $plans       = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
         $forceReview = $this->story->checkForceReview();
         $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0 || !$forceReview);
-
-        $reviewers  = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
-        $reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $reviewers   = $this->story->getReviewers($productID);
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
@@ -318,6 +387,49 @@ class storyZen extends story
         $this->view->forceReview = $forceReview;
         $this->view->needReview  = $needReview;
 
+        return $fields;
+    }
+
+    /**
+     * 获取批量创建需求的表单字段。
+     * Get form fields for batch create.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @access protected
+     * @return array
+     */
+    protected function getFormFieldsForBatchCreate(int $productID, string $branch, int $executionID = 0): array
+    {
+        $product = $this->loadModel('product')->getByID($productID);
+        $fields  = $this->config->story->form->batchCreate;
+
+        if($executionID)
+        {
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+        $branch  = current(explode(',', $branch));
+        $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
+        $plans   = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
+        $users   = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+
+        /* 设置下拉菜单内容。 */
+        $fields['branch']['options'] = $branches;
+        $fields['module']['options'] = $modules;
+        $fields['plan']['options']   = $plans;
+
+        if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
+        if(empty($branches)) unset($fields['branch']);
+        if($this->view->hiddenPlan) unset($fields['plan']);
+
+        $this->view->branchID = $branch;
         return $fields;
     }
 
@@ -407,9 +519,46 @@ class storyZen extends story
         $showFields   = trim($this->config->story->custom->createFields, ',');
         foreach($customFields as $field)
         {
-            if(!str_contains($showFields, $field)) unset($fields[$field]['control']);
+            if(!str_contains($showFields, $field)) unset($fields[$field]);
         }
 
+        return $fields;
+    }
+
+    /**
+     * 根据配置，删除非必要的表单字段配置。
+     * Remove form fields for batch create.
+     *
+     * @param  array     $fields
+     * @param  string    $productType
+     * @param  string    $storyType
+     * @access protected
+     * @return array
+     */
+    protected function removeFormFieldsForBatchCreate(array $fields, string $productType, string $storyType = 'story'): array
+    {
+        $product = $this->product->getByID($productID);
+
+        /* Set Custom*/
+        foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field)
+        {
+            if($productType != 'normal') $customFields[$productType] = $this->lang->product->branchName[$productType];
+            $customFields[$field] = $this->lang->story->$field;
+        }
+
+        $showFields = $this->config->story->custom->batchCreateFields;
+        if($storyType == 'requirement')
+        {
+            unset($customFields['plan']);
+            $showFields = str_replace(',plan,', ',', ",$showFields,");
+        }
+
+        foreach($customFields as $field => $fieldName)
+        {
+            if(!str_contains(",$showFields,", ",$field,")) unset($fields[$field]);
+        }
+
+        $this->view->customFields = $customFields;
         return $fields;
     }
 
@@ -467,6 +616,32 @@ class storyZen extends story
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
+    protected function buildStoriesForBatchCreate(int $productID, string $storyType): array
+    {
+        $forceReview = $this->story->checkForceReview();
+        $fields      = $this->config->story->form->batchCreate;
+        $account     = $this->app->user->account;
+        $now         = helper::now();
+        $saveDraft   = $this->post->status == 'draft';
+        if($forceReview) $fields['reviewer']['required'] = true;
+
+        $stories = form::batchData($fields)->get();
+        foreach($stories as $i => $story)
+        {
+            $story->type       = $storyType;
+            $story->status     = $saveDraft ? 'draft' : ((empty($story->reviewer) and !$forceReview) ? 'active' : 'reviewing');
+            $story->stage      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? 'projected' : 'wait';
+            $story->product    = $productID;
+            $story->openedBy   = $account;
+            $story->vision     = $this->config->vision;
+            $story->openedDate = $now;
+            $story->version    = 1;
+            if($this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
+        }
+
+        return $stories;
+    }
+
     /**
      * 检查需求是否重复。
      * Check repeat story.
@@ -502,22 +677,24 @@ class storyZen extends story
      * Get response when after create story in modal.
      *
      * @param  string    $message
+     * @param  int       $executionID
      * @access protected
      * @return array|false
      */
-    protected function responseAfterCreateInModal(string $message): array|false
+    protected function responseAfterCreateInModal(string $message, int $executionID = 0): array|false
     {
         if(!isonlybody()) return false;
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'reload' => true, 'closedModal' => true);
 
-        $execution         = $this->execution->getByID($this->session->execution);
+        $executionID       = $executionID ? $executionID : $this->session->execution;
+        $execution         = $this->execution->getByID($executionID);
         $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
         $executionGroupBy  = $this->session->executionGroupBy  ? $this->session->executionGroupBy  : 'default';
 
         if($execution->type == 'kanban')
         {
             $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-            $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
             $kanbanData    = json_encode($kanbanData);
             return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "updateKanban($kanbanData, 0)");
         }
@@ -557,5 +734,71 @@ class storyZen extends story
         if(!$this->session->storyList) return $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
         if(!empty($_POST['branches']) and count($_POST['branches']) > 1) return preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
         return $this->session->storyList;
+    }
+
+    /**
+     * 获取批量创建需求后的跳转地址。
+     * Get after batch create location.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  int       $executionID
+     * @param  int       $storyID
+     * @param  string    $storyType
+     * @access protected
+     * @return string
+     */
+    protected function getAfterBatchCreateLocation(int $productID, string $branch, int $executionID, int $storyID, string $storyType): string
+    {
+        if($storyID)
+        {
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('projectstory', 'view', "storyID=$storyID");
+            if($this->app->tab == 'product') $locateLink = $this->inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+            return $locateLink;
+        }
+
+        if($executionID)
+        {
+            helper::setcookie('storyModuleParam', '0', 0);
+            return $this->session->storyList;
+        }
+
+        helper::setcookie('storyModule', '0', 0);
+        if($this->session->storyList) return $this->session->storyList;
+        return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
+    }
+
+    /**
+     * 根据上传图片，批量创建需求时，获取初始化需求数据。
+     * Get data from upload images.
+     *
+     * @param  int       $productID
+     * @param  int       $moduleID
+     * @param  int       $planID
+     * @access protected
+     * @return array
+     */
+    protected function getDataFromUploadImages(int $productID, int $moduleID = 0, int $planID = 0): array
+    {
+        /* Clear title when switching products and set the session for the current product. */
+        if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
+        helper::setcookie('preProductID', $productID);
+
+        $initStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => 0, 'branch' => $this->view->branchID);
+        $stories   = array();
+        for($i = 0; $i < $this->config->story->batchCreate; $i++) $stories[] = $initStory;
+
+        if(empty($_SESSION['storyImagesFile'])) return $stories;
+
+        $files   = $this->session->storyImagesFile;
+        $stories = array();
+        foreach($files as $fileName => $file)
+        {
+            $initStory['title']       = $file['title'];
+            $initStory['uploadImage'] = $fileName;
+
+            $stories[] = $initStory;
+        }
+        return $stories;
     }
 }

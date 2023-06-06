@@ -47,7 +47,7 @@ $config->story->list->actionsOpratedParentStory = ',edit,batchcreate,change,revi
 
 $config->story->custom = new stdclass();
 $config->story->custom->createFields      = $config->story->list->customCreateFields;
-$config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
+$config->story->custom->batchCreateFields = 'plan,spec,pri,estimate,review';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
 $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,lanes,regions,branch,pri,';

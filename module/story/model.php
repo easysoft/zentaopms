@@ -18,28 +18,22 @@ class storyModel extends model
      * @param  int    $version
      * @param  bool   $setImgSize
      * @access public
-     * @return object|bool
+     * @return object|false
      */
-    public function getById($storyID, $version = 0, $setImgSize = false)
+    public function getByID(int $storyID, int $version = 0, bool $setImgSize = false): object|false
     {
-        $story = $this->dao->select('*')->from(TABLE_STORY)
-            ->where('id')->eq($storyID)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->fetch();
+        $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->andWhere('vision')->eq($this->config->vision)->fetch();
         if(!$story) return false;
 
-        $this->loadModel('file');
-        if(helper::isZeroDate($story->closedDate)) $story->closedDate = '';
+        $story->children = array();
         if($version == 0) $version = $story->version;
-        $spec = $this->dao->select('title,spec,verify,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
-        $story->title  = isset($spec->title)  ? $spec->title  : '';
-        $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
-        $story->verify = isset($spec->verify) ? $spec->verify : '';
-        $story->files  = isset($spec->files)  ? $this->file->getByIdList($spec->files) : '';
-        if(!empty($story->fromStory)) $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
 
-        /* Check parent story. */
-        if($story->parent > 0) $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
+        $spec = $this->dao->select('title,spec,verify,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
+        $story->title  = !empty($spec->title)  ? $spec->title  : '';
+        $story->spec   = !empty($spec->spec)   ? $spec->spec   : '';
+        $story->verify = !empty($spec->verify) ? $spec->verify : '';
+        $story->files  = $this->loadModel('file')->getByIdList($spec->files);
+        $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
 
         $story = $this->file->replaceImgURL($story, 'spec,verify');
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
@@ -48,49 +42,47 @@ class storyModel extends model
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('t1.story')->in($story->twins . ',' . $story->id)
+            ->beginIF(!$story->twins)->andWhere('t1.story')->eq($story->id)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
 
-        $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+        $story->tasks = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)
+            ->beginIF($story->twins)->andWhere('story')->in($story->twins . ',' . $story->id)
+            ->beginIF(!$story->twins)->andWhere('story')->eq($story->id)
             ->orderBy('id DESC')
             ->fetchGroup('execution');
 
-        $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
-        //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
-        //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
-        if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
+        if($story->toBug)          $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
+        if($story->parent > 0)     $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
+        if($story->fromStory)      $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
+        if($story->parent == '-1') $story->children   = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
         if($story->plan)
         {
-            $plans  = $this->dao->select('id,title,branch')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchAll('id');
+            $plans = $this->dao->select('id,title,branch')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchAll('id');
             foreach($plans as $planID => $plan)
             {
                 $story->planTitle[$planID] = $plan->title;
                 if($plan->branch and !isset($story->stages[$plan->branch]) and empty($story->branch)) $story->stages[$plan->branch] = 'planned';
             }
         }
+
         $extraStories = array();
         if($story->duplicateStory) $extraStories = array($story->duplicateStory);
-        if($story->linkStories)    $extraStories = explode(',', $story->linkStories);
+        if($story->linkStories)    $extraStories = array_merge($extraStories, explode(',', $story->linkStories));
         if($story->childStories)   $extraStories = array_merge($extraStories, explode(',', $story->childStories));
+
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
 
         $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
         if($story->{$linkStoryField}) $story->linkStoryTitles = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($story->{$linkStoryField})->fetchPairs();
 
-        $story->children = array();
-        if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
-
-        $story->openedDate    = empty($story->openedDate)    ? '' : substr($story->openedDate,     0, 19);
-        $story->assignedDate  = empty($story->assignedDate)  ? '' : substr($story->assignedDate,   0, 19);
-        $story->reviewedDate  = empty($story->reviewedDate)  ? '' : substr($story->reviewedDate,   0, 19);
-        $story->closedDate    = empty($story->closedDate)    ? '' : substr($story->closedDate,     0, 19);
-        $story->lastEditedDate= empty($story->lastEditedDate)? '' : substr($story->lastEditedDate, 0, 19);
+        $story->openedDate     = helper::isZeroDate($story->openedDate)     ? '' : substr($story->openedDate,     0, 19);
+        $story->assignedDate   = helper::isZeroDate($story->assignedDate)   ? '' : substr($story->assignedDate,   0, 19);
+        $story->reviewedDate   = helper::isZeroDate($story->reviewedDate)   ? '' : substr($story->reviewedDate,   0, 19);
+        $story->closedDate     = helper::isZeroDate($story->closedDate)     ? '' : substr($story->closedDate,     0, 19);
+        $story->lastEditedDate = helper::isZeroDate($story->lastEditedDate) ? '' : substr($story->lastEditedDate, 0, 19);
 
         return $story;
     }
@@ -563,214 +555,60 @@ class storyModel extends model
     /**
      * Batch create stories.
      *
+     * @param  array  $stories
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $type
+     * @param  int    $URID
      * @access public
-     * @return int|bool the id of the created story or false when error.
-     * @return type requirement|story
+     * @return array
      */
-    public function batchCreate($productID = 0, $branch = 0, $type = 'story')
+    public function batchCreate(array $stories, int $productID = 0, string $branch = '', string $type = 'story', int $URID = 0): array
     {
-        $forceReview = $this->checkForceReview();
-
         $this->loadModel('action');
-        $branch    = (int)$branch;
-        $productID = (int)$productID;
-        $now       = helper::now();
-        $mails     = array();
-        $stories   = fixer::input('post')->get();
-
-        $saveDraft = false;
-        if(isset($stories->status))
+        $storyIdList = array();
+        $link2Plans  = array();
+        foreach($stories as $i => $story)
         {
-            if($stories->status == 'draft') $saveDraft = true;
-            unset($stories->status);
-        }
+            $storyID = $this->storyTao->doCreateStory($story);
+            if(!$storyID) return false;
 
-        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}");
-        $stories = $result['data'];
+            $this->storyTao->doCreateSpec($storyID, $story);
 
-        $module = 0;
-        $plan   = '';
-        $pri    = 0;
-        $source = '';
-
-        foreach($stories->title as $i => $title)
-        {
-            if(empty($title) and $this->common->checkValidRow('story', $stories, $i)) dao::$errors["title$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
-
-            $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
-            $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
-            $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
-            $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
-            $plan   = isset($stories->plan[$i])       ? $plan   : '';
-
-            $stories->module[$i] = (int)$module;
-            $stories->pri[$i]    = (int)$pri;
-            $stories->source[$i] = $source;
-            $stories->plan[$i]   = $plan;
-        }
-
-        if(isset($stories->uploadImage)) $this->loadModel('file');
-
-        $extendFields = $this->getFlowExtendFields();
-        $data         = array();
-        $reviewers    = '';
-        foreach($stories->title as $i => $title)
-        {
-            if(empty($title)) continue;
-
-            $stories->reviewer[$i] = array_filter($stories->reviewer[$i]);
-            if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
-            $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
-            $stories->reviewer[$i] = $reviewers;
-            $_POST['reviewer'][$i] = $reviewers;
-            if(empty($stories->reviewer[$i]) and $forceReview) dao::$errors["reviewer$i"][] = $this->lang->story->errorEmptyReviewedBy;
-
-            $story = new stdclass();
-            $story->type       = $type;
-            $story->branch     = isset($stories->branch[$i]) ? $stories->branch[$i] : 0;
-            $story->module     = $stories->module[$i];
-            $story->plan       = $stories->plan[$i];
-            $story->color      = $stories->color[$i];
-            $story->title      = $stories->title[$i];
-            $story->source     = $stories->source[$i];
-            $story->category   = $stories->category[$i];
-            $story->pri        = $stories->pri[$i];
-            $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : 0;
-            $story->spec       = $stories->spec[$i];
-            $story->verify     = $stories->verify[$i];
-            $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');
-            $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
-            $story->keywords   = $stories->keywords[$i];
-            $story->sourceNote = $stories->sourceNote[$i];
-            $story->product    = $productID;
-            $story->openedBy   = $this->app->user->account;
-            $story->vision     = $this->config->vision;
-            $story->openedDate = $now;
-            $story->version    = 1;
-
-            foreach($extendFields as $extendField)
+            /* Update product plan stories order. */
+            if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
+            if($story->plan)
             {
-                $story->{$extendField->field} = $this->post->{$extendField->field}[$i];
-                if(is_array($story->{$extendField->field})) $story->{$extendField->field} = implode(',', $story->{$extendField->field});
-
-                $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
-                if(empty($story->{$extendField->field}))
-                {
-                    dao::$errors["{$extendField->field}$i"][] = sprintf($this->lang->error->notempty, $extendField->name);
-                }
+                $this->updateStoryOrderOfPlan($storyID, $story->plan);
+                $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
             }
 
-            foreach(explode(',', $this->config->story->create->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if(empty($field)) continue;
-                if($type == 'requirement' and $field == 'plan') continue;
+            $this->setStage($storyID);
+            $this->executeHooks($storyID);
 
-                if(!isset($story->$field)) continue;
-                if(!empty($story->$field)) continue;
-                if($field == 'estimate' and strlen(trim($story->estimate)) != 0) continue;
-
-                dao::$errors["{$field}$i"][] = sprintf($this->lang->error->notempty, $this->lang->story->$field);
-            }
-            $data[$i] = $story;
-        }
-
-        $link2Plans = array();
-        foreach($data as $i => $story)
-        {
-            $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->checkFlow()->exec();
-            if(!dao::isError())
-            {
-                $storyID = $this->dao->lastInsertID();
-                $this->setStage($storyID);
-
-                /* Update product plan stories order. */
-                if($story->plan)
-                {
-                    $this->updateStoryOrderOfPlan($storyID, $story->plan);
-                    $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
-                }
-
-                $specData = new stdclass();
-                $specData->story   = $storyID;
-                $specData->version = 1;
-                $specData->title   = $stories->title[$i];
-                $specData->spec    = '';
-                $specData->verify  = '';
-                if(!empty($stories->spec[$i]))  $specData->spec   = nl2br($stories->spec[$i]);
-                if(!empty($stories->verify[$i]))$specData->verify = nl2br($stories->verify[$i]);
-
-                if(!empty($stories->uploadImage[$i]) and $stories->uploadImage[$i] !== 'undefined')
-                {
-                    $fileName = $stories->uploadImage[$i];
-                    $file     = $this->session->storyImagesFile[$fileName];
-
-                    $realPath = $file['realpath'];
-                    unset($file['realpath']);
-
-                    if(!is_dir($this->file->savePath)) mkdir($this->file->savePath, 0777, true);
-                    if($realPath and rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
-                    {
-                        $file['addedBy']    = $this->app->user->account;
-                        $file['addedDate']  = $now;
-                        $file['objectType'] = 'story';
-                        $file['objectID']   = $storyID;
-                        if(in_array($file['extension'], $this->config->file->imageExtensions))
-                        {
-                            $file['extra'] = 'editor';
-                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-
-                            $fileID = $this->dao->lastInsertID();
-                            $specData->spec .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                        }
-                        else
-                        {
-                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                        }
-                    }
-                }
-
-                $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
-
-                /* Save the story reviewer to storyreview table. */
-                foreach($_POST['reviewer'][$i] as $reviewer)
-                {
-                    if(empty($reviewer)) continue;
-
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = 1;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                }
-
-                $this->executeHooks($storyID);
-
-                $actionID = $this->action->create('story', $storyID, 'Opened', '');
-                if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
-                $mails[$i] = new stdclass();
-                $mails[$i]->storyID  = $storyID;
-                $mails[$i]->actionID = $actionID;
-            }
-
+            $this->action->create('story', $storyID, 'Opened', '');
+            $storyIdList[$i] = $storyID;
         }
 
         if(!dao::isError())
         {
             /* Remove upload image file and session. */
-            if(!empty($stories->uploadImage) and $this->session->storyImagesFile)
+            if($this->session->storyImagesFile)
             {
-                $classFile = $this->app->loadClass('zfile');
-                $file = current($_SESSION['storyImagesFile']);
+                $file     = current($_SESSION['storyImagesFile']);
                 $realPath = dirname($file['realpath']);
-                if(is_dir($realPath)) $classFile->removeDir($realPath);
+                if(is_dir($realPath)) $this->app->loadClass('zfile')->removeDir($realPath);
                 unset($_SESSION['storyImagesFile']);
             }
 
-            $this->loadModel('score')->create('ajax', 'batchCreate');
+            $this->loadModel('score')->create('story', 'create',$storyID);
+            $this->score->create('ajax', 'batchCreate');
+
+            if($URID && $storyIdList) $this->subdivide($URID, $storyIdList);
             foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
         }
-        return $mails;
+
+        return $storyIdList;
     }
 
     /**
@@ -5206,50 +5044,49 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function replaceURLang($type)
+    public function replaceURLang(string $type): void
     {
-        if($type == 'requirement')
-        {
-            $storyLang = $this->lang->story;
-            $SRCommon  = $this->lang->SRCommon;
-            $URCommon  = $this->lang->URCommon;
+        if($type != 'requirement') return;
 
-            $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
-            $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);
-            $storyLang->changed            = str_replace($SRCommon, $URCommon, $storyLang->changed);
-            $storyLang->assignAction       = str_replace($SRCommon, $URCommon, $storyLang->assignAction);
-            $storyLang->reviewAction       = str_replace($SRCommon, $URCommon, $storyLang->reviewAction);
-            $storyLang->subdivideAction    = str_replace($SRCommon, $URCommon, $storyLang->subdivideAction);
-            $storyLang->closeAction        = str_replace($SRCommon, $URCommon, $storyLang->closeAction);
-            $storyLang->activateAction     = str_replace($SRCommon, $URCommon, $storyLang->activateAction);
-            $storyLang->deleteAction       = str_replace($SRCommon, $URCommon, $storyLang->deleteAction);
-            $storyLang->view               = str_replace($SRCommon, $URCommon, $storyLang->view);
-            $storyLang->linkStory          = str_replace($SRCommon, $URCommon, $storyLang->linkStory);
-            $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
-            $storyLang->exportAction       = str_replace($SRCommon, $URCommon, $storyLang->exportAction);
-            $storyLang->zeroCase           = str_replace($SRCommon, $URCommon, $storyLang->zeroCase);
-            $storyLang->zeroTask           = str_replace($SRCommon, $URCommon, $storyLang->zeroTask);
-            $storyLang->copyTitle          = str_replace($SRCommon, $URCommon, $storyLang->copyTitle);
-            $storyLang->common             = str_replace($SRCommon, $URCommon, $storyLang->common);
-            $storyLang->title              = str_replace($SRCommon, $URCommon, $storyLang->title);
-            $storyLang->spec               = str_replace($SRCommon, $URCommon, $storyLang->spec);
-            $storyLang->children           = str_replace($SRCommon, $URCommon, $storyLang->children);
-            $storyLang->linkStories        = str_replace($SRCommon, $URCommon, $storyLang->linkStories);
-            $storyLang->childStories       = str_replace($SRCommon, $URCommon, $storyLang->childStories);
-            $storyLang->duplicateStory     = str_replace($SRCommon, $URCommon, $storyLang->duplicateStory);
-            $storyLang->newStory           = str_replace($SRCommon, $URCommon, $storyLang->newStory);
-            $storyLang->copy               = str_replace($SRCommon, $URCommon, $storyLang->copy);
-            $storyLang->total              = str_replace($SRCommon, $URCommon, $storyLang->total);
-            $storyLang->released           = str_replace($SRCommon, $URCommon, $storyLang->released);
-            $storyLang->legendLifeTime     = str_replace($SRCommon, $URCommon, $storyLang->legendLifeTime);
-            $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
-            $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
-            $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
+        $storyLang = $this->lang->story;
+        $SRCommon  = $this->lang->SRCommon;
+        $URCommon  = $this->lang->URCommon;
 
-            $storyLang->report->charts['storysPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerProduct']);
-            $storyLang->report->charts['storysPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerModule']);
-            $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']);
-        }
+        $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
+        $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);
+        $storyLang->changed            = str_replace($SRCommon, $URCommon, $storyLang->changed);
+        $storyLang->assignAction       = str_replace($SRCommon, $URCommon, $storyLang->assignAction);
+        $storyLang->reviewAction       = str_replace($SRCommon, $URCommon, $storyLang->reviewAction);
+        $storyLang->subdivideAction    = str_replace($SRCommon, $URCommon, $storyLang->subdivideAction);
+        $storyLang->closeAction        = str_replace($SRCommon, $URCommon, $storyLang->closeAction);
+        $storyLang->activateAction     = str_replace($SRCommon, $URCommon, $storyLang->activateAction);
+        $storyLang->deleteAction       = str_replace($SRCommon, $URCommon, $storyLang->deleteAction);
+        $storyLang->view               = str_replace($SRCommon, $URCommon, $storyLang->view);
+        $storyLang->linkStory          = str_replace($SRCommon, $URCommon, $storyLang->linkStory);
+        $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
+        $storyLang->exportAction       = str_replace($SRCommon, $URCommon, $storyLang->exportAction);
+        $storyLang->zeroCase           = str_replace($SRCommon, $URCommon, $storyLang->zeroCase);
+        $storyLang->zeroTask           = str_replace($SRCommon, $URCommon, $storyLang->zeroTask);
+        $storyLang->copyTitle          = str_replace($SRCommon, $URCommon, $storyLang->copyTitle);
+        $storyLang->common             = str_replace($SRCommon, $URCommon, $storyLang->common);
+        $storyLang->title              = str_replace($SRCommon, $URCommon, $storyLang->title);
+        $storyLang->spec               = str_replace($SRCommon, $URCommon, $storyLang->spec);
+        $storyLang->children           = str_replace($SRCommon, $URCommon, $storyLang->children);
+        $storyLang->linkStories        = str_replace($SRCommon, $URCommon, $storyLang->linkStories);
+        $storyLang->childStories       = str_replace($SRCommon, $URCommon, $storyLang->childStories);
+        $storyLang->duplicateStory     = str_replace($SRCommon, $URCommon, $storyLang->duplicateStory);
+        $storyLang->newStory           = str_replace($SRCommon, $URCommon, $storyLang->newStory);
+        $storyLang->copy               = str_replace($SRCommon, $URCommon, $storyLang->copy);
+        $storyLang->total              = str_replace($SRCommon, $URCommon, $storyLang->total);
+        $storyLang->released           = str_replace($SRCommon, $URCommon, $storyLang->released);
+        $storyLang->legendLifeTime     = str_replace($SRCommon, $URCommon, $storyLang->legendLifeTime);
+        $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
+        $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
+        $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
+
+        $storyLang->report->charts['storysPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerProduct']);
+        $storyLang->report->charts['storysPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerModule']);
+        $storyLang->report->charts['storysPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storysPerSource']);
     }
 
     /**

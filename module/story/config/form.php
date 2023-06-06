@@ -34,3 +34,20 @@ $config->story->form->create['version']     = array('type' => 'int',     'contro
 $config->story->form->create['openedBy']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $app->user->account);
 $config->story->form->create['openedDate']  = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
 
+$config->story->form->batchCreate = array();
+$config->story->form->batchCreate['branch']     = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['module']     = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['plan']       = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['region']     = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['lane']       = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['title']      = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
+$config->story->form->batchCreate['color']      = array('type' => 'string',  'control' => 'color',        'required' => false, 'default' => '');
+$config->story->form->batchCreate['spec']       = array('type' => 'string',  'control' => 'textarea',     'required' => false, 'default' => '');
+$config->story->form->batchCreate['source']     = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => $lang->story->sourceList);
+$config->story->form->batchCreate['sourceNote'] = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->story->form->batchCreate['verify']     = array('type' => 'string',  'control' => 'textarea',     'required' => false, 'default' => '');
+$config->story->form->batchCreate['category']   = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'feature', 'options' => $lang->story->categoryList);
+$config->story->form->batchCreate['pri']        = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 3,         'options' => $lang->story->priList);
+$config->story->form->batchCreate['estimate']   = array('type' => 'float',   'control' => 'text',         'required' => false, 'default' => 0);
+$config->story->form->batchCreate['reviewer']   = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '', 'options' => 'users');
+$config->story->form->batchCreate['keywords']   = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '');

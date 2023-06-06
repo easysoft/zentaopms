@@ -210,6 +210,24 @@ class storyTao extends storyModel
     }
 
     /**
+     * 获取评审人。
+     * Get reviewers.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    protected function getReviewers(int $productID): array
+    {
+        $this->loadModel('user');
+        $product   = $this->loadModel('product')->getByID($productID);
+        $reviewers = $product->reviewer;
+
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
+        return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+    }
+
+    /**
      * 构建研发需求的跟踪矩阵信息。
      * Build story track.
      *
@@ -649,9 +667,9 @@ class storyTao extends storyModel
      */
     protected function doCreateStory(object $story): int|false
     {
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules')
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules,uploadImage')
             ->autoCheck()
-            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->checkIF(!empty($story->notifyEmail), 'notifyEmail', 'email')
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -680,7 +698,53 @@ class storyTao extends storyModel
         $spec->spec    = $story->spec;
         $spec->verify  = $story->verify;
         $spec->files   = implode(',', array_keys($files));
+
+        if(isset($story->uploadImage)) $spec = $this->doSaveUploadImage($storyID, $fileName, $spec);
+
         $this->dao->insert(TABLE_STORYSPEC)->data($spec)->exec();
+    }
+
+    /**
+     * 保存上传图片作为需求内容。
+     * Do save upload image.
+     *
+     * @param  int       $storyID
+     * @param  string    $fileName
+     * @param  object    $spec
+     * @access protected
+     * @return object
+     */
+    protected function doSaveUploadImage(int $storyID, string $fileName, object $spec): object
+    {
+        $storyImageFiles = $this->session->storyImagesFile;
+        if(empty($storyImageFiles)) return $spec;
+        if(empty($storyImageFiles[$fileName])) return $spec;
+
+        $file     = $storyImageFiles[$fileName];
+        $realPath = $file['realpath'];
+        unset($file['realpath']);
+        if(!file_exists($realPath)) return $spec;
+
+        $this->loadModel('file');
+        if(!is_dir($this->file->savePath)) mkdir($this->file->savePath, 0777, true);
+        if($realPath && rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+        {
+            $file['addedBy']    = $this->app->user->account;
+            $file['addedDate']  = helper::now();
+            $file['objectType'] = 'story';
+            $file['objectID']   = $storyID;
+
+            $isImage = in_array($file['extension'], $this->config->file->imageExtensions);
+            if($isImage) $file['extra'] = 'editor';
+
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+            $fileID = $this->dao->lastInsertID();
+
+            if($isImage)  $spec->spec  .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
+            if(!$isImage) $spec->files .= ',' . $fileID;
+        }
+
+        return $spec;
     }
 
     /**
