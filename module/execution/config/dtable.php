@@ -18,11 +18,14 @@ $config->execution->dtable->fieldList['name']['iconRender']   = true;
 $config->execution->dtable->fieldList['name']['sortType']     = true;
 $config->execution->dtable->fieldList['name']['minWidth']     = '356';
 
-$config->execution->dtable->fieldList['code']['title']    = $lang->execution->code;
-$config->execution->dtable->fieldList['code']['name']     = 'code';
-$config->execution->dtable->fieldList['code']['type']     = 'text';
-$config->execution->dtable->fieldList['code']['sortType'] = true;
-$config->execution->dtable->fieldList['code']['width']    = '136';
+if(isset($config->setCode) and $config->setCode == 1)
+{
+    $config->execution->dtable->fieldList['code']['title']    = $lang->execution->code;
+    $config->execution->dtable->fieldList['code']['name']     = 'code';
+    $config->execution->dtable->fieldList['code']['type']     = 'text';
+    $config->execution->dtable->fieldList['code']['sortType'] = true;
+    $config->execution->dtable->fieldList['code']['width']    = '136';
+}
 
 $config->execution->dtable->fieldList['project']['title']    = $lang->execution->project;
 $config->execution->dtable->fieldList['project']['name']     = 'project';
@@ -61,13 +64,13 @@ $config->execution->dtable->fieldList['end']['type']     = 'date';
 $config->execution->dtable->fieldList['end']['sortType'] = true;
 $config->execution->dtable->fieldList['end']['width']    = '96';
 
-$config->execution->dtable->fieldList['realBegan']['title']    = $lang->execution->realBegan;
+$config->execution->dtable->fieldList['realBegan']['title']    = $lang->execution->realBeganAB;
 $config->execution->dtable->fieldList['realBegan']['name']     = 'realBegan';
 $config->execution->dtable->fieldList['realBegan']['type']     = 'date';
 $config->execution->dtable->fieldList['realBegan']['sortType'] = true;
 $config->execution->dtable->fieldList['realBegan']['width']    = '106';
 
-$config->execution->dtable->fieldList['realEnd']['title']    = $lang->execution->realEnd;
+$config->execution->dtable->fieldList['realEnd']['title']    = $lang->execution->realEndAB;
 $config->execution->dtable->fieldList['realEnd']['name']     = 'realEnd';
 $config->execution->dtable->fieldList['realEnd']['type']     = 'date';
 $config->execution->dtable->fieldList['realEnd']['sortType'] = true;
