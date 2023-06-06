@@ -1,0 +1,4 @@
+#main>.container {height: auto; min-height: 340px;}
+
+#dataform .table-form>tbody>tr>th {width: 70px;}
+#dataform .table-form td.form-actions.text-center {padding-top: 20px;}
