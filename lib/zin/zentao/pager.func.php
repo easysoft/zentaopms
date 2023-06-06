@@ -9,9 +9,9 @@ namespace zin;
  * @param array $userSetting
  * @return array
  */
-function usePager(array $userSetting = null): array|null
+function usePager(array $userSetting = null, string $pagerName = 'pager'): array|null
 {
-    $pager = data('pager');
+    $pager = data($pagerName);
     if(empty($pager)) return null;
 
     $pager->setParams();
