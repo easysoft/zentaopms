@@ -10,14 +10,16 @@ class featureBar extends wg
         'current?:string',
         'link?:string',
         'current?:string',
-        'linkParams?:string'
+        'linkParams?:string',
+        'module?:string',
+        'method?:string'
     );
 
     static $defineBlocks = array
     (
-        'nav' => array('map' => 'nav'),
-        'leading' => array(),
-        'trailing' => array(),
+        'nav'      => array('map' => 'nav'),
+        'leading'  => array(),
+        'trailing' => array()
     );
 
     protected function getItems()
@@ -26,12 +28,12 @@ class featureBar extends wg
         if(!empty($items)) return $items;
 
         global $app, $lang;
-        $currentModule = $app->rawModule;
-        $currentMethod = $app->rawMethod;
+        $currentModule = $this->prop('module', $app->rawModule);
+        $currentMethod = $this->prop('method', $app->rawMethod);
 
         \common::sortFeatureMenu($currentModule, $currentMethod);
 
-        $rawItems = \customModel::getFeatureMenu($app->rawModule, $app->rawMethod);
+        $rawItems = \customModel::getFeatureMenu($currentModule, $currentMethod);
         if(!is_array($rawItems)) return null;
 
         $current      = $this->prop('current', data('browseType'));
