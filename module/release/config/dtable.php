@@ -8,6 +8,42 @@ $config->release->dtable->story   = new stdclass();
 $config->release->dtable->bug     = new stdclass();
 $config->release->dtable->leftBug = new stdclass();
 
+$config->release->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->release->dtable->fieldList['id']['name']  = 'id';
+$config->release->dtable->fieldList['id']['type']  = 'id';
+
+$config->release->dtable->fieldList['name']['title'] = $lang->release->name;
+$config->release->dtable->fieldList['name']['name']  = 'name';
+$config->release->dtable->fieldList['name']['link']  = helper::createLink('release', 'view', 'releaseID={id}');
+$config->release->dtable->fieldList['name']['type']  = 'title';
+
+$config->release->dtable->fieldList['branch']['title']    = $lang->release->branch;
+$config->release->dtable->fieldList['branch']['name']     = 'branchName';
+$config->release->dtable->fieldList['branch']['type']     = 'text';
+$config->release->dtable->fieldList['branch']['sortType'] = true;
+
+$config->release->dtable->fieldList['project']['title'] = $lang->release->project;
+$config->release->dtable->fieldList['project']['name']  = 'projectName';
+$config->release->dtable->fieldList['project']['type']  = 'text';
+
+$config->release->dtable->fieldList['build']['title'] = $lang->release->includedBuild;
+$config->release->dtable->fieldList['build']['name']  = 'build';
+$config->release->dtable->fieldList['build']['type']  = 'desc';
+
+$config->release->dtable->fieldList['status']['title']     = $lang->release->status;
+$config->release->dtable->fieldList['status']['name']      = 'status';
+$config->release->dtable->fieldList['status']['type']      = 'status';
+$config->release->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
+
+$config->release->dtable->fieldList['date']['title'] = $lang->release->date;
+$config->release->dtable->fieldList['date']['name']  = 'date';
+$config->release->dtable->fieldList['date']['type']  = 'date';
+
+$config->release->dtable->fieldList['actions']['title']      = $lang->actions;
+$config->release->dtable->fieldList['actions']['name']       = 'actions';
+$config->release->dtable->fieldList['actions']['type']       = 'actions';
+$config->release->dtable->fieldList['actions']['actionsMap'] = $config->release->actionList;
+
 $config->release->dtable->story->fieldList['id']['title']    = $lang->idAB;
 $config->release->dtable->story->fieldList['id']['name']     = 'id';
 $config->release->dtable->story->fieldList['id']['type']     = 'checkID';

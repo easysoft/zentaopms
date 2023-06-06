@@ -967,4 +967,28 @@ class releaseModel extends model
             ->orderBy($orderBy)
             ->fetchAll('product');
     }
+
+    /**
+     * 根据发布状态和权限生成列表中操作列按钮。
+     * Build table action menu for release browse page.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function buildActionList(object $release): array
+    {
+        $actions      = array();
+        $canBeChanged = common::canBeChanged('release', $release);
+        if(!$canBeChanged) return $actions;
+
+        if(common::hasPriv('release', 'linkStory')) $actions[] = 'linkStory';
+        if(common::hasPriv('release', 'linkBug')) $actions[] = 'linkBug';
+        if(common::hasPriv('release', 'changeStatus')) $actions[] = $release->status == 'normal' ? 'pause' : 'play';
+        if(common::hasPriv('release', 'edit')) $actions[] = 'edit';
+        if(common::hasPriv('release', 'notify')) $actions[] = 'notify';
+        if(common::hasPriv('release', 'delete')) $actions[] = 'delete';
+
+        return $actions;
+    }
 }

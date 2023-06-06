@@ -59,9 +59,10 @@ class release extends control
                 break;
             }
         }
+        if(!$showBranch) unset($this->config->release->dtable->fieldList['branch']);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
-        $this->view->releases   = $releases;
+        $this->view->releases   = $this->releaseZen->processReleaseListData($releases);
         $this->view->type       = $type;
         $this->view->pager      = $pager;
         $this->view->showBranch = $showBranch;
@@ -292,57 +293,42 @@ class release extends control
     }
 
     /**
+     * 删除发布。
      * Delete a release.
      *
      * @param  int    $releaseID
-     * @param  string $confirm      yes|no
      * @access public
      * @return void
      */
-    public function delete($releaseID, $confirm = 'no')
+    public function delete(int $releaseID)
     {
-        if($confirm == 'no')
+        $this->release->delete(TABLE_RELEASE, $releaseID);
+
+        $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
+        $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
+        foreach($builds as $build)
         {
-            return print(js::confirm($this->lang->release->confirmDelete, $this->createLink('release', 'delete', "releaseID=$releaseID&confirm=yes")));
+            if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
+        }
+
+        $response = array();
+        $message  = $this->executeHooks($releaseID);
+        if($message) $response['message'] = $message;
+
+        /* if ajax request, send result. */
+        if(dao::isError())
+        {
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->release->delete(TABLE_RELEASE, $releaseID);
-
-            $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
-            $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
-            $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
-            foreach($builds as $build)
-            {
-                if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
-            }
-
-            $message = $this->executeHooks($releaseID);
-            if($message) $response['message'] = $message;
-
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                    $release = $this->release->getById($releaseID);
-                }
-
-                return $this->send($response);
-            }
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-
-            $locateLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID={$release->product}");
-            return print(js::locate($locateLink, 'parent'));
+            $response['result'] = 'success';
+            $response['load']   = true;
         }
+
+        return $this->send($response);
     }
 
     /**
@@ -549,7 +535,8 @@ class release extends control
     }
 
     /**
-     * Unlink story
+     * 移除关联的需求。
+     * Unlink a story.
      *
      * @param  int    $releaseID
      * @param  int    $storyID
