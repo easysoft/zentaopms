@@ -85,8 +85,6 @@ sidebar
     )))
 );
 
-$this->bug->buildOperateMenu(null, 'browse');
-
 $config->bug->dtable->fieldList['module']['map']    = $modulePairs;
 $config->bug->dtable->fieldList['product']['map']   = $products;
 $config->bug->dtable->fieldList['story']['map']     = $stories;
@@ -96,17 +94,7 @@ $config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
 $config->bug->dtable->fieldList['project']['map']   = $projectPairs;
 $config->bug->dtable->fieldList['execution']['map'] = $executions;
 
-foreach($bugs as $bug)
-{
-    $actions = array();
-    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->bug->isClickable($bug, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $bug->actions = $actions;
-}
+$tableData = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
 
 $cols = array_values($config->bug->dtable->fieldList);
 $data = array_values($bugs);

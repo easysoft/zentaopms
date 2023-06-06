@@ -164,6 +164,8 @@ $config->bug->dtable->fieldList['actions']['type']     = 'actions';
 $config->bug->dtable->fieldList['actions']['width']    = '140';
 $config->bug->dtable->fieldList['actions']['sortType'] = false;
 $config->bug->dtable->fieldList['actions']['fixed']    = 'right';
+$config->bug->dtable->fieldList['actions']['list']     = $config->bug->actionList;
+$config->bug->dtable->fieldList['actions']['menu']     = array('close|activate', 'confirm', 'resolve', 'edit', 'copy');
 
 $config->bug->linkBugs = new stdclass();
 $config->bug->linkBugs->dtable = new stdclass();
