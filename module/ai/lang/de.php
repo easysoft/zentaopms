@@ -1,6 +1,6 @@
 <?php
 /**
- * The ai module zh-cn file of ZenTaoPMS.
+ * The ai module de file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -25,6 +25,8 @@ $lang->ai->models->proxyType      = 'Proxy Type';
 $lang->ai->models->proxyAddr      = 'Proxy Address';
 $lang->ai->models->description    = 'Description';
 $lang->ai->models->testConnection = 'Test Connection';
+$lang->ai->models->unconfigured   = 'Unconfigured';
+$lang->ai->models->edit           = 'Edit Parameters';
 
 $lang->ai->models->statusList = array();
 $lang->ai->models->statusList['on']  = 'Enable';

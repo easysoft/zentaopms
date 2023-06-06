@@ -11,56 +11,36 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" method='post'>
-    <table class='table table-form mw-800px'>
-      <tr>
-        <th><?php echo $lang->ai->models->type;?></th>
-        <td><div class="required required-wrapper"></div><?php echo html::select('type', $lang->ai->models->typeList, $modelConfig->type, "class='form-control chosen'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->ai->models->apiKey;?></th>
-        <td><div class="required required-wrapper"></div><?php echo html::input('key', $modelConfig->key, "class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->ai->models->proxyType;?></th>
-        <td>
-          <div class='row'>
-            <div class='col-md-4'>
-              <div class="required required-wrapper"></div>
-              <?php echo html::select('proxyType', $lang->ai->models->proxyTypes, $modelConfig->proxyType, "class='form-control chosen' data-disable_search='true'");?>
-            </div>
-            <div class='col-md-8' id='proxyAddrContainer' <?php if(empty($modelConfig->proxyType)) echo 'style="display: none;"'; ?>>
-              <div class='row'>
-                <div class='col-md-3 text-right' style='padding-top: 6px;'><strong><?php echo $lang->ai->models->proxyAddr;?></strong></div>
-                <div class='col-md-9'><div class="required required-wrapper"></div><?php echo html::input('proxyAddr', $modelConfig->proxyAddr, "class='form-control'");?></div>
-              </div>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->ai->models->description;?></th>
-        <td><?php echo html::textarea('description', $modelConfig->description, "class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->statusAB;?></th>
-        <td><?php echo html::radio('status', $lang->ai->models->statusList, empty($modelConfig->status) ? 'on' : $modelConfig->status);?></td>
-      </tr>
-      <tr>
-        <td colspan='2' class='text-center'>
-          <?php echo html::submitButton();?>
-          <?php echo html::commonButton($lang->ai->models->testConnection, '', 'btn btn-secondary btn-wide');?>
-        </td>
-      </tr>
-    </table>
-  </form>
+  <table class='table table-form mw-600px'>
+    <tr>
+      <th><?php echo $lang->ai->models->type;?></th>
+      <td><?php echo zget($lang->ai->models->typeList, $modelConfig->type, $lang->ai->models->unconfigured);?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->ai->models->apiKey;?></th>
+      <td><?php echo $modelConfig->key;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->ai->models->proxyType;?></th>
+      <td><?php echo zget($lang->ai->models->proxyTypes, $modelConfig->proxyType, $lang->ai->models->unconfigured);?></td>
+    </tr>
+    <tr <?php if(empty($modelConfig->proxyType)) echo 'style="display: none;"'; ?>>
+      <th><?php echo $lang->ai->models->proxyAddr;?></th>
+      <td><?php echo $modelConfig->proxyAddr;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->ai->models->description;?></th>
+      <td><?php echo $modelConfig->description;?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->statusAB;?></th>
+      <td><?php echo zget($lang->ai->models->statusList, $modelConfig->status, $lang->ai->models->statusList['off']);?></td>
+    </tr>
+    <tr>
+      <td colspan='2' class='text-center'>
+        <?php echo html::linkButton($lang->ai->models->edit, inlink('editmodel') . '#app=admin', 'self', '', 'btn btn-primary btn-wide');?>
+      </td>
+    </tr>
+  </table>
 </div>
-<script>
-$(function() {
-  $('select[name="proxyType"]').change(function() {
-    var proxyType = $(this).val();
-    $('#proxyAddrContainer').toggle(proxyType != '');
-  });
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>

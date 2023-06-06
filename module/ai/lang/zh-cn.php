@@ -25,6 +25,8 @@ $lang->ai->models->proxyType      = '代理类型';
 $lang->ai->models->proxyAddr      = '代理地址';
 $lang->ai->models->description    = '描述';
 $lang->ai->models->testConnection = '测试连接';
+$lang->ai->models->unconfigured   = '未配置';
+$lang->ai->models->edit           = '编辑模型参数';
 
 $lang->ai->models->statusList = array();
 $lang->ai->models->statusList['on']  = '启用';
