@@ -128,11 +128,6 @@
         const $table = $('#' + props.id).parent();
         if(!$table.length) return;
         const dtable = zui.DTable.get($table[0]);
-        Object.keys(props).forEach(prop =>
-        {
-            const value = props[prop];
-            if(typeof value === 'string' && value.startsWith('RAWJS<')) delete props[prop];
-        });
         if(DEBUG) console.log('[APP] ', 'update table:', {data, props});
         dtable.render(props);
     }
@@ -242,7 +237,19 @@
             {
                 updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
                 options.result = 'success';
-                try{data = JSON.parse(data);}catch(e)
+                try
+                {
+                    if(data.includes('RAWJS<'))
+                    {
+                        const func = new Function(`return ${data.split('"RAWJS<').join('').split('>RAWJS"').join('')}`);
+                        data = func();
+                    }
+                    else
+                    {
+                        data = JSON.parse(data);
+                    }
+                }
+                catch(e)
                 {
                     if(!isInAppTab && config.zin) return;
                     data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
