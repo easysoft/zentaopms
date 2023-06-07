@@ -14,9 +14,10 @@ $(document).on('click', '.batch-btn', function()
     const form = new FormData();
     checkedList.forEach((id) => form.append('todoIdList[]', id));
 
+    if($(this).attr('id') == 'changeDate') form.append('date', $('#formDate').val());
     if($(this).hasClass('ajax-btn'))
     {
-        $.ajaxSubmit({url, data:form});
+        $.ajaxSubmit({url, data: form});
     }
     else
     {
@@ -49,4 +50,20 @@ window.setStatistics = function(element, checks)
     })
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount)};
     return zui.formatString(element.options.defaultSummary);
+}
+
+window.generateHtml = function(event, options)
+{
+    const dtable = zui.DTable.query(event.target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let html = "<div class='toolbar input-group mr-2 size-sm'>";
+    html += "<input class='form-control' type='date' autocomplete='off' id='formDate' name='date'>";
+    html += "<button class='btn primary toolbar-item batch-btn ajax-btn size-sm' data-url='" + $.createLink('todo', 'import2Today') + "' id='changeDate'>";
+    html += "<span class='text'>" + changeDateLabel + "</span>";
+    html += "</button>";
+    html += "</div>";
+
+    return {html};
 }

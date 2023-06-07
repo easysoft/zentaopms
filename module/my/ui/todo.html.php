@@ -9,11 +9,12 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('changeDateLabel', $lang->todo->changeDate);
 
 featureBar
 (
     set::current($type),
-    set::linkParams("date={key}&userID={$app->user->id}&status=undone"),
+    set::linkParams('date={key}'),
     inputGroup
     (
         set::class('ml-4'),
@@ -66,14 +67,10 @@ toolbar
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
-    array('text' => $lang->todo->finish, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'batchFinish')),
-    array('text' => $lang->todo->close, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'batchClose')),
-    array('type' => 'btn-group', 'items' => array
-    (
-        array('text' => $lang->todo->changeDate, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'import2Today'))
-    ))
-));
+    array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
+    array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchFinish')),
+    array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchClose'))
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary'));
 
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
@@ -88,6 +85,7 @@ dtable
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
+    set::footer(array('checkbox', 'toolbar', jsRaw('window.generateHtml'), 'checkedInfo', 'flex', 'pager')),
 );
 
 render();
