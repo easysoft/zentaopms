@@ -7,10 +7,12 @@ class moduleMenu extends wg
     private $modules = array();
 
     protected static $defineProps = array(
-        'modules:array',
-        'activeKey:int',
-        'closeLink:string',
-        'activeText:string=""'
+        'modules: array',
+        'activeKey: int',
+        'closeLink: string',
+        'activeText: string=""',
+        'moduleSetting: bool=true',
+        'displaySetting: bool=true'
     );
 
     public static function getPageCSS(): string|false
@@ -56,10 +58,34 @@ class moduleMenu extends wg
         return $this->prop('activeText');
     }
 
-    protected function build(): wg
+    private function buildBtns()
     {
+        $moduleSetting  = $this->prop('moduleSetting');
+        $displaySetting = $this->prop('displaySetting');
+        if(!$moduleSetting && !$displaySetting) return null;
+
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
+        return div
+        (
+            setClass('setting-btns'),
+            $moduleSetting ? a
+            (
+                setClass('btn'),
+                setStyle('background', '#EEF5FF'),
+                setStyle('border', 'none'),
+                $lang->moduleSetting
+            ) : null,
+            $displaySetting ? a
+            (
+                setClass('btn white'),
+                $lang->displaySetting
+            ) : null,
+        );
+    }
+
+    protected function build(): wg
+    {
         $this->setMenuTreeProps();
         $activeKey = $this->prop('activeKey');
         $title = $this->getTitle($activeKey);
@@ -90,22 +116,7 @@ class moduleMenu extends wg
                 $closeBtn
             ) : null,
             h::main(zui::menutree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))),
-            div
-            (
-                setClass('setting-btns'),
-                a
-                (
-                    setClass('btn'),
-                    setStyle('background', '#EEF5FF'),
-                    setStyle('border', 'none'),
-                    $lang->moduleSetting
-                ),
-                a
-                (
-                    setClass('btn white'),
-                    $lang->displaySetting
-                ),
-            )
+            $this->buildBtns(),
         );
     }
 }
