@@ -44,6 +44,7 @@ formPanel
     (
         set::id('duplicateStoryBox'),
         set::name('duplicateStory'),
+        set::required(true),
         set::label($lang->story->duplicateStory),
         set::width('1/3'),
         set::strong(false),
