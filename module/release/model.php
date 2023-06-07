@@ -808,10 +808,10 @@ class releaseModel extends model
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
 
             $menu[] = array(
-                'text'  => $this->lang->release->changeStatusList[$changedStatus],
-                'icon'  => $release->status == 'normal' ? 'pause' : 'play',
-                'url'   => inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),
-                'class' => 'btn ghost'
+                'text'     => $this->lang->release->changeStatusList[$changedStatus],
+                'icon'     => $release->status == 'normal' ? 'pause' : 'play',
+                'url'      => "javascript:changeStatus('{$release->id}', '{$changedStatus}')",
+                'class'    => 'btn ghost'
             );
         }
 
@@ -832,7 +832,7 @@ class releaseModel extends model
             $menu[] = array(
                 'text'  => $this->lang->delete,
                 'icon'  => 'trash',
-                'url'   => inlink('delete', $params),
+                'url'   => "javascript:confirmDelete('{$release->id}')",
                 'class' => 'btn ghost'
             );
         }
