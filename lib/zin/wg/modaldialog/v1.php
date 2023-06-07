@@ -5,6 +5,7 @@ class modalDialog extends wg
 {
     static $defineProps = array(
         'title?: string',
+        'titleClass?: string',
         'itemID?: int',
         'headerClass?: string',
         'headerProps?: array',
@@ -24,6 +25,7 @@ class modalDialog extends wg
     protected function buildHeader()
     {
         $title       = $this->prop('title');
+        $titleClass  = $this->prop('titleClass');
         $itemID      = $this->prop('itemID');
         $headerBlock = $this->block('header');
 
@@ -34,7 +36,7 @@ class modalDialog extends wg
             setClass('modal-header', $this->prop('headerClass')),
             set($this->prop('headerProps')),
             empty($itemID) ? null : label($itemID, setStyle(['min-width' => '30px']), setClass('justify-center')),
-            empty($title) ? null : div(setClass('modal-title'), $title),
+            empty($title) ? null : div(setClass('modal-title', $titleClass), $title),
             $headerBlock
         );
     }
