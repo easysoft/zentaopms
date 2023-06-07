@@ -4,7 +4,7 @@ $config->project->dtable->defaultField = array('id', 'name', 'status', 'PM', 'bu
 
 $config->project->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->project->dtable->fieldList['id']['name']     = 'id';
-$config->project->dtable->fieldList['id']['type']     = 'id';
+$config->project->dtable->fieldList['id']['type']     = 'checkID';
 $config->project->dtable->fieldList['id']['checkbox'] = true;
 $config->project->dtable->fieldList['id']['group']    = 1;
 
