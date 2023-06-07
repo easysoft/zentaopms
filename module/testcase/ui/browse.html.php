@@ -283,6 +283,8 @@ menu
 );
  */
 
+$config->testcase->dtable->fieldList['story']['map'] = $stories;
+
 dtable
 (
     set::userMap($users),

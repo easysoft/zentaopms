@@ -276,6 +276,7 @@ class testcase extends control
         $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
         $this->view->scenes          = $scenes;
         $this->view->casesCount      = $casesCount;
+        $this->view->stories         = $this->loadModel('story')->getPairs($productID);
 
         $this->display();
     }
