@@ -3,6 +3,7 @@ global $lang,$config;
 $config->my->todo->dtable = new stdclass();
 $config->my->todo->dtable->fieldList['id']['name']  = 'id';
 $config->my->todo->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->my->todo->dtable->fieldList['id']['type']  = 'checkID';
 $config->my->todo->dtable->fieldList['id']['fixed'] = 'left';
 
 $config->my->todo->dtable->fieldList['name']['name']  = 'name';

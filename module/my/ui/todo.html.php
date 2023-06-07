@@ -64,12 +64,17 @@ toolbar
     )
 );
 
+$defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
 (
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('0.44'),
+    set::fixedLeftWidth('44%'),
+    set::checkable(true),
+    set::defaultSummary(array('html' => $defaultSummary)),
+    set::checkedSummary($lang->todo->checkedSummary),
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::footPager(usePager()),
 );
 

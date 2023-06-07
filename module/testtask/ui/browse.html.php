@@ -82,7 +82,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('0.44'),
+    set::fixedLeftWidth('44%'),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
 );

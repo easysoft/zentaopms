@@ -291,9 +291,14 @@ EOF;
 
         $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
+
+        $waitCount  = 0;
+        $doingCount = 0;
         foreach($todos as $key => $todo)
         {
             if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
+            if($todo->status == 'wait')  $waitCount ++;
+            if($todo->status == 'doing') $doingCount ++;
         }
 
         /* Assign. */
@@ -311,6 +316,8 @@ EOF;
         $this->view->pager        = $pager;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
+        $this->view->waitCount    = $waitCount;
+        $this->view->doingCount   = $doingCount;
         $this->view->importFuture = ($type != 'today');
 
         $this->display();
