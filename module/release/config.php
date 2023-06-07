@@ -32,11 +32,11 @@ $config->release->actionList['unlinkLeftBug']['url']  = 'javascript: unlinkObjec
 
 $config->release->actionList['play']['icon'] = 'play';
 $config->release->actionList['play']['hint'] = $this->lang->release->changeStatusList['normal'];
-$config->release->actionList['play']['url']  = helper::createLink('release', 'changeStatus', 'releaseID={id}&status=normal');
+$config->release->actionList['play']['url']  = 'javascript:changeStatus("{id}", "normal")';
 
 $config->release->actionList['pause']['icon'] = 'pause';
 $config->release->actionList['pause']['hint'] = $this->lang->release->changeStatusList['terminate'];
-$config->release->actionList['pause']['url']  = helper::createLink('release', 'changeStatus', 'releaseID={id}&status=terminate');
+$config->release->actionList['pause']['url']  = 'javascript:changeStatus("{id}", "terminate")';
 
 $config->release->actionList['edit']['icon'] = 'edit';
 $config->release->actionList['edit']['hint'] = $lang->release->edit;
