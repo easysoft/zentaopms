@@ -1209,6 +1209,18 @@ function section(): section
 }
 
 /**
+ * Zentao detail page section card widget.
+ *
+ * ====== blocks ======
+ * title => array('map' => 'entityLabel')
+ * ====================
+ */
+function sectionCard(): sectionCard
+{
+    return createWg('sectionCard', func_get_args());
+}
+
+/**
  * Zentao detail page section list widget.
  */
 function sectionList(): sectionList
