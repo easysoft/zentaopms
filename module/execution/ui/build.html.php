@@ -15,7 +15,18 @@ featureBar
 (
     set::current($type),
     set::linkParams("executionID={$executionID}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    li(searchToggle(set::module('executionBuild')))
+    div
+    (
+        set::class('select-product-box'),
+        select
+        (
+            set::name('product'),
+            set::value($product),
+            set::items($products),
+            on::change('changeProduct'),
+        ),
+    ),
+    li(searchToggle(set::module('executionBuild'))),
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -27,6 +38,7 @@ toolbar
 );
 
 jsVar('orderBy', $orderBy);
+jsVar('executionID', $executionID);
 jsVar('sortLink', helper::createLink('execution', 'build', "executionID={$executionID}&type={$type}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);

@@ -46,3 +46,15 @@ window.confirmDelete = function(buildID)
         $.ajaxSubmit({url: $.createLink('build', 'delete', 'buildID=' + buildID)});
     }
 }
+
+/**
+ * Change product.
+ *
+ * @access public
+ * @return void
+ */
+window.changeProduct = function()
+{
+    const link = $.createLink('execution', 'build', 'executionID=' + executionID + '&type=product&param=' + $(this).val());
+    loadPage(link);
+}
