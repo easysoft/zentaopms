@@ -35,14 +35,6 @@ window.renderCell = function(result, {col, row})
     return result;
 }
 
-window.confirmDelete = function(releaseID)
-{
-    if(window.confirm(confirmDelete))
-    {
-        $.ajaxSubmit({url: $.createLink('release', 'delete', 'releaseID=' + releaseID)});
-    }
-}
-
 window.createSortLink = function(col)
 {
     var sort = col.name + '_asc';

@@ -16,7 +16,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 
 /**
  * 计算表格任务信息的统计。
- * set task summary for table footer.
+ * Set task summary for table footer.
  *
  * @param  element element
  * @param  array   checkedidlist
