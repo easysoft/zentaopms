@@ -2,7 +2,6 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 {
     const dtable = zui.DTable.query(e.target);
     const checkedList = dtable.$.getChecks();
-    console.log(dtable)
     if(!checkedList.length) return;
 
     const tabType  = $(this).data('type');
