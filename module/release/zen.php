@@ -12,7 +12,7 @@ declare(strict_types=1);
 class releaseZen extends release
 {
     /**
-     * 处理项目列表展示数据。
+     * 处理发布列表展示数据。
      * Process release list display data.
      *
      * @param  array     $releaseList
