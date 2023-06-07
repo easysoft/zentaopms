@@ -86,6 +86,8 @@ $filter->bug->browse              = new stdclass();
 $filter->bug->default             = new stdclass();
 $filter->bug->create              = new stdclass();
 $filter->bug->export              = new stdclass();
+$filter->bug->ajaxgetproductcases = new stdclass();
+$filter->bug->ajaxgetproductbugs  = new stdclass();
 $filter->caselib->create          = new stdclass();
 $filter->doc->create              = new stdclass();
 $filter->doc->browse              = new stdclass();
@@ -467,3 +469,9 @@ $filter->tree->browse->cookie['preBranch']    = 'reg::word';
 $filter->kanban->space->cookie['showClosed'] = 'code';
 
 $filter->group->editmanagepriv->cookie['managePrivEditType'] = 'string';
+
+$filter->bug->ajaxgetproductcases->get['search']    = 'reg::any';
+$filter->bug->ajaxgetproductcases->get['limit']     = 'int';
+
+$filter->bug->ajaxgetproductbugs->get['search']      = 'reg::any';
+$filter->bug->ajaxgetproductbugs->get['limit']       = 'int';

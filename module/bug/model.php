@@ -2050,18 +2050,22 @@ class bugModel extends model
      *
      * @param  int        $productID
      * @param  int|string $branch
+     * @param  string     $search
+     * @param  int        $limit
      * @access public
      * @return void
      */
-    public function getProductBugPairs($productID, $branch = '')
+    public function getProductBugPairs($productID, $branch = '', $search = '', $limit = 0)
     {
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
+            ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
         foreach($data as $bug)
         {

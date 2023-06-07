@@ -1146,7 +1146,14 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
 
-        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $cases = array();
+        if($bug->case)
+        {
+            $case  = $this->loadModel('testcase')->getByID($bug->case);
+            $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
+        }
+
+        $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bugID}");
 
         /* Get assigned to member. */
         if($bug->execution)
@@ -1171,8 +1178,16 @@ class bug extends control
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
-        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        $branch = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+
+        $productBugs = array();
+        if($bug->resolution and $bug->duplicateBug)
+        {
+            $duplicateBug = $this->bug->getByID($bug->duplicateBug);
+            $productBugs  = $this->bug->getProductBugPairs($productID, $branch, $duplicateBug->title);
+        }
+        $this->config->moreLinks['duplicateBug'] = inlink('ajaxGetProductBugs', "productID={$productID}&bugID={$bugID}&type=json");
+
         unset($productBugs[$bugID]);
 
         $executions = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
@@ -1360,9 +1375,18 @@ class bug extends control
 
             if(!isset($modules[$bug->product][$bug->branch]) and isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
 
-            $bugProduct  = isset($productList) ? $productList[$bug->product] : $product;
-            $branch      = $bugProduct->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-            if(!isset($productBugList[$bug->product][$bug->branch])) $productBugList[$bug->product][$bug->branch] = $this->bug->getProductBugPairs($bug->product, $branch);
+            $bugProduct = isset($productList) ? $productList[$bug->product] : $product;
+            $branch     = $bugProduct->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+            if(!isset($productBugList[$bug->product][$bug->branch]))
+            {
+                if($bug->resolution and $bug->duplicateBug)
+                {
+                    $duplicateBug = $this->bug->getByID($bug->duplicateBug);
+                    $productBugList[$bug->product][$bug->branch] = $this->bug->getProductBugPairs($bug->product, $branch, $duplicateBug->title);
+                }
+            }
+
+            $this->config->moreLinks["duplicateBugs[{$bug->id}]"] = inlink('ajaxGetProductBugs', "productID={$bug->product}&bugID={$bug->id}&type=json");
         }
 
         /* Get assigned to member. */
@@ -2515,14 +2539,18 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProductBugs($productID, $bugID)
+    public function ajaxGetProductBugs($productID, $bugID, $type = 'html')
     {
+        $search      = $this->get->search;
+        $limit       = $this->get->limit;
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit);
+
         unset($productBugs[$bugID]);
 
+        if($type == 'json') return print(helper::jsonEncode($productBugs));
         return print(html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'"));
     }
 
@@ -2571,5 +2599,24 @@ class bug extends control
         $releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
 
         return print(helper::jsonEncode($releasedBuilds));
+    }
+
+    /**
+     * Ajax get relation cases.
+     *
+     * @param  int        $bugID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductCases($bugID)
+    {
+        $search = $this->get->search;
+        $limit  = $this->get->limit;
+
+        $bug = $this->bug->getByID($bugID);
+
+        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $search, $limit);
+
+        return print(helper::jsonEncode($cases));
     }
 }
