@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$isProjectApp  = $this->app->tab == 'project';
+$currentModule = $isProjectApp ? 'project'  : 'testcase';
+$currentMethod = $isProjectApp ? 'testcase' : 'browse';
+$projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
+$initModule    = isset($moduleID) ? (int)$moduleID : 0;
+
 $canModify          = common::canModify('product', $product);
 $canExport          = hasPriv('testcase', 'export');
 $canExportTemplate  = hasPriv('testcase', 'exportTemplate');
