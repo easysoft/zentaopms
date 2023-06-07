@@ -88,6 +88,21 @@ class storyModel extends model
     }
 
     /**
+     * Get story pairs.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getPairs(int $productID = 0): array
+    {
+        return $this->dao->select('id, title')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->beginIF($productID)->andWhere('product')->eq($productID)
+            ->fetchPairs();
+    }
+
+    /**
      * Get stories by idList.
      *
      * @param  array|string $storyIdList
