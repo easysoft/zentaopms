@@ -1,5 +1,5 @@
 <?php
-global $lang,$config;
+global $lang,$config, $app;
 $config->my->todo->dtable = new stdclass();
 $config->my->todo->dtable->fieldList['id']['name']  = 'id';
 $config->my->todo->dtable->fieldList['id']['title'] = $lang->idAB;
@@ -56,7 +56,6 @@ $config->my->todo->dtable->fieldList['actions']['sortType'] = false;
 $config->my->todo->dtable->fieldList['actions']['list']     = $config->my->todo->actionList;
 $config->my->todo->dtable->fieldList['actions']['menu']     = array('start', 'activate|assignTo', 'close|finish', 'edit', 'delete');
 
-global $app;
 $app->loadLang('score');
 
 $config->my->score         = new stdclass();
@@ -92,3 +91,21 @@ $config->my->score->dtable->fieldList['after']['type']  = 'count';
 $config->my->score->dtable->fieldList['desc']['name']  = 'desc';
 $config->my->score->dtable->fieldList['desc']['title'] = $lang->score->desc;
 $config->my->score->dtable->fieldList['desc']['type']  = 'desc';
+
+$config->my->requirement = new stdclass();
+$config->my->requirement->dtable = new stdclass();
+$config->my->requirement->dtable->fieldList['id']['name']  = 'id';
+$config->my->requirement->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->my->requirement->dtable->fieldList['id']['type']  = 'checkID';
+$config->my->requirement->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->my->requirement->dtable->fieldList['name']['name']  = 'name';
+$config->my->requirement->dtable->fieldList['name']['title'] = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
+$config->my->requirement->dtable->fieldList['name']['type']  = 'title';
+$config->my->requirement->dtable->fieldList['name']['link']  = helper::createLink('story', 'view', 'id={id}&version=0&param=0&storyType=requirement');
+$config->my->requirement->dtable->fieldList['name']['fixed'] = 'left';
+
+$config->my->requirement->dtable->fieldList['actions']['name']     = 'actions';
+$config->my->requirement->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->my->requirement->dtable->fieldList['actions']['type']     = 'actions';
+$config->my->requirement->dtable->fieldList['actions']['sortType'] = false;

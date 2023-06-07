@@ -86,6 +86,7 @@ class my extends control
      */
     public function work($mode = 'task', $type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         $this->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -447,7 +448,6 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->mode       = 'requirement';
-
         $this->display();
     }
 
