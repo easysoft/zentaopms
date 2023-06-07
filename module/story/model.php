@@ -5678,4 +5678,31 @@ class storyModel extends model
             }
         }
     }
+
+    /**
+     * Process story status.
+     *
+     * @param  object|Iterator  $story
+     * @access public
+     * @return object|Iterator
+     */
+    public function processStroyStatus($story, $readonly = false)
+    {
+        if($readonly) return $story;
+
+        if(is_iterable($story))
+        {
+            foreach($story as &$storyObj)
+            {
+                $storyObj->status = zget($this->lang->story->statusList, $storyObj->status, $storyObj->status);
+            }
+        }
+        else
+        {
+
+            $story->status = zget($this->lang->story->statusList, $story->status, $story->status);
+        }
+
+        return $story;
+    }
 }
