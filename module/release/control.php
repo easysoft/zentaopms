@@ -667,7 +667,8 @@ class release extends control
     }
 
     /**
-     * Unlink story
+     * 移除关联的Bug。
+     * Unlink linked bug.
      *
      * @param  int    $releaseID
      * @param  int    $bugID
@@ -675,26 +676,23 @@ class release extends control
      * @access public
      * @return void
      */
-    public function unlinkBug($releaseID, $bugID, $type = 'bug')
+    public function unlinkBug(int $releaseID, int $bugID, string $type = 'bug')
     {
         $this->release->unlinkBug($releaseID, $bugID, $type);
 
         /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
-        echo js::reload('parent');
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = true;
+        }
+        return $this->send($response);
     }
 
     /**
