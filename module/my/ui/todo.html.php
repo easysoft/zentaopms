@@ -64,6 +64,17 @@ toolbar
     )
 );
 
+$footToolbar = array('items' => array
+(
+    array('text' => $lang->edit, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
+    array('text' => $lang->todo->finish, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'batchFinish')),
+    array('text' => $lang->todo->close, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'batchClose')),
+    array('type' => 'btn-group', 'items' => array
+    (
+        array('text' => $lang->todo->changeDate, 'className' => 'batch-btn', 'btnType' => 'primary', 'data-url' => helper::createLink('todo', 'import2Today'))
+    ))
+));
+
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
 (
@@ -75,6 +86,7 @@ dtable
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->todo->checkedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );
 
