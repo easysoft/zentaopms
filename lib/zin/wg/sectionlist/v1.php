@@ -15,7 +15,7 @@ class sectionList extends wg
     {
         return div
         (
-            setClass('section-list', 'grow'),
+            setClass('section-list', 'canvas', 'col', 'gap-6', 'pt-4', 'px-6', 'pb-6'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $this->children()
         );

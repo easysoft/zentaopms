@@ -5,9 +5,9 @@ namespace zin;
 class section extends wg
 {
     protected static $defineProps = array(
-        'title: string',                   // 标题
-        'content?: string|array|callable', // 内容
-        'useHtml?: bool=false',            // 内容是否解析 HTML 标签
+        'title: string',          // 标题
+        'content?: string|array', // 内容
+        'useHtml?: bool=false',   // 内容是否解析 HTML 标签
     );
 
     protected static $defineBlocks = array(
@@ -29,22 +29,13 @@ class section extends wg
         $title       = $this->prop('title');
         $actionsView = $this->block('actions');
 
-        if(empty($actionsView)) return div(setClass('article-h2', 'mb-3'), $title);
+        if(empty($actionsView)) return div(setClass('article-h1', 'mb-2'), $title);
 
         return div
         (
-            setClass('flex', 'items-center', 'mb-3'),
-            div(setClass('article-h2'), $title),
+            setClass('flex', 'items-center', 'mb-2'),
+            div(setClass('article-h1'), $title),
             $actionsView,
-        );
-    }
-
-    private function headingTag(string $text): wg
-    {
-        return div
-        (
-            setClass('article-h4', 'my-1'),
-            "[$text]"
         );
     }
 
@@ -65,26 +56,14 @@ class section extends wg
         $content = $this->prop('content');
         if(!isset($content)) return null;
 
-        if(is_string($content)) return $this->content($content);
-
-        if(is_callable($content)) return $this->content($content());
-
-        return array_map(function($x)
-        {
-            return div
-            (
-                setClass('mt-4'),
-                $this->headingTag($x['title']),
-                $this->content($x['content'])
-            );
-        }, $content);
+        return $this->content($content);
     }
 
     protected function build(): wg
     {
         return div
         (
-            setClass('section pt-6 px-6 pb-4'),
+            setClass('section'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $this->title(),
             $this->block('subtitle'),
