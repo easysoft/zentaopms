@@ -30,6 +30,7 @@ jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('execution', 'build', "executionID={$executionID}&type={$type}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
+jsVar('confirmDelete', $lang->build->confirmDelete);
 dtable
 (
     set::userMap($users),

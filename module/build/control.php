@@ -361,44 +361,30 @@ class build extends control
      * Delete a build.
      *
      * @param  int    $buildID
-     * @param  string $confirm  yes|noe
+     * @param  string $from    execution|project
      * @access public
      * @return void
      */
-    public function delete($buildID, $confirm = 'no')
+    public function delete(int $buildID, string $from = 'execution')
     {
-        if($confirm == 'no')
+        $build = $this->build->getById($buildID);
+        $this->build->delete(TABLE_BUILD, $buildID);
+
+        $message = $this->executeHooks($buildID);
+        if($message) $response['message'] = $message;
+
+        /* if ajax request, send result. */
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->build->confirmDelete, $this->createLink('build', 'delete', "buildID=$buildID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $build = $this->build->getById($buildID);
-            $this->build->delete(TABLE_BUILD, $buildID);
-
-            $message = $this->executeHooks($buildID);
-            if($message) $response['message'] = $message;
-
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-
-            $link = $this->app->tab == 'project' ? $this->createLink('projectbuild', 'browse',  "projectID=$build->project") : $this->createLink('execution', 'build', "executionID=$build->execution");
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($link, 'parent'));
+            $response['result'] = 'success';
+            $response['load']   = helper::createLink($from, 'build', "executionID={$build->$from}");
         }
+        return $this->send($response);
     }
 
     /**
