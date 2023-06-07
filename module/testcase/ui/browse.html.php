@@ -24,7 +24,10 @@ $canBrowseUnits     = hasPriv('testtask', 'browseunits');
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
 
-$caseTypeItems = array();
+/* Process variables of case type menu. */
+$currentCaseType = zget($lang->testcase->typeList, $caseType, '');
+$currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
+$caseTypeItems   = array();
 foreach($lang->testcase->typeList as $type => $typeName)
 {
     if($canBrowseUnits and $type == 'unit')
@@ -46,7 +49,11 @@ foreach($lang->testcase->typeList as $type => $typeName)
     $caseTypeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
 }
 
-$suiteItems = array();
+/* Process variables of sutie menu. */
+$currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
+$currentSuite     = zget($suiteList, $currentSuiteID, '');
+$currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
+$suiteItems       = array();
 if(empty($suiteList))
 {
     if(empty($productID) or common::canModify('product', $product))
@@ -62,17 +69,10 @@ else
     }
 }
 
-$otherItems = array();
-$otherItems[] = array('text' => $lang->testcase->onlyScene);
-
-$currentCaseType = zget($lang->testcase->typeList, $caseType, '');
-$currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
-
-$currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
-$currentSuite     = zget($suiteList, $currentSuiteID, '');
-$currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
-
+/* Process variables of other menu. */
 $currentOtherName = $this->cookie->onlyScene ? $lang->testcase->onlyScene : $lang->other;
+$otherItems   = array();
+$otherItems[] = array('text' => $lang->testcase->onlyScene);
 
 featureBar
 (
