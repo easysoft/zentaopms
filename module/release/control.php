@@ -68,11 +68,12 @@ class release extends control
 
         $releases = $type == 'bySearch' ? $this->release->getListBySearch($productID, $queryID, $orderBy, $pager) : $this->release->getList($productID, $branch, $type, $orderBy, $queryID, $pager);
 
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
-        $this->view->releases   = $this->releaseZen->processReleaseListData($releases);
-        $this->view->type       = $type;
-        $this->view->pager      = $pager;
-        $this->view->showBranch = $showBranch;
+        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
+        $this->view->releases    = $this->releaseZen->processReleaseListData($releases);
+        $this->view->type        = $type;
+        $this->view->pager       = $pager;
+        $this->view->showBranch  = $showBranch;
+        $this->view->branchPairs = $this->loadModel('branch')->getPairs($productID);
         $this->display();
     }
 
