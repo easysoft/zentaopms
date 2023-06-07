@@ -83,10 +83,11 @@ $config->testcase->dtable->fieldList['lastRunDate']['title'] = $lang->testcase->
 $config->testcase->dtable->fieldList['lastRunDate']['type']  = 'time';
 $config->testcase->dtable->fieldList['lastRunDate']['group'] = '4';
 
-$config->testcase->dtable->fieldList['lastRunResult']['name']  = 'lastRunResult';
-$config->testcase->dtable->fieldList['lastRunResult']['title'] = $lang->testcase->lastRunResult;
-$config->testcase->dtable->fieldList['lastRunResult']['type']  = 'status';
-$config->testcase->dtable->fieldList['lastRunResult']['group'] = '4';
+$config->testcase->dtable->fieldList['lastRunResult']['name']      = 'lastRunResult';
+$config->testcase->dtable->fieldList['lastRunResult']['title']     = $lang->testcase->lastRunResult;
+$config->testcase->dtable->fieldList['lastRunResult']['type']      = 'status';
+$config->testcase->dtable->fieldList['lastRunResult']['statusMap'] = $lang->testcase->resultList;
+$config->testcase->dtable->fieldList['lastRunResult']['group']     = '4';
 
 $config->testcase->dtable->fieldList['bugs']['name']  = 'bugs';
 $config->testcase->dtable->fieldList['bugs']['title'] = $lang->testcase->bugsAB;
