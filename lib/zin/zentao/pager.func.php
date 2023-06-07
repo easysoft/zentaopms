@@ -28,7 +28,8 @@ function usePager(array $userSetting = null, string $pagerName = 'pager'): array
     $setting['recPerPage']  = $pager->recPerPage;
     $setting['linkCreator'] = createLink($pager->moduleName, $pager->methodName, $params);
     $setting['items']       = array();
-    $setting['btnProps']    = array('data-load' => 'table');
+    $setting['btnProps']    = array('data-load' => 'table', 'type' => 'ghost', 'size' => 'sm');
+    $setting['gap']         = 0;
 
     if($pager->recTotal == 0)
     {
