@@ -1457,7 +1457,7 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
-        if($module == 'testcase' && $action == 'createbug')   return $case->caseFails > 0;
+        if($module == 'testcase' && $action == 'createbug')   return !empty($case->caseFiles) && $case->caseFails > 0;
         if($module == 'testcase' && $action == 'review')      return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
 
         return true;
