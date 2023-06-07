@@ -27,13 +27,14 @@ $lang->testsuite->pri            = 'Priority';
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->project        = $lang->projectCommon;
 $lang->testsuite->product        = $lang->productCommon;
-$lang->testsuite->name           = 'Name';
+$lang->testsuite->name           = 'Suite Name';
 $lang->testsuite->type           = 'Type';
 $lang->testsuite->desc           = 'Beschreibung';
 $lang->testsuite->mailto         = 'Mailto';
 $lang->testsuite->author         = 'Zugriffskontrolle';
 $lang->testsuite->addedBy        = 'Ersteller';
-$lang->testsuite->addedDate      = 'Datum';
+$lang->testsuite->addedDate      = 'Create Date';
+$lang->testsuite->addedTime      = 'Create Time';
 $lang->testsuite->lastEditedBy   = 'Last Edited By';
 $lang->testsuite->lastEditedDate = 'Last Edited Date';
 
@@ -55,4 +56,4 @@ $lang->testsuite->lblUnlinkCase = 'Unverknüpfte Fälle';
 $lang->testsuite->authorList['private'] = 'Privat';
 $lang->testsuite->authorList['public']  = 'Öffentlich';
 
-$lang->testsuite->featureBar['browse']['all'] = 'Suite List';
+$lang->testsuite->featureBar['browse']['all'] = 'All';

@@ -27,13 +27,14 @@ $lang->testsuite->pri            = 'Priority';
 $lang->testsuite->common         = 'Cahier de Recette';
 $lang->testsuite->project        = $lang->projectCommon;
 $lang->testsuite->product        = $lang->productCommon;
-$lang->testsuite->name           = 'Nom';
+$lang->testsuite->name           = 'Suite Nom';
 $lang->testsuite->type           = 'Type';
 $lang->testsuite->desc           = 'Description';
 $lang->testsuite->mailto         = 'Mailto';
 $lang->testsuite->author         = "Contrôle d'Accès";
 $lang->testsuite->addedBy        = 'Créé par';
 $lang->testsuite->addedDate      = 'Créé le';
+$lang->testsuite->addedTime      = 'Create Time';
 $lang->testsuite->lastEditedBy   = 'LastEditedBy';
 $lang->testsuite->lastEditedDate = 'LastEditedDate';
 
@@ -55,4 +56,4 @@ $lang->testsuite->lblUnlinkCase = 'Retirer CasTest';
 $lang->testsuite->authorList['private'] = 'Privé';
 $lang->testsuite->authorList['public']  = 'Public';
 
-$lang->testsuite->featureBar['browse']['all'] = 'Suite List';
+$lang->testsuite->featureBar['browse']['all'] = 'All';

@@ -27,13 +27,14 @@ $lang->testsuite->pri            = '优先级';
 $lang->testsuite->common         = '套件';
 $lang->testsuite->project        = '所属' . $lang->projectCommon;
 $lang->testsuite->product        = '所属' . $lang->productCommon;
-$lang->testsuite->name           = '名称';
+$lang->testsuite->name           = '套件名称';
 $lang->testsuite->type           = '类型';
 $lang->testsuite->desc           = '描述';
 $lang->testsuite->mailto         = '抄送给';
 $lang->testsuite->author         = '访问权限';
 $lang->testsuite->addedBy        = '由谁创建';
-$lang->testsuite->addedDate      = '创建时间';
+$lang->testsuite->addedDate      = '创建日期';
+$lang->testsuite->addedTime      = '创建时间';
 $lang->testsuite->lastEditedBy   = '最后编辑人';
 $lang->testsuite->lastEditedDate = '最后编辑时间';
 
@@ -55,4 +56,4 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
-$lang->testsuite->featureBar['browse']['all'] = '套件列表';
+$lang->testsuite->featureBar['browse']['all'] = '全部';
