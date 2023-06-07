@@ -128,7 +128,7 @@ js::set('isAdminUser',   $this->app->user->admin);
         <?php else:?>
         <div class='version-content'>
           <?php $lastVersionList = (array)$latestVersionList;?>
-          <?php $lastVersion     = end($latestVersionList);?>
+          <?php $lastVersion     = end($lastVersionList);?>
           <?php foreach($latestVersionList as $versionNumber => $version):?>
           <div class="version-list">
             <div>
