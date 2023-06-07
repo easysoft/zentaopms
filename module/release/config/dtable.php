@@ -26,10 +26,12 @@ $config->release->dtable->fieldList['branch']['sortType'] = true;
 $config->release->dtable->fieldList['project']['title'] = $lang->release->project;
 $config->release->dtable->fieldList['project']['name']  = 'project';
 $config->release->dtable->fieldList['project']['type']  = 'text';
+$config->release->dtable->fieldList['project']['group'] = 1;
 
 $config->release->dtable->fieldList['build']['title'] = $lang->release->includedBuild;
 $config->release->dtable->fieldList['build']['name']  = 'build';
 $config->release->dtable->fieldList['build']['type']  = 'desc';
+$config->release->dtable->fieldList['build']['group'] = 1;
 
 $config->release->dtable->fieldList['status']['title']     = $lang->release->status;
 $config->release->dtable->fieldList['status']['name']      = 'status';
