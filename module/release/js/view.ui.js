@@ -4,8 +4,9 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
+    const tabType  = $(this).data('type');
     const postData = [];
-    postData[`${type}IdList[]`] = checkedList;
+    postData[`${tabType}IdList[]`] = checkedList;
 
     $.ajaxSubmit({
         url:  $(this).data('url'),
@@ -63,28 +64,47 @@ window.setStoryStatistics = function(element, checkedIDList)
  * Create sort link for table.
  *
  * @param  object col
+ * @param  string tabType
  * @access public
  * @return string
  */
-window.createSortLink = function(col)
+window.createSortLink = function(col, sortType)
 {
-    var sort = col.name + '_asc';
+    const tabID   = $('.tab-pane.active').attr('id');
+    let   tabType = '';
+    switch(tabID)
+    {
+        case 'resolvedBug':
+            tabType = 'bug';
+            break;
+        case 'leftBug':
+            tabType = 'leftBug';
+            break;
+        default:
+            tabType = 'story';
+            break;
+    }
+
+    let sort = `${col.name}_asc`;
     if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{orderBy}', sort);
+    return sortLink.replace('{type}', tabType).replace('{orderBy}', sort);
 }
 
 /**
- * 移除关联的需求。
- * Remove linked story.
+ * 移除关联的对象。
+ * Remove linked object.
  *
- * @param  int    storyID
+ * @param  sting objectType
+ * @param  int   objectID
  * @access public
  * @return void
  */
-window.unlinkStory = function(storyID)
+window.unlinkObject = function(objectType, objectID)
 {
-    if(window.confirm(confirmUnlinkStory))
+    objectType = objectType.toLowerCase();
+
+    if(window.confirm(`confirmunlink${objectType}`))
     {
-        $.ajaxSubmit({url: unlinkStoryUrl.replace('%s', storyID)});
+        $.ajaxSubmit({url: `unlink${objectType}url`.replace('%s', objectID)});
     }
 }
