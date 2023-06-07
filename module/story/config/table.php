@@ -8,6 +8,7 @@ $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
 $config->story->datatable->fieldList['id']['width']    = '60';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
+$config->story->datatable->fieldList['id']['type']     = 'id';
 
 if($app->tab == 'execution')
 {
@@ -29,6 +30,7 @@ $config->story->datatable->fieldList['pri']['fixed']    = 'left';
 $config->story->datatable->fieldList['pri']['width']    = '40';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 $config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
+$config->story->datatable->fieldList['pri']['type']     = 'pri';
 
 $config->story->datatable->fieldList['plan']['title']      = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']      = 'no';
@@ -37,10 +39,12 @@ $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 
-$config->story->datatable->fieldList['status']['title']    = 'statusAB';
-$config->story->datatable->fieldList['status']['fixed']    = 'no';
-$config->story->datatable->fieldList['status']['width']    = '60';
-$config->story->datatable->fieldList['status']['required'] = 'no';
+$config->story->datatable->fieldList['status']['title']     = 'statusAB';
+$config->story->datatable->fieldList['status']['fixed']     = 'no';
+$config->story->datatable->fieldList['status']['width']     = '60';
+$config->story->datatable->fieldList['status']['required']  = 'no';
+$config->story->datatable->fieldList['status']['type']      = 'status';
+$config->story->datatable->fieldList['status']['statusMap'] = $lang->story->statusList;
 
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
@@ -52,9 +56,10 @@ $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
 $config->story->datatable->fieldList['estimate']['width']    = '50';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
-$config->story->datatable->fieldList['reviewer']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewer']['title']      = 'reviewer';
 $config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
 $config->story->datatable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
+$config->story->datatable->fieldList['reviewer']['type']       = 'user';
 
 $config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
 $config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
@@ -62,22 +67,25 @@ $config->story->datatable->fieldList['reviewedBy']['width']      = '100';
 $config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
 $config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
 $config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
-
+$config->story->datatable->fieldList['reviewedBy']['type']       = 'user';
 
 $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['reviewedDate']['width']    = '90';
 $config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
 
-$config->story->datatable->fieldList['stage']['title']    = 'stageAB';
-$config->story->datatable->fieldList['stage']['fixed']    = 'no';
-$config->story->datatable->fieldList['stage']['width']    = '85';
-$config->story->datatable->fieldList['stage']['required'] = 'no';
+$config->story->datatable->fieldList['stage']['title']     = 'stageAB';
+$config->story->datatable->fieldList['stage']['fixed']     = 'no';
+$config->story->datatable->fieldList['stage']['width']     = '85';
+$config->story->datatable->fieldList['stage']['required']  = 'no';
+$config->story->datatable->fieldList['stage']['type']      = 'status';
+$config->story->datatable->fieldList['stage']['statusMap'] = $lang->story->stageList;
 
 $config->story->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
 $config->story->datatable->fieldList['assignedTo']['fixed']    = 'no';
 $config->story->datatable->fieldList['assignedTo']['width']    = '90';
 $config->story->datatable->fieldList['assignedTo']['required'] = 'no';
+$config->story->datatable->fieldList['assignedTo']['type']     = 'assign';
 
 $config->story->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
@@ -201,5 +209,41 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '250' : '230';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';
+$config->story->datatable->fieldList['actions']['width']    = 'auto';
+$config->story->datatable->fieldList['actions']['minWidth'] = $app->tab == 'project' ? 250 : 170;
+$config->story->datatable->fieldList['actions']['type']     = 'actions';
+
+$config->story->datatable->fieldList['actions']['actionsMap']['assigned']['icon'] = 'hand-right';
+$config->story->datatable->fieldList['actions']['actionsMap']['assigned']['hint'] = $lang->story->operateList['assigned'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['closed']['icon'] = 'off';
+$config->story->datatable->fieldList['actions']['actionsMap']['closed']['hint'] = $lang->story->operateList['closed'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['activated']['icon'] = 'active';
+$config->story->datatable->fieldList['actions']['actionsMap']['activated']['hint'] = $lang->story->operateList['activated'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['changed']['icon'] = 'change';
+$config->story->datatable->fieldList['actions']['actionsMap']['changed']['hint'] = $lang->story->operateList['changed'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['reviewed']['icon'] = 'search';
+$config->story->datatable->fieldList['actions']['actionsMap']['reviewed']['hint'] = $lang->story->operateList['reviewed'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['edited']['icon'] = 'edit';
+$config->story->datatable->fieldList['actions']['actionsMap']['edited']['hint'] = $lang->story->operateList['edited'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['submitreview']['icon'] = 'sub-review';
+$config->story->datatable->fieldList['actions']['actionsMap']['submitreview']['hint'] = $lang->story->operateList['submitreview'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['recalledchange']['icon'] = 'undo';
+$config->story->datatable->fieldList['actions']['actionsMap']['recalledchange']['hint'] = $lang->story->operateList['recalledchange'];
+
+$config->story->datatable->fieldList['actions']['actionsMap']['recalled']['icon'] = 'undo';
+$config->story->datatable->fieldList['actions']['actionsMap']['recalled']['hint'] = $lang->story->operateList['recalled'];
+
+$app->loadLang('testcase');
+$config->story->datatable->fieldList['actions']['actionsMap']['createcase']['icon'] = 'testcase';
+$config->story->datatable->fieldList['actions']['actionsMap']['createcase']['hint'] = $lang->testcase->create;
+
+$config->story->datatable->fieldList['actions']['actionsMap']['subdivide']['icon'] = 'split';
+$config->story->datatable->fieldList['actions']['actionsMap']['subdivide']['hint'] = $lang->story->subdivide;

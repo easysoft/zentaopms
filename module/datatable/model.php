@@ -65,7 +65,7 @@ class datatableModel extends model
      * @access public
      * @return object
      */
-    public function getSetting($module)
+    public function getSetting(string $module)
     {
         $method      = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
@@ -105,9 +105,12 @@ class datatableModel extends model
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
                 $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
 
-                if(isset($fieldList[$id]['minWidth'])) $set->minWidth = $fieldList[$id]['minWidth'];
-                if(isset($fieldList[$id]['maxWidth'])) $set->maxWidth = $fieldList[$id]['maxWidth'];
-                if(isset($fieldList[$id]['pri']))      $set->pri = $fieldList[$id]['pri'];
+                if(isset($fieldList[$id]['minWidth']))   $set->minWidth   = $fieldList[$id]['minWidth'];
+                if(isset($fieldList[$id]['maxWidth']))   $set->maxWidth   = $fieldList[$id]['maxWidth'];
+                if(isset($fieldList[$id]['pri']))        $set->pri        = $fieldList[$id]['pri'];
+                if(isset($fieldList[$id]['statusMap']))  $set->statusMap  = $fieldList[$id]['statusMap'];
+                if(isset($fieldList[$id]['type']))       $set->type       = $fieldList[$id]['type'];
+                if(isset($fieldList[$id]['actionsMap'])) $set->actionsMap = $fieldList[$id]['actionsMap'];
 
                 $setting[$key] = $set;
             }
