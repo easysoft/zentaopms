@@ -312,9 +312,9 @@ class release extends control
      */
     public function delete(int $releaseID)
     {
+        $release = $this->release->getByID($releaseID);
         $this->release->delete(TABLE_RELEASE, $releaseID);
 
-        $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
         $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
         $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
         foreach($builds as $build)
@@ -335,7 +335,7 @@ class release extends control
         else
         {
             $response['result'] = 'success';
-            $response['load']   = true;
+            $response['load']   = inLink('browse', "productID={$release->product}");
         }
 
         return $this->send($response);
@@ -713,18 +713,20 @@ class release extends control
     }
 
     /**
+     * 激活/停止维护发布。
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $status
+     * @param  string $status     normal|terminate
      * @access public
      * @return void
      */
-    public function changeStatus($releaseID, $status)
+    public function changeStatus(int $releaseID, string $status)
     {
         $this->release->changeStatus($releaseID, $status);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->sendError(dao::getError());
+
         $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
-        echo js::reload('parent');
+        return $this->sendSuccess(array('load' => true));
     }
 }
