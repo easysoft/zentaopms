@@ -58,8 +58,8 @@ window.generateHtml = function(event, options)
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    let html = "<div class='toolbar input-group mr-2 size-sm'>";
-    html += "<input class='form-control' type='date' autocomplete='off' id='formDate' name='date'>";
+    let html = "<div class='toolbar input-group mr-2'>";
+    html += "<input class='form-control size-sm' type='date' autocomplete='off' id='formDate' name='date'>";
     html += "<button class='btn primary toolbar-item batch-btn ajax-btn size-sm' data-url='" + $.createLink('todo', 'import2Today') + "' id='changeDate'>";
     html += "<span class='text'>" + changeDateLabel + "</span>";
     html += "</button>";
