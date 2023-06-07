@@ -459,7 +459,7 @@ class executionModel extends model
         $this->lang->error->unique = $this->lang->error->repeat;
         $sprintProject = isset($sprint->project) ? $sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
-            ->autoCheck($skipFields = 'begin,end')
+            ->autoCheck('begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
             ->checkIF(!empty($sprint->name), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = $sprintProject and `deleted` = '0'")
             ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban') and `deleted` = '0'")
@@ -640,7 +640,7 @@ class executionModel extends model
         $this->lang->error->unique = $this->lang->error->repeat;
         $executionProject = isset($execution->project) ? $execution->project : $oldExecution->project;
         $this->dao->update(TABLE_EXECUTION)->data($execution)
-            ->autoCheck($skipFields = 'begin,end')
+            ->autoCheck('begin,end')
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
@@ -707,7 +707,7 @@ class executionModel extends model
             $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
             if(!empty($diffProductIdList))
             {
-                foreach($diffProductIdList as $key => $newProductID)
+                foreach($diffProductIdList as $newProductID)
                 {
                     $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
                         ->where('project')->eq($executionID)
@@ -888,7 +888,7 @@ class executionModel extends model
             foreach($extendFields as $extendField)
             {
                 $executions[$executionID]->{$extendField->field} = $this->post->{$extendField->field}[$executionID];
-                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = join(',', $executions[$executionID]->{$extendField->field});
+                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = implode(',', $executions[$executionID]->{$extendField->field});
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
             }
@@ -940,7 +940,7 @@ class executionModel extends model
                 $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
                 if(!empty($diffProductIdList))
                 {
-                    foreach($diffProductIdList as $key => $newProductID)
+                    foreach($diffProductIdList as $newProductID)
                     {
                         $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
                             ->where('project')->eq($executionID)
@@ -953,7 +953,7 @@ class executionModel extends model
             }
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
-                ->autoCheck($skipFields = 'begin,end')
+                ->autoCheck('begin,end')
                 ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
@@ -1026,9 +1026,6 @@ class executionModel extends model
             $execution       = $selfAndChildren[$executionID];
             $executionType   = $execution->type;
 
-            $siblingList = array();
-            if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
-
             if($status == 'wait' and $execution->status != 'wait')
             {
                 $pointOutStages .= $this->changeStatus2Wait($executionID, $selfAndChildren);
@@ -1060,8 +1057,6 @@ class executionModel extends model
     {
         $this->loadModel('programplan');
         $this->loadModel('action');
-
-        $parentID = $selfAndChildren[$executionID]->parent;
 
         /* There are already tasks consuming work in this phase or its sub-phases already have start times. */
         $hasStartedChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('realBegan')->ne('0000-00-00')->andWhere('id')->in(array_keys($selfAndChildren))->andWhere('id')->ne($executionID)->fetchPairs();
@@ -1097,9 +1092,6 @@ class executionModel extends model
         $this->loadModel('programplan');
         $this->loadModel('action');
 
-        $type     = $selfAndChildren[$executionID]->type;
-        $parentID = $selfAndChildren[$executionID]->parent;
-
         $newExecution = $this->buildExecutionByStatus('doing');
         $this->dao->update(TABLE_EXECUTION)->data($newExecution)->where('id')->eq($executionID)->exec();
         if(!dao::isError())
@@ -1128,8 +1120,6 @@ class executionModel extends model
         $this->loadModel('programplan');
         $this->loadModel('action');
 
-        $type          = $selfAndChildren[$executionID]->type;
-        $parentID      = $selfAndChildren[$executionID]->parent;
         $checkedStatus = $status == 'suspended' ? 'wait,doing' : 'wait,doing,suspended';
 
         /* If status is suspended, the rules is there are sub-stages under this stage, and not all sub-stages are suspended or closed. */
@@ -3886,7 +3876,7 @@ class executionModel extends model
         /* Group by execution/type/name/lane/column. */
         $columnGroup = array();
         $parentNames = array();
-        foreach($cells as $id => $column)
+        foreach($cells as $column)
         {
             if($column->parent == '-1')
             {
@@ -3908,9 +3898,9 @@ class executionModel extends model
                     $cfd->count = 0;
                     $cfd->date  = $today;
                     $cfd->type  = $type;
-                    foreach($laneGroup as $laneID => $columnGroup)
+                    foreach($laneGroup as $columnGroup)
                     {
-                        foreach($columnGroup as $colID => $columnCard)
+                        foreach($columnGroup as $columnCard)
                         {
                             $cards = trim($columnCard->cards, ',');
                             $cfd->count += $cards ? count(explode(',', $cards)) : 0;
@@ -4396,7 +4386,6 @@ class executionModel extends model
     {
         $this->app->loadClass('date', true);
         $dateList = date::getDateList($begin, $end, $format, $type, $this->config->execution->weekend);
-        $days     = count($dateList);
 
         if(!$interval) $interval = floor(count($dateList) / $this->config->execution->maxBurnDay);
 
@@ -4471,7 +4460,7 @@ class executionModel extends model
         foreach($products as $product)
         {
             $productModules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
-            $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
+            $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', 'noempty|notrunk|withbranch');
             foreach($productModules as $moduleID => $moduleName)
             {
                 $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
@@ -4485,7 +4474,6 @@ class executionModel extends model
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchPairs  = array();
         $productType  = 'normal';
-        $productNum   = count($products);
         $productPairs = array(0 => '');
         foreach($products as $product)
         {
@@ -4833,8 +4821,6 @@ class executionModel extends model
         $burnBy = $burnBy ? $burnBy : 'left';
 
         $sets      = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
-        $limitJSON = '[]';
-
         $firstBurn = empty($sets) ? 0 : reset($sets);
         $firstTime = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : 0;
         $firstTime = !$firstTime && !empty($firstBurn->value) ? $firstBurn->value : 0;
@@ -5241,7 +5227,7 @@ class executionModel extends model
             $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path='$path'";
         }
 
-        $burns = join(',', $execution->burns);
+        $burns = implode(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
         echo "<td class='c-name text-left flex sort-handler'>";
         if(common::hasPriv('execution', 'batchEdit')) echo "<span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
@@ -5357,11 +5343,10 @@ class executionModel extends model
      */
     public function getStageLinkProductPairs($stageIdList = array())
     {
-        $productpairs = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.project')->in($stageIdList)
             ->fetchPairs('project', 'name');
-        return $productpairs;
     }
 
     /**
@@ -5449,7 +5434,7 @@ class executionModel extends model
             foreach($setting as $key => $value)
             {
                 $id  = $value;
-                $set = new stdclass();;
+                $set = new stdclass();
                 $set->order = $order;
                 $set->show  = true;
                 $set->name  = $value;
@@ -5537,7 +5522,7 @@ class executionModel extends model
     {
         $today = helper::today();
         $rows  = array();
-        foreach($executions as $id => $execution)
+        foreach($executions as $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");

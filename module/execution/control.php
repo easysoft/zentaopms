@@ -126,8 +126,6 @@ class execution extends control
 
         if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
-        /* Get products by execution. */
-        $products = $this->loadModel('product')->getProductPairsByProject($executionID);
         helper::setcookie('preExecutionID', $executionID);
 
         /* Save the recently five executions visited in the cookie. */
