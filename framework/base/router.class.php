@@ -3389,7 +3389,7 @@ class ztSessionHandler
     public $sessSavePath;
     public $sessionFile;
     public $sessionID;
-    public $rawID;
+    public $sessionName;
     public $rawFile;
 
     /**
@@ -3406,7 +3406,7 @@ class ztSessionHandler
     }
 
     /**
-     * Get sessionID
+     * Get sessionID.
      *
      * @access public
      * @return string
@@ -3419,7 +3419,7 @@ class ztSessionHandler
     /**
      * Get session file.
      *
-     * @param  string    $id
+     * @param  string $id
      * @access public
      * @return string
      */
@@ -3432,30 +3432,29 @@ class ztSessionHandler
 
         $fileName = "sess_$sessionID";
 
-        $this->sessionFile = $this->sessSavePath . '/' . $fileName;
+        $this->sessionFile = $this->sessSavePath . DS . $fileName;
         $this->sessionID   = $sessionID;
-        $this->rawID       = $id;
-        $this->rawFile     = $this->sessSavePath . '/' . "sess_$id";
+        $this->rawFile     = $this->sessSavePath . DS . "sess_$id";
         return $this->sessionFile;
     }
 
     /**
-     * Open
+     * Creates a new session, or reinitialize existing session.
      *
-     * @param  string    $savePath
-     * @param  string    $sessionName
+     * @param  string $savePath
+     * @param  string $sessionName
      * @access public
      * @return bool
      */
     public function open(string $savePath, string $sessionName): bool
     {
         $this->sessSavePath = $savePath;
-        $this->sessName     = $sessionName;
+        $this->sessionName  = $sessionName;
         return true;
     }
 
     /**
-     * Close
+     * Closes the current session.
      *
      * @access public
      * @return bool
@@ -3466,25 +3465,28 @@ class ztSessionHandler
     }
 
     /**
-     * Read
+     * Reads the session data from the session file, and returns the results.
      *
-     * @param  string    $id
+     * @param  string       $id
      * @access public
-     * @return string
+     * @return string|false
      */
-    public function read(string $id): string
+    public function read(string $id): string|false
     {
         $sessFile = $this->getSessionFile($id);
-        if(!file_exists($sessFile))
+        if(file_exists($sessFile)) return file_get_contents($sessFile);
+
+        if($this->tagID and file_exists($this->rawFile))
         {
-            ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
+            copy($this->rawFile, $sessFile);
+            return file_get_contents($sessFile);
         }
 
-        return (string) file_get_contents($sessFile);
+        return '';
     }
 
     /**
-     * Write
+     * Writes the session data to the session file.
      *
      * @param  string    $id
      * @param  string    $sessData
@@ -3494,8 +3496,6 @@ class ztSessionHandler
     public function write(string $id, string $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
-        touch($sessFile);
-        touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;
 
         if(file_put_contents($sessFile, $sessData, LOCK_EX))
@@ -3513,9 +3513,9 @@ class ztSessionHandler
     }
 
     /**
-     * Destroy
+     * Destroys a session.
      *
-     * @param  string    $id
+     * @param  string $id
      * @access public
      * @return bool
      */
@@ -3524,27 +3524,30 @@ class ztSessionHandler
         $sessFile = $this->getSessionFile($id);
         if(file_exists($sessFile)) unlink($sessFile);
         if(file_exists($this->rawFile)) unlink($this->rawFile);
-        touch($sessFile);
-        touch($this->rawFile);
 
         return true;
     }
 
     /**
-     * GC
+     * Cleans up expired sessions.
      *
-     * @param  int    $maxlifeTime
+     * @param  int       $maxlifeTime
      * @access public
-     * @return bool
+     * @return int|false
      */
-    public function gc(int $maxlifeTime): bool
+    public function gc(int $maxlifeTime): int|false
     {
-        $time = time();
+        $time  = time();
+        $count = 0;
         foreach(glob("$this->sessSavePath/sess_*") as $fileName)
         {
-            if(is_writable($fileName) and filemtime($fileName) + $maxlifeTime < $time) unlink($fileName);
+            if(is_writable($fileName) and filemtime($fileName) + $maxlifeTime < $time)
+            {
+                if(!unlink($fileName)) return false;
+                $count++;
+            }
         }
 
-        return true;
+        return $count;
     }
 }
