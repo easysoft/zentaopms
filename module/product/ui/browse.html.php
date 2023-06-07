@@ -168,6 +168,12 @@ foreach($cols as $key => $col)
         $col->width        = 300;
         $col->checkbox     = true;
     }
+    elseif($col->id == 'status')
+    {
+        $col->type = 'status';
+        $col->statusMap = $this->lang->story->statusList;
+    }
+
     $cols[$key] = $col;
 }
 
