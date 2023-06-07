@@ -99,7 +99,7 @@ function text(/* string ...$lines */)
 
 function block($name, $value = null)
 {
-    return directive('block', is_array($name) ? $name : array($name => $value));
+    return directive('block', is_array($name) ? $name : array($name => new wg($value)));
 }
 
 function to($name, $value = null)

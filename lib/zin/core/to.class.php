@@ -11,12 +11,12 @@
 
 namespace zin;
 
-require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'wg.func.php';
 
 class to
 {
     public static function __callStatic($name, $args)
     {
-        return directive('block', array($name => $args));
+        return block($name, $args);
     }
 }

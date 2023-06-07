@@ -26,13 +26,7 @@ require_once __DIR__ . DS . 'zin.class.php';
 function render(string $wgName = 'page', string|array $options = null)
 {
     /* 获取全局渲染部件实例和指令。 Get global render widgets and directives. */
-    $globalItems = array();
-    foreach(zin::$globalRenderList as $item)
-    {
-        if(is_object($item) && isset($item->parent) && $item->parent) continue;
-        $globalItems[] = $item;
-    }
-    zin::$globalRenderList = array(); // Clear globalRenderList.
+    $globalItems = zin::getGlobalRenderList();
 
     /* 决定部件名称，如果是 Ajax 请求则进行特殊处理。 Decide widget name, if is ajax request, then do special process. */
     list($normalWgName, $ajaxWgName) = array_merge(explode('|', $wgName), array(''));

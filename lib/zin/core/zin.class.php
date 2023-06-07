@@ -47,4 +47,24 @@ class zin
 
         static::$globalRenderList = array_merge(static::$globalRenderList, func_get_args());
     }
+
+    public static function getGlobalRenderList(bool $clear = true): array
+    {
+        $globalItems = array();
+
+        foreach(static::$globalRenderList as $item)
+        {
+            if(is_object($item))
+            {
+                if((isset($item->parent) && $item->parent) || ($item instanceof wg && $item->shortType() === 'wg'))
+                continue;
+            }
+            $globalItems[] = $item;
+        }
+
+        /* Clear globalRenderList. */
+        if($clear) static::$globalRenderList = array();
+
+        return $globalItems;
+    }
 }
