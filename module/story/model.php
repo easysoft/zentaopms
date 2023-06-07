@@ -3761,7 +3761,7 @@ class storyModel extends model
     {
         /* Set toList and ccList. */
         $toList = $story->assignedTo;
-        $ccList = str_replace(' ', '', trim($story->mailto, ','));
+        $ccList = isset($story->mailto) ? str_replace(' ', '', trim($story->mailto, ',')) : '';
 
         /* If the action is changed or reviewed, mail to the project or execution team. */
         if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
