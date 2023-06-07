@@ -27,6 +27,7 @@ $lang->ai->models->description    = 'Description';
 $lang->ai->models->testConnection = 'Test Connection';
 $lang->ai->models->unconfigured   = 'Unconfigured';
 $lang->ai->models->edit           = 'Edit Parameters';
+$lang->ai->models->concealTip     = 'Visible when editing';
 
 $lang->ai->models->statusList = array();
 $lang->ai->models->statusList['on']  = 'Enable';
@@ -34,7 +35,7 @@ $lang->ai->models->statusList['off'] = 'Disable';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
-$lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+// $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';

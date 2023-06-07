@@ -18,16 +18,18 @@
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->apiKey;?></th>
-      <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ('<code>' . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>');?></td>
+      <td><?php echo empty($modelConfig->key) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->key, '...', 4, strlen($modelConfig->key) - 8) . '</code>');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->ai->models->proxyType;?></th>
       <td><?php echo zget($lang->ai->models->proxyTypes, $modelConfig->proxyType, $lang->ai->models->unconfigured);?></td>
     </tr>
-    <tr <?php if(empty($modelConfig->proxyType)) echo 'style="display: none;"'; ?>>
+    <?php if(!empty($modelConfig->proxyType)):?>
+    <tr>
       <th><?php echo $lang->ai->models->proxyAddr;?></th>
-      <td><?php echo empty($modelConfig->proxyAddr) ? $lang->ai->models->unconfigured : ('<code>' . substr_replace($modelConfig->proxyAddr, '://...', strpos($modelConfig->proxyAddr, ':')) . '</code>');?></td>
+      <td><?php echo empty($modelConfig->proxyAddr) ? $lang->ai->models->unconfigured : ("<code title='{$lang->ai->models->concealTip}'>" . substr_replace($modelConfig->proxyAddr, '://...', strpos($modelConfig->proxyAddr, ':')) . '</code>');?></td>
     </tr>
+    <?php endif;?>
     <tr>
       <th><?php echo $lang->ai->models->description;?></th>
       <td><?php echo $modelConfig->description;?></td>

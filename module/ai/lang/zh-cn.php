@@ -27,6 +27,7 @@ $lang->ai->models->description    = '描述';
 $lang->ai->models->testConnection = '测试连接';
 $lang->ai->models->unconfigured   = '未配置';
 $lang->ai->models->edit           = '编辑模型参数';
+$lang->ai->models->concealTip     = '完整信息在编辑时可见';
 
 $lang->ai->models->statusList = array();
 $lang->ai->models->statusList['on']  = '启用';
@@ -34,7 +35,7 @@ $lang->ai->models->statusList['off'] = '停用';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
-$lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
+// $lang->ai->models->typeList['azure-gpt35']  = 'Azure / GPT-3.5';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';
