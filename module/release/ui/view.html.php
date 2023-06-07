@@ -42,11 +42,64 @@ detailBody
     tabs
     (
         set::class('w-full'),
+
+        /* Linked story table. */
         tabPane
         (
             set::key('finished-story'),
             set::title($lang->release->stories),
-            set::active(true),
+            set::active($type == 'story'),
+            set::icon('icon-lightbulb text-green'),
+            dtable
+            (
+                set::userMap($users),
+                set::cols(array_values($config->release->dtable->story->fieldList)),
+                set::data($storyTableData),
+                set::checkable(true),
+                set::sortLink(jsRaw('createSortLink')),
+                set::footToolbar($storyFootToolbar),
+                set::footPager(
+                    usePager(null, 'storyPager'),
+                    set::recPerPage($storyPager->recPerPage),
+                    set::recTotal($storyPager->recTotal),
+                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type={$type}&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                ),
+                set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
+            )
+        ),
+
+        /* Resolved bug table. */
+        tabPane
+        (
+            set::key('resolved-bug'),
+            set::title($lang->release->bugs),
+            set::active($type == 'bug'),
+            set::icon('icon-bug text-green'),
+            dtable
+            (
+                set::userMap($users),
+                set::cols(array_values($config->release->dtable->story->fieldList)),
+                set::data($storyTableData),
+                set::checkable(true),
+                set::sortLink(jsRaw('createSortLink')),
+                set::footToolbar($storyFootToolbar),
+                set::footPager(
+                    usePager(null, 'storyPager'),
+                    set::recPerPage($storyPager->recPerPage),
+                    set::recTotal($storyPager->recTotal),
+                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type={$type}&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                ),
+                set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
+            )
+        ),
+
+        /* Left bug table. */
+        tabPane
+        (
+            set::key('left-bug'),
+            set::title($lang->release->generatedBugs),
+            set::active($type == 'leftBug'),
+            set::icon('icon-bug text-red'),
             dtable
             (
                 set::userMap($users),
