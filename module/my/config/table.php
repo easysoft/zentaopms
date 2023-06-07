@@ -256,3 +256,102 @@ $config->my->audit->dtable->fieldList['actions']['sortType'] = false;
 $config->my->audit->dtable->fieldList['actions']['fixed']    = 'right';
 $config->my->audit->dtable->fieldList['actions']['list']     = $config->my->audit->actionList;
 $config->my->audit->dtable->fieldList['actions']['menu']     = array('review');
+
+$config->my->project->dtable = new stdclass();
+$config->my->project->dtable->fieldList['name']['name']  = 'name';
+$config->my->project->dtable->fieldList['name']['title'] = $lang->project->name;
+$config->my->project->dtable->fieldList['name']['type']  = 'title';
+$config->my->project->dtable->fieldList['name']['link']  = helper::createLink('project', 'view', "id={id}");
+$config->my->project->dtable->fieldList['name']['fixed'] = 'left';
+$config->my->project->dtable->fieldList['name']['group'] = '1';
+
+$config->my->project->dtable->fieldList['code']['name']   = 'code';
+$config->my->project->dtable->fieldList['code']['title']  = $lang->project->code;
+$config->my->project->dtable->fieldList['code']['type']   = 'text';
+$config->my->project->dtable->fieldList['code']['group']  = '1';
+$config->my->project->dtable->fieldList['code']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['status']['name']      = 'status';
+$config->my->project->dtable->fieldList['status']['title']     = $lang->project->status;
+$config->my->project->dtable->fieldList['status']['type']      = 'status';
+$config->my->project->dtable->fieldList['status']['statusMap'] = $lang->project->statusList;
+$config->my->project->dtable->fieldList['status']['group']     = '2';
+$config->my->project->dtable->fieldList['status']['hidden']    = true;
+
+$config->my->project->dtable->fieldList['PM']['name']   = 'PM';
+$config->my->project->dtable->fieldList['PM']['title']  = $lang->project->PM;
+$config->my->project->dtable->fieldList['PM']['type']   = 'avatarName';
+$config->my->project->dtable->fieldList['PM']['group']  = '3';
+
+$config->my->project->dtable->fieldList['storyCount']['name']  = 'storyCount';
+$config->my->project->dtable->fieldList['storyCount']['title'] = $lang->project->storyCount;
+$config->my->project->dtable->fieldList['storyCount']['type']  = 'count';
+$config->my->project->dtable->fieldList['storyCount']['group'] = '4';
+
+$config->my->project->dtable->fieldList['executionCount']['name']  = 'executionCount';
+$config->my->project->dtable->fieldList['executionCount']['title'] = $lang->project->executionCount;
+$config->my->project->dtable->fieldList['executionCount']['type']  = 'count';
+$config->my->project->dtable->fieldList['executionCount']['group'] = '4';
+
+$config->my->project->dtable->fieldList['budget']['name']   = 'budget';
+$config->my->project->dtable->fieldList['budget']['title']  = $lang->project->budget;
+$config->my->project->dtable->fieldList['budget']['type']   = 'money';
+$config->my->project->dtable->fieldList['budget']['group']  = '5';
+$config->my->project->dtable->fieldList['budget']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['invested']['name']  = 'invest';
+$config->my->project->dtable->fieldList['invested']['title'] = $lang->project->invested;
+$config->my->project->dtable->fieldList['invested']['type']  = 'money';
+$config->my->project->dtable->fieldList['invested']['group'] = '5';
+
+$config->my->project->dtable->fieldList['begin']['name']  = 'begin';
+$config->my->project->dtable->fieldList['begin']['title'] = $lang->project->begin;
+$config->my->project->dtable->fieldList['begin']['type']  = 'date';
+$config->my->project->dtable->fieldList['begin']['group'] = '6';
+
+$config->my->project->dtable->fieldList['end']['name']  = 'end';
+$config->my->project->dtable->fieldList['end']['title'] = $lang->project->end;
+$config->my->project->dtable->fieldList['end']['type']  = 'date';
+$config->my->project->dtable->fieldList['end']['group'] = '6';
+
+$config->my->project->dtable->fieldList['realBegan']['name']   = 'realBegan';
+$config->my->project->dtable->fieldList['realBegan']['title']  = $lang->project->realBegan;
+$config->my->project->dtable->fieldList['realBegan']['type']   = 'date';
+$config->my->project->dtable->fieldList['realBegan']['group']  = '6';
+$config->my->project->dtable->fieldList['realBegan']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['realEnd']['name']   = 'realEnd';
+$config->my->project->dtable->fieldList['realEnd']['title']  = $lang->project->realEnd;
+$config->my->project->dtable->fieldList['realEnd']['type']   = 'date';
+$config->my->project->dtable->fieldList['realEnd']['group']  = '6';
+$config->my->project->dtable->fieldList['realEnd']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['progress']['name']  = 'progress';
+$config->my->project->dtable->fieldList['progress']['title'] = $lang->project->progress;
+$config->my->project->dtable->fieldList['progress']['type']  = 'progress';
+$config->my->project->dtable->fieldList['progress']['group'] = '6';
+
+$config->my->project->dtable->fieldList['teamCount']['name']   = 'teamCount';
+$config->my->project->dtable->fieldList['teamCount']['title']  = $lang->project->teamCount;
+$config->my->project->dtable->fieldList['teamCount']['type']   = 'count';
+$config->my->project->dtable->fieldList['teamCount']['group']  = '7';
+$config->my->project->dtable->fieldList['teamCount']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['estimate']['name']   = 'estimate';
+$config->my->project->dtable->fieldList['estimate']['title']  = $lang->project->estimate;
+$config->my->project->dtable->fieldList['estimate']['type']   = 'count';
+$config->my->project->dtable->fieldList['estimate']['group']  = '7';
+$config->my->project->dtable->fieldList['estimate']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['consume']['name']   = 'consume';
+$config->my->project->dtable->fieldList['consume']['title']  = $lang->project->consume;
+$config->my->project->dtable->fieldList['consume']['type']   = 'count';
+$config->my->project->dtable->fieldList['consume']['group']  = '7';
+$config->my->project->dtable->fieldList['consume']['hidden'] = true;
+
+$config->my->project->dtable->fieldList['actions']['name']     = 'actions';
+$config->my->project->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->my->project->dtable->fieldList['actions']['type']     = 'actions';
+$config->my->project->dtable->fieldList['actions']['sortType'] = false;
+$config->my->project->dtable->fieldList['actions']['list']     = $config->my->project->actionList;
+$config->my->project->dtable->fieldList['actions']['menu']     = array('close');

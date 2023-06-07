@@ -24,3 +24,11 @@ $config->my->audit->actionList['review']['icon']        = 'glasses';
 $config->my->audit->actionList['review']['text']        = $lang->review->common;
 $config->my->audit->actionList['review']['hint']        = $lang->review->common;
 $config->my->audit->actionList['review']['data-toggle'] = 'modal';
+
+$app->loadLang('project');
+$config->my->project = new stdclass();
+$config->my->project->actionList = array();
+$config->my->project->actionList['close']['icon']        = 'close';
+$config->my->project->actionList['close']['text']        = $lang->project->close;
+$config->my->project->actionList['close']['hint']        = $lang->project->close;
+$config->my->project->actionList['close']['data-toggle'] = 'modal';
