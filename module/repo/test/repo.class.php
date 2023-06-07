@@ -80,18 +80,19 @@ class repoTest
         }
     }
 
-    public function createTest($list)
+    public function createTest($list, $isPipelineServer = true)
     {
         $init = array('SCM' => '', 'serviceHost' => '', 'serviceProject' => '', 'name' => '', 'path' => '', 'encoding' => '', 'client' => '', 'account' => '', 'password' => '', 'encrypt' => '', 'desc' => '', 'uid' => '');
 
-        foreach($init as $filed => $defaultvalue) $_POST[$filed] = $defaultvalue;
-        foreach($list as $key => $value) $_POST[$key] = $value;
+        $repo = new stdclass();
+        foreach($init as $filed => $defaultvalue) $repo->$filed = $defaultvalue;
+        foreach($list as $key => $value) $repo->$key = $value;
 
-        $objects = $this->objectModel->create();
+        $repoID = $this->objectModel->create($repo, $isPipelineServer);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getRepoByID($repoID);
     }
 
     public function updateTest($id)

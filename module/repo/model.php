@@ -189,52 +189,24 @@ class repoModel extends model
     }
 
     /**
+     * 创建版本库。
      * Create a repo.
      *
+     * @param  object $repo
+     * @param  bool   $isPipelineServer
      * @access public
-     * @return bool
+     * @return int|false
      */
-    public function create()
+    public function create(object $repo, bool $isPipelineServer): int|false
     {
-        if(!$this->checkClient()) return false;
-        if(!$this->checkConnection()) return false;
-
-        $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
-
-        $data = fixer::input('post')
-            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setIf($this->post->SCM == 'Gitlab', 'path', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
-            ->setIf($isPipelineServer, 'prefix', '')
-            ->setIf($this->post->SCM == 'Git', 'account', '')
-            ->setIf($this->post->SCM == 'Git', 'password', '')
-            ->skipSpecial('path,client,account,password')
-            ->setDefault('product', '')
-            ->join('product', ',')
-            ->setDefault('projects', '')->join('projects', ',')
-            ->get();
-
-        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-        if($data->SCM == 'Subversion')
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($data);
-            $info     = $scm->info('');
-            $infoRoot = urldecode($info->root);
-            $data->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $data->path)), '/');
-            if($data->prefix) $data->prefix = '/' . $data->prefix;
-        }
-
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'serviceToken')
+        $this->dao->insert(TABLE_REPO)->data($repo, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
-            ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
+            ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
-            ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = '{$data->SCM}'")
-            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}'")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}'")
+            ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->check('name', 'unique', "`SCM` = '{$repo->SCM}'")
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$repo->SCM}' and `serviceHost` = '{$repo->serviceHost}'")
             ->autoCheck()
             ->exec();
 
@@ -242,16 +214,7 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        $repoID = $this->dao->lastInsertID();
-
-        if($this->post->SCM == 'Gitlab')
-        {
-            /* Add webhook. */
-            $repo = $this->getRepoByID($repoID);
-            $this->loadModel('gitlab')->addPushWebhook($repo);
-        }
-
-        return $repoID;
+        return $this->dao->lastInsertID();
     }
 
     /**

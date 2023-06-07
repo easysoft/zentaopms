@@ -112,50 +112,41 @@ class repo extends control
     }
 
     /**
+     * 创建版本库。
      * Create a repo.
      *
      * @param  int    $objectID  projectID|executionID
      * @access public
      * @return void
      */
-    public function create($objectID = 0)
+    public function create(int $objectID = 0)
     {
         if($_POST)
         {
-            $repoID = $this->repo->create();
+            /* Prepare data. */
+            $formData         = form::data($this->config->repo->form->create);
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $repo             = $this->repoZen->prepareCreate($formData, $isPipelineServer);
 
+            /* Create a repo. */
+            if($repo) $repoID = $this->repo->create($repo, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if($this->post->SCM == 'Gitlab')
+            {
+                /* Add webhook. */
+                $repo = $this->getRepoByID($repoID);
+                $this->loadModel('gitlab')->addPushWebhook($repo);
+            }
+
             $actionID = $this->loadModel('action')->create('repo', $repoID, 'created');
+
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $repoID = $this->repo->saveState(0, $objectID);
-        $this->commonAction($repoID, $objectID);
-
-        $this->app->loadLang('action');
-
-        if($this->app->tab == 'project' or $this->app->tab == 'execution')
-        {
-            $products = $this->loadModel('product')->getProductPairsByProject($objectID);
-        }
-        else
-        {
-            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        }
-
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products        = $products;
-        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
-        $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
-        $this->view->objectID        = $objectID;
-
-        $this->display();
+        $this->repoZen->buildCreateForm($objectID);
     }
 
     /**
