@@ -1273,4 +1273,114 @@ class storyTao extends storyModel
 
         return $stages;
     }
+
+    protected function getAffectedProjects(object $story, array $users): object
+    {
+        $this->app->loadLang('task');
+        $this->config->story->affect = new stdclass();
+        $this->config->story->affect->projects = new stdclass();
+        $this->config->story->affect->projects->fields[] = array('name' => 'id', 'title' => $this->lang->task->id);
+        $this->config->story->affect->projects->fields[] = array('name' => 'name', 'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
+        $this->config->story->affect->projects->fields[] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
+        $this->config->story->affect->projects->fields[] = array('name' => 'consumed', 'title' => $this->lang->task->consumed);
+        $this->config->story->affect->projects->fields[] = array('name' => 'left', 'title' => $this->lang->task->left);
+
+        if(empty($story->executions)) return $story;
+        foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
+        $story->teams = $this->dao->select('account, root')->from(TABLE_TEAM)->where('root')->in(array_keys($story->executions))->andWhere('type')->eq('project')->fetchGroup('root');
+
+        foreach($story->tasks as $executionTasks)
+        {
+            foreach($executionTasks as $task)
+            {
+                $task->status     = $this->processStatus('task', $task);
+                $task->assignedTo = zget($users, $task->assignedTo);
+            }
+        }
+        return $story;
+    }
+
+    protected function getAffectedBugs(object $story, array $users): object
+    {
+        $this->app->loadLang('bug');
+        $this->config->story->affect->bugs = new stdclass();
+        $this->config->story->affect->bugs->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'title', 'title' => $this->lang->bug->title, 'link' => helper::createLink('bug', 'view', 'id={id}'));
+        $this->config->story->affect->bugs->fields[] = array('name' => 'status', 'title' => $this->lang->statusAB);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'openedBy', 'title' => $this->lang->bug->openedBy);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'resolvedBy', 'title' => $this->lang->bug->resolvedBy);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'resolution', 'title' => $this->lang->bug->resolution);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->bug->lastEditedBy);
+
+        /* Get affected bugs. */
+        $story->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')->fetchAll();
+
+        foreach($story->bugs as $bug)
+        {
+            $bug->status       = $this->processStatus('bug', $bug);
+            $bug->openedBy     = zget($users, $bug->openedBy);
+            $bug->resolvedBy   = zget($users, $bug->resolvedBy);
+            $bug->lastEditedBy = zget($users, $bug->lastEditedBy);
+            $bug->resolution   = zget($this->lang->bug->resolutionList, $bug->resolution);
+        }
+
+        return $story;
+    }
+
+    protected function getAffectedCases(object $story, array $users): object
+    {
+        $this->app->loadLang('testcase');
+        $this->config->story->affect->cases = new stdclass();
+        $this->config->story->affect->cases->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
+        $this->config->story->affect->cases->fields[] = array('name' => 'title', 'title' => $this->lang->testcase->title, 'link' => helper::createLink('testcase', 'view', 'id={id}'));
+        $this->config->story->affect->cases->fields[] = array('name' => 'status', 'title' => $this->lang->statusAB);
+        $this->config->story->affect->cases->fields[] = array('name' => 'openedBy', 'title' => $this->lang->testcase->openedBy);
+        $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
+
+        /* Get affected cases. */
+        $story->cases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->fetchAll();
+        foreach($story->cases as $case)
+        {
+            $case->status       = $this->processStatus('testcase', $case);
+            $case->openedBy     = zget($users, $case->openedBy);
+            $case->lastEditedBy = zget($users, $case->lastEditedBy);
+        }
+
+        return $story;
+    }
+
+    protected function getAffectedTwins(object $story, array $users): object
+    {
+        if(empty($story->twins)) return $story;
+
+        $this->config->story->affect->twins = new stdclass();
+        $this->config->story->affect->twins->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
+        $this->config->story->affect->twins->fields[] = array('name' => 'branch', 'title' => $this->lang->story->branch);
+        $this->config->story->affect->twins->fields[] = array('name' => 'title', 'title' => $this->lang->story->title, 'link' => helper::createLink('story', 'view', 'id={id}'));
+        $this->config->story->affect->twins->fields[] = array('name' => 'status', 'title' => $this->lang->statusAB);
+        $this->config->story->affect->twins->fields[] = array('name' => 'stage', 'title' => $this->lang->story->stageAB);
+        $this->config->story->affect->twins->fields[] = array('name' => 'openedBy', 'title' => $this->lang->story->openedBy);
+        $this->config->story->affect->twins->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->story->lastEditedBy);
+
+        $story->twins = $this->story->getByList($story->twins);
+        $branches     = $this->loadModel('branch')->getPairs($story->product);
+        foreach($story->twins as $twin)
+        {
+            $twin->branch       = zget($branches, $twin->branch, '');
+            $twin->status       = $this->processStatus('story', $twin);
+            $twin->openedBy     = zget($users, $twin->openedBy);
+            $twin->lastEditedBy = zget($users, $twin->lastEditedBy);
+            $twin->stage        = zget($this->lang->story->stageList, $twin->stage);
+        }
+
+        return $story;
+    }
 }

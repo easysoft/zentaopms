@@ -706,8 +706,6 @@ class story extends control
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $story->title;
-        $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
-        $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
         $this->view->fields           = $this->storyZen->getFormFieldsForChange($storyID);
         $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);

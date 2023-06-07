@@ -10,6 +10,35 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('lastReviewer', explode(',', $lastReviewer));
+jsVar('storyID', $story->id);
+jsVar('oldStoryTitle', $story->title);
+jsVar('oldStorySpec', $story->spec);
+jsVar('oldStoryVerify', $story->verify);
+jsVar('changed', 0);
+jsVar('storyType', $story->type);
+jsVar('rawModule', $this->app->rawModule);
+jsVar('page', $this->app->rawMethod);
+
+$formTitle = div
+(
+    span
+    (
+        setClass('form-label'),
+        $lang->story->changed
+    ),
+    div
+    (
+        setClass('form-group title'),
+        $story->title,
+        span
+        (
+            setClass('label text-gray size-sm'),
+            $story->id
+        )
+    ),
+);
+
 $formItems = array();
 $formItems['reviewer'] = formGroup
 (
@@ -22,7 +51,7 @@ $formItems['reviewer'] = formGroup
             set::name('reviewer[]'),
             set::multiple(true),
             set::items($fields['reviewer']['options']),
-            set::default($fields['reviewer']['default']),
+            set::value($fields['reviewer']['default']),
         ),
         $forceReview ? null : span
         (
@@ -47,7 +76,7 @@ $formItems['title'] = formGroup
         input
         (
             set::name('title'),
-            set::default($fields['title']['default']),
+            set::value($fields['title']['default']),
         ),
         span
         (
@@ -56,7 +85,7 @@ $formItems['title'] = formGroup
             (
                 set::name('color'),
                 set::type('color'),
-                set::default($fields['color']['default']),
+                set::value($fields['color']['default']),
             )
         ),
         empty($story->twins) ? null : span
@@ -77,14 +106,14 @@ $formItems['status'] = formRow
     set::hidden(true),
     formGroup
     (
-        input(set::name('status'), set::default($fields['status']['default']))
+        input(set::name('status'), set::value($fields['status']['default']))
     )
 );
 $formItems['spec'] = formGroup
 (
     set::label($fields['spec']['title']),
     set::control($fields['spec']['control']),
-    set::default($fields['spec']['default']),
+    set::value($fields['spec']['default']),
     set::tip($lang->story->specTemplate)
 );
 unset($fields['reviewer'], $fields['title'], $fields['color'], $fields['status'], $fields['spec']);
@@ -116,113 +145,89 @@ $formItems['file'] = formGroup
         set::name('files'),
     )
 );
+
+$affectedProjects  = array();
+$affectedTaskCount = 0;
+foreach($story->executions as $executionID => $execution)
+{
+    $teams = '';
+    foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member) . ' ';
+    $affectedTaskCount += count($story->tasks[$executionID]);
+    $affectedProjects[] = h6
+    (
+        $execution->name,
+        $teams ? small(icon('group'), $teams) : null
+    );
+    $affectedProjects[] = dtable
+    (
+        col($config->story->affect->projects->fields),
+        data(array_values($story->tasks[$executionID]))
+    );
+}
+
 $formItems['affected'] = formGroup
 (
     set::width('full'),
-    set::label($lang->attatch),
+    set::label($lang->story->checkAffection),
     tabs
-(
-    tabPane
     (
-        set::key('legend-basic'),
-        set::title('基本信息'),
-        set::active(true),
-        tableData
+        tabPane
         (
-            item
-            (
-                set::name('所属执行'),
-                '企业网站第一期'
-            ),
-            item
-            (
-                set::name('指派给'),
-                '开发丙'
-            ),
-            item
-            (
-                set::name('任务类型'),
-                '开发'
-            ),
-            item
-            (
-                set::name('任务状态'),
-                '已完成'
-            ),
-            item
-            (
-                set::name('进度'),
-                '100 %'
-            ),
-            item
-            (
-                set::name('优先级'),
-                priLabel(1)
-            ),
-        )
-    ),
-    tabPane
-    (
-        set::key('legend-life'),
-        set::title('任务的一生'),
-        tableData
+            set::key('affectedProjects'),
+            set::title($lang->story->affectedProjects),
+            set::active(true),
+            $affectedProjects,
+        ),
+        tabPane
         (
-            item
+            set::key('affectedBugs'),
+            set::title($lang->story->affectedBugs),
+            empty($story->bugs) ? null : dtable
             (
-                set::name('由谁创建'),
-                'admin 于 2021-04-28 13:16:15'
-            ),
-            item
+                col($config->story->affect->bugs->fields),
+                data(array_values($story->bugs))
+            )
+        ),
+        tabPane
+        (
+            set::key('affectedCases'),
+            set::title($lang->story->affectedCases),
+            empty($story->cases) ? null : dtable
             (
-                set::name('由谁完成'),
-                '开发丙 于 2021-04-06 15:30:00'
-            ),
-            item
+                col($config->story->affect->cases->fields),
+                data(array_values($story->cases))
+            )
+        ),
+        empty($story->twins) ? null : tabPane
+        (
+            set::key('affectedTwins'),
+            set::title($lang->story->affectedTwins),
+            dtable
             (
-                set::name('由谁取消'),
-                '暂无'
-            ),
-            item
-            (
-                set::name('由谁关闭'),
-                '暂无'
-            ),
-            item
-            (
-                set::name('关闭原因'),
-                '暂无'
-            ),
-            item
-            (
-                set::name('最后编辑'),
-                '开发丙 于 2021-04-28 13:21:51'
-            ),
-        )
+                col($config->story->affect->twins->fields),
+                data(array_values($story->twins))
+            )
+        ),
     )
-)
+);
+$formItems['lastEditedDate'] = input(set::type('hidden'), set::name('lastEditedDate', set::id('lastEditedDate'), set::value($story->lastEditedDate)));
+
+$formActions = formRow
+(
+    setClass('form-actions form-group no-label'),
+    btn(setClass('primary'), set::id('saveButton'), $lang->save),
+    btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->doNotSubmit),
+    btn(set::url('javascript:history.go(-1)'), $lang->goback),
 );
 
 formPanel
 (
     set::title(''),
-    div
-    (
-        span
-        (
-            setClass('form-label'),
-            $lang->story->changed
-        ),
-        div
-        (
-            setClass('form-group title'),
-            $story->title,
-            span
-            (
-                setClass('label text-gray size-sm'),
-                $story->id
-            )
-        ),
-    ),
-    $formItems
+    set::actions(false),
+    $formTitle,
+    $formItems,
+    $formActions,
+    h::hr(),
+    history()
 );
 render();

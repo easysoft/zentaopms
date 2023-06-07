@@ -162,37 +162,12 @@ class storyModel extends model
      */
     public function getAffectedScope($story)
     {
-        /* Remove closed executions. */
-        if($story->executions)
-        {
-            foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
-        }
+        $users = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
 
-        /* Get team members. */
-        if($story->executions)
-        {
-            $story->teams = $this->dao->select('account, root')
-                ->from(TABLE_TEAM)
-                ->where('root')->in(array_keys($story->executions))
-                ->andWhere('type')->eq('project')
-                ->fetchGroup('root');
-        }
-
-        /* Get affected bugs. */
-        $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('status')->ne('closed')
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
-            ->andWhere('status')->ne('closed')
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')->fetchAll();
-
-        /* Get affected cases. */
-        $story->cases = $this->dao->select('*')->from(TABLE_CASE)
-            ->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
-            ->fetchAll();
+        $story = $this->storyTao->getAffectedProjects($story, $users);
+        $story = $this->storyTao->getAffectedBugs($story, $users);
+        $story = $this->storyTao->getAffectedCases($story, $users);
+        $story = $this->storyTao->getAffectedTwins($story, $users);
 
         return $story;
     }
