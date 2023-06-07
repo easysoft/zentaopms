@@ -51,6 +51,16 @@ $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "release={$release->id}"));
 if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->bug->batchClose,      'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "productID={$release->product}"));
 
+/* Table data and setting for left bugs tab. */
+jsVar('confirmunlinkleftbug', $lang->release->confirmUnlinkBug);
+jsVar('unlinkleftbugurl', helper::createLink('release', 'unlinkBug', "releaseID={$release->id}&bugID=%s&type=leftBug"));
+
+$config->release->dtable->leftBug->fieldList['resolvedBuild']['map'] = $builds;
+$leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
+
+$leftBugFootToolbar = array();
+if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "release={$release->id}&type=leftBug"));
+
 detailBody
 (
     tabs
@@ -60,23 +70,23 @@ detailBody
         /* Linked story table. */
         tabPane
         (
+            to::prefix(icon('lightbulb')),
             set::key('finishedStory'),
             set::title($lang->release->stories),
             set::active($type == 'story'),
-            set::icon('icon-lightbulb text-green'),
             dtable
             (
                 set::userMap($users),
                 set::cols(array_values($config->release->dtable->story->fieldList)),
                 set::data($storyTableData),
-                set::checkable(true),
+                set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                 set::sortLink(jsRaw('createSortLink')),
                 set::footToolbar($storyFootToolbar),
                 set::footPager(
                     usePager(null, 'storyPager'),
                     set::recPerPage($storyPager->recPerPage),
                     set::recTotal($storyPager->recTotal),
-                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type={$type}&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                 ),
                 set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
             )
@@ -85,23 +95,23 @@ detailBody
         /* Resolved bug table. */
         tabPane
         (
+            to::prefix(icon('bug')),
             set::key('resolvedBug'),
             set::title($lang->release->bugs),
             set::active($type == 'bug'),
-            set::icon('icon-bug text-green'),
             dtable
             (
                 set::userMap($users),
                 set::cols(array_values($config->release->dtable->bug->fieldList)),
                 set::data($bugTableData),
-                set::checkable(true),
+                set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                 set::sortLink(jsRaw('createSortLink')),
                 set::footToolbar($bugFootToolbar),
                 set::footPager(
                     usePager(null, 'bugPager'),
                     set::recPerPage($bugPager->recPerPage),
                     set::recTotal($bugPager->recTotal),
-                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type={$type}&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                 ),
             )
         ),
@@ -109,25 +119,24 @@ detailBody
         /* Left bug table. */
         tabPane
         (
+            to::prefix(icon('bug')),
             set::key('leftBug'),
             set::title($lang->release->generatedBugs),
             set::active($type == 'leftBug'),
-            set::icon('icon-bug text-red'),
             dtable
             (
                 set::userMap($users),
-                set::cols(array_values($config->release->dtable->story->fieldList)),
-                set::data($storyTableData),
-                set::checkable(true),
+                set::cols(array_values($config->release->dtable->leftBug->fieldList)),
+                set::data($leftBugTableData),
+                set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                 set::sortLink(jsRaw('createSortLink')),
-                set::footToolbar($storyFootToolbar),
+                set::footToolbar($leftBugFootToolbar),
                 set::footPager(
-                    usePager(null, 'storyPager'),
-                    set::recPerPage($storyPager->recPerPage),
-                    set::recTotal($storyPager->recTotal),
-                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type={$type}&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                    usePager(null, 'leftBugPager'),
+                    set::recPerPage($leftBugPager->recPerPage),
+                    set::recTotal($leftBugPager->recTotal),
+                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                 ),
-                set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
             )
         ),
     )
