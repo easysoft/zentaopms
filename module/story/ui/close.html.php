@@ -14,7 +14,7 @@ namespace zin;
 
 formPanel
 (
-    set::title($lang->story->close),
+    set::title($lang->story->close . $lang->story->story),
     set::actions(array('submit')),
     set::submitBtnText($lang->story->closeAction),
     set::headingClass('status-heading'),
