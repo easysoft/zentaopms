@@ -49,3 +49,29 @@ window.createSortLink = function(col)
     if(sort == orderBy) sort = col.name + '_desc';
     return sortLink.replace('{orderBy}', sort);
 }
+
+/**
+ * 计算表格发布信息的统计。
+ * Set release summary for table footer.
+ *
+ * @access public
+ * @return object
+ */
+window.setStatistics = function()
+{
+    const rows    = this.layout.allRows;
+    let total     = 0;
+    let normal    = 0;
+    let terminate = 0;
+    let summary = '';
+    if(type != 'all')
+    {
+        summary =  pageSummary.replace('%s', total);
+    }
+    else
+    {
+        summary = pageAllSummary.replace('%total%', total).replace('%normal%', normal).replace('%terminate%', terminate);
+    }
+
+    return {html: summary};
+}

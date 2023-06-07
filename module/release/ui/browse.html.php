@@ -29,7 +29,11 @@ jsVar('markerTitle', $lang->release->marker);
 jsVar('showBranch', $showBranch);
 jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('pageAllSummary', $lang->release->pageAllSummary);
+jsVar('pageSummary', $lang->release->pageSummary);
+jsVar('type', $type);
+
 $config->release->dtable->fieldList['branch']['map'] = $branchPairs;
 dtable
 (
@@ -37,6 +41,13 @@ dtable
     set::data(array_values($releases)),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(jsRaw('createSortLink')),
+    set::footPager(
+        usePager(),
+        set::recPerPage($pager->recPerPage),
+        set::recTotal($pager->recTotal),
+        set::linkCreator(helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
+    ),
+    set::footer(jsRaw('function(){return window.setStatistics.call(this);}'))
 );
 
 /* ====== Render page ====== */
