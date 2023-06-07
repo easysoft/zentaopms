@@ -48,6 +48,7 @@ formPanel
         set::label($lang->story->reviewedBy),
         set::width('full'),
         set::strong(false),
+        set::required(true),
         inputGroup
         (
             select
