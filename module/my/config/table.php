@@ -258,12 +258,13 @@ $config->my->audit->dtable->fieldList['actions']['list']     = $config->my->audi
 $config->my->audit->dtable->fieldList['actions']['menu']     = array('review');
 
 $config->my->project->dtable = new stdclass();
-$config->my->project->dtable->fieldList['name']['name']  = 'name';
-$config->my->project->dtable->fieldList['name']['title'] = $lang->project->name;
-$config->my->project->dtable->fieldList['name']['type']  = 'title';
-$config->my->project->dtable->fieldList['name']['link']  = helper::createLink('project', 'view', "id={id}");
-$config->my->project->dtable->fieldList['name']['fixed'] = 'left';
-$config->my->project->dtable->fieldList['name']['group'] = '1';
+$config->my->project->dtable->fieldList['name']['name']       = 'name';
+$config->my->project->dtable->fieldList['name']['title']      = $lang->project->name;
+$config->my->project->dtable->fieldList['name']['type']       = 'title';
+$config->my->project->dtable->fieldList['name']['link']       = helper::createLink('project', 'index', "id={id}");
+$config->my->project->dtable->fieldList['name']['fixed']      = 'left';
+$config->my->project->dtable->fieldList['name']['group']      = '1';
+$config->my->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
 
 $config->my->project->dtable->fieldList['code']['name']   = 'code';
 $config->my->project->dtable->fieldList['code']['title']  = $lang->project->code;
