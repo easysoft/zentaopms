@@ -179,7 +179,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view(int $releaseID, string $type = 'story', string $link = 'false', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $releaseID = (int)$releaseID;
         $release   = $this->release->getByID($releaseID, true);
@@ -551,7 +551,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($releaseID, $storyID)
+    public function unlinkStory(int $releaseID, int$storyID)
     {
         $this->release->unlinkStory($releaseID, $storyID);
 
@@ -565,7 +565,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function batchUnlinkStory($releaseID)
+    public function batchUnlinkStory(int $releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
         return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=story")));
@@ -700,11 +700,11 @@ class release extends control
      * Batch unlink story.
      *
      * @param  int    $releaseID
-     * @param  string $type
+     * @param  string $type       bug|leftBug
      * @access public
      * @return void
      */
-    public function batchUnlinkBug($releaseID, $type = 'bug')
+    public function batchUnlinkBug(int $releaseID, string $type = 'bug')
     {
         $this->release->batchUnlinkBug($releaseID, $type);
         return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=$type")));
