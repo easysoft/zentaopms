@@ -34,10 +34,3 @@ window.setStatistics = function(element, checkedIDList)
     const summary = checkedIDList.length > 0 ? checkedSummary.replace('{0}', totalCount) : pageSummary;
     return {html: summary};
 }
-
-window.createSortLink = function(col)
-{
-    var sort = col.name + '_asc';
-    if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{orderBy}', sort);
-}
