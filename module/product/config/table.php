@@ -73,6 +73,15 @@ $config->product->dtable->fieldList['plans']['sortType'] = false;
 $config->product->dtable->fieldList['plans']['border']   = 'right';
 $config->product->dtable->fieldList['plans']['align']    = 'center';
 
+$config->product->dtable->fieldList['status']['name']      = 'status';
+$config->product->dtable->fieldList['status']['title']     = $lang->product->status;
+$config->product->dtable->fieldList['status']['minWidth']  = 64;
+$config->product->dtable->fieldList['status']['type']      = 'status';
+$config->product->dtable->fieldList['status']['sortType']  = false;
+$config->product->dtable->fieldList['status']['statusMap'] = $lang->product->statusList;
+$config->product->dtable->fieldList['status']['border']    = 'right';
+$config->product->dtable->fieldList['status']['align']     = 'center';
+
 $config->product->dtable->fieldList['execution']['name']     = 'execution';
 $config->product->dtable->fieldList['execution']['title']    = $lang->execution->common;
 $config->product->dtable->fieldList['execution']['minWidth'] = 64;
