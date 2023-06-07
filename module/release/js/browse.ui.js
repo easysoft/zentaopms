@@ -63,6 +63,13 @@ window.setStatistics = function()
     let total     = 0;
     let normal    = 0;
     let terminate = 0;
+    rows.forEach(function(row)
+    {
+        if(row.data.status === 'normal') normal ++;
+        if(row.data.status === 'terminate') terminate ++;
+        total ++;
+    });
+
     let summary = '';
     if(type != 'all')
     {
