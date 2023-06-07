@@ -149,10 +149,11 @@ class buildModel extends model
      *
      * @param  int    $executionID
      * @param  int    $queryID
+     * @param  object $pager
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getExecutionBuildsBySearch($executionID, $queryID)
+    public function getExecutionBuildsBySearch(int $executionID, int $queryID, object $pager = null): array
     {
         /* If there are saved query conditions, reset the session. */
         if((int)$queryID)
@@ -178,7 +179,7 @@ class buildModel extends model
             }
         }
 
-        return $this->getExecutionBuilds($executionID, 'bysearch', $buildQuery);
+        return $this->getExecutionBuilds($executionID, 'bysearch', $buildQuery, 't1.date_desc,t1.id_desc', $pager);
     }
 
     /**
@@ -270,7 +271,7 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('1=1')
-            ->beginIf(!empty($shaows))->andWhere('t1.id')->notIN($shadows)->fi()
+            ->beginIf(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
@@ -291,7 +292,7 @@ class buildModel extends model
             if($build->branch === '') $build->branch = 0;
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            if((strpos($params, 'withexecution') !== false) and $build->execution and isset($executions[$build->execution])) continue;
+            if((strpos($params, 'withexecution') !== false) and $build->execution and isset($deletedExecutions[$build->execution])) continue;
             if($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},") === false) continue;
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
@@ -501,6 +502,7 @@ class buildModel extends model
 
             /* Get delete builds. */
             $deleteBuilds = array();
+            $newBuilds    = isset($build->builds) ? $build->builds : '';
             foreach(explode(',', $oldBuild->builds) as $oldBuildID)
             {
                 if(empty($oldBuildID)) continue;
@@ -520,7 +522,6 @@ class buildModel extends model
             }
 
             /* Add branch of new builds. */
-            $newBuilds        = isset($build->builds) ? $build->builds : '';
             $newBuildBranches = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($newBuilds)->fetchPairs();
             foreach($newBuildBranches as $newBuildBranch)
             {
@@ -850,5 +851,37 @@ class buildModel extends model
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll();
+    }
+
+    /**
+     * 根据权限生成列表中操作列按钮。
+     * Build table action menu for build browse page.
+     *
+     * @param  object $build
+     * @param  int    $executionID
+     * @param  string $from        execution|projectbuild
+     * @access public
+     * @return array
+     */
+    public function buildActionList(object $build, int $executionID = 0, $from = 'execution'): array
+    {
+        $actions     = array();
+        $executionID = $executionID ? $executionID : $build->execution;
+        $execution   = $this->loadModel('execution')->getByID($executionID);
+
+        $module = $from == 'projectbuild' ? 'projectbuild' : 'build';
+        $build->executionDeleted = $execution ? $execution->deleted : 0;
+
+        if(common::hasPriv($module, 'linkstory') && common::canBeChanged('build', $build)) $actions[] = $from == 'projectbuild' ? 'linkProjectStory' : 'linkStory';
+
+        if(common::hasPriv('testtask', 'create')) $actions [] = $execution && $execution->deleted === '1' ? '-createTest' : 'createTest';
+
+        if(($from == 'execution' || !empty($execution->type) || $execution->type != 'kanban') && common::hasPriv('execution', 'bug')) $actions[] = 'viewBug';
+        if(in_array(true, array($from == 'projectbuild', empty($execution->type), $execution->type == 'kanban')) && common::hasPriv($module, 'view')) $from == 'projectbuild' ? 'projectBugList' : 'bugList';
+
+        if(common::hasPriv('build', 'edit'))   $actions[] = 'edit';
+        if(common::hasPriv('build', 'delete')) $actions[] = 'delete';
+
+        return $actions;
     }
 }

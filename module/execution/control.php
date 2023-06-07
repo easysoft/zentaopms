@@ -1003,7 +1003,7 @@ class execution extends control
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        if($execution->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
+        if($execution->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, (int)$productID, 'execution', 'bug', $executionID, $branch);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -1032,7 +1032,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&branch=$branch&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
-        $product = $this->product->getById($productID);
+        $product = $this->product->getById((int)$productID);
         $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
@@ -1078,7 +1078,7 @@ class execution extends control
         elseif(!empty($products))
         {
             $productID  = empty($productID) ? reset($products)->id : $productID;
-            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
+            $moduleTree = $this->tree->getTreeMenu((int)$productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
         }
         else
         {
@@ -1222,15 +1222,19 @@ class execution extends control
      * Browse builds of a execution.
      *
      * @param  int    $executionID
-     * @param  string $type      all|product|bysearch
+     * @param  string $type        all|product|bysearch
      * @param  int    $param
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function build($executionID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
+    public function build($executionID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load module and set session. */
+        $this->loadModel('build');
         $this->loadModel('testtask');
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
@@ -1247,7 +1251,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'build', "executionID=$executionID&type=bysearch&queryID=myQueryID");
 
         $this->loadModel('build');
-        $product = $param ? $this->loadModel('product')->getById($param) : '';
+        $product = $param ? $this->loadModel('product')->getById((int)$param) : '';
         if($product and $product->type != 'normal')
         {
             $this->loadModel('branch');
@@ -1258,53 +1262,31 @@ class execution extends control
         if(!$execution->hasProduct) unset($this->config->build->search['fields']['product']);
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'execution');
 
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* Get builds. */
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getExecutionBuildsBySearch((int)$executionID, $queryID);
+            $builds = $this->loadModel('build')->getExecutionBuildsBySearch((int)$executionID, $queryID, $pager);
         }
         else
         {
-            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param, $orderBy);
-        }
-
-        /* Set execution builds. */
-        $executionBuilds = array();
-        $productList     = $this->product->getProducts($executionID);
-        $showBranch      = false;
-        if(!empty($builds))
-        {
-            foreach($builds as $build) $executionBuilds[$build->product][] = $build;
-
-            /* Get branch name. */
-            $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($executionBuilds));
-            foreach($builds as $build)
-            {
-                $build->branchName = '';
-                if(isset($branchGroups[$build->product]))
-                {
-                    $showBranch  = true;
-                    $branchPairs = $branchGroups[$build->product];
-                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
-                    {
-                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
-                    }
-                    $build->branchName = trim($build->branchName, ',');
-                }
-            }
+            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param, $orderBy, $pager);
         }
 
         /* Header and position. */
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->build;
-
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->buildsTotal   = count($builds);
-        $this->view->executionBuilds = $executionBuilds;
-        $this->view->executionID     = $executionID;
-        $this->view->product       = $type == 'product' ? $param : 'all';
-        $this->view->products      = $products;
-        $this->view->type          = $type;
-        $this->view->showBranch    = $showBranch;
+        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds      = $this->executionZen->processBuildListData($builds, $executionID, $this->app->rawModule);
+        $this->view->executionID = $executionID;
+        $this->view->product     = $type == 'product' ? $param : 'all';
+        $this->view->products    = $products;
+        $this->view->type        = $type;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
 
         $this->display();
     }

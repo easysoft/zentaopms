@@ -11,7 +11,7 @@ $config->build->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools')
 
 global $lang;
 $config->build->search['module']             = 'build';
-$config->build->search['fields']['name']     = $lang->build->name;
+$config->build->search['fields']['name']     = $lang->build->nameAB;
 $config->build->search['fields']['id']       = $lang->build->id;
 $config->build->search['fields']['product']  = $lang->build->product;
 $config->build->search['fields']['scmPath']  = $lang->build->scmPath;
@@ -27,3 +27,33 @@ $config->build->search['params']['filePath'] = array('operator' => 'include', 'c
 $config->build->search['params']['date']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->build->search['params']['builder']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->build->search['params']['desc']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
+
+$config->build->actionList['linkStory']['icon'] = 'link';
+$config->build->actionList['linkStory']['hint'] = $lang->build->linkStory;
+$config->build->actionList['linkStory']['url']  = helper::createLink('build', 'view', 'buildID={id}&type=story&link=true');
+
+$config->build->actionList['linkProjectStory'] = $config->build->actionList['linkStory'];
+$config->build->actionList['linkProjectStory']['url'] = helper::createLink('projectbuild', 'view', 'buildID={id}&type=story&link=true');
+
+$config->build->actionList['createTest']['icon'] = 'bullhorn';
+$config->build->actionList['createTest']['hint'] = $lang->build->createTest;
+$config->build->actionList['createTest']['url']  = helper::createLink('testtask', 'create', 'product={product}&execution={execution}&build={id}&projectID={project}');
+
+$config->build->actionList['viewBug']['icon'] = 'bug';
+$config->build->actionList['viewBug']['hint'] = $lang->build->viewBug;
+$config->build->actionList['viewBug']['url']  = helper::createLink('execution', 'bug', 'execution={execution}&productID={product}&branchID=all&orderBy=status&build={id}');
+
+$config->build->actionList['bugList'] = $config->build->actionList['viewBug'];
+$config->build->actionList['bugList']['hint'] = $lang->build->bugList;
+$config->build->actionList['bugList']['url']  = helper::createLink('build', 'view', 'buildID={id}&type=generatedBug');
+
+$config->build->actionList['projectBugList'] = $config->build->actionList['bugList'];
+$config->build->actionList['projectBugList']['url']  = helper::createLink('projectbuild', 'view', 'buildID={id}&type=generatedBug');
+
+$config->build->actionList['edit']['icon'] = 'edit';
+$config->build->actionList['edit']['hint'] = $lang->build->edit;
+$config->build->actionList['edit']['url']  = helper::createLink('build', 'edit', 'buildID={id}');
+
+$config->build->actionList['delete']['icon'] = 'trash';
+$config->build->actionList['delete']['hint'] = $lang->build->delete;
+$config->build->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';

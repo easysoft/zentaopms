@@ -20,6 +20,8 @@ $lang->build->view             = "版本详情";
 $lang->build->batchUnlink      = '批量移除';
 $lang->build->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
+$lang->build->viewBug          = '查看Bug';
+$lang->build->bugList          = 'Bug列表';
 
 $lang->build->confirmDelete      = "您确认删除该版本吗？";
 $lang->build->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
@@ -40,6 +42,7 @@ $lang->build->singled        = '单一版本';
 $lang->build->builds         = '包含版本';
 $lang->build->released       = '发布';
 $lang->build->name           = '名称编号';
+$lang->build->nameAB         = '名称';
 $lang->build->date           = '打包日期';
 $lang->build->builder        = '构建者';
 $lang->build->url            = '地址';
@@ -59,6 +62,7 @@ $lang->build->noProduct      = " <span id='noProduct' style='color:red'>该{$lan
 $lang->build->noBuild        = '暂时没有版本。';
 $lang->build->emptyExecution = $lang->executionCommon . '不能为空。';
 $lang->build->linkedBuild    = '关联版本';
+$lang->build->createTest     = '提交测试';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";

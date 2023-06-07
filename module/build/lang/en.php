@@ -20,6 +20,8 @@ $lang->build->view             = "Build Detail";
 $lang->build->batchUnlink      = 'Batch Unlink';
 $lang->build->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = 'Batch Unlink Bugs';
+$lang->build->viewBug          = 'Bugs';
+$lang->build->bugList          = 'Bug List';
 
 $lang->build->confirmDelete      = "Do you want to delete this build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this {$lang->SRCommon}?";
@@ -40,6 +42,7 @@ $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
 $lang->build->released       = 'Released';
 $lang->build->name           = 'Name';
+$lang->build->nameAB         = 'Name';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
 $lang->build->url            = 'URL';
@@ -59,6 +62,7 @@ $lang->build->noProduct      = " <span id='noProduct' style='color:red'>This {$l
 $lang->build->noBuild        = 'No builds yet.';
 $lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
 $lang->build->linkedBuild    = 'Linked Build';
+$lang->build->createTest     = 'Submit Request';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
