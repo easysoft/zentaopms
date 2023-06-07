@@ -26,6 +26,10 @@ $config->release->actionList['unlinkBug']['icon'] = 'unlink';
 $config->release->actionList['unlinkBug']['hint'] = $lang->release->unlinkBug;
 $config->release->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("bug", "{id}")';
 
+$config->release->actionList['unlinkLeftBug']['icon'] = 'unlink';
+$config->release->actionList['unlinkLeftBug']['hint'] = $lang->release->unlinkBug;
+$config->release->actionList['unlinkLeftBug']['url']  = 'javascript: unlinkObject("leftBug", "{id}")';
+
 $config->release->actionList['play']['icon'] = 'play';
 $config->release->actionList['play']['hint'] = $this->lang->release->changeStatusList['normal'];
 $config->release->actionList['play']['url']  = helper::createLink('release', 'changeStatus', 'releaseID={id}&status=normal');
