@@ -131,6 +131,7 @@ $lang->testcase->batchConfirmStoryChange = "批量確認變更";
 $lang->testcase->batchCaseTypeChange     = "批量修改類型";
 $lang->testcase->browse                  = "用例列表";
 $lang->testcase->groupCase               = "分組瀏覽用例";
+$lang->testcase->groupView               = "分组查看";
 $lang->testcase->zeroCase                = "零用例{$lang->common->story}";
 $lang->testcase->import                  = "導入";
 $lang->testcase->importAction            = "導入用例";

@@ -131,6 +131,7 @@ $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
 $lang->testcase->batchCaseTypeChange     = "Batch Change Types";
 $lang->testcase->browse                  = "Case List";
 $lang->testcase->groupCase               = "View By Group";
+$lang->testcase->groupView               = "Group View";
 $lang->testcase->zeroCase                = "Stories without cases";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importAction            = "Import Case";
