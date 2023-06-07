@@ -439,7 +439,7 @@ function formatTime(string|null $time, string $format = ''): string
  */
 function initTableData($items, &$fieldList, $checkModel)
 {
-    if(!isset($fieldList['actions'])) return array();
+    if(empty($fieldList['actions'])) return $items;
 
     foreach($fieldList['actions']['menu'] as $actionMenu)
     {
