@@ -955,6 +955,7 @@ class baseControl
             for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
+            $this->app->outputXhprof();
             die($response);
         }
 
