@@ -31,6 +31,7 @@ formPanel
     set::title($lang->story->submitReview),
     set::actions(array('submit')),
     set::headingClass('status-heading'),
+    set::titleClass('form-label .form-grid'),
     to::headingActions
     (
         entityLabel
