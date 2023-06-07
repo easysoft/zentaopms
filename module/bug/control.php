@@ -166,7 +166,7 @@ class bug extends control
 
         /* Get executions. */
         $cacheKey = "bugBrowse{$this->projectID}";
-        if($this->config->cache->enable && $this->cache->has($cacheKey))
+        if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $executions = $this->cache->get($cacheKey);
         }
