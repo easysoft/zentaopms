@@ -9,6 +9,11 @@ class tabPane extends wg
         'active?: bool=false',
     );
 
+    protected static $defineBlocks = array(
+        'prefix' => array(),
+        'suffix' => array(),
+    );
+
     protected function build()
     {
         $key    = $this->prop('key');

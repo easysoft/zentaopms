@@ -23,8 +23,14 @@ class tabs extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildTitleView(string $key, string $title, bool $active): wg
+    protected function buildTitleView(tabPane $tabPane): wg
     {
+        $key    = $tabPane->prop('key');
+        $title  = $tabPane->prop('title');
+        $active = $tabPane->prop('active');
+        $prefix = $tabPane->block('prefix');
+        $suffix = $tabPane->block('suffix');
+
         return li
         (
             setClass('nav-item', $active ? 'active' : null),
@@ -33,7 +39,9 @@ class tabs extends wg
                 set('data-toggle', 'tab'),
                 setClass('font-medium'),
                 set::href("#$key"),
-                $title
+                $prefix,
+                span($title),
+                $suffix
             )
         );
     }
@@ -90,19 +98,14 @@ class tabs extends wg
         $contentViews = array();
         foreach($this->tabPanes as $tabPane)
         {
-            $key    = $tabPane->prop('key');
-            $title  = $tabPane->prop('title');
-            $active = $tabPane->prop('active');
-
-            $titleViews[]   = $this->buildTitleView($key, $title, $active);
+            $titleViews[]   = $this->buildTitleView($tabPane);
             $contentViews[] = $tabPane;
         }
 
         return div
         (
-            setClass('tabs'),
+            setClass('tabs', $isVertical ? 'flex' : null),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
-            $isVertical ? setClass('flex') : null,
 
             $this->buildTabHeader($titleViews),
             $this->buildTabBody($contentViews),

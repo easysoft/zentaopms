@@ -919,6 +919,11 @@ function tabs(): tabs
  * ?bool  active
  * string key
  * string title
+ *
+ * ====== blocks ======
+ * prefix = array()
+ * suffix = array()
+ * ====================
  */
 function tabPane(): tabPane
 {
