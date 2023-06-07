@@ -344,7 +344,7 @@ class storyZen extends story
         $plans       = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
         $forceReview = $this->story->checkForceReview();
         $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0 || !$forceReview);
-        $reviewers   = $this->story->getReviewers($productID);
+        $reviewers   = $this->story->getProductReviewers($productID);
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
@@ -415,21 +415,54 @@ class storyZen extends story
         {
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
-        $branch  = current(explode(',', $branch));
-        $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
-        $plans   = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
-        $users   = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+        $branch    = current(explode(',', $branch));
+        $modules   = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? 0 : $branch);
+        $plans     = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'skipParent|unexpired|noclosed');
+        $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+        $reviewers = $this->story->getProductReviewers($productID);
 
         /* 设置下拉菜单内容。 */
-        $fields['branch']['options'] = $branches;
-        $fields['module']['options'] = $modules;
-        $fields['plan']['options']   = $plans;
+        $fields['branch']['options']   = $branches;
+        $fields['module']['options']   = $modules;
+        $fields['plan']['options']     = $plans;
+        $fields['reviewer']['options'] = $reviewers;
 
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
         if($this->view->hiddenPlan) unset($fields['plan']);
 
         $this->view->branchID = $branch;
+        return $fields;
+    }
+
+    protected function getFormFieldsForChange(int $storyID): array
+    {
+        $story  = $this->view->story;
+        $fields = $this->config->story->form->change;
+
+        foreach($fields as $field => $attr)
+        {
+            if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
+            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
+        }
+
+        $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
+        $fields['reviewer']['options'] = $this->story->getProductReviewers($story->product, $reviewer);
+
+        $fields['reviewer']['default'] = $reviewer;
+        $fields['title']['default']    = $story->title;
+        $fields['color']['default']    = $story->color;
+        $fields['spec']['default']     = $story->spec;
+        $fields['verify']['default']   = $story->verify;
+        $fields['status']['default']   = $story->status;
+
+        $forceReview = $this->story->checkForceReview();
+        if($forceReview) $fields['reviewer']['required'] = true;
+
+        $this->view->forceReview = $forceReview;
+        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0 || !$forceReview()) && empty($reviewer);
+
+        $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
         return $fields;
     }
 

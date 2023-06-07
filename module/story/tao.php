@@ -210,21 +210,22 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取评审人。
-     * Get reviewers.
+     * 获取产品评审人。
+     * Get product reviewers.
      *
      * @param  int       $productID
+     * @param  array     $storyReviewers
      * @access protected
      * @return array
      */
-    protected function getReviewers(int $productID): array
+    protected function getProductReviewers(int $productID, array $storyReviewers = array()): array
     {
         $this->loadModel('user');
         $product   = $this->loadModel('product')->getByID($productID);
         $reviewers = $product->reviewer;
 
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product, '', '', '', '');
-        return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        return $this->user->getPairs('noclosed|nodeleted', $storyReviewers, 0, $reviewers);
     }
 
     /**

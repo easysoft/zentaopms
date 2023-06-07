@@ -198,36 +198,33 @@ class story extends control
      * @access public
      * @return void
      */
-    public function commonAction($storyID)
+    public function commonAction(int $storyID)
     {
         /* Get datas. */
-        $story    = $this->story->getById($storyID);
-        $product  = $this->product->getById($story->product);
-        $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'story', 0, $story->branch);
+        $story = $this->story->getByID($storyID);
 
         /* Set menu. */
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
         }
-        elseif($this->app->tab == 'product')
-        {
-            $this->product->setMenu($product->id, $story->branch);
-        }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($this->session->execution);
+        }
+        else
+        {
+            $this->product->setMenu($story->product, $story->branch);
         }
 
         $this->story->replaceURLang($story->type);
 
         /* Assign. */
-        $this->view->product          = $product;
-        $this->view->products         = $products;
+        $this->view->product          = $this->product->getByID($story->product);
+        $this->view->products         = $this->product->getPairs();
         $this->view->story            = $story;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);;
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
 
@@ -614,7 +611,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function change($storyID, $from = '', $storyType = 'story')
+    public function change(int $storyID, string $from = '', string $storyType = 'story')
     {
         $this->loadModel('file');
         if(!empty($_POST))
@@ -698,29 +695,21 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $method, $params)));
         }
 
-        $this->commonAction($storyID);
-        $this->story->getAffectedScope($this->view->story);
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
-        $story    = $this->view->story;
-        $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
-        $product  = $this->loadModel('product')->getByID($story->product);
-
-        /* Get users in team. */
-        $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        $this->commonAction($storyID);
+        $story = $this->view->story;
+        $this->story->getAffectedScope($story);
 
         /* Assign. */
-        $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $story->title;
         $this->view->twins            = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
-        $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
-        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
-        $this->view->reviewer         = implode(',', array_keys($reviewer));
-        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
+        $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
+        $this->view->fields           = $this->storyZen->getFormFieldsForChange($storyID);
         $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
 
         $this->display();
