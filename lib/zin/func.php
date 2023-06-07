@@ -907,6 +907,7 @@ function modalDialog(): modalDialog
  * Tabs widget.
  *
  * ?string direction='h'
+ * ?bool   collapse=false
  */
 function tabs(): tabs
 {

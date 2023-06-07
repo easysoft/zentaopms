@@ -16,6 +16,7 @@ class tabs extends wg
     protected static $defineProps = array(
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
+        'collapse?: bool=false',
     );
 
     public static function getPageCSS(): string|false
@@ -88,9 +89,39 @@ class tabs extends wg
         }
     }
 
+    private function buildCollapseBtn()
+    {
+        $collapse = $this->prop('collapse');
+        if(!$collapse) return null;
+
+        return btn
+        (
+            setClass('btn-link'),
+            setStyle(array(
+                'position' => 'absolute',
+                'right' => '24px',
+                'top' => '16px'
+            )),
+            set::icon('angle-down'),
+            on::click
+            (
+                <<<FUNC
+                    const btn = event.target;
+                    const icon = btn.querySelector('.icon');
+                    const tabs = btn.closest('.tabs');
+                    const tabContent = tabs.querySelector('.tab-content');
+                    if(tabContent) tabContent.classList.toggle('hidden');
+                    icon.classList.toggle('icon-angle-down');
+                    icon.classList.toggle('icon-angle-top');
+                FUNC
+            )
+        );
+    }
+
     protected function build(): wg
     {
         $isVertical = $this->prop('direction') === 'v';
+        $collapse   = $this->prop('collapse');
 
         $this->filterChildren();
 
@@ -104,11 +135,12 @@ class tabs extends wg
 
         return div
         (
-            setClass('tabs', $isVertical ? 'flex' : null),
+            setClass('tabs', $isVertical ? 'flex' : null, $collapse ? 'relative' : null),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
 
             $this->buildTabHeader($titleViews),
             $this->buildTabBody($contentViews),
+            $this->buildCollapseBtn(),
             $this->children
         );
     }
