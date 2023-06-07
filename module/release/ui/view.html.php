@@ -18,8 +18,8 @@ detailHeader
     !empty($actions) ? to::suffix(btnGroup(set::items($actions))) : null
 );
 
-jsVar('type', $type);
 jsVar('orderBy', $orderBy);
+jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('sortLink', helper::createLink('release', 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
 /* Table data and setting for finished stories tab. */
@@ -61,6 +61,16 @@ $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->
 $leftBugFootToolbar = array();
 if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "release={$release->id}&type=leftBug"));
 
+/* Process release info data. */
+$releaseBuild = array();
+foreach($release->builds as $build) $releaseBuild[] = $build->name;
+
+$releaseBranch = array();
+if($product->type != 'normal')
+{
+    foreach($release->branches as $branchID) $releaseBranch[] = zget($branches, $branchID, '');
+}
+
 detailBody
 (
     tabs
@@ -80,7 +90,7 @@ detailBody
                 set::cols(array_values($config->release->dtable->story->fieldList)),
                 set::data($storyTableData),
                 set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
-                set::sortLink(jsRaw('createSortLink')),
+                set::sortLink(jsRaw('window.createSortLink')),
                 set::footToolbar($storyFootToolbar),
                 set::footPager(
                     usePager(null, 'storyPager'),
@@ -105,7 +115,7 @@ detailBody
                 set::cols(array_values($config->release->dtable->bug->fieldList)),
                 set::data($bugTableData),
                 set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                set::sortLink(jsRaw('createSortLink')),
+                set::sortLink(jsRaw('window.createSortLink')),
                 set::footToolbar($bugFootToolbar),
                 set::footPager(
                     usePager(null, 'bugPager'),
@@ -129,7 +139,7 @@ detailBody
                 set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                 set::data($leftBugTableData),
                 set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                set::sortLink(jsRaw('createSortLink')),
+                set::sortLink(jsRaw('window.createSortLink')),
                 set::footToolbar($leftBugFootToolbar),
                 set::footPager(
                     usePager(null, 'leftBugPager'),
@@ -139,6 +149,61 @@ detailBody
                 ),
             )
         ),
+        tabPane
+        (
+            to::prefix(icon('flag')),
+            set::key('releaseInfo'),
+            set::title($lang->release->basicInfo),
+            div(
+                tableData
+                (
+                    item
+                    (
+                        set::name($lang->release->product),
+                        $release->productName
+                    ),
+                    item
+                    (
+                        set::name($lang->release->name),
+                        $release->name
+                    ),
+                    item
+                    (
+                        set::name($lang->release->includedBuild),
+                        implode($lang->comma, $releaseBuild)
+                    ),
+                    !empty($releaseBranch) ? item
+                    (
+                        set::name($lang->release->branch),
+                        implode($lang->comma, $releaseBranch)
+                    ) : null,
+                    item
+                    (
+                        set::name($lang->release->status),
+                        $this->processStatus('release', $release)
+                    ),
+                    item
+                    (
+                        set::name($lang->release->date),
+                        $release->date
+                    ),
+                    item
+                    (
+                        set::name($lang->release->desc),
+                        $release->desc
+                    ),
+                ),
+                h::hr(set::class('mt-6')),
+                section
+                (
+                    set::title($lang->files),
+                    set::content(''),
+                    set::useHtml(true)
+                ),
+                h::hr(set::class('mt-6')),
+                history()
+            )
+        )
     )
 );
 
