@@ -875,4 +875,18 @@ class personnelModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->personnel->accessible->search);
     }
+
+    /**
+     * 判断操作是否可以点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $whitelist
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $whitelist, string $action): bool
+    {
+        return true;
+    }
 }

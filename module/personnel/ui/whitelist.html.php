@@ -1,0 +1,54 @@
+<?php
+declare(strict_types=1);
+/**
+ * The whitelist view file of personnel module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Mengyi Liu <liumengyi@easycorp.ltd>
+ * @package     personnel
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+jsVar('module', $module);
+
+$config->personnel->whitelist->dtable->fieldList['dept']['map'] = $depts;
+
+$whitelist = initTableData($whitelist, $config->personnel->whitelist->dtable->fieldList, $this->personnel);
+
+$cols = array_values($config->personnel->whitelist->dtable->fieldList);
+$data = array_values($whitelist);
+
+featureBar
+(
+    set::current('all'),
+    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&programID={$programID}&from={$from}"),
+);
+
+$whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$programID}&module={$module}&from={$from}" : "objectID={$objectID}";
+$addWhitelistVars = $module == 'program' ? "objectID={$objectID}&deptID=0&copyID=0&programID={$programID}&from={$from}" : "objectID={$objectID}";
+toolbar
+(
+    btngroup
+    (
+        btn
+        (
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::url(helper::createLink($module, 'addWhitelist', $addWhitelistVars)),
+            $lang->personnel->addWhitelist
+        )
+    )
+);
+
+dtable
+(
+    set::cols($cols),
+    set::data($data),
+    set::fixedLeftWidth('0.33'),
+    set::onRenderCell(jsRaw('window.renderCell')),
+    set::footPager(usePager()),
+);
+
+render();
+
