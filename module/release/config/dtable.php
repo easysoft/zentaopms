@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('story');
+$app->loadLang('bug');
 $app->loadLang('build');
 
 $config->release->dtable = new stdclass();
@@ -86,7 +87,54 @@ $config->release->dtable->story->fieldList['actions']['title'] = $lang->actions;
 $config->release->dtable->story->fieldList['actions']['name']  = 'actions';
 $config->release->dtable->story->fieldList['actions']['type']  = 'actions';
 $config->release->dtable->story->fieldList['actions']['menu']  = array('unlinkStory');
+$config->release->dtable->story->fieldList['actions']['list']  = $config->release->actionList;
 
-$config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['icon'] = 'unlink';
-$config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['hint'] = $lang->release->unlinkStory;
-$config->release->dtable->story->fieldList['actions']['list']['unlinkStory']['url']  = 'javascript: unlinkStory("{id}")';
+$config->release->dtable->bug->fieldList['id']['title']    = $lang->idAB;
+$config->release->dtable->bug->fieldList['id']['name']     = 'id';
+$config->release->dtable->bug->fieldList['id']['type']     = 'checkID';
+$config->release->dtable->bug->fieldList['id']['sortType'] = 'desc';
+
+$config->release->dtable->bug->fieldList['title']['title']       = $lang->bug->title;
+$config->release->dtable->bug->fieldList['title']['name']        = 'title';
+$config->release->dtable->bug->fieldList['title']['type']        = 'title';
+$config->release->dtable->bug->fieldList['title']['link']        = helper::createLink('bug', 'view', 'bugID={id}', '', true);
+$config->release->dtable->bug->fieldList['title']['data-toggle'] = 'modal';
+
+$config->release->dtable->bug->fieldList['severity']['title'] = $lang->bug->severity;
+$config->release->dtable->bug->fieldList['severity']['name']  = 'severity';
+$config->release->dtable->bug->fieldList['severity']['type']  = 'severity';
+
+$config->release->dtable->bug->fieldList['pri']['title'] = $lang->priAB;
+$config->release->dtable->bug->fieldList['pri']['name']  = 'pri';
+$config->release->dtable->bug->fieldList['pri']['type']  = 'pri';
+
+$config->release->dtable->bug->fieldList['status']['title']     = $lang->statusAB;
+$config->release->dtable->bug->fieldList['status']['name']      = 'status';
+$config->release->dtable->bug->fieldList['status']['type']      = 'status';
+$config->release->dtable->bug->fieldList['status']['statusMap'] = $lang->bug->statusList;
+
+$config->release->dtable->bug->fieldList['resolvedBuild']['title'] = $lang->bug->resolvedBuild;
+$config->release->dtable->bug->fieldList['resolvedBuild']['name']  = 'resolvedBuild';
+$config->release->dtable->bug->fieldList['resolvedBuild']['type']  = 'text';
+
+$config->release->dtable->bug->fieldList['openedBy']['title'] = $lang->openedByAB;
+$config->release->dtable->bug->fieldList['openedBy']['name']  = 'openedBy';
+$config->release->dtable->bug->fieldList['openedBy']['type']  = 'user';
+
+$config->release->dtable->bug->fieldList['openedDate']['title'] = $lang->bug->abbr->openedDate;
+$config->release->dtable->bug->fieldList['openedDate']['name']  = 'openedDate';
+$config->release->dtable->bug->fieldList['openedDate']['type']  = 'date';
+
+$config->release->dtable->bug->fieldList['resolvedBy']['title'] = $lang->bug->resolvedBy;
+$config->release->dtable->bug->fieldList['resolvedBy']['name']  = 'resolvedBy';
+$config->release->dtable->bug->fieldList['resolvedBy']['type']  = 'user';
+
+$config->release->dtable->bug->fieldList['resolvedDate']['title'] = $lang->bug->abbr->resolvedDate;
+$config->release->dtable->bug->fieldList['resolvedDate']['name']  = 'resolvedDate';
+$config->release->dtable->bug->fieldList['resolvedDate']['type']  = 'date';
+
+$config->release->dtable->bug->fieldList['actions']['title'] = $lang->actions;
+$config->release->dtable->bug->fieldList['actions']['name']  = 'actions';
+$config->release->dtable->bug->fieldList['actions']['type']  = 'actions';
+$config->release->dtable->bug->fieldList['actions']['menu']  = array('unlinkBug');
+$config->release->dtable->bug->fieldList['actions']['list']  = $config->release->actionList;

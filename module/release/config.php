@@ -14,9 +14,17 @@ $config->release->actionList['linkStory']['icon'] = 'link';
 $config->release->actionList['linkStory']['hint'] = $lang->release->linkStory;
 $config->release->actionList['linkStory']['url']  = helper::createLink('release', 'view', 'releaseID={id}&type=story&link=true');
 
+$config->release->actionList['unlinkStory']['icon'] = 'unlink';
+$config->release->actionList['unlinkStory']['hint'] = $lang->release->unlinkStory;
+$config->release->actionList['unlinkStory']['url']  = 'javascript: unlinkObject("story", "{id}")';
+
 $config->release->actionList['linkBug']['icon'] = 'bug';
 $config->release->actionList['linkBug']['hint'] = $lang->release->linkBug;
 $config->release->actionList['linkBug']['url']  = helper::createLink('release', 'view', 'releaseID={id}&type=bug&link=true');
+
+$config->release->actionList['unlinkBug']['icon'] = 'unlink';
+$config->release->actionList['unlinkBug']['hint'] = $lang->release->unlinkBug;
+$config->release->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("bug", "{id}")';
 
 $config->release->actionList['play']['icon'] = 'play';
 $config->release->actionList['play']['hint'] = $this->lang->release->changeStatusList['normal'];
