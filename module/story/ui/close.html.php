@@ -18,6 +18,7 @@ formPanel
     set::actions(array('submit')),
     set::submitBtnText($lang->story->closeAction),
     set::headingClass('status-heading'),
+    set::titleClass('form-label .form-grid'),
     on::change('#closedReasonBox', 'setStory'),
     to::headingActions
     (
