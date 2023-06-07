@@ -170,7 +170,7 @@ foreach($cols as $key => $col)
     }
     elseif($col->id == 'status')
     {
-        $col->type = 'status';
+        $col->type      = 'status';
         $col->statusMap = $this->lang->story->statusList;
     }
 
