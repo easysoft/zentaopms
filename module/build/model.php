@@ -166,7 +166,7 @@ class buildModel extends model
             }
         }
 
-        if($this->session->executionBuildQuery == false) $this->session->set('executionBuildQuery', ' 1 = 1');
+        if($this->session->executionBuildQuery === false) $this->session->set('executionBuildQuery', ' 1 = 1');
         $buildQuery = $this->session->executionBuildQuery;
 
         /* Distinguish between repeated fields. */
@@ -381,7 +381,7 @@ class buildModel extends model
 
         krsort($builds);
         $buildPairs = array();
-        foreach($builds as $date => $childBuilds) $buildPairs += $childBuilds;
+        foreach($builds as $childBuilds) $buildPairs += $childBuilds;
 
         return $sysBuilds + $buildPairs + $selectedBuilds;
     }
@@ -576,7 +576,7 @@ class buildModel extends model
         $resolvedPairs = array();
         if(isset($_POST['bugs']))
         {
-            foreach($data->bugs as $key => $bugID)
+            foreach($data->bugs as $bugID)
             {
                 if(isset($_POST['resolvedBy'][$bugID])) $resolvedPairs[$bugID] = $data->resolvedBy[$bugID];
             }
@@ -619,7 +619,7 @@ class buildModel extends model
             if(strpos(",{$build->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
         }
 
-        $build->stories .= ',' . join(',', $this->post->stories);
+        $build->stories .= ',' . implode(',', $this->post->stories);
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
 
         $this->loadModel('action');
@@ -683,7 +683,7 @@ class buildModel extends model
             if(strpos(",{$build->bugs},", ",{$bugID},") !== false) unset($_POST['bugs'][$i]);
         }
 
-        $build->bugs .= ',' . join(',', $this->post->bugs);
+        $build->bugs .= ',' . implode(',', $this->post->bugs);
         $this->updateLinkedBug($build);
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
 
@@ -751,9 +751,9 @@ class buildModel extends model
         }
 
         $build->allBugs    = explode(',', $build->allBugs);
-        $build->allBugs    = join(',', array_unique(array_filter($build->allBugs)));
+        $build->allBugs    = implode(',', array_unique(array_filter($build->allBugs)));
         $build->allStories = explode(',', $build->allStories);
-        $build->allStories = join(',', array_unique(array_filter($build->allStories)));
+        $build->allStories = implode(',', array_unique(array_filter($build->allStories)));
 
         return $build;
     }
