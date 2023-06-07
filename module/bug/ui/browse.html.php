@@ -185,7 +185,6 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($data),
-    set::footPager(usePager()),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::footPager
