@@ -16,6 +16,16 @@ featurebar
     set::linkParams("status={key}"),
 );
 
+foreach($projects as $project)
+{
+    if(!empty($project->PM))
+    {
+        $project->PMAccount = $project->PM;
+        $project->PMAvatar  = $usersAvatar[$project->PM];
+        $project->PM        = \zget($users, $project->PM);
+    }
+}
+
 $projects = initTableData($projects, $config->my->project->dtable->fieldList, $this->my);
 
 $cols     = array_values($config->my->project->dtable->fieldList);
