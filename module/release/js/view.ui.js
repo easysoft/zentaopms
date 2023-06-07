@@ -1,3 +1,23 @@
+window.appendLinkBtn = function()
+{
+    $('.right-menu').find('.btn').eq(1).remove();
+
+    const tabID   = $('.tab-pane.active').attr('id');
+    if(tabID == 'finishedStory')
+    {
+        $('.right-menu').append($('.link-story')[0].outerHTML);
+    }
+    else if(tabID == 'resolvedBug')
+    {
+        $('.right-menu').append($('.link-bug')[0].outerHTML);
+    }
+    else if(tabID == 'leftBug')
+    {
+        $('.right-menu').append($('.link-left-bug')[0].outerHTML);
+    }
+}
+window.appendLinkBtn();
+
 $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
 {
     const dtable = zui.DTable.query(e.target);
@@ -12,6 +32,11 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
         url:  $(this).data('url'),
         data: postData
     });
+}).on('click', '.nav-tabs .nav-item a', function()
+{
+    if($(this).hasClass('active')) return;
+
+    window.appendLinkBtn();
 });
 
 /**

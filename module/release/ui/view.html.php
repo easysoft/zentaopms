@@ -11,11 +11,12 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
-$actions = $this->release->buildOperateViewMenu($release);
+$canBeChanged = common::canBeChanged('release', $release);
+$menus        = $this->release->buildOperateViewMenu($release);
 detailHeader
 (
     to::title(entityLabel(set(array('entityID' => $release->id, 'level' => 1, 'text' => $release->name)))),
-    !empty($actions) ? to::suffix(btnGroup(set::items($actions))) : null
+    !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
 jsVar('orderBy', $orderBy);
@@ -30,8 +31,8 @@ jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->pro
 jsVar('unlinkstoryurl', helper::createLink('release', 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
 $storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
 
-$canBatchUnlinkStory = common::hasPriv('release', 'batchUnlinkStory');
-$canBatchCloseStory  = common::hasPriv('story', 'batchClose');
+$canBatchUnlinkStory = $canBeChanged && common::hasPriv('release', 'batchUnlinkStory');
+$canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
 if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => inlink('batchUnlinkStory', "release={$release->id}"));
@@ -44,8 +45,8 @@ jsVar('unlinkbugurl', helper::createLink('release', 'unlinkBug', "releaseID={$re
 $config->release->dtable->bug->fieldList['resolvedBuild']['map'] = $builds;
 $bugTableData = initTableData($bugs, $config->release->dtable->bug->fieldList, $this->release);
 
-$canBatchUnlinkBug = common::hasPriv('release', 'batchUnlinkBug');
-$canBatchCloseBug  = common::hasPriv('bug', 'batchClose');
+$canBatchUnlinkBug = $canBeChanged && common::hasPriv('release', 'batchUnlinkBug');
+$canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "release={$release->id}"));
@@ -71,8 +72,64 @@ if($product->type != 'normal')
     foreach($release->branches as $branchID) $releaseBranch[] = zget($branches, $branchID, '');
 }
 
+/* Right menus, export and link. */
+$rightMenus = array();
+if(common::hasPriv('release', 'export') && ($summary || count($bugs) || count($leftBugs)))
+{
+    $rightMenus[] = array(
+        'text'        => $lang->release->export,
+        'icon'        => 'export',
+        'url'         => inlink('export'),
+        'class'       => 'btn ghost',
+        'data-toggle' => 'modal'
+    );
+}
+
+if($canBeChanged)
+{
+    $linkBtnList = array();
+    if(common::hasPriv('release', 'linkStory'))
+    {
+        $linkBtnList[] = array(
+            'text'  => $lang->release->linkStory,
+            'icon'  => 'link',
+            'url'   => inlink('linkStory', "releaseID={$release->id}&browseType=story"),
+            'class' => 'btn link-story',
+            'type'  => 'primary'
+        );
+    }
+
+    if(common::hasPriv('release', 'linkBug'))
+    {
+        $linkBtnList[] = array(
+            'text'  => $lang->release->linkBug,
+            'icon'  => 'bug',
+            'url'   => inlink('linkBug', "releaseID={$release->id}&browseType=bug"),
+            'class' => 'btn link-bug',
+            'type'  => 'primary'
+        );
+
+        $linkBtnList[] = array(
+            'text'  => $lang->release->linkBug,
+            'icon'  => 'bug',
+            'url'   => inlink('linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
+            'class' => 'btn link-left-bug',
+            'type'  => 'primary'
+        );
+    }
+
+    btnGroup(
+        set::items($linkBtnList),
+        setClass('link-btns hidden')
+    );
+}
+
 detailBody
 (
+    btnGroup(
+        set::items(common::hasPriv('release', 'export') ? $rightMenus : null),
+        setClass('right-menu')
+    ),
     tabs
     (
         set::class('w-full'),
@@ -149,6 +206,8 @@ detailBody
                 ),
             )
         ),
+
+        /* Basic info block. */
         tabPane
         (
             to::prefix(icon('flag')),
