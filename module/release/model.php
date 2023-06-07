@@ -46,25 +46,28 @@ class releaseModel extends model
     }
 
     /**
-     * Get list of releases.
+     * 获取发布列表信息。
+     * Get release list information.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int      $productID
+     * @param  string   $branch
+     * @param  string   $type
+     * @param  string   $orderBy
+     * @param  string   $param
+     * @param  object   $pager
      * @access public
-     * @return array
+     * @return object[]
      */
-    public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
+    public function getList(int $productID, string $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $param = '', object $pager = null): array
     {
         $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch !== 'all')->andWhere("FIND_IN_SET($branch, t1.branch)")->fi()
-            ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
+            ->beginIF(!in_array($type, array('all', 'review', 'bySearch')))->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'bySearch')->andWhere($param)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -990,5 +993,61 @@ class releaseModel extends model
         if(common::hasPriv('release', 'delete')) $actions[] = 'delete';
 
         return $actions;
+    }
+
+    /**
+     * 构建搜索表单字段。
+     * Build search form fields.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm(int $queryID, string $actionURL, object $product, string $branch)
+    {
+        $this->config->release->search['queryID']   = $queryID;
+        $this->config->release->search['actionURL'] = $actionURL;
+
+        if($product->type != 'normal') $this->config->release->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'all');
+        $this->config->release->search['params']['build']['values'] = $this->loadmodel('build')->getbuildpairs($product->id, $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
+
+        $this->loadModel('search')->setSearchParams($this->config->release->search);
+    }
+
+    /**
+     * 通过搜索获取发布列表信息。
+     * Get release list information by search.
+     *
+     * @param  int      $productID
+     * @param  int      $queryID
+     * @param  string   $orderBy
+     * @param  object   $pager
+     * @access public
+     * @return object[]
+     */
+    public function getListBySearch(int $productID, int $queryID, string $orderBy = 't1.date_desc', object $pager = null): array
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('releaseQuery', $query->sql);
+                $this->session->set('releaseForm', $query->form);
+            }
+        }
+
+        if($this->session->releaseQuery === false) $this->session->set('releaseQuery', ' 1 = 1');
+        $releaseQuery = $this->session->releaseQuery;
+
+        /* Replace the condition of all branch to 1. */
+        $allBranch = "`branch` = 'all'";
+        if(strpos($releaseQuery, $allBranch) !== false) $releaseQuery = str_replace($allBranch, '1', $releaseQuery);
+        $releaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $releaseQuery);
+
+        return $this->getList($productID, 'all', 'bySearch', $orderBy, $releaseQuery, $pager);
     }
 }

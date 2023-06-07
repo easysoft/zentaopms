@@ -59,6 +59,7 @@ $lang->release->createdBugs    = 'Erstellte %s Bugs';
 $lang->release->export         = 'Export as HTML';
 $lang->release->yesterday      = 'Gestern veröffentlicht';
 $lang->release->all            = 'All';
+$lang->release->allProject     = 'All';
 $lang->release->notify         = 'Notify';
 $lang->release->notifyUsers    = 'Notify Users';
 $lang->release->mailto         = 'Mailto';
@@ -101,3 +102,6 @@ $lang->release->notifyList['CT'] = "Copy To";
 $lang->release->featureBar['browse']['all']       = $lang->release->all;
 $lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
 $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];
+
+$lang->release->markerList[1] = 'Yes';
+$lang->release->markerList[0] = 'No';

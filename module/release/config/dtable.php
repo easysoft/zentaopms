@@ -23,7 +23,7 @@ $config->release->dtable->fieldList['branch']['type']     = 'text';
 $config->release->dtable->fieldList['branch']['sortType'] = true;
 
 $config->release->dtable->fieldList['project']['title'] = $lang->release->project;
-$config->release->dtable->fieldList['project']['name']  = 'projectName';
+$config->release->dtable->fieldList['project']['name']  = 'project';
 $config->release->dtable->fieldList['project']['type']  = 'text';
 
 $config->release->dtable->fieldList['build']['title'] = $lang->release->includedBuild;

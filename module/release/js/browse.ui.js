@@ -21,9 +21,14 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name == 'projectName' && row.data.builds.length == 0)
+    if(col.name == 'project')
     {
         result[0] = '';
+        if(row.data.builds.length == 0) return result;
+        for(key in row.data.builds)
+        {
+            result[result.length] = {html: row.data.builds[key].projectName};
+        }
         return result;
     }
 

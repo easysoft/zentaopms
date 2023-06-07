@@ -59,6 +59,7 @@ $lang->release->createdBugs    = '本次共遗留 %s 个Bug';
 $lang->release->export         = '导出HTML';
 $lang->release->yesterday      = '昨日发布';
 $lang->release->all            = '所有';
+$lang->release->allProject     = '所有项目';
 $lang->release->notify         = '发送通知';
 $lang->release->notifyUsers    = '通知人员';
 $lang->release->mailto         = '抄送给';
@@ -101,3 +102,6 @@ $lang->release->notifyList['CT'] = "抄送给";
 $lang->release->featureBar['browse']['all']       = '全部';
 $lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
 $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];
+
+$lang->release->markerList[1] = '是';
+$lang->release->markerList[0] = '否';

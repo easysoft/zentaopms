@@ -38,3 +38,21 @@ $config->release->actionList['notify']['data-toggle'] = 'modal';
 $config->release->actionList['delete']['icon'] = 'trash';
 $config->release->actionList['delete']['hint'] = $lang->release->delete;
 $config->release->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+
+/* Search config. */
+$config->release->search['module']            = 'release';
+$config->release->search['fields']['name']    = $lang->release->name;
+$config->release->search['fields']['branch']  = $lang->release->branch;
+$config->release->search['fields']['id']      = $lang->idAB;
+$config->release->search['fields']['build']   = $lang->release->includedBuild;
+$config->release->search['fields']['status']  = $lang->release->status;
+$config->release->search['fields']['date']    = $lang->release->date;
+$config->release->search['fields']['marker']  = $lang->release->marker;
+
+$config->release->search['params']['name']    = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->release->search['params']['branch']  = array('operator' => '=',       'control' => 'select', 'values' => array());
+$config->release->search['params']['id']      = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->release->search['params']['build']   = array('operator' => '=',       'control' => 'select', 'values' => array());
+$config->release->search['params']['status']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->release->statusList);
+$config->release->search['params']['date']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->release->search['params']['marker']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->release->markerList);
