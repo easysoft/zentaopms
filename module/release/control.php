@@ -555,7 +555,7 @@ class release extends control
     {
         $this->release->unlinkStory($releaseID, $storyID);
 
-        return $this->sendSuccess(array('load' => true));
+        return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=story")));
     }
 
     /**
@@ -568,7 +568,7 @@ class release extends control
     public function batchUnlinkStory($releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
-        return $this->sendSuccess(array('load' => true));
+        return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=story")));
     }
 
     /**
@@ -691,7 +691,7 @@ class release extends control
         {
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load']    = true;
+            $response['load']    = $this->createLink('release', 'view', "releaseID={$releaseID}&type={$type}");
         }
         return $this->send($response);
     }
@@ -707,7 +707,7 @@ class release extends control
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
         $this->release->batchUnlinkBug($releaseID, $type);
-        echo js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent');
+        return $this->sendSuccess(array('load' => $this->createLink('release', 'view', "releaseID=$releaseID&type=$type")));
     }
 
     /**
