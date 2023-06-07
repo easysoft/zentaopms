@@ -1,7 +1,8 @@
-$(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function()
+$(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
 {
-    const dtable = zui.DTable.query($(this).target);
+    const dtable = zui.DTable.query(e.target);
     const checkedList = dtable.$.getChecks();
+    console.log(dtable)
     if(!checkedList.length) return;
 
     const tabType  = $(this).data('type');
@@ -103,8 +104,8 @@ window.unlinkObject = function(objectType, objectID)
 {
     objectType = objectType.toLowerCase();
 
-    if(window.confirm(`confirmunlink${objectType}`))
+    if(window.confirm(eval(`confirmunlink${objectType}`)))
     {
-        $.ajaxSubmit({url: `unlink${objectType}url`.replace('%s', objectID)});
+        $.ajaxSubmit({url: eval(`unlink${objectType}url`).replace('%s', objectID)});
     }
 }
