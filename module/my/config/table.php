@@ -55,3 +55,40 @@ $config->my->todo->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->todo->dtable->fieldList['actions']['sortType'] = false;
 $config->my->todo->dtable->fieldList['actions']['list']     = $config->my->todo->actionList;
 $config->my->todo->dtable->fieldList['actions']['menu']     = array('start', 'activate|assignTo', 'close|finish', 'edit', 'delete');
+
+global $app;
+$app->loadLang('score');
+
+$config->my->score         = new stdclass();
+$config->my->score->dtable = new stdclass();
+
+$config->my->score->dtable->fieldList['time']['name']  = 'time';
+$config->my->score->dtable->fieldList['time']['title'] = $lang->score->time;
+$config->my->score->dtable->fieldList['time']['type']  = 'datetime';
+$config->my->score->dtable->fieldList['time']['fixed'] = 'left';
+
+$config->my->score->dtable->fieldList['module']['name']  = 'module';
+$config->my->score->dtable->fieldList['module']['title'] = $lang->score->module;
+$config->my->score->dtable->fieldList['module']['type']  = 'category';
+$config->my->score->dtable->fieldList['module']['map']   = $lang->score->modules;
+
+$config->my->score->dtable->fieldList['method']['name']  = 'method';
+$config->my->score->dtable->fieldList['method']['title'] = $lang->score->method;
+$config->my->score->dtable->fieldList['method']['type']  = 'text';
+$config->my->score->dtable->fieldList['method']['map']   = $lang->score->methods;
+
+$config->my->score->dtable->fieldList['before']['name']  = 'before';
+$config->my->score->dtable->fieldList['before']['title'] = $lang->score->before;
+$config->my->score->dtable->fieldList['before']['type']  = 'count';
+
+$config->my->score->dtable->fieldList['score']['name']  = 'score';
+$config->my->score->dtable->fieldList['score']['title'] = $lang->score->score;
+$config->my->score->dtable->fieldList['score']['type']  = 'number';
+
+$config->my->score->dtable->fieldList['after']['name']  = 'after';
+$config->my->score->dtable->fieldList['after']['title'] = $lang->score->after;
+$config->my->score->dtable->fieldList['after']['type']  = 'count';
+
+$config->my->score->dtable->fieldList['desc']['name']  = 'desc';
+$config->my->score->dtable->fieldList['desc']['title'] = $lang->score->desc;
+$config->my->score->dtable->fieldList['desc']['type']  = 'desc';

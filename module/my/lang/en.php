@@ -205,3 +205,5 @@ $lang->my->featureBar['contribute']['audit']['createdbyme']  = 'CreatedByMe';
 
 $lang->my->featureBar['contribute']['doc']['openedbyme'] = 'CreatedByMe';
 $lang->my->featureBar['contribute']['doc']['editedbyme'] = 'EditedByMe';
+
+$lang->my->featureBar['my']['score']['all'] = 'Score Record';
