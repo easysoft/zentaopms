@@ -58,3 +58,10 @@ $config->my->todo->actionList['delete']['icon']        = 'trash';
 $config->my->todo->actionList['delete']['text']        = $lang->todo->delete;
 $config->my->todo->actionList['delete']['hint']        = $lang->todo->delete;
 $config->my->todo->actionList['delete']['url']         = helper::createLink('todo', 'delete', 'todoID={id}&confirm=yes');
+
+$config->my->audit = new stdclass();
+$config->my->audit->actionList = array();
+$config->my->audit->actionList['review']['icon']        = 'glasses';
+$config->my->audit->actionList['review']['text']        = $lang->review->common;
+$config->my->audit->actionList['review']['hint']        = $lang->review->common;
+$config->my->audit->actionList['review']['data-toggle'] = 'modal';

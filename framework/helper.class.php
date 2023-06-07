@@ -439,6 +439,8 @@ function formatTime(string|null $time, string $format = ''): string
  */
 function initTableData($items, &$fieldList, $checkModel)
 {
+    if(!isset($fieldList['actions'])) return array();
+
     foreach($fieldList['actions']['menu'] as $actionMenu)
     {
         if(is_array($actionMenu))
@@ -484,7 +486,7 @@ function initTableData($items, &$fieldList, $checkModel)
                     $action = $actions[0];
                     foreach($actions as $actionName)
                     {
-                        if($checkModel->isClickable($item, $actionName))
+                        if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $actionName))
                         {
                             $action = $actionName;
                             $break  = true;
@@ -492,7 +494,7 @@ function initTableData($items, &$fieldList, $checkModel)
                     }
 
                     if(!common::hasPriv($app->rawModule, $action)) continue;
-                    if($checkModel->isClickable($item, $action))
+                    if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
                     {
                         $item->actions[] = array('name' => $action);
                     }
@@ -510,11 +512,11 @@ function initTableData($items, &$fieldList, $checkModel)
                 $action = $actions[0];
                 foreach($actions as $actionName)
                 {
-                    if($checkModel->isClickable($item, $actionName)) $action = $actionName;
+                    if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $actionName)) $action = $actionName;
                 }
 
                 if(!common::hasPriv('task', $action)) continue;
-                if($checkModel->isClickable($item, $action))
+                if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
                 {
                     $item->actions[] = array('name' => $action);
                 }
