@@ -14,13 +14,13 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"),
+    set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={key}&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle(set::module('testcase')))
 );
 
 /* zin: Define the toolbar on main menu. */
 $canCreateTestcase = hasPriv('testcase', 'create') && common::canModify('execution', $execution);
-if($canCreateTestcase) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->testcase->create, 'url' => $this->createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id"));
+if($canCreateTestcase) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->testcase->create, 'url' => $this->createLink('testcase', 'create', "productID={$productID}&branch=0&moduleID=0&from=execution&param={$execution->id}"));
 toolbar
 (
     !empty($createItem) ? item(set($createItem)) : null,
@@ -56,4 +56,3 @@ dtable
 );
 
 render();
-

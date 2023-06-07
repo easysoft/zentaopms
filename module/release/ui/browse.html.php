@@ -13,7 +13,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("productID={$product->id}&branch={$branch}&type={key}"),
+    set::linkParams("productID={$product->id}&branch={$branch}&type={key}&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle(set::module('release')))
 );
 

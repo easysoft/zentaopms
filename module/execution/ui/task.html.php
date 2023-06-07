@@ -16,7 +16,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$execution->id}&status={key}"),
+    set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"),
     li(searchToggle(set::module('task')))
 );
 
