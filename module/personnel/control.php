@@ -60,7 +60,7 @@ class personnel extends control
         $this->view->personnelList = empty($personnelList) ? $personnelList : $personnelList[$pageID - 1];
         $this->view->deptList      = $this->loadModel('dept')->getOptionMenu();
         $this->view->dept          = $this->dept->getByID($deptID);
-        $this->view->deptTree      = $this->dept->getTreeMenu($deptID = 0, array(new personnelModel, 'createMemberLink'), $programID);
+        $this->view->deptTree      = $this->dept->getTreeMenu(0, $programID);
 
         $this->display();
     }

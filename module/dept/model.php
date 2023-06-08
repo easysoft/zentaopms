@@ -128,44 +128,34 @@ class deptModel extends model
     /**
      * Get the treemenu of departments.
      *
-     * @param  int        $rootDeptID
-     * @param  string     $userFunc
-     * @param  int        $param
+     * @param  int    $rootDeptID
+     * @param  int    $param
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootDeptID = 0, $userFunc = '', $param = 0)
+    public function getTreeMenu($rootDeptID = 0, $param = 0)
     {
         $deptMenu = array();
+        $data = new stdclass();
+        $data->id     = 0;
+        $data->parent = 0;
+        $data->name   = $this->lang->dept->common;
+        $data->url    = helper::createLink('personnel', 'accessible', "program={$param}&deptID=0");
+        $deptMenu[] = $data;
+
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
-            $linkHtml = call_user_func($userFunc, $dept, $param);
+            $data = new stdclass();
+            $data->id     = $dept->id;
+            $data->parent = $dept->parent;
+            $data->name   = $dept->name;
+            $data->url    = helper::createLink('personnel', 'accessible', "program={$param}&deptID={$dept->id}");
 
-            if(isset($deptMenu[$dept->id]) and !empty($deptMenu[$dept->id]))
-            {
-                if(!isset($deptMenu[$dept->parent])) $deptMenu[$dept->parent] = '';
-                $deptMenu[$dept->parent] .= "<li>$linkHtml";
-                $deptMenu[$dept->parent] .= "<ul>".$deptMenu[$dept->id]."</ul>\n";
-            }
-            else
-            {
-                if(isset($deptMenu[$dept->parent]) and !empty($deptMenu[$dept->parent]))
-                {
-                    $deptMenu[$dept->parent] .= "<li>$linkHtml\n";
-                }
-                else
-                {
-                    $deptMenu[$dept->parent] = "<li>$linkHtml\n";
-                }
-            }
-            $deptMenu[$dept->parent] .= "</li>\n";
+            $deptMenu[] = $data;
         }
 
-        krsort($deptMenu);
-        $deptMenu = array_pop($deptMenu);
-        $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>{$deptMenu}</ul>\n";
-        return $lastMenu;
+        return $deptMenu;
     }
 
     /**

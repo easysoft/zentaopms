@@ -1,8 +1,41 @@
 <?php
+global $lang;
+
+$config->personnel->accessible->dtable = new stdclass();
+
+$config->personnel->accessible->dtable->fieldList['id']['name']  = 'id';
+$config->personnel->accessible->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->personnel->accessible->dtable->fieldList['id']['type']  = 'ID';
+$config->personnel->accessible->dtable->fieldList['id']['align'] = 'left';
+$config->personnel->accessible->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->personnel->accessible->dtable->fieldList['realname']['name']     = 'realname';
+$config->personnel->accessible->dtable->fieldList['realname']['title']    = $lang->personnel->realName;
+$config->personnel->accessible->dtable->fieldList['realname']['type']     = 'title';
+$config->personnel->accessible->dtable->fieldList['realname']['minWidth'] = '200';
+$config->personnel->accessible->dtable->fieldList['realname']['fixed']    = 'left';
+
+$config->personnel->accessible->dtable->fieldList['dept']['name']   = 'dept';
+$config->personnel->accessible->dtable->fieldList['dept']['title']  = $lang->personnel->department;
+$config->personnel->accessible->dtable->fieldList['dept']['type']   = 'category';
+$config->personnel->accessible->dtable->fieldList['dept']['map']    = array();
+
+$config->personnel->accessible->dtable->fieldList['role']['name']   = 'role';
+$config->personnel->accessible->dtable->fieldList['role']['title']  = $lang->personnel->job;
+$config->personnel->accessible->dtable->fieldList['role']['type']   = 'category';
+$config->personnel->accessible->dtable->fieldList['role']['map']    = $lang->user->roleList;
+
+$config->personnel->accessible->dtable->fieldList['account']['name']   = 'account';
+$config->personnel->accessible->dtable->fieldList['account']['title']  = $lang->personnel->userName;
+$config->personnel->accessible->dtable->fieldList['account']['type']   = 'text';
+
+$config->personnel->accessible->dtable->fieldList['gender']['name']   = 'gender';
+$config->personnel->accessible->dtable->fieldList['gender']['title']  = $lang->personnel->genders;
+$config->personnel->accessible->dtable->fieldList['gender']['type']   = 'category';
+$config->personnel->accessible->dtable->fieldList['gender']['map']    = $lang->user->genderList;
+
 $config->personnel->whitelist         = new stdclass();
 $config->personnel->whitelist->dtable = new stdclass();
-
-global $lang;
 
 $config->personnel->whitelist->actionList['unbindWhitelist']['icon']  = 'unlink';
 $config->personnel->whitelist->actionList['unbindWhitelist']['hint']  = $lang->personnel->delete;
