@@ -14,6 +14,32 @@ namespace zin;
 
 if($parent)
 {
+    $title = $lang->productplan->create;
+    $parentHidden = formGroup
+    (
+        set::name("parent"),
+        set::control('hidden'),
+        set::value($parent),
+    );
+    $parentForm = '';
+}
+else
+{
+    $title = $lang->productplan->createChildren;
+    $parentHidden = '';
+    $parentForm = formGroup
+    (
+        set::width("1/2"),
+        set::name("parent"),
+        set::label($lang->productplan->parent),
+        set::value("0"),
+        set::control("picker"),
+        set::items($parentPlanPairs)
+    );
+}
+
+if($parent)
+{
     $parentTitle = $lang->productplan->parent;
     $parentName  = $parentPlan->title;
 }
@@ -30,20 +56,6 @@ if($parent or !$product->shadow)
     (
         set::label($lang->product->common),
         $product->name
-    );
-}
-
-$parentForm = '';
-if(!$parent)
-{
-    $parentForm = formGroup
-    (
-        set::width("1/2"),
-        set::name("parent"),
-        set::label($lang->productplan->parent),
-        set::value("0"),
-        set::control("picker"),
-        set::items($parentPlanPairs)
     );
 }
 
@@ -126,6 +138,7 @@ formPanel
         set::control('hidden'),
         set::value($product->id),
     ),
+    $parentHidden,
 );
 
 render();
