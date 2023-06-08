@@ -5031,11 +5031,11 @@ class storyModel extends model
     }
 
     /**
-     * Set story status by reeview result.
+     * Set story status by review result.
      *
-     * @param  int    $story
-     * @param  int    $oldStory
-     * @param  int    $result
+     * @param  object $story
+     * @param  object $oldStory
+     * @param  object $result
      * @param  string $reason
      * @access public
      * @return array
@@ -5058,7 +5058,7 @@ class storyModel extends model
             $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->eq($oldStory->version - 1)->fetch('title');
 
             /* Delete versions that is after this version. */
-            $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+            $twinsIdList = $story->id . ($oldStory->twins ? ",{$oldStory->twins}" : '');
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->in($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->in($oldStory->version)->exec();
         }
