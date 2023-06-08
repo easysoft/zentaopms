@@ -2,6 +2,7 @@
 global $lang,$config, $app;
 $app->loadLang('todo');
 $app->loadLang('score');
+$app->loadLang('task');
 $app->loadLang('story');
 
 $config->my->todo = new stdclass();
@@ -132,6 +133,116 @@ $config->my->score->dtable->fieldList['after']['type']  = 'count';
 $config->my->score->dtable->fieldList['desc']['name']  = 'desc';
 $config->my->score->dtable->fieldList['desc']['title'] = $lang->score->desc;
 $config->my->score->dtable->fieldList['desc']['type']  = 'desc';
+
+$config->my->task = new stdclass();
+$config->my->task->actionList = array();
+$config->my->task->actionList['confirmStoryChange']['icon'] = 'search';
+$config->my->task->actionList['confirmStoryChange']['text'] = $lang->task->confirmStoryChange;
+$config->my->task->actionList['confirmStoryChange']['hint'] = $lang->task->confirmStoryChange;
+$config->my->task->actionList['confirmStoryChange']['url']  = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
+
+$config->my->task->actionList['start']['icon']        = 'play';
+$config->my->task->actionList['start']['text']        = $lang->task->start;
+$config->my->task->actionList['start']['hint']        = $lang->task->start;
+$config->my->task->actionList['start']['url']         = helper::createLink('task', 'start', 'taskID={id}');
+$config->my->task->actionList['start']['data-toggle'] = 'modal';
+
+$config->my->task->actionList['restart']['icon']        = 'play';
+$config->my->task->actionList['restart']['text']        = $lang->task->restart;
+$config->my->task->actionList['restart']['hint']        = $lang->task->restart;
+$config->my->task->actionList['restart']['url']         = helper::createLink('task', 'restart', 'taskID={id}');
+$config->my->task->actionList['restart']['data-toggle'] = 'modal';
+
+$config->my->task->actionList['finish']['icon']        = 'checked';
+$config->my->task->actionList['finish']['text']        = $lang->task->finish;
+$config->my->task->actionList['finish']['hint']        = $lang->task->finish;
+$config->my->task->actionList['finish']['url']         = helper::createLink('task', 'finish', 'taskID={id}');
+$config->my->task->actionList['finish']['data-toggle'] = 'modal';
+
+$config->my->task->actionList['close']['icon']        = 'off';
+$config->my->task->actionList['close']['text']        = $lang->task->close;
+$config->my->task->actionList['close']['hint']        = $lang->task->close;
+$config->my->task->actionList['close']['url']         = helper::createLink('task', 'close', 'taskID={id}');
+$config->my->task->actionList['close']['data-toggle'] = 'modal';
+
+$config->my->task->actionList['record']['icon']        = 'time';
+$config->my->task->actionList['record']['text']        = $lang->task->logEfforts;
+$config->my->task->actionList['record']['hint']        = $lang->task->logEfforts;
+$config->my->task->actionList['record']['url']         = helper::createLink('task', 'recordEstimate', 'taskID={id}');
+$config->my->task->actionList['record']['data-toggle'] = 'modal';
+
+$config->my->task->actionList['edit']['icon']        = 'edit';
+$config->my->task->actionList['edit']['text']        = $lang->task->edit;
+$config->my->task->actionList['edit']['hint']        = $lang->task->edit;
+$config->my->task->actionList['edit']['url']         = helper::createLink('task', 'edit', 'taskID={id}');
+$config->my->task->actionList['edit']['data-toggle'] = 'modal';
+
+$config->my->task->actionList['batchCreate']['icon']        = 'split';
+$config->my->task->actionList['batchCreate']['text']        = $lang->task->batchCreate;
+$config->my->task->actionList['batchCreate']['hint']        = $lang->task->batchCreate;
+$config->my->task->actionList['batchCreate']['url']         = helper::createLink('task', 'batchCreate', 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
+$config->my->task->actionList['batchCreate']['data-toggle'] = 'modal';
+
+$config->my->task->dtable = new stdclass();
+$config->my->task->dtable->fieldList['id']['name']  = 'id';
+$config->my->task->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->my->task->dtable->fieldList['id']['type']  = 'checkID';
+$config->my->task->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->my->task->dtable->fieldList['name']['name']  = 'name';
+$config->my->task->dtable->fieldList['name']['title'] = $lang->task->name;
+$config->my->task->dtable->fieldList['name']['type']  = 'title';
+$config->my->task->dtable->fieldList['name']['link']  = helper::createLink('task', 'view', 'taskID={id}');
+$config->my->task->dtable->fieldList['name']['fixed'] = 'left';
+
+$config->my->task->dtable->fieldList['pri']['name']  = 'pri';
+$config->my->task->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->my->task->dtable->fieldList['pri']['type']  = 'pri';
+$config->my->task->dtable->fieldList['pri']['map']   = $lang->task->priList;
+$config->my->task->dtable->fieldList['pri']['group'] = 'pri';
+
+$config->my->task->dtable->fieldList['status']['name']      = 'status';
+$config->my->task->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->my->task->dtable->fieldList['status']['type']      = 'status';
+$config->my->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->my->task->dtable->fieldList['status']['group']     = 'pri';
+
+$config->my->task->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->my->task->dtable->fieldList['openedBy']['title'] = $lang->task->openedByAB;
+$config->my->task->dtable->fieldList['openedBy']['type']  = 'user';
+$config->my->task->dtable->fieldList['openedBy']['group'] = 'user';
+
+$config->my->task->dtable->fieldList['finishedBy']['name']  = 'finishedBy';
+$config->my->task->dtable->fieldList['finishedBy']['title'] = $lang->task->finishedByAB;
+$config->my->task->dtable->fieldList['finishedBy']['type']  = 'user';
+$config->my->task->dtable->fieldList['finishedBy']['group'] = 'user';
+
+$config->my->task->dtable->fieldList['deadline']['name']  = 'deadline';
+$config->my->task->dtable->fieldList['deadline']['title'] = $lang->task->deadlineAB;
+$config->my->task->dtable->fieldList['deadline']['type']  = 'date';
+$config->my->task->dtable->fieldList['deadline']['group'] = 'number';
+
+$config->my->task->dtable->fieldList['estimate']['name']  = 'estimateLabel';
+$config->my->task->dtable->fieldList['estimate']['title'] = $lang->task->estimateAB;
+$config->my->task->dtable->fieldList['estimate']['type']  = 'number';
+$config->my->task->dtable->fieldList['estimate']['group'] = 'number';
+
+$config->my->task->dtable->fieldList['consumed']['name']  = 'consumedLabel';
+$config->my->task->dtable->fieldList['consumed']['title'] = $lang->task->consumedAB;
+$config->my->task->dtable->fieldList['consumed']['type']  = 'number';
+$config->my->task->dtable->fieldList['consumed']['group'] = 'number';
+
+$config->my->task->dtable->fieldList['left']['name']  = 'leftLabel';
+$config->my->task->dtable->fieldList['left']['title'] = $lang->task->leftAB;
+$config->my->task->dtable->fieldList['left']['type']  = 'number';
+$config->my->task->dtable->fieldList['left']['group'] = 'number';
+
+$config->my->task->dtable->fieldList['actions']['name']     = 'actions';
+$config->my->task->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->my->task->dtable->fieldList['actions']['type']     = 'actions';
+$config->my->task->dtable->fieldList['actions']['sortType'] = false;
+$config->my->task->dtable->fieldList['actions']['list']     = $config->my->task->actionList;
+$config->my->task->dtable->fieldList['actions']['menu']     = array(array('confirmStoryChange'), array('start|restart', 'finish', 'close', 'record', 'edit', 'batchCreate'));
 
 $config->my->requirement = new stdclass();
 $config->my->requirement->actionList = array();
@@ -320,7 +431,7 @@ $config->my->audit->dtable->fieldList['id']['fixed'] = 'left';
 $config->my->audit->dtable->fieldList['title']['name']        = 'title';
 $config->my->audit->dtable->fieldList['title']['title']       = $lang->my->auditField->title;
 $config->my->audit->dtable->fieldList['title']['type']        = 'title';
-$config->my->audit->dtable->fieldList['title']['link']        = helper::createLink('story', 'view', "id={id}");
+$config->my->audit->dtable->fieldList['title']['link']        = helper::createLink('story', 'view', 'id={id}');
 $config->my->audit->dtable->fieldList['title']['fixed']       = 'left';
 $config->my->audit->dtable->fieldList['title']['data-toggle'] = 'modal';
 
@@ -352,7 +463,7 @@ $config->my->project->dtable = new stdclass();
 $config->my->project->dtable->fieldList['name']['name']       = 'name';
 $config->my->project->dtable->fieldList['name']['title']      = $lang->project->name;
 $config->my->project->dtable->fieldList['name']['type']       = 'title';
-$config->my->project->dtable->fieldList['name']['link']       = helper::createLink('project', 'index', "id={id}");
+$config->my->project->dtable->fieldList['name']['link']       = helper::createLink('project', 'index', 'id={id}');
 $config->my->project->dtable->fieldList['name']['fixed']      = 'left';
 $config->my->project->dtable->fieldList['name']['group']      = '1';
 $config->my->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';

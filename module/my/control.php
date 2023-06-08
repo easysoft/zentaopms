@@ -500,9 +500,13 @@ EOF;
         }
 
         $parents = array();
+        $summary = $this->loadModel('execution')->summary($tasks);
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
+            $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
+            $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
+            $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
@@ -533,7 +537,7 @@ EOF;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $tasks;
-        $this->view->summary    = $this->loadModel('execution')->summary($tasks);
+        $this->view->summary    = $summary;
         $this->view->type       = $type;
         $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
         $this->view->recTotal   = $recTotal;
