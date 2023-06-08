@@ -1545,7 +1545,7 @@ class storyTao extends storyModel
             if(!empty($execution) && $execution->hasProduct)
             {
                 $link      = helper::createLink('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", '', true);
-                $actions[] = array('name' => 'unlinkStory', 'data-toggle' => 'modal', 'data-url' => $$link);
+                $actions[] = array('name' => 'unlinkStory', 'data-toggle' => 'modal', 'data-url' => $link);
             }
         }
 
