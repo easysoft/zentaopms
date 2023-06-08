@@ -5673,7 +5673,7 @@ class storyModel extends model
 
         if($type == 'browse')
         {
-            return $this->storyTao->buildBrowseActionBtnList($story, $type, $storyType, $execution, $params);
+            return $this->storyTao->buildBrowseActionBtnList($story, $params, $storyType, $execution);
         }
 
         if($type == 'view')
