@@ -12,9 +12,31 @@ declare(strict_types=1);
 
 namespace zin;
 
+if($parent)
+{
+    $parentTitle = $lang->productplan->parent;
+    $parentName  = $parentPlan->title;
+}
+elseif(!$product->shadow)
+{
+    $parentTitle = $lang->productplan->product;
+    $parentName  = $product->name;
+}
+
+$formHeader = '';
+if($parent or !$product->shadow)
+{
+    $formHeader = formGroup
+    (
+        set::label($lang->product->common),
+        $product->name
+    );
+}
+
 formPanel
 (
     set::title($lang->productplan->create),
+    $formHeader,
     formGroup
     (
         set::label($lang->product->common),
