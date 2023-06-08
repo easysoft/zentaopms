@@ -482,18 +482,19 @@
     {
         if(isInAppTab) window.parent.$('body').trigger('click');
 
-        const $a = $(e.target).closest('a');
-        if(!$a.length || $a.attr('target') === '_blank') return;
-        if($a.data('toggle') || $a.hasClass('not-in-app')) return e.preventDefault();
+        const $link = $(e.target).closest('a');
+        if(!$link.length || $link.attr('target') === '_blank') return;
+        if($link.data('toggle') || $link.hasClass('not-in-app')) return e.preventDefault();
 
-        const url = $a.attr('href');
+        const url = $link.attr('href');
         if(!url || url.startsWith('javascript') || url.startsWith('#')) return;
 
-        const loadTarget = $a.data('load');
+        const loadTarget = $link.data('load');
         if(loadTarget === 'table') loadTable(url);
+        else if(loadTarget) loadPage(url, loadTarget);
         else openPage(url);
         e.preventDefault();
-    }).on('zui.locate', (_e, data) =>
+    }).on('locate.zt', (_e, data) =>
     {
         if(!data) return;
         if(data === true) return loadCurrentPage();
@@ -503,8 +504,8 @@
         {
             return zui.Modal.confirm(data.confirm).then(confirmed =>
             {
-                if(confirmed) $(document).trigger('zui.locate', data.confirmed);
-                else $(document).trigger('zui.locate', data.cancelled);
+                if(confirmed) $(document).trigger('locate.zt', data.confirmed);
+                else $(document).trigger('locate.zt', data.cancelled);
             });
         }
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
