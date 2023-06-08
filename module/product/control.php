@@ -160,7 +160,7 @@ class product extends control
         $productPlans    = $this->productZen->getProductPlans($projectProducts, $projectID, $storyType, $isProjectStory);
         $stories         = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
-        /* Process the sql, get the conditon partion, save it to session. */
+        /* Process the sql, get the condition partition, save it to session. */
         $queryCondition = $this->dao->get();
         $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false and !$isProjectStory));
 
