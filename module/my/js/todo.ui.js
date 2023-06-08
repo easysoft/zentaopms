@@ -36,17 +36,12 @@ $(document).on('click', '.batch-btn', function()
  */
 window.setStatistics = function(element, checks)
 {
-    const rows = element.layout.rows;
-
     let waitCount  = 0;
     let doingCount = 0;
-    rows.forEach((row) => {
-        if(checks.includes(row.id))
-        {
-            const task = row.data;
-            if(task.status == 'wait')  waitCount ++;
-            if(task.status == 'doing') doingCount ++;
-        }
+    checks.forEach((checkID) => {
+        const task = element.getRowInfo(checkID).data;
+        if(task.status == 'wait')  waitCount ++;
+        if(task.status == 'doing') doingCount ++;
     })
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount)};
     return zui.formatString(element.options.defaultSummary);
