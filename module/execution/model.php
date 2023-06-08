@@ -2496,11 +2496,6 @@ class executionModel extends model
             foreach($tasks as $task)
             {
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
-                if($task->parent > 0 and isset($executionTasks[$executionID][$task->parent]))
-                {
-                    $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
-                    unset($executionTasks[$executionID][$task->id]);
-                }
             }
         }
 
@@ -5514,11 +5509,10 @@ class executionModel extends model
      * @param  array  $executions
      * @param  array  $users
      * @param  array  $avatarList
-     * @param  int    $productID
      * @access public
      * @return array
      */
-    public function generateRow(array $executions, array $users, array $avatarList, int $productID): array
+    public function generateRow(array $executions, array $users, array $avatarList): array
     {
         $today = helper::today();
         $rows  = array();
@@ -5526,10 +5520,13 @@ class executionModel extends model
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
+            $execution->rawID         = $execution->id;
+            $execution->isExecution   = 1;
+            $execution->id            = 'pid' . (string)$execution->id;
             $execution->name          = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');
             $execution->project       = $execution->projectName;
-            $execution->parent        = ($execution->parent and $execution->grade > 1) ? $execution->parent : '';
-            $execution->asParent      = !empty($execution->children);
+            $execution->parent        = ($execution->parent and $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
+            $execution->asParent      = !empty($execution->children) or !empty($execution->tasks);
             $execution->progress      = $execution->hours->progress;
             $execution->totalEstimate = $execution->hours->totalEstimate;
             $execution->totalConsumed = $execution->hours->totalConsumed;
@@ -5551,10 +5548,52 @@ class executionModel extends model
 
             $rows[] = $execution;
 
+            /* Append tasks and child stages. */
+            if(!empty($execution->tasks)) $rows = $this->appendTasks($execution->tasks, $rows);
+
             if(!empty($children))
             {
-                $rows = array_merge($rows, $this->generateRow($children, $users, $avatarList, $productID));
+                $rows = array_merge($rows, $this->generateRow($children, $users, $avatarList));
             }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Append tasks to execution list.
+     *
+     * @param  array  $tasks
+     * @param  array  $rows
+     * @access public
+     * @return array
+     */
+    public function appendTasks(array $tasks, array $rows): array
+    {
+        $this->loadModel('task');
+
+        foreach($tasks as $id => $task)
+        {
+            foreach($this->config->projectExecution->dtable->fieldList['actions']['task'] as $action)
+            {
+                $rawAction = str_replace('Task', '', $action);
+                $clickable = $this->task->isClickable($task, $rawAction);
+                $action    = array('name' => $action);
+                if(!$clickable) $action['disabled'] = true;
+                $task->actions[] = $action;
+            }
+
+            $task->name          = "<span class='label label-outline'>{$this->lang->task->common}</span> " . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
+            $task->rawID         = $task->id;
+            $task->id            = 'tid' . (string)$task->id;
+            $task->totalEstimate = $task->estimate;
+            $task->totalConsumed = $task->consumed;
+            $task->totalLeft     = $task->left;
+            $task->asParent      = ($task->parent < 0);
+            $task->parent        = $task->parent <= 0 ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
+            $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+
+            $rows[] = $task;
         }
 
         return $rows;
