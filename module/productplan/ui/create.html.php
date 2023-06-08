@@ -33,16 +33,10 @@ if($parent or !$product->shadow)
     );
 }
 
-formPanel
-(
-    set::title($lang->productplan->create),
-    $formHeader,
-    formGroup
-    (
-        set::label($lang->product->common),
-        $product->name
-    ),
-    formGroup
+$parentForm = '';
+if(!$parent)
+{
+    $parentForm = formGroup
     (
         set::width("1/2"),
         set::name("parent"),
@@ -50,7 +44,14 @@ formPanel
         set::value("0"),
         set::control("picker"),
         set::items($parentPlanPairs)
-    ),
+    );
+}
+
+formPanel
+(
+    set::title($lang->productplan->create),
+    $formHeader,
+    $parentForm,
     formGroup
     (
         set::width("1/2"),
