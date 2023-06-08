@@ -119,7 +119,13 @@ formPanel
         set::name("desc"),
         set::label($lang->story->spec),
         set::control("editor")
-    )
+    ),
+    formGroup
+    (
+        set::name("product"),
+        set::control('hidden'),
+        set::value($product->id),
+    ),
 );
 
 render();
