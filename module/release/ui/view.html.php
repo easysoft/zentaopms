@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-global $lang;
 
 $canBeChanged = common::canBeChanged('release', $release);
 $menus        = $this->release->buildOperateViewMenu($release);
@@ -20,6 +19,7 @@ detailHeader
 );
 
 jsVar('orderBy', $orderBy);
+jsVar('releaseID', $release->id);
 jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('sortLink', helper::createLink('release', 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
@@ -93,7 +93,7 @@ if($canBeChanged)
         $linkBtnList[] = array(
             'text'  => $lang->release->linkStory,
             'icon'  => 'link',
-            'url'   => inlink('linkStory', "releaseID={$release->id}&browseType=story"),
+            'url'   => 'javascript:loadLinkPage("linkStory", "story")',
             'class' => 'btn link-story',
             'type'  => 'primary'
         );
@@ -104,7 +104,7 @@ if($canBeChanged)
         $linkBtnList[] = array(
             'text'  => $lang->release->linkBug,
             'icon'  => 'bug',
-            'url'   => inlink('linkBug', "releaseID={$release->id}&browseType=bug"),
+            'url'   => 'javascript:loadLinkPage("linkBug", "bug")',
             'class' => 'btn link-bug',
             'type'  => 'primary'
         );
@@ -112,7 +112,7 @@ if($canBeChanged)
         $linkBtnList[] = array(
             'text'  => $lang->release->linkBug,
             'icon'  => 'bug',
-            'url'   => inlink('linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
+            'url'   => 'javascript:loadLinkPage("linkBug", "leftBug")',
             'class' => 'btn link-left-bug',
             'type'  => 'primary'
         );
@@ -126,141 +126,143 @@ if($canBeChanged)
 
 detailBody
 (
-    btnGroup(
-        set::items(common::hasPriv('release', 'export') ? $rightMenus : null),
-        setClass('right-menu')
-    ),
-    tabs
-    (
-        set::class('w-full'),
-
-        /* Linked story table. */
-        tabPane
-        (
-            to::prefix(icon('lightbulb')),
-            set::key('finishedStory'),
-            set::title($lang->release->stories),
-            set::active($type == 'story'),
-            dtable
-            (
-                set::userMap($users),
-                set::cols(array_values($config->release->dtable->story->fieldList)),
-                set::data($storyTableData),
-                set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
-                set::sortLink(jsRaw('window.createSortLink')),
-                set::footToolbar($storyFootToolbar),
-                set::footPager(
-                    usePager(null, 'storyPager'),
-                    set::recPerPage($storyPager->recPerPage),
-                    set::recTotal($storyPager->recTotal),
-                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
-                ),
-                set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
-            )
+    sectionList(
+        btnGroup(
+            set::items(common::hasPriv('release', 'export') ? $rightMenus : null),
+            setClass('right-menu px-6')
         ),
-
-        /* Resolved bug table. */
-        tabPane
+        tabs
         (
-            to::prefix(icon('bug')),
-            set::key('resolvedBug'),
-            set::title($lang->release->bugs),
-            set::active($type == 'bug'),
-            dtable
+            set::class('w-full'),
+
+            /* Linked story table. */
+            tabPane
             (
-                set::userMap($users),
-                set::cols(array_values($config->release->dtable->bug->fieldList)),
-                set::data($bugTableData),
-                set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                set::sortLink(jsRaw('window.createSortLink')),
-                set::footToolbar($bugFootToolbar),
-                set::footPager(
-                    usePager(null, 'bugPager'),
-                    set::recPerPage($bugPager->recPerPage),
-                    set::recTotal($bugPager->recTotal),
-                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
-                ),
-            )
-        ),
-
-        /* Left bug table. */
-        tabPane
-        (
-            to::prefix(icon('bug')),
-            set::key('leftBug'),
-            set::title($lang->release->generatedBugs),
-            set::active($type == 'leftBug'),
-            dtable
-            (
-                set::userMap($users),
-                set::cols(array_values($config->release->dtable->leftBug->fieldList)),
-                set::data($leftBugTableData),
-                set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                set::sortLink(jsRaw('window.createSortLink')),
-                set::footToolbar($leftBugFootToolbar),
-                set::footPager(
-                    usePager(null, 'leftBugPager'),
-                    set::recPerPage($leftBugPager->recPerPage),
-                    set::recTotal($leftBugPager->recTotal),
-                    set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
-                ),
-            )
-        ),
-
-        /* Basic info block. */
-        tabPane
-        (
-            to::prefix(icon('flag')),
-            set::key('releaseInfo'),
-            set::title($lang->release->basicInfo),
-            div(
-                tableData
+                to::prefix(icon('lightbulb')),
+                set::key('finishedStory'),
+                set::title($lang->release->stories),
+                set::active($type == 'story'),
+                dtable
                 (
-                    item
-                    (
-                        set::name($lang->release->product),
-                        $release->productName
+                    set::userMap($users),
+                    set::cols(array_values($config->release->dtable->story->fieldList)),
+                    set::data($storyTableData),
+                    set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
+                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::footToolbar($storyFootToolbar),
+                    set::footPager(
+                        usePager(null, 'storyPager'),
+                        set::recPerPage($storyPager->recPerPage),
+                        set::recTotal($storyPager->recTotal),
+                        set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                     ),
-                    item
-                    (
-                        set::name($lang->release->name),
-                        $release->name
-                    ),
-                    item
-                    (
-                        set::name($lang->release->includedBuild),
-                        implode($lang->comma, $releaseBuild)
-                    ),
-                    !empty($releaseBranch) ? item
-                    (
-                        set::name($lang->release->branch),
-                        implode($lang->comma, $releaseBranch)
-                    ) : null,
-                    item
-                    (
-                        set::name($lang->release->status),
-                        $this->processStatus('release', $release)
-                    ),
-                    item
-                    (
-                        set::name($lang->release->date),
-                        $release->date
-                    ),
-                    item
-                    (
-                        set::name($lang->release->desc),
-                        $release->desc
-                    ),
-                ),
-                h::hr(set::class('mt-6')),
-                section
+                    set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
+                )
+            ),
+
+            /* Resolved bug table. */
+            tabPane
+            (
+                to::prefix(icon('bug')),
+                set::key('resolvedBug'),
+                set::title($lang->release->bugs),
+                set::active($type == 'bug'),
+                dtable
                 (
-                    set::title($lang->files),
-                    set::content(''),
-                    set::useHtml(true)
-                ),
-                h::hr(set::class('mt-6')),
-                history()
+                    set::userMap($users),
+                    set::cols(array_values($config->release->dtable->bug->fieldList)),
+                    set::data($bugTableData),
+                    set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::footToolbar($bugFootToolbar),
+                    set::footPager(
+                        usePager(null, 'bugPager'),
+                        set::recPerPage($bugPager->recPerPage),
+                        set::recTotal($bugPager->recTotal),
+                        set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                    ),
+                )
+            ),
+
+            /* Left bug table. */
+            tabPane
+            (
+                to::prefix(icon('bug')),
+                set::key('leftBug'),
+                set::title($lang->release->generatedBugs),
+                set::active($type == 'leftBug'),
+                dtable
+                (
+                    set::userMap($users),
+                    set::cols(array_values($config->release->dtable->leftBug->fieldList)),
+                    set::data($leftBugTableData),
+                    set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::footToolbar($leftBugFootToolbar),
+                    set::footPager(
+                        usePager(null, 'leftBugPager'),
+                        set::recPerPage($leftBugPager->recPerPage),
+                        set::recTotal($leftBugPager->recTotal),
+                        set::linkCreator(helper::createLink('release', 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))
+                    ),
+                )
+            ),
+
+            /* Basic info block. */
+            tabPane
+            (
+                to::prefix(icon('flag')),
+                set::key('releaseInfo'),
+                set::title($lang->release->basicInfo),
+                div(
+                    tableData
+                    (
+                        item
+                        (
+                            set::name($lang->release->product),
+                            $release->productName
+                        ),
+                        item
+                        (
+                            set::name($lang->release->name),
+                            $release->name
+                        ),
+                        item
+                        (
+                            set::name($lang->release->includedBuild),
+                            implode($lang->comma, $releaseBuild)
+                        ),
+                        !empty($releaseBranch) ? item
+                        (
+                            set::name($lang->release->branch),
+                            implode($lang->comma, $releaseBranch)
+                        ) : null,
+                        item
+                        (
+                            set::name($lang->release->status),
+                            $this->processStatus('release', $release)
+                        ),
+                        item
+                        (
+                            set::name($lang->release->date),
+                            $release->date
+                        ),
+                        item
+                        (
+                            set::name($lang->release->desc),
+                            $release->desc
+                        ),
+                    ),
+                    h::hr(set::class('mt-6')),
+                    section
+                    (
+                        set::title($lang->files),
+                        set::content(''),
+                        set::useHtml(true)
+                    ),
+                    h::hr(set::class('mt-6')),
+                    history()
+                )
             )
         )
     )
