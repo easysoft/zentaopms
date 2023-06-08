@@ -40,19 +40,15 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
+        $twinsIdList = $storyID . ($story->twins ? ",{$story->twins}" : '');
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->beginIF($story->twins)->andWhere('t1.story')->in($story->twins . ',' . $story->id)
-            ->beginIF(!$story->twins)->andWhere('t1.story')->eq($story->id)
+            ->andWhere('t1.story')->in($twinsIdList)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
 
-        $story->tasks = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in($story->twins . ',' . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->eq($story->id)
-            ->orderBy('id DESC')
-            ->fetchGroup('execution');
+        $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($twinsIdList)->orderBy('id DESC')->fetchGroup('execution');
 
         if($story->toBug)          $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
         if($story->parent > 0)     $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
@@ -1450,99 +1446,45 @@ class storyModel extends model
      * Review a story.
      *
      * @param  int    $storyID
+     * @param  object $story
+     * @param  string $comment
      * @access public
      * @return bool
      */
-    public function review($storyID)
+    public function review(int $storyID, object $story, string $comment = ''): bool
     {
-        if(strpos($this->config->story->review->requiredFields, 'comment') !== false and !$this->post->comment)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
-            return false;
-        }
-
-        if($this->post->result == false)
-        {
-            dao::$errors[] = $this->lang->story->mustChooseResult;
-            return false;
-        }
-
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
-        $date     = helper::today();
-        $story    = fixer::input('post')
-            ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('status', $oldStory->status)
-            ->setDefault('reviewedDate', $date)
-            ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
-            ->setIF(!$this->post->assignedTo, 'assignedTo', '')
-            ->setIF(!empty($_POST['assignedTo']), 'assignedDate', $now)
-            ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
-            ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
-            ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
-            ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
-            ->add('id', $storyID)
-            ->remove('result,comment')
-            ->get();
-
-        $story->reviewedBy = implode(',', array_unique(explode(',', $story->reviewedBy)));
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->review['id'], $this->post->uid);
-
-        /* Fix bug #671. */
-        $this->lang->story->closedReason = $this->lang->story->rejectedReason;
 
         $this->dao->update(TABLE_STORYREVIEW)
-            ->set('result')->eq($this->post->result)
+            ->set('result')->eq($story->result)
             ->set('reviewDate')->eq($now)
-            ->where('story')->eq($storyID)
+            ->where('story')->in($storyID . ($oldStory->twins ? ",{$oldStory->twins}" : ''))
             ->andWhere('version')->eq($oldStory->version)
             ->andWhere('reviewer')->eq($this->app->user->account)
             ->exec();
 
-        /* Sync twins. */
-        if(!empty($oldStory->twins))
-        {
-            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-            {
-                $this->dao->update(TABLE_STORYREVIEW)
-                    ->set('result')->eq($this->post->result)
-                    ->set('reviewDate')->eq($now)
-                    ->where('story')->eq($twinID)
-                    ->andWhere('version')->eq($oldStory->version)
-                    ->andWhere('reviewer')->eq($this->app->user->account)
-                    ->exec();
-            }
-        }
-
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
-        $skipFields      = 'finalResult';
-        $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
-        if($isSuperReviewer === false)
+        $skipFields      = 'finalResult,result';
+        $isSuperReviewer = $this->storyTao->isSuperReviewer();
+        if($isSuperReviewer)
         {
             $reviewers = $this->getReviewerPairs($storyID, $oldStory->version);
             if(count($reviewers) > 1) $skipFields .= ',closedReason';
         }
 
-        $this->dao->update(TABLE_STORY)->data($story, $skipFields)
-            ->autoCheck()
-            ->batchCheck($this->config->story->review->requiredFields, 'notempty')
-            ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
-            ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkFlow()
-            ->where('id')->eq($storyID)
-            ->exec();
+        $this->dao->update(TABLE_STORY)->data($story, $skipFields)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
         if(dao::isError()) return false;
 
-        if($this->post->result != 'reject') $this->setStage($storyID);
+        if($story->result != 'reject') $this->setStage($storyID);
 
-        if(isset($story->closedReason) and $isSuperReviewer === false) unset($story->closedReason);
         $changes = common::createChanges($oldStory, $story);
         if($changes)
         {
-            $actionID = $this->recordReviewAction($story, $this->post->result, $this->post->closedReason);
-            $this->action->logHistory($actionID, $changes);
+            $story->id = $storyID;
+            $actionID  = $this->recordReviewAction($story, $comment);
+            if($actionID) $this->action->logHistory($actionID, $changes);
         }
 
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Reviewed');
@@ -1573,7 +1515,7 @@ class storyModel extends model
         {
             if(!$storyID) continue;
 
-            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+            $isSuperReviewer = $this->storyTao->isSuperReviewer();
             $oldStory        = $oldStories[$storyID];
             if($oldStory->status != 'reviewing') continue;
 
@@ -1582,7 +1524,7 @@ class storyModel extends model
                 if($reviewerInfo->version != $oldStory->version) unset($reviewerList[$storyID][$reviewer]);
             }
 
-            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
+            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and !$isSuperReviewer) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
 
@@ -1593,29 +1535,12 @@ class storyModel extends model
             $story->reviewedBy     = $oldStory->reviewedBy . ',' . $this->app->user->account;
             $story->status         = $oldStory->status;
 
-            $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
-
-            /* Sync twins. */
-            if(!empty($oldStory->twins))
-            {
-                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                {
-                    $this->dao->update(TABLE_STORYREVIEW)
-                        ->set('result')->eq($result)
-                        ->set('reviewDate')->eq($now)
-                        ->where('story')->eq($twinID)
-                        ->andWhere('version')->eq($oldStory->version)
-                        ->andWhere('reviewer')->eq($this->app->user->account)
-                        ->exec();
-                }
-            }
+            $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+            $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
             /* Update the story status by review rules. */
             $reviewedBy = explode(',', trim($story->reviewedBy, ','));
-            if($isSuperReviewer !== false)
-            {
-                $story = $this->superReview($storyID, $oldStory, $story, $result, $reason);
-            }
+            if($isSuperReviewer) $story = $this->superReview($storyID, $oldStory, $story, $result, $reason);
             if(!array_diff(array_keys($reviewerList[$storyID]), $reviewedBy))
             {
                 $reviewerPairs = array();
@@ -1666,16 +1591,8 @@ class storyModel extends model
         $story->status = $isChanged ? 'changing' : 'draft';
         $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
 
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
-
-        /* Sync twins. */
-        if(!empty($oldStory->twins))
-        {
-            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-            {
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->eq($oldStory->version)->exec();
-            }
-        }
+        $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'recalled');
@@ -1700,18 +1617,9 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
 
         /* Delete versions that is after this version. */
-        $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
-
-        /* Sync twins. */
-        if(!empty($oldStory->twins))
-        {
-            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-            {
-                $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($twinID)->andWHere('version')->eq($oldStory->version)->exec();
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->eq($oldStory->version)->exec();
-            }
-        }
+        $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+        $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->eq($oldStory->version)->exec();
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'recalledChange');
@@ -1745,16 +1653,8 @@ class storyModel extends model
             ->join('reviewer', ',')
             ->get();
 
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
-
-        /* Sync twins. */
-        if(!empty($oldStory->twins))
-        {
-            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-            {
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->eq($oldStory->version)->exec();
-            }
-        }
+        $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
 
         if(isset($_POST['reviewer']))
         {
@@ -2499,16 +2399,8 @@ class storyModel extends model
 
         if($story->status == 'active')
         {
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
-
-            /* Sync twins. */
-            if(!empty($oldStory->twins))
-            {
-                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                {
-                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->exec();
-                }
-            }
+            $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->exec();
         }
 
         $this->setStage($storyID);
@@ -3809,11 +3701,11 @@ class storyModel extends model
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
 
-        $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
+        $isSuperReviewer = $this->storyTao->isSuperReviewer();
 
-        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'change')       return (($isSuperReviewer or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
         if($action == 'submitReview') return strpos('draft,changing', $story->status) !== false;
-        if($action == 'review')       return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'review')       return (($isSuperReviewer or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
         if($action == 'close')        return $story->status != 'closed';
         if($action == 'activate')     return $story->status == 'closed';
@@ -5090,7 +4982,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getReviewerPairs($storyID, $version)
+    public function getReviewerPairs(int $storyID, int $version): array
     {
         return $this->dao->select('reviewer,result')->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetchPairs('reviewer', 'result');
     }
@@ -5102,7 +4994,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function getReviewResult($reviewerList)
+    public function getReviewResult(array $reviewerList): string
     {
         $results      = '';
         $passCount    = 0;
@@ -5130,9 +5022,9 @@ class storyModel extends model
             if($revertCount  >= floor(count($reviewerList) / 2) + 1) return 'revert';
             if($rejectCount  >= floor(count($reviewerList) / 2) + 1) return 'reject';
 
-            if(strpos($results, 'clarify') !== false) return 'clarify';
-            if(strpos($results, 'revert')  !== false) return 'revert';
-            if(strpos($results, 'reject')  !== false) return 'reject';
+            if(str_contains($results, 'clarify')) return 'clarify';
+            if(str_contains($results, 'revert'))  return 'revert';
+            if(str_contains($results, 'reject'))  return 'reject';
         }
 
         return $finalResult;
@@ -5148,7 +5040,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function setStatusByReviewResult($story, $oldStory, $result, $reason = 'cancel')
+    public function setStatusByReviewResult(object $story, object $oldStory, string $result, string $reason = 'cancel'): object
     {
         if($result == 'pass') $story->status = 'active';
 
@@ -5166,18 +5058,9 @@ class storyModel extends model
             $story->title   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->eq($oldStory->version - 1)->fetch('title');
 
             /* Delete versions that is after this version. */
-            $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->in($oldStory->version)->exec();
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->in($oldStory->version)->exec();
-
-            /* Sync twins. */
-            if(!empty($oldStory->twins))
-            {
-                foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-                {
-                    $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($twinID)->andWHere('version')->in($oldStory->version)->exec();
-                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)->andWhere('version')->in($oldStory->version)->exec();
-                }
-            }
+            $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
+            $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->in($oldStory->version)->exec();
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->in($oldStory->version)->exec();
         }
 
         if($result == 'reject')
@@ -5207,23 +5090,25 @@ class storyModel extends model
      * @access public
      * @return int|string
      */
-    public function recordReviewAction($story, $result = '', $reason = '')
+    public function recordReviewAction(object $story, string $comment = ''): int
     {
-        $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+        $isSuperReviewer = $this->storyTao->isSuperReviewer();
+        $result          = zget($story, 'result', '');
+        $reason          = zget($story, 'closedReason', '');
 
-        $comment = isset($_POST['comment']) ? $this->post->comment : '';
-
-        if($isSuperReviewer !== false and $this->app->rawMethod != 'edit') return $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . '|superReviewer');
+        $this->loadModel('action');
+        if($isSuperReviewer and $this->app->rawMethod != 'edit') return $this->action->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . '|superReviewer');
 
         $reasonParam = $result == 'reject' ? ',' . $reason : '';
-        $actionID    = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
+        $actionID    = 0;
+        if(!empty($result)) $actionID = $this->action->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam);
 
         if(isset($story->finalResult))
         {
-            if($story->finalResult == 'reject')  $this->action->create('story', $story->id, 'ReviewRejected');
-            if($story->finalResult == 'pass')    $this->action->create('story', $story->id, 'ReviewPassed');
-            if($story->finalResult == 'clarify') $this->action->create('story', $story->id, 'ReviewClarified');
-            if($story->finalResult == 'revert')  $this->action->create('story', $story->id, 'ReviewReverted');
+            if($story->finalResult == 'reject')  return $this->action->create('story', $story->id, 'ReviewRejected');
+            if($story->finalResult == 'pass')    return $this->action->create('story', $story->id, 'ReviewPassed');
+            if($story->finalResult == 'clarify') return $this->action->create('story', $story->id, 'ReviewClarified');
+            if($story->finalResult == 'revert')  return $this->action->create('story', $story->id, 'ReviewReverted');
         }
 
         return $actionID;
@@ -5238,12 +5123,12 @@ class storyModel extends model
      * @access public
      * @return object
      */
-    public function updateStoryByReview($storyID, $oldStory, $story)
+    public function updateStoryByReview(int $storyID, object $oldStory, object $story): object
     {
-        $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
-        if($isSuperReviewer !== false) return $this->superReview($storyID, $oldStory, $story);
+        $isSuperReviewer = $this->storyTao->isSuperReviewer();
+        if($isSuperReviewer) return $this->superReview($storyID, $oldStory, $story);
 
-        $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
+        $reviewerList = $this->getReviewerPairs($storyID, (int)$oldStory->version);
         $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
@@ -5265,32 +5150,19 @@ class storyModel extends model
      * @access public
      * @return object
      */
-    public function superReview($storyID, $oldStory, $story, $result = '', $reason = '')
+    public function superReview(int $storyID, object $oldStory, object $story, string $result = '', string $reason = ''): object
     {
-        $result = isset($_POST['result']) ? $this->post->result : $result;
+        $result = isset($story->result) ? $story->result : $result;
         if(empty($result)) return $story;
 
-        $reason = isset($_POST['closedReason']) ? $_POST['closedReason'] : $reason;
+        $reason = isset($story->closedReason) ? $story->closedReason : $reason;
         $story  = $this->setStatusByReviewResult($story, $oldStory, $result, $reason);
 
         $this->dao->delete()->from(TABLE_STORYREVIEW)
-            ->where('story')->eq($storyID)
+            ->where('story')->in($storyID . ($oldStory->twins ? ",{$oldStory->twins}" : ''))
             ->andWhere('version')->eq($oldStory->version)
             ->andWhere('result')->eq('')
             ->exec();
-
-        /* Sync twins. */
-        if(!empty($oldStory->twins))
-        {
-            foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
-            {
-                $this->dao->delete()->from(TABLE_STORYREVIEW)
-                    ->where('story')->eq($twinID)
-                    ->andWhere('version')->eq($oldStory->version)
-                    ->andWhere('result')->eq('')
-                    ->exec();
-            }
-        }
 
         return $story;
     }
@@ -5624,9 +5496,9 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function syncTwins($storyID, $twins, $changes, $operate)
+    public function syncTwins(int $storyID, string $twins, array $changes, string $operate): void
     {
-        if(empty($twins) or empty($changes)) return;
+        if(empty($twins) || empty($changes)) return;
 
         /* Get the fields and values to be synchronized. */
         $syncFieldList = array();
@@ -5635,25 +5507,25 @@ class storyModel extends model
             $fieldName  = $changeInfo['field'];
             $fieldValue = $changeInfo['new'];
 
-            if(strpos('product,branch,module,plan,stage,stagedBy,spec,verify,files,reviewers', $fieldName) !== false) continue;
+            if(str_contains(',product,branch,module,plan,stage,stagedBy,spec,verify,files,reviewers,', ",{$fieldName},")) continue;
             $syncFieldList[$fieldName] = $fieldValue;
         }
-
         if(empty($syncFieldList)) return;
 
         /* Synchronize and record dynamics. */
         $this->loadModel('action');
-        $twins = explode(',', trim($twins, ','));
-        foreach($twins as $twinID)
+        foreach(explode(',', $twins) as $twinID)
         {
-            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$twinID)->exec();
-            if(!dao::isError())
-            {
-                $this->setStage($twinID);
+            $twinID = (int)$twinID;
+            if(empty($twinID)) continue;
 
-                $actionID = $this->action->create('story', $twinID, 'synctwins', '', "$operate|$storyID");
-                $this->action->logHistory($actionID, $changes);
-            }
+            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq($twinID)->exec();
+            if(dao::isError()) continue;
+
+            $this->setStage($twinID);
+
+            $actionID = $this->action->create('story', $twinID, 'synctwins', '', "$operate|$storyID");
+            $this->action->logHistory($actionID, $changes);
         }
     }
 

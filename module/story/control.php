@@ -61,8 +61,8 @@ class story extends control
             helper::setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* Get story data from post. */
-            $storyData = $this->productZen->buildStoryForCreate($objectID, $bugID);
-            $response  = $this->productZen->checkRepeatStory($storyData, $objectID);
+            $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID);
+            $response  = $this->storyZen->checkRepeatStory($storyData, $objectID);
             if($response) return $this->send($response);
 
             /* Insert story data. */
@@ -968,78 +968,30 @@ class story extends control
      * @access public
      * @return void
      */
-    public function review($storyID, $from = 'product', $storyType = 'story')
+    public function review(int $storyID, string $from = 'product', string $storyType = 'story')
     {
         if(!empty($_POST))
         {
-            $this->story->review($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $storyData = $this->storyZen->buildStoryForReview($storyID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->executeHooks($storyID);
+            $this->story->review($storyID, $storyData, $this->post->comment);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $message = $this->executeHooks($storyID);
+            if(empty($message)) $message = $this->lang->saveSuccess;
 
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution')
-                {
-                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
+                if($this->app->tab == 'execution') $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
 
-                    $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                    $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                    if($execution->type == 'kanban')
-                    {
-                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
-                        $kanbanData    = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                    }
-                    if($from == 'taskkanban')
-                    {
-                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                        $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
-                        $kanbanData      = $kanbanData[$kanbanType];
-                        $kanbanData      = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
-                    }
-                }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
-                }
+                $response = $this->storyZen->responseAfterCreateInModal($message);
+                if($response) return $this->send($response);
             }
-
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
 
-            if($from == 'project')
-            {
-                $module = 'projectstory';
-                $method = 'view';
-                $params = "storyID=$storyID";
-            }
-            elseif($from == 'execution')
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($execution->multiple)
-                {
-                    $module = 'execution';
-                    $method = 'storyView';
-                    $params = "storyID=$storyID";
-                }
-                else
-                {
-                    $module = 'story';
-                    $method = 'view';
-                    $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
-                }
-            }
-            else
-            {
-                $module = 'story';
-                $method = 'view';
-                $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
-            }
-            return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+            $location = $this->storyZen->getAfterReviewLocation($storyID, $storyType, $from);
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 
         $this->commonAction($storyID);

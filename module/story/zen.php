@@ -671,9 +671,9 @@ class storyZen extends story
      * @param  int       $executionID
      * @param  int       $bugID
      * @access protected
-     * @return object
+     * @return object|false
      */
-    protected function buildStoryForCreate(int $executionID, int $bugID): object
+    protected function buildStoryForCreate(int $executionID, int $bugID): object|false
     {
         $fields       = $this->config->story->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
@@ -697,6 +697,55 @@ class storyZen extends story
         }
 
         if($storyData->status != 'draft' and $this->product->checkForceReview()) $storyData->status = 'reviewing';
+        return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+    }
+
+    /**
+     * 构建评审需求数据。
+     * Build story for review
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return object|false
+     */
+    protected function buildStoryForReview(int $storyID): object|false
+    {
+        $now    = helper::now();
+        $fields = $this->config->story->form->review;
+        foreach(explode(',', trim($this->config->story->create->requiredFields, ',')) as $field)
+        {
+            if($field == 'comment' && !$this->post->comment)
+            {
+                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+                return false;
+            }
+            if(isset($fields[$field])) $fields[$field]['required'] = true;
+        }
+        if($this->post->result == false)
+        {
+            dao::$errors[] = $this->lang->story->mustChooseResult;
+            return false;
+        }
+
+        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        $result       = $this->post->result;
+        $closedReason = $this->post->closedReason;
+        $oldStory     = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $storyData    = form::data($fields)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->removeIF($result != 'reject', 'closedReason,duplicateStory,childStories')
+            ->removeIF($result == 'reject' && $closedReason != 'duplicate', 'duplicateStory')
+            ->removeIF($result == 'reject' && $closedReason != 'subdivided', 'childStories')
+            ->get();
+
+        if($oldStory->assignedTo != $storyData->assignedTo) $storyData->assignedDate = $now;
+        $storyData->reviewedBy = implode(',', array_unique(explode(',', $oldStory->reviewedBy . ',' . $this->app->user->account)));
+
+        if($result == 'reject' && empty($closedReason)) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->rejectedReason);
+        if($result == 'reject' && $closedReason == 'duplicate' && empty($storyData->duplicateStory)) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+        if(dao::isError()) return false;
+
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
@@ -778,7 +827,7 @@ class storyZen extends story
     protected function responseAfterCreateInModal(string $message, int $executionID = 0): array|false
     {
         if(!isonlybody()) return false;
-        if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'reload' => true, 'closedModal' => true);
+        if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closedModal' => true);
 
         $executionID       = $executionID ? $executionID : $this->session->execution;
         $execution         = $this->execution->getByID($executionID);
@@ -860,6 +909,35 @@ class storyZen extends story
         helper::setcookie('storyModule', '0', 0);
         if($this->session->storyList) return $this->session->storyList;
         return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
+    }
+
+    /**
+     * 获取评审需求后的跳转地址。
+     * Get after review location.
+     *
+     * @param  int       $storyID
+     * @param  string    $storyType
+     * @param  string    $from
+     * @access protected
+     * @return string
+     */
+    protected function getAfterReviewLocation(int $storyID, string $storyType = 'story', string $from = ''): string
+    {
+        if($from == 'project') return helper::createLink('projectstory', 'view', "storyID={$storyID}");
+        if($from != 'execution') return helper::createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
+
+        $execution = $this->execution->getByID($this->session->execution);
+
+        $module = 'story';
+        $method = 'view';
+        $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
+        if($execution->multiple)
+        {
+            $module = 'execution';
+            $method = 'storyView';
+            $params = "storyID=$storyID";
+        }
+        return helper::createLink($module, $method, $params);
     }
 
     /**

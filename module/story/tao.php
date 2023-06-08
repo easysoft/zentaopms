@@ -1652,4 +1652,16 @@ class storyTao extends storyModel
 
         return $actions;
     }
+
+    /**
+     * 检查当前账号是否是超级评审人。
+     * Check account is super reviewer or not.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function isSuperReviewer(): bool
+    {
+        return str_contains(',' . zget($this->config->story, 'superReviewers', '') . ',', ",{$this->app->user->account},");
+    }
 }
