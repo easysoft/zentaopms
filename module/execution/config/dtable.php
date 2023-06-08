@@ -1,12 +1,12 @@
 <?php
 $config->execution->dtable = new stdclass();
 
-$config->execution->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->execution->dtable->fieldList['id']['name']     = 'id';
-$config->execution->dtable->fieldList['id']['type']     = 'checkID';
-$config->execution->dtable->fieldList['id']['sortType'] = 'desc';
-$config->execution->dtable->fieldList['id']['checkbox'] = true;
-$config->execution->dtable->fieldList['id']['width']    = '60';
+$config->execution->dtable->fieldList['rawID']['title']    = $lang->idAB;
+$config->execution->dtable->fieldList['rawID']['name']     = 'rawID';
+$config->execution->dtable->fieldList['rawID']['type']     = 'checkID';
+$config->execution->dtable->fieldList['rawID']['sortType'] = 'desc';
+$config->execution->dtable->fieldList['rawID']['checkbox'] = true;
+$config->execution->dtable->fieldList['rawID']['width']    = '80';
 
 $config->execution->dtable->fieldList['name']['title']        = $lang->execution->name;
 $config->execution->dtable->fieldList['name']['name']         = 'name';
