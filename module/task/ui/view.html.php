@@ -59,45 +59,49 @@ detailBody
 (
     sectionList
     (
-        item
+        section
         (
             set::title($lang->task->legendDesc),
             set::content(empty($task->desc) ? $lang->noData : $task->desc)
         ),
-        item
+        section
         (
             set::title($lang->task->story),
-            set::content(array(
-                array('title' => $lang->story->legendSpec, 'content' => empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec),
-                array('title' => $lang->task->storyVerify, 'content' => empty($task->storyVerify) ? $lang->noData : $task->storyVerify)
-            )),
-            set::useHtml(true),
-            to::subtitle(entityLabel
+            sectionCard
             (
-                setClass('my-3'),
-                set::entityID($task->storyID),
-                set::level(3),
-                set::text($task->storyTitle),
-            ))
-        ),
-        history(),
-        center
-        (
-            floatToolbar
-            (
-                set::prefix
+                entityLabel
                 (
-                    array(array('icon' => 'back', 'text' => $lang->goback))
+                    set::entityID($task->storyID),
+                    set::text($task->storyTitle),
                 ),
-                set::main($operateMenus),
-                set::suffix($commonActions)
+                item
+                (
+                    set::title($lang->story->legendSpec),
+                    empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : html($task->storySpec)
+                ),
+                item
+                (
+                    set::title($lang->task->storyVerify),
+                    empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
+                ),
             )
-        )
+        ),
+    ),
+    history(),
+    floatToolbar
+    (
+        set::prefix
+        (
+            array(array('icon' => 'back', 'text' => $lang->goback))
+        ),
+        set::main($operateMenus),
+        set::suffix($commonActions)
     ),
     detailSide
     (
         tabs
         (
+            set::collapse(true),
             tabPane
             (
                 set::key('legend-basic'),
@@ -183,6 +187,7 @@ detailBody
         ),
         tabs
         (
+            set::collapse(true),
             tabPane
             (
                 set::key('legend-effort'),

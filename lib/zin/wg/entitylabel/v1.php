@@ -47,9 +47,13 @@ class entityLabel extends wg
         $level     = $this->prop('level');
         $className = $this->prop('className');
 
+        $titleClass = empty($level)
+            ? "article-content"
+            : "article-h$level";
+
         return div
         (
-            setClass("article-h$level", $className),
+            setClass($titleClass, $className),
             $text
         );
     }
