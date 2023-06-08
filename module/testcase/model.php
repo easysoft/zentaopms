@@ -2621,9 +2621,8 @@ class testcaseModel extends model
         $branch         = $case ? $case->branch         : '{branch}';
         $module         = $case ? $case->module         : '{module}';
 
-        $params      = "caseID={$caseID}";
-        $extraParams = "runID={$runID}&{$params}";
-        $editParams  = $params;
+        $params     = "caseID={$caseID}";
+        $editParams = $params;
         if($this->app->tab == 'project')   $editParams = "{$params}&comment=false&projectID={$this->session->project}";
         if($this->app->tab == 'execution') $editParams = "{$params}&comment=false&executionID={$this->session->execution}";
         $createBugParams = "product={$product}&branch={$branch}&extra=caseID={$caseID},version={$version},runID=";
