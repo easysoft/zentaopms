@@ -156,14 +156,10 @@ $cols    = array_values($setting);
 foreach($cols as $key => $col)
 {
     $col->name  = $col->id;
-    if($col->id == 'title' || $col->id == 'id')
+    if($col->id == 'title')
     {
-        $col->sortType     = true;
-        $col->nestedToggle = true;
-        $col->checkbox     = true;
+        $col->link = sprintf($col->link, createLink('story', 'view', array('storyID' => '${row.id}', 'version' => '0', 'param' => '0', 'storyType' => $storyType)));
     }
-
-    if($col->id == 'title') $col->link = sprintf($col->link, createLink('story', 'view', array('storyID' => '${row.id}', 'version' => '0', 'param' => '0', 'storyType' => $storyType)));
 
     $cols[$key] = $col;
 }

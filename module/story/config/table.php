@@ -4,12 +4,15 @@ $config->story->datatable = new stdclass();
 
 $config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
 
-$config->story->datatable->fieldList['id']['title']    = 'idAB';
-$config->story->datatable->fieldList['id']['fixed']    = 'left';
-$config->story->datatable->fieldList['id']['width']    = '80';
-$config->story->datatable->fieldList['id']['required'] = 'yes';
-$config->story->datatable->fieldList['id']['type']     = 'id';
-$config->story->datatable->fieldList['id']['group']    = 'group1';
+$config->story->datatable->fieldList['id']['title']        = 'idAB';
+$config->story->datatable->fieldList['id']['fixed']        = 'left';
+$config->story->datatable->fieldList['id']['width']        = '80';
+$config->story->datatable->fieldList['id']['required']     = 'yes';
+$config->story->datatable->fieldList['id']['type']         = 'id';
+$config->story->datatable->fieldList['id']['group']        = 'group1';
+$config->story->datatable->fieldList['id']['sortType']     = true;
+$config->story->datatable->fieldList['id']['nestedToggle'] = true;
+$config->story->datatable->fieldList['id']['checkbox']     = true;
 
 if($app->tab == 'execution')
 {
@@ -21,13 +24,15 @@ if($app->tab == 'execution')
     $config->story->datatable->fieldList['order']['name']     = $this->lang->story->order;
 }
 
-$config->story->datatable->fieldList['title']['title']    = 'title';
-$config->story->datatable->fieldList['title']['type']     = 'link';
-$config->story->datatable->fieldList['title']['link']     = 'RAWJS<function(info){const {row, col} = info; return {url:`%s`,target:\'_blank\'};}>RAWJS';
-$config->story->datatable->fieldList['title']['fixed']    = 'left';
-$config->story->datatable->fieldList['title']['width']    = '342';
-$config->story->datatable->fieldList['title']['required'] = 'yes';
-$config->story->datatable->fieldList['title']['group']    = 'group1';
+$config->story->datatable->fieldList['title']['title']        = 'title';
+$config->story->datatable->fieldList['title']['type']         = 'link';
+$config->story->datatable->fieldList['title']['link']         = 'RAWJS<function(info){const {row, col} = info; return {url:`%s`,target:\'_blank\'};}>RAWJS';
+$config->story->datatable->fieldList['title']['fixed']        = 'left';
+$config->story->datatable->fieldList['title']['width']        = '342';
+$config->story->datatable->fieldList['title']['required']     = 'yes';
+$config->story->datatable->fieldList['title']['group']        = 'group1';
+$config->story->datatable->fieldList['title']['sortType']     = true;
+$config->story->datatable->fieldList['title']['nestedToggle'] = true;
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';

@@ -107,12 +107,15 @@ class datatableModel extends model
                 $set->group = isset($fieldList[$id]['group']) ? $fieldList[$id]['group'] : '';
                 $set->link  = isset($fieldList[$id]['link']) ? $fieldList[$id]['link'] : '';
 
-                if(isset($fieldList[$id]['minWidth']))   $set->minWidth   = $fieldList[$id]['minWidth'];
-                if(isset($fieldList[$id]['maxWidth']))   $set->maxWidth   = $fieldList[$id]['maxWidth'];
-                if(isset($fieldList[$id]['pri']))        $set->pri        = $fieldList[$id]['pri'];
-                if(isset($fieldList[$id]['statusMap']))  $set->statusMap  = $fieldList[$id]['statusMap'];
-                if(isset($fieldList[$id]['type']))       $set->type       = $fieldList[$id]['type'];
-                if(isset($fieldList[$id]['actionsMap'])) $set->actionsMap = $fieldList[$id]['actionsMap'];
+                if(isset($fieldList[$id]['minWidth']))     $set->minWidth      = $fieldList[$id]['minWidth'];
+                if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth      = $fieldList[$id]['maxWidth'];
+                if(isset($fieldList[$id]['pri']))          $set->pri           = $fieldList[$id]['pri'];
+                if(isset($fieldList[$id]['statusMap']))    $set->statusMap     = $fieldList[$id]['statusMap'];
+                if(isset($fieldList[$id]['type']))         $set->type          = $fieldList[$id]['type'];
+                if(isset($fieldList[$id]['actionsMap']))   $set->actionsMap    = $fieldList[$id]['actionsMap'];
+                if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle  = $fieldList[$id]['nestedToggle'];
+                if(isset($fieldList[$id]['checkbox']))     $set->checkbox      = $fieldList[$id]['checkbox'];
+                if(isset($fieldList[$id]['sortType']))     $set->sortType      = $fieldList[$id]['sortType'];
 
                 $setting[$key] = $set;
             }
