@@ -23,10 +23,10 @@ $data    = array_values($stories);
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=requirement&from={$app->rawMethod}")),
-    array('caret' => 'up', 'text' => $lang->story->review, 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('caret' => 'up', 'text' => $lang->story->assignedTo, 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}")),
+    array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('story', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=requirement&from={$app->rawMethod}")),
+    array('caret' => 'up', 'text' => $lang->story->review, 'className' => common::hasPriv('story', 'batchReview') ? '' : 'hidden', 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => common::hasPriv('story', 'batchAssignTo') ? '' : 'hidden','url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('story', 'batchClose') ? '' : 'hidden'), 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}")),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $rejectItems = array();
