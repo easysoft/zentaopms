@@ -328,7 +328,7 @@ class bugZen extends bug
      */
     private function getProductMembersForCreate(object $bug): array
     {
-        $productMembers = $this->bug->getProductMemberPairs($bug->productID, $bug->branch);
+        $productMembers = $this->bug->getProductMemberPairs($bug->productID, (string)$bug->branch);
         $productMembers = array_filter($productMembers);
         if(empty($productMembers)) $productMembers = $this->view->users;
 
@@ -517,13 +517,13 @@ class bugZen extends bug
      * 获取导出文件名。
      * Get export file name.
      *
-     * @param  int       $executionID
-     * @param  string    $browseType
-     * @param  object    $product
+     * @param  int         $executionID
+     * @param  string      $browseType
+     * @param  object|bool $product
      * @access protected
      * @return string
      */
-    protected function getExportFileName(int $executionID, string $browseType, object $product): string
+    protected function getExportFileName(int $executionID, string $browseType, object|bool $product): string
     {
         $fileName = $this->lang->bug->common;
         if($executionID)
@@ -546,12 +546,12 @@ class bugZen extends bug
      * 获取导出字段。
      * Get export fields.
      *
-     * @param  int       $executionID
-     * @param  object    $product
+     * @param  int         $executionID
+     * @param  object|bool $product
      * @access protected
      * @return string
      */
-    protected function getExportFields(int $executionID, object $product): string
+    protected function getExportFields(int $executionID, object|bool $product): string
     {
         $exportFields = $this->config->bug->exportFields;
         if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace('branch,', '', $exportFields);

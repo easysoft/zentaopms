@@ -4,10 +4,18 @@ $(document).on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const form = new FormData();
     const url  = $(this).data('url');
+    const form = new FormData();
     checkedList.forEach((id) => form.append('bugIdList[]', id));
-    postAndLoadPage(url, form);
+
+    if($(this).hasClass('ajax-btn'))
+    {
+        $.ajaxSubmit({url, data:form});
+    }
+    else
+    {
+        postAndLoadPage(url, form);
+    }
 });
 
 /**

@@ -22,7 +22,7 @@ featureBar
 $canExportBug = hasPriv('bug', 'export');
 $canCreateBug = hasPriv('bug', 'create') && common::canModify('execution', $execution);
 
-if($canExportBug) $exportItem = array('icon' => 'export', 'class' => 'ghost', 'text' => $lang->bug->export, 'url' => $this->createLink('bug', 'export', "productID={$productID}&orderBy={$orderBy}&browseType=&executionID={$execution->id}"), 'data-toggle' => 'modal');
+if($canExportBug) $exportItem = array('icon' => 'export', 'class' => 'ghost', 'text' => $lang->bug->export, 'url' => $this->createLink('bug', 'export', "productID={$productID}&browseType=&executionID={$execution->id}"), 'data-toggle' => 'modal');
 if($canCreateBug) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->bug->create, 'url' => $this->createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}"));
 toolbar
 (
@@ -60,7 +60,7 @@ if($canBatchAssignTo)
     $assignedToItems = array();
     foreach ($users as $account => $name)
     {
-        $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
+        $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
     }
 
     menu(
@@ -69,11 +69,11 @@ if($canBatchAssignTo)
         set::items($assignedToItems)
     );
 
-    $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
+    $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
 }
 
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+jsVar('sortLink', helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('pageSummary', $summary);
 jsVar('checkedSummary', $lang->selectedItems);
 
