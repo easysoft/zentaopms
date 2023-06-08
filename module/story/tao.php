@@ -1464,11 +1464,10 @@ class storyTao extends storyModel
         $title   = $isClick ? '' : $this->lang->story->changeTip;
         $actions[] = array
         (
-            'name'        => 'change',
-            'data-toggle' => !$isClick ? null : 'modal',
-            'data-url'    => !$isClick ? null : helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type", '', true),
-            'hint'        => $title,
-            'disabled'    => !$isClick,
+            'name'     => 'change',
+            'url'      => !$isClick ? null : helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type", '', true),
+            'hint'     => $title,
+            'disabled' => !$isClick,
         );
 
         /* Submitreview, review, recall buttons. */
@@ -1502,11 +1501,10 @@ class storyTao extends storyModel
             $link      = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type", '', true);
             $actReview = array
             (
-                'name'        => 'review',
-                'data-toggle' => !$isClick ? null : 'modal',
-                'data-url'    => !$isClick ? null : $link,
-                'hint'        => $title,
-                'disabled'    => !$isClick
+                'name'     => 'review',
+                'url'      => !$isClick ? null : $link,
+                'hint'     => $title,
+                'disabled' => !$isClick
             );
         }
 
@@ -1606,18 +1604,16 @@ class storyTao extends storyModel
         $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", '', true);
         $actions[] = array
         (
-            'name'        => 'edit',
-            'data-toggle' => !$isClick ? null : 'modal',
-            'data-url'    => !$isClick ? null : $link,
-            'hint'        => $title,
-            'disabled'    => !$isClick
+            'name'     => 'edit',
+            'url'      => !$isClick ? null : $link,
+            'disabled' => !$isClick
         );
 
         /* Create test case button. */
         if($story->type != 'requirement' && $this->config->vision != 'lite')
         {
             $link      = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", '', true);
-            $actions[] = array('name' => 'testcase', 'data-toggle' => 'modal', 'data-url' => $link);
+            $actions[] = array('name' => 'testcase', 'url' => $link);
         }
 
         /* Batch create button. */
@@ -1647,11 +1643,10 @@ class storyTao extends storyModel
             $link        = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", '', true);
             $actions[]   = array
             (
-                'name'        => 'batchCreate',
-                'data-toggle' => !$isClick ? null : 'modal',
-                'data-url'    => !$isClick ? null : $link,
-                'hint'        => $title,
-                'disabled'    => !$isClick
+                'name'     => 'batchCreate',
+                'url'      => !$isClick ? null : $link,
+                'hint'     => $title,
+                'disabled' => !$isClick
             );
         }
 
