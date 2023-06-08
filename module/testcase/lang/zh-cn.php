@@ -319,6 +319,7 @@ $lang->testcase->parentScene        = "父场景";
 $lang->testcase->scene              = "所属场景";
 $lang->testcase->summary            = '本页共 %d 个顶级场景，%d 个独立用例。';
 $lang->testcase->summaryScene       = '本页共 %d 个顶级场景。';
+$lang->testcase->checkedSummary     = '已选中 {checked} 个用例，已执行 {run} 个。';
 $lang->testcase->deleteScene        = '删除场景';
 $lang->testcase->editScene          = '编辑场景';
 $lang->testcase->hasChildren        = '该场景有子场景或测试用例存在，要全部删除吗？';

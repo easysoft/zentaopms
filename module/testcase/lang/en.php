@@ -319,6 +319,7 @@ $lang->testcase->parentScene                 = "Parent Scene";
 $lang->testcase->scene                       = "Scene";
 $lang->testcase->summary                     = 'Total %d Top Scene，%d Independent test case.';
 $lang->testcase->summaryScene                = 'Total %d Top Scene.';
+$lang->testcase->checkedSummary              = '{checked} checked test cases, {run} run.';
 $lang->testcase->deleteScene                 = 'Delete Scene';
 $lang->testcase->editScene                   = 'Edit Scene';
 $lang->testcase->hasChildren                 = 'This scene has sub scene or test cases. Do you want to delete them all?';
