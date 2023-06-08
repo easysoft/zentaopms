@@ -284,7 +284,8 @@ class storyModel extends model
         $unclosedStatus = $this->lang->story->statusList;
         unset($unclosedStatus['closed']);
 
-        $branchParam = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
+        $productParam = '';
+        $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
         if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
         $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
