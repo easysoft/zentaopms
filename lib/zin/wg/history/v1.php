@@ -234,11 +234,7 @@ class history extends wg
 
         return new section
         (
-            setClass('histories'),
-            setClass($this->prop('class')),
-            setID('actionbox'),
-            set('data-textdiff', $lang->action->textDiff),
-            set('data-original', $lang->action->original),
+            setClass('history', 'pt-4', 'px-6', 'pb-6', 'canvas'),
             set::title($lang->history),
             to::actions
             (
