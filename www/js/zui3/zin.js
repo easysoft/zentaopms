@@ -1,8 +1,10 @@
 (function()
 {
     const config      = window.config;
+    const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
+    if(isIndexPage) return;
+
     const DEBUG       = config.debug;
-    const isIndexPage = config.currentModule === 'index' && (config.currentMethod === 'index' || config.currentMethod === 'index2');
     const currentCode = window.name.substring(4);
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();

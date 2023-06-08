@@ -228,7 +228,7 @@ function updateApp(code, url, title, type)
 
     if(oldState && oldState.code === code && oldState.url === url) return;
 
-    const displayUrl = $.createLink('index', 'index2', 'open=' + btoa(url));
+    const displayUrl = $.createLink('index', 'index', 'open=' + btoa(url));
     app.currentUrl   = url;
     window.history.pushState(state, title, displayUrl);
     if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
