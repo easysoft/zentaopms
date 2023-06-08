@@ -6,7 +6,7 @@ $config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 's
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
-$config->story->datatable->fieldList['id']['width']    = '60';
+$config->story->datatable->fieldList['id']['width']    = '80';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
 $config->story->datatable->fieldList['id']['type']     = 'id';
 $config->story->datatable->fieldList['id']['group']    = 'group1';
@@ -23,13 +23,13 @@ if($app->tab == 'execution')
 
 $config->story->datatable->fieldList['title']['title']    = 'title';
 $config->story->datatable->fieldList['title']['fixed']    = 'left';
-$config->story->datatable->fieldList['title']['width']    = 200;
+$config->story->datatable->fieldList['title']['width']    = '342';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 $config->story->datatable->fieldList['title']['group']    = 'group1';
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
-$config->story->datatable->fieldList['pri']['width']    = '40';
+$config->story->datatable->fieldList['pri']['width']    = '52';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 $config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 $config->story->datatable->fieldList['pri']['type']     = 'pri';
@@ -37,7 +37,7 @@ $config->story->datatable->fieldList['pri']['group']    = 'group2';
 
 $config->story->datatable->fieldList['plan']['title']      = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']      = 'no';
-$config->story->datatable->fieldList['plan']['width']      = '64';
+$config->story->datatable->fieldList['plan']['width']      = '136';
 $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
@@ -51,7 +51,7 @@ $config->story->datatable->fieldList['category']['group']    = 'group3';
 
 $config->story->datatable->fieldList['status']['title']     = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']     = 'no';
-$config->story->datatable->fieldList['status']['width']     = '60';
+$config->story->datatable->fieldList['status']['width']     = '80';
 $config->story->datatable->fieldList['status']['required']  = 'no';
 $config->story->datatable->fieldList['status']['type']      = 'status';
 $config->story->datatable->fieldList['status']['statusMap'] = $lang->story->statusList;
@@ -68,7 +68,7 @@ $config->story->datatable->fieldList['branch']['group']      = 'group3';
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->story->datatable->fieldList['openedBy']['type']     = 'user';
 $config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['openedBy']['width']    = '60';
+$config->story->datatable->fieldList['openedBy']['width']    = '80';
 $config->story->datatable->fieldList['openedBy']['required'] = 'no';
 $config->story->datatable->fieldList['openedBy']['group']    = 'group4';
 
@@ -80,7 +80,7 @@ $config->story->datatable->fieldList['openedDate']['group']    = 'group4';
 
 $config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->story->datatable->fieldList['estimate']['width']    = '50';
+$config->story->datatable->fieldList['estimate']['width']    = '59';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 $config->story->datatable->fieldList['estimate']['group']    = 'group4';
 
