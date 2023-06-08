@@ -55,6 +55,6 @@ window.confirmDelete = function(buildID)
  */
 window.changeProduct = function()
 {
-    const link = $.createLink('execution', 'build', 'executionID=' + executionID + '&type=product&param=' + $(this).val());
+    const link = changeProductLink.replace('{productID}', $(this).val());
     loadPage(link);
 }

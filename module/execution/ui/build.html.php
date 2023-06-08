@@ -10,11 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Define the set::module('execution') feature bar on main menu. */
+/* zin: Define the set::module('executionBuild') feature bar on main menu. */
 featureBar
 (
     set::current($type),
-    set::linkParams("executionID={$executionID}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::linkParams("executionID={$execution->id}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     div
     (
         set::class('select-product-box'),
@@ -38,8 +38,9 @@ toolbar
 );
 
 jsVar('orderBy', $orderBy);
-jsVar('executionID', $executionID);
-jsVar('sortLink', helper::createLink('execution', 'build', "executionID={$executionID}&type={$type}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('executionID', $execution->id);
+jsVar('sortLink', helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('changeProductLink', helper::createLink('execution', 'build', "executionID={$execution->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
@@ -54,7 +55,7 @@ dtable
         usePager(),
         set::recPerPage($pager->recPerPage),
         set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('execution', 'build', "executionID={$executionID}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}")),
+        set::linkCreator(helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}")),
     ),
 );
 

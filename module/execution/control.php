@@ -490,8 +490,7 @@ class execution extends control
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($tasks2Imported);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager(count($tasks2Imported), $recPerPage, $pageID);
 
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
         $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
@@ -1279,8 +1278,7 @@ class execution extends control
         /* Header and position. */
         $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->build;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->builds      = $this->executionZen->processBuildListData($builds, $executionID, $this->app->rawModule);
-        $this->view->executionID = $executionID;
+        $this->view->builds      = $this->executionZen->processBuildListData($builds, $executionID);
         $this->view->product     = $type == 'product' ? $param : 'all';
         $this->view->products    = $products;
         $this->view->type        = $type;
@@ -3449,8 +3447,7 @@ class execution extends control
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($allStories);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $pager      = new pager(count($allStories), $recPerPage, $pageID);
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
         $project = $object;

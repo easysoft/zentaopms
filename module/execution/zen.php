@@ -17,11 +17,10 @@ class executionZen extends execution
      *
      * @param  array     $buildList
      * @param  string    $executionID
-     * @param  string    $from        execution|projectbuild
      * @access protected
      * @return object[]
      */
-    protected function processBuildListData(array $buildList, int $executionID = 0, $from = 'execution'): array
+    protected function processBuildListData(array $buildList, int $executionID = 0): array
     {
         $this->loadModel('build');
 
@@ -44,10 +43,11 @@ class executionZen extends execution
                 }
                 $build->branchName = trim($build->branchName, ',');
             }
-            $build->actions = $this->build->buildActionList($build, $executionID, $from);
+            $build->actions = $this->build->buildActionList($build, $executionID, 'execution');
         }
 
         if(!$showBranch) unset($this->config->build->dtable->fieldList['branch']);
+        unset($this->config->build->dtable->fieldList['execution']);
 
         return array_values($buildList);
     }
