@@ -25,21 +25,21 @@ class datatableModel extends model
         if(!isset($this->config->$module)) $this->loadModel($module);
         if($this->session->hasProduct == 0 and (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
         {
-            $productIndex = array_search('product', $this->config->$module->datatable->defaultField);
-            if($productIndex) unset($this->config->$module->datatable->defaultField[$productIndex]);
-            if(isset($this->config->$module->datatable->fieldList['product'])) unset($this->config->$module->datatable->fieldList['product']);
+            $productIndex = array_search('product', $this->config->$module->dtable->defaultField);
+            if($productIndex) unset($this->config->$module->dtable->defaultField[$productIndex]);
+            if(isset($this->config->$module->dtable->fieldList['product'])) unset($this->config->$module->dtable->fieldList['product']);
         }
-        if($this->session->currentProductType === 'normal') unset($this->config->$module->datatable->fieldList['branch']);
-        foreach($this->config->$module->datatable->fieldList as $field => $items)
+        if($this->session->currentProductType === 'normal') unset($this->config->$module->dtable->fieldList['branch']);
+        foreach($this->config->$module->dtable->fieldList as $field => $items)
         {
             if($field === 'branch')
             {
-                if($this->session->currentProductType === 'branch')   $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->branch;
-                if($this->session->currentProductType === 'platform') $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->platform;
+                if($this->session->currentProductType === 'branch')   $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->branch;
+                if($this->session->currentProductType === 'platform') $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->platform;
                 continue;
             }
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
-            $this->config->$module->datatable->fieldList[$field]['title'] = $title;
+            $this->config->$module->dtable->fieldList[$field]['title'] = $title;
         }
 
         if($this->config->edition != 'open')
@@ -48,14 +48,14 @@ class datatableModel extends model
             foreach($fields as $field)
             {
                 if($field->buildin) continue;
-                $this->config->$module->datatable->fieldList[$field->field]['title']    = $field->name;
-                $this->config->$module->datatable->fieldList[$field->field]['width']    = '120';
-                $this->config->$module->datatable->fieldList[$field->field]['fixed']    = 'no';
-                $this->config->$module->datatable->fieldList[$field->field]['required'] = 'no';
+                $this->config->$module->dtable->fieldList[$field->field]['title']    = $field->name;
+                $this->config->$module->dtable->fieldList[$field->field]['width']    = '120';
+                $this->config->$module->dtable->fieldList[$field->field]['fixed']    = 'no';
+                $this->config->$module->dtable->fieldList[$field->field]['required'] = 'no';
             }
         }
 
-        return $this->config->$module->datatable->fieldList;
+        return $this->config->$module->dtable->fieldList;
     }
 
     /**
@@ -90,7 +90,7 @@ class datatableModel extends model
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
         {
-            $setting = $this->config->$module->datatable->defaultField;
+            $setting = $this->config->$module->dtable->defaultField;
             $order   = 1;
             foreach($setting as $key => $value)
             {
