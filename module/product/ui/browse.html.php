@@ -17,8 +17,6 @@ $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 
-$this->loadModel('story');
-
 /* Generate sidebar to display module tree menu. */
 $fnGenerateSideBar = function() use ($moduleTree, $moduleID)
 {
@@ -168,170 +166,14 @@ foreach($cols as $key => $col)
     $cols[$key] = $col;
 }
 
-/* Build action menus. */
-$fnBuildActions = function($story) use ($lang, $storyType)
-{
-    $demoUrl = '/index.php?m=product&f=export&programID=0&status=noclosed&orderBy=program_asc&param=0';
-
-    if(!common::canBeChanged('story', $story))
-    {
-        return array(array
-        (
-            'name'        => 'closed',
-            'hint'        => $lang->close,
-            'disabled'    => false,
-            'data-toggle' => 'modal',
-            'data-url'    => $demoUrl
-        ));
-    }
-
-    $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-    if($story->URChanged)
-    {
-        return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'data-url' => $demoUrl));
-    }
-
-    $actions = array();
-
-    /* Change button. */
-    $isClickable = $this->story->isClickable($story, 'change');
-    $actions[] = array
-    (
-        'name'        => 'change',
-        'data-toggle' => 'modal',
-        'data-url'    => $demoUrl,
-        'hint'        => $isClickable ? null : $lang->story->changeTip,
-        'disabled'    => !$isClickable,
-    );
-
-    /* Submit review button. */
-    $actSubmitreview = array();
-    $actReview       = array();
-    $actRecall       = array();
-    if(strpos('draft,changing', $story->status) !== false)
-    {
-        $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'data-url' => $demoUrl);
-    }
-    else
-    {
-        $isClickable = $this->story->isClickable($story, 'review');
-        $hint        = $this->lang->story->review;
-        if(!$isClickable && $story->status != 'closed')
-        {
-            if($story->status == 'active')
-            {
-                $hint = $this->lang->story->reviewTip['active'];
-            }
-            elseif($storyReviewer && in_array($this->app->user->account, $storyReviewer))
-            {
-                $hint = $this->lang->story->reviewTip['reviewed'];
-            }
-            elseif($storyReviewer && !in_array($this->app->user->account, $storyReviewer))
-            {
-                $hint = $this->lang->story->reviewTip['notReviewer'];
-            }
-        }
-
-        $actReview = array('name' => 'review', 'data-toggle' => 'modal', 'data-url' => $demoUrl, 'hint' => $hint, 'disabled' => !$isClickable);
-    }
-
-    $isClickable = $this->story->isClickable($story, 'recall');
-    $hint        = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-    $hint        = $isClickable ? $hint : $this->lang->story->recallTip['actived'];
-    $actRecall   = array('name' => 'recall', 'data-toggle' => 'modal', 'data-url' => $demoUrl, 'hint' => $hint, 'disabled' => !$isClickable);
-
-    if(!empty($actSubmitreview))
-    {
-        $actions[] = $actSubmitreview;
-        $actions[] = array('name' => 'other', 'type' => 'dropdown', 'items' => array($actRecall));
-    }
-    else
-    {
-        if($actReview['disabled'] && !$actRecall['disabled'])
-        {
-            $actions[] = $actRecall;
-            $actions[] = array('name' => 'other', 'type' => 'dropdown', 'items' => array($actReview));
-        }
-        else
-        {
-            $actions[] = $actReview;
-            $actions[] = array('name' => 'other', 'type' => 'dropdown', 'items' => array($actRecall));
-        }
-    }
-
-    if($this->app->tab == 'product' && $storyType == 'requirement')
-    {
-        $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $demoUrl);
-    }
-
-    if(($this->app->rawModule == 'projectstory' || ($this->app->tab != 'product' && $storyType == 'requirement')) && $this->config->vision != 'lite')
-    {
-
-        $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $demoUrl);
-
-        /* Unlink story button. */
-        if(!empty($execution) && $execution->hasProduct)
-        {
-            $actions[] = array('name' => 'unlinkStory', 'data-toggle' => 'modal', 'data-url' => $demoUrl);
-        }
-    }
-
-    if($this->app->tab == 'product' && $storyType == 'story')
-    {
-        $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $demoUrl);
-    }
-
-    /* Edit button. */
-    $actions[] = array('name' => 'edit', 'data-toggle' => 'modal', 'data-url' => $demoUrl, 'hint' => $hint, 'disabled' => !$isClickable);
-
-    if($story->type != 'requirement' && $this->config->vision != 'lite')
-    {
-        $actions[] = array('name' => 'testcase', 'data-toggle' => 'modal', 'data-url' => $demoUrl);
-    }
-
-    /* Batch create button. */
-    $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-    if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
-    {
-        $isClick = $this->story->isClickable($story, 'batchcreate');
-        $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-        if(!$isClick && $story->status != 'closed')
-        {
-            if($story->parent > 0)
-            {
-                $title = $this->lang->story->subDivideTip['subStory'];
-            }
-            elseif(!empty($story->twins))
-            {
-                $title = $this->lang->story->subDivideTip['twinsSplit'];
-            }
-            else
-            {
-                if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
-                if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
-            }
-        }
-
-        $actions[] = array
-        (
-            'name'        => 'batchCreate',
-            'data-toggle' => 'modal',
-            'data-url'    => $demoUrl,
-            'hint'        => $title,
-            'disabled'    => !$isClick,
-        );
-    }
-
-
-    return $actions;
-};
-
 /* DataTable data. */
+$this->loadModel('story');
+
 $data = array();
 foreach($stories as $story)
 {
     $story->taskCount = $storyTasks[$story->id];
-    $story->actions   = $fnBuildActions($story);
+    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
 
     $data[] = $story;
 
@@ -341,7 +183,7 @@ foreach($stories as $story)
     foreach($story->children as $key => $child)
     {
         $child->taskCount = $storyTasks[$child->id];
-        $child->actions   = $fnBuildActions($child);
+        $child->actions   = $this->story->buildActionButtonList($child, 'browse');
 
         $data[] = $child;
     }
