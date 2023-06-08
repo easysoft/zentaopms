@@ -204,3 +204,60 @@ $config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']
 $config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['url']   = helper::createLink('task', 'deleteWorkhour', 'taskID={id}');
 $config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['order'] = 10;
 $config->task->effortTable->fieldList['actions']['actionsMap']['deleteWorkhour']['show']  = 'clickable';
+
+$config->task->dtable->importTask = new stdclass();
+
+$config->task->dtable->importTask->fieldList['id']['title']    = $lang->idAB;
+$config->task->dtable->importTask->fieldList['id']['name']     = 'id';
+$config->task->dtable->importTask->fieldList['id']['type']     = 'checkID';
+$config->task->dtable->importTask->fieldList['id']['sortType'] = 'desc';
+$config->task->dtable->importTask->fieldList['id']['checkbox'] = true;
+
+$config->task->dtable->importTask->fieldList['name']['title']       = $lang->task->name;
+$config->task->dtable->importTask->fieldList['name']['name']        = 'name';
+$config->task->dtable->importTask->fieldList['name']['type']        = 'nestedTitle';
+$config->task->dtable->importTask->fieldList['name']['link']        = helper::createLink('task', 'view', 'taskID={id}', '', true);
+$config->task->dtable->importTask->fieldList['name']['data-toggle'] = 'modal';
+
+$config->task->dtable->importTask->fieldList['pri']['title']    = $lang->priAB;
+$config->task->dtable->importTask->fieldList['pri']['name']     = 'pri';
+$config->task->dtable->importTask->fieldList['pri']['type']     = 'pri';
+$config->task->dtable->importTask->fieldList['pri']['sortType'] = true;
+$config->task->dtable->importTask->fieldList['pri']['group']    = 1;
+
+$config->task->dtable->importTask->fieldList['status']['title']     = $lang->statusAB;
+$config->task->dtable->importTask->fieldList['status']['name']      = 'status';
+$config->task->dtable->importTask->fieldList['status']['type']      = 'status';
+$config->task->dtable->importTask->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->task->dtable->importTask->fieldList['status']['sortType']  = true;
+$config->task->dtable->importTask->fieldList['status']['group']     = 1;
+
+$config->task->dtable->importTask->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
+$config->task->dtable->importTask->fieldList['assignedTo']['name']        = 'assignedTo';
+$config->task->dtable->importTask->fieldList['assignedTo']['type']        = 'assign';
+$config->task->dtable->importTask->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->task->dtable->importTask->fieldList['assignedTo']['assignLink']  = helper::createLink('task', 'assignTo', "executionID={execution}&taskID={id}", '', true);
+$config->task->dtable->importTask->fieldList['assignedTo']['sortType']    = false;
+$config->task->dtable->importTask->fieldList['assignedTo']['group']       = 2;
+
+$config->task->dtable->importTask->fieldList['left']['title']    = $lang->task->leftAB;
+$config->task->dtable->importTask->fieldList['left']['name']     = 'left';
+$config->task->dtable->importTask->fieldList['left']['type']     = 'number';
+$config->task->dtable->importTask->fieldList['left']['sortType'] = true;
+$config->task->dtable->importTask->fieldList['left']['group']    = 2;
+
+$config->task->dtable->importTask->fieldList['deadline']['title']    = $lang->task->deadlineAB;
+$config->task->dtable->importTask->fieldList['deadline']['name']     = 'deadline';
+$config->task->dtable->importTask->fieldList['deadline']['type']     = 'date';
+$config->task->dtable->importTask->fieldList['deadline']['sortType'] = true;
+$config->task->dtable->importTask->fieldList['deadline']['group']    = 2;
+
+$config->task->dtable->importTask->fieldList['execution']['title']    = $lang->task->stage;
+$config->task->dtable->importTask->fieldList['execution']['name']     = 'execution';
+$config->task->dtable->importTask->fieldList['execution']['type']     = 'desc';
+$config->task->dtable->importTask->fieldList['execution']['sortType'] = false;
+
+$config->task->dtable->importTask->fieldList['story']['title']    = $lang->task->story;
+$config->task->dtable->importTask->fieldList['story']['name']     = 'storyTitle';
+$config->task->dtable->importTask->fieldList['story']['type']     = 'desc';
+$config->task->dtable->importTask->fieldList['story']['sortType'] = false;
