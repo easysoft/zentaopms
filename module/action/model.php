@@ -249,7 +249,7 @@ class actionModel extends model
                 case 'release':
                     $result = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                     $record['product'] = $result->product;
-                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->in($result->build)->fetch('project');
                     break;
                 case 'task':
                     $fields = 'project, execution, story';
