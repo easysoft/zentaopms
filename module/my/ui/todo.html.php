@@ -70,7 +70,7 @@ $footToolbar = array('items' => array
     array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
     array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchFinish')),
     array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchClose'))
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary'));
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
