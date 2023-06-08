@@ -37,7 +37,7 @@ class dashboard extends wg
         'cellHeight?: int',                   // 网格高度。
         'blockFetch?: string|function|array', // 区块数据获取 url 或选项。
         'blockDefaultSize?: array',           // 区块默认大小。
-        'blockSizeMap: array',                // 区块大小映射。
+        'blockSizeMap?: array',                // 区块大小映射。
         'blockMenu?: array',                  // 区块菜单。
         'onLayoutChange?: function'           // 布局变更事件。
     );
