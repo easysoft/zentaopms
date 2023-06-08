@@ -22,6 +22,11 @@ $config->build->dtable->fieldList['branch']['name']  = 'branchName';
 $config->build->dtable->fieldList['branch']['type']  = 'desc';
 $config->build->dtable->fieldList['branch']['group'] = 1;
 
+$config->build->dtable->fieldList['execution']['title'] = $lang->build->execution;
+$config->build->dtable->fieldList['execution']['name']  = 'executionName';
+$config->build->dtable->fieldList['execution']['type']  = 'desc';
+$config->build->dtable->fieldList['execution']['group'] = 1;
+
 $config->build->dtable->fieldList['path']['title'] = $lang->build->url;
 $config->build->dtable->fieldList['path']['name']  = 'path';
 $config->build->dtable->fieldList['path']['type']  = 'desc';

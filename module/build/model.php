@@ -63,13 +63,11 @@ class buildModel extends model
      */
     public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t2.deleted as executionDeleted, t3.name as productName')
+        $builds = $this->dao->select('t1.*, t2.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = 0 or t1.execution = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
-            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
@@ -77,6 +75,20 @@ class buildModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        $executionIdList = array();
+        foreach($builds as $build) $executionIdList[] = $build->execution;
+        $executions = $this->loadModel('execution')->getByIdList($executionIdList);
+
+        foreach($builds as $buildID => $build)
+        {
+            if($build->execution && !isset($executions[$build->execution])) unset($builds[$buildID]);
+
+            $build->executionID      = $build->execution;
+            $build->executionDeleted = $build->execution ? $executions[$build->execution]->deleted : 0;
+            $build->executionName    = $build->execution ? $executions[$build->execution]->name : '';
+        }
+        return $builds;
     }
 
     /**
@@ -84,10 +96,12 @@ class buildModel extends model
      *
      * @param  int    $projectID
      * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectBuildsBySearch($projectID, $queryID)
+    public function getProjectBuildsBySearch($projectID, $queryID, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
         /* If there are saved query conditions, reset the session. */
         if((int)$queryID)
@@ -107,14 +121,13 @@ class buildModel extends model
         $fields = array('id' => '`id`', 'name' => '`name`', 'product' => '`product`', 'desc' => '`desc`', 'project' => '`project`');
         foreach($fields as $field)
         {
-            if(strpos($this->session->projectBuildQuery, $field) !== false)
+            if(strpos($buildQuery, $field) !== false)
             {
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
         }
-        if(strpos($this->session->projectBuildQuery, 'execution') !== false) $buildQuery = str_replace('`execution`', 't2.`id`', $buildQuery);
 
-        return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery);
+        return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery, $orderBy, $pager);
     }
 
     /**
@@ -876,11 +889,13 @@ class buildModel extends model
 
         if(common::hasPriv('testtask', 'create')) $actions [] = $execution && $execution->deleted === '1' ? '-createTest' : 'createTest';
 
-        if(($from == 'execution' || !empty($execution->type) || $execution->type != 'kanban') && common::hasPriv('execution', 'bug')) $actions[] = 'viewBug';
-        if(in_array(true, array($from == 'projectbuild', empty($execution->type), $execution->type == 'kanban')) && common::hasPriv($module, 'view')) $from == 'projectbuild' ? 'projectBugList' : 'bugList';
+        $isNotKanban   = $from == 'execution' && !empty($execution->type) && $execution->type != 'kanban';
+        $isFromProject = $from == 'projectbuild' || empty($execution->type) || $execution->type == 'kanban';
+        if($isNotKanban && common::hasPriv('execution', 'bug')) $actions[] = 'viewBug';
+        if($isFromProject && common::hasPriv($module, 'view')) $actions[] = $from == 'projectbuild' ? 'projectBugList' : 'bugList';
 
-        if(common::hasPriv('build', 'edit'))   $actions[] = 'edit';
-        if(common::hasPriv('build', 'delete')) $actions[] = 'delete';
+        if(common::hasPriv($module, 'edit'))   $actions[] = $module . 'Edit';
+        if(common::hasPriv($module, 'delete')) $actions[] = 'delete';
 
         return $actions;
     }
