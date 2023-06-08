@@ -141,29 +141,31 @@ class miscModel extends model
      * @param string $directory
      * @return void
      */
-    public function getCacheFiles($directory)
+    public function cleanCachaFiles($directory)
     {
         $files = glob($directory . DS . '*.cache');
 
-        foreach($files as $file) $this->readCacheFile($file);
+        foreach($files as $file) $this->deleteExpiredFile($file);
 
         $subdirectories = glob($directory . DS . '*', GLOB_ONLYDIR);
 
-        foreach($subdirectories as $subdirectory) $this->getCacheFiles($subdirectory);
+        foreach($subdirectories as $subdirectory) $this->cleanCachaFiles($subdirectory);
     }
 
     /**
-     * Read cache file content, and delete it if expired.
+     * Delete expired file.
      *
      * @param string $file
      * @return bool
      */
-    public function readCacheFile($file)
+    public function deleteExpiredFile($file)
     {
         $content = file_get_contents($file);
         $content = unserialize($content);
 
         if(is_null($content['time'])) return false;
         if(time() > $content['time']) return unlink($file);
+
+        return false;
     }
 }

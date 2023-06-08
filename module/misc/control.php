@@ -353,7 +353,7 @@ class misc extends control
             return;
         }
 
-        $this->misc->getCacheFiles(rtrim($this->app->getCacheRoot(), DS));
+        $this->misc->cleanCachaFiles(rtrim($this->app->getCacheRoot(), DS));
 
         echo 'Cleaned cache files.';
     }
