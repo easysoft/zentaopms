@@ -512,6 +512,7 @@ class storyZen extends story
         $fields['duplicateStory']['required'] = true;
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment, 'width' => 'full');
+        $this->view->users = $users;
         return $fields;
     }
 
