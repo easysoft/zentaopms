@@ -61,7 +61,9 @@ if($parent or !$product->shadow)
 
 formPanel
 (
-    set::title($lang->productplan->create),
+    set::title($title),
+    on::change('#begin', 'resetDelta'),
+    on::change('#end', 'resetDelta'),
     $formHeader,
     $parentForm,
     formGroup
