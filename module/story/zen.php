@@ -612,13 +612,14 @@ class storyZen extends story
      * 根据配置，删除非必要的表单字段配置。
      * Remove form fields for batch create.
      *
+     * @param  int       $productID
      * @param  array     $fields
      * @param  string    $productType
      * @param  string    $storyType
      * @access protected
      * @return array
      */
-    protected function removeFormFieldsForBatchCreate(array $fields, string $productType, string $storyType = 'story'): array
+    protected function removeFormFieldsForBatchCreate(int $productID, array $fields, string $productType, string $storyType = 'story'): array
     {
         $product = $this->product->getByID($productID);
 
@@ -875,7 +876,7 @@ class storyZen extends story
     {
         /* Clear title when switching products and set the session for the current product. */
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
-        helper::setcookie('preProductID', $productID);
+        helper::setcookie('preProductID', (string)$productID);
 
         $initStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => 0, 'branch' => $this->view->branchID);
         $stories   = array();

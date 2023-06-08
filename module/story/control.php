@@ -172,11 +172,11 @@ class story extends control
         {
             $story = $this->story->getByID($storyID);
             $this->view->storyTitle = isset($story->title) ? $story->title : '';
-            if(!$this->storyTao->checkCanSubdivide($story, !empty($product->shadow))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID);
-        $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $product->type, $storyType);
+        $fields = $this->storyZen->removeFormFieldsForBatchCreate($productID, $fields, $product->type, $storyType);
 
         $this->view->title            = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->product          = $product;
