@@ -86,7 +86,7 @@ class datatable extends control
         if(empty($setting))
         {
             $this->loadModel($module);
-            if (isset($this->config->$module->dtable->defaultField)) $setting = json_encode($this->config->$module->dtable->defaultField);
+            if(isset($this->config->$module->dtable->defaultField)) $setting = json_encode($this->config->$module->dtable->defaultField);
         }
 
         $cols = $this->datatable->getFieldList($module);
