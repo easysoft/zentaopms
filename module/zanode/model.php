@@ -117,7 +117,7 @@ class zanodemodel extends model
                 'memory' => (int)$data->memory,
             );
 
-            $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN")));
+            $result = json_decode(commonModel::http($agnetUrl . static::KVM_CREATE_PATH, json_encode($param), null, array("Authorization:$host->tokenSN"), 'data', 'POST', 10));
 
             if(empty($result))
             {
@@ -192,7 +192,7 @@ class zanodemodel extends model
             'vm'      => $node->name
         );
 
-        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         
         if(!empty($result) and $result->code == 'success')
@@ -230,6 +230,9 @@ class zanodemodel extends model
         $newSnapshot->desc        = $data->desc;
         $newSnapshot->status      = 'creating';
         $newSnapshot->osName      = $node->osName;
+        $newSnapshot->memory      = 0;
+        $newSnapshot->disk        = 0;
+        $newSnapshot->fileSize    = 0;
         $newSnapshot->from        = 'snapshot';
         $newSnapshot->createdBy   = $this->app->user->account;
         $newSnapshot->createdDate = helper::now();
@@ -252,7 +255,7 @@ class zanodemodel extends model
             'vm'   => $node->name
         ));
 
-        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(!empty($result) and $result->code == 'success')
         {
@@ -280,6 +283,9 @@ class zanodemodel extends model
         $newSnapshot->desc        = '';
         $newSnapshot->status      = 'creating';
         $newSnapshot->osName      = $node->osName;
+        $newSnapshot->memory      = 0;
+        $newSnapshot->disk        = 0;
+        $newSnapshot->fileSize    = 0;
         $newSnapshot->from        = 'snapshot';
         $newSnapshot->createdBy   = 'system';
         $newSnapshot->createdDate = helper::now();
@@ -302,7 +308,7 @@ class zanodemodel extends model
             'vm'      => $node->name
         ));
 
-        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
 
         if(!empty($result) and $result->code == 'success')
@@ -378,7 +384,7 @@ class zanodemodel extends model
             'vm'      => $node->name
         ));
 
-        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http($agnetUrl . static::SNAPSHOT_CREATE_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(!empty($result) and $result->code == 'success')
         {
@@ -413,7 +419,7 @@ class zanodemodel extends model
             'vm'   => $node->name
         );
 
-        $result = commonModel::http($agnetUrl . static::SNAPSHOT_REMOVE_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"));
+        $result = commonModel::http($agnetUrl . static::SNAPSHOT_REMOVE_PATH, json_encode($param,JSON_NUMERIC_CHECK), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
         $result = json_decode($result);
 
         if(!empty($result) and $result->code == 'success')
@@ -450,7 +456,7 @@ class zanodemodel extends model
         $path     = '/api/v1/kvm/' . $node->name . '/' . $type;
         $param    = array('vmUniqueName' => $node->name);
 
-        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->tokenSN"));
+        $result = commonModel::http($agnetUrl . $path, $param, array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
         $data   = json_decode($result, true);
 
         if(empty($data)) return $this->lang->zanode->notFoundAgent;
@@ -484,7 +490,7 @@ class zanodemodel extends model
         {
             $req = array( 'name' => $node->name );
             $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
-            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->tokenSN"));
+            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
 
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->zanode->notFoundAgent;
@@ -815,8 +821,15 @@ class zanodemodel extends model
 
         foreach($snapshotList as $name => $snapshot)
         {
-            if($snapshot->status == 'creating' and (time() - strtotime($snapshot->createdDate)) > 1800)
+            if($snapshot->status == 'creating' and (time() - strtotime($snapshot->createdDate)) > 600)
             {
+                if($snapshot->name == 'defaultSnap' && $snapshot->createdBy == "system")
+                {
+                    $this->dao->delete()->from(TABLE_IMAGE)->where('id')->eq($snapshot->id)->exec();
+                    $this->dao->update(TABLE_ZAHOST)->data(array("status" => "wait"))->where("id")->eq($snapshot->host)->exec();
+                    continue;
+                }
+
                 $this->dao->update(TABLE_IMAGE)->set('status')->eq('failed')->where('id')->eq($snapshot->id)->exec();
                 $snapshotList[$name]->status = 'failed';
             }
@@ -915,7 +928,7 @@ class zanodemodel extends model
         if(empty($node) or empty($node->parent) or empty($node->vnc)) return false;
 
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
-        $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->tokenSN"), 'json'));
+        $result   = json_decode(commonModel::http("$agnetUrl?port={$node->vnc}", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'), array("Authorization:$node->tokenSN"), 'json', 'POST', 10));
 
         if(empty($result) or $result->code != 'success') return false;
 
@@ -940,7 +953,7 @@ class zanodemodel extends model
     public function getTaskStatus($node, $taskID = 0, $type = '', $status = '')
     {
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_STATUS_PATH;
-        $result   = json_decode(commonModel::http($agnetUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->tokenSN"), 'json'));
+        $result   = json_decode(commonModel::http($agnetUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->tokenSN"), 'json', 'POST', 10));
 
         if(empty($result) or $result->code != 'success') return false;
         $data = $result->data;
@@ -994,7 +1007,7 @@ class zanodemodel extends model
      */
     public function getServiceStatus($node)
     {
-        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array('services' => 'all')), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 2));
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->zap}/api/v1/service/check", json_encode(array('services' => 'all')), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
         if(empty($result->data->ztfStatus) || $result->code != 'success')
         {
@@ -1124,7 +1137,7 @@ class zanodemodel extends model
             'task' => intval($task)
         );
 
-        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN")));
+        $result = json_decode(commonModel::http("http://{$node->ip}:{$node->ztf}/api/v1/jobs/add", json_encode($params), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
         if(empty($result) or $result->code != 0)
         {
             $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($task)->exec();
