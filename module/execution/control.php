@@ -444,23 +444,16 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $fromExecution
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importTask($toExecution, $fromExecution = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importTask($toExecution, $fromExecution = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(!empty($_POST))
-        {
-            $this->execution->importTask($toExecution);
-
-            /* If link from no head then reload. */
-            if(isonlybody()) return print(js::reload('parent'));
-
-            return print(js::locate(inlink('importTask', "toExecution=$toExecution&fromExecution=$fromExecution"), 'parent'));
-        }
+        if(!empty($_POST)) $this->execution->importTask($toExecution);
 
         $execution   = $this->commonAction($toExecution);
         $toExecution = $execution->id;
@@ -501,6 +494,8 @@ class execution extends control
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;
+        $this->view->orderBy          = $orderBy;
+        $this->view->memberPairs      = $this->loadModel('user')->getPairs('noletter|pofirst');
         $this->display();
     }
 
