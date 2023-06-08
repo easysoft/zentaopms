@@ -33,7 +33,7 @@ $cols = array_values($config->my->todo->dtable->fieldList);
 $data = array_values($todos);
 toolbar
 (
-    item
+    common::hasPriv('todo', 'export') ? item
     (
         set(array(
             'text'  => $lang->todo->export,
@@ -42,17 +42,23 @@ toolbar
             'url'   => createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy"),
             'data-toggle' => 'modal'
         ))
-    ),
-    btngroup
+    ) : null,
+    common::hasPriv('todo', 'create') || common::hasPriv('todo', 'batchCreate') ? btngroup
     (
-        btn
+        common::hasPriv('todo', 'create') ? btn
         (
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('todo', 'create')),
             $lang->todo->create
+        ) : btn
+        (
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::url(helper::createLink('todo', 'batchCreate')),
+            $lang->todo->batchCreate
         ),
-        dropdown
+        common::hasPriv('todo', 'create') && common::hasPriv('todo', 'batchCreate') ? dropdown
         (
             btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array
@@ -61,15 +67,15 @@ toolbar
                 array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal')
             )),
             set::placement('bottom-end')
-        )
-    )
+        ) : null
+    ) : null
 );
 
 $footToolbar = array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
-    array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchFinish')),
-    array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchClose'))
+    array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('todo', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")),
+    array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('todo', 'batchFinish') ? '' : 'hidden'), 'data-url' => helper::createLink('todo', 'batchFinish')),
+    array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('todo', 'batchClose') ? '' : 'hidden'), 'data-url' => helper::createLink('todo', 'batchClose'))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
@@ -85,7 +91,7 @@ dtable
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', jsRaw('window.generateHtml'), 'checkedInfo', 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', common::hasPriv('todo', 'import2Today') && $importFuture ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),
 );
 
 render();
