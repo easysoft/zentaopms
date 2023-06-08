@@ -45,3 +45,42 @@ window.setStatistics = function(element, checks)
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount).replaceAll('%estimate%', estimate).replaceAll('%consumed%', consumed).replaceAll('%left%', left)};
     return zui.formatString(element.options.defaultSummary);
 }
+
+/**
+ * 对截至日期列进行重定义。
+ * Redefine the deadline column.
+ *
+ * @param  array  result
+ * @param  array  info
+ * @access public
+ * @return string|array
+ */
+window.renderCell = function(result, info)
+{
+    if(info.col.name == 'deadline')
+    {
+        const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
+        const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
+        if(result == today)
+        {
+            result[0] = {html: '<span class="label warning-pale rounded-full size-sm">' + todayLabel + '</span>'};
+        }
+        else if(result == yesterday)
+        {
+            result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + yesterdayLabel + '</span>'};
+        }
+        else if(result < yesterday)
+        {
+            result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result + '</span>'};
+        }
+    }
+    return result;
+}
+
+function convertStringToDate(dateString)
+{
+    dateString = dateString.split('-');
+    dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
+
+    return Date.parse(dateString);
+}

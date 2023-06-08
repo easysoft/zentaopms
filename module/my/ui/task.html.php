@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('todayLabel', $lang->today);
+jsVar('yesterdayLabel', $lang->yesterday);
 
 featureBar
 (
@@ -32,6 +34,7 @@ dtable
     set::data($data),
     set::userMap($users),
     set::fixedLeftWidth('44%'),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::checkable(true),
     set::defaultSummary(array('html' => $summary)),
     set::checkedSummary($lang->execution->checkedSummary),
