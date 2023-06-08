@@ -695,11 +695,6 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $method, $params)));
         }
 
-        $this->app->loadLang('task');
-        $this->app->loadLang('bug');
-        $this->app->loadLang('testcase');
-        $this->app->loadLang('execution');
-
         $this->commonAction($storyID);
         $story = $this->view->story;
         $this->story->getAffectedScope($story);

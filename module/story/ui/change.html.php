@@ -101,22 +101,26 @@ $formItems['title'] = formGroup
     ),
     set::required($fields['title']['required'])
 );
-$formItems['status'] = formRow
+$formItems['hidden'] = formRow
 (
     set::hidden(true),
     formGroup
     (
-        input(set::name('status'), set::value($fields['status']['default']))
+        input(set::type('hidden'), set::name('status'), set::value($fields['status']['default'])),
+        input(set::type('hidden'), set::name('lastEditedDate'), set::value($story->lastEditedDate))
     )
 );
 $formItems['spec'] = formGroup
 (
+    set::width('full'),
+    set::name('spec'),
     set::label($fields['spec']['title']),
     set::control($fields['spec']['control']),
     set::value($fields['spec']['default']),
+    set::required($fields['spec']['required']),
     set::tip($lang->story->specTemplate)
 );
-unset($fields['reviewer'], $fields['title'], $fields['color'], $fields['status'], $fields['spec']);
+unset($fields['reviewer'], $fields['title'], $fields['color'], $fields['status'], $fields['lastEditedDate'], $fields['spec']);
 
 foreach($fields as $field => $attr)
 {
@@ -215,7 +219,6 @@ $formItems['affected'] = formGroup
         ),
     )
 );
-$formItems['lastEditedDate'] = input(set::type('hidden'), set::name('lastEditedDate', set::id('lastEditedDate'), set::value($story->lastEditedDate)));
 
 $formActions = formRow
 (

@@ -1274,6 +1274,15 @@ class storyTao extends storyModel
         return $stages;
     }
 
+    /**
+     * 获取该需求影响的项目和任务。
+     * Get affected projects and tasks for this story.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
     protected function getAffectedProjects(object $story, array $users): object
     {
         $this->app->loadLang('task');
@@ -1300,9 +1309,19 @@ class storyTao extends storyModel
         return $story;
     }
 
+    /**
+     * 获取该需求影响的Bug。
+     * Get affected bugs for this story.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
     protected function getAffectedBugs(object $story, array $users): object
     {
         $this->app->loadLang('bug');
+        $this->app->loadLang('execution');
         $this->config->story->affect->bugs = new stdclass();
         $this->config->story->affect->bugs->fields[] = array('name' => 'id', 'title' => $this->lang->idAB);
         $this->config->story->affect->bugs->fields[] = array('name' => 'title', 'title' => $this->lang->bug->title, 'link' => helper::createLink('bug', 'view', 'id={id}'));
@@ -1332,6 +1351,15 @@ class storyTao extends storyModel
         return $story;
     }
 
+    /**
+     * 获取该需求影响的用例。
+     * Get affected cases for this story.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
     protected function getAffectedCases(object $story, array $users): object
     {
         $this->app->loadLang('testcase');
@@ -1357,6 +1385,15 @@ class storyTao extends storyModel
         return $story;
     }
 
+    /**
+     * 获取该需求影响的孪生需求。
+     * Get affected twins for this story.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
     protected function getAffectedTwins(object $story, array $users): object
     {
         if(empty($story->twins)) return $story;
