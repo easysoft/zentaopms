@@ -368,7 +368,7 @@ dtable
     set::userMap($users),
     set::cols(array_values($config->testcase->dtable->fieldList)),
     set::data(array_values($scenes)),
-    set::checkable(true),
+    set::checkable($canBatchAction),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );
