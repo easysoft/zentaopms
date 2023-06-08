@@ -800,7 +800,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function execution(string $status = 'undone', int $projectID = 0, string $orderBy = 'order_asc', int $productID = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $this->loadModel('execution');
         $this->loadModel('task');
@@ -825,40 +825,22 @@ class project extends control
         $allExecution = $this->execution->getStatData($projectID, 'all');
         $this->view->allExecutionNum = empty($allExecution);
 
-        $this->view->title      = $this->lang->execution->allExecutions;
+        $executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
 
-        $executionStats  = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
-        $showToggleIcon  = false;
-
-        foreach($executionStats as $execution)
-        {
-            if(!empty($execution->tasks) or !empty($execution->children)) $showToggleIcon = true;
-        }
-
-        $changeStatusHtml  = "<div class='btn-group dropup'>";
-        $changeStatusHtml .= "<button data-toggle='dropdown' type='button' class='btn'>{$this->lang->statusAB} <span class='caret'></span></button>";
-        $changeStatusHtml .= "<div class='dropdown-menu search-list'><div class='list-group'>";
-        foreach($this->lang->execution->statusList as $statusAB => $statusText)
-        {
-            $actionLink        = $this->createLink('execution', 'batchChangeStatus', "status=$statusAB&projectID=$projectID");
-            $changeStatusHtml .= html::a('#', $statusText, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#executionForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
-        }
-        $changeStatusHtml .= "</div></div></div>";
-
-        $this->view->executionStats   = $executionStats;
-        $this->view->showToggleIcon   = $showToggleIcon;
-        $this->view->productList      = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->productID        = $productID;
-        $this->view->product          = $this->product->getByID($productID);
-        $this->view->projectID        = $projectID;
-        $this->view->project          = $project;
-        $this->view->projects         = $projects;
-        $this->view->pager            = $pager;
-        $this->view->orderBy          = $orderBy;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->status           = $status;
-        $this->view->isStage          = isset($project->model) && ($project->model == 'waterfall' || $project->model == 'waterfallplus');
-        $this->view->changeStatusHtml = common::hasPriv('execution', 'batchChangeStatus') ? $changeStatusHtml : '';
+        $this->view->title          = $this->lang->execution->allExecutions;
+        $this->view->executionStats = $executionStats;
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->productID      = $productID;
+        $this->view->product        = $this->product->getByID($productID);
+        $this->view->projectID      = $projectID;
+        $this->view->project        = $project;
+        $this->view->projects       = $projects;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status         = $status;
+        $this->view->isStage        = isset($project->model) && ($project->model == 'waterfall' || $project->model == 'waterfallplus');
+        $this->view->avatarList     = $this->user->getAvatarPairs('');
 
         $this->display();
     }
