@@ -256,6 +256,7 @@ class group extends control
             $privMethods        = array();
             $selectPrivs        = array();
             $selectedPrivIdList = array();
+            $relatedIdList      = array();
             $groupPrivsIdList   = $this->group->getPrivsIdListByGroup($groupID);
             foreach($privs as $priv)
             {
@@ -278,7 +279,13 @@ class group extends control
                 if(!empty($groupPrivs[$priv->module][$priv->method]))
                 {
                     $selectPrivs[$priv->parentCode][$priv->parent] ++;
-                    if(isset($priv->id)) $selectedPrivIdList[$priv->id] = $priv->id;
+                    if(isset($priv->id))
+                    {
+                        $selectedPrivIdList[$priv->id] = $priv->id;
+
+                        /* New permissions for secondary development are excluded. */
+                        if(is_numeric($priv->id)) $relatedIdList[$priv->id] = $priv->id;
+                    }
                 }
             }
             foreach($privList as $module => $privs)
@@ -312,7 +319,7 @@ class group extends control
             }
 
             $excludePrivsIdList = array_diff(array_keys($groupPrivsIdList), $selectedPrivIdList);
-            $relatedPrivData    = $this->group->getRelatedPrivs($selectedPrivIdList, '', $excludePrivsIdList);
+            $relatedPrivData    = $this->group->getRelatedPrivs($relatedIdList, '', $excludePrivsIdList);
 
             unset($privList['index']);
 
