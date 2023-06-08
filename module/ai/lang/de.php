@@ -11,7 +11,27 @@
 $lang->ai->common = 'AI';
 
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common = 'Prompts';
+$lang->ai->prompts->common    = 'Prompts';
+$lang->ai->prompts->emptyList = 'There is no prompts yet.';
+$lang->ai->prompts->create    = 'Create a prompt';
+
+$lang->ai->prompts->statuses = array();
+$lang->ai->prompts->statuses[''] = 'All';
+// $lang->ai->prompts->statuses['draft'] = 'Draft';
+
+$lang->ai->prompts->modules = array();
+$lang->ai->prompts->modules['']            = 'All';
+$lang->ai->prompts->modules['my']          = 'My';
+$lang->ai->prompts->modules['product']     = 'Product';
+$lang->ai->prompts->modules['project']     = 'Project';
+$lang->ai->prompts->modules['story']       = 'Story';
+$lang->ai->prompts->modules['productplan'] = 'Product Plan';
+$lang->ai->prompts->modules['release']     = 'Release';
+$lang->ai->prompts->modules['execution']   = 'Execution';
+$lang->ai->prompts->modules['task']        = 'Task';
+$lang->ai->prompts->modules['case']        = 'Test Case';
+$lang->ai->prompts->modules['bug']         = 'Bug';
+$lang->ai->prompts->modules['doc']         = 'Document';
 
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = 'Conversations';

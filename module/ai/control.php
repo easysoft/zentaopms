@@ -87,4 +87,22 @@ class ai extends control
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
     }
+
+    /**
+     * List prompts.
+     * 
+     * @param  string $module
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function prompts($module = '', $status = '')
+    {
+        $this->view->module     = $module;
+        $this->view->status     = $status;
+        $this->view->prompts    = $this->ai->getPrompts($module, $status);
+        $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->display();
+    }
 }

@@ -298,4 +298,19 @@ class aiModel extends model
         $response = $this->makeRequest('chat', $postData);
         return $this->parseChatResponse($response);
     }
+
+    /**
+     * Get list of prompts.
+     * 
+     * TODO: implement this.
+     * 
+     * @param  string  $module
+     * @param  string  $status
+     * @access public
+     * @return array
+     */
+    public function getPrompts($module = '', $status = '')
+    {
+        return array();
+    }
 }

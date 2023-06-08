@@ -11,7 +11,27 @@
 $lang->ai->common = 'AI';
 
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common = '提词';
+$lang->ai->prompts->common    = '提词';
+$lang->ai->prompts->emptyList = '暂时没有提词。';
+$lang->ai->prompts->create    = '创建提词';
+
+$lang->ai->prompts->statuses = array();
+$lang->ai->prompts->statuses[''] = '全部';
+// $lang->ai->prompts->statuses['draft'] = '草稿';
+
+$lang->ai->prompts->modules = array();
+$lang->ai->prompts->modules['']            = '所有分组';
+$lang->ai->prompts->modules['my']          = '地盘';
+$lang->ai->prompts->modules['product']     = '产品';
+$lang->ai->prompts->modules['project']     = '项目';
+$lang->ai->prompts->modules['story']       = '需求';
+$lang->ai->prompts->modules['productplan'] = '计划';
+$lang->ai->prompts->modules['release']     = '发布';
+$lang->ai->prompts->modules['execution']   = '执行';
+$lang->ai->prompts->modules['task']        = '任务';
+$lang->ai->prompts->modules['case']        = '用例';
+$lang->ai->prompts->modules['bug']         = 'Bug';
+$lang->ai->prompts->modules['doc']         = '文档';
 
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = '会话';
