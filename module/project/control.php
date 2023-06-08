@@ -1116,7 +1116,7 @@ class project extends control
             if($task->status == 'doing')   $testingCount ++;
             if($task->status == 'blocked') $blockedCount ++;
             if($task->status == 'done')    $doneCount ++;
-
+            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
         }
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->common;

@@ -189,15 +189,34 @@ class testtaskModel extends model
      */
     public function getProjectTasks($projectID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name AS buildName')
+        $tasks = $this->dao->select('t1.*, t2.name AS buildName, t3.name as executionName, t4.name AS productName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        foreach($tasks as $taskID => $task)
+        {
+            if($task->multiple)
+            {
+                if($task->projectName and $task->executionName)
+                {
+                    $tasks[$taskID]->executionName = $task->projectName . '/' . $task->executionName;
+                }
+                elseif(!$task->executionName)
+                {
+                    $tasks[$taskID]->executionName = $task->projectName;
+                }
+            }
+        }
+
+        return $tasks;
     }
 
     /**

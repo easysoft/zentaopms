@@ -9,17 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-$this->testtask->buildOperateMenu(null, 'browse');
-foreach($tasks as $task)
-{
-    $actions = array();
-    foreach($this->config->testtask->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->testtask->isClickable($task, $actionCode);
-        $actions[]   = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $task->actions = $actions;
-}
 
 featureBar
 (
@@ -27,22 +16,22 @@ featureBar
     set::linkParams("projectID={$projectID}")
 );
 
-$cols = array_values($config->testtask->dtable->fieldList);
-$data = array_values($tasks);
 toolbar
 (
-    btngroup
+    common::canModify('project', $project) && common::hasPriv('testtask', 'create') ? btn
     (
-        btn
-        (
-            setClass('btn primary'),
-            set::icon('plus'),
-            set::url(helper::createLink('testtask', 'create', "product=$productID")),
-            $lang->testtask->create
-        )
-    )
+        setClass('btn primary'),
+        set::icon('plus'),
+        set::url(helper::createLink('testtask', 'create', "product=0&executionID=0&build=0&projectID={$projectID}")),
+        $lang->testtask->create
+    ) : null
 );
 
+if(!$project->hasProduct) unset($config->testtask->dtable->fieldList['product']);
+
+$tasks      = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
+$cols       = array_values($config->testtask->dtable->fieldList);
+$data       = array_values($tasks);
 $footerHTML = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 dtable
 (

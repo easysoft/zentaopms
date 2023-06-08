@@ -48,7 +48,7 @@ featureBar
     )
 );
 
-if(!$product->shadow) unset($config->testtask->dtable->fieldList['product']);
+if($product->shadow) unset($config->testtask->dtable->fieldList['product']);
 
 $tasks = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
 $cols  = array_values($config->testtask->dtable->fieldList);
