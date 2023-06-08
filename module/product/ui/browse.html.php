@@ -165,11 +165,6 @@ foreach($cols as $key => $col)
         $col->checkbox     = true;
     }
 
-    if($col->id == 'assignedTo')
-    {
-        $col->userMap = $users;
-    }
-
     $cols[$key] = $col;
 }
 
@@ -396,6 +391,7 @@ toolbar
 
 dtable
 (
+    set::userMap($users),
     set::customCols(true),
     set::groupDivider(true),
     set::cols($cols),

@@ -52,6 +52,7 @@ $config->story->datatable->fieldList['status']['statusMap'] = $lang->story->stat
 $config->story->datatable->fieldList['status']['group']     = 'group3';
 
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
+$config->story->datatable->fieldList['openedBy']['type']     = 'user';
 $config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->story->datatable->fieldList['openedBy']['width']    = '60';
 $config->story->datatable->fieldList['openedBy']['required'] = 'no';
