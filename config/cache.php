@@ -16,3 +16,18 @@ $config->cache->fullPages[] = 'product|all';
 $config->cache->fullPages[] = 'project|browse';
 $config->cache->fullPages[] = 'block|printblock';
 $config->cache->fullPages[] = 'screen|view';
+
+$config->cacheKeys = new stdclass();
+
+$config->cacheKeys->block = new stdclass();
+$config->cacheKeys->block->welcome          = 'welcome';
+$config->cacheKeys->block->contribute       = 'contribute';
+$config->cacheKeys->block->projectStatistic = 'projectStatistic%s%s%s';
+$config->cacheKeys->block->recentProject    = 'recentProject';
+
+$config->cacheKeys->execution = new stdclass();
+$config->cacheKeys->execution->ajaxGetDropMenuProjects   = 'ajaxDropMenuProjects';
+$config->cacheKeys->execution->ajaxGetDropMenuExecutions = 'ajaxDropMenuExecutions';
+
+$config->cacheKeys->bug = new stdclass();
+$config->cacheKeys->bug->browse = 'bugBrowse%s';

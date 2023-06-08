@@ -165,7 +165,7 @@ class bug extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get executions. */
-        $cacheKey = "bugBrowse{$this->projectID}";
+        $cacheKey = sprintf($this->config->cacheKeys->bug->browse, $this->projectID);
         if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $executions = $this->cache->get($cacheKey);

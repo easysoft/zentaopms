@@ -3193,7 +3193,7 @@ class execution extends control
      * Manage products.
      *
      * @param  int    $executionID
-     * @param  from   $from
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -3831,8 +3831,8 @@ class execution extends control
         $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
 
-        $cacheProjectsKey   = 'execution|dropmenu|project';
-        $cacheExecutionsKey = 'execution|dropmenu|executions';
+        $cacheProjectsKey   = $this->config->cacheKeys->execution->ajaxGetDropMenuProjects;
+        $cacheExecutionsKey = $this->config->cacheKeys->execution->ajaxGetDropMenuExecutions;
 
         if(helper::isCacheEnabled())
         {
