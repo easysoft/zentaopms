@@ -375,6 +375,7 @@ dtable
     set::cols(array_values($config->testcase->dtable->fieldList)),
     set::data(array_values($scenes)),
     set::checkable($canBatchAction),
+    set::canRowCheckable(jsRaw('function(rowID){const row = this.getRowInfo(rowID); return row && row.data.isCase == 1;}')),
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
