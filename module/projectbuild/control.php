@@ -71,13 +71,12 @@ class projectBuild extends control
      * Delete a build for project.
      *
      * @param  int    $buildID
-     * @param  string $confirm  yes|noe
      * @access public
      * @return void
      */
-    public function delete($buildID, $confirm = 'no')
+    public function delete($buildID)
     {
-        echo $this->fetch('build', 'delete', "buildID=$buildID&confirm=$confirm");
+        $this->locate($this->createLink('build', 'delete', "buildID={$buildID}&from=project"));
     }
 
     /**
