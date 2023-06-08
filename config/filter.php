@@ -21,6 +21,7 @@ $filter->default->paramValue = 'reg::paramValue';
 
 $filter->default->get['onlybody']              = 'equal::yes';
 $filter->default->get['_single']               = 'equal::1';
+$filter->default->get['_nocache']              = 'equal::1';
 $filter->default->get['tid']                   = 'reg::word';
 $filter->default->get['HTTP_X_REQUESTED_WITH'] = 'equal::XMLHttpRequest';
 

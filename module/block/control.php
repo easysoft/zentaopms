@@ -381,7 +381,7 @@ class block extends control
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
 
         $cacheKey = 'welcomeBlockData';
-        if($this->config->cache->enable and $this->cache->has($cacheKey))
+        if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $data = $this->cache->get($cacheKey);
         }
@@ -418,7 +418,7 @@ class block extends control
      */
     public function contribute()
     {
-        if($this->config->cache->enable && $this->cache->has('contributeBlockData'))
+        if(helper::isCacheEnabled() && $this->cache->has('contributeBlockData'))
         {
             $data = $this->cache->get('contributeBlockData');
         }
@@ -984,7 +984,7 @@ class block extends control
         }
 
         $cacheKey = __FUNCTION__ . $status . $count . $excludedModel;
-        if($this->config->cache->enable and $this->cache->has($cacheKey))
+        if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $projects = $this->cache->get($cacheKey);
         }
@@ -2037,7 +2037,7 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager    = new pager(0, 3, 1);
         $cacheKey = __FUNCTION__;
-        if($this->config->cache->enable and $this->cache->has($cacheKey))
+        if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
         {
             $this->app->loadLang('project');
             $projects = $this->cache->get($cacheKey);

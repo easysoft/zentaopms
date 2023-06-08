@@ -718,7 +718,7 @@ class baseRouter
      *
      * @return bool
      */
-    protected function outputXhprof()
+    public function outputXhprof()
     {
         if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
 
@@ -2266,7 +2266,7 @@ class baseRouter
     {
         $cacheEnable = $this->config->cache->enableFullPage;
         /* If caching is not turned on, pages that do not need to be cached, or when searching, they are not cached. */
-        if(!$cacheEnable || !in_array("{$this->moduleName}|{$this->methodName}", $this->config->cache->fullPages) || stripos($this->server->request_uri, 'search') !== false)
+        if(!$cacheEnable || !in_array("{$this->moduleName}|{$this->methodName}", $this->config->cache->fullPages) || stripos($this->server->request_uri, 'search') !== false || isset($_GET['_nocache']) || $this->server->http_x_zt_refresh)
         {
             $this->loadModule();
             return helper::removeUTF8Bom(ob_get_clean());

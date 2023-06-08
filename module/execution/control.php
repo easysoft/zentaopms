@@ -3819,13 +3819,34 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $module
      * @param  string $method
-     * @param  mix    $extra
+     * @param  mixed  $extra
      * @access public
      * @return void
      */
     public function ajaxGetDropMenu($executionID, $module, $method, $extra)
     {
-        $orderedExecutions = array();
+        $this->view->link        = $this->execution->getLink($module, $method, $extra);
+        $this->view->module      = $module;
+        $this->view->method      = $method;
+        $this->view->executionID = $executionID;
+        $this->view->extra       = $extra;
+
+        $cacheProjectsKey   = 'execution|dropmenu|project';
+        $cacheExecutionsKey = 'execution|dropmenu|executions';
+
+        if(helper::isCacheEnabled())
+        {
+            $projects          = $this->cache->get($cacheProjectsKey);
+            $projectExecutions = $this->cache->get($cacheExecutionsKey);
+
+            if(!empty($projects) && !empty($projectExecutions))
+            {
+                $this->view->projects          = $projects;
+                $this->view->projectExecutions = $projectExecutions;
+                $this->display();
+                return;
+            }
+        }
 
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
@@ -3842,7 +3863,8 @@ class execution extends control
             ->andWhere('type')->eq('execution')
             ->fetchGroup('root', 'account');
 
-        $projectPairs = array();
+        $projectPairs      = array();
+        $orderedExecutions = array();
         foreach($projects as $project)
         {
             $executions = zget($executionGroups, $project->id, array());
@@ -3878,13 +3900,14 @@ class execution extends control
             $projectExecutions[$execution->project][] = $execution;
         }
 
-        $this->view->link               = $this->execution->getLink($module, $method, $extra);
-        $this->view->module             = $module;
-        $this->view->method             = $method;
-        $this->view->executionID        = $executionID;
-        $this->view->extra              = $extra;
-        $this->view->projects           = $projectPairs;
-        $this->view->projectExecutions  = $projectExecutions;
+        if($this->config->cache->enable)
+        {
+            $this->cache->set($cacheProjectsKey, $projectPairs);
+            $this->cache->set($cacheExecutionsKey, $projectExecutions);
+        }
+
+        $this->view->projects          = $projectPairs;
+        $this->view->projectExecutions = $projectExecutions;
         $this->display();
     }
 

@@ -255,7 +255,8 @@ class dbh
     public function formatDmSQL($sql)
     {
         $sql = trim($sql);
-        $sql = str_replace(array('\r', '\n'), ' ', $sql);
+        /* '\\\\n' try to compatible screen json like \u0232\\nBug. */
+        $sql = str_replace(array('\\\\n', '\r', '\n'), ' ', $sql);
         $sql = $this->formatFunction($sql);
 
         $actionPos = strpos($sql, ' ');
