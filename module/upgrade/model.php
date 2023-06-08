@@ -634,6 +634,8 @@ class upgradeModel extends model
                 if($this->config->edition != 'open') $this->processDataset();
                 $this->setURSwitchStatus($fromVersion);
                 break;
+            case '18_4_beta1':
+                $this->updateDateFields();
         }
 
         $this->deletePatch();
@@ -9219,6 +9221,45 @@ class upgradeModel extends model
         }
 
         return $fieldSettings;
+    }
+
+    /**
+     * Update database all tables date and datetime fields 0000-00-00 0000-00-00 00:00:00 to null.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateDateFields()
+    {
+        $suffixSQL  = "FROM information_schema.columns ";
+        $suffixSQL .= "WHERE TABLE_SCHEMA = '{$this->config->db->name}' ";
+        $suffixSQL .= "AND ((DATA_TYPE = 'date') OR (DATA_TYPE = 'datetime')) ";
+        $suffixSQL .= "AND TABLE_NAME NOT IN (SELECT TABLE_NAME FROM information_schema.VIEWS WHERE TABLE_SCHEMA = '{$this->config->db->name}') ";
+        $suffixSQL .= "ORDER BY table_name, ordinal_position;";
+
+        $updateSQL  = "SELECT CONCAT('UPDATE `', table_name, '` SET `', column_name, '` = NULL WHERE `', column_name, '` = \'0000-00-00\' OR `', column_name, '` = \'0000-00-00 00:00:00\';') AS statement ";
+        $updateSQL .= $suffixSQL;
+        $alterSQL   = "SELECT CONCAT('ALTER TABLE `', table_name, '` MODIFY `', column_name, '` ', column_type, ' NULL;') AS statement ";
+        $alterSQL  .= $suffixSQL;
+
+        $updateResult = $this->dbh->query($updateSQL)->fetchAll();
+        $alterResult  = $this->dbh->query($alterSQL)->fetchAll();
+
+        $execUpdate = '';
+        $execAlter  = '';
+        foreach($updateResult as $update)
+        {
+            $execUpdate .= $update->statement;
+        }
+        foreach($alterResult as $alter)
+        {
+            /* zt_burn use PRIMARY KEY (`execution`, `date`, `task`) and date field NOT NULL, continue. */
+            if(strpos($alter->statement, '_burn') !== false) continue;
+            $execAlter  .= $alter->statement;
+        }
+
+        $this->dbh->exec($execUpdate);
+        $this->dbh->exec($execAlter);
     }
 
     /**
