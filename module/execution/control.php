@@ -133,7 +133,7 @@ class execution extends control
         array_unshift($recentExecutions, $executionID);
         $recentExecutions = array_unique($recentExecutions);
         $recentExecutions = array_slice($recentExecutions, 0, 5);
-        $recentExecutions = join(',', $recentExecutions);
+        $recentExecutions = implode(',', $recentExecutions);
         if($this->session->multiple)
         {
             $this->loadModel('setting');
@@ -183,7 +183,7 @@ class execution extends control
         $this->view->title = $execution->name . $this->lang->colon . $this->lang->execution->task;
 
         /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -216,7 +216,7 @@ class execution extends control
         $this->view->execution    = $execution;
         $this->view->moduleID     = $moduleID;
         $this->view->modules      = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $extra);
-        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
         $this->display();
     }
@@ -250,7 +250,7 @@ class execution extends control
         }
 
         $sort        = common::appendOrder($groupBy);
-        $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, $productID = 0, $status = 'all', $modules = 0, $sort);
+        $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, 0, 'all', 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
         $taskLang    = $this->lang->task;
         $groupByList = array();
@@ -457,11 +457,7 @@ class execution extends control
             $this->execution->importTask($toExecution);
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($toExecution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                return print(js::reload('parent'));
-            }
+            if(isonlybody()) return print(js::reload('parent'));
 
             return print(js::locate(inlink('importTask', "toExecution=$toExecution&fromExecution=$fromExecution"), 'parent'));
         }
@@ -489,7 +485,7 @@ class execution extends control
         }
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(count($tasks2Imported), $recPerPage, $pageID);
 
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
@@ -525,15 +521,10 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $mails = $this->execution->importBug($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                return print(js::reload('parent'));
-            }
+            if(isonlybody()) return print(js::reload('parent'));
 
             return print(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
         }
@@ -547,7 +538,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $title      = $executions[$executionID] . $this->lang->colon . $this->lang->execution->importBug;
@@ -600,7 +591,7 @@ class execution extends control
             }
             else
             {
-                if($this->session->importBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
+                if($this->session->importBugQuery === false) $this->session->set('importBugQuery', ' 1 = 1');
             }
             $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all execution.
             $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
@@ -779,7 +770,7 @@ class execution extends control
         $executionID = $execution->id;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -884,7 +875,7 @@ class execution extends control
         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         if(!$execution->hasProduct and !$execution->multiple)
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), array('executionID' => $executionID, 'productID' => $productID), '', "&param=$param&storyType=$storyType");
+            $moduleTree = $this->tree->getTreeMenu($productID, 'story', 0, array('treeModel', $createModuleLink), array('executionID' => $executionID, 'productID' => $productID), '', "&param=$param&storyType=$storyType");
         }
         else
         {
@@ -918,7 +909,6 @@ class execution extends control
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
         $this->view->isAllProduct      = !$this->cookie->storyProductParam && !$this->cookie->storyModuleParam && !$this->cookie->storyBranchParam;
-        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
         $this->view->moduleTree        = $moduleTree;
         $this->view->modulePairs       = $modulePairs;
         $this->view->tabID             = 'story';
@@ -1010,7 +1000,7 @@ class execution extends control
         $position[] = $this->lang->execution->bug;
 
         /* Load pager and get bugs, user. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
@@ -1059,8 +1049,6 @@ class execution extends control
         }
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
-
-        $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
 
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->processBuildForBugs($bugs);
@@ -1118,7 +1106,7 @@ class execution extends control
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->setModule       = true;
-        $this->view->showBranch      = false;
+        $this->view->showBranch      = $showBranch;
 
         $this->display();
     }
@@ -1159,7 +1147,7 @@ class execution extends control
         if($hasProduct) $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, $branchID);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $branchID, $moduleID, $orderBy, $pager, $type);
@@ -1313,13 +1301,13 @@ class execution extends control
         $executionID = $execution->id;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $productTasks = array();
 
         $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', $orderBy, $pager);
-        foreach($tasks as $key => $task) $productTasks[$task->product][] = $task;
+        foreach($tasks as $task) $productTasks[$task->product][] = $task;
 
         $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->execution     = $execution;
@@ -1594,7 +1582,6 @@ class execution extends control
             $acl           = $copyExecution->acl;
             $whitelist     = $copyExecution->whitelist;
             $projectID     = $copyExecution->project;
-            $project       = $this->project->getByID($projectID);
             $products      = $this->loadModel('product')->getProducts($copyExecutionID);
             $branches      = $this->project->getBranchesByProject($copyExecutionID);
             $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
@@ -1744,7 +1731,7 @@ class execution extends control
             $this->execution->updateProducts($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $comment = $project->hasProduct ? join(',', $_POST['products']) : '';
+            $comment = $project->hasProduct ? implode(',', $_POST['products']) : '';
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $comment);
 
             $this->loadModel('programplan')->computeProgress($executionID, 'create');
@@ -1866,7 +1853,6 @@ class execution extends control
         $this->app->loadLang('programplan');
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
         $execution           = $this->execution->getById($executionID);
-        $project             = $this->project->getById($execution->project);
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
@@ -1920,7 +1906,7 @@ class execution extends control
             $newProducts  = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
-            $products     = $diffProducts ? join(',', $newProducts) : '';
+            $products     = $diffProducts ? implode(',', $newProducts) : '';
 
             if($changes or $diffProducts)
             {
@@ -1964,7 +1950,6 @@ class execution extends control
         }
 
         $executions = array('' => '') + $this->executions;
-        $managers   = $this->execution->getDefaultManagers($executionID);
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -2501,7 +2486,7 @@ class execution extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 30, 1);
 
         $this->executeHooks($executionID);
@@ -2905,7 +2890,6 @@ class execution extends control
             $taskAndBugs = array();
             foreach($kanbanTasks as $task)
             {
-                $storyID = $task->storyID;
                 $status  = $task->status;
                 $users[] = $task->assignedTo;
 
@@ -2913,7 +2897,6 @@ class execution extends control
             }
             foreach($kanbanBugs as $bug)
             {
-                $storyID = $bug->story;
                 $status  = $bug->status;
                 $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
                 $users[] = $bug->assignedTo;
@@ -2986,7 +2969,6 @@ class execution extends control
         }
 
         $this->execution->setMenu($executionID);
-        $execution = $this->execution->getById($executionID);
 
         $this->view->executionID = $executionID;
         $this->display();
@@ -3128,7 +3110,7 @@ class execution extends control
             $newProducts  = $this->product->getProducts($executionID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
-            if($diffProducts) $this->loadModel('action')->create($this->objectType, $executionID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
+            if($diffProducts) $this->loadModel('action')->create($this->objectType, $executionID, 'Managed', '', !empty($_POST['products']) ? implode(',', $_POST['products']) : '');
 
             if(isonlybody())
             {
@@ -3216,8 +3198,6 @@ class execution extends control
         $this->loadModel('dept');
 
         $execution = $this->execution->getById($executionID);
-        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst');
-        $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
@@ -3402,7 +3382,7 @@ class execution extends control
             foreach($products as $product)
             {
                 $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
-                foreach($productModules as $branch => $branchModules)
+                foreach($productModules as $branchModules)
                 {
                     foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
                 }
@@ -3428,7 +3408,7 @@ class execution extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', 'story', 'id_desc', false, '', null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);
@@ -3446,7 +3426,7 @@ class execution extends control
         }
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager      = new pager(count($allStories), $recPerPage, $pageID);
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
@@ -3607,8 +3587,8 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, 50, 1);
 
         /* Set the user and type. */
         $account = 'all';
@@ -3914,7 +3894,7 @@ class execution extends control
         }
 
         /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID   = ($status == 'bySearch') ? (int)$param : 0;
