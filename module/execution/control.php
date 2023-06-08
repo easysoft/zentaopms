@@ -1159,8 +1159,6 @@ class execution extends control
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
-        $modules = $this->tree->getAllModulePairs('case');
-
         /* Get module tree.*/
         if($executionID and empty($productID))
         {
@@ -1172,6 +1170,15 @@ class execution extends control
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
+        $idFieldList['title'] = $this->lang->idAB;
+        $idFieldList['name']  = 'id';
+        $idFieldList['type']  = 'id';
+        $idFieldList['group'] = '1';
+        array_unshift($this->config->testcase->dtable->fieldList, $idFieldList);
+
+        unset($this->config->testcase->dtable->fieldList['title']['checkbox']);
+        unset($this->config->testcase->dtable->fieldList['title']['nestedToggle']);
+
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
         $this->view->productID   = $productID;
@@ -1182,7 +1189,6 @@ class execution extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->execution   = $execution;
         $this->view->moduleTree  = $moduleTree;
-        $this->view->modules     = $modules;
         $this->view->moduleID    = $moduleID;
         $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->branchID    = $branchID;
