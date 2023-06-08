@@ -867,7 +867,7 @@ class productZen extends product
 
         /* 获取分支和分支ID。*/
         $branchPairs = $this->loadModel('branch')->getPairs($product->id, 'all');
-        return ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
+        return ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? (string)$this->cookie->preBranch : $branch;
     }
 
     /**
