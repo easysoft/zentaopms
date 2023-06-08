@@ -57,6 +57,14 @@ $config->story->datatable->fieldList['status']['type']      = 'status';
 $config->story->datatable->fieldList['status']['statusMap'] = $lang->story->statusList;
 $config->story->datatable->fieldList['status']['group']     = 'group3';
 
+$config->story->datatable->fieldList['branch']['title']      = 'branch';
+$config->story->datatable->fieldList['branch']['fixed']      = 'no';
+$config->story->datatable->fieldList['branch']['width']      = '100';
+$config->story->datatable->fieldList['branch']['required']   = 'no';
+$config->story->datatable->fieldList['branch']['control']    = 'select';
+$config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
+$config->story->datatable->fieldList['branch']['group']      = 'group3';
+
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->story->datatable->fieldList['openedBy']['type']     = 'user';
 $config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
@@ -122,85 +130,13 @@ $config->story->datatable->fieldList['product']['title']      = 'product';
 $config->story->datatable->fieldList['product']['control']    = 'hidden';
 $config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
-$config->story->datatable->fieldList['branch']['title']      = 'branch';
-$config->story->datatable->fieldList['branch']['fixed']      = 'no';
-$config->story->datatable->fieldList['branch']['width']      = '100';
-$config->story->datatable->fieldList['branch']['required']   = 'no';
-$config->story->datatable->fieldList['branch']['control']    = 'select';
-$config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
-
 $config->story->datatable->fieldList['module']['title']      = 'module';
 $config->story->datatable->fieldList['module']['control']    = 'select';
 $config->story->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&story&0&all');
 
-$config->story->datatable->fieldList['keywords']['title']    = 'keywords';
-$config->story->datatable->fieldList['keywords']['fixed']    = 'no';
-$config->story->datatable->fieldList['keywords']['width']    = '100';
-$config->story->datatable->fieldList['keywords']['required'] = 'no';
-
-$config->story->datatable->fieldList['source']['title']    = 'source';
-$config->story->datatable->fieldList['source']['fixed']    = 'no';
-$config->story->datatable->fieldList['source']['width']    = '90';
-$config->story->datatable->fieldList['source']['required'] = 'no';
-
-$config->story->datatable->fieldList['sourceNote']['title']    = 'sourceNote';
-$config->story->datatable->fieldList['sourceNote']['fixed']    = 'no';
-$config->story->datatable->fieldList['sourceNote']['width']    = '90';
-$config->story->datatable->fieldList['sourceNote']['required'] = 'no';
-
 $config->story->datatable->fieldList['needReview']['title']      = 'needReview';
 $config->story->datatable->fieldList['needReview']['control']    = 'select';
 $config->story->datatable->fieldList['needReview']['dataSource'] = array('lang' => 'reviewList');
-
-$config->story->datatable->fieldList['closedBy']['title']    = 'closedBy';
-$config->story->datatable->fieldList['closedBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['closedBy']['width']    = '80';
-$config->story->datatable->fieldList['closedBy']['required'] = 'no';
-
-$config->story->datatable->fieldList['closedDate']['title']    = 'closedDate';
-$config->story->datatable->fieldList['closedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['closedDate']['width']    = '90';
-$config->story->datatable->fieldList['closedDate']['required'] = 'no';
-
-$config->story->datatable->fieldList['closedReason']['title']    = 'closedReason';
-$config->story->datatable->fieldList['closedReason']['fixed']    = 'no';
-$config->story->datatable->fieldList['closedReason']['width']    = '90';
-$config->story->datatable->fieldList['closedReason']['required'] = 'no';
-
-$config->story->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
-$config->story->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['lastEditedBy']['width']    = '80';
-$config->story->datatable->fieldList['lastEditedBy']['required'] = 'no';
-
-$config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
-$config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
-$config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
-
-$config->story->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
-$config->story->datatable->fieldList['activatedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['activatedDate']['width']    = '90';
-$config->story->datatable->fieldList['activatedDate']['required'] = 'no';
-
-$config->story->datatable->fieldList['feedbackBy']['title']    = 'feedbackBy';
-$config->story->datatable->fieldList['feedbackBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['feedbackBy']['width']    = '100';
-$config->story->datatable->fieldList['feedbackBy']['required'] = 'no';
-
-$config->story->datatable->fieldList['notifyEmail']['title']    = 'notifyEmail';
-$config->story->datatable->fieldList['notifyEmail']['fixed']    = 'no';
-$config->story->datatable->fieldList['notifyEmail']['width']    = '100';
-$config->story->datatable->fieldList['notifyEmail']['required'] = 'no';
-
-$config->story->datatable->fieldList['mailto']['title']    = 'mailto';
-$config->story->datatable->fieldList['mailto']['fixed']    = 'no';
-$config->story->datatable->fieldList['mailto']['width']    = '100';
-$config->story->datatable->fieldList['mailto']['required'] = 'no';
-
-$config->story->datatable->fieldList['version']['title']    = 'version';
-$config->story->datatable->fieldList['version']['fixed']    = 'no';
-$config->story->datatable->fieldList['version']['width']    = '60';
-$config->story->datatable->fieldList['version']['required'] = 'no';
 
 $config->story->datatable->fieldList['taskCount']['title']    = 'T';
 $config->story->datatable->fieldList['taskCount']['fixed']    = 'no';
@@ -233,6 +169,85 @@ $config->story->datatable->fieldList['URS']['required'] = 'no';
 $config->story->datatable->fieldList['URS']['sort']     = 'no';
 $config->story->datatable->fieldList['URS']['name']     = $lang->URCommon;
 $config->story->datatable->fieldList['URS']['group']    = 'group6';
+
+
+$config->story->datatable->fieldList['closedBy']['title']    = 'closedBy';
+$config->story->datatable->fieldList['closedBy']['fixed']    = 'no';
+$config->story->datatable->fieldList['closedBy']['width']    = '80';
+$config->story->datatable->fieldList['closedBy']['required'] = 'no';
+$config->story->datatable->fieldList['closedBy']['group']    = 'group7';
+
+$config->story->datatable->fieldList['closedDate']['title']    = 'closedDate';
+$config->story->datatable->fieldList['closedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['closedDate']['width']    = '90';
+$config->story->datatable->fieldList['closedDate']['required'] = 'no';
+$config->story->datatable->fieldList['closedDate']['group']    = 'group7';
+
+$config->story->datatable->fieldList['closedReason']['title']    = 'closedReason';
+$config->story->datatable->fieldList['closedReason']['fixed']    = 'no';
+$config->story->datatable->fieldList['closedReason']['width']    = '90';
+$config->story->datatable->fieldList['closedReason']['required'] = 'no';
+$config->story->datatable->fieldList['closedReason']['group']    = 'group7';
+
+$config->story->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
+$config->story->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
+$config->story->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->story->datatable->fieldList['lastEditedBy']['required'] = 'no';
+$config->story->datatable->fieldList['lastEditedBy']['group']    = 'group8';
+
+$config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
+$config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
+$config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
+$config->story->datatable->fieldList['lastEditedDate']['group']    = 'group8';
+
+$config->story->datatable->fieldList['keywords']['title']    = 'keywords';
+$config->story->datatable->fieldList['keywords']['fixed']    = 'no';
+$config->story->datatable->fieldList['keywords']['width']    = '100';
+$config->story->datatable->fieldList['keywords']['required'] = 'no';
+$config->story->datatable->fieldList['keywords']['group']    = 'group9';
+
+$config->story->datatable->fieldList['source']['title']    = 'source';
+$config->story->datatable->fieldList['source']['fixed']    = 'no';
+$config->story->datatable->fieldList['source']['width']    = '90';
+$config->story->datatable->fieldList['source']['required'] = 'no';
+$config->story->datatable->fieldList['source']['group']    = 'group9';
+
+$config->story->datatable->fieldList['sourceNote']['title']    = 'sourceNote';
+$config->story->datatable->fieldList['sourceNote']['fixed']    = 'no';
+$config->story->datatable->fieldList['sourceNote']['width']    = '90';
+$config->story->datatable->fieldList['sourceNote']['required'] = 'no';
+$config->story->datatable->fieldList['sourceNote']['group']    = 'group9';
+
+$config->story->datatable->fieldList['feedbackBy']['title']    = 'feedbackBy';
+$config->story->datatable->fieldList['feedbackBy']['fixed']    = 'no';
+$config->story->datatable->fieldList['feedbackBy']['width']    = '100';
+$config->story->datatable->fieldList['feedbackBy']['required'] = 'no';
+$config->story->datatable->fieldList['feedbackBy']['group']    = 'group9';
+
+$config->story->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
+$config->story->datatable->fieldList['activatedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['activatedDate']['width']    = '90';
+$config->story->datatable->fieldList['activatedDate']['required'] = 'no';
+$config->story->datatable->fieldList['activatedDate']['group']    = 'group10';
+
+$config->story->datatable->fieldList['notifyEmail']['title']    = 'notifyEmail';
+$config->story->datatable->fieldList['notifyEmail']['fixed']    = 'no';
+$config->story->datatable->fieldList['notifyEmail']['width']    = '100';
+$config->story->datatable->fieldList['notifyEmail']['required'] = 'no';
+$config->story->datatable->fieldList['notifyEmail']['group']    = 'group10';
+
+$config->story->datatable->fieldList['mailto']['title']    = 'mailto';
+$config->story->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->story->datatable->fieldList['mailto']['width']    = '100';
+$config->story->datatable->fieldList['mailto']['required'] = 'no';
+$config->story->datatable->fieldList['mailto']['group']    = 'group10';
+
+$config->story->datatable->fieldList['version']['title']    = 'version';
+$config->story->datatable->fieldList['version']['fixed']    = 'no';
+$config->story->datatable->fieldList['version']['width']    = '60';
+$config->story->datatable->fieldList['version']['required'] = 'no';
+$config->story->datatable->fieldList['version']['group']    = 'group10';
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
