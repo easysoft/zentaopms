@@ -43,6 +43,12 @@ $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 $config->story->datatable->fieldList['plan']['group']      = 'group3';
 
+$config->story->datatable->fieldList['category']['title']    = 'category';
+$config->story->datatable->fieldList['category']['fixed']    = 'no';
+$config->story->datatable->fieldList['category']['width']    = '60';
+$config->story->datatable->fieldList['category']['required'] = 'no';
+$config->story->datatable->fieldList['category']['group']    = 'group3';
+
 $config->story->datatable->fieldList['status']['title']     = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']     = 'no';
 $config->story->datatable->fieldList['status']['width']     = '60';
@@ -57,6 +63,12 @@ $config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->story->datatable->fieldList['openedBy']['width']    = '60';
 $config->story->datatable->fieldList['openedBy']['required'] = 'no';
 $config->story->datatable->fieldList['openedBy']['group']    = 'group4';
+
+$config->story->datatable->fieldList['openedDate']['title']    = 'openedDate';
+$config->story->datatable->fieldList['openedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['openedDate']['width']    = '90';
+$config->story->datatable->fieldList['openedDate']['required'] = 'no';
+$config->story->datatable->fieldList['openedDate']['group']    = 'group4';
 
 $config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
@@ -83,6 +95,7 @@ $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['reviewedDate']['width']    = '90';
 $config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
+$config->story->datatable->fieldList['reviewedDate']['group']    = 'group4';
 
 $config->story->datatable->fieldList['stage']['title']     = 'stageAB';
 $config->story->datatable->fieldList['stage']['fixed']     = 'no';
@@ -103,6 +116,7 @@ $config->story->datatable->fieldList['assignedDate']['title']    = 'assignedDate
 $config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['assignedDate']['width']    = '90';
 $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
+$config->story->datatable->fieldList['assignedDate']['group']    = 'group5';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
 $config->story->datatable->fieldList['product']['control']    = 'hidden';
@@ -133,16 +147,6 @@ $config->story->datatable->fieldList['sourceNote']['title']    = 'sourceNote';
 $config->story->datatable->fieldList['sourceNote']['fixed']    = 'no';
 $config->story->datatable->fieldList['sourceNote']['width']    = '90';
 $config->story->datatable->fieldList['sourceNote']['required'] = 'no';
-
-$config->story->datatable->fieldList['category']['title']    = 'category';
-$config->story->datatable->fieldList['category']['fixed']    = 'no';
-$config->story->datatable->fieldList['category']['width']    = '60';
-$config->story->datatable->fieldList['category']['required'] = 'no';
-
-$config->story->datatable->fieldList['openedDate']['title']    = 'openedDate';
-$config->story->datatable->fieldList['openedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['openedDate']['width']    = '90';
-$config->story->datatable->fieldList['openedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['needReview']['title']      = 'needReview';
 $config->story->datatable->fieldList['needReview']['control']    = 'select';
@@ -204,7 +208,7 @@ $config->story->datatable->fieldList['taskCount']['width']    = '30';
 $config->story->datatable->fieldList['taskCount']['required'] = 'no';
 $config->story->datatable->fieldList['taskCount']['sort']     = 'no';
 $config->story->datatable->fieldList['taskCount']['name']     = $lang->story->taskCount;
-$config->story->datatable->fieldList['taskCount']['group']    = 'group5';
+$config->story->datatable->fieldList['taskCount']['group']    = 'group6';
 
 $config->story->datatable->fieldList['bugCount']['title']    = 'B';
 $config->story->datatable->fieldList['bugCount']['fixed']    = 'no';
@@ -212,6 +216,7 @@ $config->story->datatable->fieldList['bugCount']['width']    = '30';
 $config->story->datatable->fieldList['bugCount']['required'] = 'no';
 $config->story->datatable->fieldList['bugCount']['sort']     = 'no';
 $config->story->datatable->fieldList['bugCount']['name']     = $lang->story->bugCount;
+$config->story->datatable->fieldList['bugCount']['group']    = 'group6';
 
 $config->story->datatable->fieldList['caseCount']['title']    = 'C';
 $config->story->datatable->fieldList['caseCount']['fixed']    = 'no';
@@ -219,6 +224,15 @@ $config->story->datatable->fieldList['caseCount']['width']    = '30';
 $config->story->datatable->fieldList['caseCount']['required'] = 'no';
 $config->story->datatable->fieldList['caseCount']['sort']     = 'no';
 $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->caseCount;
+$config->story->datatable->fieldList['caseCount']['group']    = 'group6';
+
+$config->story->datatable->fieldList['URS']['title']    = 'UR';
+$config->story->datatable->fieldList['URS']['fixed']    = 'no';
+$config->story->datatable->fieldList['URS']['width']    = '30';
+$config->story->datatable->fieldList['URS']['required'] = 'no';
+$config->story->datatable->fieldList['URS']['sort']     = 'no';
+$config->story->datatable->fieldList['URS']['name']     = $lang->URCommon;
+$config->story->datatable->fieldList['URS']['group']    = 'group6';
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
