@@ -28,6 +28,25 @@ window.renderCell = function(result, {col, row})
         }
         return result;
     }
+
+    if(col.name == 'name' && row.data.execution == 0)
+    {
+        result[result.length] = {html: "<span class='icon icon-code-fork text-gray' title='" + integratedTip + "'></span>"};
+        return result;
+    }
+
+    if(col.name == 'executionName' && row.data.execution == 0)
+    {
+        result[0] = '';
+        for(key in row.data.builds)
+        {
+            const build         = row.data.builds[key];
+            const executionName = executionPairs[build.execution].length ? executionPairs[build.execution] : '';
+            result[result.length] = {html: "<span title='" + executionName + "'>" + executionName + "</span>"};
+        }
+        return result;
+    }
+
     return result;
 }
 

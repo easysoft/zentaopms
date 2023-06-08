@@ -10,13 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Define the set::module('projectBuild') feature bar on main menu. */
-featureBar
-(
-    set::current($type),
-    set::linkParams("projectID={$project->id}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    div
-    (
+$changeProductBox = '';
+if($project->hasProduct)
+{
+    $changeProductBox = div(
         set::class('select-product-box'),
         select
         (
@@ -25,7 +22,14 @@ featureBar
             set::items($products),
             on::change('changeProduct'),
         ),
-    ),
+    );
+}
+/* zin: Define the set::module('projectBuild') feature bar on main menu. */
+featureBar
+(
+    set::current($type),
+    set::linkParams("projectID={$project->id}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    $changeProductBox,
     li(searchToggle(set::module('projectBuild'))),
 );
 
@@ -44,6 +48,8 @@ jsVar('changeProductLink', helper::createLink('project', 'build', "projectID={$p
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
+jsVar('integratedTip', $lang->build->integrated);
+jsVar('executionPairs', $executionPairs);
 dtable
 (
     set::userMap($users),

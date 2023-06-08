@@ -1161,12 +1161,12 @@ class project extends control
 
         $this->session->set('buildList', $this->app->getURI(true), 'project');
 
-        $executions = array();
+        $executionPairs = array();
         if($project->multiple)
         {
-            $executions = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
+            $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
             $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
-            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executions);
+            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
         }
         if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
 
@@ -1197,18 +1197,18 @@ class project extends control
         }
 
         /* Header and position. */
-        $this->view->title         = $project->name . $this->lang->colon . $this->lang->execution->build;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->builds        = $this->projectZen->processBuildListData($builds, $projectID);
-        $this->view->product       = $type == 'product' ? $param : 'all';
-        $this->view->project       = $project;
-        $this->view->products      = $products;
-        $this->view->executions    = $executions;
-        $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
-        $this->view->type          = $type;
-        $this->view->orderBy       = $orderBy;
-        $this->view->param         = $param;
-        $this->view->pager         = $pager;
+        $this->view->title          = $project->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds         = $this->projectZen->processBuildListData($builds, $projectID);
+        $this->view->product        = $type == 'product' ? $param : 'all';
+        $this->view->project        = $project;
+        $this->view->products       = $products;
+        $this->view->executionPairs = $executionPairs;
+        $this->view->buildPairs     = $this->loadModel('build')->getBuildPairs(0);
+        $this->view->type           = $type;
+        $this->view->orderBy        = $orderBy;
+        $this->view->param          = $param;
+        $this->view->pager          = $pager;
 
         $this->display();
     }
