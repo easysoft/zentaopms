@@ -761,7 +761,7 @@ class baseRouter
      *
      * @return bool
      */
-    protected function outputXhprof(): bool
+    public function outputXhprof(): bool
     {
         if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
 

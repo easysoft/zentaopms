@@ -988,7 +988,7 @@ class baseControl
         }
 
         /**
-         * 使用extract安定ob方法渲染$viewFile里面的代码。
+         * 使用extract和ob方法渲染$viewFile里面的代码。
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract(\zin\zin::$data);
@@ -1056,6 +1056,7 @@ class baseControl
             for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
             $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
+            $this->app->outputXhprof();
             return helper::end($response);
         }
 
