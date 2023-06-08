@@ -295,7 +295,6 @@ class projectZen extends project
         $parentProject       = $this->loadModel('program')->getByID($project->parent);
         $projectStories      = $this->project->getStoriesByProject($projectID);
         $branches            = $this->project->getBranchesByProject($projectID);
-        $linkedProductIdList = array_keys($branches);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
         $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
         $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');

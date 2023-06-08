@@ -357,7 +357,6 @@ class project extends control
     {
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
-        $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
         $browseType  = strtolower($browseType);
         if(!in_array($browseType, array('all', 'undone'))) unset($this->config->project->dtable->fieldList['status']);
 
@@ -921,7 +920,7 @@ class project extends control
         $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
 
         /* Load pager and get bugs, user. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
 
@@ -1100,7 +1099,7 @@ class project extends control
         $this->project->setMenu($projectID);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $project = $this->project->getByID($projectID);
@@ -1110,7 +1109,7 @@ class project extends control
         $testingCount = 0;
         $blockedCount = 0;
         $doneCount    = 0;
-        foreach($tasks as $key => $task)
+        foreach($tasks as $task)
         {
             if($task->status == 'wait')    $waitCount ++;
             if($task->status == 'doing')   $testingCount ++;
@@ -1241,7 +1240,6 @@ class project extends control
 
         if(!empty($_POST))
         {
-            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('group', "projectID=$group->project")));
@@ -1261,11 +1259,11 @@ class project extends control
             $changelog = array();
             foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
             {
-                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join(',', $currentChangeLog);
+                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = implode(',', $currentChangeLog);
             }
 
             $this->view->group      = $group;
-            $this->view->changelogs = ',' . join(',', $changelog) . ',';
+            $this->view->changelogs = ',' . implode(',', $changelog) . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->projectID  = $projectID;
@@ -1495,7 +1493,7 @@ class project extends control
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->group      = $group;
-        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
+        $this->view->deptTree   = $this->loadModel('dept')->getTreeMenu(0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
         $this->view->groupUsers = $groupUsers;
         $this->view->otherUsers = $otherUsers;
 
@@ -1821,7 +1819,6 @@ class project extends control
         {
             /* 如果没有选择产品，则提示错误*/
             /* If no product is selected, prompt error. */
-            $postData         = form::data($this->config->project->form->manageProducts);
             $postProducts     = $this->post->products;
             $postOtherProduct = $this->post->otherProducts;
             if(!isset($postProducts) and !isset($postOtherProduct))
