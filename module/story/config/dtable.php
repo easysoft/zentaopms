@@ -260,7 +260,7 @@ $config->story->dtable->fieldList['actions']['title']    = 'actions';
 $config->story->dtable->fieldList['actions']['fixed']    = 'right';
 $config->story->dtable->fieldList['actions']['required'] = 'yes';
 $config->story->dtable->fieldList['actions']['width']    = 'auto';
-$config->story->dtable->fieldList['actions']['minWidth'] = $app->tab == 'project' ? 250 : 180;
+$config->story->dtable->fieldList['actions']['minWidth'] = $app->tab == 'project' ? 250 : 200;
 $config->story->dtable->fieldList['actions']['type']     = 'actions';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['assigned']['icon'] = 'hand-right';
