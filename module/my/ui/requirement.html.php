@@ -27,7 +27,7 @@ $footToolbar = array('items' => array
     array('caret' => 'up', 'text' => $lang->story->review, 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->story->assignedTo, 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}")),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary'));
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $rejectItems = array();
 foreach($lang->story->reasonList as $key => $reason)
