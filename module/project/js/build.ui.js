@@ -35,14 +35,26 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name == 'executionName' && row.data.execution == 0)
+    if(col.name == 'execution')
     {
-        result[0] = '';
-        for(key in row.data.builds)
+        if(row.data.execution == 0)
         {
-            const build         = row.data.builds[key];
-            const executionName = executionPairs[build.execution].length ? executionPairs[build.execution] : '';
-            result[result.length] = {html: "<span title='" + executionName + "'>" + executionName + "</span>"};
+            result[0] = '';
+            let executionIdList = [];
+            for(key in row.data.builds)
+            {
+                const build = row.data.builds[key];
+                if(executionIdList.indexOf(build.execution) !== -1) continue;
+
+                result[result.length] = {html: "<span title='" + build.executionName + "'>" + build.executionName + "</span>"};
+                executionIdList.push(build.execution);
+            }
+        }
+        else
+        {
+            let executionHtml = "<span title='" + row.data.executionName + "'>" + row.data.executionName + '</span>';
+            if(row.data.executionDeleted == 1) executionHtml += " <span class='label label-danger'>" + deletedTip + '</span>';
+            result[0] = {html: executionHtml};
         }
         return result;
     }

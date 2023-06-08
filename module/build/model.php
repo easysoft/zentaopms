@@ -76,17 +76,30 @@ class buildModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        $this->loadModel('build');
         $executionIdList = array();
-        foreach($builds as $build) $executionIdList[] = $build->execution;
-        $executions = $this->loadModel('execution')->getByIdList($executionIdList);
+        foreach($builds as $build)
+        {
+            $build->builds = $this->build->getByList($build->builds);
+            if(!empty($build->builds))
+            {
+                foreach($build->builds as $child)
+                {
+                    if(!isset($executionIdList[$child->execution])) $executionIdList[$child->execution] = $child->execution;
+                }
+            }
+            if(!isset($executionIdList[$build->execution])) $executionIdList[$build->execution] = $build->execution;
+        }
+        $executions = $this->loadModel('execution')->getByIdList($executionIdList, 'all');
 
         foreach($builds as $buildID => $build)
         {
-            if($build->execution && !isset($executions[$build->execution])) unset($builds[$buildID]);
-
-            $build->executionID      = $build->execution;
             $build->executionDeleted = $build->execution ? $executions[$build->execution]->deleted : 0;
             $build->executionName    = $build->execution ? $executions[$build->execution]->name : '';
+            if(!empty($build->builds))
+            {
+                foreach($build->builds as $child) $child->executionName = $child->execution ? $executions[$child->execution]->name : '';
+            }
         }
         return $builds;
     }

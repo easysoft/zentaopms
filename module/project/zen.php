@@ -1010,11 +1010,7 @@ class projectZen extends project
 
         $showBranch    = false;
         $productIdList = array();
-        foreach($builds as $build)
-        {
-            $build->builds = $this->build->getByList($build->builds);
-            $productIdList[$build->product] = $build->product;
-        }
+        foreach($builds as $build) $productIdList[$build->product] = $build->product;
 
         /* Get branch name. */
         $branchGroups = $this->branch->getByProducts($productIdList);

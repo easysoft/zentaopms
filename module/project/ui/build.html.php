@@ -49,7 +49,7 @@ jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
 jsVar('integratedTip', $lang->build->integrated);
-jsVar('executionPairs', $executionPairs);
+jsVar('deletedTip', $lang->build->deleted);
 dtable
 (
     set::userMap($users),

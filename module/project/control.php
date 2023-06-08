@@ -1160,7 +1160,6 @@ class project extends control
 
         $this->session->set('buildList', $this->app->getURI(true), 'project');
 
-        $executionPairs = array();
         if($project->multiple)
         {
             $executionPairs = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
@@ -1196,18 +1195,17 @@ class project extends control
         }
 
         /* Header and position. */
-        $this->view->title          = $project->name . $this->lang->colon . $this->lang->execution->build;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->builds         = $this->projectZen->processBuildListData($builds, $projectID);
-        $this->view->product        = $type == 'product' ? $param : 'all';
-        $this->view->project        = $project;
-        $this->view->products       = $products;
-        $this->view->executionPairs = $executionPairs;
-        $this->view->buildPairs     = $this->loadModel('build')->getBuildPairs(0);
-        $this->view->type           = $type;
-        $this->view->orderBy        = $orderBy;
-        $this->view->param          = $param;
-        $this->view->pager          = $pager;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds     = $this->projectZen->processBuildListData($builds, $projectID);
+        $this->view->product    = $type == 'product' ? $param : 'all';
+        $this->view->project    = $project;
+        $this->view->products   = $products;
+        $this->view->buildPairs = $this->loadModel('build')->getBuildPairs(0);
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
