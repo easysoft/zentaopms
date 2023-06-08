@@ -163,6 +163,8 @@ foreach($cols as $key => $col)
         $col->checkbox     = true;
     }
 
+    if($col->id == 'title') $col->link = sprintf($col->link, createLink('story', 'view', array('storyID' => '${row.id}', 'version' => '0', 'param' => '0', 'storyType' => $storyType)));
+
     $cols[$key] = $col;
 }
 

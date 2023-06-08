@@ -22,6 +22,8 @@ if($app->tab == 'execution')
 }
 
 $config->story->datatable->fieldList['title']['title']    = 'title';
+$config->story->datatable->fieldList['title']['type']     = 'link';
+$config->story->datatable->fieldList['title']['link']     = 'RAWJS<function(info){const {row, col} = info; return {url:`%s`,target:\'_blank\'};}>RAWJS';
 $config->story->datatable->fieldList['title']['fixed']    = 'left';
 $config->story->datatable->fieldList['title']['width']    = '342';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
