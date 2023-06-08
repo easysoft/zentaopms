@@ -29,7 +29,7 @@ $formTitle = div
     ),
     div
     (
-        setClass('form-group title'),
+        setClass('form-group form-title'),
         $story->title,
         span
         (

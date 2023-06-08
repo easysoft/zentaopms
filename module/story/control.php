@@ -1042,51 +1042,15 @@ class story extends control
             return print(js::locate($this->createLink($module, $method, $params), 'parent'));
         }
 
-        /* Get story and product. */
-        $story   = $this->story->getById($storyID);
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
-
-        $this->story->replaceURLang($story->type);
-
-        /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($this->session->project);
-        }
-        elseif($this->app->tab == 'product')
-        {
-            $this->product->setMenu($product->id, $story->branch);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->loadModel('execution')->setMenu($this->session->execution);
-        }
-
-        /* Set the review result options. */
+        $this->commonAction($storyID);
+        $story     = $this->view->story;
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
-        $this->lang->story->resultList = $this->lang->story->reviewResultList;
+        $this->story->getAffectedScope($story);
 
-        if($story->status == 'reviewing')
-        {
-            if($story->version == 1) unset($this->lang->story->resultList['revert']);
-            if($story->version > 1)  unset($this->lang->story->resultList['reject']);
-        }
-
-        $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
-
-        $this->view->product   = $product;
-        $this->view->story     = $story;
-        $this->view->actions   = $this->action->getList('story', $storyID);
-        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
+        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
+        $this->view->fields    = $this->storyZen->getFormFieldsForReview($storyID);
         $this->view->reviewers = $reviewers;
-        $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) == 1 ? true : false;
-
-        /* Get the affcected things. */
-        $this->story->getAffectedScope($this->view->story);
-        $this->app->loadLang('task');
-        $this->app->loadLang('bug');
-        $this->app->loadLang('testcase');
-        $this->app->loadLang('execution');
+        $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
 
         $this->display();
     }

@@ -53,10 +53,21 @@ $config->story->form->batchCreate['reviewer']   = array('type' => 'array',   'co
 $config->story->form->batchCreate['keywords']   = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '');
 
 $config->story->form->change = array();
-$config->story->form->change['reviewer']       = array('type' => 'array',   'control' => 'multi-select', 'required' => true,  'default' => '', 'options' => '');
+$config->story->form->change['reviewer']       = array('type' => 'array',   'control' => 'multi-select', 'required' => true,  'default' => '', 'filter' => 'join', 'options' => '');
 $config->story->form->change['title']          = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 $config->story->form->change['color']          = array('type' => 'string',  'control' => 'color',        'required' => false, 'default' => '');
 $config->story->form->change['spec']           = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->change['verify']         = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->change['status']         = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => '');
 $config->story->form->change['lastEditedDate'] = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => '');
+
+$config->story->form->review = array();
+$config->story->form->review['reviewedDate']   = array('type' => 'date',    'control' => 'text',   'required' => false, 'default' => '');
+$config->story->form->review['result']         = array('type' => 'string',  'control' => 'select', 'required' => true,  'default' => '', 'options' => '', 'title' => $lang->story->reviewResult);
+$config->story->form->review['assignedTo']     = array('type' => 'string',  'control' => 'select', 'required' => false, 'default' => '', 'options' => 'users');
+$config->story->form->review['closedReason']   = array('type' => 'string',  'control' => 'select', 'required' => false, 'default' => '', 'options' => $lang->story->reasonList, 'title' => $lang->story->rejectedReason);
+$config->story->form->review['pri']            = array('type' => 'int',     'control' => 'select', 'required' => false, 'default' => '', 'options' => $lang->story->priList);
+$config->story->form->review['estimate']       = array('type' => 'float',   'control' => 'text',   'required' => false, 'default' => '');
+$config->story->form->review['duplicateStory'] = array('type' => 'string',  'control' => 'text',   'required' => false, 'default' => '');
+$config->story->form->review['childStories']   = array('type' => 'string',  'control' => 'text',   'required' => false, 'default' => '');
+$config->story->form->review['status']         = array('type' => 'string',  'control' => 'hidden', 'required' => false, 'default' => '');

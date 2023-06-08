@@ -435,6 +435,14 @@ class storyZen extends story
         return $fields;
     }
 
+    /**
+     * 获取变更需求的表单字段。
+     * Get form fields for change story.
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return array
+     */
     protected function getFormFieldsForChange(int $storyID): array
     {
         $story  = $this->view->story;
@@ -463,6 +471,47 @@ class storyZen extends story
         $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0 || !$forceReview()) && empty($reviewer);
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
+        return $fields;
+    }
+
+    /**
+     * 获取评审需求的表单字段。
+     * Get form fields for review story.
+     *
+     * @param  int       $storyID
+     * @access protected
+     * @return array
+     */
+    protected function getFormFieldsForReview(int $storyID): array
+    {
+        $story      = $this->view->story;
+        $fields     = $this->config->story->form->review;
+        $users      = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
+        $resultList = $this->lang->story->reviewResultList;
+        if($story->status == 'reviewing')
+        {
+            if($story->version == 1) unset($resultList['revert']);
+            if($story->version > 1)  unset($resultList['reject']);
+        }
+
+        foreach($fields as $field => $attr)
+        {
+            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
+            if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
+            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
+        }
+        $fields['result']['options'] = $resultList;
+
+        $fields['reviewedDate']['default'] = helper::now();
+        $fields['assignedTo']['default']   = $story->assignedTo;
+        $fields['pri']['default']          = $story->pri;
+        $fields['estimate']['default']     = $story->estimate;
+        $fields['status']['default']       = $story->status;
+
+        $fields['closedReason']['required']   = true;
+        $fields['duplicateStory']['required'] = true;
+
+        $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment, 'width' => 'full');
         return $fields;
     }
 
