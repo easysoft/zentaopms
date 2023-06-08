@@ -49,7 +49,7 @@
       <tr>
         <td colspan='2' class='text-center'>
           <?php echo html::submitButton();?>
-          <?php echo html::commonButton($lang->ai->models->testConnection, '', 'btn btn-secondary btn-wide');?>
+          <?php echo html::commonButton($lang->ai->models->testConnection, 'id="testConn"', 'btn btn-secondary btn-wide load-indicator');?>
         </td>
       </tr>
     </table>
@@ -57,10 +57,33 @@
 </div>
 <script>
 $(function() {
-  $('select[name="proxyType"]').change(function() {
-    var proxyType = $(this).val();
-    $('#proxyAddrContainer').toggle(proxyType != '');
-  });
+    $('select[name="proxyType"]').change(function()
+    {
+        var proxyType = $(this).val();
+        $('#proxyAddrContainer').toggle(proxyType != '');
+    });
+    $('#testConn').click(function() {
+        $(this).attr('disabled', true).addClass('loading');
+        $.ajax(
+        {
+            type: 'POST',
+            url: createLink('ai', 'testConnection'),
+            data: $('.main-form').serialize(),
+            dataType: 'json',
+            success: function(data)
+            {
+                if(data.result == 'success')
+                {
+                    $.zui.messager.success(data.message);
+                }
+                else
+                {
+                    $.zui.messager.danger(data.message);
+                }
+            },
+            complete: function() {$('#testConn').attr('disabled', false).removeClass('loading');}
+        });
+    });
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

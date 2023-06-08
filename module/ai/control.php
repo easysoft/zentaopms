@@ -51,7 +51,7 @@ class ai extends control
             $this->loadModel('setting')->setItems('system.ai', $modelConfig);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('models') . '#app=admin'));
+            return $this->send(array('result' => 'success', 'locate' => $this->inlink('models') . '#app=admin'));
         }
 
         $modelConfig = new stdclass();
@@ -69,5 +69,22 @@ class ai extends control
         $this->view->title       = $this->lang->ai->models->title;
         $this->view->position[]  = $this->lang->ai->models->common;
         $this->display();
+    }
+
+    /**
+     * Test connection to API endpoint.
+     * 
+     * @access public
+     * @return void
+     */
+    public function testConnection()
+    {
+        $modelConfig = fixer::input('post')->get();
+        $this->ai->setConfig($modelConfig);
+        
+        $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
+        if($result === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->testConnectionResult->fail));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
     }
 }
