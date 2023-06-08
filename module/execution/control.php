@@ -984,9 +984,11 @@ class execution extends control
         if($execution->hasProduct)
         {
             unset($this->config->bug->search['fields']['product']);
+            unset($this->config->bug->search['params']['product']);
             if($project->model != 'scrum')
             {
                 unset($this->config->bug->search['fields']['plan']);
+                unset($this->config->bug->search['params']['plan']);
             }
         }
 
@@ -1107,6 +1109,7 @@ class execution extends control
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->setModule       = true;
         $this->view->showBranch      = $showBranch;
+        $this->view->recTotal        = $pager->recTotal;
 
         $this->display();
     }
@@ -1183,6 +1186,7 @@ class execution extends control
         $this->view->moduleID    = $moduleID;
         $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->branchID    = $branchID;
+        $this->view->recTotal    = $pager->recTotal;
 
         $this->display();
     }
@@ -1272,6 +1276,7 @@ class execution extends control
         $this->view->type        = $type;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
+        $this->view->recTotal    = $pager->recTotal;
         $this->view->pager       = $pager;
 
         $this->display();

@@ -15,7 +15,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build={$buildID}&type={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module('bug')))
+    li(searchToggle(set::module('executionBug')))
 );
 
 /* zin: Define the toolbar on main menu. */

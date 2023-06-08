@@ -4498,12 +4498,14 @@ class executionModel extends model
         $this->config->bug->search['module']    = $type == 'execution' ? 'executionBug' : 'projectBug';
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
-        unset($this->config->bug->search['fields']['execution']);
-        $this->config->bug->search['params']['product']['values']       = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['openedBuild']['values']   = $builds;
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        if(isset($this->config->bug->search['params']['product'])) $this->config->bug->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+
+        unset($this->config->bug->search['fields']['execution']);
+        unset($this->config->bug->search['params']['execution']);
         if($productType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

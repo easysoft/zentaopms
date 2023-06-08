@@ -1188,6 +1188,7 @@ class project extends control
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
         $this->view->pager      = $pager;
+        $this->view->recTotal   = $pager->recTotal;
 
         $this->display();
     }

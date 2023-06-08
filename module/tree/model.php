@@ -752,11 +752,11 @@ class treeModel extends model
             $extra['productID'] = $productID;
 
             $data = new stdclass();
-            $data->id     = uniqid();
+            $data->id     = (int) uniqid();
             $data->parent = 0;
             $data->name   = is_object($product) ? $product->name : $product;
             $data->url    = helper::createLink($moduleName, $methodName, $param . "productID=$productID");
-            $modules[] = $module;
+            $modules[] = $data;
 
             if(empty($branchGroups[$productID])) $branchGroups[$productID]['0'] = '';
             foreach($branchGroups[$productID] as $branch => $branchName)

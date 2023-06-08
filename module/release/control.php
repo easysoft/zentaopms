@@ -75,6 +75,7 @@ class release extends control
         $this->view->param       = $param;
         $this->view->pager       = $pager;
         $this->view->showBranch  = $showBranch;
+        $this->view->recTotal    = $pager->recTotal;
         $this->view->branchPairs = $this->loadModel('branch')->getPairs($productID);
         $this->display();
     }
