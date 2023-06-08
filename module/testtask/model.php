@@ -2367,47 +2367,6 @@ class testtaskModel extends model
     }
 
     /**
-     * 构造详情页或列表页需要的操作菜单。
-     * Build action menu.
-     *
-     * @param  object $task
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function buildOperateMenu(object $task = null, string $type = 'view'): array
-    {
-        $params = $task ? "taskID={$task->id}" : 'taskID={id}';
-
-        $actions = array();
-        $actions['start']    = array('icon' => 'play',     'text' => $this->lang->testtask->start,      'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
-        $actions['close']    = array('icon' => 'off',      'text' => $this->lang->testtask->close,      'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
-        $actions['block']    = array('icon' => 'pause',    'text' => $this->lang->testtask->block,      'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
-        $actions['activate'] = array('icon' => 'magic',    'text' => $this->lang->testtask->view,       'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
-        $actions['cases']    = array('icon' => 'sitemap',  'text' => $this->lang->testtask->cases,      'url' => helper::createLink('testtask',   'cases',    $params));
-        $actions['linkCase'] = array('icon' => 'link',     'text' => $this->lang->testtask->linkCase,   'url' => helper::createLink('testtask',   'linkCase', "{$params}&type=all&param=myQueryID"));
-        $actions['report']   = array('icon' => 'summary',  'text' => $this->lang->testtask->testreport, 'url' => helper::createLink('testreport', 'browse',   "objectID={$task->product}&objectType=product&extra={$task->id}"));
-        $actions['view']     = array('icon' => 'list-alt', 'text' => $this->lang->testtask->view,       'url' => helper::createLink('testtask',   'view',     $params), 'data-toggle' => 'modal');
-        $actions['edit']     = array('icon' => 'edit',     'text' => $this->lang->edit,                 'url' => helper::createLink('testtask',   'edit',     $params));
-        $actions['delete']   = array('icon' => 'trash',    'text' => $this->lang->delete,               'url' => helper::createLink('testtask',   'delete',   $params));
-
-        foreach($actions as $action => $actionData)
-        {
-            $actionsConfig = $this->config->testtask->actions->{$type};
-            if(strpos(",{$actionsConfig},", ",{$action},") === false)
-            {
-                unset($actions[$action]);
-                continue;
-            }
-            $actions[$action]['hint'] = $actions[$action]['text'];
-            if($type == 'browse') unset($actions[$action]['text']);
-        }
-
-        if($type == 'browse') $this->config->testtask->dtable->fieldList['actions']['actionsMap'] = $actions;
-        return $actions;
-    }
-
-    /**
      * Set menu.
      *
      * @param  array       $products

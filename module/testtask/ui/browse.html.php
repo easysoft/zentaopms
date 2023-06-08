@@ -14,18 +14,6 @@ $status   = $this->session->testTaskVersionStatus;
 $viewName = $scope == 'local'? $productName : $lang->testtask->all;
 jsVar('condition', "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
-$this->testtask->buildOperateMenu(null, 'browse');
-foreach($tasks as $task)
-{
-    $actions = array();
-    foreach($this->config->testtask->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->testtask->isClickable($task, $actionCode);
-        $actions[]   = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $task->actions = $actions;
-}
-
 $productDropdown = productMenu
 (
     set::title($viewName),
@@ -60,20 +48,20 @@ featureBar
     )
 );
 
-$cols = array_values($config->testtask->dtable->fieldList);
-$data = array_values($tasks);
+if(!$product->shadow) unset($config->testtask->dtable->fieldList['product']);
+
+$tasks = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
+$cols  = array_values($config->testtask->dtable->fieldList);
+$data  = array_values($tasks);
 toolbar
 (
-    btngroup
+    common::canModify('product', $product) && common::hasPriv('testtask', 'create') ? btn
     (
-        btn
-        (
-            setClass('btn primary'),
-            set::icon('plus'),
-            set::url(helper::createLink('testtask', 'create', "product=$productID")),
-            $lang->testtask->create
-        )
-    )
+        setClass('btn primary'),
+        set::icon('plus'),
+        set::url(helper::createLink('testtask', 'create', "product=$productID")),
+        $lang->testtask->create
+    ) : null
 );
 
 $footerHTML = $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
