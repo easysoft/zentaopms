@@ -22,7 +22,7 @@ if($app->tab == 'execution')
 
 $config->story->datatable->fieldList['title']['title']    = 'title';
 $config->story->datatable->fieldList['title']['fixed']    = 'left';
-$config->story->datatable->fieldList['title']['width']    = 'auto';
+$config->story->datatable->fieldList['title']['width']    = 200;
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
@@ -34,7 +34,7 @@ $config->story->datatable->fieldList['pri']['type']     = 'pri';
 
 $config->story->datatable->fieldList['plan']['title']      = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']      = 'no';
-$config->story->datatable->fieldList['plan']['width']      = '90';
+$config->story->datatable->fieldList['plan']['width']      = '64';
 $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
@@ -211,26 +211,26 @@ $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';
 $config->story->datatable->fieldList['actions']['width']    = 'auto';
-$config->story->datatable->fieldList['actions']['minWidth'] = $app->tab == 'project' ? 250 : 170;
+$config->story->datatable->fieldList['actions']['minWidth'] = $app->tab == 'project' ? 250 : 180;
 $config->story->datatable->fieldList['actions']['type']     = 'actions';
 
 $config->story->datatable->fieldList['actions']['actionsMap']['assigned']['icon'] = 'hand-right';
 $config->story->datatable->fieldList['actions']['actionsMap']['assigned']['hint'] = $lang->story->operateList['assigned'];
 
-$config->story->datatable->fieldList['actions']['actionsMap']['closed']['icon'] = 'off';
-$config->story->datatable->fieldList['actions']['actionsMap']['closed']['hint'] = $lang->story->operateList['closed'];
+$config->story->datatable->fieldList['actions']['actionsMap']['close']['icon'] = 'off';
+$config->story->datatable->fieldList['actions']['actionsMap']['close']['hint'] = $lang->story->operateList['closed'];
 
-$config->story->datatable->fieldList['actions']['actionsMap']['activated']['icon'] = 'active';
-$config->story->datatable->fieldList['actions']['actionsMap']['activated']['hint'] = $lang->story->operateList['activated'];
+$config->story->datatable->fieldList['actions']['actionsMap']['activate']['icon'] = 'active';
+$config->story->datatable->fieldList['actions']['actionsMap']['activate']['hint'] = $lang->story->operateList['activated'];
 
-$config->story->datatable->fieldList['actions']['actionsMap']['changed']['icon'] = 'change';
-$config->story->datatable->fieldList['actions']['actionsMap']['changed']['hint'] = $lang->story->operateList['changed'];
+$config->story->datatable->fieldList['actions']['actionsMap']['change']['icon'] = 'change';
+$config->story->datatable->fieldList['actions']['actionsMap']['change']['hint'] = $lang->story->operateList['changed'];
 
-$config->story->datatable->fieldList['actions']['actionsMap']['reviewed']['icon'] = 'search';
-$config->story->datatable->fieldList['actions']['actionsMap']['reviewed']['hint'] = $lang->story->operateList['reviewed'];
+$config->story->datatable->fieldList['actions']['actionsMap']['review']['icon'] = 'search';
+$config->story->datatable->fieldList['actions']['actionsMap']['review']['hint'] = $lang->story->operateList['reviewed'];
 
-$config->story->datatable->fieldList['actions']['actionsMap']['edited']['icon'] = 'edit';
-$config->story->datatable->fieldList['actions']['actionsMap']['edited']['hint'] = $lang->story->operateList['edited'];
+$config->story->datatable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
+$config->story->datatable->fieldList['actions']['actionsMap']['edit']['hint'] = $lang->story->operateList['edited'];
 
 $config->story->datatable->fieldList['actions']['actionsMap']['submitreview']['icon'] = 'sub-review';
 $config->story->datatable->fieldList['actions']['actionsMap']['submitreview']['hint'] = $lang->story->operateList['submitreview'];
@@ -238,12 +238,18 @@ $config->story->datatable->fieldList['actions']['actionsMap']['submitreview']['h
 $config->story->datatable->fieldList['actions']['actionsMap']['recalledchange']['icon'] = 'undo';
 $config->story->datatable->fieldList['actions']['actionsMap']['recalledchange']['hint'] = $lang->story->operateList['recalledchange'];
 
-$config->story->datatable->fieldList['actions']['actionsMap']['recalled']['icon'] = 'undo';
-$config->story->datatable->fieldList['actions']['actionsMap']['recalled']['hint'] = $lang->story->operateList['recalled'];
+$config->story->datatable->fieldList['actions']['actionsMap']['recall']['icon'] = 'undo';
+$config->story->datatable->fieldList['actions']['actionsMap']['recall']['hint'] = $lang->story->operateList['recalled'];
 
 $app->loadLang('testcase');
-$config->story->datatable->fieldList['actions']['actionsMap']['createcase']['icon'] = 'testcase';
-$config->story->datatable->fieldList['actions']['actionsMap']['createcase']['hint'] = $lang->testcase->create;
+$config->story->datatable->fieldList['actions']['actionsMap']['testcase']['icon'] = 'testcase';
+$config->story->datatable->fieldList['actions']['actionsMap']['testcase']['hint'] = $lang->testcase->create;
 
 $config->story->datatable->fieldList['actions']['actionsMap']['subdivide']['icon'] = 'split';
 $config->story->datatable->fieldList['actions']['actionsMap']['subdivide']['hint'] = $lang->story->subdivide;
+
+$config->story->datatable->fieldList['actions']['actionsMap']['processStoryChange']['icon'] = 'ok';
+$config->story->datatable->fieldList['actions']['actionsMap']['processStoryChange']['hint'] = $lang->confirm;
+
+$config->story->datatable->fieldList['actions']['actionsMap']['batchCreate']['icon'] = 'split';
+$config->story->datatable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->story->subdivide;
