@@ -293,7 +293,7 @@ $fnBuildActions = function($story) use ($lang, $storyType)
     $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
     if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
     {
-        $isClick = $this->isClickable($story, 'batchcreate');
+        $isClick = $this->story->isClickable($story, 'batchcreate');
         $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
         if(!$isClick && $story->status != 'closed')
         {
