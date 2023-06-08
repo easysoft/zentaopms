@@ -1529,7 +1529,7 @@ class storyTao extends storyModel
             }
         }
 
-        /* Close buttons. */
+        /* Close and unlink story buttons. */
         if($this->app->tab == 'product' && $storyType == 'requirement')
         {
             $link      = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type", '', true);
@@ -1554,6 +1554,39 @@ class storyTao extends storyModel
             $link      = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type", '', true);
             $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $link);
         }
+
+        /* Render divider line. */
+        $vars            = "storyType={$story->type}";
+        $canChange       = common::hasPriv('story', 'change', '', $vars);
+        $canRecall       = common::hasPriv('story', 'recall', '', $vars);
+        $canSubmitReview = (strpos('draft,changing', $story->status) !== false && common::hasPriv('story', 'submitReview', '', $vars));
+        $canReview       = (strpos('draft,changing', $story->status) === false && common::hasPriv('story', 'review', '', $vars));
+        $canEdit         = common::hasPriv('story', 'edit', '', $vars);
+        $canBatchCreate  = ($this->app->tab == 'product' && (common::hasPriv('story', 'batchCreate', '', 'storyType=story')));
+        $canCreateCase   = ($story->type == 'story' && common::hasPriv('testcase', 'create'));
+        $canClose        = common::hasPriv('story', 'close', '', $vars);
+        $canUnlinkStory  = ($this->app->tab == 'project' && common::hasPriv('projectstory', 'unlinkStory'));
+
+        $dividerAction = array('name' => 'divider', 'class'=>'nav-divider', 'type' => 'dropdown', 'icon' => '', 'caret' => false);
+        $action        = null;
+        if(in_array($this->app->tab, array('product', 'project')))
+        {
+            if(($canChange || $canRecall || $canSubmitReview || $canReview || $canEdit) && ($canCreateCase || $canBatchCreate || $canClose || $canUnlinkStory))
+            {
+                $action = $dividerAction;
+            }
+        }
+
+        if($this->app->tab == 'product' && in_array($storyType, array('requirement', 'story')))
+        {
+            if($canClose && ($canBatchCreate || $canCreateCase)) $action = $dividerAction;
+        }
+
+        if(($this->app->rawModule == 'projectstory' || ($this->app->tab != 'product' && $storyType == 'requirement')) && $this->config->vision != 'lite')
+        {
+            if($canCreateCase && ($canClose || $canUnlinkStory)) $action = $dividerAction;
+        }
+        $actions[] = $action;
 
         /* Edit button. */
         $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", '', true);
