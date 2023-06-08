@@ -60,7 +60,7 @@ window.generateHtml = function(event, options)
 
     let html = "<div class='toolbar input-group mr-2'>";
     html += "<input class='form-control size-sm' type='date' autocomplete='off' id='formDate' name='date'>";
-    html += "<button class='btn primary toolbar-item batch-btn ajax-btn size-sm' data-url='" + $.createLink('todo', 'import2Today') + "' id='changeDate'>";
+    html += "<button class='btn secondary toolbar-item batch-btn ajax-btn size-sm' data-url='" + $.createLink('todo', 'import2Today') + "' id='changeDate'>";
     html += "<span class='text'>" + changeDateLabel + "</span>";
     html += "</button>";
     html += "</div>";
