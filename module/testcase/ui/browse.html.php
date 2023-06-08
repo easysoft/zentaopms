@@ -345,27 +345,29 @@ $config->testcase->dtable->fieldList['story']['map'] = $stories;
 
 $this->testcase->buildOperateMenu(null, 'browse');
 
-foreach($cases as $case)
+foreach($scenes as $scene)
 {
-    $stages = array_filter(explode(',', $case->stage));
+    if($scene->isCase != 1) continue;
+
+    $stages = array_filter(explode(',', $scene->stage));
     foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
-    $case->stage = implode($lang->comma, $stages);
+    $scene->stage = implode($lang->comma, $stages);
 
     $actions = array();
     foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
     {
-        $isClickable = $this->testcase->isClickable($case, $actionCode);
+        $isClickable = $this->testcase->isClickable($scene, $actionCode);
 
         $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
     }
-    $case->actions = $actions;
+    $scene->actions = $actions;
 }
 
 dtable
 (
     set::userMap($users),
     set::cols(array_values($config->testcase->dtable->fieldList)),
-    set::data(array_values($cases)),
+    set::data(array_values($scenes)),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
