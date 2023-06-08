@@ -138,36 +138,36 @@ $config->my->requirement->actionList = array();
 $config->my->requirement->actionList['change']['icon']        = 'alter';
 $config->my->requirement->actionList['change']['text']        = $lang->story->change;
 $config->my->requirement->actionList['change']['hint']        = $lang->story->change;
-$config->my->requirement->actionList['change']['url']         = helper::createLink('story', 'change', 'story={id}&from=&storyType=requirement');
+$config->my->requirement->actionList['change']['url']         = helper::createLink('story', 'change', 'storyID={id}&from=&storyType=requirement');
 $config->my->requirement->actionList['change']['data-toggle'] = 'modal';
 
 $config->my->requirement->actionList['submitReview']['icon']        = 'confirm';
 $config->my->requirement->actionList['submitReview']['text']        = $lang->story->submitReview;
 $config->my->requirement->actionList['submitReview']['hint']        = $lang->story->submitReview;
-$config->my->requirement->actionList['submitReview']['url']         = helper::createLink('story', 'submitReview', 'story={id}&storyType=requirement');
+$config->my->requirement->actionList['submitReview']['url']         = helper::createLink('story', 'submitReview', 'storyID={id}&storyType=requirement');
 $config->my->requirement->actionList['submitReview']['data-toggle'] = 'modal';
 
 $config->my->requirement->actionList['review']['icon']        = 'search';
 $config->my->requirement->actionList['review']['text']        = $lang->story->review;
 $config->my->requirement->actionList['review']['hint']        = $lang->story->review;
-$config->my->requirement->actionList['review']['url']         = helper::createLink('story', 'review', 'story={id}&from=product&storyType=requirement');
+$config->my->requirement->actionList['review']['url']         = helper::createLink('story', 'review', 'storyID={id}&from=product&storyType=requirement');
 $config->my->requirement->actionList['review']['data-toggle'] = 'modal';
 
 $config->my->requirement->actionList['recall']['icon'] = 'undo';
 $config->my->requirement->actionList['recall']['text'] = $lang->story->recall;
 $config->my->requirement->actionList['recall']['hint'] = $lang->story->recall;
-$config->my->requirement->actionList['recall']['url']  = helper::createLink('story', 'recall', 'story={id}&from=list&confirm=no&storyType=requirement');
+$config->my->requirement->actionList['recall']['url']  = helper::createLink('story', 'recall', 'storyID={id}&from=list&confirm=no&storyType=requirement');
 
 $config->my->requirement->actionList['edit']['icon']        = 'edit';
 $config->my->requirement->actionList['edit']['text']        = $lang->story->edit;
 $config->my->requirement->actionList['edit']['hint']        = $lang->story->edit;
-$config->my->requirement->actionList['edit']['url']         = helper::createLink('story', 'edit',   'story={id}&from=default&storyType=requirement');
+$config->my->requirement->actionList['edit']['url']         = helper::createLink('story', 'edit', 'storyID={id}&from=default&storyType=requirement');
 $config->my->requirement->actionList['edit']['data-toggle'] = 'modal';
 
-$config->my->requirement->actionList['close']['icon'] = 'close';
+$config->my->requirement->actionList['close']['icon'] = 'off';
 $config->my->requirement->actionList['close']['text'] = $lang->story->close;
 $config->my->requirement->actionList['close']['hint'] = $lang->story->close;
-$config->my->requirement->actionList['close']['url']  = helper::createLink('story', 'close',  'story={id}&from=&storyType=requirement');
+$config->my->requirement->actionList['close']['url']  = helper::createLink('story', 'close', 'storyID={id}&from=&storyType=requirement');
 
 $config->my->requirement->dtable = new stdclass();
 $config->my->requirement->dtable->fieldList['id']['name']  = 'id';
@@ -200,7 +200,6 @@ $config->my->requirement->dtable->fieldList['status']['group']     = 'pri';
 $config->my->requirement->dtable->fieldList['openedBy']['name']      = 'openedBy';
 $config->my->requirement->dtable->fieldList['openedBy']['title']     = $lang->story->openedByAB;
 $config->my->requirement->dtable->fieldList['openedBy']['type']      = 'user';
-$config->my->requirement->dtable->fieldList['openedBy']['statusMap'] = $lang->story->statusList;
 $config->my->requirement->dtable->fieldList['openedBy']['group']     = 'openedBy';
 
 $config->my->requirement->dtable->fieldList['estimate']['name']  = 'estimate';
@@ -220,6 +219,98 @@ $config->my->requirement->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->requirement->dtable->fieldList['actions']['sortType'] = false;
 $config->my->requirement->dtable->fieldList['actions']['list']     = $config->my->requirement->actionList;
 $config->my->requirement->dtable->fieldList['actions']['menu']     = array('change', 'submitReview|review', 'recall', 'edit', 'close');
+
+$config->my->story = new stdclass();
+$config->my->story->actionList = array();
+$config->my->story->actionList['change']['icon']        = 'alter';
+$config->my->story->actionList['change']['text']        = $lang->story->change;
+$config->my->story->actionList['change']['hint']        = $lang->story->change;
+$config->my->story->actionList['change']['url']         = helper::createLink('story', 'change', 'storyID={id}');
+$config->my->story->actionList['change']['data-toggle'] = 'modal';
+
+$config->my->story->actionList['submitReview']['icon']        = 'confirm';
+$config->my->story->actionList['submitReview']['text']        = $lang->story->submitReview;
+$config->my->story->actionList['submitReview']['hint']        = $lang->story->submitReview;
+$config->my->story->actionList['submitReview']['url']         = helper::createLink('story', 'submitReview', 'storyID={id}');
+$config->my->story->actionList['submitReview']['data-toggle'] = 'modal';
+
+$config->my->story->actionList['review']['icon']        = 'search';
+$config->my->story->actionList['review']['text']        = $lang->story->review;
+$config->my->story->actionList['review']['hint']        = $lang->story->review;
+$config->my->story->actionList['review']['url']         = helper::createLink('story', 'review', 'storyID={id}');
+$config->my->story->actionList['review']['data-toggle'] = 'modal';
+
+$config->my->story->actionList['recall']['icon'] = 'undo';
+$config->my->story->actionList['recall']['text'] = $lang->story->recall;
+$config->my->story->actionList['recall']['hint'] = $lang->story->recall;
+$config->my->story->actionList['recall']['url']  = helper::createLink('story', 'recall', 'storyID={id}');
+
+$config->my->story->actionList['create']['icon']        = 'sitemap';
+$config->my->story->actionList['create']['text']        = $lang->story->edit;
+$config->my->story->actionList['create']['hint']        = $lang->story->edit;
+$config->my->story->actionList['create']['url']         = helper::createLink('testcase', 'create', 'productID={product}&branch={branch}&module=0&from=&param=0&storyID={id}');
+$config->my->story->actionList['create']['data-toggle'] = 'modal';
+
+$config->my->story->actionList['close']['icon'] = 'off';
+$config->my->story->actionList['close']['text'] = $lang->story->close;
+$config->my->story->actionList['close']['hint'] = $lang->story->close;
+$config->my->story->actionList['close']['url']  = helper::createLink('story', 'close', 'storyID={id}');
+
+$config->my->story->dtable = new stdclass();
+$config->my->story->dtable->fieldList['id']['name']  = 'id';
+$config->my->story->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->my->story->dtable->fieldList['id']['type']  = 'checkID';
+$config->my->story->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->my->story->dtable->fieldList['title']['name']  = 'title';
+$config->my->story->dtable->fieldList['title']['title'] = common::checkNotCN() ? $lang->SRCommon . ' ' . $lang->my->name : $lang->SRCommon . $lang->my->name;
+$config->my->story->dtable->fieldList['title']['type']  = 'title';
+$config->my->story->dtable->fieldList['title']['link']  = helper::createLink('story', 'view', 'id={id}');
+$config->my->story->dtable->fieldList['title']['fixed'] = 'left';
+
+$config->my->story->dtable->fieldList['pri']['name']  = 'pri';
+$config->my->story->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->my->story->dtable->fieldList['pri']['type']  = 'pri';
+$config->my->story->dtable->fieldList['pri']['group'] = 'pri';
+
+$config->my->story->dtable->fieldList['product']['name']  = 'productTitle';
+$config->my->story->dtable->fieldList['product']['title'] = $lang->story->product;
+$config->my->story->dtable->fieldList['product']['type']  = 'text';
+$config->my->story->dtable->fieldList['product']['group'] = 'pri';
+
+$config->my->story->dtable->fieldList['plan']['name']  = 'planTitle';
+$config->my->story->dtable->fieldList['plan']['title'] = $lang->story->plan;
+$config->my->story->dtable->fieldList['plan']['type']  = 'text';
+$config->my->story->dtable->fieldList['plan']['group'] = 'pri';
+
+$config->my->story->dtable->fieldList['status']['name']      = 'status';
+$config->my->story->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->my->story->dtable->fieldList['status']['type']      = 'status';
+$config->my->story->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
+$config->my->story->dtable->fieldList['status']['group']     = 'pri';
+
+$config->my->story->dtable->fieldList['openedBy']['name']      = 'openedBy';
+$config->my->story->dtable->fieldList['openedBy']['title']     = $lang->story->openedByAB;
+$config->my->story->dtable->fieldList['openedBy']['type']      = 'user';
+$config->my->story->dtable->fieldList['openedBy']['group']     = 'openedBy';
+
+$config->my->story->dtable->fieldList['estimate']['name']  = 'estimate';
+$config->my->story->dtable->fieldList['estimate']['title'] = $lang->story->estimateAB;
+$config->my->story->dtable->fieldList['estimate']['type']  = 'count';
+$config->my->story->dtable->fieldList['estimate']['group'] = 'openedBy';
+
+$config->my->story->dtable->fieldList['stage']['name']  = 'stage';
+$config->my->story->dtable->fieldList['stage']['title'] = $lang->story->stageAB;
+$config->my->story->dtable->fieldList['stage']['type']  = 'category';
+$config->my->story->dtable->fieldList['stage']['map']   = $lang->story->stageList;
+$config->my->story->dtable->fieldList['stage']['group'] = 'openedBy';
+
+$config->my->story->dtable->fieldList['actions']['name']     = 'actions';
+$config->my->story->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->my->story->dtable->fieldList['actions']['type']     = 'actions';
+$config->my->story->dtable->fieldList['actions']['sortType'] = false;
+$config->my->story->dtable->fieldList['actions']['list']     = $config->my->story->actionList;
+$config->my->story->dtable->fieldList['actions']['menu']     = array('change', 'submitReview|review', 'recall', 'create', 'close');
 
 $config->my->audit->dtable = new stdclass();
 $config->my->audit->dtable->fieldList['id']['name']  = 'id';

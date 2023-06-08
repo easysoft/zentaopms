@@ -786,7 +786,7 @@ class myModel extends model
         $this->config->product->search['actionURL']                   = $actionURL;
         $this->config->product->search['params']['product']['values'] = array('' => '') + $products;
         $this->config->product->search['params']['plan']['values']    = array('' => '') + $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
-
+        $this->config->product->search['fields']['title']             = $this->lang->story->title;
         unset($this->config->product->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);

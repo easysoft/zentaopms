@@ -372,6 +372,8 @@ EOF;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildStorySearchForm($queryID, $actionURL, $currentMethod);
 
+        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->stories    = $stories;
