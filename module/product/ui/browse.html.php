@@ -396,6 +396,7 @@ toolbar
 
 dtable
 (
+    set::customCols(true),
     set::cols($cols),
     set::data($data),
     set::className('shadow rounded'),
