@@ -468,7 +468,7 @@ class storyZen extends story
         if($forceReview) $fields['reviewer']['required'] = true;
 
         $this->view->forceReview = $forceReview;
-        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0 || !$forceReview()) && empty($reviewer);
+        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0 || !$forceReview) && empty($reviewer);
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
         return $fields;
