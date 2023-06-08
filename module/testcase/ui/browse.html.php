@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$topSceneCount = count(array_filter(array_map(function($scene){return $scene->isCase == 2 && $scene->grade == 1;}, $scenes)));
+$topCaseCount  = count(array_filter(array_map(function($scene){return $scene->isCase == 1 && $scene->scene == 0;}, $scenes)));
+
+jsVar('pageSummary', sprintf($lang->testcase->summary, $topSceneCount, $topCaseCount));
+jsVar('checkedSummary', $lang->testcase->checkedSummary);
+
 $isProjectApp  = $this->app->tab == 'project';
 $currentModule = $isProjectApp ? 'project'  : 'testcase';
 $currentMethod = $isProjectApp ? 'testcase' : 'browse';
@@ -369,6 +375,7 @@ dtable
     set::cols(array_values($config->testcase->dtable->fieldList)),
     set::data(array_values($scenes)),
     set::checkable($canBatchAction),
+    set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );
