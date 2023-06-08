@@ -263,24 +263,6 @@ sidebar
     )))
 );
 
-$this->testcase->buildOperateMenu(null, 'browse');
-
-foreach($cases as $case)
-{
-    $stages = array_filter(explode(',', $case->stage));
-    foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
-    $case->stage = implode($lang->comma, $stages);
-
-    $actions = array();
-    foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->testcase->isClickable($case, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $case->actions = $actions;
-}
-
 $caseProductIds = array();
 foreach($cases as $case) $caseProductIds[$case->product] = $case->product;
 $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
@@ -360,6 +342,24 @@ if($canBatchChangeScene)
 }
 
 $config->testcase->dtable->fieldList['story']['map'] = $stories;
+
+$this->testcase->buildOperateMenu(null, 'browse');
+
+foreach($cases as $case)
+{
+    $stages = array_filter(explode(',', $case->stage));
+    foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
+    $case->stage = implode($lang->comma, $stages);
+
+    $actions = array();
+    foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
+    {
+        $isClickable = $this->testcase->isClickable($case, $actionCode);
+
+        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
+    }
+    $case->actions = $actions;
+}
 
 dtable
 (
