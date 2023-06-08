@@ -3261,6 +3261,7 @@ class super
         {
             if($tab) $_SESSION["app-$tab"][$key] = $value;
             $_SESSION[$key] = $value;
+            session_write_close();
         }
         elseif($this->scope == 'env')
         {
@@ -3307,6 +3308,7 @@ class super
         }
         elseif($this->scope == 'session')
         {
+            if(session_status() !== PHP_SESSION_ACTIVE) session_start();
             $tab = $this->tab;
             if($tab and isset($_SESSION["app-$tab"][$key])) return $_SESSION["app-$tab"][$key];
             if(isset($_SESSION[$key])) return $_SESSION[$key];
