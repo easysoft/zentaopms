@@ -153,7 +153,7 @@ $fnBuildLinkStoryButton = function() use($lang, $product, $productID, $projectHa
 };
 
 /* DataTable columns. */
-$setting = $this->datatable->getSetting('product');
+$setting = $this->datatable->getSetting('story');
 $cols    = array_values($setting);
 foreach($cols as $key => $col)
 {
@@ -397,6 +397,7 @@ toolbar
 dtable
 (
     set::customCols(true),
+    set::groupDivider(true),
     set::cols($cols),
     set::data($data),
     set::className('shadow rounded'),

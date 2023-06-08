@@ -104,6 +104,7 @@ class datatableModel extends model
                 $set->title = $fieldList[$id]['title'];
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
                 $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
+                $set->group = isset($fieldList[$id]['group']) ? $fieldList[$id]['group'] : '';
 
                 if(isset($fieldList[$id]['minWidth']))   $set->minWidth   = $fieldList[$id]['minWidth'];
                 if(isset($fieldList[$id]['maxWidth']))   $set->maxWidth   = $fieldList[$id]['maxWidth'];
