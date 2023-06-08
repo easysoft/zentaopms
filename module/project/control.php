@@ -1144,106 +1144,71 @@ class project extends control
      * @param  string $type      all|product|bysearch
      * @param  int    $param
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function build($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
+    public function build($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load module and get project. */
         $this->loadModel('build');
         $this->loadModel('product');
         $projectID = (int)$projectID;
-        $project = $this->project->getByID($projectID);
+        $project   = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
         $this->session->set('buildList', $this->app->getURI(true), 'project');
 
-        /* Get products' list. */
-        $products = $this->product->getProducts($projectID, 'all', '', false);
-        $products = array('' => '') + $products;
-
-
-        $fromModule = $this->app->tab == 'project' ? 'projectbuild' : 'project';
-        $fromMethod = $this->app->tab == 'project' ? 'browse' : 'build';
-        /* Build the search form. */
-        $type      = strtolower($type);
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
-        $actionURL = $this->createLink($fromModule, $fromMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
-
-        $devel      = $project->model == 'waterfall';
-        $executions = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
-        $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
-        $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
+        $executions = array();
+        if($project->multiple)
+        {
+            $executions = $this->loadModel('execution')->getByProject($project->id, 'all', '', true, $project->model == 'waterfall');
+            $this->config->build->search['fields']['execution'] = zget($this->lang->project->executionList, $project->model);
+            $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executions);
+        }
         if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
 
-        $product = $param ? $this->loadModel('product')->getById($param) : '';
+        $product = $param ? $this->loadModel('product')->getById((int)$param) : '';
         if($product and $product->type != 'normal')
         {
-            $this->loadModel('build');
-            $this->loadModel('branch');
-            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $projectID);
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, '', $projectID);
             $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
             $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
         }
-        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
 
+        /* Build the search form. */
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $products  = $this->product->getProducts($projectID, 'all', '', false);
+        $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
         if($type == 'bysearch')
         {
-            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param, $orderBy);
+            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param, $orderBy, $pager);
         }
         else
         {
-            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param, $orderBy);
-        }
-
-        /* Set project builds. */
-        $projectBuilds = array();
-        $productList   = $this->product->getProducts($projectID);
-        $showBranch    = false;
-        if(!empty($builds))
-        {
-            foreach($builds as $build)
-            {
-                $build->builds = $this->build->getByList($build->builds);
-                $projectBuilds[$build->product][] = $build;
-            }
-
-            /* Get branch name. */
-            $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($projectBuilds));
-            foreach($builds as $build)
-            {
-                $build->branchName = '';
-                if(isset($branchGroups[$build->product]))
-                {
-                    $showBranch  = true;
-                    $branchPairs = $branchGroups[$build->product];
-                    foreach(explode(',', trim($build->branch, ',')) as $branchID)
-                    {
-                        if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
-                    }
-                    $build->branchName = trim($build->branchName, ',');
-
-                    if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
-                }
-            }
+            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param, $orderBy, $pager);
         }
 
         /* Header and position. */
-        $this->view->title      = $project->name . $this->lang->colon . $this->lang->execution->build;
-
+        $this->view->title         = $project->name . $this->lang->colon . $this->lang->execution->build;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->buildsTotal   = count($builds);
-        $this->view->projectBuilds = $projectBuilds;
+        $this->view->builds        = $this->projectZen->processBuildListData($builds, $projectID);
         $this->view->product       = $type == 'product' ? $param : 'all';
-        $this->view->projectID     = $projectID;
         $this->view->project       = $project;
         $this->view->products      = $products;
-        $this->view->executions    = $this->execution->getPairs();
+        $this->view->executions    = $executions;
         $this->view->buildPairs    = $this->loadModel('build')->getBuildPairs(0);
         $this->view->type          = $type;
-        $this->view->showBranch    = $showBranch;
-        $this->view->fromModule    = $fromModule;
-        $this->view->fromMethod    = $fromMethod;
+        $this->view->orderBy       = $orderBy;
+        $this->view->param         = $param;
+        $this->view->pager         = $pager;
 
         $this->display();
     }

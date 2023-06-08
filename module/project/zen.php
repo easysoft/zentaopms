@@ -994,4 +994,57 @@ class projectZen extends project
 
         return array_values($projectList);
     }
+
+    /**
+     * 处理版本列表展示数据。
+     * Process build list display data.
+     *
+     * @param  array     $builds
+     * @param  int       $projectID
+     * @access protected
+     * @return object[]
+     */
+    protected function processBuildListData(array $builds, int $projectID): array
+    {
+        $this->loadModel('build');
+        $this->loadModel('branch');
+
+        $showBranch    = false;
+        $productIdList = array();
+        foreach($builds as $build)
+        {
+            $build->builds = $this->build->getByList($build->builds);
+            $productIdList[$build->product] = $build->product;
+        }
+
+        /* Get branch name. */
+        $branchGroups = $this->branch->getByProducts($productIdList);
+        foreach($builds as $build)
+        {
+            $build->branchName = '';
+            if(isset($branchGroups[$build->product]))
+            {
+                $showBranch  = true;
+                $branchPairs = $branchGroups[$build->product];
+                foreach(explode(',', trim($build->branch, ',')) as $branchID)
+                {
+                    if(isset($branchPairs[$branchID])) $build->branchName .= "{$branchPairs[$branchID]},";
+                }
+                $build->branchName = trim($build->branchName, ',');
+
+                if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
+            }
+            $build->actions = $this->build->buildActionList($build, 0, 'projectbuild');
+        }
+
+        /* Set data table column. */
+        $project = $this->project->getByID($projectID);
+        if(!$project->hasProduct) unset($this->config->build->dtable->fieldList['product']);
+        if(!$showBranch || !$project->hasProduct) unset($this->config->build->dtable->fieldList['branch']);
+        if(!$project->multiple) unset($this->config->build->dtable->fieldList['execution']);
+        $this->config->build->dtable->fieldList['name']['link'] = helper::createLink('projectbuild', 'view', 'buildID={id}');
+        $this->config->build->dtable->fieldList['execution']['title'] = zget($this->lang->project->executionList, $project->model);
+
+        return array_values($builds);
+    }
 }
