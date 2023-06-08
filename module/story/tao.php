@@ -1465,8 +1465,8 @@ class storyTao extends storyModel
         $actions[] = array
         (
             'name'        => 'change',
-            'data-toggle' => 'modal',
-            'data-url'    => helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type", '', true),
+            'data-toggle' => !$isClick ? null : 'modal',
+            'data-url'    => !$isClick ? null : helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type", '', true),
             'hint'        => $title,
             'disabled'    => !$isClick,
         );
@@ -1500,32 +1500,46 @@ class storyTao extends storyModel
                 }
             }
             $link      = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type", '', true);
-            $actReview = array('name' => 'review', 'data-toggle' => 'modal', 'data-url' => $link, 'hint' => $title, 'disabled' => !$isClick);
+            $actReview = array
+            (
+                'name'        => 'review',
+                'data-toggle' => !$isClick ? null : 'modal',
+                'data-url'    => !$isClick ? null : $link,
+                'hint'        => $title,
+                'disabled'    => !$isClick
+            );
         }
 
         $isClick   = $this->isClickable($story, 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         $title     = $isClick ? $title : $this->lang->story->recallTip['actived'];
         $link      = helper::createLink('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", '', true);
-        $actRecall = array('name' => 'recall', 'data-toggle' => 'modal', 'data-url' => $link, 'hint' => $title, 'disabled' => !$isClick);
+        $actRecall = array
+        (
+            'name'        => 'recall',
+            'data-toggle' => !$isClick ? null : 'modal',
+            'data-url'    => !$isClick ? null : $link,
+            'hint'        => $title,
+            'disabled'    => !$isClick
+        );
 
         /* Change the render order. */
         if(!empty($actSubmitreview))
         {
             $actions[] = $actSubmitreview;
-            $actions[] = array('name' => 'other', 'type' => 'dropdown', 'items' => array($actRecall));
+            $actions[] = array('type' => 'dropdown', 'items' => array($actRecall));
         }
         else
         {
             if($actReview['disabled'] && !$actRecall['disabled'])
             {
                 $actions[] = $actRecall;
-                $actions[] = array('name' => 'other', 'type' => 'dropdown', 'items' => array($actReview));
+                $actions[] = array('type' => 'dropdown', 'items' => array($actReview));
             }
             else
             {
                 $actions[] = $actReview;
-                $actions[] = array('name' => 'other', 'type' => 'dropdown', 'items' => array($actRecall));
+                $actions[] = array('type' => 'dropdown', 'items' => array($actRecall));
             }
         }
 
@@ -1590,7 +1604,14 @@ class storyTao extends storyModel
 
         /* Edit button. */
         $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", '', true);
-        $actions[] = array('name' => 'edit', 'data-toggle' => 'modal', 'data-url' => $link, 'hint' => $title, 'disabled' => !$isClick);
+        $actions[] = array
+        (
+            'name'        => 'edit',
+            'data-toggle' => !$isClick ? null : 'modal',
+            'data-url'    => !$isClick ? null : $link,
+            'hint'        => $title,
+            'disabled'    => !$isClick
+        );
 
         /* Create test case button. */
         if($story->type != 'requirement' && $this->config->vision != 'lite')
@@ -1624,7 +1645,14 @@ class storyTao extends storyModel
 
             $executionID = empty($execution) ? 0 : $execution->id;
             $link        = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", '', true);
-            $actions[]   = array('name' => 'batchCreate', 'data-toggle' => 'modal', 'data-url' => $link, 'hint' => $title, 'disabled' => !$isClick);
+            $actions[]   = array
+            (
+                'name'        => 'batchCreate',
+                'data-toggle' => !$isClick ? null : 'modal',
+                'data-url'    => !$isClick ? null : $link,
+                'hint'        => $title,
+                'disabled'    => !$isClick
+            );
         }
 
         return $actions;
