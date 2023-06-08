@@ -191,11 +191,11 @@ $config->my->requirement->dtable->fieldList['product']['title'] = $lang->story->
 $config->my->requirement->dtable->fieldList['product']['type']  = 'text';
 $config->my->requirement->dtable->fieldList['product']['group'] = 'pri';
 
-$config->my->requirement->dtable->fieldList['product']['name']      = 'status';
-$config->my->requirement->dtable->fieldList['product']['title']     = $lang->statusAB;
-$config->my->requirement->dtable->fieldList['product']['type']      = 'status';
-$config->my->requirement->dtable->fieldList['product']['statusMap'] = $lang->story->statusList;
-$config->my->requirement->dtable->fieldList['product']['group']     = 'pri';
+$config->my->requirement->dtable->fieldList['status']['name']      = 'status';
+$config->my->requirement->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->my->requirement->dtable->fieldList['status']['type']      = 'status';
+$config->my->requirement->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
+$config->my->requirement->dtable->fieldList['status']['group']     = 'pri';
 
 $config->my->requirement->dtable->fieldList['openedBy']['name']      = 'openedBy';
 $config->my->requirement->dtable->fieldList['openedBy']['title']     = $lang->story->openedByAB;
