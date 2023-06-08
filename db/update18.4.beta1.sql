@@ -1,0 +1,1 @@
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0','*','*','*','*','moduleName=misc&methodName=cleanCache', '清理缓存文件','zentao', 1, 'normal');

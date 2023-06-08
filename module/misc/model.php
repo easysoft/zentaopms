@@ -134,4 +134,36 @@ class miscModel extends model
 
         return $weakSites;
     }
+
+    /**
+     * Get cache files.
+     *
+     * @param string $directory
+     * @return void
+     */
+    public function getCacheFiles($directory)
+    {
+        $files = glob($directory . DS . '*.cache');
+
+        foreach($files as $file) $this->readCacheFile($file);
+
+        $subdirectories = glob($directory . DS . '*', GLOB_ONLYDIR);
+
+        foreach($subdirectories as $subdirectory) $this->getCacheFiles($subdirectory);
+    }
+
+    /**
+     * Read cache file content, and delete it if expired.
+     *
+     * @param string $file
+     * @return bool
+     */
+    public function readCacheFile($file)
+    {
+        $content = file_get_contents($file);
+        $content = unserialize($content);
+
+        if(is_null($content['time'])) return false;
+        if(time() > $content['time']) return unlink($file);
+    }
 }
