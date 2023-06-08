@@ -320,6 +320,9 @@ class dbh
                 if(stripos($sql, 'SET SCHEMA') === 0) return $sql;
             case 'USE':
                 return '';
+            case 'DESC';
+                $tableName = str_replace('DESC ', '', $sql);
+                return "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
             case 'DROP':
                 return $this->formatField($sql);
         }
