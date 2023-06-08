@@ -272,12 +272,16 @@ class productModel extends model
      * @param  int        $limit
      * @param  int        $line
      * @param  string|int $shadow       all | 0 | 1
+     * @param  string     $fields       * or fieldList, such as id,name,program
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0)
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0, $fields = '*')
     {
-        $products = $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
+        $fields = explode(',', $fields);
+        $fields = trim(implode(',t1.', $fields), ',');
+
+        $products = $this->dao->select("DISTINCT t1.$fields,t2.order")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
             ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
@@ -1784,7 +1788,7 @@ class productModel extends model
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line);
+        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line, 0, 'id');
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
@@ -1827,7 +1831,7 @@ class productModel extends model
             }
         }
 
-        $stories = $this->dao->select('product, status, count(status) AS count')
+        $stories = $this->dao->select('product, status, count(id) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('story')
@@ -1835,20 +1839,8 @@ class productModel extends model
             ->groupBy('product, status')
             ->fetchGroup('product', 'status');
 
-        $requirements = $this->dao->select('product, status, count(status) AS count')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('requirement')
-            ->andWhere('product')->in($productKeys)
-            ->groupBy('product, status')
-            ->fetchGroup('product', 'status');
-
         /* Padding the stories to sure all products have records. */
-        foreach($productKeys as $productID)
-        {
-            if(!isset($stories[$productID]))      $stories[$productID]      = array();
-            if(!isset($requirements[$productID])) $requirements[$productID] = array();
-        }
+        foreach($productKeys as $productID) if(!isset($stories[$productID])) $stories[$productID] = array();
 
         /* Padding the stories to sure all status have records. */
         foreach($stories as $key => $story)
@@ -1859,18 +1851,8 @@ class productModel extends model
             }
             $stories[$key] = $story;
         }
-        foreach($requirements as $key => $requirement)
-        {
-            foreach(array_keys($this->lang->story->statusList) as $status)
-            {
-                $requirement[$status] = isset($requirement[$status]) ? $requirement[$status]->count : 0;
-            }
-            $requirements[$key] = $requirement;
-        }
 
-        if($storyType == 'requirement') $stories = $requirements;
-
-        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
+        $finishClosedStory = $this->dao->select('product, count(id) as finish')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('closed')
             ->andWhere('type')->eq('story')
@@ -1878,14 +1860,14 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
-        $unclosedStory = $this->dao->select('product, count(1) as unclosed')->from(TABLE_STORY)
+        $unclosedStory = $this->dao->select('product, count(id) as unclosed')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('story')
             ->andWhere('status')->ne('closed')
             ->groupBy('product')
             ->fetchPairs();
 
-        $plans = $this->dao->select('product, count(*) AS count')
+        $plans = $this->dao->select('product, count(id) AS count')
             ->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productKeys)
@@ -1893,21 +1875,21 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
-        $releases = $this->dao->select('product, count(*) AS count')
+        $releases = $this->dao->select('product, count(id) AS count')
             ->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productKeys)
             ->groupBy('product')
             ->fetchPairs();
 
-        $bugs = $this->dao->select('product,count(*) AS conut')
+        $bugs = $this->dao->select('product,count(id) AS conut')
             ->from(TABLE_BUG)
             ->where('product')->in($productKeys)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
 
-        $unResolved = $this->dao->select('product,count(*) AS count')
+        $unResolved = $this->dao->select('product,count(id) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->orWhere('resolution')->eq('postponed')
@@ -1916,7 +1898,7 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
-        $fixedBugs = $this->dao->select('product,count(*) AS count')
+        $fixedBugs = $this->dao->select('product,count(id) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('closed')
             ->andWhere('product')->in($productKeys)
@@ -1925,7 +1907,7 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
-        $closedBugs = $this->dao->select('product,count(*) AS count')
+        $closedBugs = $this->dao->select('product,count(id) AS count')
             ->from(TABLE_BUG)
             ->where('status')->eq('closed')
             ->andWhere('product')->in($productKeys)
@@ -1935,7 +1917,7 @@ class productModel extends model
 
         $this->app->loadClass('date', true);
         $weekDate     = date::getThisWeek();
-        $thisWeekBugs = $this->dao->select('product,count(*) AS count')
+        $thisWeekBugs = $this->dao->select('product,count(id) AS count')
             ->from(TABLE_BUG)
             ->where('openedDate')->between($weekDate['begin'], $weekDate['end'])
             ->andWhere('product')->in($productKeys)
@@ -1943,7 +1925,7 @@ class productModel extends model
             ->groupBy('product')
             ->fetchPairs();
 
-        $assignToNull = $this->dao->select('product,count(*) AS count')
+        $assignToNull = $this->dao->select('product,count(id) AS count')
             ->from(TABLE_BUG)
             ->where('assignedTo')->eq('')
             ->andWhere('product')->in($productKeys)
@@ -1959,7 +1941,6 @@ class productModel extends model
             $product->stories['unclosed']     = isset($unclosedStory[$product->id]) ? $unclosedStory[$product->id] : 0;
             $product->stories['totalStories'] = $product->stories['unclosed'] + $product->stories['closed'];
 
-            $product->requirements = $requirements[$product->id];
             $product->plans        = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
             $product->releases     = isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
@@ -1970,8 +1951,8 @@ class productModel extends model
             $product->thisWeekBugs = isset($thisWeekBugs[$product->id]) ? $thisWeekBugs[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
 
-            $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
-            $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
+            $closedTotal       = $product->stories['closed'];
+            $allTotal          = array_sum($product->stories);
             $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
 
             $stats[$key] = $product;
