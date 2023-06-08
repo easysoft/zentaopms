@@ -149,7 +149,7 @@ if(!empty($productID))
 {
     if($canBrowseGroupCase)
     {
-        $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID");;
+        $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID");
         $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab);
     }
 
