@@ -31,7 +31,6 @@ $config->testcase->dtable->fieldList['status']['group']     = '2';
 $config->testcase->dtable->fieldList['stage']['name']  = 'stage';
 $config->testcase->dtable->fieldList['stage']['title'] = $lang->testcase->stage;
 $config->testcase->dtable->fieldList['stage']['type']  = 'text';
-$config->testcase->dtable->fieldList['stage']['map']   = $lang->testcase->stageList;
 $config->testcase->dtable->fieldList['stage']['group'] = '2';
 
 $config->testcase->dtable->fieldList['precondition']['name']  = 'precondition';
