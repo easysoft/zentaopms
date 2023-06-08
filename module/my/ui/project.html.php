@@ -16,6 +16,8 @@ featurebar
     set::linkParams("status={key}"),
 );
 
+$projects = initTableData($projects, $config->my->project->dtable->fieldList, $this->my);
+
 foreach($projects as $project)
 {
     if(!empty($project->PM))
@@ -24,9 +26,19 @@ foreach($projects as $project)
         $project->PMAvatar  = $usersAvatar[$project->PM];
         $project->PM        = \zget($users, $project->PM);
     }
-}
 
-$projects = initTableData($projects, $config->my->project->dtable->fieldList, $this->my);
+    if(!$project->budget) $project->budget = $lang->project->future;
+    if($project->budget)
+    {
+        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $lang->project->tenThousand : round((float)$project->budget, 2);
+
+        $project->budget = zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget;
+    }
+
+    $project->end = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
+
+    $project->actions = $this->loadModel('project')->buildActionList($project);
+}
 
 $cols     = array_values($config->my->project->dtable->fieldList);
 $projects = array_values($projects);

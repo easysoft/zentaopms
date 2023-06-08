@@ -355,4 +355,4 @@ $config->my->project->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->project->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->project->dtable->fieldList['actions']['sortType'] = false;
 $config->my->project->dtable->fieldList['actions']['list']     = $config->my->project->actionList;
-$config->my->project->dtable->fieldList['actions']['menu']     = array('close');
+$config->my->project->dtable->fieldList['actions']['menu']     = array('start', 'close', 'active', 'edit', 'pause', 'group', 'perm', 'link', 'whitelist', 'delete');
