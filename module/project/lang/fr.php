@@ -457,6 +457,7 @@ $lang->project->associatePlan     = 'Associate Plan';
 $lang->project->editorPlaceholder = 'You can directly paste images in the editor. Hotkeys: Command C+V';
 $lang->project->tenThousandYuan   = '10k';
 $lang->project->planDate          = 'Schedule Date';
+$lang->project->delayInfo         = 'Delayed for %s days';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage';

@@ -459,6 +459,7 @@ $lang->project->associatePlan     = '关联计划';
 $lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
 $lang->project->tenThousandYuan   = '万元';
 $lang->project->planDate          = '计划日期';
+$lang->project->delayInfo         = '延期%s天';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('delayInfo', $lang->project->delayInfo);
+
 featurebar
 (
     set::current($status),
@@ -18,8 +20,17 @@ featurebar
 
 $projects = initTableData($projects, $config->my->project->dtable->fieldList, $this->my);
 
+$waitCount      = 0;
+$doingCount     = 0;
+$suspendedCount = 0;
+$closedCount    = 0;
 foreach($projects as $project)
 {
+    if($project->status == 'wait')      $waitCount ++;
+    if($project->status == 'doing')     $doingCount ++;
+    if($project->status == 'suspended') $suspendedCount ++;
+    if($project->status == 'closed')    $closedCount ++;
+
     if(!empty($project->PM))
     {
         $project->PMAccount = $project->PM;
@@ -43,10 +54,15 @@ foreach($projects as $project)
 $cols     = array_values($config->my->project->dtable->fieldList);
 $projects = array_values($projects);
 
+$footerHtml = sprintf($lang->project->summary, count($projects));
+if($status == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount);
+
 dtable
 (
     set::cols($cols),
     set::data($projects),
+    set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
+    set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
     set::footPager
     (
         usePager(),
