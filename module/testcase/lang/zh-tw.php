@@ -183,7 +183,6 @@ $lang->testcase->legendLinkBugs    = '相關Bug';
 $lang->testcase->legendOpenAndEdit = '創建編輯';
 $lang->testcase->legendComment     = '備註';
 
-$lang->testcase->summary            = "本頁共 <strong>%s</strong> 個用例，已執行<strong>%s</strong>個。";
 $lang->testcase->confirmDelete      = '您確認要刪除該測試用例嗎？';
 $lang->testcase->confirmBatchDelete = '您確認要批量刪除這些測試用例嗎？';
 $lang->testcase->ditto              = '同上';

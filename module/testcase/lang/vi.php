@@ -183,7 +183,6 @@ $lang->testcase->legendLinkBugs    = 'Bugs';
 $lang->testcase->legendOpenAndEdit = 'Tạo/Sửa';
 $lang->testcase->legendComment     = 'Nhận xét';
 
-$lang->testcase->summary               = "Tổng <strong>%s</strong> tình huống, và <strong>%s</strong> tình huống đang chạy.";
 $lang->testcase->confirmDelete         = 'Bạn có muốn xóa tình huống này?';
 $lang->testcase->confirmBatchDelete    = 'Bạn có muốn xóa tình huống hàng loạt?';
 $lang->testcase->ditto                 = 'Như trên';

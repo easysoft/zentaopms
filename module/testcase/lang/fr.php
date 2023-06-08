@@ -184,7 +184,6 @@ $lang->testcase->legendLinkBugs        = 'Bugs';
 $lang->testcase->legendOpenAndEdit     = 'Créer/Editer';
 $lang->testcase->legendComment         = 'Commentaire';
 
-$lang->testcase->summary               = "Total <strong>%s</strong> CasTests sur cette page, et <strong>%s</strong> castests ont été joués.";
 $lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';
 $lang->testcase->ditto                 = 'Idem';

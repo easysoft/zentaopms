@@ -184,7 +184,6 @@ $lang->testcase->legendLinkBugs        = 'Bugs';
 $lang->testcase->legendOpenAndEdit     = 'Create/Edit';
 $lang->testcase->legendComment         = 'Comment';
 
-$lang->testcase->summary               = "Total <strong>%s</strong> cases on this page, and <strong>%s</strong> cases run.";
 $lang->testcase->confirmDelete         = 'Do you want to delete this case?';
 $lang->testcase->confirmBatchDelete    = 'Do you want to batch delete cases?';
 $lang->testcase->ditto                 = 'Ditto';

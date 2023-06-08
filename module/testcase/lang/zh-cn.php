@@ -184,7 +184,6 @@ $lang->testcase->legendLinkBugs    = '相关Bug';
 $lang->testcase->legendOpenAndEdit = '创建编辑';
 $lang->testcase->legendComment     = '备注';
 
-$lang->testcase->summary               = "本页共 <strong>%s</strong> 个用例，已执行<strong>%s</strong>个。";
 $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto                 = '同上';
