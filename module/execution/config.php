@@ -1,5 +1,5 @@
 <?php
-$config->execution = new stdclass();
+if(!isset($config->execution)) $config->execution = new stdclass();
 $config->execution->defaultWorkhours  = '7.0';
 $config->execution->orderBy           = 'isDone,status,order_desc';
 $config->execution->maxBurnDay        = '31';
@@ -21,6 +21,7 @@ $config->execution->kanbanMethod = array('kanban', 'cfd', 'build', 'view', 'mana
 
 global $lang, $app;
 $app->loadLang('task');
+$app->loadLang('programplan');
 $config->execution->task   = new stdclass();
 $config->execution->create = new stdclass();
 $config->execution->edit   = new stdclass();
@@ -175,115 +176,41 @@ $config->execution->gantt->linkType['begin']['begin'] = 1;
 $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
-$config->execution->datatable = new stdclass();
-if(isset($config->setCode) and $config->setCode == 1)
-{
-    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'openedDate', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
-}
-else
-{
-    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'openedDate', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
-}
+$config->execution->actionList = array();
+$config->execution->actionList['start']['icon']        = 'start';
+$config->execution->actionList['start']['text']        = $lang->execution->start;
+$config->execution->actionList['start']['hint']        = $lang->execution->start;
+$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start',"executionID={rawID}");
+$config->execution->actionList['start']['data-toggle'] = 'modal';
 
-$config->execution->datatable->fieldList['id']['title']    = 'idAB';
-$config->execution->datatable->fieldList['id']['fixed']    = 'left';
-$config->execution->datatable->fieldList['id']['width']    = '70';
-$config->execution->datatable->fieldList['id']['required'] = 'yes';
-$config->execution->datatable->fieldList['id']['sortType'] = true;
-$config->execution->datatable->fieldList['id']['checkbox'] = true;
+$config->execution->actionList['createTask']['icon'] = 'plus';
+$config->execution->actionList['createTask']['text'] = $lang->task->create;
+$config->execution->actionList['createTask']['hint'] = $lang->task->create;
+$config->execution->actionList['createTask']['url']  = helper::createLink('task', 'create',"executionID={rawID}");
 
-$config->execution->datatable->fieldList['name']['name']         = 'name';
-$config->execution->datatable->fieldList['name']['title']        = $lang->execution->name;
-$config->execution->datatable->fieldList['name']['width']        = '356';
-$config->execution->datatable->fieldList['name']['type']         = 'html';
-$config->execution->datatable->fieldList['name']['fixed']        = 'left';
-$config->execution->datatable->fieldList['name']['nestedToggle'] = true;
-$config->execution->datatable->fieldList['name']['iconRender']   = true;
-$config->execution->datatable->fieldList['name']['required']     = 'yes';
+$config->execution->actionList['createChildStage']['icon'] = 'split';
+$config->execution->actionList['createChildStage']['text'] = $lang->programplan->createSubPlan;
+$config->execution->actionList['createChildStage']['hint'] = $lang->programplan->createSubPlan;
+$config->execution->actionList['createChildStage']['url']  = helper::createLink('programplan', 'create', "executionID={rawID}");
 
-if(isset($config->setCode) and $config->setCode == 1)
-{
-    $config->execution->datatable->fieldList['code']['title']    = 'execCode';
-    $config->execution->datatable->fieldList['code']['width']    = '180';
-    $config->execution->datatable->fieldList['code']['fixed']    = 'left';
-    $config->execution->datatable->fieldList['code']['required'] = 'no';
-}
+$config->execution->actionList['edit']['icon'] = 'edit';
+$config->execution->actionList['edit']['text'] = $lang->execution->edit;
+$config->execution->actionList['edit']['hint'] = $lang->execution->edit;
+$config->execution->actionList['edit']['url']  = helper::createLink('execution', 'edit',"executionID={rawID}");
 
-$config->execution->datatable->fieldList['project']['title']    = 'project';
-$config->execution->datatable->fieldList['project']['width']    = '220';
-$config->execution->datatable->fieldList['project']['flex']     = 1;
-$config->execution->datatable->fieldList['project']['fixed']    = 'no';
-$config->execution->datatable->fieldList['project']['required'] = 'no';
+$config->execution->actionList['close']['icon']        = 'off';
+$config->execution->actionList['close']['text']        = $lang->execution->close;
+$config->execution->actionList['close']['hint']        = $lang->execution->close;
+$config->execution->actionList['close']['url']         = helper::createLink('execution', 'close',"executionID={rawID}");
+$config->execution->actionList['close']['data-toggle'] = 'modal';
 
-$config->execution->datatable->fieldList['status']['title']    = 'execStatus';
-$config->execution->datatable->fieldList['status']['type']     = 'status';
-$config->execution->datatable->fieldList['status']['sortType'] = 'true';
-$config->execution->datatable->fieldList['status']['width']    = '100';
-$config->execution->datatable->fieldList['status']['required'] = 'no';
-$config->execution->datatable->fieldList['status']['fixed']    = 'no';
+$config->execution->actionList['activate']['icon']        = 'magic';
+$config->execution->actionList['activate']['text']        = $lang->execution->activate;
+$config->execution->actionList['activate']['hint']        = $lang->execution->activate;
+$config->execution->actionList['activate']['url']         = helper::createLink('execution', 'activate',"executionID={rawID}");
+$config->execution->actionList['activate']['data-toggle'] = 'modal';
 
-$config->execution->datatable->fieldList['PM']['title']    = 'owner';
-$config->execution->datatable->fieldList['PM']['width']    = '90';
-$config->execution->datatable->fieldList['PM']['required'] = 'no';
-$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
-$config->execution->datatable->fieldList['openedDate']['width']    = '85';
-$config->execution->datatable->fieldList['openedDate']['sortType'] = 'true';
-$config->execution->datatable->fieldList['openedDate']['required'] = 'no';
-$config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['begin']['title']    = 'begin';
-$config->execution->datatable->fieldList['begin']['width']    = '100';
-$config->execution->datatable->fieldList['begin']['sortType'] = 'true';
-$config->execution->datatable->fieldList['begin']['required'] = 'no';
-$config->execution->datatable->fieldList['begin']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['end']['title']    = 'end';
-$config->execution->datatable->fieldList['end']['width']    = '90';
-$config->execution->datatable->fieldList['end']['required'] = 'no';
-$config->execution->datatable->fieldList['end']['sortType'] = 'true';
-$config->execution->datatable->fieldList['end']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
-$config->execution->datatable->fieldList['realBegan']['width']    = '100';
-$config->execution->datatable->fieldList['realBegan']['required'] = 'no';
-$config->execution->datatable->fieldList['realBegan']['sortType'] = 'true';
-$config->execution->datatable->fieldList['realBegan']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['realEnd']['title']    = 'realEnd';
-$config->execution->datatable->fieldList['realEnd']['width']    = '100';
-$config->execution->datatable->fieldList['realEnd']['required'] = 'no';
-$config->execution->datatable->fieldList['realEnd']['sortType'] = 'true';
-$config->execution->datatable->fieldList['realEnd']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['estimate']['title']    = 'estimate';
-$config->execution->datatable->fieldList['estimate']['width']    = '70';
-$config->execution->datatable->fieldList['estimate']['required'] = 'no';
-$config->execution->datatable->fieldList['estimate']['sort']     = 'no';
-$config->execution->datatable->fieldList['estimate']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['consumed']['title']    = 'consumed';
-$config->execution->datatable->fieldList['consumed']['width']    = '75';
-$config->execution->datatable->fieldList['consumed']['required'] = 'no';
-$config->execution->datatable->fieldList['consumed']['sort']     = 'no';
-$config->execution->datatable->fieldList['consumed']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['left']['title']    = 'left';
-$config->execution->datatable->fieldList['left']['width']    = '70';
-$config->execution->datatable->fieldList['left']['required'] = 'no';
-$config->execution->datatable->fieldList['left']['sort']     = 'no';
-$config->execution->datatable->fieldList['left']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['progress']['title']    = 'progress';
-$config->execution->datatable->fieldList['progress']['type']     = 'circleProgress';
-$config->execution->datatable->fieldList['progress']['width']    = '70';
-$config->execution->datatable->fieldList['progress']['required'] = 'no';
-$config->execution->datatable->fieldList['progress']['sort']     = 'no';
-$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
-
-$config->execution->datatable->fieldList['burn']['title']    = 'burn';
-$config->execution->datatable->fieldList['burn']['width']    = '80';
-$config->execution->datatable->fieldList['burn']['required'] = 'no';
-$config->execution->datatable->fieldList['burn']['sort']     = 'no';
-$config->execution->datatable->fieldList['burn']['fixed']    = 'no';
+$config->execution->actionList['delete']['icon'] = 'trash';
+$config->execution->actionList['delete']['text'] = $lang->execution->delete;
+$config->execution->actionList['delete']['hint'] = $lang->execution->delete;
+$config->execution->actionList['delete']['url']  = helper::createLink('execution', 'delete',"executionID={rawID}");
