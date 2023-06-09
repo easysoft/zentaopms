@@ -368,7 +368,7 @@ class helper extends baseHelper
      */
     public static function isCacheEnabled()
     {
-        if(isset($_GET['_nocace']) || isset($_SERVER['HTTP_X_ZT_REFRESH'])) return false;
+        if(isset($_GET['_nocache']) || isset($_SERVER['HTTP_X_ZT_REFRESH'])) return false;
         global $config;
         return $config->cache->enable;
     }
