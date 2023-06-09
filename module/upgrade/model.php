@@ -9167,7 +9167,18 @@ class upgradeModel extends model
                     $sql = str_replace('$' . $filter->field, $filterDefault, $sql);
                 }
             }
-            $fieldSettings = $this->getFieldSettings($sql);
+
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $stmt = $this->dbh->query($sql);
+            if(!$stmt) /* Fix bug #35559. */
+            {
+                $data->stage = 'draft';
+                $fieldSettings = array();
+            }
+            else
+            {
+                $fieldSettings = $this->getFieldSettings($sql);
+            }
 
             $data->settings = json_encode($settings);
             $data->fields   = json_encode($fieldSettings);
