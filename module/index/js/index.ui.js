@@ -228,9 +228,8 @@ function updateApp(code, url, title, type)
 
     if(oldState && oldState.code === code && oldState.url === url) return;
 
-    const displayUrl = $.createLink('index', 'index', 'open=' + btoa(url));
-    app.currentUrl   = url;
-    window.history.pushState(state, title, displayUrl);
+    app.currentUrl = url;
+    window.history.pushState(state, title, url);
     if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
 }
 
@@ -621,7 +620,7 @@ $.get($.createLink('index', 'app'), html =>
     let defaultOpenUrl = defaultOpen || apps.defaultCode;
     if(location.hash.indexOf('#app=') === 0)
     {
-        const params = $.parseSearchParams(location.hash.substring(1));
+        const params = $.parseUrlParams(location.hash.substring(1));
         defaultOpenUrl = params.app;
     }
     openApp.apply(null, defaultOpenUrl.split(','));

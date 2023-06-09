@@ -1,5 +1,33 @@
 (function()
 {
+    if (config.skipRedirect || window.skipRedirect) return;
+
+    const parent        = window.parent;
+    const currentModule = config.currentModule;
+    const currentMethod = config.currentMethod;
+    const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
+
+    const isAllowSelfOpen = isIndexPage
+        || location.hash === '#_single'
+        || /(\?|\&)_single/.test(location.search)
+        || currentModule === 'tutorial'
+        || currentModule === 'install'
+        || currentModule === 'upgrade'
+        || (currentModule === 'user'
+            && (currentMethod === 'login' || currentMethod === 'deny'))
+        || (currentModule === 'file' && currentMethod === 'download')
+        || (currentModule === 'my' && currentMethod === 'changepassword')
+        || $('body').hasClass('allow-self-open');
+
+    if (parent === window && !isAllowSelfOpen) {
+        const shortUrl = location.pathname + location.search + location.hash;
+        location.href = $.createLink('index', 'index', `open=${btoa(shortUrl)}`);
+        return;
+    }
+}());
+
+(function()
+{
     const config      = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
     if(isIndexPage) return;
@@ -492,7 +520,7 @@
         const loadTarget = $link.data('load');
         if(loadTarget === 'table') loadTable(url);
         else if(loadTarget) loadPage(url, loadTarget);
-        else openPage(url);
+        else openPage(url, $link.data('app'));
         e.preventDefault();
     }).on('locate.zt', (_e, data) =>
     {
