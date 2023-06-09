@@ -718,6 +718,8 @@ class searchModel extends model
         if($this->config->db->driver == 'dm')
         {
             $whereCondition = preg_replace("/\b(AND|OR)\b/", "", $likeCondition, 1);
+            if(!$whereCondition) $whereCondition = '1=1';
+
             $scoreColumn    = '*';
             $orderBy        = 'editedDate_desc';
         }
