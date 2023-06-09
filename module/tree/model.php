@@ -1228,14 +1228,14 @@ class treeModel extends model
     /**
      * Create module of a test case.
      *
-     * @param  string $type
-     * @param  object $module
-     * @param  int    $parent
-     * @param  array  $extra
+     * @param  string       $type
+     * @param  object       $module
+     * @param  int          $parent
+     * @param  array|string $extra
      * @access public
      * @return object
      */
-    public function createCaseLink(string $type, object $module, int $parent, array $extra = array()): object
+    public function createCaseLink(string $type, object $module, int $parent, array|string $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
