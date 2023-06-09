@@ -79,6 +79,7 @@ dtable
     set::cols(array_values($config->execution->dtable->fieldList)),
     set::data($tableData),
     set::checkable($canBatchAction),
+    set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('onRenderSparkline')),
     set::footToolbar($footToolbar),
     set::footPager(

@@ -108,8 +108,9 @@ dtable
     set::cols(array_values($config->projectExecution->dtable->fieldList)),
     set::data($executions),
     set::checkable($canBatchAction),
+    set::fixedLeftWidth('44%'),
     //set::onRenderCell(jsRaw('onRenderSparkline')),
-    set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.isExecution == 1;}')),
+    //set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.isExecution == 1;}')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),

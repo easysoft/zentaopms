@@ -145,7 +145,6 @@ $config->projectExecution->dtable->fieldList['name']['type']           = 'html';
 $config->projectExecution->dtable->fieldList['name']['nestedToggle']   = true;
 $config->projectExecution->dtable->fieldList['name']['iconRender']     = true;
 $config->projectExecution->dtable->fieldList['name']['sortType']       = true;
-$config->projectExecution->dtable->fieldList['name']['minWidth']       = '356';
 
 $config->projectExecution->dtable->fieldList['productName']['title']    = $lang->execution->product;
 $config->projectExecution->dtable->fieldList['productName']['name']     = 'productName';
