@@ -11,6 +11,8 @@ $(function()
         $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
+    if(storyType == 'requirement') $('#importAction').parent.hide();
+
     $(document).ready(function(){
         var $title = $('#storyList thead th.c-title');
         var headerWidth = $('#storyList thead th.c-title a').innerWidth();
