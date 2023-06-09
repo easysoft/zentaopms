@@ -32,27 +32,25 @@ class group extends control
      */
     public function browse()
     {
-        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
-        $position[] = $this->lang->group->browse;
 
         $groups = $this->group->getList();
-        $groupUsers = array();
         foreach($groups as $group)
         {
+            $group->actions = array();
             if($group->role == 'projectAdmin')
             {
-                $groupUsers[$group->id] = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
+                $groupUsers   = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
+                $group->users = implode(',', $groupUsers);
             }
             else
             {
-                $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+                $groupUsers   = $this->group->getUserPairs($group->id);
+                $group->users = implode(',', $groupUsers);
             }
         }
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->groups     = $groups;
-        $this->view->groupUsers = $groupUsers;
+        $this->view->title  = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
+        $this->view->groups = $groups;
 
         $this->display();
     }
@@ -458,37 +456,26 @@ class group extends control
      * Delete a group.
      *
      * @param  int    $groupID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($groupID, $confirm = 'no')
+    public function delete($groupID)
     {
-        if($confirm == 'no')
+        $this->group->delete($groupID);
+
+        /* if ajax request, send result. */
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->group->confirmDelete, $this->createLink('group', 'delete', "groupID=$groupID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->group->delete($groupID);
-
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']   = inLink('browse');
         }
+        return $this->send($response);
     }
 
    /**

@@ -839,8 +839,10 @@ class groupModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'manageview' and $group->role == 'limited') return false;
-        if($action == 'copy' and $group->role == 'limited') return false;
+        if($action == 'manageview' && $group->role == 'limited') return false;
+        if($action == 'copy' && $group->role == 'limited') return false;
+        if($group->role == 'projectAdmin' && in_array($action, array('manageview', 'managepriv', 'managemember', 'edit', 'copy'))) return false;
+        if($group->role != 'projectAdmin' && $actions == 'manageprojectadmin') return false;
 
         return true;
     }
