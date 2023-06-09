@@ -66,6 +66,7 @@ formPanel
     on::change('#end', 'resetDelta'),
     on::change('.radio-primary > input', 'computeEndDate'),
     on::change('#future_', 'toggleDateVisibility'),
+    on::change('#parent', 'getParentBranches'),
     $formHeader,
     $parentForm,
     formGroup

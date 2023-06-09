@@ -44,3 +44,16 @@ function toggleDateVisibility()
         $('#end').removeAttr('disabled').closest('.form-row').show();
     }
 }
+
+function getParentBranches()
+{
+    var parentID        = $('#parent').val();
+    var currentBranches = $('#branch').val() ? $('#branch').val().toString() : '';
+    $.post(createLink('productplan', 'ajaxGetParentBranches', "productID=" + productID + "&parentID=" + parentID + "&currentBranches=" + currentBranches), function(data)
+    {
+        $('#branch').replaceWith(data);
+        $('#branch_chosen').remove();
+        $('#branch').chosen();
+        $('#branch').change();
+    })
+}
