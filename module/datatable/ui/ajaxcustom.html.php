@@ -53,14 +53,25 @@ function buildItem($item)
     );
 }
 
-function buildBody()
+function buildBody($cols)
 {
     global $formGID;
     $itemsList = array(
-        // 'left' => array(),
-        // 'flex' => array(),
-        // 'right' => array(),
+        'left' => array(),
+        'no' => array(),
+        'right' => array(),
     );
+
+    foreach($cols as $col)
+    {
+        $itemsList[$col['fixed']][] = array(
+            'required' => $col['fixed'] === 'yes',
+            'title' => $col['title'],
+            'width' => $col['width'],
+            'name' => $col['name'],
+            'show' => true
+        );
+    }
 
     $body = form
     (
@@ -125,7 +136,7 @@ setClass('edit-cols');
 set::title($lang->datatable->custom);
 to::header(span($lang->datatable->customTip, setClass('text-gray', 'text-md')));
 set::footerClass('justify-center');
-buildBody();
+buildBody($cols);
 to::footer
 (
     toolbar
