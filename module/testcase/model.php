@@ -1447,18 +1447,21 @@ class testcaseModel extends model
      *
      * @param  object $case
      * @param  string $action
-     * @param  string $module
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($case, $action, $module = 'testcase')
+    public static function isClickable(object $case, string $action): bool
     {
+        $canBeChanged = common::canBeChanged('case', $case);
+        if(!$canBeChanged) return false;
+
         global $config;
 
-        $action = strtolower($action);
-
-        if($module == 'testcase' && $action == 'createbug')   return !empty($case->caseFiles) && $case->caseFails > 0;
-        if($module == 'testcase' && $action == 'review')      return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
+        if($action == 'confirmStoryChange') return $case->needconfirm || $case->browseType == 'needconfirm';
+        if($action == 'review')             return $config->testcase->needReview || !empty($config->testcase->forceReview);
+        if($action == 'createbug')          return !empty($case->caseFiles) && $case->caseFails > 0;
+        if($action == 'review')             return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
+        if($action == 'showScript')         return $case->auto == 'auto';
 
         return true;
     }
