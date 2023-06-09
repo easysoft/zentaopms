@@ -16,12 +16,16 @@ class projectBuild extends control
      * @param  int    $projectID
      * @param  string $type      all|product|bysearch
      * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
+    public function browse($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        echo $this->fetch('project', 'build', "projectID=$projectID&type=$type&param=$param&orderBy=$orderBy");
+        echo $this->fetch('project', 'build', "projectID={$projectID}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
