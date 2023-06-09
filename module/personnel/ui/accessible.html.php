@@ -29,7 +29,7 @@ sidebar
         set::activeKey($deptID),
         set::closeLink($closeLink),
         set::moduleSetting(false),
-        set::displaySetting(false)
+        set::displaySetting(false),
     ),
 );
 

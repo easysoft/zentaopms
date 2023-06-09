@@ -136,14 +136,8 @@ class deptModel extends model
     public function getTreeMenu($rootDeptID = 0, $param = 0)
     {
         $deptMenu = array();
-        $data = new stdclass();
-        $data->id     = 0;
-        $data->parent = 0;
-        $data->name   = $this->lang->dept->common;
-        $data->url    = helper::createLink('personnel', 'accessible', "program={$param}&deptID=0");
-        $deptMenu[] = $data;
-
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $data     = new stdclass();
+        $stmt     = $this->dbh->query($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
             $data = new stdclass();
