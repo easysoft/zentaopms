@@ -63,8 +63,8 @@ class executionZen extends execution
      */
     protected function buildProductSwitcher(int $productID, array $products)
     {
-        $showBranch    = false;
         $productOption = array();
+        $branchOption  = array();
         $programIdList = array();
         if(count($products) > 1) $productOption[0] = $this->lang->product->all;
         foreach($products as $productData) $programIdList[$productData->program] = $productData->program;
@@ -81,9 +81,6 @@ class executionZen extends execution
         $product = $this->product->getById((int)$productID);
         if($product and $product->type != 'normal')
         {
-            /* Display of branch label. */
-            $showBranch = $this->loadModel('branch')->showBranch($productID);
-
             /* Display status of branch. */
             $branches = $this->branch->getList($productID, $executionID, 'all');
             foreach($branches as $branchInfo)
@@ -91,6 +88,6 @@ class executionZen extends execution
                 $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
         }
-        return array($productOption, $branchOption, $showBranch);
+        return array($productOption, $branchOption);
     }
 }

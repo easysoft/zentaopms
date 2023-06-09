@@ -979,10 +979,10 @@ class execution extends control
         /* Set the product drop-down and search fields. */
         $productOption = array();
         $branchOption  = array();
-        $showBranch    = false;
+        $showBranch    = $this->loadModel('branch')->showBranch($productID);
         if($execution->hasProduct)
         {
-            list($productOption, $branchOption, $showBranch) = $this->executionZen->buildProductSwitcher($productID, $products);
+            list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($productID, $products);
             unset($this->config->bug->search['fields']['product']);
             unset($this->config->bug->search['params']['product']);
             if($project->model != 'scrum')
@@ -1119,10 +1119,10 @@ class execution extends control
         $execution     = $this->execution->getByID($executionID);
         $productOption = array();
         $branchOption  = array();
-        $showBranch    = false;
+        $showBranch    = $this->loadModel('branch')->showBranch($productID);
         if($execution->hasProduct)
         {
-            list($productOption, $branchOption, $showBranch) = $this->executionZen->buildProductSwitcher($productID, $products);
+            list($productOption, $branchOption) = $this->executionZen->buildProductSwitcher($productID, $products);
         }
 
         /* Load pager. */
