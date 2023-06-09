@@ -1871,7 +1871,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
+    public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null, $isCount = false)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
@@ -1920,6 +1920,8 @@ class executionModel extends model
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
+
+        if($isCount) return count($executions);
 
         if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
@@ -5724,13 +5726,13 @@ class executionModel extends model
      * @param  array  $users
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return array
      */
     public function generateRow($executions, $users, $productID)
     {
         $today = helper::today();
         $rows  = array();
-        foreach($executions as $id => $execution)
+        foreach($executions as $execution)
         {
             $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
