@@ -17,28 +17,15 @@ detailHeader
     common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
 
-/* Build replace url param, replace {id} to $task->id. */
-$urlReplaceName  = array();
-$urlReplaceValue = array();
-foreach($task as $key => $value)
-{
-    $urlReplaceName[]  = "{{$key}}";
-    $urlReplaceValue[] = $value;
-}
-
 /* Construct suitable actions for the current task. */
 $operateMenus = array();
 foreach($config->task->view->operateList['main'] as $operate)
 {
     if(!common::hasPriv('task', $operate)) continue;
     if(!$this->task->isClickable($task, $operate)) continue;
-
     if($operate == 'batchCreate' && (!empty($task->team) || !empty($task->children))) continue;
 
-    $settings = $config->task->actionList[$operate];
-    $settings['url']  = str_replace($urlReplaceName, $urlReplaceValue, $settings['url']);
-
-    $operateMenus[] = $settings;
+    $operateMenus[] = $config->task->actionList[$operate];
 }
 
 /* Construct common actions for task. */
@@ -49,7 +36,6 @@ foreach($config->task->view->operateList['common'] as $operate)
     if($operate == 'view' && $task->parent <= 0) continue;
 
     $settings = $config->task->actionList[$operate];
-    $settings['url']  = str_replace($urlReplaceName, $urlReplaceValue, $settings['url']);
     $settings['text'] = '';
 
     $commonActions[] = $settings;
@@ -95,7 +81,8 @@ detailBody
             array(array('icon' => 'back', 'text' => $lang->goback))
         ),
         set::main($operateMenus),
-        set::suffix($commonActions)
+        set::suffix($commonActions),
+        set::object($task)
     ),
     detailSide
     (

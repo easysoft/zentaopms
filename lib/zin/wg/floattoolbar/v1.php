@@ -6,13 +6,15 @@ class floatToolbar extends wg
     protected static $defineProps = array(
         'prefix?:array',
         'main?:array',
-        'suffix?:array'
+        'suffix?:array',
+        'object?:object'
     );
 
     protected static $defineBlocks = array(
         'prefix' => array(),
         'main'   => array(),
-        'suffix' => array()
+        'suffix' => array(),
+        'object' => null
     );
 
     public static function getPageCSS(): string|false
@@ -20,7 +22,7 @@ class floatToolbar extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildDivider(wg|array|null $wg): wg|null
+    private function buildDivider(wg|array|null|bool $wg): wg|null
     {
         if(empty($wg)) return null;
 
@@ -31,8 +33,26 @@ class floatToolbar extends wg
     {
         if(empty($items)) return null;
 
+        $object = $this->prop('object');
+        if($object)
+        {
+            /* Set url template string replacement rules. */
+            $urlReplaceName  = array();
+            $urlReplaceValue = array();
+            foreach($object as $key => $value)
+            {
+                $urlReplaceName[]  = "{{$key}}";
+                $urlReplaceValue[] = $value;
+            }
+        }
+
         $btns = array();
-        foreach ($items as $item) $btns[] = btn(set($item), setClass('ghost text-white'));
+        foreach ($items as $item)
+        {
+            if($object && isset($item['url'])) $item['url'] = str_replace($urlReplaceName, $urlReplaceValue, $item['url']);
+
+            $btns[] = btn(set($item), setClass('ghost text-white'));
+        }
         return $btns;
     }
 
@@ -66,7 +86,7 @@ class floatToolbar extends wg
             $prefixBtns,
             $this->buildDivider($prefixBtns),
             $mainBtns,
-            $this->buildDivider($suffixBtns),
+            $this->buildDivider($mainBtns && $suffixBtns),
             $suffixBtns,
         );
     }
