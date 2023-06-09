@@ -207,15 +207,61 @@ $config->my->task->dtable->fieldList['status']['type']      = 'status';
 $config->my->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList;
 $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 
+$config->my->task->dtable->fieldList['type']['name']  = 'type';
+$config->my->task->dtable->fieldList['type']['title'] = $lang->task->type;
+$config->my->task->dtable->fieldList['type']['type']  = 'category';
+$config->my->task->dtable->fieldList['type']['map']   = $lang->task->typeList;
+$config->my->task->dtable->fieldList['type']['group'] = 'pri';
+
+$config->my->task->dtable->fieldList['project']['name']  = 'projectName';
+$config->my->task->dtable->fieldList['project']['title'] = $lang->task->project;
+$config->my->task->dtable->fieldList['project']['type']  = 'text';
+$config->my->task->dtable->fieldList['project']['group'] = 'project';
+
+$config->my->task->dtable->fieldList['execution']['name']  = 'executionName';
+$config->my->task->dtable->fieldList['execution']['title'] = $lang->task->execution;
+$config->my->task->dtable->fieldList['execution']['type']  = 'text';
+$config->my->task->dtable->fieldList['execution']['group'] = 'project';
+
 $config->my->task->dtable->fieldList['openedBy']['name']  = 'openedBy';
 $config->my->task->dtable->fieldList['openedBy']['title'] = $lang->task->openedByAB;
 $config->my->task->dtable->fieldList['openedBy']['type']  = 'user';
-$config->my->task->dtable->fieldList['openedBy']['group'] = 'user';
+$config->my->task->dtable->fieldList['openedBy']['group'] = 'openedBy';
+
+$config->my->task->dtable->fieldList['openedDate']['name']  = 'openedDate';
+$config->my->task->dtable->fieldList['openedDate']['title'] = $lang->task->openedDate;
+$config->my->task->dtable->fieldList['openedDate']['type']  = 'date';
+$config->my->task->dtable->fieldList['openedDate']['group'] = 'openedBy';
+
+$config->my->task->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
+$config->my->task->dtable->fieldList['assignedTo']['title'] = $lang->task->assignedToAB;
+$config->my->task->dtable->fieldList['assignedTo']['type']  = 'user';
+$config->my->task->dtable->fieldList['assignedTo']['group'] = 'openedBy';
+
+$config->my->task->dtable->fieldList['assignedDate']['name']  = 'assignedDate';
+$config->my->task->dtable->fieldList['assignedDate']['title'] = $lang->task->assignedDate;
+$config->my->task->dtable->fieldList['assignedDate']['type']  = 'date';
+$config->my->task->dtable->fieldList['assignedDate']['group'] = 'openedBy';
+
+$config->my->task->dtable->fieldList['estStarted']['name']  = 'estStarted';
+$config->my->task->dtable->fieldList['estStarted']['title'] = $lang->task->estStarted;
+$config->my->task->dtable->fieldList['estStarted']['type']  = 'date';
+$config->my->task->dtable->fieldList['estStarted']['group'] = 'estStarted';
+
+$config->my->task->dtable->fieldList['realStarted']['name']  = 'realStarted';
+$config->my->task->dtable->fieldList['realStarted']['title'] = $lang->task->realStarted;
+$config->my->task->dtable->fieldList['realStarted']['type']  = 'date';
+$config->my->task->dtable->fieldList['realStarted']['group'] = 'estStarted';
 
 $config->my->task->dtable->fieldList['finishedBy']['name']  = 'finishedBy';
 $config->my->task->dtable->fieldList['finishedBy']['title'] = $lang->task->finishedByAB;
 $config->my->task->dtable->fieldList['finishedBy']['type']  = 'user';
-$config->my->task->dtable->fieldList['finishedBy']['group'] = 'user';
+$config->my->task->dtable->fieldList['finishedBy']['group'] = 'estStarted';
+
+$config->my->task->dtable->fieldList['finishedDate']['name']  = 'finishedDate';
+$config->my->task->dtable->fieldList['finishedDate']['title'] = $lang->task->finishedDate;
+$config->my->task->dtable->fieldList['finishedDate']['type']  = 'date';
+$config->my->task->dtable->fieldList['finishedDate']['group'] = 'estStarted';
 
 $config->my->task->dtable->fieldList['deadline']['name']  = 'deadline';
 $config->my->task->dtable->fieldList['deadline']['title'] = $lang->task->deadlineAB;
@@ -236,6 +282,11 @@ $config->my->task->dtable->fieldList['left']['name']  = 'leftLabel';
 $config->my->task->dtable->fieldList['left']['title'] = $lang->task->leftAB;
 $config->my->task->dtable->fieldList['left']['type']  = 'number';
 $config->my->task->dtable->fieldList['left']['group'] = 'number';
+
+$config->my->task->dtable->fieldList['progress']['name']  = 'progress';
+$config->my->task->dtable->fieldList['progress']['title'] = $lang->task->progress;
+$config->my->task->dtable->fieldList['progress']['type']  = 'number';
+$config->my->task->dtable->fieldList['progress']['group'] = 'number';
 
 $config->my->task->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->task->dtable->fieldList['actions']['title']    = $lang->actions;

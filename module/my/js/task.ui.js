@@ -57,11 +57,11 @@ window.setStatistics = function(element, checks)
  */
 window.renderCell = function(result, info)
 {
-    if(info.col.name == 'deadline')
+    if(info.col.name == 'deadline' && result[0])
     {
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
         const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
-        if(result == today)
+        if(result[0] == today)
         {
             result[0] = {html: '<span class="label warning-pale rounded-full size-sm">' + todayLabel + '</span>'};
         }

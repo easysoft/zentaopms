@@ -169,14 +169,14 @@ $lang->my->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->my->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->my->featureBar['dynamic']['lastMonth'] = '上月';
 
-$lang->my->featureBar['task']['assignedTo']     = $lang->my->assignedToMe;
-$lang->my->featureBar['testcase']['assigntome'] = $lang->my->assignedToMe;
+$lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
+$lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
 
-$lang->my->featureBar['requirement'] = $lang->my->featureBar['task'];
-$lang->my->featureBar['requirement']['reviewBy'] = '待我评审';
+$lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['requirement']['reviewBy'] = '待我评审';
 
-$lang->my->featureBar['story'] = $lang->my->featureBar['requirement'];
-$lang->my->featureBar['bug']   = $lang->my->featureBar['task'];
+$lang->my->featureBar['work']['story'] = $lang->my->featureBar['work']['requirement'];
+$lang->my->featureBar['work']['bug']   = $lang->my->featureBar['work']['task'];
 
 $lang->my->featureBar['contribute']['task']['openedBy']   = '由我创建';
 $lang->my->featureBar['contribute']['task']['finishedBy'] = '由我完成';

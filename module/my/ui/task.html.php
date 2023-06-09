@@ -22,7 +22,7 @@ featureBar
 $footToolbar = array('items' => array
 (
     array('text' => $lang->edit,  'className' => 'batch-btn ' . (common::hasPriv('task', 'batchEdit') ? '' : 'hidden'),           'data-url' => helper::createLink('task', 'batchEdit')),
-    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('task', 'batchClose') ? '' : 'hidden'), 'data-url' => helper::createLink('task', 'batchClose')),
+    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('task', 'batchClose') && $type != 'closedBy' ? '' : 'hidden'), 'data-url' => helper::createLink('task', 'batchClose')),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
