@@ -25,6 +25,10 @@ $footToolbar = array('items' => array
     array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('task', 'batchClose') && $type != 'closedBy' ? '' : 'hidden'), 'data-url' => helper::createLink('task', 'batchClose')),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
+if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
+if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
+if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
+
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols  = array_values($config->my->task->dtable->fieldList);
 $data  = array_values($tasks);
