@@ -279,7 +279,7 @@ class dbh
                 if(strpos($sql, '\\\\') !== FALSE) $sql = str_replace('\\\\', '\\', $sql);
                 break;
             case 'CREATE':
-                if(stripos($sql, 'CREATE VIEW') === 0) return '';
+                if(stripos($sql, 'CREATE VIEW') === 0) $sql = str_replace('CREATE VIEW', 'CREATE OR REPLACE VIEW', $sql);
                 if(stripos($sql, 'CREATE FUNCTION') === 0) return '';
 
                 if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0)
