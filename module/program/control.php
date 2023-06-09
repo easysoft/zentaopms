@@ -894,7 +894,8 @@ class program extends control
 
         /* Process product structure. */
         if($this->config->systemMode == 'light' and $orderBy == 'program_asc') $orderBy = 'order_asc';
-        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
+        $products         = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch($queryID) : $this->product->getList();
+        $productStats     = $this->product->getStats(array_keys($products), $orderBy, $pager);
         $productStructure = $this->product->statisticProgram($productStats);
         $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
         $programLines     = array();

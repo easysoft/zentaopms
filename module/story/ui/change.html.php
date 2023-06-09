@@ -170,4 +170,4 @@ formPanel
     h::hr(),
     history()
 );
-render();
+render(isonlybody() ? 'modalDialog' : 'page');

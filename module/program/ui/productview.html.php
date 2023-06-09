@@ -148,6 +148,7 @@ foreach($productStructure as $programID => $program)
 }
 
 $summary = sprintf($lang->product->lineSummary, $linesCount, count($productStats));
+jsVar('summary', $summary);
 
 set::title($lang->program->productView);
 
@@ -193,29 +194,6 @@ toolbar
     ))),
 );
 
-js
-(
-<<<RENDERCELL
-window.footerGenerator = function()
-{
-    return [{children: '{$summary}', className: "text-dark"}, "flex", "pager"];
-}
-
-window.renderReleaseCountCell = function(result, {col, row})
-{
-    if(col.name !== 'releaseCount') return result;
-
-    var changed = row.data.releaseCount - row.data.releaseCountOld;
-
-    if(changed === 0) result[0] = 0;
-    if(changed > 0)   result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle primary-pale bd-primary">+' + changed + '</span>'};
-    if(changed < 0)   result[0] = {html: row.data.releaseCount + ' <span class="label size-sm circle warning-pale bd-warning">' + changed + '</span>'};
-
-    return result;
-}
-RENDERCELL
-);
-
 dtable
 (
     set::className('shadow rounded'),
@@ -224,7 +202,7 @@ dtable
     set::footPager(usePager()),
     set::nested(true),
     set::onRenderCell(jsRaw('function(result, data){ return window.renderReleaseCountCell(result, data); }')),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
+    set::footer(jsRaw('function(){return window.footerGenerator();}'))
 );
 
 render();
