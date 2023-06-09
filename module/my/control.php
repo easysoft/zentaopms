@@ -248,6 +248,7 @@ EOF;
     {
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
+        if($mode == 'doc' && $type == 'openedBy') $type = 'openedbyme';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
