@@ -31,15 +31,17 @@ class formBatch extends formBase
      */
     static $defineProps = array
     (
-        'items?: array[]',          // 使用一个列定义对象数组来定义批量表单项。
-        'minRows?: int',            // 最小显示的行数目。
-        'maxRows?: int',            // 最多显示的行数目。
-        'data?: array[]',           // 初始化行数据。
-        'mode?: string',            // 批量操作模式，可以为 `'add'`（批量添加） 或 `'edit'`（批量编辑）。
-        'actionsText?: string',     // 操作列头部文本，如果不指定则使用 `$lang->actions` 的值。
-        'idKey?: string',           // 用于从行数据获取 ID 的属性名。
-        'onRenderRow?: function',   // 渲染行时的回调函数。
-        'onRenderRowCol?: function' // 渲染列时的回调函数。
+        'items?: array[]',              // 使用一个列定义对象数组来定义批量表单项。
+        'minRows?: int',                // 最小显示的行数目。
+        'maxRows?: int',                // 最多显示的行数目。
+        'data?: array[]',               // 初始化行数据。
+        'mode?: string',                // 批量操作模式，可以为 `'add'`（批量添加） 或 `'edit'`（批量编辑）。
+        'actionsText?: string',         // 操作列头部文本，如果不指定则使用 `$lang->actions` 的值。
+        'idKey?: string',               // 用于从行数据获取 ID 的属性名。
+        'addRowIcon?: string|false',    // 添加行的图标，如果设置为 `false` 则不显示图标
+        'deleteRowIcon?: string|false', // 删除行的图标，如果设置为 `false` 则不显示图标
+        'onRenderRow?: function',       // 渲染行时的回调函数。
+        'onRenderRowCol?: function'     // 渲染列时的回调函数。
     );
 
     /**
@@ -161,7 +163,7 @@ class formBatch extends formBase
         $after[] = zui::batchForm
         (
             set::_to('#' . $this->id()),
-            set($this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey', 'onRenderRow', 'onRenderRowCol')))
+            set($this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey', 'onRenderRow', 'onRenderRowCol', 'addRowIcon', 'deleteRowIcon')))
         );
         return $after;
     }
