@@ -12315,7 +12315,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `action` varchar(50) NOT NULL DEFAULT '',
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `width` smallint(5) NOT NULL DEFAULT '0',
+  `width` varchar(50) NOT NULL DEFAULT '0',
   `position` text NULL,
   `readonly` enum('0','1') NOT NULL DEFAULT '0',
   `mobileShow` enum('0','1') NOT NULL DEFAULT '1',
