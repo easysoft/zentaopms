@@ -147,7 +147,7 @@ $formItems['file'] = formGroup
     input
     (
         set::type('file'),
-        set::name('files'),
+        set::name('files[]'),
     )
 );
 $formItems['affected'] = getAffectedTabs($story, $users);
@@ -162,6 +162,7 @@ $formActions = formRow
 
 formPanel
 (
+    set::id('dataform'),
     set::title(''),
     set::actions(false),
     $formTitle,
