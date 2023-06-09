@@ -1,0 +1,21 @@
+title: zt_task_doing
+author: Zhaoke
+version: "1.0"
+fields:
+- field: id
+  range: 1-100
+- field: parent
+  range: '`-1`{9},1{2},2{2},3{2},4{2},5{2},6{2},7{2},8{2},9'
+- field: name
+  range: 1-100
+  prefix: '任务'
+- field: status
+  range: 'wait{9},doing,done,doing,closed,doing,pause,doing,cancel,doing,wait,done,wait,done,wait,doing'
+- field: mode
+  range: 'multi{9},{100}'
+- field: execution
+  range: 1
+- field: openedBy
+  range: "user2"
+- field: closedReason
+  range: "{21},done,{100}"
