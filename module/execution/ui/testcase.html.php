@@ -61,7 +61,17 @@ sidebar
     )))
 );
 
-foreach($cases as $case) $case->actions = array();
+$config->testcase->dtable->fieldList['story']['map'] = $stories;
+$config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = str_replace('%executionID%', $executionID, $config->testcase->dtable->fieldList['actions']['list']['edit']['url']);
+$config->testcase->dtable->fieldList['actions']['menu'] =  array(array('confirmStoryChange'), array('runCase', 'runResult', 'edit', 'createBug', 'create'));
+foreach($cases as $case)
+{
+    initTableData(array($case), $config->testcase->dtable->fieldList, $this->testcase);
+
+    $stages = array_filter(explode(',', $case->stage));
+    foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
+    $case->stage = implode($lang->comma, $stages);
+}
 
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&moduleID={$moduleID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
