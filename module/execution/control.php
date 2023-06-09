@@ -1068,7 +1068,6 @@ class execution extends control
 
         /* Assign. */
         $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
-        $this->view->position        = $position;
         $this->view->bugs            = $bugs;
         $this->view->tabID           = 'bug';
         $this->view->build           = $this->loadModel('build')->getById($build);
