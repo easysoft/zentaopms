@@ -217,8 +217,13 @@ function updateApp(code, url, title, type)
     const app = apps.openedMap[code];
     if(!app) return;
 
-    const state    = typeof code === 'object' ? code : {code: code, url: url, title: title, type: type};
-    const oldState = window.history.state;
+    const state     = typeof code === 'object' ? code : {code: code, url: url, title: title, type: type};
+    const prevState = window.history.state;
+    const urlInfo   = $.parseLink(state.url);
+
+    state.prev  = prevState;
+    state.index = prevState ? prevState.index + 1 : 1;
+    state.path  = urlInfo.methodName ? `${urlInfo.moduleName}-${urlInfo.methodName}` : '';
 
     if(title)
     {
@@ -226,7 +231,7 @@ function updateApp(code, url, title, type)
         app.currentTitle = title;
     }
 
-    if(oldState && oldState.code === code && oldState.url === url) return;
+    if(prevState && prevState.code === code && prevState.url === url) return;
 
     app.currentUrl = url;
     window.history.pushState(state, title, url);
@@ -409,6 +414,37 @@ function getAppCodeFromUrl(urlOrModuleName)
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : '';
+}
+
+/**
+ * Search history and go back to specified path.
+ *
+ * @param {string|string[]} paths    Preferred search path
+ * @param {string}          urlOrApp Fallback url or app code
+ * @returns {void}
+ */
+function goBack(paths, urlOrApp)
+{
+    if(paths)
+    {
+        if(typeof paths === 'string') paths = paths.split(',');
+        const pathSet = new Set(paths);
+        let state = window.history.state;
+        while(state && state.path && !pathSet.has(state.path)) state = state.prev;
+        if(state && state.index) return window.history.go(state.index - window.history.state.index);
+    }
+
+    if(!urlOrApp) window.history.back();
+
+    if($.apps.openedMap[urlOrApp])
+    {
+        let state = window.history.state;
+        state = state && state.prev;
+        if(state && state.code === urlOrApp) window.history.back();
+        while(state && state.code !== urlOrApp) state = state.prev;
+        if(state && state.index && state.code === urlOrApp) return openApp(state.url, state.code, state.type !== 'show');
+    }
+    openApp(urlOrApp);
 }
 
 /**
@@ -633,4 +669,5 @@ $.apps = $.extend(apps,
     showApp:    showApp,
     updateApp:  updateApp,
     getLastApp: getLastApp,
+    goBack:     goBack
 });
