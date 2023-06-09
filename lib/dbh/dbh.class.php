@@ -158,7 +158,7 @@ class dbh
                 $sql = "SHOW TABLES FROM {$this->config->name} like {$tableName}";
                 break;
             case 'dm':
-                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name={$tableName}";
+                $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name='{$tableName}'";
                 break;
             default:
                 $sql = '';
