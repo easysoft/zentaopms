@@ -119,4 +119,6 @@ $config->testcase->dtable->fieldList['actions']['name']     = 'actions';
 $config->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testcase->dtable->fieldList['actions']['type']     = 'actions';
 $config->testcase->dtable->fieldList['actions']['sortType'] = false;
+$config->testcase->dtable->fieldList['actions']['list']     = $config->testcase->actionList;
+$config->testcase->dtable->fieldList['actions']['menu']     = array();
 $config->testcase->dtable->fieldList['actions']['group']    = '7';
