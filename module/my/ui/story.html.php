@@ -22,7 +22,7 @@ $footToolbar = array('items' => array
     array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('story', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=story&from={$app->rawMethod}")),
     array('caret' => 'up', 'text' => $lang->story->review, 'className' => common::hasPriv('story', 'batchReview') ? '' : 'hidden', 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => common::hasPriv('story', 'batchAssignTo') ? '' : 'hidden','url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('story', 'batchClose') ? '' : 'hidden'), 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=story&from={$app->rawMethod}")),
+    array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('story', 'batchClose') && strtolower($type) != 'closedby' ? '' : 'hidden'), 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=story&from={$app->rawMethod}")),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $rejectItems = array();

@@ -402,23 +402,23 @@ $config->my->story->dtable->fieldList['pri']['group'] = 'pri';
 $config->my->story->dtable->fieldList['product']['name']  = 'productTitle';
 $config->my->story->dtable->fieldList['product']['title'] = $lang->story->product;
 $config->my->story->dtable->fieldList['product']['type']  = 'text';
-$config->my->story->dtable->fieldList['product']['group'] = 'pri';
+$config->my->story->dtable->fieldList['product']['group'] = 'product';
 
 $config->my->story->dtable->fieldList['plan']['name']  = 'planTitle';
 $config->my->story->dtable->fieldList['plan']['title'] = $lang->story->plan;
 $config->my->story->dtable->fieldList['plan']['type']  = 'text';
-$config->my->story->dtable->fieldList['plan']['group'] = 'pri';
+$config->my->story->dtable->fieldList['plan']['group'] = 'product';
 
 $config->my->story->dtable->fieldList['status']['name']      = 'status';
 $config->my->story->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->my->story->dtable->fieldList['status']['type']      = 'status';
 $config->my->story->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
-$config->my->story->dtable->fieldList['status']['group']     = 'pri';
+$config->my->story->dtable->fieldList['status']['group']     = 'product';
 
-$config->my->story->dtable->fieldList['openedBy']['name']      = 'openedBy';
-$config->my->story->dtable->fieldList['openedBy']['title']     = $lang->story->openedByAB;
-$config->my->story->dtable->fieldList['openedBy']['type']      = 'user';
-$config->my->story->dtable->fieldList['openedBy']['group']     = 'openedBy';
+$config->my->story->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->my->story->dtable->fieldList['openedBy']['title'] = $lang->story->openedByAB;
+$config->my->story->dtable->fieldList['openedBy']['type']  = 'user';
+$config->my->story->dtable->fieldList['openedBy']['group'] = 'openedBy';
 
 $config->my->story->dtable->fieldList['estimate']['name']  = 'estimate';
 $config->my->story->dtable->fieldList['estimate']['title'] = $lang->story->estimateAB;
