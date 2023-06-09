@@ -976,8 +976,15 @@ class execution extends control
         $products    = $this->product->getProducts($execution->id);
         if(count($products) === 1) $productID = current($products)->id;
 
+        /* Set the product drop-down and search fields. */
+        $productOption = array();
+        $branchOption  = array();
+        $showBranch    = false;
         if($execution->hasProduct)
         {
+            if(count($products) > 1) $productOption[0] = $this->lang->product->all;
+            foreach($products as $productData) $productOption[$productData->id] = $productData->name;
+
             unset($this->config->bug->search['fields']['product']);
             unset($this->config->bug->search['params']['product']);
             if($project->model != 'scrum')
@@ -985,16 +992,21 @@ class execution extends control
                 unset($this->config->bug->search['fields']['plan']);
                 unset($this->config->bug->search['params']['plan']);
             }
+
+            $product = $this->product->getById((int)$productID);
+            if($product and $product->type != 'normal')
+            {
+                /* Display of branch label. */
+                $showBranch = $this->loadModel('branch')->showBranch($productID);
+
+                /* Display status of branch. */
+                $branches = $this->branch->getList($productID, $executionID, 'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                }
+            }
         }
-
-        $productPairs = array('0' => $this->lang->product->all);
-        foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        if($execution->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, (int)$productID, 'execution', 'bug', $executionID, $branch);
-
-        /* Header and position. */
-        $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
-        $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $position[] = $this->lang->execution->bug;
 
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', true);
@@ -1017,24 +1029,6 @@ class execution extends control
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&branch=$branch&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
-
-        $product = $this->product->getById((int)$productID);
-        $showBranch      = false;
-        $branchOption    = array();
-        $branchTagOption = array();
-        if($product and $product->type != 'normal')
-        {
-            /* Display of branch label. */
-            $showBranch = $this->loadModel('branch')->showBranch($productID);
-
-            /* Display status of branch. */
-            $branches = $this->branch->getList($productID, $executionID, 'all');
-            foreach($branches as $branchInfo)
-            {
-                $branchOption[$branchInfo->id]    = $branchInfo->name;
-                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-            }
-        }
 
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
@@ -1073,7 +1067,7 @@ class execution extends control
         $showModule = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
 
         /* Assign. */
-        $this->view->title           = $title;
+        $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;
         $this->view->position        = $position;
         $this->view->bugs            = $bugs;
         $this->view->tabID           = 'bug';
@@ -1091,8 +1085,6 @@ class execution extends control
         $this->view->param           = $param;
         $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
         $this->view->builds          = $this->build->getBuildPairs($productID);
-        $this->view->branchOption    = $branchOption;
-        $this->view->branchTagOption = $branchTagOption;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
@@ -1105,6 +1097,8 @@ class execution extends control
         $this->view->setModule       = true;
         $this->view->showBranch      = $showBranch;
         $this->view->recTotal        = $pager->recTotal;
+        $this->view->productOption   = $productOption;
+        $this->view->branchOption    = $branchOption;
 
         $this->display();
     }
