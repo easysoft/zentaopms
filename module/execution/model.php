@@ -1942,6 +1942,8 @@ class executionModel extends model
                 if($delay > 0) $execution->delay = $delay;
             }
 
+            if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
+
             /* Process the burns. */
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
@@ -1951,11 +1953,7 @@ class executionModel extends model
             $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
             $execution->teamCount   = isset($teams[$execution->id]) ? $teams[$execution->id]->teams : 0;
 
-            if(isset($executionTasks) and isset($executionTasks[$execution->id]))
-            {
-                $tasks = array_chunk($executionTasks[$execution->id], $this->config->task->defaultLoadCount, true);
-                $execution->tasks = $tasks[0];
-            }
+            if(isset($executionTasks) and isset($executionTasks[$execution->id])) $execution->tasks = $executionTasks[$execution->id];
 
             /* In the case of the waterfall model, calculate the sub-stage. */
             if($param === 'skipParent')
@@ -1967,16 +1965,6 @@ class executionModel extends model
             {
                 $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                 $executions[$execution->id]->title = implode('/', $parentExecutions);
-                if(strpos($param, 'skipParent') !== false)
-                {
-                    $children = $this->getChildExecutions($execution->id);
-                    if(count($children) > 0) $parentList[$execution->id] = $execution->id;
-                }
-            }
-            elseif(isset($executions[$execution->parent]))
-            {
-                $executions[$execution->parent]->children[$key] = $execution;
-                $childList[$key] = $key;
             }
 
             /* Bind execution product */
@@ -1985,13 +1973,6 @@ class executionModel extends model
                 $execution->product = $projectProductIdList[$execution->id];
             }
         }
-
-        if(strpos($param, 'withchild') === false)
-        {
-            foreach($childList as $childID) unset($executions[$childID]);
-        }
-
-        foreach($parentList as $parentID) unset($executions[$parentID]);
 
         return array_values($executions);
     }
@@ -5404,108 +5385,6 @@ class executionModel extends model
     }
 
     /**
-     * Generate col for dtable.
-     *
-     * @param  string $orderBy
-     * @access public
-     * @return void
-     */
-    public function generateCol($orderBy = '')
-    {
-        $this->loadModel('datatable');
-
-        $setting   = $this->datatable->getSetting('execution');
-        $fieldList = $this->config->execution->datatable->fieldList;
-
-        foreach($fieldList as $field => $items)
-        {
-            $fieldKey = in_array($field, array('name', 'code', 'type', 'PM', 'status')) ? 'exec' . ucfirst($field) : $field;
-            $title    = $field == 'id' ? 'ID' : zget($this->lang->execution, $fieldKey, zget($this->lang, $field, $field));
-            $fieldList[$field]['title'] = $title;
-        }
-
-        if(empty($setting))
-        {
-            $setting = $this->config->execution->datatable->defaultField;
-            $order   = 1;
-            foreach($setting as $key => $value)
-            {
-                $id  = $value;
-                $set = new stdclass();
-                $set->order = $order;
-                $set->show  = true;
-                $set->name  = $value;
-                $set->title = $fieldList[$id]['title'];
-
-                $sortType = '';
-                if(strpos($orderBy, $id) !== false)
-                {
-                    $sort = str_replace("{$id}_", '', $orderBy);
-                    $sortType = $sort == 'asc' ? 'up' : 'down';
-                }
-
-                if(isset($fieldList[$id]['checkbox']))     $set->checkbox     = $fieldList[$id]['checkbox'];
-                if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle = $fieldList[$id]['nestedToggle'];
-                if(isset($fieldList[$id]['fixed']))        $set->fixed        = $fieldList[$id]['fixed'];
-                if(isset($fieldList[$id]['width']))        $set->width        = $fieldList[$id]['width'];
-                if(isset($fieldList[$id]['type']))         $set->type         = $fieldList[$id]['type'];
-                if(isset($fieldList[$id]['sortType']))     $set->sortType     = $fieldList[$id]['sortType'];
-                if(isset($fieldList[$id]['flex']))         $set->flex         = $fieldList[$id]['flex'];
-                if(isset($fieldList[$id]['minWidth']))     $set->minWidth     = $fieldList[$id]['minWidth'];
-                if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth     = $fieldList[$id]['maxWidth'];
-                if(isset($fieldList[$id]['pri']))          $set->pri          = $fieldList[$id]['pri'];
-
-                if($sortType) $set->sortType = $sortType;
-
-                $setting[$key] = $set;
-                $order ++;
-            }
-        }
-        else
-        {
-            foreach($setting as $key => $set)
-            {
-                if(empty($set->show))
-                {
-                    unset($setting[$key]);
-                    continue;
-                }
-
-                $sortType = '';
-                if(strpos($orderBy, $set->id) !== false)
-                {
-                    $sort = str_replace("{$set->id}_", '', $orderBy);
-                    $sortType = $sort == 'asc' ? 'up' : 'down';
-                }
-
-                $set->name  = $set->id;
-                $set->title = $fieldList[$set->id]['title'];
-
-                if(isset($fieldList[$set->id]['checkbox']))     $set->checkbox     = $fieldList[$set->id]['checkbox'];
-                if(isset($fieldList[$set->id]['nestedToggle'])) $set->nestedToggle = $fieldList[$set->id]['nestedToggle'];
-                if(isset($fieldList[$set->id]['fixed']))        $set->fixed        = $fieldList[$set->id]['fixed'];
-                if(isset($fieldList[$set->id]['type']))         $set->type         = $fieldList[$set->id]['type'];
-                if(isset($fieldList[$set->id]['sortType']))     $set->sortType     = $fieldList[$set->id]['sortType'];
-                if(isset($fieldList[$set->id]['flex']))         $set->flex         = $fieldList[$set->id]['flex'];
-                if(isset($fieldList[$set->id]['minWidth']))     $set->minWidth     = $fieldList[$set->id]['minWidth'];
-                if(isset($fieldList[$set->id]['maxWidth']))     $set->maxWidth     = $fieldList[$set->id]['maxWidth'];
-                if(isset($fieldList[$set->id]['pri']))          $set->pri          = $fieldList[$set->id]['pri'];
-
-                if($sortType) $set->sortType = $sortType;
-
-                $set->width = str_replace('px', '', $set->width);
-
-                unset($set->id);
-
-            }
-        }
-
-        usort($setting, array('datatableModel', 'sortCols'));
-
-        return $setting;
-    }
-
-    /**
      * Generate row for dtable.
      *
      * @param  array  $executions
@@ -5525,10 +5404,10 @@ class executionModel extends model
             $execution->rawID         = $execution->id;
             $execution->isExecution   = 1;
             $execution->id            = 'pid' . (string)$execution->id;
-            $execution->name          = "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->children) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '');
+            $execution->name          = "<span class='label secondary-pale'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->isParent) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label danger-pale">' . $this->lang->execution->delayed . '</span>' : '');
             $execution->project       = $execution->projectName;
             $execution->parent        = ($execution->parent and $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
-            $execution->asParent      = !empty($execution->children) or !empty($execution->tasks);
+            $execution->asParent      = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->progress      = $execution->hours->progress;
             $execution->totalEstimate = $execution->hours->totalEstimate;
             $execution->totalConsumed = $execution->hours->totalConsumed;
@@ -5545,18 +5424,10 @@ class executionModel extends model
                 $execution->PMAccount = $execution->PM;
             }
 
-            $children = isset($execution->children) ? $execution->children : array();
-            unset($execution->children);
-
             $rows[] = $execution;
 
             /* Append tasks and child stages. */
             if(!empty($execution->tasks)) $rows = $this->appendTasks($execution->tasks, $rows);
-
-            if(!empty($children))
-            {
-                $rows = array_merge($rows, $this->generateRow($children, $users, $avatarList));
-            }
         }
 
         return $rows;
@@ -5585,7 +5456,7 @@ class executionModel extends model
                 $task->actions[] = $action;
             }
 
-            $task->name          = "<span class='label label-outline'>{$this->lang->task->common}</span> " . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
+            $task->name          = "<span class='label secondary-pale'>{$this->lang->task->common}</span> " . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
             $task->rawID         = $task->id;
             $task->id            = 'tid' . (string)$task->id;
             $task->totalEstimate = $task->estimate;
