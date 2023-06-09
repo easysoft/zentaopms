@@ -19,10 +19,7 @@ featurebar
     set::linkParams("type={key}&orderBy=id_desc&recPerPage={$pager->recPerPage}"),
 );
 
-foreach($executions as $execution)
-{
-      $isParent = isset($parentGroup[$execution->id]);
-}
+foreach($executions as $execution) $execution->isParent = isset($parentGroup[$execution->id]);
 
 $cols       = array_values($config->my->execution->dtable->fieldList);
 $executions = array_values($executions);
