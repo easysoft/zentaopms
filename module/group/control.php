@@ -521,14 +521,14 @@ class group extends control
 
             /* Pager. */
             $this->app->loadClass('pager', $static = true);
-            $recTotal = count($privList);
-            $pager    = new pager($recTotal, $recPerPage, $pageID);
+            $total    = count($privList);
+            $pager    = new pager($total, $recPerPage, $pageID);
             $privList = array_chunk($privList, $pager->recPerPage, true);
             $privList = empty($privList) ? $privList : $privList[$pageID - 1];
 
             /* Build the search form. */
             $queryID   = ($browseType == 'bysearch') ? (int)$paramID : 0;
-            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage");
+            $actionURL = $this->createLink('group', 'editManagePriv', "browseType=bysearch&view=&paramID=myQueryID&recTotal=$total&recPerPage=$recPerPage");
             $this->group->buildPrivSearchForm($queryID, $actionURL);
 
             $privRelations = $this->group->getPrivRelationsByIdList(array_keys($privList));
@@ -882,8 +882,6 @@ class group extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-
-            $this->send(array('result' => $responseResult, 'message' => $responseMessage, 'locate' => $locate));
         }
 
         $moduleViewPairs    = $this->group->getPrivModuleViewPairs();
