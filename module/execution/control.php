@@ -4024,8 +4024,8 @@ class execution extends control
         $this->app->loadLang('my');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
-        $this->loadModel('product');
         $this->loadModel('datatable');
+        $this->loadModel('product');
 
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');

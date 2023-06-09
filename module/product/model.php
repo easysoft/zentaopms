@@ -398,7 +398,7 @@ class productModel extends model
      */
     public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '', $noDeleted = true)
     {
-        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append, $noDeleted);
+        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all', 'id,name,deleted') : $this->getProducts($projectID, $status, '', true, $append, $noDeleted);
         $pairs    = array();
         if(!empty($products))
         {
