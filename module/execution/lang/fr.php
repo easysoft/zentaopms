@@ -552,6 +552,8 @@ $lang->execution->featureBar['story']['reviewing'] = 'Reviewing';
 
 $lang->execution->featureBar['testcase']['all'] = 'All';
 
+$lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
+
 $lang->execution->myExecutions = "J'étais impliqué";
 $lang->execution->doingProject = "Ongoing {$lang->projectCommon}s";
 
