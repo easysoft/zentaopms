@@ -12,18 +12,24 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* zin: Define the set::module('task') feature bar on main menu. */
+$executions = array(0 => $lang->execution->allExecutions) + $executions;
 featureBar
 (
-    setClass('nav-item'),
+    set::current('all'),
+    set::linkParams("toExecution={$execution->id}"),
     btn
     (
-        set::text($lang->execution->importTask),
-        set::active(true),
-        set::url('###')
+        set::text($lang->execution->selectExecution),
+        setClass('ml-6')
     ),
-    set::current($browseType),
-    set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    productMenu
+    (
+        setClass('px-6'),
+        set::title($lang->execution->allExecutions),
+        set::items($executions),
+        set::activeKey($fromExecution),
+        set::link(inlink('importtask', "executionID={$execution->id}&fromExecution=%s"))
+    )
 );
 
 $config->task->dtable->importTask->fieldList['execution']['map'] = $executions;
@@ -41,14 +47,14 @@ dtable
     set::footToolbar(array(
         'items' => array(
             array(
-                'text'  => $lang->execution->importTask,
-                'class' => 'btn secondary toolbar-item batch-btn size-sm',
+                'text'     => $lang->execution->importTask,
+                'class'    => 'btn secondary toolbar-item batch-btn size-sm',
                 'data-url' => createLink('execution', 'importtask', "executionID={$execution->id}&fromExecution={$fromExecution}"),
             ),
             array(
                 'text'  => $lang->goback,
                 'class' => 'btn toolbar-item size-sm text-gray',
-                'url'   => 'javascript:window.history.go(-1);',
+                'url'   => createLink('execution', 'task', "executionID={$execution->id}")
             )
         )
     )),
