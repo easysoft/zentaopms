@@ -4019,7 +4019,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function all($status = 'undone', $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('stage');
@@ -4049,7 +4049,7 @@ class execution extends control
         $this->view->title            = $this->lang->execution->allExecutions;
         $this->view->position[]       = $this->lang->execution->allExecutions;
         $this->view->executionStats   = $executionStats;
-        $this->view->allExecutionsNum = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_asc', null, true);
+        $this->view->allExecutionsNum = $this->execution->getExecutionCounts(0, 'all');
         $this->view->productList      = $this->product->getProductPairsByProject(0);
         $this->view->productID        = $productID;
         $this->view->pager            = $pager;
