@@ -1254,13 +1254,22 @@ class treeModel extends model
     /**
      * Create link of a test task.
      *
-     * @param  object  $module
+     * @param  string       $type
+     * @param  object       $module
+     * @param  int          $parent
+     * @param  array|string $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createTestTaskLink($type, $module, $extra)
+    public function createTestTaskLink(string $type, object $module, int $parent, array|string $extra = array()): object
     {
-        return html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+
+        return $data;
     }
 
     /**
