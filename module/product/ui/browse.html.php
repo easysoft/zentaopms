@@ -172,6 +172,7 @@ foreach($stories as $story)
 {
     $story->taskCount = $storyTasks[$story->id];
     $story->actions   = $this->story->buildActionButtonList($story, 'browse');
+    $story->plan      = $plans[$story->plan];
 
     $data[] = $story;
 

@@ -326,6 +326,7 @@ class productplanModel extends model
             }
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if(str_contains($param, 'cleantitle')) $planPairs[$plan->id] = $plan->title;
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
         }
 
