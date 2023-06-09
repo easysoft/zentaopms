@@ -254,3 +254,70 @@ $config->projectExecution->dtable->fieldList['actions']['actionsMap']['editTask'
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon'] = 'split';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->task->batchCreate;
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['batchCreate']['url']  = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={rawID}');
+
+$app->loadLang('group');
+$config->projectGroup = new stdclass();
+$config->projectGroup->dtable = new stdclass();
+
+$config->projectGroup->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->projectGroup->dtable->fieldList['id']['name']     = 'id';
+$config->projectGroup->dtable->fieldList['id']['type']     = 'checkID';
+$config->projectGroup->dtable->fieldList['id']['sortType'] = 'desc';
+$config->projectGroup->dtable->fieldList['id']['fixed']    = 'left';
+$config->projectGroup->dtable->fieldList['id']['checkbox'] = false;
+$config->projectGroup->dtable->fieldList['id']['width']    = '80';
+$config->projectGroup->dtable->fieldList['id']['group']    = 1;
+
+$config->projectGroup->dtable->fieldList['name']['title']    = $lang->group->name;
+$config->projectGroup->dtable->fieldList['name']['name']     = 'name';
+$config->projectGroup->dtable->fieldList['name']['fixed']    = 'left';
+$config->projectGroup->dtable->fieldList['name']['flex']     = 1;
+$config->projectGroup->dtable->fieldList['name']['type']     = 'title';
+$config->projectGroup->dtable->fieldList['name']['sortType'] = true;
+$config->projectGroup->dtable->fieldList['name']['group']    = 1;
+
+$config->projectGroup->dtable->fieldList['desc']['title']    = $lang->group->desc;
+$config->projectGroup->dtable->fieldList['desc']['name']     = 'desc';
+$config->projectGroup->dtable->fieldList['desc']['type']     = 'desc';
+$config->projectGroup->dtable->fieldList['desc']['sortType'] = false;
+$config->projectGroup->dtable->fieldList['desc']['group']    = 2;
+
+$config->projectGroup->dtable->fieldList['users']['title']    = $lang->group->users;
+$config->projectGroup->dtable->fieldList['users']['name']     = 'users';
+$config->projectGroup->dtable->fieldList['users']['type']     = 'desc';
+$config->projectGroup->dtable->fieldList['users']['hint']     = true;
+$config->projectGroup->dtable->fieldList['users']['sortType'] = false;
+$config->projectGroup->dtable->fieldList['users']['group']    = 3;
+
+$config->projectGroup->dtable->fieldList['actions']['name']     = 'actions';
+$config->projectGroup->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->projectGroup->dtable->fieldList['actions']['type']     = 'actions';
+$config->projectGroup->dtable->fieldList['actions']['width']    = '140';
+$config->projectGroup->dtable->fieldList['actions']['menu']     = array('managePriv', 'manageMember', 'edit', 'copy', 'delete');
+$config->projectGroup->dtable->fieldList['actions']['sortType'] = false;
+$config->projectGroup->dtable->fieldList['actions']['fixed']    = 'right';
+
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['icon'] = 'lock';
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['text'] = $lang->group->managePriv;;
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['hint'] = $lang->group->managePriv;;
+$config->projectGroup->dtable->fieldList['actions']['list']['managePriv']['url']  = helper::createLink('project', 'managePriv', "projectID={project}&type=bygroup&groupID={id}");
+
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['icon'] = 'persons';
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['text'] = $lang->group->manageMember;
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['hint'] = $lang->group->manageMember;
+$config->projectGroup->dtable->fieldList['actions']['list']['manageMember']['url']  = helper::createLink('project', 'manageGroupMember', "groupID={id}");
+
+$config->projectGroup->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
+$config->projectGroup->dtable->fieldList['actions']['list']['edit']['text'] = $lang->group->edit;
+$config->projectGroup->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->group->edit;
+$config->projectGroup->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('project', 'editGroup', "groupID={id}");
+
+$config->projectGroup->dtable->fieldList['actions']['list']['copy']['icon'] = 'copy';
+$config->projectGroup->dtable->fieldList['actions']['list']['copy']['text'] = $lang->group->copy;
+$config->projectGroup->dtable->fieldList['actions']['list']['copy']['hint'] = $lang->group->copy;
+$config->projectGroup->dtable->fieldList['actions']['list']['copy']['url']  = helper::createLink('project', 'copyGroup', "groupID={id}");
+
+$config->projectGroup->dtable->fieldList['actions']['list']['delete']['icon'] = 'trash';
+$config->projectGroup->dtable->fieldList['actions']['list']['delete']['text'] = $lang->group->delete;
+$config->projectGroup->dtable->fieldList['actions']['list']['delete']['hint'] = $lang->group->delete;
+$config->projectGroup->dtable->fieldList['actions']['list']['delete']['url']  = helper::createLink('group', 'delete', "groupID={id}");
