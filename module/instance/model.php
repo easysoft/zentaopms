@@ -33,8 +33,6 @@ class InstanceModel extends model
      */
     public function getByID($id)
     {
-        $deadline = date('Y-m-d H:i:s', strtotime("-{$this->config->demoAppLife} minutes"));
-
         $instance = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('id')->eq($id)
             ->andWhere('deleted')->eq(0)
@@ -60,8 +58,6 @@ class InstanceModel extends model
      */
     public function getByIdList($idList)
     {
-        $deadline = date('Y-m-d H:i:s', strtotime("-{$this->config->demoAppLife} minutes"));
-
         $instances = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('id')->in($idList)
             ->andWhere('deleted')->eq(0)
@@ -107,8 +103,6 @@ class InstanceModel extends model
      */
     public function getByAccount($account = '', $pager = null, $pinned = '', $searchParam = '', $status = 'all')
     {
-        $deadline = date('Y-m-d H:i:s', strtotime("-{$this->config->demoAppLife} minutes"));
-
         $defaultSpace = $this->loadModel('space')->defaultSpace($account ? $account : $this->app->user->account);
 
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
@@ -189,8 +183,6 @@ class InstanceModel extends model
      */
     public function totalServices()
     {
-        $deadline = date('Y-m-d H:i:s', strtotime("-{$this->config->demoAppLife} minutes"));
-
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
         $count = $this->dao->select('count(*) as qty')->from(TABLE_INSTANCE)->alias('instance')
@@ -1411,14 +1403,6 @@ class InstanceModel extends model
             {
                 if($backup->creator != 'auto') continue; // Only delete data madde by auto backup.
                 if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
-
-                $deadline = intval($backup->create_time) + $instance->backupKeepDays * 24 * 3600;
-                //$deadline = intval($backup->create_time) + 300; // Debug codes: delete backup if it's life is older 5 minuts.
-                if($deadline < time())
-                {
-                    $this->deleteBackup($instance, $backup->name);
-                    $this->action->create('instance', $instance->id, 'deleteExpiredBackup', '', json_encode(array('data' => $backup)));
-                }
             }
         }
     }
@@ -1658,12 +1642,10 @@ class InstanceModel extends model
      */
     public function deleteExpiredDemoInstance()
     {
-        $deadline     = date('Y-m-d H:i:s', strtotime("-{$this->config->demoAppLife} minutes"));
         $demoAccounts = array_filter(explode(',', $this->config->demoAccounts));
 
         $instanceList = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('deleted')->eq(0)
-            ->andWhere('createdAt')->lt($deadline)
             ->andWhere('createdBy')->in($demoAccounts)
             ->fetchAll();
         if(empty($instanceList)) return;
