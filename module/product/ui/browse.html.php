@@ -195,12 +195,7 @@ $fnGenerateSideBar();
 featureBar
 (
     set::current($browseType),
-    set::linkParams("productID={$productID}&browseType={key}"),
-    set::moreMenuLinkCallback(function($browseType) use($projectIDParam, $productID, $branch, $storyType)
-    {
-        global $app;
-        return createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={$browseType}&param=0&storyType=$storyType");
-    }),
+    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID")),
     li(searchToggle(set::module('story')))
 );
 

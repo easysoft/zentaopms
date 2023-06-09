@@ -145,7 +145,7 @@ class product extends control
         $project   = $this->loadModel('project')->getByID($projectID);
         $branchID  = $this->productZen->getBranchID($product, $branch);
         $orderBy   = $orderBy ? $orderBy : $cookieOrderBy;
-        $branch    = $branchID ?? $branch;
+        $branch    = $branchID ? $branchID : $branch;
 
         /* ATTENTION: be careful to change the order of follow sentences. */
         $this->productZen->setMenu4Browse($projectID, $productID, $branch, $storyType);
