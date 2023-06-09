@@ -347,26 +347,26 @@ if($canBatchChangeScene)
     );
 }
 
-$config->testcase->dtable->fieldList['story']['map'] = $stories;
 
-$this->testcase->buildOperateMenu(null, 'browse');
+$executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
+$url         = $config->testcase->dtable->fieldList['actions']['list']['edit']['url'];
+$url         = str_replace('%executionID%', $executionID, $url);
+
+$config->testcase->dtable->fieldList['story']['map'] = $stories;
+$config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = $url;
 
 foreach($scenes as $scene)
 {
+    $actionType = $scene->isCase == 1 ? 'testcase' : 'scene';
+    $config->testcase->dtable->fieldList['actions']['menu'] = $config->$actionType->menu;
+
+    initTableData(array($scene), $config->testcase->dtable->fieldList, $this->testcase);
+
     if($scene->isCase != 1) continue;
 
     $stages = array_filter(explode(',', $scene->stage));
     foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
     $scene->stage = implode($lang->comma, $stages);
-
-    $actions = array();
-    foreach($this->config->testcase->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->testcase->isClickable($scene, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $scene->actions = $actions;
 }
 
 dtable
