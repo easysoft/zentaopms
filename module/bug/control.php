@@ -981,7 +981,7 @@ class bug extends control
         if($this->post->bugIdList)
         {
             $bugIdList = array_unique($this->post->bugIdList);
-            $bugs      = $this->bug->getByList($bugIDList);
+            $bugs      = $this->bug->getByIdList($bugIdList);
 
             $bug = form::data($this->config->bug->form->confirm)->setDefault('confirmed', 1)->remove('pri,type,status,mailto')->get();
             foreach($bugIdList as $bugID)

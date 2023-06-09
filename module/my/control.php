@@ -573,7 +573,7 @@ EOF;
             $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
         }
 
-        $bugs = $this->bug->checkDelayedBugs($bugs);
+        $bugs = $this->bug->batchAppendDelayedDays($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");

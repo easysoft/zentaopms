@@ -68,3 +68,40 @@ $config->my->project->actionList['whitelist']['url']  = helper::createLink('proj
 $config->my->project->actionList['delete']['icon'] = 'trash';
 $config->my->project->actionList['delete']['hint'] = $lang->project->delete;
 $config->my->project->actionList['delete']['url']  = helper::createLink('project', 'delete', 'projectID={id}');
+
+$app->loadLang('bug');
+$config->my->bug = new stdclass();
+$config->my->bug->actionList = array();
+$config->my->bug->actionList['confirm']['icon']        = 'ok';
+$config->my->bug->actionList['confirm']['text']        = $lang->bug->abbr->confirmed;
+$config->my->bug->actionList['confirm']['hint']        = $lang->bug->abbr->confirmed;
+$config->my->bug->actionList['confirm']['url']         = helper::createLink('bug', 'confirm',"bugID={id}");
+$config->my->bug->actionList['confirm']['data-toggle'] = 'modal';
+
+$config->my->bug->actionList['resolve']['icon']        = 'checked';
+$config->my->bug->actionList['resolve']['text']        = $lang->bug->resolve;
+$config->my->bug->actionList['resolve']['hint']        = $lang->bug->resolve;
+$config->my->bug->actionList['resolve']['url']         = helper::createLink('bug', 'resolve',"bugID={id}");
+$config->my->bug->actionList['resolve']['data-toggle'] = 'modal';
+
+$config->my->bug->actionList['close']['icon']        = 'off';
+$config->my->bug->actionList['close']['text']        = $lang->bug->close;
+$config->my->bug->actionList['close']['hint']        = $lang->bug->close;
+$config->my->bug->actionList['close']['url']         = helper::createLink('bug', 'close',"bugID={id}");
+$config->my->bug->actionList['close']['data-toggle'] = 'modal';
+
+$config->my->bug->actionList['activate']['icon']        = 'magic';
+$config->my->bug->actionList['activate']['text']        = $lang->bug->activate;
+$config->my->bug->actionList['activate']['hint']        = $lang->bug->activate;
+$config->my->bug->actionList['activate']['url']         = helper::createLink('bug', 'activate',"bugID={id}");
+$config->my->bug->actionList['activate']['data-toggle'] = 'modal';
+
+$config->my->bug->actionList['edit']['icon'] = 'edit';
+$config->my->bug->actionList['edit']['text'] = $lang->bug->edit;
+$config->my->bug->actionList['edit']['hint'] = $lang->bug->edit;
+$config->my->bug->actionList['edit']['url']  = helper::createLink('bug', 'edit',"bugID={id}");
+
+$config->my->bug->actionList['copy']['icon'] = 'copy';
+$config->my->bug->actionList['copy']['text'] = $lang->bug->copy;
+$config->my->bug->actionList['copy']['hint'] = $lang->bug->copy;
+$config->my->bug->actionList['copy']['url']  = helper::createLink('bug', 'create',"productID={product}&branch={branch}&extra=bugID={id}");
