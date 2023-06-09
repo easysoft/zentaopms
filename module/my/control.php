@@ -308,21 +308,16 @@ EOF;
         $this->view->todos        = $todos;
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
-        $this->view->recTotal     = $recTotal;
-        $this->view->recPerPage   = $recPerPage;
-        $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->user         = $user;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->account      = $this->app->user->account;
-        $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
-        $this->view->pager        = $pager;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
         $this->view->waitCount    = $waitCount;
         $this->view->doingCount   = $doingCount;
         $this->view->importFuture = ($type != 'today');
-
+        $this->view->pager        = $pager;
         $this->display();
     }
 
@@ -376,19 +371,14 @@ EOF;
         foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
-        $this->view->stories    = $stories;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
-        $this->view->type       = $type;
-        $this->view->param      = $param;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'story';
-
+        $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->stories  = $stories;
+        $this->view->users    = $this->user->getPairs('noletter');
+        $this->view->projects = $this->loadModel('project')->getPairsByProgram();
+        $this->view->type     = $type;
+        $this->view->param    = $param;
+        $this->view->mode     = 'story';
+        $this->view->pager    = $pager;
         $this->display();
     }
 
@@ -442,18 +432,14 @@ EOF;
         foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
-        $this->view->stories    = $stories;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
-        $this->view->type       = $type;
-        $this->view->param      = $param;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'requirement';
+        $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->stories  = $stories;
+        $this->view->users    = $this->user->getPairs('noletter');
+        $this->view->projects = $this->loadModel('project')->getPairsByProgram();
+        $this->view->type     = $type;
+        $this->view->param    = $param;
+        $this->view->mode     = 'requirement';
+        $this->view->pager    = $pager;
         $this->display();
     }
 
@@ -537,19 +523,13 @@ EOF;
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->tabID      = 'task';
-        $this->view->tasks      = $tasks;
+        $this->view->tasks      = $this->app->viewType == 'json' ?  array_values($tasks) : $tasks;
         $this->view->summary    = $summary;
         $this->view->type       = $type;
         $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
-
-        if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
     }
 
@@ -626,7 +606,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function testtask($type = 'wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testtask($type = 'wait', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -649,15 +629,9 @@ EOF;
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
-
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
         $this->view->type       = $type;
-        $this->view->pager      = $pager;
         $this->view->mode       = 'testtask';
-
+        $this->view->pager      = $pager;
         $this->display();
     }
 

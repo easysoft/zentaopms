@@ -37,7 +37,8 @@ class featureBar extends wg
         if(!is_array($rawItems)) return null;
 
         $current      = $this->prop('current', data('browseType'));
-        $recTotal     = data('recTotal');
+        $pager        = data('pager');
+        $recTotal     = $pager ? $pager->recTotal : '';
         $items        = array();
         $link         = $this->prop('link');
 
