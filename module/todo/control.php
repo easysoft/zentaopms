@@ -454,12 +454,12 @@ class todo extends control
         if(!$_POST) $this->locate($this->createLink('my', 'todo'));
 
         $formData   = form::data($this->config->todo->editDate->form);
-        $todoIDList = !empty($formData->data->todoIDList) ? $formData->data->todoIDList : array($todoID);
+        $todoIdList = !empty($formData->data->todoIdList) ? $formData->data->todoIdList : array($todoID);
         $date       = !empty($formData->data->date) ? $formData->data->date : date::today();
-        if(!$todoIDList) $this->locate((string)$this->session->todoList);
+        if(!$todoIdList) $this->locate((string)$this->session->todoList);
 
-        $this->todo->editDate((array)$todoIDList, (string)$date);
-        $this->locate((string)$this->session->todoList);
+        $this->todo->editDate((array)$todoIdList, (string)$date);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

@@ -73,7 +73,7 @@ $config->todo->batchFinish->form['todoIDList'] = array('required' => true, 'type
 $config->todo->editDate = new stdclass();
 $config->todo->editDate->form = array();
 $config->todo->editDate->form['date']       = array('required' => true, 'type' => 'string');
-$config->todo->editDate->form['todoIDList'] = array('required' => true, 'type' => 'array');
+$config->todo->editDate->form['todoIdList'] = array('required' => true, 'type' => 'array');
 
 $config->todo->export = new stdclass();
 $config->todo->export->form = array();
