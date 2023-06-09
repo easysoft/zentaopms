@@ -159,33 +159,33 @@ function p($keys = '', $delimiter = ',')
  * @param  string   $moduleName
  * @param  string   $methodName
  * @param  string   $methodParam
- * @param  string   $isGrup
+ * @param  string   $isGroup
  * @access public
- * @return void
+ * @return string
  */
-function genStepDesc($userStep, $moduleName, $methodName, $methodParam, $isGrup)
+function genStepDesc($userStep, $moduleName, $methodName, $methodParam, $isGroup)
 {
-    if($userStep) return '- ' . $userStep . ($isGrup ? "\n" : '');
+    if($userStep) return '- ' . $userStep . ($isGroup ? "\n" : '');
 
     if ($methodName === 0 && $methodParam === 0)
     {
-        $stepDesc = "- 执行{$moduleName}" . ($isGrup ? "\n" : '');
+        $stepDesc = "- 执行{$moduleName}" . ($isGroup ? "\n" : '');
     }
     elseif($methodParam)
     {
-        $stepDesc = "- 执行{$moduleName}模块的{$methodName}方法，参数是{$methodParam}" . ($isGrup ? "\n" : '');
+        $stepDesc = "- 执行{$moduleName}模块的{$methodName}方法，参数是{$methodParam}" . ($isGroup ? "\n" : ' ');
     }
     else
     {
-        $stepDesc = "- 执行{$moduleName}模块的{$methodName}方法" . ($isGrup ? "\n" : '');
+        $stepDesc = "- 执行{$moduleName}模块的{$methodName}方法" . ($isGroup ? "\n" : ' ');
     }
 
     return $stepDesc;
 }
 
 /**
- * 生成用例步骤并输出（ztf使用）
- * extract ZTF note.
+ * 用例步骤并输出（ztf使用）
+ * Print steps by row.
  *
  * @param  string $key
  * @access public
@@ -204,47 +204,90 @@ function printSteps()
     foreach($rpeList as $rpe)
     {
         list($moduleName, $methodName, $methodParam) = $rpe[0];
-        $expectStr = is_numeric($rpe[1]) ? $rpe[1] : trim($rpe[1], substr($rpe[1], 0, 1));
+
+        $isGroup    = false;
         $pParam    = $rpe[2];
-        $userStep  = trim(str_replace('//', '', $rpe[3]));
         $keys      = $pParam[0];
         $delimiter = $pParam[1] ? $pParam[1] : ',';
-        $isGrup    = false;
-        $stepDesc  = '';
-        $expects   = '' === $expectStr ? array() : explode($delimiter, $expectStr);
 
-        $rowIndex = -1;
-        $pos      = strpos($keys, ':');
-        if($pos)
-        {
-            $arrKey   = substr($keys, 0, $pos);
-            $keys     = substr($keys, $pos + 1);
-            $rowIndex = $arrKey;
-        }
-        $keys = empty($keys) ? array() : explode($delimiter, $keys);
-        if(count($keys) > 1) $isGrup = true;
+        $parts     = explode(';', $keys);
+        $parts     = array_filter($parts);
+        $userStep  = trim(str_replace('//', '', $rpe[3]));
+        $expectStr = is_numeric($rpe[1]) ? $rpe[1] : trim($rpe[1], substr($rpe[1], 0, 1));
 
-        $stepDesc = genStepDesc($userStep, $moduleName, $methodName, $methodParam, $isGrup);
+        $stepDesc = genStepDesc($userStep, $moduleName, $methodName, $methodParam, $isGroup);
+
         if(empty($keys)) $stepDesc .= " @{$expectStr}\n";
 
-        foreach($keys as $index => $row)
+        if(str_contains($expectStr, ';'))
         {
-            $stepExpect = isset($expects[$index]) ? $expects[$index] : '';
-            if(count($expects) == 1) $stepExpect = $expectStr;
-            if($rowIndex == -1)
+            $expectList = explode(';', $expectStr);
+            $expectList = array_map(function($item) use ($delimiter)
             {
-                $stepDesc .= ($isGrup ? ' - ' : '') . ($row ? "属性{$row}" : '') . " @{$stepExpect}\n";
-            }
-            else
-            {
-                $stepDesc .= ($isGrup ? ' - ' : '') . "第{$rowIndex}条的{$row}属性 @{$stepExpect}\n";
-            }
+                return explode($delimiter, $item);
+            }, $expectList);
+        }
+        else
+        {
+            $expectList = explode($delimiter, $expectStr);
+            $chunkCount = empty($parts) ? 1 : ceil(count($expectList)/count($parts));
+            $expectList = array_chunk($expectList, $chunkCount);
         }
 
-        $desc .= $stepDesc . "\n";
+        $isGroup = count($expectList) > 1 || (!empty($expectList) && count($expectList[0]) > 1);
+        $desc   .= $stepDesc;
+
+        if($isGroup && substr($desc, -2) != "\n") $desc .= "\n";
+
+        foreach($parts as $index => $part)
+        {
+            $desc .= genRowStep($part, $delimiter, $expectList[$index], $isGroup);
+        }
+
+        $desc .= "\n";
     }
 
     echo trim($desc);
+}
+
+/**
+ * 生成（;隔开的）每条数据的用例步骤.
+ * Generate steps by row.
+ *
+ * @param  string $key
+ * @access public
+ * @return string
+ */
+function genRowStep($keys, $delimiter, $expects, $isGroup)
+{
+    $stepDesc = '';
+    $rowIndex = -1;
+    $pos      = strpos($keys, ':');
+
+    if($pos)
+    {
+        $rowIndex = substr($keys, 0, $pos);
+        $keys     = substr($keys, $pos + 1);
+    }
+
+    $keys = $keys === '' ? array() : explode($delimiter, $keys);
+
+    foreach($keys as $index => $row)
+    {
+        $stepExpect = isset($expects[$index]) ? $expects[$index] : '';
+        if(count($expects) == 1) $stepExpect = current($expects);
+
+        if($rowIndex == -1)
+        {
+            $stepDesc .= ($isGroup ? ' - ' : '') . ($row ? "属性{$row}" : '') . " @{$stepExpect}\n";
+        }
+        else
+        {
+            $stepDesc .= ($isGroup ? ' - ' : '') . "第{$rowIndex}条的{$row}属性 @{$stepExpect}\n";
+        }
+    }
+
+    return $stepDesc;
 }
 
 /**
@@ -300,7 +343,7 @@ function splitParam($params)
 function genModuleAndMethod($rParams)
 {
     $newParams = array();
-    foreach($rParams as $index => $param)
+    foreach($rParams as $param)
     {
         $param = trim($param, "'");
         if($param[0] != '$') $param = trim(strchr($param, '$'), ')');

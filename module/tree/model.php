@@ -465,7 +465,8 @@ class treeModel extends model
         {
             if($onlyGetLinked && !isset($executionModules[$module->id]) && empty($product->shadow)) continue;
 
-            $modules[] = $this->buildTree($module, $type, 0, $userFunc, $extra, $branch);
+            $data = $this->buildTree($module, $type, 0, $userFunc, $extra, $branch);
+            if($data) $modules[] = $data;
         }
 
         return $modules;
@@ -1227,14 +1228,14 @@ class treeModel extends model
     /**
      * Create module of a test case.
      *
-     * @param  string $type
-     * @param  object $module
-     * @param  int    $parent
-     * @param  array  $extra
+     * @param  string       $type
+     * @param  object       $module
+     * @param  int          $parent
+     * @param  array|string $extra
      * @access public
      * @return object
      */
-    public function createCaseLink(string $type, object $module, int $parent, array $extra = array()): object
+    public function createCaseLink(string $type, object $module, int $parent, array|string $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
@@ -1253,13 +1254,22 @@ class treeModel extends model
     /**
      * Create link of a test task.
      *
-     * @param  object  $module
+     * @param  string       $type
+     * @param  object       $module
+     * @param  int          $parent
+     * @param  array|string $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createTestTaskLink($type, $module, $extra)
+    public function createTestTaskLink(string $type, object $module, int $parent, array|string $extra = array()): object
     {
-        return html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+
+        return $data;
     }
 
     /**
