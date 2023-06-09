@@ -142,29 +142,22 @@ featureBar
 
 toolbar
 (
-    modalTrigger
+    btn
     (
-        to::trigger(btn
-        (
-            setClass('ghost text-darker'),
-            set::icon('export'),
-            $lang->export
-        )),
-        set::size('sm'),
-        set::url(createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param")),
-        set::type('ajax')
+        setClass('ghost text-darker'),
+        set::icon('export'),
+        set('data-toggle', 'modal'),
+        set('data-url', createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param")),
+        $lang->export
     ),
     div(setClass('nav-divider')),
-    $config->systemMode == 'ALM' ? modalTrigger
+    $config->systemMode == 'ALM' ? btn
     (
-        to::trigger(btn
-        (
-            setClass('ghost text-primary'),
-            set::icon('edit'),
-            $lang->product->editLine
-        )),
-        set::url(createLink('product', 'manageLine', $browseType)),
-        set::type('ajax')
+        setClass('ghost text-primary'),
+        set::icon('edit'),
+        set('data-toggle', 'modal'),
+        set('data-url', createLink('product', 'manageLine', $browseType)),
+        $lang->product->editLine
     ) : null,
     item(set(array
     (
