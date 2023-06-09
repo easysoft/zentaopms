@@ -349,17 +349,19 @@
         }, options.delayTime || 0);
     }
 
-    function loadTable(url, id)
+    function loadTable(url, id, options)
     {
         url = url || currentAppUrl;
         id  = id || $('.dtable').attr('id') || 'dtable';
         if(!id) return;
 
-        fetchContent(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', {id: '#' + id, target: '#' + id});
+        fetchContent(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', $.extend({id: '#' + id, target: '#' + id}, options));
     }
 
     function loadPage(url, selector, id, options)
     {
+        if(selector === 'table') return loadTable(url, id, options);
+
         url = url || currentAppUrl;
         if (!selector && url.includes(' '))
         {
@@ -373,7 +375,7 @@
         {
             selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
         }
-        fetchContent(url, selector, $.extend({id}, options));
+        fetchContent(url, selector, $.extend({id: id}, options));
     }
 
     function postAndLoadPage(url, data, selector, id, options)
@@ -400,6 +402,38 @@
     function onRenderPage(callback)
     {
         window.config.onRenderPage = callback;
+    }
+
+    /**
+     * Open url in app.
+     * @param {string} url
+     * @param {Object} options
+     * @param {string} options.url
+     * @param {string} options.app
+     * @param {string} options.load
+     * @param {string} options.back
+     */
+    function openUrl(url, options)
+    {
+        if(typeof url === 'object')
+        {
+            options = url;
+            url = options.url;
+        }
+        else
+        {
+            options = options || {};
+            options.url = url;
+        }
+        if(options.id)     delete options.id;
+        if(options.loadId) options.id = options.loadId;
+
+        if(DEBUG) console.log('[APP] open url', url, options);
+
+        if(options.load) return loadPage(url, options.load, options.id, options);
+        if(options.back) return $.apps.goBack(options.back, url);
+
+        openPage(url, options.app);
     }
 
     /**
@@ -503,24 +537,23 @@
         return result;
     }
 
-    $.extend(window, {fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading});
+    $.extend(window, {fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: $.apps.goBack});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
     {
         if(isInAppTab) window.parent.$('body').trigger('click');
 
-        const $link = $(e.target).closest('a');
+        const $link = $(e.target).closest('a,.open-url');
         if(!$link.length || $link.attr('target') === '_blank') return;
-        if($link.data('toggle') || $link.hasClass('not-in-app')) return e.preventDefault();
 
-        const url = $link.attr('href');
-        if(!url || url.startsWith('javascript') || url.startsWith('#')) return;
+        const options = $link.dataset();
+        if(options.toggle || $link.hasClass('not-in-app')) return e.preventDefault();
 
-        const loadTarget = $link.data('load');
-        if(loadTarget === 'table') loadTable(url);
-        else if(loadTarget) loadPage(url, loadTarget);
-        else openPage(url, $link.data('app'));
+        const url = options.url || $link.attr('href');
+        if(!url || url.startsWith('javascript:') || url.startsWith('#')) return;
+
+        openUrl(url, options);
         e.preventDefault();
     }).on('locate.zt', (_e, data) =>
     {
