@@ -95,6 +95,8 @@ $lang->zanode      = new stdclass();
 $lang->holiday     = new stdclass();
 $lang->contact     = new stdclass();
 $lang->dimension   = new stdclass();
+$lang->space       = new stdclass();
+$lang->store       = new stdclass();
 
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();

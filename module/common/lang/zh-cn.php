@@ -229,6 +229,8 @@ $lang->zahost->common       = '宿主机';
 $lang->zanode->common       = '执行节点';
 $lang->dimension->common    = '维度';
 $lang->contact->common      = '联系人';
+$lang->space->common        = '服务管理';
+$lang->store->common        = '应用市场';
 
 $lang->programstakeholder->common = '干系人';
 $lang->featureswitch->common      = '功能开关';
@@ -362,6 +364,7 @@ $lang->devops->mr       = '合并请求';
 $lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
+$lang->devops->platform = '平台';
 $lang->devops->set      = '设置';
 
 $lang->admin->module      = '功能配置';
@@ -478,6 +481,7 @@ $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页�
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 $lang->error->loginTimeout    = '登录已超时，请重新登入!';
+$lang->error->httpServerError = '服务器错误';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();

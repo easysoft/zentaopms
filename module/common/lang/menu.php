@@ -471,19 +471,21 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 
 /* DevOps menu. */
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
-$lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
-$lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
-$lang->devops->menu->app     = array('link' => "{$lang->app->common}|app|serverlink|%s");
-$lang->devops->menu->set     = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit');
+$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
+$lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->devops->menu->app      = array('link' => "{$lang->app->common}|app|serverlink|%s");
+$lang->devops->menu->platform = array('link' => "{$lang->devops->platform}|space|browse", 'subModule' => 'instance,store');
+$lang->devops->menu->set      = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit');
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'mr';
 $lang->devops->menuOrder[15] = 'compile';
 $lang->devops->menuOrder[20] = 'app';
-$lang->devops->menuOrder[25] = 'set';
+$lang->devops->menuOrder[25] = 'platform';
+$lang->devops->menuOrder[30] = 'set';
 
-$lang->devops->dividerMenu = ',set,';
+$lang->devops->dividerMenu = ',platform,';
 
 $lang->devops->menu->set['subMenu'] = new stdclass();
 $lang->devops->menu->set['subMenu']->repo      = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
@@ -667,6 +669,8 @@ $lang->navGroup->git              = 'devops';
 $lang->navGroup->app              = 'devops';
 $lang->navGroup->pipeline         = 'devops';
 $lang->navGroup->devopssetting    = 'devops';
+$lang->navGroup->space            = 'devops';
+$lang->navGroup->instance         = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';

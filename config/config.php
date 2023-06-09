@@ -203,3 +203,24 @@ else
     unset($config->bizVersion);
     unset($config->maxVersion);
 }
+
+/* 渠成平台设置。CNE Api settings. */
+$config->CNE = new stdclass();
+$config->CNE->api = new stdclass();
+$config->CNE->api->host    = '';
+$config->CNE->api->auth    = 'X-Auth-Token';
+$config->CNE->api->token   = 'reiquai7pei7thei4iePe5ait3Kaiquu'; // Please set token in my.php.
+$config->CNE->api->headers = array('Content-Type: application/json');
+$config->CNE->api->channel = 'stable';
+
+$config->CNE->app = new stdclass;
+$config->CNE->app->domain = 'dev.haogs.cn';
+
+$config->cloud = new stdclass;
+$config->cloud->api = new stdclass;
+$config->cloud->api->host          = 'http://cne-market.internal-pre.chandao.net';
+$config->cloud->api->auth          = 'X-Auth-Token';
+$config->cloud->api->token         = 'gwaN4KynqNqQoPD7eN8s'; // Please set token in my.php.
+$config->cloud->api->headers       = array('Content-Type: application/json');
+$config->cloud->api->channel       = 'stable';
+$config->cloud->api->switchChannel = false;

@@ -383,6 +383,10 @@ if(!defined('TABLE_MEASRECORDS'))        define('TABLE_MEASRECORDS', '`' . $conf
 if(!defined('TABLE_MEASQUEUE'))          define('TABLE_MEASQUEUE', '`' . $config->db->prefix . 'measqueue`');
 if(!defined('TABLE_MEASTEMPLATE'))       define('TABLE_MEASTEMPLATE', '`' . $config->db->prefix . 'meastemplate`');
 
+define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
+define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
+define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;

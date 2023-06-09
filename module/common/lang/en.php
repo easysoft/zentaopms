@@ -229,6 +229,7 @@ $lang->zahost->common       = 'ZAhost';
 $lang->zanode->common       = 'ZAnode';
 $lang->dimension->common    = 'Dimension';
 $lang->contact->common      = 'Contacts';
+$lang->space->common        = 'Services';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
@@ -362,6 +363,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->platform = 'Platform';
 $lang->devops->set      = 'Set';
 
 $lang->admin->module      = 'Module';
@@ -478,6 +480,7 @@ $lang->error->editedByOther   = 'This record might have been changed. Please ref
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please quit tutorial first!';
 $lang->error->noCurlExt       = 'No Curl module installed';
 $lang->error->loginTimeout    = 'Login has timed out, please login again!';
+$lang->error->httpServerError = 'Server error';
 
 /* Page info. */
 $lang->pager = new stdclass();

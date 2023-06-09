@@ -3683,6 +3683,96 @@ EOF;
 
         return false;
     }
+
+
+     /**
+     * Get method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiGet($url, $data = array(), $headers = array())
+    {
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
+
+        $result = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $headers, 'json', 20));
+        if($result && $result->code == 200) return $result;
+
+        return self::apiError($result);
+    }
+
+    /**
+     * Post method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiPost($url, $data, $headers = array())
+    {
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $headers, 'json', 20));
+        if($result && $result->code == 200) return $result;
+
+        return self::apiError($result);
+    }
+
+    /**
+     * Put method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiPut($url, $data, $headers = array())
+    {
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers, 'json', 20));
+        if($result && $result->code == 200) return $result;
+
+        return self::apiError($result);
+    }
+
+    /**
+     * Delete method of API.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $headers example: array("key1:value1", "key2:value2")
+     * @access public
+     * @return object
+     */
+    public static function apiDelete($url, $data, $headers = array())
+    {
+        $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $headers, 'json', 20));
+        if($result && $result->code == 200) return $result;
+
+        return self::apiError($result);
+    }
+
+    /**
+     * Return error object of api server.
+     *
+     * @param  object|null $result
+     * @access protected
+     * @return object
+     */
+    static protected function apiError($result)
+    {
+        global $lang;
+
+        if($result && $result->code) return $result;
+
+        $error = new stdclass;
+        $error->code    = 600;
+        $error->message = $lang->error->httpServerError;
+        return $error;
+    }
 }
 
 class common extends commonModel
