@@ -1868,6 +1868,7 @@ class executionModel extends model
      * @param  string|int $param skipParent
      * @param  string     $orderBy
      * @param  object     $pager
+     * @param  bool       $isCount true for count, false for fetchAll.
      * @access public
      * @return array
      */
