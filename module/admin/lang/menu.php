@@ -44,6 +44,11 @@ $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert'][
 $lang->admin->menuList->convert['link']  = 'convert|convertjira';
 $lang->admin->menuList->convert['order'] = 50;
 
+$lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
+$lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
+$lang->admin->menuList->platform['link']  = 'system|platform';
+$lang->admin->menuList->platform['order'] = 55;
+
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
 $lang->admin->menuList->system['subMenu']['trash']       = array('link' => "{$lang->action->trash}|action|trash|");
 $lang->admin->menuList->system['subMenu']['safe']        = array('link' => "{$lang->security}|admin|safe|", 'alias' => 'checkweak,resetpwdsetting', 'links' => array('admin|resetpwdsetting|', 'admin|checkweak|'));

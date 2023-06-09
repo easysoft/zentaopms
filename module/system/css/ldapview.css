@@ -1,0 +1,7 @@
+.btn.label-lg.label-primary.btn-edit {color: #61be68;}
+.btn.label-lg.label-outline {background-color: #ffffff!important;}
+.btn.label-lg.label-outline:hover, .btn-visit.btn:focus {background-color: #e5fbf3!important;}
+.edit-tools-tips {display: inline-block; margin: 0 10px;}
+#ldapAccountModal .modal-content {padding-bottom: 20px;}
+input#ldapPassword {border:none;}
+#ldapPassBtn {border:none;}

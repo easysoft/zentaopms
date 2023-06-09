@@ -231,6 +231,19 @@ class helper extends baseHelper
         );
     }
 
+    /**
+     * Process traffic.
+     *
+     * @param  float  $traffic
+     * @param  int    $precision
+     * @access public
+     * @return float
+     */
+    public static function formatKB($traffic, $precision = 2)
+    {
+        return round($traffic / (1024 * 1024), $precision) >= 1 ? round($traffic / (1024 * 1024), $precision) . 'GB' : (round($traffic / 1024, $precision) >= 1 ? round($traffic / 1024, $precision) . 'MB' : round($traffic, $precision) . 'KB');
+    }
+
 	/**
 	 * Trim version to xuanxuan version format.
 	 *

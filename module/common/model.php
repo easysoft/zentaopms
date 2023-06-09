@@ -3773,6 +3773,81 @@ EOF;
         $error->message = $lang->error->httpServerError;
         return $error;
     }
+
+    /**
+     * Print progress bar.
+     *
+     * @param  int    $percent percent 0-100
+     * @param  string $color color theme: gray, red, orange, green
+     * @param  string $tip
+     * @param  string $showValue possible values: '', 'percent', 'tip'
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printProgressBar($percent, $color = '', $tip = '', $showValue = '')
+    {
+        if(empty($color) && $percent == 0)                  $color = 'gray';
+        if(empty($color) && $percent > 0 && $percent < 60)  $color = 'green';
+        if(empty($color) && $percent >= 0 && $percent < 80) $color = 'orange';
+        if(empty($color) && $percent >= 80)                 $color = 'red';
+
+        $title     = $tip ? $tip : $percent . '%';
+        $valueHtml = '';
+        if($showValue == 'tip')     $valueHtml = "<div style='position: absolute; width:100%; text-align: center; line-height: 20px;'>{$title}</div>";
+        if($showValue == 'percent') $valueHtml = "<div style='position: absolute; width:100%; text-align: center; line-height: 20px;'>{$percent}%</div>";
+
+        echo <<<EOT
+            <div class='progress-group'>
+              <div title='{$title}' data-toggle='tooltip' style='height: 20px;' class='progress bg-light-{$color}'>
+                <div class='progress-bar bg-{$color}' role='progressbar' aria-valuenow='82' aria-valuemin='0' aria-valuemax='100' style='width: {$percent}%;'></div>
+                {$valueHtml}
+              </div>
+            </div>
+EOT;
+    }
+
+    /**
+     * Print progress pie.
+     *
+     * @param  float  $percent
+     * @param  string $color  HEX value of color
+     * @param  string $tip
+     * @param  string $tipPosition   available values: left, right, top, bottom
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printProgressPie($percent, $color = '', $tip = '', $tipPosition = 'bottom')
+    {
+        if(empty($color)) $color = self::getColorByLevel($percent);
+
+        $title = $tip ? $tip : $percent . '%';
+
+        echo <<<EOT
+            <div   title='{$title}' data-toggle='tooltip' data-placement='{$tipPosition}' class='progress-pie' data-doughnut-size='85' data-color='{$color}' data-value='{$percent}' data-width='120' data-height='120' data-back-color='#e8edf3'>
+              <div class='progress-info' style='line-height: 120px; padding-top: 0; font-size:25px;'>{$percent}%</div>
+            </div>
+EOT;
+    }
+
+    /**
+     * Get color by level for percent that is in level range.
+     *
+     * @param  float $percent
+     * @static
+     * @access public
+     * @return string HEX value of color
+     */
+    public static function getColorByLevel($percent)
+    {
+        if($percent == 0)                    $color = '#999999'; // gray
+        if($percent > 0 and $percent < 60)   $color = '#009e0f'; // green
+        if($percent >= 60 and $percent < 80) $color = '#ff9900'; // orange
+        if($percent >= 80)                   $color = '#cf2a27'; // red
+
+        return $color;
+    }
 }
 
 class common extends commonModel
