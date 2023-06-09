@@ -1205,14 +1205,14 @@ class testtask extends control
      */
     public function batchUnlinkCases($taskID)
     {
-        if(isset($_POST['caseIDList']))
+        if(isset($_POST['caseIdList']))
         {
             $this->dao->delete()->from(TABLE_TESTRUN)
                 ->where('task')->eq((int)$taskID)
-                ->andWhere('`case`')->in($this->post->caseIDList)
+                ->andWhere('`case`')->in($this->post->caseIdList)
                 ->exec();
             $this->loadModel('action');
-            foreach($_POST['caseIDList'] as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
+            foreach($_POST['caseIdList'] as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
         }
 
         return print(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID")));
@@ -1346,8 +1346,8 @@ class testtask extends control
             return print(js::locate($url, 'parent'));
         }
 
-        if(!$this->post->caseIDList) return print(js::locate($url, 'parent'));
-        $caseIDList = array_unique($this->post->caseIDList);
+        if(!$this->post->caseIdList) return print(js::locate($url, 'parent'));
+        $caseIdList = array_unique($this->post->caseIdList);
 
         /* The case of tasks of qa. */
         if($productID or ($this->app->tab == 'project' and empty($productID)))
@@ -1365,7 +1365,7 @@ class testtask extends control
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
 
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIdList)->fetchAll('id');
         }
         /* The case of my. */
         else
@@ -1375,7 +1375,7 @@ class testtask extends control
                 $this->loadModel('project')->setMenu($this->session->project);
                 $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                     ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                    ->where('t2.id')->in($caseIDList)
+                    ->where('t2.id')->in($caseIdList)
                     ->fetchAll('id');
             }
             else
@@ -1385,7 +1385,7 @@ class testtask extends control
 
                 $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                     ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                    ->where('t1.id')->in($caseIDList)
+                    ->where('t1.id')->in($caseIdList)
                     ->fetchAll('id');
             }
 
@@ -1407,7 +1407,7 @@ class testtask extends control
         if($from == 'testtask')
         {
             $runs = $this->dao->select('`case`, version')->from(TABLE_TESTRUN)
-                ->where('`case`')->in($caseIDList)
+                ->where('`case`')->in($caseIdList)
                 ->andWhere('task')->eq($taskID)
                 ->fetchPairs();
             foreach($cases as $caseID => $case)
@@ -1419,12 +1419,12 @@ class testtask extends control
         $this->view->cases = $cases;
         $this->view->steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t2.id')->in($caseIDList)
+            ->where('t2.id')->in($caseIdList)
             ->andWhere('t1.version=t2.version')
             ->andWhere('t2.status')->ne('wait')
             ->fetchGroup('case', 'id');
 
-        $this->view->caseIDList = array_keys($cases);
+        $this->view->caseIdList = array_keys($cases);
         $this->view->productID  = $productID;
         $this->view->title      = $this->lang->testtask->batchRun;
         $this->view->from       = $from;
@@ -1483,10 +1483,10 @@ class testtask extends control
         $this->dao->update(TABLE_TESTRUN)
             ->set('assignedTo')->eq($this->post->assignedTo)
             ->where('task')->eq((int)$taskID)
-            ->andWhere('`case`')->in($this->post->caseIDList)
+            ->andWhere('`case`')->in($this->post->caseIdList)
             ->exec();
         $this->loadModel('action');
-        foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $this->post->assignedTo);
+        foreach($this->post->caseIdList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $this->post->assignedTo);
         return print(js::locate($this->session->caseList, 'parent'));
     }
 
