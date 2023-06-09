@@ -39,32 +39,19 @@ onRenderPage(function(info)
 onClickBatchEdit = function(event)
 {
     /* Get checked product ID list. */
-    const idList  = new Array();
-    const rowList = $('#dtable').find('.dtable-row');
+    const dtable      = zui.DTable.query(event.target);
+    const checkedList = dtable.$.getChecks();
 
-    Object.keys(rowList).forEach(function(index)
-    {
-        const row = $(rowList[index]);
-
-        const checkboxList = row.find('div.dtable-checkbox');
-        if(checkboxList.length !== 1) return;
-        if(!$(checkboxList[0]).hasClass('checked')) return;
-
-        const id  = row.data('id');
-        if( !id || id === 'HEADER') return;
-
-        idList.push(id);
-    });
-
-    if(idList.length === 0) return;
+    if(checkedList.length === 0) return;
 
     /* Create form. */
     const f = document.createElement("form");
     f.action = $(event.target).attr('href');
     f.method = "POST";
+    f.target = "_self";
 
     /* Create element to carry data. */
-    idList.forEach(function(id)
+    checkedList.forEach(function(id)
     {
         const item = document.createElement('input');
         item.name  = 'productIDList[]';
