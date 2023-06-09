@@ -15,6 +15,7 @@ zdTable('project')->config('project')->gen(1);
 
 su('user1');
 $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
+$task = new taskTest();
 
 /**
 doing           + done   = doing
@@ -29,7 +30,6 @@ closeReasonDone + wait   = doing
 
 zdTable('task')->config('taskdoing')->gen(26, true, false);
 
-$task = new taskTest();
 r($task->updateParentStatusTest(10)) && p('status') && e('doing');
 r($task->updateParentStatusTest(12)) && p('status') && e('doing');
 r($task->updateParentStatusTest(14)) && p('status') && e('doing');
@@ -51,7 +51,6 @@ pause + wait   = doing
 
 zdTable('task')->config('taskpause')->gen(18, true, false);
 
-$task = new taskTest();
 r($task->updateParentStatusTest(8))  && p('status') && e('doing');
 r($task->updateParentStatusTest(10)) && p('status') && e('doing');
 r($task->updateParentStatusTest(12)) && p('status') && e('pause');
@@ -67,7 +66,6 @@ wait + cancel = wait
 
 zdTable('task')->config('taskwait')->gen(9, true, false);
 
-$task = new taskTest();
 r($task->updateParentStatusTest(4)) && p('status') && e('wait');
 r($task->updateParentStatusTest(6)) && p('status') && e('wait');
 r($task->updateParentStatusTest(8)) && p('status') && e('wait');
@@ -80,7 +78,6 @@ done + cancel = done
 
 zdTable('task')->config('taskdone')->gen(9, true, false);
 
-$task = new taskTest();
 r($task->updateParentStatusTest(4)) && p('status,finishedBy,assignedTo') && e('done,user1,user2');
 r($task->updateParentStatusTest(6)) && p('status,finishedBy,assignedTo') && e('done,user1,user2');
 r($task->updateParentStatusTest(8)) && p('status,finishedBy,assignedTo') && e('done,user1,user2');
@@ -93,9 +90,8 @@ cancel + cancel = cancel
 
 zdTable('task')->config('taskclose')->gen(9, true, false);
 
-$task = new taskTest();
 r($task->updateParentStatusTest(4)) && p('status,closedBy,assignedTo,closedReason') && e('closed,user1,closed,done');
-r($task->updateParentStatusTest(6)) && p('status') && e('closed');
-r($task->updateParentStatusTest(8)) && p('status,finishedBy,canceledBy') && e('cancel,~~,user1,user2,assignedTo');
+r($task->updateParentStatusTest(6)) && p('status,closedBy,assignedTo,closedReason') && e('closed,user1,closed,done');
+r($task->updateParentStatusTest(8)) && p('status,finishedBy,canceledBy')            && e('cancel,~~,user1,user2,assignedTo');
 
 

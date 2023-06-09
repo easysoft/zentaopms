@@ -1199,6 +1199,7 @@ class taskTest
     }
 
     /**
+     * 测试更新父任务状态。
      * Test update parent status by taskID.
      *
      * @param  int   $taskID
@@ -1209,8 +1210,12 @@ class taskTest
      */
     public function updateParentStatusTest($taskID, $parentID = 0, $createAction = true)
     {
-        $object = $this->objectModel->updateParentStatus($taskID, $parentID, $createAction);
-        if(!$object) $object = $this->objectModel->getByID($taskID);
+        $oldObject = $this->objectModel->getByID($taskID);
+        if($oldObject->parent) $oldObject = $this->objectModel->getByID($oldObject->parent);
+
+        $this->objectModel->updateParentStatus($taskID, $parentID, $createAction);
+
+        $object = $this->objectModel->getByID(intval($oldObject->id));
 
         if(dao::isError())
         {
@@ -2179,5 +2184,53 @@ class taskTest
     {
         $tasks = $this->objectModel->getByIdList($taskIdList);
         return $this->objectModel->appendLane($tasks);
+    }
+
+    /**
+     * 测试根据父任务状态更新父任务信息。
+     * Test update parent by status and child.
+     *
+     * @param  object  $parentTask
+     * @param  object  $childTask
+     * @param  string  $status
+     * @access public
+     * @return object
+     */
+    public function updateTaskByChildAndStatusTest(object $parentTask, object $childTask, string $status)
+    {
+        $now = time();
+
+        $this->objectModel->updateTaskByChildAndStatus($parentTask, $childTask, $status);
+
+        $task = $this->objectModel->getByID(intval($parentTask->id));
+
+        if(!$task->finishedDate)   $task->finishedDate = '';
+        if(!$task->assignedDate)   $task->assignedDate = '';
+        if(!$task->closedDate)     $task->closedDate = '';
+        if(!$task->canceledDate)   $task->canceledDate = '';
+        if(!$task->lastEditedDate) $task->lastEditedDate = '';
+
+        $task->finishedDate   = abs($now - strtotime($task->finishedDate));
+        $task->assignedDate   = abs($now - strtotime($task->assignedDate));
+        $task->closedDate     = abs($now - strtotime($task->closedDate));
+        $task->canceledDate   = abs($now - strtotime($task->canceledDate));
+        $task->lastEditedDate = abs($now - strtotime($task->lastEditedDate));
+
+        return $task;
+    }
+
+    /**
+     * 更新父任务时记录日志。
+     * Test create action record when update parent status.
+     *
+     * @param  object  $oldParentTask
+     * @access public
+     * @return object
+     */
+    public function createUpdateParentTaskActionTest(object $oldParentTask)
+    {
+        $this->objectModel->createUpdateParentTaskAction($oldParentTask);
+
+        return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldParentTask->id)->orderBy('`id` desc')->fetch();;
     }
 }

@@ -4,9 +4,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
 
 /**
+
 title=taskModel->assign();
 timeout=0
 cid=1
+
 */
 
 zdTable('task')->config('task')->gen(6);
