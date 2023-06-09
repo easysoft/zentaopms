@@ -1130,12 +1130,27 @@ class execution extends control
         $products = $this->product->getProducts($executionID, 'all', '', false);
         if(count($products) == 1) $productID = key($products);
 
-        $execution = $this->execution->getByID($executionID);
+        $execution     = $this->execution->getByID($executionID);
+        $productOption = array();
+        $branchOption  = array();
+        $showBranch    = false;
+        if($execution->hasProduct)
+        {
+            $productOption = array(0 => $this->lang->product->all) + $products;
+            $product       = $this->product->getById((int)$productID);
+            if($product and $product->type != 'normal')
+            {
+                /* Display of branch label. */
+                $showBranch = $this->loadModel('branch')->showBranch($productID);
 
-        $hasProduct = $this->dao->findByID($execution->project)->from(TABLE_PROJECT)->fetch('hasProduct');
-
-        $extra = $executionID;
-        if($hasProduct) $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, $branchID);
+                /* Display status of branch. */
+                $branches = $this->branch->getList($productID, $executionID, 'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                }
+            }
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1167,20 +1182,23 @@ class execution extends control
         unset($this->config->testcase->dtable->fieldList['title']['checkbox']);
         unset($this->config->testcase->dtable->fieldList['title']['nestedToggle']);
 
-        $this->view->title       = $this->lang->execution->testcase;
-        $this->view->executionID = $executionID;
-        $this->view->productID   = $productID;
-        $this->view->cases       = $cases;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->type        = $type;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->execution   = $execution;
-        $this->view->moduleTree  = $moduleTree;
-        $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
-        $this->view->branchID    = $branchID;
-        $this->view->recTotal    = $pager->recTotal;
+        $this->view->title         = $this->lang->execution->testcase;
+        $this->view->executionID   = $executionID;
+        $this->view->productID     = $productID;
+        $this->view->cases         = $cases;
+        $this->view->orderBy       = $orderBy;
+        $this->view->pager         = $pager;
+        $this->view->type          = $type;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->execution     = $execution;
+        $this->view->moduleTree    = $moduleTree;
+        $this->view->moduleID      = $moduleID;
+        $this->view->moduleName    = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->branchID      = $branchID;
+        $this->view->recTotal      = $pager->recTotal;
+        $this->view->productOption = $productOption;
+        $this->view->branchOption  = $branchOption;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }
