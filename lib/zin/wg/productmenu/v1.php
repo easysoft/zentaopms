@@ -6,6 +6,8 @@ class productMenu extends wg
     protected static $defineProps = array(
         'title?:string',
         'items?:array',
+        'activeKey?:string',
+        'link?:string'
     );
 
     public static function getPageCSS(): string|false
@@ -13,42 +15,54 @@ class productMenu extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    private function buildMenu()
+    {
+        $link      = $this->prop('link');
+        $items     = $this->prop('items');
+        $activeKey = $this->prop('activeKey');
+
+        $menus = array();
+        foreach($items as $itemKey => $item)
+        {
+            if(is_array($item))
+            {
+                $menus[] = $item;
+                continue;
+            }
+
+            $menus[] = array('text' => $item, 'active' => $itemKey == $activeKey, 'url' => sprintf($link, $itemKey));
+        }
+        return $menus;
+    }
+
     protected function build()
     {
-        $title     = $this->prop('title');
-        $items     = $this->prop('items');
+        $title = $this->prop('title');
+        $items = $this->buildMenu();
 
-        return dropdown
+        return div
         (
-            to
+            setClass('program-menu'),
+            set('data-zin-id', $this->gid),
+            h::header
             (
-                'trigger',
+                set('data-toggle', 'dropdown'),
                 div
                 (
-                    setClass('program-menu'),
-                    h::header
+                    setClass('title-container'),
+                    div
                     (
-                        div
-                        (
-                            setClass('title-container'),
-                            div
-                            (
-                                setClass('icon-container down'),
-                                h::i(setClass('gg-chevron-down')),
-                            ),
-                            span($title)
-                        ),
-                    )
-                )
+                        setClass('icon-container down'),
+                        h::i(setClass('gg-chevron-down')),
+                    ),
+                    span($title)
+                ),
             ),
-            to
+            menu
             (
-                'menu', menu
-                (
-                    set::class('dropdown-menu'),
-                    set::items($items)
-                )
-            ),
+                set::class('dropdown-menu'),
+                set::items($items)
+            )
         );
     }
 }
