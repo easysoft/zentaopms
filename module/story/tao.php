@@ -1465,7 +1465,7 @@ class storyTao extends storyModel
         $actions[] = array
         (
             'name'     => 'change',
-            'url'      => !$isClick ? null : helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type", '', true),
+            'url'      => !$isClick ? null : helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type"),
             'hint'     => $title,
             'disabled' => !$isClick,
         );
@@ -1601,7 +1601,7 @@ class storyTao extends storyModel
         $actions[] = $action;
 
         /* Edit button. */
-        $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", '', true);
+        $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type");
         $actions[] = array
         (
             'name'     => 'edit',
@@ -1612,7 +1612,7 @@ class storyTao extends storyModel
         /* Create test case button. */
         if($story->type != 'requirement' && $this->config->vision != 'lite')
         {
-            $link      = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", '', true);
+            $link      = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
             $actions[] = array('name' => 'testcase', 'url' => $link);
         }
 
@@ -1640,7 +1640,7 @@ class storyTao extends storyModel
             }
 
             $executionID = empty($execution) ? 0 : $execution->id;
-            $link        = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", '', true);
+            $link        = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
             $actions[]   = array
             (
                 'name'     => 'batchCreate',
