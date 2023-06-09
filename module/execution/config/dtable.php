@@ -14,7 +14,6 @@ $config->execution->dtable->fieldList['name']['fixed']        = 'left';
 $config->execution->dtable->fieldList['name']['flex']         = 1;
 $config->execution->dtable->fieldList['name']['type']         = 'html';
 $config->execution->dtable->fieldList['name']['nestedToggle'] = true;
-$config->execution->dtable->fieldList['name']['iconRender']   = true;
 $config->execution->dtable->fieldList['name']['sortType']     = true;
 $config->execution->dtable->fieldList['name']['minWidth']     = '356';
 

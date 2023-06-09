@@ -143,7 +143,6 @@ $config->projectExecution->dtable->fieldList['name']['fixed']          = 'left';
 $config->projectExecution->dtable->fieldList['name']['flex']           = 1;
 $config->projectExecution->dtable->fieldList['name']['type']           = 'html';
 $config->projectExecution->dtable->fieldList['name']['nestedToggle']   = true;
-$config->projectExecution->dtable->fieldList['name']['iconRender']     = true;
 $config->projectExecution->dtable->fieldList['name']['sortType']       = true;
 
 $config->projectExecution->dtable->fieldList['productName']['title']    = $lang->execution->product;
