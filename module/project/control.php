@@ -668,15 +668,17 @@ class project extends control
         $this->loadModel('group');
         $this->project->setMenu($projectID);
 
-        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
-        $position[] = $this->lang->group->browse;
-
         $groups     = $this->group->getList($projectID);
         $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+        foreach($groups as $group)
+        {
+            $group->users = '';
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
+            $groupUsers = $this->group->getUserPairs($group->id);
+            foreach($groupUsers as $realname) $group->users .= $realname . ' ';
+        }
+
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $this->view->groups     = $groups;
         $this->view->project    = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $this->view->projectID  = $projectID;
