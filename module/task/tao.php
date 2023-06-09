@@ -907,4 +907,141 @@ class taskTao extends taskModel
 
         if($task->mode == 'linear' and empty($record->order)) $this->updateEstimateOrder($effortID, $currentTeam->order);
     }
+
+    /**
+     * 查询当前任务作为父任务时的状态。
+     * Get the status of the taskID as a parent task.
+     *
+     * @param  int       $taskID
+     * @access protected
+     * @return string
+     */
+    protected function getParentStatusById(int $taskID) :string
+    {
+        $children = $this->dao->select('id,status,closedReason,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchAll();
+
+        if(empty($children)) return '';
+
+        $childrenStatus = $childrenClosedReason = array();
+
+        foreach($children as $task)
+        {
+            $childrenStatus[$task->status]             = $task->status;
+            $childrenClosedReason[$task->closedReason] = $task->closedReason;
+        }
+
+        if(count($childrenStatus) == 1) return current($childrenStatus);
+
+        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause'])) return 'doing';
+
+        if((isset($childrenStatus['done']) || isset($childrenClosedReason['done'])) && isset($childrenStatus['wait'])) return 'doing';
+
+        if(isset($childrenStatus['wait']))   return 'wait';
+        if(isset($childrenStatus['done']))   return 'done';
+        if(isset($childrenStatus['closed'])) return 'closed';
+        if(isset($childrenStatus['cancel'])) return 'cancel';
+
+        return '';
+    }
+
+    /**
+     * 根据子任务以及父任务的状态更新父任务。
+     * Update parent task status by child and parent status.
+     *
+     * @param  object    $parentTask
+     * @param  object    $childTask
+     * @param  string    $status
+     * @access protected
+     * @return string
+     */
+    protected function updateTaskByChildAndStatus(object $parentTask, object $childTask, string $status) :void
+    {
+        $now  = helper::now();
+        $task = new stdclass();
+        $task->status = $status;
+
+        if($status == 'done')
+        {
+            $task->assignedTo   = $parentTask->openedBy;
+            $task->assignedDate = $now;
+            $task->finishedBy   = $this->app->user->account;
+            $task->finishedDate = $now;
+        }
+
+        if($status == 'cancel')
+        {
+            $task->assignedTo   = $parentTask->openedBy;
+            $task->assignedDate = $now;
+            $task->finishedBy   = '';
+            $task->finishedDate = null;
+            $task->canceledBy   = $this->app->user->account;
+            $task->canceledDate = $now;
+        }
+
+        if($status == 'closed')
+        {
+            $task->assignedTo   = 'closed';
+            $task->assignedDate = $now;
+            $task->closedBy     = $this->app->user->account;
+            $task->closedDate   = $now;
+            $task->closedReason = 'done';
+        }
+
+        if($status == 'doing' or $status == 'wait')
+        {
+            if($parentTask->assignedTo == 'closed')
+            {
+                $task->assignedTo   = $childTask->assignedTo;
+                $task->assignedDate = $now;
+            }
+
+            $task->finishedBy   = '';
+            $task->finishedDate = null;
+            $task->closedBy     = '';
+            $task->closedDate   = null;
+            $task->closedReason = '';
+        }
+
+        $task->lastEditedBy   = $this->app->user->account;
+        $task->lastEditedDate = $now;
+        $task->parent         = '-1';
+
+        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentTask->id)->exec();
+    }
+
+    /**
+     * 更新父任务状态时记录修改日志。
+     * Create action record when update parent task.
+     *
+     * @param  object    $oldParentTask
+     * @access protected
+     * @return void
+     */
+    protected function createUpdateParentTaskAction(object $oldParentTask) :void
+    {
+        $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+
+        unset($oldParentTask->subStatus);
+        unset($newParentTask->subStatus);
+        
+        $status  = $newParentTask->status;
+        $changes = common::createChanges($oldParentTask, $newParentTask);
+        $action  = '';
+
+        if($status == 'done'   && $oldParentTask->status != 'done')   $action = 'Finished';
+        if($status == 'closed' && $oldParentTask->status != 'closed') $action = 'Closed';
+        if($status == 'pause'  && $oldParentTask->status != 'paused') $action = 'Paused';
+        if($status == 'cancel' && $oldParentTask->status != 'cancel') $action = 'Canceled';
+        if($status == 'doing'  && $oldParentTask->status == 'wait')   $action = 'Started';
+        if($status == 'doing'  && $oldParentTask->status == 'pause')  $action = 'Restarted';
+
+        if($status == 'doing'  && $oldParentTask->status != 'wait' && $oldParentTask->status != 'pause') $action = 'Activated';
+
+        if($status == 'wait'   && $oldParentTask->status != 'wait') $action = 'Adjusttasktowait';
+
+        if(!$action) return;
+
+        $actionID = $this->loadModel('action')->create('task', $oldParentTask->id, $action, '', '', '', false);
+        $this->action->logHistory($actionID, $changes);
+    }
 }
