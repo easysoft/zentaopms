@@ -26,7 +26,7 @@ $productDropdown = productMenu
 featureBar
 (
     set::current($status),
-    set::linkParams("productID={$productID}&branch=$branch&type={$scope},{key}"),
+    set::linkParams("productID={$productID}&branch={$branch}&type={$scope},{key}"),
     to::before($productDropdown),
     inputGroup
     (

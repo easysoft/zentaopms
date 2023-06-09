@@ -171,6 +171,7 @@ $lang->my->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
+$lang->my->featureBar['work']['testtask']['assignedTo'] = 'Test task';
 
 $lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
 $lang->my->featureBar['work']['requirement']['reviewBy'] = 'ReviewByMe';

@@ -627,11 +627,27 @@ EOF;
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
-        $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
-        $this->view->type       = $type;
-        $this->view->mode       = 'testtask';
-        $this->view->pager      = $pager;
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $tasks        = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
+        foreach($tasks as $key => $task)
+        {
+            if($task->status == 'wait')    $waitCount ++;
+            if($task->status == 'doing')   $testingCount ++;
+            if($task->status == 'blocked') $blockedCount ++;
+            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
+            if(empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
+        }
+
+        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
+        $this->view->tasks        = $tasks;
+        $this->view->type         = $type;
+        $this->view->waitCount    = $waitCount;
+        $this->view->testingCount = $testingCount;
+        $this->view->blockedCount = $blockedCount;
+        $this->view->mode         = 'testtask';
+        $this->view->pager        = $pager;
         $this->display();
     }
 
