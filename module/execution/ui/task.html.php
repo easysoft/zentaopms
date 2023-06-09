@@ -194,7 +194,8 @@ dtable
         set::recTotal($recTotal),
         set::linkCreator(helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
     ),
-    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}'))
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::customCols(true)
 );
 
 render();

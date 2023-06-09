@@ -15,6 +15,8 @@ namespace zin;
 formPanel
 (
     set::title($lang->productplan->edit),
+    on::change('.radio-primary > input', 'computeEndDate'),
+    on::change('#future_', 'toggleDateVisibility'),
     formGroup
     (
         set::width("1/2"),

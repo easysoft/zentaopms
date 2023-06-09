@@ -13,6 +13,8 @@ class toolbar extends wg
 
     public function onBuildItem($item)
     {
+        if($item === null) return '';
+
         if(!($item instanceof item))
         {
             if($item instanceof wg) return $item;

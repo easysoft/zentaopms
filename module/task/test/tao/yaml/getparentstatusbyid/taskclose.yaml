@@ -1,0 +1,19 @@
+title: zt_task_pause
+author: Zhaoke
+version: "1.0"
+fields:
+- field: id
+  range: 41-100
+- field: parent
+  range: '`-1`{3},41{2},42{2},43{2}'
+- field: name
+  range: 1-100
+  prefix: '任务'
+- field: status
+  range: 'wait{3},closed,closed,closed,cancel,cancel,cancel'
+- field: mode
+  range: 'multi{3},{100}'
+- field: execution
+  range: 1
+- field: openedBy
+  range: "user2"

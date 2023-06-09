@@ -44,33 +44,41 @@ $config->group->priv->search['params']['dependPrivs']    = array('operator' => '
 $config->group->priv->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',   'values' => '');
 
 $config->group->actionList = array();
-$config->group->actionList['manageView']['icon']        = 'eye';
-$config->group->actionList['manageView']['text']        = $lang->group->manageView;
-$config->group->actionList['manageView']['hint']        = $lang->group->manageView;
-$config->group->actionList['manageView']['url']         = helper::createLink('group', 'manageView', "groupID={id}");
-$config->group->actionList['manageView']['data-toggle'] = 'modal';
+$config->group->actionList['manageView']['icon'] = 'eye';
+$config->group->actionList['manageView']['text'] = $lang->group->manageView;
+$config->group->actionList['manageView']['hint'] = $lang->group->manageView;
+$config->group->actionList['manageView']['url']  = helper::createLink('group', 'manageView', "groupID={id}");
 
 $config->group->actionList['managePriv']['icon'] = 'lock';
 $config->group->actionList['managePriv']['text'] = $lang->group->managePriv;
 $config->group->actionList['managePriv']['hint'] = $lang->group->managePriv;
 $config->group->actionList['managePriv']['url']  = helper::createLink('group', 'managepriv', "type=bypackage&groupID={id}");
 
-$config->group->actionList['manageMember']['icon'] = 'persons';
-$config->group->actionList['manageMember']['text'] = $lang->group->manageMember;
-$config->group->actionList['manageMember']['hint'] = $lang->group->manageMember;
-$config->group->actionList['manageMember']['url']  = helper::createLink('group', 'manageMember', "groupID={id}");
+$config->group->actionList['manageProjectAdmin']['icon']        = 'persons';
+$config->group->actionList['manageProjectAdmin']['text']        = $lang->group->manageProjectAdmin;
+$config->group->actionList['manageProjectAdmin']['hint']        = $lang->group->manageProjectAdmin;
+$config->group->actionList['manageProjectAdmin']['url']         = helper::createLink('group', 'manageProjectAdmin', "groupID={id}");
+$config->group->actionList['manageProjectAdmin']['data-toggle'] = 'modal';
 
-$config->group->actionList['edit']['icon'] = 'edit';
-$config->group->actionList['edit']['text'] = $lang->group->edit;
-$config->group->actionList['edit']['hint'] = $lang->group->edit;
-$config->group->actionList['edit']['url']  = helper::createLink('group', 'edit', "groupID={id}");
+$config->group->actionList['manageMember']['icon']        = 'persons';
+$config->group->actionList['manageMember']['text']        = $lang->group->manageMember;
+$config->group->actionList['manageMember']['hint']        = $lang->group->manageMember;
+$config->group->actionList['manageMember']['url']         = helper::createLink('group', 'manageMember', "groupID = {id}");
+$config->group->actionList['manageMember']['data-toggle'] = 'modal';
 
-$config->group->actionList['copy']['icon'] = 'copy';
-$config->group->actionList['copy']['text'] = $lang->group->copy;
-$config->group->actionList['copy']['hint'] = $lang->group->copy;
-$config->group->actionList['copy']['url']  = helper::createLink('group', 'copy', "groupID={id}");
+$config->group->actionList['edit']['icon']        = 'edit';
+$config->group->actionList['edit']['text']        = $lang->group->edit;
+$config->group->actionList['edit']['hint']        = $lang->group->edit;
+$config->group->actionList['edit']['url']         = helper::createLink('group', 'edit', "groupID={id}");
+$config->group->actionList['edit']['data-toggle'] = 'modal';
+
+$config->group->actionList['copy']['icon']        = 'copy';
+$config->group->actionList['copy']['text']        = $lang->group->copy;
+$config->group->actionList['copy']['hint']        = $lang->group->copy;
+$config->group->actionList['copy']['url']         = helper::createLink('group', 'copy', "groupID={id}");
+$config->group->actionList['copy']['data-toggle'] = 'modal';
 
 $config->group->actionList['delete']['icon'] = 'trash';
 $config->group->actionList['delete']['text'] = $lang->group->delete;
 $config->group->actionList['delete']['hint'] = $lang->group->delete;
-$config->group->actionList['delete']['url']  = helper::createLink('group', 'delete', "groupID={id}");
+$config->group->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';

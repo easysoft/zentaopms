@@ -422,7 +422,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getTreeMenu(int $rootID, string $type = 'root', int $startModule = 0, array $userFunc = array(), array $extra = array(), string $branch = '0'): array
+    public function getTreeMenu(int $rootID, string $type = 'root', int $startModule = 0, array $userFunc = array(), array|string $extra = array(), string $branch = '0'): array
     {
         if($type == 'line') $rootID = 0;
 
@@ -856,7 +856,7 @@ class treeModel extends model
      * @access public
      * @return false|object
      */
-    public function buildTree(object $module, string $type, int $parent = 0, array $userFunc = array(), array $extra = array(), string $branch = 'all'): false|object
+    public function buildTree(object $module, string $type, int $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): false|object
     {
         /* Add for task #1945. check the module has case or no. */
         if((isset($extra['rootID']) and isset($extra['branch']) and $branch === 'null') or ($type == 'case' and is_numeric($extra)))

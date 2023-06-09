@@ -374,7 +374,7 @@ class yaml
      * @access public
      * @return void
      */
-    public function gen($rows, $isClear = true)
+    public function gen($rows, $isClear = true, $useCache = true)
     {
         list($runFileDir, $runFileName) = $this->getScriptPathAndName();
 
@@ -382,7 +382,7 @@ class yaml
         $scriptPath = sprintf("%s%s%s.php", $runFileDir, DS, $runFileName);
         $yamlPath   = sprintf("%s%sdata%s%s_%s.yaml", $runFileDir, DS, DS, $this->tableName, $runFileName);
 
-        if($rows && $this->checkNeedReGenerateSql($sqlPath, $scriptPath, $yamlPath))
+        if($rows && (!$useCache || $this->checkNeedReGenerateSql($sqlPath, $scriptPath, $yamlPath)))
         {
             $runtimeRoot = dirname(dirname(__FILE__)) . '/runtime/';
             $zdPath      = $runtimeRoot . 'zd';

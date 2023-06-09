@@ -1,0 +1,11 @@
+title: zt_task
+author: Zhaoke
+version: "1.0"
+fields:
+- field: id
+  range: 1-100
+- field: status
+  range: done,closed,pause,cancel,doing,wait
+- field: execution
+  range: 1
+  

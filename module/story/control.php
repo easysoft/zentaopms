@@ -634,65 +634,18 @@ class story extends control
                 if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
             }
 
-            $this->executeHooks($storyID);
+            $message = $this->executeHooks($storyID);
+            if(empty($message)) $message = $this->lang->saveSuccess;
 
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution')
-                {
-                    $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                    $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                    if($execution->type == 'kanban')
-                    {
-                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
-                        $kanbanData    = json_encode($kanbanData);
-                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban($kanbanData)"));
-                    }
-                    if($from == 'taskkanban')
-                    {
-                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $executionLaneType, $executionGroupBy, $taskSearchValue);
-                        $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
-                        $kanbanData      = $kanbanData[$kanbanType];
-                        $kanbanData      = json_encode($kanbanData);
-                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.updateKanban(\"story\", $kanbanData)"));
-                    }
-                }
-                else
-                {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'reloadByAjaxForm()'));
-                }
+                $response = $this->storyZen->responseAfterCreateInModal($message);
+                if($response) return $this->send($response);
             }
+            if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-
-            if($this->app->tab == 'project')
-            {
-                $module  = 'projectstory';
-                $method  = 'view';
-                $params  = "storyID=$storyID";
-                if(!$this->session->multiple)
-                {
-                    $module  = 'story';
-                    $params .= "&version=0&param={$this->session->project}&storyType=$storyType";
-                }
-            }
-            elseif($this->app->tab == 'execution')
-            {
-                $module = 'execution';
-                $method = 'storyView';
-                $params = "storyID=$storyID";
-            }
-            else
-            {
-                $module = 'story';
-                $method = 'view';
-                $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
-            }
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($module, $method, $params)));
+            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 
         $this->commonAction($storyID);

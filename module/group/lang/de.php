@@ -128,6 +128,8 @@ $lang->privlang->parent = 'Module/Package';
 $lang->group->copyOptions['copyPriv'] = 'Rechte kopieren';
 $lang->group->copyOptions['copyUser'] = 'Benutzer kopieren';
 
+$lang->group->featureBar['browse']['all'] = 'Privilege Group';
+
 $lang->group->versions['']            = 'Verlauf';
 $lang->group->versions['18_4_alpha1'] = 'ZenTao18.4.alpha1';
 $lang->group->versions['18_3']        = 'ZenTao18.3';

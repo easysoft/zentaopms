@@ -205,6 +205,9 @@ $lang->testtask->featureBar['browse']['doing']       = $lang->testtask->testing;
 $lang->testtask->featureBar['browse']['blocked']     = $lang->testtask->blocked;
 $lang->testtask->featureBar['browse']['done']        = $lang->testtask->done;
 
+$lang->testtask->featureBar['cases']['all']          = $lang->testtask->allCases;
+$lang->testtask->featureBar['cases']['assignedtome'] = $lang->testtask->assignedToMe;
+
 $lang->testtask->unitTag['all']       = '所有';
 $lang->testtask->unitTag['newest']    = '最近';
 $lang->testtask->unitTag['thisWeek']  = '本周';

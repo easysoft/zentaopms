@@ -23,6 +23,7 @@ $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
 $initModule    = isset($moduleID) ? (int)$moduleID : 0;
 
 $canModify                  = common::canModify('product', $product);
+$canCreateSuite             = hasPriv('testsuite', 'create');
 $canBrowseUnits             = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase          = hasPriv('testcase', 'zerocase');
 $canBrowseGroupCase         = hasPriv('testcase', 'groupcase');
@@ -80,7 +81,7 @@ $currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSu
 $suiteItems       = array();
 if(empty($suiteList))
 {
-    if(empty($productID) or common::canModify('product', $product))
+    if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
     {
         $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
     }

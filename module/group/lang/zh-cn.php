@@ -128,6 +128,8 @@ $lang->privlang->parent = '所属模块/权限包';
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
+$lang->group->featureBar['browse']['all'] = '浏览分组';
+
 $lang->group->versions['']            = '修改历史';
 $lang->group->versions['18_4_alpha1'] = '禅道18.4.alpha1';
 $lang->group->versions['18_3']        = '禅道18.3';

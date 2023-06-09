@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/task.class.php';
-su('admin');
 
 /**
 
@@ -18,7 +17,7 @@ zdTable('project')->config('project')->gen(20);
 
 su('user12');
 
-$taskIDlist = array('1','2','3','4','5','6');
+$taskIDlist = array('1', '2', '3', '4', '5', '6');
 
 $waitTask       = array('assignedTo' => 'user12','status' => 'wait');
 $waitTaskLeft   = array('assignedTo' => 'user11','status' => 'wait', 'left' => 1);

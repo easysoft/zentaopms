@@ -839,8 +839,10 @@ class groupModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'manageview' and $group->role == 'limited') return false;
-        if($action == 'copy' and $group->role == 'limited') return false;
+        if($action == 'manageview' && $group->role == 'limited') return false;
+        if($action == 'copy' && $group->role == 'limited') return false;
+        if($group->role == 'projectAdmin' && in_array($action, array('manageview', 'managepriv', 'managemember', 'edit', 'copy'))) return false;
+        if($group->role != 'projectAdmin' && $action == 'manageprojectadmin') return false;
 
         return true;
     }
@@ -1499,7 +1501,7 @@ class groupModel extends model
         $this->dbh->exec('ALTER TABLE ' . TABLE_PRIVMANAGER . ' CHANGE `parent` `parent` mediumint(8) unsigned NOT NULL;');
         $this->dbh->exec('DROP TABLE IF EXISTS ' . TABLE_PRIVPACKAGE . ';');
 
-        die('success');
+        return print('success');
     }
 
     /**
@@ -1511,7 +1513,7 @@ class groupModel extends model
     public function initSystemResources()
     {
         $allResourceFile = $this->app->getModuleRoot() . 'group/lang/allresources.php';
-        if(!file_exists("$allResourceFile")) die("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
+        if(!file_exists("$allResourceFile")) return print("Please execute the commands: touch $allResourceFile; chmod 777 $allResourceFile");
 
         $resourceContents = file_get_contents($allResourceFile);
         if(!$resourceContents) file_put_contents($allResourceFile, "<?php\n\$views     = array();\n\$resources = array();\n");
@@ -1524,7 +1526,7 @@ class groupModel extends model
 
         file_put_contents($allResourceFile, "\$views['{$this->config->edition}']['{$this->config->vision}'] = '$view';\n", FILE_APPEND);
         file_put_contents($allResourceFile, "\$resources['{$this->config->edition}']['{$this->config->vision}'] = '$resource';\n", FILE_APPEND);
-        die('success');
+        return print('success');
     }
 
     /**
@@ -1964,7 +1966,7 @@ class groupModel extends model
         $this->dao->insert(TABLE_PRIVLANG)->data($privLang)->exec();
 
         $this->loadModel('action')->create('privlang', $privID, 'Opened');
-        return $packageID;
+        return $privID;
     }
 
     /**
@@ -2352,11 +2354,11 @@ class groupModel extends model
             ->andWhere('t2.vision')->like("%,{$this->config->vision},%")
             ->andWhere('((t4.type')->eq('package')
             ->andWhere('t5.type')->eq('module')
-            ->beginIF(!empty($view) and $view != 'general')->andWhere('t5.code')->in($modules)->fi()
+            ->beginIF(!empty($type) and $type != 'general')->andWhere('t5.code')->in($modules)->fi()
             ->markRight(1)
             ->orWhere('(t4.type')->eq('module')
             ->andWhere('t5.type')->eq('view')
-            ->beginIF(!empty($view) and $view != 'general')->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF(!empty($type) and $type != 'general')->andWhere('t1.module')->in($modules)->fi()
             ->markRight(2)
             ->orderBy('t2.`order`_asc, t1.`type` desc')
             ->fetchGroup('parentCode', 'relationPriv');

@@ -912,6 +912,34 @@ class storyZen extends story
     }
 
     /**
+     * 获取变更需求后的跳转地址。
+     * Get after change story location.
+     *
+     * @param  int       $storyID
+     * @param  string    $storyType
+     * @access protected
+     * @return string
+     */
+    protected function getAfterChangeLocation(int $storyID, string $storyType = 'story'): string
+    {
+        if($this->app->tab == 'execution') return helper::createLink('execution', 'storyView', "storyID=$storyID");
+        if($this->app->tab != 'project') return helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+
+        if($this->app->tab == 'project')
+        {
+            $module  = 'projectstory';
+            $method  = 'view';
+            $params  = "storyID=$storyID";
+            if(!$this->session->multiple)
+            {
+                $module  = 'story';
+                $params .= "&version=0&param={$this->session->project}&storyType=$storyType";
+            }
+            return helper::createLink($module, $module, $params);
+        }
+    }
+
+    /**
      * 获取评审需求后的跳转地址。
      * Get after review location.
      *

@@ -443,152 +443,68 @@ class taskModel extends model
      * 更新父任务的状态.
      * Update parent status by taskID.
      *
-     * @param int $taskID
+     * @param int  $taskID
+     * @param int  $parentID
+     * @param bool $createAction
      *
      * @access public
-     * @return bool
+     * @return void
      */
-    public function updateParentStatus($taskID, $parentID = 0, $createAction = true)
+    public function updateParentStatus(int $taskID, int $parentID = 0, bool $createAction = true) :void
     {
+        /* Get child task info. */
         $childTask = $this->dao->select('id,assignedTo,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(empty($childTask)) return;
+
         if(empty($parentID)) $parentID = $childTask->parent;
-        if($parentID <= 0) return true;
+        if($parentID <= 0) return;
 
         $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+
         $this->computeWorkingHours($parentID);
 
-        $childrenStatus       = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('status', 'status');
-        $childrenClosedReason = $this->dao->select('closedReason')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('closedReason');
-        if(empty($childrenStatus)) return $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
-
-        $status = '';
-        if(count($childrenStatus) == 1)
+        /* Compute parent task status. */
+        $status = $this->taskTao->getParentStatusById($parentID);
+        if(empty($status))
         {
-            $status = current($childrenStatus);
-        }
-        else
-        {
-            if(isset($childrenStatus['doing']) or isset($childrenStatus['pause']))
-            {
-                $status = 'doing';
-            }
-            elseif((isset($childrenStatus['done']) or isset($childrenClosedReason['done'])) && isset($childrenStatus['wait']))
-            {
-                $status = 'doing';
-            }
-            elseif(isset($childrenStatus['wait']))
-            {
-                $status = 'wait';
-            }
-            elseif(isset($childrenStatus['done']))
-            {
-                $status = 'done';
-            }
-            elseif(isset($childrenStatus['closed']))
-            {
-                $status = 'closed';
-            }
-            elseif(isset($childrenStatus['cancel']))
-            {
-                $status = 'cancel';
-            }
+            $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
+            return;
         }
 
+        /* Get new task info. */
         $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
-        if(empty($parentTask)) return $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($taskID)->exec();
-
-        if($status and $parentTask->status != $status)
+        if(empty($parentTask))
         {
-            $now  = helper::now();
-            $task = new stdclass();
-            $task->status = $status;
-            if($status == 'done')
-            {
-                $task->assignedTo   = $parentTask->openedBy;
-                $task->assignedDate = $now;
-                $task->finishedBy   = $this->app->user->account;
-                $task->finishedDate = $now;
-            }
-
-            if($status == 'cancel')
-            {
-                $task->assignedTo   = $parentTask->openedBy;
-                $task->assignedDate = $now;
-                $task->finishedBy   = '';
-                $task->finishedDate = null;
-                $task->canceledBy   = $this->app->user->account;
-                $task->canceledDate = $now;
-            }
-
-            if($status == 'closed')
-            {
-                $task->assignedTo   = 'closed';
-                $task->assignedDate = $now;
-                $task->closedBy     = $this->app->user->account;
-                $task->closedDate   = $now;
-                $task->closedReason = 'done';
-            }
-
-            if($status == 'doing' or $status == 'wait')
-            {
-                if($parentTask->assignedTo == 'closed')
-                {
-                    $task->assignedTo   = $childTask->assignedTo;
-                    $task->assignedDate = $now;
-                }
-                $task->finishedBy   = '';
-                $task->finishedDate = null;
-                $task->closedBy     = '';
-                $task->closedDate   = null;
-                $task->closedReason = '';
-            }
-
-            $task->lastEditedBy   = $this->app->user->account;
-            $task->lastEditedDate = $now;
-            $task->parent         = '-1';
-            $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
-            if(!dao::isError())
-            {
-                if(!$createAction) return $task;
-
-                if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
-                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
-
-                unset($oldParentTask->subStatus);
-                unset($newParentTask->subStatus);
-                $changes = common::createChanges($oldParentTask, $newParentTask);
-                $action  = '';
-                if($status == 'done' and $parentTask->status != 'done')     $action = 'Finished';
-                if($status == 'closed' and $parentTask->status != 'closed') $action = 'Closed';
-                if($status == 'pause' and $parentTask->status != 'paused')  $action = 'Paused';
-                if($status == 'cancel' and $parentTask->status != 'cancel') $action = 'Canceled';
-                if($status == 'doing' and $parentTask->status == 'wait')    $action = 'Started';
-                if($status == 'doing' and $parentTask->status == 'pause')   $action = 'Restarted';
-                if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
-                if($status == 'wait' and $parentTask->status != 'wait')     $action = 'Adjusttasktowait';
-                if($action)
-                {
-                    $actionID = $this->loadModel('action')->create('task', $parentID, $action, '', '', '', false);
-                    $this->action->logHistory($actionID, $changes);
-                }
-
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
-            }
+            $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($taskID)->exec();
+            return;
         }
-        else
+
+        if($parentTask->status == $status)
         {
             if(!dao::isError())
             {
-                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
-                $changes = common::createChanges($oldParentTask, $newParentTask);
+                $changes = common::createChanges($oldParentTask, $parentTask);
                 if($changes)
                 {
                     $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited', '', '', '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
             }
+            return;
         }
+
+        /* Update task status. */
+        $this->taskTao->updateTaskByChildAndStatus($parentTask, $childTask, $status);
+        
+        if(dao::isError() || !$createAction) return;
+
+        if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
+
+        /* Create action record. */
+        $this->taskTao->createUpdateParentTaskAction($oldParentTask);
+
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $status, $oldParentTask->status);
     }
 
     /**

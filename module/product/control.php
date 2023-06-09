@@ -145,7 +145,7 @@ class product extends control
         $project   = $this->loadModel('project')->getByID($projectID);
         $branchID  = $this->productZen->getBranchID($product, $branch);
         $orderBy   = $orderBy ? $orderBy : $cookieOrderBy;
-        $branch    = $branchID ?? $branch;
+        $branch    = $branchID ? $branchID : $branch;
 
         /* ATTENTION: be careful to change the order of follow sentences. */
         $this->productZen->setMenu4Browse($projectID, $productID, $branch, $storyType);
@@ -189,7 +189,7 @@ class product extends control
         $this->view->productName     = $productName;
         $this->view->moduleID        = $moduleID;
         $this->view->stories         = $stories;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired,noclosed', true);
+        $this->view->plans           = $this->loadModel('productplan')->getPairsForStory($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired,noclosed,cleantitle');
         $this->view->productPlans    = !empty($productPlans) ? array(0 => '') + $productPlans : array();
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;

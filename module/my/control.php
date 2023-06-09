@@ -248,6 +248,7 @@ EOF;
     {
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
+        if($mode == 'doc' && $type == 'openedBy') $type = 'openedbyme';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -573,7 +574,7 @@ EOF;
             $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
         }
 
-        $bugs = $this->bug->checkDelayedBugs($bugs);
+        $bugs = $this->bug->batchAppendDelayedDays($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
