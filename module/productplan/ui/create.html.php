@@ -64,6 +64,7 @@ formPanel
     set::title($title),
     on::change('#begin', 'resetDelta'),
     on::change('#end', 'resetDelta'),
+    on::change('.radio-primary > input', 'computeEndDate'),
     $formHeader,
     $parentForm,
     formGroup
