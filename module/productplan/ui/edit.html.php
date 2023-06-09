@@ -15,6 +15,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->productplan->edit),
+    on::change('#future_', 'toggleDateVisibility'),
     formGroup
     (
         set::width("1/2"),
