@@ -246,7 +246,8 @@ EOF;
      */
     public function contribute($mode = 'task', $type = 'openedBy', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(($mode == 'issue' or $mode == 'risk') and $type == 'openedBy') $type = 'createdBy';
+        if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
+        if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
