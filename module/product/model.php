@@ -1270,15 +1270,15 @@ class productModel extends model
      * 获取项目集下的产品线。
      * Get product line pairs by program.
      *
-     * @param  int    $programID
+     * @param  int|array $programID
      * @access public
      * @return string[]
      */
-    public function getLinePairs(int $programID = 0): array
+    public function getLinePairs(int|array $programIdList = 0): array
     {
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
+            ->beginIF($programIdList)->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'name');
     }

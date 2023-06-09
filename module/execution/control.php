@@ -982,9 +982,7 @@ class execution extends control
         $showBranch    = false;
         if($execution->hasProduct)
         {
-            if(count($products) > 1) $productOption[0] = $this->lang->product->all;
-            foreach($products as $productData) $productOption[$productData->id] = $productData->name;
-
+            list($productOption, $branchOption, $showBranch) = $this->executionZen->buildProductSwitcher($productID, $products);
             unset($this->config->bug->search['fields']['product']);
             unset($this->config->bug->search['params']['product']);
             if($project->model != 'scrum')
@@ -993,19 +991,6 @@ class execution extends control
                 unset($this->config->bug->search['params']['plan']);
             }
 
-            $product = $this->product->getById((int)$productID);
-            if($product and $product->type != 'normal')
-            {
-                /* Display of branch label. */
-                $showBranch = $this->loadModel('branch')->showBranch($productID);
-
-                /* Display status of branch. */
-                $branches = $this->branch->getList($productID, $executionID, 'all');
-                foreach($branches as $branchInfo)
-                {
-                    $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                }
-            }
         }
 
         /* Load pager and get bugs, user. */
@@ -1076,6 +1061,7 @@ class execution extends control
         $this->view->orderBy         = $orderBy;
         $this->view->users           = $users;
         $this->view->productID       = $productID;
+        $this->view->product         = $this->product->getByID((int) $productID);
         $this->view->project         = $project;
         $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
@@ -1127,7 +1113,7 @@ class execution extends control
         $this->session->set('caseList', $uri, 'execution');
         $this->session->set('bugList',  $uri, 'execution');
 
-        $products = $this->product->getProducts($executionID, 'all', '', false);
+        $products = $this->product->getProducts($executionID);
         if(count($products) == 1) $productID = key($products);
 
         $execution     = $this->execution->getByID($executionID);
@@ -1136,20 +1122,7 @@ class execution extends control
         $showBranch    = false;
         if($execution->hasProduct)
         {
-            $productOption = array(0 => $this->lang->product->all) + $products;
-            $product       = $this->product->getById((int)$productID);
-            if($product and $product->type != 'normal')
-            {
-                /* Display of branch label. */
-                $showBranch = $this->loadModel('branch')->showBranch($productID);
-
-                /* Display status of branch. */
-                $branches = $this->branch->getList($productID, $executionID, 'all');
-                foreach($branches as $branchInfo)
-                {
-                    $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                }
-            }
+            list($productOption, $branchOption, $showBranch) = $this->executionZen->buildProductSwitcher($productID, $products);
         }
 
         /* Load pager. */
@@ -1185,6 +1158,7 @@ class execution extends control
         $this->view->title         = $this->lang->execution->testcase;
         $this->view->executionID   = $executionID;
         $this->view->productID     = $productID;
+        $this->view->product       = $this->product->getByID((int) $productID);
         $this->view->cases         = $cases;
         $this->view->orderBy       = $orderBy;
         $this->view->pager         = $pager;

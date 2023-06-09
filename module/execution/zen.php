@@ -51,5 +51,46 @@ class executionZen extends execution
 
         return array_values($buildList);
     }
-}
 
+    /**
+     * 构建产品下拉选择数据。
+     * Build product drop-down select data.
+     *
+     * @param  int       $productID
+     * @param  object[]  $products
+     * @access protected
+     * @return array
+     */
+    protected function buildProductSwitcher(int $productID, array $products)
+    {
+        $showBranch    = false;
+        $productOption = array();
+        $programIdList = array();
+        if(count($products) > 1) $productOption[0] = $this->lang->product->all;
+        foreach($products as $productData) $programIdList[$productData->program] = $productData->program;
+        $programPairs = $this->loadModel('program')->getPairsByList($programIdList);
+        $linePairs    = $this->loadModel('product')->getLinePairs($programIdList);
+
+        foreach($products as $productData)
+        {
+            $programName = isset($programPairs[$productData->program]) ? $programPairs[$productData->program] . ' / ' : '';
+            $lineName    = isset($linePairs[$productData->line]) ? $linePairs[$productData->line] . ' / ' : '';
+            $productOption[$productData->id] = $programName . $lineName . $productData->name;
+        }
+
+        $product = $this->product->getById((int)$productID);
+        if($product and $product->type != 'normal')
+        {
+            /* Display of branch label. */
+            $showBranch = $this->loadModel('branch')->showBranch($productID);
+
+            /* Display status of branch. */
+            $branches = $this->branch->getList($productID, $executionID, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
+        }
+        return array($productOption, $branchOption, $showBranch);
+    }
+}

@@ -15,7 +15,7 @@ $productDropdown = '';
 if($execution->hasProduct)
 {
     $productDropdown = productMenu(
-        set::title($productOption[$productID]),
+        set::title($product ? $product->name : $productOption[$productID]),
         set::items($productOption),
         set::activeKey($productID),
         set::link(helper::createLink('execution', 'testcase', "executionID={$execution->id}&productID=%s")),
