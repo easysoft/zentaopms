@@ -77,7 +77,7 @@ $config->bug->dtable->fieldList['openedDate']['group'] = '4';
 
 $config->bug->dtable->fieldList['confirmed']['name']  = 'confirmed';
 $config->bug->dtable->fieldList['confirmed']['title'] = $lang->bug->confirmed;
-$config->bug->dtable->fieldList['confirmed']['type']  = 'status';
+$config->bug->dtable->fieldList['confirmed']['type']  = 'category';
 $config->bug->dtable->fieldList['confirmed']['map']   = $lang->bug->confirmedList;
 $config->bug->dtable->fieldList['confirmed']['group'] = '5';
 
