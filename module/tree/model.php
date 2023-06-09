@@ -465,7 +465,8 @@ class treeModel extends model
         {
             if($onlyGetLinked && !isset($executionModules[$module->id]) && empty($product->shadow)) continue;
 
-            $modules[] = $this->buildTree($module, $type, 0, $userFunc, $extra, $branch);
+            $data = $this->buildTree($module, $type, 0, $userFunc, $extra, $branch);
+            if($data) $modules[] = $data;
         }
 
         return $modules;
