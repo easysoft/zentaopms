@@ -425,13 +425,22 @@
             options = options || {};
             options.url = url;
         }
-        if(options.id)     delete options.id;
-        if(options.loadId) options.id = options.loadId;
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
-        if(options.load) return loadPage(url, options.load, options.id, options);
-        if(options.back) return $.apps.goBack(options.back, url);
+        if(typeof options.load === 'string')
+        {
+            if(options.id) delete options.id;
+            return loadPage(url, options.load, options.loadId, options);
+        }
+
+        let back = options.back;
+        if(typeof back === 'string')
+        {
+            if(back === 'back')        back = currentCode;
+            else if(back === 'global') back = '';
+            return $.apps.goBack(back, url);
+        }
 
         openPage(url, options.app);
     }

@@ -236,6 +236,7 @@ function updateApp(code, url, title, type)
     app.currentUrl = url;
     window.history.pushState(state, title, url);
     if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
+    return state;
 }
 
 /**
@@ -419,32 +420,34 @@ function getAppCodeFromUrl(urlOrModuleName)
 /**
  * Search history and go back to specified path.
  *
- * @param {string|string[]} paths    Preferred search path
- * @param {string}          urlOrApp Fallback url or app code
+ * @param {string} target Back target, can be app name or module-method path.
+ * @param {string} url    Fallback url.
  * @returns {void}
  */
-function goBack(paths, urlOrApp)
+function goBack(target, url)
 {
-    if(paths)
+    if(target)
     {
-        if(typeof paths === 'string') paths = paths.split(',');
-        const pathSet = new Set(paths);
-        let state = window.history.state;
-        while(state && state.path && !pathSet.has(state.path)) state = state.prev;
-        if(state && state.index) return window.history.go(state.index - window.history.state.index);
+        if($.apps.openedMap[target])
+        {
+            let state = window.history.state;
+            state = state && state.prev;
+            if(state && state.code === target) window.history.back();
+            while(state && state.code !== target) state = state.prev;
+            if(state && state.index && state.code === target) return openApp(state.url, state.code, state.type !== 'show');
+        }
+        else
+        {
+            const pathSet = new Set(target.split(','));
+            let state = window.history.state;
+            while(state && state.path && !pathSet.has(state.path)) state = state.prev;
+            if(state && state.index) return window.history.go(state.index - window.history.state.index);
+        }
     }
 
-    if(!urlOrApp) window.history.back();
+    if(url) return openApp(url);
 
-    if($.apps.openedMap[urlOrApp])
-    {
-        let state = window.history.state;
-        state = state && state.prev;
-        if(state && state.code === urlOrApp) window.history.back();
-        while(state && state.code !== urlOrApp) state = state.prev;
-        if(state && state.index && state.code === urlOrApp) return openApp(state.url, state.code, state.type !== 'show');
-    }
-    openApp(urlOrApp);
+    window.history.back();
 }
 
 /**
@@ -645,7 +648,7 @@ $(window).on('popstate', function(event)
 {
     const state = event.state;
     if(debug) console.log('[APPS]', 'popstate:', state);
-    openApp(state.url, state.code, state.type !== 'show');
+    if(state) openApp(state.url, state.code, state.type !== 'show');
 });
 
 $.get($.createLink('index', 'app'), html =>
