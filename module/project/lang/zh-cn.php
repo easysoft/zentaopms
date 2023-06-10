@@ -1,4 +1,6 @@
 <?php
+global $app;
+
 /* Actions. */
 $lang->project->createGuide         = "选择{$lang->projectCommon}模板";
 $lang->project->index               = "{$lang->projectCommon}仪表盘";
@@ -318,13 +320,8 @@ $lang->project->featureBar['execution']['closed']    = '已关闭';
 $lang->project->featureBar['bug']['all']        = '全部';
 $lang->project->featureBar['bug']['unresolved'] = '未解决';
 
-$lang->project->featureBar['testcase']['all']         = '所有';
-$lang->project->featureBar['testcase']['wait']        = '待评审';
-$lang->project->featureBar['testcase']['needconfirm'] = "需求变动";
-$lang->project->featureBar['testcase']['group']       = '分组查看';
-$lang->project->featureBar['testcase']['zerocase']    = "零用例{$lang->SRCommon}";
-$lang->project->featureBar['testcase']['suite']       = '套件';
-$lang->project->featureBar['testcase']['autocase']    = '自动化';
+$app->loadLang('testcase');
+$lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
 $lang->project->featureBar['testtask']['all'] = '测试单列表';
 

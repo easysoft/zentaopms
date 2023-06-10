@@ -1,4 +1,6 @@
 <?php
+global $app;
+
 /* Actions. */
 $lang->project->createGuide         = 'Select Template';
 $lang->project->index               = 'Dashboard';
@@ -318,13 +320,8 @@ $lang->project->featureBar['execution']['closed']    = 'Closed';
 $lang->project->featureBar['bug']['all']        = 'All';
 $lang->project->featureBar['bug']['unresolved'] = 'Unresolved';
 
-$lang->project->featureBar['testcase']['all']         = 'All';
-$lang->project->featureBar['testcase']['wait']        = 'Waiting';
-$lang->project->featureBar['testcase']['needconfirm'] = "Story Changed";
-$lang->project->featureBar['testcase']['group']       = 'Group View';
-$lang->project->featureBar['testcase']['zerocase']    = "Zero Case {$lang->SRCommon}";
-$lang->project->featureBar['testcase']['suite']       = 'Suite';
-$lang->project->featureBar['testcase']['autocase']    = 'Automated';
+$app->loadLang('testcase');
+$lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
 $lang->project->featureBar['build']['all'] = 'Build List';
 

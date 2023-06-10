@@ -1,4 +1,6 @@
 <?php
+global $app;
+
 /* Actions. */
 $lang->project->createGuide         = 'Select Template';
 $lang->project->index               = 'Dashboard';

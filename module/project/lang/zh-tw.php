@@ -1,4 +1,6 @@
 <?php
+global $app;
+
 /* Actions. */
 $lang->project->createGuide       = '選擇項目模板';
 $lang->project->index             = '項目儀表盤';
