@@ -93,9 +93,10 @@ toolbar
 sidebar
 (
     moduleMenu(set(array(
-        'modules'   => $moduleTree,
-        'activeKey' => $moduleID,
-        'closeLink' => $this->createLink('execution', 'task')
+        'modules'     => $moduleTree,
+        'activeKey'   => $moduleID,
+        'settingLink' => $this->createLink('tree', 'browsetask', "rootID=$execution->id&productID=0"),
+        'closeLink'   => $this->createLink('execution', 'task')
     )))
 );
 

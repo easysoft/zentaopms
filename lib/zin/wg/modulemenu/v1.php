@@ -9,9 +9,9 @@ class moduleMenu extends wg
     protected static $defineProps = array(
         'modules: array',
         'activeKey: int',
+        'settingLink: string',
         'closeLink: string',
         'activeText: string=""',
-        'moduleSetting: bool=true',
         'displaySetting: bool=true'
     );
 
@@ -60,27 +60,36 @@ class moduleMenu extends wg
 
     private function buildBtns()
     {
-        $moduleSetting  = $this->prop('moduleSetting');
+        $settingLink = $this->prop('settingLink');
         $displaySetting = $this->prop('displaySetting');
-        if(!$moduleSetting && !$displaySetting) return null;
+        if(!$settingLink && !$displaySetting) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
+        $currentModule = $app->rawModule;
+        $currentMethod = $app->rawMethod;
+
+        $datatableId = $app->moduleName . ucfirst($app->methodName);
+
         return div
         (
             setClass('setting-btns'),
-            $moduleSetting ? a
+            $settingLink ? a
             (
                 setClass('btn'),
                 setStyle('background', '#EEF5FF'),
                 setStyle('border', 'none'),
+                set::href($settingLink),
                 $lang->moduleSetting
             ) : null,
-            $displaySetting ? a
-            (
-                setClass('btn white'),
-                $lang->displaySetting
-            ) : null,
+            $displaySetting ?
+                a(
+                    setClass('btn white'),
+                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
+                    set('data-toggle', 'modal'),
+                    $lang->displaySetting
+                )
+            : null,
         );
     }
 

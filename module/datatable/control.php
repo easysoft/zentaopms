@@ -23,6 +23,27 @@ class datatable extends control
     }
 
     /**
+     * Set display.
+     *
+     * @param  string $datatableId
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @access public
+     * @return void
+     */
+    public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
+    {
+        $this->view->datatableId   = $datatableId;
+        $this->view->moduleName    = $moduleName;
+        $this->view->methodName    = $methodName;
+        $this->view->currentModule = $currentModule;
+        $this->view->currentMethod = $currentMethod;
+        $this->render();
+    }
+
+    /**
      * Save config
      *
      * @access public
@@ -42,7 +63,7 @@ class datatable extends control
             if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
-            return $this->send(array('result' => 'success'));
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
         }
     }
 
