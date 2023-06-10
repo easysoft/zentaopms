@@ -496,7 +496,7 @@ class taskModel extends model
 
         /* Update task status. */
         $this->taskTao->updateTaskByChildAndStatus($parentTask, $childTask, $status);
-        
+
         if(dao::isError() || !$createAction) return;
 
         if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
