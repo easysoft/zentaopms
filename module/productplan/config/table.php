@@ -35,27 +35,27 @@ $config->productplan->dtable->fieldList['end']['group'] = '3';
 
 $config->productplan->dtable->fieldList['stories']['name']  = 'stories';
 $config->productplan->dtable->fieldList['stories']['title'] = $lang->productplan->stories;
-$config->productplan->dtable->fieldList['stories']['type']  = 'text';
+$config->productplan->dtable->fieldList['stories']['type']  = 'number';
 $config->productplan->dtable->fieldList['stories']['group'] = '4';
 
 $config->productplan->dtable->fieldList['bugs']['name']  = 'bugs';
 $config->productplan->dtable->fieldList['bugs']['title'] = $lang->productplan->bugs;
-$config->productplan->dtable->fieldList['bugs']['type']  = 'text';
+$config->productplan->dtable->fieldList['bugs']['type']  = 'number';
 $config->productplan->dtable->fieldList['bugs']['group'] = '4';
 
 $config->productplan->dtable->fieldList['storyPoint']['name']  = 'storyPoint';
 $config->productplan->dtable->fieldList['storyPoint']['title'] = $lang->productplan->storyPoint;
-$config->productplan->dtable->fieldList['storyPoint']['width'] = 120;
+$config->productplan->dtable->fieldList['storyPoint']['type']  = 'count';
 $config->productplan->dtable->fieldList['storyPoint']['group'] = '4';
 
 $config->productplan->dtable->fieldList['execution']['name']  = 'execution';
 $config->productplan->dtable->fieldList['execution']['title'] = $lang->productplan->execution;
-$config->productplan->dtable->fieldList['execution']['type']  = 'text';
+$config->productplan->dtable->fieldList['execution']['type']  = 'icon';
 $config->productplan->dtable->fieldList['execution']['group'] = '5';
 
 $config->productplan->dtable->fieldList['desc']['name']  = 'desc';
 $config->productplan->dtable->fieldList['desc']['title'] = $lang->productplan->desc;
-$config->productplan->dtable->fieldList['desc']['type']  = 'text';
+$config->productplan->dtable->fieldList['desc']['type']  = 'desc';
 $config->productplan->dtable->fieldList['desc']['group'] = '6';
 
 $config->productplan->dtable->fieldList['actions']['name']     = 'actions';
