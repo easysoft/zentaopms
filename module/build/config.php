@@ -60,3 +60,7 @@ $config->build->actionList['projectbuildEdit']['url'] = helper::createLink('proj
 $config->build->actionList['delete']['icon'] = 'trash';
 $config->build->actionList['delete']['hint'] = $lang->build->delete;
 $config->build->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+
+$config->build->actionList['unlinkBug']['icon'] = 'unlink';
+$config->build->actionList['unlinkBug']['hint'] = $lang->build->unlinkBug;
+$config->build->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("bug", "{id}")';
