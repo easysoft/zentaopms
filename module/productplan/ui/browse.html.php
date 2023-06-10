@@ -10,11 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$canCreate = common::hasPriv('productplan', 'create');
+$canModify = common::canModify('product', $product);
+$createLink = $this->createLink('productplan', 'create', "productID={$productID}&branchID={$branch}&parent={$parent}");
+
 featureBar
 (
     set::current($browseType),
     set::linkParams("product=$productID&branch=$branch&browseType={key}"),
     li(searchToggle())
+);
+
+toolbar
+(
+    $canCreate && $canModify ? item(set(array('text' => $lang->productplan->create, 'url' => $createLink, 'class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
 $config->productplan->dtable->fieldList['branch']['map'] = $branches;
