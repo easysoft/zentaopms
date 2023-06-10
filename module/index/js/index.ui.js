@@ -420,28 +420,38 @@ function getAppCodeFromUrl(urlOrModuleName)
 /**
  * Search history and go back to specified path.
  *
- * @param {string} target Back target, can be app name or module-method path.
- * @param {string} url    Fallback url.
+ * @param {string} target     Back target, can be app name or module-method path.
+ * @param {string} url        Fallback url.
+ * @param {object} startState Start state.
  * @returns {void}
  */
-function goBack(target, url)
+function goBack(target, url, startState)
 {
-    if(target)
+    const currentState = window.history.state;
+    const preState = currentState && currentState.prev;
+    if(target && currentState && preState)
     {
+        startState = startState || (currentState && currentState.prev);
         if($.apps.openedMap[target])
         {
-            let state = window.history.state;
-            state = state && state.prev;
-            if(state && state.code === target) window.history.back();
+            let state = startState;
             while(state && state.code !== target) state = state.prev;
-            if(state && state.index && state.code === target) return openApp(state.url, state.code, state.type !== 'show');
+            if(state && state.code === target)
+            {
+                if(state.index === preState.index) return window.history.back();
+                return openApp(state.url, state.code, false);
+            }
         }
         else
         {
             const pathSet = new Set(target.split(','));
-            let state = window.history.state;
+            let state = startState;
             while(state && state.path && !pathSet.has(state.path)) state = state.prev;
-            if(state && state.index) return window.history.go(state.index - window.history.state.index);
+            if(state && pathSet.has(state.path))
+            {
+                if(state.index === preState.index) return window.history.back();
+                return openApp(state.url, state.code, false);
+            }
         }
     }
 

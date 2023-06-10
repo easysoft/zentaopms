@@ -39,6 +39,7 @@
     const startTime   = performance.now();
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
+    let historyState  = parent.window.history.state;
 
     $.apps = $.extend(
     {
@@ -54,6 +55,7 @@
 
             window.history.pushState(state, title, url);
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
+            return state;
         },
         reloadApp: function(_code, url)
         {
@@ -208,7 +210,7 @@
     {
         if(DEBUG) console.log('[APP] ', 'render:', list);
         list.forEach(item => renderPartial(item, options));
-        $.apps.updateApp(currentCode, currentAppUrl, document.title);
+        historyState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
     }
 
     function toggleLoading(target, isLoading)
@@ -439,7 +441,7 @@
         {
             if(back === 'APP')         back = currentCode;
             else if(back === 'GLOBAL') back = '';
-            return $.apps.goBack(back, url);
+            return $.apps.goBack(back, url, historyState);
         }
 
         openPage(url, options.app);
