@@ -17,7 +17,7 @@ $app->loadLang('datatable');
 $formGID = null;
 jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSave', "module={$module}&method={$method}"));
 
-function buildItem($item)
+function buildItem(array $item): wg
 {
     global $lang;
 
@@ -53,7 +53,17 @@ function buildItem($item)
     );
 }
 
-function buildBody($cols)
+
+function getDefaultConfig(string $name): array
+{
+    global $config;
+    $defaultConfig = $config->datatable->defaultColConfig;
+
+    if(isset($defaultConfig[$name])) return $defaultConfig[$name];
+    return array();
+}
+
+function buildBody(array $cols): form
 {
     global $formGID;
     $itemsList = array(
@@ -64,12 +74,13 @@ function buildBody($cols)
 
     foreach($cols as $col)
     {
+        if($col['type']) $col = array_merge(getDefaultConfig($col['type']), $col);
         $itemsList[$col['fixed']][] = array(
-            'required' => $col['fixed'] === 'yes',
+            'required' => isset($col['required']) && $col['required'] === true,
             'title' => $col['title'],
             'width' => $col['width'],
             'name' => $col['name'],
-            'show' => true
+            'show' => $col['show']
         );
     }
 
@@ -94,7 +105,7 @@ function buildBody($cols)
     return $body;
 }
 
-function submitFunc()
+function submitFunc(): string
 {
     global $formGID;
 
