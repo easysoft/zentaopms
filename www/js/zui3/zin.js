@@ -437,8 +437,8 @@
         let back = options.back;
         if(typeof back === 'string')
         {
-            if(back === 'back')        back = currentCode;
-            else if(back === 'global') back = '';
+            if(back === 'APP')         back = currentCode;
+            else if(back === 'GLOBAL') back = '';
             return $.apps.goBack(back, url);
         }
 

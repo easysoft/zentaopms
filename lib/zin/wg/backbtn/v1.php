@@ -30,7 +30,7 @@ class backBtn extends btn
      */
     static $defineProps = array
     (
-        'back?: string="back"'  // 定义返回行为，可以为 `'back'`（返回打开当前页面时的上一个历史记录）、 `'global'`（返回上一个全局历史记录）、`'moduleName-methodName'`（从历史记录中向后查找符合指定路径的历史记录）。
+        'back?: string="APP"'  // 定义返回行为，可以为 `'APP'`（默认值，返回打开当前页面时的上一个历史记录）、 `'GLOBAL'`（返回上一个全局历史记录）、`'moduleName-methodName'`（从历史记录中向后查找符合指定路径的历史记录）。
     );
 
     /**
