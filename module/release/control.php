@@ -171,18 +171,18 @@ class release extends control
     /**
      * View a release.
      *
-     * @param  string|int $releaseID
-     * @param  string     $type
-     * @param  string     $link
-     * @param  string     $param
-     * @param  string     $orderBy
-     * @param  string|int $recTotal
-     * @param  string|int $recPerPage
-     * @param  string|int $pageID
+     * @param  int    $releaseID
+     * @param  string $type
+     * @param  string $link
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function view(string|int $releaseID, string $type = 'story', string $link = 'false', string $param = '', string $orderBy = 'id_desc', string|int $recTotal = 0, string|int $recPerPage = 100, string|int $pageID = 1)
+    public function view(int $releaseID, string $type = 'story', string $link = 'false', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $releaseID = (int)$releaseID;
         $release   = $this->release->getByID($releaseID, true);
