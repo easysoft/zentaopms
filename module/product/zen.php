@@ -963,7 +963,7 @@ class productZen extends product
      * @param  string    $branchID
      * @param  string    $moduleID
      * @param  int       $param
-     * @param  string    $storyType
+     * @param  string    $storyType  requirement|story
      * @param  string    $browseType
      * @param  string    $orderBy
      * @param  object    $pager
