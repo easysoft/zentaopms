@@ -104,6 +104,7 @@ $lang->project->output             = '输出';
 $lang->project->path               = '路径';
 $lang->project->grade              = '层级';
 $lang->project->version            = '版本';
+$lang->project->program            = '项目集';
 $lang->project->parentVersion      = '父版本';
 $lang->project->planDuration       = '计划周期天数';
 $lang->project->realDuration       = '实际周期天数';

@@ -104,6 +104,7 @@ $lang->project->output             = 'Output';
 $lang->project->path               = 'Path';
 $lang->project->grade              = 'Grade';
 $lang->project->version            = 'Version';
+$lang->project->program            = 'Program';
 $lang->project->parentVersion      = 'Parent Version';
 $lang->project->planDuration       = 'Plan Duration';
 $lang->project->realDuration       = 'Real Duration';
