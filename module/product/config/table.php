@@ -127,3 +127,6 @@ $config->product->dtable->extendField['type']     = 'number';
 $config->product->dtable->extendField['sortType'] = false;
 $config->product->dtable->extendField['align']    = 'center';
 $config->product->dtable->extendField['border']   = 'left';
+
+$config->productProject = new stdclass();
+$config->productProject->showFields = array('id', 'program', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'estimate', 'consume', 'progress');

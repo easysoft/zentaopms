@@ -97,8 +97,7 @@ div
 );
 
 /* Get column settings of the data table. */
-$showFields = array('id', 'program', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'estimate', 'consume', 'progress');
-foreach($showFields as $showField)
+foreach($config->productProject->showFields as $showField)
 {
     if(isset($config->project->dtable->fieldList[$showField])) $cols[$showField] = $config->project->dtable->fieldList[$showField];
     if($showField == 'program')
