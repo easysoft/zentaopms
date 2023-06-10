@@ -523,7 +523,7 @@ class custom extends control
     }
 
     /**
-     * Set whether the execution is read-only.
+     * Set whether the closed execution is read-only.
      *
      * @access public
      * @return void
@@ -543,7 +543,7 @@ class custom extends control
     }
 
     /**
-     * Set whether the product is read-only.
+     * Set whether the closed product is read-only.
      *
      * @access public
      * @return void

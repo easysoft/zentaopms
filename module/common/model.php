@@ -3113,6 +3113,7 @@ EOF;
 
         if(empty($object)) return true;
 
+        /* Judge that if the closed object(product|execution) is readonly from config table. The default is can modify. */
         if($type == 'product'   and empty($config->CRProduct)   and $object->status == 'closed') return false;
         if($type == 'execution' and empty($config->CRExecution) and $object->status == 'closed') return false;
 
