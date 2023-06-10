@@ -4,21 +4,21 @@ namespace zin;
 class btn extends wg
 {
     static $defineProps = array(
-        'icon?:string',
-        'iconClass?:string',
-        'text?:string',
-        'square?:bool',
-        'disabled?:bool',
-        'active?:bool',
-        'url?:string',
-        'target?:string',
-        'size?:string|int',
-        'trailingIcon?:string',
-        'trailingIconClass?:string',
-        'caret?:string|bool',
-        'hint?:string',
-        'type?:string',
-        'btnType?:string'
+        'text?:string',              // 按钮的文本。
+        'icon?:string',              // 图标名称。
+        'iconClass?:string',         // 图标的样式类。
+        'square?:bool',              // 是否为方形按钮，通常用于只显示一个图标的按钮。
+        'disabled?:bool',            // 是否禁用按钮。
+        'active?:bool',              // 是否为激活状态。
+        'url?:string',               // 按钮的链接地址。
+        'target?:string',            // 按钮的链接目标。
+        'size?:string|int',          // 按钮的尺寸，可选值为 `'xl'`、`'lg'`、`'md'`、`'sm'` 或者通过数字设置宽高，如 `20`。
+        'trailingIcon?:string',      // 按钮尾部图标的名称。
+        'trailingIconClass?:string', // 按钮尾部图标的样式类。
+        'caret?:string|bool',        // 按钮的下拉箭头，可选值为 `'top'`（向上）、`'bottom'`（向下） 或者 `true`（自动）。
+        'hint?:string',              // 按钮的提示文本（鼠标悬停时显示）。
+        'type?:string',              // 按钮的类型，可选值为 `'default'`、`'primary'`、`'success'`、`'info'`、`'warning'`、`'danger'`、`'link'`。
+        'btnType?:string'            // 按钮的类型，可选值为 `'button'`、`'submit'`、`'reset'`。
     );
 
     public function onAddChild($child)
@@ -32,15 +32,13 @@ class btn extends wg
 
     protected function getProps()
     {
-        $props = $this->props->skip(array_keys(static::getDefinedProps()));
-
+        $props  = $this->getRestProps();
         $url    = $this->prop('url');
         $target = $this->prop('target');
 
         if(empty($url))
         {
             $props['type'] = $this->prop('btnType') ?? 'button';
-            if(!isset($props['data-url']))    $props['data-url']    = $url;
             if(!isset($props['data-target'])) $props['data-target'] = $target;
         }
         else
@@ -56,12 +54,7 @@ class btn extends wg
 
     private function getChildren()
     {
-        $caret             = $this->prop('caret');
-        $text              = $this->prop('text');
-        $icon              = $this->prop('icon');
-        $iconClass         = $this->prop('iconClass');
-        $trailingIcon      = $this->prop('trailingIcon');
-        $trailingIconClass = $this->prop('trailingIconClass');
+        list($caret, $text, $icon, $iconClass, $trailingIcon, $trailingIconClass) = $this->prop(array('caret', 'text', 'icon', 'iconClass', 'trailingIcon', 'trailingIconClass'));
 
         $children = array();
         if(!empty($icon)) $children[] = icon($icon, setClass($iconClass));
@@ -75,14 +68,8 @@ class btn extends wg
 
     private function getClassList()
     {
-        $url           = $this->prop('url');
-        $type          = $this->prop('type');
-        $caret         = $this->prop('caret');
-        $text          = $this->prop('text');
-        $icon          = $this->prop('icon');
-        $trailingIcon  = $this->prop('trailingIcon');
-        $onlyCaret     = empty($text) && !empty($caret) && empty($icon) && empty($trailingIcon);
-
+        list($url, $type, $caret, $text, $icon, $trailingIcon) = $this->prop(array('url', 'type', 'caret', 'text', 'icon', 'trailingIcon'));
+        $onlyCaret = empty($text) && !empty($caret) && empty($icon) && empty($trailingIcon);
         $classList = array(
             'btn'       => true,
             'disabled'  => $this->prop('disabled'),
@@ -91,8 +78,10 @@ class btn extends wg
             'square'    => $this->prop('square')
         );
 
-        if(!empty($type))    $classList[$type] = true;
-        elseif(!empty($url)) $classList['btn-default'] = true;
+        if(empty($type) && !empty($url)) $type = 'btn-default';
+        if($type === 'link')             $type = 'btn-link';
+        if($type === 'default')          $type = 'btn-default';
+        if(!empty($type))                $classList[$type] = true;
 
         if(empty($text) && !empty($icon) && !isset($classList['square'])) $classList['square'] = true;
 
