@@ -33,6 +33,7 @@ $lang->productplan->allAB      = 'All';
 $lang->productplan->to         = 'To';
 $lang->productplan->more       = 'More';
 $lang->productplan->comment    = 'Comment';
+$lang->productplan->storyPoint = 'Story Point';
 
 $lang->productplan->batchUnlink       = "Retirer par lot";
 $lang->productplan->batchClose        = "Batch Close";

@@ -33,6 +33,7 @@ $lang->productplan->allAB      = '所有';
 $lang->productplan->to         = '至';
 $lang->productplan->more       = '更多操作';
 $lang->productplan->comment    = '备注';
+$lang->productplan->storyPoint = '故事点';
 
 $lang->productplan->batchUnlink       = "批量移除";
 $lang->productplan->batchClose        = "批量关闭";
