@@ -28,11 +28,13 @@ class dtable extends wg
         $module = $this->prop('module', $app->rawModule);
         if(!isset($app->lang->$module)) $app->loadLang($module);
 
+        /* Set col default name and title. */
         $colConfigs = $this->prop('cols');
         foreach($colConfigs as $field => &$config)
         {
-            if(!isset($config['name']))  $config['name'] = $field;
+            if(is_object($config)) $config = (array)$config;
 
+            if(!isset($config['name']))  $config['name'] = $field;
             if(!isset($config['title'])) $config['title'] = zget($app->lang->{$module}, $config['name'], zget($app->lang, $config['name']));
         }
         $this->setProp('cols', array_values($colConfigs));
