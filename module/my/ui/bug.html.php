@@ -41,8 +41,9 @@ $param             = $config->productLink == 'product-all' ? '' : "productID={pr
 $productBrowseLink = createLink('product', $productLink[1], $param);
 $config->my->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
 
+foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
+
 $bugs = initTableData($bugs, $config->my->bug->dtable->fieldList, $this->bug);
-$cols = array_values($config->my->bug->dtable->fieldList);
 $bugs = array_values($bugs);
 
 $footToolbar = array('items' => array
@@ -68,11 +69,12 @@ menu
 
 dtable
 (
-    set::cols($cols),
+    set::cols($config->my->bug->dtable->fieldList),
     set::data($bugs),
     set::userMap($users),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction ? true : false),
+    set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     $canBatchAction ? set::footToolbar($footToolbar) : null,
     set::footPager(usePager()),
 );
