@@ -1061,7 +1061,7 @@ class productZen extends product
      * @param  string  $storyType
      * @param  string  $browseType
      * @param  bool    $isProjectStory
-     * @access private
+     * @access protected
      * @return void
      */
     protected function saveSession4Browse(object $product, string $storyType, string $browseType, bool $isProjectStory): void
