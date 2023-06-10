@@ -57,3 +57,12 @@ $config->productplan->dtable->fieldList['desc']['name']  = 'desc';
 $config->productplan->dtable->fieldList['desc']['title'] = $lang->productplan->desc;
 $config->productplan->dtable->fieldList['desc']['type']  = 'text';
 $config->productplan->dtable->fieldList['desc']['group'] = '6';
+
+$config->productplan->dtable->fieldList['actions']['name']     = 'actions';
+$config->productplan->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->productplan->dtable->fieldList['actions']['type']     = 'actions';
+$config->productplan->dtable->fieldList['actions']['width']    = '140';
+$config->productplan->dtable->fieldList['actions']['sortType'] = false;
+$config->productplan->dtable->fieldList['actions']['fixed']    = 'right';
+$config->productplan->dtable->fieldList['actions']['list']     = $config->productplan->actionList;
+$config->productplan->dtable->fieldList['actions']['menu']     = array('start', 'createExecution', 'linkStory', 'linkBug', 'edit', 'more');
