@@ -193,7 +193,7 @@ class project extends control
      * @access public
      * @return string
      */
-    public function ajaxGetLinkedProducts(string $projectID): string
+    public function ajaxGetLinkedProducts(string $projectID)
     {
         $productsWithBranch = array();
         $linkedProducts     = $this->project->getBranchesByProject((int)$projectID);

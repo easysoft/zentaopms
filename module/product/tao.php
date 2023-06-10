@@ -682,22 +682,21 @@ class productTao extends productModel
      * 获取项目关联的产品。
      * Get products by project ID.
      *
-     * @param  int       $projectID
-     * @param  string    $append    '1,2,3'
-     * @param  string    $status
-     * @param  string    $orderBy
-     * @param  bool      $noDeleted
+     * @param  int          $projectID
+     * @param  string|array $append    '1,2,3'
+     * @param  string       $status
+     * @param  string       $orderBy
+     * @param  bool         $noDeleted
      * @access protected
      * @return int[]
      */
-    protected function getProductsByProjectID(int $projectID, string $append, string $status, string $orderBy, bool $noDeleted = true): array
+    protected function getProductsByProjectID(int $projectID, string|array $append, string $status, string $orderBy, bool $noDeleted = true): array
     {
         /* 处理要用的到变量信息。 */
         $append  = $this->formatAppendParam($append);
         $orderBy = ($orderBy ? "{$orderBy}," : '') . 't2.order asc';
 
-        return $this->dao->select("t1.branch, t1.plan, t2.*")
-            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select("t1.branch, t1.plan, t2.*")->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('(1=1')
             ->beginIF($noDeleted)->andWhere('t2.deleted')->eq(0)->fi()
@@ -706,7 +705,7 @@ class productTao extends productModel
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->markRight(1)
-            ->beginIF($append)->orWhere('t1.id')->in($append)->fi()
+            ->beginIF($append)->orWhere('t2.id')->in($append)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
     }

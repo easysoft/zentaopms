@@ -900,15 +900,15 @@ class projectZen extends project
      * 获取其他的关联产品
      * Get other products under the projectprogram.
      *
-     * @param  object $programProducts
-     * @param  array  $branchGroups
-     * @param  array  $linkedBranches
-     * @param  array  $linkedProducts
+     * @param  array     $programProducts
+     * @param  array     $branchGroups
+     * @param  array     $linkedBranches
+     * @param  array     $linkedProducts
      *
      * @access protected
      * @return array
      */
-    protected function getOtherProducts(object $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
+    protected function getOtherProducts(array $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
         foreach($programProducts as $productID => $productName)
         {
