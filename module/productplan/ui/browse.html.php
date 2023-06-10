@@ -66,6 +66,7 @@ dtable
         set::recTotal($pager->recTotal),
         set::linkCreator(helper::createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
     ),
+    set::footer(jsRaw("function(){return window.footerGenerator.call(this, '{$summary}');}"))
 );
 
 render();

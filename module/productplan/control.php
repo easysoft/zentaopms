@@ -366,6 +366,8 @@ class productplan extends control
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
 
+        $plans = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
+
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
@@ -375,11 +377,12 @@ class productplan extends control
         $this->view->viewType         = $viewType;
         $this->view->orderBy          = $orderBy;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
+        $this->view->plans            = $plans;
         $this->view->pager            = $pager;
         $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch, '', 'noclosed', 'multiple');
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->view->queryID          = $queryID;
+        $this->view->summary          = $this->productplan->getSummary($plans);
         $this->display();
     }
 
