@@ -372,6 +372,7 @@ foreach($scenes as $scene)
 
 dtable
 (
+    set::customCols(true),
     set::userMap($users),
     set::cols(array_values($config->testcase->dtable->fieldList)),
     set::data(array_values($scenes)),
