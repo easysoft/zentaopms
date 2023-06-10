@@ -1363,47 +1363,39 @@ class repo extends control
     }
 
     /**
+     * 导入版本库。
      * Import repos.
      *
-     * @param int $server
+     * @param  int    $server
      * @access public
      * @return void
      */
-    public function import($server = 0)
+    public function import(int $server = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
+
         if($_POST)
         {
-            $this->repo->batchCreate();
+            $repos = $this->repoZen->prepareBatchCreate();
 
+            if($repos) $this->repo->batchCreate($repos, (int)$_POST['serviceHost']);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
         $gitlabList = $this->loadModel('gitlab')->getList();
         $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
 
-        $repoList = array();
-        if(!empty($gitlab))
-        {
-            $repoList      = $this->gitlab->apiGetProjects($gitlab->id);
-            $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
-                ->where('SCM')->eq(ucfirst($gitlab->type))
-                ->andWhere('serviceHost')->eq($gitlab->id)
-                ->fetchPairs();
-            foreach($repoList as $key => $repo)
-            {
-                if(isset($existRepoList[$repo->id])) unset($repoList[$key]);
-            }
-        }
+        $repoList = $this->repoZen->getGitlabNotExistRepos($gitlab);
 
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->view->gitlabPairs = $this->gitlab->getPairs();
-        $this->view->products = $products;
-        $this->view->projects = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->gitlab   = $gitlab;
-        $this->view->repoList = array_values($repoList);
+        $this->view->products    = $products;
+        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->gitlab      = $gitlab;
+        $this->view->repoList    = array_values($repoList);
         $this->display();
     }
 

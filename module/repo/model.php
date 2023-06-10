@@ -218,33 +218,19 @@ class repoModel extends model
     }
 
     /**
+     * 批量创建版本库。
      * Batch create repos.
      *
+     * @param  array  $repos
      * @access public
      * @return bool
      */
-    public function batchCreate()
+    public function batchCreate(array $repos, int $serviceHost): bool
     {
-        $repos = fixer::input('post')->get();
-
-        $dataAry = array();
-        foreach($repos as $key => $val)
-        {
-            if(strpos($key, 'serviceProject') === 0)
-            {
-                $i = substr($key, 14);
-                if(empty($repos->{'product' . $i})) dao::$errors['product' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->product);
-                if(empty($repos->{'name' . $i}))    dao::$errors['name' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
-
-                if(!empty($repos->{'product' . $i}) and !empty($repos->{'name' . $i})) $dataAry[] = array('serviceProject' => $repos->{'serviceProject' . $i}, 'product' => implode(',', $repos->{'product' . $i}), 'name' => $repos->{'name' . $i}, 'projects' => empty($repos->projects[$i]) ? '' : implode(',', $repos->projects[$i]));
-            }
-        }
-        if(dao::isError()) return false;
-
-        foreach($dataAry as $data)
+        foreach($repos as $data)
         {
             $repo = new stdclass();
-            $repo->serviceHost    = $repos->serviceHost;
+            $repo->serviceHost    = $serviceHost;
             $repo->serviceProject = $data['serviceProject'];
             $repo->product        = $data['product'];
             $repo->name           = $data['name'];
