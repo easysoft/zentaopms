@@ -838,15 +838,6 @@ ALTER TABLE `zt_meetingroom`
 CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `editedDate` `editedDate` datetime NULL;
 
-ALTER TABLE `zt_module`
-CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
-CHANGE `collector` `collector` text NULL,
-CHANGE `short` `short` varchar(30) NOT NULL DEFAULT '';
-
-ALTER TABLE `zt_mr`
-CHANGE `editedBy` `editedBy` varchar(30) NOT NULL DEFAULT '',
-CHANGE `editedDate` `editedDate` datetime NULL;
-
 ALTER TABLE `zt_nc`
 CHANGE `resolvedBy` `resolvedBy` varchar(30) NOT NULL DEFAULT '',
 CHANGE `resolution` `resolution` char(30) NOT NULL DEFAULT '',
@@ -2012,6 +2003,7 @@ CHANGE `contentType` `contentType` varchar(30) NOT NULL DEFAULT '';
 ALTER TABLE `zt_module`
 CHANGE `type` `type` char(30) NOT NULL DEFAULT '',
 CHANGE `owner` `owner` varchar(30) NOT NULL DEFAULT '',
+CHANGE `collector` `collector` text NULL,
 CHANGE `short` `short` varchar(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_mr`
