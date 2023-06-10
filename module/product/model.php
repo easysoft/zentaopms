@@ -1609,8 +1609,8 @@ class productModel extends model
      * Set menu.
      *
      * @param  int         $productID
-     * @param  string|int  $branch      all|''|int
-     * @param  string      $extra
+     * @param  string|int  $branch    all|''|int
+     * @param  string      $extra     requirement|story
      * @access public
      * @return void
      */
