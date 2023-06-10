@@ -15,7 +15,7 @@ class dtable extends wg
 
     protected function created()
     {
-        $this->setDefaultProps(array('id' => static::$dtableID ? static::$dtableID : 'dtable'));
+        $this->setDefaultProps(array('id' => static::$dtableID ? ('dtable' . static::$dtableID) : 'dtable'));
         static::$dtableID++;
 
         global $app;
