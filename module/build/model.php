@@ -807,52 +807,35 @@ class buildModel extends model
      *
      * @param  object $build
      * @param  string $type
-     * @param  string $extra
      * @access public
-     * @return string
+     * @return array 
      */
-    public function buildOperateMenu($build, $type = 'view', $extra = '')
+    public function buildOperateMenu(object $build, string $type = 'view'): array
     {
-        $extraParams = array();
-        if($extra) parse_str($extra, $extraParams);
-
-        $menu   = '';
+        $menu   = array();
         $params = "buildID=$build->id";
 
-        global $app;
-        $tab = $app->tab;
+        $canBeChanged = common::canBeChanged('build', $build);
+        if($build->deleted || !$canBeChanged) return $menu;
 
-        $module = $this->app->tab == 'project' ? 'projectbuild' : 'build';
-        if($type == 'browse')
+        if(common::hasPriv('build', 'edit', $build))
         {
-            $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;
-            $execution   = $this->loadModel('execution')->getByID($executionID);
-            $build->executionDeleted = $execution ? $execution->deleted : 0;
-
-            $testtaskApp = (!empty($execution->type) and $execution->type == 'kanban') ? 'data-app="qa"' : "data-app='{$tab}'";
-
-            if(common::hasPriv($module, 'linkstory') and common::canBeChanged('build', $build)) $menu .= $this->buildMenu($module, 'view', "{$params}&type=story&link=true", $build, $type, 'link', '', '', '', "data-app={$tab}", $this->lang->build->linkStory);
-
-            $title = ($execution and $execution->deleted === '1') ? $this->lang->build->notice->createTest : '';
-            $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp, $title);
-
-            if($tab == 'execution' and !empty($execution->type) and $execution->type != 'kanban') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&branchID=all&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
-            if($tab == 'project' or empty($execution->type) or $execution->type == 'kanban')      $menu .= $this->buildMenu($module, 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='$tab'", $this->lang->project->bug);
-
-            $menu .= $this->buildMenu($module, 'edit',   $params, $build, $type);
-            $menu .= $this->buildMenu($module, 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+            $menu[] = array(
+                'text'  => $this->lang->build->edit,
+                'icon'  => 'edit',
+                'url'   => helper::createLink('build', 'edit', $params),
+                'class' => 'btn ghost'
+            );
         }
-        else
+
+        if(common::hasPriv('build', 'delete', $build))
         {
-            $canBeChanged = common::canBeChanged('build', $build);
-            if($build->deleted || !$canBeChanged) return '';
-
-            $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
-
-            $editClickable   = $this->buildMenu($module, 'edit',   $params, $build, $type, '', '', '', '', '', '', false);
-            $deleteClickable = $this->buildMenu($module, 'delete', $params, $build, $type, '', '', '', '', '', '', false);
-            if(common::hasPriv($module, 'edit')   and $editClickable)   $menu .= html::a(helper::createLink($module, 'edit',   $params), "<i class='icon-common-edit icon-edit'></i> "    . $this->lang->edit,   '', "class='btn btn-link' title='{$this->lang->build->edit}' data-app='{$app->tab}'");
-            if(common::hasPriv($module, 'delete') and $deleteClickable) $menu .= html::a(helper::createLink($module, 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->build->delete}' target='hiddenwin' data-app='{$app->tab}'");
+            $menu[] = array(
+                'text'  => $this->lang->build->delete,
+                'icon'  => 'trash',
+                'url'   => "javascript:confirmDelete('{$build->id}')",
+                'class' => 'btn ghost'
+            );
         }
 
         return $menu;
