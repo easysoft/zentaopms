@@ -22,6 +22,12 @@ $footToolbar = array('items' => array
     array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('testcase', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('testcase', 'batchEdit', 'productID=0&branch=all&type=case&tab=my'))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
+if($type == 'openedbyme')
+{
+    unset($config->my->testcase->dtable->fieldList['testtask']);
+    unset($config->my->testcase->dtable->fieldList['openedBy']);
+}
+
 $cases = initTableData($cases, $config->my->testcase->dtable->fieldList, $this->testcase);
 $cols  = array_values($config->my->testcase->dtable->fieldList);
 $data  = array_values($cases);
