@@ -298,13 +298,14 @@ class branchModel extends model
     }
 
     /**
+     * 关闭一个分支。
      * Close a branch.
      *
      * @param  int    $branchID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function close($branchID)
+    public function close(int $branchID): bool
     {
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('closed')
@@ -312,22 +313,25 @@ class branchModel extends model
             ->set('`default`')->eq('0')
             ->where('id')->eq($branchID)
             ->exec();
+        return !dao::isError();
     }
 
     /**
+     * 激活一个分支。
      * Activate a branch.
      *
      * @param  int    $branchID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function activate($branchID)
+    public function activate(int $branchID): bool
     {
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('active')
-            ->set('closedDate')->eq('')
+            ->set('closedDate')->eq(null)
             ->where('id')->eq($branchID)
             ->exec();
+        return !dao::isError();
     }
 
     /**
@@ -798,6 +802,10 @@ class branchModel extends model
      */
     public static function isClickable($branch, $action)
     {
+        if(!$branch->id) return false;
+        if($branch->status == 'active' && $action == 'activate') return false;
+        if($branch->status == 'closed' && $action == 'close')    return false;
+
         return true;
     }
 }
