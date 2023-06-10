@@ -16,10 +16,12 @@ $testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersi
 jsVar('testcaseTitle', $testcaseTitle);
 jsVar('testcaseLink', $testcaseLink);
 
+$linkParam = 'type={key}';
+if($app->rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 featurebar
 (
     set::current($type),
-    set::linkParam("type=$type"),
+    set::linkParams($linkParam),
     li(searchToggle()),
 );
 
