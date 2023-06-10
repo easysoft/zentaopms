@@ -361,6 +361,7 @@ foreach($scenes as $scene)
     $actionType = $scene->isCase == 1 ? 'testcase' : 'scene';
     $config->testcase->dtable->fieldList['actions']['menu'] = $config->$actionType->menu;
 
+    $scene->browseType = $browseType;
     initTableData(array($scene), $config->testcase->dtable->fieldList, $this->testcase);
 
     if($scene->isCase != 1) continue;
