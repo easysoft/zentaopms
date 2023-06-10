@@ -9,7 +9,7 @@ $config->story->dtable->fieldList['id']['fixed']        = 'left';
 $config->story->dtable->fieldList['id']['width']        = '80';
 $config->story->dtable->fieldList['id']['required']     = 'yes';
 $config->story->dtable->fieldList['id']['type']         = 'id';
-$config->story->dtable->fieldList['id']['group']        = 'group1';
+$config->story->dtable->fieldList['id']['group']        = 1;
 $config->story->dtable->fieldList['id']['sortType']     = true;
 $config->story->dtable->fieldList['id']['nestedToggle'] = true;
 $config->story->dtable->fieldList['id']['checkbox']     = true;
@@ -30,7 +30,7 @@ $config->story->dtable->fieldList['title']['link']         = 'RAWJS<function(inf
 $config->story->dtable->fieldList['title']['fixed']        = 'left';
 $config->story->dtable->fieldList['title']['width']        = '342';
 $config->story->dtable->fieldList['title']['required']     = 'yes';
-$config->story->dtable->fieldList['title']['group']        = 'group1';
+$config->story->dtable->fieldList['title']['group']        = 1;
 $config->story->dtable->fieldList['title']['sortType']     = true;
 $config->story->dtable->fieldList['title']['nestedToggle'] = true;
 
@@ -40,7 +40,7 @@ $config->story->dtable->fieldList['pri']['width']    = '52';
 $config->story->dtable->fieldList['pri']['required'] = 'no';
 $config->story->dtable->fieldList['pri']['name']     = $this->lang->story->pri;
 $config->story->dtable->fieldList['pri']['type']     = 'pri';
-$config->story->dtable->fieldList['pri']['group']    = 'group2';
+$config->story->dtable->fieldList['pri']['group']    = 2;
 
 $config->story->dtable->fieldList['plan']['title']      = 'planAB';
 $config->story->dtable->fieldList['plan']['fixed']      = 'no';
@@ -48,13 +48,13 @@ $config->story->dtable->fieldList['plan']['width']      = '136';
 $config->story->dtable->fieldList['plan']['required']   = 'no';
 $config->story->dtable->fieldList['plan']['control']    = 'select';
 $config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
-$config->story->dtable->fieldList['plan']['group']      = 'group3';
+$config->story->dtable->fieldList['plan']['group']      = 3;
 
 $config->story->dtable->fieldList['category']['title']    = 'category';
 $config->story->dtable->fieldList['category']['fixed']    = 'no';
 $config->story->dtable->fieldList['category']['width']    = '60';
 $config->story->dtable->fieldList['category']['required'] = 'no';
-$config->story->dtable->fieldList['category']['group']    = 'group3';
+$config->story->dtable->fieldList['category']['group']    = 3;
 
 $config->story->dtable->fieldList['status']['title']     = 'statusAB';
 $config->story->dtable->fieldList['status']['fixed']     = 'no';
@@ -62,7 +62,7 @@ $config->story->dtable->fieldList['status']['width']     = '80';
 $config->story->dtable->fieldList['status']['required']  = 'no';
 $config->story->dtable->fieldList['status']['type']      = 'status';
 $config->story->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
-$config->story->dtable->fieldList['status']['group']     = 'group3';
+$config->story->dtable->fieldList['status']['group']     = 3;
 
 $config->story->dtable->fieldList['branch']['title']      = 'branch';
 $config->story->dtable->fieldList['branch']['fixed']      = 'no';
@@ -70,32 +70,32 @@ $config->story->dtable->fieldList['branch']['width']      = '100';
 $config->story->dtable->fieldList['branch']['required']   = 'no';
 $config->story->dtable->fieldList['branch']['control']    = 'select';
 $config->story->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
-$config->story->dtable->fieldList['branch']['group']      = 'group3';
+$config->story->dtable->fieldList['branch']['group']      = 3;
 
 $config->story->dtable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->story->dtable->fieldList['openedBy']['type']     = 'user';
 $config->story->dtable->fieldList['openedBy']['fixed']    = 'no';
 $config->story->dtable->fieldList['openedBy']['width']    = '80';
 $config->story->dtable->fieldList['openedBy']['required'] = 'no';
-$config->story->dtable->fieldList['openedBy']['group']    = 'group4';
+$config->story->dtable->fieldList['openedBy']['group']    = 4;
 
 $config->story->dtable->fieldList['openedDate']['title']    = 'openedDate';
 $config->story->dtable->fieldList['openedDate']['fixed']    = 'no';
 $config->story->dtable->fieldList['openedDate']['width']    = '90';
 $config->story->dtable->fieldList['openedDate']['required'] = 'no';
-$config->story->dtable->fieldList['openedDate']['group']    = 'group4';
+$config->story->dtable->fieldList['openedDate']['group']    = 4;
 
 $config->story->dtable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->dtable->fieldList['estimate']['fixed']    = 'no';
 $config->story->dtable->fieldList['estimate']['width']    = '59';
 $config->story->dtable->fieldList['estimate']['required'] = 'no';
-$config->story->dtable->fieldList['estimate']['group']    = 'group4';
+$config->story->dtable->fieldList['estimate']['group']    = 4;
 
 $config->story->dtable->fieldList['reviewer']['title']      = 'reviewer';
 $config->story->dtable->fieldList['reviewer']['control']    = 'multiple';
 $config->story->dtable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
 $config->story->dtable->fieldList['reviewer']['type']       = 'user';
-$config->story->dtable->fieldList['reviewer']['group']      = 'group4';
+$config->story->dtable->fieldList['reviewer']['group']      = 4;
 
 $config->story->dtable->fieldList['reviewedBy']['title']      = 'reviewedBy';
 $config->story->dtable->fieldList['reviewedBy']['fixed']      = 'no';
@@ -104,13 +104,13 @@ $config->story->dtable->fieldList['reviewedBy']['required']   = 'no';
 $config->story->dtable->fieldList['reviewedBy']['control']    = 'multiple';
 $config->story->dtable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
 $config->story->dtable->fieldList['reviewedBy']['type']       = 'user';
-$config->story->dtable->fieldList['reviewedBy']['group']      = 'group4';
+$config->story->dtable->fieldList['reviewedBy']['group']      = 4;
 
 $config->story->dtable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->dtable->fieldList['reviewedDate']['fixed']    = 'no';
 $config->story->dtable->fieldList['reviewedDate']['width']    = '90';
 $config->story->dtable->fieldList['reviewedDate']['required'] = 'no';
-$config->story->dtable->fieldList['reviewedDate']['group']    = 'group4';
+$config->story->dtable->fieldList['reviewedDate']['group']    = 4;
 
 $config->story->dtable->fieldList['stage']['title']     = 'stageAB';
 $config->story->dtable->fieldList['stage']['fixed']     = 'no';
@@ -118,20 +118,20 @@ $config->story->dtable->fieldList['stage']['width']     = '85';
 $config->story->dtable->fieldList['stage']['required']  = 'no';
 $config->story->dtable->fieldList['stage']['type']      = 'status';
 $config->story->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList;
-$config->story->dtable->fieldList['stage']['group']     = 'group5';
+$config->story->dtable->fieldList['stage']['group']     = 5;
 
 $config->story->dtable->fieldList['assignedTo']['title']    = 'assignedTo';
 $config->story->dtable->fieldList['assignedTo']['fixed']    = 'no';
 $config->story->dtable->fieldList['assignedTo']['width']    = '90';
 $config->story->dtable->fieldList['assignedTo']['required'] = 'no';
 $config->story->dtable->fieldList['assignedTo']['type']     = 'assign';
-$config->story->dtable->fieldList['assignedTo']['group']    = 'group5';
+$config->story->dtable->fieldList['assignedTo']['group']    = 5;
 
 $config->story->dtable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->story->dtable->fieldList['assignedDate']['fixed']    = 'no';
 $config->story->dtable->fieldList['assignedDate']['width']    = '90';
 $config->story->dtable->fieldList['assignedDate']['required'] = 'no';
-$config->story->dtable->fieldList['assignedDate']['group']    = 'group5';
+$config->story->dtable->fieldList['assignedDate']['group']    = 5;
 
 $config->story->dtable->fieldList['product']['title']      = 'product';
 $config->story->dtable->fieldList['product']['control']    = 'hidden';
@@ -151,7 +151,7 @@ $config->story->dtable->fieldList['taskCount']['width']    = '30';
 $config->story->dtable->fieldList['taskCount']['required'] = 'no';
 $config->story->dtable->fieldList['taskCount']['sort']     = 'no';
 $config->story->dtable->fieldList['taskCount']['name']     = $lang->story->taskCount;
-$config->story->dtable->fieldList['taskCount']['group']    = 'group6';
+$config->story->dtable->fieldList['taskCount']['group']    = 6;
 
 $config->story->dtable->fieldList['bugCount']['title']    = 'B';
 $config->story->dtable->fieldList['bugCount']['fixed']    = 'no';
@@ -159,7 +159,7 @@ $config->story->dtable->fieldList['bugCount']['width']    = '30';
 $config->story->dtable->fieldList['bugCount']['required'] = 'no';
 $config->story->dtable->fieldList['bugCount']['sort']     = 'no';
 $config->story->dtable->fieldList['bugCount']['name']     = $lang->story->bugCount;
-$config->story->dtable->fieldList['bugCount']['group']    = 'group6';
+$config->story->dtable->fieldList['bugCount']['group']    = 6;
 
 $config->story->dtable->fieldList['caseCount']['title']    = 'C';
 $config->story->dtable->fieldList['caseCount']['fixed']    = 'no';
@@ -167,7 +167,7 @@ $config->story->dtable->fieldList['caseCount']['width']    = '30';
 $config->story->dtable->fieldList['caseCount']['required'] = 'no';
 $config->story->dtable->fieldList['caseCount']['sort']     = 'no';
 $config->story->dtable->fieldList['caseCount']['name']     = $lang->story->caseCount;
-$config->story->dtable->fieldList['caseCount']['group']    = 'group6';
+$config->story->dtable->fieldList['caseCount']['group']    = 6;
 
 $config->story->dtable->fieldList['URS']['title']    = 'UR';
 $config->story->dtable->fieldList['URS']['fixed']    = 'no';
@@ -175,86 +175,86 @@ $config->story->dtable->fieldList['URS']['width']    = '30';
 $config->story->dtable->fieldList['URS']['required'] = 'no';
 $config->story->dtable->fieldList['URS']['sort']     = 'no';
 $config->story->dtable->fieldList['URS']['name']     = $lang->URCommon;
-$config->story->dtable->fieldList['URS']['group']    = 'group6';
+$config->story->dtable->fieldList['URS']['group']    = 6;
 
 
 $config->story->dtable->fieldList['closedBy']['title']    = 'closedBy';
 $config->story->dtable->fieldList['closedBy']['fixed']    = 'no';
 $config->story->dtable->fieldList['closedBy']['width']    = '80';
 $config->story->dtable->fieldList['closedBy']['required'] = 'no';
-$config->story->dtable->fieldList['closedBy']['group']    = 'group7';
+$config->story->dtable->fieldList['closedBy']['group']    = 7;
 
 $config->story->dtable->fieldList['closedDate']['title']    = 'closedDate';
 $config->story->dtable->fieldList['closedDate']['fixed']    = 'no';
 $config->story->dtable->fieldList['closedDate']['width']    = '90';
 $config->story->dtable->fieldList['closedDate']['required'] = 'no';
-$config->story->dtable->fieldList['closedDate']['group']    = 'group7';
+$config->story->dtable->fieldList['closedDate']['group']    = 7;
 
 $config->story->dtable->fieldList['closedReason']['title']    = 'closedReason';
 $config->story->dtable->fieldList['closedReason']['fixed']    = 'no';
 $config->story->dtable->fieldList['closedReason']['width']    = '90';
 $config->story->dtable->fieldList['closedReason']['required'] = 'no';
-$config->story->dtable->fieldList['closedReason']['group']    = 'group7';
+$config->story->dtable->fieldList['closedReason']['group']    = 7;
 
 $config->story->dtable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->story->dtable->fieldList['lastEditedBy']['fixed']    = 'no';
 $config->story->dtable->fieldList['lastEditedBy']['width']    = '80';
 $config->story->dtable->fieldList['lastEditedBy']['required'] = 'no';
-$config->story->dtable->fieldList['lastEditedBy']['group']    = 'group8';
+$config->story->dtable->fieldList['lastEditedBy']['group']    = 8;
 
 $config->story->dtable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
 $config->story->dtable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->story->dtable->fieldList['lastEditedDate']['width']    = '90';
 $config->story->dtable->fieldList['lastEditedDate']['required'] = 'no';
-$config->story->dtable->fieldList['lastEditedDate']['group']    = 'group8';
+$config->story->dtable->fieldList['lastEditedDate']['group']    = 8;
 
 $config->story->dtable->fieldList['keywords']['title']    = 'keywords';
 $config->story->dtable->fieldList['keywords']['fixed']    = 'no';
 $config->story->dtable->fieldList['keywords']['width']    = '100';
 $config->story->dtable->fieldList['keywords']['required'] = 'no';
-$config->story->dtable->fieldList['keywords']['group']    = 'group9';
+$config->story->dtable->fieldList['keywords']['group']    = 9;
 
 $config->story->dtable->fieldList['source']['title']    = 'source';
 $config->story->dtable->fieldList['source']['fixed']    = 'no';
 $config->story->dtable->fieldList['source']['width']    = '90';
 $config->story->dtable->fieldList['source']['required'] = 'no';
-$config->story->dtable->fieldList['source']['group']    = 'group9';
+$config->story->dtable->fieldList['source']['group']    = 9;
 
 $config->story->dtable->fieldList['sourceNote']['title']    = 'sourceNote';
 $config->story->dtable->fieldList['sourceNote']['fixed']    = 'no';
 $config->story->dtable->fieldList['sourceNote']['width']    = '90';
 $config->story->dtable->fieldList['sourceNote']['required'] = 'no';
-$config->story->dtable->fieldList['sourceNote']['group']    = 'group9';
+$config->story->dtable->fieldList['sourceNote']['group']    = 9;
 
 $config->story->dtable->fieldList['feedbackBy']['title']    = 'feedbackBy';
 $config->story->dtable->fieldList['feedbackBy']['fixed']    = 'no';
 $config->story->dtable->fieldList['feedbackBy']['width']    = '100';
 $config->story->dtable->fieldList['feedbackBy']['required'] = 'no';
-$config->story->dtable->fieldList['feedbackBy']['group']    = 'group9';
+$config->story->dtable->fieldList['feedbackBy']['group']    = 9;
 
 $config->story->dtable->fieldList['activatedDate']['title']    = 'activatedDate';
 $config->story->dtable->fieldList['activatedDate']['fixed']    = 'no';
 $config->story->dtable->fieldList['activatedDate']['width']    = '90';
 $config->story->dtable->fieldList['activatedDate']['required'] = 'no';
-$config->story->dtable->fieldList['activatedDate']['group']    = 'group10';
+$config->story->dtable->fieldList['activatedDate']['group']    = 10;
 
 $config->story->dtable->fieldList['notifyEmail']['title']    = 'notifyEmail';
 $config->story->dtable->fieldList['notifyEmail']['fixed']    = 'no';
 $config->story->dtable->fieldList['notifyEmail']['width']    = '100';
 $config->story->dtable->fieldList['notifyEmail']['required'] = 'no';
-$config->story->dtable->fieldList['notifyEmail']['group']    = 'group10';
+$config->story->dtable->fieldList['notifyEmail']['group']    = 10;
 
 $config->story->dtable->fieldList['mailto']['title']    = 'mailto';
 $config->story->dtable->fieldList['mailto']['fixed']    = 'no';
 $config->story->dtable->fieldList['mailto']['width']    = '100';
 $config->story->dtable->fieldList['mailto']['required'] = 'no';
-$config->story->dtable->fieldList['mailto']['group']    = 'group10';
+$config->story->dtable->fieldList['mailto']['group']    = 10;
 
 $config->story->dtable->fieldList['version']['title']    = 'version';
 $config->story->dtable->fieldList['version']['fixed']    = 'no';
 $config->story->dtable->fieldList['version']['width']    = '60';
 $config->story->dtable->fieldList['version']['required'] = 'no';
-$config->story->dtable->fieldList['version']['group']    = 'group10';
+$config->story->dtable->fieldList['version']['group']    = 10;
 
 $config->story->dtable->fieldList['actions']['title']    = 'actions';
 $config->story->dtable->fieldList['actions']['fixed']    = 'right';
