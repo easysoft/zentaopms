@@ -137,53 +137,37 @@ class branch extends control
     }
 
     /**
+     * 关闭分支。
      * Close a branch.
      *
      * @param  int    $branchID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function close($branchID, $confirm = 'no')
+    public function close(int $branchID)
     {
-        $this->app->loadLang('product');
-        $productType = $this->branch->getProductType($branchID);
-
-        if($confirm == 'no')
-        {
-            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmClose), inlink('close', "branchID=$branchID&confirm=yes")));
-        }
-
         $this->branch->close($branchID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->sendError(dao::getError());
 
         $this->loadModel('action')->create('branch', $branchID, 'Closed');
-        return print(js::reload('parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
+     * 激活分支。
      * Activate a branch.
      *
      * @param  int    $branchID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function activate($branchID, $confirm = 'no')
+    public function activate(int $branchID)
     {
-        $this->app->loadLang('product');
-        $productType = $this->branch->getProductType($branchID);
-
-        if($confirm == 'no')
-        {
-            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmActivate), inlink('activate', "branchID=$branchID&confirm=yes")));
-        }
-
         $this->branch->activate($branchID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->sendError(dao::getError());
 
         $this->loadModel('action')->create('branch', $branchID, 'Activated');
-        return print(js::reload('parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
