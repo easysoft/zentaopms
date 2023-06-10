@@ -894,7 +894,9 @@ class execution extends control
         $this->view->title             = $title;
         $this->view->position          = $position;
         $this->view->productID         = $productID;
+        $this->view->product           = $this->product->getById($productID);
         $this->view->execution         = $execution;
+        $this->view->executionID       = $executionID;
         $this->view->stories           = $stories;
         $this->view->linkedTaskStories = $this->story->getIdListWithTask($executionID);
         $this->view->allPlans          = $allPlans;
