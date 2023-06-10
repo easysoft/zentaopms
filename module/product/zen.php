@@ -792,7 +792,7 @@ class productZen extends product
             return;
         }
 
-        $this->product->setMenu($productID, $branch, "storyType=$storyType");
+        $this->product->setMenu($productID, $branch, $storyType);
     }
 
     /**
