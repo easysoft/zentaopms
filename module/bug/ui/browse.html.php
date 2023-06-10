@@ -13,10 +13,12 @@ namespace zin;
 jsVar('productID', $product->id);
 jsVar('branch',    $branch);
 
+$queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
 featureBar
 (
-    set::current($browseType),
+    set::current($browseType == 'bysearch' ? $param : $browseType),
     set::linkParams("product=$product->id&branch=$branch&browseType={key}"),
+    set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
     li(searchToggle())
 );
 

@@ -58,14 +58,15 @@ class featureBar extends wg
             $isActive = $item->name == $current;
 
             $moreSelects = array();
-            if($item->name == 'more' && !empty($lang->$currentModule->moreSelects))    $moreSelects = $lang->$currentModule->moreSelects;
+            if($item->name == 'more'  && !empty($lang->$currentModule->moreSelects))   $moreSelects = $lang->$currentModule->moreSelects;
             if(isset($lang->$currentModule->moreSelects[$currentMethod][$item->name])) $moreSelects = $lang->$currentModule->moreSelects[$currentMethod][$item->name];
+            if($item->name == 'QUERY' && !empty($lang->custom->queryList))             $moreSelects = $lang->custom->queryList;
             if(!empty($moreSelects))
             {
                 $activeText = $item->text;
 
                 $subItems = array();
-                $callback = $this->prop('moreMenuLinkCallback');
+                $callback = $this->prop($item->name == 'more' ? 'moreMenuLinkCallback' : 'queryMenuLinkCallback');
                 $callback = isset($callback[0]) ? $callback[0] : null;
 
                 foreach($moreSelects as $key => $text)
@@ -98,7 +99,6 @@ class featureBar extends wg
 
                 continue;
             }
-
 
             $items[] = array
             (
