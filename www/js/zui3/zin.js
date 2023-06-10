@@ -68,11 +68,11 @@
         html:          updatePageWithHtml,
         body:          (data) => $('body').html(data),
         title:         (data) => document.title = data,
-        'main':        (data) => $('#main').html(data),
-        'featureBar':  (data) => $('#featureBar').html(data),
-        'pageCSS':     (data) => $('#pageCSS').html(data),
-        'configJS':    (data) => $('#configJS')[0].text = data,
-        'pageJS':      (data) => $('#pageJS').replaceWith(data),
+        main:          (data) => $('#main').html(data),
+        featureBar:    (data) => $('#featureBar').html(data),
+        pageCSS:       (data) => $('#pageCSS').html(data),
+        configJS:      (data) => $('#configJS')[0].text = data,
+        pageJS:        (data) => $('#pageJS').replaceWith(data),
         activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    activeNav,
         table:         updateTable,
@@ -80,6 +80,11 @@
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
         zinErrors:     (data, _info, options) => showErrors(data, options.id === 'page'),
     };
+
+    function registerRender(name, callback)
+    {
+        renderMap[name] = callback;
+    }
 
     function showFatalError(data, _info, options)
     {
@@ -233,10 +238,10 @@
      * @param {Object} options
      * @param {string} options.id
      * @param {string} options.url
-     * @param {string} options.selectors
+     * @param {string} options.selector
      * @param {string} [options.target]
      * @param {string} [options.method]
-     * @param {string} [options.data]
+     * @param {FormData|Form|Record<string, unknown>} [options.data]
      * @param {{selector: string, type: string}} [options.zinOptions]
      * @param {function} [options.success]
      * @param {function} [options.error]
@@ -246,7 +251,7 @@
     function requestContent(options, onFinish)
     {
         const target    = options.target || '#main';
-        const selectors = Array.isArray(options.selectors) ? options.selectors : options.selectors.split(',');
+        const selectors = Array.isArray(options.selector) ? options.selector : options.selector.split(',');
         const url       = options.url;
 
         if(DEBUG) console.log('[APP]', 'request', options);
@@ -301,7 +306,7 @@
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {xhr, type, error});;
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {xhr, type, error});
                 zui.Messager.show('ZIN: Fetch data failed from ' + url);
-                if(options.error) options.error(data);
+                if(options.error) options.error(data, error);
                 if(onFinish) onFinish(error);
             },
             complete: () =>
@@ -320,7 +325,7 @@
         {
             options = url;
             url = options.url;
-            selectors = options.selectors;
+            selectors = options.selector;
         }
         if(typeof options === 'string') options = {id: options};
         else if(typeof options === 'function') options = {success: options};
@@ -351,43 +356,72 @@
         }, options.delayTime || 0);
     }
 
-    function loadTable(url, id, options)
+    /**
+     * Load page with zin way.
+     *
+     * @param {Object}   [options]
+     * @param {string}   [options.url]
+     * @param {string}   [options.selector]
+     * @param {string}   [options.id]
+     * @param {string}   [options.method]
+     * @param {FormData|Form|Record<string, unknown>} [options.data]
+     * @param {string}   [options.target]
+     * @param {function} [options.success]
+     * @param {function} [options.error]
+     * @param {function} [options.complete]
+     * @param {string}   [selector]
+     * @returns {void}
+     */
+    function loadPage(options, selector)
     {
-        url = url || currentAppUrl;
-        id  = id || $('.dtable').attr('id') || 'dtable';
-        if(!id) return;
+        if(typeof options === 'string') options = {url: options};
+        else if(!options) options = {};
+        if(typeof selector === 'string') options.selector = selector;
 
-        fetchContent(url, 'table/#' + id + ':type=json&data=props,#featureBar>*', $.extend({id: '#' + id, target: '#' + id}, options));
-    }
-
-    function loadPage(url, selector, id, options)
-    {
-        if(selector === 'table') return loadTable(url, id, options);
-
-        url = url || currentAppUrl;
-        if (!selector && url.includes(' '))
+        if (!options.selector && options.url.includes(' '))
         {
             const parts = url.split(' ', 2);
-            url      = parts[0];
-            selector = parts[1];
+            options.url      = parts[0];
+            options.selector = parts[1];
         }
-        if(DEBUG) console.log('[APP] ', 'load:', url);
-        id = id || selector || 'page';
-        if(!selector)
+
+        options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
+        if(!options.selector) options.selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
+        if(!options.id) options.id = options.selector || 'page';
+
+        if(DEBUG) console.log('[APP] ', 'load:', options.url);
+        fetchContent(options.url, options.selector, options);
+    }
+
+    /**
+     * Load dtable content.
+     *
+     * @param {string} [url]
+     * @param {string} [id]
+     * @param {Object} [options]
+     * @returns
+     */
+    function loadTable(url, id, options)
+    {
+        id  = id || $('.dtable').attr('id') || 'dtable';
+        loadPage($.extend(
         {
-            selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
-        }
-        fetchContent(url, selector, $.extend({id: id}, options));
+            url: url,
+            id: '#' + id,
+            target: '#' + id,
+            selector: 'table/#' + id + ':type=json&data=props,#featureBar>*'
+        }, options));
     }
 
-    function postAndLoadPage(url, data, selector, id, options)
+    function postAndLoadPage(url, data, selector, options)
     {
-        loadPage(url, selector, id, $.extend({method: 'POST', data, contentType: false}, options));
+        loadPage($.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options));
     }
 
-    function loadCurrentPage(selector)
+    function loadCurrentPage(options)
     {
-        return loadPage(currentAppUrl, selector);
+        if(typeof options === 'string') options = {selector: options};
+        return loadPage(options);
     }
 
     function openPage(url, appCode)
@@ -432,8 +466,15 @@
 
         if(typeof options.load === 'string')
         {
-            if(options.id) delete options.id;
-            return loadPage(url, options.load, options.loadId, options);
+            if(options.id)     delete options.id;
+            if(url)            options.url = url;
+            if(options.loadId) {options.id = options.loadId; delete options.loadId;}
+            if(options.load)
+            {
+                if(options.load === 'table') return loadTable(options.url, options.id, options);
+                options.selector = options.load; delete options.load;
+            }
+            return loadPage(options);
         }
 
         let back = options.back;
@@ -548,7 +589,7 @@
         return result;
     }
 
-    $.extend(window, {fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: $.apps.goBack});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: $.apps.goBack});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
