@@ -43,8 +43,9 @@ $(function()
 
 window.renderCustomCell = function(result, {col, row})
 {
-    if(!col || !row || (col.name != 'PM' && col.name != 'status')) return result;
+    if(!col || !row) return result;
 
+    if(col.name == 'end')    result = [row.data.end];
     if(col.name == 'status') result = [row.data.statusTitle];
     if(col.name == 'PM')     result = ["<a href='" + col.setting.link.replace('{PMUserID}', row.data.PMUserID) + "' data-toggle='modal'>" + row.data.PM + "</a>"];
     return result;

@@ -107,7 +107,7 @@ foreach($config->productProject->showFields as $showField)
     {
         $cols[$showField]['name']  = 'programName';
         $cols[$showField]['fixed'] = 'left';
-        $cols[$showField]['width'] = '150';
+        $cols[$showField]['width'] = '120';
         $cols[$showField]['title'] = $lang->project->program;
     }
     $cols[$showField]['sortType'] = false;
@@ -149,6 +149,7 @@ foreach($projectStats as $project)
     $project->estimate    = $project->hours->totalEstimate . $lang->execution->workHourUnit;
     $project->consume     = $project->hours->totalConsumed . $lang->execution->workHourUnit;
     $project->progress    = $project->hours->progress;
+    $project->end         = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
     if($project->PM)
     {
         $user = zget($PMList, $project->PM, '');
