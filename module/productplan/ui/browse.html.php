@@ -34,8 +34,21 @@ $data = array_values($plans);
 $footToolbar = array('items' => array
 (
     array('text' => $lang->edit, 'btnType' => 'secondary', 'data-url' => createLink('productplan', 'batchEdit', "productID={$product->id}&branch=$branch")),
-    array('caret' => 'up', 'text' => $lang->productplan->status, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->productplan->status, 'btnType' => 'secondary', 'url' => '#statusActions','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
 ));
+
+$statusItems = array();
+foreach($lang->productplan->statusList as $status => $statusLang)
+{
+    $statusItems[] = array('text' => $statusLang, 'class' => 'batch-btn', 'data-url' => helper::createLink('productplan', 'batchChangeStatus', "status={$status}&productID={$productID}"));
+}
+
+menu
+(
+    set::id('statusActions'),
+    set::class('menu dropdown-menu'),
+    set::items($statusItems),
+);
 
 dtable
 (
