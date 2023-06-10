@@ -789,7 +789,25 @@ class baseControl
         $this->app->setControlFile();
 
         if(!is_array($params)) parse_str($params, $params);
-        $this->app->params = $params;
+        $this->app->setParams();
+
+        /*
+         * 设置要fetch的方法的参数类型。
+         * Set fetch method param type.
+         */
+        $paramKeys   = array_keys($this->app->params);
+        $keyIndex    = 0;
+        $fetchParams = array();
+        foreach($params as $param => $value)
+        {
+            if(empty($paramKeys[$keyIndex])) break;
+
+            $paramKey = $paramKeys[$keyIndex];
+            settype($value, gettype($this->app->params[$paramKey]));
+
+            $fetchParams[] = $value;
+            $keyIndex ++;
+        }
 
         $currentPWD = getcwd();
 
@@ -876,7 +894,7 @@ class baseControl
          * Call the method and use ob function to get the output.
          */
         ob_start();
-        call_user_func_array(array($module, $methodName), array_values($params));
+        call_user_func_array(array($module, $methodName), $fetchParams);
         $output = ob_get_contents();
         ob_end_clean();
 
