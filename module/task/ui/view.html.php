@@ -23,7 +23,6 @@ foreach($config->task->view->operateList['main'] as $operate)
 {
     if(!common::hasPriv('task', $operate)) continue;
     if(!$this->task->isClickable($task, $operate)) continue;
-    if($operate == 'batchCreate' && (!empty($task->team) || !empty($task->children))) continue;
 
     $operateMenus[] = $config->task->actionList[$operate];
 }
@@ -48,7 +47,8 @@ detailBody
         section
         (
             set::title($lang->task->legendDesc),
-            set::content(empty($task->desc) ? $lang->noData : $task->desc)
+            set::content(empty($task->desc) ? $lang->noData : $task->desc),
+            set::useHtml(true)
         ),
         section
         (
