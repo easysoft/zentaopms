@@ -374,7 +374,7 @@ dtable
 (
     set::customCols(true),
     set::userMap($users),
-    set::cols(array_values($config->testcase->dtable->fieldList)),
+    set::cols($config->testcase->dtable->fieldList),
     set::data(array_values($scenes)),
     set::checkable($canBatchAction),
     set::canRowCheckable(jsRaw('function(rowID){const row = this.getRowInfo(rowID); return row && row.data.isCase == 1;}')),
