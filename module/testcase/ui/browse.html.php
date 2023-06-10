@@ -361,7 +361,8 @@ $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->ses
 $url         = $config->testcase->dtable->fieldList['actions']['list']['edit']['url'];
 $url         = str_replace('%executionID%', (string)$executionID, $url);
 
-$config->testcase->dtable->fieldList['story']['map'] = $stories;
+$config->testcase->dtable->fieldList['title']['nestedToggle'] = $topSceneCount > 0;
+$config->testcase->dtable->fieldList['story']['map']          = $stories;
 $config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = $url;
 
 foreach($scenes as $scene)
