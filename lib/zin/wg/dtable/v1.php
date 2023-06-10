@@ -18,9 +18,9 @@ class dtable extends wg
         $this->setDefaultProps(array('id' => static::$dtableID ? static::$dtableID : 'dtable'));
         static::$dtableID++;
 
+        global $app;
         if($this->prop('customCols') === true)
         {
-            global $app;
             $app->loadLang('datatable');
             $this->setProp('customCols', array('url' => createLink('datatable', 'ajaxcustom', "module=$app->rawModule&method=$app->rawMethod"), 'hint' => $app->lang->datatable->custom));
         }
