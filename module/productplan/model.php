@@ -1405,4 +1405,25 @@ class productplanModel extends model
 
         return $plans;
     }
+
+    /**
+     * Get the total count of parent plan, child plan and indepentdent plan.
+     *
+     * @param  array  $planList
+     * @access public
+     * @return string
+     */
+    public function getSummary(array $planList): string
+    {
+        $totalParent = $totalChild = $totalIndependent = 0;
+
+        foreach($planList as $plan)
+        {
+            if($plan->parent == -1) $totalParent ++;
+            if($plan->parent > 0)   $totalChild ++;
+            if($plan->parent == 0)  $totalIndependent ++;
+        }
+
+        return sprintf($this->lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
+    }
 }
