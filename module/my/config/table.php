@@ -504,7 +504,7 @@ $config->my->testcase->dtable->fieldList['id']['fixed'] = 'left';
 $config->my->testcase->dtable->fieldList['title']['name']  = 'title';
 $config->my->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
 $config->my->testcase->dtable->fieldList['title']['type']  = 'title';
-$config->my->testcase->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', 'testcaseID={id}&version={version}');
+$config->my->testcase->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', 'caseID={id}&version={version}');
 $config->my->testcase->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->my->testcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];

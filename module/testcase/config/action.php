@@ -41,6 +41,11 @@ $config->testcase->actionList['create']['text'] = $lang->testcase->copy;
 $config->testcase->actionList['create']['hint'] = $lang->testcase->copy;
 $config->testcase->actionList['create']['url']  = helper::createLink('testcase', 'create', 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={id}');
 
+$config->testcase->actionList['unlinkCase']['icon'] = 'unlink';
+$config->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
+$config->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
+$config->testcase->actionList['unlinkCase']['url']  = helper::createLink('testtask', 'unlinkCase', 'caseID={id}&confirm=yes');
+
 $config->testcase->actionList['showScript']['icon'] = 'file-code';
 $config->testcase->actionList['showScript']['text'] = $lang->testcase->showScript;
 $config->testcase->actionList['showScript']['hint'] = $lang->testcase->showScript;

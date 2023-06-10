@@ -1,5 +1,8 @@
 <?php
-global $lang;
+global $lang, $app;
+$app->loadLang('testcase');
+$app->loadModuleConfig('testcase');
+
 $config->testtask->actionList = array();
 $config->testtask->actionList['start']['icon'] = 'play';
 $config->testtask->actionList['start']['text'] = $lang->testtask->start;
@@ -107,3 +110,31 @@ $config->testtask->dtable->fieldList['actions']['type']     = 'actions';
 $config->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
+
+$config->testtask->testcase = new stdclass();
+$config->testtask->testcase->dtable = new stdclass();
+$config->testtask->testcase->dtable->fieldList['id']['name']  = 'id';
+$config->testtask->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testtask->testcase->dtable->fieldList['id']['type'] = 'checkID';
+$config->testtask->testcase->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->testtask->testcase->dtable->fieldList['title']['name']  = 'title';
+$config->testtask->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
+$config->testtask->testcase->dtable->fieldList['title']['type']  = 'title';
+$config->testtask->testcase->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', 'caseID={id}&version={version}&from=testtask&taskID={task}');
+$config->testtask->testcase->dtable->fieldList['title']['fixed'] = 'left';
+
+foreach($config->testcase->dtable->fieldList as $key => $fieldList)
+{
+    if($key == 'id' || $key == 'title') continue;
+    $config->testtask->testcase->dtable->fieldList[$key] = $fieldList;
+
+    if($key == 'keywords')
+    {
+        $config->testtask->testcase->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
+        $config->testtask->testcase->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
+        $config->testtask->testcase->dtable->fieldList['assignedTo']['type']  = 'user';
+    }
+}
+
+$config->testtask->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'createBug', 'unlinkCase');
