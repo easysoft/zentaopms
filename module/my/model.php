@@ -419,7 +419,7 @@ class myModel extends model
         $scene = $this->loadModel('testcase')->getSceneMenu(0, 0);
 
         $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
-        $this->app->loadConfig('testcase');
+        $this->app->loadModuleConfig('testcase');
         $this->config->testcase->search['module']                      = $queryName;
         $this->config->testcase->search['queryID']                     = $queryID;
         $this->config->testcase->search['actionURL']                   = $actionURL;
