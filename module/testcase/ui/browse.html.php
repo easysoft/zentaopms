@@ -150,14 +150,14 @@ featureBar
 $viewItems   = array();
 $exportItems = array();
 $importItems = array();
+if($canBrowseGroupCase)
+{
+    $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID");
+    $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab);
+}
+
 if(!empty($productID))
 {
-    if($canBrowseGroupCase)
-    {
-        $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID");
-        $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab);
-    }
-
     if($canExport)
     {
         $link = $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType");
