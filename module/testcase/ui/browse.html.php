@@ -16,6 +16,7 @@ $topCaseCount  = count(array_filter(array_map(function($scene){return $scene->is
 jsVar('pageSummary', sprintf($lang->testcase->summary, $topSceneCount, $topCaseCount));
 jsVar('checkedSummary', $lang->testcase->checkedSummary);
 
+$notInFetch    = $this->app->module == $this->app->rawModule && $this->app->method == $this->app->rawMethod;
 $isProjectApp  = $this->app->tab == 'project';
 $currentModule = $isProjectApp ? 'project'  : 'testcase';
 $currentMethod = $isProjectApp ? 'testcase' : 'browse';
@@ -49,29 +50,32 @@ $canBatchAction             = ($canBatchRun || $canBatchEdit || $canBatchReview 
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
 
-/* Process variables of case type menu. */
-$currentCaseType = zget($lang->testcase->typeList, $caseType, '');
-$currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
-$caseTypeItems   = array();
-foreach($lang->testcase->typeList as $type => $typeName)
+if($notInFetch)
 {
-    if($canBrowseUnits and $type == 'unit')
+    /* Process variables of case type menu. */
+    $currentCaseType = zget($lang->testcase->typeList, $caseType, '');
+    $currentTypeName = empty($currentCaseType) ? $lang->testcase->allType : $currentCaseType;
+    $caseTypeItems   = array();
+    foreach($lang->testcase->typeList as $type => $typeName)
     {
-        $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
-        $text = $lang->testcase->browseUnits;
-    }
-    elseif(isset($groupBy))
-    {
-        $url  = $this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type");
-        $text = $typeName;
-    }
-    else
-    {
-        $url  = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
-        $text = $typeName;
-    }
+        if($canBrowseUnits and $type == 'unit')
+        {
+            $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
+            $text = $lang->testcase->browseUnits;
+        }
+        elseif(isset($groupBy))
+        {
+            $url  = $this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type");
+            $text = $typeName;
+        }
+        else
+        {
+            $url  = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
+            $text = $typeName;
+        }
 
-    $caseTypeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
+        $caseTypeItems[] = array('text' => $text, 'url' => $url, 'active' => $type == $caseType);
+    }
 }
 
 /* Process variables of sutie menu. */
@@ -101,14 +105,14 @@ $otherItems[] = array('text' => $lang->testcase->onlyScene);
 
 featureBar
 (
-    to::before
+    $notInFetch ? to::before
     (
         productMenu
         (
             set::title($currentTypeName),
             set::items($caseTypeItems)
         )
-    ),
+    ) : null,
     set::linkParams($projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType=$caseType"),
     $canBrowseZeroCase ? li
     (
