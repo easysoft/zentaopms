@@ -3696,7 +3696,7 @@ EOF;
         $result = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'GET'), $headers, 'json', 20));
         if($result && $result->code == 200) return $result;
 
-        return self::apiError($result);
+        return static::apiError($result);
     }
 
     /**
@@ -3713,7 +3713,7 @@ EOF;
         $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $headers, 'json', 20));
         if($result && $result->code == 200) return $result;
 
-        return self::apiError($result);
+        return static::apiError($result);
     }
 
     /**
@@ -3730,7 +3730,7 @@ EOF;
         $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers, 'json', 20));
         if($result && $result->code == 200) return $result;
 
-        return self::apiError($result);
+        return static::apiError($result);
     }
 
     /**
@@ -3747,7 +3747,7 @@ EOF;
         $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $headers, 'json', 20));
         if($result && $result->code == 200) return $result;
 
-        return self::apiError($result);
+        return static::apiError($result);
     }
 
     /**
@@ -3757,7 +3757,7 @@ EOF;
      * @access protected
      * @return object
      */
-    static protected function apiError($result)
+    protected static function apiError($result)
     {
         global $lang;
 
@@ -3815,7 +3815,7 @@ EOT;
      */
     public static function printProgressPie($percent, $color = '', $tip = '', $tipPosition = 'bottom')
     {
-        if(empty($color)) $color = self::getColorByLevel($percent);
+        if(empty($color)) $color = static::getColorByLevel($percent);
 
         $title = $tip ? $tip : $percent . '%';
 
