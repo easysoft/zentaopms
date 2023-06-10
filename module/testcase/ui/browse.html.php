@@ -16,7 +16,6 @@ $topCaseCount  = count(array_filter(array_map(function($scene){return $scene->is
 jsVar('pageSummary', sprintf($lang->testcase->summary, $topSceneCount, $topCaseCount));
 jsVar('checkedSummary', $lang->testcase->checkedSummary);
 
-$notInFetch    = $this->app->module == $this->app->rawModule && $this->app->method == $this->app->rawMethod;
 $isProjectApp  = $this->app->tab == 'project';
 $currentModule = $isProjectApp ? 'project'  : 'testcase';
 $currentMethod = $isProjectApp ? 'testcase' : 'browse';
@@ -24,6 +23,7 @@ $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
 $initModule    = isset($moduleID) ? (int)$moduleID : 0;
 
 $canModify                  = common::canModify('product', $product);
+$canSwitchCaseType          = $this->app->tab == 'qa';
 $canCreateSuite             = hasPriv('testsuite', 'create');
 $canBrowseUnits             = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase          = hasPriv('testcase', 'zerocase');
@@ -50,7 +50,7 @@ $canBatchAction             = ($canBatchRun || $canBatchEdit || $canBatchReview 
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
 
-if($notInFetch)
+if($canSwitchCaseType)
 {
     /* Process variables of case type menu. */
     $currentCaseType = zget($lang->testcase->typeList, $caseType, '');
@@ -105,7 +105,7 @@ $otherItems[] = array('text' => $lang->testcase->onlyScene);
 
 featureBar
 (
-    $notInFetch ? to::before
+    $canSwitchCaseType ? to::before
     (
         productMenu
         (
