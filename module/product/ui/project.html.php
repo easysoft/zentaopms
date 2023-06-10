@@ -33,26 +33,29 @@ featureBar
 );
 
 /* Set right toolbar. */
-$branchStatus == 'closed' ? null : toolbar
-(
-    !common::hasPriv('project', 'manageProducts') ? null : item(set(array
+if($branchStatus != 'closed')
+{
+    toolbar
     (
-        'icon'        => 'link',
-        'text'        => $lang->product->link2Project,
-        'class'       => "secondary",
-        'url'         => '#link2Project',
-        'data-toggle' => 'modal'
-    ))),
-    !common::hasPriv('project', 'create') ? null : item(set(array
-    (
-        'icon'        => 'plus',
-        'text'        => $lang->project->create,
-        'class'       => "primary create-project-btn",
-        'url'         => $this->createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true),
-        'data-toggle' => 'modal',
-        'data-type'   => 'ajax',
-    )))
-);
+        !common::hasPriv('project', 'manageProducts') ? null : item(set(array
+        (
+            'icon'        => 'link',
+            'text'        => $lang->product->link2Project,
+            'class'       => "secondary",
+            'url'         => '#link2Project',
+            'data-toggle' => 'modal'
+        ))),
+        !common::hasPriv('project', 'create') ? null : item(set(array
+        (
+            'icon'        => 'plus',
+            'text'        => $lang->project->create,
+            'class'       => "primary create-project-btn",
+            'url'         => $this->createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true),
+            'data-toggle' => 'modal',
+            'data-type'   => 'ajax',
+        )))
+    );
+}
 
 /* Create link2Project modal. */
 div
