@@ -304,8 +304,7 @@ class build extends control
             $objectID   = $build->execution;
         }
 
-        $executions    = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
-        $executionType = $build->execution ? $this->execution->getByID($build->execution) : '';
+        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
 
         $this->commonActions($build->project);
 
@@ -345,7 +344,6 @@ class build extends control
         $this->view->bugPager      = $bugPager;
         $this->view->branchName    = empty($branchName) ? $this->lang->branch->main : $branchName;
         $this->view->childBuilds   = empty($build->builds) ? array() : $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($build->builds)->fetchAll();
-        $this->view->executionType = (!empty($executionType) and $executionType->type == 'stage') ? 1 : 0;
 
         if($this->app->getViewType() == 'json')
         {
@@ -758,7 +756,7 @@ class build extends control
     public function batchUnlinkStory($buildID)
     {
         $this->build->batchUnlinkStory($buildID);
-        return print(js::locate($this->createLink('build', 'view', "buildID=$buildID&type=story"), 'parent'));
+        return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=story")));
     }
 
     /**
@@ -940,6 +938,6 @@ class build extends control
     public function batchUnlinkBug($buildID)
     {
         $this->build->batchUnlinkBug($buildID);
-        return print(js::locate($this->createLink('build', 'view', "buildID=$buildID&type=bug"), 'parent'));
+        return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=bug")));
     }
 }
