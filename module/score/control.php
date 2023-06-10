@@ -33,7 +33,8 @@ class score extends control
     {
         $this->app->loadLang('my');
 
-        $this->view->title      = $this->lang->my->scoreRule;
+        $this->view->title = $this->lang->my->scoreRule;
+        $this->view->rules = $this->score->buildRules();
         $this->display();
     }
 
