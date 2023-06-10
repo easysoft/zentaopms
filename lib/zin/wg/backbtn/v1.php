@@ -45,4 +45,17 @@ class backBtn extends btn
         $props['data-back'] = $this->prop('back');
         return $props;
     }
+
+    /**
+     * Override the getClassList method.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getClassList(): array
+    {
+        $classList = parent::getClassList();
+        $classList['open-url'] = true;
+        return $classList;
+    }
 }

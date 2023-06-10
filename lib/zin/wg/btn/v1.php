@@ -66,7 +66,7 @@ class btn extends wg
         return $children;
     }
 
-    private function getClassList()
+    protected function getClassList()
     {
         list($url, $type, $caret, $text, $icon, $trailingIcon) = $this->prop(array('url', 'type', 'caret', 'text', 'icon', 'trailingIcon'));
         $onlyCaret = empty($text) && !empty($caret) && empty($icon) && empty($trailingIcon);
