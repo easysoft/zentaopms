@@ -665,6 +665,12 @@ function label(): label
 
 /**
  * DTable widget.
+ *
+ * ?string className
+ * ?string id
+ * ?bool   customCols
+ * ?array  cols
+ * ?string module
  */
 function dtable(): dtable
 {
@@ -770,6 +776,8 @@ function sidebar(): sidebar
  * ?string current
  * ?string link
  * ?string linkParams
+ * ?string module
+ * ?string method
  *
  * ====== blocks ======
  * nav      = array('map' => 'nav')
@@ -1010,6 +1018,8 @@ function programMenu(): programMenu
  *
  * ?string title
  * ?array  items
+ * ?string activeKey
+ * ?string link
  */
 function productMenu(): productMenu
 {
@@ -1330,4 +1340,14 @@ function dragUl(): dragUl
 function editCols(): editCols
 {
     return createWg('editCols', func_get_args());
+}
+
+/**
+ * Back btn widget.
+ *
+ * ?string back
+ */
+function backBtn(): backBtn
+{
+    return createWg('backBtn', func_get_args());
 }
