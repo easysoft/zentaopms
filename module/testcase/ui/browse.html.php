@@ -351,7 +351,7 @@ if($canBatchChangeScene)
 
 $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
 $url         = $config->testcase->dtable->fieldList['actions']['list']['edit']['url'];
-$url         = str_replace('%executionID%', $executionID, $url);
+$url         = str_replace('%executionID%', (string)$executionID, $url);
 
 $config->testcase->dtable->fieldList['story']['map'] = $stories;
 $config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = $url;
