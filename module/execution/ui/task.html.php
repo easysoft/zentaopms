@@ -117,12 +117,14 @@ if($canBatchAction)
             set::id('navActions'),
             set::class('dropdown-menu'),
             $canBatchClose ? item(set(array(
-                'text'  => $lang->close,
-                'class' => 'batch-btn', 'data-url' => createLink('task', 'batchClose')
+                'text'     => $lang->close,
+                'class'    => 'batch-btn',
+                'data-url' => createLink('task', 'batchClose')
             ))) : null,
             $canBatchCancel ? item(set(array(
-                'text' => $lang->task->cancel,
-                'class' => 'batch-btn', 'data-url' => createLink('task', 'batchCancel')
+                'text'     => $lang->task->cancel,
+                'class'    => 'batch-btn',
+                'data-url' => createLink('task', 'batchCancel')
             ))) : null,
         );
     }
@@ -165,14 +167,14 @@ if($canBatchAction)
         $footToolbar['items'][] = array(
             'type'  => 'btn-group',
             'items' => array(
-                array('text' => $lang->edit, 'class' => "btn primary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
-                array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+                array('text' => $lang->edit, 'class' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
+                array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
             )
         );
     }
 
-    if($canBatchChangeModule) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
-    if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'btnType' => 'primary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
+    if($canBatchChangeModule) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->moduleAB,   'class' => 'btn btn-caret size-sm secondary', 'url' => '#navModule',    'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
+    if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'class' => 'btn btn-caret size-sm secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown');
 }
 
 jsVar('orderBy',        $orderBy);
