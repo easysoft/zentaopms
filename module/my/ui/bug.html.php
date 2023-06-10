@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$testcaseTitle = "[" . $lang->testcase->common . "#{case}]";
+$testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersion}");
+
+jsVar('testcaseTitle', $testcaseTitle);
+jsVar('testcaseLink', $testcaseLink);
+
 featurebar
 (
     set::current($type),
@@ -28,6 +34,12 @@ if($type == 'assignedTo')     unset($config->my->bug->dtable->fieldList['assigne
 if($type == 'resolvedBy')     unset($config->my->bug->dtable->fieldList['resolvedBy']);
 if($app->rawMethod != 'work') unset($config->my->bug->dtable->fieldList['deadline']);
 if(!$canBatchAction) $config->my->bug->dtable->fieldList['id']['type'] = 'id';
+
+$projectBrowseLink = createLink('project', 'browse');
+$productLink       = explode('-', $config->productLink);
+$param             = $config->productLink == 'product-all' ? '' : "productID={product}";
+$productBrowseLink = createLink('product', $productLink[1], $param);
+$config->my->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
 
 $bugs = initTableData($bugs, $config->my->bug->dtable->fieldList, $this->bug);
 $cols = array_values($config->my->bug->dtable->fieldList);
@@ -59,7 +71,7 @@ dtable
     set::cols($cols),
     set::data($bugs),
     set::userMap($users),
-    set::onRenderCell(jsRaw('window.renderCell')),
+    set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction ? true : false),
     $canBatchAction ? set::footToolbar($footToolbar) : null,
     set::footPager(usePager()),

@@ -830,6 +830,11 @@ $config->my->bug->dtable->fieldList['type']['map']    = $lang->bug->typeList;
 $config->my->bug->dtable->fieldList['type']['group']  = '2';
 $config->my->bug->dtable->fieldList['type']['hidden'] = true;
 
+$config->my->bug->dtable->fieldList['product']['name']  = 'productName';
+$config->my->bug->dtable->fieldList['product']['title'] = $lang->bug->product;
+$config->my->bug->dtable->fieldList['product']['type']  = 'text';
+$config->my->bug->dtable->fieldList['product']['group'] = '3';
+
 $config->my->bug->dtable->fieldList['project']['name']   = 'project';
 $config->my->bug->dtable->fieldList['project']['title']  = $lang->bug->project;
 $config->my->bug->dtable->fieldList['project']['type']   = 'text';
