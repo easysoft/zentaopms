@@ -1053,9 +1053,10 @@ function history(): history
 /**
  * Zentao float toolbar widget.
  *
- * ?array prefix btns props array.
- * ?array main   btns props array.
- * ?array suffix btns props array.
+ * ?array  prefix btns props array.
+ * ?array  main   btns props array.
+ * ?array  suffix btns props array.
+ * ?object object
  *
  * ====== blocks ======
  * dropdowns = array()
