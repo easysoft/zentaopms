@@ -41,7 +41,7 @@ class testcaseModel extends model
     {
         if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
         /* Value of story may be showmore. */
-        $this->dao->insert(TABLE_CASE)->data($case)
+        $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,forceNotReview,scriptFile,scriptName')
             ->autoCheck()
             ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
             ->checkFlow()
