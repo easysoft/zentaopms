@@ -34,3 +34,29 @@ $config->productplan->search['params']['branch'] = array('operator' => 'include'
 $config->productplan->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => array('' => '') + $lang->productplan->statusList);
 $config->productplan->search['params']['begin']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->productplan->search['params']['end']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+
+$config->productplan->actionList['start']['icon']        = 'play';
+$config->productplan->actionList['start']['hint']        = $lang->productplan->start;
+$config->productplan->actionList['start']['text']        = $lang->productplan->start;
+$config->productplan->actionList['start']['url']         = helper::createLink('productplan', 'start', 'productplanID={id}', '', true);
+$config->productplan->actionList['start']['data-toggle'] = 'modal';
+
+$config->productplan->actionList['createExecution']['icon']        = 'plus';
+$config->productplan->actionList['createExecution']['hint']        = $lang->productplan->createExecution;
+$config->productplan->actionList['createExecution']['text']        = $lang->productplan->createExecution;
+$config->productplan->actionList['createExecution']['data-toggle'] = 'modal';
+
+$config->productplan->actionList['linkStory']['icon']        = 'link';
+$config->productplan->actionList['linkStory']['hint']        = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['text']        = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['data-toggle'] = 'modal';
+
+$config->productplan->actionList['linkBug']['icon']        = 'bug';
+$config->productplan->actionList['linkBug']['hint']        = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['text']        = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['data-toggle'] = 'modal';
+
+$config->productplan->actionList['edit']['icon']  = 'edit';
+$config->productplan->actionList['edit']['hint']  = $lang->productplan->edit;
+$config->productplan->actionList['edit']['text']  = $lang->productplan->edit;
+$config->productplan->actionList['edit']['url']   = helper::createLink('productplan', 'edit', 'productplanID={id}');
