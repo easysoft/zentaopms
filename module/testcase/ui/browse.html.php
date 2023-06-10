@@ -24,6 +24,7 @@ $initModule    = isset($moduleID) ? (int)$moduleID : 0;
 
 $canModify                  = common::canModify('product', $product);
 $canSwitchCaseType          = $this->app->tab == 'qa';
+$canDisplaySuite            = $this->app->tab == 'qa';
 $canCreateSuite             = hasPriv('testsuite', 'create');
 $canBrowseUnits             = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase          = hasPriv('testcase', 'zerocase');
@@ -78,23 +79,26 @@ if($canSwitchCaseType)
     }
 }
 
-/* Process variables of sutie menu. */
-$currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
-$currentSuite     = zget($suiteList, $currentSuiteID, '');
-$currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
-$suiteItems       = array();
-if(empty($suiteList))
+if($canDisplaySuite)
 {
-    if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
+    /* Process variables of sutie menu. */
+    $currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
+    $currentSuite     = zget($suiteList, $currentSuiteID, '');
+    $currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
+    $suiteItems       = array();
+    if(empty($suiteList))
     {
-        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
+        if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
+        {
+            $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
+        }
     }
-}
-else
-{
-    foreach($suiteList as $suiteID => $suite)
+    else
     {
-        $suiteItems[] = array('text' => $suite->name, 'url' => $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), 'active' => $suiteID == (int)$currentSuiteID);
+        foreach($suiteList as $suiteID => $suite)
+        {
+            $suiteItems[] = array('text' => $suite->name, 'url' => $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), 'active' => $suiteID == (int)$currentSuiteID);
+        }
     }
 }
 
@@ -105,6 +109,7 @@ $otherItems[] = array('text' => $lang->testcase->onlyScene);
 
 featureBar
 (
+    set::linkParams($projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType=$caseType"),
     $canSwitchCaseType ? to::before
     (
         productMenu
@@ -113,7 +118,6 @@ featureBar
             set::items($caseTypeItems)
         )
     ) : null,
-    set::linkParams($projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType=$caseType"),
     $canBrowseZeroCase ? li
     (
         set::class('nav-item'),
@@ -125,7 +129,7 @@ featureBar
             $lang->testcase->zeroCase
         )
     ) : null,
-    dropdown
+    $canDisplaySuite ? dropdown
     (
         btn
         (
@@ -133,7 +137,7 @@ featureBar
             $currentSuiteName
         ),
         set::items($suiteItems)
-    ),
+    ) : null,
     dropdown
     (
         btn
