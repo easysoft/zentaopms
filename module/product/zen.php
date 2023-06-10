@@ -792,7 +792,7 @@ class productZen extends product
             return;
         }
 
-        $this->product->setMenu($productID, $branch, "storyType=$storyType");
+        $this->product->setMenu($productID, $branch, $storyType);
     }
 
     /**
@@ -963,7 +963,7 @@ class productZen extends product
      * @param  string    $branchID
      * @param  string    $moduleID
      * @param  int       $param
-     * @param  string    $storyType
+     * @param  string    $storyType  requirement|story
      * @param  string    $browseType
      * @param  string    $orderBy
      * @param  object    $pager
@@ -1061,7 +1061,7 @@ class productZen extends product
      * @param  string  $storyType
      * @param  string  $browseType
      * @param  bool    $isProjectStory
-     * @access private
+     * @access protected
      * @return void
      */
     protected function saveSession4Browse(object $product, string $storyType, string $browseType, bool $isProjectStory): void

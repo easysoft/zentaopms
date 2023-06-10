@@ -657,7 +657,9 @@ class testcaseModel extends model
             ->andWhere('t3.status')->ne('done')
             ->beginIF(strpos($auto, 'skip') === false and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll(strpos($auto, 'run') !== false? 'run' : 'id');
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll(strpos($auto, 'run') !== false? 'run' : 'id');
     }
 
     /**

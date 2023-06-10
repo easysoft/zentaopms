@@ -232,6 +232,60 @@ class scoreModel extends model
     }
 
     /**
+     * Build rules for list.
+     *
+     * @access public
+     * @return array
+     */
+    public function buildRules()
+    {
+        $allRules = array();
+        foreach($this->config->score->rule as $module => $moduleRule)
+        {
+            foreach($moduleRule as $method => $rule)
+            {
+                $rules['module'] = $this->lang->score->modules[$module];
+                $rules['method'] = $this->lang->score->methods[$module][$method];
+                $rules['times']  = empty($rule['times']) ? $this->lang->score->noLimit : $rule['times'];
+                $rules['hour']   = empty($rule['hour']) ? $this->lang->score->noLimit : $rule['hour'];
+                $rules['score']  = $rule['score'];
+
+                $desc = '';
+                if(isset($this->lang->score->extended[$module][$method]))
+                {
+                    $desc     = $this->lang->score->extended[$module][$method];
+                    $descRule = explode('##', $desc);
+                    if(!empty($descRule))
+                    {
+                        foreach($descRule as $key => $value)
+                        {
+                            if($key % 2 == 1)
+                            {
+                                $match = explode(',', $value);
+                                if(count($match) == 2)
+                                {
+                                    $score = $this->config->score->ruleExtended[$module][$method][$match[0]][$match[1]];
+                                }
+                                else
+                                {
+                                    $score = $this->config->score->ruleExtended[$module][$method][$match[0]];
+                                }
+                                $desc = str_replace('##' . $value . '##', $score, $desc);
+                            }
+                        }
+                    }
+                }
+
+                $rules['desc'] = $desc;
+
+                $allRules[] = $rules;
+            }
+        }
+
+        return $allRules;
+    }
+
+    /**
      * Score reset.
      *
      * @param int $lastID

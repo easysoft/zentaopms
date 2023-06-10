@@ -95,6 +95,15 @@ class repoTest
         return $this->objectModel->getRepoByID($repoID);
     }
 
+    public function batchCreateTest($repos, $serviceHost)
+    {
+        $repoID = $this->objectModel->batchCreate($repos, $serviceHost);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getList();
+    }
+
     public function updateTest($id)
     {
         $objects = $this->objectModel->update($id);

@@ -256,5 +256,58 @@ class repoZen extends repo
 
         $this->display();
     }
+
+    /**
+     * 准备批量创建版本库的数据。
+     * Prepare batch create repo data.
+     *
+     * @access protected
+     * @return array|false
+     */
+    protected function prepareBatchCreate(): array|false
+    {
+        $data = array();
+        foreach($_POST as $key => $val)
+        {
+            if(strpos($key, 'serviceProject') === 0)
+            {
+                $i = substr($key, 14);
+                if($this->post->{'product' . $i} == '') dao::$errors['product' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->product);
+                if($this->post->{'name' . $i} == '')    dao::$errors['name' . $i][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+                if(dao::isError()) continue;
+
+                $data[] = array('serviceProject' => $this->post->{'serviceProject' . $i}, 'product' => implode(',', $this->post->{'product' . $i}), 'name' => $this->post->{'name' . $i}, 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
+            }
+        }
+        if(dao::isError()) return false;
+
+        return $data;
+    }
+
+    /**
+     * 获取gitlab还没存在禅道的项目列表。
+     * Get gitlab not exist repos.
+     *
+     * @param  object    $gitlab
+     * @access protected
+     * @return array
+     */
+    protected function getGitlabNotExistRepos(object $gitlab): array
+    {
+        $repoList = array();
+        if(!empty($gitlab))
+        {
+            $repoList      = $this->loadModel('gitlab')->apiGetProjects($gitlab->id);
+            $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
+                ->where('SCM')->eq(ucfirst($gitlab->type))
+                ->andWhere('serviceHost')->eq($gitlab->id)
+                ->fetchPairs();
+            foreach($repoList as $key => $repo)
+            {
+                if(isset($existRepoList[$repo->id])) unset($repoList[$key]);
+            }
+        }
+        return $repoList;
+    }
 }
 

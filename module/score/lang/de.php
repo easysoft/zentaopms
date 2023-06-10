@@ -86,3 +86,5 @@ $lang->score->extended['bug']['resolve']         = 'Nach dem Lösen eines Bugs, 
 $lang->score->extended['bug']['confirm']         = 'Wenn ein Bug bestätigt wurde, werden die Punkte nach der Dringlichkeit vergeben. S1, + ##severity,3##; S2 + ##severity,2##, S3 + ##severity,1##.';
 $lang->score->extended['task']['finish']         = 'Wenn eine Aufgabe erledigt wurde, werden folgende Punkte vergeben: runde(Mannstunden / 10  Schätzung / Verbraucht) + Prirität (p1 ##pri,1##, p2 ##pri,2##).';
 $lang->score->extended['story']['close']         = 'Wenn eine Story geschlossen wurde, bekommt der Ersteler ##createID## Punkte.';
+
+$lang->score->featureBar['rule']['all'] = 'Score Rules';

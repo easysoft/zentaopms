@@ -6,7 +6,9 @@ $app->loadLang('task');
 $app->loadLang('story');
 $app->loadLang('doc');
 $app->loadLang('testtask');
+$app->loadLang('testcase');
 $app->loadModuleConfig('testtask');
+$app->loadModuleConfig('testcase');
 
 $config->my->todo = new stdclass();
 $config->my->todo->actionList = array();
@@ -491,6 +493,36 @@ $config->my->testtask->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->my->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->my->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
+
+$config->my->testcase = new stdclass();
+$config->my->testcase->dtable = new stdclass();
+$config->my->testcase->dtable->fieldList['id']['name']  = 'id';
+$config->my->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->my->testcase->dtable->fieldList['id']['type'] = 'checkID';
+$config->my->testcase->dtable->fieldList['id']['fixed'] = 'left';
+
+$config->my->testcase->dtable->fieldList['title']['name']  = 'title';
+$config->my->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
+$config->my->testcase->dtable->fieldList['title']['type']  = 'title';
+$config->my->testcase->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', 'testcaseID={id}&version={version}');
+$config->my->testcase->dtable->fieldList['title']['fixed'] = 'left';
+
+$config->my->testcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
+$config->my->testcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
+$config->my->testcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
+
+$config->my->testcase->dtable->fieldList['testtask']['name']  = 'taskName';
+$config->my->testcase->dtable->fieldList['testtask']['title'] = $lang->testtask->common;
+$config->my->testcase->dtable->fieldList['testtask']['type']  = 'text';
+$config->my->testcase->dtable->fieldList['testtask']['group'] = 'testtask';
+
+$config->my->testcase->dtable->fieldList['openedBy']      = $config->testcase->dtable->fieldList['openedBy'];
+$config->my->testcase->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
+$config->my->testcase->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
+$config->my->testcase->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
+$config->my->testcase->dtable->fieldList['actions']       = $config->testcase->dtable->fieldList['actions'];
+
+$config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'edit', 'createBug', 'create');
 
 $config->my->audit->dtable = new stdclass();
 $config->my->audit->dtable->fieldList['id']['name']  = 'id';

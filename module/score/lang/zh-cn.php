@@ -86,3 +86,5 @@ $lang->score->extended['bug']['resolve']         = 'Bug解决后，额外增加�
 $lang->score->extended['bug']['confirm']         = 'Bug确认后，额外增加严重程度积分：s1 + ##severity,1##, s2 + ##severity,2##, s3 + ##severity,3##。';
 $lang->score->extended['task']['finish']         = '额外增加工时积分 round(工时 / 10 * 预计 / 消耗) + 优先级积分(p1 ##pri,1##, p2 ##pri,2##)。';
 $lang->score->extended['story']['close']         = "{$lang->SRCommon}的创建者额外增加##createID##分";
+
+$lang->score->featureBar['rule']['all'] = '积分规则';

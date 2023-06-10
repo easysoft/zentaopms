@@ -17,9 +17,29 @@ featurebar
     li(searchToggle()),
 );
 
+$canBatchEdit     = common::hasPriv('bug', 'batchEdit')    && $type == 'assignedTo';
+$canBatchConfirm  = common::hasPriv('bug', 'batchConfirm') && $type != 'closedBy';
+$canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) != 'closedby';
+$canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+$canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
+
+if($type == 'openedBy')       unset($config->my->bug->dtable->fieldList['openedBy']);
+if($type == 'assignedTo')     unset($config->my->bug->dtable->fieldList['assignedTo']);
+if($type == 'resolvedBy')     unset($config->my->bug->dtable->fieldList['resolvedBy']);
+if($app->rawMethod != 'work') unset($config->my->bug->dtable->fieldList['deadline']);
+if(!$canBatchAction) $config->my->bug->dtable->fieldList['id']['type'] = 'id';
+
 $bugs = initTableData($bugs, $config->my->bug->dtable->fieldList, $this->bug);
 $cols = array_values($config->my->bug->dtable->fieldList);
 $bugs = array_values($bugs);
+
+$footToolbar = array('items' => array
+(
+    array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchEdit')),
+    array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
+    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchClose')),
+    array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'caret' => 'up', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
@@ -34,22 +54,14 @@ menu
     set::items($assignedToItems)
 );
 
-$footToolbar = array('items' => array
-(
-    array('text' => $lang->edit, 'className' => 'batch-btn ' . (common::hasPriv('bug', 'batchEdit') ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchEdit')),
-    array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('bug', 'batchConfirm') && $type != 'closedBy' ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchConfirm')),
-    array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('bug', 'batchClose')   && $type != 'closedBy' ? '' : 'hidden'), 'data-url' => helper::createLink('bug', 'batchClose')),
-    array('text' => $lang->bug->assignedTo, 'caret' => 'up', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
-
 dtable
 (
     set::cols($cols),
     set::data($bugs),
     set::userMap($users),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::checkable(true),
-    set::footToolbar($footToolbar),
+    set::checkable($canBatchAction ? true : false),
+    $canBatchAction ? set::footToolbar($footToolbar) : null,
     set::footPager(usePager()),
 );
 

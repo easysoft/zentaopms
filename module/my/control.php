@@ -86,6 +86,8 @@ class my extends control
      */
     public function work($mode = 'task', $type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if($mode == 'testcase' && $type == 'assignedTo') $type = 'assigntome';
+
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         //$this->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -248,7 +250,7 @@ EOF;
     {
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
-        if($mode == 'doc' && $type == 'openedBy') $type = 'openedbyme';
+        if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -697,7 +699,7 @@ EOF;
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
-        $this->my->buildTestcaseSearchForm($queryID, $actionURL, $currentMethod);
+        $this->my->buildTestCaseSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
