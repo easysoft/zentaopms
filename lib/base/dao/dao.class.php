@@ -60,7 +60,7 @@ class baseDAO
      * @var bool
      * @access public
      */
-    public $useSqlite = true;
+    public $useSqlite = false;
 
     /**
      * 全局对象$lang
@@ -191,12 +191,14 @@ class baseDAO
     public function __construct()
     {
         global $app, $config, $lang, $dbh, $slaveDBH;
-        $this->app      = $app;
-        $this->config   = $config;
-        $this->lang     = $lang;
-        $this->dbh      = $dbh;
-        $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
-        $this->useSqlite();
+        $this->app       = $app;
+        $this->config    = $config;
+        $this->lang      = $lang;
+        $this->dbh       = $dbh;
+        $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
+        $this->useSqlite = $this->config->enableSqlite;
+
+        if($this->useSqlite) $this->useSqlite();
 
         $this->reset();
     }
@@ -206,16 +208,16 @@ class baseDAO
      * Use sqlite database.
      *
      * @access public
-     * @return void
+     * @return object
      */
-    public function useSqlite()
+    public function useSqlite($useSqlite = true)
     {
-        $this->useSqlite = true;
-        if(!$this->sqlite instanceof PDO)
-        {
-            $sqlite = $this->app->loadClass('sqlite');
-            $this->sqlite = $sqlite->connectSqlite();
-        }
+        $this->useSqlite = $useSqlite;
+        if(!$this->useSqlite) return $this;
+
+        if(!$this->sqlite instanceof sqlite) $this->sqlite = $this->app->loadClass('sqlite')->connectSqlite();
+
+        return $this;
     }
 
     /**
@@ -890,13 +892,17 @@ class baseDAO
             $this->reset();
 
             $result = $this->dbh->exec($sql);
-            try
+
+            if($this->useSqlite)
             {
-                $this->sqlite->exec($sql);
-            }
-            catch(PDOException $e)
-            {
-                $this->sqlError($e);
+                try
+                {
+                    $this->sqlite->exec($sql);
+                }
+                catch(PDOException $e)
+                {
+                    $this->sqlError($e);
+                }
             }
 
             return $result;
