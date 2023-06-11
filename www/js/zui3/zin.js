@@ -215,7 +215,8 @@
     {
         if(DEBUG) console.log('[APP] ', 'render:', list);
         list.forEach(item => renderPartial(item, options));
-        historyState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
+        const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
+        if (newState) historyState = newState;
     }
 
     function toggleLoading(target, isLoading)
@@ -441,6 +442,20 @@
     }
 
     /**
+     * Search history and go back to specified path.
+     *
+     * @param {string} target Back target, can be app name or module-method path.
+     * @param {string} url    Fallback url.
+     * @returns {void}
+     */
+    function goBack(target, url)
+    {
+        if(!target || target === 'APP' || target === true) target = currentCode;
+        else if(target === 'GLOBAL')    target = '';
+        $.apps.goBack(target, url, historyState);
+    }
+
+    /**
      * Open url in app.
      * @param {string} url
      * @param {Object} options
@@ -464,26 +479,22 @@
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
-        if(typeof options.load === 'string')
+        const load = options.load;
+        if(typeof load === 'string' || load)
         {
             if(options.id)     delete options.id;
             if(url)            options.url = url;
             if(options.loadId) {options.id = options.loadId; delete options.loadId;}
-            if(options.load)
+            if(load)
             {
-                if(options.load === 'table') return loadTable(options.url, options.id, options);
-                options.selector = options.load; delete options.load;
+                if(load === 'table') return loadTable(options.url, options.id, options);
+                if(load !== 'APP' && typeof load === 'string') options.selector = load;
+                delete options.load;
             }
             return loadPage(options);
         }
 
-        let back = options.back;
-        if(typeof back === 'string')
-        {
-            if(back === 'APP')         back = currentCode;
-            else if(back === 'GLOBAL') back = '';
-            return $.apps.goBack(back, url, historyState);
-        }
+        if(typeof options.back === 'string') return goBack(options.back, url);
 
         openPage(url, options.app);
     }
@@ -589,7 +600,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: $.apps.goBack});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
