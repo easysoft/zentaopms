@@ -45,6 +45,24 @@ class baseDAO
     public $config;
 
     /**
+     * 全局对象$sqlite
+     * The global sqlite object.
+     *
+     * @var object
+     * @access public
+     */
+    public $sqlite = null;
+
+    /**
+     * 是否使用sqlite数据库。
+     * If use sqlite database.
+     *
+     * @var bool
+     * @access public
+     */
+    public $useSqlite = true;
+
+    /**
      * 全局对象$lang
      * The global lang object.
      *
@@ -178,8 +196,26 @@ class baseDAO
         $this->lang     = $lang;
         $this->dbh      = $dbh;
         $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
+        $this->useSqlite();
 
         $this->reset();
+    }
+
+    /**
+     * 使用sqlite数据库。
+     * Use sqlite database.
+     *
+     * @access public
+     * @return void
+     */
+    public function useSqlite()
+    {
+        $this->useSqlite = true;
+        if(!$this->sqlite instanceof PDO)
+        {
+            $sqlite = $this->app->loadClass('sqlite');
+            $this->sqlite = $sqlite->connectSqlite();
+        }
     }
 
     /**
@@ -852,7 +888,18 @@ class baseDAO
         {
             if($this->table) unset(dao::$cache[$this->table]);
             $this->reset();
-            return $this->dbh->exec($sql);
+
+            $result = $this->dbh->exec($sql);
+            try
+            {
+                $this->sqlite->exec($sql);
+            }
+            catch(PDOException $e)
+            {
+                $this->sqlError($e);
+            }
+
+            return $result;
         }
         catch (PDOException $e)
         {
@@ -1515,7 +1562,7 @@ class baseSQL
      * @var object
      * @access public
      */
-    public $dbh;
+     public $dbh;
 
     /**
      * 更新或插入的数据。
@@ -1700,7 +1747,7 @@ class baseSQL
     {
         $sqlobj = self::factory();
         $sqlobj->setMethod('replace');
-        $sqlobj->sql = "REPLACE $table SET ";
+        $sqlobj->sql = "REPLACE INTO $table ";
         return $sqlobj;
     }
 
@@ -1731,10 +1778,15 @@ class baseSQL
     public function data($data, $skipFields = '')
     {
         $data = (object) $data;
-        if($skipFields) $this->skipFields = ',' . str_replace(' ', '', $skipFields) . ',';
 
         if($this->method != 'insert')
         {
+            if($this->method == 'replace')
+            {
+                $fields = array_keys((array) $data);
+                $this->sql .= '(`' . implode('`,`', $fields) . '`) VALUES (';
+            }
+
             foreach($data as $field => $value)
             {
                 if(!preg_match('|^\w+$|', $field))
@@ -1742,15 +1794,25 @@ class baseSQL
                     unset($data->$field);
                     continue;
                 }
+
                 if(strpos($this->skipFields, ",$field,") !== false) continue;
                 if($field == 'id' and $this->method == 'update') continue;     // primary key not allowed in dmdb.
 
-                $this->sql .= "`$field` = " . $this->quote($value) . ',';
+                if($this->method == 'replace')
+                {
+                    $this->sql .= empty($this->quote($value)) ? "''" : $this->quote($value) . ',';
+                }
+                else
+                {
+                    $this->sql .= "`$field` = " . $this->quote($value) . ',';
+                }
             }
         }
 
         $this->data = $data;
         $this->sql  = rtrim($this->sql, ',');    // Remove the last ','.
+        if($this->method == 'replace') $this->sql .= ')';
+
         return $this;
     }
 
