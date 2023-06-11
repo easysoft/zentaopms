@@ -102,7 +102,7 @@ class sqlite
      * @access public
      * @return void
      */
-    public function exec(string $sql):void
+    public function exec(string $sql): void
     {
         $this->dbh->exec($this->processSQL($sql));
     }
