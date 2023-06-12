@@ -63,4 +63,8 @@ $config->build->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")
 
 $config->build->actionList['unlinkBug']['icon'] = 'unlink';
 $config->build->actionList['unlinkBug']['hint'] = $lang->build->unlinkBug;
-$config->build->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("bug", "{id}")';
+$config->build->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("Bug", "{id}")';
+
+$config->build->actionList['unlinkStory']['icon'] = 'unlink';
+$config->build->actionList['unlinkStory']['hint'] = $lang->build->unlinkStory;
+$config->build->actionList['unlinkStory']['url']  = 'javascript: unlinkObject("Story", "{id}")';

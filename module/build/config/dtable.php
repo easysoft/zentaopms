@@ -94,11 +94,12 @@ $config->build->story->dtable->fieldList['stage']['name']  = 'stage';
 $config->build->story->dtable->fieldList['stage']['type']  = 'category';
 $config->build->story->dtable->fieldList['stage']['map']   = $lang->story->stageList;
 
-$config->build->story->dtable->fieldList['actions']['title'] = $lang->actions;
-$config->build->story->dtable->fieldList['actions']['name']  = 'actions';
-$config->build->story->dtable->fieldList['actions']['type']  = 'actions';
-$config->build->story->dtable->fieldList['actions']['menu']  = array('unlinkStory');
-$config->build->story->dtable->fieldList['actions']['list']  = $config->build->actionList;
+$config->build->story->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->build->story->dtable->fieldList['actions']['name']     = 'actions';
+$config->build->story->dtable->fieldList['actions']['type']     = 'actions';
+$config->build->story->dtable->fieldList['actions']['menu']     = array('unlinkStory');
+$config->build->story->dtable->fieldList['actions']['list']     = $config->build->actionList;
+$config->build->story->dtable->fieldList['actions']['minWidth'] = '60';
 
 $config->build->bug->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->build->bug->dtable->fieldList['id']['name']     = 'id';
