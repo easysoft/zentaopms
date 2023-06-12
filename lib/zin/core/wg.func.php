@@ -87,6 +87,26 @@ function setTag($id): directive
     return set('tagName', $id);
 }
 
+/**
+ * Set widget data-* attribute.
+ *
+ * @param  string|array $name
+ * @param  mixed        $value
+ * @return directive
+ */
+function setData(string|array $name, mixed $value = null): directive
+{
+    $map   = is_array($name) ? $name : array($name => $value);
+    $attrs = array();
+    foreach($map as $key => $value)
+    {
+        $name = "data-$key";
+        if(is_bool($value))       $attrs[$name] = $value ? 'true' : 'false';
+        else if(is_array($value)) $attrs[$name] = json_encode($value);
+        else                      $attrs[$name] = $value;
+    }
+    return set($attrs);
+}
 
 /**
  * Add event listener to widget element.

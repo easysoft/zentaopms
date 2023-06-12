@@ -10,15 +10,15 @@
  */
 namespace zin;
 
-function toggle($name, $options = null)
+/**
+ * Add data-toggle=* to widget element and set other data attributes.
+ *
+ * @param  string $name
+ * @param  array  $dataset
+ */
+function toggle($name, $dataset = null): directive
 {
-    $props = array('data-toggle' => $name);
-    if (is_array($options))
-    {
-        foreach ($options as $key => $value)
-        {
-            $props["data-$key"] = $value;
-        }
-    }
-    return set($props);
+    if(empty($dataset)) $dataset = array();
+    $dataset['data-toggle'] = $name;
+    return setData($dataset);
 }
