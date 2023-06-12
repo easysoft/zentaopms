@@ -147,7 +147,12 @@ class helper extends baseHelper
         elseif(function_exists('iconv'))
         {
             if($fromEncoding == $toEncoding) return $string;
-            $convertString = @iconv($fromEncoding, $toEncoding, $string);
+
+            $errorlevel    = error_reporting();
+            error_reporting(0);
+            $convertString = iconv($fromEncoding, $toEncoding, $string);
+            error_reporting($errorlevel);
+
             /* iconv error then return original. */
             if(!$convertString) return $string;
             return $convertString;
