@@ -225,7 +225,7 @@ class helper extends baseHelper
 
                     array_push($versionStrs, $build);
                 }
-                return join("", $versionStrs);
+                return implode('', $versionStrs);
             },
             $version
         );
@@ -273,7 +273,7 @@ class helper extends baseHelper
 					if(!$preRelease) array_push($versionStrs, "build");
 					array_push($versionStrs, mb_substr($build, 0, 1) === "." ? substr($build, 1) : $build);
 				}
-				return join("", $versionStrs);
+				return implode('', $versionStrs);
 			},
 			$version
 		);
