@@ -1426,4 +1426,196 @@ class productplanModel extends model
 
         return sprintf($this->lang->productplan->summary, count($planList), $totalParent, $totalChild, $totalIndependent);
     }
+
+    /**
+     * Build action button list.
+     * 
+     * Copied form the 'buildOperateMenu' funciton.
+     *
+     * @param  object $plan
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function buildActionBtnList(object $plan, string $type = 'view'): array
+    {
+        $params  = "planID=$plan->id";
+        $actions = [];
+
+        $canStart       = common::hasPriv('productplan', 'start');
+        $canFinish      = common::hasPriv('productplan', 'finish');
+        $canClose       = common::hasPriv('productplan', 'close');
+        $canCreateExec  = common::hasPriv('execution', 'create');
+        $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
+        $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
+        $canEdit        = common::hasPriv('productplan', 'edit');
+        $canCreateChild = common::hasPriv('productplan', 'create');
+        $canDelete      = common::hasPriv('productplan', 'delete');
+
+        $actions[] = $this->buildActionBtn('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
+        $actions[] = $this->buildActionBtn('productplan', 'finish', $params, $plan, $type, 'checked', 'hiddenwin', '', false, '', $this->lang->productplan->finishAB);
+        $actions[] = $this->buildActionBtn('productplan', 'close', $params, $plan, $type, 'off', 'hiddenwin', 'iframe', true, '', $this->lang->productplan->closeAB);
+
+        if($type == 'view') $actions[] = $this->buildActionBtn('productplan', 'activate', $params, $plan, $type, 'magic', 'hiddenwin', '', false, '', $this->lang->productplan->activateAB);
+
+        if($type == 'browse')
+        {
+            $canClickExecution = true;
+            if($plan->parent < 0 || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan))
+            {
+                $canClickExecution = false;
+            }
+
+            if($canClickExecution)
+            {
+                $product     = $this->loadModel('product')->getById($plan->product);
+                $branchList  = $this->loadModel('branch')->getList($plan->product, 0, 'all');
+
+                $branchStatusList = array();
+                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
+                if($product->type != 'normal')
+                {
+                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
+                    if($branchStatus == 'closed') $canClickExecution = false;
+                }
+            }
+
+            if($canClickExecution)
+            {
+                $actions[] = $this->buildActionBtn('none', 'plus', $params, $plan, $type, '', '', '', false, '', $this->lang->productplan->createExecution);
+            }
+            elseif($canCreateExec)
+            {
+                $actions[] = $this->buildActionBtn('none', 'plus', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->createExecution);
+            }
+
+            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            {
+                $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
+            }
+
+            if($canLinkStory and $plan->parent >= 0)
+            {
+                $actions[] = $this->buildActionBtn($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+            }
+            elseif($canLinkStory)
+            {
+                $actions[] = $this->buildActionBtn('none', 'link', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->linkStory);
+            }
+
+            if($canLinkBug and $plan->parent >= 0)
+            {
+                $actions[] = $this->buildActionBtn($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
+            }
+            elseif($canLinkBug)
+            {
+                $actions[] = $this->buildActionBtn('none', 'bug', $params, $plan, $type, '', '', '', false, 'disabled', $this->lang->productplan->linkBug);
+            }
+
+            $actions[] = $this->buildActionBtn($this->app->rawModule, 'edit', $params, $plan, $type);
+        }
+
+        $actions[] = $this->buildActionBtn($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+
+        if($type == 'browse')
+        {
+            if(($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+            {
+                $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
+            }
+            $actions[] = $this->buildActionBtn('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
+        }
+
+        if($type == 'view')
+        {
+            $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
+            /* TODO attach the buttons of workflow module. */
+            $actions[] = $this->buildActionBtn('none', 'divider', $params, $plan, $type);
+
+            /* Refactor the original business loggic. */
+            $editClickable   = $this->buildActionBtn($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', $this->lang->edit, false);
+            $deleteClickable = $this->buildActionBtn('productplan', 'delete', $params, $plan, $type, 'trash', '', '', '', '', $this->lang->delete, false);
+            if($canEdit and $editClickable) $actions[] = $editClickable;
+            if($canDelete and $deleteClickable) $actions[] = $deleteClickable;
+        }
+
+        return $actions;
+    }
+
+    /**
+     * 构建操作按钮。
+     * Build action button.
+     *
+     * Copied from the buildMenu of model class, to refactor it.
+     * Ensure that all the original parameters are kept to maintain compatibility with the 'buildMenu' method.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $params
+     * @param  object $data
+     * @param  string $type
+     * @param  string $icon
+     * @param  string $target
+     * @param  string $class
+     * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  string $title
+     * @access private
+     * @return array
+     */
+    private function buildActionBtn($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = ''): array
+    {
+        if($moduleName === 'none')
+        {
+            /* Special action button, with customize business logic of prductplan module. */
+            return array
+            (
+                'name'     => $methodName,
+                'hint'     => $title,
+                'disabled' => !empty($misc),
+            );
+        }
+
+        if(str_contains($moduleName, '.')) [$appName, $moduleName] = explode('.', $moduleName);
+
+        if(str_contains($methodName, '_') && strpos($methodName, '_') > 0) [$module, $method] = explode('_', $methodName);
+
+        if(empty($module)) $module = $moduleName;
+        if(empty($method)) $method = $methodName;
+
+        $isClick = true;
+        if(method_exists($this, 'isClickable')) $isClick = $this->isClickable($data, $method, $module);
+
+        $link = helper::createLink($module, $method, $params, '', $onlyBody);
+
+        global $lang;
+        /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
+        if(empty($title))
+        {
+            $title = $method;
+            if($method == 'create' and $icon == 'copy') $method = 'copy';
+            if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
+            if((isset($lang->$module->$method) or $this->app->loadLang($module)) and isset($lang->$module->$method))
+            {
+                $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+            }
+            if($icon == 'toStory')   $title  = $lang->bug->toStory;
+            if($icon == 'createBug') $title  = $lang->testtask->createBug;
+        }
+
+        /* set the class. */
+        if(!$icon)
+        {
+            $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
+        }
+
+        return array
+        (
+            'name'     => $icon ? $icon : $methodName,
+            'url'      => !$isClick ? null : $link,
+            'hint'     => $title,
+            'disabled' => !$isClick
+        );
+    }
 }
