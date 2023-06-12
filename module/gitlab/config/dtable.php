@@ -1,4 +1,7 @@
 <?php
+global $lang, $app;
+$app->loadLang('gitlab');
+
 $config->gitlab->dtable = new stdclass();
 
 $config->gitlab->dtable->fieldList['id']['title']    = 'ID';
@@ -21,10 +24,6 @@ $config->gitlab->dtable->fieldList['url']['type']     = 'desc';
 $config->gitlab->dtable->fieldList['url']['sortType'] = true;
 $config->gitlab->dtable->fieldList['url']['hint']     = true;
 $config->gitlab->dtable->fieldList['url']['minWidth'] = '356';
-
-
-global $lang, $app;
-$app->loadLang('gitlab');
 
 $config->gitlab->actionList = array();
 $config->gitlab->actionList['edit']['icon'] = 'edit';
