@@ -107,6 +107,7 @@ $config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
 $config->bug->dtable->fieldList['project']['map']   = $projectPairs;
 $config->bug->dtable->fieldList['execution']['map'] = $executions;
 
+if($product->type == 'normal') unset($config->bug->dtable->fieldList['branch']);
 if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 $bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
@@ -210,9 +211,10 @@ else
 {
     dtable
     (
-        set::userMap($users),
         set::cols($config->bug->dtable->fieldList),
         set::data($data),
+        set::userMap($users),
+        set::customCols(true),
         set::checkable($canBatchAction ? true : false),
         $canBatchAction ? set::footToolbar($footToolbar) : null,
         set::footPager
