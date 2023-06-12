@@ -193,21 +193,37 @@ menu
     set::items($assignedToItems)
 );
 
-dtable
-(
-    set::userMap($users),
-    set::cols($config->bug->dtable->fieldList),
-    set::data($data),
-    set::checkable($canBatchAction ? true : false),
-    $canBatchAction ? set::footToolbar($footToolbar) : null,
-    set::footPager
+if(empty($bugs))
+{
+    panel
     (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
-);
+        p
+        (
+            span($lang->bug->notice->noBug, set('class', 'text-gray')),
+            $canBeChanged && common::hasPriv('bug', 'create') ? a(icon('plus'), $lang->bug->create, set('href', createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID"))) : null,
+        ),
+        setClass('text-center'),
+        setStyle('padding', '80px 10px'),
+    );
+}
+else
+{
+    dtable
+    (
+        set::userMap($users),
+        set::cols($config->bug->dtable->fieldList),
+        set::data($data),
+        set::checkable($canBatchAction ? true : false),
+        $canBatchAction ? set::footToolbar($footToolbar) : null,
+        set::footPager
+        (
+            usePager(),
+            set::page($pager->pageID),
+            set::recPerPage($pager->recPerPage),
+            set::recTotal($pager->recTotal),
+            set::linkCreator(helper::createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
+        ),
+    );
+}
 
 render();
