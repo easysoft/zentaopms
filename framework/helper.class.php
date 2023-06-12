@@ -241,7 +241,13 @@ class helper extends baseHelper
      */
     public static function formatKB($traffic, $precision = 2)
     {
-        return round($traffic / (1024 * 1024), $precision) >= 1 ? round($traffic / (1024 * 1024), $precision) . 'GB' : (round($traffic / 1024, $precision) >= 1 ? round($traffic / 1024, $precision) . 'MB' : round($traffic, $precision) . 'KB');
+        $gigaByte = round($traffic / (1024 * 1024), $precision);
+        if($gigaByte >= 1) return $gigaByte . 'GB';
+
+        $megaByte = round($traffic / 1024, $precision);
+        if($megaByte >= 1) return $megaByte . 'MB';
+
+        return round($traffic, $precision) . 'KB';
     }
 
 	/**
