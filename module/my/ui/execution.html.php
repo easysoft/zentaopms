@@ -21,21 +21,17 @@ featurebar
 
 foreach($executions as $execution) $execution->isParent = isset($parentGroup[$execution->id]);
 
-$cols       = array_values($config->my->execution->dtable->fieldList);
 $executions = array_values($executions);
 
 dtable
 (
-    set::cols($cols),
+    set::cols($config->my->execution->dtable->fieldList),
     set::data($executions),
     set::onRenderCell(jsRaw('window.onRenderExecutionCell')),
     set::footPager
     (
         usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('my', 'execution', "type={$type}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}")),
+        set::linkCreator(createLink('my', 'execution', "type={$type}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}")),
     ),
 );
 

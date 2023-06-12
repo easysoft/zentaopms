@@ -122,7 +122,7 @@ $footToolbar = array('items' => array
     )),
     array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => ($this->session->currentProductType == 'normal' || !$canBatchChangeBranch ? 'hidden' : '') , 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => ($canBatchAssign ? '' : 'hidden'), 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $resolveItems = array();

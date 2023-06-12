@@ -59,7 +59,7 @@ $footToolbar = array('items' => array
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
-    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
+    $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
 }
 
 menu
