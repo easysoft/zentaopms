@@ -277,7 +277,7 @@ class pivotModel extends model
                 $fieldItem->field  = $index;
                 $fieldItem->type   = $defaultType;
 
-                $fieldSettingsNew[$index] = $fieldItem;
+                $fieldSettingsNew->$index = $fieldItem;
             }
             else
             {
