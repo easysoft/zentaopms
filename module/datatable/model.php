@@ -38,6 +38,8 @@ class datatableModel extends model
                 if($this->session->currentProductType === 'platform') $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->platform;
                 continue;
             }
+
+            if(!isset($items['title'])) $items['title'] = $field;
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
             $this->config->$module->dtable->fieldList[$field]['title'] = $title;
 
