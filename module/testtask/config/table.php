@@ -59,7 +59,7 @@ $config->testtask->actionList['delete']['url']  = helper::createLink('testtask',
 $config->testtask->dtable = new stdclass();
 $config->testtask->dtable->fieldList['id']['name']  = 'id';
 $config->testtask->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->testtask->dtable->fieldList['id']['fixed'] = 'left';
+$config->testtask->dtable->fieldList['id']['type']  = 'id';
 
 $config->testtask->dtable->fieldList['title']['name']  = 'name';
 $config->testtask->dtable->fieldList['title']['title'] = $lang->testtask->name;
