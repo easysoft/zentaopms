@@ -1,4 +1,4 @@
 .detail-side {width: 370px; max-height: 752px;}
 .detail-side .tab-content>.tab-pane {padding-left: 0 !important;}
-.detail-side .tabs {padding: 12px 24px 8px 24px;}
+.detail-side .tabs {padding: 12px 24px 8px 24px; background: #fff;}
 .detail-side .tabs:not(:first-child) {border-top: 1px solid #E6EAF1;}
