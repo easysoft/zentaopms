@@ -194,7 +194,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function batchCreate($projectID = 0, $productID = 0, $type = 'all')
+    public function batchCreate(int $projectID = 0, int $productID = 0, string $type = 'all')
     {
         $productID = $this->commonAction($projectID, $productID);
 
