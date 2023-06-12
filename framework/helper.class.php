@@ -480,13 +480,13 @@ function initTableData($items, &$fieldList, $checkModel)
             {
                 $item->actions = array();
                 $isClickable   = false;
-                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName);
+                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, $checkModel);
 
                 if($isClickable) break;     // If the action is clickable, use this group.
             }
             else // Only one group of action menus.
             {
-                initItemActions($item, $actionMenu);
+                initItemActions($item, $actionMenu, $checkModel);
             }
         }
 
