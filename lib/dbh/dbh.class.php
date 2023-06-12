@@ -463,6 +463,9 @@ class dbh
                 {
                     foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
                 }
+
+                /* If table has datas and sql no default values defined, replace NOT NULL to NULL. */
+                if (strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false) $sql = str_replace("NOT NULL", "NULL", $sql);
         }
 
         return $sql;
