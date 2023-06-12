@@ -458,24 +458,11 @@ function initTableData($items, &$fieldList, $checkModel)
     {
         if(is_array($actionMenu))
         {
-            foreach($actionMenu as $actionName)
-            {
-                $actions = explode('|', $actionName);
-                foreach($actions as $action)
-                {
-                    $fieldList['actions']['actionsMap'][$action] = $fieldList['actions']['list'][$action];
-                    $fieldList['actions']['actionsMap'][$action]['text'] = '';
-                }
-            }
+            foreach($actionMenu as $actionName) initTableActions($fieldList, $actionName);
         }
         else
         {
-            $actions = explode('|', $actionMenu);
-            foreach($actions as $action)
-            {
-                $fieldList['actions']['actionsMap'][$action] = $fieldList['actions']['list'][$action];
-                $fieldList['actions']['actionsMap'][$action]['text'] = '';
-            }
+            initTableActions($fieldList, $actionMenu);
         }
     }
 
@@ -492,51 +479,14 @@ function initTableData($items, &$fieldList, $checkModel)
             if(is_array($actionMenu))       // Two or more grups.
             {
                 $item->actions = array();
-                $break         = false;     // If the action is clickable, use this group.
-                foreach($actionMenu as $actionName)
-                {
-                    $actions = explode('|', $actionName);
-                    $action = $actions[0];
-                    foreach($actions as $actionName)
-                    {
-                        if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $actionName))
-                        {
-                            $action = $actionName;
-                            $break  = true;
-                        }
-                    }
+                $isClickable   = false;
+                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName);
 
-                    if(!common::hasPriv($app->rawModule, $action)) continue;
-                    if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
-                    {
-                        $item->actions[] = array('name' => $action);
-                    }
-                    else
-                    {
-                        $item->actions[] = array('name' => $action, 'disabled' => true);
-                    }
-                }
-
-                if($break) break;
+                if($isClickable) break;     // If the action is clickable, use this group.
             }
             else // Only one group of action menus.
             {
-                $actions = explode('|', $actionMenu);
-                $action = $actions[0];
-                foreach($actions as $actionName)
-                {
-                    if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $actionName)) $action = $actionName;
-                }
-
-                if(!common::hasPriv('task', $action)) continue;
-                if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
-                {
-                    $item->actions[] = array('name' => $action);
-                }
-                else
-                {
-                    $item->actions[] = array('name' => $action, 'disabled' => true);
-                }
+                initItemActions($item, $actionMenu);
             }
         }
 
@@ -551,6 +501,61 @@ function initTableData($items, &$fieldList, $checkModel)
     }
 
     return array_values($items);
+}
+
+/**
+ * Init column actions of a table.
+ *
+ * @param  array  $fieldList
+ * @param  string $actionMenu
+ * @access public
+ * @return void
+ */
+function initTableActions(array &$fieldList, string $actionMenu): void
+{
+    $actions = explode('|', $actionMenu);
+    foreach($actions as $action)
+    {
+        $fieldList['actions']['actionsMap'][$action] = $fieldList['actions']['list'][$action];
+        $fieldList['actions']['actionsMap'][$action]['text'] = '';
+    }
+}
+
+/**
+ * Init row actions of a item.
+ *
+ * @param  object $item
+ * @param  string $actionMenu
+ * @param  object $checkModel
+ * @access public
+ * @return bool
+ */
+function initItemActions(object &$item, string $actionMenu, object $checkModel): bool
+{
+    $isClickable = false;
+    $actions     = explode('|', $actionMenu);
+    $action      = current($actions);
+    foreach($actions as $actionName)
+    {
+        if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $actionName))
+        {
+            $action      = $actionName;
+            $isClickable = true;
+        }
+    }
+
+    if(!common::hasPriv($app->rawModule, $action)) return $isClickable;
+
+    if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
+    {
+        $item->actions[] = array('name' => $action);
+    }
+    else
+    {
+        $item->actions[] = array('name' => $action, 'disabled' => true);
+    }
+
+    return $isClickable;
 }
 
 /**
