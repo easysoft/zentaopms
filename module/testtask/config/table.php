@@ -64,7 +64,7 @@ $config->testtask->dtable->fieldList['id']['type']  = 'id';
 $config->testtask->dtable->fieldList['title']['name']  = 'name';
 $config->testtask->dtable->fieldList['title']['title'] = $lang->testtask->name;
 $config->testtask->dtable->fieldList['title']['type']  = 'title';
-$config->testtask->dtable->fieldList['title']['link']  = helper::createLink('testcase', 'view', "taskID={id}");
+$config->testtask->dtable->fieldList['title']['link']  = helper::createLink('testtask', 'view', "taskID={id}");
 $config->testtask->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->testtask->dtable->fieldList['build']['name']  = 'buildName';
