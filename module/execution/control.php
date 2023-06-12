@@ -1515,18 +1515,29 @@ class execution extends control
     {
         $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
 
-        $execution   = $this->commonAction($executionID);
-        $executionID = $execution->id;
-        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $execution = $this->commonAction($executionID);
+        $deptID    = $this->app->user->admin ? 0 : $this->app->user->dept;
 
-        $title      = $execution->name . $this->lang->colon . $this->lang->execution->team;
-        $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $position[] = $this->lang->execution->team;
+        $teamMembers = array();
+        $totalHours  = 0;
+        foreach($this->view->teamMembers as $member)
+        {
+            $totalHours += $member->totalHours;
 
-        $this->view->title        = $title;
-        $this->view->position     = $position;
+            $member->days    = $member->days . $this->lang->execution->day;
+            $member->hours   = $member->hours . $this->lang->execution->workHour;
+            $member->total   = $member->totalHours . $this->lang->execution->workHour;
+            $member->actions = array();
+            if(common::hasPriv('execution', 'unlinkMember', $member) && common::canModify('execution', $execution)) $member->actions = array('unlink');
+
+            $teamMembers[] = $member;
+        }
+
+        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->team;
         $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->recTotal     = count($this->view->teamMembers);
+        $this->view->teamMembers  = $teamMembers;
 
         $this->display();
     }
@@ -3237,14 +3248,11 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $userID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function unlinkMember($executionID, $userID, $confirm = 'no')
+    public function unlinkMember($executionID, $userID)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->execution->confirmUnlinkMember, $this->inlink('unlinkMember', "executionID=$executionID&userID=$userID&confirm=yes")));
-
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
@@ -3252,21 +3260,18 @@ class execution extends control
         if(!dao::isError()) $this->loadModel('action')->create('team', $executionID, 'managedTeam');
 
         /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
-        return print(js::locate($this->inlink('team', "executionID=$executionID"), 'parent'));
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = helper::createLink('execution', 'team', "executionID={$executionID}");
+        }
+        return $this->send($response);
     }
 
     /**

@@ -665,3 +665,5 @@ $lang->execution->featureBar['dynamic']['thisWeek']  = 'This Week';
 $lang->execution->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->execution->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->execution->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->execution->featureBar['team']['all'] = 'Members';

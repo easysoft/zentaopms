@@ -182,7 +182,7 @@ $lang->execution->cfdTypeList['bug']   = "按Bug查看";
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
 $lang->team->roleAB     = '我的角色';
-$lang->team->join       = '加盟日';
+$lang->team->join       = '加盟日期';
 $lang->team->hours      = '可用工时/天';
 $lang->team->days       = '可用工日';
 $lang->team->totalHours = '总计';
@@ -665,3 +665,5 @@ $lang->execution->featureBar['dynamic']['thisWeek']  = '本周';
 $lang->execution->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->execution->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->execution->featureBar['dynamic']['lastMonth'] = '上月';
+
+$lang->execution->featureBar['team']['all'] = '团队成员';
