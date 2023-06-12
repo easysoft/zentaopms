@@ -73,13 +73,16 @@ toolbar
     ))) : null
 );
 
+$setting = $this->datatable->getSetting('execution');
+
 dtable
 (
     set::userMap($users),
-    set::cols(array_values($config->execution->dtable->fieldList)),
+    set::cols($setting),
     set::data($tableData),
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
+    set::customCols(true),
     set::onRenderCell(jsRaw('onRenderSparkline')),
     set::footToolbar($footToolbar),
     set::footPager(

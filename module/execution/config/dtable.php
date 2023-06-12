@@ -7,6 +7,7 @@ $config->execution->dtable->fieldList['rawID']['type']     = 'checkID';
 $config->execution->dtable->fieldList['rawID']['sortType'] = 'desc';
 $config->execution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->execution->dtable->fieldList['rawID']['width']    = '80';
+$config->execution->dtable->fieldList['rawID']['required'] = true;
 
 $config->execution->dtable->fieldList['name']['title']        = $lang->execution->name;
 $config->execution->dtable->fieldList['name']['name']         = 'name';
@@ -16,6 +17,7 @@ $config->execution->dtable->fieldList['name']['type']         = 'html';
 $config->execution->dtable->fieldList['name']['nestedToggle'] = true;
 $config->execution->dtable->fieldList['name']['sortType']     = true;
 $config->execution->dtable->fieldList['name']['minWidth']     = '356';
+$config->execution->dtable->fieldList['name']['required']     = true;
 
 if(isset($config->setCode) and $config->setCode == 1)
 {
@@ -25,6 +27,7 @@ if(isset($config->setCode) and $config->setCode == 1)
     $config->execution->dtable->fieldList['code']['type']     = 'text';
     $config->execution->dtable->fieldList['code']['sortType'] = true;
     $config->execution->dtable->fieldList['code']['width']    = '136';
+    $config->execution->dtable->fieldList['code']['show']     = 'true';
 }
 
 $config->execution->dtable->fieldList['project']['title']    = $lang->execution->project;
@@ -33,6 +36,7 @@ $config->execution->dtable->fieldList['project']['type']     = 'desc';
 $config->execution->dtable->fieldList['project']['sortType'] = true;
 $config->execution->dtable->fieldList['project']['width']    = '160';
 $config->execution->dtable->fieldList['project']['group']    = '1';
+$config->execution->dtable->fieldList['project']['show']     = true;
 
 $config->execution->dtable->fieldList['status']['title']     = $lang->execution->status;
 $config->execution->dtable->fieldList['status']['name']      = 'status';
@@ -41,6 +45,7 @@ $config->execution->dtable->fieldList['status']['statusMap'] = $lang->execution-
 $config->execution->dtable->fieldList['status']['sortType']  = true;
 $config->execution->dtable->fieldList['status']['width']     = '80';
 $config->execution->dtable->fieldList['status']['group']     = '1';
+$config->execution->dtable->fieldList['status']['show']      = true;
 
 $config->execution->dtable->fieldList['PM']['title']    = $lang->execution->PM;
 $config->execution->dtable->fieldList['PM']['name']     = 'PM';
@@ -48,6 +53,7 @@ $config->execution->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->execution->dtable->fieldList['PM']['sortType'] = true;
 $config->execution->dtable->fieldList['PM']['width']    = '100';
 $config->execution->dtable->fieldList['PM']['group']    = '2';
+$config->execution->dtable->fieldList['PM']['show']     = true;
 
 $config->execution->dtable->fieldList['openedDate']['title']    = $lang->execution->openedDate;
 $config->execution->dtable->fieldList['openedDate']['name']     = 'openedDate';
@@ -62,6 +68,7 @@ $config->execution->dtable->fieldList['begin']['type']     = 'date';
 $config->execution->dtable->fieldList['begin']['sortType'] = true;
 $config->execution->dtable->fieldList['begin']['width']    = '96';
 $config->execution->dtable->fieldList['begin']['group']    = '3';
+$config->execution->dtable->fieldList['begin']['show']     = true;
 
 $config->execution->dtable->fieldList['end']['title']    = $lang->execution->end;
 $config->execution->dtable->fieldList['end']['name']     = 'end';
@@ -69,6 +76,7 @@ $config->execution->dtable->fieldList['end']['type']     = 'date';
 $config->execution->dtable->fieldList['end']['sortType'] = true;
 $config->execution->dtable->fieldList['end']['width']    = '96';
 $config->execution->dtable->fieldList['end']['group']    = '3';
+$config->execution->dtable->fieldList['end']['show']     = true;
 
 $config->execution->dtable->fieldList['realBegan']['title']    = $lang->execution->realBeganAB;
 $config->execution->dtable->fieldList['realBegan']['name']     = 'realBegan';
@@ -90,6 +98,7 @@ $config->execution->dtable->fieldList['totalEstimate']['type']     = 'number';
 $config->execution->dtable->fieldList['totalEstimate']['sortType'] = false;
 $config->execution->dtable->fieldList['totalEstimate']['width']    = '64';
 $config->execution->dtable->fieldList['totalEstimate']['group']    = '4';
+$config->execution->dtable->fieldList['totalEstimate']['show']     = true;
 
 $config->execution->dtable->fieldList['totalConsumed']['title']    = $lang->execution->totalConsumed;
 $config->execution->dtable->fieldList['totalConsumed']['name']     = 'totalConsumed';
@@ -97,6 +106,7 @@ $config->execution->dtable->fieldList['totalConsumed']['type']     = 'number';
 $config->execution->dtable->fieldList['totalConsumed']['sortType'] = false;
 $config->execution->dtable->fieldList['totalConsumed']['width']    = '64';
 $config->execution->dtable->fieldList['totalConsumed']['group']    = '4';
+$config->execution->dtable->fieldList['totalConsumed']['show']     = true;
 
 $config->execution->dtable->fieldList['totalLeft']['title']    = $lang->execution->totalLeft;
 $config->execution->dtable->fieldList['totalLeft']['name']     = 'totalLeft';
@@ -104,6 +114,7 @@ $config->execution->dtable->fieldList['totalLeft']['type']     = 'number';
 $config->execution->dtable->fieldList['totalLeft']['sortType'] = false;
 $config->execution->dtable->fieldList['totalLeft']['width']    = '64';
 $config->execution->dtable->fieldList['totalLeft']['group']    = '4';
+$config->execution->dtable->fieldList['totalLeft']['show']     = true;
 
 $config->execution->dtable->fieldList['progress']['title']    = $lang->execution->progress;
 $config->execution->dtable->fieldList['progress']['name']     = 'progress';
@@ -111,6 +122,7 @@ $config->execution->dtable->fieldList['progress']['type']     = 'progress';
 $config->execution->dtable->fieldList['progress']['sortType'] = false;
 $config->execution->dtable->fieldList['progress']['width']    = '64';
 $config->execution->dtable->fieldList['progress']['group']    = '4';
+$config->execution->dtable->fieldList['progress']['show']     = true;
 
 $config->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
 $config->execution->dtable->fieldList['burn']['name']     = 'burn';
@@ -118,3 +130,4 @@ $config->execution->dtable->fieldList['burn']['type']     = 'burn';
 $config->execution->dtable->fieldList['burn']['sortType'] = false;
 $config->execution->dtable->fieldList['burn']['width']    = '88';
 $config->execution->dtable->fieldList['burn']['group']    = '4';
+$config->execution->dtable->fieldList['burn']['show']     = true;

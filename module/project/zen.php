@@ -980,7 +980,7 @@ class projectZen extends project
 
             if($project->PM)
             {
-                $user = zget($userList, $project->PM);
+                $user = zget($userList, $project->PM, '');
                 if(empty($user)) continue;
 
                 $project->PM        = $user->realname;
