@@ -79,8 +79,8 @@ jsVar('sortLink', helper::createLink('execution', 'testcase', "executionID={$exe
 dtable
 (
     set::userMap($users),
-    set::cols(array_values($config->testcase->dtable->fieldList)),
-    set::data(array_values($cases)),
+    set::cols($config->testcase->dtable->fieldList),
+    set::data($cases),
     set::sortLink(jsRaw('createSortLink')),
     set::footPager(
         usePager(),
