@@ -20,7 +20,7 @@ featureBar
 );
 
 /* Build create story button. */
-$fnBuildCreateStoryButton = function() use ($lang, $product, $storyType, $productID)
+$fnBuildCreateStoryButton = function() use ($lang, $product, $storyType, $productID, $executionID)
 {
     if(!common::canModify('product', $product)) return null;
 
@@ -82,7 +82,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $storyType, $produc
 };
 
 /* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $product, $productID)
+$fnBuildLinkStoryButton = function() use($lang, $product, $productID, $executionID)
 {
     if(!common::canModify('product', $product)) return null;
 
