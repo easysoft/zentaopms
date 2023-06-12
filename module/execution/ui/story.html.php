@@ -89,7 +89,7 @@ $fnBuildLinkStoryButton = function() use($lang, $product, $productID)
     /* Tutorial mode. */
     if(commonModel::isTutorialMode())
     {
-        $wizardParams = helper::safe64Encode("project={$execution->id}");
+        $wizardParams = helper::safe64Encode("project={$executionID}");
 
         return item(set(array
         (

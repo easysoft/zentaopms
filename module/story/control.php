@@ -223,7 +223,7 @@ class story extends control
         $this->view->product          = $this->product->getByID($story->product);
         $this->view->products         = $this->product->getPairs();
         $this->view->story            = $story;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, $story->branch);
         $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, 0, '', true);
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
@@ -1754,7 +1754,7 @@ class story extends control
     public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get story, product, products, and queryID. */
