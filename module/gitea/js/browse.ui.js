@@ -25,3 +25,19 @@ window.renderCell = function(result, {col, row})
 
     return result;
 };
+
+/**
+ * 提示并删除版本。
+ * Delete release with tips.
+ *
+ * @param  int    giteaID
+ * @access public
+ * @return void
+ */
+window.confirmDelete = function(giteaID)
+{
+    if(window.confirm(confirmDelete))
+    {
+        $.ajaxSubmit({url: $.createLink('gitea', 'delete', 'giteaID=' + giteaID)});
+    }
+}

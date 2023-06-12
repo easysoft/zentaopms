@@ -39,7 +39,7 @@ $config->gitea->actionList['bindUser']['url']  = helper::createLink('gitea', 'bi
 $config->gitea->actionList['delete']['icon'] = 'trash';
 $config->gitea->actionList['delete']['text'] = $lang->gitea->delete;
 $config->gitea->actionList['delete']['hint'] = $lang->gitea->delete;
-$config->gitea->actionList['delete']['url']  = helper::createLink('gitea', 'delete',"giteaID={id}");
+$config->gitea->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
 
 $config->gitea->dtable->fieldList['actions']['name']     = 'actions';
 $config->gitea->dtable->fieldList['actions']['title']    = $lang->actions;

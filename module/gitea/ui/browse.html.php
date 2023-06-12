@@ -26,6 +26,7 @@ toolbar
     $canCreate ? item(set($createItem)) : null,
 );
 
+jsVar('confirmDelete',    $lang->gitea->confirmDelete);
 jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('gitea', 'browseProject'));
 jsVar('sortLink',         helper::createLink('gitea', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
