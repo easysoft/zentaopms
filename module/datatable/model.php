@@ -96,32 +96,33 @@ class datatableModel extends model
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
         {
-            $setting = $this->config->$module->dtable->defaultField;
-            $order   = 1;
-            foreach($setting as $key => $value)
+            $order = 1;
+            foreach($fieldList as $key => $value)
             {
-                $id  = $value;
-                $set = new stdclass();;
-                $set->order    = $order++;
-                $set->id       = $id;
-                $set->show     = true;
-                $set->width    = $fieldList[$id]['width'];
-                $set->fixed    = $fieldList[$id]['fixed'];
-                $set->title    = $fieldList[$id]['title'];
-                $set->sortType = isset($fieldList[$id]['sort']) && $fieldList[$id]['sort'] == 'yes';
-                $set->name     = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
-                $set->group    = isset($fieldList[$id]['group']) ? $fieldList[$id]['group'] : '';
-                $set->link     = isset($fieldList[$id]['link']) ? $fieldList[$id]['link'] : '';
+                if(!isset($value['required']) and !isset($value['show'])) continue;
 
-                if(isset($fieldList[$id]['minWidth']))     $set->minWidth      = $fieldList[$id]['minWidth'];
-                if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth      = $fieldList[$id]['maxWidth'];
-                if(isset($fieldList[$id]['pri']))          $set->pri           = $fieldList[$id]['pri'];
-                if(isset($fieldList[$id]['statusMap']))    $set->statusMap     = $fieldList[$id]['statusMap'];
-                if(isset($fieldList[$id]['type']))         $set->type          = $fieldList[$id]['type'];
-                if(isset($fieldList[$id]['actionsMap']))   $set->actionsMap    = $fieldList[$id]['actionsMap'];
-                if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle  = $fieldList[$id]['nestedToggle'];
-                if(isset($fieldList[$id]['checkbox']))     $set->checkbox      = $fieldList[$id]['checkbox'];
-                if(isset($fieldList[$id]['map']))          $set->map           = $fieldList[$id]['map'];
+                $set = new stdclass();
+                $set->order    = $order++;
+                $set->id       = $key;
+                $set->show     = true;
+                $set->width    = $value['width'];
+                $set->type     = $value['type'];
+                $set->fixed    = isset($value['fixed'])    ? $value['fixed']    : '';
+                $set->title    = isset($value['title'])    ? $value['title']    : $this->lang->$module->{$key};
+                $set->name     = isset($value['name'])     ? $value['name']     : $key;
+                $set->sortType = isset($value['sortType']) ? $value['sortType'] : false;
+                $set->group    = isset($value['group'])    ? $value['group']    : '';
+                $set->link     = isset($value['link'])     ? $value['link']     : '';
+
+                if(isset($value['minWidth']))     $set->minWidth     = $value['minWidth'];
+                if(isset($value['maxWidth']))     $set->maxWidth     = $value['maxWidth'];
+                if(isset($value['pri']))          $set->pri          = $value['pri'];
+                if(isset($value['statusMap']))    $set->statusMap    = $value['statusMap'];
+                if(isset($value['actionsMap']))   $set->actionsMap   = $value['actionsMap'];
+                if(isset($value['checkbox']))     $set->checkbox     = $value['checkbox'];
+                if(isset($value['map']))          $set->map          = $value['map'];
+                if(isset($value['flex']))         $set->flex         = $value['flex'];
+                if(isset($value['nestedToggle'])) $set->nestedToggle = $value['nestedToggle'];
 
                 $setting[$key] = $set;
             }
