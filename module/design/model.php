@@ -201,7 +201,7 @@ class designModel extends model
         }
 
         $oldCommit = $this->dao->findByID($designID)->from(TABLE_DESIGN)->fetch('commit');
-        $revisions = join(',', $revisions);
+        $revisions = implode(',', $revisions);
         $commit    = $oldCommit ? $oldCommit . ',' . $revisions : $revisions;
 
         $design = new stdclass();
@@ -372,12 +372,12 @@ class designModel extends model
         }
         else
         {
-            if($this->session->designQuery == false) $this->session->set('designQuery', ' 1 = 1');
+            if($this->session->designQuery === false) $this->session->set('designQuery', ' 1 = 1');
         }
 
         $designQuery = $this->session->designQuery;
 
-        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
+        return $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
@@ -385,8 +385,6 @@ class designModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        return $designs;
     }
 
     /**
@@ -404,8 +402,6 @@ class designModel extends model
      */
     public function setMenu($projectID, $products, $productID = 0)
     {
-        $project = $this->loadModel('project')->getByID($projectID);
-
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
         $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
@@ -440,7 +436,6 @@ class designModel extends model
             $currentProduct->name = $this->lang->product->all;
         }
 
-        $currentProduct = $this->loadModel('product')->getById($productID);
         if(!empty($currentProduct->shadow)) return '';
 
         $output = '';

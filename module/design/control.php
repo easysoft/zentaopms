@@ -118,7 +118,7 @@ class design extends control
         }
 
         /* Init pager and get designs. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager   = pager::init(0, $recPerPage, $pageID);
 
         if(!$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
@@ -242,8 +242,8 @@ class design extends control
      */
     public function view($designID = 0)
     {
-        $design    = $this->design->getByID($designID);
-        $productID = $this->commonAction($design->project, $design->product, $designID);
+        $design = $this->design->getByID($designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true), 'product');
@@ -277,7 +277,7 @@ class design extends control
     {
         $design = $this->design->getByID($designID);
         $design = $this->design->getAffectedScope($design);
-        $productID = $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         if($_POST)
         {
@@ -333,8 +333,8 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        $design    = $this->design->getById($designID);
-        $productID = $this->commonAction($design->project, $design->product, $designID);
+        $design = $this->design->getById($designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         /* Get project and date. */
         $project = $this->loadModel('project')->getByID($design->project);
@@ -369,9 +369,8 @@ class design extends control
         }
 
         /* Init pager. */
-        $this->app->loadClass('pager', $static = true);
-        $recTotal  = count($revisions);
-        $pager     = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $pager     = new pager(count($revisions), $recPerPage, $pageID);
         $revisions = array_chunk($revisions, $pager->recPerPage);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
@@ -427,10 +426,10 @@ class design extends control
     public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $design = $this->design->getByID($designID);
-        $productID = $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID);
 
         /* Init pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager   = pager::init(0, $recPerPage, $pageID);
 
         $design = $this->design->getCommit($designID, $pager);
