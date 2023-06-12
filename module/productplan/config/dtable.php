@@ -8,6 +8,7 @@ $config->productplan->dtable->fieldList['id']['fixed']    = 'left';
 $config->productplan->dtable->fieldList['id']['checkbox'] = true;
 $config->productplan->dtable->fieldList['id']['sortType'] = true;
 $config->productplan->dtable->fieldList['id']['align']    = 'left';
+$config->productplan->dtable->fieldList['id']['group']    = 'g1';
 
 $config->productplan->dtable->fieldList['title']['name']         = 'title';
 $config->productplan->dtable->fieldList['title']['title']        = $lang->productplan->title;
@@ -16,6 +17,7 @@ $config->productplan->dtable->fieldList['title']['fixed']        = 'left';
 $config->productplan->dtable->fieldList['title']['sortType']     = true;
 $config->productplan->dtable->fieldList['title']['align']        = 'left';
 $config->productplan->dtable->fieldList['title']['nestedToggle'] = true;
+$config->productplan->dtable->fieldList['title']['group']        = 'g1';
 
 $config->productplan->dtable->fieldList['status']['name']      = 'status';
 $config->productplan->dtable->fieldList['status']['title']     = $lang->productplan->status;
@@ -28,41 +30,50 @@ $config->productplan->dtable->fieldList['branch']['name']     = 'branch';
 $config->productplan->dtable->fieldList['branch']['title']    = '';
 $config->productplan->dtable->fieldList['branch']['type']     = 'text';
 $config->productplan->dtable->fieldList['branch']['sortType'] = true;
+$config->productplan->dtable->fieldList['branch']['group']    = 'g2';
 
 $config->productplan->dtable->fieldList['begin']['name']     = 'begin';
 $config->productplan->dtable->fieldList['begin']['title']    = $lang->productplan->begin;
 $config->productplan->dtable->fieldList['begin']['type']     = 'date';
 $config->productplan->dtable->fieldList['begin']['sortType'] = true;
+$config->productplan->dtable->fieldList['begin']['group']    = 'g3';
 
 $config->productplan->dtable->fieldList['end']['name']     = 'end';
 $config->productplan->dtable->fieldList['end']['title']    = $lang->productplan->end;
 $config->productplan->dtable->fieldList['end']['type']     = 'date';
 $config->productplan->dtable->fieldList['end']['sortType'] = true;
+$config->productplan->dtable->fieldList['end']['group']    = 'g3';
 
 $config->productplan->dtable->fieldList['stories']['name']     = 'stories';
 $config->productplan->dtable->fieldList['stories']['title']    = $lang->productplan->stories;
 $config->productplan->dtable->fieldList['stories']['type']     = 'number';
 $config->productplan->dtable->fieldList['stories']['sortType'] = false;
+$config->productplan->dtable->fieldList['stories']['width']    = 84;
+$config->productplan->dtable->fieldList['stories']['group']    = 'g4';
 
 $config->productplan->dtable->fieldList['bugs']['name']     = 'bugs';
 $config->productplan->dtable->fieldList['bugs']['title']    = $lang->productplan->bugs;
 $config->productplan->dtable->fieldList['bugs']['type']     = 'number';
 $config->productplan->dtable->fieldList['bugs']['sortType'] = false;
+$config->productplan->dtable->fieldList['bugs']['group']    = 'g4';
 
 $config->productplan->dtable->fieldList['hour']['name']     = 'hour';
 $config->productplan->dtable->fieldList['hour']['title']    = $lang->productplan->hour;
 $config->productplan->dtable->fieldList['hour']['type']     = 'number';
 $config->productplan->dtable->fieldList['hour']['sortType'] = false;
+$config->productplan->dtable->fieldList['hour']['group']    = 'g4';
 
 $config->productplan->dtable->fieldList['execution']['name']     = 'execution';
 $config->productplan->dtable->fieldList['execution']['title']    = $lang->productplan->execution;
 $config->productplan->dtable->fieldList['execution']['type']     = 'number';
 $config->productplan->dtable->fieldList['execution']['sortType'] = false;
+$config->productplan->dtable->fieldList['execution']['group']    = 'g5';
 
 $config->productplan->dtable->fieldList['desc']['name']     = 'desc';
 $config->productplan->dtable->fieldList['desc']['title']    = $lang->productplan->desc;
 $config->productplan->dtable->fieldList['desc']['type']     = 'text';
 $config->productplan->dtable->fieldList['desc']['sortType'] = false;
+$config->productplan->dtable->fieldList['desc']['group']    = 'g6';
 
 $config->productplan->dtable->fieldList['actions']['name']     = 'actions';
 $config->productplan->dtable->fieldList['actions']['title']    = $lang->actions;
