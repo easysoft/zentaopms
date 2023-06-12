@@ -499,8 +499,17 @@ EOF;
             $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
             $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
             $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
-            if(!isset($task->hasChild)) $task->hasChild = 0;
-            if(isset($tasks[$task->parent])) $tasks[$task->parent]->hasChild = 1;
+            if($task->parent)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->hasChild = true;
+                }
+                else
+                {
+                    $task->parent = 0;
+                }
+            }
         }
 
         /* Get the story language configuration. */
