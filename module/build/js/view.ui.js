@@ -52,3 +52,20 @@ window.unlinkObject = function(objectType, objectID)
         $.ajaxSubmit({url: eval(`unlink${objectType}URL`).replace('%s', objectID)});
     }
 }
+
+/**
+ * 生成列表的排序链接。
+ * Create sort link for table.
+ *
+ * @param  object col
+ * @access public
+ * @return string
+ */
+window.createSortLink = function(col)
+{
+    let tabType = $('.tab-pane.active').attr('id');
+    let sort    = `${col.name}_asc`;
+
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{type}', tabType).replace('{orderBy}', sort);
+}

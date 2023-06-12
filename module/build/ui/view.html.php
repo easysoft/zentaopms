@@ -27,6 +27,7 @@ jsVar('confirmUnlinkBug',   $lang->build->confirmUnlinkBug);
 jsVar('unlinkStoryURL',     helper::createLink('build', 'unlinkStory', "buildID={$build->id}&storyID=%s"));
 jsVar('unlinkBugURL',       helper::createLink('build', 'unlinkBug', "buildID={$build->id}&bugID=%s"));
 
+/* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv('build', 'batchUnlinkStory');
 $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
@@ -34,6 +35,7 @@ $storyFootToolbar = array();
 if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => inlink('batchUnlinkStory', "build={$build->id}"));
 if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->story->batchClose,    'btnType' => 'primary', 'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$build->product}"));
 
+/* Bug's batch btn. */
 $canBatchUnlinkBug = $canBeChanged && common::hasPriv('build', 'batchUnlinkBug');
 $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
