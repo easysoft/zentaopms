@@ -58,45 +58,24 @@ if($branchStatus != 'closed')
 }
 
 /* Create link2Project modal. */
-div
+modal
 (
-    setClass('modal'),
     set::id('link2Project'),
-    div
+    set::title($lang->product->link2Project),
+    set::footerClass('form-actions'),
+    to::footer
     (
-        setClass('modal-dialog mw-500px'),
-        div
-        (
-            setClass('modal-content'),
-            div
-            (
-                setClass('modal-header'),
-                h4(setClass('modal-title'), $lang->product->link2Project)
-            ),
-            div
-            (
-                setClass('modal-actions'),
-                btn(setClass('square ghost'), set('data-dismiss', 'modal'), icon('close'))
-            ),
-            div
-            (
-                setClass('modal-body'),
-                inputGroup
-                (
-                    $lang->product->link2Project,
-                    select(set::name('project'), set::items($projects))
-                ),
-                formRow
-                (
-                    setClass('form-actions form-group no-label pt-7'),
-                    input(set::type('hidden'), set::name('product'), set::value($product->id)),
-                    input(set::type('hidden'), set::name('branch'), set::value($branchID)),
-                    btn(setClass('primary'), set::id('saveButton'), $lang->save),
-                    btn(setClass('default'), set('data-dismiss', 'modal'), $lang->cancel),
-                ),
-            )
-        )
-    )
+        btn(setClass('primary'), set::id('saveButton'), $lang->save),
+        btn(setClass('default'), set('data-dismiss', 'modal'), $lang->cancel),
+    ),
+
+    inputGroup
+    (
+        $lang->product->link2Project,
+        select(set::name('project'), set::items($projects))
+    ),
+    input(set::type('hidden'), set::name('product'), set::value($product->id)),
+    input(set::type('hidden'), set::name('branch'), set::value($branchID)),
 );
 
 /* Get column settings of the data table. */
