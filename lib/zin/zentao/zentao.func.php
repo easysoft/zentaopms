@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The helper functions and classes for ZentaoPHP file of zin of ZenTaoPMS.
  *
@@ -69,7 +70,7 @@ function isFieldRequired($name)
     $moduleName = $app->moduleName;
     $methodName = $app->methodName;
     $required   = false;
-    if(isset($config->$moduleName->$methodName->requiredFields)) $required = in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
+    if (isset($config->$moduleName->$methodName->requiredFields)) $required = in_array($name, explode(',', $config->$moduleName->$methodName->requiredFields));
 
     return $required;
 }
@@ -85,6 +86,8 @@ function isAjaxRequest(string|null $type = null): bool
     if($isAjax === false) return false;
 
     if($type === 'zin') return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
+
+    if($type === 'modal') return isset($_SERVER['X-Zui-Modal']) && $_SERVER['X-Zui-Modal'] == true;
 
     return $isAjax;
 }
