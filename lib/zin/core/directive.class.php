@@ -54,7 +54,7 @@ class directive
     }
 }
 
-function directive($type, $data, $options = null)
+function directive($type, $data, $options = null): directive
 {
     return new directive($type, $data, $options);
 }

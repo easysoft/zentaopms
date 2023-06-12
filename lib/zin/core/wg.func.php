@@ -1,12 +1,13 @@
 <?php
+declare(strict_types=1);
 /**
- * The wg helper methods file of zin lib.
+ * The widget function file of zin module of ZenTaoPMS.
  *
- * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @author      Hao Sun <sunhao@easycorp.ltd>
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      sunhao<sunhao@easycorp.ltd>
  * @package     zin
- * @version     $Id
- * @link        https://www.zentao.net
+ * @link        http://www.zentao.net
  */
 namespace zin;
 
@@ -16,7 +17,14 @@ require_once __DIR__ . DS . 'directive.class.php';
 require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'context.func.php';
 
-function set($name, $value = null)
+/**
+ * Set widget properties.
+ *
+ * @param  string|array     $name
+ * @param  mixed            $value
+ * @return directive|null
+ */
+function set(string|array|props|null $name, mixed $value = null): directive | null
 {
     if($name === null) return null;
 
@@ -25,40 +33,69 @@ function set($name, $value = null)
     else if(is_array($name)) $props = $name;
     else if(is_object($name))  $props = (array)$name;
     else if(is_string($name)) $props = array($name => $value);
-    if($props) return directive('prop', $props);
+    return $props ? directive('prop', $props) : null;
 }
 
-function prop($name, $value = null)
-{
-    return set($name, $value);
-}
-
-function setClass()
+/**
+ * Set widget CSS class attribute.
+ *
+ * @param  array|string|null ...$classList
+ * @return directive
+ */
+function setClass(/* array|string|null ...$classList */): directive
 {
     return directive('class', func_get_args());
 }
 
-function setStyle($name, $value = null)
+/**
+ * Set widget style attribute.
+ *
+ * @return directive
+ */
+function setStyle(array|string $name, mixed $value = null): directive
 {
     return directive('style', is_array($name) ? $name : array($name => $value));
 }
 
-function setCssVar($name, $value = null)
+/**
+ * Set widget CSS variable.
+ *
+ * @return directive
+ */
+function setCssVar(array|string $name, mixed $value = null): directive
 {
     return directive('cssVar', is_array($name) ? $name : array($name => $value));
 }
 
+/**
+ * Set widget ID attribute.
+ *
+ * @return directive
+ */
 function setID($id)
 {
-    return prop('id', $id);
+    return set('id', $id);
 }
 
-function setTag($id)
+/**
+ * Set widget element tag name.
+ *
+ * @return directive
+ */
+function setTag($id): directive
 {
-    return prop('tagName', $id);
+    return set('tagName', $id);
 }
 
-function on($name, $handler, $options = null)
+
+/**
+ * Add event listener to widget element.
+ *
+ * @param  string            $name
+ * @param  bool|string|array $handler
+ * @param  array             $options
+ */
+function on(string $name, bool|string|array $handler, array $options = null): directive
 {
     if(is_string($options) && is_string($handler))
     {
@@ -87,43 +124,84 @@ function on($name, $handler, $options = null)
     return set("@$name", (object)$options);
 }
 
-function html(/* string ...$lines */)
+/**
+ * Create html content.
+ *
+ * @param  string ...$lines
+ * @return directive
+ */
+function html(/* string ...$lines */): directive
 {
     return directive('html', implode("\n", \zin\utils\flat(func_get_args())));
 }
 
-function text(/* string ...$lines */)
+/**
+ * Create text content.
+ *
+ * @param  string ...$lines
+ * @return directive
+ */
+function text(/* string ...$lines */): directive
 {
     return directive('text', implode("\n", \zin\utils\flat(func_get_args())));
 }
 
-function block($name, $value = null)
+/**
+ * Create block content.
+ *
+ * @param  string       $name
+ * @param  mixed        ...$wgs
+ * @return directive
+ */
+function to(/* string $name, mixed ...$wgs */): directive
 {
-    return directive('block', is_array($name) ? $name : array($name => new wg($value)));
+    $args  = func_get_args();
+    $name  = array_shift($args);
+    $wg    = new wg(count($args) > 1 ? $args : $args[0]);
+    return directive('block', array($name => $wg));
 }
 
-function to($name, $value = null)
+/**
+ * Create content for block "before".
+ *
+ * @param  string       $wgs
+ * @return directive
+ */
+function before(/* mixed ...$wgs */): directive
 {
-    return block($name, $value);
+    return to('before', func_get_args());
 }
 
-function before()
+/**
+ * Create content for block "after".
+ *
+ * @param  string       $wgs
+ * @return directive
+ */
+function after(): directive
 {
-    return directive('block', array('before' => func_get_args()));
+    return to('after', func_get_args());
 }
 
-function after()
-{
-    return directive('block', array('after' => func_get_args()));
-}
-
-function inherit($item)
+/**
+ * Create widget contents inherited from the given widget.
+ *
+ * @param  wg|array $item
+ * @return array
+ */
+function inherit(wg|array $item): array
 {
     if(!($item instanceof wg)) $item = new wg($item);
     return array(set($item->props), directive('block', $item->blocks), $item->children());
 }
 
-function divorce($item)
+/**
+ * Divorce widget from parent.
+ *
+ * @param  wg|array $item
+ * @return array
+ */
+function divorce(wg|array $item): wg|array
 {
     if($item instanceof wg)
     {
@@ -136,7 +214,14 @@ function divorce($item)
     return $item;
 }
 
-function hasWgInList($items, $type)
+/**
+ * Check if the given widget list has the given widget type.
+ *
+ * @param  wg|array $items
+ * @param  string   $type
+ * @return bool
+ */
+function hasWgInList(wg|array $items, string $type): bool
 {
     if(!is_array($items)) $items = array($items);
     foreach($items as $item)
@@ -146,7 +231,14 @@ function hasWgInList($items, $type)
     return false;
 }
 
-function groupWgInList($items, $types)
+/**
+ * Group widgets by type.
+ *
+ * @param  wg|array $items
+ * @param  string   $types
+ * @return array
+ */
+function groupWgInList(wg|array $items, string|array $types): array
 {
     if(is_string($types)) $types = explode(',', $types);
     $typesMap = array();

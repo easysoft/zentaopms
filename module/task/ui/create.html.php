@@ -254,8 +254,8 @@ formPanel
                 $storyEmptyPreTip,
                 input(
                     set::name(''),
-                    prop('readonly'),
-                    prop('onfocus', 'this.blur()'),
+                    set('readonly'),
+                    set('onfocus', 'this.blur()'),
                 ),
                 span
                 (

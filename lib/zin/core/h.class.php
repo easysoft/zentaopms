@@ -92,12 +92,12 @@ class h extends wg
     {
         $args = func_get_args();
         $tagName = array_shift($args);
-        return new h(is_string($tagName) ? prop('tagName', $tagName) : $tagName, $args);
+        return new h(is_string($tagName) ? set('tagName', $tagName) : $tagName, $args);
     }
 
     public static function __callStatic($tagName, $args)
     {
-        return new h(prop('tagName', $tagName), $args);
+        return new h(set('tagName', $tagName), $args);
     }
 
     public static function a()
@@ -109,37 +109,37 @@ class h extends wg
 
     public static function button()
     {
-        return static::create('button', prop('type', 'button'), func_get_args());
+        return static::create('button', set('type', 'button'), func_get_args());
     }
 
     public static function input()
     {
-        return static::create('input', prop('type', 'text'), func_get_args());
+        return static::create('input', set('type', 'text'), func_get_args());
     }
 
     public static function formHidden($name, $value, ...$args)
     {
-        return static::create('input', prop('type', 'hidden'), set::name($name), set::value($value), $args);
+        return static::create('input', set('type', 'hidden'), set::name($name), set::value($value), $args);
     }
 
     public static function checkbox()
     {
-        return static::create('input', prop('type', 'checkbox'), func_get_args());
+        return static::create('input', set('type', 'checkbox'), func_get_args());
     }
 
     public static function radio()
     {
-        return static::create('input', prop('type', 'radio'), func_get_args());
+        return static::create('input', set('type', 'radio'), func_get_args());
     }
 
     public static function date()
     {
-        return static::create('input', prop('type', 'date'), func_get_args());
+        return static::create('input', set('type', 'date'), func_get_args());
     }
 
     public static function file()
     {
-        return static::create('input', prop('type', 'file'), func_get_args());
+        return static::create('input', set('type', 'file'), func_get_args());
     }
 
     public static function textarea(...$args)
@@ -162,12 +162,12 @@ class h extends wg
 
     public static function importJs($src, ...$args)
     {
-        return static::create('script', prop('src', $src), ...$args);
+        return static::create('script', set('src', $src), ...$args);
     }
 
     public static function importCss($src, ...$args)
     {
-        return static::create('link', prop('rel', 'stylesheet'), prop('href', $src), ...$args);
+        return static::create('link', set('rel', 'stylesheet'), set('href', $src), ...$args);
     }
 
     public static function import($file, $type = null, ...$args)
