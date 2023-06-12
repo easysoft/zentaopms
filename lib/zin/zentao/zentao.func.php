@@ -91,3 +91,21 @@ function isAjaxRequest(string|null $type = null): bool
 
     return $isAjax;
 }
+
+/**
+ * Bind global event listener to widget element.
+ *
+ * @param string       $name
+ * @param string|array $callback
+ * @param array|null   $options
+ * @return directive
+ */
+function bind(string $name, string|array $callback, array $options = null): directive
+{
+    $data = array('on' => $name);
+    if(is_string($callback)) $data['call'] = $callback;
+    if(is_array($callback))  $data = array_merge($data, $callback);
+    if($options)             $data = array_merge($data, $options);
+
+    return setData($data);
+}
