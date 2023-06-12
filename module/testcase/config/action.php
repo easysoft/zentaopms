@@ -12,13 +12,13 @@ $config->testcase->actionList['confirmStoryChange']['url']  = helper::createLink
 $config->testcase->actionList['runCase']['icon']       = 'play';
 $config->testcase->actionList['runCase']['text']       = $lang->testtask->runCase;
 $config->testcase->actionList['runCase']['hint']       = $lang->testtask->runCase;
-$config->testcase->actionList['runCase']['url']        = helper::createLink('testtask', 'runCase', 'runID=0&caseID={id}&version={version}');
+$config->testcase->actionList['runCase']['url']        = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={id}&version={version}');
 $config->testcase->actionList['runCase']['data-width'] = 0.95;
 
 $config->testcase->actionList['runResult']['icon']       = 'list-alt';
 $config->testcase->actionList['runResult']['text']       = $lang->testtask->results;
 $config->testcase->actionList['runResult']['hint']       = $lang->testtask->results;
-$config->testcase->actionList['runResult']['url']        = helper::createLink('testtask', 'results', 'runID=0&caseID={id}');
+$config->testcase->actionList['runResult']['url']        = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={id}');
 $config->testcase->actionList['runResult']['data-width'] = 0.95;
 
 $config->testcase->actionList['edit']['icon'] = 'edit';
@@ -44,7 +44,7 @@ $config->testcase->actionList['create']['url']  = helper::createLink('testcase',
 $config->testcase->actionList['unlinkCase']['icon'] = 'unlink';
 $config->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
 $config->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
-$config->testcase->actionList['unlinkCase']['url']  = helper::createLink('testtask', 'unlinkCase', 'caseID={id}&confirm=yes');
+$config->testcase->actionList['unlinkCase']['url']  = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}&confirm=yes');
 
 $config->testcase->actionList['showScript']['icon'] = 'file-code';
 $config->testcase->actionList['showScript']['text'] = $lang->testcase->showScript;
