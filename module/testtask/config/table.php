@@ -87,7 +87,6 @@ $config->testtask->dtable->fieldList['owner']['name']    = 'owner';
 $config->testtask->dtable->fieldList['owner']['title']   = $lang->testtask->owner;
 $config->testtask->dtable->fieldList['owner']['type']    = 'user';
 $config->testtask->dtable->fieldList['owner']['group']   = 'user';
-$config->testtask->dtable->fieldList['owner']['userMap'] = array();
 
 $config->testtask->dtable->fieldList['begin']['name']  = 'begin';
 $config->testtask->dtable->fieldList['begin']['title'] = $lang->testtask->begin;
