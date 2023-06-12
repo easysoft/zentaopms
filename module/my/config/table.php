@@ -381,9 +381,15 @@ $config->my->story->actionList['recall']['text'] = $lang->story->recall;
 $config->my->story->actionList['recall']['hint'] = $lang->story->recall;
 $config->my->story->actionList['recall']['url']  = helper::createLink('story', 'recall', 'storyID={id}');
 
+$config->my->story->actionList['edit']['icon']        = 'edit';
+$config->my->story->actionList['edit']['text']        = $lang->story->edit;
+$config->my->story->actionList['edit']['hint']        = $lang->story->edit;
+$config->my->story->actionList['edit']['url']         = helper::createLink('stroy', 'edit', 'storyID={id}');
+$config->my->story->actionList['edit']['data-toggle'] = 'modal';
+
 $config->my->story->actionList['create']['icon']        = 'sitemap';
-$config->my->story->actionList['create']['text']        = $lang->story->edit;
-$config->my->story->actionList['create']['hint']        = $lang->story->edit;
+$config->my->story->actionList['create']['text']        = $lang->testcase->create;
+$config->my->story->actionList['create']['hint']        = $lang->testcase->create;
 $config->my->story->actionList['create']['url']         = helper::createLink('testcase', 'create', 'productID={product}&branch={branch}&module=0&from=&param=0&storyID={id}');
 $config->my->story->actionList['create']['data-toggle'] = 'modal';
 
@@ -395,13 +401,14 @@ $config->my->story->actionList['close']['url']  = helper::createLink('story', 'c
 $config->my->story->dtable = new stdclass();
 $config->my->story->dtable->fieldList['id']['name']  = 'id';
 $config->my->story->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->story->dtable->fieldList['id']['type']  = 'checkID';
+$config->my->story->dtable->fieldList['id']['type']  = 'id';
 
-$config->my->story->dtable->fieldList['title']['name']  = 'title';
-$config->my->story->dtable->fieldList['title']['title'] = common::checkNotCN() ? $lang->SRCommon . ' ' . $lang->my->name : $lang->SRCommon . $lang->my->name;
-$config->my->story->dtable->fieldList['title']['type']  = 'title';
-$config->my->story->dtable->fieldList['title']['link']  = helper::createLink('story', 'view', 'id={id}');
-$config->my->story->dtable->fieldList['title']['fixed'] = 'left';
+$config->my->story->dtable->fieldList['title']['name']         = 'title';
+$config->my->story->dtable->fieldList['title']['title']        = common::checkNotCN() ? $lang->SRCommon . ' ' . $lang->my->name : $lang->SRCommon . $lang->my->name;
+$config->my->story->dtable->fieldList['title']['type']         = 'title';
+$config->my->story->dtable->fieldList['title']['nestedToggle'] = true;
+$config->my->story->dtable->fieldList['title']['link']         = helper::createLink('story', 'view', 'id={id}');
+$config->my->story->dtable->fieldList['title']['fixed']        = 'left';
 
 $config->my->story->dtable->fieldList['pri']['name']  = 'pri';
 $config->my->story->dtable->fieldList['pri']['title'] = $lang->priAB;
@@ -445,7 +452,7 @@ $config->my->story->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->story->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->story->dtable->fieldList['actions']['sortType'] = false;
 $config->my->story->dtable->fieldList['actions']['list']     = $config->my->story->actionList;
-$config->my->story->dtable->fieldList['actions']['menu']     = array('change', 'submitReview|review', 'recall', 'create', 'close');
+$config->my->story->dtable->fieldList['actions']['menu']     = array('change', 'review|submitReview', 'recall', 'edit', 'create', 'close');
 
 $config->my->testtask = new stdclass();
 $config->my->testtask->dtable = new stdclass();

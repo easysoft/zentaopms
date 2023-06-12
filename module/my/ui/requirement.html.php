@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('children', $lang->story->children);
 
 featureBar
 (
@@ -25,10 +24,10 @@ $canBatchClose    = common::hasPriv('story', 'batchClose');
 $canBatchAction   = $canBatchEdit || $canBatchReview || $canBatchAssignTo || $canBatchClose;
 $footToolbar = array('items' => array
 (
-    $canBatchEdit     ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=requirement&from={$app->rawMethod}")) : null,
-    $canBatchReview   ? array('caret' => 'up', 'text' => $lang->story->review, 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
+    $canBatchEdit ?     array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=requirement&from={$app->rawMethod}")) : null,
+    $canBatchReview ?   array('caret' => 'up', 'text' => $lang->story->review, 'url' => '#navReview', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     $canBatchAssignTo ? array('caret' => 'up', 'text' => $lang->story->assignedTo, 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canBatchClose    ? array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}")) : null,
+    $canBatchClose ?    array('text' => $lang->story->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}")) : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($canBatchReview)
@@ -79,7 +78,7 @@ if($canBatchAssignTo)
     );
 }
 
-if($canBatchAction) $config->my->requirement->dtable->fieldList['id']['type']  = 'checkID';
+if($canBatchAction) $config->my->requirement->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->requirement->dtable->fieldList, $this->story);
 $cols    = array_values($config->my->requirement->dtable->fieldList);
@@ -90,7 +89,7 @@ dtable
     set::data($data),
     set::userMap($users),
     set::fixedLeftWidth('44%'),
-    $canBatchAction ? set::checkable(true) : null,
+    set::checkable($canBatchAction ? true : false),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
