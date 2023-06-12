@@ -61,7 +61,7 @@ sidebar
     moduleMenu(set(array(
         'modules'   => $moduleTree,
         'activeKey' => $moduleID,
-        'closeLink' => $this->createLink('execution', 'testcase', "executionID={$execution->id}")
+        'closeLink' => $this->createLink('execution', 'bug', "executionID={$execution->id}")
     )))
 );
 
