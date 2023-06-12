@@ -309,5 +309,53 @@ class repoZen extends repo
         }
         return $repoList;
     }
+
+    /**
+     * 获取版本库文件列表信息。
+     * Get repo files info.
+     *
+     * @param  object    $repo
+     * @param  string    $path
+     * @param  string    $branchID
+     * @param  int       $refresh
+     * @param  string    $revision
+     * @param  string    $lastRevision
+     * @access protected
+     * @return array
+     */
+    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revison, string $lastRevision): array
+    {
+        $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
+        $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
+        $this->scm->setEngine($repo);
+        if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
+        {
+            if($repo->SCM == 'Gitlab')
+            {
+                $infos = $this->repo->getFileList($repo, $branchID, $path);
+            }
+            else
+            {
+                $infos        = $this->scm->ls($path, $revision);
+                $revisionList = array_column($infos, 'revision', 'revision');
+                $comments     = $this->repo->getHistory($repoID, $revisionList);
+                foreach($infos as $info)
+                {
+                    if(isset($comments[$info->revision]))
+                    {
+                        $comment = $comments[$info->revision];
+                        $info->comment = $comment->comment;
+                    }
+                }
+            }
+            if($cacheFile) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
+        }
+        else
+        {
+            $infos = unserialize(file_get_contents($cacheFile));
+        }
+
+        return $infos;
+    }
 }
 

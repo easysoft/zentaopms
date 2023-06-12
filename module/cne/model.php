@@ -198,7 +198,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function getQLBInfo($name, $namespace)
+    public function getQLBInfo($name, $namespace, $channel = '')
     {
         $apiParams = array();
         $apiParams['cluster']   = '';

@@ -69,13 +69,12 @@ class repo extends control
      *
      * @param  int    $objectID
      * @param  string $orderBy
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function maintain($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function maintain($objectID = 0, $orderBy = 'id_desc', $recPerPage = 20, $pageID = 1)
     {
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
@@ -521,9 +520,8 @@ class repo extends control
         $originBranchID         = $branchID;
         if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
 
-        /* Get path and refresh. */
+        /* Get path. */
         if($this->get->repoPath) $path = $this->get->repoPath;
-        if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
 
         /* Set menu and session. */
         $this->commonAction($repoID, $objectID);
@@ -583,6 +581,7 @@ class repo extends control
         }
 
         /* Refresh repo. */
+        if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
         if($refresh)
         {
             $this->repo->updateCommit($repoID, $objectID, $originBranchID);
@@ -596,35 +595,7 @@ class repo extends control
         $lastRevision = current($revisions);
 
         /* Get files info. */
-        $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
-        $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
-        $this->scm->setEngine($repo);
-        if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
-        {
-            if($repo->SCM == 'Gitlab')
-            {
-                $infos = $this->repo->getFileList($repo, $branchID, $path);
-            }
-            else
-            {
-                $infos        = $this->scm->ls($path, $revision);
-                $revisionList = array_column($infos, 'revision', 'revision');
-                $comments     = $this->repo->getHistory($repoID, $revisionList);
-                foreach($infos as $info)
-                {
-                    if(isset($comments[$info->revision]))
-                    {
-                        $comment = $comments[$info->revision];
-                        $info->comment = $comment->comment;
-                    }
-                }
-            }
-            if($cacheFile) file_put_contents($cacheFile, serialize($infos), LOCK_EX);
-        }
-        else
-        {
-            $infos = unserialize(file_get_contents($cacheFile));
-        }
+        $infos = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revison, $lastRevision);
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Synchronous commit only in root path. */

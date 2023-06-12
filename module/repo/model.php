@@ -2975,4 +2975,23 @@ class repoModel extends model
         }
         return true;
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $repo
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(ojbect $repo, string $action): bool
+    {
+        $action = strtolower($action);
+
+        if($action == 'execjob')    return $repo->exec == '';
+        if($action == 'reportview') return $repo->report == '';
+
+        return true;
+    }
 }
