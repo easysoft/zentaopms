@@ -17,6 +17,7 @@ class testsuiteTest
     }
 
     /**
+     * 测试创建一个测试套件。
      * Test create a test suite.
      *
      * @param  int     $productID
@@ -25,19 +26,18 @@ class testsuiteTest
      * @access public
      * @return array|int
      */
-    public function createTest($productID, $name, $type)
+    public function createTest(int $productID, string $name, string $type): array|int
     {
-        $_POST['name'] = $name;
-        $_POST['desc'] = '';
-        $_POST['type'] = $type;
-        $_POST['uid']  = '62538b850bb9d';
+        $suite = new stdclass();
+        $suite->name = $name;
+        $suite->desc = '';
+        $suite->type = $type;
 
-        $objects = $this->objectModel->create($productID);
-        unset($_POST);
+        $suiteID = $this->objectModel->create($suite);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $suiteID;
     }
 
     /**

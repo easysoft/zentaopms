@@ -109,27 +109,35 @@ class testsuite extends control
     }
 
     /**
+     * 创建一个测试套件。
      * Create a test suite.
      *
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function create($productID)
+    public function create(int $productID)
     {
         if(!empty($_POST))
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->testsuite->successSaved;
-            $suiteID = $this->testsuite->create($productID);
+            $suite = form::data($this->config->testsuite->form->create)
+                ->setIF($this->lang->navGroup->testsuite != 'qa', 'project', $this->session->project)
+                ->add('product', (int)$productID)
+                ->get();
+            $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
+
+            $suiteID = $this->testsuite->create($suite);
             if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
                 return $this->send($response);
             }
-            $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->testsuite->successSaved;
+
+            $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
             $message = $this->executeHooks($suiteID);
             if($message) $response['message'] = $message;
 
@@ -143,9 +151,8 @@ class testsuite extends control
         $productID  = $this->product->saveVisitState($productID, $this->products);
         $this->loadModel('qa')->setMenu($this->products, $productID);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
-
-        $this->view->productID    = $productID;
+        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
+        $this->view->productID = $productID;
         $this->display();
     }
 
