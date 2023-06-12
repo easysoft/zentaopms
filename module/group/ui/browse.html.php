@@ -16,6 +16,18 @@ featureBar
     set::current('all'),
 );
 
+/* zin: Define the toolbar on main menu. */
+$canManagePriv     = hasPriv('group', 'managePriv');
+$canCreateGroup    = hasPriv('group', 'create');
+
+if($canManagePriv) $managePrivItem = array('class' => 'btn ghost', 'text' => $lang->group->managePrivByModule, 'url' => $this->createLink('group', 'managePriv', 'type=byModule'), 'data-toggle' => 'modal');
+if($canCreateGroup) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->group->create, 'url' => $this->createLink('group', 'create'),  'data-toggle' => 'modal');
+toolbar
+(
+    $canManagePriv ? item(set($managePrivItem)) : null,
+    $canCreateGroup ? item(set($createItem)) : null,
+);
+
 jsVar('confirmDelete', $lang->group->confirmDelete);
 $tableData = initTableData($groups, $config->group->dtable->fieldList, $this->group);
 dtable
