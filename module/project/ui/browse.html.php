@@ -82,16 +82,26 @@ if($canBatchEdit)
     );
 }
 
+$settings = $this->loadModel('datatable')->getSetting('project');
+foreach($settings as $key => $value)
+{
+    if($value->id == 'status' && strpos(',all,bysearch,undone,', ",$browseType,") === false) $value->show = false;
+    if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
+
+    if(!$value->show) unset($settings[$key]);
+}
+
 /* zin: Define the dtable in main content. */
 dtable
 (
     set::groupDivider(true),
-    set::cols(array_values($config->project->dtable->fieldList)),
+    set::cols($settings),
     set::data($projectStats),
     set::checkable($canBatchEdit),
     set::footToolbar($footToolbar),
     set::sortLink(helper::createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
+    set::customCols(true)
 );
 
 render();
