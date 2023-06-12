@@ -576,20 +576,3 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
     return $isClickable;
 }
-
-/**
- * Fix for session error.
- *
- * @param  string    $class
- * @access protected
- * @return void
- */
-function autoloader(string $class)
-{
-    if(!class_exists($class) && ($class == 'post_max_size' || $class == 'max_input_vars'))
-    {
-        eval('class ' . $class . ' {};');
-    }
-}
-
-spl_autoload_register('autoloader');
