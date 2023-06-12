@@ -718,7 +718,7 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  int    $version
-     * @param  int    $param
+     * @param  int    $param     executionID|projectID
      * @param  string $storyType story|requirement
      * @access public
      * @return void
