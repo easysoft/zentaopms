@@ -192,7 +192,6 @@ $config->my->task->dtable = new stdclass();
 $config->my->task->dtable->fieldList['id']['name']  = 'id';
 $config->my->task->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->task->dtable->fieldList['id']['type']  = 'checkID';
-$config->my->task->dtable->fieldList['id']['fixed'] = 'left';
 
 $config->my->task->dtable->fieldList['name']['name']  = 'name';
 $config->my->task->dtable->fieldList['name']['title'] = $lang->task->name;
