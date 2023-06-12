@@ -10,10 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}" . ($type == 'bysearch' ? '' : "&param=$param");
 featureBar
 (
     set::current($type),
-    set::linkParams("project={$project->id}&product={$productID}&branch={$branchID}&orderBy=status,id_desc&build={$buildID}&type={key}&param={$param}"),
+    set::linkParams($linkParams),
     li(searchToggle())
 );
 
@@ -47,7 +48,7 @@ sidebar
     )))
 );
 
-$this->bug->buildOperateMenu(null, 'browse');
+$canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 
 $config->bug->dtable->fieldList['module']['map']    = $modulePairs;
 $config->bug->dtable->fieldList['product']['map']   = $products;
@@ -57,6 +58,15 @@ $config->bug->dtable->fieldList['toTask']['map']    = $tasks;
 $config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
 $config->bug->dtable->fieldList['project']['map']   = $projectPairs;
 $config->bug->dtable->fieldList['execution']['map'] = $executions;
+
+foreach($config->bug->dtable->fieldList as $fieldCode => $fieldInfo)
+{
+    if(!$project->hasProduct && (($project->model != 'scrum' && $fieldCode == 'plan') || $fieldCode == 'branch')) unset($config->bug->dtable->fieldList[$fieldCode]);
+}
+
+if(!$canBatchAssignTo) $config->bug->dtable->fieldList['id']['type'] = 'id';
+
+foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
 $bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
 $data = array_values($bugs);
@@ -82,8 +92,10 @@ dtable
     set::data($data),
     set::userMap($users),
     set::customCols(true),
-    set::checkable(true),
     set::footToolbar($footToolbar),
+    set::checkable($canBatchAssignTo ? true : false),
+    set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
+    $canBatchAssignedTo ? set::footToolbar($footToolbar) : null,
     set::footPager(usePager()),
 );
 
