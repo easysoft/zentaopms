@@ -218,48 +218,51 @@ detailBody
                 set::key('releaseInfo'),
                 set::title($lang->release->basicInfo),
                 div(
-                    tableData
-                    (
-                        item
+                    section(
+                        set::title($lang->release->basicInfo),
+                        tableData
                         (
-                            set::name($lang->release->product),
-                            $release->productName
-                        ),
-                        item
-                        (
-                            set::name($lang->release->name),
-                            $release->name
-                        ),
-                        item
-                        (
-                            set::name($lang->release->includedBuild),
-                            implode($lang->comma, $releaseBuild)
-                        ),
-                        !empty($releaseBranch) ? item
-                        (
-                            set::name($lang->release->branch),
-                            implode($lang->comma, $releaseBranch)
-                        ) : null,
-                        item
-                        (
-                            set::name($lang->release->status),
-                            $this->processStatus('release', $release)
-                        ),
-                        item
-                        (
-                            set::name($lang->release->date),
-                            $release->date
-                        ),
-                        item
-                        (
-                            set::name($lang->release->desc),
-                            $release->desc
-                        ),
+                            item
+                            (
+                                set::name($lang->release->product),
+                                $release->productName
+                            ),
+                            item
+                            (
+                                set::name($lang->release->name),
+                                $release->name
+                            ),
+                            item
+                            (
+                                set::name($lang->release->includedBuild),
+                                implode($lang->comma, $releaseBuild)
+                            ),
+                            !empty($releaseBranch) ? item
+                            (
+                                set::name($lang->release->branch),
+                                implode($lang->comma, $releaseBranch)
+                            ) : null,
+                            item
+                            (
+                                set::name($lang->release->status),
+                                $this->processStatus('release', $release)
+                            ),
+                            item
+                            (
+                                set::name($lang->release->date),
+                                $release->date
+                            ),
+                            item
+                            (
+                                set::name($lang->release->desc),
+                                $release->desc
+                            ),
+                        )
                     ),
-                    h::hr(set::class('mt-6')),
                     section
                     (
                         set::title($lang->files),
+                        setClass('pt-5'),
                         set::content(''),
                         set::useHtml(true)
                     ),
