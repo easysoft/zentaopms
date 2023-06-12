@@ -85,8 +85,8 @@ toolbar
             set::placement('bottom-end'),
         )
     ) : null,
-    $canCreate && !$canBatchCreate ? item(set($createItem)) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem)) : null,
+    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
 /* zin: Define the sidebar in main content. */
