@@ -84,10 +84,11 @@ foreach($config->productProject->showFields as $showField)
     if(isset($config->project->dtable->fieldList[$showField])) $cols[$showField] = $config->project->dtable->fieldList[$showField];
     if($showField == 'program')
     {
-        $cols[$showField]['name']  = 'programName';
-        $cols[$showField]['fixed'] = 'left';
-        $cols[$showField]['width'] = '120';
-        $cols[$showField]['title'] = $lang->project->program;
+        $cols[$showField]['name']     = 'programName';
+        $cols[$showField]['fixed']    = 'left';
+        $cols[$showField]['type']     = 'shortTitle';
+        $cols[$showField]['checkbox'] = false;
+        $cols[$showField]['title']    = $lang->project->program;
     }
     $cols[$showField]['sortType'] = false;
     $cols[$showField]['group']    = 0;
