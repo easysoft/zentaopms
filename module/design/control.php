@@ -44,7 +44,7 @@ class design extends control
 
         ksort($products);
 
-        $productID   = $this->product->saveState($productID, $products);
+        $productID   = $this->product->getAccessableProductID($productID, $products);
 
         $this->lang->modulePageNav = $this->design->setMenu($projectID, $products, $productID);
         $this->project->setMenu($projectID);
@@ -67,12 +67,10 @@ class design extends control
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $productID = 0, $type = 'all', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $projectID = 0, int $productID = 0, string $type = 'all', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $productID = $this->commonAction($projectID, $productID);
-
-        $project  = $this->loadModel('project')->getByID($projectID);
-        $typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $project   = $this->project->getByID($projectID);
 
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true), 'project');
@@ -83,7 +81,7 @@ class design extends control
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
         $this->config->design->search['params']['story']['values'] = $stories;
-        $this->config->design->search['params']['type']['values']  = $typeList;
+        $this->config->design->search['params']['type']['values']  = $this->lang->design->typeList;
 
         $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('design', 'browse', "projectID=$projectID&productID=$productID&type=bySearch&queryID=myQueryID");
@@ -122,21 +120,20 @@ class design extends control
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init(0, $recPerPage, $pageID);
-        $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
 
-        $this->view->hiddenProduct = $project->hasProduct ? false : true;
+        if(!$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
+        if($project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
+        if(!helper::hasFeature('devops')) $this->config->design->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
-
-        $this->view->designs    = $designs;
-        $this->view->type       = $type;
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
-        $this->view->productID  = $productID;
-        $this->view->projectID  = $projectID;
-        $this->view->pager      = $pager;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->typeList   = $typeList;
+        $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
+        $this->view->designs   = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
+        $this->view->projectID = $projectID;
+        $this->view->productID = $productID;
+        $this->view->type      = $type;
+        $this->view->param     = $param;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -507,24 +504,28 @@ class design extends control
      * Delete a design.
      *
      * @param  int    $designID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($designID = 0, $confirm = 'no')
+    public function delete($designID = 0)
     {
-        if($confirm == 'no')
+        $design = $this->design->getByID($designID);
+        $this->design->delete(TABLE_DESIGN, $designID);
+        $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('design')->andWhere('AID')->eq($designID)->andWhere('Btype')->eq('commit')->andwhere('relation')->eq('completedin')->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('Btype')->eq('design')->andwhere('relation')->eq('completedfrom')->exec();
+
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->design->confirmDelete, inlink('delete', "designID=$designID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->design->delete(TABLE_DESIGN, $designID);
-            $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('design')->andWhere('AID')->eq($designID)->andWhere('Btype')->eq('commit')->andwhere('relation')->eq('completedin')->exec();
-            $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('Btype')->eq('design')->andwhere('relation')->eq('completedfrom')->exec();
-
-            return print(js::locate($this->session->designList, 'parent'));
+            $response['result'] = 'success';
+            $response['load']   = inLink('browse', "projectID={$design->project}");
         }
+
+        return $this->send($response);
     }
 
     /**

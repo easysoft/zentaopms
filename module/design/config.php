@@ -10,7 +10,7 @@ $config->design->edit   = new stdclass();
 $config->design->create->requiredFields = 'name,type';
 $config->design->edit->requiredFields   = 'name,type';
 
-$config->design->affectedFixedNum = 7; 
+$config->design->affectedFixedNum = 7;
 
 global $lang;
 $config->design->search['module']                = 'design';
@@ -30,3 +30,15 @@ $config->design->search['params']['createdBy']   = array('operator' => '=', 'con
 $config->design->search['params']['createdDate'] = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
 $config->design->search['params']['assignedTo']  = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->design->search['params']['story']       = array('operator' => '=', 'control' => 'select',  'values' => '');
+
+$config->design->actionList['edit']['icon'] = 'alter';
+$config->design->actionList['edit']['hint'] = $lang->design->edit;
+$config->design->actionList['edit']['url']  = helper::createLink('design', 'edit', 'designID={id}');
+
+$config->design->actionList['viewCommit']['icon'] = 'list-alt';
+$config->design->actionList['viewCommit']['hint'] = $lang->design->viewCommit;
+$config->design->actionList['viewCommit']['url']  = helper::createLink('design', 'viewCommit', 'designID={id}');
+
+$config->design->actionList['delete']['icon'] = 'trash';
+$config->design->actionList['delete']['hint'] = $lang->design->delete;
+$config->design->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';

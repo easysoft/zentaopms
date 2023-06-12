@@ -405,14 +405,12 @@ class designModel extends model
     public function setMenu($projectID, $products, $productID = 0)
     {
         $project = $this->loadModel('project')->getByID($projectID);
-        if(!empty($project) and $project->model == 'waterfall') $typeList = 'typeList';
-        if(!empty($project) and $project->model == 'waterfallplus') $typeList = 'plusTypeList';
 
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
         $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
         $count = 1;
-        foreach(array_filter($this->lang->design->{$typeList}) as $key => $value)
+        foreach(array_filter($this->lang->design->typeList) as $key => $value)
         {
             $key = strtolower($key);
 
