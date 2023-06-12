@@ -1352,3 +1352,13 @@ function backBtn(): backBtn
 {
     return createWg('backBtn', func_get_args());
 }
+
+/**
+ * Main navbar widget.
+ *
+ * ?array items
+ */
+function mainNavbar(): mainNavbar
+{
+    return createWg('mainNavbar', func_get_args());
+}
