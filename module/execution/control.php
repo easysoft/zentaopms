@@ -1519,11 +1519,8 @@ class execution extends control
         $deptID    = $this->app->user->admin ? 0 : $this->app->user->dept;
 
         $teamMembers = array();
-        $totalHours  = 0;
         foreach($this->view->teamMembers as $member)
         {
-            $totalHours += $member->totalHours;
-
             $member->days    = $member->days . $this->lang->execution->day;
             $member->hours   = $member->hours . $this->lang->execution->workHour;
             $member->total   = $member->totalHours . $this->lang->execution->workHour;
