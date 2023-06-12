@@ -37,7 +37,7 @@ class sonarqube extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $sonarqubeList = $this->loadModel('pipeline')->getList('sonarqube', $orderBy, $pager);
@@ -129,7 +129,7 @@ class sonarqube extends control
             $sonarqubeID = $this->loadModel('pipeline')->create('sonarqube');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $actionID = $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
+            $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -208,19 +208,27 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function delete($sonarqubeID, $confirm = 'no')
+    public function delete($sonarqubeID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
-
         $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->loadModel('action');
         $actionID = $this->pipeline->delete($sonarqubeID, 'sonarqube');
-        if($actionID) return print(js::error($this->lang->sonarqube->delError));
+        if($actionID)
+        {
+            $response['result']  = 'fail';
+            $response['message'] = $this->lang->sonarqube->delError;
+
+            return $this->send($response);
+        }
 
         $sonarQube = $this->pipeline->getByID($sonarqubeID);
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
-        echo js::reload('parent');
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**
@@ -248,12 +256,12 @@ class sonarqube extends control
      */
     public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
         $sonarqubeProjectList = $this->sonarqube->apiGetProjects($sonarqubeID, $keyword);
         $projectKeyList       = array();
-        foreach($sonarqubeProjectList as $key => $sonarqubeProject)
+        foreach($sonarqubeProjectList as $sonarqubeProject)
         {
             if(!isset($sonarqubeProject->lastAnalysisDate)) $sonarqubeProject->lastAnalysisDate = '';
             $projectKeyList[] = $sonarqubeProject->key;
@@ -266,7 +274,7 @@ class sonarqube extends control
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeProjectList);
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal = count($sonarqubeProjectList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
@@ -357,7 +365,7 @@ class sonarqube extends control
         else
         {
             $keyword = '';
-            if($search == true) $keyword = $this->session->sonarqubeIssueKeyword;
+            if($search) $keyword = $this->session->sonarqubeIssueKeyword;
         }
 
         ini_set('memory_limit', '1024M');
@@ -373,18 +381,15 @@ class sonarqube extends control
                 $sonarqubeIssue->message      = htmlspecialchars($sonarqubeIssue->message);
                 $sonarqubeIssue->creationDate = date('Y-m-d H:i:s', strtotime($sonarqubeIssue->creationDate));
 
-                list($project, $file) = explode(':', $sonarqubeIssue->component);
+                list(, $file) = explode(':', $sonarqubeIssue->component);
                 $sonarqubeIssue->file = $file;
             }
 
-            if($cacheFile)
+            if($cacheFile && !file_exists($cacheFile . '.lock'))
             {
-                if(!file_exists($cacheFile . '.lock'))
-                {
-                    touch($cacheFile . '.lock');
-                    file_put_contents($cacheFile, serialize($sonarqubeIssueList));
-                    unlink($cacheFile . '.lock');
-                }
+                touch($cacheFile . '.lock');
+                file_put_contents($cacheFile, serialize($sonarqubeIssueList));
+                unlink($cacheFile . '.lock');
             }
         }
         else
@@ -413,7 +418,7 @@ class sonarqube extends control
         $productID = current(explode(',', $products));
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal = count($sonarqubeIssueList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $sonarqubeIssueList = array_chunk($sonarqubeIssueList, $pager->recPerPage);
