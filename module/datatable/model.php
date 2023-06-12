@@ -40,6 +40,12 @@ class datatableModel extends model
             }
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
             $this->config->$module->dtable->fieldList[$field]['title'] = $title;
+
+            /* Set col config default value. */
+            if(!empty($items['type']) && isset($this->config->datatable->defaultColConfig[$items['type']]))
+            {
+                $this->config->$module->dtable->fieldList[$field] = array_merge($this->config->datatable->defaultColConfig[$items['type']], $this->config->$module->dtable->fieldList[$field]);
+            }
         }
 
         if($this->config->edition != 'open')
@@ -96,16 +102,16 @@ class datatableModel extends model
             {
                 $id  = $value;
                 $set = new stdclass();;
-                $set->order = $order++;
-                $set->id    = $id;
-                $set->show  = true;
-                $set->width = $fieldList[$id]['width'];
-                $set->fixed = $fieldList[$id]['fixed'];
-                $set->title = $fieldList[$id]['title'];
-                $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
-                $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
-                $set->group = isset($fieldList[$id]['group']) ? $fieldList[$id]['group'] : '';
-                $set->link  = isset($fieldList[$id]['link']) ? $fieldList[$id]['link'] : '';
+                $set->order    = $order++;
+                $set->id       = $id;
+                $set->show     = true;
+                $set->width    = $fieldList[$id]['width'];
+                $set->fixed    = $fieldList[$id]['fixed'];
+                $set->title    = $fieldList[$id]['title'];
+                $set->sortType = isset($fieldList[$id]['sort']) && $fieldList[$id]['sort'] == 'yes';
+                $set->name     = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
+                $set->group    = isset($fieldList[$id]['group']) ? $fieldList[$id]['group'] : '';
+                $set->link     = isset($fieldList[$id]['link']) ? $fieldList[$id]['link'] : '';
 
                 if(isset($fieldList[$id]['minWidth']))     $set->minWidth      = $fieldList[$id]['minWidth'];
                 if(isset($fieldList[$id]['maxWidth']))     $set->maxWidth      = $fieldList[$id]['maxWidth'];
@@ -115,7 +121,7 @@ class datatableModel extends model
                 if(isset($fieldList[$id]['actionsMap']))   $set->actionsMap    = $fieldList[$id]['actionsMap'];
                 if(isset($fieldList[$id]['nestedToggle'])) $set->nestedToggle  = $fieldList[$id]['nestedToggle'];
                 if(isset($fieldList[$id]['checkbox']))     $set->checkbox      = $fieldList[$id]['checkbox'];
-                if(isset($fieldList[$id]['sortType']))     $set->sortType      = $fieldList[$id]['sortType'];
+                if(isset($fieldList[$id]['map']))          $set->map           = $fieldList[$id]['map'];
 
                 $setting[$key] = $set;
             }
@@ -136,8 +142,8 @@ class datatableModel extends model
                 }
 
                 if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
-                $set->title = $fieldList[$set->id]['title'];
-                $set->sort  = isset($fieldList[$set->id]['sort']) ? $fieldList[$set->id]['sort'] : 'yes';
+                $set->title    = $fieldList[$set->id]['title'];
+                $set->sortType = isset($fieldList[$set->id]['sort']) && $fieldList[$set->id]['sort'] == 'yes';
             }
         }
 
