@@ -26,6 +26,7 @@ toolbar
     $canCreate ? item(set($createItem)) : null,
 );
 
+jsVar('confirmDelete',    $lang->jenkins->confirmDelete);
 jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('jenkins', 'browseProject'));
 jsVar('sortLink',         helper::createLink('jenkins', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));

@@ -34,7 +34,7 @@ $config->jenkins->actionList['edit']['url']  = helper::createLink('jenkins', 'ed
 $config->jenkins->actionList['delete']['icon'] = 'trash';
 $config->jenkins->actionList['delete']['text'] = $lang->jenkins->delete;
 $config->jenkins->actionList['delete']['hint'] = $lang->jenkins->delete;
-$config->jenkins->actionList['delete']['url']  = helper::createLink('jenkins', 'delete',"jenkinsID={id}");
+$config->jenkins->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
 
 $config->jenkins->dtable->fieldList['actions']['name']     = 'actions';
 $config->jenkins->dtable->fieldList['actions']['title']    = $lang->actions;
