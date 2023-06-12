@@ -174,6 +174,8 @@ class search extends control
     public function ajaxRemoveMenu($queryID)
     {
         $this->dao->update(TABLE_USERQUERY)->set('shortcut')->eq(0)->where('id')->eq($queryID)->exec();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success'));
     }
 
     /**

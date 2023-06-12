@@ -71,13 +71,23 @@ class featureBar extends wg
 
                 foreach($moreSelects as $key => $text)
                 {
-                    $subItems[] = array
-                    (
-                        'text'   => $text,
-                        'active' => $key == $current,
-                        'url'    => ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link),
-                        'attrs'  => ['data-id' => $key, 'data-load' => 'table']
-                    );
+                    $subItem = array();
+                    $subItem['text']   = $text;
+                    $subItem['active'] = $key == $current;
+                    $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', $key, $link);
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => 'table'];
+
+                    if($item->name == 'QUERY')
+                    {
+                        $closeLink = createLink('search', 'ajaxRemoveMenu', "queryID={$key}");
+                        $loadUrl   = $subItem['url'] . '#featureBar';
+
+                        $subItem['className']    = 'flex-auto';
+                        $subItem['rootClass']    = 'row gap-0';
+                        $subItem['rootChildren'] = array(jsRaw("zui.h('a', {className: 'ajax-submit', 'data-url': '{$closeLink}', 'data-load': '{$loadUrl}'}, zui.h('span', {className: 'close'}))"));
+                    }
+
+                    $subItems[] = $subItem;
 
                     if($key === $current)
                     {
