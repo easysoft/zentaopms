@@ -34,8 +34,8 @@ class history extends wg
     private function checkEditCommentPriv(object $action): bool
     {
         global $app;
-        $methodName = $this->prop('methodName') === null ? $this->prop('methodName') : data('methodName');
-        $actions = $this->prop('actions');
+        $methodName = $this->prop('methodName') !== null ? $this->prop('methodName') : $app->rawMethod;
+        $actions    = $this->prop('actions') !== null ? $this->prop('actions') : data('actions');
 
         return (!isset($canBeChanged) || !empty($canBeChanged))
             && !empty($actions) && end($actions) == $action
@@ -45,7 +45,7 @@ class history extends wg
             && common::hasPriv('action', 'editComment');
     }
 
-    private function expandBtn(int $i): wg
+    private function expandBtn(): wg
     {
         global $lang;
         return btn
@@ -56,7 +56,8 @@ class history extends wg
             on::click
             (
                 <<<EXPAND
-                const changeBox = document.querySelector("#changeBox$i");
+                const btn = e.target.closest('button');
+                const changeBox = btn.nextElementSibling;
                 const icon = e.target.querySelector('.icon');
                 icon.classList.toggle('icon-plus');
                 icon.classList.toggle('icon-minus');
@@ -79,13 +80,12 @@ class history extends wg
         );
     }
 
-    private function historyChanges(object $action, int $i): wg
+    private function historyChanges(object $action): wg
     {
         global $app;
         return div
         (
             setClass('history-changes ml-7 mt-2'),
-            setID("changeBox$i"),
             html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
         );
     }
@@ -175,8 +175,8 @@ class history extends wg
 
             if(!empty($action->history))
             {
-                $actionItemView->add($this->expandBtn($i));
-                $actionItemView->add($this->historyChanges($action, $i));
+                $actionItemView->add($this->expandBtn());
+                $actionItemView->add($this->historyChanges($action));
             }
             if(strlen(trim(($action->comment))) !== 0)
             {
