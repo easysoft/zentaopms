@@ -581,9 +581,9 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
  */
 function autoloader(string $class)
 {
-    if(!class_exists($class))
+    if(!class_exists($class) && ($class == 'post_max_size' || $class == 'max_input_vars'))
     {
-        if($class == 'post_max_size' or $class == 'max_input_vars') eval('class ' . $class . ' {};');
+        eval('class ' . $class . ' {};');
     }
 }
 
