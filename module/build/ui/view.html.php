@@ -41,7 +41,22 @@ $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => inlink('batchUnlinkBug', "build={$build->id}"));
 if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('class' => 'btn primary size-sm batch-btn', 'text' => $lang->bug->batchClose, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "productID={$build->product}"));
 
-$/* Init table data for dtable. */
+/* Integrated builds or single build. */
+if($build->execution)
+{
+    $executionTitle = empty($multipleProject) ? $lang->build->project : ($executionType ? $lang->build->executionAB : $lang->build->execution);
+    $executionName  = zget($executions, $build->execution);
+}
+else
+{
+    $builds = '';
+    foreach(explode(',', $build->builds) as $buildID)
+    {
+        if($buildID) $builds .= html::a($this->createLink('build', 'view', "buildID=$buildID") . "#app={$app->tab}", zget($buildPairs, $buildID)) . $lang->comma;
+    }
+}
+
+/* Init table data for dtable. */
 $stories       = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs          = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 $generatedBugs = initTableData($generatedBugs, $config->build->generatedBug->dtable->fieldList, $this->build);
@@ -110,11 +125,10 @@ detailBody
                         set::recTotal($storyPager->recTotal),
                         set::linkCreator(helper::createLink('build', 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}"))
                     ),
-                    //set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
                 )
             ),
 
-            /* Resolved bug table. */
+            /* Resolved bugs table. */
             tabPane
             (
                 to::prefix(icon('bug')),
@@ -138,6 +152,7 @@ detailBody
                 )
             ),
 
+            /* Generated bugs table. */
             tabPane
             (
                 to::prefix(icon('bug')),
@@ -173,15 +188,44 @@ detailBody
                             set::name($lang->build->product),
                             $build->productName
                         ),
+                        $build->productType != 'normal' ? item
+                        (
+                            set::name($lang->build->branch),
+                            $branchName
+                        ) : null,
                         item
                         (
                             set::name($lang->build->name),
                             $build->name
                         ),
+                        $build->execution ? item
+                        (
+                            set::name($executionTitle),
+                            ltrim($executionName, '/')
+                        ) : item
+                        (
+                            set::name($builds),
+                            rtrim($builds, $lang->comma)
+                        ),
+                        item
+                        (
+                            set::name($lang->build->builder),
+                            zget($users, $build->builder)
+                        ),
                         item
                         (
                             set::name($lang->build->date),
                             $build->date
+                        ),
+                        item
+                        (
+                            set::name($lang->build->scmPath),
+                            html::a($build->scmPath, $build->scmPath, '_blank')
+                        ),
+                        item
+                        (
+                            set::name($lang->build->filePath),
+                            html::a($build->filePath, $build->filePath, '_blank')
                         ),
                         item
                         (
