@@ -23,14 +23,22 @@ $(() =>
                     id: li.dataset.key,
                     order: ++index,
                     show: checkbox.checked,
-                    width: input.value + 'px',
+                    width: input.value,
                     fixed: types[i],
                 });
             }
         }
 
-        fetch(ajaxSaveUrl, {method: 'post', body: JSON.stringify(formData)})
-            .then(res => res.json())
-            .then((json) => {if(json.result === 'success') loadTable();});
+        $.ajaxSubmit({
+            url: ajaxSaveUrl,
+
+            type: 'POST',
+
+            contentType: 'application/json',
+
+            data: {fields: JSON.stringify(formData)},
+
+            closeModal: true,
+        });
     });
 });

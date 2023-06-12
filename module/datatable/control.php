@@ -56,11 +56,45 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
 
-            $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
-            $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
             if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
             if($this->post->showBranch !== false) $this->setting->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showBranch', $this->post->showBranch);
-            if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+        }
+    }
+
+    /**
+     * Ajax save fields.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveFields(string $module, string $method)
+    {
+        if(!empty($_POST))
+        {
+            $account = $this->app->user->account;
+            if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
+
+            $fieldList = $this->datatable->getFieldList($module);
+            $fields    = json_decode($this->post->fields);
+            foreach($fields as $index => $field)
+            {
+                $id = $field->id;
+                if(!isset($fieldList[$id])) continue;
+
+                $fieldList[$id]['order'] = $field->order;
+                $fieldList[$id]['width'] = $field->width;
+                $fieldList[$id]['show']  = $field->show ? true :false;
+            }
+
+            $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
+            $value = json_encode(array_values($fieldList));
+            $this->loadModel('setting')->setItem($account . '.' . $name, $value);
+            if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
             return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
@@ -81,7 +115,6 @@ class datatable extends control
         $moduleName = $module;
         $target     = $module . ucfirst($method);
         $mode       = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
-        $key        = $mode == 'datatable' ? 'cols' : 'tablecols';
 
         if($module == 'testtask')
         {
@@ -101,16 +134,28 @@ class datatable extends control
         $this->view->method = $method;
         $this->view->mode   = $mode;
 
+        $cols    = $this->datatable->getFieldList($module);
         $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';
-        if(isset($this->config->datatable->$target->$key)) $setting = $this->config->datatable->$target->$key;
+        if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
         if(empty($setting))
         {
             $this->loadModel($module);
             if(isset($this->config->$module->dtable->defaultField)) $setting = json_encode($this->config->$module->dtable->defaultField);
         }
+        else
+        {
+            $fields = json_decode($setting);
+            foreach($fields as $index => $field)
+            {
+                $id = $field->name;
+                if(!isset($cols[$id])) continue;
 
-        $cols = $this->datatable->getFieldList($module);
+                $cols[$id]['order'] = $field->order;
+                $cols[$id]['width'] = $field->width;
+                $cols[$id]['show']  = $field->show ? true :false;
+            }
+        }
 
         if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
 

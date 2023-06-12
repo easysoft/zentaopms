@@ -79,21 +79,10 @@ class datatableModel extends model
         $datatableId = $module . ucfirst($method);
 
         $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
-        $key  = $mode == 'datatable' ? 'cols' : 'tablecols';
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if(isset($this->config->datatable->$datatableId->$key))
-        {
-            if($datatableId == 'testcaseBrowse' && $key == 'tablecols' && $this->cookie->onlyScene)
-            {
-                $setting = json_decode('[{"id":"id","order":1,"show":true,"width":"70px","fixed":"left"},{"id":"title","order":2,"show":true,"width":"auto","fixed":"left"},{"id":"openedBy","order":8,"show":true,"width":"80px","fixed":"no"},{"id":"openedDate","order":9,"show":true,"width":"90px","fixed":"no"},{"id":"lastEditedBy","order":16,"show":true,"width":"80px","fixed":"no"},{"id":"lastEditedDate","order":17,"show":true,"width":"90px","fixed":"no"},{"id":"actions","order":23,"show":true,"width":"150px","fixed":"right"}]');
-            }
-            else
-            {
-                $setting = json_decode($this->config->datatable->$datatableId->$key);
-            }
-        }
+        if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols);
 
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
@@ -101,7 +90,7 @@ class datatableModel extends model
             $order = 1;
             foreach($fieldList as $key => $value)
             {
-                if(!isset($value['required']) and !isset($value['show'])) continue;
+                if(empty($value['required']) and empty($value['show'])) continue;
 
                 $set = new stdclass();
                 $set->order    = $order++;
@@ -133,7 +122,7 @@ class datatableModel extends model
         {
             foreach($setting as $key => $set)
             {
-                if(!isset($fieldList[$set->id]))
+                if(empty($set->show))
                 {
                     unset($setting[$key]);
                     continue;
@@ -144,9 +133,7 @@ class datatableModel extends model
                     continue;
                 }
 
-                if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
-                $set->title    = $fieldList[$set->id]['title'];
-                $set->sortType = isset($fieldList[$set->id]['sort']) && $fieldList[$set->id]['sort'] == 'yes';
+                if($set->name == 'actions') $set->width = $fieldList[$set->name]['width'];
             }
         }
 

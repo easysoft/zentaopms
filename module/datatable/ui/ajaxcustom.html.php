@@ -14,7 +14,7 @@ namespace zin;
 
 global $lang, $app;
 $app->loadLang('datatable');
-jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSave', "module={$module}&method={$method}"));
+jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSaveFields', "module={$module}&method={$method}"));
 
 function buildItem(array $item): wg
 {
