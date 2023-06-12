@@ -16,7 +16,6 @@ $config->productplan->dtable->fieldList['title']['fixed']        = 'left';
 $config->productplan->dtable->fieldList['title']['sortType']     = true;
 $config->productplan->dtable->fieldList['title']['align']        = 'left';
 $config->productplan->dtable->fieldList['title']['nestedToggle'] = true;
-$config->productplan->dtable->fieldList['title']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.parent === \'\') return \'icon-plus text-gray\'; return \'\';}>RAWJS';
 
 $config->productplan->dtable->fieldList['status']['name']      = 'status';
 $config->productplan->dtable->fieldList['status']['title']     = $lang->productplan->status;

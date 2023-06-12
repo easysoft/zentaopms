@@ -33,59 +33,48 @@ $fnGetTableFieldList = function() use ($config, $browseType, $lang, $product)
     return array_values($fieldList);
 };
 
-$totalParent = 0;
-$totalChild  = 0;
+$totalParent      = 0;
+$totalChild       = 0;
+$totalIndependent = 0;
 
-$fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$totalChild, $browseType, $branchOption)
+$fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$totalChild, &$totalIndependent, $browseType, $branchOption)
 {
-    $this->loadModel('file');
-
     $dataList = array();
 
     foreach($plans as $plan)
     {
-        $plan = $this->file->replaceImgURL($plan, 'desc');
-        if($plan->parent == '-1')
-        {
-          $parent   = $plan->id;
-          $children = isset($plan->children) ? $plan->children : 0;
-
-          $totalParent ++;
-        }
-        if($plan->parent == 0) $parent = 0;
-        if(!empty($parent) and $plan->parent > 0 and $plan->parent != $parent) $parent = 0;
-        if($plan->parent <= 0) $i = 0;
-        if($plan->parent > 0) $totalChild ++;
-
-        $class = '';
-        if(!empty($parent) and $plan->parent == $parent)
-        {
-          $class  = "table-children parent-{$parent}";
-          $class .= $i == 0 ? ' table-child-top' : '';
-          $class .= ($i + 1 == $children) ? ' table-child-bottom' : '';
-          $i++;
-        }
-
         $data = new stdclass();
-        $data->id = sprintf('%03d', $plan->id);
 
+        $data->id    = sprintf('%03d', $plan->id);
         $data->title = $plan->title;
+
+        /* Parent. */
+        $data->parent = '';
+        if($plan->parent == '-1') $totalParent ++;
+        if($plan->parent == 0) $totalIndependent++;
+        if($plan->parent > 0)
+        {
+            $data->parent   = sprintf('%03d', $plan->parent);
+            $totalChild ++;
+        }
 
         if($browseType == 'all') $data->status = $plan->status;
 
+        /* Branch. */
         if($this->session->currentProductType != 'normal')
         {
             $planBranches = '';
             foreach(explode(',', $plan->branch) as $branchID) $planBranches .= $branchOption[$branchID] . ',';
             $data->branch = trim($planBranches, ',');
         }
+
         $data->begin   = $plan->begin == $config->productplan->future ? $lang->productplan->future : $plan->begin;
         $data->end     = $plan->end == $config->productplan->future ? $lang->productplan->future : $plan->end;
         $data->stories = $plan->stories;
         $data->bugs    = $plan->bugs;
         $data->hour    = $plan->hour;
-        $data->parent  = $plan->parent > 0 ? "$plan->parent" : '';
 
+        /* Executions. */
         $data->execution = null;
         if(!empty($plan->projects))
         {
@@ -106,17 +95,49 @@ $fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$to
             }
         }
 
+        /* Description. */
+        $this->loadModel('file');
+        $plan = $this->file->replaceImgURL($plan, 'desc');
         $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));
         $data->desc = nl2br($desc);
 
         // TODO: values of extend fields.
 
+        /* Build action button list. */
         $data->actions = $this->productplan->buildActionBtnList($plan, 'browse');
 
         $dataList[] = $data;
     }
 
     return $dataList;
+};
+
+$canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
+$canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
+
+/* Generate dropdown menu for the batch change status button on footbar. */
+$fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus)
+{
+    if(!$canBatchChangeStatus) return;
+
+    $items = array();
+    foreach($lang->productplan->statusList as $statKey => $statText)
+    {
+        if($statKey == 'closed') continue;
+
+        $items[] = array
+        (
+            'text' => $statText,
+            'onclick' => jsRaw("function(){console.log('$statText')}")
+        );
+    }
+
+    zui::menu
+    (
+        set::id('footbarActionMenu'),
+        set::class('menu dropdown-menu'),
+        set::items($items)
+    );
 };
 
 /* ZIN: layout. */
@@ -152,6 +173,7 @@ toolbar
     (
         set::icon('plus'),
         setClass('primary'),
+        set::url(createLink('projectplan', 'create', "productID=$product->id&branch=$branch")),
         $lang->productplan->create
     ) : null
 );
@@ -194,33 +216,7 @@ if(empty($plans))
     return render();
 }
 
-$canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
-$canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
-
-/* Generate dropdown menu for the batch change status button on footbar. */
-$fnGenerateDropdownMenu = function() use($lang, $canBatchChangeStatus)
-{
-    if(!$canBatchChangeStatus) return;
-
-    $items = array();
-    foreach($lang->productplan->statusList as $statKey => $statText)
-    {
-        if($statKey == 'closed') continue;
-
-        $items[] = array
-        (
-            'text' => $statText,
-            'onclick' => jsRaw("function(){console.log('$statText')}")
-        );
-    }
-
-    zui::menu
-    (
-        set::id('footbarActionMenu'),
-        set::class('menu dropdown-menu'),
-        set::items($items)
-    );
-};
+/* Render popup menu for the bution on the toolbar of datatable. */
 $fnGenerateDropdownMenu();
 
 dtable
@@ -238,13 +234,13 @@ dtable
             $canBatchEdit ? array
             (
                 'text'    => $lang->edit,
-                'btnType' => 'primary',
+                'btnType' => 'secondary',
                 'url'     => inlink('batchEdit', "productID=$product->id&branch=$branch"),
             ) : null,
             $canBatchChangeStatus ? array
             (
                 'text'           => $lang->statusAB,
-                'btnType'        => 'primary',
+                'btnType'        => 'secondary',
                 'type'           => 'dropdown',
                 'caret'          => 'up',
                 'url'            => '#footbarActionMenu',
@@ -259,7 +255,14 @@ dtable
         set::recPerPage($pager->recPerPage),
         set::recTotal($pager->recTotal),
         set::linkCreator(inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
-    )
+    ),
+    set::checkInfo(jsRaw("function(checkedIDList){ return footerInfo(checkedIDList);}"))
 );
+
+jsVar('pageSummary',      $summary);
+jsVar('checkedSummary',   $this->lang->productplan->checkedSummary);
+jsVar('totalParent',      $totalParent);
+jsVar('totalChild',       $totalChild);
+jsVar('totalIndependent', $totalIndependent);
 
 render();
