@@ -78,7 +78,7 @@ detailBody
     (
         set::prefix
         (
-            array(array('icon' => 'back', 'text' => $lang->goback))
+            array(array('icon' => 'back', 'text' => $lang->goback, 'url' => 'javascript:goBack("execution-task", "execution-task")'))
         ),
         set::main($operateMenus),
         set::suffix($commonActions),
