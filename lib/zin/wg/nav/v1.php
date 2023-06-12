@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . DS . 'actionitem' . DS . 'v1.php';
 
 class nav extends wg
 {
-    static $defineProps = 'items?:array';
+    static $defineProps = 'items?:array'; // 使用数组指定导航中的每一项。
 
     public function onBuildItem($item)
     {
