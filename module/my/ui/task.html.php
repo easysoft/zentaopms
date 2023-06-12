@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('multipleAB', $lang->task->multipleAB);
 
 featureBar
 (

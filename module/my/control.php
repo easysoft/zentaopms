@@ -491,7 +491,6 @@ EOF;
             $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
 
-        $parents = array();
         $summary = $this->loadModel('execution')->summary($tasks);
         foreach($tasks as $task)
         {
@@ -499,24 +498,9 @@ EOF;
             $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
             $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
             $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
-        }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-                else
-                {
-                    $parent = $parents[$task->parent];
-                    $task->parentName = $parent->name;
-                }
-            }
+            $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
+            if(!isset($task->hasChild)) $task->hasChild = 0;
+            if(isset($tasks[$task->parent])) $tasks[$task->parent]->hasChild = 1;
         }
 
         /* Get the story language configuration. */

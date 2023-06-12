@@ -197,11 +197,12 @@ $config->my->task->dtable->fieldList['id']['name']  = 'id';
 $config->my->task->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->task->dtable->fieldList['id']['type']  = 'checkID';
 
-$config->my->task->dtable->fieldList['name']['name']  = 'name';
-$config->my->task->dtable->fieldList['name']['title'] = $lang->task->name;
-$config->my->task->dtable->fieldList['name']['type']  = 'title';
-$config->my->task->dtable->fieldList['name']['link']  = array('url' => helper::createLink('task', 'view', 'taskID={id}'), 'data-app' => 'project');
-$config->my->task->dtable->fieldList['name']['fixed'] = 'left';
+$config->my->task->dtable->fieldList['name']['name']         = 'name';
+$config->my->task->dtable->fieldList['name']['title']        = $lang->task->name;
+$config->my->task->dtable->fieldList['name']['type']         = 'title';
+$config->my->task->dtable->fieldList['name']['nestedToggle'] = true;
+$config->my->task->dtable->fieldList['name']['link']         = array('url' => helper::createLink('task', 'view', 'taskID={id}'), 'data-app' => 'project');
+$config->my->task->dtable->fieldList['name']['fixed']        = 'left';
 
 $config->my->task->dtable->fieldList['pri']['name']  = 'pri';
 $config->my->task->dtable->fieldList['pri']['title'] = $lang->priAB;
