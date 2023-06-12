@@ -26,6 +26,7 @@ toolbar
     $canCreate ? item(set($createItem)) : null,
 );
 
+jsVar('confirmDelete',    $lang->gogs->confirmDelete);
 jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('gogs', 'browseProject'));
 jsVar('sortLink',         helper::createLink('gogs', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
