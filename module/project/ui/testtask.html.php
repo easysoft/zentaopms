@@ -27,7 +27,8 @@ toolbar
     ) : null
 );
 
-if(!$project->hasProduct) unset($config->testtask->dtable->fieldList['product']);
+unset($config->testtask->dtable->fieldList['product']);
+unset($config->testtask->dtable->fieldList['execution']);
 
 $tasks      = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
 $cols       = array_values($config->testtask->dtable->fieldList);
