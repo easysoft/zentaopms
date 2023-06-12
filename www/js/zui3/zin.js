@@ -379,7 +379,7 @@
         else if(!options) options = {};
         if(typeof selector === 'string') options.selector = selector;
 
-        if (!options.selector && options.url.includes(' '))
+        if (!options.selector && options.url && options.url.includes(' '))
         {
             const parts = url.split(' ', 2);
             options.url      = parts[0];
