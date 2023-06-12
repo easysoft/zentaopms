@@ -49,33 +49,16 @@ sidebar
 
 $this->bug->buildOperateMenu(null, 'browse');
 
-foreach($bugs as $bug)
-{
-    $bug->productName = zget($products, $bug->product);
-    $bug->storyName   = zget($stories, $bug->story);
-    $bug->taskName    = zget($tasks, $bug->task);
-    $bug->toTaskName  = zget($tasks, $bug->toTask);
-    $bug->module      = zget($modulePairs, $bug->module);
-    $bug->branch      = zget($branchTagOption, $bug->branch);
-    $bug->project     = zget($projectPairs, $bug->project);
-    $bug->execution   = zget($executions, $bug->execution);
-    $bug->type        = zget($lang->bug->typeList, $bug->type);
-    $bug->confirmed   = zget($lang->bug->confirmedList, $bug->confirmed);
-    $bug->resolution  = zget($lang->bug->resolutionList, $bug->resolution);
-    $bug->os          = zget($lang->bug->osList, $bug->os);
-    $bug->browser     = zget($lang->bug->browserList, $bug->browser);
+$config->bug->dtable->fieldList['module']['map']    = $modulePairs;
+$config->bug->dtable->fieldList['product']['map']   = $products;
+$config->bug->dtable->fieldList['story']['map']     = $stories;
+$config->bug->dtable->fieldList['task']['map']      = $tasks;
+$config->bug->dtable->fieldList['toTask']['map']    = $tasks;
+$config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
+$config->bug->dtable->fieldList['project']['map']   = $projectPairs;
+$config->bug->dtable->fieldList['execution']['map'] = $executions;
 
-    $actions = array();
-    foreach($this->config->bug->dtable->fieldList['actions']['actionsMap'] as $actionCode => $actionMap)
-    {
-        $isClickable = $this->bug->isClickable($bug, $actionCode);
-
-        $actions[] = $isClickable ? $actionCode : array('name' => $actionCode, 'disabled' => true);
-    }
-    $bug->actions = $actions;
-}
-
-$cols = array_values($config->bug->dtable->fieldList);
+$bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
 $data = array_values($bugs);
 
 $assignedToItems = array();
@@ -95,19 +78,13 @@ $footToolbar = array('items' => array
 
 dtable
 (
-    set::userMap($users),
-    set::cols($cols),
+    set::cols($config->bug->dtable->fieldList),
     set::data($data),
+    set::userMap($users),
+    set::customCols(true),
     set::checkable(true),
     set::footToolbar($footToolbar),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('project', 'bug', "projectID={$project->id}&product={$productID}&branch={$branchID}&orderBy=$orderBy&build={$buildID}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::footPager(usePager()),
 );
 
 render();
