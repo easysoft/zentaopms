@@ -113,7 +113,7 @@ if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 $bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
 $data = array_values($bugs);
 
-$footToolbar = array('items' => array
+$footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
@@ -123,7 +123,7 @@ $footToolbar = array('items' => array
     array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'className' => ($this->session->currentProductType == 'normal' || !$canBatchChangeBranch ? 'hidden' : '') , 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->bug->abbr->module, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $resolveItems = array();
 foreach($lang->bug->resolutionList as $key => $resolution)
@@ -215,8 +215,8 @@ else
         set::data($data),
         set::userMap($users),
         set::customCols(true),
-        set::checkable($canBatchAction ? true : false),
-        $canBatchAction ? set::footToolbar($footToolbar) : null,
+        set::checkable($canBatchAction),
+        set::footToolbar($footToolbar),
         set::footPager
         (
             usePager(),

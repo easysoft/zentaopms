@@ -81,10 +81,10 @@ menu
     set::items($assignedToItems)
 );
 
-$footToolbar = array('items' => array
+$footToolbar = $canBatchAssignedTo ? array('items' => array
 (
     array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top'),
-));
+)) : null;
 
 dtable
 (
@@ -93,9 +93,9 @@ dtable
     set::userMap($users),
     set::customCols(true),
     set::footToolbar($footToolbar),
-    set::checkable($canBatchAssignTo ? true : false),
+    set::checkable($canBatchAssignTo),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
-    $canBatchAssignedTo ? set::footToolbar($footToolbar) : null,
+    set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );
 

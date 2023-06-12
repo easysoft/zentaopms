@@ -48,13 +48,13 @@ foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 $bugs = initTableData($bugs, $config->my->bug->dtable->fieldList, $this->bug);
 $bugs = array_values($bugs);
 
-$footToolbar = array('items' => array
+$footToolbar = $canBatchAction ? array('items' => array
 (
     array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchEdit')),
     array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchConfirm')),
     array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchClose')),
     array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'caret' => 'up', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
@@ -75,9 +75,9 @@ dtable
     set::data($bugs),
     set::userMap($users),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
-    set::checkable($canBatchAction ? true : false),
+    set::checkable($canBatchAction),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
-    $canBatchAction ? set::footToolbar($footToolbar) : null,
+    set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );
 
