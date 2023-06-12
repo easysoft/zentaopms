@@ -139,12 +139,11 @@ class history extends wg
 
         return form
         (
-            setClass('comment-edit-form hidden'),
+            setClass('comment-edit-form hidden mt-2 ml-6'),
             set::method('post'),
             set::action(createLink('action', 'editComment', "actionID=$action->id")),
             textarea
             (
-                setClass('mt-2 ml-6'),
                 set::name('lastComment'),
                 set::rows('8'),
                 set::autofocus('autofocus'),
