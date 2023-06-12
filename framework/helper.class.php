@@ -466,7 +466,6 @@ function initTableData($items, &$fieldList, $checkModel)
         }
     }
 
-    global $app;
     foreach($items as $item)
     {
         $item->actions = array();
@@ -480,13 +479,13 @@ function initTableData($items, &$fieldList, $checkModel)
             {
                 $item->actions = array();
                 $isClickable   = false;
-                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, $checkModel);
+                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, $fieldList['actions']['list'], $checkModel);
 
                 if($isClickable) break;     // If the action is clickable, use this group.
             }
             else // Only one group of action menus.
             {
-                initItemActions($item, $actionMenu, $checkModel);
+                initItemActions($item, $actionMenu, $fieldList['actions']['list'], $checkModel);
             }
         }
 
@@ -516,7 +515,16 @@ function initTableActions(array &$fieldList, string $actionMenu): void
     $actions = explode('|', $actionMenu);
     foreach($actions as $action)
     {
-        $fieldList['actions']['actionsMap'][$action] = $fieldList['actions']['list'][$action];
+        $actionConfig = $fieldList['actions']['list'][$action];
+        if(!empty($actionConfig['url']['module']) && !empty($actionConfig['url']['method']))
+        {
+            $moduleName = $actionConfig['url']['module'];
+            $methodName = $actionConfig['url']['method'];
+            $params     = !empty($actionConfig['url']['params']) ? $actionConfig['url']['params'] : array();
+            $actionConfig['url'] = helper::createLink($moduleName, $methodName, $params);
+        }
+
+        $fieldList['actions']['actionsMap'][$action] = $actionConfig;
         $fieldList['actions']['actionsMap'][$action]['text'] = '';
     }
 }
@@ -526,11 +534,12 @@ function initTableActions(array &$fieldList, string $actionMenu): void
  *
  * @param  object $item
  * @param  string $actionMenu
+ * @param  array  $actionList
  * @param  object $checkModel
  * @access public
  * @return bool
  */
-function initItemActions(object &$item, string $actionMenu, object $checkModel): bool
+function initItemActions(object &$item, string $actionMenu, array $actionList, object $checkModel): bool
 {
     $isClickable = false;
     $actions     = explode('|', $actionMenu);
@@ -544,7 +553,12 @@ function initItemActions(object &$item, string $actionMenu, object $checkModel):
         }
     }
 
-    if(!common::hasPriv($app->rawModule, $action)) return $isClickable;
+    if(!isset($actionList[$action])) return $isClickable;
+
+    global $app;
+    $moduleName = !empty($actionList[$action]['url']['module']) ? $actionList[$action]['url']['module'] : $app->rawModule;
+
+    if(!common::hasPriv($moduleName, $action)) return $isClickable;
 
     if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
     {
