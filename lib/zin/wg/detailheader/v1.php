@@ -14,11 +14,11 @@ class detailHeader extends wg
     {
         global $lang;
 
-        return btn
+        return backBtn
         (
+            setClass('mr-4'),
             set::icon('back'),
             set::type('secondary'),
-            setClass('mr-4'),
             $lang->goback
         );
     }
