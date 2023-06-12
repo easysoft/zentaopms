@@ -31,3 +31,19 @@ window.setStatistics = function()
 
     return {html: pageSummary.replace('%totalHours%', totalHours)};
 }
+
+window.renderCell = function(result, {col, row})
+{
+    if(col.name == 'realname' && !deptUsers[row.data.userID])
+    {
+        result[0] = {html: "<a href='javascript:checkUserDept();'>" + row.data.realname + '</a>'};
+        return result;
+    }
+
+    return result;
+}
+
+window.checkUserDept = function()
+{
+    alert(noAccess);
+}

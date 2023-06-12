@@ -32,12 +32,15 @@ toolbar
 
 jsVar('confirmUnlinkMember', $lang->execution->confirmUnlinkMember);
 jsVar('pageSummary', $lang->team->totalHours . '：' .  "<strong>%totalHours%{$lang->execution->workHour}" . sprintf($lang->project->teamMembersCount, count($teamMembers)) . "</strong>");
+jsVar('deptUsers', $deptUsers);
+jsVar('noAccess', $lang->user->error->noAccess);
 
 dtable
 (
     set::userMap($users),
     set::cols($config->execution->dtable->team->fieldList),
     set::data($teamMembers),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footer(jsRaw('function(){return window.setStatistics.call(this);}'))
 );
 
