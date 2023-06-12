@@ -156,8 +156,8 @@ $config->product->report->planLabels   = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishClosedStories', 'unclosedStories');
-$config->product->statisticFields['bugs']     = array('unResolvedBugs', 'closedBugs', 'fixedBugs');
+$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'totalStories');
+$config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
 $config->product->statisticFields['plans']    = array('plans');
 $config->product->statisticFields['releases'] = array('releases');
 
