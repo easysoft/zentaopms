@@ -23,7 +23,7 @@ featureBar
         'name' => 'involved',
         'text' => $lang->project->mine
     ))),
-    li(searchToggle())
+    li(searchToggle(set::module('project')))
 );
 
 /* zin: Define the toolbar on main menu. */
