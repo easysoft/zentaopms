@@ -1952,17 +1952,7 @@ class executionModel extends model
 
         if(empty($productID) and !empty($executions)) $projectProductIdList = $this->dao->select('project, GROUP_CONCAT(product) as product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($executions))->groupBy('project')->fetchPairs();
 
-        $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
-
-        /* Get the number of execution teams. */
-        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in(array_keys($executions))
-            ->andWhere('t1.type')->ne('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('t1.root')
-            ->fetchAll('root');
 
         $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
             ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
@@ -2000,10 +1990,6 @@ class executionModel extends model
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
             foreach($burnData as $data) $execution->burns[] = $data->value;
-
-            /* Process the hours. */
-            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
-            $execution->teamCount   = isset($teams[$execution->id]) ? $teams[$execution->id]->teams : 0;
 
             if(isset($executionTasks) and isset($executionTasks[$execution->id]))
             {
@@ -5769,10 +5755,6 @@ class executionModel extends model
             $execution->asParent = !empty($execution->children);
             $execution->status   = zget($this->lang->execution->statusList, $execution->status);
             $execution->PM       = zget($users, $execution->PM);
-            $execution->progress = $execution->hours->progress;
-            $execution->estimate = $execution->hours->totalEstimate;
-            $execution->consumed = $execution->hours->totalConsumed;
-            $execution->left     = $execution->hours->totalLeft;
 
             $children = isset($execution->children) ? $execution->children : array();
             unset($execution->children);

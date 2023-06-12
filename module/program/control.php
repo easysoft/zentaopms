@@ -51,6 +51,8 @@ class program extends control
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
+        $this->program->refreshStats(); // Refresh stats fields of projects.
+
         if($programType === 'bygrid')
         {
             $programs = $this->program->getProgramStats($status, 20, $orderBy);
@@ -107,7 +109,6 @@ class program extends control
         $this->view->pager        = $pager;
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
-        $this->view->progressList = $this->program->getProgressList(array_keys($programs));
         $this->view->hasProject   = $hasProject;
 
         $this->display();

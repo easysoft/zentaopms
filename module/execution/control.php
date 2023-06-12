@@ -4040,6 +4040,8 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
+
         $queryID   = ($status == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchForm($queryID, $actionURL);
