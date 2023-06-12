@@ -1308,7 +1308,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function team(string $projectID = '0')
+    public function team(int $projectID = 0)
     {
         $projectID = (int)$projectID;
         $this->session->set('teamList', $this->app->getURI(true), 'project');
@@ -1316,14 +1316,24 @@ class project extends control
         $this->app->loadLang('execution');
         $this->project->setMenu($projectID);
 
-        $project = $this->project->getById($projectID);
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $project     = $this->project->getById($projectID);
+        $deptID      = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $teamMembers = $this->project->getTeamMembers($projectID);
+        foreach($teamMembers as $member)
+        {
+            $member->days    = $member->days . $this->lang->execution->day;
+            $member->hours   = $member->hours . $this->lang->execution->workHour;
+            $member->total   = $member->totalHours . $this->lang->execution->workHour;
+            $member->actions = array();
+            if(common::hasPriv('project', 'unlinkMember', $member) && common::canModify('project', $project)) $member->actions = array('unlink');
+        }
 
         $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
         $this->view->projectID    = $projectID;
-        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
+        $this->view->teamMembers  = $teamMembers;
         $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('project', $project);
+        $this->view->recTotal     = count($teamMembers);
 
         $this->display();
     }
@@ -1333,15 +1343,12 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $userID
-     * @param  string $confirm  yes|no
      * @param  string $removeExecution  yes|no
      * @access public
      * @return void
      */
-    public function unlinkMember($projectID, $userID, $confirm = 'no', $removeExecution = 'no')
+    public function unlinkMember(int $projectID, int $userID, string $removeExecution = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&userID=$userID&confirm=yes")));
-
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
@@ -1349,21 +1356,18 @@ class project extends control
         if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
 
         /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
-        echo js::locate($this->inlink('team', "projectID=$projectID"), 'parent');
+        else
+        {
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = helper::createLink('project', 'team', "projectID={$projectID}");
+        }
+        return $this->send($response);
     }
 
     /**
@@ -1375,7 +1379,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageMembers($projectID, $dept = '', $copyProjectID = 0)
+    public function manageMembers(int $projectID, string $dept = '', int $copyProjectID = 0)
     {
         /* Load model. */
         $this->loadModel('user');

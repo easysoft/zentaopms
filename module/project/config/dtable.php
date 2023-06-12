@@ -1,5 +1,7 @@
 <?php
+global $lang,$app;
 $config->project->dtable = new stdclass();
+$config->project->dtable->team = new stdclass();
 $config->project->dtable->defaultField = array('id', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'progress', 'actions');
 
 $config->project->dtable->fieldList['id']['title']    = $lang->idAB;
@@ -321,3 +323,34 @@ $config->projectGroup->dtable->fieldList['actions']['list']['delete']['icon'] = 
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['text'] = $lang->group->delete;
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['hint'] = $lang->group->delete;
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['url']  = helper::createLink('group', 'delete', "groupID={id}");
+
+$app->loadLang('execution');
+$config->project->dtable->team->fieldList['account']['title']    = $lang->team->account;
+$config->project->dtable->team->fieldList['account']['name']     = 'realname';
+$config->project->dtable->team->fieldList['account']['type']     = 'user';
+$config->project->dtable->team->fieldList['account']['link']     = helper::createLink('user', 'view', "userID={userID}");
+$config->project->dtable->team->fieldList['account']['sortType'] = false;
+
+$config->project->dtable->team->fieldList['role']['title']    = $lang->team->role;
+$config->project->dtable->team->fieldList['role']['type']     = 'user';
+$config->project->dtable->team->fieldList['role']['sortType'] = false;
+
+$config->project->dtable->team->fieldList['join']['title'] = $lang->team->join;
+$config->project->dtable->team->fieldList['join']['type']  = 'date';
+
+$config->project->dtable->team->fieldList['days']['title'] = $lang->team->days;
+$config->project->dtable->team->fieldList['days']['type']  = 'number';
+
+$config->project->dtable->team->fieldList['hours']['title'] = $lang->team->hours;
+$config->project->dtable->team->fieldList['hours']['type']  = 'number';
+
+$config->project->dtable->team->fieldList['total']['title'] = $lang->team->totalHours;
+$config->project->dtable->team->fieldList['total']['type']  = 'number';
+
+$config->project->dtable->team->fieldList['limited']['title']    = $lang->team->limited;
+$config->project->dtable->team->fieldList['limited']['type']     = 'user';
+$config->project->dtable->team->fieldList['limited']['map']      = $lang->team->limitedList;
+$config->project->dtable->team->fieldList['limited']['sortType'] = false;
+
+$config->project->dtable->team->fieldList['actions']['type']       = 'actions';
+$config->project->dtable->team->fieldList['actions']['actionsMap'] = $config->project->team->actionList;

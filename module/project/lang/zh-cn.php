@@ -466,3 +466,5 @@ $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段'
 $lang->project->executionList['kanban']        = $lang->projectCommon . '看板';
 $lang->project->executionList['agileplus']     = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfallplus'] = $lang->projectCommon . '阶段';
+
+$lang->project->featureBar['team']['all'] = '团队成员';

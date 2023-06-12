@@ -466,3 +466,5 @@ $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage'
 $lang->project->executionList['kanban']        = $lang->projectCommon . ' Kanban';
 $lang->project->executionList['agileplus']     = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfallplus'] = $lang->projectCommon . ' Stage';
+
+$lang->project->featureBar['team']['all'] = 'Members';

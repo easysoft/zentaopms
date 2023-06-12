@@ -303,3 +303,8 @@ $config->project->budget = new stdclass();
 $config->project->budget->precision         = 2;
 $config->project->budget->tenThousand       = 10000;
 $config->project->budget->oneHundredMillion = 100000000;
+
+$config->project->team = new stdclass();
+$config->project->team->actionList['unlink']['icon'] = 'unlink';
+$config->project->team->actionList['unlink']['hint'] = $lang->project->unlinkMember;
+$config->project->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{account}", "{userID}")';
