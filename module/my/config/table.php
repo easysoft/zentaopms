@@ -447,7 +447,7 @@ $config->my->testtask = new stdclass();
 $config->my->testtask->dtable = new stdclass();
 $config->my->testtask->dtable->fieldList['id']['name']  = 'id';
 $config->my->testtask->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->testtask->dtable->fieldList['id']['fixed'] = 'left';
+$config->my->testtask->dtable->fieldList['id']['type']  = 'id';
 
 $config->my->testtask->dtable->fieldList['title']['name']  = 'name';
 $config->my->testtask->dtable->fieldList['title']['title'] = $lang->testtask->name;
@@ -481,11 +481,6 @@ $config->my->testtask->dtable->fieldList['end']['name']  = 'end';
 $config->my->testtask->dtable->fieldList['end']['title'] = $lang->testtask->end;
 $config->my->testtask->dtable->fieldList['end']['type']  = 'date';
 $config->my->testtask->dtable->fieldList['end']['group'] = 'user';
-
-$config->my->testtask->dtable->fieldList['status']['name']      = 'status';
-$config->my->testtask->dtable->fieldList['status']['title']     = $lang->testtask->status;
-$config->my->testtask->dtable->fieldList['status']['type']      = 'status';
-$config->my->testtask->dtable->fieldList['status']['statusMap'] = $lang->testtask->statusList;
 
 $config->my->testtask->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->testtask->dtable->fieldList['actions']['title']    = $lang->actions;
