@@ -14,7 +14,6 @@ namespace zin;
 
 global $lang, $app;
 $app->loadLang('datatable');
-$formGID = null;
 jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSave', "module={$module}&method={$method}"));
 
 function buildItem(array $item): wg
@@ -65,7 +64,6 @@ function getDefaultConfig(string $name): array
 
 function buildBody(array $cols): form
 {
-    global $formGID;
     $itemsList = array(
         'left' => array(),
         'no' => array(),
@@ -75,6 +73,7 @@ function buildBody(array $cols): form
     foreach($cols as $col)
     {
         if($col['type']) $col = array_merge(getDefaultConfig($col['type']), $col);
+        if(!isset($col['fixed']) || empty($col['fixed'])) $col['fixed'] = 'no';
         $itemsList[$col['fixed']][] = array(
             'required' => isset($col['required']) && $col['required'] === true,
             'title' => $col['title'],
@@ -101,46 +100,8 @@ function buildBody(array $cols): form
     }
 
     $body->setProp('data-zin-gid', $body->gid);
-    $formGID = $body->gid;
+    jsVar('formGID', $body->gid);
     return $body;
-}
-
-function submitFunc(): string
-{
-    global $formGID;
-
-    return <<<FUNC
-        const formData = [];
-        let index = 0;
-        const types = ['left', 'no', 'right'];
-        const getSelector = (value) => '[data-zin-gid="{$formGID}"] .drag-ul.' + value + '-cols';
-        const colsList = types.map(x => document.querySelector(getSelector(x)));
-
-        for(let i = 0; i < colsList.length; i++)
-        {
-            const cols = colsList[i];
-            if(!cols) continue;
-
-            const children = Array.from(cols.children);
-            for(let j = 0; j < children.length; j++)
-            {
-                const li = children[j];
-                const checkbox = li.querySelector('input[type="checkbox"]');
-                const input = li.querySelector('input[type="text"]');
-                formData.push({
-                    id: li.dataset.key,
-                    order: ++index,
-                    show: checkbox.checked,
-                    width: input.value + 'px',
-                    fixed: types[i],
-                });
-            }
-        }
-
-        fetch(ajaxSaveUrl, {method: 'post', body: JSON.stringify(formData)})
-            .then(res => res.json())
-            .then((json) => {if(json.result === 'success') loadTable();});
-    FUNC;
 }
 
 setClass('edit-cols');
@@ -154,8 +115,7 @@ to::footer
     (
         item
         (
-            set(array('text' => $lang->save, 'type' => 'primary', 'class' => 'w-28', 'data-dismiss' => 'modal')),
-            on::click($this->submitFunc())
+            set(array('text' => $lang->save, 'type' => 'primary', 'class' => 'w-28', 'data-dismiss' => 'modal', 'id' => 'ajax-save')),
         )
     )
 );
