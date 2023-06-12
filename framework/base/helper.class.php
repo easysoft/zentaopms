@@ -540,18 +540,21 @@ class baseHelper
      *  Compute the diff days of two date.
      *
      * @param   string $date1   the first date.
-     * @param   string $date2   the sencond date.
+     * @param   string $date2   the second date.
      * @access  public
-     * @return  int  the diff of the two days.
+     * @return  int             the diff of the two days.
      */
-    static public function diffDate($date1, $date2)
+    static public function diffDate(?string $date1, ?string $date2): int
     {
+        if(is_null($date1)) $date1 = '0000-00-00';
+        if(is_null($date2)) $date2 = '0000-00-00';
+
         /* Get the timestamp in the current operating system. */
         $date1 = new DateTime($date1);
         $date2 = new DateTime($date2);
-        $date1 = date_format($date1, "U");
+        $date1 = date_format($date1, "U"); /* Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT). */
         $date2 = date_format($date2, "U");
-        return round(($date1 - $date2) / 86400, 0);
+        return (int)round(($date1 - $date2) / 86400, 0);
     }
 
     /**
