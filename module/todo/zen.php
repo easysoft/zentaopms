@@ -330,9 +330,9 @@ class todoZen extends todo
 
         list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($form, $type, $account, $status);
 
-        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, '', '', isset($objectIdList['bug']) ? $objectIdList['bug'] : '');
-        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', '', isset($objectIdList['task']) ? $objectIdList['task'] : '');
-        $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : '');
+        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, array(), array(), isset($objectIdList['bug']) ? $objectIdList['bug'] : array());
+        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', array(), isset($objectIdList['task']) ? $objectIdList['task'] : array());
+        $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : array());
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
         if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');

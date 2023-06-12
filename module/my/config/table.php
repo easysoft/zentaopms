@@ -98,6 +98,11 @@ $config->my->todo->dtable->fieldList['assignedBy']['title'] = $lang->todo->assig
 $config->my->todo->dtable->fieldList['assignedBy']['type']  = 'user';
 $config->my->todo->dtable->fieldList['assignedBy']['group'] = 'assignedBy';
 
+$config->my->todo->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
+$config->my->todo->dtable->fieldList['assignedTo']['title'] = $lang->todo->assignedTo;
+$config->my->todo->dtable->fieldList['assignedTo']['type']  = 'user';
+$config->my->todo->dtable->fieldList['assignedTo']['group'] = 'assignedBy';
+
 $config->my->todo->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->todo->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->todo->dtable->fieldList['actions']['type']     = 'actions';

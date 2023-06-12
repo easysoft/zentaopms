@@ -60,15 +60,15 @@ $config->todo->assignTo->form['assignedTo']   = array('required' => true,  'type
 
 $config->todo->batchClose = new stdclass();
 $config->todo->batchClose->form = array();
-$config->todo->batchClose->form['todoIDList'] = array('required' => true, 'type' => 'array');
+$config->todo->batchClose->form['todoIdList'] = array('required' => true, 'type' => 'array');
 
 $config->todo->batchEdit = new stdclass();
 $config->todo->batchEdit->form = array();
-$config->todo->batchEdit->form['todoIDList'] = array('required' => true, 'type' => 'array');
+$config->todo->batchEdit->form['todoIdList'] = array('required' => true, 'type' => 'array');
 
 $config->todo->batchFinish = new stdclass();
 $config->todo->batchFinish->form = array();
-$config->todo->batchFinish->form['todoIDList'] = array('required' => true, 'type' => 'array');
+$config->todo->batchFinish->form['todoIdList'] = array('required' => true, 'type' => 'array');
 
 $config->todo->editDate = new stdclass();
 $config->todo->editDate->form = array();

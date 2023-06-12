@@ -92,7 +92,7 @@ class todo extends control
         {
             $form       = form::data($this->config->todo->batchCreate->form);
             $todosData  = $this->todoZen->beforeBatchCreate($form);
-            $todoIDList = $this->todo->batchCreate($todosData);
+            $todoIdList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Locate the browser. */
@@ -100,7 +100,7 @@ class todo extends control
             if($date == '') $date = 'future';
             if($date == date('Ymd')) $date= 'today';
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::locate($this->createLink('my', 'todo', "type={$date}"), 'parent'));
         }
@@ -180,7 +180,7 @@ class todo extends control
         if($from == 'todoBatchEdit')
         {
             $todos      = $this->todoZen->beforeBatchEdit($form);
-            $allChanges = $this->todo->batchUpdate($todos, $form->data->todoIDList);
+            $allChanges = $this->todo->batchUpdate($todos, $form->data->todoIdList);
             $this->todoZen->afterBatchEdit($allChanges);
 
             return print(js::locate($this->session->todoList, 'parent'));
@@ -406,8 +406,8 @@ class todo extends control
      */
     public function batchFinish()
     {
-        $todoIDList = form::data($this->config->todo->batchFinish->form)->get('todoIDList');
-        $todoList   = $this->todo->getByList($todoIDList);
+        $todoIdList = form::data($this->config->todo->batchFinish->form)->get('todoIdList');
+        $todoList   = $this->todo->getByList($todoIdList);
         foreach($todoList as $todoID => $todo)
         {
             if($todo->status == 'done' || $todo->status == 'closed') unset($todoList[$todoID]);
@@ -416,7 +416,7 @@ class todo extends control
         $isBatchFinished = $this->todo->batchFinish(array_keys($todoList));
         if(!$isBatchFinished) return false;
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -429,16 +429,17 @@ class todo extends control
     public function batchClose()
     {
         $waitIdList = array();
-        $todoIdList = form::data($this->config->todo->batchClose->form)->get('todoIDList');
+        $todoIdList = form::data($this->config->todo->batchClose->form)->get('todoIdList');
         foreach($todoIdList as $todoID)
         {
-            $todo   = $this->todo->getByID($todoID);
+            $todoID = (int)$todoID;
+            $todo = $this->todo->getByID($todoID);
             if($todo->status == 'done') $this->todo->close($todoID);
             if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
         }
         if(!empty($waitIdList)) echo js::alert(sprintf($this->lang->todo->unfinishedTodo, implode(',', $waitIdList)));
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
