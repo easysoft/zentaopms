@@ -6,6 +6,7 @@ $config->design->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->design->dtable->fieldList['id']['type']  = 'id';
 
 $config->design->dtable->fieldList['name']['type'] = 'title';
+$config->design->dtable->fieldList['name']['link'] = helper::createLink('design', 'view', 'designID={id}');
 
 $config->design->dtable->fieldList['product']['type'] = 'desc';
 
