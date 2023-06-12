@@ -86,14 +86,7 @@ dtable
 (
     set::cols($cols),
     set::data($data),
-    set::footPager
-    (
-        usePager(),
-        set::page($pager->pageID),
-        set::recPerPage($pager->recPerPage),
-        set::recTotal($pager->recTotal),
-        set::linkCreator(helper::createLink('my', 'audit', "browseType={$browseType}&param=&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
-    ),
+    set::footPager(usePager()),
 );
 
 render();
