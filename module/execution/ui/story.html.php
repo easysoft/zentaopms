@@ -164,7 +164,7 @@ foreach($cols as $key => $col)
     $col->name  = $col->id;
     if($col->id == 'title')
     {
-        $col->link = sprintf($col->link, createLink('story', 'view', array('storyID' => '${row.id}', 'version' => '0', 'param' => '0', 'storyType' => $storyType)));
+        $col->link = sprintf($col->link, createLink('execution', 'storyView', array('storyID' => '${row.id}', 'execution' => $executionID)));
     }
 
     $cols[$key] = $col;
