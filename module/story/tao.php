@@ -352,8 +352,7 @@ class storyTao extends storyModel
         if(is_int($productID))$productID = (string)$productID;
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
-        /* Get parent stories and children. */
-        $stories = $this->mergeChildren($stories, $type);
+        //$stories = $this->mergeChildren($stories, $type); //Future lists no longer require parent-child hierarchy for implementation.
         $parents = $this->extractParents($stories);
         if($parents)
         {

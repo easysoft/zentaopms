@@ -3704,7 +3704,7 @@ class storyModel extends model
         $isSuperReviewer = str_contains(',' . zget($config->story, 'superReviewers', '') . ',', ",{$app->user->account},");
 
         if($action == 'change')       return (($isSuperReviewer or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'submitReview') return strpos('draft,changing', $story->status) !== false;
+        if($action == 'submitreview') return strpos('draft,changing', $story->status) !== false;
         if($action == 'review')       return (($isSuperReviewer or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
         if($action == 'close')        return $story->status != 'closed';

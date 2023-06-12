@@ -53,7 +53,6 @@ $config->my->todo->dtable = new stdclass();
 $config->my->todo->dtable->fieldList['id']['name']  = 'id';
 $config->my->todo->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->todo->dtable->fieldList['id']['type']  = 'checkID';
-$config->my->todo->dtable->fieldList['id']['fixed'] = 'left';
 
 $config->my->todo->dtable->fieldList['name']['name']  = 'name';
 $config->my->todo->dtable->fieldList['name']['title'] = $lang->todo->name;
@@ -309,14 +308,14 @@ $config->my->requirement->actionList['close']['url']  = helper::createLink('stor
 $config->my->requirement->dtable = new stdclass();
 $config->my->requirement->dtable->fieldList['id']['name']  = 'id';
 $config->my->requirement->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->requirement->dtable->fieldList['id']['type']  = 'checkID';
-$config->my->requirement->dtable->fieldList['id']['fixed'] = 'left';
+$config->my->requirement->dtable->fieldList['id']['type']  = 'id';
 
-$config->my->requirement->dtable->fieldList['title']['name']  = 'title';
-$config->my->requirement->dtable->fieldList['title']['title'] = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
-$config->my->requirement->dtable->fieldList['title']['type']  = 'title';
-$config->my->requirement->dtable->fieldList['title']['link']  = helper::createLink('story', 'view', 'id={id}&version=0&param=0&storyType=requirement');
-$config->my->requirement->dtable->fieldList['title']['fixed'] = 'left';
+$config->my->requirement->dtable->fieldList['title']['name']         = 'title';
+$config->my->requirement->dtable->fieldList['title']['title']        = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
+$config->my->requirement->dtable->fieldList['title']['type']         = 'title';
+$config->my->requirement->dtable->fieldList['title']['nestedToggle'] = true;
+$config->my->requirement->dtable->fieldList['title']['link']         = helper::createLink('story', 'view', 'id={id}&version=0&param=0&storyType=requirement');
+$config->my->requirement->dtable->fieldList['title']['fixed']        = 'left';
 
 $config->my->requirement->dtable->fieldList['pri']['name']  = 'pri';
 $config->my->requirement->dtable->fieldList['pri']['title'] = $lang->priAB;
@@ -334,10 +333,10 @@ $config->my->requirement->dtable->fieldList['status']['type']      = 'status';
 $config->my->requirement->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
 $config->my->requirement->dtable->fieldList['status']['group']     = 'pri';
 
-$config->my->requirement->dtable->fieldList['openedBy']['name']      = 'openedBy';
-$config->my->requirement->dtable->fieldList['openedBy']['title']     = $lang->story->openedByAB;
-$config->my->requirement->dtable->fieldList['openedBy']['type']      = 'user';
-$config->my->requirement->dtable->fieldList['openedBy']['group']     = 'openedBy';
+$config->my->requirement->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->my->requirement->dtable->fieldList['openedBy']['title'] = $lang->story->openedByAB;
+$config->my->requirement->dtable->fieldList['openedBy']['type']  = 'user';
+$config->my->requirement->dtable->fieldList['openedBy']['group'] = 'openedBy';
 
 $config->my->requirement->dtable->fieldList['estimate']['name']  = 'estimate';
 $config->my->requirement->dtable->fieldList['estimate']['title'] = $lang->story->estimateAB;
@@ -355,7 +354,7 @@ $config->my->requirement->dtable->fieldList['actions']['title']    = $lang->acti
 $config->my->requirement->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->requirement->dtable->fieldList['actions']['sortType'] = false;
 $config->my->requirement->dtable->fieldList['actions']['list']     = $config->my->requirement->actionList;
-$config->my->requirement->dtable->fieldList['actions']['menu']     = array('change', 'submitReview|review', 'recall', 'edit', 'close');
+$config->my->requirement->dtable->fieldList['actions']['menu']     = array('change', 'review|submitReview', 'recall', 'edit', 'close');
 
 $config->my->story = new stdclass();
 $config->my->story->actionList = array();
@@ -397,7 +396,6 @@ $config->my->story->dtable = new stdclass();
 $config->my->story->dtable->fieldList['id']['name']  = 'id';
 $config->my->story->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->story->dtable->fieldList['id']['type']  = 'checkID';
-$config->my->story->dtable->fieldList['id']['fixed'] = 'left';
 
 $config->my->story->dtable->fieldList['title']['name']  = 'title';
 $config->my->story->dtable->fieldList['title']['title'] = common::checkNotCN() ? $lang->SRCommon . ' ' . $lang->my->name : $lang->SRCommon . $lang->my->name;
@@ -499,7 +497,7 @@ $config->my->testcase = new stdclass();
 $config->my->testcase->dtable = new stdclass();
 $config->my->testcase->dtable->fieldList['id']['name']  = 'id';
 $config->my->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->testcase->dtable->fieldList['id']['type'] = 'checkID';
+$config->my->testcase->dtable->fieldList['id']['type']  = 'checkID';
 $config->my->testcase->dtable->fieldList['id']['fixed'] = 'left';
 
 $config->my->testcase->dtable->fieldList['title']['name']  = 'title';
@@ -528,7 +526,7 @@ $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', '
 $config->my->audit->dtable = new stdclass();
 $config->my->audit->dtable->fieldList['id']['name']  = 'id';
 $config->my->audit->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->audit->dtable->fieldList['id']['fixed'] = 'left';
+$config->my->audit->dtable->fieldList['id']['type']  = 'id';
 
 $config->my->audit->dtable->fieldList['title']['name']        = 'title';
 $config->my->audit->dtable->fieldList['title']['title']       = $lang->my->auditField->title;
@@ -666,8 +664,7 @@ $config->my->execution = new stdclass();
 $config->my->execution->dtable = new stdclass();
 $config->my->execution->dtable->fieldList['id']['name']  = 'id';
 $config->my->execution->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->execution->dtable->fieldList['id']['type']  = 'ID';
-$config->my->execution->dtable->fieldList['id']['fixed'] = 'left';
+$config->my->execution->dtable->fieldList['id']['type']  = 'id';
 $config->my->execution->dtable->fieldList['id']['group'] = '1';
 
 $config->my->execution->dtable->fieldList['name']['name']  = 'name';
@@ -796,8 +793,6 @@ $config->my->bug->dtable = new stdclass();
 $config->my->bug->dtable->fieldList['id']['name']  = 'id';
 $config->my->bug->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->bug->dtable->fieldList['id']['type']  = 'checkID';
-$config->my->bug->dtable->fieldList['id']['align'] = 'left';
-$config->my->bug->dtable->fieldList['id']['fixed'] = 'left';
 $config->my->bug->dtable->fieldList['id']['group'] = 'left';
 
 $config->my->bug->dtable->fieldList['title']['name']     = 'title';
@@ -1036,12 +1031,12 @@ $config->my->doc->actionList['delete']['url']  = helper::createLink('doc', 'dele
 $config->my->doc->dtable = new stdclass();
 $config->my->doc->dtable->fieldList['id']['name']  = 'id';
 $config->my->doc->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->my->doc->dtable->fieldList['id']['fixed'] = 'left';
+$config->my->doc->dtable->fieldList['id']['type']  = 'id';
 
-$config->my->doc->dtable->fieldList['title']['name']       = 'title';
-$config->my->doc->dtable->fieldList['title']['title']      = $lang->doc->title;
-$config->my->doc->dtable->fieldList['title']['type']       = 'text';
-$config->my->doc->dtable->fieldList['title']['fixed']      = 'left';
+$config->my->doc->dtable->fieldList['title']['name']  = 'title';
+$config->my->doc->dtable->fieldList['title']['title'] = $lang->doc->title;
+$config->my->doc->dtable->fieldList['title']['type']  = 'text';
+$config->my->doc->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->my->doc->dtable->fieldList['object']['name']  = 'objectName';
 $config->my->doc->dtable->fieldList['object']['title'] = $lang->doc->object;
