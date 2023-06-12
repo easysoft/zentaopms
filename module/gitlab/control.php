@@ -218,24 +218,31 @@ class gitlab extends control
     }
 
     /**
+     * 删除一条gitlab记录。
      * Delete a gitlab.
      *
      * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($id)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
-
         $oldGitLab = $this->loadModel('pipeline')->getByID($id);
         $actionID  = $this->pipeline->delete($id, 'gitlab');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']  = 'fail';
+            $response['message'] = $this->lang->pipeline->delError;
+            return $this->send($response);
+        }
 
         $gitLab   = $this->gitlab->getByID($id);
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        echo js::reload('parent');
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**

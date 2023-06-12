@@ -26,6 +26,7 @@ toolbar
     $canCreate ? item(set($createItem)) : null,
 );
 
+jsVar('confirmDelete',    $lang->gitlab->confirmDelete);
 jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('gitlab', 'browseProject'));
 jsVar('sortLink',         helper::createLink('gitlab', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
