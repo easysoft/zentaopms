@@ -44,7 +44,7 @@ class design extends control
 
         ksort($products);
 
-        $productID   = $this->product->getAccessableProductID($productID, $products);
+        $productID = $this->product->getAccessableProductID($productID, $products);
 
         $this->lang->modulePageNav = $this->design->setMenu($projectID, $products, $productID);
         $this->project->setMenu($projectID);
@@ -147,7 +147,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $productID = 0, $type = 'all')
+    public function create(int $projectID = 0, int $productID = 0, string $type = 'all')
     {
         $productID = $this->commonAction($projectID, $productID);
 
@@ -173,16 +173,14 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
 
-        $project = $this->loadModel('project')->getByID($projectID);
-
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
-
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
+        $this->view->products   = $products;
         $this->view->type       = $type;
-        $this->view->typeList   = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $this->view->project    = $this->loadModel('project')->getByID($projectID);
 
         $this->display();
     }
