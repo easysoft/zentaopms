@@ -13,8 +13,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=testtask&type={key}&param={$param}"),
-    li(searchToggle())
+    set::linkParams("mode=testtask&type={key}&param={$param}")
 );
 
 $tasks      = initTableData($tasks, $config->my->testtask->dtable->fieldList, $this->testtask);
