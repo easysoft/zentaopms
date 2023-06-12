@@ -87,7 +87,7 @@ function isAjaxRequest(string|null $type = null): bool
 
     if($type === 'zin') return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
 
-    if($type === 'modal') return isset($_SERVER['X-Zui-Modal']) && $_SERVER['X-Zui-Modal'] == true;
+    if($type === 'modal') return isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true;
 
     return $isAjax;
 }
