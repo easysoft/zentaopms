@@ -79,7 +79,7 @@ class helper extends baseHelper
     /**
      * Verify that the system has opened on the feature.
      *
-     * @param  string    $feature    scrum_risk | risk | scrum
+     * @param  string $feature    scrum_risk | risk | scrum
      * @static
      * @access public
      * @return bool
@@ -94,32 +94,29 @@ class helper extends baseHelper
             $code = $code[0] . ucfirst($code[1]);
             return !str_contains(",$config->disabledFeatures,", ",{$code},");
         }
-        else
-        {
-            if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return !str_contains(",$config->disabledFeatures,", ",{$feature},");
 
-            $hasFeature       = false;
-            $canConfigFeature = false;
-            foreach($config->featureGroup as $group => $modules)
+        if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return !str_contains(",$config->disabledFeatures,", ",{$feature},");
+
+        $hasFeature       = false;
+        $canConfigFeature = false;
+        foreach($config->featureGroup as $group => $modules)
+        {
+            foreach($modules as $module)
             {
-                foreach($modules as $module)
+                if($feature != $group && $feature != $module) continue;
+
+                $canConfigFeature = true;
+                if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
                 {
-                    if($feature == $group or $feature == $module)
-                    {
-                        $canConfigFeature = true;
-                        if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
-                        {
-                            if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
-                        }
-                        else
-                        {
-                            if(helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
-                        }
-                    }
+                    $hasFeature |= (helper::hasFeature("{$group}") && helper::hasFeature("{$group}_{$module}"));
+                }
+                else
+                {
+                    $hasFeature |= helper::hasFeature("{$group}_{$module}");
                 }
             }
-            return !$canConfigFeature or ($hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},"));
         }
+        return !$canConfigFeature || ($hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},"));
     }
 
     /**
