@@ -57,9 +57,8 @@ else
 }
 
 /* Init table data for dtable. */
-$stories       = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
-$bugs          = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
-$generatedBugs = initTableData($generatedBugs, $config->build->generatedBug->dtable->fieldList, $this->build);
+$stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
+$bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 
 if($canBeChanged)
 {
@@ -163,7 +162,7 @@ detailBody
                 (
                     set::userMap($users),
                     set::cols(array_values($config->build->generatedBug->dtable->fieldList)),
-                    set::data($generatedBugTableData),
+                    set::data(array_values($generatedBugs)),
                     set::sortLink(jsRaw('window.createSortLink')),
                     set::footPager(
                         usePager(null, 'generatedBugPager'),
