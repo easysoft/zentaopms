@@ -465,7 +465,7 @@ class dbh
                 }
 
                 /* If table has datas and sql no default values defined, replace NOT NULL to NULL. */
-                if (strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false) $sql = str_replace("NOT NULL", "NULL", $sql);
+                if (strpos($sql, "NOT NULL,") !== false && strpos($sql, "DEFAULT") === false) $sql = str_replace("NOT NULL", "NULL", $sql);
         }
 
         return $sql;
