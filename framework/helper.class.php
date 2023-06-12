@@ -287,7 +287,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function requestAPI(string $url)
+    public static function requestAPI(string $url)
     {
         global $config;
 
