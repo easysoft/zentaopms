@@ -36,11 +36,11 @@ class featureBar extends wg
         $rawItems = \customModel::getFeatureMenu($currentModule, $currentMethod);
         if(!is_array($rawItems)) return null;
 
-        $current      = $this->prop('current', data('browseType'));
-        $pager        = data('pager');
-        $recTotal     = $pager ? $pager->recTotal : '';
-        $items        = array();
-        $link         = $this->prop('link');
+        $current  = $this->prop('current', data('browseType'));
+        $pager    = data('pager');
+        $recTotal = $pager ? $pager->recTotal : data('recTotal');
+        $items    = array();
+        $link     = $this->prop('link');
 
         data('activeFeature', $current);
 
