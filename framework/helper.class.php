@@ -243,13 +243,10 @@ class helper extends baseHelper
      */
     public static function formatKB($traffic, $precision = 2)
     {
-        $gigaByte = round($traffic / (1024 * 1024), $precision);
-        if($gigaByte >= 1) return $gigaByte . 'GB';
+        $base     = log($traffic, 1024);
+        $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
 
-        $megaByte = round($traffic / 1024, $precision);
-        if($megaByte >= 1) return $megaByte . 'MB';
-
-        return round($traffic, $precision) . 'KB';
+        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
     }
 
 	/**
