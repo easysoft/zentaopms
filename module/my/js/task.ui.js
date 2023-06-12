@@ -47,8 +47,8 @@ window.setStatistics = function(element, checks)
 }
 
 /**
- * 对截至日期列进行重定义。
- * Redefine the deadline column.
+ * 对部分列进行重定义。
+ * Redefine the partial column.
  *
  * @param  array  result
  * @param  array  info

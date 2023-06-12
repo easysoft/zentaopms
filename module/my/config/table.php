@@ -196,7 +196,7 @@ $config->my->task->dtable->fieldList['id']['type']  = 'checkID';
 $config->my->task->dtable->fieldList['name']['name']  = 'name';
 $config->my->task->dtable->fieldList['name']['title'] = $lang->task->name;
 $config->my->task->dtable->fieldList['name']['type']  = 'title';
-$config->my->task->dtable->fieldList['name']['link']  = helper::createLink('task', 'view', 'taskID={id}');
+$config->my->task->dtable->fieldList['name']['link']  = array('url' => helper::createLink('task', 'view', 'taskID={id}'), 'data-app' => 'project');
 $config->my->task->dtable->fieldList['name']['fixed'] = 'left';
 
 $config->my->task->dtable->fieldList['pri']['name']  = 'pri';
@@ -214,11 +214,13 @@ $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 $config->my->task->dtable->fieldList['project']['name']  = 'projectName';
 $config->my->task->dtable->fieldList['project']['title'] = $lang->task->project;
 $config->my->task->dtable->fieldList['project']['type']  = 'text';
+$config->my->task->dtable->fieldList['project']['link']  = helper::createLink('project', 'view', 'projectID={project}');
 $config->my->task->dtable->fieldList['project']['group'] = 'project';
 
 $config->my->task->dtable->fieldList['execution']['name']  = 'executionName';
 $config->my->task->dtable->fieldList['execution']['title'] = $lang->task->execution;
 $config->my->task->dtable->fieldList['execution']['type']  = 'text';
+$config->my->task->dtable->fieldList['execution']['link']  = helper::createLink('execution', 'task', 'executionID={execution}');
 $config->my->task->dtable->fieldList['execution']['group'] = 'project';
 
 $config->my->task->dtable->fieldList['openedBy']['name']  = 'openedBy';
