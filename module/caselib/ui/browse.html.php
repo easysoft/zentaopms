@@ -148,7 +148,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
 
 dtable
 (
-    set::cols(array_values($config->caselib->testcase->dtable->fieldList)),
+    set::cols($config->caselib->testcase->dtable->fieldList),
     set::data(array_values($tableData)),
     set::checkable($canBatchAction),
     set::footToolbar($footToolbar),
