@@ -143,6 +143,7 @@ class datatableModel extends model
             $set['group']    = isset($value['group'])    ? $value['group']    : '';
             $set['link']     = isset($value['link'])     ? $value['link']     : '';
 
+            if(isset($value['required']))     $set['required']     = $value['required'];
             if(isset($value['minWidth']))     $set['minWidth']     = $value['minWidth'];
             if(isset($value['maxWidth']))     $set['maxWidth']     = $value['maxWidth'];
             if(isset($value['pri']))          $set['pri']          = $value['pri'];
