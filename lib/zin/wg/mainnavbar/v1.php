@@ -34,6 +34,37 @@ class mainNavbar extends nav
         'right' => array('map' => 'toolbar'),
     );
 
+    protected function created()
+    {
+        global $app;
+
+        $currentModule = $app->getModuleName();
+        $currentMethod = $app->getMethodName();
+
+        commonModel::setMainMenu();
+        $items = \customModel::getModuleMenu($app->rawMethod);
+        if($items)
+        {
+            $items = json_decode(json_encode($items), true);
+
+            foreach($items as $key => $item)
+            {
+                $link = $item['link'];
+                $items[$key]['url'] = commonModel::createMenuLink((object)$item, $tab);
+
+                $active = '';
+                if($link['module'] == $currentModule and $link['method'] == $currentMethod) $active = 'active';
+                if($link['module'] == $currentModule and strpos(",{$item['alias']},", ",{$currentMethod},") !== false) $active = 'active';
+                if(strpos(",{$item['exclude']},", ",{$currentModule}-{$currentMethod},") !== false or strpos(",{$item['exclude']},", ",{$currentModule},") !== false) $active = '';
+                $items[$key]['class'] = $active;
+
+                unset($items[$key]['name']);
+            }
+
+            $this->setProp('items', $items);
+        }
+    }
+
     /**
      * Override the build method.
      *
