@@ -25,3 +25,4 @@ $config->user->detailFields = 'id,account,realname,avatar';
 $config->user->defaultFields['todo']  = array('id', 'name', 'pri', 'date', 'status', 'type', 'begin', 'end');
 $config->user->defaultFields['task']  = array('id', 'name', 'pri', 'status', 'execution', 'deadline', 'estimate', 'consumed', 'left');
 $config->user->defaultFields['story'] = array('id', 'title', 'pri', 'status', 'product', 'plan', 'openedBy', 'estimate', 'stage');
+$config->user->defaultFields['bug']   = array('id', 'title', 'severity', 'pri', 'openedBy', 'resolvedBy', 'resolution');
