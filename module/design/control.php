@@ -37,7 +37,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function commonAction($projectID = 0, $productID = 0, $designID = 0)
+    public function commonAction(int $projectID = 0, int $productID = 0, int $designID = 0)
     {
         $products    = $this->product->getProductPairsByProject($projectID);
         $products[0] = $this->lang->product->all;
@@ -178,7 +178,6 @@ class design extends control
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
-        $this->view->products   = $products;
         $this->view->type       = $type;
         $this->view->project    = $this->loadModel('project')->getByID($projectID);
 
@@ -271,7 +270,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function edit($designID = 0)
+    public function edit(int $designID = 0)
     {
         $design = $this->design->getByID($designID);
         $design = $this->design->getAffectedScope($design);
@@ -296,17 +295,15 @@ class design extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $this->createLink('design', 'view', "id=$design->id");
+            $response['load']    = $this->createLink('design', 'view', "id={$designID}");
             return $this->send($response);
         }
 
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
+        $project       = $this->loadModel('project')->getByID($design->project);
 
-        $project = $this->loadModel('project')->getByID($design->project);
-
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
-
+        $this->view->title   = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
         $this->view->design  = $design;
         $this->view->project = $project;
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
