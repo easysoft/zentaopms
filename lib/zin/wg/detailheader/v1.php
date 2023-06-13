@@ -4,6 +4,11 @@ namespace zin;
 
 class detailHeader extends wg
 {
+    protected static $defineProps = array(
+        'back?: string="APP"',
+        'backUrl?: string',
+    );
+
     protected static $defineBlocks = array(
         'prefix' => array(),
         'title'  => array(),
@@ -13,12 +18,12 @@ class detailHeader extends wg
     private function backBtn(): wg
     {
         global $lang;
-
         return backBtn
         (
-            setClass('mr-4'),
             set::icon('back'),
             set::type('secondary'),
+            set::back($this->prop('back')),
+            set::url($this->prop('backUrl')),
             $lang->goback
         );
     }
@@ -36,7 +41,7 @@ class detailHeader extends wg
             setClass('detail-header flex justify-between mb-3'),
             div
             (
-                setClass('flex', 'items-center'),
+                setClass('flex', 'items-center', 'gap-x-4'),
                 $prefix,
                 $title,
             ),
