@@ -25,6 +25,7 @@ $initModule    = isset($moduleID) ? (int)$moduleID : 0;
 $canModify                  = common::canModify('product', $product);
 $canSwitchCaseType          = $this->app->tab == 'qa';
 $canDisplaySuite            = $this->app->tab == 'qa';
+$canManageModule            = hasPriv('tree', 'browse') && !empty($productID);
 $canCreateSuite             = hasPriv('testsuite', 'create');
 $canBrowseUnits             = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase          = hasPriv('testcase', 'zerocase');
@@ -260,13 +261,15 @@ toolbar
     )
 );
 
-$closeLink = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
+$settingLink = $canManageModule ? createLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$app->tab}") : '';
+$closeLink   = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
 sidebar
 (
     moduleMenu(set(array
     (
         'modules'   => $moduleTree,
         'activeKey' => $moduleID,
+        'settingLink' => $settingLink,
         'closeLink' => $closeLink
     )))
 );
