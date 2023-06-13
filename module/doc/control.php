@@ -377,7 +377,19 @@ class doc extends control
 
         if(!empty($_POST))
         {
-            if($this->loadModel('common')->checkPrivByObject($objectType, $libID) === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+            $doclib   = $this->loadModel('doc')->getLibById($objectID);
+            $canVisit = true;
+            if('custom' == $objectType)
+            {
+                $account = $this->app->user->account;
+                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
+            }
+            else
+            {
+                $canVisit = $this->loadModel('common')->checkPrivByObject($objectType, $doclib->$objectType);
+            }
+            if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             if(empty($libID) and strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);

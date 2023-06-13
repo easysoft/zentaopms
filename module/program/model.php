@@ -1611,4 +1611,16 @@ class programModel extends model
 
         return $programID;
     }
+
+    /**
+     * Check the privilege.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($programID)
+    {
+        return !empty($programID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->programs},", ",{$programID},") !== false));
+    }
 }

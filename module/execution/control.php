@@ -2528,6 +2528,8 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
+        if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
+
         $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
 
         $programList = array_filter(explode(',', $execution->projectInfo->path));
@@ -2730,6 +2732,7 @@ class execution extends control
      */
     public function taskKanban($executionID, $browseType = 'all', $orderBy = 'order_asc', $groupBy = '')
     {
+        if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
         if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */

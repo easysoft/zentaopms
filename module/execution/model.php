@@ -23,11 +23,7 @@ class executionModel extends model
      */
     public function checkPriv($executionID)
     {
-        if(empty($executionID)) return false;
-
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false);
+        return !empty($executionID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false));
     }
 
     /**

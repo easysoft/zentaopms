@@ -3640,7 +3640,7 @@ EOF;
     /**
      * Check object priv.
      *
-     * @param  string   $objectType
+     * @param  string   $objectType program|project|product|execution
      * @param  int      $objectID
      * @access public
      * @return bool
@@ -3648,31 +3648,9 @@ EOF;
     public function checkPrivByObject($objectType, $objectID)
     {
         $objectType = strtolower($objectType);
-        $canVisit   = true;
-        switch($objectType)
-        {
-            case 'custom':
-                $doclib  = $this->loadModel('doc')->getLibById($objectID);
-                $account = (string)$this->app->user->account;
-                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
-                break;
-            case 'product':
-                $doclib   = $this->loadModel('doc')->getLibById($objectID);
-                $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
-                break;
-            case 'project':
-                $doclib   = $this->loadModel('doc')->getLibById($objectID);
-                $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
-                break;
-            case 'execution':
-                $doclib   = $this->loadModel('doc')->getLibById($objectID);
-                $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
-                break;
-            default:
-                break;
-        }
+        if(in_array($objectType, array('program', 'project', 'product', 'execution'))) return $this->loadModel($objectType)->checkPriv($objectID);
 
-        return $canVisit;
+        return false;
     }
 
 }
