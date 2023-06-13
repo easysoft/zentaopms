@@ -1452,11 +1452,10 @@ class productplanModel extends model
         $canCreateChild = common::hasPriv('productplan', 'create');
         $canDelete      = common::hasPriv('productplan', 'delete');
 
-        $actions[] = $this->buildActionBtn('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
-        $actions[] = $this->buildActionBtn('productplan', 'finish', $params, $plan, $type, 'checked', 'hiddenwin', '', false, '', $this->lang->productplan->finishAB);
-        $actions[] = $this->buildActionBtn('productplan', 'close', $params, $plan, $type, 'off', 'hiddenwin', 'iframe', true, '', $this->lang->productplan->closeAB);
-
-        if($type == 'view') $actions[] = $this->buildActionBtn('productplan', 'activate', $params, $plan, $type, 'magic', 'hiddenwin', '', false, '', $this->lang->productplan->activateAB);
+        $actions[] = $this->buildActionBtn('productplan', 'start',    $params, $plan, $type, 'start',    'hiddenwin', '',       false, '', $this->lang->productplan->startAB);
+        $actions[] = $this->buildActionBtn('productplan', 'finish',   $params, $plan, $type, 'finish',   'hiddenwin', '',       false, '', $this->lang->productplan->finishAB);
+        $actions[] = $this->buildActionBtn('productplan', 'close',    $params, $plan, $type, 'close',    'hiddenwin', 'iframe', true,  '', $this->lang->productplan->closeAB);
+        $actions[] = $this->buildActionBtn('productplan', 'activate', $params, $plan, $type, 'activate', 'hiddenwin', '',       false, '', $this->lang->productplan->activateAB);
 
         if($type == 'browse')
         {

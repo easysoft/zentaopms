@@ -82,24 +82,25 @@ $config->productplan->dtable->fieldList['actions']['fixed']    = 'right';
 $config->productplan->dtable->fieldList['actions']['required'] = 'yes';
 $config->productplan->dtable->fieldList['actions']['width']    = 'auto';
 $config->productplan->dtable->fieldList['actions']['type']     = 'actions';
-$config->productplan->dtable->fieldList['actions']['minWidth'] = 280;
+$config->productplan->dtable->fieldList['actions']['minWidth'] = 200;
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['icon']  = '';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['class'] = 'nav-divider';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['type']  = 'dropdown';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['caret'] = false;
 
-$config->productplan->dtable->fieldList['actions']['actionsMap']['play']['icon'] = 'play';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['play']['hint'] = $this->lang->productplan->startAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'play';
+$config->productplan->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $this->lang->productplan->startAB;
 
-$config->productplan->dtable->fieldList['actions']['actionsMap']['checked']['icon'] = 'checked';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['checked']['hint'] = $this->lang->productplan->finishAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['icon'] = 'checked';
+$config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['hint'] = $this->lang->productplan->finishAB;
 
-$config->productplan->dtable->fieldList['actions']['actionsMap']['off']['icon'] = 'off';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['off']['hint'] = $this->lang->productplan->closeAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['close']['icon']        = 'off';
+$config->productplan->dtable->fieldList['actions']['actionsMap']['close']['hint']        = $this->lang->productplan->closeAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['close']['data-toggle'] = 'modal';
 
-$config->productplan->dtable->fieldList['actions']['actionsMap']['magic']['icon'] = 'active';
-$config->productplan->dtable->fieldList['actions']['actionsMap']['magic']['hint'] = $this->lang->productplan->activateAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['icon'] = 'active';
+$config->productplan->dtable->fieldList['actions']['actionsMap']['activate']['hint'] = $this->lang->productplan->activateAB;
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['plus']['icon'] = 'plus';
 
