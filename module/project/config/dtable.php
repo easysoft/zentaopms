@@ -14,7 +14,7 @@ $config->project->dtable->fieldList['id']['required'] = true;
 $config->project->dtable->fieldList['name']['title']      = $lang->project->name;
 $config->project->dtable->fieldList['name']['name']       = 'name';
 $config->project->dtable->fieldList['name']['type']       = 'title';
-$config->project->dtable->fieldList['name']['link']       = helper::createLink('project', 'index', 'projectID={id}');
+$config->project->dtable->fieldList['name']['link']       = array('module' => 'project', 'method' => 'index', 'params' => 'projectID={id}');
 $config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
 $config->project->dtable->fieldList['name']['group']      = 1;
 $config->project->dtable->fieldList['name']['required']   = true;
@@ -130,7 +130,7 @@ $config->project->dtable->fieldList['actions']['actionsMap']['perm']['url']  = h
 
 $config->project->dtable->fieldList['actions']['actionsMap']['link']['icon'] = 'link';
 $config->project->dtable->fieldList['actions']['actionsMap']['link']['hint'] = $lang->project->manageProducts;
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['url']  = helper::createLink('project', 'manageProducts', 'projectID={id}');
+$config->project->dtable->fieldList['actions']['actionsMap']['link']['url']  = array('module' => 'project', 'method' => 'manageProducts', 'params' => 'projectID={id}');
 
 $config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['icon'] = 'shield-check';
 $config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['hint'] = $lang->project->whitelist;
@@ -343,7 +343,7 @@ $app->loadLang('execution');
 $config->project->dtable->team->fieldList['account']['title']    = $lang->team->account;
 $config->project->dtable->team->fieldList['account']['name']     = 'realname';
 $config->project->dtable->team->fieldList['account']['type']     = 'user';
-$config->project->dtable->team->fieldList['account']['link']     = helper::createLink('user', 'view', "userID={userID}");
+$config->project->dtable->team->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');
 $config->project->dtable->team->fieldList['account']['sortType'] = false;
 
 $config->project->dtable->team->fieldList['role']['title']    = $lang->team->role;

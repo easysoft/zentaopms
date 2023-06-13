@@ -13,7 +13,7 @@ $config->task->dtable->fieldList['name']['fixed']    = 'left';
 $config->task->dtable->fieldList['name']['flex']     = 1;
 $config->task->dtable->fieldList['name']['type']     = 'nestedTitle';
 $config->task->dtable->fieldList['name']['sortType'] = true;
-$config->task->dtable->fieldList['name']['link']     = helper::createLink('task', 'view', 'taskID={id}');
+$config->task->dtable->fieldList['name']['link']     = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
 
 $config->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->fieldList['pri']['name']     = 'pri';
@@ -46,7 +46,7 @@ $config->task->dtable->fieldList['assignedTo']['title']       = $lang->task->ass
 $config->task->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->task->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->task->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
-$config->task->dtable->fieldList['assignedTo']['assignLink']  = helper::createLink('task', 'assignTo', "executionID={execution}&taskID={id}", '', true);
+$config->task->dtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 $config->task->dtable->fieldList['assignedTo']['sortType']    = true;
 
 $config->task->dtable->fieldList['assignedDate']['title']    = $lang->task->assignedDate;
@@ -216,7 +216,7 @@ $config->task->dtable->importTask->fieldList['id']['checkbox'] = true;
 $config->task->dtable->importTask->fieldList['name']['title']       = $lang->task->name;
 $config->task->dtable->importTask->fieldList['name']['name']        = 'name';
 $config->task->dtable->importTask->fieldList['name']['type']        = 'nestedTitle';
-$config->task->dtable->importTask->fieldList['name']['link']        = helper::createLink('task', 'view', 'taskID={id}', '', true);
+$config->task->dtable->importTask->fieldList['name']['link']        = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
 $config->task->dtable->importTask->fieldList['name']['data-toggle'] = 'modal';
 
 $config->task->dtable->importTask->fieldList['pri']['title']    = $lang->priAB;

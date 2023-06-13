@@ -15,7 +15,7 @@ $config->release->dtable->fieldList['id']['type']  = 'id';
 
 $config->release->dtable->fieldList['name']['title'] = $lang->release->name;
 $config->release->dtable->fieldList['name']['name']  = 'name';
-$config->release->dtable->fieldList['name']['link']  = helper::createLink('release', 'view', 'releaseID={id}');
+$config->release->dtable->fieldList['name']['link']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
 $config->release->dtable->fieldList['name']['type']  = 'title';
 
 $config->release->dtable->fieldList['branch']['title']    = $lang->release->branch;
@@ -99,7 +99,7 @@ $config->release->dtable->bug->fieldList['id']['sortType'] = 'desc';
 $config->release->dtable->bug->fieldList['title']['title']       = $lang->bug->title;
 $config->release->dtable->bug->fieldList['title']['name']        = 'title';
 $config->release->dtable->bug->fieldList['title']['type']        = 'title';
-$config->release->dtable->bug->fieldList['title']['link']        = helper::createLink('bug', 'view', 'bugID={id}', '', true);
+$config->release->dtable->bug->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->release->dtable->bug->fieldList['title']['data-toggle'] = 'modal';
 
 $config->release->dtable->bug->fieldList['severity']['title'] = $lang->bug->severity;

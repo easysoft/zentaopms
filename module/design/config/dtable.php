@@ -6,7 +6,7 @@ $config->design->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->design->dtable->fieldList['id']['type']  = 'id';
 
 $config->design->dtable->fieldList['name']['type'] = 'title';
-$config->design->dtable->fieldList['name']['link'] = helper::createLink('design', 'view', 'designID={id}');
+$config->design->dtable->fieldList['name']['link'] = array('module' => 'design', 'method' => 'view', 'params' => 'designID={id}');
 
 $config->design->dtable->fieldList['product']['type'] = 'desc';
 
@@ -16,7 +16,7 @@ $config->design->dtable->fieldList['type']['sortType']  = false;
 
 $config->design->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->design->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
-$config->design->dtable->fieldList['assignedTo']['assignLink']  = helper::createLink('design', 'assignTo', "designID={id}", '', true);
+$config->design->dtable->fieldList['assignedTo']['assignLink']  = array('module' => 'design', 'method' => 'assignTo', 'params' => 'designID={id}');
 $config->design->dtable->fieldList['assignedTo']['data-toggle'] = 'modal';
 $config->design->dtable->fieldList['assignedTo']['sortType']    = false;
 

@@ -10,7 +10,7 @@ $config->build->dtable->fieldList['id']['type']  = 'id';
 
 $config->build->dtable->fieldList['name']['title']    = $lang->build->nameAB;
 $config->build->dtable->fieldList['name']['name']     = 'name';
-$config->build->dtable->fieldList['name']['link']     = helper::createLink('build', 'view', 'buildID={id}');
+$config->build->dtable->fieldList['name']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}');
 $config->build->dtable->fieldList['name']['type']     = 'title';
 $config->build->dtable->fieldList['name']['sortType'] = false;
 
@@ -65,7 +65,7 @@ $config->build->story->dtable->fieldList['id']['checkbox'] = true;
 $config->build->story->dtable->fieldList['title']['title']       = $lang->story->title;
 $config->build->story->dtable->fieldList['title']['name']        = 'title';
 $config->build->story->dtable->fieldList['title']['type']        = 'title';
-$config->build->story->dtable->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}', '', true);
+$config->build->story->dtable->fieldList['title']['link']        = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}', '', true);
 $config->build->story->dtable->fieldList['title']['data-toggle'] = 'modal';
 
 $config->build->story->dtable->fieldList['pri']['title'] = $lang->priAB;
@@ -109,7 +109,7 @@ $config->build->bug->dtable->fieldList['id']['sortType'] = 'desc';
 $config->build->bug->dtable->fieldList['title']['title']       = $lang->bug->title;
 $config->build->bug->dtable->fieldList['title']['name']        = 'title';
 $config->build->bug->dtable->fieldList['title']['type']        = 'title';
-$config->build->bug->dtable->fieldList['title']['link']        = helper::createLink('bug', 'view', 'bugID={id}', '', true);
+$config->build->bug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->build->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
 
 $config->build->bug->dtable->fieldList['severity']['title'] = $lang->bug->severity;

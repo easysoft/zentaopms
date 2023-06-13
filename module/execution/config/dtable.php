@@ -137,7 +137,7 @@ $config->execution->dtable->fieldList['burn']['show']     = true;
 $config->execution->dtable->team->fieldList['account']['title']    = $lang->team->account;
 $config->execution->dtable->team->fieldList['account']['name']     = 'realname';
 $config->execution->dtable->team->fieldList['account']['type']     = 'user';
-$config->execution->dtable->team->fieldList['account']['link']     = helper::createLink('user', 'view', "userID={userID}");
+$config->execution->dtable->team->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');
 $config->execution->dtable->team->fieldList['account']['sortType'] = false;
 
 $config->execution->dtable->team->fieldList['role']['title']    = $lang->team->role;
