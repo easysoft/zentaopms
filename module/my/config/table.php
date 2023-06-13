@@ -1044,6 +1044,7 @@ $config->my->doc->dtable->fieldList['id']['type']  = 'id';
 $config->my->doc->dtable->fieldList['title']['name']  = 'title';
 $config->my->doc->dtable->fieldList['title']['title'] = $lang->doc->title;
 $config->my->doc->dtable->fieldList['title']['type']  = 'text';
+$config->my->doc->dtable->fieldList['title']['link']  = array('module' => 'doc', 'method' => 'view', 'params' => 'docID={id}');
 $config->my->doc->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->my->doc->dtable->fieldList['object']['name']  = 'objectName';

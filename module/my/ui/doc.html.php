@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 jsVar('account', $app->user->account);
+jsVar('draftLabel', $lang->doc->draft);
+jsVar('canCollect', common::hasPriv('doc', 'collect'));
+jsVar('objectIconList', $config->doc->objectIconList);
 
 featureBar
 (
