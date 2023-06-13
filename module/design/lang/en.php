@@ -53,6 +53,7 @@ $lang->design->linkCommit   = 'Link Commit';
 $lang->design->unlinkCommit = 'Unlink Commit';
 $lang->design->submit       = 'Submit Review';
 $lang->design->assignTo     = 'Assign';
+$lang->design->assignAction = 'Assign Design';
 $lang->design->revision     = 'Linked Code';
 
 $lang->design->browseAction = 'Design List';

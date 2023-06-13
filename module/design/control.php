@@ -532,12 +532,12 @@ class design extends control
      * @access public
      * @return void
      */
-    public function assignTo($designID = 0)
+    public function assignTo(int $designID = 0)
     {
         if($_POST)
         {
             $changes = $this->design->assign($designID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
             if(!empty($changes))
@@ -546,14 +546,12 @@ class design extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('design', 'browse'), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $design = $this->design->getByID($designID);
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->assignedTo;
-
+        $this->view->title  = $this->lang->design->common . $this->lang->colon . $this->lang->design->assignedTo;
         $this->view->design = $design;
         $this->view->users  = $this->loadModel('project')->getTeamMemberPairs($design->project);
         $this->display();
