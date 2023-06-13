@@ -221,7 +221,6 @@ toolbar
             setClass('btn btn-link ghost square'),
             set::icon('export')
         ),
-        set::arrow(false),
         set::items($exportItems),
         set::placement('bottom-end'),
     ) : null,
@@ -232,7 +231,6 @@ toolbar
             setClass('btn btn-link ghost square'),
             set::icon('import')
         ),
-        set::arrow(false),
         set::items($importItems),
         set::placement('bottom-end'),
     ) : null,

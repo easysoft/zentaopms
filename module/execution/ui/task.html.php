@@ -71,7 +71,6 @@ toolbar
             setClass('ghost btn square btn-default'),
             set::icon('import')
         ),
-        set::arrow(false),
         set::items(array_filter(array($importTaskItem, $importBugItem))),
         set::placement('bottom-end'),
     ) : null,
