@@ -53,17 +53,28 @@ class job extends control
         $this->loadModel('gitlab');
         foreach($jobList as $job)
         {
-            $job->canExec = true;
+            $job->canExec    = true;
+            $job->engineName = zget($this->lang->job->engineList, $job->engine);
+            $job->frameName  = zget($this->lang->job->frameList, $job->frame);
+
             if($job->engine == 'gitlab')
             {
                 $pipeline = json_decode($job->pipeline);
                 $branch   = $this->gitlab->apiGetSingleBranch($job->server, $pipeline->project, $pipeline->reference);
                 if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
+                /* query buildSpec */
+                if(is_numeric($job->pipeline))  $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
+                if(isset($pipeline->reference)) $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $pipeline->project);
             }
             elseif($job->engine == 'jenkins')
             {
                 if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
             }
+
+            $job->lastStatusName = zget($this->lang->compile->statusList, $job->lastStatus, '');
+            $job->lastExec       = $job->lastExec ? $job->lastExec : '';
+            $job->triggerConfig  = $this->job->getTriggerConfig($job);
+            $job->buildSpec      = urldecode($job->pipeline) . '@' . $job->jenkinsName;
         }
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;

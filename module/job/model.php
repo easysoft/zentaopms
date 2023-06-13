@@ -672,4 +672,23 @@ class jobModel extends model
             ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * Adjust the action is clickable.
+     *
+     * @param  object $object
+     * @param  string $action
+     * @param  string $module
+     * @access public
+     * @return void
+     */
+    public static function isClickable($object, $action, $module = 'job')
+    {
+        $action = strtolower($action);
+
+        if($module == 'job' && $action == 'exec') return $object->canExec;
+
+        return true;
+    }
 }
