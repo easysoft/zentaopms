@@ -254,8 +254,8 @@ enrpm:
 	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
 	cp ~/rpmbuild/RPMS/noarch/zentaoalm-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
-rmJsMap:
-	find zentaopms/ -name "*.js.map" -delete
+cleanAssets:
+	find zentaopms/ -type f \( -name "*.js.map" -o -name "*.gz" \) -delete
 ciCommon:
 	make clean
 	git pull
@@ -268,7 +268,7 @@ ciCommon:
         endif
 
 	make package
-	make rmJsMap
+	make cleanAssets
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	# en
 	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
