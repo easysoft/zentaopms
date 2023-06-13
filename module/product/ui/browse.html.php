@@ -18,7 +18,7 @@ $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 
 /* Generate sidebar to display module tree menu. */
-$fnGenerateSideBar = function() use ($moduleTree, $moduleID)
+$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID)
 {
     sidebar
     (
@@ -190,6 +190,7 @@ foreach($stories as $story)
 
 data('storyBrowseType', $storyBrowseType);
 
+/* Layout. */
 $fnGenerateSideBar();
 
 featureBar
