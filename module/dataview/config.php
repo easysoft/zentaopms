@@ -36,3 +36,11 @@ $config->dataview->columnTypes->NEWDATE    = 'date';
 $config->dataview->columnTypes->INTERVAL   = 'string';
 $config->dataview->columnTypes->GEOMETRY   = 'string';
 $config->dataview->columnTypes->NEWDECIMAL = 'number';
+
+/* Dameng native_type. */
+$config->dataview->columnTypes->int       = 'number';
+$config->dataview->columnTypes->varchar   = 'string';
+$config->dataview->columnTypes->timestamp = 'string';
+$config->dataview->columnTypes->date      = 'date';
+$config->dataview->columnTypes->text      = 'string';
+$config->dataview->columnTypes->blob      = 'string';
