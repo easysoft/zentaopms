@@ -34,6 +34,8 @@ if($project->hasProduct)
 formPanel
 (
     set::title(''),
+    set::back('GLOBAL'),
+    set::backUrl(helper::createLink('design', 'browse', "projectID={$project->id}")),
     entityLabel
     (
         set::entityID($design->id),

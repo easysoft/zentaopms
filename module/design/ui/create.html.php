@@ -34,6 +34,8 @@ if($project->hasProduct)
 formPanel
 (
     set::title($lang->design->create),
+    set::back('GLOBAL'),
+    set::backUrl(helper::createLink('design', 'browse', "projectID={$projectID}")),
     $productRow,
     formRow
     (
