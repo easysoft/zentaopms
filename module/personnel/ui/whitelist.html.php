@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('module', $module);
+$config->personnel->whitelist->actionList['unbindWhitelist']['url']  = array('module' => $module, 'method' => 'unbindWhitelist', 'params' => 'userID={id}');
 
 $config->personnel->whitelist->dtable->fieldList['dept']['map'] = $depts;
 
@@ -46,7 +46,6 @@ dtable
     set::cols($cols),
     set::data($data),
     set::fixedLeftWidth('0.33'),
-    set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );
 

@@ -41,7 +41,7 @@ $config->personnel->whitelist->actionList['unbindWhitelist']['icon']  = 'unlink'
 $config->personnel->whitelist->actionList['unbindWhitelist']['hint']  = $lang->personnel->delete;
 $config->personnel->whitelist->actionList['unbindWhitelist']['text']  = $lang->personnel->delete;
 $config->personnel->whitelist->actionList['unbindWhitelist']['show']  = 'clickable';
-$config->personnel->whitelist->actionList['unbindWhitelist']['link']  = array('module' => 'personnel', 'method' => 'unbindWhitelist', 'params' => 'userID={id}');
+$config->personnel->whitelist->actionList['unbindWhitelist']['url']   = array('module' => 'personnel', 'method' => 'unbindWhitelist', 'params' => 'userID={id}');
 
 $config->personnel->whitelist->dtable->fieldList['id']['name']  = 'id';
 $config->personnel->whitelist->dtable->fieldList['id']['title'] = $lang->idAB;
