@@ -105,34 +105,44 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function batchEdit($productID)
+    public function batchEdit(int $productID)
     {
         $this->loadModel('action');
         $this->loadModel('product')->setMenu($productID);
 
-        if($this->post->IDList)
+        if($this->post->branchID)
         {
             $changes = $this->branch->batchUpdate($productID);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             foreach($changes as $branchID => $change)
             {
                 $extra = $branchID == BRANCH_MAIN ? $productID : '';
                 if($change) $this->action->create('branch', $branchID, 'Edited', '', $extra);
             }
 
-            return print(js::locate($this->session->branchManage, 'parent'));
+            return $this->sendSuccess(array('load' => $this->session->branchManage));
         }
 
-        $branchList   = $this->branch->getList($productID, 0, 'all');
+        $branchList   = array_values($this->branch->getList($productID, 0, 'all'));
         $branchIDList = $this->post->branchIDList;
         if(empty($branchIDList)) return print(js::locate($this->session->branchManage, 'parent'));
 
-        foreach($branchList as $branch)
+        foreach($branchList as $index => $branch)
         {
-            if(!in_array($branch->id, $branchIDList)) unset($branchList[$branch->id]);
+            if(!in_array($branch->id, $branchIDList))
+            {
+                unset($branchList[$index]);
+            }
+            else
+            {
+                $branchList[$index]->branchID = $branch->id;
+                $branchList[$index]->id       = $index + 1;
+            }
         }
 
         $this->view->product    = $this->product->getById($productID);
-        $this->view->branchList = $branchList;
+        $this->view->branchList = array_values($branchList);
         $this->display();
     }
 
