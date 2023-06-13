@@ -1342,7 +1342,7 @@ class taskZen extends task
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = true;
 
-        $execution  = $this->execution->getByID((int)$task->execution);
+        $execution  = $this->loadModel('execution')->getByID((int)$task->execution);
         $kanbanData = $this->getKanbanData($execution, $regionID);
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';

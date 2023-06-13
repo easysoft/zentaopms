@@ -433,7 +433,7 @@ class task extends control
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($taskData, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
             $this->send($response);
         }
 
