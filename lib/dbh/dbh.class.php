@@ -382,8 +382,6 @@ class dbh
             case 'dm':
                 /* DATE convert to TO_CHAR. */
                 $sql = preg_replace("/\bDATE\(([^)]*)\)/",  "TO_CHAR($1, 'yyyy-mm-dd')", $sql, -1);
-                $sql = $this->formatDmDateSubFunction($sql);
-                $sql = $this->formatDmDateDiffFunction($sql);
 
                 return $sql;
 
@@ -418,37 +416,6 @@ class dbh
         $field = str_ireplace($if, $case, $field);
 
         return $field;
-    }
-
-    /**
-     * Format DATE_SUB function of dmdb.
-     *
-     * @param  string $sql
-     * @access public
-     * @return string
-     *
-     * DATE_SUB(t1.today, INTERVAL TIMESTAMPDIFF(YEAR, t1.firstDay, t1.today) YEAR) -> DATEADD(YEAR, -DATEDIFF(YEAR, t1.firstDay, t1.today), t1.today)
-     */
-    public function formatDmDateSubFunction($sql)
-    {
-        $pattern = "/DATE_SUB\((.*),\s*INTERVAL\s*(.*)\s*YEAR\)/";
-        preg_match($pattern, $sql, $matches);
-
-        return count($matches) == 0 ? $sql : preg_replace($pattern, "DATEADD(YEAR, -DATEDIFF(YEAR, \\2, \\1), \\1)", $sql);
-    }
-
-    /**
-     * Format DATEDIFF function of dmdb.
-     *
-     * @param  string $sql
-     * @access public
-     * @return string
-     *
-     * DATEDIFF(date1,date2) -> DATEDIFF(DD,date1,date2)
-     */
-    public function formatDmDateDiffFunction($sql)
-    {
-        return preg_replace('/DATEDIFF\(([^,]+),([^)]+)\)/', 'DATEDIFF(DD,$1,$2)', $sql);
     }
 
     /**
