@@ -18,20 +18,6 @@ $(document).off('click').on('click', '.batch-btn', function()
     }
 });
 
-window.onRenderCell = function(result, {row, col})
-{
-    if(result && row.data.isCase == 1 && col.name == 'title')
-    {
-        const prefix = result.slice(0, - 2);
-        const suffix = result.slice(-2);
-        const first  = result.shift();
-        const id     = row.data.id;
-        const html   = `<span class='text-gray'>${id}</span>`;
-        result = prefix.concat({html}, suffix);
-    }
-    return result;
-}
-
 /**
  * 计算表格信息的统计。
  * Set summary for table footer.
