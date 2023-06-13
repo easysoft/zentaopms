@@ -185,6 +185,7 @@ jsVar('checkedSummary', $lang->execution->checkedSummary);
 
 dtable
 (
+    set::groupDivider(true),
     set::userMap($memberPairs),
     set::cols($cols),
     set::data($tableData),
