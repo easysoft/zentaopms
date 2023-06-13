@@ -12,7 +12,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->dataview->group;?></th>
-          <td><?php echo html::select('group', $groups, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('group', $groups, '', "class='form-control chosen' data-drop_direction='down'");?></td>
         </tr>
         <tr>
           <th class='thWidth'><?php echo $lang->dataview->name;?></th>
