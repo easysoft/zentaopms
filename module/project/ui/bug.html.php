@@ -68,9 +68,6 @@ if(!$canBatchAssignTo) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
-$bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
-$data = array_values($bugs);
-
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
 
@@ -86,10 +83,13 @@ $footToolbar = $canBatchAssignTo ? array('items' => array
     array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top'),
 )) : null;
 
+$cols = $this->loadModel('datatable')->getSetting('project');
+$bugs = initTableData($bugs, $cols, $this->bug);
+
 dtable
 (
-    set::cols($config->bug->dtable->fieldList),
-    set::data($data),
+    set::cols($cols),
+    set::data(array_values($bugs)),
     set::userMap($users),
     set::customCols(true),
     set::footToolbar($footToolbar),
