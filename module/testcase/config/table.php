@@ -1,10 +1,14 @@
 <?php
 global $lang;
 $config->testcase->dtable = new stdclass();
+$config->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->dtable->fieldList['id']['type']  = 'checkID';
+$config->testcase->dtable->fieldList['id']['fixed'] = 'left';
+$config->testcase->dtable->fieldList['id']['group'] = '1';
+
 $config->testcase->dtable->fieldList['title']['title']        = $lang->testcase->title;
 $config->testcase->dtable->fieldList['title']['type']         = 'title';
 $config->testcase->dtable->fieldList['title']['fixed']        = 'left';
-$config->testcase->dtable->fieldList['title']['checkbox']     = true;
 $config->testcase->dtable->fieldList['title']['nestedToggle'] = true;
 $config->testcase->dtable->fieldList['title']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.isCase == 2) return \'icon-folder-open-o text-gray\'; return \'\';}>RAWJS';
 $config->testcase->dtable->fieldList['title']['group']        = '1';
