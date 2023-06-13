@@ -641,7 +641,6 @@ class myModel extends model
     {
         $rawMethod = $this->app->rawMethod;
         $this->loadModel('bug');
-        $this->app->loadConfig('bug');
 
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 

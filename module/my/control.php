@@ -567,7 +567,7 @@ EOF;
         }
         else
         {
-            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
+            $bugs = $this->bug->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
         }
 
         $bugs = $this->bug->batchAppendDelayedDays($bugs);

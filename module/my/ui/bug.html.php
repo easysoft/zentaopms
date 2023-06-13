@@ -31,22 +31,19 @@ $canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) 
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
-if($type == 'openedBy')       unset($config->my->bug->dtable->fieldList['openedBy']);
-if($type == 'assignedTo')     unset($config->my->bug->dtable->fieldList['assignedTo']);
-if($type == 'resolvedBy')     unset($config->my->bug->dtable->fieldList['resolvedBy']);
-if($app->rawMethod != 'work') unset($config->my->bug->dtable->fieldList['deadline']);
-if(!$canBatchAction) $config->my->bug->dtable->fieldList['id']['type'] = 'id';
+if($type == 'openedBy')       unset($config->bug->dtable->fieldList['openedBy']);
+if($type == 'assignedTo')     unset($config->bug->dtable->fieldList['assignedTo']);
+if($type == 'resolvedBy')     unset($config->bug->dtable->fieldList['resolvedBy']);
+if($app->rawMethod != 'work') unset($config->bug->dtable->fieldList['deadline']);
+if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 $projectBrowseLink = createLink('project', 'browse');
 $productLink       = explode('-', $config->productLink);
 $param             = $config->productLink == 'product-all' ? '' : "productID={product}";
 $productBrowseLink = createLink('product', $productLink[1], $param);
-$config->my->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
+$config->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
-
-$bugs = initTableData($bugs, $config->my->bug->dtable->fieldList, $this->bug);
-$bugs = array_values($bugs);
 
 $footToolbar = $canBatchAction ? array('items' => array
 (
@@ -69,10 +66,14 @@ menu
     set::items($assignedToItems)
 );
 
+$cols = $this->loadModel('datatable')->getSetting('my');
+$bugs = initTableData($bugs, $cols, $this->bug);
+
 dtable
 (
-    set::cols($config->my->bug->dtable->fieldList),
-    set::data($bugs),
+    set::cols($cols),
+    set::data(array_values($bugs)),
+    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module=my&method=bug"), 'hint' => $app->lang->datatable->custom)),
     set::userMap($users),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction),
