@@ -2941,7 +2941,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `finishedDate` datetime NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_deployscope`;
