@@ -65,10 +65,10 @@ class branch extends control
         if($_POST)
         {
             $branchID = $this->branch->create($productID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('branch', $branchID, 'Opened');
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->view->product = $this->loadModel('product')->getById($productID);
