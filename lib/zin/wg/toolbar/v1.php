@@ -2,6 +2,7 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'backbtn' . DS . 'v1.php';
 
 class toolbar extends wg
 {
@@ -13,7 +14,7 @@ class toolbar extends wg
 
     public function onBuildItem($item)
     {
-        if($item === null) return '';
+        if($item === null) return null;
 
         if(!($item instanceof item))
         {
@@ -26,7 +27,8 @@ class toolbar extends wg
         if($type === 'btnGroup') return new btnGroup(inherit($item));
 
         list($btnClass, $btnProps) = $this->prop(array('btnClass', 'btnProps'));
-        return new btn
+        $btn = empty($item->prop('back')) ? '\zin\btn' : '\zin\backBtn';
+        return new $btn
         (
             setClass('toolbar-item', $btnClass),
             is_array($btnProps) ? set($btnProps) : null,

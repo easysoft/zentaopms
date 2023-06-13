@@ -28,8 +28,7 @@ class formBatchPanel extends formPanel
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'items?: array[]',              // 使用一个列定义对象数组来定义批量表单项。
         'minRows?: int',                // 最小显示的行数目。
         'maxRows?: int',                // 最多显示的行数目。
@@ -48,8 +47,7 @@ class formBatchPanel extends formPanel
      * @var    array
      * @access protected
      */
-    protected static $defaultProps = array
-    (
+    protected static $defaultProps = array(
         'batch' => true
     );
 }

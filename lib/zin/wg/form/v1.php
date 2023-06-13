@@ -11,8 +11,7 @@ require_once dirname(__DIR__) . DS . 'formbase' . DS . 'v1.php';
  */
 class form extends formBase
 {
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'items?: array',    // 使用一个列定义对象数组来定义表单项。
         'grid?: bool=true', // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int', // 标签宽度，单位为像素。
@@ -43,7 +42,7 @@ class form extends formBase
     {
         list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));
         $props = parent::buildProps();
-        if($grid)               $props[] = set::class('form-grid');
+        if($grid)               $props[] = setClass('form-grid');
         if(!empty($labelWidth)) $props[] = setCssVar('form-grid-label-width', $labelWidth);
 
         return $props;
@@ -51,9 +50,9 @@ class form extends formBase
 
     protected function buildContent(): array
     {
-        list($items, $grid) = $this->prop(['items', 'grid']);
+        list($items, $grid) = $this->prop(array('items', 'grid'));
 
-        $list     = is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : [];
+        $list     = is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : array();
         $children = $this->children();
         if(!empty($children)) $list = array_merge($list, $children);
 

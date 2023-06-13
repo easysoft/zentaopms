@@ -32,14 +32,13 @@ class formPanel extends panel
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'class?: string="panel-form rounded-md ring-0 canvas px-4 pb-4 mb-4 mx-auto"', // 类名。
         'size?: string="lg"',                          // 额外尺寸。
         'id?: string="$GID"',                          // ID，如果不指定则自动生成（使用 zin 部件 GID）。
         'method?: "get"|"post"="post"',                // 表单提交方式。
         'url?: string',                                // 表单提交地址。
-        'actions?: array=["submit","cancel"]',         // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
+        'actions?: array',                             // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string="form-group no-label"', // 表单操作按钮栏类名。
         'target?: string="ajax"',                      // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
         'submitBtnText?: string',                      // 表单提交按钮文本，如果不指定则使用 `$lang->save` 的值。
@@ -49,6 +48,10 @@ class formPanel extends panel
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
         'shadow?: bool=true',                          // 是否显示阴影层。
+    );
+
+    protected static $defaultProps = array(
+        'actions' => array('submit', 'cancel')
     );
 
     /**

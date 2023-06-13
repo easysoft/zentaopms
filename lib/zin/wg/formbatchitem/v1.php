@@ -28,8 +28,7 @@ class formBatchItem extends wg
      * @var    array
      * @access protected
      */
-    protected static $defineProps = array
-    (
+    protected static $defineProps = array(
         'name: string',                 // 表单项名称，无需包含 `[]`。
         'label: string|bool',           // 列标题。
         'labelClass?: string',          // 列标题类名。
@@ -77,8 +76,7 @@ class formBatchItem extends wg
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';
 
-        return array
-        (
+        return array(
             h::th
             (
                 setClass('form-batch-head'),
