@@ -19,7 +19,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreate    = hasPriv('branch', 'create');
 $canBatchEdit = hasPriv('branch', 'batchEdit');
-if($canCreate) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->branch->create, 'url' => $this->createLink('branch', 'create', "productID={$product->id}"));
+if($canCreate) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->branch->create, 'url' => $this->createLink('branch', 'create', "productID={$product->id}", '', true), 'data-toggle' => 'modal');
 toolbar
 (
     !empty($createItem) ? item(set($createItem)) : null,
