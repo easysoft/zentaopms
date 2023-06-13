@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace zin;
 include './featurebar.html.php';
 
-$todoNavs = array();
-$that     = zget($lang->user->thirdPerson, $user->gender);
+$that = zget($lang->user->thirdPerson, $user->gender);
 $bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&type=assignedTo"));
 $bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=openedBy"));
 $bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&type=resolvedBy"));

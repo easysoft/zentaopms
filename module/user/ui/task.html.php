@@ -16,8 +16,7 @@ jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('childrenAB', $lang->task->childrenAB);
 jsVar('multipleAB', $lang->task->multipleAB);
 
-$todoNavs = array();
-$that     = zget($lang->user->thirdPerson, $user->gender);
+$that = zget($lang->user->thirdPerson, $user->gender);
 $taskNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('task', "userID={$user->id}&type=assignedTo"));
 $taskNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('task', "userID={$user->id}&type=openedBy"));
 $taskNavs['finishedBy'] = array('text' => sprintf($lang->user->finishedBy, $that), 'url' => inlink('task', "userID={$user->id}&type=finishedBy"));

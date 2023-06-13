@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace zin;
 include './featurebar.html.php';
 
-$todoNavs = array();
-$that     = zget($lang->user->thirdPerson, $user->gender);
+$that = zget($lang->user->thirdPerson, $user->gender);
 $storyNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=assignedTo"));
 $storyNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=openedBy"));
 $storyNavs['reviewedBy'] = array('text' => sprintf($lang->user->reviewedBy, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=reviewedBy"));

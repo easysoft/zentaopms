@@ -27,3 +27,4 @@ $config->user->defaultFields['task']     = array('id', 'name', 'pri', 'status', 
 $config->user->defaultFields['story']    = array('id', 'title', 'pri', 'status', 'product', 'plan', 'openedBy', 'estimate', 'stage');
 $config->user->defaultFields['bug']      = array('id', 'title', 'severity', 'pri', 'openedBy', 'resolvedBy', 'resolution');
 $config->user->defaultFields['testtask'] = array('id', 'title', 'execution', 'build', 'begin', 'end', 'status');
+$config->user->defaultFields['testcase'] = array('id', 'title', 'pri', 'type', 'status', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult');
