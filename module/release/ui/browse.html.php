@@ -41,13 +41,13 @@ dtable
     set::data(array_values($releases)),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(jsRaw('createSortLink')),
+    set::footer([jsRaw('function(){return window.setStatistics.call(this);}'), 'flex', 'pager']),
     set::footPager(
         usePager(),
         set::recPerPage($pager->recPerPage),
         set::recTotal($pager->recTotal),
         set::linkCreator(helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
     ),
-    set::footer(jsRaw('function(){return window.setStatistics.call(this);}'))
 );
 
 /* ====== Render page ====== */
