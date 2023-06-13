@@ -386,6 +386,7 @@ dtable
     set::userMap($users),
     set::cols($config->testcase->dtable->fieldList),
     set::data(array_values($scenes)),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::checkable($canBatchAction),
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
