@@ -109,17 +109,7 @@ class datatableModel extends model
             }
         }
 
-        usort($setting, array('datatableModel', 'sortCols'));
-
-        /* In index array, find actions. */
-        $types = array_column($setting, 'type');
-        $index = array_search('actions', $types);
-
-        if($index)
-        {
-            $setting['actions'] = $setting[$index];
-            unset($setting[$index]);
-        }
+        uasort($setting, array('datatableModel', 'sortCols'));
 
         return $setting;
     }

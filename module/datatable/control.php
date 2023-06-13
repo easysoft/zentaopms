@@ -94,7 +94,7 @@ class datatable extends control
             }
 
             $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
-            $value = json_encode(array_values($fieldList));
+            $value = json_encode($fieldList);
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
             if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
