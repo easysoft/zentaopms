@@ -19,6 +19,22 @@ window.changeStatus = function(branchID, changeStatus)
     }
 }
 
+/**
+ * 设置合并分支按钮是否显示。
+ * Set merge btn display.
+ *
+ * @access public
+ * @return void
+ */
+window.checkedChange = function()
+{
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $('#mergeBranch').hide();
+    if(checkedList.length == 2) $('#mergeBranch').show();
+}
 
 window.createSortLink = function(col)
 {
@@ -26,3 +42,15 @@ window.createSortLink = function(col)
     if(sort == orderBy) sort = col.name + '_desc';
     return sortLink.replace('{orderBy}', sort);
 }
+
+$(document).on('click', '.batch-btn', function()
+{
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const form = new FormData();
+    const url  = $(this).data('url');
+    checkedList.forEach((id) => form.append('branchIDList[]', id));
+    postAndLoadPage(url, form);
+});
