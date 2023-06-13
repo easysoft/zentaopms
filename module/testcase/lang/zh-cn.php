@@ -326,6 +326,7 @@ $lang->testcase->editScene          = '编辑场景';
 $lang->testcase->hasChildren        = '该场景有子场景或测试用例存在，要全部删除吗？';
 $lang->testcase->confirmDeleteScene = '您确定要删除场景：“%s”吗？';
 $lang->testcase->sceneb             = "场景";
+$lang->testcase->onlyAutomated      = '仅自动化';
 $lang->testcase->onlyScene          = '仅场景';
 $lang->testcase->iScene             = '所属场景';
 $lang->testcase->generalTitle       = '标题';
