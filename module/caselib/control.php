@@ -218,14 +218,16 @@ class caselib extends control
     }
 
     /**
+     * 创建用例库的测试用例。
      * Create case for library.
      *
      * @param  int    $libID
      * @param  int    $moduleID
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function createCase($libID, $moduleID = 0, $param = 0)
+    public function createCase(int $libID, int $moduleID = 0, int $param = 0)
     {
         if(!empty($_POST))
         {
@@ -249,7 +251,7 @@ class caselib extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}")));
         }
         /* Set lib menu. */
