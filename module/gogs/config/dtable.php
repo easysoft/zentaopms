@@ -7,20 +7,20 @@ $config->gogs->dtable = new stdclass();
 $config->gogs->dtable->fieldList['id']['title']    = 'ID';
 $config->gogs->dtable->fieldList['id']['name']     = 'id';
 $config->gogs->dtable->fieldList['id']['type']     = 'number';
-$config->gogs->dtable->fieldList['id']['sortType'] = 'desc';
+$config->gogs->dtable->fieldList['id']['sortType'] = true;
 $config->gogs->dtable->fieldList['id']['checkbox'] = false;
 $config->gogs->dtable->fieldList['id']['width']    = '80';
 
 $config->gogs->dtable->fieldList['name']['title']    = $lang->gogs->name;
 $config->gogs->dtable->fieldList['name']['name']     = 'name';
-$config->gogs->dtable->fieldList['name']['type']     = 'desc';
+$config->gogs->dtable->fieldList['name']['type']     = 'text';
 $config->gogs->dtable->fieldList['name']['sortType'] = true;
 $config->gogs->dtable->fieldList['name']['hint']     = true;
 $config->gogs->dtable->fieldList['name']['minWidth'] = '356';
 
 $config->gogs->dtable->fieldList['url']['title']    = $lang->gogs->url;
 $config->gogs->dtable->fieldList['url']['name']     = 'url';
-$config->gogs->dtable->fieldList['url']['type']     = 'desc';
+$config->gogs->dtable->fieldList['url']['type']     = 'text';
 $config->gogs->dtable->fieldList['url']['sortType'] = true;
 $config->gogs->dtable->fieldList['url']['hint']     = true;
 $config->gogs->dtable->fieldList['url']['minWidth'] = '356';
