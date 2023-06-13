@@ -90,7 +90,7 @@ class datatableModel extends model
             $order = 1;
             foreach($fieldList as $key => $value)
             {
-                if(empty($value['required']) and empty($value['show'])) continue;
+                if(empty($value['required']) && empty($value['show'])) continue;
 
                 $set = array();
                 $set['order']    = $order++;
@@ -114,6 +114,8 @@ class datatableModel extends model
                 if(isset($value['map']))          $set['map']          = $value['map'];
                 if(isset($value['flex']))         $set['flex']         = $value['flex'];
                 if(isset($value['nestedToggle'])) $set['nestedToggle'] = $value['nestedToggle'];
+                if(isset($value['list']))         $set['list']         = $value['list'];
+                if(isset($value['menu']))         $set['menu']         = $value['menu'];
 
                 $setting[$key] = $set;
             }
@@ -122,7 +124,7 @@ class datatableModel extends model
         {
             foreach($setting as $key => $set)
             {
-                if(empty($set['show']))
+                if(empty($set['required']) && empty($set['show']))
                 {
                     unset($setting[$key]);
                     continue;
@@ -139,6 +141,16 @@ class datatableModel extends model
         }
 
         usort($setting, array('datatableModel', 'sortCols'));
+
+        /* In index array, find actions. */
+        $types = array_column($setting, 'type');
+        $index = array_search('actions', $types);
+
+        if($index)
+        {
+            $setting['actions'] = $setting[$index];
+            unset($setting[$index]);
+        }
 
         return $setting;
     }

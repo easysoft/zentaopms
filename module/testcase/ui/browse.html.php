@@ -357,13 +357,14 @@ $config->testcase->dtable->fieldList['title']['nestedToggle'] = $topSceneCount >
 $config->testcase->dtable->fieldList['story']['map']          = $stories;
 $config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = $url;
 
+$cols = $this->loadModel('datatable')->getSetting('testcase');
 foreach($scenes as $scene)
 {
     $actionType = $scene->isCase == 1 ? 'testcase' : 'scene';
-    $config->testcase->dtable->fieldList['actions']['menu'] = $config->$actionType->menu;
+    $cols['actions']['menu'] = $config->$actionType->menu;
 
     $scene->browseType = $browseType;
-    initTableData(array($scene), $config->testcase->dtable->fieldList, $this->testcase);
+    initTableData(array($scene), $cols, $this->testcase);
 
     if($scene->isCase != 1) continue;
 
