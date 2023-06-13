@@ -26,11 +26,87 @@ toolbar
     !empty($createItem) ? item(set($createItem)) : null,
 );
 
+jsVar('confirmMerge',    $lang->branch->confirmMerge);
 jsVar('confirmclose',    $lang->branch->confirmClose);
 jsVar('confirmactivate', $lang->branch->confirmActivate);
 
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+
+modal
+(
+    setID('mergeModal'),
+    set::modalProps(array('title' => $lang->branch->mergeBranch)),
+    div
+    (
+        setClass('alert light-pale flex items-center'),
+        icon('info-sign', setClass('icon icon-2x alert-icon')),
+        div
+        (
+            h4($lang->branch->mergedMain, setClass('font-bold')),
+            p($lang->branch->mergeTips),
+            p($lang->branch->targetBranchTips)
+        )
+    ),
+    form
+    (
+        setID('mergeForm'),
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::url(createLink('branch', 'mergeBranch', "productID={$product->id}")),
+        formGroup
+        (
+            set::label($lang->branch->mergeTo),
+            inputGroup
+            (
+                setClass('input-control has-suffix'),
+                select
+                (
+                    set::name('targetBranch'),
+                    set::items($branchPairs),
+                    set::type('picker'),
+                ),
+                div
+                (
+                    setClass('input-control-suffix opacity-100 bg-white z-10'),
+                    checkbox
+                    (
+                        setID('createBranch'),
+                        set::name('createBranch'),
+                        set::text($lang->branch->create),
+                        set::value(1),
+                        on::change('createBranch(this)'),
+                    )
+                )
+            ),
+            input
+            (
+                set::type('hidden'),
+                set::name('mergedBranchIDList')
+            )
+        ),
+        div
+        (
+            setClass('hidden form-grid'),
+            setID('createForm'),
+            formGroup
+            (
+                set::label(sprintf($lang->branch->name, $lang->product->branchName[$product->type])),
+                set::required(true),
+                input(set::name('name'))
+            ),
+            formGroup
+            (
+                set::label(sprintf($lang->branch->desc, $lang->product->branchName[$product->type])),
+                textarea
+                (
+                    set::name('desc'),
+                    set::rows('5'),
+                )
+            )
+        )
+    )
+);
 
 $tableData = initTableData($branchList, $config->branch->dtable->fieldList, $this->branch);
 
@@ -48,10 +124,11 @@ if($canBatchEdit)
 if($canMerge && $browseType != 'closed')
 {
     $footToolbar['items'][] = array(
-        'id'       => 'mergeBranch',
-        'text'     => $lang->branch->merge,
-        'class'    => 'btn batch-btn secondary size-sm',
-        'data-url' => createLink('branch', 'batchEdit', "productID={$product->id}")
+        'id'          => 'mergeBranch',
+        'text'        => $lang->branch->merge,
+        'class'       => 'btn secondary size-sm',
+        'data-target' => '#mergeModal',
+        'data-toggle' => 'modal'
     );
 }
 
