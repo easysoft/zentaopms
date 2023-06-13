@@ -209,9 +209,11 @@ if(empty($bugs))
 }
 else
 {
+    $cols = $this->loadModel('datatable')->getSetting('bug');
+
     dtable
     (
-        set::cols($config->bug->dtable->fieldList),
+        set::cols($cols),
         set::data($data),
         set::userMap($users),
         set::customCols(true),
