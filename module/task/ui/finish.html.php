@@ -81,7 +81,7 @@ else
         set::headingClass('status-heading'),
         set::titleClass('form-label .form-grid'),
         set::shadow(!isonlybody()),
-        to::headingActions
+        to::heading
         (
             entityLabel
             (
@@ -90,16 +90,30 @@ else
                 set::text($task->name),
                 set::entityID($task->id),
                 set::reverse(true),
-            )
+            ),
         ),
-        formGroup
+        to::headingActions
         (
-            set::width('1/3'),
-            set::label(empty($task->team) ? $lang->task->hasConsumed : $lang->task->common . $lang->task->consumed),
-            div(
-                set::class('consumed'),
-                $task->consumed . $lang->task->suffixHour
-            )
+            span
+            (
+                setClass('flex gap-x-2 mr-3'),
+                $lang->task->hasConsumed,
+                span
+                (
+                    set::class('label secondary-pale'),
+                    $task->consumed . $lang->task->suffixHour,
+                ),
+            ),
+            span
+            (
+                setClass('flex gap-x-2'),
+                $lang->task->consumed,
+                span
+                (
+                    set::class('label warning-pale'),
+                    $task->consumed . $lang->task->suffixHour,
+                )
+            ),
         ),
         $consumedControl,
         formGroup
