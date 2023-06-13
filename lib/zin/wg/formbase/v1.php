@@ -28,10 +28,7 @@ class formBase extends wg
         'cancelBtnText?: string',              // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
         'back?: string="APP"',                 // 表单返回行为
         'backUrl?: string',                    // 表单返回链接
-    );
-
-    protected static $defaultProps = array(
-        'actions' => array('submit', 'cancel')
+        'ajax?:array'                          // Ajax 表单选项
     );
 
     protected function buildActions(): wg|null
@@ -84,7 +81,10 @@ class formBase extends wg
     protected function buildAfter(): array
     {
         $after = parent::buildAfter();
-        if($this->prop('target') === 'ajax') $after[] = zui::ajaxForm(set::_to('#' . $this->id()));
+        if($this->prop('target') === 'ajax')
+        {
+            $after[] = zui::ajaxForm(set::_to('#' . $this->id()), set($this->prop('ajax')));
+        }
         return $after;
     }
 
