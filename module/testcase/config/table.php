@@ -12,7 +12,7 @@ $config->testcase->dtable->fieldList['title']['fixed']        = 'left';
 $config->testcase->dtable->fieldList['title']['nestedToggle'] = true;
 $config->testcase->dtable->fieldList['title']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.isCase == 2) return \'icon-folder-open-o text-gray\'; return \'\';}>RAWJS';
 $config->testcase->dtable->fieldList['title']['group']        = '1';
-if(common::hasPriv('testcase', 'view')) $config->testcase->dtable->fieldList['title']['link'] = helper::createLink('testcase', 'view', "caseID={id}");
+$config->testcase->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 
 $config->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
 $config->testcase->dtable->fieldList['pri']['type']  = 'pri';
@@ -39,7 +39,7 @@ $config->testcase->dtable->fieldList['precondition']['group'] = '3';
 $config->testcase->dtable->fieldList['story']['title'] = $lang->testcase->story;
 $config->testcase->dtable->fieldList['story']['type']  = 'desc';
 $config->testcase->dtable->fieldList['story']['group'] = '3';
-if(common::hasPriv('story', 'view')) $config->testcase->dtable->fieldList['story']['link']  = helper::createLink('story', 'view', "storyID={story}");
+$config->testcase->dtable->fieldList['story']['link']  = array('module' => 'story', 'method' => 'view', 'params' => "storyID={story}");
 
 $config->testcase->dtable->fieldList['keywords']['title'] = $lang->testcase->keywords;
 $config->testcase->dtable->fieldList['keywords']['type']  = 'text';
