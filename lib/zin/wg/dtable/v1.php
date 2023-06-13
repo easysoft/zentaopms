@@ -61,10 +61,22 @@ class dtable extends wg
      */
     protected function getLink(array $setting): array|string
     {
-        if(empty($setting['module']) || empty($setting['method'])) return $setting;
-        if(!hasPriv($setting['module'], $setting['method'])) return '';
-
-        return createLink($setting['module'], $setting['method'], zget($setting, 'params', ''));
+        if(!empty($setting['url']))
+        {
+            $url = $setting['url'];
+            if(!empty($url['module']) && !empty($url['method']))
+            {
+                $setting['url'] = '';
+                if(hasPriv($url['module'], $url['method'])) $setting['url'] = createLink($url['module'], $url['method'], zget($url, 'params', ''));
+            }
+            return $setting;
+        }
+        else if(!empty($setting['module']) && !empty($setting['method']))
+        {
+            if(!hasPriv($setting['module'], $setting['method'])) return '';
+            return createLink($setting['module'], $setting['method'], zget($setting, 'params', ''));
+        }
+        return $setting;
     }
 
     protected function build()
