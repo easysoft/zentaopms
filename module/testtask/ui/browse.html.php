@@ -67,7 +67,6 @@ toolbar
 $footerHTML = strtolower($status) == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));
 dtable
 (
-    set::customCols(true),
     set::cols($cols),
     set::data($data),
     set::userMap($users),
