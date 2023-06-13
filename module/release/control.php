@@ -103,7 +103,7 @@ class release extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $releaseID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
 
-            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('view', "releaseID={$releaseID}")));
         }
 
         $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch|hasproject', 0, 'execution', '', false);
