@@ -20,6 +20,13 @@ $cols = array();
 foreach($config->user->defaultFields['testtask'] as $field) $cols[$field] = $config->testtask->dtable->fieldList[$field];
 $cols['id']['checkbox'] = false;
 
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
+
 $waitCount    = 0;
 $testingCount = 0;
 $blockedCount = 0;

@@ -29,6 +29,13 @@ if($storyType == 'requirement' || $this->config->vision == 'lite') unset($cols['
 if($this->config->vision == 'lite') unset($cols['stage']);
 if($this->config->vision == 'lite') $cols['product']['title'] = $lang->story->project;
 
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
+
 foreach($stories as $story) $story->estimate .= $config->hourUnit;
 
 panel

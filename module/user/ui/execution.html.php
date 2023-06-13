@@ -26,7 +26,12 @@ $cols['role']  = array('type' => 'user',    'title' => $lang->team->role);
 $cols['join']  = array('type' => 'date',    'title' => $lang->team->join);
 $cols['hours'] = array('type' => 'number',  'width' => 100, 'title' => $lang->team->hours);
 
-$cols = array_map(function($col){unset($col['fixed'], $col['sortType']); return $col;}, $cols);
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
 
 panel
 (

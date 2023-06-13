@@ -22,6 +22,13 @@ $cols = array();
 foreach($config->user->defaultFields['bug'] as $field) $cols[$field] = $config->bug->dtable->fieldList[$field];
 $cols['id']['checkbox'] = false;
 
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
+
 panel
 (
     setClass('list'),

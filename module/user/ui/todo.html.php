@@ -24,6 +24,13 @@ $cols['name']['link']   = array('module' => 'todo', 'method' => 'view', 'params'
 $cols['type']['type']   = 'html';
 $cols['type']['align']  = 'center';
 
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
+
 $waitCount  = 0;
 $doingCount = 0;
 foreach($todos as $todo)

@@ -30,6 +30,13 @@ foreach($config->user->defaultFields['task'] as $field) $cols[$field] = $config-
 $cols['id']['checkbox']       = false;
 $cols['name']['nestedToggle'] = false;
 
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
+
 $tasks = initTableData($tasks, $cols, $this->task);
 foreach($tasks as $task)
 {

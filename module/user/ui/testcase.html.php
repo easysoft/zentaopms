@@ -22,6 +22,13 @@ $cols['id']['checkbox']        = false;
 $cols['title']['nestedToggle'] = false;
 $cols['status']['statusMap']['changed'] = $lang->story->changed;;
 
+$cols = array_map(function($col)
+{
+    unset($col['fixed'], $col['group']);
+    $col['sortType'] = false;
+    return $col;
+}, $cols);
+
 foreach($cases as $case)
 {
     if($type == 'case2Him') $case->id = $case->case;
