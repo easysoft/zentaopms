@@ -21,6 +21,7 @@ if($project->hasProduct)
             set::label($lang->design->product),
             set::value($productID),
             set::items($products),
+            set::required(true),
         )
     );
 }
@@ -34,7 +35,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('product'),
+            set::name('story'),
             set::label($lang->design->story),
             set::items($stories),
         )
