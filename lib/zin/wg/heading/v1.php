@@ -33,9 +33,9 @@ class heading extends wg
         (
             set::url($url),
             set::hint($lang->$tab->common),
-            $tab == 'devops' ? set::class('num') : null,
-            html($icon),
-            span(set::class('text'), $lang->$tab->common),
+            $tab == 'devops' ? setClass('num') : null,
+            set::icon($icon),
+            set::text($lang->$tab->common)
         );
     }
 

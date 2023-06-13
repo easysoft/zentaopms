@@ -1,17 +1,17 @@
 <?php
 $lang->navIcons              = array();
-$lang->navIcons['my']        = "<i class='icon icon-menu-my'></i>";
-$lang->navIcons['program']   = "<i class='icon icon-program'></i>";
-$lang->navIcons['product']   = "<i class='icon icon-product'></i>";
-$lang->navIcons['project']   = "<i class='icon icon-project'></i>";
-$lang->navIcons['execution'] = "<i class='icon icon-run'></i>";
-$lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
-$lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
-$lang->navIcons['kanban']    = "<i class='icon icon-kanban'></i>";
-$lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
-$lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
-$lang->navIcons['system']    = "<i class='icon icon-group'></i>";
-$lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
+$lang->navIcons['my']        = 'menu-my';
+$lang->navIcons['program']   = 'program';
+$lang->navIcons['product']   = 'product';
+$lang->navIcons['project']   = 'project';
+$lang->navIcons['execution'] = 'run';
+$lang->navIcons['qa']        = 'test';
+$lang->navIcons['devops']    = 'devops';
+$lang->navIcons['kanban']    = 'kanban';
+$lang->navIcons['doc']       = 'doc';
+$lang->navIcons['bi']        = 'statistic';
+$lang->navIcons['system']    = 'group';
+$lang->navIcons['admin']     = 'cog-outline';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
