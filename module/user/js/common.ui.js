@@ -6,4 +6,4 @@ window.switchAccount = function(account)
     if(method == 'story')   link = $.createLink('user', method, 'account=' + account + '&storyType=' + pageParams.storyType);
 
     loadPage(link);
-}
+};

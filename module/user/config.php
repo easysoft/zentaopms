@@ -22,4 +22,6 @@ $config->user->resetPasswordTimeout = 3;
 /* User detail fields for API against JIHU GitLab. */
 $config->user->detailFields = 'id,account,realname,avatar';
 
-$config->user->defaultFields['todo'] = array('id', 'name', 'pri', 'date', 'status', 'type', 'begin', 'end');
+$config->user->defaultFields['todo']  = array('id', 'name', 'pri', 'date', 'status', 'type', 'begin', 'end');
+$config->user->defaultFields['task']  = array('id', 'name', 'pri', 'status', 'execution', 'deadline', 'estimate', 'consumed', 'left');
+$config->user->defaultFields['story'] = array('id', 'title', 'pri', 'status', 'product', 'plan', 'openedBy', 'estimate', 'stage');

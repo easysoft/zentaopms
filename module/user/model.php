@@ -3049,6 +3049,7 @@ class userModel extends model
 
         $featureBarMenus = array();
         $featureBarMenus['todo'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'todo', "userID={$user->id}&type=all"), 'text' => $this->lang->user->schedule);
+        $featureBarMenus['task'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'task', "userID={$user->id}"), 'text' => $this->lang->user->task);
 
         if($this->config->URAndSR) $featureBarMenus['requirement'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=requirement"), 'text' => $this->lang->URCommon);
 

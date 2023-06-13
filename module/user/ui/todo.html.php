@@ -37,10 +37,12 @@ $summary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount)
 
 panel
 (
+    setClass('list'),
     set::title(null),
     set::headingActions(array(nav(set::items($todoNavs)))),
     dtable
     (
+        set::bordered(true),
         set::cols($cols),
         set::data(array_values($todos)),
         set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
