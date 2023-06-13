@@ -19,6 +19,7 @@ $config->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->fieldList['pri']['name']     = 'pri';
 $config->task->dtable->fieldList['pri']['type']     = 'pri';
 $config->task->dtable->fieldList['pri']['sortType'] = true;
+$config->task->dtable->fieldList['pri']['show']     = true;
 
 $config->task->dtable->fieldList['type']['title']    = $lang->task->typeAB;
 $config->task->dtable->fieldList['type']['name']     = 'type';
@@ -31,6 +32,7 @@ $config->task->dtable->fieldList['status']['name']      = 'status';
 $config->task->dtable->fieldList['status']['type']      = 'status';
 $config->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList;
 $config->task->dtable->fieldList['status']['sortType']  = true;
+$config->task->dtable->fieldList['status']['show']      = true;
 
 $config->task->dtable->fieldList['openedBy']['title']    = $lang->task->openedByAB;
 $config->task->dtable->fieldList['openedBy']['name']     = 'openedBy';
@@ -48,11 +50,13 @@ $config->task->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->task->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
 $config->task->dtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 $config->task->dtable->fieldList['assignedTo']['sortType']    = true;
+$config->task->dtable->fieldList['assignedTo']['show']        = true;
 
 $config->task->dtable->fieldList['assignedDate']['title']    = $lang->task->assignedDate;
 $config->task->dtable->fieldList['assignedDate']['name']     = 'assignedDate';
 $config->task->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->task->dtable->fieldList['assignedDate']['sortType'] = true;
+$config->task->dtable->fieldList['assignedDate']['show']     = true;
 
 $config->task->dtable->fieldList['estStarted']['title']    = $lang->task->estStarted;
 $config->task->dtable->fieldList['estStarted']['name']     = 'estStarted';
@@ -78,25 +82,30 @@ $config->task->dtable->fieldList['deadline']['title']    = $lang->task->deadline
 $config->task->dtable->fieldList['deadline']['name']     = 'deadline';
 $config->task->dtable->fieldList['deadline']['type']     = 'date';
 $config->task->dtable->fieldList['deadline']['sortType'] = true;
+$config->task->dtable->fieldList['deadline']['show']     = true;
 
 $config->task->dtable->fieldList['estimate']['title']    = $lang->task->estimateAB;
 $config->task->dtable->fieldList['estimate']['name']     = 'estimate';
 $config->task->dtable->fieldList['estimate']['type']     = 'number';
 $config->task->dtable->fieldList['estimate']['sortType'] = true;
+$config->task->dtable->fieldList['estimate']['show']     = true;
 
 $config->task->dtable->fieldList['consumed']['title']    = $lang->task->consumedAB;
 $config->task->dtable->fieldList['consumed']['name']     = 'consumed';
 $config->task->dtable->fieldList['consumed']['type']     = 'number';
 $config->task->dtable->fieldList['consumed']['sortType'] = true;
+$config->task->dtable->fieldList['consumed']['show']     = true;
 
 $config->task->dtable->fieldList['left']['title']    = $lang->task->leftAB;
 $config->task->dtable->fieldList['left']['name']     = 'left';
 $config->task->dtable->fieldList['left']['type']     = 'number';
 $config->task->dtable->fieldList['left']['sortType'] = true;
+$config->task->dtable->fieldList['left']['show']     = true;
 
 $config->task->dtable->fieldList['progress']['title'] = $lang->task->progressAB;
 $config->task->dtable->fieldList['progress']['name']  = 'progress';
 $config->task->dtable->fieldList['progress']['type']  = 'progress';
+$config->task->dtable->fieldList['progress']['show']  = true;
 
 $config->task->dtable->fieldList['closedBy']['title']    = $lang->task->closedBy;
 $config->task->dtable->fieldList['closedBy']['name']     = 'closedBy';
