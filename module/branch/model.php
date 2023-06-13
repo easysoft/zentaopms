@@ -230,7 +230,7 @@ class branchModel extends model
         $oldBranch = $this->getById($branchID, 0, '');
 
         $newBranch = fixer::input('post')->get();
-        $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : '';
+        $newBranch->closedDate = $newBranch->status == 'closed' ? helper::today() : null;
 
         $this->app->loadLang('product');
         $productType = $this->getProductType($branchID);
