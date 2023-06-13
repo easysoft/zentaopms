@@ -134,7 +134,7 @@ class datatable extends control
         if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
         if(empty($setting))
         {
-            $cols = $this->dtable->getFieldList($module);
+            $cols = $this->datatable->getFieldList($module);
         }
         else
         {
