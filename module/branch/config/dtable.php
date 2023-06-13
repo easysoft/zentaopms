@@ -1,6 +1,11 @@
 <?php
 $config->branch->dtable = new stdclass();
 
+$config->branch->dtable->fieldList['id']['type']     = 'checkID';
+$config->branch->dtable->fieldList['id']['name']     = '';
+$config->branch->dtable->fieldList['id']['width']    = 30;
+$config->branch->dtable->fieldList['id']['sortType'] = false;
+
 $config->branch->dtable->fieldList['name']['type']     = 'title';
 $config->branch->dtable->fieldList['name']['sortType'] = false;
 
