@@ -18,7 +18,7 @@ class btn extends wg
         'caret?:string|bool',        // 按钮的下拉箭头，可选值为 `'top'`（向上）、`'bottom'`（向下） 或者 `true`（自动）。
         'hint?:string',              // 按钮的提示文本（鼠标悬停时显示）。
         'type?:string',              // 按钮的类型，可选值为 `'default'`、`'primary'`、`'success'`、`'info'`、`'warning'`、`'danger'`、`'link'`。
-        'btnType?:string'            // 按钮的类型，可选值为 `'button'`、`'submit'`、`'reset'`。
+        'btnType?:string="button"'   // 按钮的类型，可选值为 `'button'`、`'submit'`、`'reset'`。
     );
 
     public function onAddChild($child)
@@ -32,23 +32,20 @@ class btn extends wg
 
     protected function getProps()
     {
-        $props  = $this->getRestProps();
         $url    = $this->prop('url');
         $target = $this->prop('target');
+        $props  = array_merge($this->getRestProps(), array('title' => $this->prop('hint')));
 
         if(empty($url))
         {
-            $props['type'] = $this->prop('btnType') ?? 'button';
+            $props['type'] = $this->prop('btnType');
             if(!isset($props['data-target'])) $props['data-target'] = $target;
+            return $props;
         }
-        else
-        {
-            $props['tagName'] = 'a';
-            if(!isset($props['href']))   $props['href'] = $url;
-            if(!isset($props['target'])) $props['target'] = $target;
-        }
-        $props['title'] = $this->prop('hint');
 
+        $props['tagName'] = 'a';
+        if(!isset($props['href']))   $props['href'] = $url;
+        if(!isset($props['target'])) $props['target'] = $target;
         return $props;
     }
 
@@ -79,8 +76,8 @@ class btn extends wg
         );
 
         if(empty($type) && !empty($url)) $type = 'btn-default';
-        if($type === 'link')             $type = 'btn-link';
-        if($type === 'default')          $type = 'btn-default';
+        else if($type === 'link')        $type = 'btn-link';
+        else if($type === 'default')     $type = 'btn-default';
         if(!empty($type))                $classList[$type] = true;
 
         if(empty($text) && !empty($icon) && !isset($classList['square'])) $classList['square'] = true;
@@ -91,9 +88,6 @@ class btn extends wg
         return $classList;
     }
 
-    /**
-     * @return builder
-     */
     protected function build()
     {
         $props     = $this->getProps();
