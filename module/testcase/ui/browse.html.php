@@ -147,7 +147,7 @@ featureBar
     li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
 );
 
-$viewItems   = array();
+$viewItems   = array(array('text' => $lang->testcase->listView, 'active' => true));
 $exportItems = array();
 $importItems = array();
 if($canBrowseGroupCase)
