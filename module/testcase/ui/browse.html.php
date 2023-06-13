@@ -151,7 +151,7 @@ $exportItems = array();
 $importItems = array();
 if($canBrowseGroupCase)
 {
-    $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID");
+    $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$caseType");
     $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab);
 }
 
