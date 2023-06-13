@@ -1,3 +1,5 @@
+const executionDropdownMap = new Map();
+
 window.footerSummary = function(checkedIdList)
 {
     if(!checkedIdList.length)
@@ -13,14 +15,41 @@ window.footerSummary = function(checkedIdList)
     return {html: summary};
 }
 
+window.showExecution = function(target, executionList)
+{
+    if(executionDropdownMap.has(target)) return;
+
+    let executionItems = new Array();
+    executionList.forEach(function(execution, index)
+    {
+        const link = $.createLink('execution', 'task', `executionID=${execution.id}`);
+        executionItems.push({text: execution.name, url: link});
+    });
+
+    const dropdown = new zui.Dropdown($(target), {
+        arrow: true,
+        placement: 'right',
+        menu: {items: executionItems},
+    });
+
+    executionDropdownMap.set(target, dropdown);
+}
+
 window.renderProductPlanList = function(result, {col, row, value})
 {
     if(col.name === 'execution')
     {
-        if(result[0])
+        if(result[0].length === 0) return [];
+
+        if(result[0].length === 1)
         {
-            result[0] = {html: '<a class="btn ghost toolbar-item text-primary square size-sm" title="' + result[0] + '"><i class="icon icon-run"></i></a>'};
+            const link = $.createLink('execution', 'task', `executionID=${result[0][0].id}`);
+            result[0]  = {html: '<a class="btn ghost toolbar-item text-primary square size-sm" href="' + link + '" title="' + result[0][0].name + '"><i class="icon icon-run"></i></a>'};
+
+            return result;
         }
+
+        result[0] = {html: `<a class="btn ghost toolbar-item text-primary square size-sm" href="javascript:;" onclick='window.showExecution(this, ${JSON.stringify(result[0])})'><i class="icon icon-run"></i></a>`};
     }
 
     return result;

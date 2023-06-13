@@ -1445,7 +1445,7 @@ class productplanModel extends model
         $canStart       = common::hasPriv('productplan', 'start');
         $canFinish      = common::hasPriv('productplan', 'finish');
         $canClose       = common::hasPriv('productplan', 'close');
-        $canCreateExec  = common::hasPriv('execution', 'create');
+        $canCreateExec  = common::hasPriv('execution',   'create');
         $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
         $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
         $canEdit        = common::hasPriv('productplan', 'edit');

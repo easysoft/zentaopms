@@ -75,23 +75,13 @@ $fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$to
         $data->hour    = $plan->hour;
 
         /* Executions. */
-        $data->execution = null;
+        $data->execution = array();
         if(!empty($plan->projects))
         {
-            if(count($plan->projects) === 1)
+            /* Associated to multi executions. */
+            foreach($plan->projects as $executionID => $execution)
             {
-                $executionID = key($plan->projects);
-                $data->execution = $plan->projects[$executionID]->name;
-            }
-            else
-            {
-                /* Associated to multi executions. */
-                $comma = '';
-                foreach($plan->projects as $executionID => $execution)
-                {
-                    $comma = ',';
-                    $data->execution .= $comma . $execution->name;
-                }
+                $data->execution[]   = array('id' => $executionID, 'name' => $execution->name);
             }
         }
 
