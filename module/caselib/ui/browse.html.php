@@ -25,7 +25,7 @@ $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or 
 $cols = $this->loadModel('datatable')->getSetting('caselib');
 $tableData = initTableData($cases, $cols, $this->testcase);
 
-$config->caselib->testcase->dtable->fieldList['openedBy']['map'] = $users;
+$config->caselib->dtable->fieldList['openedBy']['map'] = $users;
 
 featureBar
 (

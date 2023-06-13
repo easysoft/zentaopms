@@ -1,7 +1,6 @@
 <?php
 global $app, $lang;
 $app->loadLang('testcase');
-$app->loadModuleConfig('testcase');
 
 $config->caselib->testcase = new stdclass();
 $config->caselib->testcase->actionList['edit']['icon']  = 'edit';
@@ -18,15 +17,16 @@ $config->caselib->testcase->actionList['delete']['url']   = array('module' => 't
 $config->caselib->testcase->actionList['delete']['order'] = 10;
 $config->caselib->testcase->actionList['delete']['show']  = 'clickable';
 
-$config->caselib->testcase->dtable = new stdclass();
-$config->caselib->testcase->dtable->fieldList = $config->testcase->dtable->fieldList;
+$app->loadModuleConfig('testcase');
 
-$config->caselib->testcase->dtable->fieldList['actions']['name']       = 'actions';
-$config->caselib->testcase->dtable->fieldList['actions']['title']      = $lang->actions;
-$config->caselib->testcase->dtable->fieldList['actions']['type']       = 'actions';
-$config->caselib->testcase->dtable->fieldList['actions']['width']      = '140';
-$config->caselib->testcase->dtable->fieldList['actions']['fixed']      = 'right';
-$config->caselib->testcase->dtable->fieldList['actions']['list']       = $config->caselib->testcase->actionList;
-$config->caselib->testcase->dtable->fieldList['actions']['menu']       = array('edit', 'delete');
+$config->caselib->dtable = new stdclass();
+$config->caselib->dtable->fieldList = $config->testcase->dtable->fieldList;
 
-$config->testcase->dtable->fieldList['actions'] = $config->caselib->testcase->dtable->fieldList['actions'];
+$config->caselib->dtable->fieldList['type']['show']          = true;
+$config->caselib->dtable->fieldList['status']['show']        = true;
+$config->caselib->dtable->fieldList['lastRunner']['show']    = false;
+$config->caselib->dtable->fieldList['lastRunDate']['show']   = false;
+$config->caselib->dtable->fieldList['lastRunResult']['show'] = false;
+
+$config->caselib->dtable->fieldList['actions']['list'] = $config->caselib->testcase->actionList;
+$config->caselib->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
