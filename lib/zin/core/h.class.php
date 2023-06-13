@@ -250,6 +250,7 @@ class h extends wg
         {
             if(empty($var)) continue;
             $val = h::encodeJsonWithRawJs($val);
+            if(empty($val)) $val = '[]';
             if(str_starts_with($var, 'window.')) $jsCode .= "$var=" . $val . ';';
             elseif(str_starts_with($var, '+')) $jsCode .= 'let ' . substr($var, 1) . '=' . $val . ';';
             else $jsCode .= "const $var=" . $val . ';';
