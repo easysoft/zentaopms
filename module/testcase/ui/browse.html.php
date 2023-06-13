@@ -98,11 +98,6 @@ if($canDisplaySuite)
     }
 }
 
-/* Process variables of other menu. */
-$currentOtherName = $this->cookie->onlyScene ? $lang->testcase->onlyScene : $lang->other;
-$otherItems   = array();
-$otherItems[] = array('text' => $lang->testcase->onlyScene);
-
 featureBar
 (
     set::linkParams($projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType=$caseType"),
@@ -134,15 +129,6 @@ featureBar
         ),
         set::items($suiteItems)
     ) : null,
-    dropdown
-    (
-        btn
-        (
-            setClass('ghost'),
-            $currentOtherName
-        ),
-        set::items($otherItems)
-    ),
     li(searchToggle(set::open($browseType == 'bysearch'))),
     li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
 );
