@@ -22,7 +22,7 @@ $data = array_values($whitelist);
 featureBar
 (
     set::current('all'),
-    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&programID={$programID}&from={$from}"),
+    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}"),
 );
 
 $whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$programID}&module={$module}&from={$from}" : "objectID={$objectID}";
