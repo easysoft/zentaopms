@@ -31,6 +31,7 @@ jsVar('confirmactivate', $lang->branch->confirmActivate);
 
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+
 $tableData = initTableData($branchList, $config->branch->dtable->fieldList, $this->branch);
 
 $footToolbar  = array();
