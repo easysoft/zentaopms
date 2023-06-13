@@ -128,8 +128,8 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamConsumed,teamLeft,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
-            ->removeIF(empty($this->post->estStarted), 'estStarted')
-            ->removeIF(empty($this->post->deadline), 'deadline')
+            ->removeIF(!$this->post->estStarted, 'estStarted')
+            ->removeIF(!$this->post->deadline, 'deadline')
             ->add('version', 1)
             ->get();
 
