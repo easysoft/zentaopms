@@ -110,9 +110,6 @@ $config->bug->dtable->fieldList['execution']['map'] = $executions;
 if($product->type == 'normal') unset($config->bug->dtable->fieldList['branch']);
 if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
-$bugs = initTableData($bugs, $config->bug->dtable->fieldList, $this->bug);
-$data = array_values($bugs);
-
 $footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
@@ -210,11 +207,12 @@ if(empty($bugs))
 else
 {
     $cols = $this->loadModel('datatable')->getSetting('bug');
+    $bugs = initTableData($bugs, $cols, $this->bug);
 
     dtable
     (
         set::cols($cols),
-        set::data($data),
+        set::data(array_values($bugs)),
         set::userMap($users),
         set::customCols(true),
         set::checkable($canBatchAction),
