@@ -73,6 +73,8 @@ class mainNavbar extends nav
      */
     protected function build(): wg
     {
+        if(!$this->prop('items')) return div();
+
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');
 

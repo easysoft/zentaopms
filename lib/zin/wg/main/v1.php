@@ -103,9 +103,11 @@ class main extends wg
      * @access protected
      * @return array
      */
-    protected function buildMainNavbar(): array
+    protected function buildMainNavbar(): array|mainNavbar
     {
-        return $this->block('navbar');
+        $navbar = $this->block('navbar');
+        if(!$navbar) return mainNavbar();
+        return $navbar;
     }
 
     /**

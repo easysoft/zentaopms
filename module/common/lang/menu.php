@@ -109,14 +109,14 @@ $lang->my->menu->work['menuOrder'][35] = 'audit';
 if(!$config->URAndSR) unset($lang->my->menu->work['subMenu']->requirement, $lang->my->menu->work['menuOrder'][10]);
 
 $lang->my->menu->contribute['subMenu']              = new stdclass();
-$lang->my->menu->contribute['subMenu']->task        = "{$lang->task->common}|my|contribute|mode=task";
-$lang->my->menu->contribute['subMenu']->story       = "$lang->SRCommon|my|contribute|mode=story";
-$lang->my->menu->contribute['subMenu']->requirement = "$lang->URCommon|my|contribute|mode=requirement";
-$lang->my->menu->contribute['subMenu']->bug         = "{$lang->bug->common}|my|contribute|mode=bug";
-$lang->my->menu->contribute['subMenu']->testcase    = "{$lang->testcase->shortCommon}|my|contribute|mode=testcase&type=openedbyme";
-$lang->my->menu->contribute['subMenu']->testtask    = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
-$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review');
-$lang->my->menu->contribute['subMenu']->doc         = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
+$lang->my->menu->contribute['subMenu']->task        = array('link' => "{$lang->task->common}|my|contribute|mode=task", 'alias' => 'task');
+$lang->my->menu->contribute['subMenu']->story       = array('link' => "$lang->SRCommon|my|contribute|mode=story", 'alias' => 'story');
+$lang->my->menu->contribute['subMenu']->requirement = array('link' => "$lang->URCommon|my|contribute|mode=requirement", 'alias' => 'requirement');
+$lang->my->menu->contribute['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|contribute|mode=bug", 'alias' => 'bug');
+$lang->my->menu->contribute['subMenu']->testcase    = array('link' => "{$lang->testcase->shortCommon}|my|contribute|mode=testcase&type=openedbyme", 'alias' => 'testcase');
+$lang->my->menu->contribute['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|contribute|mode=testtask&type=done", 'alias' => 'testtask');
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review', 'alias' => 'audit');
+$lang->my->menu->contribute['subMenu']->doc         = array('link' => "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme", 'alias' => 'doc');
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';
 $lang->my->menu->contribute['menuOrder'][10] = 'story';
