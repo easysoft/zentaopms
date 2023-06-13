@@ -81,6 +81,7 @@ $lang->trunk              = 'Trunk';
 $lang->sort               = 'Order';
 $lang->required           = 'Required';
 $lang->noData             = 'No data.';
+$lang->noDesc             = 'No Describe';
 $lang->fullscreen         = 'Fullscreen';
 $lang->retrack            = 'Retrack';
 $lang->whitelist          = 'Access whitelist';

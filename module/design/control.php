@@ -237,10 +237,10 @@ class design extends control
      * @access public
      * @return void
      */
-    public function view($designID = 0)
+    public function view(int $designID = 0)
     {
         $design = $this->design->getByID($designID);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, (int)$design->product, $designID);
 
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true), 'product');
@@ -274,7 +274,7 @@ class design extends control
     {
         $design = $this->design->getByID($designID);
         $design = $this->design->getAffectedScope($design);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, (int)$design->product, $designID);
 
         if($_POST)
         {

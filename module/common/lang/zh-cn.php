@@ -81,6 +81,7 @@ $lang->trunk              = '主干';
 $lang->sort               = '排序';
 $lang->required           = '必填';
 $lang->noData             = '暂无';
+$lang->noDesc             = '暂无描述';
 $lang->fullscreen         = '全屏';
 $lang->retrack            = '收起';
 $lang->whitelist          = '访问白名单';

@@ -7,6 +7,7 @@ $config->design->editor->assignto = array('id' => 'comment', 'tools' => 'simpleT
 
 $config->design->create = new stdclass();
 $config->design->edit   = new stdclass();
+$config->design->view   = new stdclass();
 $config->design->create->requiredFields = 'name,type';
 $config->design->edit->requiredFields   = 'name,type';
 
@@ -42,3 +43,16 @@ $config->design->actionList['viewCommit']['url']  = helper::createLink('design',
 $config->design->actionList['delete']['icon'] = 'trash';
 $config->design->actionList['delete']['hint'] = $lang->design->delete;
 $config->design->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+
+$config->design->actionList['assignTo']['icon']        = 'hand-right';
+$config->design->actionList['assignTo']['text']        = $lang->design->assignTo;
+$config->design->actionList['assignTo']['url']         = helper::createLink('design', 'assignTo', 'designID={id}', '', true);
+$config->design->actionList['assignTo']['data-toggle'] = 'modal';
+
+$config->design->actionList['linkCommit']['icon']        = 'link';
+$config->design->actionList['linkCommit']['text']        = $lang->design->linkCommit;
+$config->design->actionList['linkCommit']['url']         = helper::createLink('design', 'linkCommit', 'designID={id}', '', true);
+$config->design->actionList['linkCommit']['data-toggle'] = 'modal';
+
+$config->design->view->operateList['main']   = array('assignTo', 'linkCommit');
+$config->design->view->operateList['common'] = array('edit', 'delete');
