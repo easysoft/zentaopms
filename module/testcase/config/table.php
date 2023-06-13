@@ -71,7 +71,7 @@ $config->testcase->dtable->fieldList['lastRunDate']['title'] = $lang->testcase->
 $config->testcase->dtable->fieldList['lastRunDate']['type']  = 'datetime';
 $config->testcase->dtable->fieldList['lastRunDate']['group'] = '4';
 
-$config->testcase->dtable->fieldList['lastRunResult']['title'] = $lang->testcase->lastRunResult;
+$config->testcase->dtable->fieldList['lastRunResult']['title']     = $lang->testcase->lastRunResult;
 $config->testcase->dtable->fieldList['lastRunResult']['type']      = 'status';
 $config->testcase->dtable->fieldList['lastRunResult']['statusMap'] = $lang->testcase->resultList;
 $config->testcase->dtable->fieldList['lastRunResult']['group']     = '4';
