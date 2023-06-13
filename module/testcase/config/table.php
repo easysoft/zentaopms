@@ -48,7 +48,6 @@ $config->testcase->dtable->fieldList['keywords']['title'] = $lang->testcase->key
 $config->testcase->dtable->fieldList['keywords']['type']  = 'text';
 $config->testcase->dtable->fieldList['keywords']['group'] = '3';
 
-$config->testcase->dtable->fieldList['openedBy']['title'] = $lang->testcase->openedBy;
 $config->testcase->dtable->fieldList['openedBy']['title'] = $lang->testcase->openedByAB;
 $config->testcase->dtable->fieldList['openedBy']['type']  = 'user';
 $config->testcase->dtable->fieldList['openedBy']['show']  = true;
@@ -58,7 +57,6 @@ $config->testcase->dtable->fieldList['openedDate']['title'] = $lang->testcase->o
 $config->testcase->dtable->fieldList['openedDate']['type']  = 'date';
 $config->testcase->dtable->fieldList['openedDate']['group'] = '4';
 
-$config->testcase->dtable->fieldList['reviewedBy']['title'] = $lang->testcase->reviewedBy;
 $config->testcase->dtable->fieldList['reviewedBy']['title'] = $lang->testcase->reviewedByAB;
 $config->testcase->dtable->fieldList['reviewedBy']['type']  = 'user';
 $config->testcase->dtable->fieldList['reviewedBy']['group'] = '4';
