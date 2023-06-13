@@ -145,14 +145,17 @@ class datatableModel extends model
     /**
      * Sort cols.
      *
-     * @param  int    $a
-     * @param  int    $b
+     * @param  object $a
+     * @param  object $b
      * @static
      * @access public
      * @return int
      */
     public static function sortCols($a, $b)
     {
+        $a = (object)$a;
+        $b = (object)$b;
+
         if(!isset($a->order)) return 0;
         return $a->order - $b->order;
     }

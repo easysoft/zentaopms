@@ -88,7 +88,7 @@ class datatable extends control
 
                 $fieldList[$id]['order'] = $field->order;
                 $fieldList[$id]['width'] = $field->width;
-                $fieldList[$id]['show']  = $field->show ? true :false;
+                $fieldList[$id]['show']  = $field->show ? true : false;
             }
 
             $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
@@ -114,48 +114,34 @@ class datatable extends control
     {
         $moduleName = $module;
         $target     = $module . ucfirst($method);
-        $mode       = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
 
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
             $this->app->loadConfig('testtask');
-            $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
-            $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
-            $this->config->testcase->datatable->fieldList['status']['width']  = '90';
+            $this->config->testcase->dtable->defaultField = $this->config->testtask->dtable->defaultField;
+            $this->config->testcase->dtable->fieldList['actions']['width'] = '100';
+            $this->config->testcase->dtable->fieldList['status']['width']  = '90';
         }
         if($module == 'testcase')
         {
             $this->loadModel('testcase');
-            unset($this->config->testcase->datatable->fieldList['assignedTo']);
+            unset($this->config->testcase->dtable->fieldList['assignedTo']);
         }
 
-        $this->view->module = $module;
-        $this->view->method = $method;
-        $this->view->mode   = $mode;
-
-        $cols    = $this->datatable->getFieldList($module);
         $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';
         if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
         if(empty($setting))
         {
-            $this->loadModel($module);
-            if(isset($this->config->$module->dtable->defaultField)) $setting = json_encode($this->config->$module->dtable->defaultField);
+            $cols = $this->dtable->getFieldList($module);
         }
         else
         {
-            $fields = json_decode($setting);
-            foreach($fields as $index => $field)
-            {
-                $id = $field->name;
-                if(!isset($cols[$id])) continue;
-
-                $cols[$id]['order'] = $field->order;
-                $cols[$id]['width'] = $field->width;
-                $cols[$id]['show']  = $field->show ? true :false;
-            }
+            $cols = json_decode($setting, true);
         }
+
+        usort($cols, array('datatableModel', 'sortCols'));
 
         if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
 
@@ -196,8 +182,9 @@ class datatable extends control
         }
         if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
-        $this->view->cols    = $cols;
-        $this->view->setting = $setting;
+        $this->view->module = $module;
+        $this->view->method = $method;
+        $this->view->cols   = $cols;
         $this->display();
     }
 
