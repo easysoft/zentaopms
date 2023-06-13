@@ -373,8 +373,6 @@ foreach($scenes as $scene)
     $scene->stage = implode($lang->comma, $stages);
 }
 
-$cols = $this->loadModel('datatable')->getSetting('testcase');
-
 dtable
 (
     set::customCols(true),
