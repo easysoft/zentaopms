@@ -42,7 +42,7 @@ class main extends wg
      * @access protected
      * @return wg
      */
-    protected function buildMenu(): wg
+    protected function buildMenu(): wg|null
     {
         $menuBlocks = $this->block('menu');
         if(empty($menuBlocks)) return div();
