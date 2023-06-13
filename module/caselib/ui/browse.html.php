@@ -95,16 +95,16 @@ toolbar
     ) : '',
 );
 
-$closeLink = $this->createLink('caselib', 'browse', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy");
+$settingLink = $this->createLink('tree', 'browse', "libID={$libID}&view=caselib&currentModuleID=0&branch=0&from={$lang->navGroup->caselib}");
+$closeLink   = $this->createLink('caselib', 'browse', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy");
 sidebar
 (
     moduleMenu
     (
         set::modules($moduleTree),
         set::activeKey($moduleID),
+        set::settingLink($settingLink),
         set::closeLink($closeLink),
-        set::moduleSetting(false),
-        set::displaySetting(false),
     ),
 );
 
