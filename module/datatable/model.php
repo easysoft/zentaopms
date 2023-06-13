@@ -82,7 +82,7 @@ class datatableModel extends model
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols);
+        if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);
 
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
@@ -92,28 +92,28 @@ class datatableModel extends model
             {
                 if(empty($value['required']) and empty($value['show'])) continue;
 
-                $set = new stdclass();
-                $set->order    = $order++;
-                $set->id       = $key;
-                $set->show     = true;
-                $set->width    = $value['width'];
-                $set->type     = $value['type'];
-                $set->fixed    = isset($value['fixed'])    ? $value['fixed']    : '';
-                $set->title    = isset($value['title'])    ? $value['title']    : $this->lang->$module->{$key};
-                $set->name     = isset($value['name'])     ? $value['name']     : $key;
-                $set->sortType = isset($value['sortType']) ? $value['sortType'] : false;
-                $set->group    = isset($value['group'])    ? $value['group']    : '';
-                $set->link     = isset($value['link'])     ? $value['link']     : '';
+                $set = array();
+                $set['order']    = $order++;
+                $set['id']       = $key;
+                $set['show']     = true;
+                $set['width']    = $value['width'];
+                $set['type']     = $value['type'];
+                $set['fixed']    = isset($value['fixed'])    ? $value['fixed']    : '';
+                $set['title']    = isset($value['title'])    ? $value['title']    : $this->lang->$module->{$key};
+                $set['name']     = isset($value['name'])     ? $value['name']     : $key;
+                $set['sortType'] = isset($value['sortType']) ? $value['sortType'] : false;
+                $set['group']    = isset($value['group'])    ? $value['group']    : '';
+                $set['link']     = isset($value['link'])     ? $value['link']     : '';
 
-                if(isset($value['minWidth']))     $set->minWidth     = $value['minWidth'];
-                if(isset($value['maxWidth']))     $set->maxWidth     = $value['maxWidth'];
-                if(isset($value['pri']))          $set->pri          = $value['pri'];
-                if(isset($value['statusMap']))    $set->statusMap    = $value['statusMap'];
-                if(isset($value['actionsMap']))   $set->actionsMap   = $value['actionsMap'];
-                if(isset($value['checkbox']))     $set->checkbox     = $value['checkbox'];
-                if(isset($value['map']))          $set->map          = $value['map'];
-                if(isset($value['flex']))         $set->flex         = $value['flex'];
-                if(isset($value['nestedToggle'])) $set->nestedToggle = $value['nestedToggle'];
+                if(isset($value['minWidth']))     $set['minWidth']     = $value['minWidth'];
+                if(isset($value['maxWidth']))     $set['maxWidth']     = $value['maxWidth'];
+                if(isset($value['pri']))          $set['pri']          = $value['pri'];
+                if(isset($value['statusMap']))    $set['statusMap']    = $value['statusMap'];
+                if(isset($value['actionsMap']))   $set['actionsMap']   = $value['actionsMap'];
+                if(isset($value['checkbox']))     $set['checkbox']     = $value['checkbox'];
+                if(isset($value['map']))          $set['map']          = $value['map'];
+                if(isset($value['flex']))         $set['flex']         = $value['flex'];
+                if(isset($value['nestedToggle'])) $set['nestedToggle'] = $value['nestedToggle'];
 
                 $setting[$key] = $set;
             }
@@ -122,18 +122,19 @@ class datatableModel extends model
         {
             foreach($setting as $key => $set)
             {
-                if(empty($set->show))
-                {
-                    unset($setting[$key]);
-                    continue;
-                }
-                if($this->session->currentProductType === 'normal' and $set->id === 'branch')
+                if(empty($set['show']))
                 {
                     unset($setting[$key]);
                     continue;
                 }
 
-                if($set->name == 'actions') $set->width = $fieldList[$set->name]['width'];
+                if($this->session->currentProductType === 'normal' and $set['id'] === 'branch')
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
+
+                if($set['name'] == 'actions') $set['width'] = $fieldList['actions']['width'];
             }
         }
 
@@ -153,11 +154,8 @@ class datatableModel extends model
      */
     public static function sortCols($a, $b)
     {
-        $a = (object)$a;
-        $b = (object)$b;
-
-        if(!isset($a->order)) return 0;
-        return $a->order - $b->order;
+        if(!isset($a['order']) or !isset($b['order'])) return 0;
+        return $a['order'] - $b['order'];
     }
 
     /**

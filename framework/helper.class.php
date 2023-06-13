@@ -457,7 +457,22 @@ function formatTime(string|null $time, string $format = ''): string
  */
 function initTableData($items, &$fieldList, $checkModel)
 {
-    if(empty($fieldList['actions'])) return $items;
+    /* Find actions in index array. */
+    if(empty($fieldList['actions']))
+    {
+        $types = array_column($fieldList, 'type');
+        $index = array_search('actions', $types);
+
+        if($index)
+        {
+            $fieldList['actions'] = $fieldList[$index];
+            unset($fieldList[$index]);
+        }
+        else
+        {
+            return $items;
+        }
+    }
 
     foreach($fieldList['actions']['menu'] as $actionMenu)
     {

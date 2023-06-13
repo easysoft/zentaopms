@@ -48,7 +48,8 @@ if(common::canModify('execution', $execution))
     }
 }
 
-$tableData = initTableData($tasks, $config->task->dtable->fieldList, $this->task);
+$cols = $this->loadModel('datatable')->getSetting('execution');
+$tableData = initTableData($tasks, $cols, $this->task);
 
 toolbar
 (
@@ -186,7 +187,7 @@ jsVar('checkedSummary', $lang->execution->checkedSummary);
 dtable
 (
     set::userMap($memberPairs),
-    set::cols(array_values($config->task->dtable->fieldList)),
+    set::cols($cols),
     set::data($tableData),
     set::checkable($canBatchAction),
     set::sortLink(jsRaw('createSortLink')),

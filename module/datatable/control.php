@@ -79,7 +79,8 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
-            $fieldList = $this->datatable->getFieldList($module);
+            $rawModule = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+            $fieldList = $this->datatable->getFieldList($rawModule);
             $fields    = json_decode($this->post->fields);
             foreach($fields as $index => $field)
             {
@@ -114,6 +115,8 @@ class datatable extends control
     {
         $moduleName = $module;
         $target     = $module . ucfirst($method);
+
+        $this->view->module = $module;
 
         if($module == 'testtask')
         {
@@ -182,7 +185,6 @@ class datatable extends control
         }
         if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
-        $this->view->module = $module;
         $this->view->method = $method;
         $this->view->cols   = $cols;
         $this->display();
