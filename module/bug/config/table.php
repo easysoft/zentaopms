@@ -41,41 +41,35 @@ $config->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 $config->bug->dtable->fieldList['status']['show']      = true;
 $config->bug->dtable->fieldList['status']['group']     = '2';
 
-$config->bug->dtable->fieldList['type']['name']   = 'type';
-$config->bug->dtable->fieldList['type']['title']  = $lang->bug->type;
-$config->bug->dtable->fieldList['type']['type']   = 'category';
-$config->bug->dtable->fieldList['type']['map']    = $lang->bug->typeList;
-$config->bug->dtable->fieldList['type']['group']  = '2';
-$config->bug->dtable->fieldList['type']['hidden'] = true;
+$config->bug->dtable->fieldList['type']['name']  = 'type';
+$config->bug->dtable->fieldList['type']['title'] = $lang->bug->type;
+$config->bug->dtable->fieldList['type']['type']  = 'category';
+$config->bug->dtable->fieldList['type']['map']   = $lang->bug->typeList;
+$config->bug->dtable->fieldList['type']['group'] = '2';
 
-$config->bug->dtable->fieldList['branch']['name']   = 'branch';
-$config->bug->dtable->fieldList['branch']['title']  = $lang->bug->branch;
-$config->bug->dtable->fieldList['branch']['type']   = 'text';
-$config->bug->dtable->fieldList['branch']['hidden'] = true;
+$config->bug->dtable->fieldList['branch']['name']  = 'branch';
+$config->bug->dtable->fieldList['branch']['title'] = $lang->bug->branch;
+$config->bug->dtable->fieldList['branch']['type']  = 'text';
 
-$config->bug->dtable->fieldList['project']['name']   = 'project';
-$config->bug->dtable->fieldList['project']['title']  = $lang->bug->project;
-$config->bug->dtable->fieldList['project']['type']   = 'text';
-$config->bug->dtable->fieldList['project']['group']  = '3';
-$config->bug->dtable->fieldList['project']['hidden'] = true;
+$config->bug->dtable->fieldList['project']['name']  = 'project';
+$config->bug->dtable->fieldList['project']['title'] = $lang->bug->project;
+$config->bug->dtable->fieldList['project']['type']  = 'text';
+$config->bug->dtable->fieldList['project']['group'] = '3';
 
-$config->bug->dtable->fieldList['execution']['name']   = 'execution';
-$config->bug->dtable->fieldList['execution']['title']  = $lang->bug->execution;
-$config->bug->dtable->fieldList['execution']['type']   = 'text';
-$config->bug->dtable->fieldList['execution']['group']  = '3';
-$config->bug->dtable->fieldList['execution']['hidden'] = true;
+$config->bug->dtable->fieldList['execution']['name']  = 'execution';
+$config->bug->dtable->fieldList['execution']['title'] = $lang->bug->execution;
+$config->bug->dtable->fieldList['execution']['type']  = 'text';
+$config->bug->dtable->fieldList['execution']['group'] = '3';
 
-$config->bug->dtable->fieldList['plan']['name']   = 'plan';
-$config->bug->dtable->fieldList['plan']['title']  = $lang->bug->plan;
-$config->bug->dtable->fieldList['plan']['width']  = 120;
-$config->bug->dtable->fieldList['plan']['group']  = '3';
-$config->bug->dtable->fieldList['plan']['hidden'] = true;
+$config->bug->dtable->fieldList['plan']['name']  = 'plan';
+$config->bug->dtable->fieldList['plan']['title'] = $lang->bug->plan;
+$config->bug->dtable->fieldList['plan']['width'] = 120;
+$config->bug->dtable->fieldList['plan']['group'] = '3';
 
-$config->bug->dtable->fieldList['openedBuild']['name']   = 'openedBuild';
-$config->bug->dtable->fieldList['openedBuild']['title']  = $lang->bug->openedBuild;
-$config->bug->dtable->fieldList['openedBuild']['type']   = 'text';
-$config->bug->dtable->fieldList['openedBuild']['group']  = '3';
-$config->bug->dtable->fieldList['openedBuild']['hidden'] = true;
+$config->bug->dtable->fieldList['openedBuild']['name']  = 'openedBuild';
+$config->bug->dtable->fieldList['openedBuild']['title'] = $lang->bug->openedBuild;
+$config->bug->dtable->fieldList['openedBuild']['type']  = 'text';
+$config->bug->dtable->fieldList['openedBuild']['group'] = '3';
 
 $config->bug->dtable->fieldList['openedBy']['name']  = 'openedBy';
 $config->bug->dtable->fieldList['openedBy']['title'] = $lang->bug->abbr->openedBy;
@@ -103,23 +97,20 @@ $config->bug->dtable->fieldList['assignedTo']['assignLink'] = helper::createLink
 $config->bug->dtable->fieldList['assignedTo']['group']      = '5';
 $config->bug->dtable->fieldList['assignedTo']['show']       = true;
 
-$config->bug->dtable->fieldList['assignedDate']['name']   = 'assignedDate';
-$config->bug->dtable->fieldList['assignedDate']['title']  = $lang->bug->assignedDate;
-$config->bug->dtable->fieldList['assignedDate']['type']   = 'date';
-$config->bug->dtable->fieldList['assignedDate']['group']  = '5';
-$config->bug->dtable->fieldList['assignedDate']['hidden'] = true;
+$config->bug->dtable->fieldList['assignedDate']['name']  = 'assignedDate';
+$config->bug->dtable->fieldList['assignedDate']['title'] = $lang->bug->assignedDate;
+$config->bug->dtable->fieldList['assignedDate']['type']  = 'date';
+$config->bug->dtable->fieldList['assignedDate']['group'] = '5';
 
-$config->bug->dtable->fieldList['deadline']['name']   = 'deadline';
-$config->bug->dtable->fieldList['deadline']['title']  = $lang->bug->deadline;
-$config->bug->dtable->fieldList['deadline']['type']   = 'date';
-$config->bug->dtable->fieldList['deadline']['group']  = '5';
-$config->bug->dtable->fieldList['deadline']['hidden'] = true;
+$config->bug->dtable->fieldList['deadline']['name']  = 'deadline';
+$config->bug->dtable->fieldList['deadline']['title'] = $lang->bug->deadline;
+$config->bug->dtable->fieldList['deadline']['type']  = 'date';
+$config->bug->dtable->fieldList['deadline']['group'] = '5';
 
-$config->bug->dtable->fieldList['resolvedBy']['name']   = 'resolvedBy';
-$config->bug->dtable->fieldList['resolvedBy']['title']  = $lang->bug->resolvedBy;
-$config->bug->dtable->fieldList['resolvedBy']['type']   = 'user';
-$config->bug->dtable->fieldList['resolvedBy']['group']  = '6';
-$config->bug->dtable->fieldList['resolvedBy']['hidden'] = true;
+$config->bug->dtable->fieldList['resolvedBy']['name']  = 'resolvedBy';
+$config->bug->dtable->fieldList['resolvedBy']['title'] = $lang->bug->resolvedBy;
+$config->bug->dtable->fieldList['resolvedBy']['type']  = 'user';
+$config->bug->dtable->fieldList['resolvedBy']['group'] = '6';
 
 $config->bug->dtable->fieldList['resolution']['name']  = 'resolution';
 $config->bug->dtable->fieldList['resolution']['title'] = $lang->bug->resolution;
@@ -128,105 +119,89 @@ $config->bug->dtable->fieldList['resolution']['map']   = $lang->bug->resolutionL
 $config->bug->dtable->fieldList['resolution']['group'] = '6';
 $config->bug->dtable->fieldList['resolution']['show']  = true;
 
-$config->bug->dtable->fieldList['toTask']['name']   = 'toTaskName';
-$config->bug->dtable->fieldList['toTask']['title']  = $lang->bug->toTask;
-$config->bug->dtable->fieldList['toTask']['type']   = 'text';
-$config->bug->dtable->fieldList['toTask']['link']   = helper::createLink('task', 'view', 'taskID={toTask}');
-$config->bug->dtable->fieldList['toTask']['group']  = '6';
-$config->bug->dtable->fieldList['toTask']['hidden'] = true;
+$config->bug->dtable->fieldList['toTaskName']['name']  = 'toTaskName';
+$config->bug->dtable->fieldList['toTaskName']['title'] = $lang->bug->toTask;
+$config->bug->dtable->fieldList['toTaskName']['type']  = 'text';
+$config->bug->dtable->fieldList['toTaskName']['link']  = helper::createLink('task', 'view', 'taskID={toTask}');
+$config->bug->dtable->fieldList['toTaskName']['group'] = '6';
 
-$config->bug->dtable->fieldList['resolvedDate']['name']   = 'assignedDate';
-$config->bug->dtable->fieldList['resolvedDate']['title']  = $lang->bug->abbr->resolvedDate;
-$config->bug->dtable->fieldList['resolvedDate']['type']   = 'date';
-$config->bug->dtable->fieldList['resolvedDate']['group']  = '6';
-$config->bug->dtable->fieldList['resolvedDate']['hidden'] = true;
+$config->bug->dtable->fieldList['resolvedDate']['name']  = 'resolvedDate';
+$config->bug->dtable->fieldList['resolvedDate']['title'] = $lang->bug->abbr->resolvedDate;
+$config->bug->dtable->fieldList['resolvedDate']['type']  = 'date';
+$config->bug->dtable->fieldList['resolvedDate']['group'] = '6';
 
-$config->bug->dtable->fieldList['resolvedBuild']['name']   = 'resolvedBuild';
-$config->bug->dtable->fieldList['resolvedBuild']['title']  = $lang->bug->resolvedBuild;
-$config->bug->dtable->fieldList['resolvedBuild']['type']   = 'text';
-$config->bug->dtable->fieldList['resolvedBuild']['group']  = '6';
-$config->bug->dtable->fieldList['resolvedBuild']['hidden'] = true;
+$config->bug->dtable->fieldList['resolvedBuild']['name']  = 'resolvedBuild';
+$config->bug->dtable->fieldList['resolvedBuild']['title'] = $lang->bug->resolvedBuild;
+$config->bug->dtable->fieldList['resolvedBuild']['type']  = 'text';
+$config->bug->dtable->fieldList['resolvedBuild']['group'] = '6';
 
-$config->bug->dtable->fieldList['os']['name']   = 'os';
-$config->bug->dtable->fieldList['os']['title']  = $lang->bug->os;
-$config->bug->dtable->fieldList['os']['type']   = 'category';
-$config->bug->dtable->fieldList['os']['map']    = $lang->bug->osList;
-$config->bug->dtable->fieldList['os']['group']  = '7';
-$config->bug->dtable->fieldList['os']['hidden'] = true;
+$config->bug->dtable->fieldList['os']['name']  = 'os';
+$config->bug->dtable->fieldList['os']['title'] = $lang->bug->os;
+$config->bug->dtable->fieldList['os']['type']  = 'category';
+$config->bug->dtable->fieldList['os']['map']   = $lang->bug->osList;
+$config->bug->dtable->fieldList['os']['group'] = '7';
 
-$config->bug->dtable->fieldList['browser']['name']   = 'browser';
-$config->bug->dtable->fieldList['browser']['title']  = $lang->bug->browser;
-$config->bug->dtable->fieldList['browser']['type']   = 'category';
-$config->bug->dtable->fieldList['browser']['map']    = $lang->bug->browserList;
-$config->bug->dtable->fieldList['browser']['group']  = '7';
-$config->bug->dtable->fieldList['browser']['hidden'] = true;
+$config->bug->dtable->fieldList['browser']['name']  = 'browser';
+$config->bug->dtable->fieldList['browser']['title'] = $lang->bug->browser;
+$config->bug->dtable->fieldList['browser']['type']  = 'category';
+$config->bug->dtable->fieldList['browser']['map']   = $lang->bug->browserList;
+$config->bug->dtable->fieldList['browser']['group'] = '7';
 
-$config->bug->dtable->fieldList['activatedCount']['name']   = 'activatedCount';
-$config->bug->dtable->fieldList['activatedCount']['title']  = $lang->bug->abbr->activatedCount;
-$config->bug->dtable->fieldList['activatedCount']['type']   = 'count';
-$config->bug->dtable->fieldList['activatedCount']['group']  = '8';
-$config->bug->dtable->fieldList['activatedCount']['hidden'] = true;
+$config->bug->dtable->fieldList['activatedCount']['name']  = 'activatedCount';
+$config->bug->dtable->fieldList['activatedCount']['title'] = $lang->bug->abbr->activatedCount;
+$config->bug->dtable->fieldList['activatedCount']['type']  = 'count';
+$config->bug->dtable->fieldList['activatedCount']['group'] = '8';
 
-$config->bug->dtable->fieldList['activatedDate']['name']   = 'activatedDate';
-$config->bug->dtable->fieldList['activatedDate']['title']  = $lang->bug->activatedDate;
-$config->bug->dtable->fieldList['activatedDate']['type']   = 'date';
-$config->bug->dtable->fieldList['activatedDate']['group']  = '8';
-$config->bug->dtable->fieldList['activatedDate']['hidden'] = true;
+$config->bug->dtable->fieldList['activatedDate']['name']  = 'activatedDate';
+$config->bug->dtable->fieldList['activatedDate']['title'] = $lang->bug->activatedDate;
+$config->bug->dtable->fieldList['activatedDate']['type']  = 'date';
+$config->bug->dtable->fieldList['activatedDate']['group'] = '8';
 
-$config->bug->dtable->fieldList['story']['name']   = 'storyName';
-$config->bug->dtable->fieldList['story']['title']  = $lang->bug->story;
-$config->bug->dtable->fieldList['story']['type']   = 'text';
-$config->bug->dtable->fieldList['story']['link']   = helper::createLink('story', 'view', 'storyID={story}');
-$config->bug->dtable->fieldList['story']['group']  = '8';
-$config->bug->dtable->fieldList['story']['hidden'] = true;
+$config->bug->dtable->fieldList['storyName']['name']  = 'storyName';
+$config->bug->dtable->fieldList['storyName']['title'] = $lang->bug->story;
+$config->bug->dtable->fieldList['storyName']['type']  = 'text';
+$config->bug->dtable->fieldList['storyName']['link']  = helper::createLink('story', 'view', 'storyID={story}');
+$config->bug->dtable->fieldList['storyName']['group'] = '8';
 
-$config->bug->dtable->fieldList['task']['name']   = 'taskName';
-$config->bug->dtable->fieldList['task']['title']  = $lang->bug->task;
-$config->bug->dtable->fieldList['task']['type']   = 'text';
-$config->bug->dtable->fieldList['task']['link']   = helper::createLink('task', 'view', 'taskID={task}');
-$config->bug->dtable->fieldList['task']['group']  = '8';
-$config->bug->dtable->fieldList['task']['hidden'] = true;
+$config->bug->dtable->fieldList['taskName']['name']  = 'taskName';
+$config->bug->dtable->fieldList['taskName']['title'] = $lang->bug->task;
+$config->bug->dtable->fieldList['taskName']['type']  = 'text';
+$config->bug->dtable->fieldList['taskName']['link']  = helper::createLink('task', 'view', 'taskID={task}');
+$config->bug->dtable->fieldList['taskName']['group'] = '8';
 
-$config->bug->dtable->fieldList['mailto']['name']   = 'mailto';
-$config->bug->dtable->fieldList['mailto']['title']  = $lang->bug->mailto;
-$config->bug->dtable->fieldList['mailto']['type']   = 'user';
-$config->bug->dtable->fieldList['mailto']['group']  = '9';
-$config->bug->dtable->fieldList['mailto']['hidden'] = true;
+$config->bug->dtable->fieldList['mailto']['name']  = 'mailto';
+$config->bug->dtable->fieldList['mailto']['title'] = $lang->bug->mailto;
+$config->bug->dtable->fieldList['mailto']['type']  = 'user';
+$config->bug->dtable->fieldList['mailto']['group'] = '9';
 
 $config->bug->dtable->fieldList['keywords']['name']  = 'keywords';
 $config->bug->dtable->fieldList['keywords']['title'] = $lang->bug->keywords;
 $config->bug->dtable->fieldList['keywords']['type']  = 'text';
-$config->bug->dtable->fieldList['keywords']['group']  = '9';
-$config->bug->dtable->fieldList['keywords']['hidden'] = true;
+$config->bug->dtable->fieldList['keywords']['group'] = '9';
 
-$config->bug->dtable->fieldList['lastEditedBy']['name']   = 'lastEditedBy';
-$config->bug->dtable->fieldList['lastEditedBy']['title']  = $lang->bug->lastEditedBy;
-$config->bug->dtable->fieldList['lastEditedBy']['type']   = 'user';
-$config->bug->dtable->fieldList['lastEditedBy']['group']  = '10';
-$config->bug->dtable->fieldList['lastEditedBy']['hidden'] = true;
+$config->bug->dtable->fieldList['lastEditedBy']['name']  = 'lastEditedBy';
+$config->bug->dtable->fieldList['lastEditedBy']['title'] = $lang->bug->lastEditedBy;
+$config->bug->dtable->fieldList['lastEditedBy']['type']  = 'user';
+$config->bug->dtable->fieldList['lastEditedBy']['group'] = '10';
 
-$config->bug->dtable->fieldList['lastEditedDate']['name']   = 'lastEditedDate';
-$config->bug->dtable->fieldList['lastEditedDate']['title']  = $lang->bug->abbr->lastEditedDate;
-$config->bug->dtable->fieldList['lastEditedDate']['type']   = 'date';
-$config->bug->dtable->fieldList['lastEditedDate']['group']  = '10';
-$config->bug->dtable->fieldList['lastEditedDate']['hidden'] = true;
+$config->bug->dtable->fieldList['lastEditedDate']['name']  = 'lastEditedDate';
+$config->bug->dtable->fieldList['lastEditedDate']['title'] = $lang->bug->abbr->lastEditedDate;
+$config->bug->dtable->fieldList['lastEditedDate']['type']  = 'date';
+$config->bug->dtable->fieldList['lastEditedDate']['group'] = '10';
 
-$config->bug->dtable->fieldList['closedBy']['name']   = 'closedBy';
-$config->bug->dtable->fieldList['closedBy']['title']  = $lang->bug->closedBy;
-$config->bug->dtable->fieldList['closedBy']['type']   = 'user';
-$config->bug->dtable->fieldList['closedBy']['group']  = '10';
-$config->bug->dtable->fieldList['closedBy']['hidden'] = true;
+$config->bug->dtable->fieldList['closedBy']['name']  = 'closedBy';
+$config->bug->dtable->fieldList['closedBy']['title'] = $lang->bug->closedBy;
+$config->bug->dtable->fieldList['closedBy']['type']  = 'user';
+$config->bug->dtable->fieldList['closedBy']['group'] = '10';
 
-$config->bug->dtable->fieldList['closedDate']['name']   = 'closedDate';
-$config->bug->dtable->fieldList['closedDate']['title']  = $lang->bug->closedDate;
-$config->bug->dtable->fieldList['closedDate']['type']   = 'date';
-$config->bug->dtable->fieldList['closedDate']['group']  = '10';
-$config->bug->dtable->fieldList['closedDate']['hidden'] = true;
+$config->bug->dtable->fieldList['closedDate']['name']  = 'closedDate';
+$config->bug->dtable->fieldList['closedDate']['title'] = $lang->bug->closedDate;
+$config->bug->dtable->fieldList['closedDate']['type']  = 'date';
+$config->bug->dtable->fieldList['closedDate']['group'] = '10';
 
-$config->bug->dtable->fieldList['module']['name']   = 'module';
-$config->bug->dtable->fieldList['module']['title']  = $lang->bug->module;
-$config->bug->dtable->fieldList['module']['type']   = 'text';
-$config->bug->dtable->fieldList['module']['hidden'] = true;
+$config->bug->dtable->fieldList['module']['name']  = 'module';
+$config->bug->dtable->fieldList['module']['title'] = $lang->bug->module;
+$config->bug->dtable->fieldList['module']['type']  = 'text';
 
 $config->bug->dtable->fieldList['actions']['name']     = 'actions';
 $config->bug->dtable->fieldList['actions']['title']    = $lang->actions;
