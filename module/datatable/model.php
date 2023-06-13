@@ -155,6 +155,7 @@ class datatableModel extends model
             if(isset($value['nestedToggle'])) $set['nestedToggle'] = $value['nestedToggle'];
             if(isset($value['list']))         $set['list']         = $value['list'];
             if(isset($value['menu']))         $set['menu']         = $value['menu'];
+            if(isset($value['assignLink']))   $set['assignLink']   = $value['assignLink'];
 
             $setting[$key] = $set;
         }
