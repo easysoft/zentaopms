@@ -318,23 +318,26 @@ class branch extends control
      */
     public function mergeBranch($productID)
     {
-        /* Filter out the main branch and target branch. */
-        $mergedBranches = array_filter($_POST['mergedBranchIDList'], function($branch)
+        if($this->post->mergedBranchIDList)
         {
-            $mergeToBranch  = $_POST['createBranch'] ? '' : $_POST['targetBranch'];
-            return $branch != 0 and $branch != $mergeToBranch;
-        });
+            /* Filter out the main branch and target branch. */
+            $mergedBranchIDList = explode(',', $this->post->mergedBranchIDList);
+            $mergedBranches     = array_filter($mergedBranchIDList, function($branch)
+            {
+                $mergeToBranch  = $this->post->createBranch ? '' : $this->post->targetBranch;
+                return $branch != 0 and $branch != $mergeToBranch;
+            });
 
-        $mergedBranchIDList = implode(',', $mergedBranches);
-        $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
+            $mergedBranchIDList = implode(',', $mergedBranches);
+            $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
 
-        $targetBranch = $this->branch->mergeBranch($productID, $mergedBranchIDList);
+            $targetBranch = $this->branch->mergeBranch($productID, $mergedBranchIDList);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
-
-        if(dao::isError()) return $this->send(array('message' => dao::getError(), 'result' => 'fail'));
-
-        return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
+            $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
+            if(dao::isError()) return $this->sendError(dao::getError());
+        }
+        return $this->sendSuccess(array('load' => true, 'closeModel' => true));
     }
 
     /**
