@@ -327,8 +327,10 @@ class todoModel extends model
      */
     public static function isClickable(object $todo, string $action): bool
     {
+        global $app;
         $action = strtolower($action);
 
+        if($todo->private and $app->user->account != $todo->account) return false;
         if($action == 'start')    return $todo->status == 'wait' && !$todo->cycle;
         if($action == 'activate') return $todo->status == 'done' or $todo->status == 'closed';
         if($action == 'close')    return $todo->status == 'done';

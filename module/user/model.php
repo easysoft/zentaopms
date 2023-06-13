@@ -28,7 +28,7 @@ class userModel extends model
             $user = $this->getById($account);
             if($user and $user->deleted) $users[$account] = zget($user, 'realname', $account);
         }
-        return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\" class='form-control chosen'");
+        return $users;
     }
 
     /**
@@ -3031,5 +3031,43 @@ class userModel extends model
             $users = $currentUser + $users;
         }
         return $users;
+    }
+
+    /**
+     * 获取 FeatureBar 导航。
+     * Get featureBar menus.
+     *
+     * @param  object $user
+     * @access public
+     * @return array
+     */
+    public function getFeatureBarMenus(object $user): array
+    {
+        $moduleName = $this->app->moduleName;
+        $methodName = $this->app->methodName;
+        $params     = $this->app->params;
+
+        $featureBarMenus = array();
+        $featureBarMenus['todo'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'todo', "userID={$user->id}&type=all"), 'text' => $this->lang->user->schedule);
+
+        if($this->config->URAndSR) $featureBarMenus['requirement'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=requirement"), 'text' => $this->lang->URCommon);
+
+        $featureBarMenus['story']    = array('type' => 'link', 'url' => helper::createLink($moduleName, 'story', "userID={$user->id}&storyType=story"), 'text' => $this->lang->SRCommon);
+        $featureBarMenus['bug']      = array('type' => 'link', 'url' => helper::createLink($moduleName, 'bug', "userID={$user->id}"), 'text' => $this->lang->user->bug);
+        $featureBarMenus['testtask'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'testtask', "userID={$user->id}"), 'text' => $this->lang->user->testTask);
+        $featureBarMenus['testcase'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'testcase', "userID={$user->id}"), 'text' => $this->lang->user->testCase);
+
+        if($this->config->systemMode == 'ALM') $featureBarMenus['execution'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'execution', "userID={$user->id}"), 'text' => $this->lang->user->execution);
+        if($this->config->edition == 'max')    $featureBarMenus['issue']     = array('type' => 'link', 'url' => helper::createLink($moduleName, 'issue', "userID={$user->id}"), 'text' => $this->lang->user->issue);
+        if($this->config->edition == 'max')    $featureBarMenus['risk']      = array('type' => 'link', 'url' => helper::createLink($moduleName, 'risk', "userID={$user->id}"), 'text' => $this->lang->user->risk);
+
+        $featureBarMenus['dynamic'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'dynamic', "userID={$user->id}&type=today"), 'text' => $this->lang->user->dynamic);
+        $featureBarMenus['profile'] = array('type' => 'link', 'url' => helper::createLink($moduleName, 'profile', "userID={$user->id}"), 'text' => $this->lang->user->profile);
+
+        if($methodName != 'story') $featureBarMenus[$methodName]['active'] = true;
+        if($methodName == 'story' and $params['storyType'] == 'story')       $featureBarMenus['story']['active']       = true;
+        if($methodName == 'story' and $params['storyType'] == 'requirement') $featureBarMenus['requirement']['active'] = true;
+
+        return $featureBarMenus;
     }
 }
