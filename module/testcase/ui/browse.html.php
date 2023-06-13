@@ -64,11 +64,6 @@ if($canSwitchCaseType)
             $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
             $text = $lang->testcase->browseUnits;
         }
-        elseif(isset($groupBy))
-        {
-            $url  = $this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type");
-            $text = $typeName;
-        }
         else
         {
             $url  = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type");
