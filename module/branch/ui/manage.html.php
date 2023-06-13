@@ -26,7 +26,6 @@ toolbar
     !empty($createItem) ? item(set($createItem)) : null,
 );
 
-jsVar('confirmMerge',    $lang->branch->confirmMerge);
 jsVar('confirmclose',    $lang->branch->confirmClose);
 jsVar('confirmactivate', $lang->branch->confirmActivate);
 
@@ -51,6 +50,7 @@ modal
     form
     (
         setID('mergeForm'),
+        set::ajax(array('beforeSubmit' => jsRaw("() => zui.Modal.confirm('{$lang->branch->confirmMerge}')"))),
         setClass('text-center', 'py-4'),
         set::actions(array('submit')),
         set::url(createLink('branch', 'mergeBranch', "productID={$product->id}")),
