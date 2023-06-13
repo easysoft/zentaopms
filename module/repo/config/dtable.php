@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang, $app;
+$app->loadLang('sonarqube');
 
 $config->repo->dtable = new stdclass();
 
@@ -39,12 +40,12 @@ $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
 
 $config->repo->dtable->fieldList['actions']['list']['execJob']['icon']        = 'sonarqube';
-$config->repo->dtable->fieldList['actions']['list']['execJob']['hint']        = $lang->repo->execJob;
+$config->repo->dtable->fieldList['actions']['list']['execJob']['hint']        = $lang->sonarqube->execJob;
 $config->repo->dtable->fieldList['actions']['list']['execJob']['url']         = helper::createLink('sonarqube', 'execJob', "jobID={jobID}");
 $config->repo->dtable->fieldList['actions']['list']['execJob']['data-toggle'] = 'modal';
 
 $config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
-$config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->repo->reportView;
+$config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
 $config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = helper::createLink('sonarqube', 'reportView', "jobID={jobID}");
 $config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle'] = 'modal';
 
