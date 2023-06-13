@@ -60,7 +60,7 @@ $config->testcase->dtable->fieldList['reviewedBy']['type']  = 'user';
 $config->testcase->dtable->fieldList['reviewedBy']['group'] = '4';
 
 $config->testcase->dtable->fieldList['reviewedDate']['title'] = $lang->testcase->reviewedDate;
-$config->testcase->dtable->fieldList['reviewedDate']['type']  = 'time';
+$config->testcase->dtable->fieldList['reviewedDate']['type']  = 'datetime';
 $config->testcase->dtable->fieldList['reviewedDate']['group'] = '4';
 
 $config->testcase->dtable->fieldList['lastRunner']['title'] = $lang->testcase->lastRunner;
@@ -68,7 +68,7 @@ $config->testcase->dtable->fieldList['lastRunner']['type']  = 'user';
 $config->testcase->dtable->fieldList['lastRunner']['group'] = '4';
 
 $config->testcase->dtable->fieldList['lastRunDate']['title'] = $lang->testcase->lastRunDate;
-$config->testcase->dtable->fieldList['lastRunDate']['type']  = 'time';
+$config->testcase->dtable->fieldList['lastRunDate']['type']  = 'datetime';
 $config->testcase->dtable->fieldList['lastRunDate']['group'] = '4';
 
 $config->testcase->dtable->fieldList['lastRunResult']['title'] = $lang->testcase->lastRunResult;
