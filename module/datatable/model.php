@@ -87,38 +87,7 @@ class datatableModel extends model
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
         {
-            $order = 1;
-            foreach($fieldList as $key => $value)
-            {
-                if(empty($value['required']) && empty($value['show'])) continue;
-
-                $set = array();
-                $set['order']    = $order++;
-                $set['id']       = $key;
-                $set['show']     = true;
-                $set['width']    = $value['width'];
-                $set['type']     = $value['type'];
-                $set['fixed']    = isset($value['fixed'])    ? $value['fixed']    : '';
-                $set['title']    = isset($value['title'])    ? $value['title']    : $this->lang->$module->{$key};
-                $set['name']     = isset($value['name'])     ? $value['name']     : $key;
-                $set['sortType'] = isset($value['sortType']) ? $value['sortType'] : false;
-                $set['group']    = isset($value['group'])    ? $value['group']    : '';
-                $set['link']     = isset($value['link'])     ? $value['link']     : '';
-
-                if(isset($value['minWidth']))     $set['minWidth']     = $value['minWidth'];
-                if(isset($value['maxWidth']))     $set['maxWidth']     = $value['maxWidth'];
-                if(isset($value['pri']))          $set['pri']          = $value['pri'];
-                if(isset($value['statusMap']))    $set['statusMap']    = $value['statusMap'];
-                if(isset($value['actionsMap']))   $set['actionsMap']   = $value['actionsMap'];
-                if(isset($value['checkbox']))     $set['checkbox']     = $value['checkbox'];
-                if(isset($value['map']))          $set['map']          = $value['map'];
-                if(isset($value['flex']))         $set['flex']         = $value['flex'];
-                if(isset($value['nestedToggle'])) $set['nestedToggle'] = $value['nestedToggle'];
-                if(isset($value['list']))         $set['list']         = $value['list'];
-                if(isset($value['menu']))         $set['menu']         = $value['menu'];
-
-                $setting[$key] = $set;
-            }
+            $setting = $this->formatFields($fieldList);
         }
         else
         {
@@ -150,6 +119,53 @@ class datatableModel extends model
         {
             $setting['actions'] = $setting[$index];
             unset($setting[$index]);
+        }
+
+        return $setting;
+    }
+
+    /**
+     * Format fields by config.
+     *
+     * @param  array  $fieldList
+     * @param  bool   $onlyshow
+     * @access public
+     * @return void
+     */
+    public function formatFields($fieldList, $onlyshow = true)
+    {
+        $setting = array();
+        $order   = 1;
+        foreach($fieldList as $key => $value)
+        {
+            if(empty($value['required']) && empty($value['show']) && $onlyshow) continue;
+
+            $set = array();
+            $set['order']    = $order++;
+            $set['id']       = $key;
+            $set['show']     = true;
+            $set['width']    = $value['width'];
+            $set['type']     = $value['type'];
+            $set['fixed']    = isset($value['fixed'])    ? $value['fixed']    : '';
+            $set['title']    = isset($value['title'])    ? $value['title']    : $this->lang->$module->{$key};
+            $set['name']     = isset($value['name'])     ? $value['name']     : $key;
+            $set['sortType'] = isset($value['sortType']) ? $value['sortType'] : false;
+            $set['group']    = isset($value['group'])    ? $value['group']    : '';
+            $set['link']     = isset($value['link'])     ? $value['link']     : '';
+
+            if(isset($value['minWidth']))     $set['minWidth']     = $value['minWidth'];
+            if(isset($value['maxWidth']))     $set['maxWidth']     = $value['maxWidth'];
+            if(isset($value['pri']))          $set['pri']          = $value['pri'];
+            if(isset($value['statusMap']))    $set['statusMap']    = $value['statusMap'];
+            if(isset($value['actionsMap']))   $set['actionsMap']   = $value['actionsMap'];
+            if(isset($value['checkbox']))     $set['checkbox']     = $value['checkbox'];
+            if(isset($value['map']))          $set['map']          = $value['map'];
+            if(isset($value['flex']))         $set['flex']         = $value['flex'];
+            if(isset($value['nestedToggle'])) $set['nestedToggle'] = $value['nestedToggle'];
+            if(isset($value['list']))         $set['list']         = $value['list'];
+            if(isset($value['menu']))         $set['menu']         = $value['menu'];
+
+            $setting[$key] = $set;
         }
 
         return $setting;

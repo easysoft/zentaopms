@@ -81,6 +81,7 @@ class datatable extends control
 
             $rawModule = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
             $fieldList = $this->datatable->getFieldList($rawModule);
+            $fieldList = $this->datatable->formatFields($fieldList, false);
             $fields    = json_decode($this->post->fields);
             foreach($fields as $index => $field)
             {
