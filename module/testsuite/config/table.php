@@ -6,14 +6,14 @@ global $lang;
 $config->testsuite->actionList['linkCase']['icon']  = 'link';
 $config->testsuite->actionList['linkCase']['hint']  = $lang->testsuite->linkCase;
 $config->testsuite->actionList['linkCase']['text']  = $lang->testsuite->linkCase;
-$config->testsuite->actionList['linkCase']['url']   = helper::createLink('testsuite', 'linkCase', 'suiteID={id}');
+$config->testsuite->actionList['linkCase']['url']   = array('module' => 'testsuite', 'method' => 'linkCase', 'params' => 'suiteID={id}');
 $config->testsuite->actionList['linkCase']['order'] = 5;
 $config->testsuite->actionList['linkCase']['show']  = 'clickable';
 
 $config->testsuite->actionList['edit']['icon']        = 'edit';
 $config->testsuite->actionList['edit']['hint']        = $lang->testsuite->edit;
 $config->testsuite->actionList['edit']['text']        = $lang->testsuite->edit;
-$config->testsuite->actionList['edit']['url']         = helper::createLink('testsuite', 'edit', 'suiteID={id}', '', true);
+$config->testsuite->actionList['edit']['url']         = array('module' => 'testsuite', 'method' => 'edit', 'params' => 'suiteID={id}');
 $config->testsuite->actionList['edit']['data-toggle'] = 'modal';
 $config->testsuite->actionList['edit']['order']       = 5;
 $config->testsuite->actionList['edit']['show']        = 'clickable';
@@ -21,7 +21,7 @@ $config->testsuite->actionList['edit']['show']        = 'clickable';
 $config->testsuite->actionList['delete']['icon']  = 'trash';
 $config->testsuite->actionList['delete']['hint']  = $lang->testsuite->delete;
 $config->testsuite->actionList['delete']['text']  = $lang->testsuite->delete;
-$config->testsuite->actionList['delete']['url']   = helper::createLink('testsuite', 'delete', 'suiteID={id}');
+$config->testsuite->actionList['delete']['url']   = array('module' => 'testsuite', 'method' => 'delete', 'params' => 'suiteID={id}');
 $config->testsuite->actionList['delete']['order'] = 10;
 $config->testsuite->actionList['delete']['show']  = 'clickable';
 
@@ -70,18 +70,18 @@ $config->testsuite->testcase = new stdclass();
 $config->testsuite->testcase->actionList['unlinkCase']['icon'] = 'unlink';
 $config->testsuite->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
 $config->testsuite->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
-$config->testsuite->testcase->actionList['unlinkCase']['url']  = helper::createLink('testsuite', 'unlinkCase', 'suiteID={suite}&caseID={id}&confirm=yes');
+$config->testsuite->testcase->actionList['unlinkCase']['url']  = array('module' => 'testsuite', 'method' => 'unlinkCase', 'params' => 'suiteID={suite}&caseID={id}&confirm=yes');
 
 $config->testsuite->testcase->actionList['runCase']['icon']       = 'play';
 $config->testsuite->testcase->actionList['runCase']['text']       = $lang->testtask->runCase;
 $config->testsuite->testcase->actionList['runCase']['hint']       = $lang->testtask->runCase;
-$config->testsuite->testcase->actionList['runCase']['url']        = helper::createLink('testtask', 'runCase', 'runID=0&caseID={id}&version={version}');
+$config->testsuite->testcase->actionList['runCase']['url']        = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={id}&version={version}');
 $config->testsuite->testcase->actionList['runCase']['data-width'] = 0.95;
 
 $config->testsuite->testcase->actionList['runResult']['icon']       = 'list-alt';
 $config->testsuite->testcase->actionList['runResult']['text']       = $lang->testtask->results;
 $config->testsuite->testcase->actionList['runResult']['hint']       = $lang->testtask->results;
-$config->testsuite->testcase->actionList['runResult']['url']        = helper::createLink('testtask', 'results', 'runID=0&caseID={id}');
+$config->testsuite->testcase->actionList['runResult']['url']        = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={id}');
 $config->testsuite->testcase->actionList['runResult']['data-width'] = 0.95;
 
 $config->testsuite->testcase->dtable = new stdclass();
