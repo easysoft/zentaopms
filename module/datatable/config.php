@@ -7,6 +7,7 @@ $config->datatable->moduleAlias['program-project'] = 'project';
 $config->datatable->moduleAlias['project-bug']     = 'bug';
 $config->datatable->moduleAlias['execution-bug']   = 'bug';
 $config->datatable->moduleAlias['my-bug']          = 'bug';
+$config->datatable->moduleAlias['caselib-browse']  = 'testcase';
 
 $config->datatable->noProductModule = ',review,';
 

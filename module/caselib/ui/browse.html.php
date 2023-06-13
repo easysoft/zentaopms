@@ -22,7 +22,8 @@ $canBatchReview       = common::hasPriv('testcase', 'batchReview') and ($config-
 $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');
 $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);
 
-$tableData = initTableData($cases, $config->caselib->testcase->dtable->fieldList, $this->testcase);
+$cols = $this->loadModel('datatable')->getSetting('caselib');
+$tableData = initTableData($cases, $cols, $this->testcase);
 
 $config->caselib->testcase->dtable->fieldList['openedBy']['map'] = $users;
 
@@ -149,9 +150,10 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
 dtable
 (
     set::userMap($users),
-    set::cols($config->caselib->testcase->dtable->fieldList),
+    set::cols($cols),
     set::data(array_values($tableData)),
     set::checkable($canBatchAction),
+    set::customCols(true),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );

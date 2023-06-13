@@ -19,11 +19,7 @@ $config->caselib->testcase->actionList['delete']['order'] = 10;
 $config->caselib->testcase->actionList['delete']['show']  = 'clickable';
 
 $config->caselib->testcase->dtable = new stdclass();
-$config->caselib->testcase->dtable->fieldList['title']    = $config->testcase->dtable->fieldList['title'];
-$config->caselib->testcase->dtable->fieldList['pri']      = $config->testcase->dtable->fieldList['pri'];
-$config->caselib->testcase->dtable->fieldList['type']     = $config->testcase->dtable->fieldList['type'];
-$config->caselib->testcase->dtable->fieldList['status']   = $config->testcase->dtable->fieldList['status'];
-$config->caselib->testcase->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
+$config->caselib->testcase->dtable->fieldList = $config->testcase->dtable->fieldList;
 
 $config->caselib->testcase->dtable->fieldList['actions']['name']       = 'actions';
 $config->caselib->testcase->dtable->fieldList['actions']['title']      = $lang->actions;
@@ -32,3 +28,5 @@ $config->caselib->testcase->dtable->fieldList['actions']['width']      = '140';
 $config->caselib->testcase->dtable->fieldList['actions']['fixed']      = 'right';
 $config->caselib->testcase->dtable->fieldList['actions']['list']       = $config->caselib->testcase->actionList;
 $config->caselib->testcase->dtable->fieldList['actions']['menu']       = array('edit', 'delete');
+
+$config->testcase->dtable->fieldList['actions'] = $config->caselib->testcase->dtable->fieldList['actions'];
