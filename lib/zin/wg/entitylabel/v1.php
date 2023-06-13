@@ -19,6 +19,11 @@ class entityLabel extends wg
         'suffix' => array()
     );
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function onAddChild(mixed $child): mixed
     {
         if(is_string($child) && !$this->props->has('text'))
@@ -66,7 +71,7 @@ class entityLabel extends wg
         $entityName = $this->buildEntityName();
         return div
         (
-            setClass('entity-label', 'flex', 'items-center', 'gap-x-1'),
+            setClass('entity-label', 'flex', 'items-center', 'gap-x-2'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             $reverse ? array($entityName, $entityID) : array($entityID, $entityName),
             $suffix

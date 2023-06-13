@@ -21,7 +21,7 @@ class sectionCard extends wg
     {
         return div
         (
-            setClass('py-2', 'pl-2'),
+            setClass('py-2', 'pl-3'),
             $this->title($item->prop('title')),
             $item->children(),
         );
@@ -36,8 +36,8 @@ class sectionCard extends wg
             setClass('section-card', 'border', 'rounded-sm'),
             div
             (
-                setClass('h-9', 'flex', 'items-center', 'pl-2'),
-                setStyle('background', '#F8F8F8'),
+                setClass('h-9', 'flex', 'items-center', 'pl-3'),
+                setStyle('background', 'var(--color-gray-100)'),
                 $title
             ),
             div

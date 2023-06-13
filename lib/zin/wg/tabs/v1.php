@@ -96,12 +96,7 @@ class tabs extends wg
 
         return btn
         (
-            setClass('btn-link'),
-            setStyle(array(
-                'position' => 'absolute',
-                'right' => '24px',
-                'top' => '16px'
-            )),
+            setClass('btn-link', 'btn-collapse'),
             set::icon('angle-down'),
             on::click
             (

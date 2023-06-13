@@ -2,7 +2,7 @@
 .history .btn-comment {font-size: 12px; font-weight: 400; color: var(--color-slate-700);}
 .history .btn-edit-comment {position: absolute !important;}
 .history-list .marker {color: var(--color-slate-700); border-color: var(--color-gray-200); background: var(--color-slate-50);}
-.history-list .comment-content {background: var(--color-gray-200);}
+.history-list .comment-content {background: var(--color-gray-100);}
 .history-list.sort-reverse {flex-direction: column-reverse;}
 .history-changes {display: none;}
 .history-changes.show {display: block; }
