@@ -143,9 +143,9 @@ class datatableModel extends model
             $set = array();
             $set['order']    = $order++;
             $set['id']       = $key;
-            $set['show']     = true;
-            $set['width']    = $value['width'];
             $set['type']     = $value['type'];
+            $set['show']     = empty($value['show'])     ? false              : true;
+            $set['width']    = isset($value['width'])    ? $value['width']    : '';
             $set['fixed']    = isset($value['fixed'])    ? $value['fixed']    : '';
             $set['title']    = isset($value['title'])    ? $value['title']    : $this->lang->$module->{$key};
             $set['name']     = isset($value['name'])     ? $value['name']     : $key;

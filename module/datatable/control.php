@@ -139,6 +139,7 @@ class datatable extends control
         if(empty($setting))
         {
             $cols = $this->datatable->getFieldList($module);
+            $cols = $this->datatable->formatFields($cols, false);
         }
         else
         {
