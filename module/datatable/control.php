@@ -82,7 +82,7 @@ class datatable extends control
 
             $rawModule = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
             $fieldList = $this->datatable->getFieldList($rawModule);
-            $fieldList = $this->datatable->formatFields($fieldList, false);
+            $fieldList = $this->datatable->formatFields($module, $fieldList, false);
             $fields    = json_decode($this->post->fields);
             foreach($fields as $index => $field)
             {
@@ -140,7 +140,7 @@ class datatable extends control
         if(empty($setting))
         {
             $cols = $this->datatable->getFieldList($module);
-            $cols = $this->datatable->formatFields($cols, false);
+            $cols = $this->datatable->formatFields($module, $cols, false);
         }
         else
         {
