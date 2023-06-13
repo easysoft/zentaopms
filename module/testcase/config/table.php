@@ -4,6 +4,7 @@ $config->testcase->dtable = new stdclass();
 $config->testcase->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->testcase->dtable->fieldList['id']['type']     = 'checkID';
 $config->testcase->dtable->fieldList['id']['fixed']    = 'left';
+$config->testcase->dtable->fieldList['id']['sortType'] = true;
 $config->testcase->dtable->fieldList['id']['required'] = true;
 $config->testcase->dtable->fieldList['id']['group']    = '1';
 
@@ -16,10 +17,11 @@ $config->testcase->dtable->fieldList['title']['link']         = array('module' =
 $config->testcase->dtable->fieldList['title']['required']     = true;
 $config->testcase->dtable->fieldList['title']['group']        = '1';
 
-$config->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
-$config->testcase->dtable->fieldList['pri']['type']  = 'pri';
-$config->testcase->dtable->fieldList['pri']['show']  = true;
-$config->testcase->dtable->fieldList['pri']['group'] = '2';
+$config->testcase->dtable->fieldList['pri']['title']    = $lang->testcase->pri;
+$config->testcase->dtable->fieldList['pri']['type']     = 'pri';
+$config->testcase->dtable->fieldList['pri']['sortType'] = true;
+$config->testcase->dtable->fieldList['pri']['show']     = true;
+$config->testcase->dtable->fieldList['pri']['group']    = '2';
 
 $config->testcase->dtable->fieldList['type']['title'] = $lang->testcase->type;
 $config->testcase->dtable->fieldList['type']['type']  = 'category';
@@ -70,10 +72,11 @@ $config->testcase->dtable->fieldList['lastRunner']['type']  = 'user';
 $config->testcase->dtable->fieldList['lastRunner']['show']  = true;
 $config->testcase->dtable->fieldList['lastRunner']['group'] = '4';
 
-$config->testcase->dtable->fieldList['lastRunDate']['title'] = $lang->testcase->lastRunDate;
-$config->testcase->dtable->fieldList['lastRunDate']['type']  = 'datetime';
-$config->testcase->dtable->fieldList['lastRunDate']['show']  = true;
-$config->testcase->dtable->fieldList['lastRunDate']['group'] = '4';
+$config->testcase->dtable->fieldList['lastRunDate']['title']    = $lang->testcase->lastRunDate;
+$config->testcase->dtable->fieldList['lastRunDate']['type']     = 'datetime';
+$config->testcase->dtable->fieldList['lastRunDate']['sortType'] = true;
+$config->testcase->dtable->fieldList['lastRunDate']['show']     = true;
+$config->testcase->dtable->fieldList['lastRunDate']['group']    = '4';
 
 $config->testcase->dtable->fieldList['lastRunResult']['title']     = $lang->testcase->lastRunResult;
 $config->testcase->dtable->fieldList['lastRunResult']['type']      = 'status';
@@ -110,7 +113,6 @@ $config->testcase->dtable->fieldList['lastEditedDate']['group'] = '6';
 
 $config->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testcase->dtable->fieldList['actions']['type']     = 'actions';
-$config->testcase->dtable->fieldList['actions']['sortType'] = false;
 $config->testcase->dtable->fieldList['actions']['list']     = $config->testcase->actionList;
 $config->testcase->dtable->fieldList['actions']['menu']     = array();
 $config->testcase->dtable->fieldList['actions']['required'] = true;
