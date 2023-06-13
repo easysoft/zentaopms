@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$app->loadLang('zanode');
+jsVar('runCaseConfirm', $lang->zanode->runCaseConfirm);
+jsVar('automation', !empty($automation) ? $automation->id : 0);
 
 $removeLink = $browseType == 'bymodule' ? inlink('cases', "taskID=$taskID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskCaseModule")';
 sidebar
@@ -85,8 +88,8 @@ else
     if($canBatchEdit)        $footToolbar['items'][] = array('text' => $lang->edit,                 'className' => 'batch-btn',          'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}&branch=all"));
     if($canBatchUnlinkCases) $footToolbar['items'][] = array('text' => $lang->testtask->unlinkCase, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'batchUnlinkCases', "taskID={$task->id}"));
 }
-if($canBatchAssign) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->testtask->assignedTo, 'className' => common::hasPriv('testtask', 'batchAssign') ? '' : 'hidden', 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
-if($canBatchRun)    $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('testtask', 'batchRun') ? '' : 'hidden'), 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&orderBy=id_desc&from=testtask&taskID={$taskID}&confirm=yes"));
+if($canBatchAssign) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->testtask->assignedTo, 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
+if($canBatchRun)    $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run', 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&orderBy=id_desc&from=testtask&taskID={$taskID}&confirm=yes"));
 $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
 
 if($canBatchEdit && $canBatchUnlinkCases)

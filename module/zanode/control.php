@@ -611,14 +611,14 @@ class zanode extends control
     {
         if($_POST)
         {
-            $caseIDList = $_POST['caseIDList'];
+            $caseIdList = $_POST['caseIdList'];
             $script     = $this->zanode->getAutomationByID($scriptID);
-            $cases = $this->loadModel('testcase')->getByList($caseIDList);
+            $cases = $this->loadModel('testcase')->getByList($caseIdList);
 
             foreach($cases as $id => $case)
             {
                 if($case->auto != 'auto') continue;
-                $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node);
+                $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node ? $script->node : 0);
                 if(!dao::isError()) $this->zanode->runZTFScript($script->id, $id, $resultID);
             }
 
