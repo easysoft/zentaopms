@@ -81,7 +81,7 @@ menu
     set::items($assignedToItems)
 );
 
-$footToolbar = $canBatchAssignedTo ? array('items' => array
+$footToolbar = $canBatchAssignTo ? array('items' => array
 (
     array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top'),
 )) : null;
