@@ -33,7 +33,7 @@ class my extends control
     public function index()
     {
         $this->view->title = $this->lang->my->common;
-        echo $this->fetch('block', 'dashboard', 'module=my');
+        echo $this->fetch('block', 'dashboard', 'dashboard=my');
     }
 
     /**

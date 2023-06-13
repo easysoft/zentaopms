@@ -45,7 +45,7 @@ class main extends wg
     protected function buildMenu(): wg
     {
         $menuBlocks = $this->block('menu');
-        if(empty($menuBlocks)) return null;
+        if(empty($menuBlocks)) return div();
 
         list($featureBarList, $navList, $toolbarList, $restList) = groupWgInList($menuBlocks, array('featureBar', 'nav', 'toolbar'));
 

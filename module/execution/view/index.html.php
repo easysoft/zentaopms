@@ -15,6 +15,6 @@
   <p><span class="text-muted"><?php echo $lang->execution->noProject;?></span> <?php common::printLink('execution', 'create', '', "<i class='icon icon-plus'></i> " . $lang->execution->create, '', "class='btn btn-info'");?></p>
 </div>
 <?php else:?>
-<?php echo $this->fetch('block', 'dashboard', 'module=execution');?>
+<?php echo $this->fetch('block', 'dashboard', 'dashboard=execution');?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

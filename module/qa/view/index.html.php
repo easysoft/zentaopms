@@ -11,5 +11,5 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php echo $this->fetch('block', 'dashboard', 'module=qa');?>
+<?php echo $this->fetch('block', 'dashboard', 'dashboard=qa');?>
 <?php include '../../common/view/footer.html.php';?>

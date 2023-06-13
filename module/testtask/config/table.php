@@ -38,7 +38,7 @@ $config->testtask->actionList['linkCase']['url']  = helper::createLink('testtask
 $config->testtask->actionList['report']['icon'] = 'summary';
 $config->testtask->actionList['report']['text'] = $lang->testtask->testreport;
 $config->testtask->actionList['report']['hint'] = $lang->testtask->testreport;
-$config->testtask->actionList['report']['url']  = helper::createLink('testreport', 'browse', 'objectID={product}&objectType=product&extra={id}');
+$config->testtask->actionList['report']['url']  = array('module' => 'testreport', 'method' => 'browse', 'params' => 'objectID={product}&objectType=product&extra={id}');
 
 $config->testtask->actionList['view']['icon']        = 'list-alt';
 $config->testtask->actionList['view']['text']        = $lang->testtask->view;
