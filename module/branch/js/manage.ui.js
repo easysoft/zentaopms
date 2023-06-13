@@ -53,4 +53,33 @@ $(document).on('click', '.batch-btn', function()
     const url  = $(this).data('url');
     checkedList.forEach((id) => form.append('branchIDList[]', id));
     postAndLoadPage(url, form);
+}).on('click', '#mergeBranch', function()
+{
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return false;
+
+    $('#mergedBranchIDList').val(checkedList.join(','));
 });
+
+/**
+ * Set create branch form.
+ *
+ * @param  element obj
+ * @access public
+ * @return void
+ */
+function createBranch(obj)
+{
+    $('#createForm input, #createForm textarea').attr('disabled', true);
+    $('input[name=targetBranch]').removeAttr('disabled');
+    $('#createForm').addClass('hidden');
+
+    const createNew = $(obj).is(':checked');
+    if(createNew)
+    {
+        $('#createForm input, #createForm textarea').removeAttr('disabled');
+        $('#targetBranch').attr('disabled', true);
+        $('#createForm').removeClass('hidden');
+    }
+}
