@@ -6,7 +6,7 @@ global $lang;
 $config->testreport->actionList['edit']['icon']        = 'edit';
 $config->testreport->actionList['edit']['hint']        = $lang->testreport->edit;
 $config->testreport->actionList['edit']['text']        = $lang->testreport->edit;
-$config->testreport->actionList['edit']['url']         = helper::createLink('testreport', 'edit', 'reportID={id}', '', true);
+$config->testreport->actionList['edit']['url']         = array('module' => 'testreport', 'method' => 'edit', 'params' => 'reportID={id}');
 $config->testreport->actionList['edit']['data-toggle'] = 'modal';
 $config->testreport->actionList['edit']['order']       = 5;
 $config->testreport->actionList['edit']['show']        = 'clickable';
@@ -14,7 +14,7 @@ $config->testreport->actionList['edit']['show']        = 'clickable';
 $config->testreport->actionList['delete']['icon']  = 'trash';
 $config->testreport->actionList['delete']['hint']  = $lang->testreport->delete;
 $config->testreport->actionList['delete']['text']  = $lang->testreport->delete;
-$config->testreport->actionList['delete']['url']   = helper::createLink('testreport', 'delete', 'reportID={id}');
+$config->testreport->actionList['delete']['url']   = array('module' => 'testreport', 'method' => 'delete', 'params' => 'reportID={id}');
 $config->testreport->actionList['delete']['order'] = 10;
 $config->testreport->actionList['delete']['show']  = 'clickable';
 
@@ -29,7 +29,7 @@ $config->testreport->dtable->fieldList['title']['title']    = $lang->testreport-
 $config->testreport->dtable->fieldList['title']['type']     = 'title';
 $config->testreport->dtable->fieldList['title']['minWidth'] = '200';
 $config->testreport->dtable->fieldList['title']['fixed']    = 'left';
-$config->testreport->dtable->fieldList['title']['link']     = helper::createLink('testreport', 'view', "testreportID={id}");
+$config->testreport->dtable->fieldList['title']['link']     = array('module' => 'testreport', 'method' => 'view', 'params' => 'testreportID={id}');
 
 $config->testreport->dtable->fieldList['execution']['name']     = 'execution';
 $config->testreport->dtable->fieldList['execution']['title']    = $lang->testreport->execution;
