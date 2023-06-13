@@ -226,6 +226,7 @@ dtable
     set::customCols(true),
     set::nested(true),
     set::checkable(true),
+    set::onRenderCell(jsRaw('window.renderProductPlanList')),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
     (
@@ -256,7 +257,7 @@ dtable
         set::recTotal($pager->recTotal),
         set::linkCreator(inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={page}"))
     ),
-    set::checkInfo(jsRaw("function(checkedIDList){ return footerInfo(checkedIDList);}"))
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
 );
 
 jsVar('pageSummary',      $summary);

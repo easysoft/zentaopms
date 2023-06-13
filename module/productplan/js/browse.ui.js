@@ -1,4 +1,4 @@
-window.footerInfo = function(checkedIdList)
+window.footerSummary = function(checkedIdList)
 {
     if(!checkedIdList.length)
     {
@@ -11,4 +11,17 @@ window.footerInfo = function(checkedIdList)
     summary     = summary.replace('%independent%', totalIndependent);
 
     return {html: summary};
+}
+
+window.renderProductPlanList = function(result, {col, row, value})
+{
+    if(col.name === 'execution')
+    {
+        if(result[0])
+        {
+            result[0] = {html: '<a class="btn ghost toolbar-item text-primary square size-sm" title="' + result[0] + '"><i class="icon icon-run"></i></a>'};
+        }
+    }
+
+    return result;
 }
