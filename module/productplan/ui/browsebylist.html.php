@@ -95,11 +95,87 @@ $fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$to
 
         /* Build action button list. */
         $data->actions = $this->productplan->buildActionBtnList($plan, 'browse');
+        $data->actions = rearrangeActionBtns($data->actions);
 
         $dataList[] = $data;
     }
 
     return $dataList;
+};
+
+function rearrangeActionBtns($actions)
+{
+    $actionMap = array();
+    foreach($actions as $action)
+    {
+        $actionMap[$action['name']] = $action;
+    }
+
+    $result = array();
+
+    if(empty($actionMap['start']['disabled']))
+    {
+        $result[] = $actionMap['start'];
+        $result[] = array('type' => 'dropdown', 'items' => array
+        (
+            $actionMap['finish'],
+            $actionMap['close'],
+            $actionMap['activate'],
+        ));
+    }
+    elseif(empty($actionMap['finish']['disabled']))
+    {
+        $result[] = $actionMap['finish'];
+        $result[] = array('type' => 'dropdown', 'items' => array
+        (
+            $actionMap['start'],
+            $actionMap['close'],
+            $actionMap['activate'],
+        ));
+    }
+    elseif(empty($actionMap['close']['disabled']))
+    {
+        $result[] = $actionMap['close'];
+        $result[] = array('type' => 'dropdown', 'items' => array
+        (
+            $actionMap['start'],
+            $actionMap['finish'],
+            $actionMap['activate'],
+        ));
+    }
+    elseif(empty($actionMap['activate']['disabled']))
+    {
+        $result[] = $actionMap['activate'];
+        $result[] = array('type' => 'dropdown', 'items' => array
+        (
+            $actionMap['start'],
+            $actionMap['finish'],
+            $actionMap['close'],
+        ));
+    }
+    else
+    {
+        $result[] = $actionMap['start'];
+        $result[] = array('type' => 'dropdown', 'items' => array
+        (
+            $actionMap['finish'],
+            $actionMap['close'],
+            $actionMap['activate'],
+        ));
+    }
+
+    $result[] = $actionMap['plus'];
+    $result[] = $actionMap['divider'];
+    $result[] = $actionMap['link'];
+    $result[] = $actionMap['bug'];
+    $result[] = $actionMap['edit'];
+    $result[] = array('type' => 'dropdown', 'icon' => 'icon-ellipsis-v', 'caret' => false, 'items' => array
+    (
+        $actionMap['edit'],
+        $actionMap['trash'],
+    ));
+
+    return $result;
 };
 
 $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
