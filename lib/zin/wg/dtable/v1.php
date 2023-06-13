@@ -23,7 +23,7 @@ class dtable extends wg
         if($this->prop('customCols') === true)
         {
             $app->loadLang('datatable');
-            $this->setProp('customCols', array('url' => createLink('datatable', 'ajaxcustom', "module=$app->rawModule&method=$app->rawMethod"), 'hint' => $app->lang->datatable->custom));
+            $this->setProp('customCols', array('url' => createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"), 'hint' => $app->lang->datatable->custom));
         }
 
         $module = $this->prop('module', $app->rawModule);
