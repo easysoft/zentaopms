@@ -10,18 +10,21 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$removeLink = $browseType == 'bymodule' ? inlink('cases', "taskID=$taskID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskCaseModule")';
 sidebar
 (
     moduleMenu(set(array
     (
         'modules'   => $moduleTree,
-        'activeKey' => $currentModuleID,
-        'closeLink' => $closeLink
+        'activeKey' => $moduleID,
+        'closeLink' => $removeLink
     )))
 );
 
 featureBar
 (
+    set::current($type),
+    set::linkParams("taskID={$taskID}&browseType={key}&param=0"),
     li(searchToggle())
 );
 
@@ -53,58 +56,75 @@ toolbar
         'icon'  => 'list-alt',
         'text'  => $lang->testtask->view,
         'class' => 'ghost',
-        'url'   => createLink('testtask', 'view', "taskID=$task->id")
+        'url'   => createLink('testtask', 'view', "taskID={$task->id}")
     ))) : null,
     item(set(array
     (
         'icon'  => 'back',
         'text'  => $lang->goback,
         'class' => 'ghost',
-        'url'   => createLink('testtask', 'browse', "taskID=$task->id")
+        'url'   => createLink('testtask', 'browse', "productID={$productID}")
     ))),
 );
 
-$footToolbar = array('items' => array
-(
-    array('type' => 'btn-group', 'items' => array
+$canBatchEdit        = common::hasPriv('testtask', 'batchEdit');
+$canBatchUnlinkCases = common::hasPriv('testtask', 'batchUnlinkCases');
+$canBatchAssign      = common::hasPriv('testtask', 'batchAssign');
+$canBatchRun         = common::hasPriv('testtask', 'batchRun');
+$footToolbar = array();
+if($canBatchEdit && $canBatchUnlinkCases)
+{
+    $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
     (
         array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}&branch=all")),
-        array('caret' => 'up', 'className' => 'secondary ' . (common::hasPriv('testtask', 'batchUnlinkCases') ? '' : 'hidden'), 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    )),
-    array('caret' => 'up', 'text' => $lang->testtask->assignedTo, 'className' => common::hasPriv('testtask', 'batchAssign') ? '' : 'hidden', 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
-    array('text' => $lang->testtask->runCase, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('testtask', 'batchRun') ? '' : 'hidden'), 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&orderBy=id_desc&from=testtask&taskID={$taskID}&confirm=yes"))
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
+        array('caret' => 'up', 'className' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
+    ));
+}
+else
+{
+    if($canBatchEdit)        $footToolbar['items'][] = array('text' => $lang->edit,                 'className' => 'batch-btn',          'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}&branch=all"));
+    if($canBatchUnlinkCases) $footToolbar['items'][] = array('text' => $lang->testtask->unlinkCase, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'batchUnlinkCases', "taskID={$task->id}"));
+}
+if($canBatchAssign) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->testtask->assignedTo, 'className' => common::hasPriv('testtask', 'batchAssign') ? '' : 'hidden', 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
+if($canBatchRun)    $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn ajax-btn ' . (common::hasPriv('testtask', 'batchRun') ? '' : 'hidden'), 'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&orderBy=id_desc&from=testtask&taskID={$taskID}&confirm=yes"));
+$footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
 
-menu
-(
-    set::id('navActions'),
-    set::class('menu dropdown-menu'),
-    set::items(array
+if($canBatchEdit && $canBatchUnlinkCases)
+{
+    menu
     (
-        array('text' => $lang->testtask->unlinkCase, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'batchUnlinkCases', "taskID={$task->id}")),
-    ))
-);
+        set::id('navActions'),
+        set::class('menu dropdown-menu'),
+        set::items(array
+        (
+            array('text' => $lang->testtask->unlinkCase, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'batchUnlinkCases', "taskID={$task->id}")),
+        ))
+    );
+}
 
-$assignedToItems = array();
-foreach($assignedToList as $key => $value) $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'batchAssign', "taskID={$task->id}"));
+if($canBatchAssign)
+{
+    $assignedToItems = array();
+    foreach($assignedToList as $key => $value) $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testtask', 'batchAssign', "taskID={$task->id}"));
 
-menu
-(
-    set::id('navAssignedTo'),
-    set::class('dropdown-menu'),
-    set::items($assignedToItems)
-);
+    menu
+    (
+        set::id('navAssignedTo'),
+        set::class('dropdown-menu'),
+        set::items($assignedToItems)
+    );
+}
 
 $config->testtask->testcase->dtable->fieldList['story']['map'] = $stories;
+
 $runs = initTableData($runs, $config->testtask->testcase->dtable->fieldList, $this->testcase);
-$cols = array_values($config->testtask->testcase->dtable->fieldList);
 $data = array_values($runs);
 
 dtable
 (
     set::customCols(true),
-    set::cols($cols),
     set::data($data),
+    set::cols($config->testtask->testcase->dtable->fieldList),
     set::userMap($users),
     set::checkable(true),
     set::fixedLeftWidth('44%'),
