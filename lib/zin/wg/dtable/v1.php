@@ -37,6 +37,8 @@ class dtable extends wg
 
             if(!isset($config['name']))  $config['name'] = $field;
             if(!isset($config['title'])) $config['title'] = zget($app->lang->{$module}, $config['name'], zget($app->lang, $config['name']));
+            if(isset($config['link']) && is_array($config['link'])) $config['link'] = $this->getLink($config['link']);
+            if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
         }
         $this->setProp('cols', array_values($colConfigs));
 
@@ -47,6 +49,22 @@ class dtable extends wg
     public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    /**
+     * 获取字段链接。
+     * Get link to the field.
+     *
+     * @param  array        $setting
+     * @access protected
+     * @return array|string
+     */
+    protected function getLink(array $setting): array|string
+    {
+        if(empty($setting['module']) || empty($setting['method'])) return $setting;
+        if(!hasPriv($setting['module'], $setting['method'])) return '';
+
+        return createLink($setting['module'], $setting['method'], zget($setting, 'params', ''));
     }
 
     protected function build()
