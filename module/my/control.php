@@ -695,14 +695,29 @@ EOF;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTestCaseSearchForm($queryID, $actionURL, $currentMethod);
 
+        $failCount = 0;
+        foreach($cases as $case)
+        {
+            if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
+            if($case->needconfirm)
+            {
+                $case->status = $this->lang->story->changed;
+            }
+            else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+            {
+                $case->status = $this->lang->testcase->changed;
+            }
+            if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
+        }
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
         $this->view->type       = $type;
+        $this->view->failCount  = $failCount;
         $this->view->param      = $param;
-        $this->view->summary    = $this->testcase->summary($cases);
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
