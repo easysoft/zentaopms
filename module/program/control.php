@@ -826,6 +826,9 @@ class program extends control
             }
         }
 
+        /* Set the default work hours from config. */
+        $defaultWorkhours = $this->config->execution->defaultWorkhours;
+
         /* Get PM id list. */
         $accounts = array();
         $hasProject = false;
@@ -833,6 +836,11 @@ class program extends control
         {
             if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
             if($hasProject === false and $program->type != 'program') $hasProject = true;
+            if($program->type == 'project')
+            {
+                $workhour = $this->loadModel('project')->getWorkhour($program->id);
+                $program->invested = round($workhour->totalConsumed / $defaultWorkhours, 1);
+            }
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
@@ -841,8 +849,7 @@ class program extends control
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
-        $this->view->title      = $this->lang->program->projectView;
-
+        $this->view->title        = $this->lang->program->projectView;
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;

@@ -30,7 +30,8 @@ foreach($programs as $program)
     /* Progress. */
     if(isset($progressList[$program->id])) $program->progress = round($progressList[$program->id]);
 
-    $program->invested = 0;
+    /* Set invested hours. */
+    if(!isset($program->invested)) $program->invested = 0;
 
     /* Actions. */
     $program->actions = array();
