@@ -4,13 +4,18 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const postData = [];
-    postData['taskIdList[]'] = checkedList;
+    const url  = $(this).data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append('taskIdList[]', id));
 
-    $.ajaxSubmit({
-        url:  $(this).data('url'),
-        data: postData
-    });
+    if($(this).hasClass('ajax-btn'))
+    {
+        $.ajaxSubmit({url, data: form});
+    }
+    else
+    {
+        postAndLoadPage(url, form);
+    }
 });
 
 /**

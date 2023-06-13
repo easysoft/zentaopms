@@ -120,12 +120,12 @@ if($canBatchAction)
             set::class('dropdown-menu'),
             $canBatchClose ? item(set(array(
                 'text'     => $lang->close,
-                'class'    => 'batch-btn',
+                'class'    => 'batch-btn ajax-btn',
                 'data-url' => createLink('task', 'batchClose')
             ))) : null,
             $canBatchCancel ? item(set(array(
                 'text'     => $lang->task->cancel,
-                'class'    => 'batch-btn',
+                'class'    => 'batch-btn ajax-btn',
                 'data-url' => createLink('task', 'batchCancel')
             ))) : null,
         );
@@ -136,7 +136,7 @@ if($canBatchAction)
         $moduleItems = array();
         foreach($modules as $moduleID => $module)
         {
-            $moduleItems[] = array('text' => $module, 'class' => 'batch-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
+            $moduleItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchChangeModule', "moduleID=$moduleID"));
         }
 
         menu
@@ -152,7 +152,7 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($memberPairs as $account => $name)
         {
-            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
+            $assignedToItems[] = array('text' => $name, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
         }
 
         menu
