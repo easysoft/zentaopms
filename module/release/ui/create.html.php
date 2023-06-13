@@ -62,7 +62,7 @@ formPanel
             set::width('1/4'),
             set::name('date'),
             set::label($lang->release->date),
-            set::value( helper::today()),
+            set::value(helper::today()),
             set::control('date')
         ),
     ),
