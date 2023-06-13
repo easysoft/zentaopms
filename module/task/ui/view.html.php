@@ -76,10 +76,7 @@ detailBody
     history(),
     floatToolbar
     (
-        set::prefix
-        (
-            array(array('icon' => 'back', 'text' => $lang->goback, 'url' => 'javascript:goBack("execution-task", "execution-task")'))
-        ),
+        to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($operateMenus),
         set::suffix($commonActions),
         set::object($task)

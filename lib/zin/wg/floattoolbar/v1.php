@@ -14,7 +14,6 @@ class floatToolbar extends wg
         'prefix' => array(),
         'main'   => array(),
         'suffix' => array(),
-        'object' => null
     );
 
     public static function getPageCSS(): string|false
@@ -22,7 +21,7 @@ class floatToolbar extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildDivider(wg|array|null|bool $wg): wg|null
+    private function buildDivider(wg|array|null $wg): wg|null
     {
         if(empty($wg)) return null;
 
@@ -59,8 +58,10 @@ class floatToolbar extends wg
     private function mergeBtns(array|null $btns, array|wg|null $block): array|wg|null
     {
         if(empty($btns) && empty($block)) return null;
-        if(empty($btns)) return $block;
         if(empty($block)) return $btns;
+
+        foreach($block[0]->children() as $blockBtn) $blockBtn->add(setClass('ghost', 'text-white'));
+        if(empty($btns)) return $block;
 
         if(!is_array($block)) $block = array($block);
         return array_merge($btns, $block);
@@ -86,7 +87,7 @@ class floatToolbar extends wg
             $prefixBtns,
             $this->buildDivider($prefixBtns),
             $mainBtns,
-            $this->buildDivider($mainBtns && $suffixBtns),
+            empty($mainBtns) ? null : $this->buildDivider($suffixBtns),
             $suffixBtns,
         );
     }
