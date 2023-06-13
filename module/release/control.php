@@ -127,7 +127,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function edit($releaseID)
+    public function edit(int $releaseID)
     {
         if(!empty($_POST))
         {
@@ -143,7 +143,7 @@ class release extends control
             $result  = $this->executeHooks($releaseID);
             $message = $result ? $result : $this->lang->saveSuccess;
 
-            return $this->send(array('result' => 'success', 'message' => $message, 'locate' => inlink('view', "releaseID=$releaseID")));
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('view', "releaseID={$releaseID}")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');
