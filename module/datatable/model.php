@@ -87,7 +87,7 @@ class datatableModel extends model
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
         {
-            $setting = $this->formatFields($fieldList);
+            $setting = $this->formatFields($module, $fieldList);
         }
         else
         {
@@ -117,47 +117,35 @@ class datatableModel extends model
     /**
      * Format fields by config.
      *
+     * @param  string $module
      * @param  array  $fieldList
      * @param  bool   $onlyshow
      * @access public
-     * @return void
+     * @return array
      */
-    public function formatFields($fieldList, $onlyshow = true)
+    public function formatFields($module, $fieldList, $onlyshow = true): array
     {
+        $this->app->loadLang('module');
+
         $setting = array();
         $order   = 1;
-        foreach($fieldList as $key => $value)
+        foreach($fieldList as $field => $config)
         {
-            if(empty($value['required']) && empty($value['show']) && $onlyshow) continue;
+            if(empty($config['required']) && empty($config['show']) && $onlyshow) continue;
 
-            $set = array();
-            $set['order']    = $order++;
-            $set['id']       = $key;
-            $set['type']     = $value['type'];
-            $set['title']    = $value['title'];
-            $set['show']     = empty($value['show'])     ? false              : true;
-            $set['width']    = isset($value['width'])    ? $value['width']    : '';
-            $set['fixed']    = isset($value['fixed'])    ? $value['fixed']    : '';
-            $set['name']     = isset($value['name'])     ? $value['name']     : $key;
-            $set['sortType'] = isset($value['sortType']) ? $value['sortType'] : false;
-            $set['group']    = isset($value['group'])    ? $value['group']    : '';
-            $set['link']     = isset($value['link'])     ? $value['link']     : '';
+            $config['order']    = $order++;
+            $config['id']       = $field;
+            $config['show']     = !empty($config['show']);
+            $config['sortType'] = !empty($config['sortType']);
+            $config['title']    = zget($config, 'title', zget($this->lang->$module, $field, zget($this->lang, $field)));
+            $config['name']     = zget($config, 'name',  $field);
+            $config['type']     = zget($config, 'type',  'text');
+            $config['width']    = zget($config, 'width', '');
+            $config['fixed']    = zget($config, 'fixed', '');
+            $config['link']     = zget($config, 'link',  '');
+            $config['group']    = zget($config, 'group', '');
 
-            if(isset($value['required']))     $set['required']     = $value['required'];
-            if(isset($value['minWidth']))     $set['minWidth']     = $value['minWidth'];
-            if(isset($value['maxWidth']))     $set['maxWidth']     = $value['maxWidth'];
-            if(isset($value['pri']))          $set['pri']          = $value['pri'];
-            if(isset($value['statusMap']))    $set['statusMap']    = $value['statusMap'];
-            if(isset($value['actionsMap']))   $set['actionsMap']   = $value['actionsMap'];
-            if(isset($value['checkbox']))     $set['checkbox']     = $value['checkbox'];
-            if(isset($value['map']))          $set['map']          = $value['map'];
-            if(isset($value['flex']))         $set['flex']         = $value['flex'];
-            if(isset($value['nestedToggle'])) $set['nestedToggle'] = $value['nestedToggle'];
-            if(isset($value['list']))         $set['list']         = $value['list'];
-            if(isset($value['menu']))         $set['menu']         = $value['menu'];
-            if(isset($value['assignLink']))   $set['assignLink']   = $value['assignLink'];
-
-            $setting[$key] = $set;
+            $setting[$field] = $config;
         }
 
         return $setting;
