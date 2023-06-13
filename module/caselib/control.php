@@ -234,7 +234,7 @@ class caselib extends control
             $this->loadModel('testcase');
             setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $case = form::data($this->config->testcase->form->create)->get();
+            $case = form::data($this->config->testcase->form->create)->add('lib', $libID)->get();
 
             $steps   = $case->steps;
             $expects = $case->expects;
