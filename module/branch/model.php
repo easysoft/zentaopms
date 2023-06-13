@@ -729,9 +729,23 @@ class branchModel extends model
     public function mergeBranch($productID, $mergedBranches)
     {
         $data = fixer::input('post')->get();
+        if(empty($data->targetBranch) && empty($data->name))
+        {
+            $this->changeBranchLanguage($productID);
+            if($this->post->createBranch)
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->branch->name);
+            }
+            else
+            {
+                dao::$errors['targetBranch'] = sprintf($this->lang->error->notempty, $this->lang->branch->mergeBranch);
+            }
+            return false;
+        }
 
         /* Get the target branch. */
         $targetBranch = $data->createBranch ? $this->create($productID, true) : $data->targetBranch;
+
         if($data->createBranch) $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
 
         /* Branch. */
