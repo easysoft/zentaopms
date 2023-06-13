@@ -349,7 +349,6 @@ if($canBatchChangeScene)
     );
 }
 
-
 $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
 $url         = $config->testcase->dtable->fieldList['actions']['list']['edit']['url'];
 $url         = str_replace('%executionID%', (string)$executionID, $url);
@@ -373,11 +372,13 @@ foreach($scenes as $scene)
     $scene->stage = implode($lang->comma, $stages);
 }
 
+$cols = $this->loadModel('datatable')->getSetting('testcase');
+
 dtable
 (
     set::customCols(true),
     set::userMap($users),
-    set::cols($config->testcase->dtable->fieldList),
+    set::cols($cols),
     set::data(array_values($scenes)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::checkable($canBatchAction),
