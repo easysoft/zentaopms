@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../testcase/view/caseheader.html.php';?>
+<?php include './caseheader.html.php';?>
 <?php js::set('resetActive', false);?>
 <?php js::set('tab', $app->tab);?>
 <div id='mainContent' class='main-control'>

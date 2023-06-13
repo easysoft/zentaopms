@@ -1320,7 +1320,7 @@ class productModel extends model
      */
     public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
     {
-        $projectList = $this->dao->select('DISTINCT t2.id, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projectList = $this->dao->select('DISTINCT t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.objectID')
