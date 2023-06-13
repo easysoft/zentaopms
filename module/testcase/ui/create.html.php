@@ -118,7 +118,7 @@ formPanel
                     checkbox
                     (
                         set::name('auto'),
-                        set::text($lang->testcase->showAutoCase),
+                        set::text($lang->testcase->automated),
                     )
                 )
             )
@@ -270,7 +270,7 @@ function printStepsTable()
                         checkbox
                         (
                             set::name("stepType[$i]"),
-                            set::text($lang->testcase->showAutoCase),
+                            set::text($lang->testcase->automated),
                         )
                     )
                 )

@@ -100,7 +100,7 @@ $lang->testcase->suite            = '套件';
 $lang->testcase->executionStatus  = '执行状态';
 $lang->testcase->caseType         = '用例类型';
 $lang->testcase->allType          = '所有类型';
-$lang->testcase->showAutoCase     = '自动化';
+$lang->testcase->automated        = '自动化';
 $lang->testcase->automation       = '自动化设置';
 
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。

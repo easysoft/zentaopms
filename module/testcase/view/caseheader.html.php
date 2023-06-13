@@ -142,7 +142,7 @@
         if($this->moduleName == 'story' and $this->methodName == 'zerocase') continue;
         if($browseType == 'bysuite' or $browseType == 'bysearch') continue;
 
-        echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
+        echo html::checkbox('showAutoCase', array('1' => $lang->testcase->automated), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {

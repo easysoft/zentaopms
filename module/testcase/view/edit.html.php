@@ -225,7 +225,7 @@
                 <td>
                   <?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, "class='form-control chosen'");?>
                   <div class="input-group-addon">
-                  <?php echo html::checkbox('auto', array('auto' => $lang->testcase->showAutoCase), $case->auto, "id='autocase' title='{$lang->testcase->showAutoCase}'");?>
+                  <?php echo html::checkbox('auto', array('auto' => $lang->testcase->automated), $case->auto, "id='autocase' title='{$lang->testcase->automated}'");?>
                   </div>
                 </td>
               </tr>
