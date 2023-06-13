@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      yourname<yourname@easycorp.ltd>
+ * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     task
  * @link        http://www.zentao.net
  */
@@ -66,7 +66,7 @@ else
 
         $assignedToControl = formGroup
             (
-                set::width('1/4'),
+                set::width('1/3'),
                 set::name('assignedTo'),
                 set::label($lang->story->assignTo),
                 set::control('picker'),
@@ -104,19 +104,19 @@ else
         $consumedControl,
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::label($lang->task->currentConsumed),
-            inputGroup
+            inputControl
             (
-                control(set(array
+                input
                 (
-                    'name'  => 'currentConsumed',
-                    'id'    => 'currentConsumed',
-                    'value' => 0,
-                    'type'  => 'text'
-                ))),
-                $lang->task->suffixHour
-            )
+                    set::name('currentConsumed'),
+                    set::value(0),
+                    set::type('text'),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
         ),
         $assignedToControl,
         formGroup
@@ -145,7 +145,6 @@ else
         ),
         formGroup
         (
-            set::width('2/3'),
             set::name('comment'),
             set::label($lang->comment),
             set::control("editor")

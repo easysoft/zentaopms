@@ -64,7 +64,7 @@ $leftBox = '';
 if($task->parent != '-1')
 {
     $leftBox = formGroup(
-        set::width('1/4'),
+        set::width('1/3'),
         set::label($lang->task->left),
         set::name('left'),
         inputControl
@@ -109,7 +109,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::label($lang->task->assignedTo),
             set::required($isMultiple),
             inputGroup
@@ -135,7 +135,6 @@ formPanel
             set::rows('5'),
         )
     ),
-    history()
 );
 
 $teamData = array();

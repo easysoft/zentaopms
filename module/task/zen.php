@@ -749,13 +749,13 @@ class taskZen extends task
         if(!$this->post->currentConsumed) dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
         if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
 
-        $task->consumed += (float)$this->post->currentConsumed;
+        $task->consumed = $oldTask->consumed + (float)$this->post->currentConsumed;
         return $task;
     }
 
     /**
-     * 处理开始任务的日志数据。
-     * Process the effort data for the start task.
+     * 处理完成任务的日志数据。
+     * Process the effort data for the finish task.
      *
      * @param  object    $oldTask
      * @param  object    $task
@@ -765,16 +765,18 @@ class taskZen extends task
     protected function buildEffortForFinish(object $oldTask, object $task): object
     {
         /* Record consumed and left. */
+        $consumed = $task->consumed;
         if(empty($oldTask->team))
         {
-            $task->consumed = $task->consumed - $oldTask->consumed;
+            $consumed = $task->consumed - $oldTask->consumed;
         }
         else
         {
             $currentTeam = $this->task->getTeamByAccount($oldTask->team);
-            $task->consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
+            $consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
         }
-        if($task->consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
+
+        if($consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
 
         $estimate = new stdclass();
         $estimate->date     = helper::isZeroDate($task->finishedDate) ? helper::today() : substr($task->finishedDate, 0, 10);
@@ -782,7 +784,7 @@ class taskZen extends task
         $estimate->left     = 0;
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $task->consumed;
+        $estimate->consumed = $consumed;
 
         return $estimate;
     }

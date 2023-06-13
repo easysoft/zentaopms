@@ -887,6 +887,7 @@ class task extends control
             $this->executeHooks($taskID);
 
             /* Get the information returned after a task is started. */
+            $task     = $this->task->fetchById($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
             $this->send($response);
         }
