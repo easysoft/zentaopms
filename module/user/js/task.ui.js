@@ -8,7 +8,6 @@ window.renderCell = function(result, info)
         if(task.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
         if(html) result.unshift({html});
     }
-    if(info.col.name == 'status' && result) return [task.statusLabel];
     if(info.col.name == 'deadline' && result[0])
     {
         if(result[0] == '0000-00-00') return [''];

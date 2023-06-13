@@ -33,7 +33,6 @@ $cols['name']['nestedToggle'] = false;
 $tasks = initTableData($tasks, $cols, $this->task);
 foreach($tasks as $task)
 {
-    $task->statusLabel   = $this->processStatus('task', $task);
     $task->estimateLabel = $task->estimate . $lang->execution->workHourUnit;
     $task->consumedLabel = $task->consumed . $lang->execution->workHourUnit;
     $task->leftLabel     = $task->left     . $lang->execution->workHourUnit;

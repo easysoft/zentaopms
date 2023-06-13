@@ -29,11 +29,7 @@ if($storyType == 'requirement' || $this->config->vision == 'lite') unset($cols['
 if($this->config->vision == 'lite') unset($cols['stage']);
 if($this->config->vision == 'lite') $cols['product']['title'] = $lang->story->project;
 
-foreach($stories as $story)
-{
-    $story->statusLabel = $this->processStatus('story', $story);
-    $story->estimate   .= $config->hourUnit;
-}
+foreach($stories as $story) $story->estimate .= $config->hourUnit;
 
 panel
 (
@@ -46,7 +42,6 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($stories)),
-        set::onRenderCell(jsRaw('window.renderCell')),
         set::footPager(usePager()),
     )
 );

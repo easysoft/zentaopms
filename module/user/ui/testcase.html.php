@@ -11,10 +11,7 @@ declare(strict_types=1);
 namespace zin;
 include './featurebar.html.php';
 
-jsVar('trunkLang', $lang->trunk);
-
-$todoNavs = array();
-$that     = zget($lang->user->thirdPerson, $user->gender);
+$that = zget($lang->user->thirdPerson, $user->gender);
 $testcaseNavs['case2Him']  = array('text' => sprintf($lang->user->case2Him, $that),  'url' => inlink('testcase', "userID={$user->id}&type=case2Him"));
 $testcaseNavs['caseByHim'] = array('text' => sprintf($lang->user->caseByHim, $that), 'url' => inlink('testcase', "userID={$user->id}&type=caseByHim"));
 if(isset($testcaseNavs[$type])) $testcaseNavs[$type]['active'] = true;
@@ -23,19 +20,12 @@ $cols = array();
 foreach($config->user->defaultFields['testcase'] as $field) $cols[$field] = $config->testcase->dtable->fieldList[$field];
 $cols['id']['checkbox']        = false;
 $cols['title']['nestedToggle'] = false;
+$cols['status']['statusMap']['changed'] = $lang->story->changed;;
 
 foreach($cases as $case)
 {
     if($type == 'case2Him') $case->id = $case->case;
-    if((isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version) || $case->needconfirm)
-    {
-        $case->status      = 'changed';
-        $case->statusLabel = $lang->story->changed;
-    }
-    else
-    {
-        $case->statusLabel = $this->processStatus('testcase', $case);
-    }
+    if((isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version) || $case->needconfirm) $case->status = 'changed';
 }
 
 panel

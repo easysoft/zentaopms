@@ -30,8 +30,6 @@ foreach($tasks as $task)
     if($task->status == 'doing')   $testingCount ++;
     if($task->status == 'blocked') $blockedCount ++;
     if($task->status == 'done')    $doneCount ++;
-
-    $task->statusLabel = $this->processStatus('testtask', $task);
 }
 $summary = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 
