@@ -352,15 +352,16 @@ if($canBatchChangeScene)
     );
 }
 
+$cols = $this->loadModel('datatable')->getSetting('testcase');
+
 $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
-$url         = $config->testcase->dtable->fieldList['actions']['list']['edit']['url'];
+$url         = $cols['actions']['list']['edit']['url'];
 $url         = str_replace('%executionID%', (string)$executionID, $url);
 
-$config->testcase->dtable->fieldList['title']['nestedToggle'] = $topSceneCount > 0;
-$config->testcase->dtable->fieldList['story']['map']          = $stories;
-$config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = $url;
+if(isset($cols['actions'])) $cols['actions']['list']['edit']['url'] = $url;
+if(isset($cols['title']))   $cols['title']['nestedToggle'] = $topSceneCount > 0;
+if(isset($cols['story']))   $cols['story']['map']          = $stories;
 
-$cols = $this->loadModel('datatable')->getSetting('testcase');
 foreach($scenes as $scene)
 {
     $actionType = $scene->isCase == 1 ? 'testcase' : 'scene';
