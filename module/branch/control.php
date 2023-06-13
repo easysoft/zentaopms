@@ -79,18 +79,19 @@ class branch extends control
      * Edit a branch.
      *
      * @param  int    $branchID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function edit($branchID, $productID)
+    public function edit(int $branchID, int $productID)
     {
         if($_POST)
         {
             $changes = $this->branch->update($branchID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             if($changes) $this->loadModel('action')->create('branch', $branchID, 'Edited');
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->view->product = $this->loadModel('product')->getById($productID);
