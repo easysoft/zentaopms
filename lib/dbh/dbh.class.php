@@ -447,7 +447,7 @@ class dbh
      */
     public function formatDmDateDiffFunction($sql)
     {
-        return preg_replace('/DATEDIFF\(/', 'DATEDIFF(DD,', $sql);
+        return preg_replace('/DATEDIFF\(([^,]+),([^)]+)\)/', 'DATEDIFF(DD,$1,$2)', $sql);
     }
 
     /**
