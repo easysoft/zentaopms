@@ -2985,7 +2985,7 @@ class repoModel extends model
      * @access public
      * @return bool
      */
-    public static function isClickable(ojbect $repo, string $action): bool
+    public static function isClickable(object $repo, string $action): bool
     {
         $action = strtolower($action);
 

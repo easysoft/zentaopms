@@ -21,6 +21,17 @@ foreach($repoList as $repo)
         $repo->job = $sonarRepoList[$repo->id]->id;
         if(in_array($repo->job, $successJobs)) $repo->report = '';
     }
+
+    $repo->productNames = '';
+    $productList  = explode(',', str_replace(' ', '', $repo->product));
+    if(isset($productList) and $productList[0])
+    {
+        foreach($productList as $productID)
+        {
+            if(!isset($products[$productID])) continue;
+            $repo->productNames .= ' ' . zget($products, $productID, $productID);
+        }
+    }
 }
 
 $config->repo->dtable->fieldList['name']['link']                     = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
@@ -29,12 +40,39 @@ $config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->cr
 
 $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 
+featureBar
+(
+    h::a
+    (
+        setClass('btn btn-active-text'),
+        $lang->repo->maintain,
+        set::href(createLink('repo', 'maintain')),
+    ),
+);
+
+toolBar
+(
+    hasPriv('repo', 'import') ? item(set(array
+    (
+        'text'  => $lang->repo->importAction,
+        'icon'  => 'import',
+        'class' => 'toolbar-item ghost btn btn-default',
+        'url'   => createLink('repo', 'import'),
+    ))) : null,
+    hasPriv('repo', 'create') ? item(set(array
+    (
+        'text'  => $lang->repo->createAction,
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+        'url'   => createLink('repo', 'create'),
+    ))) : null,
+);
+
 dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
-    set::footerPager(usePager()),
-    set::sortLink(helper::createLink('repo', 'maintain', "objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::footPager(usePager()),
 );
 
 render();

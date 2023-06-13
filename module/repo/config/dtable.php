@@ -18,11 +18,13 @@ $config->repo->dtable->fieldList['scm']['group'] = 1;
 $config->repo->dtable->fieldList['name']['name']  = 'name';
 $config->repo->dtable->fieldList['name']['title'] = $lang->repo->name;
 $config->repo->dtable->fieldList['name']['type']  = 'text';
+$config->repo->dtable->fieldList['name']['sortType'] = true;
 $config->repo->dtable->fieldList['name']['group'] = 2;
 
-$config->repo->dtable->fieldList['product']['name']  = 'product';
+$config->repo->dtable->fieldList['product']['name']  = 'productNames';
 $config->repo->dtable->fieldList['product']['title'] = $lang->repo->product;
 $config->repo->dtable->fieldList['product']['type']  = 'text';
+$config->repo->dtable->fieldList['product']['sortType'] = true;
 
 $config->repo->dtable->fieldList['path']['name']  = 'codePath';
 $config->repo->dtable->fieldList['path']['title'] = $lang->repo->path;

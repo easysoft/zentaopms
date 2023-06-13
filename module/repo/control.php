@@ -595,7 +595,7 @@ class repo extends control
         $lastRevision = current($revisions);
 
         /* Get files info. */
-        $infos = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revison, $lastRevision);
+        $infos = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision);
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Synchronous commit only in root path. */

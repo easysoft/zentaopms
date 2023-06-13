@@ -319,11 +319,11 @@ class repoZen extends repo
      * @param  string    $branchID
      * @param  int       $refresh
      * @param  string    $revision
-     * @param  string    $lastRevision
+     * @param  object    $lastRevision
      * @access protected
      * @return array
      */
-    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revison, string $lastRevision): array
+    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revison, object $lastRevision): array
     {
         $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
         $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
