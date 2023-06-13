@@ -129,6 +129,16 @@ featureBar
         ),
         set::items($suiteItems)
     ) : null,
+    li
+    (
+        set::class('nav-item'),
+        a($lang->testcase->onlyAutomated)
+    ),
+    li
+    (
+        set::class('nav-item'),
+        a($lang->testcase->onlyScene)
+    ),
     li(searchToggle(set::open($browseType == 'bysearch'))),
     li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
 );
