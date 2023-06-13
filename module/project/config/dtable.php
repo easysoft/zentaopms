@@ -47,52 +47,70 @@ $config->project->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->project->dtable->fieldList['PM']['group']    = 3;
 $config->project->dtable->fieldList['PM']['required'] = true;
 
+$config->project->dtable->fieldList['storyCount']['title']  = $lang->project->storyCount;
+$config->project->dtable->fieldList['storyCount']['type']   = 'number';
+$config->project->dtable->fieldList['storyCount']['group']  = 4;
+
+$config->project->dtable->fieldList['executionCount']['title']  = $lang->project->executionCount;
+$config->project->dtable->fieldList['executionCount']['type']   = 'count';
+$config->project->dtable->fieldList['executionCount']['group']  = 4;
+
 $config->project->dtable->fieldList['budget']['title']    = $lang->project->budget;
 $config->project->dtable->fieldList['budget']['name']     = 'budget';
 $config->project->dtable->fieldList['budget']['type']     = 'money';
-$config->project->dtable->fieldList['budget']['group']    = 4;
+$config->project->dtable->fieldList['budget']['group']    = 5;
 $config->project->dtable->fieldList['budget']['required'] = false;
 
 $config->project->dtable->fieldList['teamCount']['title']    = $lang->project->teamCount;
 $config->project->dtable->fieldList['teamCount']['name']     = 'teamCount';
 $config->project->dtable->fieldList['teamCount']['type']     = 'number';
-$config->project->dtable->fieldList['teamCount']['group']    = 4;
+$config->project->dtable->fieldList['teamCount']['group']    = 5;
 $config->project->dtable->fieldList['teamCount']['required'] = false;
 
 $config->project->dtable->fieldList['invested']['title']    = $lang->project->invested;
 $config->project->dtable->fieldList['invested']['name']     = 'invested';
 $config->project->dtable->fieldList['invested']['type']     = 'count';
-$config->project->dtable->fieldList['invested']['group']    = 4;
+$config->project->dtable->fieldList['invested']['group']    = 5;
 $config->project->dtable->fieldList['invested']['required'] = false;
 
 $config->project->dtable->fieldList['begin']['title']    = $lang->project->begin;
 $config->project->dtable->fieldList['begin']['name']     = 'begin';
 $config->project->dtable->fieldList['begin']['type']     = 'date';
-$config->project->dtable->fieldList['begin']['group']    = 5;
+$config->project->dtable->fieldList['begin']['group']    = 6;
 $config->project->dtable->fieldList['begin']['required'] = false;
 
 $config->project->dtable->fieldList['end']['title']    = $lang->project->end;
 $config->project->dtable->fieldList['end']['name']     = 'end';
 $config->project->dtable->fieldList['end']['type']     = 'date';
-$config->project->dtable->fieldList['end']['group']    = 5;
+$config->project->dtable->fieldList['end']['group']    = 6;
 $config->project->dtable->fieldList['end']['required'] = false;
+
+$config->project->dtable->fieldList['realBegan']['title']    = $lang->project->realBeganAB;
+$config->project->dtable->fieldList['realBegan']['type']     = 'date';
+$config->project->dtable->fieldList['realBegan']['group']    = 6;
+$config->project->dtable->fieldList['realBegan']['required'] = false;
+
+$config->project->dtable->fieldList['realEnd']['title']    = $lang->project->realEndAB;
+$config->project->dtable->fieldList['realEnd']['type']     = 'date';
+$config->project->dtable->fieldList['realEnd']['group']    = 6;
+$config->project->dtable->fieldList['realEnd']['required'] = false;
 
 $config->project->dtable->fieldList['estimate']['title']    = $lang->project->estimate;
 $config->project->dtable->fieldList['estimate']['name']     = 'estimate';
 $config->project->dtable->fieldList['estimate']['type']     = 'number';
-$config->project->dtable->fieldList['estimate']['group']    = 6;
+$config->project->dtable->fieldList['estimate']['group']    = 7;
 $config->project->dtable->fieldList['estimate']['required'] = false;
 
 $config->project->dtable->fieldList['consume']['title']    = $lang->project->consume;
 $config->project->dtable->fieldList['consume']['name']     = 'consume';
 $config->project->dtable->fieldList['consume']['type']     = 'number';
-$config->project->dtable->fieldList['consume']['group']    = 6;
+$config->project->dtable->fieldList['consume']['group']    = 7;
 $config->project->dtable->fieldList['consume']['required'] = false;
 
 $config->project->dtable->fieldList['progress']['title']    = $lang->project->progress;
 $config->project->dtable->fieldList['progress']['name']     = 'progress';
 $config->project->dtable->fieldList['progress']['type']     = 'progress';
-$config->project->dtable->fieldList['progress']['group']    = 6;
+$config->project->dtable->fieldList['progress']['group']    = 7;
 $config->project->dtable->fieldList['progress']['required'] = false;
 
 $config->project->dtable->fieldList['actions']['title']    = $lang->actions;

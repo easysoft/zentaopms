@@ -963,7 +963,8 @@ class projectZen extends project
     {
         $userList = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
 
-        $this->app->loadConfig('execution');
+        $this->loadModel('story');
+        $this->loadModel('execution');
         foreach($projectList as $project)
         {
             $project->from       = 'project';
@@ -975,7 +976,13 @@ class projectZen extends project
             $project->progress   = $project->hours->progress;
             $project->invested   = !empty($this->config->execution->defaultWorkhours) ? round($project->hours->totalConsumed / $this->config->execution->defaultWorkhours, 2) : 0;
 
-            $projectBudget   = $this->project->getBudgetWithUnit($project->budget);
+            $projectStories = $this->story->getExecutionStoryPairs($project->id);
+            $project->storyCount = count($projectStories);
+
+            $executions = $this->execution->getStatData($project->id, 'all');
+            $project->executionCount = count($executions);
+
+            $projectBudget = $this->project->getBudgetWithUnit($project->budget);
             $project->budget = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
             if($project->PM)
