@@ -130,6 +130,7 @@ $lang->testcase->batchDelete             = "Supprimer par Lot ";
 $lang->testcase->batchConfirmStoryChange = "Confirmer par Lot";
 $lang->testcase->batchCaseTypeChange     = "Changer Types par Lot";
 $lang->testcase->browse                  = "Liste CasTests";
+$lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "Vue par Groupe";
 $lang->testcase->groupView               = "Group View";
 $lang->testcase->zeroCase                = "Stories sans CasTests";

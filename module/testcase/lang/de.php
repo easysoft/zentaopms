@@ -130,6 +130,7 @@ $lang->testcase->batchDelete             = "Mehrere löschen ";
 $lang->testcase->batchConfirmStoryChange = "Mehrere bestätigen";
 $lang->testcase->batchCaseTypeChange     = "Mehrere Typen änderen";
 $lang->testcase->browse                  = "Fälle";
+$lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "Nach Gruppe";
 $lang->testcase->groupView               = "Group View";
 $lang->testcase->zeroCase                = "Storys ohne Fälle";

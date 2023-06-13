@@ -130,6 +130,7 @@ $lang->testcase->batchDelete             = "Batch Delete ";
 $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
 $lang->testcase->batchCaseTypeChange     = "Batch Change Types";
 $lang->testcase->browse                  = "Case List";
+$lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "View By Group";
 $lang->testcase->groupView               = "Group View";
 $lang->testcase->zeroCase                = "Stories without cases";

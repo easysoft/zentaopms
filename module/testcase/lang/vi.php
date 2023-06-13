@@ -130,6 +130,7 @@ $lang->testcase->batchDelete             = "Xóa hàng loạt ";
 $lang->testcase->batchConfirmStoryChange = "Xác nhận hàng loạt";
 $lang->testcase->batchCaseTypeChange     = "Thay đổi Loại hàng loạt";
 $lang->testcase->browse                  = "Danh sách tình huống";
+$lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "Xem theo Nhóm";
 $lang->testcase->groupView               = "Group View";
 $lang->testcase->zeroCase                = "Stories without cases";

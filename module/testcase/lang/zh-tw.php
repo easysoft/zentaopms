@@ -130,6 +130,7 @@ $lang->testcase->batchDelete             = "批量刪除 ";
 $lang->testcase->batchConfirmStoryChange = "批量確認變更";
 $lang->testcase->batchCaseTypeChange     = "批量修改類型";
 $lang->testcase->browse                  = "用例列表";
+$lang->testcase->listView                = "列表查看";
 $lang->testcase->groupCase               = "分組瀏覽用例";
 $lang->testcase->groupView               = "分组查看";
 $lang->testcase->zeroCase                = "零用例{$lang->common->story}";
