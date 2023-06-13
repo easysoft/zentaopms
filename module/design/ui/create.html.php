@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+/* zin: Set variables to define picker options for form. */
+jsVar('projectID', $projectID);
+
 /* Cannot show product field in no-product project. */
 $productRow = '';
 if($project->hasProduct)
@@ -22,6 +26,7 @@ if($project->hasProduct)
             set::value($productID),
             set::items($products),
             set::required(true),
+            on::change('loadStory'),
         )
     );
 }
