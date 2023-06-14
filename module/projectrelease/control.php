@@ -452,7 +452,10 @@ class projectrelease extends control
                 if(!empty($release->stories))
                 {
                     $this->loadModel('story');
-                    $stories = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($this->session->storyOrderBy, '_', ' '))->fetchAll();
+                    $stories = $this->dao->select('id, title')->from(TABLE_STORY)
+                        ->where('id')->in($release->stories)
+                        ->andWhere('deleted')->eq(0)
+                        ->fetchAll();
 
                     foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
 
@@ -483,8 +486,9 @@ class projectrelease extends control
                 if(!empty($release->bugs))
                 {
                     $this->loadModel('bug');
-                    $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->linkedBugQueryCondition)
-                        ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
+                    $bugs = $this->dao->select('id, title')->from(TABLE_BUG)
+                        ->where('id')->in($release->bugs)
+                        ->andWhere('deleted')->eq(0)
                         ->fetchAll('id');
 
                     foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
@@ -515,8 +519,9 @@ class projectrelease extends control
 
                 if(!empty($release->leftBugs))
                 {
-                    $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->leftBugsQueryCondition)
-                        ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
+                    $bugs = $this->dao->select('id, title')->from(TABLE_BUG)
+                        ->where(id)->in($release->leftBugs)
+                        ->andWhere('deleted')->eq(0)
                         ->fetchAll('id');
 
                     foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
