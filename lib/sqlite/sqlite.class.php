@@ -147,6 +147,8 @@ class sqlite
      */
     public function query($sql)
     {
+        if($this->isSkipSqlite($sql)) return $this->mysql->query($sql);
+
         try
         {
             return $this->dbh->query($this->formatSQL($sql));
@@ -186,10 +188,12 @@ class sqlite
      *
      * @param  string $sql
      * @access public
-     * @return int
+     * @return int|null
      */
-    public function pushToQueue(string $sql): int
+    public function pushToQueue(string $sql): int|null
     {
+        if($this->isSkipSqlite($sql)) return false;
+
         $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
         $queue .= " SET `sql` = " . $this->quote($sql);
         $queue .= ", addDate = " . $this->quote(helper::now());
@@ -214,5 +218,21 @@ class sqlite
 
         $dbh = $driver == 'sqlite' ? 'dbh' : 'mysql';
         return $this->$dbh->quote((string)$value);
+    }
+
+    /**
+     * Check a sql skip SQLite or not.
+     *
+     * @param  string $sql
+     * @access public
+     * @return bool
+     */
+    public function isSkipSqlite(string $sql): bool
+    {
+        foreach($this->config->sqliteWhiteList as $table)
+        {
+            if(strpos($sql, $table) !== false) return true;
+        }
+        return false;
     }
 }
