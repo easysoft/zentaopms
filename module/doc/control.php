@@ -377,16 +377,26 @@ class doc extends control
 
         if(!empty($_POST))
         {
-            $doclib   = $this->loadModel('doc')->getLibById($objectID);
+            $doclib   = $this->loadModel('doc')->getLibById($libID);
             $canVisit = true;
-            if('custom' == $objectType)
+
+            switch($objectType)
             {
-                $account = $this->app->user->account;
-                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
-            }
-            else
-            {
-                $canVisit = $this->loadModel('common')->checkPrivByObject($objectType, $doclib->$objectType);
+                case 'custom':
+                    $account = (string)$this->app->user->account;
+                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
+                    break;
+                case 'product':
+                    $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
+                    break;
+                case 'project':
+                    $canVisit = $this->loadModel('project')->checkPriv($doclib->project);
+                    break;
+                case 'execution':
+                    $canVisit = $this->loadModel('execution')->checkPriv($doclib->execution);
+                    break;
+                default:
+                break;
             }
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
