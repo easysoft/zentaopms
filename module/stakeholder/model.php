@@ -673,4 +673,25 @@ class stakeholderModel extends model
             ->orderBy('id_desc')
             ->fetchAll();
     }
+
+    /**
+     * Judge the action is clickable.
+     *
+     * @param  object $object stakeholder
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $object, string $action): bool
+    {
+        /* Judge the object whether can be changed. */
+        $canChange = common::canBeChanged('stakeholder', $object);
+        if(!$canChange) return false;
+
+        /* Special action can be set its own condition. */
+        if($action == 'notExists') return false;
+
+        /* The action is clickable by default. */
+        return true;
+    }
 }
