@@ -27,7 +27,7 @@ class datatableModel extends model
         if(!isset($this->config->$module)) $this->loadModel($module);
 
         $config = $this->config->$module;
-        if(isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
+        if(!empty($method) && isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
         $fieldList = $config->dtable->fieldList;
 
         /* If doesn't need product, remove 'product' field. */

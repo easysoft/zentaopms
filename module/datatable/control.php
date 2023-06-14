@@ -81,7 +81,7 @@ class datatable extends control
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
             $rawModule = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
-            $fieldList = $this->datatable->getFieldList($rawModule);
+            $fieldList = $this->datatable->getFieldList($rawModule, $method);
             $fieldList = $this->datatable->formatFields($module, $fieldList, false);
             $fields    = json_decode($this->post->fields);
             foreach($fields as $index => $field)
