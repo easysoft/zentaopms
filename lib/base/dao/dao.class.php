@@ -897,7 +897,7 @@ class baseDAO
             {
                 try
                 {
-                    $this->saveSqlite($sql);
+                    $this->sqlite->pushToQueue($sql);
                 }
                 catch(PDOException $e)
                 {
@@ -2390,24 +2390,5 @@ class baseSQL
 
         if($this->magicQuote) $value = stripslashes($value);
         return $this->dbh->quote((string)$value);
-    }
-
-    /**
-     * Save sql to sqlite queue.
-     *
-     * @param  string $sql
-     * @access public
-     * @return int
-     */
-    public function saveSqlite(string $sql): int
-    {
-        $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
-        $queue .= " SET `sql` = " . $this->quote($sql);
-        $queue .= ", addDate = " . $this->quote(helper::now());
-        $queue .= ", `status` = 'wait'";
-
-        $this->dbh->exec($queue);
-
-        return $this->dbh->lastInsertId();
     }
 }

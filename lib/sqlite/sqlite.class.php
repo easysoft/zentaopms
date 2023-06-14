@@ -35,6 +35,15 @@ class sqlite
     public $dbh = null;
 
     /**
+     * 是否开启特殊字符转义。
+     * Magic quote or not.
+     *
+     * @var bool
+     * @access public
+     */
+    public $magicQuote;
+
+    /**
      * __construct
      *
      * @access public
@@ -43,8 +52,9 @@ class sqlite
     public function __construct()
     {
         global $app, $dbh;
-        $this->app   = $app;
-        $this->mysql = $dbh;
+        $this->app        = $app;
+        $this->mysql      = $dbh;
+        $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
 
         $this->connectSqlite();
     }
@@ -161,5 +171,40 @@ class sqlite
     public function exec(string $sql): void
     {
         $this->dbh->exec($this->formatSQL($sql));
+    }
+
+    /**
+     * Save sql to sqlite queue.
+     *
+     * @param  string $sql
+     * @access public
+     * @return int
+     */
+    public function pushToQueue(string $sql): int
+    {
+        $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
+        $queue .= " SET `sql` = " . $this->quote($sql);
+        $queue .= ", addDate = " . $this->quote(helper::now());
+        $queue .= ", `status` = 'wait'";
+
+        $this->mysql->exec($queue);
+        return $this->mysql->lastInsertId();
+    }
+
+    /**
+     * Quote a var.
+     *
+     * @param  mixed  $value
+     * @access public
+     * @return mixed
+     */
+    public function quote($value, $driver = 'mysql')
+    {
+        if(is_null($value)) return 'NULL';
+
+        if($this->magicQuote) $value = stripslashes($value);
+
+        $dbh = $driver == 'sqlite' ? 'dbh' : 'mysql';
+        return $this->$dbh->quote((string)$value);
     }
 }
