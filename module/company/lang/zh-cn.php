@@ -51,3 +51,6 @@ $lang->company->featureBar['dynamic']['thisWeek']  = '本周';
 $lang->company->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->company->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->company->featureBar['dynamic']['lastMonth'] = '上月';
+
+$lang->company->featureBar['browse']['inside']  = '内部人员';
+$lang->company->featureBar['browse']['outside'] = '外部人员';

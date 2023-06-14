@@ -82,8 +82,8 @@ class company extends control
         /* Assign. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $this->view->users       = $users;
-        $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
-        $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
+        // $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
+        $this->view->deptTree    = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
         $this->view->parentDepts = $this->dept->getParents($deptID);
         $this->view->dept        = $this->dept->getById($deptID);
         $this->view->orderBy     = $orderBy;

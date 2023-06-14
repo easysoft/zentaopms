@@ -857,7 +857,7 @@ class personnelModel extends model
      */
     public function createMemberLink($dept = 0, $programID = 0)
     {
-        return html::a(helper::createLink('personnel', 'accessible', "program={$programID}&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return helper::createLink('personnel', 'accessible', "program={$programID}&deptID={$dept->id}");
     }
 
     /**

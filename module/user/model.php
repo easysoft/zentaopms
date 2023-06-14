@@ -2817,11 +2817,12 @@ class userModel extends model
      */
     public static function isClickable($user, $action)
     {
-        global $config;
+        global $config, $app;
         $action = strtolower($action);
 
-        if($action == 'unbind' and empty($user->ranzhi)) return false;
-        if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) >= $config->user->lockMinutes * 60) return false;
+        if($action == 'unbind' && empty($user->ranzhi)) return false;
+        if($action == 'unlock' && (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) >= $config->user->lockMinutes * 60) return false;
+        if($action == 'delete' && strpos($app->company->admins, ",{$user->account},") !== false) return false;
 
         return true;
     }
