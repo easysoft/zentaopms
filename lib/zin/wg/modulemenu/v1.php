@@ -78,7 +78,7 @@ class moduleMenu extends wg
             (
                 setClass('btn'),
                 setStyle('background', '#EEF5FF'),
-                setStyle('border', 'none'),
+                setStyle('box-shadow', 'none'),
                 set::href($settingLink),
                 $lang->moduleSetting
             ) : null,
