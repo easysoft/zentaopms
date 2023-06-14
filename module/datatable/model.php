@@ -17,17 +17,17 @@ class datatableModel extends model
      * Get field list.
      *
      * @param  string $module
-     * @param  string $surffix
+     * @param  string $method
      * @access public
      * @return array
      */
-    public function getFieldList($module, $surffix = '')
+    public function getFieldList($module, $method = '')
     {
         /* Load corresponding module. */
         if(!isset($this->config->$module)) $this->loadModel($module);
 
         $config = $this->config->$module;
-        if(!empty($surffix)) $config = $config->$surffix;
+        if(!empty($method)) $config = $config->$method;
         $fieldList = $config->dtable->fieldList;
 
         /* If doesn't need product, remove 'product' field. */
