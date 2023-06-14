@@ -189,4 +189,19 @@ class entryTest
         return $object;
     }
 
+    /**
+     * 测试判断操作是否可以点击。
+     * Test judge an action is clickable or not.
+     *
+     * @param  object     $entry
+     * @param  string     $action
+     * @access public
+     * @return int|array
+     */
+    public function isClickableTest(object $entry, string $action): int|array
+    {
+        $isClickable = $this->objectModel->isClickable($entry, $action);
+        if(dao::isError()) return dao::getError();
+        return $isClickable ? 1 : 0;
+    }
 }
