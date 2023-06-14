@@ -1,5 +1,7 @@
 $().ready(function()
 {
+    new zui.Tooltip('#tooltipHover', {title: autoRelationTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light'});
+
     $(document).on('click', '#lastBuildBtn', function()
     {
         $('#name').val($(this).text());

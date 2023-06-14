@@ -12,6 +12,7 @@ namespace zin;
 
 /* zin: Set variables to define picker options for form. */
 jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
+jsVar('autoRelationTip', $lang->build->notice->autoRelation);
 jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
 jsVar('productGroups', $productGroups);
@@ -120,7 +121,11 @@ formPanel
         (
             set::width('1/2'),
             setClass('pl-4 items-center'),
-            icon('help')
+            icon(
+                'help',
+                set('data-toggle', 'tooltip'),
+                set('id', 'tooltipHover'),
+            ),
         ),
     ),
     formRow
