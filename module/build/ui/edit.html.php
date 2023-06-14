@@ -16,6 +16,7 @@ jsVar('executionID', $build->execution);
 jsVar('oldBranch', $oldBranch);
 jsVar('builds', $build->builds);
 jsVar('buildID', $build->id);
+jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 $productRow = '';
 if(!$hidden)
 {
