@@ -50,13 +50,19 @@ class groupModel extends model
      *
      * @param  int    $groupID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($groupID)
+    public function update(int $groupID): bool
     {
         $group = fixer::input('post')->get();
         $this->lang->error->unique = $this->lang->group->repeat;
-        return $this->dao->update(TABLE_GROUP)->data($group)->batchCheck($this->config->group->edit->requiredFields, 'notempty')->check('name', 'unique', "id != {$groupID}")->where('id')->eq($groupID)->exec();
+        $this->dao->update(TABLE_GROUP)->data($group)
+            ->batchCheck($this->config->group->edit->requiredFields, 'notempty')
+            ->check('name', 'unique', "id != {$groupID}")
+            ->where('id')->eq($groupID)
+            ->exec();
+
+        return !dao::isError();
     }
 
     /**
