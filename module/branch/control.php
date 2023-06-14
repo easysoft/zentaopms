@@ -261,7 +261,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $browseType = 'all', $projectID = 0, $withMainBranch = true, $isTwins = 'no', $fieldID = '0', $multiple = '')
+    public function ajaxGetBranches(int $productID, int $oldBranch = 0, string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '')
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') return;

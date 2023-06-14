@@ -808,7 +808,7 @@ class buildModel extends model
      * @param  object $build
      * @param  string $type
      * @access public
-     * @return array 
+     * @return array
      */
     public function buildOperateMenu(object $build, string $type = 'view'): array
     {

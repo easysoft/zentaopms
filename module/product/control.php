@@ -883,7 +883,7 @@ class product extends control
         $products = $this->product->getProductPairsByProject($executionID, $status);
 
         if(empty($products)) return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
-        return print(html::select('product', $products, '', "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+        return print(html::select('product', $products, '', "onchange='loadBranches();' class='form-control chosen' required"));
     }
 
     /**
