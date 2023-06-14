@@ -53,5 +53,5 @@ window.renderCell = function(result, {col, row})
 
 window.checkUserDept = function()
 {
-    alert(noAccess);
+    zui.Modal.alert(noAccess);
 }

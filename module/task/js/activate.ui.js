@@ -21,7 +21,7 @@ $(function()
             if(!isNaN(estimate)) totalEstimate += estimate;
             if($tr.hasClass('member-wait') && (isNaN(estimate) || estimate <= 0))
             {
-                window.alert(account + ' ' + estimateNotEmpty);
+                zui.Modal.alert(account + ' ' + estimateNotEmpty);
                 error = true;
                 return false;
             }
@@ -34,7 +34,7 @@ $(function()
             if(!isNaN(left)) totalLeft += left;
             if(!$left.prop('readonly') && $tr.hasClass('member-wait') && (isNaN(left) || left <= 0))
             {
-                  window.alert(account + ' ' + leftNotEmpty);
+                  zui.Modal.alert(account + ' ' + leftNotEmpty);
                   error = true;
                   return false;
             }
@@ -44,7 +44,7 @@ $(function()
 
         if(memberCount < 2)
         {
-            window.alert(teamMemberError);
+            zui.Modal.alert(teamMemberError);
             return false;
         }
 
@@ -101,7 +101,7 @@ $(function()
                 var assignedTo = $('#assignedTo').val();
                 if(!assignedTo)
                 {
-                    bootbox.alert(teamNotEmpty);
+                    zui.Modal.alert(teamNotEmpty);
                     return false;
                 }
             }
@@ -109,7 +109,7 @@ $(function()
             var estimate = parseInt($('#left').val());
             if(isNaN(estimate) || estimate <= 0)
             {
-                bootbox.alert(multiple ? teamLeftEmpty : leftNotEmpty);
+                zui.Modal.alert(multiple ? teamLeftEmpty : leftNotEmpty);
                 return false;
             }
 
