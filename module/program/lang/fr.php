@@ -126,12 +126,12 @@ $lang->program->createProduct    = 'Create Product';
 $lang->program->createProject    = 'Create Project';
 
 /* DTable columns of product view page. */
-$lang->program->unclosedReqCount  = 'Unclosed';
-$lang->program->closedReqRate     = 'Closed Rate';
-$lang->program->testCaseCoverage  = 'Coverage';
-$lang->program->bugActivatedCount = 'Activated';
-$lang->program->fixedRate         = 'Fixed';
-$lang->program->feedback          = 'Feedback';
+$lang->program->totalUnclosedStories = 'Unclosed';
+$lang->program->closedStoryRate      = 'Closed Rate';
+$lang->program->testCaseCoverage     = 'Coverage';
+$lang->program->totalActivatedBugs   = 'Activated';
+$lang->program->fixedRate            = 'Fixed';
+$lang->program->feedback             = 'Feedback';
 
 $lang->program->tip = new stdclass();
 $lang->program->tip->closed     = 'The program has been closed. Re-close is not available.';
@@ -213,7 +213,13 @@ $lang->program->kanban->normalReleases  = 'Normal Releases';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
-$lang->program->defaultProgram = 'Default Program';
-$lang->program->projectView    = 'Project View';
-$lang->program->productView    = 'Product View';
-$lang->program->manDay         = 'Man Day';
+$lang->program->defaultProgram    = 'Default Program';
+$lang->program->projectView       = 'Project View';
+$lang->program->productView       = 'Product View';
+$lang->program->manDay            = 'Man Day';
+$lang->program->createdDate       = 'Created Date';
+$lang->program->totalStories      = 'Total Stories';
+$lang->program->project           = 'Projects';
+$lang->program->totalBugs         = 'Total Bugs';
+$lang->program->latestReleaseDate = 'Latest Release Date';
+$lang->program->latestRelease     = 'Latest Release';
