@@ -50,7 +50,7 @@ class entityLabel extends wg
     {
         $text      = $this->prop('text');
         $level     = $this->prop('level');
-        $className = $this->prop('className');
+        $className = $this->prop('textClass');
 
         $titleClass = empty($level)
             ? "article-content"
