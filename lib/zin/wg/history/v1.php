@@ -214,9 +214,11 @@ class history extends wg
         );
     }
 
-    private function commentBtn(): wg
+    private function commentBtn(): ?wg
     {
-        global $lang;
+        global $app, $lang;
+        $methodName = $this->prop('methodName') !== null ? $this->prop('methodName') : $app->rawMethod;
+        if (!str_contains(',view,objectlibs,viewcard,', ",$methodName,")) return null;
         return commentBtn
         (
             set::dataTarget('#comment-dialog'),
