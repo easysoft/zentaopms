@@ -1,4 +1,4 @@
-.welcome-block {background-image: linear-gradient( 90deg, #EDF7FE 0%, #FFF 20%);}
+.welcome-block .panel-body {background-image: linear-gradient( 90deg, #EDF7FE 0%, #FFF 20%);}
 .border-right {position: relative;}
 .border-right::after {content: ''; position: absolute; right: 0px; width: 1px; height: 40px; background: #EEE; top: 50%; margin-top: -20px;}
 .avatar-border-one {width: 4.2rem; height: 4.2rem; background: #f4f5f3; position: relative;}

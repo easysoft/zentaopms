@@ -251,6 +251,7 @@ class block extends control
         $this->view->moreLink       = $block->moreLink;
         $this->view->title          = $block->title;
         $this->view->block          = $block;
+        $this->view->longBlock      = $block->width >= 2;
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */

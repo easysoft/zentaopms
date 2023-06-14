@@ -13,6 +13,7 @@ namespace zin;
 
 panel
 (
+    set('title', 'welcome'),
     set('class', 'welcome-block'),
     div
     (

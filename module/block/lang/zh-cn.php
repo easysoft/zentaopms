@@ -133,142 +133,34 @@ $lang->block->titleList['bug']            = '指派给我的Bug';
 $lang->block->titleList['case']           = '指派给我的用例';
 $lang->block->titleList['testtask']       = '待测版本列表';
 
-$lang->block->default['waterfallproject']['3']['title']  = "{$lang->projectCommon}计划";
-$lang->block->default['waterfallproject']['3']['module'] = 'waterfallproject';
-$lang->block->default['waterfallproject']['3']['code']   = 'waterfallgantt';
-
-$lang->block->default['waterfallproject']['6']['title']  = '最新动态';
-$lang->block->default['waterfallproject']['6']['module'] = 'waterfallproject';
-$lang->block->default['waterfallproject']['6']['code']   = 'projectdynamic';
-
-$lang->block->default['waterfallplusproject'] = $lang->block->default['waterfallproject'];
-
-$lang->block->default['scrumproject']['1']['title']  = $lang->projectCommon . '概况';
-$lang->block->default['scrumproject']['1']['module'] = 'scrumproject';
-$lang->block->default['scrumproject']['1']['code']   = 'scrumoverview';
-
-$lang->block->default['scrumproject']['2']['title']  = $lang->executionCommon . '列表';
-$lang->block->default['scrumproject']['2']['module'] = 'scrumproject';
-$lang->block->default['scrumproject']['2']['code']   = 'scrumlist';
-
-$lang->block->default['scrumproject']['2']['params']['type']    = 'undone';
-$lang->block->default['scrumproject']['2']['params']['count']   = '20';
-$lang->block->default['scrumproject']['2']['params']['orderBy'] = 'id_desc';
-
-$lang->block->default['scrumproject']['3']['title']  = '待测版本';
-$lang->block->default['scrumproject']['3']['module'] = 'scrumproject';
-$lang->block->default['scrumproject']['3']['code']   = 'scrumtest';
-
-$lang->block->default['scrumproject']['3']['params']['type']    = 'wait';
-$lang->block->default['scrumproject']['3']['params']['count']   = '15';
-$lang->block->default['scrumproject']['3']['params']['orderBy'] = 'id_desc';
-
-$lang->block->default['scrumproject']['4']['title']  = $lang->executionCommon . '总览';
-$lang->block->default['scrumproject']['4']['module'] = 'scrumproject';
-$lang->block->default['scrumproject']['4']['code']   = 'sprint';
-
-$lang->block->default['scrumproject']['5']['title']  = '最新动态';
-$lang->block->default['scrumproject']['5']['module'] = 'scrumproject';
-$lang->block->default['scrumproject']['5']['code']   = 'projectdynamic';
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon}概况",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon}列表", 'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => '待测版本',                     'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '9', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon}总览", 'module' => 'scrumproject', 'code' => 'sprint',         'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
+$lang->block->default['scrumproject'][] = array('title' => '最新动态',                     'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1', 'height' => '8', 'left' => '2', 'top' => '3');
 
 $lang->block->default['kanbanproject']    = $lang->block->default['scrumproject'];
 $lang->block->default['agileplusproject'] = $lang->block->default['scrumproject'];
 
-$lang->block->default['product']['1']['title']  = $lang->productCommon . '统计';
-$lang->block->default['product']['1']['module'] = 'product';
-$lang->block->default['product']['1']['code']   = 'statistic';
+$lang->block->default['waterfallproject'][] = array('title' => "{$lang->projectCommon}计划", 'module' => 'waterfallproject', 'code' => 'waterfallgantt', 'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
+$lang->block->default['waterfallproject'][] = array('title' => '最新动态',                   'module' => 'waterfallproject', 'code' => 'projectdynamic', 'width' => '1', 'height' => '8', 'left' => '2', 'top' => '0');
 
-$lang->block->default['product']['1']['params']['type']  = 'all';
-$lang->block->default['product']['1']['params']['count'] = '20';
+$lang->block->default['waterfallplusproject'] = $lang->block->default['waterfallproject'];
 
-$lang->block->default['product']['2']['title']  = $lang->productCommon . '总览';
-$lang->block->default['product']['2']['module'] = 'product';
-$lang->block->default['product']['2']['code']   = 'overview';
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}统计",     'module' => 'product', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'all',        'count' => '20'));
+$lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}", 'module' => 'product', 'code' => 'list',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'noclosed',   'count' => '15'));
+$lang->block->default['product'][] = array('title' => $lang->productCommon . '总览',    'module' => 'product', 'code' => 'overview',  'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
+$lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",    'module' => 'product', 'code' => 'story',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '3', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
-$lang->block->default['product']['3']['title']  = '未关闭的' . $lang->productCommon;
-$lang->block->default['product']['3']['module'] = 'product';
-$lang->block->default['product']['3']['code']   = 'list';
-
-$lang->block->default['product']['3']['params']['count'] = 15;
-$lang->block->default['product']['3']['params']['type']  = 'noclosed';
-
-$lang->block->default['product']['4']['title']  = "指派给我的{$lang->SRCommon}";
-$lang->block->default['product']['4']['module'] = 'product';
-$lang->block->default['product']['4']['code']   = 'story';
-
-$lang->block->default['product']['4']['params']['count']   = 15;
-$lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
-$lang->block->default['product']['4']['params']['type']    = 'assignedTo';
-
-$lang->block->default['execution']['1']['title']  = '执行统计';
-$lang->block->default['execution']['1']['module'] = 'execution';
-$lang->block->default['execution']['1']['code']   = 'statistic';
-
-$lang->block->default['execution']['1']['params']['type']  = 'all';
-$lang->block->default['execution']['1']['params']['count'] = '20';
-
-$lang->block->default['execution']['2']['title']  = '执行总览';
-$lang->block->default['execution']['2']['module'] = 'execution';
-$lang->block->default['execution']['2']['code']   = 'overview';
-
-$lang->block->default['execution']['3']['title']  = '未关闭的执行';
-$lang->block->default['execution']['3']['module'] = 'execution';
-$lang->block->default['execution']['3']['code']   = 'list';
-
-$lang->block->default['execution']['3']['params']['count']   = 15;
-$lang->block->default['execution']['3']['params']['orderBy'] = 'id_desc';
-$lang->block->default['execution']['3']['params']['type']    = 'undone';
-
-$lang->block->default['execution']['4']['title']  = '指派给我的任务';
-$lang->block->default['execution']['4']['module'] = 'execution';
-$lang->block->default['execution']['4']['code']   = 'task';
-
-$lang->block->default['execution']['4']['params']['count']   = 15;
-$lang->block->default['execution']['4']['params']['orderBy'] = 'id_desc';
-$lang->block->default['execution']['4']['params']['type']    = 'assignedTo';
-
-$lang->block->default['execution']['5']['title']  = '版本列表';
-$lang->block->default['execution']['5']['module'] = 'execution';
-$lang->block->default['execution']['5']['code']   = 'build';
-
-$lang->block->default['execution']['5']['params']['count']   = 15;
-$lang->block->default['execution']['5']['params']['orderBy'] = 'id_desc';
-
-$lang->block->default['qa']['1']['title']  = '测试统计';
-$lang->block->default['qa']['1']['module'] = 'qa';
-$lang->block->default['qa']['1']['code']   = 'statistic';
-
-$lang->block->default['qa']['1']['params']['type']  = 'noclosed';
-$lang->block->default['qa']['1']['params']['count'] = '20';
-
-$lang->block->default['qa']['2']['title']  = '指派给我的Bug';
-$lang->block->default['qa']['2']['module'] = 'qa';
-$lang->block->default['qa']['2']['code']   = 'bug';
-
-$lang->block->default['qa']['2']['params']['count']   = 15;
-$lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
-
-$lang->block->default['qa']['3']['title']  = '指派给我的用例';
-$lang->block->default['qa']['3']['module'] = 'qa';
-$lang->block->default['qa']['3']['code']   = 'case';
-
-$lang->block->default['qa']['3']['params']['count']   = 15;
-$lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['3']['params']['type']    = 'assigntome';
-
-$lang->block->default['qa']['4']['title']  = '待测版本列表';
-$lang->block->default['qa']['4']['module'] = 'qa';
-$lang->block->default['qa']['4']['code']   = 'testtask';
-
-$lang->block->default['qa']['4']['params']['count']   = 15;
-$lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['4']['params']['type']    = 'wait';
+$lang->block->default['qa'][] = array('title' => '测试统计',       'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
+$lang->block->default['qa'][] = array('title' => '待测版本列表',   'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => '指派给我的Bug',  'module' => 'qa', 'code' => 'bug',       'width' => '1', 'height' => '6', 'left' => '2', 'top' => '0', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => '指派给我的用例', 'module' => 'qa', 'code' => 'case',      'width' => '1', 'height' => '6', 'left' => '2', 'top' => '6', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
 
 $lang->block->default['full']['my'][] = array('title' => '欢迎总览',                               'module' => 'welcome',    'code' => 'welcome',       'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
 $lang->block->default['full']['my'][] = array('title' => "使用帮助",                               'module' => 'guide',      'code' => 'guide',         'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3');
 $lang->block->default['full']['my'][] = array('title' => "我近期参与的{$lang->projectCommon}",     'module' => 'project',    'code' => 'recentproject', 'width' => '2', 'height' => '4', 'left' => '0', 'top' => '9');
-$lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->execution->common}统计", 'module' => 'execution',  'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '13',  'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->execution->common}统计", 'module' => 'execution',  'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '13', 'params' => array('type' => 'undone',   'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa',         'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '18', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product',    'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '23', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon}统计",             'module' => 'project',    'code' => 'statistic',     'width' => '2', 'height' => '5', 'left' => '0', 'top' => '28', 'params' => array('type' => 'undone',   'count' => '20'));
@@ -278,45 +170,14 @@ $lang->block->default['full']['my'][] = array('title' => "禅道动态",        
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon}总览",             'module' => 'project',    'code' => 'overview',      'width' => '1', 'height' => '3', 'left' => '2', 'top' => '8');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product',    'code' => 'overview',      'width' => '1', 'height' => '3', 'left' => '2', 'top' => '11');
 
-/* Doc module block. */
-$lang->block->default['doc']['1']['title']  = '文档统计';
-$lang->block->default['doc']['1']['module'] = 'doc';
-$lang->block->default['doc']['1']['code']   = 'docstatistic';
-
-$lang->block->default['doc']['2']['title']  = '文档动态';
-$lang->block->default['doc']['2']['module'] = 'doc';
-$lang->block->default['doc']['2']['code']   = 'docdynamic';
-
-$lang->block->default['doc']['3']['title']  = '我收藏的文档';
-$lang->block->default['doc']['3']['module'] = 'doc';
-$lang->block->default['doc']['3']['code']   = 'docmycollection';
-
-$lang->block->default['doc']['4']['title']  = '最近更新的文档';
-$lang->block->default['doc']['4']['module'] = 'doc';
-$lang->block->default['doc']['4']['code']   = 'docrecentupdate';
-
-$lang->block->default['doc']['5']['title']  = '浏览排行榜';
-$lang->block->default['doc']['5']['module'] = 'doc';
-$lang->block->default['doc']['5']['code']   = 'docviewlist';
-
-if($config->vision == 'rnd')
-{
-    $lang->block->default['doc']['6']['title']  = $lang->productCommon . '文档';
-    $lang->block->default['doc']['6']['module'] = 'doc';
-    $lang->block->default['doc']['6']['code']   = 'productdoc';
-
-    $lang->block->default['doc']['6']['params']['count'] = '20';
-}
-
-$lang->block->default['doc']['7']['title']  = '收藏排行榜';
-$lang->block->default['doc']['7']['module'] = 'doc';
-$lang->block->default['doc']['7']['code']   = 'doccollectlist';
-
-$lang->block->default['doc']['8']['title']  = $lang->projectCommon . '文档';
-$lang->block->default['doc']['8']['module'] = 'doc';
-$lang->block->default['doc']['8']['code']   = 'projectdoc';
-
-$lang->block->default['doc']['8']['params']['count'] = '20';
+$lang->block->default['doc'][] = array('title' => '文档统计',                   'module' => 'doc', 'code' => 'docstatistic',    'width' => '2', 'height' => '3', 'left' => '0', 'top' => '0');
+$lang->block->default['doc'][] = array('title' => '我收藏的文档',               'module' => 'doc', 'code' => 'docmycollection', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '3');
+$lang->block->default['doc'][] = array('title' => '最近更新的文档',             'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '9');
+$lang->block->default['doc'][] = array('title' => "{$lang->productCommon}文档", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '15', 'params' => array('count' => '20'));
+$lang->block->default['doc'][] = array('title' => "{$lang->projectCommon}文档", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '21', 'params' => array('count' => '20'));
+$lang->block->default['doc'][] = array('title' => '文档动态',                   'module' => 'doc', 'code' => 'docdynamic',      'width' => '1', 'height' => '8', 'left' => '2', 'top' => '0');
+$lang->block->default['doc'][] = array('title' => '浏览排行榜',                 'module' => 'doc', 'code' => 'docviewlist',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '8');
+$lang->block->default['doc'][] = array('title' => '收藏排行榜',                 'module' => 'doc', 'code' => 'doccollectlist',  'width' => '1', 'height' => '6', 'left' => '2', 'top' => '14');
 
 $lang->block->count   = '数量';
 $lang->block->type    = '类型';
