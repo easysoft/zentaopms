@@ -449,7 +449,7 @@ class projectrelease extends control
             {
                 $html .= "<h3>{$this->lang->release->stories}</h3>";
 
-                if(!empty($release->story))
+                if(!empty($release->stories))
                 {
                     $this->loadModel('story');
                     $stories = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($this->session->storyOrderBy, '_', ' '))->fetchAll();
