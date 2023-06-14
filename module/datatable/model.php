@@ -90,14 +90,13 @@ class datatableModel extends model
     {
         $method      = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
-
-        $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
+        $cfgMethod  = ($module == 'program' && $method == 'productview') ? $method : '';
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
         if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);
 
-        $fieldList = $this->getFieldList($module);
+        $fieldList = $this->getFieldList($module, $cfgMethod);
         if(empty($setting))
         {
             $setting = $this->formatFields($module, $fieldList);
