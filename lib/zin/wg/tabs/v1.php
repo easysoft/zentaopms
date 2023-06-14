@@ -34,11 +34,11 @@ class tabs extends wg
 
         return li
         (
-            setClass('nav-item', $active ? 'active' : null),
+            setClass('nav-item'),
             a
             (
                 set('data-toggle', 'tab'),
-                setClass('font-medium'),
+                setClass('font-medium', $active ? 'active' : null),
                 set::href("#$key"),
                 $prefix,
                 span($title),

@@ -1,7 +1,6 @@
-.nav-tabs>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-slate-600);}
+.nav-tabs>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-slate-800);}
 .nav-tabs>.nav-item>a:after {border-width: 0;}
 .nav-tabs>.nav-item>a:before {background: none;}
-.nav-tabs>.nav-item.active>a {color: var(--color-primary-500);}
-.nav-tabs>.nav-item.active>a:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
-.nav-tabs>.nav-item.active:after {width: calc(100% - 32px); margin-left: 16px; border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
+.nav-tabs>.nav-item>a.active {color: var(--color-primary-500);}
+.nav-tabs>.nav-item>a.active:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
 .tabs .btn-collapse {position: absolute; top: 16px; right: 24px; width: 24px; height: 24px;}
