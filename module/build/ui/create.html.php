@@ -142,7 +142,7 @@ formPanel
                 div
                 (
                     setClass('help-block'),
-                    html('&nbsp;' . $lang->build->last . ': <a class="code label label-badge label-light" id="lastBuildBtn">' . $lastBuild->name . '</a>'),
+                    html('&nbsp;' . $lang->build->last . ': <a class="code label light rounded-full" id="lastBuildBtn">' . $lastBuild->name . '</a>'),
                 ),
             )
         ) : '',
