@@ -172,15 +172,6 @@ $lang->program->featureBar['browse']['doing']     = 'Doing';
 $lang->program->featureBar['browse']['suspended'] = 'Suspended';
 $lang->program->featureBar['browse']['closed']    = 'Closed';
 
-$lang->program->featureBar['productview']['all']      = 'All';
-$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['productview']['end']      = 'End';
-
-$lang->program->featureBar['projectview']['all']      = 'All';
-$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['projectview']['wait']     = 'Waiting';
-$lang->program->featureBar['projectview']['doing']    = 'Doing';
-$lang->program->featureBar['projectview']['more']     = 'More';
 $lang->program->featureBar['product']['all']      = 'Alle ' . $lang->productCommon;
 $lang->program->featureBar['product']['noclosed'] = 'Offen';
 $lang->program->featureBar['product']['closed']   = 'Geschlossen';
@@ -191,6 +182,22 @@ $lang->program->featureBar['project']['wait']      = 'Waiting';
 $lang->program->featureBar['project']['doing']     = 'Doing';
 $lang->program->featureBar['project']['suspended'] = 'Suspended';
 $lang->program->featureBar['project']['closed']    = 'Closed';
+
+$lang->program->featureBar['productview']['all']      = 'All';
+$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['productview']['end']      = 'End';
+$lang->program->featureBar['productview']['wait']     = 'Waiting';
+$lang->program->featureBar['productview']['doing']    = 'Doing';
+$lang->program->featureBar['productview']['more']     = $lang->more;
+
+$lang->program->featureBar['projectview']['all']      = 'All';
+$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['projectview']['wait']     = 'Waiting';
+$lang->program->featureBar['projectview']['doing']    = 'Doing';
+$lang->program->featureBar['projectview']['more']     = $lang->more;
+
+$lang->program->moreSelects['suspended'] = 'Suspended';
+$lang->program->moreSelects['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

@@ -172,16 +172,7 @@ $lang->program->featureBar['browse']['doing']     = 'En Cours';
 $lang->program->featureBar['browse']['suspended'] = 'Suspendues';
 $lang->program->featureBar['browse']['closed']    = 'Fermées';
 
-$lang->program->featureBar['productview']['all']      = 'All';
-$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['productview']['end']      = 'End';
-
-$lang->program->featureBar['projectview']['all']      = 'All';
-$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['projectview']['wait']     = 'Waiting';
-$lang->program->featureBar['projectview']['doing']    = 'Doing';
-$lang->program->featureBar['projectview']['more']     = 'More';
-$lang->program->featureBar['product']['all']      = 'Tous';
+$lang->program->featureBar['product']['all']      = 'Tous ' . $lang->productCommon;
 $lang->program->featureBar['product']['noclosed'] = 'Ouvertes';
 $lang->program->featureBar['product']['closed']   = 'Fermé';
 
@@ -191,6 +182,22 @@ $lang->program->featureBar['project']['wait']      = 'En Attente';
 $lang->program->featureBar['project']['doing']     = 'En Cours';
 $lang->program->featureBar['project']['suspended'] = 'Suspendues';
 $lang->program->featureBar['project']['closed']    = 'Fermées';
+
+$lang->program->featureBar['productview']['all']      = 'All';
+$lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['productview']['end']      = 'End';
+$lang->program->featureBar['productview']['wait']     = 'Waiting';
+$lang->program->featureBar['productview']['doing']    = 'Doing';
+$lang->program->featureBar['productview']['more']     = $lang->more;
+
+$lang->program->featureBar['projectview']['all']      = 'All';
+$lang->program->featureBar['projectview']['unclosed'] = 'Unclosed';
+$lang->program->featureBar['projectview']['wait']     = 'Waiting';
+$lang->program->featureBar['projectview']['doing']    = 'Doing';
+$lang->program->featureBar['projectview']['more']     = $lang->more;
+
+$lang->program->moreSelects['suspended'] = 'Suspendues';
+$lang->program->moreSelects['closed']    = 'Fermées';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

@@ -86,9 +86,6 @@ $lang->program->changePRJUnit           = "更新{$lang->projectCommon}预算单
 $lang->program->showNotCurrentProjects  = "显示非当前项目集的{$lang->projectCommon}信息";
 
 $lang->program->progress         = "{$lang->projectCommon}进度";
-$lang->program->other                   = '其他';
-
-$lang->program->progress         = '项目进度';
 $lang->program->progressAB       = '进度';
 $lang->program->children         = '添加子项目集';
 $lang->program->allInvest        = '项目集总投入';
@@ -189,12 +186,18 @@ $lang->program->featureBar['project']['closed']    = '已关闭';
 $lang->program->featureBar['productview']['all']      = '全部';
 $lang->program->featureBar['productview']['unclosed'] = '未关闭';
 $lang->program->featureBar['productview']['end']      = '结束';
+$lang->program->featureBar['productview']['wait']     = '未开始';
+$lang->program->featureBar['productview']['doing']    = '进行中';
+$lang->program->featureBar['productview']['more']     = $lang->more;
 
 $lang->program->featureBar['projectview']['all']      = '全部';
 $lang->program->featureBar['projectview']['unclosed'] = '未关闭';
 $lang->program->featureBar['projectview']['wait']     = '未开始';
 $lang->program->featureBar['projectview']['doing']    = '进行中';
-$lang->program->featureBar['projectview']['more']     = '更多';
+$lang->program->featureBar['projectview']['more']     = $lang->more;
+
+$lang->program->moreSelects['suspended'] = '已挂起';
+$lang->program->moreSelects['closed']    = '已关闭';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';
