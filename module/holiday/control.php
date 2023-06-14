@@ -36,6 +36,8 @@ class holiday extends control
         $holidays = $this->holiday->getList($year);
         $yearList = $this->holiday->getYearPairs();
 
+        foreach($holidays as $holiday) $holiday->holiday = formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);
+
         $yearAndNext = array(date('Y'), date('Y') + 1);
         foreach($yearAndNext as $date)
         {
