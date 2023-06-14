@@ -463,7 +463,17 @@ function initTableData($items, &$fieldList, $checkModel)
     {
         if(is_array($actionMenu))
         {
-            foreach($actionMenu as $actionName) initTableActions($fieldList, $actionName);
+            foreach($actionMenu as $actionMenuKey => $actionName)
+            {
+                if($actionMenuKey == 'other')
+                {
+                    foreach($actionName as $otherActionName) initTableActions($fieldList, $otherActionName);
+                }
+                else
+                {
+                    initTableActions($fieldList, $actionName);
+                }
+            }
         }
         else
         {
@@ -474,14 +484,45 @@ function initTableData($items, &$fieldList, $checkModel)
     foreach($items as $item)
     {
         $item->actions = array();
-        foreach($fieldList['actions']['menu'] as $actionMenu)
+        foreach($fieldList['actions']['menu'] as $actionKey => $actionMenu)
         {
-            /*
-             * Menu可能会有多套，如果只有一套可以直接用一维数组。
-             * There are maybe two or more groups of action menus.
-             */
-            if(is_array($actionMenu))       // Two or more grups.
+            if(isset($actionMenu['other']))
             {
+                $currentActionMenu = $actionMenu[0];
+                initItemActions($item, $currentActionMenu, $fieldList['actions']['list'], $checkModel);
+
+                $otherActionMenus = $actionMenu['other'];
+                $otherAction      = '';
+                foreach($otherActionMenus as $otherActionMenu)
+                {
+                    $otherActions = explode('|', $otherActionMenu);
+                    foreach($otherActions as $otherActionName)
+                    {
+                        if(in_array($otherActionName, $item->actions)) continue;
+
+                        if(method_exists($checkModel, 'isClickable') && !$checkModel->isClickable($item, $otherActionName)) $otherAction .= '-';
+                        $otherAction .= $otherActionName . ',';
+                    }
+                }
+                $item->actions[] = 'other:' . $otherAction;
+            }
+            elseif($actionKey == 'more')
+            {
+                $moreAction = '';
+                foreach($actionMenu as $moreActionName)
+                {
+                    if(method_exists($checkModel, 'isClickable') && !$checkModel->isClickable($item, $moreActionName)) $moreAction .= '-';
+                    $moreAction .= $moreActionName . ',';
+                }
+
+                $item->actions[] = 'more:' . $moreAction;
+            }
+            elseif(is_array($actionMenu))       // Two or more grups.
+            {
+                /*
+                 * Menu可能会有多套，如果只有一套可以直接用一维数组。
+                 * There are maybe two or more groups of action menus.
+                 */
                 $item->actions = array();
                 $isClickable   = false;
                 foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, $fieldList['actions']['list'], $checkModel);
@@ -567,7 +608,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
     if(!method_exists($checkModel, 'isClickable') || $checkModel->isClickable($item, $action))
     {
-        $item->actions[] = array('name' => $action);
+        $item->actions[] = $action;
     }
     else
     {
