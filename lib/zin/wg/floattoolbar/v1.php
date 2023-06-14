@@ -32,27 +32,21 @@ class floatToolbar extends wg
     {
         if(empty($items)) return null;
 
-        $object = $this->prop('object');
-        if($object)
-        {
-            /* Set url template string replacement rules. */
-            $urlReplaceName  = array();
-            $urlReplaceValue = array();
-            foreach($object as $key => $value)
-            {
-                $urlReplaceName[]  = "{{$key}}";
-                $urlReplaceValue[] = $value;
-            }
-        }
-
         $btns = array();
-        foreach ($items as $item)
+        foreach ($items as &$item)
         {
-            if($object && isset($item['url'])) $item['url'] = str_replace($urlReplaceName, $urlReplaceValue, $item['url']);
+            if(!empty($item['url'])) $item['url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
 
             $btns[] = btn(set($item), setClass('ghost text-white'));
         }
         return $btns;
+    }
+
+    public function getObjectValue($matches)
+    {
+        if(!isset($this->object)) $this->object = $this->prop('object');
+
+        return zget($this->object, $matches[1]);
     }
 
     private function mergeBtns(array|null $btns, array|wg|null $block): array|wg|null
