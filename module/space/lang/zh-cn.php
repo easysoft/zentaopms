@@ -13,8 +13,8 @@ $lang->space->notice->toInstall = '请到应用市场安装';
 $lang->space->byList = '列表';
 $lang->space->byCard = '卡片';
 
-$lang->space->filterList['all']         = '全部';
+$lang->space->featureBar['browse']['all']      = '全部';
 //$lang->space->filterList['toBeUpdated'] = '待更新';
-$lang->space->filterList['running']     = '运行中';
-$lang->space->filterList['stopped']     = '已停止';
-$lang->space->filterList['abnormal']    = '异常';
+$lang->space->featureBar['browse']['running']  = '运行中';
+$lang->space->featureBar['browse']['stopped']  = '已停止';
+$lang->space->featureBar['browse']['abnormal'] = '异常';

@@ -821,7 +821,7 @@ class mrModel extends model
             foreach($response as $MR)
             {
                 if(empty($MR->source_project_id) or empty($MR->target_project_id)) return null;
-                if($MR->source_project_id == $sourceProject and $MR->target_project_id == $targetProject) return $MMRR;
+                if($MR->source_project_id == $sourceProject and $MR->target_project_id == $targetProject) return $MR;
             }
         }
         return null;
@@ -945,7 +945,7 @@ class mrModel extends model
             $newMR->squash               = $MR->squash == '1' ? 1 : 0;
             if($MR->assignee)
             {
-                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($MR->hostID, $MR->assignee);
                 if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
             }
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
@@ -2093,16 +2093,20 @@ class mrModel extends model
     }
 
     /**
+     * 判断按钮是否可点击。
      * Adjust the action clickable.
      *
      * @param  object $MR
      * @param  string $action
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function isClickable($MR, $action)
+    public static function isClickable(object $MR, string $action): bool
     {
         if($action == 'edit' and !$MR->synced) return false;
+        if($action == 'edit')   return $MR->canEdit;
+        if($action == 'delete') return $MR->canDelete;
+
         return true;
     }
 }
