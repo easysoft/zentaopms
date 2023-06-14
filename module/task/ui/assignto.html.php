@@ -18,7 +18,8 @@ formPanel
     set::title($lang->task->assignAction),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
+    set::actions(array('submit')),
+    set::shadow(false),
     to::headingActions
     (
         entityLabel
@@ -30,7 +31,6 @@ formPanel
             set::reverse(true),
         )
     ),
-    set::shadow(!isonlybody()),
     formGroup
     (
         set::width("1/3"),
@@ -70,4 +70,4 @@ h::hr(set::class('mt-6'));
 
 history();
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render('modalDialog');

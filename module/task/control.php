@@ -623,6 +623,8 @@ class task extends control
 
         if(!empty($_POST))
         {
+            $oldTask = $this->task->getByID($taskID);
+
             /* Init task data. */
             $task = form::data($this->config->task->form->pause)->get();
             $task->id = $taskID;
@@ -642,7 +644,7 @@ class task extends control
 
             /* Get response after the suspended task. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($oldTask, $from);
             return $this->send($response);
         }
 
@@ -840,8 +842,7 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            $task = $this->task->getById($taskID);
-            if(isonlybody()) return $this->taskZen->responseModal($task, $from, $regionID);
+            if(isonlybody()) return $this->taskZen->responseModal($oldTask, $from, $regionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 

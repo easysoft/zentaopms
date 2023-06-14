@@ -325,7 +325,7 @@ formPanel
         (
             input
             (
-                set::type('date'),
+                set::control('date'),
                 set::name('estStarted'),
                 set::value($task->estStarted),
                 set::placeholder($lang->task->estStarted),
@@ -333,7 +333,7 @@ formPanel
             $lang->task->to,
             input
             (
-                set::type('date'),
+                set::control('date'),
                 set::name('deadline'),
                 set::value($task->deadline),
                 set::placeholder($lang->task->deadline),

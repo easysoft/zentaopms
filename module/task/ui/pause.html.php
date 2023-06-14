@@ -21,6 +21,8 @@ formPanel
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
     set::shadow(!isonlybody()),
+    set::actions(array('submit')),
+    set::submitBtnText($lang->task->pause),
     to::headingActions
     (
         entityLabel
