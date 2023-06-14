@@ -18,7 +18,8 @@ featurebar
     set::linkParams("status={key}"),
 );
 
-$projects = initTableData($projects, $config->my->project->dtable->fieldList, $this->my);
+$this->loadModel('project');
+$projects = initTableData($projects, $config->project->dtable->fieldList, $this->project);
 
 $waitCount      = 0;
 $doingCount     = 0;
@@ -50,8 +51,6 @@ foreach($projects as $project)
     }
 
     $project->end = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
-
-    $project->actions = $this->loadModel('project')->buildActionList($project);
 }
 
 $projects = array_values($projects);
@@ -61,7 +60,7 @@ if($status == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, co
 
 dtable
 (
-    set::cols($config->my->project->dtable->fieldList),
+    set::cols($config->project->dtable->fieldList),
     set::data($projects),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),

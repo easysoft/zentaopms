@@ -109,50 +109,12 @@ $config->project->dtable->fieldList['progress']['type']  = 'progress';
 $config->project->dtable->fieldList['progress']['group'] = 7;
 $config->project->dtable->fieldList['progress']['show']  = true;
 
-$config->project->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->project->dtable->fieldList['actions']['name']     = 'actions';
+$config->project->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->project->dtable->fieldList['actions']['type']     = 'actions';
-$config->project->dtable->fieldList['actions']['required'] = true;
-
-$config->project->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'play';
-$config->project->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $lang->project->start;
-$config->project->dtable->fieldList['actions']['actionsMap']['start']['url']  = helper::createLink('project', 'start', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['close']['icon'] = 'off';
-$config->project->dtable->fieldList['actions']['actionsMap']['close']['hint'] = $lang->project->close;
-$config->project->dtable->fieldList['actions']['actionsMap']['close']['url']  = helper::createLink('project', 'close', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['active']['icon'] = 'magic';
-$config->project->dtable->fieldList['actions']['actionsMap']['active']['hint'] = $lang->project->activate;
-$config->project->dtable->fieldList['actions']['actionsMap']['active']['url']  = helper::createLink('project', 'activate', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
-$config->project->dtable->fieldList['actions']['actionsMap']['edit']['hint'] = $lang->project->edit;
-$config->project->dtable->fieldList['actions']['actionsMap']['edit']['url']  = helper::createLink('project', 'edit', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['pause']['icon'] = 'pause';
-$config->project->dtable->fieldList['actions']['actionsMap']['pause']['hint'] = $lang->project->suspend;
-$config->project->dtable->fieldList['actions']['actionsMap']['pause']['url']  = helper::createLink('project', 'suspend', 'projectID={id}', '', true);
-
-$config->project->dtable->fieldList['actions']['actionsMap']['group']['icon'] = 'group';
-$config->project->dtable->fieldList['actions']['actionsMap']['group']['hint'] = $lang->project->team;
-$config->project->dtable->fieldList['actions']['actionsMap']['group']['url']  = helper::createLink('project', 'team', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['perm']['icon'] = 'lock';
-$config->project->dtable->fieldList['actions']['actionsMap']['perm']['hint'] = $lang->project->group;
-$config->project->dtable->fieldList['actions']['actionsMap']['perm']['url']  = helper::createLink('project', 'group', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['icon'] = 'link';
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['hint'] = $lang->project->manageProducts;
-$config->project->dtable->fieldList['actions']['actionsMap']['link']['url']  = array('module' => 'project', 'method' => 'manageProducts', 'params' => 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['icon'] = 'shield-check';
-$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['hint'] = $lang->project->whitelist;
-$config->project->dtable->fieldList['actions']['actionsMap']['whitelist']['url']  = helper::createLink('project', 'whitelist', 'projectID={id}');
-
-$config->project->dtable->fieldList['actions']['actionsMap']['delete']['icon'] = 'trash';
-$config->project->dtable->fieldList['actions']['actionsMap']['delete']['hint'] = $lang->project->delete;
-$config->project->dtable->fieldList['actions']['actionsMap']['delete']['url']  = helper::createLink('project', 'delete', 'projectID={id}');
+$config->project->dtable->fieldList['actions']['sortType'] = false;
+$config->project->dtable->fieldList['actions']['list']     = $config->project->actionList;
+$config->project->dtable->fieldList['actions']['menu']     = array(array('close|start|activate', 'other' => array('pause', 'activate|close')), 'edit', 'group', 'perm', 'more' => array('link', 'whitelist', 'delete'));
 
 global $app;
 $app->loadLang('execution');
