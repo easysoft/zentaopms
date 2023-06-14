@@ -19,6 +19,14 @@ class sqlite
     public $app;
 
     /**
+     * The global config object.
+     *
+     * @var object
+     * @access public
+     */
+    public $config;
+
+    /**
      * The global mysql object.
      *
      * @var object
@@ -35,7 +43,6 @@ class sqlite
     public $dbh = null;
 
     /**
-     * 是否开启特殊字符转义。
      * Magic quote or not.
      *
      * @var bool
@@ -51,9 +58,10 @@ class sqlite
      */
     public function __construct()
     {
-        global $app, $dbh;
+        global $app, $config, $dbh;
         $this->app        = $app;
         $this->mysql      = $dbh;
+        $this->config     = $config;
         $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
 
         $this->connectSqlite();
