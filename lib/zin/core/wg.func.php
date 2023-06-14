@@ -115,7 +115,7 @@ function setData(string|array $name, mixed $value = null): directive
  * @param  bool|string|array $handler
  * @param  array             $options
  */
-function on(string $name, bool|string|array $handler, array $options = null): directive
+function on(string $name, bool|string|array $handler, array|string|bool $options = null): directive
 {
     if(is_string($options) && is_string($handler))
     {
