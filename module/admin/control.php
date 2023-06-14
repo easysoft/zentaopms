@@ -516,4 +516,20 @@ class admin extends control
 
         return print(json_encode($response));
     }
+
+    /**
+     * Execute sql from SQLite queue.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function execSqliteQueue()
+    {
+        $now = helper::now();
+        $query = $this->dao->select('*')->from(TABLE_SQLITE_QUEUE)->where('status')->eq('wait')->fetch();
+
+        $this->dao->sqlite->rawExec($query->sql);
+        $this->dao->update(TABLE_SQLITE_QUEUE)->set('status')->eq('done')->set('execDate')->eq($now)->where('id')->eq($query->id)->exec();
+        die('ok');
+    }
 }
