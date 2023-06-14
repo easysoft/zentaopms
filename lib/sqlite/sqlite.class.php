@@ -19,6 +19,14 @@ class sqlite
     public $app;
 
     /**
+     * The global mysql object.
+     *
+     * @var object
+     * @access public
+     */
+    public $mysql;
+
+    /**
      * The global sqlite object.
      *
      * @var object
@@ -34,8 +42,11 @@ class sqlite
      */
     public function __construct()
     {
-        global $app;
-        $this->app = $app;
+        global $app, $dbh;
+        $this->app   = $app;
+        $this->mysql = $dbh;
+
+        $this->connectSqlite();
     }
 
     /**
@@ -54,6 +65,7 @@ class sqlite
         if(strpos($sqliteFile, $tmpRoot) !== 0) helper::end("The sqlite file '$sqliteFile' is not in the tmp root '$tmpRoot'");
 
         $dbh = new PDO("sqlite:$sqliteFile");
+        $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $this->dbh = $dbh;
@@ -68,7 +80,7 @@ class sqlite
      * @access public
      * @return string
      */
-    public function processSQL(string $sql)
+    public function formatAttr(string $sql): string
     {
         $sql = str_replace('`', '', $sql);
         $sql = preg_replace('/\s*int\s*\(\d+\)\s*NOT NULL AUTO_INCREMENT/i', ' INTEGER PRIMARY KEY AUTOINCREMENT', $sql);
@@ -96,6 +108,50 @@ class sqlite
     }
 
     /**
+     * Format sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function formatSQL($sql)
+    {
+        $sql = $this->formatAttr($sql);
+        return $sql;
+    }
+
+    /**
+     * Query sql by SQLite, if throw exception, query sql by MySQL.
+     *
+     * @param  string $sql
+     * @access public
+     * @return PDOStatement|false
+     */
+    public function query($sql)
+    {
+        try
+        {
+            return $this->dbh->query($this->formatSQL($sql));
+        }
+        catch(PDOException $e)
+        {
+            return $this->mysql->query($sql);
+        }
+    }
+
+    /**
+     * Query sql without format.
+     *
+     * @param  string $sql
+     * @access public
+     * @return PDOStatement|false
+     */
+    public function rawQuery($sql)
+    {
+        return $this->dbh->query($sql);
+    }
+
+    /**
      * Execute sql.
      *
      * @param  string $sql
@@ -104,6 +160,6 @@ class sqlite
      */
     public function exec(string $sql): void
     {
-        $this->dbh->exec($this->processSQL($sql));
+        $this->dbh->exec($this->formatSQL($sql));
     }
 }

@@ -795,7 +795,7 @@ class baseDAO
             }
             else
             {
-                return $this->dbh->rawQuery($sql);
+                return $this->useSqlite ? $this->sqlite->query($sql) : $this->dbh->rawQuery($sql);
             }
         }
         catch (PDOException $e)
