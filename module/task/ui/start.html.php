@@ -68,6 +68,7 @@ else
 {
     formPanel
     (
+        setID('startForm'),
         set::title($lang->task->startAction),
         set::headingClass('status-heading'),
         set::titleClass('form-label .form-grid'),
