@@ -852,3 +852,78 @@ $config->my->doc->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->doc->dtable->fieldList['actions']['sortType'] = false;
 $config->my->doc->dtable->fieldList['actions']['list']     = $config->my->doc->actionList;
 $config->my->doc->dtable->fieldList['actions']['menu']     = array('edit', 'delete');
+
+$config->my->team = new stdclass();
+$config->my->team->dtable = new stdclass();
+$config->my->team->dtable->fieldList['id']['name']     = 'id';
+$config->my->team->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->my->team->dtable->fieldList['id']['type']     = 'id';
+$config->my->team->dtable->fieldList['id']['sortType'] = true;
+
+$config->my->team->dtable->fieldList['realname']['name']     = 'realname';
+$config->my->team->dtable->fieldList['realname']['title']    = $lang->user->realname;
+$config->my->team->dtable->fieldList['realname']['type']     = 'text';
+$config->my->team->dtable->fieldList['realname']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userid={id}&from = my');
+$config->my->team->dtable->fieldList['realname']['group']    = '1';
+$config->my->team->dtable->fieldList['realname']['sortType'] = true;
+
+$config->my->team->dtable->fieldList['account']['name']     = 'account';
+$config->my->team->dtable->fieldList['account']['title']    = $lang->user->account;
+$config->my->team->dtable->fieldList['account']['type']     = 'text';
+$config->my->team->dtable->fieldList['account']['group']    = '1';
+$config->my->team->dtable->fieldList['account']['sortType'] = true;
+
+$config->my->team->dtable->fieldList['role']['name']     = 'role';
+$config->my->team->dtable->fieldList['role']['title']    = $lang->user->role;
+$config->my->team->dtable->fieldList['role']['type']     = 'category';
+$config->my->team->dtable->fieldList['role']['map']      = $lang->user->roleList;
+$config->my->team->dtable->fieldList['role']['sortType'] = true;
+$config->my->team->dtable->fieldList['role']['group']    = '2';
+
+$config->my->team->dtable->fieldList['email']['name']     = 'email';
+$config->my->team->dtable->fieldList['email']['title']    = $lang->user->email;
+$config->my->team->dtable->fieldList['email']['type']     = 'text';
+$config->my->team->dtable->fieldList['email']['sortType'] = true;
+$config->my->team->dtable->fieldList['email']['group']    = '3';
+
+$config->my->team->dtable->fieldList['gender']['name']     = 'gender';
+$config->my->team->dtable->fieldList['gender']['title']    = $lang->user->gender;
+$config->my->team->dtable->fieldList['gender']['type']     = 'category';
+$config->my->team->dtable->fieldList['gender']['map']      = $lang->user->genderList;
+$config->my->team->dtable->fieldList['gender']['sortType'] = true;
+$config->my->team->dtable->fieldList['gender']['group']    = '3';
+
+$config->my->team->dtable->fieldList['phone']['name']     = 'phone';
+$config->my->team->dtable->fieldList['phone']['title']    = $lang->user->phone;
+$config->my->team->dtable->fieldList['phone']['type']     = 'text';
+$config->my->team->dtable->fieldList['phone']['sortType'] = true;
+$config->my->team->dtable->fieldList['phone']['group']    = '3';
+
+if(!empty($this->config->isINT))
+{
+    $config->my->team->dtable->fieldList['skype']['name']     = 'skype';
+    $config->my->team->dtable->fieldList['skype']['title']    = $lang->user->skype;
+    $config->my->team->dtable->fieldList['skype']['type']     = 'text';
+    $config->my->team->dtable->fieldList['skype']['sortType'] = true;
+    $config->my->team->dtable->fieldList['skype']['group']    = '3';
+}
+else
+{
+    $config->my->team->dtable->fieldList['qq']['name']     = 'qq';
+    $config->my->team->dtable->fieldList['qq']['title']    = $lang->user->qq;
+    $config->my->team->dtable->fieldList['qq']['type']     = 'text';
+    $config->my->team->dtable->fieldList['qq']['sortType'] = true;
+    $config->my->team->dtable->fieldList['qq']['group']    = '3';
+}
+
+$config->my->team->dtable->fieldList['last']['name']     = 'last';
+$config->my->team->dtable->fieldList['last']['title']    = $lang->user->last;
+$config->my->team->dtable->fieldList['last']['type']     = 'date';
+$config->my->team->dtable->fieldList['last']['sortType'] = true;
+$config->my->team->dtable->fieldList['last']['group']    = '4';
+
+$config->my->team->dtable->fieldList['visits']['name']     = 'visits';
+$config->my->team->dtable->fieldList['visits']['title']    = $lang->user->visits;
+$config->my->team->dtable->fieldList['visits']['type']     = 'text';
+$config->my->team->dtable->fieldList['visits']['sortType'] = true;
+$config->my->team->dtable->fieldList['visits']['group']    = '4';
