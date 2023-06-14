@@ -12,9 +12,45 @@ namespace zin;
 
 $canBeChanged = common::canBeChanged('build', $build);
 $menus        = $this->build->buildOperateMenu($build);
+
+$buildItems = array();
+foreach($buildPairs as $id => $name)
+{
+    $buildItem['text']   = $name;
+    $buildItem['url']    = helper::createLink($builds[$id]->execution ? 'build' : 'projectbuild', 'view', "buildID=$id");
+    $buildItem['active'] = $id == $build->id;
+
+    $buildItems[] = $buildItem;
+}
+
 detailHeader
 (
-    to::title(entityLabel(set(array('entityID' => $build->id, 'level' => 1, 'text' => $build->name)))),
+    to::prefix
+    (
+        backBtn
+        (
+            set::icon('back'),
+            set::type('secondary'),
+            set::back('GLOBAL'),
+            $lang->goback
+        ),
+        dropdown
+        (
+            btn
+            (
+                setClass('ghost text-primary bg-light bg-opacity-50'),
+                entityLabel
+                (
+                    set::entityID($build->id),
+                    set::level(2),
+                    set::text($build->name),
+                    set::textClass('text-primary'),
+                    set::idClass('id-label'),
+                ),
+            ),
+            set::items($buildItems),
+        )
+    ),
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
