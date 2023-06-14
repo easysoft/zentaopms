@@ -530,6 +530,6 @@ class admin extends control
 
         $this->dao->sqlite->rawExec($query->sql);
         $this->dao->update(TABLE_SQLITE_QUEUE)->set('status')->eq('done')->set('execDate')->eq($now)->where('id')->eq($query->id)->exec();
-        die('ok');
+        echo 'ok';
     }
 }
