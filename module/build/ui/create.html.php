@@ -119,7 +119,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            setClass('ml-4 items-center'),
+            setClass('pl-4 items-center'),
             icon('help')
         ),
     ),
