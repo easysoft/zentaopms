@@ -2,7 +2,7 @@
 global $lang;
 $config->stakeholder->dtable = new stdclass();
 $config->stakeholder->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->stakeholder->dtable->fieldList['id']['type']     = 'checkID';
+$config->stakeholder->dtable->fieldList['id']['type']     = 'idAB';
 $config->stakeholder->dtable->fieldList['id']['fixed']    = 'left';
 $config->stakeholder->dtable->fieldList['id']['sortType'] = true;
 $config->stakeholder->dtable->fieldList['id']['required'] = true;
