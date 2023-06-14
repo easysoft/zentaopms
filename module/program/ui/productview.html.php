@@ -1,7 +1,22 @@
 <?php
+declare(strict_types=1);
+/**
+* The UI file of program module of ZenTaoPMS.
+*
+* @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+* @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+* @author      chen.tao <chentao@easycorp.ltd>
+* @package     program
+* @link        https://www.zentao.net
+*/
+
 namespace zin;
 
-$cols = array_values($config->program->productview->dtable->fieldList);
+/* Generate cols for the data table. */
+$fnGenerateCols = function()
+{
+    return $this->loadModel('datatable') ->getSetting('program');
+};
 
 $totalStories = 0;
 $hasProduct   = false;
@@ -151,6 +166,8 @@ jsVar('summary', $summary);
 
 set::title($lang->program->productView);
 
+/* Layout. */
+
 featureBar
 (
     set::current($browseType),
@@ -195,7 +212,7 @@ toolbar
 
 dtable
 (
-    set::cols($cols),
+    set::cols($fnGenerateCols()),
     set::data($data),
     set::customCols(true),
     set::className('shadow rounded'),
