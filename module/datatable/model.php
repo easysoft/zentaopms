@@ -17,53 +17,66 @@ class datatableModel extends model
      * Get field list.
      *
      * @param  string $module
+     * @param  string $surffix
      * @access public
      * @return array
      */
-    public function getFieldList($module)
+    public function getFieldList($module, $surffix = '')
     {
+        /* Load corresponding module. */
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if($this->session->hasProduct == 0 and (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
+
+        $config = $this->config->$module;
+        if(!empty($surffix)) $config = $config->$surffix;
+        $fieldList = $config->dtable->fieldList;
+
+        /* If doesn't need product, remove 'product' field. */
+        if($this->session->hasProduct == 0 && (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
         {
-            $productIndex = array_search('product', $this->config->$module->dtable->defaultField);
-            if($productIndex) unset($this->config->$module->dtable->defaultField[$productIndex]);
-            if(isset($this->config->$module->dtable->fieldList['product'])) unset($this->config->$module->dtable->fieldList['product']);
+            $productIndex = array_search('product', $config->dtable->defaultField);
+            if($productIndex) unset($config->dtable->defaultField[$productIndex]);
+            if(isset($fieldList['product'])) unset($fieldList['product']);
         }
-        if($this->session->currentProductType === 'normal') unset($this->config->$module->dtable->fieldList['branch']);
-        foreach($this->config->$module->dtable->fieldList as $field => $items)
+
+        /* Nomal product without 'branch' field. */
+        if($this->session->currentProductType === 'normal') unset($config->fieldList['branch']);
+
+        foreach($fieldList as $fieldName => $items)
         {
-            if($field === 'branch')
+            if($fieldName === 'branch')
             {
-                if($this->session->currentProductType === 'branch')   $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->branch;
-                if($this->session->currentProductType === 'platform') $this->config->$module->dtable->fieldList[$field]['title'] = $this->lang->datatable->platform;
+                if($this->session->currentProductType === 'branch')   $fieldList[$fieldName]['title'] = $this->lang->datatable->branch;
+                if($this->session->currentProductType === 'platform') $fieldList[$fieldName]['title'] = $this->lang->datatable->platform;
                 continue;
             }
 
-            if(!isset($items['title'])) $items['title'] = $field;
+            /* Translate field title. */
+            if(!isset($items['title'])) $items['title'] = $fieldName;
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
-            $this->config->$module->dtable->fieldList[$field]['title'] = $title;
+            $fieldList[$fieldName]['title'] = $title;
 
             /* Set col config default value. */
             if(!empty($items['type']) && isset($this->config->datatable->defaultColConfig[$items['type']]))
             {
-                $this->config->$module->dtable->fieldList[$field] = array_merge($this->config->datatable->defaultColConfig[$items['type']], $this->config->$module->dtable->fieldList[$field]);
+                $fieldList[$fieldName] = array_merge($this->config->datatable->defaultColConfig[$items['type']], $fieldList[$fieldName]);
             }
         }
 
+        /* Logic except open source version .*/
         if($this->config->edition != 'open')
         {
             $fields = $this->loadModel('workflowfield')->getList($module);
             foreach($fields as $field)
             {
                 if($field->buildin) continue;
-                $this->config->$module->dtable->fieldList[$field->field]['title']    = $field->name;
-                $this->config->$module->dtable->fieldList[$field->field]['width']    = '120';
-                $this->config->$module->dtable->fieldList[$field->field]['fixed']    = 'no';
-                $this->config->$module->dtable->fieldList[$field->field]['required'] = 'no';
+                $fieldList[$field->field]['title']    = $field->name;
+                $fieldList[$field->field]['width']    = '120';
+                $fieldList[$field->field]['fixed']    = 'no';
+                $fieldList[$field->field]['required'] = 'no';
             }
         }
 
-        return $this->config->$module->dtable->fieldList;
+        return $fieldList;
     }
 
     /**

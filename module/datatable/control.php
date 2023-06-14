@@ -139,7 +139,9 @@ class datatable extends control
         if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
         if(empty($setting))
         {
-            $cols = $this->datatable->getFieldList($module);
+            $cfgSurffix = ($module == 'program' && $method == 'productview') ? $method : '';
+
+            $cols = $this->datatable->getFieldList($module, $cfgSurffix);
             $cols = $this->datatable->formatFields($module, $cols, false);
         }
         else
