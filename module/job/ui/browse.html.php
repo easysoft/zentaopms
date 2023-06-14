@@ -12,7 +12,12 @@ declare(strict_types=1);
 
 namespace zin;
 
-featureBar();
+/* zin: Define the set::module('job') feature bar on main menu. */
+featureBar
+(
+    set::current('job'),
+    set::link($this->createLink('{key}', 'browse', "repoID=$repoID")),
+);
 
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('job', 'create');
@@ -29,7 +34,7 @@ toolbar
 jsVar('confirmDelete',    $lang->job->confirmDelete);
 jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('job', 'browseProject'));
-jsVar('sortLink',         helper::createLink('job', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink',         helper::createLink('job', 'browse', "repoID={$repoID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 dtable
 (

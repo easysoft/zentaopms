@@ -10,14 +10,14 @@ window.createSortLink = function(col)
  * 提示并删除版本。
  * Delete release with tips.
  *
- * @param  int    gogsID
+ * @param  int    jobID
  * @access public
  * @return void
  */
-window.confirmDelete = function(gogsID)
+window.confirmDelete = function(jobID)
 {
     if(window.confirm(confirmDelete))
     {
-        $.ajaxSubmit({url: $.createLink('gogs', 'delete', 'gogsID=' + gogsID)});
+        $.ajaxSubmit({url: $.createLink('job', 'delete', 'jobID=' + jobID)});
     }
 }

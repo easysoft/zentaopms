@@ -28,13 +28,13 @@ $config->job->dtable->fieldList['repo']['sortType'] = true;
 $config->job->dtable->fieldList['repo']['width']    = '100';
 
 $config->job->dtable->fieldList['engine']['title']    = $lang->job->engine;
-$config->job->dtable->fieldList['engine']['name']     = 'engineName';
+$config->job->dtable->fieldList['engine']['name']     = 'engine';
 $config->job->dtable->fieldList['engine']['type']     = 'text';
 $config->job->dtable->fieldList['engine']['sortType'] = true;
 $config->job->dtable->fieldList['engine']['width']    = '80';
 
 $config->job->dtable->fieldList['frame']['title']    = $lang->job->frame;
-$config->job->dtable->fieldList['frame']['name']     = 'frameName';
+$config->job->dtable->fieldList['frame']['name']     = 'frame';
 $config->job->dtable->fieldList['frame']['type']     = 'text';
 $config->job->dtable->fieldList['frame']['sortType'] = true;
 $config->job->dtable->fieldList['frame']['show']     = true;
@@ -43,17 +43,17 @@ $config->job->dtable->fieldList['frame']['width']    = '120';
 $config->job->dtable->fieldList['buildSpec']['title']    = $lang->job->buildSpec;
 $config->job->dtable->fieldList['buildSpec']['name']     = 'buildSpec';
 $config->job->dtable->fieldList['buildSpec']['type']     = 'text';
-$config->job->dtable->fieldList['buildSpec']['sortType'] = true;
+$config->job->dtable->fieldList['buildSpec']['sortType'] = false;
 $config->job->dtable->fieldList['buildSpec']['width']    = '160';
 
 $config->job->dtable->fieldList['triggerType']['title']    = $lang->job->triggerType;
-$config->job->dtable->fieldList['triggerType']['name']     = 'triggerConfig';
+$config->job->dtable->fieldList['triggerType']['name']     = 'triggerType';
 $config->job->dtable->fieldList['triggerType']['type']     = 'text';
 $config->job->dtable->fieldList['triggerType']['sortType'] = false;
 $config->job->dtable->fieldList['triggerType']['width']    = '120';
 
 $config->job->dtable->fieldList['lastStatus']['title']    = $lang->job->lastStatus;
-$config->job->dtable->fieldList['lastStatus']['name']     = 'lastStatusName';
+$config->job->dtable->fieldList['lastStatus']['name']     = 'lastStatus';
 $config->job->dtable->fieldList['lastStatus']['type']     = 'status';
 $config->job->dtable->fieldList['lastStatus']['sortType'] = true;
 $config->job->dtable->fieldList['lastStatus']['width']    = '120';
