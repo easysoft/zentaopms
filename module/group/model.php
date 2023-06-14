@@ -70,21 +70,21 @@ class groupModel extends model
      *
      * @param  int    $groupID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function copy($groupID)
+    public function copy(int $groupID): bool
     {
         $group = fixer::input('post')->remove('options')->get();
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)->check('name', 'unique')->check('name', 'notempty')->exec();
-        if($this->post->options == false) return;
-        if(!dao::isError())
-        {
-            $newGroupID = $this->dao->lastInsertID();
-            $options    = join(',', $this->post->options);
-            if(strpos($options, 'copyPriv') !== false) $this->copyPriv($groupID, $newGroupID);
-            if(strpos($options, 'copyUser') !== false) $this->copyUser($groupID, $newGroupID);
-        }
+        if(dao::isError()) return false;
+
+        if(!$this->post->options) return true;
+
+        $newGroupID = $this->dao->lastInsertID();
+        if(in_array('copyPriv', $this->post->options)) $this->copyPriv($groupID, $newGroupID);
+        if(in_array('copyUser', $this->post->options)) $this->copyUser($groupID, $newGroupID);
+        return true;
     }
 
     /**
