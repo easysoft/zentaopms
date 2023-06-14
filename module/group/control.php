@@ -82,14 +82,14 @@ class group extends control
      * @access public
      * @return void
      */
-    public function edit($groupID)
+    public function edit(int $groupID)
     {
        if(!empty($_POST))
         {
             $this->group->update($groupID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
