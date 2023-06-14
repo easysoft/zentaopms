@@ -232,17 +232,18 @@ $config->program->projectView->dtable->fieldList['progress']['type']     = 'circ
 global $app;
 $app->loadLang('project');
 
-$config->program->projectView->dtable->fieldList['actions']['name']   = 'actions';
-$config->program->projectView->dtable->fieldList['actions']['title']  = $lang->actions;
-$config->program->projectView->dtable->fieldList['actions']['width']  = 160;
-$config->program->projectView->dtable->fieldList['actions']['type']   = 'actions';
-$config->program->projectView->dtable->fieldList['actions']['fixed']  = 'right';
-$config->program->projectView->dtable->fieldList['actions']['actionsMap'] = array(
+$config->program->projectView->dtable->fieldList['actions']['name']       = 'actions';
+$config->program->projectView->dtable->fieldList['actions']['title']      = $lang->actions;
+$config->program->projectView->dtable->fieldList['actions']['width']      = 160;
+$config->program->projectView->dtable->fieldList['actions']['type']       = 'actions';
+$config->program->projectView->dtable->fieldList['actions']['fixed']      = 'right';
+$config->program->projectView->dtable->fieldList['actions']['actionsMap'] = array
+(
     'program_start'     => array('icon'  => 'icon-start',        'hint' => $lang->program->start),
     'program_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->program->suspend),
     'program_close'     => array('icon'  => 'icon-off',          'hint' => $lang->program->close),
     'program_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->program->activate),
-    'program_other'     => array('caret' => true,                'hint' => $lang->program->other, 'type' => 'dropdown', ),
+    'program_other'     => array('caret' => true,                'hint' => $lang->other, 'type' => 'dropdown'),
     'program_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->program->edit),
     'program_create'    => array('icon'  => 'icon-split',        'hint' => $lang->program->create),
     'program_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->program->delete),
@@ -250,7 +251,7 @@ $config->program->projectView->dtable->fieldList['actions']['actionsMap'] = arra
     'project_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->project->suspend),
     'project_close'     => array('icon'  => 'icon-off',          'hint' => $lang->project->close),
     'project_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->project->activate),
-    'project_other'     => array('caret' => true,                'hint' => $lang->project->other, 'type' => 'dropdown', ),
+    'project_other'     => array('caret' => true,                'hint' => $lang->project->other, 'type' => 'dropdown'),
     'project_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->project->edit),
     'project_team'      => array('icon'  => 'icon-groups',       'hint' => $lang->project->manageMembers),
     'project_group'     => array('icon'  => 'icon-lock',         'hint' => $lang->project->group),
