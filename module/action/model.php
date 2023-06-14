@@ -1304,6 +1304,17 @@ class actionModel extends model
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
 
+        /* If idList include ',*,' Format ',*,' to '*'. */
+        foreach($projectIdList as $key => $idList)
+        {
+            $idList = explode(',', $idList);
+
+            foreach($idList as $id) $projectIdList[] = $id;
+            unset($projectIdList[$key]);
+        }
+
+        if($projectIdList) $projectIdList = array_unique($projectIdList);
+
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
         $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
