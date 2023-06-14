@@ -50,6 +50,7 @@ formPanel
             checkbox(
                 set::name('sync'),
                 set::rootClass('ml-4'),
+                set::checked(1),
                 set::value(1),
                 set::text($lang->release->syncFromBuilds),
             ),
