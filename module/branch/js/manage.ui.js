@@ -11,12 +11,10 @@ window.changeStatus = function(branchID, changeStatus)
 {
     const methodName = changeStatus == 'close' ? 'close' : 'activate';
     const confirmMsg = changeStatus == 'close' ? confirmclose : confirmactivate;
-    if(window.confirm(confirmMsg))
+    zui.Modal.confirm({message: confirmMsg, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        $.ajaxSubmit({
-            url: $.createLink('branch', methodName, `branchID=${branchID}`)
-        });
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('branch', methodName, `branchID=${branchID}`)});
+    });
 }
 
 /**
