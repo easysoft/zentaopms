@@ -40,7 +40,10 @@ $config->dataview->columnTypes->NEWDECIMAL = 'number';
 /* Dameng native_type. */
 $config->dataview->columnTypes->int       = 'number';
 $config->dataview->columnTypes->varchar   = 'string';
+$config->dataview->columnTypes->text      = 'string';
 $config->dataview->columnTypes->timestamp = 'string';
 $config->dataview->columnTypes->date      = 'date';
-$config->dataview->columnTypes->text      = 'string';
-$config->dataview->columnTypes->blob      = 'string';
+$config->dataview->columnTypes->time      = 'string';
+$config->dataview->columnTypes->double    = 'number';
+$config->dataview->columnTypes->number    = 'number';
+$config->dataview->columnTypes->bigint    = 'number';
