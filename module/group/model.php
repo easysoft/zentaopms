@@ -17,9 +17,9 @@ class groupModel extends model
      * Create a group.
      *
      * @access public
-     * @return bool
+     * @return int|false
      */
-    public function create()
+    public function create(): int|false
     {
         $group = fixer::input('post')->get();
         if(isset($group->limited))
@@ -28,7 +28,12 @@ class groupModel extends model
             $group->role = 'limited';
         }
         $this->lang->error->unique = $this->lang->group->repeat;
-        $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->check('name', 'unique')->exec();
+        $this->dao->insert(TABLE_GROUP)->data($group)
+            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
+            ->check('name', 'unique')
+            ->exec();
+        if(dao::isError()) return false;
+
         $groupID = $this->dao->lastInsertId();
 
         $data         = new stdclass();
