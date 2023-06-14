@@ -40,6 +40,7 @@ if(!$canRecordEffort)
 }
 else
 {
+    jsVar('consumed', empty($task->team) ? $task->consumed : (float)$task->myConsumed);
     jsVar('task', $task);
     jsVar('consumedEmpty', $lang->task->error->consumedEmptyAB);
 
@@ -99,10 +100,10 @@ else
             span
             (
                 setClass('flex gap-x-2 mr-3'),
-                $lang->task->hasConsumed,
+                !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed,
                 span
                 (
-                    set::class('label secondary-pale'),
+                    setClass('label secondary-pale'),
                     $task->consumed . $lang->task->suffixHour,
                 ),
             ),
@@ -112,8 +113,13 @@ else
                 $lang->task->consumed,
                 span
                 (
-                    set::class('label warning-pale'),
-                    $task->consumed . $lang->task->suffixHour,
+                    setClass('label warning-pale'),
+                    span
+                    (
+                        setID('totalConsumed'),
+                        $task->consumed
+                    ),
+                    $lang->task->suffixHour,
                 )
             ),
         ),
