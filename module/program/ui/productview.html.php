@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-$cols = array_values($config->program->productView->dtable->fieldList);
+$cols = array_values($config->program->productview->dtable->fieldList);
 
 $totalStories = 0;
 $hasProduct   = false;
@@ -47,7 +47,6 @@ foreach($productStructure as $programID => $program)
         $item->name             = $program['programName'];
         $item->id               = 'program-' . $programID;
         $item->type             = 'program';
-        $item->level            = 1;
         $item->asParent         = true;
         $item->feedback         = rand(0, 100);
         $item->programName      = $program['programName'];
@@ -196,9 +195,10 @@ toolbar
 
 dtable
 (
-    set::className('shadow rounded'),
     set::cols($cols),
     set::data($data),
+    set::customCols(true),
+    set::className('shadow rounded'),
     set::footPager(usePager()),
     set::nested(true),
     set::onRenderCell(jsRaw('function(result, data){ return window.renderReleaseCountCell(result, data); }')),
