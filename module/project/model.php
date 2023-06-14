@@ -1424,12 +1424,10 @@ class projectModel extends model
      */
     public function batchUpdate()
     {
-        $projects    = array();
-        $allChanges  = array();
-        $data        = fixer::input('post')->get();
-        $oldProjects = $this->getByIdList($this->post->projectIdList);
-        $nameList    = array();
-
+        $projects     = array();
+        $allChanges   = array();
+        $data         = fixer::input('post')->get();
+        $oldProjects  = $this->getByIdList($this->post->projectIdList);
         $extendFields = $this->getFlowExtendFields();
         foreach($data->projectIdList as $projectID)
         {
@@ -1455,7 +1453,7 @@ class projectModel extends model
             foreach($extendFields as $extendField)
             {
                 $projects[$projectID]->{$extendField->field} = $this->post->{$extendField->field}[$projectID];
-                if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = join(',', $projects[$projectID]->{$extendField->field});
+                if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = implode(',', $projects[$projectID]->{$extendField->field});
 
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
             }
@@ -1850,9 +1848,7 @@ class projectModel extends model
      */
     public function printCell($col, $project, $users, $programID = 0)
     {
-        $canOrder     = common::hasPriv('project', 'updateOrder');
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
-        $account      = $this->app->user->account;
         $field        = $col->id;
         $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', false, $project->id);
 
@@ -2005,8 +2001,7 @@ class projectModel extends model
             $unit   = $this->lang->project->hundredMillion;
         }
 
-        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, $this->config->project->budget->precision);
-        return $projectBudget;
+        return in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, $this->config->project->budget->precision);
     }
 
     /**
@@ -2028,7 +2023,7 @@ class projectModel extends model
         {
             $products      = array();
             $otherProducts = $_POST['otherProducts'];
-            foreach($otherProducts as $index => $otherProduct)
+            foreach($otherProducts as $otherProduct)
             {
                 if(!$otherProduct) continue;
 
@@ -2076,7 +2071,7 @@ class projectModel extends model
         }
 
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
+        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();
 
         $existedProducts = array();
         foreach($products as $i => $productID)
@@ -2602,11 +2597,10 @@ class projectModel extends model
      */
     public function getDataByProject($table, $projectID, $type = '')
     {
-        $result = $this->dao->select('id')->from($table)
+        return $this->dao->select('id')->from($table)
             ->where('project')->eq($projectID)
             ->beginIF(!empty($type))->andWhere('type')->eq($type)->fi()
             ->fetch();
-        return $result;
     }
 
     /**

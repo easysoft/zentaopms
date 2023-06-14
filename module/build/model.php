@@ -92,7 +92,7 @@ class buildModel extends model
         }
         $executions = $this->loadModel('execution')->getByIdList($executionIdList, 'all');
 
-        foreach($builds as $buildID => $build)
+        foreach($builds as $build)
         {
             $build->executionDeleted = $build->execution ? $executions[$build->execution]->deleted : 0;
             $build->executionName    = $build->execution ? $executions[$build->execution]->name : '';
@@ -806,15 +806,13 @@ class buildModel extends model
      * Build action menu.
      *
      * @param  object $build
-     * @param  string $type
      * @access public
      * @return array
      */
-    public function buildOperateMenu(object $build, string $type = 'view'): array
+    public function buildOperateMenu(object $build): array
     {
-        $menu   = array();
-        $params = "buildID=$build->id";
-
+        $menu         = array();
+        $params       = "buildID={$build->id}";
         $canBeChanged = common::canBeChanged('build', $build);
         if($build->deleted || !$canBeChanged) return $menu;
 

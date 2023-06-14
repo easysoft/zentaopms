@@ -65,7 +65,7 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $groupID = $this->group->create();
+            $this->group->create();
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));

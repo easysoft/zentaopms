@@ -1020,11 +1020,8 @@ class executionModel extends model
         {
             /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
             $selfAndChildrenList = $this->programplan->getSelfAndChildrenList($executionID);
-            $siblingStages       = $this->programplan->getSiblings($executionID);
-
-            $selfAndChildren = $selfAndChildrenList[$executionID];
-            $execution       = $selfAndChildren[$executionID];
-            $executionType   = $execution->type;
+            $selfAndChildren     = $selfAndChildrenList[$executionID];
+            $execution           = $selfAndChildren[$executionID];
 
             if($status == 'wait' and $execution->status != 'wait')
             {
@@ -1926,9 +1923,8 @@ class executionModel extends model
 
         $emptyHour  = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $today      = helper::today();
-        $childList  = array();
         $parentList = array();
-        foreach($executions as $key => $execution)
+        foreach($executions as $execution)
         {
             $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
 
@@ -2472,7 +2468,7 @@ class executionModel extends model
         $taskIdList = array_unique($taskIdList);
         $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
 
-        foreach($executionTasks as $executionID => $tasks)
+        foreach($executionTasks as $tasks)
         {
             foreach($tasks as $task)
             {
@@ -5399,7 +5395,6 @@ class executionModel extends model
         $rows  = array();
         foreach($executions as $execution)
         {
-            $label = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             $link  = $execution->type == 'kanban' ? helper::createLink('execution', 'kanban', "id=$execution->id") : helper::createLink('execution', 'task', "id=$execution->id");
             $execution->rawID         = $execution->id;
             $execution->isExecution   = 1;
@@ -5445,7 +5440,7 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
-        foreach($tasks as $id => $task)
+        foreach($tasks as $task)
         {
             foreach($this->config->projectExecution->dtable->fieldList['actions']['task'] as $action)
             {
