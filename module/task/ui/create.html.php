@@ -56,7 +56,7 @@ $kanbanRow = '';
 /* The region and lane fields are only showed in kanban. */
 if($execution->type == 'kanban')
 {
-    $kanbanRow = formRow (
+    $kanbanRow = formRow(
         formGroup
         (
             set::width('1/2'),
