@@ -63,16 +63,18 @@ $config->program->productview->dtable->fieldList = array();
 $config->program->productview->dtable->fieldList['name']['name']         = 'name';
 $config->program->productview->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->productview->dtable->fieldList['name']['type']         = 'title';
+$config->program->productview->dtable->fieldList['name']['required']     = true;
 $config->program->productview->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->productview->dtable->fieldList['name']['checkbox']     = true;
 $config->program->productview->dtable->fieldList['name']['sortType']     = true;
 $config->program->productview->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
 $config->program->productview->dtable->fieldList['name']['group']        = 'g1';
 
-$config->program->productview->dtable->fieldList['PM']['name']  = 'PM';
-$config->program->productview->dtable->fieldList['PM']['title'] = $lang->program->PM;
-$config->program->productview->dtable->fieldList['PM']['type']  = 'avatarBtn';
-$config->program->productview->dtable->fieldList['PM']['group'] = 'g2';
+$config->program->productview->dtable->fieldList['PM']['name']     = 'PM';
+$config->program->productview->dtable->fieldList['PM']['title']    = $lang->program->PM;
+$config->program->productview->dtable->fieldList['PM']['type']     = 'avatarBtn';
+$config->program->productview->dtable->fieldList['PM']['required'] = true;
+$config->program->productview->dtable->fieldList['PM']['group']    = 'g2';
 
 $config->program->productview->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->program->productview->dtable->fieldList['createdDate']['title']    = '创建时间';
@@ -89,6 +91,7 @@ $config->program->productview->dtable->fieldList['unclosedReqCount']['name']    
 $config->program->productview->dtable->fieldList['unclosedReqCount']['title']    = $lang->program->unclosedReqCount;
 $config->program->productview->dtable->fieldList['unclosedReqCount']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['unclosedReqCount']['type']     = 'number';
+$config->program->productview->dtable->fieldList['unclosedReqCount']['required'] = true;
 $config->program->productview->dtable->fieldList['unclosedReqCount']['sortType'] = true;
 $config->program->productview->dtable->fieldList['unclosedReqCount']['group']    = 'g4';
 
@@ -103,12 +106,14 @@ $config->program->productview->dtable->fieldList['closedReqRate']['name']     = 
 $config->program->productview->dtable->fieldList['closedReqRate']['title']    = $lang->program->closedReqRate;
 $config->program->productview->dtable->fieldList['closedReqRate']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['closedReqRate']['type']     = 'progress';
+$config->program->productview->dtable->fieldList['closedReqRate']['required'] = true;
 $config->program->productview->dtable->fieldList['closedReqRate']['sortType'] = true;
 $config->program->productview->dtable->fieldList['closedReqRate']['group']    = 'g4';
 
 $config->program->productview->dtable->fieldList['planCount']['name']     = 'plans';
 $config->program->productview->dtable->fieldList['planCount']['title']    = $lang->productplan->shortCommon;
 $config->program->productview->dtable->fieldList['planCount']['type']     = 'number';
+$config->program->productview->dtable->fieldList['planCount']['required'] = true;
 $config->program->productview->dtable->fieldList['planCount']['sortType'] = true;
 $config->program->productview->dtable->fieldList['planCount']['group']    = 'g5';
 
@@ -121,6 +126,7 @@ $config->program->productview->dtable->fieldList['projectCount']['group']    = '
 $config->program->productview->dtable->fieldList['executionCount']['name']     = 'executionCount';
 $config->program->productview->dtable->fieldList['executionCount']['title']    = $lang->execution->common;
 $config->program->productview->dtable->fieldList['executionCount']['type']     = 'number';
+$config->program->productview->dtable->fieldList['executionCount']['required'] = true;
 $config->program->productview->dtable->fieldList['executionCount']['sortType'] = true;
 $config->program->productview->dtable->fieldList['executionCount']['group']    = 'g5';
 
@@ -128,6 +134,7 @@ $config->program->productview->dtable->fieldList['testCaseCoverage']['name']    
 $config->program->productview->dtable->fieldList['testCaseCoverage']['title']    = $lang->program->testCaseCoverage;
 $config->program->productview->dtable->fieldList['testCaseCoverage']['minWidth'] = 100;
 $config->program->productview->dtable->fieldList['testCaseCoverage']['type']     = 'progress';
+$config->program->productview->dtable->fieldList['testCaseCoverage']['required'] = true;
 $config->program->productview->dtable->fieldList['testCaseCoverage']['sortType'] = true;
 $config->program->productview->dtable->fieldList['testCaseCoverage']['group']    = 'g6';
 
@@ -135,6 +142,7 @@ $config->program->productview->dtable->fieldList['bugActivatedCount']['name']   
 $config->program->productview->dtable->fieldList['bugActivatedCount']['title']    = $lang->program->bugActivatedCount;
 $config->program->productview->dtable->fieldList['bugActivatedCount']['minWidth'] = 86;
 $config->program->productview->dtable->fieldList['bugActivatedCount']['type']     = 'number';
+$config->program->productview->dtable->fieldList['bugActivatedCount']['required'] = true;
 $config->program->productview->dtable->fieldList['bugActivatedCount']['sortType'] = true;
 $config->program->productview->dtable->fieldList['bugActivatedCount']['group']    = 'g7';
 
@@ -149,12 +157,14 @@ $config->program->productview->dtable->fieldList['fixedRate']['name']     = 'fix
 $config->program->productview->dtable->fieldList['fixedRate']['title']    = $lang->program->fixedRate;
 $config->program->productview->dtable->fieldList['fixedRate']['minWidth'] = 80;
 $config->program->productview->dtable->fieldList['fixedRate']['type']     = 'progress';
+$config->program->productview->dtable->fieldList['fixedRate']['required'] = true;
 $config->program->productview->dtable->fieldList['fixedRate']['sortType'] = true;
 $config->program->productview->dtable->fieldList['fixedRate']['group']    = 'g7';
 
 $config->program->productview->dtable->fieldList['releaseCount']['name']     = 'releaseCount';
 $config->program->productview->dtable->fieldList['releaseCount']['title']    = $lang->release->common;
 $config->program->productview->dtable->fieldList['releaseCount']['type']     = 'number';
+$config->program->productview->dtable->fieldList['releaseCount']['required'] = true;
 $config->program->productview->dtable->fieldList['releaseCount']['sortType'] = true;
 $config->program->productview->dtable->fieldList['releaseCount']['group']    = 'g8';
 
