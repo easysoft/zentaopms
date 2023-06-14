@@ -8,6 +8,7 @@
 #menu .nav > li > a > .text {white-space: nowrap;}
 
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
+#menuMainNav a {cursor: pointer;}
 #menuFooter {position: absolute; bottom: 6px; left: 0; right: 0;}
 
 #menuMoreNav {display: none;}
@@ -28,7 +29,7 @@
 #appTabs {position: absolute; left: 4px; right: 280px; top: 0; bottom: 0; user-select: none;}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .7;}
 #appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
-#appTabs > li > a.active {color: inherit; opacity: 1; color: var(--color-primary-500)}
+#appTabs > li > a.active {opacity: 1; color: var(--color-primary-500)}
 #appsToolbar {position: absolute; right: 4px; width: 280px; top: 0; bottom: 0; display: flex; justify-content: flex-end;}
 #appsToolbar > .btn {color: inherit}
 #appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
