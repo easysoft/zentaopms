@@ -176,11 +176,23 @@ class sqlite
      *
      * @param  string $sql
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function exec(string $sql): void
+    public function exec(string $sql)
     {
-        $this->dbh->exec($this->formatSQL($sql));
+        return $this->dbh->exec($this->formatSQL($sql));
+    }
+
+    /**
+     * Execute sql without format.
+     *
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function rawExec(string $sql)
+    {
+        return $this->dbh->exec($sql);
     }
 
     /**
