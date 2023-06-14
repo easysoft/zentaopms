@@ -27,7 +27,7 @@ class datatableModel extends model
         if(!isset($this->config->$module)) $this->loadModel($module);
 
         $config = $this->config->$module;
-        if(!empty($method)) $config = $config->$method;
+        if(isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
         $fieldList = $config->dtable->fieldList;
 
         /* If doesn't need product, remove 'product' field. */
@@ -90,13 +90,12 @@ class datatableModel extends model
     {
         $method      = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
-        $cfgMethod  = ($module == 'program' && $method == 'productview') ? $method : '';
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
         if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);
 
-        $fieldList = $this->getFieldList($module, $cfgMethod);
+        $fieldList = $this->getFieldList($module, $method);
         if(empty($setting))
         {
             $setting = $this->formatFields($module, $fieldList);
