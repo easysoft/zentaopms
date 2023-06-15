@@ -164,7 +164,7 @@ class testcase extends control
         }
 
         $queryCondition = '';
-        $topObjects     =  $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+        $topObjects     = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
 
         /* Get children cases and scenes.*/
         $scenes = $this->testcase->getList($productParam, $branch,$moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
@@ -373,14 +373,16 @@ class testcase extends control
         {
             $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
-            $productID = $this->product->saveState($productID, $products);
+            $productID = $this->product->saveVisitState($productID, $products);
+            $productID = (int)$productID;
             $product   = $this->product->getByID($productID);
             if(!$product->shadow) $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', $projectID, $branchID);
         }
         else
         {
             $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
+            $productID = $this->product->saveVisitState($productID, $products);
+            $productID = (int)$productID;
             $product   = $this->product->getByID($productID);
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
