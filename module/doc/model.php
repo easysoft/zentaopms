@@ -1954,7 +1954,7 @@ class docModel extends model
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
             ->fi()
             ->beginIF($type == 'project')
-            ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
+            ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
             ->orWhere("(objectType = 'review' and objectID in ($reviewIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
