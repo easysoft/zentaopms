@@ -1,7 +1,7 @@
 window.unlinkObject = function(objectType, objectID)
 {
     if(window.confirm(confirmLang[objectType])) $.get(unlinkURL[objectType].replace('%s', objectID), function(){loadPage(locateURL[objectType])});
-}
+};
 
 window.renderStoryCell = function(result, info)
 {
@@ -20,13 +20,14 @@ window.ajaxConfirmLoad = function(obj)
     var $this   = $(obj);
     var action = $this.data('action');
     if(window.confirm(confirmLang[action])) $.get($this.data('url'), function(){loadPage(locateURL[type])});
-}
+};
 
 window.showLink = function(obj)
 {
-    var $this = $(obj);
-    loadPage($this.data('linkurl'), '#' + $this.data('type') + 'DTable');
-}
+    var $this  = $(obj);
+    var idName = $this.data('type') == 'story' ? '#stories' : '#bugs';
+    $(idName).load($this.data('linkurl'));
+};
 
 $(document).on('click', '.batch-btn', function()
 {
@@ -47,4 +48,19 @@ $(document).on('click', '.batch-btn', function()
     {
         $.ajaxSubmit({"url": $(this).data('formaction'), "data": postData, "callback": loadPage(locateURL[type])});
     }
+});
+
+$(document).on('click', '.linkObjectBtn', function()
+{
+    const $this  = $(this);
+    const type   = $this.data('type');
+    const dtable = zui.DTable.query($this);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const postKey  = type == 'story' ? 'stories' : 'bugs';
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append(postKey + '[]', id));
+
+    $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage(locateURL[type])});
 });

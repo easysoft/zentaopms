@@ -166,8 +166,13 @@ $fnGetChildrenPlans = function($childrenPlans)
 $menus = $this->productplan->buildOperateMenu($plan);
 detailHeader
 (
-    to::prefix(backBtn(set::icon('back'), set::type('secondary'), set::back($this->session->productPlanList), $lang->goback)),
-    to::title(entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title)))),
+    to::prefix
+    (
+        backBtn(set::icon('back'), set::type('secondary'), set::back($this->session->productPlanList), $lang->goback),
+        entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title))),
+        span(setClass('label'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
+        $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
+    ),
     (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
@@ -193,7 +198,7 @@ detailBody
                         set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
                         set::trigger('hover'),
                     ),
-                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&param={$param}&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&browseType=&param={$param}&orderBy={$orderBy}"))),
                 ),
                 dtable
                 (
@@ -224,7 +229,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}&param={$param}&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}&browseType=&param={$param}&orderBy={$orderBy}"))),
                 ),
                 dtable
                 (

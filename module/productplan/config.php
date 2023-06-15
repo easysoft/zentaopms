@@ -69,5 +69,7 @@ $config->productplan->actionList['unlinkStory']['icon'] = 'unlink';
 $config->productplan->actionList['unlinkStory']['hint'] = $lang->productplan->unlinkStory;
 $config->productplan->actionList['unlinkStory']['url']  = 'javascript:unlinkObject("story", "{id}")';
 
-$config->productplan->defaultFields['story'] = array('id', 'title', 'module', 'pri', 'status', 'openedBy', 'assignedTo', 'estimate', 'stage', 'actions');
-$config->productplan->defaultFields['bug']   = array('id', 'title', 'pri', 'status', 'openedBy', 'assignedTo', 'actions');
+$config->productplan->defaultFields['story']     = array('id', 'title', 'module', 'pri', 'status', 'openedBy', 'assignedTo', 'estimate', 'stage', 'actions');
+$config->productplan->defaultFields['bug']       = array('id', 'title', 'pri', 'status', 'openedBy', 'assignedTo', 'actions');
+$config->productplan->defaultFields['linkStory'] = array('id', 'pri', 'plan', 'module', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
+$config->productplan->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'status');
