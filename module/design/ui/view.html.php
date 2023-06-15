@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('confirmDelete', $lang->design->confirmDelete);
+jsVar('type', strtolower($design->type));
 detailHeader
 (
     to::title(entityLabel(set(array('entityID' => $design->id, 'level' => 1, 'text' => $design->name)))),

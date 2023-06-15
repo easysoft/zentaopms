@@ -72,9 +72,6 @@ $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = 'All';
 $lang->design->rangeList['assign'] = 'Selected';
 
-$lang->design->featureBar['all'] = 'All';
-$lang->design->featureBar += $lang->design->typeList;
-
 /* 提示信息. */
 $lang->design->errorSelection = 'No record selected!';
 $lang->design->noDesign       = 'No record.';

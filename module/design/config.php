@@ -42,9 +42,10 @@ $config->design->actionList['viewCommit']['icon'] = 'list-alt';
 $config->design->actionList['viewCommit']['hint'] = $lang->design->viewCommit;
 $config->design->actionList['viewCommit']['url']  = helper::createLink('design', 'viewCommit', 'designID={id}');
 
-$config->design->actionList['delete']['icon'] = 'trash';
-$config->design->actionList['delete']['hint'] = $lang->design->delete;
-$config->design->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->design->actionList['delete']['icon']       = 'trash';
+$config->design->actionList['delete']['hint']       = $lang->design->delete;
+$config->design->actionList['delete']['url']        = helper::createLink('design', 'delete', 'designID={id}');
+$config->design->actionList['delete']['ajaxSubmit'] = true;
 
 $config->design->actionList['assignTo']['icon']        = 'hand-right';
 $config->design->actionList['assignTo']['text']        = $lang->design->assignTo;

@@ -72,9 +72,6 @@ $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';
 $lang->design->rangeList['assign'] = '选中记录';
 
-$lang->design->featureBar['browse']['all'] = '所有';
-$lang->design->featureBar['browse'] += $lang->design->typeList;
-
 /* 提示信息. */
 $lang->design->errorSelection = '还没有选中记录!';
 $lang->design->noDesign       = '暂时没有记录';

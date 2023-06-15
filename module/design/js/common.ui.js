@@ -1,18 +1,8 @@
-/**
- * 提示并删除设计。
- * Delete design with tips.
- *
- * @param  int    designID
- * @access public
- * @return void
- */
-window.confirmDelete = function(designID)
+$(function()
 {
-    zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
-    {
-        if(res) $.ajaxSubmit({url: $.createLink('design', 'delete', 'designID=' + designID)});
-    });
-}
+    $('#mainNavbar .nav a[data-id=' + type + ']').addClass('active');
+});
+
 
 /**
  * 渲染需求下拉框中的选项。

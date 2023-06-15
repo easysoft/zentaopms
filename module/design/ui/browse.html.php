@@ -10,11 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('+type', strtolower($type));
+jsVar('projectID', $projectID);
+jsVar('productID', $productID);
+
 /* zin: Define the set::module('design') feature bar on main menu. */
 featureBar
 (
-    set::current($type),
-    set::linkParams("projectID={$projectID}&productID={$productID}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle(set::module('design')))
 );
 

@@ -12,6 +12,7 @@ namespace zin;
 
 /* zin: Set variables to define picker options for form. */
 jsVar('projectID', $projectID);
+jsVar('type', strtolower($type));
 
 /* Cannot show product field in no-product project. */
 $productRow = '';
