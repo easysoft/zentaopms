@@ -83,7 +83,7 @@ class repo extends control
         $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal = count($repoList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $repoList = array_chunk($repoList, $pager->recPerPage);
@@ -138,7 +138,7 @@ class repo extends control
                 $this->loadModel('gitlab')->addPushWebhook($repo);
             }
 
-            $actionID = $this->loadModel('action')->create('repo', $repoID, 'created');
+            $this->loadModel('action')->create('repo', $repoID, 'created');
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
@@ -273,7 +273,6 @@ class repo extends control
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $nRevision);
-        $path = $entry ? $info->path : '';
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
         $this->view->type        = 'diff';
@@ -409,7 +408,7 @@ class repo extends control
         set_time_limit(0);
         $browser = helper::getBrowser();
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setBackSession('view', $withOtherModule = true);
+        $this->repo->setBackSession('view', true);
         if($repoID == 0) $repoID = $this->session->repoID;
         if($revision != 'HEAD')
         {
@@ -456,7 +455,7 @@ class repo extends control
             $content = helper::convertEncoding($content, $encoding);
         }
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager(0, 10, 1);
 
         $logType   = 'file';
@@ -514,7 +513,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch')
+    public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch',  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $repoID                 = $this->repo->saveState($repoID, $objectID);
         $originBranchID         = $branchID;
@@ -525,7 +524,7 @@ class repo extends control
 
         /* Set menu and session. */
         $this->commonAction($repoID, $objectID);
-        $this->repo->setBackSession('list', $withOtherModule = true);
+        $this->repo->setBackSession('list', true);
 
         session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
@@ -569,8 +568,8 @@ class repo extends control
         $path = $this->repo->decodePath($path);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 10, 1);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         if($_POST)
         {
@@ -590,12 +589,36 @@ class repo extends control
         }
 
         /* Set logType and revisions. */
-        $logType      = 'dir';
+        $logType      = $type;
         $revisions    = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
         $lastRevision = current($revisions);
+        $lastRevision = empty($lastRevision) ? new stdclass() : $lastRevision;
+        $pathInfo     = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
+        foreach($revisions as $item)
+        {
+            $item->link     = $this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$item->revision}" . $pathInfo);
+            $item->revision = $repo->SCM != 'Subversion' ? substr($item->revision, 0, 10) : $item->revision;
+        }
 
         /* Get files info. */
         $infos = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision);
+
+        $base64BranchID = helper::safe64Encode(base64_encode($branchID));
+        foreach($infos as $info)
+        {
+            $infoPath       = trim(urldecode($path) . '/' . $info->name, '/');
+            $info->comment  = htmlSpecialString($info->comment, ENT_QUOTES);
+            $info->revision = $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);
+            if($info->kind == 'dir')
+            {
+                $info->link = $this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath));
+            }
+            else
+            {
+                $info->link = $this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
+            }
+        }
+
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Synchronous commit only in root path. */
@@ -643,14 +666,14 @@ class repo extends control
     public function log($repoID = 0, $objectID = 0, $entry = '', $revision = 'HEAD', $type = 'dir', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setBackSession('log', $withOtherModule = true);
+        $this->repo->setBackSession('log', true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
         $repo  = $this->repo->getRepoByID($repoID);
         $file  = $entry;
         $entry = $this->repo->decodePath($entry);
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         if($_POST)
@@ -984,7 +1007,15 @@ class repo extends control
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
-        $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch', $isBranchOrTag ? 'isBranchOrTag': '');
+
+        if($type === 'file')
+        {
+            $content = $this->scm->cat($entry, $fromRevision);
+        }
+        else
+        {
+            $content = $this->scm->diff($entry, $fromRevision, $toRevision, 'patch', $isBranchOrTag ? 'isBranchOrTag': '');
+        }
 
         $fileName = basename(urldecode($entry));
         if($type != 'file') $fileName .= "r$fromRevision--r$toRevision.patch";
@@ -1079,7 +1110,7 @@ class repo extends control
         $modules = $this->loadModel('tree')->getOptionMenu($repo->product, 'story');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -1166,7 +1197,7 @@ class repo extends control
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -1176,8 +1207,8 @@ class repo extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($product->id);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, $branch = 'all', $params = '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($product->id, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, 'all', '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($product->id, 'all', '');
 
         unset($this->config->bug->search['fields']['product']);
         if($product->type == 'normal')
@@ -1251,10 +1282,10 @@ class repo extends control
 
         $repo    = $this->repo->getRepoByID($repoID);
         $product = $this->loadModel('product')->getById($repo->product);
-        $modules = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'task');
+        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -1468,7 +1499,8 @@ class repo extends control
 
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
-        $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
+        $revision = 'HEAD';
+        if($version != 1) $revision = in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision;
         if($type == 'batch')
         {
             $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
@@ -1479,25 +1511,22 @@ class repo extends control
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
-        if(empty($commitCount))
+        if(empty($commitCount) && !$repo->synced)
         {
-            if(!$repo->synced)
+            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
-                if(in_array($repo->SCM, $this->config->repo->gitTypeList))
-                {
-                    if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
+                if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
 
-                    $branchID = reset($branches);
-                    setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+                $branchID = reset($branches);
+                setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-                    if($branchID) $this->repo->fixCommit($repoID);
-                }
+                if($branchID) $this->repo->fixCommit($repoID);
+            }
 
-                if(empty($branchID))
-                {
-                    $this->repo->markSynced($repoID);
-                    return print('finish');
-                }
+            if(empty($branchID))
+            {
+                $this->repo->markSynced($repoID);
+                return print('finish');
             }
         }
 
@@ -1570,7 +1599,7 @@ class repo extends control
     public function ajaxSideCommits($repoID, $path, $objectID = 0,  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $repo      = $this->repo->getRepoByID($repoID);
@@ -1804,7 +1833,7 @@ class repo extends control
             {
                 foreach($projects as $key => $project)
                 {
-                    if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
+                    if(!$this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
                 }
             }
         }
@@ -1916,7 +1945,6 @@ class repo extends control
      */
     public function downloadCode($repoID = 0, $branch = '')
     {
-        $repo     = $this->repo->getRepoByID($repoID);
         $savePath = $this->app->getDataRoot() . 'repo';
         if(!is_dir($savePath))
         {

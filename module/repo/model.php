@@ -199,7 +199,7 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
-        $this->dao->insert(TABLE_REPO)->data($repo, $skip = 'serviceToken')
+        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
@@ -258,7 +258,7 @@ class repoModel extends model
                 $this->loadModel('gitlab')->addPushWebhook($repo);
             }
 
-            $actionID = $this->loadModel('action')->create('repo', $repoID, 'created');
+            $this->loadModel('action')->create('repo', $repoID, 'created');
         }
 
         return true;
@@ -312,7 +312,7 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
+        $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
@@ -586,7 +586,7 @@ class repoModel extends model
 
         $conditions = array();
         foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='$matched->project')";
-        $conditions = '(' . join(' OR ', $conditions). ')';
+        $conditions = '(' . implode(' OR ', $conditions). ')';
 
         $matchedRepos = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')
             ->andWhere($conditions)
@@ -665,7 +665,7 @@ class repoModel extends model
 
         $conditions = array();
         foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='$matched->project')";
-        $conditions = '(' . join(' OR ', $conditions). ')';
+        $conditions = '(' . implode(' OR ', $conditions). ')';
 
         $matchedRepos = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')
             ->andWhere($conditions)
@@ -691,7 +691,7 @@ class repoModel extends model
     public function getByIdList($idList)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll();
-        foreach($repos as $i => $repo)
+        foreach($repos as $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
             $repo->acl = json_decode($repo->acl);
@@ -808,6 +808,7 @@ class repoModel extends model
             $repoComment->originalComment = $repoComment->comment;
             $repoComment->comment         = $this->replaceCommentLink($repoComment->comment);
         }
+
         return $comments;
     }
 
@@ -1377,7 +1378,6 @@ class repoModel extends model
 
         $blk = substr($content, 0, 512);
         return (
-            false ||
             substr_count($blk, "^\r\n")/512 > 0.3 ||
             substr_count($blk, "^ -~")/512 > 0.3 ||
             substr_count($blk, "\x00") > 0
@@ -1470,7 +1470,7 @@ class repoModel extends model
             exec($versionCommand, $versionOutput, $versionResult);
             if($versionResult)
             {
-                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("<br />", $versionOutput));
+                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, implode("<br />", $versionOutput));
                 dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
                 return false;
             }
@@ -1500,7 +1500,7 @@ class repoModel extends model
             exec($command, $output, $result);
             if($result)
             {
-                $message = sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                $message = sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
                 if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
                 {
                     dao::$errors['client'] = $this->lang->repo->error->clientVersion;
@@ -1563,7 +1563,7 @@ class repoModel extends model
             exec($command, $output, $result);
             if($result)
             {
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
                 return false;
             }
         }
@@ -1580,9 +1580,6 @@ class repoModel extends model
     public function replaceCommentLink($comment)
     {
         $rules   = $this->processRules();
-        $stories = array();
-        $tasks   = array();
-        $bugs    = array();
         $storyReg = '/' . $rules['storyReg'] . '/i';
         $taskReg  = '/' . $rules['taskReg'] . '/i';
         $bugReg   = '/' . $rules['bugReg'] . '/i';
@@ -2117,7 +2114,7 @@ class repoModel extends model
         {
             $record = array();
             $record['execution'] = $executionID;
-            $record['product']   = isset($products[$taskID]) ? "," . join(',', array_keys($products[$taskID])) . "," : ",0,";
+            $record['product']   = isset($products[$taskID]) ? "," . implode(',', array_keys($products[$taskID])) . "," : ",0,";
             $records[$taskID] = $record;
         }
         return $records;
@@ -2475,14 +2472,11 @@ class repoModel extends model
                     }
                     $infos = array('revision' => $lastRevision, 'files' => $allFiles);
 
-                    if($cacheFile)
+                    if($cacheFile && !file_exists($cacheFile . '.lock'))
                     {
-                        if(!file_exists($cacheFile . '.lock'))
-                        {
-                            touch($cacheFile . '.lock');
-                            file_put_contents($cacheFile, serialize($infos));
-                            unlink($cacheFile . '.lock');
-                        }
+                        touch($cacheFile . '.lock');
+                        file_put_contents($cacheFile, serialize($infos));
+                        unlink($cacheFile . '.lock');
                     }
                 }
                 else
@@ -2561,7 +2555,8 @@ class repoModel extends model
 
                 $parentID = $parent == '' ? 0 : $files[$parent]['id'];
                 $parent  .= $parent == '' ? $path : '/' . $path;
-                if(!isset($files[$parent])){
+                if(!isset($files[$parent]))
+                {
                     $id++;
 
                     $files[$parent] = array(
@@ -2884,7 +2879,7 @@ class repoModel extends model
         if($values)
         {
             $sql    = 'INSERT INTO ' . TABLE_REPOFILES . ' (`repo`,`revision`,`path`,`oldPath`,`parent`,`type`,`action`) VALUES ' . trim($values, ',');
-            $result = $this->dao->exec($sql);
+            $this->dao->exec($sql);
         }
 
         $this->loadModel('setting')->setItem('system.repo.synced', $this->config->repo->synced . ',' . $repoID);
