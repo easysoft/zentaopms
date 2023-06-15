@@ -36,10 +36,11 @@ $config->gitlab->actionList['bindUser']['text'] = $lang->gitlab->bindUser;
 $config->gitlab->actionList['bindUser']['hint'] = $lang->gitlab->bindUser;
 $config->gitlab->actionList['bindUser']['url']  = helper::createLink('gitlab', 'bindUser',"gitlabID={id}");
 
-$config->gitlab->actionList['delete']['icon'] = 'trash';
-$config->gitlab->actionList['delete']['text'] = $lang->gitlab->delete;
-$config->gitlab->actionList['delete']['hint'] = $lang->gitlab->delete;
-$config->gitlab->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->gitlab->actionList['delete']['icon']       = 'trash';
+$config->gitlab->actionList['delete']['text']       = $lang->gitlab->delete;
+$config->gitlab->actionList['delete']['hint']       = $lang->gitlab->delete;
+$config->gitlab->actionList['delete']['ajaxSubmit'] = true;
+$config->gitlab->actionList['delete']['url']        = helper::createLink('gitlab', 'delete',"gitlabID={id}");
 
 $config->gitlab->dtable->fieldList['actions']['name']     = 'actions';
 $config->gitlab->dtable->fieldList['actions']['title']    = $lang->actions;

@@ -36,10 +36,11 @@ $config->gogs->actionList['bindUser']['text'] = $lang->gogs->bindUser;
 $config->gogs->actionList['bindUser']['hint'] = $lang->gogs->bindUser;
 $config->gogs->actionList['bindUser']['url']  = helper::createLink('gogs', 'bindUser',"gogsID={id}");
 
-$config->gogs->actionList['delete']['icon'] = 'trash';
-$config->gogs->actionList['delete']['text'] = $lang->gogs->delete;
-$config->gogs->actionList['delete']['hint'] = $lang->gogs->delete;
-$config->gogs->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->gogs->actionList['delete']['icon']       = 'trash';
+$config->gogs->actionList['delete']['text']       = $lang->gogs->delete;
+$config->gogs->actionList['delete']['hint']       = $lang->gogs->delete;
+$config->gogs->actionList['delete']['ajaxSubmit'] = true;
+$config->gogs->actionList['delete']['url']        = helper::createLink('gogs', 'delete',"gogsID={id}");
 
 $config->gogs->dtable->fieldList['actions']['name']     = 'actions';
 $config->gogs->dtable->fieldList['actions']['title']    = $lang->actions;

@@ -36,10 +36,11 @@ $config->gitea->actionList['bindUser']['text'] = $lang->gitea->bindUser;
 $config->gitea->actionList['bindUser']['hint'] = $lang->gitea->bindUser;
 $config->gitea->actionList['bindUser']['url']  = helper::createLink('gitea', 'bindUser',"giteaID={id}");
 
-$config->gitea->actionList['delete']['icon'] = 'trash';
-$config->gitea->actionList['delete']['text'] = $lang->gitea->delete;
-$config->gitea->actionList['delete']['hint'] = $lang->gitea->delete;
-$config->gitea->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->gitea->actionList['delete']['icon']       = 'trash';
+$config->gitea->actionList['delete']['text']       = $lang->gitea->delete;
+$config->gitea->actionList['delete']['hint']       = $lang->gitea->delete;
+$config->gitea->actionList['delete']['ajaxSubmit'] = true;
+$config->gitea->actionList['delete']['url']        = helper::createLink('gitea', 'delete',"giteaID={id}");
 
 $config->gitea->dtable->fieldList['actions']['name']     = 'actions';
 $config->gitea->dtable->fieldList['actions']['title']    = $lang->actions;

@@ -80,10 +80,11 @@ $config->job->actionList['exec']['text'] = $lang->job->exec;
 $config->job->actionList['exec']['hint'] = $lang->job->exec;
 $config->job->actionList['exec']['url']  = helper::createLink('job', 'exec',"jobID={id}");
 
-$config->job->actionList['delete']['icon'] = 'trash';
-$config->job->actionList['delete']['text'] = $lang->job->delete;
-$config->job->actionList['delete']['hint'] = $lang->job->delete;
-$config->job->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->job->actionList['delete']['icon']       = 'trash';
+$config->job->actionList['delete']['text']       = $lang->job->delete;
+$config->job->actionList['delete']['hint']       = $lang->job->delete;
+$config->job->actionList['delete']['ajaxSubmit'] = true;
+$config->job->actionList['delete']['url']        = helper::createLink('job', 'delete',"jobID={id}");
 
 $config->job->dtable->fieldList['actions']['name']     = 'actions';
 $config->job->dtable->fieldList['actions']['title']    = $lang->actions;

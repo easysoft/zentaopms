@@ -36,10 +36,11 @@ $config->sonarqube->actionList['edit']['text'] = $lang->sonarqube->edit;
 $config->sonarqube->actionList['edit']['hint'] = $lang->sonarqube->edit;
 $config->sonarqube->actionList['edit']['url']  = helper::createLink('sonarqube', 'edit',"sonarqubeID={id}");
 
-$config->sonarqube->actionList['delete']['icon'] = 'trash';
-$config->sonarqube->actionList['delete']['text'] = $lang->sonarqube->delete;
-$config->sonarqube->actionList['delete']['hint'] = $lang->sonarqube->delete;
-$config->sonarqube->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->sonarqube->actionList['delete']['icon']       = 'trash';
+$config->sonarqube->actionList['delete']['text']       = $lang->sonarqube->delete;
+$config->sonarqube->actionList['delete']['hint']       = $lang->sonarqube->delete;
+$config->sonarqube->actionList['delete']['ajaxSubmit'] = true;
+$config->sonarqube->actionList['delete']['url']        = helper::createLink('sonarqube', 'delete',"sonarqubeID={id}");
 
 $config->sonarqube->dtable->fieldList['actions']['name']     = 'actions';
 $config->sonarqube->dtable->fieldList['actions']['title']    = $lang->actions;
