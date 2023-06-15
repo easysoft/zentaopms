@@ -5,9 +5,14 @@ window.footerGenerator = function()
 
 window.renderReleaseCountCell = function(result, {col, row})
 {
-    if(col.name === 'createdDate' || col.name === 'latestReleaseDate')
+    if(col.name === 'createdDate')
     {
         if(row.data.createdDate === '') return [''];
+    }
+
+    if(col.name === 'latestReleaseDate')
+    {
+        if(row.data.latestReleaseDate === '') return [''];
     }
 
     return result;
