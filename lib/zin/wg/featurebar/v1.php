@@ -10,7 +10,7 @@ class featureBar extends wg
         'current?:string',
         'link?:string',
         'current?:string',
-        'linkParams?:string',
+        'linkParams?:string=""',
         'module?:string',
         'method?:string'
     );
@@ -44,12 +44,7 @@ class featureBar extends wg
 
         data('activeFeature', $current);
 
-        if(empty($link))
-        {
-            $linkParams = $this->prop('linkParams');
-            if(empty($linkParams)) $linkParams = 'browseType={key}&orderBy=' . data('orderBy') ?? '';
-            $link = createLink($currentModule, $currentMethod, $linkParams);
-        }
+        if(empty($link)) $link = createLink($currentModule, $currentMethod, $this->prop('linkParams'));
 
         foreach($rawItems as $item)
         {
