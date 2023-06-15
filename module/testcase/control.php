@@ -400,6 +400,8 @@ class testcase extends control
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $stories  = array_chunk($stories, $pager->recPerPage);
 
+        $this->lang->testcase->featureBar['zerocase'] = $this->lang->testcase->featureBar['browse'];
+
         $this->view->title      = $this->lang->story->zeroCase;
 
         $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'header.html.php';
+
 $canBatchEdit        = hasPriv('story', 'batchEdit');
 $canBatchChangeStage = hasPriv('story', 'batchChangeStage');
 $canBatchReview      = hasPriv('story', 'batchReview');
