@@ -14,6 +14,7 @@ jsVar('confirmDelete', $lang->stage->confirmDelete);
 featureBar
 (
     set::current('all'),
+    set::method('browse'),
 );
 
 /* zin: Define the set::module('release') feature bar on main menu. */
