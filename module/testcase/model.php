@@ -1459,11 +1459,13 @@ class testcaseModel extends model
 
         global $config;
 
-        if($action == 'confirmStoryChange') return $case->needconfirm || $case->browseType == 'needconfirm';
+        $action = strtolower($action);
+
+        if($action == 'confirmstorychange') return $case->needconfirm || $case->browseType == 'needconfirm';
         if($action == 'review')             return $config->testcase->needReview || !empty($config->testcase->forceReview);
-        if($action == 'createbug')          return !empty($case->caseFiles) && $case->caseFails > 0;
+        if($action == 'createbug')          return !empty($case->caseFails) && $case->caseFails > 0;
         if($action == 'review')             return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
-        if($action == 'showScript')         return $case->auto == 'auto';
+        if($action == 'showscript')         return $case->auto == 'auto';
 
         return true;
     }
