@@ -546,8 +546,7 @@ class baseHelper
      */
     static public function diffDate(?string $date1, ?string $date2): int
     {
-        if(is_null($date1)) $date1 = '0000-00-00';
-        if(is_null($date2)) $date2 = '0000-00-00';
+        if(empty($date1) or empty($date2)) return 0;
 
         /* Get the timestamp in the current operating system. */
         $date1 = new DateTime($date1);
