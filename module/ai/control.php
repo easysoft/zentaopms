@@ -124,14 +124,84 @@ class ai extends control
     {
         if(strtolower($this->server->request_method) == 'post')
         {
-            $prompt = fixer::input('post')->get();
-            $this->ai->createPrompt($prompt);
+            $prompt   = fixer::input('post')->get();
+            $promptID = $this->ai->createPrompt($prompt);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return print(js::closeModal('parent.parent')); // TODO: jump to step 2 of creation process.
+            return $this->send(array('result' => 'success', 'callback' => "gotoPrompt($promptID)"));
         }
 
         $this->view->title      = $this->lang->ai->prompts->create;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Edit role of prompt, prompt editing step 2.
+     *
+     * @param  int    $prompt
+     * @access public
+     * @return void
+     */
+    public function promptAssignRole($prompt)
+    {
+        $this->view->title      = $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Set data source of prompt, prompt editing step 3.
+     *
+     * @param  int    $prompt
+     * @access public
+     * @return void
+     */
+    public function promptSelectDataSource($prompt)
+    {
+        $this->view->title      = $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Edit purpose and purpose elaboration of prompt, prompt editing step 4.
+     *
+     * @param  int    $prompt
+     * @access public
+     * @return void
+     */
+    public function promptSetPurpose($prompt)
+    {
+        $this->view->title      = $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Set target form of prompt, prompt editing step 5.
+     *
+     * @param  int    $prompt
+     * @access public
+     * @return void
+     */
+    public function promptSetTargetForm($prompt)
+    {
+        $this->view->title      = $this->lang->ai->prompts->setTargetForm . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Edit additional information of prompt, final prompt editing step.
+     *
+     * @param  int    $prompt
+     * @access public
+     * @return void
+     */
+    public function promptFinalize($prompt)
+    {
+        $this->view->title      = $this->lang->ai->prompts->finalize . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
         $this->view->position[] = $this->lang->ai->prompts->common;
         $this->display();
     }

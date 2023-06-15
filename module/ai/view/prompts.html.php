@@ -77,7 +77,7 @@
                 <td class='text-center c-actions'>
                   <?php
                     echo html::a('#', '<i class="icon-bars text-primary"></i>', '', "class='btn'");
-                    echo html::a('#', '<i class="icon-design text-primary"></i>', '', "class='btn'");
+                    echo html::a(inlink('promptassignrole', "prompt=$prompt->id"), '<i class="icon-design text-primary"></i>', '', "class='btn'");
                     echo html::a('#', '<i class="icon-edit text-primary"></i>', '', "class='btn'");
                     echo html::a('#', '<i class="icon-lock text-primary"></i>', '', "class='btn'");
                     echo html::a('#', '<i class="icon-trash text-primary"></i>', '', "class='btn'");

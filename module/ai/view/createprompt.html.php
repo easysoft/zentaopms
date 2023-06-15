@@ -39,7 +39,8 @@
 </div>
 <script>
 $(function() {
-    $('input[name="name"]').on('input', function() {
+    $('input[name="name"]').on('input', function()
+    {
         if($(this).val().length > 0)
         {
             $('button[type="submit"]').removeClass('disabled');
@@ -50,5 +51,10 @@ $(function() {
         }
     });
 });
+
+function gotoPrompt(id)
+{
+    parent.location.href = createLink('ai', 'promptassignrole', 'prompt=' + id);
+}
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>

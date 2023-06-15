@@ -29,6 +29,12 @@ $lang->ai->prompts->createdDate = '创建时间';
 $lang->ai->prompts->targetForm  = '表单';
 $lang->ai->prompts->funcDesc    = '功能描述';
 
+$lang->ai->prompts->assignRole       = '指定角色';
+$lang->ai->prompts->selectDataSource = '选择对象';
+$lang->ai->prompts->setPurpose       = '确认操作';
+$lang->ai->prompts->setTargetForm    = '结果处理';
+$lang->ai->prompts->finalize         = '准备发布';
+
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = '全部';
 $lang->ai->prompts->statuses['draft'] = '草稿';
