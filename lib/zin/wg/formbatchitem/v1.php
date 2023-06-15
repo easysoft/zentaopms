@@ -90,8 +90,7 @@ class formBatchItem extends wg
                 set($this->getRestProps()),
                 span
                 (
-                    set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null),
-                    set::required($required),
+                    set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null, $required ? 'required' : null),
                     set($labelProps),
                     empty($label) ? $name : $label
                 ),
