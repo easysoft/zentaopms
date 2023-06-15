@@ -25,10 +25,10 @@ class stage extends control
 
         $this->stage->setMenu($type);
 
-        $this->view->stages      = $this->stage->getStages($orderBy, 0, $type);
-        $this->view->orderBy     = $orderBy;
-        $this->view->type        = $type;
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->title   = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
+        $this->view->orderBy = $orderBy;
+        $this->view->type    = $type;
 
         $this->display();
     }
