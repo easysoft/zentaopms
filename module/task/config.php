@@ -5,17 +5,21 @@ helper::import(dirname(__FILE__) . 'config/form.php');
 global $lang, $app;
 $config->task = new stdclass();
 
-$config->task->create   = new stdclass();
-$config->task->edit     = new stdclass();
-$config->task->start    = new stdclass();
-$config->task->finish   = new stdclass();
-$config->task->activate = new stdclass();
-$config->task->view     = new stdclass();
+$config->task->create      = new stdclass();
+$config->task->edit        = new stdclass();
+$config->task->start       = new stdclass();
+$config->task->finish      = new stdclass();
+$config->task->activate    = new stdclass();
+$config->task->view        = new stdclass();
+$config->task->batchcreate = new stdclass();
+$config->task->batchedit   = new stdclass();
 
-$config->task->create->requiredFields   = 'execution,name,type';
-$config->task->edit->requiredFields     = $config->task->create->requiredFields;
-$config->task->finish->requiredFields   = 'realStarted,finishedDate,currentConsumed';
-$config->task->activate->requiredFields = 'left';
+$config->task->create->requiredFields      = 'execution,name,type';
+$config->task->batchcreate->requiredFields = 'name,type';
+$config->task->edit->requiredFields        = $config->task->create->requiredFields;
+$config->task->batchedit->requiredFields   = $config->task->edit->requiredFields;
+$config->task->finish->requiredFields      = 'realStarted,finishedDate,currentConsumed';
+$config->task->activate->requiredFields    = 'left';
 
 /* Default value. */
 $config->task->default  = new stdclass();

@@ -883,21 +883,18 @@ class taskZen extends task
             if(!empty($this->config->limitTaskDate))
             {
                 $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
-                if(dao::isError()) return false;
             }
 
             /* Check start and end date. */
             if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
             {
                 dao::$errors["deadline[$rowIndex]"] = $this->lang->task->error->deadlineSmall;
-                return false;
             }
 
             /* Check if the estimate is positive. */
             if($task->estimate < 0)
             {
                 dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->recordMinus;
-                return false;
             }
 
             /* Check if the required fields are empty. */
@@ -906,11 +903,11 @@ class taskZen extends task
                 if(empty($task->$field))
                 {
                     dao::$errors[$field . "[$rowIndex]"] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                    return false;
                 }
             }
         }
 
+        if(dao::isError()) return false;
         return true;
     }
 

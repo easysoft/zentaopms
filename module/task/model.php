@@ -789,7 +789,7 @@ class taskModel extends model
             $oldTask = zget($oldTasks, $taskID);
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
-                ->batchCheck($this->config->task->edit->requiredFields, 'notempty')
+                ->batchCheck($this->config->task->batchedit->requiredFields, 'notempty')
                 ->checkFlow()
                 ->where('id')->eq($taskID)
                 ->exec();
@@ -797,7 +797,6 @@ class taskModel extends model
             if(dao::isError())
             {
                 foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$taskID}]"] = $error;
-                return false;
             }
 
             /* Create the task description of the current version in the database. */
@@ -821,7 +820,8 @@ class taskModel extends model
 
             $allChanges[$taskID] = $changes;
         }
-        if(!dao::isError()) $this->score->create('ajax', 'batchEdit');
+        if(dao::isError()) return false;
+        $this->score->create('ajax', 'batchEdit');
         return $allChanges;
     }
 
