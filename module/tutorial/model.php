@@ -83,7 +83,7 @@ class tutorialModel extends model
         $product->deleted        = '0';
         $product->branch         = '';
         $product->reviewer       = $this->app->user->account;
-        $product->branches       = array('1' => 'Test branch');
+        $product->branches       = array('1' => '0');
         $product->plans          = array('1' => 'Test plan');
 
         return $product;
