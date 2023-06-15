@@ -11,11 +11,6 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
-detailHeader
-(
-    to::title(entityLabel(set(array('entityID' => $gitea->id, 'level' => 1, 'text' => $gitea->name)))),
-);
-
 detailBody
 (
     sectionList
@@ -30,4 +25,4 @@ detailBody
     history(),
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render('modalDialog');

@@ -54,3 +54,69 @@ $config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle']
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']        = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']        = $lang->repo->delete;
 $config->repo->dtable->fieldList['actions']['list']['delete']['data-toggle'] = 'modal';
+
+$config->repo->repoDtable = new stdclass();
+
+$config->repo->repoDtable->fieldList['name']['name']     = 'name';
+$config->repo->repoDtable->fieldList['name']['title']    = $lang->repo->name;
+$config->repo->repoDtable->fieldList['name']['sortType'] = false;
+$config->repo->repoDtable->fieldList['name']['type']     = 'title';
+$config->repo->repoDtable->fieldList['name']['fixed']    = 'left';
+$config->repo->repoDtable->fieldList['name']['width']    = '256';
+$config->repo->repoDtable->fieldList['name']['hint']     = true;
+
+$config->repo->repoDtable->fieldList['revision']['name']     = 'revision';
+$config->repo->repoDtable->fieldList['revision']['title']    = $lang->repo->revisions;
+$config->repo->repoDtable->fieldList['revision']['sortType'] = false;
+$config->repo->repoDtable->fieldList['revision']['width']    = '100';
+$config->repo->repoDtable->fieldList['revision']['hint']     = true;
+
+$config->repo->repoDtable->fieldList['time']['name']     = 'date';
+$config->repo->repoDtable->fieldList['time']['title']    = $lang->repo->time;
+$config->repo->repoDtable->fieldList['time']['sortType'] = false;
+$config->repo->repoDtable->fieldList['time']['type']     = 'date';
+$config->repo->repoDtable->fieldList['time']['hint']     = true;
+
+$config->repo->repoDtable->fieldList['committer']['name']     = 'account';
+$config->repo->repoDtable->fieldList['committer']['title']    = $lang->repo->committer;
+$config->repo->repoDtable->fieldList['committer']['sortType'] = false;
+$config->repo->repoDtable->fieldList['committer']['type']     = 'user';
+$config->repo->repoDtable->fieldList['committer']['hint']     = true;
+
+$config->repo->repoDtable->fieldList['comment']['name']     = 'comment';
+$config->repo->repoDtable->fieldList['comment']['title']    = $lang->repo->comment;
+$config->repo->repoDtable->fieldList['comment']['sortType'] = false;
+$config->repo->repoDtable->fieldList['comment']['type']     = 'text';
+$config->repo->repoDtable->fieldList['comment']['minWidth'] = '300';
+$config->repo->repoDtable->fieldList['comment']['hint']     = true;
+
+$config->repo->commentDtable = new stdclass();
+
+$config->repo->commentDtable->fieldList['id']['title']    = '';
+$config->repo->commentDtable->fieldList['id']['name']     = '';
+$config->repo->commentDtable->fieldList['id']['type']     = 'checkID';
+$config->repo->commentDtable->fieldList['id']['sortType'] = false;
+$config->repo->commentDtable->fieldList['id']['checkbox'] = true;
+$config->repo->commentDtable->fieldList['id']['width']    = '40';
+
+$config->repo->commentDtable->fieldList['revision']['name']     = 'revision';
+$config->repo->commentDtable->fieldList['revision']['title']    = $lang->repo->revisions;
+$config->repo->commentDtable->fieldList['revision']['sortType'] = false;
+$config->repo->commentDtable->fieldList['revision']['type']     = 'title';
+$config->repo->commentDtable->fieldList['revision']['width']    = '100';
+$config->repo->commentDtable->fieldList['revision']['hint']     = true;
+
+$config->repo->commentDtable->fieldList['commit']['name']     = 'commit';
+$config->repo->commentDtable->fieldList['commit']['title']    = $lang->repo->commit;
+$config->repo->commentDtable->fieldList['commit']['sortType'] = false;
+$config->repo->commentDtable->fieldList['commit']['type']     = 'text';
+$config->repo->commentDtable->fieldList['commit']['width']    = '40';
+$config->repo->commentDtable->fieldList ['commit']['hint']    = true;
+
+$config->repo->commentDtable->fieldList['time'] = $config->repo->repoDtable->fieldList['time'];
+
+$config->repo->commentDtable->fieldList['committer'] = $config->repo->repoDtable->fieldList['committer'];
+$config->repo->commentDtable->fieldList['comment']   = $config->repo->repoDtable->fieldList['comment'];
+
+$config->repo->commentDtable->fieldList['comment']['name']   = 'originalComment';
+$config->repo->commentDtable->fieldList['committer']['name'] = 'committer';

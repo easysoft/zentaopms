@@ -11,7 +11,7 @@ window.renderCell = function(result, {col, row})
     if(col.name === 'name')
     {
         var browseProjectLink = $.createLink('gitea', 'view', 'giteaID=' + row.data.id);
-        if(canBrowseProject) result[0] = {html:'<a href="' + browseProjectLink + '&onlybody=yes" data-toggle="modal" data-width="60%">' + row.data.name + '</a>', style:{flexDirection:"column"}};
+        if(canBrowseProject) result[0] = {html:'<a href="' + browseProjectLink + '" data-toggle="modal" data-width="60%">' + row.data.name + '</a>', style:{flexDirection:"column"}};
 
         return result;
     }
