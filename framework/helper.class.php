@@ -453,7 +453,7 @@ function formatTime(string|null $time, string $format = ''): string
  * @param  array  $fieldList
  * @param  object $checkModel
  * @access public
- * @return void
+ * @return array
  */
 function initTableData($items, &$fieldList, $checkModel)
 {
