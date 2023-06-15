@@ -13,7 +13,15 @@ namespace zin;
 
 panel
 (
-    set('title', 'welcome'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span(set('class', 'text-md font-bold'), $todaySummary),
+            span(set('class', 'ml-4 text-base font-medium'), html(sprintf($lang->block->summary->welcome, 9999, 9999, 9999, 9999)))
+        )
+    ),
     set('class', 'welcome-block'),
     div
     (

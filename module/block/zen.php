@@ -319,7 +319,8 @@ class blockZen extends block
         {
             if($time >= $type) $welcomeType = $type;
         }
-        $this->view->welcomeType = $welcomeType;
+        $this->view->welcomeType  = $welcomeType;
+        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())];
     }
 
     /**

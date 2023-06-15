@@ -111,6 +111,9 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
+$lang->block->summary = new stdclass();
+$lang->block->summary->welcome = 'Zentao has been with you for %s days. <strong>Yesterday</strong>, you has finished <span class="text-success">%s</span> reviews, <span class="text-success">%s</span> tasks , <span class="text-success">%s</span> bugs were resolved.';
+
 $lang->block->dashboard['default'] = 'Dashboard';
 $lang->block->dashboard['my']      = 'My';
 
