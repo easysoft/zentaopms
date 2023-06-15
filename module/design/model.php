@@ -84,7 +84,13 @@ class designModel extends model
             $design->createdBy   = $this->app->user->account;
             $design->createdDate = helper::now();
 
-            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->create->requiredFields, 'notempty')->exec();
+            $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
+
+            if(dao::isError())
+            {
+                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$i}]"] = $error;
+                return false;
+            }
 
             $designID = $this->dao->lastInsertID();
             $this->action->create('design', $designID, 'Opened');

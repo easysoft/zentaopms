@@ -210,7 +210,7 @@ class design extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = inlink('browse', "projectID=$projectID&productID=$productID");
+            $response['load']    = inlink('browse', "projectID=$projectID&productID=$productID");
 
             return $this->send($response);
         }
