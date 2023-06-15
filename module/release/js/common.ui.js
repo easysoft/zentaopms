@@ -8,10 +8,10 @@
  */
 window.confirmDelete = function(releaseID)
 {
-    if(window.confirm(confirmDelete))
+    zui.Modal.confirm(confirmDelete).then((res) =>
     {
-        $.ajaxSubmit({url: $.createLink('release', 'delete', 'releaseID=' + releaseID)});
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('release', 'delete', 'releaseID=' + releaseID)});
+    })
 }
 
 /**
