@@ -910,7 +910,7 @@ class program extends control
             $programLines[$productLine->root][$productLine->id] = $productLine->name;
         }
 
-        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $actionURL = $this->createLink('program', 'productview', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
         $this->view->title            = $this->lang->product->common;
@@ -920,8 +920,6 @@ class program extends control
         $this->view->productLines     = $productLines;
         $this->view->programLines     = $programLines;
         $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->userIdPairs      = $this->user->getPairs('noletter|showid');
-        $this->view->usersAvatar      = $this->user->getAvatarPairs('');
         $this->view->orderBy          = $orderBy;
         $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;
