@@ -308,10 +308,11 @@ class dbh
                     $fields = implode(',', $fieldList);
                     return substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
                 }
-                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0)
+                elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
                     preg_match('/ON\ +[0-9a-zA-Z\_\.]+\`([0-9a-zA-Z\_]+)\`/', $sql, $matches);
-                    $tableName = explode('_', $matches[1]);
+
+                    $tableName = str_replace($this->config->prefix, '', $matches);
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
                 }
             case 'ALTER':
