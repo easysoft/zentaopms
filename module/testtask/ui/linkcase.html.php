@@ -19,17 +19,24 @@ foreach($lang->testtask->featureBar['linkcase'] as $key => $label)
         if($isActive) $label = $key == 'bysuite' ? $suiteList[$param]->name : zget($testTask, $param);
         $subItems = array();
         $dataList = $key == 'bysuite' ? $suiteList : $testTask;
-        foreach($dataList as $dataID => $data)
+        if($dataList)
         {
-            $text = $key == 'bysuite' ? $data->name : $data;
-            $subItems[] = array
-            (
-                'text'   => $text,
-                'active' => $key == $type && $dataID == $param,
-                'url'    => createLink('testtask', 'linkCase', "taskID={$taskID}&type={$key}&param={$dataID}"),
-                'badge'  => $dataID == $param && !empty($pager->recTotal) ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
-                'props'  => ['data-id' => $text, 'data-load' => 'table']
-            );
+            foreach($dataList as $dataID => $data)
+            {
+                $text = $key == 'bysuite' ? $data->name : $data;
+                $subItems[] = array
+                (
+                    'text'   => $text,
+                    'active' => $key == $type && $dataID == $param,
+                    'url'    => createLink('testtask', 'linkCase', "taskID={$taskID}&type={$key}&param={$dataID}"),
+                    'badge'  => $dataID == $param && !empty($pager->recTotal) ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
+                    'props'  => ['data-id' => $text, 'data-load' => 'table']
+                );
+            }
+        }
+        else
+        {
+            $subItems[] = array ('text' => $key == 'bysuite' ? $lang->testsuite->noticeNone : $lang->testtask->noticeNoOther);
         }
         $items[] = array
         (
