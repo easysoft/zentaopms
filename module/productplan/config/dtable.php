@@ -115,4 +115,3 @@ $config->productplan->dtable->fieldList['actions']['actionsMap']['edit']['icon']
 $config->productplan->dtable->fieldList['actions']['actionsMap']['split']['icon'] = 'split';
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['trash']['icon'] = 'trash';
-

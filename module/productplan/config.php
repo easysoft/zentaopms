@@ -60,3 +60,14 @@ $config->productplan->actionList['edit']['icon']  = 'edit';
 $config->productplan->actionList['edit']['hint']  = $lang->productplan->edit;
 $config->productplan->actionList['edit']['text']  = $lang->productplan->edit;
 $config->productplan->actionList['edit']['url']   = helper::createLink('productplan', 'edit', 'productplanID={id}');
+
+$config->productplan->actionList['unlinkBug']['icon'] = 'unlink';
+$config->productplan->actionList['unlinkBug']['hint'] = $lang->productplan->unlinkBug;
+$config->productplan->actionList['unlinkBug']['url']  = 'javascript:unlinkObject("bug", "{id}")';
+
+$config->productplan->actionList['unlinkStory']['icon'] = 'unlink';
+$config->productplan->actionList['unlinkStory']['hint'] = $lang->productplan->unlinkStory;
+$config->productplan->actionList['unlinkStory']['url']  = 'javascript:unlinkObject("story", "{id}")';
+
+$config->productplan->defaultFields['story'] = array('id', 'title', 'module', 'pri', 'status', 'openedBy', 'assignedTo', 'estimate', 'stage', 'actions');
+$config->productplan->defaultFields['bug']   = array('id', 'title', 'pri', 'status', 'openedBy', 'assignedTo', 'actions');

@@ -775,7 +775,7 @@ class productplan extends control
     {
         foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
         $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
-        return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy")));
     }
 
     /**
@@ -903,8 +903,8 @@ class productplan extends control
      */
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
-        foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
-        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIDList));
+        foreach($this->post->bugIdList as $bugID) $this->productplan->unlinkBug($bugID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIdList));
         return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 

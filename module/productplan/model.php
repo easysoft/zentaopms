@@ -1220,106 +1220,29 @@ class productplanModel extends model
      * Build operate menu.
      *
      * @param  object $plan
-     * @param  string $type
      * @access public
      * @return string
      */
-    public function buildOperateMenu($plan, $type = 'view')
+    public function buildOperateMenu($plan)
     {
         $params = "planID=$plan->id";
 
-        $canStart       = common::hasPriv('productplan', 'start');
-        $canFinish      = common::hasPriv('productplan', 'finish');
-        $canClose       = common::hasPriv('productplan', 'close');
-        $canCreateExec  = common::hasPriv('execution', 'create');
-        $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
-        $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
+        $canStart       = common::hasPriv('productplan', 'start')    && static::isClickable($plan, 'start');
+        $canFinish      = common::hasPriv('productplan', 'finish')   && static::isClickable($plan, 'finish');
+        $canClose       = common::hasPriv('productplan', 'close')    && static::isClickable($plan, 'close');
+        $canActivate    = common::hasPriv('productplan', 'activate') && static::isClickable($plan, 'activate');
         $canEdit        = common::hasPriv('productplan', 'edit');
-        $canCreateChild = common::hasPriv('productplan', 'create');
-        $canDelete      = common::hasPriv('productplan', 'delete');
+        $canCreateChild = common::hasPriv('productplan', 'create') && static::isClickable($plan, 'create');
+        $canDelete      = common::hasPriv('productplan', 'delete') && static::isClickable($plan, 'delete');
 
-        $menu  = '';
-        $menu .= $this->buildMenu('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
-        $menu .= $this->buildMenu('productplan', 'finish', $params, $plan, $type, 'checked', 'hiddenwin', '', false, '', $this->lang->productplan->finishAB);
-        $menu .= $this->buildMenu('productplan', 'close', $params, $plan, $type, 'off', 'hiddenwin', 'iframe', true, '', $this->lang->productplan->closeAB);
-
-        if($type == 'view') $menu .= $this->buildMenu('productplan', 'activate', $params, $plan, $type, 'magic', 'hiddenwin', '', false, '', $this->lang->productplan->activateAB);
-
-        if($type == 'browse')
-        {
-            $canClickExecution = true;
-            if($plan->parent < 0 || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) $canClickExecution = false;
-
-            if($canClickExecution)
-            {
-                $product     = $this->loadModel('product')->getById($plan->product);
-                $branchList  = $this->loadModel('branch')->getList($plan->product, 0, 'all');
-
-                $branchStatusList = array();
-                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
-
-                if($product->type != 'normal')
-                {
-                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-                    if($branchStatus == 'closed') $canClickExecution = false;
-                }
-            }
-
-            if($canClickExecution)
-            {
-                $menu .= html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
-            }
-            elseif($canCreateExec)
-            {
-                $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
-            }
-
-            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
-            {
-                $menu .= "<div class='dividing-line'></div>";
-            }
-
-            if($canLinkStory and $plan->parent >= 0)
-            {
-                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
-            }
-            elseif($canLinkStory)
-            {
-                $menu .= "<button type='button' class='disabled btn'><i class='icon-link' title='{$this->lang->productplan->linkStory}'></i></button>";
-            }
-
-            if($canLinkBug and $plan->parent >= 0)
-            {
-                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
-            }
-            elseif($canLinkBug)
-            {
-                $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
-            }
-
-            $menu .= $this->buildMenu($this->app->rawModule, 'edit', $params, $plan, $type);
-        }
-
-        $menu .= $this->buildMenu($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
-
-        if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
-        {
-            $menu .= "<div class='dividing-line'></div>";
-        }
-
-        if($type == 'browse') $menu .= $this->buildMenu('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
-
-        if($type == 'view')
-        {
-            $menu .= "<div class='divider'></div>";
-            $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
-            $menu .= "<div class='divider'></div>";
-
-            $editClickable   = $this->buildMenu($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
-            $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
-            if($canEdit and $editClickable) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-            if($canDelete and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
-        }
+        $menu = array();
+        if($canStart)       $menu[] = array('icon' => 'play',    'text' => $this->lang->productplan->startAB,    'data-url' => helper::createLink('productplan', 'start', $params . '&confirm=yes'), 'data-action' => 'start', 'onclick' => 'ajaxConfirmLoad(this)');
+        if($canFinish)      $menu[] = array('icon' => 'checked', 'text' => $this->lang->productplan->finishAB,   'data-url' => helper::createLink('productplan', 'finish', $params . '&confirm=yes'), 'data-action' => 'finish', 'onclick' => 'ajaxConfirmLoad(this)');
+        if($canClose)       $menu[] = array('icon' => 'off',     'text' => $this->lang->productplan->closeAB,    'url' => helper::createLink('productplan', 'close', $params, '', true), 'data-toggle' => 'modal');
+        if($canActivate)    $menu[] = array('icon' => 'magic',   'text' => $this->lang->productplan->activateAB, 'data-url' => helper::createLink('productplan', 'activate', $params . '&confirm=yes'), 'data-action' => 'activate', 'onclick' => 'ajaxConfirmLoad(this)');
+        if($canCreateChild) $menu[] = array('icon' => 'split',   'text' => $this->lang->productplan->children,   'url' => helper::createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"));
+        if($canEdit)        $menu[] = array('icon' => 'edit',    'text' => $this->lang->edit,   'url' => helper::createLink('productplan', 'edit', $params));
+        if($canDelete)      $menu[] = array('icon' => 'trash',   'text' => $this->lang->delete, 'data-url' => helper::createLink('productplan', 'delete', $params . '&confirm=yes'), 'data-action' => 'delete', 'onclick' => 'ajaxConfirmLoad(this)');
 
         return $menu;
     }
@@ -1429,7 +1352,7 @@ class productplanModel extends model
 
     /**
      * Build action button list.
-     * 
+     *
      * Copied form the 'buildOperateMenu' funciton.
      *
      * @param  object $plan
