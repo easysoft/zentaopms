@@ -68,7 +68,7 @@ modal
                 ),
                 div
                 (
-                    setClass('input-control-suffix opacity-100 bg-white z-10'),
+                    setClass('input-control-suffix opacity-100 bg-white z-10 form-batch-ditto-btn mr-1'),
                     checkbox
                     (
                         setID('createBranch'),
