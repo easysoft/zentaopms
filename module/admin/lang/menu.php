@@ -46,7 +46,7 @@ $lang->admin->menuList->convert['order'] = 50;
 
 $lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
 $lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
-$lang->admin->menuList->platform['link']  = 'system|platform';
+$lang->admin->menuList->platform['link']  = 'system|index';
 $lang->admin->menuList->platform['order'] = 55;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");

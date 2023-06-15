@@ -23,6 +23,17 @@ featureBar
     set::linkParams("spaceID=&browseType={key}"),
 );
 
+toolBar
+(
+    hasPriv('instance', 'create') ? item(set(array
+    (
+        'text'  => $lang->space->install,
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+        'url'   => createLink('store', 'browse'),
+    ))) : null,
+);
+
 dtable
 (
     set::cols($config->space->dtable->fieldList),
