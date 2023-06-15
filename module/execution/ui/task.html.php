@@ -96,7 +96,8 @@ sidebar
         'modules'     => $moduleTree,
         'activeKey'   => $moduleID,
         'settingLink' => $this->createLink('tree', 'browsetask', "rootID=$execution->id&productID=0"),
-        'closeLink'   => $this->createLink('execution', 'task')
+        'closeLink'   => $this->createLink('execution', 'task'),
+        'branchType'  => $showBranch ? 'branch' : ''
     )))
 );
 

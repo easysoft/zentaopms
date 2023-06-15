@@ -30,16 +30,23 @@ class datatable extends control
      * @param  string $methodName
      * @param  string $currentModule
      * @param  string $currentMethod
+     * @param  string $branchType
      * @access public
      * @return void
      */
-    public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
+    public function ajaxDisplay(string $datatableId, string $moduleName, string $methodName, string $currentModule, string $currentMethod, string $branchType)
     {
+        if($branchType) $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, isset($this->lang->datatable->$branchType) ? $this->lang->datatable->$branchType : $this->lang->datatable->branch);
+
+        $this->app->loadConfig($currentModule);
+
         $this->view->datatableId   = $datatableId;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;
         $this->view->currentModule = $currentModule;
         $this->view->currentMethod = $currentMethod;
+        $this->view->isShowBranch  = $branchType && $branchType != 'normal';
+        $this->view->showBranch    = isset($this->config->$currentModule->$currentMethod->showBranch) ? $this->config->$currentModule->$currentMethod->showBranch : 1;
         $this->render();
     }
 
@@ -56,7 +63,7 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
 
-            $this->loadModel('setting');
+            $this->loadModel('setting')->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showModule', $this->post->value);
             if($this->post->allModule !== false)  $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
             if($this->post->showBranch !== false) $this->setting->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showBranch', $this->post->showBranch);
 

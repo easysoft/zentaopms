@@ -16,9 +16,10 @@ $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
+$branchType        = $showBranch ? $product->type : '';
 
 /* Generate sidebar to display module tree menu. */
-$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID)
+$fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID, $branchType)
 {
     sidebar
     (
@@ -27,7 +28,8 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
             'modules'     => $moduleTree,
             'activeKey'   => $moduleID,
             'settingLink' => $this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID"),
-            'closeLink'   => createLink('execution', 'task')
+            'closeLink'   => createLink('execution', 'task'),
+            'branchType'  => $branchType
         )))
     );
 };

@@ -12,7 +12,8 @@ class moduleMenu extends wg
         'settingLink: string',
         'closeLink: string',
         'activeText: string=""',
-        'displaySetting: bool=true'
+        'branchType: string=""',
+        'showDisplay: bool=true'
     );
 
     public static function getPageCSS(): string|false
@@ -61,8 +62,9 @@ class moduleMenu extends wg
     private function buildBtns()
     {
         $settingLink = $this->prop('settingLink');
-        $displaySetting = $this->prop('displaySetting');
-        if(!$settingLink && !$displaySetting) return null;
+        $showDisplay = $this->prop('showDisplay');
+        $branchType  = $this->prop('branchType');
+        if(!$settingLink && !$showDisplay) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
@@ -82,10 +84,10 @@ class moduleMenu extends wg
                 set::href($settingLink),
                 $lang->moduleSetting
             ) : null,
-            $displaySetting ?
+            $showDisplay ?
                 a(
                     setClass('btn white'),
-                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
+                    set::href(helper::createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod&branchType=$branchType")),
                     set('data-toggle', 'modal'),
                     $lang->displaySetting
                 )
