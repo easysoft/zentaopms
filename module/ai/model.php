@@ -1,7 +1,7 @@
 <?php
 /**
  * The model file of ai module of ZenTaoPMS.
- * 
+ *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wenrui LI <liwenrui@easycorp.ltd>
@@ -12,7 +12,7 @@ class aiModel extends model
 {
     /**
      * Model config.
-     * 
+     *
      * @var    object
      * @access public
      */
@@ -36,7 +36,7 @@ class aiModel extends model
 
     /**
      * Set model config, used for testing.
-     * 
+     *
      * @param  object $config
      * @access public
      * @return void
@@ -94,7 +94,7 @@ class aiModel extends model
 
     /**
      * Get proxy type.
-     * 
+     *
      * @param  string    $proxyType
      * @access private
      * @return int|false
@@ -301,16 +301,45 @@ class aiModel extends model
 
     /**
      * Get list of prompts.
-     * 
-     * TODO: implement this.
-     * 
+     *
+     * TODO: fully implement this.
+     *
      * @param  string  $module
      * @param  string  $status
      * @access public
      * @return array
      */
-    public function getPrompts($module = '', $status = '')
+    public function getPrompts($module = '', $status = '', $order = 'id_desc', $pager = null)
     {
-        return array();
+        return $this->dao->select('*')->from(TABLE_PROMPT)
+            ->where('1=1')
+            ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
+            ->beginIF(!empty($status))->andWhere('status')->eq($status)->fi()
+            ->orderBy($order)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Create a prompt.
+     *
+     * TODO: fully implement this.
+     *
+     * @param  object    $prompt
+     * @access public
+     * @return int|false returns prompt id on success, false on fail
+     */
+    public function createPrompt($prompt)
+    {
+        $prompt->createdDate = helper::now();
+        $prompt->createdBy   = $this->app->user->account;
+
+        $this->dao->insert(TABLE_PROMPT)
+            ->data($prompt)
+            ->autoCheck()
+            ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
+            ->exec();
+
+        return dao::isError() ? false : $this->dao->lastInsertID();
     }
 }

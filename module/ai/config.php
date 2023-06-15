@@ -29,3 +29,6 @@ foreach($config->ai->openai->contentTypeMapping as $contentType => $apis)
 {
     foreach($apis as $api) $config->ai->openai->contentType[$api] = $contentType;
 }
+
+$config->ai->createprompt = new stdclass();
+$config->ai->createprompt->requiredFields = 'name';

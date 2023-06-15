@@ -12,9 +12,9 @@ class ai extends control
 {
     /**
      * List models.
-     * 
+     *
      * TODO: not fully implemented yet, currently shows the only model config.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -39,7 +39,7 @@ class ai extends control
 
     /**
      * Edit model configuration, store in system.ai settings.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -73,7 +73,7 @@ class ai extends control
 
     /**
      * Test connection to API endpoint.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -81,7 +81,7 @@ class ai extends control
     {
         $modelConfig = fixer::input('post')->get();
         $this->ai->setConfig($modelConfig);
-        
+
         $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
         if($result === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->testConnectionResult->fail));
 
@@ -90,18 +90,48 @@ class ai extends control
 
     /**
      * List prompts.
-     * 
+     *
      * @param  string $module
      * @param  string $status
      * @access public
      * @return void
      */
-    public function prompts($module = '', $status = '')
+    public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        /* Set pager and order. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $order = common::appendOrder($orderBy);
+
+        $this->view->prompts    = $this->ai->getPrompts($module, $status, $order, $pager);
         $this->view->module     = $module;
         $this->view->status     = $status;
-        $this->view->prompts    = $this->ai->getPrompts($module, $status);
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->view->title      = $this->lang->ai->prompts->common;
+        $this->view->position[] = $this->lang->ai->prompts->common;
+
+        $this->display();
+    }
+
+    /**
+     * Create a prompt.
+     *
+     * @access public
+     * @return void
+     */
+    public function createPrompt()
+    {
+        if(strtolower($this->server->request_method) == 'post')
+        {
+            $prompt = fixer::input('post')->get();
+            $this->ai->createPrompt($prompt);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return print(js::closeModal('parent.parent')); // TODO: jump to step 2 of creation process.
+        }
+
+        $this->view->title      = $this->lang->ai->prompts->create;
         $this->view->position[] = $this->lang->ai->prompts->common;
         $this->display();
     }

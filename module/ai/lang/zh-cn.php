@@ -10,14 +10,28 @@
  */
 $lang->ai->common = 'AI';
 
+/* Definitions of table columns, used to sprintf error messages to dao::$errors. */
+$lang->prompt = new stdclass();
+$lang->prompt->name = '名称';
+$lang->prompt->desc = '描述';
+
+$lang->ai->nextStep = '下一步';
+
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common    = '提词';
-$lang->ai->prompts->emptyList = '暂时没有提词。';
-$lang->ai->prompts->create    = '创建提词';
+$lang->ai->prompts->common      = '提词';
+$lang->ai->prompts->emptyList   = '暂时没有提词。';
+$lang->ai->prompts->create      = '创建提词';
+$lang->ai->prompts->id          = 'ID';
+$lang->ai->prompts->name        = '名称';
+$lang->ai->prompts->description = '描述';
+$lang->ai->prompts->createdBy   = '创建者';
+$lang->ai->prompts->createdDate = '创建时间';
+$lang->ai->prompts->targetForm  = '表单';
+$lang->ai->prompts->funcDesc    = '功能描述';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = '全部';
-// $lang->ai->prompts->statuses['draft'] = '草稿';
+$lang->ai->prompts->statuses['draft'] = '草稿';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = '所有分组';

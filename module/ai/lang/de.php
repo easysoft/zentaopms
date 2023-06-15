@@ -10,14 +10,28 @@
  */
 $lang->ai->common = 'AI';
 
+/* Definitions of table columns, used to sprintf error messages to dao::$errors. */
+$lang->prompt = new stdclass();
+$lang->prompt->name = 'Name';
+$lang->prompt->desc = 'Description';
+
+$lang->ai->nextStep = 'Next';
+
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common    = 'Prompts';
-$lang->ai->prompts->emptyList = 'There is no prompts yet.';
-$lang->ai->prompts->create    = 'Create a prompt';
+$lang->ai->prompts->common      = 'Prompt';
+$lang->ai->prompts->emptyList   = 'No prompts yet.';
+$lang->ai->prompts->create      = 'Create Prompt';
+$lang->ai->prompts->id          = 'ID';
+$lang->ai->prompts->name        = 'Name';
+$lang->ai->prompts->description = 'Description';
+$lang->ai->prompts->createdBy   = 'Creator';
+$lang->ai->prompts->createdDate = 'Created Date';
+$lang->ai->prompts->targetForm  = 'Target Form';
+$lang->ai->prompts->funcDesc    = 'Function Description';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = 'All';
-// $lang->ai->prompts->statuses['draft'] = 'Draft';
+$lang->ai->prompts->statuses['draft'] = 'Draft';
 
 $lang->ai->prompts->modules = array();
 $lang->ai->prompts->modules['']            = 'All';

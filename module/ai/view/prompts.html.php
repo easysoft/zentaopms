@@ -18,7 +18,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php 
+    <?php
       foreach($this->lang->ai->prompts->statuses as $statusKey => $statusName)
       {
         echo html::a($this->createLink('ai', 'prompts', "module=$module&status=$statusKey"), "<span class='text'>{$this->lang->ai->prompts->statuses[$statusKey]}" . ($status == $statusKey ? '<span class="label label-light label-badge" style="margin-left: 4px;">' . count($prompts) . '</span>' : '') . "</span>", '' ,"id='status-$statusKey' class='btn btn-link" . ($status == $statusKey ? ' btn-active-text' : '') . "'");
@@ -26,7 +26,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-primary'");?>
+    <?php echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-primary iframe'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -44,8 +44,52 @@
       <div class="table-empty-tip">
         <p>
           <span class="text-muted"><?php echo $lang->ai->prompts->emptyList;?></span>
-          <?php echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-info'");?>
+          <?php echo html::a($this->createLink('ai', 'createprompt'), "<i class='icon icon-plus'></i> " . $lang->ai->prompts->create, '', "class='btn btn-info iframe'");?>
         </p>
+      </div>
+    <?php else:?>
+      <div class='main-table'>
+        <table class='main-table table has-sort-head table-fixed' id='promptList'>
+          <thead>
+            <tr>
+              <?php $vars = "module=$module&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+              <th class='c-id text-left w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->ai->prompts->id);?></th>
+              <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->ai->prompts->name);?></th>
+              <th class='c-createdby w-120px'><?php common::printOrderLink('createdby', $orderBy, $vars, $lang->ai->prompts->createdBy);?></th>
+              <th class='c-createddate w-180px'><?php common::printOrderLink('createddate', $orderBy, $vars, $lang->ai->prompts->createdDate);?></th>
+              <th class='c-targetform'><?php common::printOrderLink('targetform', $orderBy, $vars, $lang->ai->prompts->targetForm);?></th>
+              <th class='c-desc'><?php echo $lang->ai->prompts->funcDesc;?></th>
+              <th class='text-center c-actions-5'><?php echo $lang->actions;?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($prompts as $prompt):?>
+              <tr>
+                <td class='c-id'><?php echo $prompt->id;?></td>
+                <td class='c-name'>
+                  <?php echo $prompt->name;?>
+                  <?php if($prompt->status == 'draft') echo "<span class='label label-light label-badge'>{$this->lang->ai->prompts->statuses[$prompt->status]}</span>";?>
+                </td>
+                <td class='c-createdby'><?php echo $prompt->createdBy;?></td>
+                <td class='c-createddate'><?php echo $prompt->createdDate;?></td>
+                <td class='c-targetform'><?php echo $prompt->targetForm;?></td>
+                <td class='c-description'><?php echo $prompt->desc;?></td>
+                <td class='text-center c-actions'>
+                  <?php
+                    echo html::a('#', '<i class="icon-bars text-primary"></i>', '', "class='btn'");
+                    echo html::a('#', '<i class="icon-design text-primary"></i>', '', "class='btn'");
+                    echo html::a('#', '<i class="icon-edit text-primary"></i>', '', "class='btn'");
+                    echo html::a('#', '<i class="icon-lock text-primary"></i>', '', "class='btn'");
+                    echo html::a('#', '<i class="icon-trash text-primary"></i>', '', "class='btn'");
+                  ?>
+                </td>
+              </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+        <div class='table-footer'>
+          <?php $pager->show('right', 'pagerjs');?>
+        </div>
       </div>
     <?php endif;?>
   </div>

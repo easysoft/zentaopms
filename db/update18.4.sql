@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `zt_prompt` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `desc` text DEFAULT NULL,
+  `model` mediumint(8) unsigned DEFAULT NULL,
+  `module` varchar(30) DEFAULT NULL,
+  `source` text DEFAULT NULL,
+  `targetForm` varchar(30) DEFAULT NULL,
+  `purpose` text DEFAULT NULL,
+  `elaboration` text DEFAULT NULL,
+  `role` text DEFAULT NULL,
+  `characterization` text DEFAULT NULL,
+  `status` enum('draft','active','replaced') NOT NULL DEFAULT 'draft',
+  `parent` mediumint(8) unsigned DEFAULT NULL,
+  `successor` mediumint(8) unsigned DEFAULT NULL,
+  `revision` mediumint(8) unsigned DEFAULT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) DEFAULT NULL,
+  `editedDate` datetime DEFAULT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

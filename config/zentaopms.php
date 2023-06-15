@@ -377,6 +377,8 @@ define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
 define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
 define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
+define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
