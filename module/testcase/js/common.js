@@ -365,6 +365,8 @@ function loadStories(productID, moduleID, num)
 {
     var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
     var branchID     = $(branchIDName + num).val();
+    if(!branchID) branchID = 0;
+
     var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
     $.get(storyLink, function(stories)
     {

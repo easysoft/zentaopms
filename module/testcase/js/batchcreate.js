@@ -94,6 +94,8 @@ function loadScenes(productID, moduleID, num)
 
     var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
     var branchID     = $(branchIDName + num).val();
+    if(!branchID) branchID = 0;
+
     var sceneLink = createLink('testcase', 'ajaxGetScenesForBC', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&number=' + num);
     $.get(sceneLink, function(scenes)
     {
