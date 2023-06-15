@@ -13,6 +13,7 @@ jsVar('confirmDelete', $lang->stage->confirmDelete);
 
 featureBar
 (
+    set::method('browse'),
     set::current('all'),
 );
 
