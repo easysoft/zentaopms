@@ -78,7 +78,7 @@ function isFieldRequired($name)
 /**
  * Determine whether the request is ajax.
  *
- * @param string|null $type 'zin'|null
+ * @param string|null $type 'zin'|'modal'|null
  */
 function isAjaxRequest(string|null $type = null): bool
 {
