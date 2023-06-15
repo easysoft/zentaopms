@@ -179,9 +179,11 @@ class tutorialModel extends model
     public function getProjectStats($browseType = '')
     {
         $project   = $this->getProject();
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
-        $project->hours       = (object)$emptyHour;
+        $project->progress    = 0;
+        $project->estimate    = 0;
+        $project->consumed    = 0;
+        $project->left        = 0;
         $project->leftTasks   = '—';
         $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
@@ -202,9 +204,11 @@ class tutorialModel extends model
     public function getExecutionStats($browseType = '')
     {
         $execution = $this->getProject();
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
-        $execution->hours        = (object)$emptyHour;
+        $execution->progress       = 0;
+        $execution->estimate       = 0;
+        $execution->consumed       = 0;
+        $execution->left           = 0;
         $execution->leftTasks    = '—';
         $execution->teamMembers  = array_keys($this->getTeamMembers());
         $execution->teamCount    = count($execution->teamMembers);
