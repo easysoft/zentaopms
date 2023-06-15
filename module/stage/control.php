@@ -19,7 +19,7 @@ class stage extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = "id_asc", $type = 'waterfall')
+    public function browse(string $orderBy = "id_asc", string $type = 'waterfall')
     {
         if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy=$orderBy&type=waterfallplus"));
 
@@ -127,7 +127,7 @@ class stage extends control
      * @access public
      * @return void
      */
-    public function edit($stageID = 0)
+    public function edit(int $stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
         $this->stage->setMenu($stage->projectType);
@@ -146,12 +146,12 @@ class stage extends control
 
             $actionID = $this->loadModel('action')->create('stage', $stageID, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$stage->projectType");
+            $response['load'] = true;
             return $this->send($response);
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
-        $this->view->stage       = $stage;
+        $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
+        $this->view->stage = $stage;
 
         $this->display();
     }
@@ -219,23 +219,26 @@ class stage extends control
      * Delete a stage.
      *
      * @param  int    $stageID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($stageID, $confirm = 'no')
+    public function delete(int $stageID)
     {
         $stage = $this->stage->getById($stageID);
 
-        if($confirm == 'no')
+        $this->stage->delete(TABLE_STAGE, $stageID);
+
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->stage->confirmDelete, inlink('delete', "stageID=$stageID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->stage->delete(TABLE_STAGE, $stageID);
-
-            return print(js::reload('parent'));
+            $response['result'] = 'success';
+            $response['load']   = true;
         }
+
+        return $this->send($response);
     }
 }
