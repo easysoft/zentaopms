@@ -50,6 +50,12 @@ class mainNavbar extends nav
 
             foreach($items as $key => $item)
             {
+                if(empty($item['link']))
+                {
+                    unset($items[$key]);
+                    continue;
+                }
+
                 $link = $item['link'];
                 $items[$key]['url'] = commonModel::createMenuLink((object)$item, $tab);
 
