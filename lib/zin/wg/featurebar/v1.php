@@ -44,7 +44,7 @@ class featureBar extends wg
 
         data('activeFeature', $current);
 
-        if(empty($link)) $link = createLink($currentModule, $currentMethod, $this->prop('linkParams'));
+        if(empty($link)) $link = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
 
         foreach($rawItems as $item)
         {
