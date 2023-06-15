@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('confirmRecord', $lang->task->confirmRecord);
+
 entityLabel
 (
     setClass('my-3 gap-x-3'),

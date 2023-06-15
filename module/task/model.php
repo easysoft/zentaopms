@@ -1074,7 +1074,7 @@ class taskModel extends model
             $this->addTaskEffort($record);
             $effortID = $this->dao->lastInsertID();
 
-            $isFinishTask = (empty($currentTeam) && !in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
+            $isFinishTask = (empty($currentTeam) && in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
             /* Change the workhour and status of tasks through effort. */
             list($newTask, $actionID) = $this->taskTao->buildTaskForEffort($record, $task, (string)$lastDate, $isFinishTask);
             if($lastDate <= $record->date) $lastDate = $record->date;

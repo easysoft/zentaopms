@@ -175,7 +175,7 @@ $config->task->effortTable->fieldList['consumed']['checkbox'] = false;
 $config->task->effortTable->fieldList['consumed']['width']    = '80';
 
 $config->task->effortTable->fieldList['left']['title']    = $lang->task->left;
-$config->task->effortTable->fieldList['left']['name']     = 'consumed';
+$config->task->effortTable->fieldList['left']['name']     = 'left';
 $config->task->effortTable->fieldList['left']['checkbox'] = false;
 $config->task->effortTable->fieldList['left']['width']    = '80';
 
