@@ -334,10 +334,11 @@ class tutorialModel extends model
         $execution->QD            = $this->app->user->account;
         $execution->RD            = $this->app->user->account;
         $execution->deleted       = '0';
-        $execution->totalConsumed = 0;
-        $execution->totalLeft     = 0;
-        $execution->totalHours    = 0;
-        $execution->totalEstimate = 0;
+        $execution->consumed      = 0;
+        $execution->left          = 0;
+        $execution->hours         = 0;
+        $execution->estimate      = 0;
+        $execution->progress      = 0;
         $execution->displayCards  = 0;
         $execution->fluidBoard    = 0;
         $execution->hours         = $hours;
