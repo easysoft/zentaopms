@@ -100,6 +100,7 @@ class tutorialModel extends model
         $product = $this->getProduct();
         $product->totalStories     = 0;
         $product->draftStories     = 0;
+        $product->activeStories    = 0;
         $product->changingStories  = 0;
         $product->reviewingStories = 0;
         $product->plans            = 0;
