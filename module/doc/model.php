@@ -1932,7 +1932,7 @@ class docModel extends model
             $execution   = $this->loadModel('execution')->getByID($objectID);
 
             $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectID)->fetchPairs('story', 'story');
-            if($storyIDList) $storyIDList = join(',', $storyIDList);
+            $storyIDList = join(',', $storyIDList);
 
             $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
