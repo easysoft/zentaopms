@@ -8,10 +8,10 @@
  */
 window.deleteMember = function(executionID, userID)
 {
-    if(window.confirm(confirmUnlinkMember))
+    zui.Modal.confirm({message: confirmUnlinkMember, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        $.ajaxSubmit({url: $.createLink('execution', 'unlinkMember', 'executionID=' + executionID + '&userID=' + userID)});
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('execution', 'unlinkMember', 'executionID=' + executionID + '&userID=' + userID)});
+    });
 }
 
 /**

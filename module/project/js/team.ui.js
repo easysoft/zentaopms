@@ -12,14 +12,17 @@ window.deleteMember = function(projectID, account, userID)
     let removeConfirm   = '';
     let tipsLink        = $.createLink('project', 'ajaxGetRemoveMemberTips', 'projectID=' + projectID + '&account=' + account);
     let removeExecution = 'no';
-    if(window.confirm(confirmUnlinkMember))
+    zui.Modal.confirm({message: confirmUnlinkMember, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        $.get(tipsLink, function(tips)
+        if(res)
         {
-            if(tips && window.confirm(tips)) removeExecution = 'yes';
-            $.ajaxSubmit({url: $.createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&removeExecution=' + removeExecution)});
-        })
-    }
+            $.get(tipsLink, function(tips)
+            {
+                if(tips && window.confirm(tips)) removeExecution = 'yes';
+                $.ajaxSubmit({url: $.createLink('project', 'unlinkMember', 'projectID=' + projectID + '&userID=' + userID + '&removeExecution=' + removeExecution)});
+            })
+        }
+    })
 }
 
 /**

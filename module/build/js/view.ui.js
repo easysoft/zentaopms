@@ -4,13 +4,13 @@ window.appendLinkBtn = function()
 
     const tabID = $('.tab-pane.active').attr('id');
     if(tabID == 'story')
-    {   
+    {
         $('.right-menu').append($('.link-story')[0].outerHTML);
-    }   
+    }
     else if(tabID == 'bug')
-    {   
+    {
         $('.right-menu').append($('.link-bug')[0].outerHTML);
-    }   
+    }
 }
 
 window.appendLinkBtn();
@@ -47,10 +47,10 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
  */
 window.unlinkObject = function(objectType, objectID)
 {
-    if(window.confirm(eval(`confirmUnlink${objectType}`)))
+    zui.Modal.confirm({message: eval(`confirmUnlink${objectType}`), icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        $.ajaxSubmit({url: eval(`unlink${objectType}URL`).replace('%s', objectID)});
-    }
+        if(res) $.ajaxSubmit({url: eval(`unlink${objectType}URL`).replace('%s', objectID)});
+    });
 }
 
 /**

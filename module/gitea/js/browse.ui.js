@@ -36,8 +36,8 @@ window.renderCell = function(result, {col, row})
  */
 window.confirmDelete = function(giteaID)
 {
-    if(window.confirm(confirmDelete))
+    zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        $.ajaxSubmit({url: $.createLink('gitea', 'delete', 'giteaID=' + giteaID)});
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('gitea', 'delete', 'giteaID=' + giteaID)});
+    });
 }

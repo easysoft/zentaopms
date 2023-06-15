@@ -8,8 +8,8 @@
  */
 window.confirmDelete = function(groupID)
 {
-    if(window.confirm(confirmDelete))
+    zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        $.ajaxSubmit({url: $.createLink('group', 'delete', 'groupID=' + groupID)});
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('group', 'delete', 'groupID=' + groupID)});
+    });
 }

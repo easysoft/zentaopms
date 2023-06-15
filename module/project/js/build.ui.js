@@ -72,10 +72,10 @@ window.renderCell = function(result, {col, row})
  */
 window.confirmDelete = function(buildID)
 {
-    if(window.confirm(confirmDelete))
+    zui.Modal.confirm(confirmDelete).then((res) =>
     {
-        $.ajaxSubmit({url: $.createLink('projectbuild', 'delete', 'buildID=' + buildID)});
-    }
+        if(res) $.ajaxSubmit({url: $.createLink('projectbuild', 'delete', 'buildID=' + buildID)});
+    });
 }
 
 /**
