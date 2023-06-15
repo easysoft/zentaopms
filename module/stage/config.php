@@ -18,6 +18,8 @@ $config->stage->actionList['edit']['hint']        = $lang->stage->edit;
 $config->stage->actionList['edit']['url']         = helper::createLink('stage', 'edit', 'stageID={id}', '', true);
 $config->stage->actionList['edit']['data-toggle'] = 'modal';
 
-$config->stage->actionList['delete']['icon'] = 'trash';
-$config->stage->actionList['delete']['hint'] = $lang->stage->delete;
-$config->stage->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->stage->actionList['delete']['icon']         = 'trash';
+$config->stage->actionList['delete']['hint']         = $lang->stage->delete;
+$config->stage->actionList['delete']['url']          = helper::createLink('stage', 'delete', 'stageID={id}');
+$config->stage->actionList['delete']['class']        = 'ajax-form';
+$config->stage->actionList['delete']['data-confirm'] = $lang->stage->confirmDelete;
