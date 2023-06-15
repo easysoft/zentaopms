@@ -62,7 +62,7 @@ featureBar
         set::text($lang->project->edit),
         set::checked($this->cookie->editProject)
     ) : NULL,
-    li(searchToggle())
+    li(searchToggle(set::module('program')))
 );
 
 toolbar
