@@ -117,3 +117,45 @@ $config->testcase->dtable->fieldList['actions']['list']     = $config->testcase-
 $config->testcase->dtable->fieldList['actions']['menu']     = array();
 $config->testcase->dtable->fieldList['actions']['required'] = true;
 $config->testcase->dtable->fieldList['actions']['group']    = '7';
+
+$config->testcase->zerocase->dtable = new stdclass();
+$config->testcase->zerocase->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->zerocase->dtable->fieldList['id']['type']  = 'checkID';
+
+$config->testcase->zerocase->dtable->fieldList['title']['title'] = $lang->story->title;
+$config->testcase->zerocase->dtable->fieldList['title']['type']  = 'title';
+$config->testcase->zerocase->dtable->fieldList['title']['link']  = array('module' => 'story', 'method' => 'view', "storyID={id}&version=0&param={param}");
+
+$config->testcase->zerocase->dtable->fieldList['pri']['title'] = $lang->story->pri;
+$config->testcase->zerocase->dtable->fieldList['pri']['type']  = 'pri';
+
+$config->testcase->zerocase->dtable->fieldList['planTitle']['title'] = $lang->story->planAB;
+$config->testcase->zerocase->dtable->fieldList['planTitle']['type']  = 'text';
+
+$config->testcase->zerocase->dtable->fieldList['status']['title']     = $lang->story->status;
+$config->testcase->zerocase->dtable->fieldList['status']['type']      = 'status';
+$config->testcase->zerocase->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
+
+$config->testcase->zerocase->dtable->fieldList['openedBy']['title'] = $lang->story->openedByAB;
+$config->testcase->zerocase->dtable->fieldList['openedBy']['type']  = 'user';
+
+$config->testcase->zerocase->dtable->fieldList['estimate']['title'] = $lang->story->estimate;
+$config->testcase->zerocase->dtable->fieldList['estimate']['type']  = 'count';
+
+$config->testcase->zerocase->dtable->fieldList['stage']['title'] = $lang->story->stage;
+$config->testcase->zerocase->dtable->fieldList['stage']['type']  = 'category';
+$config->testcase->zerocase->dtable->fieldList['stage']['map']   = $lang->story->stageList;
+
+$config->testcase->zerocase->dtable->fieldList['assignedTo']['title'] = $lang->story->assignedTo;
+$config->testcase->zerocase->dtable->fieldList['assignedTo']['type']  = 'assign';
+
+$config->testcase->zerocase->dtable->fieldList['source']['title'] = $lang->story->source;
+$config->testcase->zerocase->dtable->fieldList['source']['type']  = 'category';
+$config->testcase->zerocase->dtable->fieldList['source']['map']   = $lang->story->sourceList;
+
+$config->testcase->zerocase->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->testcase->zerocase->dtable->fieldList['actions']['type']     = 'actions';
+$config->testcase->zerocase->dtable->fieldList['actions']['list']     = $config->testcase->zerocase->actionList;
+$config->testcase->zerocase->dtable->fieldList['actions']['menu']     = array('change', 'review', 'close', 'edit', 'createcase');
+$config->testcase->zerocase->dtable->fieldList['actions']['required'] = true;
+$config->testcase->zerocase->dtable->fieldList['actions']['group']    = '7';
