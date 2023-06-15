@@ -57,30 +57,28 @@ $config->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
 
-$config->testtask->testcase = new stdclass();
-$config->testtask->testcase->dtable = new stdclass();
-$config->testtask->testcase->dtable->fieldList['id']['name']  = 'id';
-$config->testtask->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->testtask->testcase->dtable->fieldList['id']['type'] = 'checkID';
-$config->testtask->testcase->dtable->fieldList['id']['fixed'] = 'left';
+$config->testtask->cases->dtable = new stdclass();
 
-$config->testtask->testcase->dtable->fieldList['title']['name']  = 'title';
-$config->testtask->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
-$config->testtask->testcase->dtable->fieldList['title']['type']  = 'title';
-$config->testtask->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={version}&from=testtask&taskID={task}');
-$config->testtask->testcase->dtable->fieldList['title']['fixed'] = 'left';
-
-foreach($config->testcase->dtable->fieldList as $key => $fieldList)
+foreach($config->testcase->dtable->fieldList as $field => $setting)
 {
-    if($key == 'id' || $key == 'title') continue;
-    $config->testtask->testcase->dtable->fieldList[$key] = $fieldList;
+    if($field == 'actions') continue;
 
-    if($key == 'keywords')
+    $config->testtask->cases->dtable->fieldList[$field] = $setting;
+
+    if($field == 'title') $config->testtask->cases->dtable->fieldList[$field]['nestedToggle'] = false;
+    if($field == 'story') $config->testtask->cases->dtable->fieldList[$field]['name']         = 'storyTitle';
+
+    if($field == 'keywords')
     {
-        $config->testtask->testcase->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
-        $config->testtask->testcase->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
-        $config->testtask->testcase->dtable->fieldList['assignedTo']['type']  = 'user';
+        $config->testtask->cases->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['type']  = 'user';
+        $config->testtask->cases->dtable->fieldList['assignedTo']['show']  = true;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['group'] = 99; // Set a different group between testcase.
     }
 }
 
-$config->testtask->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'createBug', 'unlinkCase');
+$config->testtask->cases->dtable->fieldList['actions']['name']  = 'actions';
+$config->testtask->cases->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->testtask->cases->dtable->fieldList['actions']['type']  = 'actions';
+$config->testtask->cases->dtable->fieldList['actions']['list']  = $config->testtask->cases->actionList;
+$config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('confirmChange'), array('createBug', 'runCase', 'results', 'unlinkCase'));
