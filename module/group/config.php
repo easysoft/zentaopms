@@ -81,4 +81,4 @@ $config->group->actionList['copy']['data-toggle'] = 'modal';
 $config->group->actionList['delete']['icon'] = 'trash';
 $config->group->actionList['delete']['text'] = $lang->group->delete;
 $config->group->actionList['delete']['hint'] = $lang->group->delete;
-$config->group->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->group->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
