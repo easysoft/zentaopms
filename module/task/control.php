@@ -467,7 +467,7 @@ class task extends control
         {
             $workhour = form::batchData($this->config->task->form->recordWorkhour)->get();
             $changes  = $this->task->recordWorkhour($taskID, $workhour);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
             $this->loadModel('common')->syncPPEStatus($taskID);
 

@@ -53,7 +53,7 @@ formBatchPanel
         set::name('work'),
         set::label($lang->task->work),
         set::width('auto'),
-        set::control('input')
+        set::control('textarea')
     ),
     formBatchItem
     (
