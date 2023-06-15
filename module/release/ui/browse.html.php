@@ -27,7 +27,6 @@ toolbar
 
 jsVar('markerTitle', $lang->release->marker);
 jsVar('showBranch', $showBranch);
-jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('pageAllSummary', $lang->release->pageAllSummary);

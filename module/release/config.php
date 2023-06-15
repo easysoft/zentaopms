@@ -47,9 +47,11 @@ $config->release->actionList['notify']['hint']        = $lang->release->notify;
 $config->release->actionList['notify']['url']         = helper::createLink('release', 'notify', 'releaseID={id}', '', true);
 $config->release->actionList['notify']['data-toggle'] = 'modal';
 
-$config->release->actionList['delete']['icon'] = 'trash';
-$config->release->actionList['delete']['hint'] = $lang->release->delete;
-$config->release->actionList['delete']['url']  = 'javascript:confirmDelete("{id}")';
+$config->release->actionList['delete']['icon']         = 'trash';
+$config->release->actionList['delete']['hint']         = $lang->release->delete;
+$config->release->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'delete', 'releaseID={id}');
+$config->release->actionList['delete']['class']        = 'ajax-submit';
+$config->release->actionList['delete']['data-confirm'] = $lang->release->confirmDelete;
 
 /* Search config. */
 $config->release->search['module']            = 'release';

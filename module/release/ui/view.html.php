@@ -20,7 +20,6 @@ detailHeader
 
 jsVar('orderBy', $orderBy);
 jsVar('releaseID', $release->id);
-jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('sortLink', helper::createLink('release', 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
 $buildModule = $app->tab == 'project' ? 'projectrelease' : 'release';

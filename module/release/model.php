@@ -812,10 +812,10 @@ class releaseModel extends model
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
 
             $menu[] = array(
-                'text'     => $this->lang->release->changeStatusList[$changedStatus],
-                'icon'     => $release->status == 'normal' ? 'pause' : 'play',
-                'url'      => "javascript:changeStatus('{$release->id}', '{$changedStatus}')",
-                'class'    => 'btn ghost'
+                'text'  => $this->lang->release->changeStatusList[$changedStatus],
+                'icon'  => $release->status == 'normal' ? 'pause' : 'play',
+                'url'   => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "releaseID={$release->id}&status={$changedStatus}"),
+                'class' => 'btn ghost ajax-submit',
             );
         }
 
@@ -834,10 +834,11 @@ class releaseModel extends model
         if(common::hasPriv('release', 'delete'))
         {
             $menu[] = array(
-                'text'  => $this->lang->delete,
-                'icon'  => 'trash',
-                'url'   => "javascript:confirmDelete('{$release->id}')",
-                'class' => 'btn ghost'
+                'text'         => $this->lang->delete,
+                'icon'         => 'trash',
+                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'delete', "releaseID={$release->id}"),
+                'class'        => 'btn ghost ajax-submit',
+                'data-confirm' => $this->lang->release->confirmDelete
             );
         }
 
