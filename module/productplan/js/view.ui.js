@@ -3,11 +3,29 @@ window.unlinkObject = function(objectType, objectID)
     if(window.confirm(confirmLang[objectType])) $.get(unlinkURL[objectType].replace('%s', objectID), function(){loadPage(locateURL[objectType])});
 }
 
+window.renderStoryCell = function(result, info)
+{
+    const story = info.row.data;
+    if(info.col.name == 'title' && result)
+    {
+        let html = '';
+        if(story.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(html) result.unshift({html});
+    }
+    return result;
+};
+
 window.ajaxConfirmLoad = function(obj)
 {
     var $this   = $(obj);
     var action = $this.data('action');
     if(window.confirm(confirmLang[action])) $.get($this.data('url'), function(){loadPage(locateURL[type])});
+}
+
+window.showLink = function(obj)
+{
+    var $this = $(obj);
+    loadPage($this.data('linkurl'), '#' + $this.data('type') + 'DTable');
 }
 
 $(document).on('click', '.batch-btn', function()

@@ -25,13 +25,7 @@ $confirmLang['delete']   = $lang->productplan->confirmDelete;
 jsVar('confirmLang', $confirmLang);
 jsVar('unlinkURL',   $unlinkURL);
 jsVar('locateURL',   $locateURL);
-
-$menus = $this->productplan->buildOperateMenu($plan);
-detailHeader
-(
-    to::title(entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title)))),
-    (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(set::items($menus))) : null
-);
+jsVar('childrenAB',  $lang->story->childrenAB);
 
 $bugCols  = array();
 $storyCols = array();
@@ -145,6 +139,37 @@ zui::menu
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
 
+$menus = $this->productplan->buildOperateMenu($plan);
+detailHeader
+(
+    to::prefix(backBtn(set::icon('back'), set::type('secondary'), set::back($this->session->productPlanList), $lang->goback)),
+    to::title(entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title)))),
+    (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(set::items($menus))) : null
+);
+
+$createStoryLink      = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateStoryLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+
+$branchNames = '';
+if($product->type != 'normal')
+{
+    foreach(explode(',', $branch) as $branchID) $branchNames .= "{$branchOption[$branchID]},";
+    $branchNames = trim($branches, ',');
+}
+
+$fnGetChildrenPlans = function($childrenPlans)
+{
+    $childrenPlanItems = array();
+    foreach($childrenPlans as $childrenPlan)
+    {
+        $childrenPlanItems[] = a(set::href(inlink('view', "planID={$childrenPlan->id}")), "#{$childrenPlan->id} {$childrenPlan->title}");
+        $childrenPlanItems[] = h::br();
+    }
+
+    array_pop($childrenPlanItems);
+    return $childrenPlanItems;
+};
+
 detailBody
 (
     sectionList
@@ -158,6 +183,17 @@ detailBody
                 set::key('stories'),
                 set::title($lang->productplan->linkedStories),
                 set::active($type == 'story'),
+                div
+                (
+                    setClass('tabnActions'),
+                    dropdown
+                    (
+                        btn(set::text($lang->story->create), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
+                        set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
+                        set::trigger('hover'),
+                    ),
+                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&param={$param}&orderBy={$orderBy}"))),
+                ),
                 dtable
                 (
                     set::id('storyDTable'),
@@ -166,6 +202,7 @@ detailBody
                     set::cols($storyCols),
                     set::data(array_values($planStories)),
                     set::checkable($canBatchActionStory),
+                    set::onRenderCell(jsRaw('window.renderStoryCell')),
                     set::footToolbar($storyFootToolbar),
                     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
@@ -183,6 +220,11 @@ detailBody
                 set::key('bugs'),
                 set::title($lang->productplan->linkedBugs),
                 set::active($type == 'bug'),
+                div
+                (
+                    setClass('tabnActions'),
+                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}&param={$param}&orderBy={$orderBy}"))),
+                ),
                 dtable
                 (
                     set::id('bugDTable'),
@@ -208,6 +250,20 @@ detailBody
                 set::key('planInfo'),
                 set::title($lang->productplan->view),
                 set::active($type == 'planInfo'),
+                tableData
+                (
+                    set::title($lang->productplan->basicInfo),
+                    item(set::name($lang->productplan->title), $plan->title),
+                    $plan->parent > 0 ? item(set::name($lang->productplan->parent), a(set::href(inlink('view', "planID={$parentPlan->id}")), "#{$parentPlan->id} {$parentPlan->title}")) : null,
+                    $product->type != 'normal' ? item(set::name($lang->product->branch), $branchNames) : null,
+                    item(set::name($lang->productplan->begin), $plan->begin == FUTURE_TIME ? $lang->productplan->future : $plan->begin),
+                    item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
+                    $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
+                    item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
+                    item(set::name($lang->productplan->desc), $plan->desc),
+                ),
+                h::hr(),
+                history(),
             ),
         )
     )
