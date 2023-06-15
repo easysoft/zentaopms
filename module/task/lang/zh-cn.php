@@ -64,6 +64,7 @@ $lang->task->teamOrder           = '工序';
 $lang->task->manageTeam          = '维护团队';
 $lang->task->unfoldEffort        = '展开日志';
 $lang->task->foldEffort          = '收起日志';
+$lang->task->addEffort           = '新增日志';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';

@@ -10,15 +10,36 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$tableData = initTableData($efforts, $config->task->effortTable->fieldList['actions'], $this->task);
-dtable
+entityLabel
 (
-    set::cols(array_values($config->task->effortTable->fieldList)),
-    set::data($tableData),
+    setClass('my-3 gap-x-3'),
+    set::level(1),
+    set::text($task->name),
+    set::entityID($task->id),
+    set::reverse(true),
 );
 
-formBatch
+if($efforts)
+{
+    $tableData = initTableData($efforts, $config->task->effortTable->fieldList['actions'], $this->task);
+    dtable
+    (
+        set::cols(array_values($config->task->effortTable->fieldList)),
+        set::data($tableData),
+    );
+}
+
+formBatchPanel
 (
+    set::title($lang->task->addEffort),
+    set::shadow(!isonlybody()),
+    formBatchItem
+    (
+        set::name('id'),
+        set::label($lang->idAB),
+        set::control('index'),
+        set::width('32px'),
+    ),
     formBatchItem
     (
         set::name('date'),

@@ -64,6 +64,7 @@ $lang->task->teamOrder           = 'Order';
 $lang->task->manageTeam          = 'Manage Team';
 $lang->task->unfoldEffort        = 'Unfold Effort';
 $lang->task->foldEffort          = 'Fold Effort';
+$lang->task->addEffort           = 'Add Effort';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
