@@ -797,6 +797,7 @@ class taskModel extends model
             if(dao::isError())
             {
                 foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$taskID}]"] = $error;
+                return false;
             }
 
             /* Create the task description of the current version in the database. */
@@ -820,7 +821,6 @@ class taskModel extends model
 
             $allChanges[$taskID] = $changes;
         }
-        if(dao::isError()) return false;
         $this->score->create('ajax', 'batchEdit');
         return $allChanges;
     }
