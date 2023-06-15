@@ -31,8 +31,8 @@ class stageModel extends model
         {
             $totalPercent = $this->getTotalPercent($type);
 
-            if(!is_numeric($stage->percent)) return dao::$errors['message'][] = $this->lang->stage->error->notNum;
-            if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+            if(!is_numeric($stage->percent)) return dao::$errors['percent'] = $this->lang->stage->error->notNum;
+            if(round($totalPercent + $stage->percent) > 100) return dao::$errors['percent'] = $this->lang->stage->error->percentOver;
         }
 
         $this->dao->insert(TABLE_STAGE)
@@ -42,8 +42,8 @@ class stageModel extends model
             ->checkIF($stage->percent != '', 'percent', 'float')
             ->exec();
 
-        if(!dao::isError()) return $this->dao->lastInsertID();
-        return false;
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
     }
 
     /**

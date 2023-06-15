@@ -57,20 +57,16 @@ class stage extends control
     /**
      * Create a stage.
      *
-     * @param  string $type
+     * @param  string $type waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function create($type = 'waterfall')
+    public function create(string $type = 'waterfall')
     {
-        $this->stage->setMenu($type);
         if($_POST)
         {
             $stageID = $this->stage->create($type);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
             if(!$stageID)
             {
                 $response['result']  = 'fail';
@@ -79,11 +75,15 @@ class stage extends control
             }
 
             $this->loadModel('action')->create('stage', $stageID, 'Opened');
-            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
+
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['load']       = true;
             return $this->send($response);
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;
+        $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;
 
         $this->display();
     }

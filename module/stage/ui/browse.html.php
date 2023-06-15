@@ -13,7 +13,6 @@ jsVar('confirmDelete', $lang->stage->confirmDelete);
 
 featureBar
 (
-    set::method('browse'),
     set::current('all'),
 );
 
@@ -21,7 +20,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
-if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "type={$type}"));
+if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "type={$type}"), 'data-toggle' => 'modal');
 if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "type={$type}"));
 div
 (
