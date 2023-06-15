@@ -21,7 +21,7 @@ entityLabel
 
 if($efforts)
 {
-    $tableData = initTableData($efforts, $config->task->effortTable->fieldList['actions'], $this->task);
+    $tableData = initTableData($efforts, $config->task->effortTable->fieldList, $this->task);
     dtable
     (
         set::cols(array_values($config->task->effortTable->fieldList)),
