@@ -1169,8 +1169,10 @@ class productModel extends model
         $unclosedStory        = $this->story->getUnClosedTotal();
         $plans                = $this->productTao->getPlansTODO($productIdList);
         $releases             = $this->productTao->getReleasesTODO($productIdList);
+        $latestReleases       = $this->productTao->getLatestReleasesTODO($productIdList);
         $bugs                 = $this->productTao->getBugsTODO($productIdList);
         $unResolved           = $this->productTao->getUnResolvedTODO($productIdList);
+        $activeBugs           = $this->productTao->getActiveBugsTODO($productIdList);
         $fixedBugs            = $this->productTao->getFixedBugsTODO($productIdList);
         $closedBugs           = $this->productTao->getClosedBugsTODO($productIdList);
         $thisWeekBugs         = $this->productTao->getThisWeekBugsTODO($productIdList);
@@ -1192,12 +1194,17 @@ class productModel extends model
             $product->releases     = isset($releases[$product->id])            ? $releases[$product->id]            : 0;
             $product->bugs         = isset($bugs[$product->id])                ? $bugs[$product->id]                : 0;
             $product->unResolved   = isset($unResolved[$product->id])          ? $unResolved[$product->id]          : 0;
+            $product->activeBugs   = isset($activeBugs[$product->id])          ? $activeBugs[$product->id]          : 0;
             $product->closedBugs   = isset($closedBugs[$product->id])          ? $closedBugs[$product->id]          : 0;
             $product->fixedBugs    = isset($fixedBugs[$product->id])           ? $fixedBugs[$product->id]           : 0;
             $product->thisWeekBugs = isset($thisWeekBugs[$product->id])        ? $thisWeekBugs[$product->id]        : 0;
             $product->assignToNull = isset($assignToNull[$product->id])        ? $assignToNull[$product->id]        : 0;
             $product->executions   = isset($executionCountPairs[$product->id]) ? $executionCountPairs[$product->id] : 0;
             $product->coverage     = isset($coveragePairs[$product->id])       ? $coveragePairs[$product->id]       : 0;
+
+            $latestRelease = isset($latestReleases[$product->id]) ? $latestReleases[$product->id][0] : null;
+            $product->latestRelease     = $latestRelease ? $latestRelease->name : '';
+            $product->latestReleaseDate = $latestRelease ? $latestRelease->date : '';
 
             /* Calculate product progress. */
             $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];

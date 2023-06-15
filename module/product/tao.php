@@ -291,6 +291,17 @@ class productTao extends productModel
             ->fetchPairs();
     }
 
+    /* TODO move to release module. */
+    protected function getLatestReleasesTODO(array $productIDs): array
+    {
+        return $this->dao->select('product, name, date')
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIDs)
+            ->orderBy('id_desc')
+            ->fetchGroup('product');
+    }
+
     /* TODO move to bug module. */
     protected function getBugsTODO(array $productIDs): array
     {
@@ -309,6 +320,18 @@ class productTao extends productModel
             ->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->orWhere('resolution')->eq('postponed')
+            ->andWhere('product')->in($productIDs)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('product')
+            ->fetchPairs();
+    }
+
+    /* TODO move to bug module. */
+    protected function getActiveBugsTODO(array $productIDs): array
+    {
+        return $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('status')->eq('active')
             ->andWhere('product')->in($productIDs)
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
@@ -381,8 +404,14 @@ class productTao extends productModel
     {
         $this->loadModel('program');
 
-        if($orderBy == 'program_asc') $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
-        else $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
+        if($orderBy == 'program_asc')
+        {
+            $products = $this->getPagerProductsWithProgramIn($productIdList, $pager);
+        }
+        else
+        {
+            $products = $this->getPagerProductsIn($productIdList, $pager, $orderBy);
+        }
 
         /* Fetch product lines. */
         $linePairs = $this->getLinePairs();
