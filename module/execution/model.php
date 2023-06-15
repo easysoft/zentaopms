@@ -5402,7 +5402,7 @@ class executionModel extends model
             $execution->name          = "<span class='label secondary-pale'>{$this->lang->execution->typeList[$execution->type]}</span> " . (empty($execution->isParent) ? html::a($link, $execution->name, '_self', 'class="text-primary"') : $execution->name) . (strtotime($today) > strtotime($execution->end) ? '<span class="label danger-pale">' . $this->lang->execution->delayed . '</span>' : '');
             $execution->project       = $execution->projectName;
             $execution->parent        = ($execution->parent and $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
-            $execution->asParent      = !empty($execution->isParent) or !empty($execution->tasks);
+            $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->progress      = $execution->hours->progress;
             $execution->totalEstimate = $execution->hours->totalEstimate;
             $execution->totalConsumed = $execution->hours->totalConsumed;
@@ -5457,7 +5457,7 @@ class executionModel extends model
             $task->totalEstimate = $task->estimate;
             $task->totalConsumed = $task->consumed;
             $task->totalLeft     = $task->left;
-            $task->asParent      = ($task->parent < 0);
+            $task->isParent      = ($task->parent < 0);
             $task->parent        = $task->parent <= 0 ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
 

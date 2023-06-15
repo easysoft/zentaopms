@@ -7,12 +7,13 @@ $config->task->dtable->fieldList['id']['sortType'] = 'desc';
 $config->task->dtable->fieldList['id']['checkbox'] = true;
 $config->task->dtable->fieldList['id']['required'] = true;
 
-$config->task->dtable->fieldList['name']['fixed']    = 'left';
-$config->task->dtable->fieldList['name']['flex']     = 1;
-$config->task->dtable->fieldList['name']['type']     = 'nestedTitle';
-$config->task->dtable->fieldList['name']['sortType'] = true;
-$config->task->dtable->fieldList['name']['link']     = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
-$config->task->dtable->fieldList['name']['required'] = true;
+$config->task->dtable->fieldList['name']['fixed']        = 'left';
+$config->task->dtable->fieldList['name']['flex']         = 1;
+$config->task->dtable->fieldList['name']['type']         = 'nestedTitle';
+$config->task->dtable->fieldList['name']['nestedToggle'] = true;
+$config->task->dtable->fieldList['name']['sortType']     = true;
+$config->task->dtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
+$config->task->dtable->fieldList['name']['required']     = true;
 
 $config->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->fieldList['pri']['type']     = 'pri';
