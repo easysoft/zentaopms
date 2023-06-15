@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowspec` (
 CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `approval` mediumint(8) NOT NULL DEFAULT '0',
-  `type` enum('review','cc') NOT NULL,
+  `type` enum('review','cc') NOT NULL DEFAULT 'review',
   `title` varchar(255) NOT NULL DEFAULT '',
   `account` char(30) NOT NULL DEFAULT '',
   `node` varchar(100) NOT NULL DEFAULT '',
@@ -369,9 +369,9 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `date` date NOT NULL,
-  `estimate` float NOT NULL,
-  `left` float NOT NULL,
-  `consumed` float NOT NULL,
+  `estimate` float NOT NULL DEFAULT '0',
+  `left` float NOT NULL DEFAULT '0',
+  `consumed` float NOT NULL DEFAULT '0',
   `storyPoint` float NOT NULL DEFAULT '0',
   PRIMARY KEY  (`execution`,`date`,`task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1263,11 +1263,11 @@ CREATE TABLE IF NOT EXISTS `zt_priv` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL DEFAULT '',
   `method` varchar(30) NOT NULL DEFAULT '',
-  `parent` mediumint(8) unsigned NOT NULL,
+  `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
   `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
   `system` enum('0','1') NOT NULL DEFAULT '0',
-  `order` mediumint(8) NOT NULL,
+  `order` mediumint(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1768 DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `priv` ON `zt_priv` (`module`,`method`);
@@ -1275,30 +1275,30 @@ CREATE UNIQUE INDEX `priv` ON `zt_priv` (`module`,`method`);
 -- DROP TABLE IF EXISTS `zt_privmanager`;
 CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `parent` mediumint(8) unsigned NOT NULL,
-  `code` varchar(100) NOT NULL,
+  `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `code` varchar(100) NOT NULL DEFAULT '',
   `type` enum('view','module','package') NOT NULL DEFAULT 'package',
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
   `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
-  `order` mediumint(8) NOT NULL,
+  `order` mediumint(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_privlang`;
 CREATE TABLE IF NOT EXISTS `zt_privlang` (
-  `objectID` mediumint(8) unsigned NOT NULL,
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `objectType` enum('priv','manager') NOT NULL DEFAULT 'priv',
-  `lang` varchar(30) NOT NULL,
-  `key` varchar(100) NOT NULL,
-  `value` varchar(255) NOT NULL,
+  `lang` varchar(30) NOT NULL DEFAULT '',
+  `key` varchar(100) NOT NULL DEFAULT '',
+  `value` varchar(255) NOT NULL DEFAULT '',
   `desc` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `objectlang` ON `zt_privlang` (`objectID`,`objectType`,`lang`);
 
 -- DROP TABLE IF EXISTS `zt_privrelation`;
 CREATE TABLE IF NOT EXISTS `zt_privrelation` (
-  `priv` mediumint(8) unsigned NOT NULL,
-  `type` varchar(30) NOT NULL,
+  `priv` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `type` varchar(30) NOT NULL DEFAULT '',
   `relationPriv` mediumint(8) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
@@ -1676,7 +1676,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `objectType` char(30) NOT NULL DEFAULT '',
   `user` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT '',
-  `key` enum('0','1') NOT NULL,
+  `key` enum('0','1') NOT NULL DEFAULT '0',
   `from` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
@@ -1705,7 +1705,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `type` varchar(30) NOT NULL DEFAULT 'story',
   `category` varchar(30) NOT NULL DEFAULT 'feature',
   `pri` tinyint(3) unsigned NOT NULL DEFAULT '3',
-  `estimate` float unsigned NOT NULL,
+  `estimate` float unsigned NOT NULL DEFAULT '0',
   `status` enum('','changing','active','draft','reviewing','closed') NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
@@ -1763,7 +1763,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `story` mediumint(9) NOT NULL DEFAULT '0',
   `round` smallint(6) NOT NULL DEFAULT '0',
   `estimate` text NULL,
-  `average` float NOT NULL,
+  `average` float NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1817,9 +1817,9 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `type` varchar(20) NOT NULL DEFAULT '',
   `mode` varchar(10) NOT NULL DEFAULT '',
   `pri` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `estimate` float unsigned NOT NULL,
+  `estimate` float unsigned NOT NULL DEFAULT '0',
   `consumed` float unsigned NOT NULL DEFAULT '0',
-  `left` float unsigned NOT NULL,
+  `left` float unsigned NOT NULL DEFAULT '0',
   `deadline` date NULL,
   `status` enum('wait','doing','done','pause','cancel','closed') NOT NULL DEFAULT 'wait',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
@@ -1869,7 +1869,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `task` mediumint(8) unsigned NOT NULL default '0',
   `date` date NULL,
   `left` float unsigned NOT NULL default '0',
-  `consumed` float unsigned NOT NULL,
+  `consumed` float unsigned NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL default '',
   `work` text NULL,
   `order` tinyint(3) unsigned NOT NULL DEFAULT 0,
@@ -2179,11 +2179,11 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `weekStart` date NULL,
-  `pv` float(9,2) NOT NULL,
-  `ev` float(9,2) NOT NULL,
-  `ac` float(9,2) NOT NULL,
-  `sv` float(9,2) NOT NULL,
-  `cv` float(9,2) NOT NULL,
+  `pv` float(9,2) NOT NULL DEFAULT '0',
+  `ev` float(9,2) NOT NULL DEFAULT '0',
+  `ac` float(9,2) NOT NULL DEFAULT '0',
+  `sv` float(9,2) NOT NULL DEFAULT '0',
+  `cv` float(9,2) NOT NULL DEFAULT '0',
   `staff` smallint(5) unsigned NOT NULL DEFAULT '0',
   `progress` varchar(255) NOT NULL DEFAULT '',
   `workload` varchar(255) NOT NULL DEFAULT '',
@@ -2634,8 +2634,8 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `startedDate` datetime NULL,
   `deadline` date NULL,
   `pri` tinyint unsigned NOT NULL DEFAULT '0',
-  `estimate` float unsigned NOT NULL,
-  `left` float unsigned NOT NULL,
+  `estimate` float unsigned NOT NULL DEFAULT '0',
+  `left` float unsigned NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL,
@@ -2787,9 +2787,9 @@ CREATE TABLE `zt_image` (
   `status` varchar(20) NOT NULL DEFAULT '',
   `osName` varchar(32) NOT NULL DEFAULT '',
   `from` varchar(10) NOT NULL DEFAULT 'zentao',
-  `memory` float unsigned NOT NULL,
-  `disk` float unsigned NOT NULL,
-  `fileSize` float unsigned NOT NULL,
+  `memory` float unsigned NOT NULL DEFAULT '0',
+  `disk` float unsigned NOT NULL DEFAULT '0',
+  `fileSize` float unsigned NOT NULL DEFAULT '0',
   `md5` varchar(64) NOT NULL DEFAULT '',
   `desc` text NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -2902,8 +2902,8 @@ CREATE TABLE IF NOT EXISTS `zt_overtime` (
   `year` char(4) NOT NULL DEFAULT '',
   `begin` date NULL,
   `end` date NULL,
-  `start` time NOT NULL,
-  `finish` time NOT NULL,
+  `start` time NULL,
+  `finish` time NULL,
   `hours` float(4,1) unsigned NOT NULL DEFAULT '0.0',
   `leave` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
@@ -12722,7 +12722,7 @@ CREATE TABLE IF NOT EXISTS `zt_intervention` (
   `situation` varchar(255) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `deleted` enum('0','1') NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `project` ON `zt_intervention`(`project`,`activity`);
@@ -13145,7 +13145,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
   `version` varchar(255) NOT NULL DEFAULT '',
-  `type` enum('reviewed','taged') NOT NULL,
+  `type` enum('reviewed','taged') NOT NULL DEFAULT 'reviewed',
   `range` text NULL,
   `data` text NULL,
   `storyEst` char(30) NOT NULL DEFAULT '',
@@ -13217,7 +13217,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
   `reviewer` char(30) NOT NULL DEFAULT '',
   `remainIssue` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
-  `consumed` float NOT NULL,
+  `consumed` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `reviewer` ON `zt_reviewresult`(`review`,`reviewer`,`type`);
