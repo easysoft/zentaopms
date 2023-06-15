@@ -37,23 +37,6 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 });
 
 /**
- * 移除关联的对象。
- * Remove linked object.
- *
- * @param  sting objectType
- * @param  int   objectID
- * @access public
- * @return void
- */
-window.unlinkObject = function(objectType, objectID)
-{
-    zui.Modal.confirm({message: eval(`confirmUnlink${objectType}`), icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
-    {
-        if(res) $.ajaxSubmit({url: eval(`unlink${objectType}URL`).replace('%s', objectID)});
-    });
-}
-
-/**
  * 生成列表的排序链接。
  * Create sort link for table.
  *

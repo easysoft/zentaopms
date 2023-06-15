@@ -58,10 +58,6 @@ jsVar('orderBy', $orderBy);
 jsVar('buildID', $build->id);
 jsVar('confirmDelete', $lang->build->confirmDelete);
 jsVar('sortLink', helper::createLink('build', 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
-jsVar('confirmUnlinkStory', $lang->build->confirmUnlinkStory);
-jsVar('confirmUnlinkBug',   $lang->build->confirmUnlinkBug);
-jsVar('unlinkStoryURL',     helper::createLink('build', 'unlinkStory', "buildID={$build->id}&storyID=%s"));
-jsVar('unlinkBugURL',       helper::createLink('build', 'unlinkBug', "buildID={$build->id}&bugID=%s"));
 
 /* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv('build', 'batchUnlinkStory');
@@ -95,6 +91,10 @@ else
 }
 
 /* Init table data for dtable. */
+$buildModule = $app->tab == 'project' ? 'projectbuild' : 'build';
+$config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url']     = helper::createLink($buildModule, 'unlinkBug', "buildID={$build->id}&bugID={id}");
+$config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'] = helper::createLink($buildModule, 'unlinkStory', "buildID={$build->id}&storyID={id}");
+
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 

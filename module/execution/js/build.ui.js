@@ -32,22 +32,6 @@ window.renderCell = function(result, {col, row})
 }
 
 /**
- * 提示并删除版本。
- * Delete release with tips.
- *
- * @param  int    buildID
- * @access public
- * @return void
- */
-window.confirmDelete = function(buildID)
-{
-    zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
-    {
-        if(res) $.ajaxSubmit({url: $.createLink('build', 'delete', 'buildID=' + buildID)});
-    });
-}
-
-/**
  * Change product.
  *
  * @access public

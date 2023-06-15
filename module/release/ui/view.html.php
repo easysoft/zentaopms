@@ -23,12 +23,14 @@ jsVar('releaseID', $release->id);
 jsVar('confirmDelete', $lang->release->confirmDelete);
 jsVar('sortLink', helper::createLink('release', 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
+$buildModule = $app->tab == 'project' ? 'projectrelease' : 'release';
+
 /* Table data and setting for finished stories tab. */
 jsVar('summary', $summary);
 jsVar('storyCases', $storyCases);
 jsVar('confirmunlinkstory', $lang->release->confirmUnlinkStory);
 jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));
-jsVar('unlinkstoryurl', helper::createLink('release', 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
+jsVar('unlinkstoryurl', helper::createLink($buildModule, 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
 $storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
 
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv('release', 'batchUnlinkStory');
@@ -40,7 +42,7 @@ if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('class' => 'btn se
 
 /* Table data and setting for resolved bugs tab. */
 jsVar('confirmunlinkbug', $lang->release->confirmUnlinkBug);
-jsVar('unlinkbugurl', helper::createLink('release', 'unlinkBug', "releaseID={$release->id}&bugID=%s"));
+jsVar('unlinkbugurl', helper::createLink($buildModule, 'unlinkBug', "releaseID={$release->id}&bugID=%s"));
 
 $config->release->dtable->bug->fieldList['resolvedBuild']['map'] = $builds;
 $bugTableData = initTableData($bugs, $config->release->dtable->bug->fieldList, $this->release);
@@ -54,7 +56,7 @@ if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('class' => 'btn second
 
 /* Table data and setting for left bugs tab. */
 jsVar('confirmunlinkleftbug', $lang->release->confirmUnlinkBug);
-jsVar('unlinkleftbugurl', helper::createLink('release', 'unlinkBug', "releaseID={$release->id}&bugID=%s&type=leftBug"));
+jsVar('unlinkleftbugurl', helper::createLink($buildModule, 'unlinkBug', "releaseID={$release->id}&bugID=%s&type=leftBug"));
 
 $config->release->dtable->leftBug->fieldList['resolvedBuild']['map'] = $builds;
 $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
