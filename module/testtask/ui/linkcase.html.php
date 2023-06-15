@@ -24,6 +24,7 @@ foreach($lang->testtask->featureBar['linkcase'] as $key => $label)
             foreach($dataList as $dataID => $data)
             {
                 $text = $key == 'bysuite' ? $data->name : $data;
+                if($key == 'bysuite' && $data->type == 'public') $text .= " ({$lang->testsuite->authorList[$data->type]})";
                 $subItems[] = array
                 (
                     'text'   => $text,
