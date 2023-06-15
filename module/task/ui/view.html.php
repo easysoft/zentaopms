@@ -40,6 +40,8 @@ foreach($config->task->view->operateList['common'] as $operate)
     $commonActions[] = $settings;
 }
 
+if($task->children) $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
+
 detailBody
 (
     sectionList
@@ -50,6 +52,7 @@ detailBody
             set::content(empty($task->desc) ? $lang->noData : $task->desc),
             set::useHtml(true)
         ),
+        $task->story ?
         section
         (
             set::title($lang->task->story),
@@ -71,7 +74,18 @@ detailBody
                     empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
                 ),
             )
-        ),
+        ) : null,
+        $task->children ?
+        section
+        (
+            set::title($lang->task->children),
+            dtable
+            (
+                set::cols(array_values($config->task->dtable->children->fieldList)),
+                set::data($children),
+                set::checkable(false),
+            )
+        ) : null,
     ),
     history(),
     floatToolbar

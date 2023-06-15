@@ -256,3 +256,36 @@ $config->task->dtable->importTask->fieldList['story']['title']    = $lang->task-
 $config->task->dtable->importTask->fieldList['story']['name']     = 'storyTitle';
 $config->task->dtable->importTask->fieldList['story']['type']     = 'desc';
 $config->task->dtable->importTask->fieldList['story']['sortType'] = false;
+
+$config->task->dtable->children = new stdclass();
+
+$config->task->dtable->children->fieldList['id']             = $config->task->dtable->fieldList['id'];
+$config->task->dtable->children->fieldList['id']['checkbox'] = false;
+$config->task->dtable->children->fieldList['id']['sortType'] = false;
+$config->task->dtable->children->fieldList['id']['name']     = 'id';
+
+$config->task->dtable->children->fieldList['name']                 = $config->task->dtable->fieldList['name'];
+$config->task->dtable->children->fieldList['name']['title']        = $lang->task->name;
+$config->task->dtable->children->fieldList['name']['sortType']     = false;
+$config->task->dtable->children->fieldList['name']['name']         = 'name';
+$config->task->dtable->children->fieldList['name']['nestedToggle'] = false;
+
+$config->task->dtable->children->fieldList['pri']             = $config->task->dtable->fieldList['pri'];
+$config->task->dtable->children->fieldList['pri']['sortType'] = false;
+$config->task->dtable->children->fieldList['pri']['name']     = 'pri';
+
+$config->task->dtable->children->fieldList['deadline']             = $config->task->dtable->fieldList['deadline'];
+$config->task->dtable->children->fieldList['deadline']['sortType'] = false;
+
+$config->task->dtable->children->fieldList['assignedTo']             = $config->task->dtable->fieldList['assignedTo'];
+$config->task->dtable->children->fieldList['assignedTo']['title']    = $lang->task->assignedTo;
+$config->task->dtable->children->fieldList['assignedTo']['sortType'] = false;
+$config->task->dtable->children->fieldList['assignedTo']['name']     = 'assignedTo';
+
+$config->task->dtable->children->fieldList['status']             = $config->task->dtable->fieldList['status'];
+$config->task->dtable->children->fieldList['status']['sortType'] = false;
+$config->task->dtable->children->fieldList['status']['name']     = 'status';
+
+$config->task->dtable->children->fieldList['actions']          = $config->task->dtable->fieldList['actions'];
+$config->task->dtable->children->fieldList['actions']['title'] = $lang->actions;
+$config->task->dtable->children->fieldList['actions']['name']  = 'actions';
