@@ -9,7 +9,7 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {
-        if(row.data.postponed) result[result.length] = {html:'<span class="label size-sm circle danger-pale">' + langPostponed + '</span>', className:'flex items-end w-full', style:{flexDirection:"column"}};
+        if(row.data.postponed) result[result.length] = {html:'<span class="label size-sm circle danger-pale">' + row.data.delayInfo + '</span>', className:'flex items-end w-full', style:{flexDirection:"column"}};
         return result;
     }
 

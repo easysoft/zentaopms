@@ -12,7 +12,11 @@ foreach($programs as $program)
     if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
     {
         $delay = helper::diffDate(helper::today(), $program->end);
-        if($delay > 0) $program->postponed = true;
+        if($delay > 0)
+        {
+            $program->postponed = true;
+            $program->delayInfo = sprintf($lang->project->delayInfo, $delay);
+        }
     }
 
     /* PM. */
@@ -49,7 +53,7 @@ foreach($programs as $program)
 }
 
 jsVar('langManDay',    $lang->program->manDay);
-jsVar('langPostponed', $lang->project->statusList['delay']);
+jsVar('langPostponed', empty($program->end) ? $lang->project->statusList['delay'] : sprintf($lang->project->delayInfo, helper::diffDate(helper::today(), $program->end)));
 jsVar('summeryTpl',    $summary);
 
 featureBar
