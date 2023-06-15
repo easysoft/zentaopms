@@ -168,7 +168,7 @@ detailHeader
 (
     to::prefix
     (
-        backBtn(set::icon('back'), set::type('secondary'), set::back($this->session->productPlanList), $lang->goback),
+        backBtn(set::icon('back'), set::type('secondary'), set::url($this->session->productPlanList), $lang->goback),
         entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title))),
         span(setClass('label'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
@@ -276,4 +276,3 @@ detailBody
 );
 
 render();
-

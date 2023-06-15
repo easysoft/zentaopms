@@ -11,7 +11,7 @@ $config->product->dtable->fieldList['name']['checkbox']     = true;
 $config->product->dtable->fieldList['name']['sortType']     = true;
 $config->product->dtable->fieldList['name']['align']        = 'left';
 $config->product->dtable->fieldList['name']['border']       = 'right';
-$config->product->dtable->fieldList['name']['link']         = 'RAWJS<function(info){const {row, col} = info; return {url:`%s`,target:\'_blank\'};}>RAWJS';
+$config->product->dtable->fieldList['name']['link']         = 'RAWJS<function(info){const {row, col} = info; return {url:`%s`};}>RAWJS';
 
 $config->product->dtable->fieldList['productLine']['name']     = 'productLine';
 $config->product->dtable->fieldList['productLine']['title']    = $lang->product->belongingLine;

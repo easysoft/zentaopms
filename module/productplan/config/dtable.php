@@ -13,6 +13,7 @@ $config->productplan->dtable->fieldList['id']['group']    = 'g1';
 $config->productplan->dtable->fieldList['title']['name']         = 'title';
 $config->productplan->dtable->fieldList['title']['title']        = $lang->productplan->title;
 $config->productplan->dtable->fieldList['title']['type']         = 'title';
+$config->productplan->dtable->fieldList['title']['link']         = helper::createLink('productplan', 'view', 'planID={id}');
 $config->productplan->dtable->fieldList['title']['fixed']        = 'left';
 $config->productplan->dtable->fieldList['title']['sortType']     = true;
 $config->productplan->dtable->fieldList['title']['align']        = 'left';
