@@ -39,9 +39,9 @@ class stdClass extends \stdClass
 {
 }
 
-function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '')
+function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
 {
-    return \helper::createLink($moduleName, $methodName, $vars, $viewType);
+    return \helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody);
 }
 
 function inLink($methodName = 'index', $vars = '', $viewType = '', $onlybody = false)
