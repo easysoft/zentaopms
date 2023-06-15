@@ -88,13 +88,14 @@ foreach($settings as $key => $value)
     if($value['id'] == 'status' && strpos(',all,bysearch,undone,', ",$browseType,") === false)      unset($settings[$key]);
     if(commonModel::isTutorialMode() && in_array($value['id'], array('PM', 'budget', 'teamCount'))) unset($settings[$key]);
 }
+$tableData = initTableData($projectStats, $settings, $this->project);
 
 /* zin: Define the dtable in main content. */
 dtable
 (
     set::groupDivider(true),
     set::cols($settings),
-    set::data($projectStats),
+    set::data($tableData),
     set::checkable($canBatchEdit),
     set::footToolbar($footToolbar),
     set::sortLink(helper::createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
