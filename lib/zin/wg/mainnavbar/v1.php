@@ -42,7 +42,8 @@ class mainNavbar extends nav
         $currentMethod = $app->getMethodName();
 
         commonModel::setMainMenu();
-        $items = \customModel::getModuleMenu($app->rawMethod);
+        $activeMenu = commonModel::printMainMenu(false);
+        $items = \customModel::getModuleMenu($activeMenu);
         if($items)
         {
             $items = json_decode(json_encode($items), true);

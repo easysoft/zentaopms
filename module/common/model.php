@@ -1131,11 +1131,12 @@ class commonModel extends model
     /**
      * Print the main menu.
      *
+     * @param  bool   $printHtml
      * @static
      * @access public
      * @return string
      */
-    public static function printMainMenu()
+    public static function printMainMenu(bool $printHtml = true): string
     {
         global $app, $lang, $config;
 
@@ -1157,12 +1158,12 @@ class commonModel extends model
         /* Print all main menus. */
         $menu = customModel::getMainMenu();
 
-        echo "<ul class='nav nav-default'>\n";
+        $menuHtml = "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
-            if($menuItem->divider) echo "<li class='divider'></li>";
+            if($menuItem->divider) $menuHtml .= "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
@@ -1185,11 +1186,11 @@ class commonModel extends model
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
                 $executionID = $menuItem->link['vars'];
-                commonModel::buildMoreButton($executionID);
+                commonModel::buildMoreButton($executionID, $printHtml);
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
-                commonModel::buildAppButton();
+                commonModel::buildAppButton($printHtml);
             }
             else
             {
@@ -1262,22 +1263,23 @@ class commonModel extends model
                         $label    .= "<span class='caret'></span>";
                         $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
 
-                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
                     }
                     else
                     {
-                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
                     }
                 }
                 else
                 {
-                    echo "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+                    $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
                 }
             }
         }
 
-        echo "</ul>\n";
+        $menuHtml .= "</ul>\n";
 
+        if($printHtml) echo $menuHtml;
         return $activeMenu;
     }
 
@@ -1798,18 +1800,19 @@ EOF;
      * Build more executions button.
      *
      * @param  int    $executionID
+     * @param  bool   $printHtml
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function buildMoreButton($executionID)
+    public static function buildMoreButton(int $executionID, bool $printHtml = true): bool
     {
-        if(defined('TUTORIAL')) return;
+        if(defined('TUTORIAL')) return false;
 
         global $lang, $app;
 
         $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
-        if(empty($object)) return;
+        if(empty($object)) return false;
 
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
@@ -1827,7 +1830,7 @@ EOF;
             $executionPairs[$execution->id] = $execution->name;
         }
 
-        if(empty($executionPairs)) return;
+        if(empty($executionPairs)) return false;
 
         $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}<span class='caret'></span></a>";
         $html .= "<ul class='dropdown-menu'>";
@@ -1845,19 +1848,21 @@ EOF;
 
         $html .= "</ul></li>\n";
 
-        echo $html;
+        if($printHtml) echo $html;
+        return true;
     }
 
     /**
      * Build devops app button.
      *
+     * @param  bool   $printHtml
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function buildAppButton()
+    public static function buildAppButton(bool $printHtml = true): bool
     {
-        if(defined('TUTORIAL')) return;
+        if(defined('TUTORIAL')) return false;
         global $app, $config, $lang;
 
         $condition     = '';
@@ -1868,11 +1873,11 @@ EOF;
             {
                 if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
             }
-            if(empty($types)) return;
+            if(empty($types)) return false;
             $condition .= ' AND `type` in (' . trim($types, ',') . ')';
         }
         $pipelineList = $app->dbh->query("SELECT `type`,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
-        if(empty($pipelineList)) return;
+        if(empty($pipelineList)) return false;
 
         $appCommon = isset($lang->db->custom['devopsMenu']['menu']['app']) ? $lang->db->custom['devopsMenu']['menu']['app'] : $lang->app->common;
         $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$appCommon}<span class='caret'></span></a>";
@@ -1884,7 +1889,8 @@ EOF;
         }
         $html .= "</ul></li>\n";
 
-        echo $html;
+        if($printHtml) echo $html;
+        return true;
     }
 
     /**
