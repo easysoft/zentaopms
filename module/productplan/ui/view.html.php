@@ -138,14 +138,7 @@ zui::menu
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
-
-$menus = $this->productplan->buildOperateMenu($plan);
-detailHeader
-(
-    to::prefix(backBtn(set::icon('back'), set::type('secondary'), set::back($this->session->productPlanList), $lang->goback)),
-    to::title(entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title)))),
-    (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(set::items($menus))) : null
-);
+foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
 $createStoryLink      = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
@@ -169,6 +162,14 @@ $fnGetChildrenPlans = function($childrenPlans)
     array_pop($childrenPlanItems);
     return $childrenPlanItems;
 };
+
+$menus = $this->productplan->buildOperateMenu($plan);
+detailHeader
+(
+    to::prefix(backBtn(set::icon('back'), set::type('secondary'), set::back($this->session->productPlanList), $lang->goback)),
+    to::title(entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title)))),
+    (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(set::items($menus))) : null
+);
 
 detailBody
 (
