@@ -325,6 +325,7 @@ foreach(explode(',', $case->reviewedBy) as $account)
 }
 $reviewedBy = trim($reviewedBy);
 
+$isInModal = isAjaxRequest('modal');
 detailHeader
 (
     to::title
@@ -336,7 +337,7 @@ detailHeader
             set::text($case->title)
         )
     ),
-    to::suffix
+    !$isInModal ? to::suffix
     (
         btn
         (
@@ -345,7 +346,7 @@ detailHeader
             set::text($lang->case->create),
             $canCreateCase ? set::url($this->createLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}")) : null
         )
-    )
+    ) : null
 );
 
 detailBody
@@ -512,5 +513,4 @@ detailBody
     ),
 );
 
-render();
-
+render($isInModal ? 'modalDialog' : 'page');

@@ -317,7 +317,7 @@ class testsuite extends control
         if(!empty($_POST))
         {
             $this->testsuite->linkCase($suiteID);
-            $this->locate(inlink('view', "suiteID=$suiteID"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "suiteID=$suiteID")));
         }
 
         $suite = $this->testsuite->getById($suiteID);

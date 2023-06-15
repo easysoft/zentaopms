@@ -64,6 +64,7 @@ $config->testsuite->dtable->fieldList['actions']['menu']       = array('linkCase
 global $app;
 $app->loadLang('testcase');
 $app->loadLang('testtask');
+$app->loadModuleConfig('testcase');
 
 $config->testsuite->testcase = new stdclass();
 
@@ -136,3 +137,19 @@ $config->testsuite->testcase->dtable->fieldList['actions']['title']    = $lang->
 $config->testsuite->testcase->dtable->fieldList['actions']['sortType'] = false;
 $config->testsuite->testcase->dtable->fieldList['actions']['list']     = $config->testsuite->testcase->actionList;
 $config->testsuite->testcase->dtable->fieldList['actions']['menu']     = array();
+
+$config->testsuite->linkcase = new stdclass();
+$config->testsuite->linkcase->dtable = new stdclass();
+$config->testsuite->linkcase->dtable->fieldList['id']     = $config->testcase->dtable->fieldList['id'];
+$config->testsuite->linkcase->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
+$config->testsuite->linkcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
+$config->testsuite->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
+$config->testsuite->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
+
+$config->testsuite->linkcase->dtable->fieldList['status']['name']  = 'version';
+$config->testsuite->linkcase->dtable->fieldList['status']['title'] = $lang->testsuite->linkVersion;
+$config->testsuite->linkcase->dtable->fieldList['status']['type']  = 'text';
+$config->testsuite->linkcase->dtable->fieldList['status']['group'] = 'version';
+
+$config->testsuite->linkcase->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
+unset($config->testsuite->linkcase->dtable->fieldList['title']['nestedToggle']);
