@@ -121,7 +121,7 @@ class repoZen extends repo
             exec($versionCommand, $versionOutput, $versionResult);
             if($versionResult)
             {
-                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("<br />", $versionOutput));
+                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, implode("<br />", $versionOutput));
                 dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
                 return false;
             }
@@ -151,7 +151,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                $message = sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                $message = sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
                 if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
                 {
                     dao::$errors['client'] = $this->lang->repo->error->clientVersion;
@@ -214,7 +214,7 @@ class repoZen extends repo
             exec($command, $output, $result);
             if($result)
             {
-                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, implode("<br />", $output));
                 return false;
             }
         }
@@ -323,7 +323,7 @@ class repoZen extends repo
      * @access protected
      * @return array
      */
-    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revison, object $lastRevision): array
+    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision): array
     {
         $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
         $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
@@ -338,7 +338,7 @@ class repoZen extends repo
             {
                 $infos        = $this->scm->ls($path, $revision);
                 $revisionList = array_column($infos, 'revision', 'revision');
-                $comments     = $this->repo->getHistory($repoID, $revisionList);
+                $comments     = $this->repo->getHistory($repo->id, $revisionList);
                 foreach($infos as $info)
                 {
                     if(isset($comments[$info->revision]))

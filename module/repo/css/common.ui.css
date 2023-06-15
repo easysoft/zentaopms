@@ -1,0 +1,3 @@
+.directory {background-image:url('theme/default/images/repo/dir.png');}
+.file {background-image:url('theme/default/images/repo/txt.png');}
+.mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom;margin-right: 2px;}
