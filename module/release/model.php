@@ -637,6 +637,10 @@ class releaseModel extends model
         $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getById($release->product)->name;
         $subject = 'Release #' . $release->id . ' ' . $release->name . $suffix;
 
+        $stories  = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $bugs     = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)->fetchAll();
+        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)->fetchAll();
+
         /* Get mail content. */
         $modulePath = $this->app->getModulePath('', 'release');
         $oldcwd     = getcwd();

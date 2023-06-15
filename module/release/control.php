@@ -294,7 +294,7 @@ class release extends control
                 $this->loadModel('action')->create('release', $releaseID, 'notified');
             }
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $this->view->release = $this->release->getById($releaseID);

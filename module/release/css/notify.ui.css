@@ -1,0 +1,3 @@
+#notifyForm > .form-row:first-child {height : 6rem;}
+#notifyForm .check-list-inline {flex-wrap: wrap;}
+#notifyForm .checkbox-primary {flex: 25%;}
