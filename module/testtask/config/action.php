@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $app, $lang;
+$app->loadLang('testcase');
 
 $config->testtask->actionList = array();
 $config->testtask->actionList['start']['icon'] = 'play';
@@ -53,3 +54,33 @@ $config->testtask->actionList['delete']['icon'] = 'trash';
 $config->testtask->actionList['delete']['text'] = $lang->testtask->delete;
 $config->testtask->actionList['delete']['hint'] = $lang->testtask->delete;
 $config->testtask->actionList['delete']['url']  = array('module' => 'testtask', 'method' => 'delete', 'params' => 'taskID={id}');
+
+if(!isset($config->testtask->cases)) $config->testtask->cases = new stdclass();
+$config->testtask->cases->actionList['confirmChange']['icon'] = 'search';
+$config->testtask->cases->actionList['confirmChange']['text'] = $lang->testcase->confirmChange;
+$config->testtask->cases->actionList['confirmChange']['hint'] = $lang->testcase->confirmChange;
+$config->testtask->cases->actionList['confirmChange']['url']  = array('module' => 'testcase', 'method' => 'confirmChange', 'params' => 'id={case}&taskID={task}&from=list');
+
+$config->testtask->cases->actionList['createBug']['icon']        = 'bug';
+$config->testtask->cases->actionList['createBug']['text']        = $lang->testcase->createBug;
+$config->testtask->cases->actionList['createBug']['hint']        = $lang->testcase->createBug;
+$config->testtask->cases->actionList['createBug']['url']         = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&branch={branch}&extra=executionID=%execution%,buildID=%build%,caseID={case},version={version},runID={id},testtask=%testtask%', 'data-width' => '90%');
+$config->testtask->cases->actionList['createBug']['data-width']  = '90%';
+$config->testtask->cases->actionList['createBug']['data-toggle'] = 'modal';
+
+$config->testtask->cases->actionList['runCase']['icon'] = 'play';
+$config->testtask->cases->actionList['runCase']['text'] = $lang->testtask->runCase;
+$config->testtask->cases->actionList['runCase']['hint'] = $lang->testtask->runCase;
+$config->testtask->cases->actionList['runCase']['url']  = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'id={id}');
+
+$config->testtask->cases->actionList['results']['icon'] = 'list-alt';
+$config->testtask->cases->actionList['results']['text'] = $lang->testtask->results;
+$config->testtask->cases->actionList['results']['hint'] = $lang->testtask->results;
+$config->testtask->cases->actionList['results']['url']  = array('module' => 'testtask', 'method' => 'results', 'params' => 'id={id}');
+
+$config->testtask->cases->actionList['unlinkCase']['icon']         = 'unlink';
+$config->testtask->cases->actionList['unlinkCase']['text']         = $lang->testtask->unlinkCase;
+$config->testtask->cases->actionList['unlinkCase']['hint']         = $lang->testtask->unlinkCase;
+$config->testtask->cases->actionList['unlinkCase']['url']          = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}');
+$config->testtask->cases->actionList['unlinkCase']['class']        = 'ajax-submit';
+$config->testtask->cases->actionList['unlinkCase']['data-confirm'] = $lang->testtask->confirmUnlinkCase;
