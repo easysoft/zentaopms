@@ -1,7 +1,9 @@
 window.footerGenerator = function()
 {
-    var checkedCount = $("div.is-checked").length;
-    const statistic = summeryTpl.replace('%s', ' ' + checkedCount + ' ');
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+
+    const statistic = summeryTpl.replace('%s', ' ' + checkedList.length + ' ');
     return [{children: statistic, className: "text-dark"}, "flex", "pager"];
 }
 
