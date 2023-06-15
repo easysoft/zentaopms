@@ -1,4 +1,4 @@
-$(document).on('click', '.batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query(this);
     const checkedList = dtable.$.getChecks();
@@ -19,17 +19,24 @@ $(document).on('click', '.batch-btn', function()
         {
             if(result)
             {
-                const ztfURL =  $.createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation);
-                $.post(ztfURL, form);
-            }
+                const ztfURL = $.createLink('zanode', 'ajaxRunZTFScript', 'scriptID=' + automation);
+                $.post(ztfURL, form, function(result)
+                {
+                    if(result.result == 'fail')
+                    {
+                        zui.Modal.alert(result.message);
+                        return false;
+                    }
 
-            if($(this).hasClass('ajax-btn'))
-            {
-                $.ajaxSubmit({url, data: form});
-            }
-            else
-            {
-                postAndLoadPage(url, form);
+                    if($(this).hasClass('ajax-btn'))
+                    {
+                        $.ajaxSubmit({url, data: form});
+                    }
+                    else
+                    {
+                        postAndLoadPage(url, form);
+                    }
+                }, 'json');
             }
         }});
     }
