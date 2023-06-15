@@ -146,10 +146,10 @@ $config->testsuite->linkcase->dtable->fieldList['pri']    = $config->testcase->d
 $config->testsuite->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->testsuite->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
-$config->testsuite->linkcase->dtable->fieldList['status']['name']  = 'version';
-$config->testsuite->linkcase->dtable->fieldList['status']['title'] = $lang->testsuite->linkVersion;
-$config->testsuite->linkcase->dtable->fieldList['status']['type']  = 'text';
-$config->testsuite->linkcase->dtable->fieldList['status']['group'] = 'version';
+$config->testsuite->linkcase->dtable->fieldList['version']['name']  = 'version';
+$config->testsuite->linkcase->dtable->fieldList['version']['title'] = $lang->testsuite->linkVersion;
+$config->testsuite->linkcase->dtable->fieldList['version']['type']  = 'text';
+$config->testsuite->linkcase->dtable->fieldList['version']['group'] = 'version';
 
 $config->testsuite->linkcase->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
 unset($config->testsuite->linkcase->dtable->fieldList['title']['nestedToggle']);

@@ -1068,7 +1068,8 @@ class testtask extends control
         if(!empty($_POST))
         {
             $this->testtask->linkCase($taskID, $type);
-            $this->locate(inlink('cases', "taskID=$taskID"));
+            if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
         }
 
         /* Save session. */

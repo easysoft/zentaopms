@@ -208,6 +208,12 @@ $lang->testtask->featureBar['browse']['done']        = $lang->testtask->done;
 $lang->testtask->featureBar['cases']['all']          = $lang->testtask->allCases;
 $lang->testtask->featureBar['cases']['assignedtome'] = $lang->testtask->assignedToMe;
 
+$lang->testtask->featureBar['linkcase']['all']     = $lang->all;
+$lang->testtask->featureBar['linkcase']['bystory'] = $lang->testtask->linkByStory;
+$lang->testtask->featureBar['linkcase']['bysuite'] = $lang->testtask->linkBySuite;
+$lang->testtask->featureBar['linkcase']['bybuild'] = $lang->testtask->linkByBuild;
+$lang->testtask->featureBar['linkcase']['bybug']   = $lang->testtask->linkByBug;
+
 $lang->testtask->unitTag['all']       = '所有';
 $lang->testtask->unitTag['newest']    = '最近';
 $lang->testtask->unitTag['thisWeek']  = '本周';

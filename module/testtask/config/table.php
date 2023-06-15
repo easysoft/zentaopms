@@ -82,3 +82,22 @@ $config->testtask->cases->dtable->fieldList['actions']['title'] = $lang->actions
 $config->testtask->cases->dtable->fieldList['actions']['type']  = 'actions';
 $config->testtask->cases->dtable->fieldList['actions']['list']  = $config->testtask->cases->actionList;
 $config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('confirmChange'), array('createBug', 'runCase', 'results', 'unlinkCase'));
+
+$config->testtask->linkcase = new stdclass();
+$config->testtask->linkcase->dtable = new stdclass();
+$config->testtask->linkcase->dtable->fieldList['id']     = $config->testcase->dtable->fieldList['id'];
+$config->testtask->linkcase->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
+$config->testtask->linkcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
+$config->testtask->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
+$config->testtask->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
+
+$config->testtask->linkcase->dtable->fieldList['version']['name']  = 'version';
+$config->testtask->linkcase->dtable->fieldList['version']['title'] = $lang->testtask->linkVersion;
+$config->testtask->linkcase->dtable->fieldList['version']['type']  = 'text';
+$config->testtask->linkcase->dtable->fieldList['version']['group'] = 'version';
+
+$config->testtask->linkcase->dtable->fieldList['openedBy']      = $config->testcase->dtable->fieldList['openedBy'];
+$config->testtask->linkcase->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
+$config->testtask->linkcase->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
+$config->testtask->linkcase->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
+unset($config->testtask->linkcase->dtable->fieldList['title']['nestedToggle']);

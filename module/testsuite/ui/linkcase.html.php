@@ -36,7 +36,7 @@ div
         $lang->testsuite->unlinkedCases . "({$pager->recTotal})"
     )
 );
-$cases = initTableData($cases, $config->testcase->dtable->fieldList, $this->testcase);
+$cases = initTableData($cases, $config->testsuite->linkcase->dtable->fieldList, $this->testcase);
 $data  = array_values($cases);
 dtable
 (
