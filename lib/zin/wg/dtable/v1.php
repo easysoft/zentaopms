@@ -40,10 +40,16 @@ class dtable extends wg
             if(isset($config['link']) && is_array($config['link'])) $config['link'] = $this->getLink($config['link']);
             if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
 
-            if(!empty($config['ajaxSubmit']))
+            if(!empty($config['actionsMap']))
             {
-                if(empty($config['class']))         $config['class']        = 'ajax-form';
-                if(!isset($config['data-confirm'])) $config['data-confirm'] = zget($app->lang->$module, 'confirmDelete');
+                foreach($config['actionsMap'] as &$action)
+                {
+                    if(!empty($action['ajaxSubmit']))
+                    {
+                        if(empty($action['class']))         $action['class']        = 'ajax-submit';
+                        if(!isset($action['data-confirm'])) $action['data-confirm'] = zget($app->lang->$module, 'confirmDelete');
+                    }
+                }
             }
         }
         $this->setProp('cols', array_values($colConfigs));
