@@ -512,14 +512,12 @@ class program extends control
         $this->app->loadLang('stakeholder');
         $this->program->setMenu($programID);
 
-        /* Load pager and get tasks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->program->stakeholder;
-
-        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
+        $this->view->title        = $this->lang->program->stakeholder;
         $this->view->pager        = $pager;
+        $this->view->stakeholders = $this->program->getStakeholders($programID, $orderBy, $pager);
         $this->view->programID    = $programID;
         $this->view->program      = $this->program->getByID($programID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
