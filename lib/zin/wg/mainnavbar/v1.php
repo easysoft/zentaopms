@@ -61,7 +61,9 @@ class mainNavbar extends nav
                 $items[$key]['url'] = commonModel::createMenuLink((object)$item, $tab);
                 $items[$key]['data-id'] = $item['name'];
 
-                $active = '';
+                $active    = '';
+                $subModule = isset($item['subModule']) ? explode(',', $item['subModule']) : array();
+                if($subModule and in_array($currentModule, $subModule)) $active = 'active';
                 if($link['module'] == $currentModule and $link['method'] == $currentMethod) $active = 'active';
                 if($link['module'] == $currentModule and strpos(",{$item['alias']},", ",{$currentMethod},") !== false) $active = 'active';
                 if(strpos(",{$item['exclude']},", ",{$currentModule}-{$currentMethod},") !== false or strpos(",{$item['exclude']},", ",{$currentModule},") !== false) $active = '';
