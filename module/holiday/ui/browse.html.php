@@ -17,24 +17,36 @@ sidebar
     div
     (
         setClass('cell'),
-        div
+        menu
         (
-            setClass('nav list-group tab-menu'),
-            a
+            setClass('menu'),
+            li
             (
-                set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=hours') : ''),
-                $lang->custom->setHours,
+                setClass('menu-item'),
+                a
+                (
+                    set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=hours') : ''),
+                    $lang->custom->setHours,
+                ),
             ),
-            a
+            li
             (
-                set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=weekend') : ''),
-                $lang->custom->setWeekend,
+                setClass('menu-item'),
+                a
+                (
+                    set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=weekend') : ''),
+                    $lang->custom->setWeekend,
+                ),
             ),
-            a
+            li
             (
-                setClass('active'),
-                set::href(createLink('holiday', 'browse')),
-                $lang->custom->setHoliday,
+                setClass('menu-item'),
+                a
+                (
+                    setClass('active'),
+                    set::href(createLink('holiday', 'browse')),
+                    $lang->custom->setHoliday,
+                ),
             ),
         ),
     ),
