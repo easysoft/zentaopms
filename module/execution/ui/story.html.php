@@ -204,6 +204,72 @@ sidebar
     )))
 );
 
+modal
+(
+    setID('taskModal'),
+    set::modalProps(array('title' => $lang->story->batchToTask)),
+    form
+    (
+        setClass('text-center', 'py-4'),
+        setID('toTaskForm'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->next),
+        set::url(createLink('story', 'batchToTask', "executionID={$execution->id}&projectID={$execution->project}")),
+        formGroup
+        (
+            set::label($lang->task->type),
+            set::required(true),
+            set::width('1/2'),
+            select
+            (
+                set::name('type'),
+                set::items($lang->task->typeList)
+            )
+        ),
+        $lang->hourCommon !== $lang->workingHour ? formGroup
+        (
+            set::label($lang->story->one . $lang->hourCommon),
+            set::required(true),
+            set::width('1/2'),
+            inputGroup
+            (
+                span
+                (
+                    setClass('input-group-addon'),
+                    "≈ "
+                ),
+                input(set::name('hourPointValue')),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->workingHour
+                )
+            ),
+        ) : null,
+        formGroup
+        (
+            set::label($lang->story->field),
+            checkList
+            (
+                set::name('fields[]'),
+                set::inline(true),
+                set::value(array_keys($lang->story->convertToTask->fieldList)),
+                set::items($lang->story->convertToTask->fieldList)
+            ),
+            input
+            (
+                set::type('hidden'),
+                set::name('storyIdList')
+            )
+        ),
+        div
+        (
+            setClass('alert secondary-pale'),
+            $lang->story->batchToTaskTips
+        )
+    )
+);
+
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
@@ -223,8 +289,8 @@ if($canBatchAction)
             set::class('dropdown-menu'),
             $canBatchToTask ? item(set(array(
                 'text'  => $lang->story->batchToTask,
-                'class' => 'batch-btn ajax-btn',
-                'url'   => '#batchToTask'
+                'url'   => '#taskModal',
+                'data-toggle' => 'modal'
             ))) : null,
         );
     }
@@ -276,7 +342,7 @@ if($canBatchAction)
     {
         $footToolbar['items'][] = array(
             'text'  => $lang->close,
-            'class' => 'btn btn-caret size-sm secondary',
+            'class' => 'btn batch-btn ajax-btn size-sm secondary',
             'url'   => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
         );
     }
@@ -317,7 +383,7 @@ if($canBatchAction)
     {
         $footToolbar['items'][] = array(
             'text'  => $lang->execution->unlinkStoryAB,
-            'class' => 'btn btn-caret size-sm secondary',
+            'class' => 'btn batch-btn ajax-btn size-sm secondary',
             'url'   => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
         );
     }

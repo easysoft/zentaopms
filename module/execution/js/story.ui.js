@@ -6,7 +6,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
     const url  = $(this).data('url');
     const form = new FormData();
-    checkedList.forEach((id) => form.append('taskIdList[]', id));
+    checkedList.forEach((id) => form.append('storyIdList[]', id));
 
     if($(this).hasClass('ajax-btn'))
     {
@@ -16,6 +16,12 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     {
         postAndLoadPage(url, form);
     }
+}).on('click', '#taskModal button[type="submit"]', function()
+{
+    const formData = new FormData($("#toTaskForm")[0]);
+    postAndLoadPage($('#toTaskForm').attr('action'), formData);
+
+    return false;
 });
 
 /**
@@ -31,6 +37,8 @@ window.setStatistics = function(element, checkedIdList)
 {
     const checkedTotal = checkedIdList.length;
     if(checkedTotal == 0) return {html: summary};
+
+    $('#storyIdList').val(checkedIdList.join(','));
 
     let checkedEstimate = 0;
     let checkedCase     = 0;
