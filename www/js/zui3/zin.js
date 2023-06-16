@@ -293,13 +293,35 @@
                     data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
                 }
                 if(options.updateUrl !== false) currentAppUrl = url;
-                data.forEach((item, idx) => item.selector = selectors[idx]);
-                updatePerfInfo(options, 'renderBegin');
-                renderPage(data, options);
-                updatePerfInfo(options, 'renderEnd');
-                $(document).trigger('pagerender.app');
-                if(options.success) options.success(data);
-                if(onFinish) onFinish(null, data);
+                if(Array.isArray(data))
+                {
+                    data.forEach((item, idx) => item.selector = selectors[idx]);
+                    updatePerfInfo(options, 'renderBegin');
+                    renderPage(data, options);
+                    updatePerfInfo(options, 'renderEnd');
+                    $(document).trigger('pagerender.app');
+                    if(options.success) options.success(data);
+                    if(onFinish) onFinish(null, data);
+                }
+                else if(data.load)
+                {
+                    if(data.load === 'dtable') loadTable();
+                    else if(typeof data.load === 'string') loadPage(data.load);
+                    else if(data.load === true) loadCurrentPage();
+                    else if(typeof data.load === 'object')
+                    {
+                        if('confirm' in data.load)
+                        {
+                            const confirmed = confirm(data.load.confirm);
+                            if(confirmed) loadPage(data.load.confirmed);
+                            else          loadPage(data.load.canceled);
+                        }
+                        else
+                        {
+                            loadPage(data.load);
+                        }
+                    }
+                }
             },
             error: (xhr, type, error) =>
             {
