@@ -29,7 +29,7 @@ detailHeader
 
 $fromItem     = '';
 $fromItemData = '';
-if(in_array($todo->type, array('story', 'task', 'bug')) and !empty($todo->object))
+if(in_array($todo->type, array('story', 'task', 'bug')) && !empty($todo->object))
 {
     $app->loadLang($todo->type);
     $objectData = array();
@@ -146,9 +146,8 @@ if($todo->status != 'done' && $todo->status != 'closed')
     $createStoryPriv = common::hasPriv('story', 'create');
     $createTaskPriv  = common::hasPriv('task', 'create');
     $createBugPriv   = common::hasPriv('bug', 'create');
-    $printBtn        = $config->vision == 'lite' and empty($projects);
-    //if($printBtn && ($createStoryPriv || $createTaskPriv || $createBugPriv))
-    if(true)
+    $printBtn        = $config->vision == 'lite' && empty($projects);
+    if($printBtn && ($createStoryPriv || $createTaskPriv || $createBugPriv))
     {
         $actionList[] = array
         (
