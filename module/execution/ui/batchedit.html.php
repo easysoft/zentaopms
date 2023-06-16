@@ -10,10 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('stageList', $lang->stage->typeList);
-
 $setCode    = (isset($config->setCode) and $config->setCode == 1);
 $showMethod = $app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus');
+
+jsVar('stageList', $lang->stage->typeList);
 
 formBatchPanel
 (
@@ -73,7 +73,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($poUsers),
-        set::width('136px'),
+        set::width('80px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -84,7 +84,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($qdUsers),
-        set::width('136px'),
+        set::width('80px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -95,7 +95,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items(array()),
-        set::width('136px'),
+        set::width('80px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -104,7 +104,7 @@ formBatchPanel
         set::label($lang->execution->type),
         set::control('select'),
         set::items($lang->execution->lifeTimeList),
-        set::width('136px'),
+        set::width('80px'),
     ),
     formBatchItem
     (
