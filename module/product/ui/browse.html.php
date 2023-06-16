@@ -154,40 +154,23 @@ $fnBuildLinkStoryButton = function() use($lang, $product, $productID, $projectHa
 };
 
 /* DataTable columns. */
-$setting = $this->datatable->getSetting('story');
-$cols    = array_values($setting);
-foreach($cols as $key => $col)
-{
-    if($col->id == 'title')
-    {
-        $col->link = sprintf($col->link, createLink('story', 'view', array('storyID' => '${row.id}', 'version' => '0', 'param' => '0', 'storyType' => $storyType)));
-    }
-
-    $cols[$key] = $col;
-}
+$setting = $this->datatable->getSetting('product');
+if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
+$cols = array_values($setting);
 
 /* DataTable data. */
 $this->loadModel('story');
 
-$data = array();
+$data    = array();
+$options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users);
 foreach($stories as $story)
 {
-    $story->taskCount = $storyTasks[$story->id];
-    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
-    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
-
-    $data[] = $story;
-
+    $options['branches'] = zget($branchOptions, $story->product, array());
+    $data[] = $this->story->formatStoryForList($story, $options);
     if(!isset($story->children)) continue;
 
     /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->taskCount = $storyTasks[$child->id];
-        $child->actions   = $this->story->buildActionButtonList($child, 'browse');
-
-        $data[] = $child;
-    }
+    foreach($story->children as $key => $child) $data[] = $this->story->formatStoryForList($child, $options);
 }
 
 data('storyBrowseType', $storyBrowseType);
@@ -204,26 +187,9 @@ featureBar
 
 toolbar
 (
-    item(set(array
-    (
-        'text' => $lang->project->report,
-        'icon' => 'bar-chart',
-        'class' => 'ghost'
-    ))),
-    item(set(array
-    (
-        'text'  => $lang->export,
-        'icon'  => 'export',
-        'class' => 'ghost',
-        'url'   => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"),
-    ))),
-    item(set(array
-    (
-        'text'  => $lang->import,
-        'icon'  => 'import',
-        'class' => 'ghost',
-        'url'   => createLink('story', 'import', "productID=$productID"),
-    ))),
+    item(set(array('text' => $lang->project->report, 'icon' => 'bar-chart', 'class' => 'ghost'))),
+    item(set(array('text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType")))),
+    item(set(array('text' => $lang->import, 'icon' => 'import', 'class' => 'ghost', 'url' => helper::createLink('story', 'import', "productID=$productID")))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
 );

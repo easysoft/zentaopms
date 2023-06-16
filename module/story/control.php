@@ -1057,8 +1057,8 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType")));
         }
 
         /* Get story and product. */

@@ -14,14 +14,6 @@ namespace zin;
 
 /* Get column settings of the data table. */
 $cols = array_values($config->product->dtable->fieldList);
-/* Set the name link. */
-foreach($cols as &$col)
-{
-    if($col['name'] != 'name') continue;
-
-    $col['link'] = sprintf($col['link'], createLink('product', 'browse', array('productID' => '${row.id}')));
-    break;
-}
 
 $extendFieldList = $this->product->getFlowExtendFields();
 foreach($extendFieldList as $field => $name)

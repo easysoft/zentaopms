@@ -5724,4 +5724,45 @@ class storyModel extends model
 
         return $menu;
     }
+
+    /**
+     * 格式化列表中需求数据。
+     * Format story for list.
+     *
+     * @param  object $story
+     * @param  array $options
+     * @access public
+     * @return object
+     */
+    public function formatStoryForList(object $story, array $options = array()): object
+    {
+        $story->actions  = $this->buildActionButtonList($story, 'browse');
+        $story->estimate = $story->estimate . $this->config->hourUnit;
+
+        $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
+        $story->bugCount  = zget(zget($options, 'storyBugs',  array()), $story->id, 0);
+        $story->caseCount = zget(zget($options, 'storyCases', array()), $story->id, 0);
+        $story->module    = zget(zget($options, 'modules',    array()), $story->module, '');
+        $story->branch    = zget(zget($options, 'branches',   array()), $story->branch, '');
+        $story->plan      = isset($story->planTitle) ? $story->planTitle : zget(zget($options, 'plans', array()), $story->plan, '');
+
+        $story->source       = zget($this->lang->story->sourceList,   $story->source, '');
+        $story->category     = zget($this->lang->story->categoryList, $story->category);
+        $story->closedReason = zget($this->lang->story->reasonList,   $story->closedReason);
+
+        if($story->mailto)
+        {
+            $mailto = '';
+            foreach(explode(',', $story->mailto) as $account)
+            {
+                $account = trim($account);
+                if(empty($account)) continue;
+
+                $mailto .= zget(zget($options, 'users', array()), $account) . ' ';
+            }
+            $story->mailto = $mailto;
+        }
+
+        return $story;
+    }
 }

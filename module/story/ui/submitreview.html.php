@@ -53,8 +53,9 @@ formPanel
         (
             select
             (
-                set::name('reviewer'),
+                set::name('reviewer[]'),
                 set::value($story->reviewer),
+                set::multiple(true),
                 set::items($reviewers),
             ),
             $needNotReviewBox,
