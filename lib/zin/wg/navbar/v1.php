@@ -5,7 +5,9 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class navbar extends wg
 {
-    static $defineProps = 'items?:array';
+    static $defineProps = array(
+        'items: array'
+    );
 
     protected function getExecutionMoreItem($executionID)
     {
@@ -274,7 +276,7 @@ class navbar extends wg
         }
 
         /* Set active menu to global data, make it accessible to other widgets */
-        useData('activeMenu', $activeMenu);
+        data('activeMenu', $activeMenu);
 
         return $items;
     }
