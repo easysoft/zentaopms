@@ -1,7 +1,7 @@
 <?php
 
 $config->execution->dtable = new stdclass();
-$config->execution->dtable->team = new stdclass();
+$config->execution->team->dtable = new stdclass();
 
 $config->execution->dtable->fieldList['rawID']['title']    = $lang->idAB;
 $config->execution->dtable->fieldList['rawID']['name']     = 'rawID';
