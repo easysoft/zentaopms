@@ -1195,7 +1195,7 @@ class bug extends control
         if($userID == 0) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
-        $bugs    = $this->bug->getUserBugPairs($account, true, 0, '', '', $appendID);
+        $bugs    = $this->bug->getUserBugPairs($account, true, 0, array(), array(), $appendID);
 
         if($id) return print(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
         return print(html::select('bug', $bugs, '', 'class=form-control'));

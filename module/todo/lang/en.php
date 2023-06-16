@@ -99,6 +99,10 @@ $lang->todo->noOptions      = 'You have no %s todo at the moment. Please reselec
 $lang->todo->summary        = 'Total todos: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>.';
 $lang->todo->checkedSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>.';
 
+$lang->todo->abbr = new stdclass();
+$lang->todo->abbr->start  = 'Start';
+$lang->todo->abbr->finish = 'Finish';
+
 $lang->todo->statusList['wait']   = 'Waiting';
 $lang->todo->statusList['doing']  = 'Doing';
 $lang->todo->statusList['done']   = 'Done';
@@ -117,6 +121,10 @@ $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Task';
 $lang->todo->typeList['story']    = 'Story';
 $lang->todo->typeList['testtask'] = 'Testtask';
+
+$lang->todo->fromList['bug']   = 'Related Bug';
+$lang->todo->fromList['task']  = 'Related Task';
+$lang->todo->fromList['story'] = 'Related' . $lang->SRCommon;
 
 $lang->todo->confirmDelete  = 'Do you want to delete this todo?';
 $lang->todo->thisIsPrivate  = 'This is a private todo';

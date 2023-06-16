@@ -55,11 +55,13 @@ $config->my->todo->dtable->fieldList['id']['name']  = 'id';
 $config->my->todo->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->todo->dtable->fieldList['id']['type']  = 'checkID';
 
-$config->my->todo->dtable->fieldList['name']['name']  = 'name';
-$config->my->todo->dtable->fieldList['name']['title'] = $lang->todo->name;
-$config->my->todo->dtable->fieldList['name']['type']  = 'title';
-$config->my->todo->dtable->fieldList['name']['link']  = array('module' => 'todo', 'method' => 'view', 'params' => 'id={id}&from=my');
-$config->my->todo->dtable->fieldList['name']['fixed'] = 'left';
+$config->my->todo->dtable->fieldList['name']['name']        = 'name';
+$config->my->todo->dtable->fieldList['name']['title']       = $lang->todo->name;
+$config->my->todo->dtable->fieldList['name']['type']        = 'title';
+$config->my->todo->dtable->fieldList['name']['link']        = array('module' => 'todo', 'method' => 'view', 'params' => 'id={id}&from=my', 'onlybody' => true);
+$config->my->todo->dtable->fieldList['name']['data-toggle'] = 'modal';
+$config->my->todo->dtable->fieldList['name']['data-size']   = '1200px';
+$config->my->todo->dtable->fieldList['name']['fixed']       = 'left';
 
 $config->my->todo->dtable->fieldList['pri']['name']  = 'pri';
 $config->my->todo->dtable->fieldList['pri']['title'] = $lang->priAB;

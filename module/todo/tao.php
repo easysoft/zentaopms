@@ -375,9 +375,30 @@ class todoTao extends todoModel
     {
         $savedTodoName = $todo->name;
 
+        if($todo->type == 'story')
+        {
+            $story        = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch();
+            $todo->object = $story;
+            $todo->name   = zget($story, 'title', '');
+        }
+        if($todo->type == 'task')
+        {
+            $task        = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch();
+            $todo->object = $task;
+            $todo->name   = zget($task, 'name', '');
+        }
+        if($todo->type == 'bug')
+        {
+            $bug        = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch();
+            $todo->object = $bug;
+            $todo->name   = zget($bug, 'title', '');
+        }
+        /*
         if($todo->type == 'story')    $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')      $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_BUG)->fetch('title');
+         */
+
         if($todo->type == 'testtask') $todo->name = $this->dao->findByID($todo->objectID)->from(TABLE_TESTTASK)->fetch('name');
 
         if($this->config->edition == 'max')

@@ -99,6 +99,10 @@ $lang->todo->noOptions      = 'Vous n\'avez pas de %s en attente pour le moment.
 $lang->todo->summary        = 'Total todos: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>.';
 $lang->todo->checkedSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>.';
 
+$lang->todo->abbr = new stdclass();
+$lang->todo->abbr->start  = 'Start';
+$lang->todo->abbr->finish = 'Finish';
+
 $lang->todo->statusList['wait']   = 'En Attente';
 $lang->todo->statusList['doing']  = 'En cours';
 $lang->todo->statusList['done']   = 'Fait';
@@ -117,6 +121,10 @@ $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = 'Tâche';
 $lang->todo->typeList['story']    = 'Story';
 $lang->todo->typeList['testtask'] = 'Testtask';
+
+$lang->todo->fromList['bug']   = 'Related Bug';
+$lang->todo->fromList['task']  = 'Related Task';
+$lang->todo->fromList['story'] = 'Related' . $lang->SRCommon;
 
 $lang->todo->confirmDelete  = "Voulez-vous supprimer cette entrée de l'agenda ?";
 $lang->todo->thisIsPrivate  = "Il s'agit d'un rdv privé";
