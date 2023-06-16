@@ -348,4 +348,4 @@ $config->project->actionList['whitelist']['url']  = array('module' => 'project',
 
 $config->project->actionList['delete']['icon'] = 'trash';
 $config->project->actionList['delete']['hint'] = $lang->project->delete;
-$config->project->actionList['delete']['url']  = array('module' => 'project', 'method' => 'delete', 'params' => 'projectID={id}');
+$config->project->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';

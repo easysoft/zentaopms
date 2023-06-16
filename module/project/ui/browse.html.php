@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 /* zin: Define the feature bar on main menu. */
 featureBar
 (

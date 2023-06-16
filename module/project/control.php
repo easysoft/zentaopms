@@ -1662,47 +1662,33 @@ class project extends control
      * Delete a project and confirm.
      *
      * @param  string  $projectID
-     * @param  string  $confirm
      * @param  string  $from browse|view
      *
      * @access public
-     * @return int
+     * @return void
      */
-    public function delete(string $projectID, string $confirm = 'no', string $from = 'browse'): int
+    public function delete(int $projectID, string $from = 'browse')
     {
         $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
+        $this->project->delete(TABLE_PROJECT, $projectID);
+        $this->project->deleteByTableName('zt_doclib', $projectID);
+        $this->loadModel('user')->updateUserView($projectID, 'project');
 
-        if($confirm == 'no')
-        {
-            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes&from=$from")));
-        }
-        else
-        {
-            $this->project->delete(TABLE_PROJECT, $projectID);
-            $this->project->deleteByTableName('zt_doclib', $projectID);
-            $this->loadModel('user')->updateUserView($projectID, 'project');
+        $response['closedModal'] = true;
+        $response['load']        = true;
 
-            $message = $this->executeHooks($projectID);
-            if($message) $this->lang->saveSuccess = $message;
+        $message = $this->executeHooks($projectID);
+        if($message) $response['message'] = $message;
 
-            /* Delete the execution and product under the project. */
-            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
-            if(empty($executionIdList))
-            {
-                if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
-                return print(js::reload('parent'));
-            }
-            $this->projectZen->removeAssociatedExecutions($executionIdList);
-            $this->projectZen->removeAssociatedProducts($project);
+        /* Delete the execution and product under the project. */
+        $executionIdList = $this->loadModel('execution')->getPairs($projectID);
+        if(!empty($executionIdList)) $this->projectZen->removeAssociatedExecutions($executionIdList);
+        $this->projectZen->removeAssociatedProducts($project);
 
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-
-            $this->session->set('project', '');
-            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
-            return print(js::reload('parent'));
-        }
+        $this->session->set('project', '');
+        if($from == 'view') $response['load'] = helper::createLink('project', 'browse');
+        return $this->sendSuccess($response);
     }
 
     /**
