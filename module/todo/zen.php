@@ -109,7 +109,7 @@ class todoZen extends todo
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = $rawData->uid ? $rawData->$objectType : $rawData->objectID;
+        if($hasObject && $objectType) $objectID = $rawData->$objectType ? $rawData->$objectType : $rawData->objectID;
         $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
         return $form->add('account', $this->app->user->account)
@@ -119,7 +119,7 @@ class todoZen extends todo
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end, private')
-            ->setIF($hasObject && $objectType,  'objectID', $objectID)
+            ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
             ->setIF(empty($rawData->date),  'date', '2030-01-01')
             ->setIF(empty($rawData->begin), 'begin', '2400')
             ->setIF(empty($rawData->begin) || empty($rawData->end), 'end', '2400')
@@ -156,11 +156,10 @@ class todoZen extends todo
      * Prepare the creation data.
      *
      * @param  object       $todo
-     * @param  string       $uid
      * @access protected
      * @return object|false
      */
-    protected function prepareCreateData(object $todo, string $uid = ''): object|false
+    protected function prepareCreateData(object $todo): object|false
     {
         if(!isset($todo->pri) && in_array($todo->type, $this->config->todo->moduleList) && !in_array($todo->type, array('review', 'feedback')))
         {
@@ -171,10 +170,10 @@ class todoZen extends todo
             if($todo->pri == 'low')    $todo->pri = 3;
         }
 
-        if($todo->type != 'custom' && $todo->objectID)
+        if($todo->type != 'custom' && !empty($todo->objectID))
         {
             $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($todo->{$type});
+            $object = $this->loadModel($type)->getByID($todo->objectID);
             if(isset($object->name))  $todo->name = $object->name;
             if(isset($object->title)) $todo->name = $object->title;
         }
@@ -192,7 +191,7 @@ class todoZen extends todo
         }
         if(empty($todo->cycle)) unset($todo->config);
 
-        if($uid) $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $uid);
+        $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
 
         return $todo;
     }

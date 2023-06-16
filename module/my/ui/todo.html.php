@@ -46,6 +46,7 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('todo', 'create')),
+            set('data-toggle', 'modal'),
             $lang->todo->create
         ) : btn
         (

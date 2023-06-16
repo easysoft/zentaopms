@@ -46,17 +46,16 @@ class todo extends control
             $form     = $this->todoZen->addCycleYearConfig($form);
             $todoData = $this->todoZen->beforeCreate($form);
 
-            $uid  = isset($form->data->uid) ? $form->data->uid : '';
-            $todo = $this->todoZen->prepareCreateData($todoData, $uid);
-            if(!$todo) return print(js::error(dao::getError()));
+            $todo = $this->todoZen->prepareCreateData($todoData);
+            if(!$todo) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $todoID = $this->todo->create($todo);
-            if($todoID === false) return print(js::error(dao::getError()));
+            if($todoID === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo, $form);
 
-            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success'));
+            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             if($from == 'block')
             {
@@ -67,8 +66,8 @@ class todo extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            if(isonlybody()) return print(js::closeModal('parent.parent'));
-            return print(js::locate($this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc'), 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc')));
         }
 
         unset($this->lang->todo->typeList['cycle']);

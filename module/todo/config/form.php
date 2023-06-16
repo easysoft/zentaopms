@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 $config->todo->create->form = array();
 $config->todo->create->form['type']         = array('required' => true,  'type' => 'string');
-$config->todo->create->form['name']         = array('required' => true,  'type' => 'string');
+$config->todo->create->form['name']         = array('required' => true,  'type' => 'string', 'default'  => '');
+$config->todo->create->form['story']        = array('required' => true,  'type' => 'string', 'default'  => 0);
+$config->todo->create->form['task']         = array('required' => true,  'type' => 'string', 'default'  => 0);
+$config->todo->create->form['bug']          = array('required' => true,  'type' => 'string', 'default'  => 0);
 $config->todo->create->form['status']       = array('required' => true,  'type' => 'string');
 $config->todo->create->form['pri']          = array('required' => true,  'type' => 'int');
 $config->todo->create->form['date']         = array('required' => false, 'type' => 'string',  'default' => helper::today());
@@ -17,7 +20,6 @@ $config->todo->create->form['vision']       = array('required' => false, 'type' 
 $config->todo->create->form['objectID']     = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->create->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['cycle']        = array('required' => false, 'type' => 'int',     'default' => 0);
-$config->todo->create->form['uid']          = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['config']       = array('required' => false, 'type' => 'array',   'default' => array());
 
 $config->todo->batchCreate = new stdclass();
