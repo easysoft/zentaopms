@@ -5738,6 +5738,7 @@ class storyModel extends model
     {
         $story->actions  = $this->buildActionButtonList($story, 'browse');
         $story->estimate = $story->estimate . $this->config->hourUnit;
+        $story->isParent = isset($story->children);
 
         $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
         $story->bugCount  = zget(zget($options, 'storyBugs',  array()), $story->id, 0);

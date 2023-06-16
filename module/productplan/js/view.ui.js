@@ -31,8 +31,9 @@ window.showLink = function(obj)
 
 $(document).on('click', '.batch-btn', function()
 {
-    const type   = $(this).data('type');
-    const dtable = zui.DTable.query($('#' + type + 'DTable'));
+    const $this  = $(this);
+    const type   = $this.data('type');
+    const dtable = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 

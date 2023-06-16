@@ -46,7 +46,9 @@ $config->program->dtable->fieldList['end']['sortType'] = true;
 $config->program->dtable->fieldList['progress']['name']     = 'progress';
 $config->program->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
 $config->program->dtable->fieldList['progress']['minWidth'] = 100;
-$config->program->dtable->fieldList['progress']['type']     = 'circleProgress';
+$config->program->dtable->fieldList['progress']['sortType'] = false;
+$config->program->dtable->fieldList['progress']['type']     = 'progress';
+$config->program->dtable->fieldList['progress']['align']    = 'center';
 
 $config->program->dtable->fieldList['actions']['name']   = 'actions';
 $config->program->dtable->fieldList['actions']['title']  = $lang->actions;
@@ -193,6 +195,7 @@ $config->program->projectView->dtable->fieldList['name']['name']         = 'name
 $config->program->projectView->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->projectView->dtable->fieldList['name']['width']        = 200;
 $config->program->projectView->dtable->fieldList['name']['type']         = 'link';
+$config->program->projectView->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID={id}')}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID={id}')};}>RAWJS";
 $config->program->projectView->dtable->fieldList['name']['flex']         = 1;
 $config->program->projectView->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->projectView->dtable->fieldList['name']['checkbox']     = true;
@@ -281,7 +284,7 @@ $config->program->projectView->dtable->fieldList['realEnd']['group']    = 7;
 $config->program->projectView->dtable->fieldList['progress']['name']     = 'progress';
 $config->program->projectView->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
 $config->program->projectView->dtable->fieldList['progress']['minWidth'] = 100;
-$config->program->projectView->dtable->fieldList['progress']['type']     = 'circleProgress';
+$config->program->projectView->dtable->fieldList['progress']['type']     = 'progress';
 $config->program->projectView->dtable->fieldList['progress']['show']     = true;
 $config->program->projectView->dtable->fieldList['progress']['group']    = 8;
 

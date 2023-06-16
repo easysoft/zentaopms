@@ -1,8 +1,8 @@
 window.footerGenerator = function()
 {
-    const count = this.layout.allRows.filter((x) => x.data.type === "product").length;
+    const count     = this.layout.allRows.filter((x) => x.data.type === "product").length;
     const statistic = summeryTpl.replace('%s', ' ' + count + ' ');
-    return [{children: statistic, className: "text-dark"}, "flex", "pager"];
+    return ['checkbox', 'toolbar', {html: statistic, className: "text-dark"}, "flex", "pager"];
 }
 
 window.renderCell = function(result, {col, row})
@@ -27,3 +27,15 @@ window.renderCell = function(result, {col, row})
 
     return result;
 }
+
+$(document).on('click', '.batch-btn', function()
+{
+    const $this  = $(this);
+    const dtable = zui.DTable.query($this);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append('projectIdList[]', id));
+    postAndLoadPage($(this).data('url'), postData);
+})

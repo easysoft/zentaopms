@@ -27,7 +27,7 @@ class programModel extends model
      * @access public
      * @return int
      */
-    public function saveState($programID = 0, $programs = array())
+    public function saveState(int $programID = 0, array $programs = array()): int
     {
         if($programID > 0) $this->session->set('program', (int)$programID);
         if($programID == 0 and $this->cookie->lastProgram) $this->session->set('program', (int)$this->cookie->lastProgram);
@@ -38,7 +38,7 @@ class programModel extends model
             if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false) $this->accessDenied();
         }
 
-        return $this->session->program;
+        return (int)$this->session->program;
     }
 
     /**

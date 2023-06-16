@@ -165,7 +165,7 @@ class program extends control
             $program   = $this->program->getByID($programID);
             $path      = explode(',', $program->path);
             $path      = array_filter($path);
-            $programID = current($path);
+            $programID = (int)current($path);
 
             $this->view->program = $program;
         }
@@ -747,7 +747,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function view($programID)
+    public function view(int $programID)
     {
         $programID = (int)$programID;
         $program   = $this->program->getByID($programID);
