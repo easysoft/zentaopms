@@ -73,12 +73,6 @@ formPanel
             set::rows('6'),
         ),
     ),
-    formGroup
-    (
-        setClass('hidden'),
-        set::name('status'),
-        set::value('doing'),
-    )
 );
 
 h::hr(set::class('mt-6'));
