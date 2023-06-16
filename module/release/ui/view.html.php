@@ -264,7 +264,7 @@ detailBody
                     (
                         set::title($lang->files),
                         setClass('pt-5'),
-                        set::content(''),
+                        set::content(implode(',', array_column($release->files, 'title'))),
                         set::useHtml(true)
                     ),
                     h::hr(set::class('mt-6')),
