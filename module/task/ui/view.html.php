@@ -76,10 +76,11 @@ if($task->team)
             ),
             h::td
             (
-                $team->left
+                (float)$team->left
             ),
             h::td
             (
+                setClass("status-{$team->status}"),
                 zget($lang->task->statusList, $team->status)
             ),
         );
