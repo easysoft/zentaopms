@@ -9,7 +9,7 @@ $config->release->editor = new stdclass();
 $config->release->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->release->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 
-global $lang;
+global $lang, $app;
 $config->release->actionList['linkStory']['icon'] = 'link';
 $config->release->actionList['linkStory']['hint'] = $lang->release->linkStory;
 $config->release->actionList['linkStory']['url']  = helper::createLink('release', 'view', 'releaseID={id}&type=story&link=true');
