@@ -38,7 +38,7 @@ jsVar('noAccess', $lang->user->error->noAccess);
 dtable
 (
     set::userMap($users),
-    set::cols($config->execution->dtable->team->fieldList),
+    set::cols($config->execution->team->dtable->fieldList),
     set::data($teamMembers),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footer(jsRaw('function(){return window.setStatistics.call(this);}'))

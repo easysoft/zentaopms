@@ -134,32 +134,32 @@ $config->execution->dtable->fieldList['burn']['width']    = '88';
 $config->execution->dtable->fieldList['burn']['group']    = '4';
 $config->execution->dtable->fieldList['burn']['show']     = true;
 
-$config->execution->dtable->team->fieldList['account']['title']    = $lang->team->account;
-$config->execution->dtable->team->fieldList['account']['name']     = 'realname';
-$config->execution->dtable->team->fieldList['account']['type']     = 'user';
-$config->execution->dtable->team->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');
-$config->execution->dtable->team->fieldList['account']['sortType'] = false;
+$config->execution->team->dtable->fieldList['account']['title']    = $lang->team->account;
+$config->execution->team->dtable->fieldList['account']['name']     = 'realname';
+$config->execution->team->dtable->fieldList['account']['type']     = 'user';
+$config->execution->team->dtable->fieldList['account']['link']     = array('module' => 'user', 'method' => 'view', 'params' => 'userID={userID}');
+$config->execution->team->dtable->fieldList['account']['sortType'] = false;
 
-$config->execution->dtable->team->fieldList['role']['title']    = $lang->team->role;
-$config->execution->dtable->team->fieldList['role']['type']     = 'user';
-$config->execution->dtable->team->fieldList['role']['sortType'] = false;
+$config->execution->team->dtable->fieldList['role']['title']    = $lang->team->role;
+$config->execution->team->dtable->fieldList['role']['type']     = 'user';
+$config->execution->team->dtable->fieldList['role']['sortType'] = false;
 
-$config->execution->dtable->team->fieldList['join']['title'] = $lang->team->join;
-$config->execution->dtable->team->fieldList['join']['type']  = 'date';
+$config->execution->team->dtable->fieldList['join']['title'] = $lang->team->join;
+$config->execution->team->dtable->fieldList['join']['type']  = 'date';
 
-$config->execution->dtable->team->fieldList['days']['title'] = $lang->team->days;
-$config->execution->dtable->team->fieldList['days']['type']  = 'number';
+$config->execution->team->dtable->fieldList['days']['title'] = $lang->team->days;
+$config->execution->team->dtable->fieldList['days']['type']  = 'number';
 
-$config->execution->dtable->team->fieldList['hours']['title'] = $lang->team->hours;
-$config->execution->dtable->team->fieldList['hours']['type']  = 'number';
+$config->execution->team->dtable->fieldList['hours']['title'] = $lang->team->hours;
+$config->execution->team->dtable->fieldList['hours']['type']  = 'number';
 
-$config->execution->dtable->team->fieldList['total']['title'] = $lang->team->totalHours;
-$config->execution->dtable->team->fieldList['total']['type']  = 'number';
+$config->execution->team->dtable->fieldList['total']['title'] = $lang->team->totalHours;
+$config->execution->team->dtable->fieldList['total']['type']  = 'number';
 
-$config->execution->dtable->team->fieldList['limited']['title']    = $lang->team->limited;
-$config->execution->dtable->team->fieldList['limited']['type']     = 'user';
-$config->execution->dtable->team->fieldList['limited']['map']      = $lang->team->limitedList;
-$config->execution->dtable->team->fieldList['limited']['sortType'] = false;
+$config->execution->team->dtable->fieldList['limited']['title']    = $lang->team->limited;
+$config->execution->team->dtable->fieldList['limited']['type']     = 'user';
+$config->execution->team->dtable->fieldList['limited']['map']      = $lang->team->limitedList;
+$config->execution->team->dtable->fieldList['limited']['sortType'] = false;
 
-$config->execution->dtable->team->fieldList['actions']['type']       = 'actions';
-$config->execution->dtable->team->fieldList['actions']['actionsMap'] = $config->execution->team->actionList;
+$config->execution->team->dtable->fieldList['actions']['type']       = 'actions';
+$config->execution->team->dtable->fieldList['actions']['actionsMap'] = $config->execution->team->actionList;
