@@ -10,8 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$isInModal = isAjaxRequest('modal');
 detailHeader
 (
+    $isInModal ? to::prefix('') : '',
     to::title(entityLabel(set(array('entityID' => $lib->id, 'level' => 1, 'text' => $lib->name)))),
 );
 
@@ -20,11 +22,8 @@ foreach($config->caselib->actionList as $operate => $settings)
 {
     if(!common::hasPriv('caselib', $operate)) continue;
 
-    $settings['text'] = '';
-
     $commonActions[] = $settings;
 }
-
 detailBody
 (
     sectionList
@@ -39,15 +38,14 @@ detailBody
     ),
     floatToolbar
     (
-        set::prefix
+        !$isInModal ? set::prefix
         (
             array(array('icon' => 'back', 'text' => $lang->goback, 'url' => 'javascript:goBack("execution-task", "execution-task")'))
-        ),
+        ) : '',
         set::suffix($commonActions),
         set::object($lib),
     ),
 );
 
-
-render();
+render($isInModal ? 'modalDialog' : 'page');
 
