@@ -126,25 +126,17 @@ class todo extends control
 
             /* Processing edit request data. */
             $todo = $this->todoZen->beforeEdit($todoID, $form);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* update a todo. */
             $changes = $this->todo->update($todoID, $todo);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* Handle data after edit todo. */
             $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($this->session->todoList, 'parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
         /* Judge a private todo or not, If private, die. */

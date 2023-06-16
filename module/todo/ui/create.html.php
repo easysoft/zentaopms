@@ -35,8 +35,6 @@ $cycleTypeOptions = array(
 $days = array();
 for($day = 1; $day <= 31; $day ++) $days[$day] = $day . $lang->todo->day;
 
-$isInModal = isAjaxRequest('modal');
-
 formPanel
 (
     set::title(''),
@@ -600,4 +598,4 @@ formPanel
     )
 );
 
-render($isInModal ? 'modalDialog' : 'page');
+render(isAjaxRequest('modal') ? 'modalDialog' : 'page');
