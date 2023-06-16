@@ -161,10 +161,10 @@ $setting = $this->datatable->getSetting('story');
 $cols    = array_values($setting);
 foreach($cols as $key => $col)
 {
-    $col->name  = $col->id;
-    if($col->id == 'title')
+    $col['name']  = $col['id'];
+    if($col['id'] == 'title')
     {
-        $col->link = sprintf($col->link, createLink('execution', 'storyView', array('storyID' => '${row.id}', 'execution' => $executionID)));
+        $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '${row.id}', 'execution' => $executionID)));
     }
 
     $cols[$key] = $col;
@@ -195,6 +195,137 @@ foreach($stories as $story)
     }
 }
 
+sidebar
+(
+    moduleMenu(set(array(
+        'modules'     => $moduleTree,
+        'activeKey'   => $param,
+        'closeLink'   => $this->createLink('execution', 'story')
+    )))
+);
+
+$canBatchEdit        = common::hasPriv('story', 'batchEdit');
+$canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
+$canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
+$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+$canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
+$canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
+$canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
+
+$footToolbar = array();
+if($canBatchAction)
+{
+    if($canBatchToTask)
+    {
+        menu
+        (
+            set::id('batchToTask'),
+            set::class('dropdown-menu'),
+            $canBatchToTask ? item(set(array(
+                'text'  => $lang->story->batchToTask,
+                'class' => 'batch-btn ajax-btn',
+                'url'   => '#batchToTask'
+            ))) : null,
+        );
+    }
+
+    if($canBatchToTask || $canBatchEdit)
+    {
+        $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
+        $footToolbar['items'][] = array(
+            'type'  => 'btn-group',
+            'items' => array(
+                array('text' => $lang->edit, 'class' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")),
+                array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+            )
+        );
+    }
+
+    if($canBatchAssignTo)
+    {
+        $assignedToItems = array();
+        foreach ($users as $account => $name)
+        {
+            $assignedToItems[] = array(
+                'text'     => $name,
+                'class'    => 'batch-btn ajax-btn',
+                'data-url' => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
+            );
+        }
+
+        menu
+        (
+            set::id('navAssignedTo'),
+            set::class('dropdown-menu'),
+            set::items($assignedToItems)
+        );
+    }
+
+    if($canBatchAssignTo)
+    {
+        $footToolbar['items'][] = array(
+            'caret'       => 'up',
+            'text'        => $lang->story->assignedTo,
+            'class'       => 'btn btn-caret size-sm secondary',
+            'url'         => '#navAssignedTo',
+            'data-toggle' => 'dropdown'
+        );
+    }
+
+    if($canBatchClose)
+    {
+        $footToolbar['items'][] = array(
+            'text'  => $lang->close,
+            'class' => 'btn btn-caret size-sm secondary',
+            'url'   => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
+        );
+    }
+
+    if($canBatchChangeStage)
+    {
+        $stageItems = array();
+        foreach($lang->story->stageList as $stageID => $stage)
+        {
+            $stageItems[] = array(
+                'text'     => $stage,
+                'class'    => 'batch-btn ajax-btn',
+                'data-url' => createLink('story', 'batchChangeStage', "stageID=$stageID")
+            );
+        }
+
+        menu
+        (
+            set::id('navStage'),
+            set::class('dropdown-menu'),
+            set::items($stageItems)
+        );
+    }
+
+    if($canBatchChangeStage)
+    {
+        $footToolbar['items'][] = array(
+            'caret'          => 'up',
+            'text'           => $lang->story->stageAB,
+            'class'          => 'btn btn-caret size-sm secondary',
+            'url'            => '#navStage',
+            'data-toggle'    => 'dropdown',
+            'data-placement' => 'top-start'
+        );
+    }
+
+    if($canBatchUnlink)
+    {
+        $footToolbar['items'][] = array(
+            'text'  => $lang->execution->unlinkStoryAB,
+            'class' => 'btn btn-caret size-sm secondary',
+            'url'   => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
+        );
+    }
+}
+
+jsVar('cases', $storyCases);
+jsVar('summary', $summary);
+jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));
 dtable
 (
     set::userMap($users),
@@ -203,10 +334,14 @@ dtable
     set::cols($cols),
     set::data($data),
     set::className('shadow rounded'),
-    set::footPager(usePager()),
-    set::nested(true),
-    set::footer(jsRaw("function(){return window.footerGenerator.call(this, '{$summary}');}"))
+    set::footToolbar($footToolbar),
+    set::footPager(
+        usePager(),
+        set::recPerPage($pager->recPerPage),
+        set::recTotal($pager->recTotal),
+        set::linkCreator(helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={$recTotal}&recPerPage={recPerPage}&page={page}"))
+    ),
+    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
 );
 
 render();
-
