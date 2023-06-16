@@ -699,6 +699,7 @@ class execution extends control
         $this->app->loadLang('testcase');
 
         /* Change for requirement story title. */
+        $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
         if($storyType == 'requirement')
         {
             $this->lang->story->title           = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
