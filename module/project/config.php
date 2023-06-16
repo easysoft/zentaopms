@@ -318,9 +318,9 @@ $config->project->actionList['close']['icon'] = 'off';
 $config->project->actionList['close']['hint'] = $lang->project->close;
 $config->project->actionList['close']['url']  = helper::createLink('project', 'close', 'projectID={id}', '', true);
 
-$config->project->actionList['active']['icon'] = 'magic';
-$config->project->actionList['active']['hint'] = $lang->project->activate;
-$config->project->actionList['active']['url']  = helper::createLink('project', 'activate', 'projectID={id}', '', true);
+$config->project->actionList['activate']['icon'] = 'magic';
+$config->project->actionList['activate']['hint'] = $lang->project->activate;
+$config->project->actionList['activate']['url']  = helper::createLink('project', 'activate', 'projectID={id}', '', true);
 
 $config->project->actionList['edit']['icon'] = 'edit';
 $config->project->actionList['edit']['hint'] = $lang->project->edit;

@@ -505,7 +505,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
                     $otherActions = explode('|', $otherActionMenu);
                     foreach($otherActions as $otherActionName)
                     {
-                        if(in_array($otherActionName, $item->actions)) continue;
+                        if(in_array($otherActionName, array_column($item->actions, 'name'))) continue;
 
                         if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName)) $otherAction .= '-';
                         $otherAction .= $otherActionName . ',';
