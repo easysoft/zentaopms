@@ -264,14 +264,14 @@ $config->program->projectView->dtable->fieldList['end']['show']     = true;
 $config->program->projectView->dtable->fieldList['end']['group']    = 6;
 
 $config->program->projectView->dtable->fieldList['realBegan']['name']     = 'realBegan';
-$config->program->projectView->dtable->fieldList['realBegan']['title']    = $lang->program->realBegan;
+$config->program->projectView->dtable->fieldList['realBegan']['title']    = $lang->program->realBeganAB;
 $config->program->projectView->dtable->fieldList['realBegan']['minWidth'] = 90;
 $config->program->projectView->dtable->fieldList['realBegan']['type']     = 'date';
 $config->program->projectView->dtable->fieldList['realBegan']['sortType'] = true;
 $config->program->projectView->dtable->fieldList['realBegan']['group']    = 7;
 
 $config->program->projectView->dtable->fieldList['realEnd']['name']     = 'realEnd';
-$config->program->projectView->dtable->fieldList['realEnd']['title']    = $lang->program->realEnd;
+$config->program->projectView->dtable->fieldList['realEnd']['title']    = $lang->program->realEndAB;
 $config->program->projectView->dtable->fieldList['realEnd']['minWidth'] = 90;
 $config->program->projectView->dtable->fieldList['realEnd']['type']     = 'date';
 $config->program->projectView->dtable->fieldList['realEnd']['sortType'] = true;
