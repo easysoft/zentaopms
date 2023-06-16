@@ -109,45 +109,6 @@ toolbar
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
-/* DataTable columns. */
-$setting = $this->datatable->getSetting('execution');
-$cols    = array_values($setting);
-foreach($cols as $key => $col)
-{
-    $col['name']  = $col['id'];
-    if($col['id'] == 'title')
-    {
-        $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '${row.id}', 'execution' => $executionID)));
-    }
-
-    $cols[$key] = $col;
-}
-
-
-/* DataTable data. */
-$this->loadModel('story');
-
-$data = array();
-foreach($stories as $story)
-{
-    $story->taskCount = $storyTasks[$story->id];
-    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
-    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
-
-    $data[] = $story;
-
-    if(!isset($story->children)) continue;
-
-    /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->taskCount = $storyTasks[$child->id];
-        $child->actions   = $this->story->buildActionButtonList($child, 'browse');
-
-        $data[] = $child;
-    }
-}
-
 sidebar
 (
     moduleMenu(set(array(
@@ -343,6 +304,44 @@ if($canBatchAction)
             'class' => 'btn batch-btn ajax-btn size-sm secondary',
             'url'   => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
         );
+    }
+}
+
+/* DataTable columns. */
+$setting = $this->datatable->getSetting('execution');
+$cols    = array();
+foreach($setting as $col)
+{
+    if(!$execution->hasProduct and $col['id'] == 'branch') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $value['id'] == 'plan') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['id'] == 'stage') continue;
+
+    $col['name'] = $col['id'];
+    if($col['id'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $executionID)));
+
+    $cols[] = $col;
+}
+
+
+/* DataTable data. */
+$data = array();
+foreach($stories as $story)
+{
+    $story->taskCount = $storyTasks[$story->id];
+    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
+    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
+
+    $data[] = $story;
+
+    if(!isset($story->children)) continue;
+
+    /* Children. */
+    foreach($story->children as $key => $child)
+    {
+        $child->taskCount = $storyTasks[$child->id];
+        $child->actions   = $this->story->buildActionButtonList($child, 'browse', $execution);
+
+        $data[] = $child;
     }
 }
 
