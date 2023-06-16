@@ -35,6 +35,7 @@ formPanel
 (
     set::title($lang->stage->create),
     set::shadow(false),
+    set::actions(array('submit')),
     formRow
     (
         formGroup
