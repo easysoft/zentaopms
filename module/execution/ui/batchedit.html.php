@@ -11,7 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('stageList', $lang->stage->typeList);
-$setCode = (isset($config->setCode) and $config->setCode == 1);
+
+$setCode    = (isset($config->setCode) and $config->setCode == 1);
+$showMethod = $app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus');
 
 formBatchPanel
 (
@@ -30,7 +32,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('64px'),
+        set::width('38px'),
     ),
     formBatchItem
     (
@@ -38,11 +40,20 @@ formBatchPanel
         set::label($lang->execution->name),
         set::width('240px'),
     ),
+    $showMethod ? formBatchItem
+    (
+        set::name('type'),
+        set::label($lang->execution->method),
+        set::control('select'),
+        set::items($lang->execution->typeList),
+        set::disabled(true),
+        set::width('64px'),
+    ) : null,
     $setCode ? formBatchItem
     (
         set::name('code'),
         set::label($lang->execution->code),
-        set::width('120px'),
+        set::width('136px'),
     ) : null,
     formBatchItem
     (
@@ -52,7 +63,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($pmUsers),
-        set::width('120px'),
+        set::width('136px'),
     ),
     formBatchItem
     (
@@ -62,7 +73,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($poUsers),
-        set::width('120px'),
+        set::width('136px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -73,7 +84,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($qdUsers),
-        set::width('120px'),
+        set::width('136px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -84,7 +95,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items(array()),
-        set::width('120px'),
+        set::width('136px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -93,28 +104,28 @@ formBatchPanel
         set::label($lang->execution->type),
         set::control('select'),
         set::items($lang->execution->lifeTimeList),
-        set::width('120px'),
+        set::width('136px'),
     ),
     formBatchItem
     (
         set::name('begin'),
         set::label($lang->execution->begin),
         set::control('date'),
-        set::width('100px'),
+        set::width('76px'),
     ),
     formBatchItem
     (
         set::name('end'),
         set::label($lang->execution->end),
         set::control('date'),
-        set::width('100px'),
+        set::width('76px'),
     ),
     formBatchItem
     (
         set::name('team'),
         set::label($lang->execution->teamname),
         set::control('text'),
-        set::width('120px'),
+        set::width('136px'),
         set::hidden(true),
     ),
     formBatchItem
@@ -138,7 +149,7 @@ formBatchPanel
                 'suffixWidth' => 20
             )
         ),
-        set::width('80px'),
+        set::width('76px'),
     ),
 );
 
