@@ -98,16 +98,24 @@ $config->executionLink = $executionLink;
 
 $usedMode = zget($config->global, 'mode', 'light');
 jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));
-div
+panel
 (
     set('class', 'guide-block of-hidden'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            $lang->block->guide,
+        )
+    ),
     div
     (
-        set('class', 'flex h-full'),
+        set('class', 'flex h-full border-top'),
         cell
         (
-            set('width', '22%'),
-            set('class', 'bg-secondary-pale'),
+            set('width', '18%'),
+            set('class', 'bg-secondary-pale of-hidden'),
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked h-full of-y-auto of-x-hidden'),
@@ -117,7 +125,7 @@ div
         cell
         (
             set('class', 'tab-content'),
-            set('width', '78%'),
+            set('width', '82%'),
             getGuideInfo($blockNavCode)
         )
     )

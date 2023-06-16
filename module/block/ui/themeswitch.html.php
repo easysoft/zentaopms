@@ -26,7 +26,7 @@ function printThemeSwitch()
         $themes[] = cell
         (
             set('width', '25%'),
-            set('class', 'pr-4 pb-4'),
+            set('class', 'pt-2 px-2'),
             div
             (
                 set('class', 'block ' . ($app->cookie->theme == $themeKey ? 'active' : '')),
@@ -36,12 +36,12 @@ function printThemeSwitch()
                     set('data-theme', $themeKey),
                     img
                     (
-                        set('class', 'p-4'),
+                        set('class', 'p-2'),
                         set('src', $image)
                     ),
                     div
                     (
-                        set('class', "px-4 pb-2 text-center theme-{$themeKey}"),
+                        set('class', "px-2 pb-1 text-center theme-{$themeKey}"),
                         span
                         (
                             icon('check-circle mr-2 hidden'),
@@ -55,12 +55,12 @@ function printThemeSwitch()
 
     return div
     (
-        set('class', 'theme-switch p-4'),
+        set('class', 'theme-switch'),
         div
         (
             div
             (
-                set('class','flex flex-wrap mt-2'),
+                set('class','flex flex-wrap'),
                 $themes
             )
         )

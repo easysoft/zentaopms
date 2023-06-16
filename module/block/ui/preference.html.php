@@ -21,7 +21,7 @@ function printPreference()
 
     return div
     (
-        set('class', 'p-6'),
+        set('class', 'preference-block pt-6 px-6'),
         form
         (
             set::url(helper::createLink('my', 'preference', "showTip=false")),

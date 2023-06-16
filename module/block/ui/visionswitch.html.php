@@ -27,14 +27,15 @@ function printVisionSwitch()
         if(common::checkNotCN() and $vision->key == 'rnd')  $image = $config->webRoot . "theme/default/images/guide/vision_{$vision->key}_en.png";
         $cells[] = cell
         (
-            set('class', 'flex-1 block mr-4 ' . ($config->vision == $vision->key ? 'active' : '')),
+            set('width', '50%'),
+            set('class', 'flex-1 block mr-4 ' . ($config->vision == $vision->key ? 'active' : 'state')),
             div
             (
-                set('class', 'w-full vision-block ' . ($config->vision != $vision->key ? 'state' : '')),
+                set('class', 'w-full vision-block'),
                 set('data-vision', $vision->key),
                 img
                 (
-                    set('class', 'p-4'),
+                    set('class', 'p-2'),
                     set('src', $image)
                 ),
                 div
