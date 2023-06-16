@@ -322,13 +322,13 @@ class todo extends control
      */
     public function delete(int $todoID, string $confirm = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->todo->confirmDelete, 'confirmed' => $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes"), 'canceled' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'))));
 
         $this->todo->delete(TABLE_TODO, $todoID);
 
         if(helper::isAjaxRequest())
         {
-            $response = array('result' => 'success', 'message' => '');
+            $response = array('result' => 'success', 'message' => '', 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'));
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -338,10 +338,8 @@ class todo extends control
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-        return print(js::locate($browseLink, 'parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
