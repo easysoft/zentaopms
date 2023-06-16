@@ -883,7 +883,7 @@ class program extends control
         /* Load module and set session. */
         $this->loadModel('product');
         $this->loadModel('user');
-        $this->session->set('productView', $this->app->getURI(true), 'program');
+        $this->session->set('productList', $this->app->getURI(true), 'program');
 
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
 
@@ -913,17 +913,17 @@ class program extends control
         $actionURL = $this->createLink('program', 'productview', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
-        $this->view->title            = $this->lang->product->common;
-        $this->view->recTotal         = $pager->recTotal;
-        $this->view->productStats     = $productStats;
-        $this->view->productStructure = $productStructure;
-        $this->view->productLines     = $productLines;
-        $this->view->programLines     = $programLines;
-        $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->orderBy          = $orderBy;
-        $this->view->browseType       = $browseType;
-        $this->view->pager            = $pager;
-        $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
+        $this->view->title              = $this->lang->product->common;
+        $this->view->recTotal           = $pager->recTotal;
+        $this->view->productStats       = $productStats;
+        $this->view->productStructure   = $productStructure;
+        $this->view->productLines       = $productLines;
+        $this->view->programLines       = $programLines;
+        $this->view->users              = $this->user->getPairs('noletter');
+        $this->view->orderBy            = $orderBy;
+        $this->view->browseType         = $browseType;
+        $this->view->pager              = $pager;
+        $this->view->checkedEditProduct = !empty((int)$this->cookie->checkedEditProduct);
 
         $this->render();
     }
