@@ -12,6 +12,51 @@ declare(strict_types=1);
 
 namespace zin;
 
+/* Closure creating program buttons. */
+$fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
+{
+    $items = array();
+
+    hasPriv('program', 'create') ? $items[] = array
+    (
+        'text' => $lang->program->create,
+        'icon' => 'plus',
+        'url'  => createLink('program', 'create')
+    ) : null;
+
+    hasPriv('product', 'create') ? $items[] = array
+    (
+        'text' => $lang->program->createProduct,
+        'icon' => 'plus',
+        'url'  => createLink('product', 'create')
+    ) : null;
+
+    hasPriv('product', 'manageLine') ? $items[] = array
+    (
+        'text'        => $lang->program->manageLine,
+        'icon'        => 'edit',
+        'data-toggle' => 'modal',
+        'data-url'    => createLink('product', 'manageLine', $browseType)
+    ) : null;
+
+    return inputGroup
+    (
+        hasPriv('program', 'create') ? btn
+        (
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::text($lang->program->create),
+            set::url(createLink('program', 'create'))
+        ) : null,
+        !empty($items) ? dropdown
+        (
+            setClass('btn primary'),
+            span(setClass('caret')),
+            set::items($items),
+        ) : null
+    );
+};
+
 /* Generate cols for the data table. */
 $fnGenerateCols = function()
 {
@@ -231,18 +276,7 @@ toolbar
         'class'=> 'ghost',
         'url'  => createLink('program', 'exportTable')
     ))),
-    item(set(array(
-        'text' => $lang->program->createProduct,
-        'icon' => 'plus',
-        'class'=> 'btn secondary',
-        'url'  => createLink('program', 'exportTable')
-    ))),
-    item(set(array(
-        'text' => $lang->program->create,
-        'icon' => 'plus',
-        'class'=> 'btn primary',
-        'url'  => createLink('program', 'create')
-    ))),
+    $fnGenerateCreateProgramBtns()
 );
 
 dtable
