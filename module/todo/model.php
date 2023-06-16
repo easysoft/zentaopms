@@ -890,7 +890,7 @@ class todoModel extends model
     public function delete($table, $todoID)
     {
         $todo = $this->dao->select('account, assignedTo')->from($table)->where('id')->eq($todoID)->fetch();
-        if(!$this->app->user->admin && $todo->account != $this->app->user->account && $todo->assignedTo != $this->app->user->account) return false;
+        if(!$this->app->user->admin && $todo && $todo->account != $this->app->user->account && $todo->assignedTo != $this->app->user->account) return false;
 
         return parent::delete($table, $todoID);
     }

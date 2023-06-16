@@ -458,7 +458,7 @@ class todo extends control
             {
                 if(isonlybody()) return print(js::alert($this->lang->error->accessDenied));
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->error->accessDenied));
-                if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));;
+                if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
             }
 
             /* if ajax request, send result. */
