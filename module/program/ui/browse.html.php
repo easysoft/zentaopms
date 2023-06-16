@@ -95,7 +95,8 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
     set::footer(jsRaw('function(){return window.footerGenerator.call(this);}')),
-    set::customCols(true)
+    set::customCols(true),
+    set::userMap($this->loadModel('user')->getPairs('noletter|pofirst'))
 );
 
 render();
