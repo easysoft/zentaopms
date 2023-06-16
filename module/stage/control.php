@@ -146,7 +146,8 @@ class stage extends control
 
             $actionID = $this->loadModel('action')->create('stage', $stageID, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            $response['load'] = true;
+            $response['closeModal'] = true;
+            $response['load']       = true;
             return $this->send($response);
         }
 

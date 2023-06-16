@@ -109,7 +109,7 @@ class stageModel extends model
         if(isset($this->config->setPercent) and $this->config->setPercent == 1)
         {
             $totalPercent = $this->getTotalPercent($oldStage->projectType);
-            if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+            if(round($totalPercent + (float)$stage->percent - $oldStage->percent) > 100) return dao::$errors['percent'] = $this->lang->stage->error->percentOver;
         }
 
         $this->dao->update(TABLE_STAGE)
@@ -119,8 +119,8 @@ class stageModel extends model
             ->checkIF($stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldStage, $stage);
-        return false;
+        if(dao::isError()) return false;
+        return common::createChanges($oldStage, $stage);
     }
 
     /**
