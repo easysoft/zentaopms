@@ -6,16 +6,21 @@ class programMenu extends wg
     private $programs = array();
 
     protected static $defineProps = array(
-        'programs?:array',
-        'activeClass?:string',
-        'activeIcon?:string',
-        'activeKey?:string',
-        'closeLink?:string'
+        'programs?: array',
+        'activeClass?: string="active"',
+        'activeIcon?: string="check"',
+        'activeKey?: string',
+        'closeLink?: string'
     );
 
     public static function getPageCSS(): string|false
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    public static function getPageJS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     private function buildMenuTree($parent, $parentID)
@@ -40,13 +45,13 @@ class programMenu extends wg
     private function getTitle($activeKey)
     {
         global $lang;
-
         if(empty($activeKey)) return $lang->program->all;
 
         foreach($this->programs as $program)
         {
             if($program->id == $activeKey) return $program->name;
         }
+
         return $lang->program->all;
     }
 
@@ -55,65 +60,71 @@ class programMenu extends wg
         return array_filter($this->programs, function($program) use($id) {return $program->parent == $id;});
     }
 
-    private function setMenuTreeProps()
+    private function getTreeProps()
     {
-        if(!empty($this->prop('programs'))) $this->programs = $this->prop('programs');
-        $this->setProp('programs', null);
         $items = $this->buildMenuTree(array(), 0);
         array_unshift($items, array('type' => 'heading', 'text' => '筛选项目集'));
-        $this->setProp('items', $items);
-        $this->setProp('commonItemProps', array('item' => array('className' => 'not-hide-menu')));
-        $this->setProp('isDropdownMenu', true);
-        $this->setProp('_to', "[data-zin-id='$this->gid']");
-        $this->setDefaultProps(array('activeClass' => 'active', 'activeIcon' => 'check'));
+        return array('items' => $items);
+    }
+
+    private function closeBtn()
+    {
+        $activeKey = $this->prop('activeKey');
+        if(empty($activeKey)) return null;
+
+        return a
+        (
+            set('href', $this->prop('closeLink')),
+            h::i
+            (
+                setClass('icon icon-close p-3 cursor-pointer'),
+                setStyle('color', '#313C52'),
+            )
+        );
     }
 
     protected function build()
     {
-        $this->setMenuTreeProps();
-
-        $activeKey = $this->prop('activeKey');
-        $title     = $this->getTitle($activeKey);
-        $closeBtn  = null;
-
-        if(!empty($activeKey))
-        {
-            $closeBtn = a
-            (
-                set('href', $this->prop('closeLink')),
-                h::i
-                (
-                    setClass('icon icon-close'),
-                    setStyle('color', '#313C52'),
-                )
-            );
-        }
+        $this->programs = $this->prop('programs');
+        $activeKey      = $this->prop('activeKey');
 
         return div
         (
-            setClass('program-menu'),
-            set('data-zin-id', $this->gid),
-            h::header
+            setClass('program-menu col shrink-0'),
+            set('data-show', '0'),
+            popovers
             (
-                set('data-toggle', 'dropdown'),
-                div
+                set::placement('bottom-start'),
+                to::trigger
                 (
-                    setClass('title-container'),
-                    div
+                    button
                     (
-                        setClass('icon-container down'),
-                        h::i(setClass('gg-chevron-down')),
-                    ),
-                    div
-                    (
-                        setClass('icon-container up'),
-                        h::i(setClass('gg-chevron-up')),
-                    ),
-                    span($title)
+                        setClass('h-10 border border-primary flex justify-between items-center cursor-pointer pl-3 rounded'),
+                        on::click('toggleIcon'),
+                        div
+                        (
+                            setClass('flex gap-x-2'),
+                            div
+                            (
+                                setClass('icon-container down'),
+                                icon('angle-down'),
+                            ),
+                            div
+                            (
+                                setClass('icon-container up'),
+                                icon('angle-top', setClass('text-white')),
+                            ),
+                            span
+                            (
+                                setClass('font-bold leading-5'),
+                                $this->getTitle($activeKey),
+                            )
+                        ),
+                        $this->closeBtn(),
+                    )
                 ),
-                $closeBtn
-            ),
-            zui::menutree(inherit($this))
+                to::target(zui::tree(set($this->getTreeProps()))),
+            )
         );
     }
 }
