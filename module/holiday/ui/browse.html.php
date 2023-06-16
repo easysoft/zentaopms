@@ -102,7 +102,7 @@ div
         div
         (
             setClass('table-import shadow-sm'),
-            html(sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year=$currentYear", '', true), $lang->import, '', "class='text-primary iframe' data-width='400px'"))),
+            html(sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year=$currentYear", '', true), $lang->import, '', "class='text-primary' data-toggle='modal' data-width='400px'"))),
         )
     )
 );
