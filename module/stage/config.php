@@ -1,16 +1,19 @@
 <?php
 global $lang;
-$config->stage->create = new stdclass();
-$config->stage->edit   = new stdclass();
+$config->stage->create      = new stdclass();
+$config->stage->batchcreate = new stdclass();
+$config->stage->edit        = new stdclass();
 if(isset($config->setPercent) && $config->setPercent == 1)
 {
-    $config->stage->create->requiredFields = 'name,percent,type';
-    $config->stage->edit->requiredFields   = 'name,percent,type';
+    $config->stage->create->requiredFields      = 'name,percent,type';
+    $config->stage->batchcreate->requiredFields = 'name,percent,type';
+    $config->stage->edit->requiredFields        = 'name,percent,type';
 }
 else
 {
-    $config->stage->create->requiredFields = 'name,type';
-    $config->stage->edit->requiredFields   = 'name,type';
+    $config->stage->create->requiredFields      = 'name,type';
+    $config->stage->batchcreate->requiredFields = 'name,type';
+    $config->stage->edit->requiredFields        = 'name,type';
 }
 
 $config->stage->actionList['edit']['icon']        = 'edit';

@@ -102,8 +102,6 @@ class stage extends control
         {
             $this->stage->batchCreate($type);
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -111,7 +109,9 @@ class stage extends control
                 return $this->send($response);
             }
 
-            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['load']    = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
             return $this->send($response);
         }
 

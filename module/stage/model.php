@@ -60,7 +60,7 @@ class stageModel extends model
         if($setPercent)
         {
             $totalPercent = $this->getTotalPercent($type);
-            if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+            if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'] = $this->lang->stage->error->percentOver;
         }
 
         $this->loadModel('action');
@@ -70,18 +70,22 @@ class stageModel extends model
 
             $stage = new stdclass();
             $stage->name        = $name;
-            if($setPercent) $stage->percent = $data->percent[$i];
             $stage->type        = $data->type[$i];
             $stage->projectType = $type;
             $stage->createdBy   = $this->app->user->account;
             $stage->createdDate = helper::today();
+            if($setPercent) $stage->percent = $data->percent[$i];
 
             $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()
                 ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
                 ->checkIF($stage->percent != '', 'percent', 'float')
                 ->exec();
 
-            if(dao::isError()) return false;
+            if(dao::isError())
+            {
+                foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$i}]"] = $error;
+                return false;
+            }
 
             $stageID = $this->dao->lastInsertID();
             $this->action->create('stage', $stageID, 'Opened');
