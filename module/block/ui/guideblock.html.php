@@ -100,26 +100,27 @@ $usedMode = zget($config->global, 'mode', 'light');
 jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));
 panel
 (
-    set('class', 'guide-block of-hidden'),
+    set('class', 'guide-block'),
+    set('headingClass', 'border-b'),
     to::heading
     (
         div
         (
             set('class', 'panel-title w-full justify-between'),
-            $lang->block->guide,
+            $block->title,
             a(set('href', createLink('tutorial', 'start')), set('class', 'btn warning'), $lang->block->tutorial)
         )
     ),
     div
     (
-        set('class', 'flex h-full border-top'),
+        set('class', 'flex h-full of-hidden'),
         cell
         (
             set('width', '18%'),
-            set('class', 'bg-secondary-pale of-hidden'),
+            set('class', 'bg-secondary-pale of-y-auto'),
             ul
             (
-                set('class', 'nav nav-tabs nav-stacked h-full of-y-auto of-x-hidden'),
+                set('class', 'nav nav-tabs nav-stacked'),
                 getGuideTabs($blockNavCode)
             ),
         ),

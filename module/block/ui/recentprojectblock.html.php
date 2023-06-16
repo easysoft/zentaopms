@@ -60,6 +60,7 @@ foreach($projects as $projectID => $project)
 panel
 (
     set('class', 'recentproject-block'),
+    set('headingClass', 'border-b'),
     to::heading
     (
         div

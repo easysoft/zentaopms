@@ -311,20 +311,29 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
 }
 
 $blockNavCode = 'nav-' . uniqid();
-div
+panel
 (
     on::click('.nav-prev,.nav-next', 'switchNav'),
-    set('class', 'productstatistic-block of-hidden ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('class', 'productstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('headingClass', 'border-b'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span($block->title),
+        )
+    ),
     div
     (
-        set('class', "flex h-full " . ($longBlock ? '' : 'col')),
+        set('class', "flex h-full of-hidden " . ($longBlock ? '' : 'col')),
         cell
         (
-            set('width', '22%'),
-            set('class', $longBlock ? 'bg-secondary-pale' : ''),
+            set('width', '25%'),
+            set('class', $longBlock ? 'bg-secondary-pale of-y-auto of-x-hidden' : ''),
             ul
             (
-                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked h-full of-y-auto of-x-hidden' : 'pt-4 px-4')),
+                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
                 getProductTabs($products, $blockNavCode, $longBlock)
             ),
         ),

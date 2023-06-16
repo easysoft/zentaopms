@@ -1,4 +1,5 @@
 .projectstatistic-block {background: #FCFDFE;}
+.projectstatistic-block .panel-body {padding: 0;}
 .projectstatistic-block .tab-content {width: 100%;}
 .projectstatistic-block .bg-secondary-pale {background: #F3F6FA;}
 .projectstatistic-block .nav-tabs .nav-item:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
