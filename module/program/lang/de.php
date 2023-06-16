@@ -224,3 +224,4 @@ $lang->program->totalBugs         = 'Total Bugs';
 $lang->program->latestReleaseDate = 'Latest Release Date';
 $lang->program->latestRelease     = 'Latest Release';
 $lang->program->manageLine        = 'Verwalte Produktlinie';
+$lang->program->checkedProducts   = '<strong>%total%</strong>&nbsp; products selected.';

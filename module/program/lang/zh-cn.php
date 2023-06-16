@@ -224,3 +224,4 @@ $lang->program->totalBugs         = 'Bug总数';
 $lang->program->latestReleaseDate = '最新发布时间';
 $lang->program->latestRelease     = '最新发布';
 $lang->program->manageLine        = '维护产品线';
+$lang->program->checkedProducts   = '共选中&nbsp;<strong>%total%</strong>&nbsp;个产品。';
