@@ -7,9 +7,10 @@ require_once dirname(__DIR__) . DS . 'section' . DS . 'v1.php';
 class history extends wg
 {
     protected static $defineProps = array(
-        'actions?:array',
-        'users?:array',
-        'methodName?:string'
+        'actions?: array',
+        'users?: array',
+        'methodName?: string',
+        'commentUrl?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -233,6 +234,8 @@ class history extends wg
     {
         global $lang;
 
+        $commentUrl = $this->prop('commentUrl');
+
         return new section
         (
             setClass('history', 'pt-4', 'px-6', 'pb-6', 'canvas'),
@@ -248,7 +251,11 @@ class history extends wg
                 )
             ),
             div(setClass('mt-3'), $this->historyList()),
-            commentDialog(set::name('comment'))
+            commentDialog
+            (
+                set::name('comment'),
+                set::url($commentUrl),
+            )
         );
     }
 }

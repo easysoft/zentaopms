@@ -132,7 +132,7 @@ detailBody
             )
         ) : null,
     ),
-    history(),
+    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id))),),
     floatToolbar
     (
         to::prefix(backBtn(set::icon('back'), $lang->goback)),
