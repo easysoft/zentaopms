@@ -105,8 +105,9 @@ panel
     (
         div
         (
-            set('class', 'panel-title'),
+            set('class', 'panel-title w-full justify-between'),
             $lang->block->guide,
+            a(set('href', createLink('tutorial', 'start')), set('class', 'btn warning'), $lang->block->tutorial)
         )
     ),
     div
