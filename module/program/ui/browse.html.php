@@ -94,7 +94,8 @@ dtable
     set::nested(true),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
-    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}'))
+    set::footer(jsRaw('function(){return window.footerGenerator.call(this);}')),
+    set::customCols(true)
 );
 
 render();
