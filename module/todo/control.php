@@ -237,7 +237,7 @@ class todo extends control
         if($todo->status == 'done')
         {
             $isClosed = $this->todo->close($todoID);
-            if(!$isClosed) return print(js::error(dao::getError()));
+            if(!$isClosed) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
         /* Return json if run mode is API. */
@@ -246,9 +246,8 @@ class todo extends control
             $this->send(array('status' => 'success'));
         }
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
