@@ -1180,6 +1180,7 @@ class productModel extends model
         list($stories, $reqs) = $this->productTao->getStatsStoriesAndRequirements($productIdList, $storyType);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->productTao->getCaseCoveragePairs($productIdList);
+        $projectsPairs        = $this->productTao->getProjectCountPairs($productIdList);
 
         /* Render statistic result to each product. */
         $stats = array();
@@ -1201,6 +1202,7 @@ class productModel extends model
             $product->assignToNull = isset($assignToNull[$product->id])        ? $assignToNull[$product->id]        : 0;
             $product->executions   = isset($executionCountPairs[$product->id]) ? $executionCountPairs[$product->id] : 0;
             $product->coverage     = isset($coveragePairs[$product->id])       ? $coveragePairs[$product->id]       : 0;
+            $product->projects     = isset($projectsPairs[$product->id])       ? $projectsPairs[$product->id]       : 0;
 
             $latestRelease = isset($latestReleases[$product->id]) ? $latestReleases[$product->id][0] : null;
             $product->latestRelease     = $latestRelease ? $latestRelease->name : '';
