@@ -2322,15 +2322,15 @@ class storyModel extends model
     /**
      * Batch assign to.
      *
+     * @param  string $assignedTo
      * @access public
      * @return array
      */
-    public function batchAssignTo()
+    public function batchAssignTo(string $assignedTo = '')
     {
         $now         = helper::now();
         $allChanges  = array();
         $storyIdList = $this->post->storyIdList;
-        $assignedTo  = $this->post->assignedTo;
         $oldStories  = $this->getByList($storyIdList);
         $ignoreStories = '';
         foreach($storyIdList as $storyID)

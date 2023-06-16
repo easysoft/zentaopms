@@ -1586,18 +1586,20 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchAssignTo($storyType = 'story')
+    public function batchAssignTo(string $storyType = 'story', string $assignedTo = '')
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
-            $allChanges = $this->story->batchAssignTo();
+            if(!$assignedTo) $assignedTo = $this->post->assignedTo;
+
+            $allChanges = $this->story->batchAssignTo($assignedTo);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $assignedTwins = array();
             $oldStories       = $this->story->getByList($this->post->storyIdList);
             foreach($allChanges as $storyID => $changes)
             {
-                $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
+                $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
                 $this->action->logHistory($actionID, $changes);
 
                 /* Sync twins. */
