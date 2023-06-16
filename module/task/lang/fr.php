@@ -106,6 +106,7 @@ $lang->task->date              = 'Date';
 $lang->task->deadline          = 'Date Butoir';
 $lang->task->deadlineAB        = 'Date Butoir';
 $lang->task->status            = 'Statut';
+$lang->task->statusAB          = 'Status';
 $lang->task->subStatus         = 'Sous-statut';
 $lang->task->desc              = 'Description';
 $lang->task->version           = 'Version';

@@ -106,6 +106,7 @@ $lang->task->date              = '日期';
 $lang->task->deadline          = '截止日期';
 $lang->task->deadlineAB        = '截止';
 $lang->task->status            = '任务状态';
+$lang->task->statusAB          = '状态';
 $lang->task->subStatus         = '子状态';
 $lang->task->desc              = '任务描述';
 $lang->task->version           = '版本';

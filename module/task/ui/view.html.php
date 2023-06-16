@@ -13,7 +13,21 @@ global $lang;
 
 detailHeader
 (
-    to::title(entityLabel(set(array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)))),
+    to::title
+    (
+        $task->team ? span
+        (
+            setClass('label primary-pale'),
+            $lang->task->modeList[$task->mode]
+        ) : null,
+        entityLabel
+        (
+            set
+            (
+                array('entityID' => $task->id, 'level' => 1, 'text' => $task->name)
+            )
+        )
+    ),
     common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
 
@@ -41,6 +55,36 @@ foreach($config->task->view->operateList['common'] as $operate)
 }
 
 if($task->children) $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
+if($task->team)
+{
+    $teams = array();
+    foreach($task->team as $team)
+    {
+        $teams[] = h::tr
+        (
+            h::td
+            (
+                zget($users, $team->account)
+            ),
+            h::td
+            (
+                (float)$team->estimate
+            ),
+            h::td
+            (
+                (float)$team->consumed
+            ),
+            h::td
+            (
+                $team->left
+            ),
+            h::td
+            (
+                zget($lang->task->statusList, $team->status)
+            ),
+        );
+    }
+}
 
 detailBody
 (
@@ -182,6 +226,48 @@ detailBody
                     ),
                 )
             ),
+            $task->team ? tabPane
+            (
+                set::key('legend-team'),
+                set::title($lang->task->team),
+                h::table
+                (
+                    setClass('table table-data'),
+                    set::id('team'),
+                    h::thead
+                    (
+                        h::tr
+                        (
+                            h::th
+                            (
+                                $lang->task->team,
+                                set::width('80px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->estimateAB,
+                                set::width('60px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->consumedAB,
+                                set::width('60px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->leftAB,
+                                set::width('60px'),
+                            ),
+                            h::th
+                            (
+                                $lang->task->statusAB,
+                                set::width('80px'),
+                            ),
+                        ),
+                    ),
+                    h::tbody($teams)
+                )
+            ) : null,
         ),
         tabs
         (
