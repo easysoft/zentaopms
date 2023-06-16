@@ -12,6 +12,7 @@ namespace zin;
 
 $setCode    = (isset($config->setCode) and $config->setCode == 1);
 $showMethod = $app->tab == 'project' and isset($project) and ($project->model == 'agileplus' or $project->model == 'waterfallplus');
+$typeTip    = $this->app->tab == 'execution' ? $lang->execution->waterfallTip . lcfirst($lang->execution->typeTip) : $lang->execution->typeTip;
 
 jsVar('stageList', $lang->stage->typeList);
 
@@ -101,10 +102,23 @@ formBatchPanel
     formBatchItem
     (
         set::name('lifetime'),
-        set::label($lang->execution->type),
+        set::label(
+            $lang->execution->type
+        ),
         set::control('select'),
         set::items($lang->execution->lifeTimeList),
         set::width('80px'),
+        set::tipIcon('help'),
+        set::tip($typeTip),
+        set
+        (
+            'tipProps',
+            array
+            (
+                'data-toggle'    => 'tooltip',
+                'data-placement' => 'right',
+            )
+        ),
     ),
     formBatchItem
     (
