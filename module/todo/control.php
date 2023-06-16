@@ -219,9 +219,8 @@ class todo extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
