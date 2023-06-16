@@ -11,26 +11,59 @@ declare(strict_types=1);
 
 namespace zin;
 
+$usageDays     = 9999;
+$doneReview    = 9999;
+$finishTask    = 9999;
+$fixBug        = 9999;
+
+$reviewByMe['feedback'] = array('number' => '9999', 'delay' => '1111');
+$reviewByMe['testcase'] = array('number' => '9999');
+$reviewByMe['baseline'] = array('number' => '9999');
+$assignToMe['task']     = array('number' => '9999', 'delay' => '1111');
+$assignToMe['bug']      = array('number' => '9999');
+
+$feedbackCount = 9999;
+if($doneReview > $finishTask && $doneReview > $fixBug)
+{
+    $honorary = 'review';
+}
+else if($finishTask > $doneReview && $finishTask > $fixBug)
+{
+    $honorary = 'task';
+}
+else
+{
+    $honorary = 'bug';
+}
+
 panel
 (
+    set('class', 'welcome-block'),
     to::heading
     (
         div
         (
-            set('class', 'panel-title'),
-            span(set('class', 'text-md font-bold'), $todaySummary),
-            span(set('class', 'ml-4 text-base font-medium'), html(sprintf($lang->block->summary->welcome, 9999, 9999, 9999, 9999)))
+            set('class', 'panel-title flex w-full'),
+            col
+            (
+                set('align', 'center'),
+                set('class', 'w-1/5 pr-3'),
+                span($todaySummary),
+
+            ),
+            col
+            (
+                span(set('class', 'text-base font-medium'), html(sprintf($lang->block->summary->welcome, $usageDays, $doneReview, $finishTask, $fixBug)))
+            )
         )
     ),
-    set('class', 'welcome-block'),
     div
     (
-        setClass('flex'),
+        set('class', 'flex py-2'),
         col
         (
-            setStyle(['width' => '20%']),
             set('align', 'center'),
-            set('class', 'border-right p-3'),
+            set('class', 'border-right w-1/5'),
             center
             (
                 set('class', 'font-bold'),
@@ -38,103 +71,76 @@ panel
             ),
             center
             (
-                set('class', 'rounded-full avatar-border-one m-5'),
+                set('class', 'rounded-full avatar-border-one my-1'),
                 center
                 (
                     set('class', 'rounded-full avatar-border-two'),
                     userAvatar
                     (
-                        set('size', 'lg'),
                         set('class', 'welcome-avatar'),
                         set('user', $this->app->user)
                     )
                 )
-            )
+            ),
+            span(set('class', 'label circle honorary text-xs'), $lang->block->honorary[$honorary])
         ),
         cell
         (
             set('width', '45%'),
-            set('class', 'border-right p-3'),
+            set('class', 'border-right px-4'),
             div
             (
                 set('class', 'font-bold'),
-                '待我评审：'
+                $lang->block->welcome->reviewByMe
             ),
             div
             (
-                setClass('flex justify-around pt-6'),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        58
-                    ),
-                    span('研发需求数')
-                ),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        39
-                    ),
-                    span('反馈数')
-                ),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        17
-                    ),
-                    span('研发需求数')
-                )
+                setClass('flex justify-around pt-1'),
+                getMeasureItem($reviewByMe)
             )
         ),
         cell
         (
             set('width', '35%'),
-            set('class', 'border-right p-3'),
+            set('class', 'border-right px-4'),
             div
             (
                 set('class', 'font-bold'),
-                '待我评审：'
+                $lang->block->welcome->assignToMe
             ),
             div
             (
-                setClass('flex justify-around pt-6'),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        16
-                    ),
-                    span('任务数'),
-                    span
-                    (
-                        set('class', 'rounded-full welcome-label-delay px-1 text-sm'),
-                        '延期 3'
-                    )
-                ),
-                col
-                (
-                    set('class', 'text-center'),
-                    span
-                    (
-                        set('class', 'tile-amount text-primary'),
-                        30
-                    ),
-                    span('BUG数')
-                )
+                setClass('flex justify-around pt-1'),
+                getMeasureItem($assignToMe)
             )
         )
     )
 );
 
 render('|fragment');
+
+function getMeasureItem($data)
+{
+    global $lang;
+
+    $items = array();
+    foreach($data as $key => $info)
+    {
+        $items[] = div
+        (
+            set('class', 'text-center'),
+            div
+            (
+                set('class', 'text-3xl text-primary font-bold h-40px'),
+                $info['number']
+            ),
+            div($lang->block->welcome->{$key}),
+            !empty($info['delay']) ? div
+            (
+                set('class', 'label danger-pale circle size-sm'),
+                $lang->block->delay . ' ' . $info['delay']
+            ) : null
+        );
+    }
+    return $items;
+}

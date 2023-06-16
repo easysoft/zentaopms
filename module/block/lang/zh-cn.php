@@ -41,7 +41,6 @@ $lang->block->wait         = '未开始';
 $lang->block->doing        = '进行中';
 $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
-$lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
 $lang->block->contribute   = '我的贡献';
 $lang->block->finish       = '已完成';
@@ -53,6 +52,7 @@ $lang->block->myStory             = "我的{$lang->SRCommon}";
 $lang->block->myBug               = '我的BUG';
 $lang->block->myExecution         = '未关闭的' . $lang->executionCommon;
 $lang->block->myProduct           = '未关闭的' . $lang->productCommon;
+$lang->block->delay               = '延期';
 $lang->block->delayed             = '已延期';
 $lang->block->noData              = '当前统计类型下暂无数据';
 $lang->block->emptyTip            = '暂无数据';
@@ -152,7 +152,7 @@ $lang->block->default['waterfallplusproject'] = $lang->block->default['waterfall
 
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}统计",     'module' => 'product', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'all',        'count' => '20'));
 $lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}", 'module' => 'product', 'code' => 'list',      'width' => '2', 'height' => '6', 'left' => '0', 'top' => '5', 'params' => array('type' => 'noclosed',   'count' => '15'));
-$lang->block->default['product'][] = array('title' => $lang->productCommon . '总览',    'module' => 'product', 'code' => 'overview',  'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
+$lang->block->default['product'][] = array('title' => "{$lang->productCommon}总览",     'module' => 'product', 'code' => 'overview',  'width' => '1', 'height' => '3', 'left' => '2', 'top' => '0');
 $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",    'module' => 'product', 'code' => 'story',     'width' => '1', 'height' => '6', 'left' => '2', 'top' => '3', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['qa'][] = array('title' => '测试统计',       'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'height' => '5', 'left' => '0', 'top' => '0', 'params' => array('type' => 'noclosed',   'count' => '20'));
@@ -203,19 +203,6 @@ $lang->block->availableBlocks['issue']       = '问题';
 $lang->block->availableBlocks['meeting']     = '会议';
 $lang->block->availableBlocks['feedback']    = '反馈';
 $lang->block->availableBlocks['ticket']      = '工单';
-
-$lang->block->moduleList['product']    = $lang->productCommon;
-$lang->block->moduleList['project']    = $lang->projectCommon;
-$lang->block->moduleList['execution']  = $lang->execution->common;
-$lang->block->moduleList['qa']         = '测试';
-$lang->block->moduleList['todo']       = '待办';
-$lang->block->moduleList['doc']        = '文档';
-$lang->block->moduleList['assigntome'] = $lang->block->assignToMe;
-$lang->block->moduleList['dynamic']    = $lang->block->dynamic;
-$lang->block->moduleList['guide']      = $lang->block->guide;
-$lang->block->moduleList['welcome']    = $lang->block->welcome;
-$lang->block->moduleList['html']       = $lang->block->html;
-$lang->block->moduleList['contribute'] = $lang->block->contribute;
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon}列表";
@@ -272,7 +259,6 @@ $lang->block->modules['doc']->availableBlocks['doccollectlist']  = '收藏排行
 $lang->block->modules['doc']->availableBlocks['projectdoc']      = $lang->projectCommon . '文档';
 
 $lang->block->orderByList = new stdclass();
-
 $lang->block->orderByList->product = array();
 $lang->block->orderByList->product['id_asc']      = 'ID 递增';
 $lang->block->orderByList->product['id_desc']     = 'ID 递减';
@@ -339,7 +325,6 @@ $lang->block->feedbackCount = '反馈数';
 $lang->block->ticketCount   = '工单数';
 
 $lang->block->typeList = new stdclass();
-
 $lang->block->typeList->task['assignedTo'] = '指派给我';
 $lang->block->typeList->task['openedBy']   = '由我创建';
 $lang->block->typeList->task['finishedBy'] = '由我完成';
@@ -409,10 +394,10 @@ $lang->block->typeList->issue['closed']   = '已关闭';
 $lang->block->typeList->issue['resolved'] = '已解决';
 $lang->block->typeList->issue['canceled'] = '已取消';
 
-$lang->block->welcomeList['06:00'] = '%s，早上好！';
-$lang->block->welcomeList['11:30'] = '%s，中午好！';
-$lang->block->welcomeList['13:30'] = '%s，下午好！';
-$lang->block->welcomeList['19:00'] = '%s，晚上好！';
+$lang->block->welcomeList['06:00'] = '%s，早上好';
+$lang->block->welcomeList['11:30'] = '%s，中午好';
+$lang->block->welcomeList['13:30'] = '%s，下午好';
+$lang->block->welcomeList['19:00'] = '%s，晚上好';
 
 $lang->block->gridOptions[8] = '左侧';
 $lang->block->gridOptions[4] = '右侧';
@@ -488,10 +473,38 @@ $lang->block->visions['lite']->text  = "专为非研发团队打造，主要以�
 $lang->block->customModes['light'] = '轻量管理模式';
 $lang->block->customModes['ALM']   = '全生命周期管理模式';
 
+$lang->block->honorary = array();
+$lang->block->honorary['bug']    = '消灭BUG能力者';
+$lang->block->honorary['task']   = '勤劳小蜜蜂';
+$lang->block->honorary['review'] = '模范评审官';
+
+$lang->block->welcome = new stdclass();
+$lang->block->welcome->common     = '欢迎总览';
+$lang->block->welcome->reviewByMe = '待我评审：';
+$lang->block->welcome->assignToMe = '指派给我：';
+$lang->block->welcome->feedback   = '反馈数';
+$lang->block->welcome->testcase   = '用例数';
+$lang->block->welcome->baseline   = '基线数';
+$lang->block->welcome->task       = '任务数';
+$lang->block->welcome->bug        = 'BUG数';
+$lang->block->welcome->story      = '需求数';
+
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
 $lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式，概念更加完整、严谨，功能更丰富。';
 $lang->block->customModeTip->light  = "适用于小型研发团队的管理模式，提供{$lang->projectCommon}管理的核心功能。";
+
+$lang->block->productstatistic = new stdclass();
+$lang->block->productstatistic->totalStory      = '需求总数';
+$lang->block->productstatistic->closed          = '已关闭';
+$lang->block->productstatistic->notClosed       = '未关闭';
+$lang->block->productstatistic->storyStatistics = '需求统计';
+$lang->block->productstatistic->monthDone       = '本月完成 <span class="text-success font-bold">%s</span>';
+$lang->block->productstatistic->monthOpened     = '本月新增 <span class="text-black font-bold">%s</span>';
+$lang->block->productstatistic->news            = '产品最新推进';
+$lang->block->productstatistic->newPlan         = '最新计划';
+$lang->block->productstatistic->newExecution    = '最新执行';
+$lang->block->productstatistic->newRelease      = '最新发布';
 
 $lang->block->projectstatistic = new stdclass();
 $lang->block->projectstatistic->story       = '需求';
@@ -515,18 +528,6 @@ $lang->block->projectstatistic->personDay   = '人天';
 $lang->block->projectstatistic->day         = '天';
 $lang->block->projectstatistic->hour        = 'h';
 
-$lang->block->productstatistic = new stdclass();
-$lang->block->productstatistic->totalStory      = '需求总数';
-$lang->block->productstatistic->closed          = '已关闭';
-$lang->block->productstatistic->notClosed       = '未关闭';
-$lang->block->productstatistic->storyStatistics = '需求统计';
-$lang->block->productstatistic->monthDone       = '本月完成 <span class="text-success font-bold">%s</span>';
-$lang->block->productstatistic->monthOpened     = '本月新增 <span class="text-black font-bold">%s</span>';
-$lang->block->productstatistic->news            = '产品最新推进';
-$lang->block->productstatistic->newPlan         = '最新计划';
-$lang->block->productstatistic->newExecution    = '最新执行';
-$lang->block->productstatistic->newRelease      = '最新发布';
-
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->totalProductCount       = '产品总数';
 $lang->block->productoverview->productReleasedThisYear = '今年发布';
@@ -537,3 +538,16 @@ $lang->block->productlist->unclosedFeedback  = '未关闭反馈';
 $lang->block->productlist->activatedStory    = '激活需求';
 $lang->block->productlist->storyCompleteRate = '需求完成率';
 $lang->block->productlist->activatedBug      = '激活Bug';
+
+$lang->block->moduleList['product']    = $lang->productCommon;
+$lang->block->moduleList['project']    = $lang->projectCommon;
+$lang->block->moduleList['execution']  = $lang->execution->common;
+$lang->block->moduleList['qa']         = '测试';
+$lang->block->moduleList['todo']       = '待办';
+$lang->block->moduleList['doc']        = '文档';
+$lang->block->moduleList['assigntome'] = $lang->block->assignToMe;
+$lang->block->moduleList['dynamic']    = $lang->block->dynamic;
+$lang->block->moduleList['guide']      = $lang->block->guide;
+$lang->block->moduleList['welcome']    = $lang->block->welcome->common;
+$lang->block->moduleList['html']       = $lang->block->html;
+$lang->block->moduleList['contribute'] = $lang->block->contribute;
