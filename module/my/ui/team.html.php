@@ -28,6 +28,7 @@ dtable
 (
     set::cols($this->config->my->team->dtable->fieldList),
     set::data($users),
+    set::fixedLeftWidth('0.2'),
     set::footPager(usePager()),
 );
 

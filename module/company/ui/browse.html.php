@@ -62,6 +62,7 @@ dtable
 (
     set::cols($this->config->company->user->dtable->fieldList),
     set::data($tableData),
+    set::fixedLeftWidth('0.2'),
     set::footPager(usePager()),
 );
 
