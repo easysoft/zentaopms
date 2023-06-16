@@ -207,7 +207,16 @@ sidebar
 modal
 (
     setID('taskModal'),
-    set::modalProps(array('title' => $lang->story->batchToTask)),
+    set::modalProps(array('title' => $lang->story->batchToTask, 'titleClass' => 'flex-initial')),
+    to::header
+    (
+        div
+        (
+            setClass('flex-auto'),
+            icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+            $lang->story->batchToTaskTips
+        )
+    ),
     form
     (
         setClass('text-center', 'py-4'),
@@ -261,11 +270,6 @@ modal
                 set::type('hidden'),
                 set::name('storyIdList')
             )
-        ),
-        div
-        (
-            setClass('alert secondary-pale'),
-            $lang->story->batchToTaskTips
         )
     )
 );
