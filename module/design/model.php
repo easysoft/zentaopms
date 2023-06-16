@@ -427,8 +427,6 @@ class designModel extends model
             $count ++;
         }
 
-        if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
-
         if(empty($products) || !$productID) return '';
 
         if($productID)

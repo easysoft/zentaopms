@@ -309,12 +309,11 @@ $lang->waterfall->menu->qa['subMenu']->testtask   = array('link' => "{$lang->tes
 $lang->waterfall->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|project|testreport|projectID=%s", 'subModule' => 'testreport');
 
 $lang->waterfall->menu->design['subMenu'] = new stdclass();
-$lang->waterfall->menu->design['subMenu']->all      = array('link' => "$lang->all|design|browse|projectID=%s&productID=0&browseType=all");
-$lang->waterfall->menu->design['subMenu']->hlds     = array('link' => "{$lang->design->HLDS}|design|browse|projectID=%s&productID=0&browseType=HLDS");
-$lang->waterfall->menu->design['subMenu']->dds      = array('link' => "{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
-$lang->waterfall->menu->design['subMenu']->dbds     = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
-$lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
-$lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
+$lang->waterfall->menu->design['subMenu']->all  = array('link' => "$lang->all|design|browse|projectID=%s&productID=0&browseType=all");
+$lang->waterfall->menu->design['subMenu']->hlds = array('link' => "{$lang->design->HLDS}|design|browse|projectID=%s&productID=0&browseType=HLDS");
+$lang->waterfall->menu->design['subMenu']->dds  = array('link' => "{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
+$lang->waterfall->menu->design['subMenu']->dbds = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
+$lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 
 /* Kanban project menu. */
 $lang->kanbanProject = new stdclass();

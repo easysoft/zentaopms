@@ -87,36 +87,6 @@ class design extends control
         $actionURL = $this->createLink('design', 'browse', "projectID=$projectID&productID=$productID&type=bySearch&queryID=myQueryID");
         $this->design->buildSearchForm($queryID, $actionURL);
 
-        /* Print top and right actions. */
-        $this->lang->TRActions  = '<div class="btn-toolbar pull-right">';
-        if($this->config->edition == 'max' and common::hasPriv('design', 'submit'))
-        {
-            $this->lang->TRActions .= '<div class="btn-group">';
-            $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->submit}", '', "class='btn btn-secondary iframe'");
-            $this->lang->TRActions .= '</div>';
-        }
-
-        if(common::hasPriv('design', 'create') and common::hasPriv('design', 'batchCreate'))
-        {
-            $this->lang->TRActions .= '<div class="btn-group dropdown">';
-            $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
-            $this->lang->TRActions .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span>";
-            $this->lang->TRActions .= '</button>';
-            $this->lang->TRActions .= "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
-
-            if(common::hasPriv('design', 'create'))      $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'create', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->create, '', "class='btn btn-link'") . '</li>';
-            if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'batchCreate', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->batchCreate, '', "class='btn btn-link'") . '</li>';
-
-            $this->lang->TRActions .= '</ul>';
-            $this->lang->TRActions .= '</div>';
-            $this->lang->TRActions .= '</div>';
-        }
-        else
-        {
-            if(common::hasPriv('design', 'create')) $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
-            if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= html::a(inlink('batchCreate', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->batchCreate}", '', "class='btn btn-primary'");
-        }
-
         /* Init pager and get designs. */
         $this->app->loadClass('pager', true);
         $pager   = pager::init(0, $recPerPage, $pageID);
