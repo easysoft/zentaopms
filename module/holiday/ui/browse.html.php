@@ -73,6 +73,7 @@ div
                 setClass('btn primary'),
                 set::icon('plus'),
                 set::url(helper::createLink('holiday', 'create')),
+                set('data-toggle', 'modal'),
                 $lang->holiday->create
             ),
         ),
@@ -81,8 +82,7 @@ div
     (
         set::cols($this->config->holiday->dtable->fieldList),
         set::data($tableData),
-        set::footer(
-        ),
+        set::footer(),
     ),
     div
     (

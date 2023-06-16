@@ -1,10 +1,11 @@
 <?php
 global $lang;
 $config->holiday->actionList = array();
-$config->holiday->actionList['edit']['icon'] = 'edit';
-$config->holiday->actionList['edit']['text'] = '';
-$config->holiday->actionList['edit']['hint'] = $lang->holiday->edit;
-$config->holiday->actionList['edit']['url']  = array('module' => 'holiday', 'method' => 'edit', 'params' => 'holidayID={id}');
+$config->holiday->actionList['edit']['icon']        = 'edit';
+$config->holiday->actionList['edit']['text']        = '';
+$config->holiday->actionList['edit']['hint']        = $lang->holiday->edit;
+$config->holiday->actionList['edit']['url']         = array('module' => 'holiday', 'method' => 'edit', 'params' => 'holidayID={id}');
+$config->holiday->actionList['edit']['data-toggle'] = 'modal';
 
 $config->holiday->actionList['delete']['icon'] = 'close';
 $config->holiday->actionList['delete']['text'] = '';
