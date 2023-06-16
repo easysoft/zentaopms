@@ -8,7 +8,7 @@ class dtable extends wg
         'id?:string',                            // ID。
         'customCols?: bool|array',               // 是否支持自定义列。
         'cols?:array',                           // 表格列配置
-        'date?:array',                           // 表格数据源
+        'data?:array',                           // 表格数据源
         'module?:string',                        // 模块信息，主要是获取语言项
     );
 
