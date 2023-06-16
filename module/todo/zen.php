@@ -589,7 +589,7 @@ class todoZen extends todo
         if($todo->type == 'story') $app = 'product';
         $cancelURL = $this->server->http_referer;
 
-        return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+        return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
     }
 
     /**

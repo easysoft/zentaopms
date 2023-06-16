@@ -196,9 +196,8 @@ class todo extends control
         }
 
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
