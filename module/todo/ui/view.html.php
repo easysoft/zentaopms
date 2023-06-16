@@ -36,33 +36,14 @@ if(in_array($todo->type, array('story', 'task', 'bug')) && !empty($todo->object)
 {
     $app->loadLang($todo->type);
     $objectData = array();
-    if($todo->type == 'story')
+    foreach($config->todo->related[$todo->type]['title'] as $index => $relatedTitle)
     {
+        $title   = $lang->{$todo->type}->{$relatedTitle};
+        $content = zget($todo->object, $config->todo->related[$todo->type]['content'][$index], '');
         $objectData[] = item
         (
-            set::title($lang->story->legendSpec),
-            empty($todo->object->spec) ? $lang->noData : html($todo->object->spec)
-        );
-        $objectData[] = item
-        (
-            set::title($lang->story->legendVerify),
-            empty($todo->object->verify) ? $lang->noData : html($todo->object->verify)
-        );
-    }
-    if($todo->type == 'task')
-    {
-        $objectData[] = item
-        (
-            set::title($lang->task->legendDesc),
-            empty($todo->object->desc) ? $lang->noData : html($todo->object->desc)
-        );
-    }
-    if($todo->type == 'bug')
-    {
-        $objectData[] = item
-        (
-            set::title($lang->bug->legendSteps),
-            empty($todo->object->steps) ? $lang->noData : html($todo->object->steps)
+            set::title($lang->{$todo->type}->{$relatedTitle}),
+            empty($content) ? $lang->noData : html($content),
         );
     }
     $fromItemData = section
