@@ -14,7 +14,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("browseType={key}"),
-    li(searchToggle(set::open($browseType == 'bysearch'))),
+    li(searchToggle(set::open($type == 'bysearch'), set::module('user'))),
 );
 
 toolbar
