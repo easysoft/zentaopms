@@ -197,6 +197,8 @@ $config->program->projectView->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->projectView->dtable->fieldList['name']['checkbox']     = true;
 $config->program->projectView->dtable->fieldList['name']['sortType']     = true;
 $config->program->projectView->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+$config->program->projectView->dtable->fieldList['name']['show']         = true;
+$config->program->projectView->dtable->fieldList['name']['group']        = 1;
 
 $config->program->projectView->dtable->fieldList['status']['name']      = 'status';
 $config->program->projectView->dtable->fieldList['status']['title']     = $lang->program->status;
@@ -204,41 +206,83 @@ $config->program->projectView->dtable->fieldList['status']['minWidth']  = 60;
 $config->program->projectView->dtable->fieldList['status']['type']      = 'status';
 $config->program->projectView->dtable->fieldList['status']['sortType']  = true;
 $config->program->projectView->dtable->fieldList['status']['statusMap'] = $lang->program->statusList;
+$config->program->projectView->dtable->fieldList['status']['show']      = true;
+$config->program->projectView->dtable->fieldList['status']['group']     = 2;
 
 $config->program->projectView->dtable->fieldList['PM']['name']     = 'PM';
 $config->program->projectView->dtable->fieldList['PM']['title']    = $lang->program->PM;
 $config->program->projectView->dtable->fieldList['PM']['minWidth'] = 80;
 $config->program->projectView->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->program->projectView->dtable->fieldList['PM']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['PM']['show']     = true;
+$config->program->projectView->dtable->fieldList['PM']['group']    = 3;
 
 $config->program->projectView->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->projectView->dtable->fieldList['budget']['title']    = $lang->program->budget;
 $config->program->projectView->dtable->fieldList['budget']['width']    = 90;
 $config->program->projectView->dtable->fieldList['budget']['type']     = 'format';
 $config->program->projectView->dtable->fieldList['budget']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['budget']['show']     = true;
+$config->program->projectView->dtable->fieldList['budget']['group']    = 4;
 
 $config->program->projectView->dtable->fieldList['invested']['name']     = 'invested';
 $config->program->projectView->dtable->fieldList['invested']['title']    = $lang->program->invested;
 $config->program->projectView->dtable->fieldList['invested']['minWidth'] = 70;
 $config->program->projectView->dtable->fieldList['invested']['type']     = 'format';
 $config->program->projectView->dtable->fieldList['invested']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['invested']['show']     = true;
+$config->program->projectView->dtable->fieldList['invested']['group']    = 4;
+
+$config->program->projectView->dtable->fieldList['openedDate']['name']     = 'openedDate';
+$config->program->projectView->dtable->fieldList['openedDate']['title']    = $lang->program->openedDate;
+$config->program->projectView->dtable->fieldList['openedDate']['type']     = 'date';
+$config->program->projectView->dtable->fieldList['openedDate']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['openedDate']['minWidth'] = 90;
+$config->program->projectView->dtable->fieldList['openedDate']['group']    = 5;
+
+$config->program->projectView->dtable->fieldList['openedBy']['name']     = 'openedBy';
+$config->program->projectView->dtable->fieldList['openedBy']['title']    = $lang->program->openedBy;
+$config->program->projectView->dtable->fieldList['openedBy']['type']     = 'user';
+$config->program->projectView->dtable->fieldList['openedBy']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['openedBy']['minWidth'] = 80;
+$config->program->projectView->dtable->fieldList['openedBy']['group']    = 5;
 
 $config->program->projectView->dtable->fieldList['begin']['name']     = 'begin';
 $config->program->projectView->dtable->fieldList['begin']['title']    = $lang->program->begin;
 $config->program->projectView->dtable->fieldList['begin']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['begin']['type']     = 'datetime';
+$config->program->projectView->dtable->fieldList['begin']['type']     = 'date';
 $config->program->projectView->dtable->fieldList['begin']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['begin']['show']     = true;
+$config->program->projectView->dtable->fieldList['begin']['group']    = 6;
 
 $config->program->projectView->dtable->fieldList['end']['name']     = 'end';
 $config->program->projectView->dtable->fieldList['end']['title']    = $lang->program->end;
 $config->program->projectView->dtable->fieldList['end']['minWidth'] = 90;
-$config->program->projectView->dtable->fieldList['end']['type']     = 'datetime';
+$config->program->projectView->dtable->fieldList['end']['type']     = 'date';
 $config->program->projectView->dtable->fieldList['end']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['end']['show']     = true;
+$config->program->projectView->dtable->fieldList['end']['group']    = 6;
+
+$config->program->projectView->dtable->fieldList['realBegan']['name']     = 'realBegan';
+$config->program->projectView->dtable->fieldList['realBegan']['title']    = $lang->program->realBegan;
+$config->program->projectView->dtable->fieldList['realBegan']['minWidth'] = 90;
+$config->program->projectView->dtable->fieldList['realBegan']['type']     = 'date';
+$config->program->projectView->dtable->fieldList['realBegan']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['realBegan']['group']    = 7;
+
+$config->program->projectView->dtable->fieldList['realEnd']['name']     = 'realEnd';
+$config->program->projectView->dtable->fieldList['realEnd']['title']    = $lang->program->realEnd;
+$config->program->projectView->dtable->fieldList['realEnd']['minWidth'] = 90;
+$config->program->projectView->dtable->fieldList['realEnd']['type']     = 'date';
+$config->program->projectView->dtable->fieldList['realEnd']['sortType'] = true;
+$config->program->projectView->dtable->fieldList['realEnd']['group']    = 7;
 
 $config->program->projectView->dtable->fieldList['progress']['name']     = 'progress';
 $config->program->projectView->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
 $config->program->projectView->dtable->fieldList['progress']['minWidth'] = 100;
 $config->program->projectView->dtable->fieldList['progress']['type']     = 'circleProgress';
+$config->program->projectView->dtable->fieldList['progress']['show']     = true;
+$config->program->projectView->dtable->fieldList['progress']['group']    = 8;
 
 global $app;
 $app->loadLang('project');
