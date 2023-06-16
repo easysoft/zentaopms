@@ -90,26 +90,26 @@ unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert
 unset($lang->story->reasonList[''], $lang->story->reasonList['subdivided'], $lang->story->reasonList['duplicate']);
 unset($plans[''], $lang->story->stageList[''], $users['']);
 
-foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
-foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
-foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
-foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
-foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID={$plan->id}"));
-foreach($lang->story->stageList as $key => $stageName)     $stageItems[]            = array('text' => $stageName,  'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
+foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
+foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
+foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
+foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
+foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID={$plan->id}"));
+foreach($lang->story->stageList as $key => $stageName)     $stageItems[]            = array('text' => $stageName,  'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
 foreach($users as $account => $realname)
 {
     if($account == 'closed') continue;
-    $assignItems[] = array('text' => $realname, 'className' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID=$plan->product"), 'data-account' => $account);
+    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-type' => 'story', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID=$plan->product"), 'data-account' => $account);
 }
 
 if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
 $reviewResultItems = array_values($reviewResultItems);
 
 $navStoryActionItems = array();
-if($canBatchCloseStory)  $navStoryActionItems[] = array('text' => $lang->close, 'className' => 'batch-btn', 'data-type' => 'story', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$plan->product}"));
-if($canBatchEditStory)   $navStoryActionItems[] = array('text' => $lang->edit, 'className' => 'batch-btn',  'data-type' => 'story', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchEdit', "productID=$plan->product&projectID=$projectID&branch=$branch"));
+if($canBatchCloseStory)  $navStoryActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-type' => 'story', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$plan->product}"));
+if($canBatchEditStory)   $navStoryActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn',  'data-type' => 'story', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchEdit', "productID=$plan->product&projectID=$projectID&branch=$branch"));
 if($canBatchReviewStory) $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->review, 'items' => $reviewResultItems);
-if($canBatchChangeBranchStory && $product->type != 'normal') $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$this->session->currentProductType], 'items' => $branchItems);
+if($canBatchChangeBranchStory && $product->type != 'normal') $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
 if($canBatchChangeModuleStory) $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->moduleAB, 'items' => $moduleItems);
 if($canBatchChangePlanStory)   $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems);
 if($canBatchChangeStageStory)  $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
@@ -122,12 +122,11 @@ zui::menu
     set::items($navStoryActionItems)
 );
 
-
 $planItems = array();
-foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName, 'className' => 'batch-btn', 'data-type' => 'bug', 'data-formaction' => $this->createLink('bug', 'batchChangePlan', "planID=$planID"));
+foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-formaction' => $this->createLink('bug', 'batchChangePlan', "planID=$planID"));
 
 $navBugActionItems = array();
-if($canBatchEditBug)       $navBugActionItems[] = array('text' => $lang->edit, 'className' => 'batch-btn', 'data-type' => 'bug', 'data-page' => 'batch', 'data-formaction' => helper::createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch"));
+if($canBatchEditBug)       $navBugActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-page' => 'batch', 'data-formaction' => helper::createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch"));
 if($canBatchChangePlanBug) $navBugActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems);
 zui::menu
 (

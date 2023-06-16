@@ -33,7 +33,7 @@ $(document).on('click', '.batch-btn', function()
 {
     const $this  = $(this);
     const type   = $this.data('type');
-    const dtable = zui.DTable.query($this);
+    const dtable = zui.DTable.query($('#' + type + 'DTable'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 

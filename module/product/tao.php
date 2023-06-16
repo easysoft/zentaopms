@@ -1289,7 +1289,7 @@ class productTao extends productModel
         $stmt = $this->dbh->query($this->tree->buildMenuQuery($productID, 'story', 0, $branch));
         while($module = $stmt->fetch())
         {
-            $module->url  = call_user_func_array(array($this->tree, $userFunc[1]), array('story', $module, $extra));
+            $module->url  = call_user_func_array(array($this->tree, $userFunc[1]), array('story', $module, 0, $extra));
             $moduleTree[] = $module;
         }
 
