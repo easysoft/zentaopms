@@ -1631,14 +1631,13 @@ class project extends control
      * 激活项目并更新其状态
      * Activate a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      *
      * @return void
      */
-    public function activate(string $projectID)
+    public function activate(int $projectID)
     {
-        $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
 
         if(!empty($_POST))
@@ -1647,10 +1646,13 @@ class project extends control
             $postData = $this->projectZen->prepareActivateExtras($projectID, $postData);
 
             $changes = $this->project->activate($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterActivate($projectID, $changes);
-            return print(js::reload('parent.parent'));
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            return $this->sendSuccess($response);
         }
 
         $this->projectZen->buildActivateForm($project);

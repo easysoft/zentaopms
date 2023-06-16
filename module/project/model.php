@@ -1580,11 +1580,12 @@ class projectModel extends model
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
         /* Update start and end date of tasks in this project. */
-        if($project->readjustTime and $project->readjustTask)
+        if($project->readjustTask)
         {
-            $tasks = $this->projectTao->fetchUndoneTasks((int)$projectID);
+            $tasks = $this->projectTao->fetchUndoneTasks($projectID);
             $this->projectTao->updateTasksStartAndEndDate($tasks, $oldProject, $project);
         }
+
         /* Activate the shadow product of the project. (only change product status) */
         if(!$oldProject->hasProduct)
         {
