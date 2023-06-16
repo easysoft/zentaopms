@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('stageList', $lang->stage->typeList);
+$setCode = (isset($config->setCode) and $config->setCode == 1);
 
 formBatchPanel
 (
@@ -37,12 +38,12 @@ formBatchPanel
         set::label($lang->execution->name),
         set::width('240px'),
     ),
-    formBatchItem
+    $setCode ? formBatchItem
     (
         set::name('code'),
         set::label($lang->execution->code),
         set::width('120px'),
-    ),
+    ) : null,
     formBatchItem
     (
         set::name('PM'),
