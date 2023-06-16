@@ -13,3 +13,8 @@ window.renderRowData = function($row, index, row)
         }
     }
 }
+
+$().ready(function()
+{
+    new zui.Tooltip('#tooltipHover', {trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light'});
+})
