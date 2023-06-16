@@ -14,8 +14,11 @@ jsVar('selectProduct',   $lang->todo->selectProduct);
 jsVar('selectExecution', $lang->execution->selectExecution);
 jsVar('todoID',          $todo->id);
 
+$isInModal = isAjaxRequest('modal');
+
 detailHeader
 (
+    $isInModal ? to::prefix('') : '',
     to::title
     (
         entityLabel
@@ -429,5 +432,5 @@ detailBody
     ),
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render($isInModal ? 'modalDialog' : 'page');
 
