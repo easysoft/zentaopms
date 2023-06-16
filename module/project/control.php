@@ -541,7 +541,7 @@ class project extends control
         $this->loadModel('action');
         $this->loadModel('execution');
 
-        if($this->post->names)
+        if($this->post->name)
         {
             $allChanges = $this->project->batchUpdate();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -574,7 +574,7 @@ class project extends control
         }
         $unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
 
-        $this->view->title      = $this->lang->project->batchEdit;
+        $this->view->title = $this->lang->project->batchEdit;
 
         $this->view->projects             = $projects;
         $this->view->programs             = $programs;
