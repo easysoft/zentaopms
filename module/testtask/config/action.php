@@ -3,22 +3,23 @@ global $app, $lang;
 $app->loadLang('testcase');
 
 $config->testtask->actionList = array();
-$config->testtask->actionList['start']['icon'] = 'play';
-$config->testtask->actionList['start']['text'] = $lang->testtask->start;
-$config->testtask->actionList['start']['hint'] = $lang->testtask->start;
-$config->testtask->actionList['start']['url']  = array('module' => 'testtask', 'method' => 'start', 'params' => 'taskID={id}');
-$config->testtask->actionList['start']['data-toggle']  = 'modal';
+$config->testtask->actionList['start']['icon']        = 'play';
+$config->testtask->actionList['start']['text']        = $lang->testtask->start;
+$config->testtask->actionList['start']['hint']        = $lang->testtask->start;
+$config->testtask->actionList['start']['url']         = array('module' => 'testtask', 'method' => 'start', 'params' => 'taskID={id}');
+$config->testtask->actionList['start']['data-toggle'] = 'modal';
 
-$config->testtask->actionList['close']['icon'] = 'off';
-$config->testtask->actionList['close']['text'] = $lang->testtask->close;
-$config->testtask->actionList['close']['hint'] = $lang->testtask->close;
-$config->testtask->actionList['close']['url']  = array('module' => 'testtask', 'method' => 'close', 'params' => 'taskID={id}');
-$config->testtask->actionList['close']['data-toggle']  = 'modal';
+$config->testtask->actionList['close']['icon']        = 'off';
+$config->testtask->actionList['close']['text']        = $lang->testtask->close;
+$config->testtask->actionList['close']['hint']        = $lang->testtask->close;
+$config->testtask->actionList['close']['url']         = array('module' => 'testtask', 'method' => 'close', 'params' => 'taskID={id}');
+$config->testtask->actionList['close']['data-toggle'] = 'modal';
 
-$config->testtask->actionList['block']['icon'] = 'pause';
-$config->testtask->actionList['block']['text'] = $lang->testtask->block;
-$config->testtask->actionList['block']['hint'] = $lang->testtask->block;
-$config->testtask->actionList['block']['url']  = array('module' => 'testtask', 'method' => 'block', 'params' => 'taskID={id}');
+$config->testtask->actionList['block']['icon']        = 'pause';
+$config->testtask->actionList['block']['text']        = $lang->testtask->block;
+$config->testtask->actionList['block']['hint']        = $lang->testtask->block;
+$config->testtask->actionList['block']['url']         = array('module' => 'testtask', 'method' => 'block', 'params' => 'taskID={id}');
+$config->testtask->actionList['block']['data-toggle'] = 'modal';
 
 $config->testtask->actionList['activate']['icon']        = 'magic';
 $config->testtask->actionList['activate']['text']        = $lang->testtask->activate;
