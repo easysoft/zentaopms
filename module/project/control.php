@@ -1538,27 +1538,26 @@ class project extends control
     /**
      * Start a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      * @return void
      */
-    public function start(string $projectID)
+    public function start(int $projectID)
     {
-        $projectID = (int)$projectID;
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {
             $postData = form::data($this->config->project->form->start);
-
             $postData = $this->projectZen->prepareStartExtras($postData);
-
             $changes  = $this->project->start($projectID, $postData);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterStart($project, $changes, $this->post->comment);
-            return print(js::reload('parent.parent'));
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            return $this->sendSuccess($response);
         }
 
         $this->projectZen->buildStartForm($project);

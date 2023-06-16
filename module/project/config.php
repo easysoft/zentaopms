@@ -310,9 +310,11 @@ $config->project->team->actionList['unlink']['hint'] = $lang->project->unlinkMem
 $config->project->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{account}", "{userID}")';
 
 $config->project->actionList = array();
-$config->project->actionList['start']['icon'] = 'play';
-$config->project->actionList['start']['hint'] = $lang->project->start;
-$config->project->actionList['start']['url']  = array('module' => 'project', 'method' => 'start', 'params' => 'projectID={id}');
+$config->project->actionList['start']['icon']        = 'play';
+$config->project->actionList['start']['hint']        = $lang->project->start;
+$config->project->actionList['start']['url']         = array('module' => 'project', 'method' => 'start', 'params' => 'projectID={id}');
+$config->project->actionList['start']['data-toggle'] = 'modal';
+$config->project->actionList['start']['data-size']   = array('height' => '540px', 'width' => '800px');
 
 $config->project->actionList['close']['icon'] = 'off';
 $config->project->actionList['close']['hint'] = $lang->project->close;
