@@ -1,20 +1,19 @@
-window.onRenderSparkline = function(result, info)
+$(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 {
-    if(info.col.name === 'burn' && Array.isArray(info.row.data.burns) && info.row.data.burns.length)
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const url  = $(this).data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append('executionIDList[]', id.replace("pid", '')));
+
+    if($(this).hasClass('ajax-btn'))
     {
-        tryRenderSparkline();
-        return [{html: '<span class="sparkline pending text-left no-padding" values="' + info.row.data.burns.join(',') + '"></span>'}];
+        $.ajaxSubmit({url, data: form});
     }
-    return result;
-}
-
-window.tryRenderSparkline = function()
-{
-    if(window.renderingSparkline) clearTimeout(window.renderingSparkline);
-    window.renderingSparkline = setTimeout(renderSparkline, 200);
-}
-
-window.renderSparkline = function()
-{
-    $('#dtable .dtable-rows .sparkline.pending').removeClass('pending').sparkline();
-}
+    else
+    {
+        postAndLoadPage(url, form);
+    }
+});

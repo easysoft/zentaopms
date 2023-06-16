@@ -2065,7 +2065,7 @@ class execution extends control
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
 
-        if($this->post->names)
+        if($this->post->name)
         {
             $allChanges = $this->execution->batchUpdate();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

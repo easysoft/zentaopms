@@ -83,7 +83,6 @@ dtable
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
     set::customCols(true),
-    set::onRenderCell(jsRaw('onRenderSparkline')),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager(),

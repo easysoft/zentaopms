@@ -748,7 +748,7 @@ class executionModel extends model
         $executions    = array();
         $allChanges    = array();
         $data          = fixer::input('post')->get();
-        $oldExecutions = $this->getByIdList($this->post->executionIDList);
+        $oldExecutions = $this->getByIdList($this->post->id);
         $nameList      = array();
         $codeList      = array();
 
@@ -773,46 +773,46 @@ class executionModel extends model
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $extendFields = $this->getFlowExtendFields();
-        foreach($data->executionIDList as $executionID)
+        foreach($data->id as $executionID)
         {
-            $executionName = $data->names[$executionID];
-            if(isset($data->codes)) $executionCode = $data->codes[$executionID];
+            $executionName = $data->name[$executionID];
+            if(isset($data->code)) $executionCode = $data->code[$executionID];
 
             $executionID = (int)$executionID;
             $executions[$executionID] = new stdClass();
             $executions[$executionID]->id             = $executionID;
             $executions[$executionID]->name           = $executionName;
-            $executions[$executionID]->PM             = $data->PMs[$executionID];
-            $executions[$executionID]->PO             = $data->POs[$executionID];
-            $executions[$executionID]->QD             = $data->QDs[$executionID];
-            $executions[$executionID]->RD             = $data->RDs[$executionID];
-            $executions[$executionID]->begin          = $data->begins[$executionID];
-            $executions[$executionID]->end            = $data->ends[$executionID];
-            $executions[$executionID]->team           = $data->teams[$executionID];
-            $executions[$executionID]->desc           = htmlspecialchars_decode($data->descs[$executionID]);
-            $executions[$executionID]->days           = $data->dayses[$executionID];
+            $executions[$executionID]->PM             = $data->PM[$executionID];
+            $executions[$executionID]->PO             = $data->PO[$executionID];
+            $executions[$executionID]->QD             = $data->QD[$executionID];
+            $executions[$executionID]->RD             = $data->RD[$executionID];
+            $executions[$executionID]->begin          = $data->begin[$executionID];
+            $executions[$executionID]->end            = $data->end[$executionID];
+            $executions[$executionID]->team           = $data->team[$executionID];
+            $executions[$executionID]->desc           = htmlspecialchars_decode($data->desc[$executionID]);
+            $executions[$executionID]->days           = $data->days[$executionID];
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
 
-            if(isset($data->codes))    $executions[$executionID]->code    = $executionCode;
-            if(isset($data->projects)) $executions[$executionID]->project = zget($data->projects, $executionID, 0);
-            if(isset($data->attributes[$executionID])) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
-            if(isset($data->lifetimes[$executionID]))  $executions[$executionID]->lifetime  = $data->lifetimes[$executionID];
+            if(isset($data->code))    $executions[$executionID]->code    = $executionCode;
+            if(isset($data->project)) $executions[$executionID]->project = zget($data->project, $executionID, 0);
+            if(isset($data->attribute[$executionID])) $executions[$executionID]->attribute = zget($data->attribute, $executionID, '');
+            if(isset($data->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $data->lifetime[$executionID];
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? $executions[$executionID]->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
             /* Check unique code for edited executions. */
-            if(isset($data->codes) and empty($executionCode))
+            if(isset($data->code) and empty($executionCode))
             {
-                dao::$errors["codes$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
+                dao::$errors["code$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
-            elseif(isset($data->codes) and $executionCode)
+            elseif(isset($data->code) and $executionCode)
             {
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors["codes$executionID"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
+                    dao::$errors["code$executionID"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                 }
                 $codeList[$executionCode] = $executionCode;
             }
@@ -826,7 +826,7 @@ class executionModel extends model
                     if($parentID == $parents[$repeatID])
                     {
                         $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
-                        dao::$errors["names$executionID"][] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        dao::$errors["name$executionID"][] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
                         break;
                     }
                 }
@@ -835,7 +835,7 @@ class executionModel extends model
             $nameList[$executionName][] = $executionID;
 
             /* Attribute check. */
-            if(isset($data->attributes) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
+            if(isset($data->attribute) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
                 $this->app->loadLang('stage');
                 $attribute = $executions[$executionID]->attribute;
@@ -852,18 +852,18 @@ class executionModel extends model
                 if($parentAttr && $parentAttr != $attribute && $parentAttr != 'mix')
                 {
                     $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
-                    dao::$errors["attributes$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
+                    dao::$errors["attribute$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
                 }
 
                 $attributeList[$executionID] = $attribute;
             }
 
             /* Judge workdays is legitimate. */
-            $workdays = helper::diffDate($data->ends[$executionID], $data->begins[$executionID]) + 1;
-            if(isset($data->dayses[$executionID]) and $data->dayses[$executionID] > $workdays)
+            $workdays = helper::diffDate($data->end[$executionID], $data->begin[$executionID]) + 1;
+            if(isset($data->days[$executionID]) and $data->days[$executionID] > $workdays)
             {
                 $this->app->loadLang('project');
-                dao::$errors["dayses{$executionID}"][] = sprintf($this->lang->project->workdaysExceed, $workdays);
+                dao::$errors["days{$executionID}"][] = sprintf($this->lang->project->workdaysExceed, $workdays);
             }
 
             /* Parent stage begin and end check. */
@@ -876,12 +876,12 @@ class executionModel extends model
 
                 if($begin < $parentBegin)
                 {
-                    dao::$errors["begins$executionID"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+                    dao::$errors["begin$executionID"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
                 }
 
                 if($end > $parentEnd)
                 {
-                    dao::$errors["ends$executionID"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                    dao::$errors["end$executionID"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
                 }
             }
 
@@ -893,24 +893,24 @@ class executionModel extends model
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
             }
 
-            if(empty($executions[$executionID]->begin)) dao::$errors["begins{$executionID}"][] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
-            if(empty($executions[$executionID]->end))   dao::$errors["ends{$executionID}"][]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
+            if(empty($executions[$executionID]->begin)) dao::$errors["begin{$executionID}"][] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
+            if(empty($executions[$executionID]->end))   dao::$errors["end{$executionID}"][]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
 
             /* Project begin and end check. */
             if(!empty($executions[$executionID]->begin) and !empty($executions[$executionID]->end))
             {
                 if($executions[$executionID]->begin > $executions[$executionID]->end)
                 {
-                    dao::$errors["ends{$executionID}"][] = sprintf($this->lang->execution->errorLetterPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
+                    dao::$errors["end{$executionID}"][] = sprintf($this->lang->execution->errorLetterPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
                 }
 
                 if($project and $executions[$executionID]->begin < $project->begin)
                 {
-                    dao::$errors["begins{$executionID}"][] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+                    dao::$errors["begin{$executionID}"][] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
                 }
                 if($project and $executions[$executionID]->end > $project->end)
                 {
-                    dao::$errors["ends{$executionID}"][] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                    dao::$errors["end{$executionID}"][] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
                 }
             }
         }
@@ -996,6 +996,7 @@ class executionModel extends model
 
             $allChanges[$executionID] = common::createChanges($oldExecution, $execution);
         }
+
         $this->fixOrder();
         return $allChanges;
     }
