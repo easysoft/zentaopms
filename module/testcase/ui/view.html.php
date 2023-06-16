@@ -212,7 +212,7 @@ else
                     $moduleItems[] = $canBrowseTestCase ? a(set::href($this->createLink('testcase', 'browse', "productID={$case->product}&branch={$module->branch}&browseType=byModule&param={$module->id}")), $module->name) : $module->name;
                 }
             }
-            else if($tab == project)
+            else if($tab == 'project')
             {
                 $moduleItems[] = $canBrowseProjectTestCase ? a(set::href($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id")), $module->name) : $module->name;
             }
