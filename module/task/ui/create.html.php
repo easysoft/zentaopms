@@ -238,7 +238,7 @@ formPanel
                     set::id('story'),
                     set::name('story'),
                     set::value($task->story),
-                    set::items($stories),
+                    set::items(array_filter($stories)),
                     on::change('setStoryRelated'),
                 ),
                 $storyPreviewBtn,
@@ -290,7 +290,7 @@ formPanel
                 select
                 (
                     set::name('pri'),
-                    set::items($lang->task->priList),
+                    set::items(array_filter($lang->task->priList)),
                 ),
                 $lang->task->estimate,
                 inputControl
