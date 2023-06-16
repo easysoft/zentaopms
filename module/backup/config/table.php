@@ -17,13 +17,13 @@ $config->backup->dtable->fieldList['file']['group'] = 1;
 
 $config->backup->dtable->fieldList['allCount']['title'] = $lang->backup->allCount;
 $config->backup->dtable->fieldList['allCount']['name']  = 'allCount';
-$config->backup->dtable->fieldList['allCount']['type']  = 'text';
+$config->backup->dtable->fieldList['allCount']['type']  = 'count';
 $config->backup->dtable->fieldList['allCount']['show']  = true;
 $config->backup->dtable->fieldList['allCount']['group'] = 2;
 
 $config->backup->dtable->fieldList['count']['title'] = $lang->backup->count;
 $config->backup->dtable->fieldList['count']['name']  = 'count';
-$config->backup->dtable->fieldList['count']['type']  = 'text';
+$config->backup->dtable->fieldList['count']['type']  = 'count';
 $config->backup->dtable->fieldList['count']['show']  = true;
 $config->backup->dtable->fieldList['count']['group'] = 3;
 
