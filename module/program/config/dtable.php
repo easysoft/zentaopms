@@ -63,6 +63,7 @@ $config->program->productview->dtable->fieldList = array();
 $config->program->productview->dtable->fieldList['name']['name']         = 'name';
 $config->program->productview->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->productview->dtable->fieldList['name']['type']         = 'title';
+$config->program->productview->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(value, row){return window.iconRenderProductView(value, row);}>RAWJS';
 $config->program->productview->dtable->fieldList['name']['link']         = array('module' => 'product', 'method' => 'browse', 'params' => 'productID={id}');
 $config->program->productview->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->productview->dtable->fieldList['name']['checkbox']     = true;
