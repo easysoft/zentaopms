@@ -9313,7 +9313,7 @@ class upgradeModel extends model
      */
     public function processDeployStepAction()
     {
-        $steps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->where('deleted')->fetchAll('id');
-        $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('deploystep')->andWhere('objectID')->notIN(array_keys($steps))->exec();
+        $steps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->fetchAll('id');
+        if($steps) $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('deploystep')->andWhere('objectID')->notIN(array_keys($steps))->exec();
     }
 }
