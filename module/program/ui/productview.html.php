@@ -45,7 +45,7 @@ $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
     $item->totalStories         = $totalStories;
     $item->closedStoryRate      = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100);
     $item->totalPlans           = $program['plans'];
-    $item->totalProjects        = rand(0, 100);
+    $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
     $item->testCaseCoverage     = $program['coverage'];
     $item->totalActivatedBugs   = 0;
@@ -79,7 +79,7 @@ $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$li
     $item->totalStories         = $totalStories;
     $item->closedStoryRate      = ($totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100);
     $item->totalPlans           = $line['plans'];
-    $item->totalProjects        = rand(0, 100);
+    $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
     $item->testCaseCoverage     = $line['coverage'];
     $item->totalActivatedBugs   = 0;
@@ -109,7 +109,7 @@ $fnGenerateProductRowData = function($lineID, $product) use ($users)
     $item->totalStories         = $totalStories;
     $item->closedStoryRate      = empty($totalStories) ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100;
     $item->totalPlans           = $product->plans;
-    $item->totalProjects        = rand(0, 100);
+    $item->totalProjects        = $product->projects;
     $item->totalExecutions      = $product->executions;
     $item->testCaseCoverage     = $product->coverage;
     $item->totalActivatedBugs   = $product->activeBugs;
@@ -142,11 +142,13 @@ foreach($productStructure as $programID => $program)
     $totalExecutions = 0;
     $totalBugs       = 0;
     $totalActiveBugs = 0;
+    $totalProjects   = 0;
     foreach($program as $lineID => $line)
     {
         $totalProductExecutions = 0;
         $totalProductBugs       = 0;
         $totalProductActiveBugs = 0;
+        $totalProductProjects   = 0;
         if(isset($line['products']) && is_array($line['products']))
         {
             /* Generate product row data. */
@@ -158,6 +160,7 @@ foreach($productStructure as $programID => $program)
                     $totalProductExecutions += $productRow->totalExecutions;
                     $totalProductBugs       += $productRow->totalBugs;
                     $totalProductActiveBugs += $productRow->totalActivatedBugs;
+                    $totalProductProjects   += $productRow->totalProjects;
 
                     $data[] = $productRow;
                 }
@@ -171,6 +174,7 @@ foreach($productStructure as $programID => $program)
             $lineRow->totalExecutions    = $totalProductExecutions;
             $lineRow->totalBugs          = $totalProductBugs;
             $lineRow->totalActivatedBugs = $totalProductActiveBugs;
+            $lineRow->totalProjects      = $totalProductProjects;
 
             $data[] = $lineRow;
         }
@@ -178,6 +182,7 @@ foreach($productStructure as $programID => $program)
         $totalExecutions += $totalProductExecutions;
         $totalBugs       += $totalProductBugs;
         $totalActiveBugs += $totalProductActiveBugs;
+        $totalProjects   += $totalProductProjects;
     }
 
     /* Generate program row data. */
@@ -187,6 +192,7 @@ foreach($productStructure as $programID => $program)
         $programRow->totalExecutions    = $totalExecutions;
         $programRow->totalBugs          = $totalBugs;
         $programRow->totalActivatedBugs = $totalActiveBugs;
+        $programRow->totalProjects      = $totalProjects;
 
         $data[] = $programRow;
     }

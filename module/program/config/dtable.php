@@ -116,7 +116,7 @@ $config->program->productview->dtable->fieldList['totalPlans']['show']     = tru
 $config->program->productview->dtable->fieldList['totalPlans']['sortType'] = true;
 $config->program->productview->dtable->fieldList['totalPlans']['group']    = 'g5';
 
-$config->program->productview->dtable->fieldList['totalProjects']['name']     = 'projects';
+$config->program->productview->dtable->fieldList['totalProjects']['name']     = 'totalProjects';
 $config->program->productview->dtable->fieldList['totalProjects']['title']    = $lang->program->project;
 $config->program->productview->dtable->fieldList['totalProjects']['type']     = 'text';
 $config->program->productview->dtable->fieldList['totalProjects']['sortType'] = true;
