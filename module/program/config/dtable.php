@@ -63,6 +63,7 @@ $config->program->productview->dtable->fieldList = array();
 $config->program->productview->dtable->fieldList['name']['name']         = 'name';
 $config->program->productview->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->program->productview->dtable->fieldList['name']['type']         = 'title';
+$config->program->productview->dtable->fieldList['name']['link']         = array('module' => 'product', 'method' => 'browse', 'params' => 'productID={id}');
 $config->program->productview->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->productview->dtable->fieldList['name']['checkbox']     = true;
 $config->program->productview->dtable->fieldList['name']['show']         = true;
@@ -118,7 +119,8 @@ $config->program->productview->dtable->fieldList['totalPlans']['group']    = 'g5
 
 $config->program->productview->dtable->fieldList['totalProjects']['name']     = 'totalProjects';
 $config->program->productview->dtable->fieldList['totalProjects']['title']    = $lang->program->project;
-$config->program->productview->dtable->fieldList['totalProjects']['type']     = 'text';
+$config->program->productview->dtable->fieldList['totalProjects']['type']     = 'number';
+$config->program->productview->dtable->fieldList['totalProjects']['link']     = array('module' => 'product', 'method' => 'project', 'params' => 'status=all&&productID={id}');
 $config->program->productview->dtable->fieldList['totalProjects']['sortType'] = true;
 $config->program->productview->dtable->fieldList['totalProjects']['group']    = 'g5';
 
