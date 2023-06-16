@@ -251,3 +251,16 @@ $config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']
 
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon'] = 'split';
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->story->subdivide;
+
+$app->loadLang('task');
+$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['icon'] = 'plus';
+$config->story->dtable->fieldList['actions']['actionsMap']['createTask']['hint'] = $lang->task->create;
+
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['icon'] = 'pluses';
+$config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['hint'] = $lang->task->batchCreate;
+
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['icon'] = 'estimate';
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hint'] = $lang->task->batchCreate;
+
+$config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
+$config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlink;
