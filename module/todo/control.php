@@ -197,7 +197,7 @@ class todo extends control
 
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
         if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -219,7 +219,7 @@ class todo extends control
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -247,7 +247,7 @@ class todo extends control
         }
 
         if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -373,7 +373,7 @@ class todo extends control
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
 
-            $cancelURL   = $this->server->http_referer;
+            $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
             return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
         }
 
@@ -382,7 +382,7 @@ class todo extends control
             return $this->send(array('status' => 'success'));
         }
         if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
