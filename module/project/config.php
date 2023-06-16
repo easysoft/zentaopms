@@ -328,9 +328,10 @@ $config->project->actionList['edit']['icon'] = 'edit';
 $config->project->actionList['edit']['hint'] = $lang->project->edit;
 $config->project->actionList['edit']['url']  = array('module' => 'project', 'method' => 'edit', 'params' => 'projectID={id}');
 
-$config->project->actionList['pause']['icon'] = 'pause';
-$config->project->actionList['pause']['hint'] = $lang->project->suspend;
-$config->project->actionList['pause']['url']  = helper::createLink('project', 'suspend', 'projectID={id}', '', true);
+$config->project->actionList['pause']['icon']        = 'pause';
+$config->project->actionList['pause']['hint']        = $lang->project->suspend;
+$config->project->actionList['pause']['url']         = helper::createLink('project', 'suspend', 'projectID={id}', '', true);
+$config->project->actionList['pause']['data-toggle'] = 'modal';
 
 $config->project->actionList['group']['icon'] = 'group';
 $config->project->actionList['group']['hint'] = $lang->project->team;

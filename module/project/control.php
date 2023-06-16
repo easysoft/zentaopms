@@ -1555,9 +1555,7 @@ class project extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterStart($project, $changes, $this->post->comment);
-            $response['closeModal'] = true;
-            $response['load']       = true;
-            return $this->sendSuccess($response);
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildStartForm($project);
@@ -1572,10 +1570,8 @@ class project extends control
      * @access public
      * @return void
      */
-    public function suspend(string $projectID)
+    public function suspend(int $projectID)
     {
-        $projectID = (int)$projectID;
-
         /* Processing parameter passing while suspend project. */
         if(!empty($_POST))
         {
@@ -1584,12 +1580,13 @@ class project extends control
 
             /* Update the database status to suspended. */
             $changes = $this->project->suspend($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the suspended. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterSuspend($projectID, $changes, $comment);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildSuspendForm($projectID);
@@ -1650,9 +1647,7 @@ class project extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterActivate($projectID, $changes);
-            $response['closeModal'] = true;
-            $response['load']       = true;
-            return $this->sendSuccess($response);
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildActivateForm($project);
