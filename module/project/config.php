@@ -315,9 +315,10 @@ $config->project->actionList['start']['hint']        = $lang->project->start;
 $config->project->actionList['start']['url']         = array('module' => 'project', 'method' => 'start', 'params' => 'projectID={id}');
 $config->project->actionList['start']['data-toggle'] = 'modal';
 
-$config->project->actionList['close']['icon'] = 'off';
-$config->project->actionList['close']['hint'] = $lang->project->close;
-$config->project->actionList['close']['url']  = helper::createLink('project', 'close', 'projectID={id}', '', true);
+$config->project->actionList['close']['icon']        = 'off';
+$config->project->actionList['close']['hint']        = $lang->project->close;
+$config->project->actionList['close']['url']         = helper::createLink('project', 'close', 'projectID={id}', '', true);
+$config->project->actionList['close']['data-toggle'] = 'modal';
 
 $config->project->actionList['activate']['icon']        = 'magic';
 $config->project->actionList['activate']['hint']        = $lang->project->activate;

@@ -1565,7 +1565,7 @@ class project extends control
      * 挂起一个项目
      * Suspend a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      *
      * @access public
      * @return void
@@ -1596,15 +1596,13 @@ class project extends control
      * 关闭一个项目
      * Close a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      *
      * @return void
      */
-    public function close(string $projectID)
+    public function close(int $projectID)
     {
-        $projectID = (int)$projectID;
-
         /* Processing parameter passing while close project. */
         if(!empty($_POST))
         {
@@ -1613,12 +1611,13 @@ class project extends control
 
             /* Update the database status to closed. */
             $changes = $this->project->close($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the closed. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
-            return print(js::reload('parent.parent'));
+
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildClosedForm($projectID);
