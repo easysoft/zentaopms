@@ -2409,7 +2409,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('openedDate')->fetchAll();
+        return $this->dao->select("DATE_FORMAT(openedDate, '%Y-%m-%d') AS name, COUNT(*) AS value")->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('openedDate')->fetchAll();
     }
 
     /**
@@ -2420,7 +2420,7 @@ class bugModel extends model
      */
     public function getDataOfResolvedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(resolvedDate, '%Y-%m-%d') AS name, COUNT(*) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('resolvedDate')
@@ -2435,7 +2435,7 @@ class bugModel extends model
      */
     public function getDataOfClosedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(closedDate, '%Y-%m-%d') AS name, COUNT(*) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('closedDate')->fetchAll();
