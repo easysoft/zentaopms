@@ -278,7 +278,7 @@ class todoZen extends todo
 
         if($todo->end < $todo->begin)
         {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
         }
 
