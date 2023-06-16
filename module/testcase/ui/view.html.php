@@ -12,7 +12,6 @@ namespace zin;
 
 $canCreateCase = hasPriv('testcase', 'create');
 
-
 $stepID = $childID = 0;
 $steps = array();
 foreach($case->steps as $step)
@@ -337,6 +336,7 @@ detailHeader
             set::text($case->title)
         )
     ),
+    $isInModal ? to::prefix('') : null,
     !$isInModal ? to::suffix
     (
         btn
@@ -416,10 +416,10 @@ detailBody
         (
             floatToolbar
             (
-                set::prefix
+                !$isInModal ? set::prefix
                 (
                     array(array('icon' => 'back', 'text' => $lang->goback))
-                ),
+                ) : null,
                 set::main($this->testcase->buildOperateMenu($case, 'view')),
                 set::suffix
                 (

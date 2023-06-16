@@ -298,7 +298,7 @@ detailBody
     )
 );
 
-render();
+render(isAjaxRequest('modal') ? 'modalDialog' : 'page');
 
 /**
  * Build content of table data.
