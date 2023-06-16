@@ -383,8 +383,6 @@ class dbh
             case 'dm':
                 /* DATE convert to TO_CHAR. */
                 $sql = preg_replace("/\bDATE\(([^)]*)\)/",  "TO_CHAR($1, 'yyyy-mm-dd')", $sql, -1);
-                /* DATE_FORMAT(openedDate, '%Y-%m-%d') convert to TO_CHAR(openedDate, 'yyyy-mm-dd'). */
-                $sql = preg_replace('/DATE_FORMAT\((\w+),\s*'%Y-%m-%d'\)/',  "TO_CHAR($1, \'yyyy-mm-dd\')", $sql, -1);
 
                 return $sql;
 
