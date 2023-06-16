@@ -634,6 +634,10 @@ class upgradeModel extends model
                 if($this->config->edition != 'open') $this->processDataset();
                 $this->setURSwitchStatus($fromVersion);
                 break;
+            case '18_4_beta1':
+                if($this->config->edition != 'open') $this->processDeployStepAction();
+                break;
+
         }
 
         $this->deletePatch();
@@ -9299,5 +9303,17 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Delete deploystep action where id not in zt_deploy.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processDeployStepAction()
+    {
+        $steps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->where('deleted')->fetchAll('id');
+        $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('deploystep')->andWhere('objectID')->notIN(array_keys($steps))->exec();
     }
 }
