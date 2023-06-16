@@ -267,9 +267,10 @@ class todo extends control
 
             $todo->id   = $todoID;
             $isAssigned = $this->todoZen->doAssignTo($todo);
-            if(!$isAssigned) return print(js::error(dao::getError()));
+            if(!$isAssigned) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return print(js::reload('parent.parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
         $this->todoZen->buildAssignToView($todoID);

@@ -46,6 +46,7 @@ $config->todo->objectList['testtask'] = 'testtasks';
 
 $config->todo->sessionUri = array();
 $config->todo->sessionUri['bugList']      = 'qa';
+$config->todo->sessionUri['todoList']     = 'my';
 $config->todo->sessionUri['taskList']     = 'execution';
 $config->todo->sessionUri['storyList']    = 'product';
 $config->todo->sessionUri['testtaskList'] = 'qa';

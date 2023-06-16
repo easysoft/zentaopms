@@ -91,4 +91,4 @@ formPanel
     )
 );
 
-render();
+render(isAjaxRequest('modal') ? 'modalDialog' : 'page');
