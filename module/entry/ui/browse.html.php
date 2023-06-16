@@ -29,6 +29,8 @@ dtable
 (
     set::cols($this->config->entry->dtable->fieldList),
     set::data($tableData),
+    set::fixedLeftWidth('0.33'),
+    set::footer(jsRaw("function(){return window.footerGenerator.call(this, '" . sprintf($lang->entry->summaryTip, count($tableData)) . "');}")),
     set::footPager(usePager()),
 );
 

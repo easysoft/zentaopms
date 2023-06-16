@@ -21,11 +21,13 @@ $config->entry->dtable = new stdclass();
 $config->entry->dtable->fieldList['id']['name']     = 'id';
 $config->entry->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->entry->dtable->fieldList['id']['type']     = 'id';
+$config->entry->dtable->fieldList['id']['fixed']    = 'left';
 $config->entry->dtable->fieldList['id']['sortType'] = true;
 
 $config->entry->dtable->fieldList['name']['name']     = 'name';
 $config->entry->dtable->fieldList['name']['title']    = $lang->entry->name;
 $config->entry->dtable->fieldList['name']['type']     = 'text';
+$config->entry->dtable->fieldList['name']['fixed']    = 'left';
 $config->entry->dtable->fieldList['name']['sortType'] = true;
 
 $config->entry->dtable->fieldList['code']['name']     = 'code';
