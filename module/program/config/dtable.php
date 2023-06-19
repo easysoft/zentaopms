@@ -319,3 +319,134 @@ $config->program->projectView->dtable->fieldList['actions']['actionsMap'] = arra
     'project_whitelist' => array('icon'  => 'icon-shield-check', 'hint' => $lang->project->whitelist),
     'project_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->project->delete)
 );
+
+/* DataTable fields of browse View. */
+$config->program->browse = new stdClass();
+$config->program->browse->dtable = new stdClass();
+$config->program->browse->dtable->fieldList = array();
+
+$config->program->browse->dtable->fieldList['name']['name']         = 'name';
+$config->program->browse->dtable->fieldList['name']['title']        = $lang->nameAB;
+$config->program->browse->dtable->fieldList['name']['width']        = 200;
+$config->program->browse->dtable->fieldList['name']['type']         = 'link';
+$config->program->browse->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'browse', 'projectID={id}')}; if(row.data.type == 'program') return {url:$.createLink('program', 'view', 'programID={id}')};}>RAWJS";
+$config->program->browse->dtable->fieldList['name']['flex']         = 1;
+$config->program->browse->dtable->fieldList['name']['nestedToggle'] = true;
+$config->program->browse->dtable->fieldList['name']['checkbox']     = true;
+$config->program->browse->dtable->fieldList['name']['sortType']     = true;
+$config->program->browse->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+$config->program->browse->dtable->fieldList['name']['show']         = true;
+$config->program->browse->dtable->fieldList['name']['group']        = 1;
+
+$config->program->browse->dtable->fieldList['status']['name']      = 'status';
+$config->program->browse->dtable->fieldList['status']['title']     = $lang->program->status;
+$config->program->browse->dtable->fieldList['status']['minWidth']  = 60;
+$config->program->browse->dtable->fieldList['status']['type']      = 'status';
+$config->program->browse->dtable->fieldList['status']['sortType']  = true;
+$config->program->browse->dtable->fieldList['status']['statusMap'] = $lang->program->statusList;
+$config->program->browse->dtable->fieldList['status']['show']      = true;
+$config->program->browse->dtable->fieldList['status']['group']     = 2;
+
+$config->program->browse->dtable->fieldList['PM']['name']     = 'PM';
+$config->program->browse->dtable->fieldList['PM']['title']    = $lang->program->PM;
+$config->program->browse->dtable->fieldList['PM']['minWidth'] = 80;
+$config->program->browse->dtable->fieldList['PM']['type']     = 'avatarBtn';
+$config->program->browse->dtable->fieldList['PM']['sortType'] = true;
+$config->program->browse->dtable->fieldList['PM']['show']     = true;
+$config->program->browse->dtable->fieldList['PM']['group']    = 3;
+
+$config->program->browse->dtable->fieldList['budget']['name']     = 'budget';
+$config->program->browse->dtable->fieldList['budget']['title']    = $lang->program->budget;
+$config->program->browse->dtable->fieldList['budget']['width']    = 90;
+$config->program->browse->dtable->fieldList['budget']['type']     = 'format';
+$config->program->browse->dtable->fieldList['budget']['sortType'] = true;
+$config->program->browse->dtable->fieldList['budget']['show']     = true;
+$config->program->browse->dtable->fieldList['budget']['group']    = 4;
+
+$config->program->browse->dtable->fieldList['invested']['name']     = 'invested';
+$config->program->browse->dtable->fieldList['invested']['title']    = $lang->program->invested;
+$config->program->browse->dtable->fieldList['invested']['minWidth'] = 70;
+$config->program->browse->dtable->fieldList['invested']['type']     = 'format';
+$config->program->browse->dtable->fieldList['invested']['sortType'] = true;
+$config->program->browse->dtable->fieldList['invested']['show']     = true;
+$config->program->browse->dtable->fieldList['invested']['group']    = 4;
+
+$config->program->browse->dtable->fieldList['openedDate']['name']     = 'openedDate';
+$config->program->browse->dtable->fieldList['openedDate']['title']    = $lang->program->openedDate;
+$config->program->browse->dtable->fieldList['openedDate']['type']     = 'date';
+$config->program->browse->dtable->fieldList['openedDate']['sortType'] = true;
+$config->program->browse->dtable->fieldList['openedDate']['minWidth'] = 90;
+$config->program->browse->dtable->fieldList['openedDate']['group']    = 5;
+
+$config->program->browse->dtable->fieldList['openedBy']['name']     = 'openedBy';
+$config->program->browse->dtable->fieldList['openedBy']['title']    = $lang->program->openedBy;
+$config->program->browse->dtable->fieldList['openedBy']['type']     = 'user';
+$config->program->browse->dtable->fieldList['openedBy']['sortType'] = true;
+$config->program->browse->dtable->fieldList['openedBy']['minWidth'] = 80;
+$config->program->browse->dtable->fieldList['openedBy']['group']    = 5;
+
+$config->program->browse->dtable->fieldList['begin']['name']     = 'begin';
+$config->program->browse->dtable->fieldList['begin']['title']    = $lang->program->begin;
+$config->program->browse->dtable->fieldList['begin']['minWidth'] = 90;
+$config->program->browse->dtable->fieldList['begin']['type']     = 'date';
+$config->program->browse->dtable->fieldList['begin']['sortType'] = true;
+$config->program->browse->dtable->fieldList['begin']['show']     = true;
+$config->program->browse->dtable->fieldList['begin']['group']    = 6;
+
+$config->program->browse->dtable->fieldList['end']['name']     = 'end';
+$config->program->browse->dtable->fieldList['end']['title']    = $lang->program->end;
+$config->program->browse->dtable->fieldList['end']['minWidth'] = 90;
+$config->program->browse->dtable->fieldList['end']['type']     = 'date';
+$config->program->browse->dtable->fieldList['end']['sortType'] = true;
+$config->program->browse->dtable->fieldList['end']['show']     = true;
+$config->program->browse->dtable->fieldList['end']['group']    = 6;
+
+$config->program->browse->dtable->fieldList['realBegan']['name']     = 'realBegan';
+$config->program->browse->dtable->fieldList['realBegan']['title']    = $lang->program->realBeganAB;
+$config->program->browse->dtable->fieldList['realBegan']['minWidth'] = 90;
+$config->program->browse->dtable->fieldList['realBegan']['type']     = 'date';
+$config->program->browse->dtable->fieldList['realBegan']['sortType'] = true;
+$config->program->browse->dtable->fieldList['realBegan']['group']    = 7;
+
+$config->program->browse->dtable->fieldList['realEnd']['name']     = 'realEnd';
+$config->program->browse->dtable->fieldList['realEnd']['title']    = $lang->program->realEndAB;
+$config->program->browse->dtable->fieldList['realEnd']['minWidth'] = 90;
+$config->program->browse->dtable->fieldList['realEnd']['type']     = 'date';
+$config->program->browse->dtable->fieldList['realEnd']['sortType'] = true;
+$config->program->browse->dtable->fieldList['realEnd']['group']    = 7;
+
+$config->program->browse->dtable->fieldList['progress']['name']     = 'progress';
+$config->program->browse->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
+$config->program->browse->dtable->fieldList['progress']['minWidth'] = 100;
+$config->program->browse->dtable->fieldList['progress']['type']     = 'progress';
+$config->program->browse->dtable->fieldList['progress']['show']     = true;
+$config->program->browse->dtable->fieldList['progress']['group']    = 8;
+
+$config->program->browse->dtable->fieldList['actions']['name']       = 'actions';
+$config->program->browse->dtable->fieldList['actions']['title']      = $lang->actions;
+$config->program->browse->dtable->fieldList['actions']['width']      = 160;
+$config->program->browse->dtable->fieldList['actions']['type']       = 'actions';
+$config->program->browse->dtable->fieldList['actions']['fixed']      = 'right';
+$config->program->browse->dtable->fieldList['actions']['actionsMap'] = array
+(
+    'program_start'     => array('icon'  => 'icon-start',        'hint' => $lang->program->start),
+    'program_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->program->suspend),
+    'program_close'     => array('icon'  => 'icon-off',          'hint' => $lang->program->close),
+    'program_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->program->activate),
+    'program_other'     => array('caret' => true,                'hint' => $lang->other, 'type' => 'dropdown'),
+    'program_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->program->edit),
+    'program_create'    => array('icon'  => 'icon-split',        'hint' => $lang->program->create),
+    'program_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->program->delete),
+    'project_start'     => array('icon'  => 'icon-start',        'hint' => $lang->project->start),
+    'project_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->project->suspend),
+    'project_close'     => array('icon'  => 'icon-off',          'hint' => $lang->project->close),
+    'project_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->project->activate),
+    'project_other'     => array('caret' => true,                'hint' => $lang->project->other, 'type' => 'dropdown'),
+    'project_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->project->edit),
+    'project_team'      => array('icon'  => 'icon-groups',       'hint' => $lang->project->manageMembers),
+    'project_group'     => array('icon'  => 'icon-lock',         'hint' => $lang->project->group),
+    'project_more'      => array('icon'  => 'icon-ellipsis-v',   'hint' => $lang->project->moreActions, 'type' => 'dropdown', 'caret' => false),
+    'project_link'      => array('icon'  => 'icon-link',         'hint' => $lang->project->manageProducts),
+    'project_whitelist' => array('icon'  => 'icon-shield-check', 'hint' => $lang->project->whitelist),
+    'project_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->project->delete)
+);

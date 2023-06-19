@@ -145,12 +145,6 @@ class datatable extends control
         $setting = '';
         if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
 
-        if($module == 'program' and $method == 'browse')
-        {
-            $method  = 'projectView'; /* Use projectView datatable setting in program module . */
-            $setting = $this->config->datatable->programProjectView->cols; /* Use the customized table data from database. */
-        }
-
         if(empty($setting))
         {
             $cols = $this->datatable->getFieldList($module, $method);
