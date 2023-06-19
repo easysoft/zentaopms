@@ -41,8 +41,32 @@ class backBtn extends btn
      */
     protected function getProps(): array
     {
+        global $app;
+
+        $backs = array(
+            'task'       => 'execution-task,my-work',
+            'story'      => 'product-browse,projectstory-story,execution-story,my-work',
+            'bug'        => 'bug->browse,project-bug,my-work',
+            'testcase'   => 'testcase-browse,project-testcase,my-work',
+            'testsuite'  => 'testsuite-browse',
+            'testreport' => 'testreport-browse,project-testreport',
+            'doc'        => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace'
+        );
+
         $props = parent::getProps();
-        $props['data-back'] = $this->prop('back');
+        if($this->prop('back') != 'APP')
+        {
+            $props['data-back'] = $this->prop('back');
+        }
+        elseif(isset($backs[$app->rawModule]))
+        {
+            $props['data-back'] = $backs[$app->rawModule];
+        }
+        elseif(!$this->prop('back'))
+        {
+            $props['data-back'] = 'GLOBAL';
+        }
+
         return $props;
     }
 
