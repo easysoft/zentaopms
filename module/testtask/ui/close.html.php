@@ -10,17 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($testtask->name);
+to::header
+(
+    $lang->testtask->closeAction,
+    entityLabel
+    (
+        set::entityID($testtask->id),
+        set::level(1),
+        set::text($testtask->name),
+        set::reverse(true)
+    )
+);
 
 form
 (
-    formGroup
-    (
-        set::label($lang->testtask->status),
-        set::name('status'),
-        set::value('done'),
-        set::class('hidden'),
-    ),
     formGroup
     (
         set::label($lang->testtask->realFinishedDate),
@@ -48,11 +51,12 @@ form
                 set::value($testtask->mailto ? tr_replace(' ', '', $testtask->mailto) : ''),
                 set::multiple(true),
             ),
-            select
+            $contactList ? select
             (
                 set::name('contact'),
                 set::items($contactList),
-            )
+                on::change("setMailto('mailto', this.value)"),
+            ) : null
         )
     ),
     set::actions(array('submit'))

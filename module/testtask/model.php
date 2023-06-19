@@ -852,7 +852,7 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
-            ->setDefault('status', 'done')
+            ->add('status', 'done')
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('comment,uid')
