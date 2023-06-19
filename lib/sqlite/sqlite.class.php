@@ -56,7 +56,7 @@ class sqlite
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($params)
     {
         global $app, $config, $dbh;
         $this->app        = $app;
@@ -64,7 +64,7 @@ class sqlite
         $this->config     = $config;
         $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
 
-        $this->connectSqlite();
+        $this->connectSqlite($params->file);
     }
 
     /**
