@@ -14,6 +14,7 @@ class entityLabel extends wg
         'textClass?: string',    // 文本样式类
         'idClass?: string',      // 编号样式类
         'href?: string',         // 实体链接
+        'labelProps?: array'     // 标签属性
     );
 
     protected static $defineBlocks = array(
@@ -49,21 +50,28 @@ class entityLabel extends wg
 
     private function buildEntityName(): wg
     {
-        $text      = $this->prop('text');
-        $level     = $this->prop('level');
-        $className = $this->prop('textClass');
-        $href      = $this->prop('href');
+        $text       = $this->prop('text');
+        $level      = $this->prop('level');
+        $className  = $this->prop('textClass');
+        $href       = $this->prop('href');
+        $labelProps = $this->prop('labelProps');
 
         $titleClass = empty($level)
             ? "article-content"
             : "article-h$level";
 
-        if(empty($href)) return div(setClass($titleClass, $className), $text);
+        if(empty($href)) return div
+        (
+            setClass($titleClass, $className),
+            set($labelProps),
+            $text
+        );
 
         return a
         (
             setClass($titleClass, $className),
             set::href($href),
+            set($labelProps),
             $text
         );
     }
