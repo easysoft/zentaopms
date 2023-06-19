@@ -250,7 +250,7 @@ class product extends control
 
         /* Get stories. */
         $projectProducts = array();
-        if($isProjectStory and $storyType == 'story')
+        if($isProjectStory)
         {
             $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 

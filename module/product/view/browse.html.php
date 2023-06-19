@@ -73,7 +73,7 @@ js::set('vision',        $this->config->vision);
   </div>
   <?php endif;?>
   <div class="btn-toolbar pull-left">
-    <?php if($isProjectStory): ?>
+    <?php if($isProjectStory):?>
     <?php if(!empty($project->hasProduct)):?>
     <div class='btn-group'>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><div class='text' style="overflow: hidden;" title='<?php echo $productName;?>'><?php echo $productName;?></div> <span class='caret'></span></a>
@@ -103,6 +103,12 @@ js::set('vision',        $this->config->vision);
     <?php
     if(!commonModel::isTutorialMode())
     {
+        if($isProjectStory and $storyType == 'requirement')
+        {
+            unset($lang->projectstory->featureBar['story']['linkedExecution']);
+            unset($lang->projectstory->featureBar['story']['unlinkedExecution']);
+        }
+
         foreach(customModel::getFeatureMenu($this->app->rawModule, $this->app->rawMethod) as $menuItem)
         {
             if(isset($menuItem->hidden)) continue;
