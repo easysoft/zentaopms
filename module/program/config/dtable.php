@@ -174,7 +174,7 @@ $config->program->productview->dtable->fieldList['totalReleases']['sortType'] = 
 $config->program->productview->dtable->fieldList['totalReleases']['group']    = 'g8';
 
 $config->program->productview->dtable->fieldList['latestReleaseDate']['name']     = 'latestReleaseDate';
-$config->program->productview->dtable->fieldList['latestReleaseDate']['title']    = $lang->program->latestRelease;
+$config->program->productview->dtable->fieldList['latestReleaseDate']['title']    = $lang->program->latestReleaseDate;
 $config->program->productview->dtable->fieldList['latestReleaseDate']['minWidth'] = 120;
 $config->program->productview->dtable->fieldList['latestReleaseDate']['type']     = 'date';
 $config->program->productview->dtable->fieldList['latestReleaseDate']['sortType'] = true;
