@@ -331,9 +331,10 @@ class bug extends control
         }
 
         /* Show the variables associated. */
-        $this->view->title = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
-        $this->view->users = $users;
-        $this->view->bug   = $oldBug;
+        $this->view->title   = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
+        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->users   = $users;
+        $this->view->bug     = $oldBug;
         $this->display();
     }
 
