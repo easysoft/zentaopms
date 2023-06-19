@@ -22,7 +22,16 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     postAndLoadPage($('#toTaskForm').attr('action'), formData);
 
     return false;
-});
+}).on('click', '#linkStoryByPlan button[type="submit"]', function()
+{
+    var planID = $('#plan').val();
+    if(planID)
+    {
+        $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID)});
+    }
+
+    return false;
+})
 
 /**
  * 计算表格信息的统计。
