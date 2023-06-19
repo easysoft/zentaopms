@@ -111,7 +111,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null, $getCodePath = false)
+    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null, $getCodePath = false, $lastSubmitTime = false)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
@@ -152,6 +152,12 @@ class repoModel extends model
 
                     if(!$hasPriv) unset($repos[$i]);
                 }
+            }
+
+            if($lastSubmitTime)
+            {
+                $lastRevision = $this->repoTao->getLastRevision($repo->id);
+                $repo->lastSubmitTime = isset($lastRevision->time) ? $lastRevision->time : '';
             }
 
             if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo, $getCodePath);

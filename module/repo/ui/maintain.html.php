@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
+$batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
+
 foreach($repoList as $repo)
 {
     $jobID       = 0;
@@ -24,12 +27,23 @@ foreach($repoList as $repo)
 
     $repo->productNames = '';
     $productList  = explode(',', str_replace(' ', '', $repo->product));
-    if(isset($productList) and $productList[0])
+    if($productList)
     {
         foreach($productList as $productID)
         {
             if(!isset($products[$productID])) continue;
             $repo->productNames .= ' ' . zget($products, $productID, $productID);
+        }
+    }
+
+    $repo->projectNames = '';
+    $projectList  = explode(',', str_replace(' ', '', $repo->projects));
+    if($projectList)
+    {
+        foreach($projectList as $projectID)
+        {
+            if(!isset($projects[$projectID])) continue;
+            $repo->projectNames .= ' ' . zget($projects, $projectID, $projectID);
         }
     }
 }
@@ -42,30 +56,33 @@ $repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo)
 
 featureBar
 (
-    h::a
-    (
-        setClass('btn btn-active-text'),
-        $lang->repo->maintain,
-        set::href(createLink('repo', 'maintain')),
-    ),
+    set::current('all'),
+    li(searchToggle(set::module('repo')))
 );
 
 toolBar
 (
-    hasPriv('repo', 'import') ? item(set(array
+    !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
     (
-        'text'  => $lang->repo->importAction,
-        'icon'  => 'import',
-        'class' => 'toolbar-item ghost btn btn-default',
-        'url'   => createLink('repo', 'import'),
-    ))) : null,
-    hasPriv('repo', 'create') ? item(set(array
-    (
-        'text'  => $lang->repo->createAction,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('repo', 'create'),
     ))) : null,
+    !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
+    (
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+    ))) : null,
+    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
+    (
+        btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
+        dropDown
+        (
+            btn(setClass('btn primary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::placement('bottom-end'),
+            set::items(array($createItem, $batchCreateItem)),
+        ),
+    ) : null,
 );
 
 dtable

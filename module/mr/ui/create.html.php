@@ -18,6 +18,7 @@ jsVar('branchPrivs', array());
 
 formPanel
 (
+    set::labelWidth('11em'),
     formGroup
     (
         set::width('1/2'),

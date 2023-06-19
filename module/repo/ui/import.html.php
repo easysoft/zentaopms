@@ -28,7 +28,7 @@ featureBar
     (
         setClass('form-title'),
         set::href($this->createLink('repo', 'import')),
-        $lang->repo->importAction,
+        $lang->repo->batchCreate,
     ),
     inputGroup
     (

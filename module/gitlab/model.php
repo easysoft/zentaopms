@@ -1050,10 +1050,10 @@ class gitlabModel extends model
             $requests[$id]['url'] = sprintf($this->getApiRoot($repo->serviceHost, false), "/projects/{$repo->serviceProject}");
         }
         $this->app->loadClass('requests', true);
-        $results = requests::request_multiple($requests);
+        $results = requests::request_multiple($requests, array('timeout' => 2));
         foreach($results as $id => $result)
         {
-            if(!empty($result->body) and substr($result->body, 0, 1) == '{') $this->projects[$repos[$id]->serviceHost][$repos[$id]->serviceProject] = json_decode($result->body);
+            $this->projects[$repos[$id]->serviceHost][$repos[$id]->serviceProject] = (!empty($result->body) and substr($result->body, 0, 1) == '{') ? json_decode($result->body) : '';
         }
     }
 
