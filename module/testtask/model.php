@@ -895,7 +895,7 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->add('id', $taskID)
-            ->setDefault('status', 'blocked')
+            ->add('status', 'blocked')
             ->stripTags($this->config->testtask->editor->block['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
@@ -920,7 +920,7 @@ class testtaskModel extends model
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
-            ->setDefault('status', 'doing')
+            ->add('status', 'doing')
             ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 

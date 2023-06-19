@@ -904,8 +904,7 @@ class testtask extends control
             $message = $this->executeHooks($taskID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         /* Get task info. */
@@ -951,10 +950,10 @@ class testtask extends control
 
         /* Get task info. */
         $testtask  = $this->testtask->getById($taskID);
-        $productID = $this->product->saveVisitState($testtask->product, $this->products);
+        $productID = $this->product->saveVisitState((int)$testtask->product, $this->products);
 
         /* Set menu. */
-        $this->loadModel('qa')->setMenu($this->products, $productID, $testtask->branch, $taskID);
+        $this->loadModel('qa')->setMenu($this->products, $productID, (string)$testtask->branch, $taskID);
 
         $this->view->testtask     = $this->testtask->getById($taskID);
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
@@ -987,8 +986,7 @@ class testtask extends control
             $message = $this->executeHooks($taskID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         /* Get task info. */

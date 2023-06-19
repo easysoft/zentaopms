@@ -10,17 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($testtask->name);
+to::header
+(
+    $lang->testtask->blockAction,
+    entityLabel
+    (
+        set::entityID($testtask->id),
+        set::level(1),
+        set::text($testtask->name),
+        set::reverse(true)
+    )
+);
 
 form
 (
-    formGroup
-    (
-        set::label($lang->testtask->status),
-        set::name('status'),
-        set::value('blocked'),
-        set::class('hidden'),
-    ),
     formGroup
     (
         set::label($lang->comment),
