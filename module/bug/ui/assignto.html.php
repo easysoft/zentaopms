@@ -55,5 +55,6 @@ formPanel
         set::rows(6),
     ),
 );
+history();
 
 render('modalDialog');
