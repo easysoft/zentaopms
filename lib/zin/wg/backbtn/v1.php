@@ -46,7 +46,7 @@ class backBtn extends btn
         $backs = array(
             'task'       => 'execution-task,my-work',
             'story'      => 'product-browse,projectstory-story,execution-story,my-work',
-            'bug'        => 'bug->browse,project-bug,my-work',
+            'bug'        => 'bug-browse,project-bug,my-work',
             'testcase'   => 'testcase-browse,project-testcase,my-work',
             'testsuite'  => 'testsuite-browse',
             'testreport' => 'testreport-browse,project-testreport',
@@ -64,7 +64,7 @@ class backBtn extends btn
         }
         elseif(!$this->prop('back'))
         {
-            $props['data-back'] = 'GLOBAL';
+            $props['data-back'] = 'APP';
         }
 
         return $props;
