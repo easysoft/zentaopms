@@ -92,8 +92,16 @@ class datatableModel extends model
         $datatableId = $module . ucfirst($method);
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+
+
         if(!isset($this->config->$module)) $this->loadModel($module);
         if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);
+
+        if($module == 'program' and $method == 'browse')
+        {
+            $method  = 'projectView'; /* Use projectView datatable setting in program module . */
+            $setting = json_decode($this->config->datatable->programProjectView->cols, true); /* Fetch the customized table data from database. */
+        }
 
         $fieldList = $this->getFieldList($module, $method);
         if(empty($setting))

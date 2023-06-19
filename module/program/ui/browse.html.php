@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-$cols = array_values($config->program->projectView->dtable->fieldList);
+$cols = $this->loadModel('datatable')->getSetting('program');
 $data = array();
 foreach($programs as $program)
 {
