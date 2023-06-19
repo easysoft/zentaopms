@@ -19,3 +19,5 @@ UPDATE `zt_pivot` SET `sql` = 'SELECT \n  t1.name AS  \'产品\', \n  IFNULL(t2.
 WHERE id = 1002;
 UPDATE `zt_chart` SET `settings` = '{\"value\": {\"type\": \"agg\", \"field\": \"taskleft\", \"agg\": \"sum\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}'
 WHERE id = 10112;
+
+UPDATE `zt_priv` SET `edition`=',biz,max,ipd,' where `module`='feedback' and `method`='toUserStory';
