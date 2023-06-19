@@ -19,6 +19,37 @@ featureBar
     li(searchToggle(set::module('executionStory')))
 );
 
+jsVar('executionID', $executionID);
+$linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
+$linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+modal
+(
+    setID('linkStoryByPlan'),
+    set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
+    div
+    (
+        setClass('flex-auto'),
+        icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+        $linkStoryByPlanTips
+    ),
+    form
+    (
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->linkStory),
+        formGroup
+        (
+            set::label($lang->execution->selectStoryPlan),
+            set::required(true),
+            select
+            (
+                set::name('plan'),
+                set::items($allPlans)
+            )
+        ),
+    )
+);
+
 /* Show tool bar. */
 $canModifyProduct = common::canModify('product', $product);
 $canCreate        = $canModifyProduct && hasPriv('story', 'create');
@@ -49,7 +80,7 @@ if(commonModel::isTutorialMode())
 }
 
 $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
-$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal');
+$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 toolbar
 (
