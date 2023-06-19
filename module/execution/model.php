@@ -1262,45 +1262,35 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
-            ->setDefault('realEnd', '')
+            ->setDefault('realEnd', null)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('closedBy', '')
-            ->setDefault('closedDate', '')
+            ->setDefault('closedDate', null)
             ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
+            ->remove('comment,readjustTask')
             ->get();
 
         if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $execution->status = 'wait';
+        $begin = $execution->begin;
+        $end   = $execution->end;
 
-        if(!$this->post->readjustTime)
+        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
+
+        if($oldExecution->grade > 1)
         {
-            unset($execution->begin);
-            unset($execution->end);
-        }
-
-        if($this->post->readjustTime)
-        {
-            $begin = $execution->begin;
-            $end   = $execution->end;
-
-            if($begin > $end) dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
-
-            if($oldExecution->grade > 1)
+            $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+            $parentBegin = $parent->begin;
+            $parentEnd   = $parent->end;
+            if($begin < $parentBegin)
             {
-                $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
-                $parentBegin = $parent->begin;
-                $parentEnd   = $parent->end;
-                if($begin < $parentBegin)
-                {
-                    dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
-                }
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+            }
 
-                if($end > $parentEnd)
-                {
-                    dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
-                }
+            if($end > $parentEnd)
+            {
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
             }
         }
 
@@ -1314,7 +1304,7 @@ class executionModel extends model
             ->exec();
 
         /* Readjust task. */
-        if($this->post->readjustTime and $this->post->readjustTask)
+        if($this->post->readjustTask)
         {
             $beginTimeStamp = strtotime($execution->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)

@@ -72,7 +72,7 @@ class execution extends control
      * @access public
      * @return object current object
      */
-    public function commonAction($executionID = 0, $extra = '')
+    public function commonAction(int $executionID = 0, string $extra = '')
     {
         $this->loadModel('product');
 
@@ -89,7 +89,7 @@ class execution extends control
         $this->execution->setMenu($executionID, $buildID = 0, $extra);
 
         /* Assign. */
-        $this->view->hidden          = !empty($project->hasProduct) ? "" : 'hide';
+        $this->view->hidden          = !empty($project->hasProduct) ? '' : 'hide';
         $this->view->executions      = $this->executions;
         $this->view->execution       = $execution;
         $this->view->childExecutions = $childExecutions;
@@ -2327,7 +2327,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function activate($executionID, $from = 'execution')
+    public function activate(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2336,20 +2336,17 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->activate($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
 
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
+            return $this->sendSuccess($response);
         }
 
         $newBegin = date('Y-m-d');
