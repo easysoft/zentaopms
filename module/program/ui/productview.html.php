@@ -259,7 +259,6 @@ foreach($productStructure as $programID => $program)
 }
 
 /* ZIN: layout. */
-
 featureBar
 (
     set::current($browseType),

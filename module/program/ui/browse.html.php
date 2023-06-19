@@ -69,17 +69,18 @@ toolbar
 (
     item(set
     ([
-        'text' => $lang->program->createProject,
-        'icon' => 'plus',
-        'class'=> 'btn secondary',
-        'url'  => createLink('program', 'exportTable')
+        'text'  => $lang->program->createProject,
+        'icon'  => 'plus',
+        'class' => 'btn secondary',
+        'url'   => $this->createLink('project', 'createGuide'),
+        'data-toggle' => 'modal',
     ])),
     item(set
     ([
         'text' => $lang->program->create,
         'icon' => 'plus',
         'class'=> 'btn primary',
-        'url'  => createLink('program', 'create')
+        'url'  => $this->createLink('program', 'create')
     ])),
 );
 
