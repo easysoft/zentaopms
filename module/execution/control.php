@@ -2283,7 +2283,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function suspend($executionID, $from = 'execution')
+    public function suspend(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2294,7 +2294,7 @@ class execution extends control
             $this->loadModel('action');
             $this->execution->computeBurn($executionID);
             $changes = $this->execution->suspend($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -2306,14 +2306,11 @@ class execution extends control
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
 
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('suspended')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
+            return $this->sendSuccess($response);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->suspend;
