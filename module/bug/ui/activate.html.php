@@ -10,10 +10,22 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($bug->title);
-
-form
+formPanel
 (
+    set::shadow(false),
+    set::title($lang->bug->activate),
+    set::headingClass('status-heading'),
+    to::headingActions
+    (
+        entityLabel
+        (
+            setClass('my-3 gap-x-3'),
+            set::level(1),
+            set::text($bug->title),
+            set::entityID($bug->id),
+            set::reverse(true),
+        )
+    ),
     formGroup
     (
         set::width('1/3'),
@@ -60,7 +72,8 @@ form
             set::name('files[]')
         )
     ),
-    set::actions(array('submit'))
+    set::actions(array('submit')),
+    set::submitBtnText($lang->bug->activate)
 );
 
 h::hr(set::class('mt-6'));
