@@ -56,32 +56,32 @@ $duplicateBug = $bug->duplicateBug ? "#{$bug->duplicateBug}:{$duplicateLink}" : 
 $relatedBugs = array();
 foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
 {
-    $relatedBugs[] = a
+    $relatedBugs[] = div(a
     (
         set('href', $this->createLink('bug', 'view', "bugID={$relatedBugID}")),
         set('data-toggle', 'modal'),
-        "#{$relatedBugID} {$relatedBugTitle}"
-    );
+        span(label(set::class('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
+    ));
 }
 
 $linkMR = array();
 foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
 {
-    $linkMR[] = a
+    $linkMR[] = div(a
     (
         $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
-        "#{$MRID} {$linkMRTitle}"
-    );
+        span(label(set::class('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
+    ));
 }
 
 $linkCommits = array();
 foreach($legendMisc['linkCommit']['text'] as $commit)
 {
-    $linkCommits[] = a
+    $linkCommits[] = div(a
     (
         $canViewRepo ? set('href', $this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")) : null,
-        " {$commit->comment}"
-    );
+        "{$commit->comment}"
+    ));
 }
 
 $legendBasic['os']['text']            = $osHTML;
@@ -217,6 +217,7 @@ detailBody
                 set::title($lang->bug->legendMisc),
                 tableData
                 (
+                    set::useTable(false),
                     buildItems($legendMisc)
                 )
             )
@@ -246,7 +247,8 @@ function buildItems($items)
                 set::href($item['href']),
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 $item['text']
-            ) : $item['text']
+            ) : $item['text'],
+            set::collapse(!empty($item['collapse'])),
         );
     }
 
