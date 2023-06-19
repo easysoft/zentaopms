@@ -1,3 +1,6 @@
+var revisionMap = {};
+var checkedIds  = [];
+
 window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
@@ -71,8 +74,7 @@ $('#repo-select').on('change', function()
  */
 window.checkedChange = function(changes)
 {
-    const dtable   = zui.DTable.query('#repo-comments-table');
-    var checkedIds = dtable == undefined ? [] : dtable.$.getChecks()
+    checkedIds = getCurrentCheckedIds();
 
     if(checkedIds.length < 2)
     {
@@ -93,8 +95,7 @@ window.checkedChange = function(changes)
  */
 window.diffClick = function()
 {
-    const dtable    = zui.DTable.query('#repo-comments-table');
-    var checkedIds  = dtable.$.getChecks();
+    var checkedIds  = getCurrentCheckedIds();
     var newDiffLink = diffLink.replace('{oldRevision}', revisionMap[checkedIds[1]]);
     newDiffLink     = newDiffLink.replace('{newRevision}', revisionMap[checkedIds[0]]);
 
@@ -109,15 +110,26 @@ window.diffClick = function()
  *
  * @param int     rowID
  * @access public
- * @return void
+ * @return bool
  */
 window.canRowCheckable = function(rowID)
 {
-    const dtable    = zui.DTable.query('#repo-comments-table');
-    var checkedIds  = dtable.$.getChecks();
+    const dtable = zui.DTable.query('#repo-comments-table');
+    var   data   = dtable.$.props.data;
 
-    if(checkedIds.length < 2)           return true;
-    if(checkedIds.indexOf(rowID) == -1) return 'disabled'
+    if(data.length == 0) return true;
+
+    if(revisionMap[data[0].id] === undefined)
+    {
+        revisionMap = {};
+        for (var i = 0; i < data.length; i++) revisionMap[data[i].id] = data[i].revision;
+        window.checkedChange();
+    }
+
+    var currentCheckedIds = getCurrentCheckedIds();
+
+    if(currentCheckedIds.length < 2)           return true;
+    if(currentCheckedIds.indexOf(rowID) == -1) return 'disabled'
 
     return true;
 }
@@ -127,27 +139,65 @@ $(function()
     /* Checked the first and second row when page loaded. */
     setTimeout(function()
     {
-        const dtable = zui.DTable.query('#repo-comments-table');
-        if($.cookie.get('sideRepoSelected'))
-        {
-            var sideRepoSelectedAry = $.cookie.get('sideRepoSelected').split(',');
-            dtable.$.toggleCheckRows(sideRepoSelectedAry);
-        }
-        else
-        {
-            dtable.$.toggleCheckRows(Object.keys(revisionMap).slice(0, 2));
-        }
-
-        window.checkedChange();
+        checkColInCurrentPage()
     }, 100);
 })
+
+/**
+ * 选中当前页码对应的行。
+ * Select the rows to the current page.
+ *
+ * @access public
+ * @return void
+ */
+function checkColInCurrentPage()
+{
+    const dtable   = zui.DTable.query('#repo-comments-table');
+    var checkedIds = $.cookie.get('sideRepoSelected') ? $.cookie.get('sideRepoSelected').split(',') : [];
+
+    var currentCheckedIds = [];
+    if(revisionMap[checkedIds[0]]) currentCheckedIds.push(checkedIds[0]);
+    if(revisionMap[checkedIds[1]]) currentCheckedIds.push(checkedIds[1]);
+
+    if(currentCheckedIds)
+    {
+        dtable.$.toggleCheckRows(currentCheckedIds);
+    }
+    else
+    {
+        dtable.$.toggleCheckRows(Object.keys(revisionMap).slice(0, 2));
+    }
+
+    window.checkedChange();
+}
+
+/**
+ * 获取当前页码选中的行。
+ * Get checked rows in current page.
+ *
+ * @access public
+ * @return array
+ */
+function getCurrentCheckedIds()
+{
+    const dtable = zui.DTable.query('#repo-comments-table');
+    if(dtable.$ == undefined) return [];
+
+    var   checkedIds        = dtable.$.getChecks();
+    var   currentCheckedIds = [];
+
+    for (var i = 0; i < checkedIds.length; i++)
+    {
+        if(revisionMap[checkedIds[i]]) currentCheckedIds.push(checkedIds[i]);
+    }
+
+    return currentCheckedIds;
+}
 
 $('.copy-btn').on('click', function()
 {
     var copyText = $(this).parent().parent().find('input');
-    console.log(copyText);
     copyText[0].select();
-    console.log(document.execCommand("Copy"))
     document.execCommand("Copy");
 
     $(this).tooltip('show');

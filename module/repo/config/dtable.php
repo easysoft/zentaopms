@@ -67,7 +67,7 @@ $config->repo->repoDtable = new stdclass();
 
 $config->repo->repoDtable->fieldList['name']['name']     = 'name';
 $config->repo->repoDtable->fieldList['name']['title']    = $lang->repo->name;
-$config->repo->repoDtable->fieldList['name']['type']     = 'title';
+$config->repo->repoDtable->fieldList['name']['minWidth']    = '160';
 $config->repo->repoDtable->fieldList['name']['sortType'] = false;
 $config->repo->repoDtable->fieldList['name']['fixed']    = 'left';
 $config->repo->repoDtable->fieldList['name']['hint']     = true;

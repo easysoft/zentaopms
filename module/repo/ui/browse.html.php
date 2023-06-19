@@ -202,13 +202,10 @@ dtable
 /* zin: Define the sidebar in main content. */
 $encodePath  = $this->repo->encodePath($path);
 $diffLink    = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&oldrevision={oldRevision}&newRevision={newRevision}");
-$revisionMap = array();
-foreach($revisions as $revision) $revisionMap[$revision->id] = $revision->revision;
 
 jsVar('repoID',      $repoID);
 jsVar('branch',      $branchID);
 jsVar('menus',       $menus);
-jsVar('revisionMap', $revisionMap);
 jsVar('diffLink',    $diffLink);
 jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
