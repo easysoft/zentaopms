@@ -1845,7 +1845,7 @@ class executionModel extends model
                     $this->session->set('executionForm', $query->form);
                 }
             }
-            if($this->session->executionQuery == false) $this->session->set('executionQuery', ' 1 = 1');
+            if($this->session->executionQuery === false) $this->session->set('executionQuery', ' 1 = 1');
 
             $executionQuery = $this->session->executionQuery;
             $allProject = "`project` = 'all'";
@@ -1855,7 +1855,6 @@ class executionModel extends model
         }
 
         /* Get involved executions. */
-        $myExecutionIDList = array();
         if($browseType == 'involved')
         {
             $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
@@ -2001,7 +2000,6 @@ class executionModel extends model
             $executionProducts = array();
             if($project->hasProduct and ($project->stageBy == 'product'))
             {
-                $executionList = array();
                 $executionProducts = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
                     ->where('project')->in(array_keys($executions))
@@ -2181,7 +2179,7 @@ class executionModel extends model
         $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
         foreach($productBranchPairs as $product => $branch)
         {
-            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = join(',', array_keys($branches[$product]));
+            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = implode(',', array_keys($branches[$product]));
         }
 
         return $productBranchPairs;
@@ -2329,7 +2327,7 @@ class executionModel extends model
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
 
-        $_SESSION['limitedExecutions'] = join(',', $executions);
+        $_SESSION['limitedExecutions'] = implode(',', $executions);
         return $_SESSION['limitedExecutions'];
     }
 
@@ -2418,7 +2416,7 @@ class executionModel extends model
             }
             else
             {
-                if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
+                if($this->session->taskQuery === false) $this->session->set('taskQuery', ' 1 = 1');
             }
 
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
@@ -2747,7 +2745,7 @@ class executionModel extends model
         }
 
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
+        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();
 
         $existedProducts = array();
         foreach($products as $i => $productID)
@@ -2815,7 +2813,7 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.execution')->in(array_keys($executions))
-            ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . join("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
+            ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . implode("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->fetchGroup('execution', 'id');
         return $tasks;
     }
@@ -3052,7 +3050,7 @@ class executionModel extends model
             }
 
             $taskID = $this->dao->lastInsertID();
-            if($task->story != false) $this->story->setStage($task->story);
+            if($task->story !== false) $this->story->setStage($task->story);
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
             $mails[$key] = new stdClass();
             $mails[$key]->taskID  = $taskID;
@@ -3232,7 +3230,7 @@ class executionModel extends model
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
-        foreach($stories as $key => $storyID)
+        foreach($stories as $storyID)
         {
             $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
@@ -3666,7 +3664,7 @@ class executionModel extends model
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
         $accounts = array();
-        foreach($members as $account => $member)
+        foreach($members as $member)
         {
             if(isset($oldJoin[$member->account])) continue;
 
