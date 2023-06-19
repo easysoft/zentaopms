@@ -290,9 +290,9 @@ if($canBatchAction)
     if($canBatchClose)
     {
         $footToolbar['items'][] = array(
-            'text'  => $lang->close,
-            'class' => 'btn batch-btn ajax-btn size-sm secondary',
-            'url'   => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
+            'text'     => $lang->close,
+            'class'    => 'btn batch-btn size-sm secondary',
+            'data-url' => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
         );
     }
 
