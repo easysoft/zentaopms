@@ -269,7 +269,7 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                toggleLoading();
+                toggleLoading(target);
             },
             success: (data) =>
             {
