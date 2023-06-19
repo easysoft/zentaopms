@@ -179,11 +179,12 @@ $lang->testcase->lblTypeValue   = 'Type Value';
 $lang->testcase->lblStageValue  = 'Phase Value';
 $lang->testcase->lblStatusValue = 'Status Value';
 
-$lang->testcase->legendBasicInfo       = 'Basic Information';
-$lang->testcase->legendAttatch         = 'Files';
-$lang->testcase->legendLinkBugs        = 'Bugs';
-$lang->testcase->legendOpenAndEdit     = 'Create/Edit';
-$lang->testcase->legendComment         = 'Comment';
+$lang->testcase->legendBasicInfo   = 'Basic Information';
+$lang->testcase->legendAttatch     = 'Files';
+$lang->testcase->legendLinkBugs    = 'Bugs';
+$lang->testcase->legendOpenAndEdit = 'Create/Edit';
+$lang->testcase->legendComment     = 'Comment';
+$lang->testcase->legendOther       = 'Other Related';
 
 $lang->testcase->confirmDelete         = 'Do you want to delete this case?';
 $lang->testcase->confirmBatchDelete    = 'Do you want to batch delete cases?';

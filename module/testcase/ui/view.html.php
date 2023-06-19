@@ -203,6 +203,7 @@ else
             set::entityID($case->fromBug),
             set::text($case->fromBugData->title),
             set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+            set::collapse(true),
             set('title', $case->fromBugData->title),
         );
     }
@@ -217,6 +218,7 @@ else
                 set::entityID($bugID),
                 set::text($bug->title),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+                set::collapse(true),
                 set('title', $bug->title),
             );
         }
@@ -233,13 +235,14 @@ else
     {
         foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
         {
-            $linkCases[] = a
+            $linkCases[] = entityLabel
             (
                 set::href($this->createLink('testcase', 'view', "caseID={$linkCaseID}")),
                 set::level(4),
                 set::entityID($linkCaseID),
                 set::text($case->fromBugData->linkCaseTitle),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+                set::collapse(true),
                 set('title', $linkCaseTitle),
             );
         }
@@ -472,10 +475,11 @@ detailBody
             tabPane
             (
                 set::key('otherReleted'),
-                set::title('其他相关'),
+                set::title($lang->testcase->legendOther),
                 set::active(true),
                 tableData
                 (
+                    set::useTable(false),
                     $linkBugsItem,
                     $linkCaseItem,
                 ),

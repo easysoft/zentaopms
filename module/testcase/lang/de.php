@@ -179,11 +179,12 @@ $lang->testcase->lblTypeValue   = 'Typenliste';
 $lang->testcase->lblStageValue  = 'Stageliste';
 $lang->testcase->lblStatusValue = 'Statusliste';
 
-$lang->testcase->legendBasicInfo       = 'Basis Info';
-$lang->testcase->legendAttatch         = 'Datei';
-$lang->testcase->legendLinkBugs        = 'Bug';
-$lang->testcase->legendOpenAndEdit     = 'Erstellt/Bearbeitet';
-$lang->testcase->legendComment         = 'Bemerkung';
+$lang->testcase->legendBasicInfo   = 'Basis Info';
+$lang->testcase->legendAttatch     = 'Datei';
+$lang->testcase->legendLinkBugs    = 'Bug';
+$lang->testcase->legendOpenAndEdit = 'Erstellt/Bearbeitet';
+$lang->testcase->legendComment     = 'Bemerkung';
+$lang->testcase->legendOther       = 'Other Related';
 
 $lang->testcase->confirmDelete         = 'Möchten Sie diesen Testfall schließen?';
 $lang->testcase->confirmBatchDelete    = 'Möchten Sie diese Testfälle schließen?';

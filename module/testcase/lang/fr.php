@@ -179,11 +179,12 @@ $lang->testcase->lblTypeValue   = 'Valeur Type';
 $lang->testcase->lblStageValue  = 'Valeur Phase';
 $lang->testcase->lblStatusValue = 'Valeur Statut';
 
-$lang->testcase->legendBasicInfo       = 'Infos de Base';
-$lang->testcase->legendAttatch         = 'Fichiers';
-$lang->testcase->legendLinkBugs        = 'Bugs';
-$lang->testcase->legendOpenAndEdit     = 'Créer/Editer';
-$lang->testcase->legendComment         = 'Commentaire';
+$lang->testcase->legendBasicInfo   = 'Infos de Base';
+$lang->testcase->legendAttatch     = 'Fichiers';
+$lang->testcase->legendLinkBugs    = 'Bugs';
+$lang->testcase->legendOpenAndEdit = 'Créer/Editer';
+$lang->testcase->legendComment     = 'Commentaire';
+$lang->testcase->legendOther       = 'Other Related';
 
 $lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';

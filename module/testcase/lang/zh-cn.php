@@ -184,6 +184,7 @@ $lang->testcase->legendAttatch     = '附件';
 $lang->testcase->legendLinkBugs    = '相关Bug';
 $lang->testcase->legendOpenAndEdit = '创建编辑';
 $lang->testcase->legendComment     = '备注';
+$lang->testcase->legendOther       = '其他相关';
 
 $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
