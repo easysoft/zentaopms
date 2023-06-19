@@ -3897,6 +3897,7 @@ EOT;
     public function getSqliteDAO($params)
     {
         $dao = clone $this->dao;
+        $dao->reset();
 
         $dao->dbh    = $this->app->connectSqlite($params);
         $dao->driver = 'sqlite';
