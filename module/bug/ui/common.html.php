@@ -10,8 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
-function setCommonProps($bug, $title)
+function setCommonProps(object $bug, string $title = ''): array
 {
+    if(empty($title))
+    {
+        global $app, $lang;
+        $module = $app->getModuleName();
+        $method = $app->getMethodName();
+        $title  = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
+    }
+
     $items[] = set::shadow(false);
     $items[] = set::title($title);
     $items[] = set::headingClass('modal-heading');
