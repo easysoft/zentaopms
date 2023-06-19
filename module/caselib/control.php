@@ -40,8 +40,8 @@ class caselib extends control
             $libID = $this->caselib->create($lib, $this->post->uid);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response = $this->caselibZen->responseAfterCreate($libID);
-            return $this->send($response);
+            if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('caselib', 'browse', "libID=$libID")));
         }
 
         $this->caselibZen->setCreateMenu();

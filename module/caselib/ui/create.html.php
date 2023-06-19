@@ -33,4 +33,4 @@ $formItems['desc'] = $descGroup;
 /* TODO:printExtendFields */
 formPanel($formItems);
 
-render();
+render(isAjaxRequest('modal') ? 'modalDialog' : 'page');

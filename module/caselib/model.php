@@ -196,6 +196,7 @@ class caselibModel extends model
         {
             $libID = $this->dao->lastInsertID();
             $this->loadModel('file')->updateObjectID($uid, $libID, 'caselib');
+            $this->loadModel('action')->create('caselib', $libID, 'opened');
             return $libID;
         }
         return false;
