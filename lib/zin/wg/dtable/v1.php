@@ -4,7 +4,7 @@ namespace zin;
 class dtable extends wg
 {
     static $defineProps = array(
-        'className?:string="shadow-sm rounded"', // 表格样式。
+        'className?:string="shadow rounded"', // 表格样式。
         'id?:string',                            // ID。
         'customCols?: bool|array',               // 是否支持自定义列。
         'cols?:array',                           // 表格列配置
