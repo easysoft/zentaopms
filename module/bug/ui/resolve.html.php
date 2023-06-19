@@ -36,6 +36,7 @@ if(common::hasPriv('build', 'create'))
 formPanel
 (
     set::title($lang->bug->resolve),
+    set::shadow(false),
     set::headingClass('status-heading'),
     set::actions(array('submit')),
     set::submitBtnText($lang->bug->resolve),

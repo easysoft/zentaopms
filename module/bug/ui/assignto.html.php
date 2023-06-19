@@ -16,6 +16,7 @@ jsVar('page', 'assignedto');
 formPanel
 (
     set::title($lang->bug->assignTo),
+    set::shadow(false),
     set::headingClass('status-heading'),
     set::actions(array('submit')),
     set::submitBtnText($lang->bug->assignTo),
