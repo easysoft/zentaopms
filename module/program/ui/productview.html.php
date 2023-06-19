@@ -305,6 +305,7 @@ dtable
     set::nested(true),
     set::className('shadow rounded'),
     set::footPager(usePager()),
+    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'product';}")),
     set::onRenderCell(jsRaw('window.renderCellProductView')),
     set::footToolbar(array
     (
