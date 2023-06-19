@@ -64,7 +64,7 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::name('duplicate'),
+            set::name('duplicateBug'),
             set::label($lang->bug->duplicateBug),
             set::items(array()),
             set::placeholder($lang->bug->placeholder->duplicate),

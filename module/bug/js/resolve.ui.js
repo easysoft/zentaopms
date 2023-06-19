@@ -8,7 +8,7 @@ function setDuplicate()
         {
             if(!bugs) return;
 
-            const $duplicateBug = $('#duplicate').empty();
+            const $duplicateBug = $('#duplicateBug').empty();
             $.each(bugs, function(index, bug)
             {
                 $duplicateBug.append('<option value="' + bug.value + '">' + bug.text + '</option>');
