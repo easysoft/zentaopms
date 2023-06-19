@@ -1165,6 +1165,8 @@ class productModel extends model
 
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
+        $this->config->product->search['params']['stage']['values'] = array('' => '') + $this->lang->story->stageList;
+
         /* Get modules. */
         $this->loadModel('tree');
         if($this->app->tab == 'project')

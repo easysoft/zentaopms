@@ -215,7 +215,7 @@ $lang->story->statusList['active']    = 'Aktiv';
 $lang->story->statusList['closed']    = 'Geschlossen';
 $lang->story->statusList['changing']  = 'Geändert';
 
-$lang->story->stageList['']           = '';
+$lang->story->stageList = array();
 $lang->story->stageList['wait']       = 'Wartend';
 $lang->story->stageList['planned']    = 'Geplant';
 $lang->story->stageList['projected']  = 'Projektiert';

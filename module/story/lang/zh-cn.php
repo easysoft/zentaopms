@@ -215,7 +215,7 @@ $lang->story->statusList['active']    = '激活';
 $lang->story->statusList['closed']    = '已关闭';
 $lang->story->statusList['changing']  = '变更中';
 
-$lang->story->stageList['']           = '';
+$lang->story->stageList = array();
 $lang->story->stageList['wait']       = '未开始';
 $lang->story->stageList['planned']    = "已计划";
 $lang->story->stageList['projected']  = '已立项';
