@@ -60,6 +60,13 @@ foreach($actionCodes as $actionCode)
 
         $params = !empty($actionConfig['url']['params']) ? $actionConfig['url']['params'] : array();
 
+        preg_match_all("/\{(.+?)\}/i", $params, $vars);
+        foreach($vars[0] as $key => $var)
+        {
+            $realVar = $vars[1][$key];
+            $params = str_replace($var, (string)$task->$realVar, $params);
+        }
+
         $actionConfig['url'] = createLink($moduleName, $methodName, $params);
     }
 
@@ -102,7 +109,6 @@ detailBody
         panel
         (
             set::title($lang->testtask->legendBasicInfo),
-
             tableData
             (
                 !empty($execution->multiple) ? item
