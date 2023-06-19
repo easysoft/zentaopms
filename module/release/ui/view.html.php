@@ -92,33 +92,30 @@ if($canBeChanged)
     if(common::hasPriv('release', 'linkStory'))
     {
         $linkBtnList[] = array(
-            'text'        => $lang->release->linkStory,
-            'icon'        => 'link',
-            'url'         => inlink('linkStory', "releaseID={$release->id}&browseType=story"),
-            'class'       => 'btn link-story',
-            'type'        => 'primary',
-            'data-toggle' => 'modal'
+            'text'     => $lang->release->linkStory,
+            'icon'     => 'link',
+            'data-url' => inlink('linkStory', "releaseID={$release->id}&browseType=story"),
+            'class'    => 'btn link-story',
+            'type'     => 'primary'
         );
     }
 
     if(common::hasPriv('release', 'linkBug'))
     {
         $linkBtnList[] = array(
-            'text'        => $lang->release->linkBug,
-            'icon'        => 'bug',
-            'url'         => inlink('linkBug', "releaseID={$release->id}&browseType=bug"),
-            'class'       => 'btn link-bug',
-            'type'        => 'primary',
-            'data-toggle' => 'modal'
+            'text'     => $lang->release->linkBug,
+            'icon'     => 'bug',
+            'data-url' => inlink('linkBug', "releaseID={$release->id}&browseType=bug"),
+            'class'    => 'btn link-bug',
+            'type'     => 'primary',
         );
 
         $linkBtnList[] = array(
-            'text'        => $lang->release->linkBug,
-            'icon'        => 'bug',
-            'url'         => inlink('linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
-            'class'       => 'btn link-left-bug',
-            'type'        => 'primary',
-            'data-toggle' => 'modal'
+            'text'     => $lang->release->linkBug,
+            'icon'     => 'bug',
+            'data-url' => inlink('linkBug', "releaseID={$release->id}&browseType=leftBug&param=0&type=leftBug"),
+            'class'    => 'btn link-left-bug',
+            'type'     => 'primary',
         );
     }
 
