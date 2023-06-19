@@ -262,5 +262,6 @@ $config->story->dtable->fieldList['actions']['actionsMap']['batchCreateTask']['h
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['icon'] = 'estimate';
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hint'] = $lang->task->batchCreate;
 
+$app->loadLang('execution');
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
