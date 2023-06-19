@@ -231,20 +231,4 @@ class sqlite
         $dbh = $driver == 'sqlite' ? 'dbh' : 'mysql';
         return $this->$dbh->quote((string)$value);
     }
-
-    /**
-     * Check a sql skip SQLite or not.
-     *
-     * @param  string $sql
-     * @access public
-     * @return bool
-     */
-    public function isSkipSqlite(string $sql): bool
-    {
-        foreach($this->config->sqliteWhiteList as $table)
-        {
-            if(strpos($sql, $table) !== false) return true;
-        }
-        return false;
-    }
 }

@@ -448,8 +448,6 @@ $config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
 $config->objectTables['privrelation'] = TABLE_PRIVRELATION;
 $config->objectTables['scene']        = TABLE_SCENE;
 
-$config->sqliteWhiteList = array('sqlite_queue', 'cron');
-
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
