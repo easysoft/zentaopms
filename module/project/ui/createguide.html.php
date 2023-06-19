@@ -55,13 +55,13 @@ div
     setID('modelList'),
     setClass('flex items-center flex-wrap'),
     $itemList,
-    center
+    div
     (
-        setClass('model-block'),
+        setClass('model-block more-model'),
         div
         (
-            setClass('border'),
-            p($lang->project->moreModelTitle)
+            setClass('border text-gray text-center'),
+            $lang->project->moreModelTitle
         )
     ),
 );
