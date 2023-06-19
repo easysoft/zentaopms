@@ -638,10 +638,10 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('target') === '_blank') return;
 
         const options = $link.dataset();
-        if(options.toggle || $link.hasClass('not-open-url')) return e.preventDefault();
+        if(options.toggle || $link.hasClass('not-open-url')) return;
 
         const url = options.url || $link.attr('href');
-        if(!url || url.startsWith('javascript:') || url.startsWith('#')) return;
+        if(url && (url.startsWith('javascript:') || url.startsWith('#'))) return;
 
         openUrl(url, options, e);
         e.preventDefault();
