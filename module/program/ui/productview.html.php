@@ -267,13 +267,12 @@ featureBar
     (hasPriv('product', 'batchEdit') && $hasProduct === true) ? li(checkbox
     (
         on::click('onClickCheckBatchEdit'),
-        set::type('checkbox'),
         set::text($lang->project->edit),
         set('data-id', 'checkbox-batchedit'),
         set('data-load', 'table'),
         set::checked($this->cookie->editProject)
     )) : NULL,
-    li(searchToggle(set::open($browseType == 'bySearch'))),
+    li(searchToggle(set::open($browseType == 'bySearch'), set::module('program'))),
     li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
 );
 

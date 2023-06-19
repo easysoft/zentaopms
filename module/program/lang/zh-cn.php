@@ -185,7 +185,6 @@ $lang->program->featureBar['project']['closed']    = '已关闭';
 
 $lang->program->featureBar['productview']['all']      = '全部';
 $lang->program->featureBar['productview']['unclosed'] = '未关闭';
-$lang->program->featureBar['productview']['end']      = '结束';
 $lang->program->featureBar['productview']['wait']     = '未开始';
 $lang->program->featureBar['productview']['doing']    = '进行中';
 $lang->program->featureBar['productview']['more']     = $lang->more;
