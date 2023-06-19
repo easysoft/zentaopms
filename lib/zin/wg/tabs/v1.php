@@ -96,6 +96,7 @@ class tabs extends wg
 
         return collapseBtn
         (
+            setClass('tabs-collapse-btn'),
             set::target('.tab-content'),
             set::parent('.tabs')
         );
