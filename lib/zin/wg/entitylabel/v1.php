@@ -12,7 +12,8 @@ class entityLabel extends wg
         'text: string',          // 实体文本
         'reverse?: bool=false',  // 编号与文本是否交换顺序
         'textClass?: string',    // 文本样式类
-        'idClass?: string'       // 编号样式类
+        'idClass?: string',      // 编号样式类
+        'href?: string',         // 实体链接
     );
 
     protected static $defineBlocks = array(
@@ -51,14 +52,18 @@ class entityLabel extends wg
         $text      = $this->prop('text');
         $level     = $this->prop('level');
         $className = $this->prop('textClass');
+        $href      = $this->prop('href');
 
         $titleClass = empty($level)
             ? "article-content"
             : "article-h$level";
 
-        return div
+        if(empty($href)) return div(setClass($titleClass, $className), $text);
+
+        return a
         (
             setClass($titleClass, $className),
+            set::href($href),
             $text
         );
     }
