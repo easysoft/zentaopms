@@ -131,18 +131,15 @@ class companyModel extends model
     }
 
     /**
+     * 更新公司信息。
      * Update a company.
      *
+     * @param  object $compnay
      * @access public
      * @return void
      */
-    public function update()
+    public function update($company): void
     {
-        $company = fixer::input('post')
-            ->stripTags('name')
-            ->get();
-        if($company->website  == 'http://') $company->website  = '';
-        if($company->backyard == 'http://') $company->backyard = '';
         $companyID = $this->app->company->id;
         $this->dao->update(TABLE_COMPANY)
             ->data($company)

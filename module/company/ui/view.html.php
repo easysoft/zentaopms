@@ -20,6 +20,7 @@ detailHeader
             set::icon('edit'),
             set::url(helper::createLink('company', 'edit')),
             set('data-toggle', 'modal'),
+            set('data-size', '600'),
             $lang->edit
         ),
     ),
