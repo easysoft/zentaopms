@@ -162,7 +162,7 @@
     function updateTable(data)
     {
         const props = data.props;
-        const $table = $('#' + props.id).parent();
+        const $table = $('#' + props.id).closest('[data-zui-dtable]');
         if(!$table.length) return;
         const dtable = zui.DTable.get($table[0]);
         if(DEBUG) console.log('[APP] ', 'update table:', {data, props});
@@ -485,8 +485,9 @@
      * @param {string} options.app
      * @param {string} options.load
      * @param {string} options.back
+     * @param {Event}  event
      */
-    function openUrl(url, options)
+    function openUrl(url, options, event)
     {
         if(typeof url === 'object')
         {
@@ -509,7 +510,11 @@
             if(options.loadId) {options.id = options.loadId; delete options.loadId;}
             if(load)
             {
-                if(load === 'table') return loadTable(options.url, options.id, options);
+                if(load === 'table')
+                {
+                    if(!options.id && event) options.id = $(event.target).closest('.dtable').attr('id');
+                    return loadTable(options.url, options.id, options);
+                }
                 if(load !== 'APP' && typeof load === 'string') options.selector = load;
                 delete options.load;
             }
@@ -638,7 +643,7 @@
         const url = options.url || $link.attr('href');
         if(!url || url.startsWith('javascript:') || url.startsWith('#')) return;
 
-        openUrl(url, options);
+        openUrl(url, options, e);
         e.preventDefault();
     }).on('locate.zt', (_e, data) =>
     {
