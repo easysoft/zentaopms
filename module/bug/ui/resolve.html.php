@@ -112,12 +112,12 @@ formPanel
                 (
                     set::id('newBuildBox'),
                     set::label($lang->bug->resolvedBuild),
+                    set::required(true),
                     setClass('hidden'),
                     input
                     (
                         set::name('buildName'),
                         set::value(''),
-                        set::required(true)
                     ),
                 ),
                 $createBuild,
