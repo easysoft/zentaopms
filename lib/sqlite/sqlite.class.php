@@ -147,8 +147,6 @@ class sqlite
      */
     public function query($sql)
     {
-        if($this->isSkipSqlite($sql)) return $this->mysql->query($sql);
-
         try
         {
             return $this->dbh->query($this->formatSQL($sql));
@@ -204,8 +202,6 @@ class sqlite
      */
     public function pushToQueue(string $sql): int|null
     {
-        if($this->isSkipSqlite($sql)) return false;
-
         $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
         $queue .= " SET `sql` = " . $this->quote($sql);
         $queue .= ", addDate = " . $this->quote(helper::now());
