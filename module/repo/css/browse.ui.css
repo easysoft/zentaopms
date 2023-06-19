@@ -1,3 +1,5 @@
-.sidebar-comments{width: 530px;}
+.sidebar-comments{width: 550px;}
 .repo-downloadCode{margin: 8px 10px 8px 0;}
-.repo-select{margin-left: 1rem;}
+.repo-select{margin-left: 1rem; margin-right: 10px;}
+.repo-comment{width: 100%; display: inline-block; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.dtable-cell-html{width: 100%;}

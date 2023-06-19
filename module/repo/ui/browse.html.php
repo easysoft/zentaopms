@@ -37,11 +37,10 @@ $base64BranchID    = helper::safe64Encode(base64_encode($branchID));
 $breadcrumbItems   = array();
 $breadcrumbItems[] = h::a
 (
-    setClass('form-title'),
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
     $repo->name,
 );
-$breadcrumbItems[] = h::span('/');
+$breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 
 $paths    = explode('/', $path);
 $fileName = array_pop($paths);
@@ -51,11 +50,10 @@ foreach($paths as $index => $pathName)
     $postPath .= $pathName . '/';
     $breadcrumbItems[] = h::a
     (
-        setClass('form-title'),
         set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath))),
         trim($pathName, '/'),
     );
-    $breadcrumbItems[] = h::span('/');
+    $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 }
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
@@ -79,7 +77,7 @@ featureBar(
 /* zin: Define the toolbar on main menu. */
 $refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
 $refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh');
-$downloadItem  = array('text' => $lang->repo->downloadCode, 'url' => '#modalDownloadCode', 'class' => 'primary download-btn', 'icon' => 'download', 'data-toggle' => 'modal');
+$downloadItem  = array('text' => $lang->repo->download, 'url' => '#modal-downloadCode', 'class' => 'primary download-btn', 'icon' => 'download', 'data-toggle' => 'modal', 'data-size' => '500px');
 
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
@@ -97,7 +95,7 @@ modalTrigger
 (
     modal
     (
-        set::id('modalDownloadCode'),
+        set::id('modal-downloadCode'),
         set::title($lang->repo->downloadCode),
         $cloneUrl->svn ? div
         (
@@ -106,7 +104,7 @@ modalTrigger
             (
                 formGroup
                 (
-                    set::width('2/3'),
+                    set::width('450px'),
                     input
                     (
                         set::type('text'),
@@ -116,7 +114,7 @@ modalTrigger
                 ),
                 formGroup
                 (
-                    set::width('1/6'),
+                    set::width('50px'),
                     btn
                     (
                         set::icon('copy'),
@@ -132,19 +130,20 @@ modalTrigger
             (
                 formGroup
                 (
-                    set::width('2/3'),
+                    set::width('450px'),
                     input
                     (
                         set::type('text'),
                         set::value($cloneUrl->ssh),
-                        set::disabled(true),
+                        set::readOnly(true),
                     ),
                 ),
                 formGroup
                 (
-                    set::width('1/6'),
+                    set::width('50px'),
                     btn
                     (
+                        set::class('copy-btn'),
                         set::icon('copy'),
                     )
                 )
@@ -158,19 +157,20 @@ modalTrigger
             (
                 formGroup
                 (
-                    set::width('2/3'),
+                    set::width('450px'),
                     input
                     (
                         set::type('text'),
                         set::value($cloneUrl->http),
-                        set::disabled(true),
+                        set::readOnly(true),
                     ),
                 ),
                 formGroup
                 (
-                    set::width('1/6'),
+                    set::width('50px'),
                     btn
                     (
+                        set::class('copy-btn'),
                         set::icon('copy'),
                     )
                 )
@@ -182,6 +182,7 @@ modalTrigger
             set::footerClass('flex-center'),
             btn
             (
+                set::icon('down-circle'),
                 set::class('downloadZip-btn'),
                 set::text($lang->repo->downloadZip),
             )
@@ -194,6 +195,7 @@ dtable
     set::cols($config->repo->repoDtable->fieldList),
     set::data($tableData),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::canRowCheckable(jsRaw('function(rowID){return false;}')),
     set::footPager(),
 );
 
@@ -210,12 +212,14 @@ jsVar('revisionMap', $revisionMap);
 jsVar('diffLink',    $diffLink);
 jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
+/* Disbale check all checkbox of table header */
+$config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
 
-$footToolbar['items'][] = array('text' => $lang->repo->diff, 'class' => "btn secondary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
+$footToolbar['items'][] = array('text' => $lang->repo->diff, 'class' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAllLink);
 
 sidebar
@@ -229,8 +233,9 @@ sidebar
         set::data($commentsTableData),
         set::onRenderCell(jsRaw('window.renderCommentCell')),
         set::onCheckChange(jsRaw('window.checkedChange')),
-        set::checkInfo(jsRaw('function(){return {html:\'\'}}')),
+        set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
         set::footToolbar($footToolbar),
+        set::footer(array('toolbar', 'flex', 'pager')),
         set::footPager(usePager()),
         set::showToolbarOnChecked(false),
     ),

@@ -59,10 +59,9 @@ $config->repo->repoDtable = new stdclass();
 
 $config->repo->repoDtable->fieldList['name']['name']     = 'name';
 $config->repo->repoDtable->fieldList['name']['title']    = $lang->repo->name;
-$config->repo->repoDtable->fieldList['name']['sortType'] = false;
 $config->repo->repoDtable->fieldList['name']['type']     = 'title';
+$config->repo->repoDtable->fieldList['name']['sortType'] = false;
 $config->repo->repoDtable->fieldList['name']['fixed']    = 'left';
-$config->repo->repoDtable->fieldList['name']['width']    = '256';
 $config->repo->repoDtable->fieldList['name']['hint']     = true;
 
 $config->repo->repoDtable->fieldList['revision']['name']     = 'revision';
@@ -87,7 +86,6 @@ $config->repo->repoDtable->fieldList['comment']['name']     = 'comment';
 $config->repo->repoDtable->fieldList['comment']['title']    = $lang->repo->comment;
 $config->repo->repoDtable->fieldList['comment']['sortType'] = false;
 $config->repo->repoDtable->fieldList['comment']['type']     = 'text';
-$config->repo->repoDtable->fieldList['comment']['minWidth'] = '300';
 $config->repo->repoDtable->fieldList['comment']['hint']     = true;
 
 $config->repo->commentDtable = new stdclass();
@@ -109,7 +107,6 @@ $config->repo->commentDtable->fieldList['revision']['hint']     = true;
 $config->repo->commentDtable->fieldList['commit']['name']     = 'commit';
 $config->repo->commentDtable->fieldList['commit']['title']    = $lang->repo->commit;
 $config->repo->commentDtable->fieldList['commit']['sortType'] = false;
-$config->repo->commentDtable->fieldList['commit']['type']     = 'text';
 $config->repo->commentDtable->fieldList['commit']['width']    = '40';
 $config->repo->commentDtable->fieldList ['commit']['hint']    = true;
 
