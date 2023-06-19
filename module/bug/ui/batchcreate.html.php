@@ -149,7 +149,7 @@ $items[] = array
     'label'    => $lang->bug->deadline,
     'hidden'   => zget($visibleFields, 'deadline', true, false),
     'control'  => 'date',
-    'width'    => '128px',
+    'width'    => '136px',
     'required' => isset($requiredFields['deadline']),
     'ditto'    => true,
 );
@@ -189,6 +189,7 @@ $items[] = array
     'value'    => '',
     'width'    => '80px',
     'required' => isset($requiredFields['pri']),
+    'ditto'   => true,
 );
 
 /* Field of severity. */
