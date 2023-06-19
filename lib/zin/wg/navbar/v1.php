@@ -5,7 +5,9 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
 
 class navbar extends wg
 {
-    static $defineProps = 'items?:array';
+    static $defineProps = array(
+        'items: array'
+    );
 
     protected function getExecutionMoreItem($executionID)
     {
@@ -32,8 +34,7 @@ class navbar extends wg
         $dropItems = array();
         foreach($executionPairs as $executionID => $executionName)
         {
-            $dropItems[] = array
-            (
+            $dropItems[] = array(
                 'url' => createLink('execution', 'task', "executionID=$executionID"),
                 'text' => $executionName,
                 'hint' => $executionName,
@@ -45,8 +46,7 @@ class navbar extends wg
 
         if(count($executionPairs) > 10)
         {
-            $dropItems[] = array
-            (
+            $dropItems[] = array(
                 'url' => createLink('project', 'execution', "status=all&projectID={$object->project}"),
                 'text' => "$lang->preview $lang->more",
                 'hint' => $lang->more,
@@ -54,8 +54,7 @@ class navbar extends wg
             );
         }
 
-        return array
-        (
+        return array(
             'type' => 'dropdown',
             'items' => $dropItems,
             'text' => $lang->more,
@@ -86,8 +85,7 @@ class navbar extends wg
         $dropItems = array();
         foreach($pipelineList as $pipeline)
         {
-            $dropItems[] = array
-            (
+            $dropItems[] = array(
                 'url' => $pipeline->url,
                 'text' => "[{$pipeline->type}] {$pipeline->name}",
                 'hint' => $pipeline->name,
@@ -96,8 +94,7 @@ class navbar extends wg
             );
         }
 
-        return array
-        (
+        return array(
             'type' => 'dropdown',
             'items' => $dropItems,
             'text' => $lang->app->common,
@@ -224,8 +221,7 @@ class navbar extends wg
                             $label      = $subLabel;
                         }
 
-                        $dropItems[] = array
-                        (
+                        $dropItems[] = array(
                             'active'   => $subActive,
                             'data-id'  => $dropMenuName,
                             'url'      => $subLink,
@@ -235,8 +231,7 @@ class navbar extends wg
                     }
 
                     if(empty($dropItems)) continue;
-                    $items[] = array
-                    (
+                    $items[] = array(
                         'type'     => 'dropdown',
                         'items'    => $dropItems,
                         'class'    => $class,
@@ -250,8 +245,7 @@ class navbar extends wg
                 }
                 else
                 {
-                    $items[] = array
-                    (
+                    $items[] = array(
                         'class'    => $class,
                         'text'     => $label,
                         'url'      => commonModel::createMenuLink($menuItem, $tab),
@@ -264,8 +258,7 @@ class navbar extends wg
             }
             else
             {
-                $items[] = array
-                (
+                $items[] = array(
                     'class'  => $class,
                     'text'   => $menuItem->text,
                     'active' => $isActive,
@@ -274,7 +267,7 @@ class navbar extends wg
         }
 
         /* Set active menu to global data, make it accessible to other widgets */
-        useData('activeMenu', $activeMenu);
+        data('activeMenu', $activeMenu);
 
         return $items;
     }
@@ -292,6 +285,15 @@ class navbar extends wg
             set::id('navbar'),
             new nav
             (
+                on::click(<<<'FUNC'
+                    const $target = $(e.target);
+                    if(!$target.closest('.nav-divider').length && $target.closest('.nav-item').length)
+                    {
+                        const $navbar = $target.closest('#navbar');
+                        $navbar.find('.active').removeClass('active');
+                        $target.closest('.nav-item').find('a').addClass('active');
+                    }
+                FUNC),
                 set::items($this->getItems()),
                 $this->children()
             )

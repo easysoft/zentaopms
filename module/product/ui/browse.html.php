@@ -194,17 +194,97 @@ toolbar
     $fnBuildLinkStoryButton()
 );
 
+$canBeChanged         = common::canModify('product', $product);
+$canBatchEdit         = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
+$canBatchClose        = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
+$canBatchReview       = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
+$canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
+$canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
+$canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
+$canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
+$canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
+$canBatchUnlink       = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
+$canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib') and helper::hasFeature('storylib'));
+$canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
+$footToolbar = $canBatchAction ? array('items' => array
+(
+    array('type' => 'btn-group', 'items' => array
+    (
+        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-page' => 'batch', 'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")),
+        array('caret' => 'up', 'class' => 'btn btn-caret size-sm secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    )),
+    !$canBatchUnlink ? null : array('text' => $lang->story->unlink, 'className' => 'secondary', 'id' => 'batchUnlinkStory'),
+    array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? '' : 'hidden', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? '' : 'hidden', 'url' => '#navPlan', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'url' => '#navAssignedTo', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+    !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib'),
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
+
+unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
+unset($lang->story->reasonList[''], $lang->story->reasonList['subdivided'], $lang->story->reasonList['duplicate']);
+unset($plans[''], $lang->story->stageList[''], $users['']);
+
+foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
+foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
+foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
+foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
+foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID"));
+foreach($lang->story->stageList as $key => $stageName)
+{
+    if(!str_contains('|tested|verified|released|closed|', "|$key|")) continue;
+    $stageItems[] = array('text' => $stageName,  'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
+}
+foreach($users as $account => $realname)
+{
+    if($account == 'closed') continue;
+    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID={$product->id}"), 'data-account' => $account);
+}
+
+if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
+$reviewResultItems = array_values($reviewResultItems);
+
+$navActionItems = array();
+if($canBatchClose)  $navActionItems[] = array('text' => $lang->close, 'class' => 'batch-btn', 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$product->id}"));
+if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->review, 'items' => $reviewResultItems);
+if($canBatchChangeBranch && $product->type != 'normal') $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
+if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
+
+menu
+(
+    set::id('navActions'),
+    set::class('menu dropdown-menu'),
+    set::items($navActionItems),
+);
+menu
+(
+    set::id('navModule'),
+    set::class('dropdown-menu'),
+    set::items($moduleItems)
+);
+menu
+(
+    set::id('navPlan'),
+    set::class('dropdown-menu'),
+    set::items($planItems)
+);
+menu
+(
+    set::id('navAssignedTo'),
+    set::class('dropdown-menu'),
+    set::items($assignItems)
+);
+
 dtable
 (
+    set::id('stories'),
     set::userMap($users),
     set::customCols(true),
-    set::groupDivider(true),
+    set::checkable($canBatchAction),
     set::cols($cols),
     set::data($data),
-    set::className('shadow rounded'),
     set::footPager(usePager()),
-    set::nested(true),
-    set::footer(jsRaw("function(){return window.footerGenerator.call(this, '{$summary}');}"))
+    set::footToolbar($footToolbar),
+    set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
 );
 
 render();

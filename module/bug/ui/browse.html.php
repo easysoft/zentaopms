@@ -23,14 +23,15 @@ featureBar
 );
 
 $canBeChanged         = common::canModify('product', $product);
-$canBatchEdit         = $canBeChanged && common::hasPriv('bug', 'batchEdit');
-$canBatchConfirm      = $canBeChanged && common::hasPriv('bug', 'batchConfirm');
-$canBatchActivate     = $canBeChanged && common::hasPriv('bug', 'batchActivate');
-$canBatchChangeBranch = $canBeChanged && common::hasPriv('bug', 'batchChangeBranch');
-$canBatchChangeModule = $canBeChanged && common::hasPriv('bug', 'batchChangeModule');
-$canBatchResolve      = $canBeChanged && common::hasPriv('bug', 'batchResolve');
-$canBatchAssignTo     = $canBeChanged && common::hasPriv('bug', 'batchAssignTo');
+$canBatchEdit         = $canBeChanged && hasPriv('bug', 'batchEdit');
+$canBatchConfirm      = $canBeChanged && hasPriv('bug', 'batchConfirm');
+$canBatchActivate     = $canBeChanged && hasPriv('bug', 'batchActivate');
+$canBatchChangeBranch = $canBeChanged && hasPriv('bug', 'batchChangeBranch');
+$canBatchChangeModule = $canBeChanged && hasPriv('bug', 'batchChangeModule');
+$canBatchResolve      = $canBeChanged && hasPriv('bug', 'batchResolve');
+$canBatchAssignTo     = $canBeChanged && hasPriv('bug', 'batchAssignTo');
 $canBatchClose        = common::hasPriv('bug', 'batchClose');
+$canManageModule      = hasPriv('tree', 'browse');
 $canBatchAction       = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchActivate || $canBatchChangeBranch || $canBatchChangeModule || $canBatchResolve || $canBatchAssignTo;
 
 if(!isonlybody())
@@ -87,14 +88,16 @@ if(!isonlybody())
     );
 }
 
-$closeLink = $browseType == 'bymodule' ? createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+$closeLink   = $browseType == 'bymodule' ? createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+$settingLink = $canManageModule ? createLink('tree', 'browse', "productID={$product->id}&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}") : '';
 sidebar
 (
     moduleMenu(set(array
     (
-        'modules'   => $moduleTree,
-        'activeKey' => $currentModuleID,
-        'closeLink' => $closeLink
+        'modules'     => $moduleTree,
+        'activeKey'   => $currentModuleID,
+        'closeLink'   => $closeLink,
+        'settingLink' => $settingLink,
     )))
 );
 

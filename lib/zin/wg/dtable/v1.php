@@ -4,11 +4,11 @@ namespace zin;
 class dtable extends wg
 {
     static $defineProps = array(
-        'className?:string="shadow-sm rounded"', // 表格样式。
+        'className?:string="shadow rounded"', // 表格样式。
         'id?:string',                            // ID。
         'customCols?: bool|array',               // 是否支持自定义列。
         'cols?:array',                           // 表格列配置
-        'date?:array',                           // 表格数据源
+        'data?:array',                           // 表格数据源
         'module?:string',                        // 模块信息，主要是获取语言项
     );
 
@@ -56,6 +56,19 @@ class dtable extends wg
 
         $tableData = $this->prop('data', array());
         $this->setProp('data', array_values($tableData));
+
+        /* Add dtable load info to pager links. */
+        $pager = $this->prop('footPager');
+        if(!empty($pager) && isset($pager['items']))
+        {
+            if(!isset($pager['btnProps'])) $pager['btnProps'] = array('data-load' => 'table', 'type' => 'ghost', 'size' => 'sm', 'data-id' => $this->prop('id'));
+            foreach($pager['items'] as $index => $item)
+            {
+                if($item['type'] !== 'size-menu') continue;
+                if(!isset($item['itemProps'])) $pager['items'][$index]['itemProps'] = array('data-load' => 'table', 'data-id' => $this->prop('id'));
+            }
+            $this->setProp('footPager', $pager);
+        }
     }
 
     public static function getPageCSS(): string|false

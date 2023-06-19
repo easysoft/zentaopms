@@ -396,7 +396,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $executionID = 0, $branch = 0, $storyType = 'story', $from = '')
+    public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
     {
         $this->story->replaceURLang($storyType);
 

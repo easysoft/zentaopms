@@ -345,16 +345,25 @@ function getWaterfallProjectInfo($project)
 }
 
 $blockNavCode = 'nav-' . uniqid();
-div
+panel
 (
-    set('class', 'projectstatistic-block'),
+    set('class', 'projectstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
+    set('headingClass', 'border-b'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            span($block->title),
+        )
+    ),
     div
     (
-        set('class', 'flex'),
+        set('class', 'flex h-full of-hidden'),
         cell
         (
             set('width', '25%'),
-            set('class', 'of-hidden bg-secondary-pale'),
+            set('class', 'bg-secondary-pale of-y-auto of-x-hidden'),
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),

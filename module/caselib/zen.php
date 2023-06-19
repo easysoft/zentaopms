@@ -50,21 +50,4 @@ class caselibZen extends caselib
 
         return $this->loadModel('file')->processImgURL($lib, $this->config->caselib->editor->create['id'], $uid);
     }
-
-    /**
-     * 构建创建产品页面数据。
-     * Build form fields for create.
-     *
-     * @param  int  $libID
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterCreate(int $libID): array
-    {
-        $this->loadModel('action')->create('caselib', $libID, 'opened');
-
-        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID);
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID=$libID"));
-    }
-
 }

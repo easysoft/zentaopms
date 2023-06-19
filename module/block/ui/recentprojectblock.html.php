@@ -17,13 +17,14 @@ foreach($projects as $projectID => $project)
     $viewLink = $this->createLink('project', 'index', "projectID=$project->id");
     $cards[] = cell
     (
-        set('width', '33%'),
-        set('class', 'border m-2 p-4'),
+        set('width', '32%'),
+        set('class', 'border p-4'),
         div
         (
             set('class', 'pb-2'),
             a
             (
+                set('class', 'text-black'),
                 set('href', $viewLink),
                 $project->name
             )
@@ -34,10 +35,11 @@ foreach($projects as $projectID => $project)
             div
             (
                 set('class', 'py-1.5'),
-                span('近期执行 : XXX'),
+                span('近期执行 : '),
+                a(set('href', ''), '执行名称'),
                 label
                 (
-                    set('class', 'warning-outline ml-4'),
+                    set('class', 'warning-pale circle ml-2'),
                     '进行中'
                 )
             ),
@@ -58,9 +60,18 @@ foreach($projects as $projectID => $project)
 panel
 (
     set('class', 'recentproject-block'),
+    set('headingClass', 'border-b'),
+    to::heading
+    (
+        div
+        (
+            set('class', 'panel-title'),
+            $lang->block->titleList['recentproject']
+        )
+    ),
     div
     (
-        set('class', 'flex cards'),
+        set('class', 'flex cards justify-between'),
         $cards
     )
 );

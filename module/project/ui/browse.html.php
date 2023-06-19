@@ -53,11 +53,11 @@ toolbar
     ))),
     item(set(array
     (
-        'icon'       => 'plus',
-        'text'       => $lang->project->create,
-        'class'      => "primary create-project-btn",
-        'url'        => $this->createLink('project', 'createGuide', '', '', true),
-        'data-modal' => 'modal'
+        'icon'        => 'plus',
+        'text'        => $lang->project->create,
+        'class'       => "primary create-project-btn",
+        'url'         => createLink('project', 'createGuide'),
+        'data-toggle' => 'modal'
     )))
 );
 

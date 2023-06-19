@@ -126,25 +126,17 @@ class todo extends control
 
             /* Processing edit request data. */
             $todo = $this->todoZen->beforeEdit($todoID, $form);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* update a todo. */
             $changes = $this->todo->update($todoID, $todo);
-            if(dao::isError())
-            {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                return print(js::error(dao::getError()));
-            }
+            if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* Handle data after edit todo. */
             $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($this->session->todoList, 'parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
         /* Judge a private todo or not, If private, die. */
@@ -204,9 +196,8 @@ class todo extends control
         }
 
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -227,9 +218,8 @@ class todo extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -247,7 +237,7 @@ class todo extends control
         if($todo->status == 'done')
         {
             $isClosed = $this->todo->close($todoID);
-            if(!$isClosed) return print(js::error(dao::getError()));
+            if(!$isClosed) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
 
         /* Return json if run mode is API. */
@@ -256,9 +246,8 @@ class todo extends control
             $this->send(array('status' => 'success'));
         }
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -278,9 +267,10 @@ class todo extends control
 
             $todo->id   = $todoID;
             $isAssigned = $this->todoZen->doAssignTo($todo);
-            if(!$isAssigned) return print(js::error(dao::getError()));
+            if(!$isAssigned) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return print(js::reload('parent.parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
         $this->todoZen->buildAssignToView($todoID);
@@ -332,13 +322,13 @@ class todo extends control
      */
     public function delete(int $todoID, string $confirm = 'no')
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes")));
+        if($confirm == 'no') return $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->todo->confirmDelete, 'confirmed' => $this->createLink('todo', 'delete', "todoID={$todoID}&confirm=yes"), 'canceled' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'))));
 
         $this->todo->delete(TABLE_TODO, $todoID);
 
         if(helper::isAjaxRequest())
         {
-            $response = array('result' => 'success', 'message' => '');
+            $response = array('result' => 'success', 'message' => '', 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'));
             if(dao::isError())
             {
                 $response['result']  = 'fail';
@@ -348,10 +338,8 @@ class todo extends control
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-        return print(js::locate($browseLink, 'parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**
@@ -383,17 +371,16 @@ class todo extends control
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
 
-            $cancelURL   = $this->server->http_referer;
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->objectID), 'locate' => $confirmURL));
-            return print(strpos($cancelURL, 'calendar') ? json_encode(array(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL)) : js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+            $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
             return $this->send(array('status' => 'success'));
         }
-        if(isonlybody()) return print(js::reload('parent.parent'));
-        return print(js::reload('parent'));
+        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
     /**

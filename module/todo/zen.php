@@ -278,7 +278,7 @@ class todoZen extends todo
 
         if($todo->end < $todo->begin)
         {
-            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
             return false;
         }
 
@@ -587,9 +587,9 @@ class todoZen extends todo
         if($todo->type == 'bug')   $app = 'qa';
         if($todo->type == 'task')  $app = 'execution';
         if($todo->type == 'story') $app = 'product';
-        $cancelURL = $this->server->http_referer;
+        $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
 
-        return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->objectID), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+        return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
     }
 
     /**

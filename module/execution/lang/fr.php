@@ -141,6 +141,7 @@ $lang->execution->list                = "{$lang->executionCommon} List";
 $lang->execution->allProject          = 'Tous';
 $lang->execution->method              = 'Management Method';
 $lang->execution->sameAsParent        = "Same as parent";
+$lang->execution->selectStoryPlan     = 'Select Plan';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';

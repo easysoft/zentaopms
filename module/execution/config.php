@@ -180,7 +180,7 @@ $config->execution->actionList = array();
 $config->execution->actionList['start']['icon']        = 'start';
 $config->execution->actionList['start']['text']        = $lang->execution->start;
 $config->execution->actionList['start']['hint']        = $lang->execution->start;
-$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start',"executionID={rawID}");
+$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start',"executionID={rawID}", '', true);
 $config->execution->actionList['start']['data-toggle'] = 'modal';
 
 $config->execution->actionList['createTask']['icon'] = 'plus';
@@ -210,10 +210,11 @@ $config->execution->actionList['activate']['hint']        = $lang->execution->ac
 $config->execution->actionList['activate']['url']         = helper::createLink('execution', 'activate',"executionID={rawID}");
 $config->execution->actionList['activate']['data-toggle'] = 'modal';
 
-$config->execution->actionList['delete']['icon'] = 'trash';
-$config->execution->actionList['delete']['text'] = $lang->execution->delete;
-$config->execution->actionList['delete']['hint'] = $lang->execution->delete;
-$config->execution->actionList['delete']['url']  = helper::createLink('execution', 'delete',"executionID={rawID}");
+$config->execution->actionList['delete']['icon']  = 'trash';
+$config->execution->actionList['delete']['class'] = 'ajax-submit';
+$config->execution->actionList['delete']['text']  = $lang->execution->delete;
+$config->execution->actionList['delete']['hint']  = $lang->execution->delete;
+$config->execution->actionList['delete']['url']   = helper::createLink('execution', 'delete',"executionID={rawID}");
 
 $config->execution->team = new stdclass();
 $config->execution->team->actionList['unlink']['icon'] = 'unlink';

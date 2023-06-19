@@ -541,7 +541,7 @@ class project extends control
         $this->loadModel('action');
         $this->loadModel('execution');
 
-        if($this->post->names)
+        if($this->post->name)
         {
             $allChanges = $this->project->batchUpdate();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -574,7 +574,7 @@ class project extends control
         }
         $unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
 
-        $this->view->title      = $this->lang->project->batchEdit;
+        $this->view->title = $this->lang->project->batchEdit;
 
         $this->view->projects             = $projects;
         $this->view->programs             = $programs;
@@ -1555,9 +1555,7 @@ class project extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterStart($project, $changes, $this->post->comment);
-            $response['closeModal'] = true;
-            $response['load']       = true;
-            return $this->sendSuccess($response);
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildStartForm($project);
@@ -1567,15 +1565,13 @@ class project extends control
      * 挂起一个项目
      * Suspend a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      *
      * @access public
      * @return void
      */
-    public function suspend(string $projectID)
+    public function suspend(int $projectID)
     {
-        $projectID = (int)$projectID;
-
         /* Processing parameter passing while suspend project. */
         if(!empty($_POST))
         {
@@ -1584,12 +1580,13 @@ class project extends control
 
             /* Update the database status to suspended. */
             $changes = $this->project->suspend($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the suspended. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterSuspend($projectID, $changes, $comment);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildSuspendForm($projectID);
@@ -1599,15 +1596,13 @@ class project extends control
      * 关闭一个项目
      * Close a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      *
      * @return void
      */
-    public function close(string $projectID)
+    public function close(int $projectID)
     {
-        $projectID = (int)$projectID;
-
         /* Processing parameter passing while close project. */
         if(!empty($_POST))
         {
@@ -1616,12 +1611,13 @@ class project extends control
 
             /* Update the database status to closed. */
             $changes = $this->project->close($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Process the data returned after the closed. */
             $comment = strip_tags($this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
-            return print(js::reload('parent.parent'));
+
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildClosedForm($projectID);
@@ -1631,14 +1627,13 @@ class project extends control
      * 激活项目并更新其状态
      * Activate a project.
      *
-     * @param  string $projectID
+     * @param  int $projectID
      * @access public
      *
      * @return void
      */
-    public function activate(string $projectID)
+    public function activate(int $projectID)
     {
-        $projectID = (int)$projectID;
         $project   = $this->project->getByID($projectID);
 
         if(!empty($_POST))
@@ -1647,10 +1642,11 @@ class project extends control
             $postData = $this->projectZen->prepareActivateExtras($projectID, $postData);
 
             $changes = $this->project->activate($projectID, $postData);
-            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->projectZen->responseAfterActivate($projectID, $changes);
-            return print(js::reload('parent.parent'));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         $this->projectZen->buildActivateForm($project);

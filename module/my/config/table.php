@@ -48,7 +48,7 @@ $config->my->todo->actionList['edit']['data-toggle'] = 'modal';
 $config->my->todo->actionList['delete']['icon'] = 'trash';
 $config->my->todo->actionList['delete']['text'] = $lang->todo->delete;
 $config->my->todo->actionList['delete']['hint'] = $lang->todo->delete;
-$config->my->todo->actionList['delete']['url']  = array('module' => 'todo', 'method' => 'delete', 'params' => 'todoID={id}&confirm=yes');
+$config->my->todo->actionList['delete']['url']  = array('module' => 'todo', 'method' => 'delete', 'params' => 'todoID={id}&confirm=no');
 
 $config->my->todo->dtable = new stdclass();
 $config->my->todo->dtable->fieldList['id']['name']  = 'id';

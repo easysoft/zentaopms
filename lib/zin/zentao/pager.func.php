@@ -28,7 +28,6 @@ function usePager(array $userSetting = null, string $pagerName = 'pager'): array
     $setting['recPerPage']  = $pager->recPerPage;
     $setting['linkCreator'] = createLink($pager->moduleName, $pager->methodName, $params);
     $setting['items']       = array();
-    $setting['btnProps']    = array('data-load' => 'table', 'type' => 'ghost', 'size' => 'sm');
     $setting['gap']         = 0;
 
     if($pager->recTotal == 0)
@@ -38,7 +37,7 @@ function usePager(array $userSetting = null, string $pagerName = 'pager'): array
     else
     {
         $setting['items'][] = array('type' => 'info', 'text' => $pager->lang->pager->totalCountAB);
-        $setting['items'][] = array('type' => 'size-menu', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->pageSize)), 'dropdown' => array('placement' => 'top'), 'itemProps' => array('data-load' => 'table'));
+        $setting['items'][] = array('type' => 'size-menu', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->pageSize)), 'dropdown' => array('placement' => 'top'));
         $setting['items'][] = array('type' => 'link', 'page' => 'first', 'hint' => $pager->lang->pager->firstPage, 'icon' => 'icon-first-page');
         $setting['items'][] = array('type' => 'link', 'page' => 'prev', 'hint' => $pager->lang->pager->previousPage, 'icon' => 'icon-angle-left');
         $setting['items'][] = array('type' => 'info', 'text' => '{page}/{pageTotal}');

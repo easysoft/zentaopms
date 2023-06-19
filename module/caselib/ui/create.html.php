@@ -14,23 +14,23 @@ declare(strict_types=1);
 namespace zin;
 $nameGroup = formGroup
 (
-    set::name("name"),
+    set::name('name'),
+    set::width('1/2'),
     set::label($lang->caselib->name),
     set::required(true),
-    set::control("text")
+    set::control('text')
 );
 $descGroup = formGroup
 (
-    set::name("desc"),
+    set::name('desc'),
     set::label($lang->caselib->desc),
-    set::control("editor")
+    set::control('editor')
 );
 
 $formItems = array();
 $formItems['name'] = $nameGroup;
 $formItems['desc'] = $descGroup;
 
-/* TODO:printExtendFields */
 formPanel($formItems);
 
-render();
+render(isAjaxRequest('modal') ? 'modalDialog' : 'page');

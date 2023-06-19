@@ -1427,28 +1427,28 @@ class projectModel extends model
         $projects     = array();
         $allChanges   = array();
         $data         = fixer::input('post')->get();
-        $oldProjects  = $this->getByIdList($this->post->projectIdList);
+        $oldProjects  = $this->getByIdList($this->post->id);
         $extendFields = $this->getFlowExtendFields();
-        foreach($data->projectIdList as $projectID)
+        foreach($data->id as $projectID)
         {
             $projectID   = (int)$projectID;
-            $projectName = $data->names[$projectID];
-            if(isset($data->codes)) $projectCode = $data->codes[$projectID];
+            $projectName = $data->name[$projectID];
+            if(isset($data->code)) $projectCode = $data->code[$projectID];
 
             $projects[$projectID] = new stdClass();
-            if(isset($data->parents[$projectID])) $projects[$projectID]->parent = $data->parents[$projectID];
+            if(isset($data->parent[$projectID])) $projects[$projectID]->parent = $data->parent[$projectID];
             $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
             $projects[$projectID]->model          = $oldProjects[$projectID]->model;
-            $projects[$projectID]->PM             = $data->PMs[$projectID];
-            $projects[$projectID]->begin          = $data->begins[$projectID];
-            $projects[$projectID]->end            = $data->ends[$projectID] == $this->lang->project->longTime ? LONG_TIME : $data->ends[$projectID];
-            $projects[$projectID]->days           = $data->ends[$projectID] == $this->lang->project->longTime ? 0 : $data->dayses[$projectID];
-            $projects[$projectID]->acl            = $data->acls[$projectID];
+            $projects[$projectID]->PM             = $data->PM[$projectID];
+            $projects[$projectID]->begin          = $data->begin[$projectID];
+            $projects[$projectID]->end            = $data->end[$projectID] == $this->lang->project->longTime ? LONG_TIME : $data->end[$projectID];
+            $projects[$projectID]->acl            = $data->acl[$projectID];
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 
-            if(isset($data->codes)) $projects[$projectID]->code = $projectCode;
+            if(isset($data->code)) $projects[$projectID]->code = $projectCode;
+            if($data->end[$projectID] == $this->lang->project->longTime) $projects[$projectID]->days = 0;
 
             foreach($extendFields as $extendField)
             {
@@ -1458,6 +1458,7 @@ class projectModel extends model
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
             }
         }
+
         if(dao::isError()) return false;
 
         $this->loadModel('execution');
@@ -1580,11 +1581,12 @@ class projectModel extends model
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
         /* Update start and end date of tasks in this project. */
-        if($project->readjustTime and $project->readjustTask)
+        if($project->readjustTask)
         {
-            $tasks = $this->projectTao->fetchUndoneTasks((int)$projectID);
+            $tasks = $this->projectTao->fetchUndoneTasks($projectID);
             $this->projectTao->updateTasksStartAndEndDate($tasks, $oldProject, $project);
         }
+
         /* Activate the shadow product of the project. (only change product status) */
         if(!$oldProject->hasProduct)
         {

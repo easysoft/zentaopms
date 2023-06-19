@@ -164,7 +164,7 @@ dtable
 (
     set::cols($cols),
     set::data($fnGenerateTableData($productStats)),
-    set::checkable(true),
+    set::checkable(common::hasPriv('product', 'batchEdit')),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
     (

@@ -72,7 +72,7 @@ class execution extends control
      * @access public
      * @return object current object
      */
-    public function commonAction($executionID = 0, $extra = '')
+    public function commonAction(int $executionID = 0, string $extra = '')
     {
         $this->loadModel('product');
 
@@ -89,7 +89,7 @@ class execution extends control
         $this->execution->setMenu($executionID, $buildID = 0, $extra);
 
         /* Assign. */
-        $this->view->hidden          = !empty($project->hasProduct) ? "" : 'hide';
+        $this->view->hidden          = !empty($project->hasProduct) ? '' : 'hide';
         $this->view->executions      = $this->executions;
         $this->view->execution       = $execution;
         $this->view->childExecutions = $childExecutions;
@@ -699,6 +699,7 @@ class execution extends control
         $this->app->loadLang('testcase');
 
         /* Change for requirement story title. */
+        $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
         if($storyType == 'requirement')
         {
             $this->lang->story->title           = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
@@ -2197,7 +2198,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function start($executionID, $from = 'execution')
+    public function start(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2207,7 +2208,7 @@ class execution extends control
         {
             $this->loadModel('action');
             $changes = $this->execution->start($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -2220,14 +2221,11 @@ class execution extends control
 
             $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
+            return $this->sendSuccess($response);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->start;
@@ -2285,7 +2283,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function suspend($executionID, $from = 'execution')
+    public function suspend(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2296,7 +2294,7 @@ class execution extends control
             $this->loadModel('action');
             $this->execution->computeBurn($executionID);
             $changes = $this->execution->suspend($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -2308,14 +2306,11 @@ class execution extends control
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
 
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('suspended')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('suspended')";
+            return $this->sendSuccess($response);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->suspend;
@@ -2332,7 +2327,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function activate($executionID, $from = 'execution')
+    public function activate(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2341,20 +2336,17 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->activate($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
 
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
+            return $this->sendSuccess($response);
         }
 
         $newBegin = date('Y-m-d');
@@ -2378,7 +2370,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function close($executionID, $from = 'execution')
+    public function close(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2388,20 +2380,17 @@ class execution extends control
         {
             $this->execution->computeBurn($executionID);
             $this->execution->close($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'close');
 
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('closed')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('closed')";
+            return $this->sendSuccess($response);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;
@@ -3018,7 +3007,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function delete($executionID, $confirm = 'no')
+    public function delete(int $executionID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -3054,7 +3043,8 @@ class execution extends control
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
-            return print(js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes")));
+            $tips = $tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]);
+            return $this->send(array('callback' => "confirmDeleteExecution({$executionID}, \"{$tips}\")"));
         }
         else
         {
@@ -3073,7 +3063,7 @@ class execution extends control
             if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'load' => true));
         }
     }
 
@@ -4133,7 +4123,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '', $param = '')
+    public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $fromMethod = 'story', string $extra = '', string $param = '')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -4200,8 +4190,9 @@ class execution extends control
 
         $haveDraft = sprintf($importPlanStoryTips, $count);
         if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
-        if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
-        return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
+        if($count != 0) return $this->sendError($haveDraft);
+
+        return $this->sendSuccess(array('closeModal' => true, 'load' => true));
     }
 
     /**

@@ -16,184 +16,129 @@ featureBar
 (
     set::current($type),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type={key}")),
-    li(searchToggle(set::module('story')))
+    li(searchToggle(set::module('executionStory')))
 );
 
-/* Build create story button. */
-$fnBuildCreateStoryButton = function() use ($lang, $product, $storyType, $productID, $executionID)
-{
-    if(!common::canModify('product', $product)) return null;
-
-    $createLink      = createLink('story', 'create', "product=$productID&branch=0&moduleID=0&storyID=0&objectID=$executionID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
-    $batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&storyID=0&executionID=$executionID&plan=0&storyType=$storyType");
-
-    $createBtnLink  = '';
-    $createBtnTitle = '';
-    if(hasPriv($storyType, 'create'))
-    {
-        $createBtnLink  = $createLink;
-        $createBtnTitle = $lang->story->create;
-    }
-    elseif(hasPriv($storyType, 'batchCreate'))
-    {
-        $createBtnLink  = empty($productID) ? '' : $batchCreateLink;
-        $createBtnTitle = $lang->story->batchCreate;
-    }
-
-    /* Without privilege, don't render create button. */
-    if(empty($createBtnLink)) return null;
-
-    if(!empty($productID) && hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
-    {
-        $items = array();
-
-        if(commonModel::isTutorialMode())
-        {
-            /* Tutorial create link. */
-            $wizardParams = helper::safe64Encode("productID=$productID&branch=0&moduleID=0");
-            $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            $items[] = array('text' => $lang->story->createCommon, 'url' => $link);
-        }
-        else
-        {
-            $items[] = array('text' => $lang->story->create, 'url' => $createLink);
-        }
-
-        $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
-
-        return dropdown
-        (
-            icon('plus'),
-            $createBtnTitle,
-            span(setClass('caret')),
-            setClass('btn secondary'),
-            set::items($items),
-        );
-    }
-
-    return item(set(array
+jsVar('executionID', $executionID);
+$linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
+$linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+modal
+(
+    setID('linkStoryByPlan'),
+    set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
+    div
     (
-        'text'  => $createBtnTitle,
-        'icon'  => 'plus',
-        'type'  => 'dropdown',
-        'class' => 'secondary',
-        'url'   => $createBtnLink
-    )));
-};
-
-/* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $product, $productID, $executionID)
-{
-    if(!common::canModify('product', $product)) return null;
-
-    /* Tutorial mode. */
-    if(commonModel::isTutorialMode())
-    {
-        $wizardParams = helper::safe64Encode("project={$executionID}");
-
-        return item(set(array
+        setClass('flex-auto'),
+        icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+        $linkStoryByPlanTips
+    ),
+    form
+    (
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->linkStory),
+        formGroup
         (
-            'text' => $lang->project->linkStory,
-            'url'  => createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams")
-        )));
-    }
-
-    $buttonLink  = '';
-    $buttonTitle = '';
-    $dataToggle  = '';
-    if(common::hasPriv('projectstory', 'importPlanStories'))
-    {
-        $buttonLink  = empty($productID) ? '' : '#linkStoryByPlan';
-        $buttonTitle = $lang->execution->linkStoryByPlan;
-        $dataToggle  = 'data-toggle="modal"';
-    }
-    if(common::hasPriv('projectstory', 'linkStory'))
-    {
-        $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=0");
-        $buttonTitle = $lang->execution->linkStory;
-        $dataToggle  = '';
-    }
-
-    if(empty($buttonLink)) return null;
-
-    if(!empty($productID) && common::hasPriv('projectstory', 'linkStory') && common::hasPriv('projectstory', 'importPlanStories'))
-    {
-        $items = array();
-        $items[] = array('text' => $lang->execution->linkStory,       'url' => createLink('projectstory', 'linkStory', "project=0"));
-        $items[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => $dataToggle);
-
-        return dropdown
-        (
-            icon('link'),
-            $buttonTitle,
-            span(setClass('caret')),
-            setClass('btn primary'),
-            set::items($items),
-        );
-    }
-
-    return null;
-};
+            set::label($lang->execution->selectStoryPlan),
+            set::required(true),
+            select
+            (
+                set::name('plan'),
+                set::items($allPlans)
+            )
+        ),
+    )
+);
 
 /* Show tool bar. */
+$canModifyProduct = common::canModify('product', $product);
+$canCreate        = $canModifyProduct && hasPriv('story', 'create');
+$canBatchCreate   = $canModifyProduct && hasPriv('story', 'canBatchCreate');
+$createLink       = createLink('story', 'create', "product={$productID}&branch=0&moduleID=0&storyID=0&objectID={$executionID}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}");
+$batchCreateLink  = createLink('story', 'batchCreate', "productID={$productID}&branch=0&moduleID=0&storyID=0&executionID={$executionID}&plan=0&storyType={$storyType}");
+
+/* Tutorial create link. */
+if(commonModel::isTutorialMode())
+{
+    $wizardParams   = helper::safe64Encode("productID={$productID}&branch=0&moduleID=0");
+    $createLink     = $this->createLink('tutorial', 'wizard', "module=story&method=create&params={$wizardParams}");
+    $canBatchCreate = false;
+}
+
+$createItem      = array('text' => $lang->story->create,      'url' => $createLink);
+$batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+
+$canLinkStory     = $canModifyProduct && hasPriv('story', 'linkStory');
+$canlinkPlanStory = $canModifyProduct && hasPriv('story', 'importPlanStories');
+$linkStoryUrl     = createLink('story', 'linkStory', "project={$executionID}");
+
+if(commonModel::isTutorialMode())
+{
+    $wizardParams     = helper::safe64Encode("project={$executionID}");
+    $linkStoryUrl     = createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams");
+    $canlinkPlanStory = false;
+}
+
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
+$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+
 toolbar
 (
-    item(set(array
+    hasPriv('story', 'report') ? item(set(array
     (
-        'text' => $lang->story->report->common,
-        'icon' => 'common-report icon-bar-chart muted',
-        'class' => 'ghost'
-    ))),
-    item(set(array
-    (
-        'text'  => $lang->story->export,
-        'icon'  => 'export',
+        'text'  => $lang->story->report->common,
+        'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$type&storyType=$storyType"),
-    ))),
-    $fnBuildCreateStoryButton(),
-    $fnBuildLinkStoryButton()
+        'url'   => createLink('story', 'report', "productID={$productID}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}"),
+    ))) : null,
+    hasPriv('story', 'export') ? item(set(array
+    (
+        'text'        => $lang->story->export,
+        'icon'        => 'export',
+        'class'       => 'ghost',
+        'url'         => createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$type&storyType=$storyType"),
+        'data-toggle' => 'modal'
+    ))) : null,
+
+    $canCreate && $canBatchCreate ? btngroup
+    (
+        btn
+        (
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::url($createLink),
+            $lang->story->create
+        ),
+        dropdown
+        (
+            btn(setClass('btn primary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items(array_filter(array($createItem, $batchCreateItem))),
+            set::placement('bottom-end'),
+        )
+    ) : null,
+    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+
+    $canLinkStory && $canlinkPlanStory ? btngroup
+    (
+        btn(
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::url($linkStoryUrl),
+            $lang->story->linkStory
+        ),
+        dropdown
+        (
+            btn(setClass('btn primary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items(array_filter(array($linkItem, $linkPlanItem))),
+            set::placement('bottom-end'),
+        )
+    ) : null,
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
-
-
-/* DataTable columns. */
-$setting = $this->datatable->getSetting('story');
-$cols    = array_values($setting);
-foreach($cols as $key => $col)
-{
-    $col['name']  = $col['id'];
-    if($col['id'] == 'title')
-    {
-        $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '${row.id}', 'execution' => $executionID)));
-    }
-
-    $cols[$key] = $col;
-}
-
-
-/* DataTable data. */
-$this->loadModel('story');
-
-$data = array();
-foreach($stories as $story)
-{
-    $story->taskCount = $storyTasks[$story->id];
-    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
-    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
-
-    $data[] = $story;
-
-    if(!isset($story->children)) continue;
-
-    /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->taskCount = $storyTasks[$child->id];
-        $child->actions   = $this->story->buildActionButtonList($child, 'browse');
-
-        $data[] = $child;
-    }
-}
 
 sidebar
 (
@@ -345,9 +290,9 @@ if($canBatchAction)
     if($canBatchClose)
     {
         $footToolbar['items'][] = array(
-            'text'  => $lang->close,
-            'class' => 'btn batch-btn ajax-btn size-sm secondary',
-            'url'   => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
+            'text'     => $lang->close,
+            'class'    => 'btn batch-btn size-sm secondary',
+            'data-url' => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
         );
     }
 
@@ -390,6 +335,44 @@ if($canBatchAction)
             'class' => 'btn batch-btn ajax-btn size-sm secondary',
             'url'   => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
         );
+    }
+}
+
+/* DataTable columns. */
+$setting = $this->datatable->getSetting('execution');
+$cols    = array();
+foreach($setting as $col)
+{
+    if(!$execution->hasProduct and $col['id'] == 'branch') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $value['id'] == 'plan') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['id'] == 'stage') continue;
+
+    $col['name'] = $col['id'];
+    if($col['id'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $executionID)));
+
+    $cols[] = $col;
+}
+
+
+/* DataTable data. */
+$data = array();
+foreach($stories as $story)
+{
+    $story->taskCount = $storyTasks[$story->id];
+    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
+    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
+
+    $data[] = $story;
+
+    if(!isset($story->children)) continue;
+
+    /* Children. */
+    foreach($story->children as $key => $child)
+    {
+        $child->taskCount = $storyTasks[$child->id];
+        $child->actions   = $this->story->buildActionButtonList($child, 'browse', $execution);
+
+        $data[] = $child;
     }
 }
 

@@ -38,6 +38,9 @@ onRenderPage(function(info)
  */
 onClickBatchEdit = function(event)
 {
+    event.stopPropagation();
+    event.preventDefault();
+
     /* Get checked product ID list. */
     const dtable      = zui.DTable.query(event.target);
     const checkedList = dtable.$.getChecks();

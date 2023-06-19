@@ -12,10 +12,69 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* Generate cols for the data table. */
-$fnGenerateCols = function()
+$canBatchEdit = common::hasPriv('product', 'batchEdit');
+$hasProduct   = false;
+
+/* Closure creating program buttons. */
+$fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 {
-    return $this->loadModel('datatable') ->getSetting('program');
+    $items = array();
+
+    hasPriv('program', 'create') ? $items[] = array
+    (
+        'text' => $lang->program->create,
+        'icon' => 'plus',
+        'url'  => createLink('program', 'create')
+    ) : null;
+
+    hasPriv('product', 'create') ? $items[] = array
+    (
+        'text' => $lang->program->createProduct,
+        'icon' => 'plus',
+        'url'  => createLink('product', 'create')
+    ) : null;
+
+    hasPriv('product', 'manageLine') ? $items[] = array
+    (
+        'text'        => $lang->program->manageLine,
+        'icon'        => 'edit',
+        'data-toggle' => 'modal',
+        'data-url'    => createLink('product', 'manageLine', $browseType)
+    ) : null;
+
+    return inputGroup
+    (
+        hasPriv('program', 'create') ? btn
+        (
+            setClass('btn primary'),
+            set::icon('plus'),
+            set::text($lang->program->create),
+            set::url(createLink('program', 'create'))
+        ) : null,
+        !empty($items) ? dropdown
+        (
+            setClass('btn primary'),
+            span(setClass('caret')),
+            set::items($items),
+        ) : null
+    );
+};
+
+/* Generate cols for the data table. */
+$fnGenerateCols = function() use ($canBatchEdit)
+{
+    $cols = $this->loadModel('datatable') ->getSetting('program');
+
+    foreach($cols as $colName => &$setting)
+    {
+        if($colName == 'name')
+        {
+            $setting['checkbox'] = $canBatchEdit;
+            break;
+        }
+    }
+
+    return $cols;
 };
 
 /* Closure for generating program row data. */
@@ -155,15 +214,16 @@ foreach($productStructure as $programID => $program)
             foreach($line['products'] as $productID => $product)
             {
                 $productRow = $fnGenerateProductRowData($lineID, $product);
-                if(!empty($productRow))
-                {
-                    $totalProductExecutions += $productRow->totalExecutions;
-                    $totalProductBugs       += $productRow->totalBugs;
-                    $totalProductActiveBugs += $productRow->totalActivatedBugs;
-                    $totalProductProjects   += $productRow->totalProjects;
 
-                    $data[] = $productRow;
-                }
+                $totalProductExecutions += $productRow->totalExecutions;
+                $totalProductBugs       += $productRow->totalBugs;
+                $totalProductActiveBugs += $productRow->totalActivatedBugs;
+                $totalProductProjects   += $productRow->totalProjects;
+
+                $data[] = $productRow;
+
+                /* Set flag variable. */
+                $hasProduct = true;
             }
         }
 
@@ -198,22 +258,23 @@ foreach($productStructure as $programID => $program)
     }
 }
 
-$summary = sprintf($lang->product->lineSummary, $linesCount, count($productStats));
-jsVar('summary', $summary);
-
-/* Layout. */
+/* ZIN: layout. */
 
 featureBar
 (
     set::current($browseType),
     set::linkParams("status={key}&orderBy=$orderBy"),
-    (hasPriv('product', 'batchEdit') && $hasProduct === true) ? item
+    (hasPriv('product', 'batchEdit') && $hasProduct === true) ? li(checkbox
     (
+        on::click('onClickCheckBatchEdit'),
         set::type('checkbox'),
         set::text($lang->project->edit),
+        set('data-id', 'checkbox-batchedit'),
+        set('data-load', 'table'),
         set::checked($this->cookie->editProject)
-    ) : NULL,
-    li(searchToggle())
+    )) : NULL,
+    li(searchToggle(set::open($browseType == 'bySearch'))),
+    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
 );
 
 toolbar
@@ -231,18 +292,7 @@ toolbar
         'class'=> 'ghost',
         'url'  => createLink('program', 'exportTable')
     ))),
-    item(set(array(
-        'text' => $lang->program->createProduct,
-        'icon' => 'plus',
-        'class'=> 'btn secondary',
-        'url'  => createLink('program', 'exportTable')
-    ))),
-    item(set(array(
-        'text' => $lang->program->create,
-        'icon' => 'plus',
-        'class'=> 'btn primary',
-        'url'  => createLink('program', 'create')
-    ))),
+    $fnGenerateCreateProgramBtns()
 );
 
 dtable
@@ -251,12 +301,28 @@ dtable
     set::data($data),
     set::userMap($users),
     set::customCols(true),
-    set::checkable(true),
+    set::checkable($canBatchEdit),
     set::nested(true),
     set::className('shadow rounded'),
     set::footPager(usePager()),
-    set::onRenderCell(jsRaw('window.renderReleaseCountCell')),
-    set::footer(jsRaw('window.footerGenerator()'))
+    set::onRenderCell(jsRaw('window.renderCellProductView')),
+    set::footToolbar(array
+    (
+        'type'  => 'btn-group',
+        'items' => array(
+            $canBatchEdit ? array
+            (
+                'text'    => $lang->edit,
+                'btnType' => 'secondary',
+                'url'     => createLink('product', 'batchEdit'),
+                'onClick' => jsRaw('onClickBatchEdit')
+            ) : null
+        )
+    )),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
 );
+
+jsVar('pageSummary', sprintf($lang->product->lineSummary, $linesCount, count($productStats)));
+jsVar('checkedSummary', $lang->program->checkedProducts);
 
 render();

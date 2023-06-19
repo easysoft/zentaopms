@@ -1181,7 +1181,7 @@ class executionModel extends model
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
 
-        if(!dao::isError()) return common::createChanges($oldExecution, $execution);
+        return common::createChanges($oldExecution, $execution);
     }
 
     /**
@@ -1262,45 +1262,35 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
-            ->setDefault('realEnd', '')
+            ->setDefault('realEnd', null)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('closedBy', '')
-            ->setDefault('closedDate', '')
+            ->setDefault('closedDate', null)
             ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment,readjustTime,readjustTask')
+            ->remove('comment,readjustTask')
             ->get();
 
         if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $execution->status = 'wait';
+        $begin = $execution->begin;
+        $end   = $execution->end;
 
-        if(!$this->post->readjustTime)
+        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
+
+        if($oldExecution->grade > 1)
         {
-            unset($execution->begin);
-            unset($execution->end);
-        }
-
-        if($this->post->readjustTime)
-        {
-            $begin = $execution->begin;
-            $end   = $execution->end;
-
-            if($begin > $end) dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterPlan, $end, $begin);
-
-            if($oldExecution->grade > 1)
+            $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+            $parentBegin = $parent->begin;
+            $parentEnd   = $parent->end;
+            if($begin < $parentBegin)
             {
-                $parent      = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
-                $parentBegin = $parent->begin;
-                $parentEnd   = $parent->end;
-                if($begin < $parentBegin)
-                {
-                    dao::$errors["message"][] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
-                }
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterParent, $parentBegin);
+            }
 
-                if($end > $parentEnd)
-                {
-                    dao::$errors["message"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
-                }
+            if($end > $parentEnd)
+            {
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
             }
         }
 
@@ -1314,7 +1304,7 @@ class executionModel extends model
             ->exec();
 
         /* Readjust task. */
-        if($this->post->readjustTime and $this->post->readjustTask)
+        if($this->post->readjustTask)
         {
             $beginTimeStamp = strtotime($execution->begin);
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
@@ -1855,7 +1845,7 @@ class executionModel extends model
                     $this->session->set('executionForm', $query->form);
                 }
             }
-            if($this->session->executionQuery == false) $this->session->set('executionQuery', ' 1 = 1');
+            if($this->session->executionQuery === false) $this->session->set('executionQuery', ' 1 = 1');
 
             $executionQuery = $this->session->executionQuery;
             $allProject = "`project` = 'all'";
@@ -1865,7 +1855,6 @@ class executionModel extends model
         }
 
         /* Get involved executions. */
-        $myExecutionIDList = array();
         if($browseType == 'involved')
         {
             $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
@@ -2011,7 +2000,6 @@ class executionModel extends model
             $executionProducts = array();
             if($project->hasProduct and ($project->stageBy == 'product'))
             {
-                $executionList = array();
                 $executionProducts = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
                     ->where('project')->in(array_keys($executions))
@@ -2191,7 +2179,7 @@ class executionModel extends model
         $branches = $this->loadModel('branch')->getByProducts(array_keys($productBranchPairs));
         foreach($productBranchPairs as $product => $branch)
         {
-            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = join(',', array_keys($branches[$product]));
+            if($branch == 0 and isset($branches[$product])) $productBranchPairs[$product] = implode(',', array_keys($branches[$product]));
         }
 
         return $productBranchPairs;
@@ -2339,7 +2327,7 @@ class executionModel extends model
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
 
-        $_SESSION['limitedExecutions'] = join(',', $executions);
+        $_SESSION['limitedExecutions'] = implode(',', $executions);
         return $_SESSION['limitedExecutions'];
     }
 
@@ -2428,7 +2416,7 @@ class executionModel extends model
             }
             else
             {
-                if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
+                if($this->session->taskQuery === false) $this->session->set('taskQuery', ' 1 = 1');
             }
 
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
@@ -2757,7 +2745,7 @@ class executionModel extends model
         }
 
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
+        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();
 
         $existedProducts = array();
         foreach($products as $i => $productID)
@@ -2825,7 +2813,7 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.execution')->in(array_keys($executions))
-            ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . join("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
+            ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . implode("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->fetchGroup('execution', 'id');
         return $tasks;
     }
@@ -3062,7 +3050,7 @@ class executionModel extends model
             }
 
             $taskID = $this->dao->lastInsertID();
-            if($task->story != false) $this->story->setStage($task->story);
+            if($task->story !== false) $this->story->setStage($task->story);
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
             $mails[$key] = new stdClass();
             $mails[$key]->taskID  = $taskID;
@@ -3242,7 +3230,7 @@ class executionModel extends model
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
-        foreach($stories as $key => $storyID)
+        foreach($stories as $storyID)
         {
             $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
@@ -3676,7 +3664,7 @@ class executionModel extends model
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
 
         $accounts = array();
-        foreach($members as $account => $member)
+        foreach($members as $member)
         {
             if(isset($oldJoin[$member->account])) continue;
 

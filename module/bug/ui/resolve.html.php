@@ -37,6 +37,9 @@ formPanel
 (
     set::title($lang->bug->resolve),
     set::headingClass('status-heading'),
+    set::actions(array('submit')),
+    set::submitBtnText($lang->bug->resolve),
+    set::actionsClass('form-group no-label'),
     to::headingActions
     (
         entityLabel
@@ -60,12 +63,12 @@ formPanel
     formRow
     (
         setClass('hidden'),
-        set::id('duplicateBox'),
+        set::id('duplicateBugBox'),
         formGroup
         (
             set::width('1/3'),
-            set::name('duplicate'),
-            set::label($lang->bug->duplicate),
+            set::name('duplicateBug'),
+            set::label($lang->bug->duplicateBug),
             set::items(array()),
             set::placeholder($lang->bug->placeholder->duplicate),
             set::value(''),
@@ -112,12 +115,12 @@ formPanel
                 (
                     set::id('newBuildBox'),
                     set::label($lang->bug->resolvedBuild),
+                    set::required(true),
                     setClass('hidden'),
                     input
                     (
                         set::name('buildName'),
                         set::value(''),
-                        set::required(true)
                     ),
                 ),
                 $createBuild,

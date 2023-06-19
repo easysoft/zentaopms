@@ -144,6 +144,7 @@ class datatable extends control
         $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';
         if(isset($this->config->datatable->$target->cols)) $setting = $this->config->datatable->$target->cols;
+
         if(empty($setting))
         {
             $cols = $this->datatable->getFieldList($module, $method);

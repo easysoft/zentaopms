@@ -374,7 +374,7 @@ detailBody
                         h::th
                         (
                             $lang->testcase->stepID,
-                            set::width('50px'),
+                            set::width('60px'),
                         ),
                         h::th
                         (

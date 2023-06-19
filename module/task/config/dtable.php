@@ -194,11 +194,13 @@ $config->task->effortTable->fieldList['actions']['list']['editEffort']['url']   
 $config->task->effortTable->fieldList['actions']['list']['editEffort']['order'] = 5;
 $config->task->effortTable->fieldList['actions']['list']['editEffort']['show']  = 'clickable';
 
-$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['icon']  = 'trash';
-$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['hint']  = $lang->task->deleteWorkhour;
-$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['url']   = helper::createLink('task', 'deleteWorkhour', 'taskID={id}');
-$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['order'] = 10;
-$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['show']  = 'clickable';
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['icon']         = 'trash';
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['hint']         = $lang->task->deleteWorkhour;
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['order']        = 10;
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['show']         = 'clickable';
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['url']          = array('module' => 'task', 'method' => 'deleteWorkhour', 'params' => 'taskID={id}');
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['class']        = 'ajax-submit btn ghost square size-sm';
+$config->task->effortTable->fieldList['actions']['list']['deleteWorkhour']['data-confirm'] = $lang->task->confirmDeleteEstimate;
 
 $config->task->dtable->importTask = new stdclass();
 

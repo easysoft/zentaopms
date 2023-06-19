@@ -557,7 +557,7 @@ class build extends control
         $lastBuild = $this->build->getLast($executionID, $projectID);
         if($lastBuild)
         {
-            echo "<div class='help-block'> &nbsp; " . $this->lang->build->last . ": <a class='code label label-badge label-light' id='lastBuildBtn'>" . $lastBuild->name . "</a></div>";
+            echo "<div class='help-block'> &nbsp; " . $this->lang->build->last . ": <a class='code label light rounded-full' id='lastBuildBtn'>" . $lastBuild->name . "</a></div>";
         }
         else
         {

@@ -68,6 +68,7 @@ toolbar
         setClass('btn secondary'),
         set::icon('plus'),
         set::url(helper::createLink('caselib', 'create')),
+        set('data-toggle', 'modal'),
         $lang->caselib->create
     ) : '',
     $canCreateCase && $canBatchCreateCase ? btngroup
