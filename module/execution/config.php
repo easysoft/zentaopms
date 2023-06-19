@@ -180,7 +180,7 @@ $config->execution->actionList = array();
 $config->execution->actionList['start']['icon']        = 'start';
 $config->execution->actionList['start']['text']        = $lang->execution->start;
 $config->execution->actionList['start']['hint']        = $lang->execution->start;
-$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start',"executionID={rawID}");
+$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start',"executionID={rawID}", '', true);
 $config->execution->actionList['start']['data-toggle'] = 'modal';
 
 $config->execution->actionList['createTask']['icon'] = 'plus';
