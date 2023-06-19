@@ -505,7 +505,7 @@ class project extends control
             $postData   = form::data($this->config->project->form->edit);
             $newProject = $this->projectZen->prepareProject($postData, $project->hasProduct);
 
-            $changes = $this->project->update($newProject, $project, $this->post->uid);
+            $changes = $this->project->update($newProject, $project);
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
@@ -513,7 +513,7 @@ class project extends control
             }
 
             $this->project->updatePlans($projectID, (array)$this->post->plans);                        // 更新关联的计划列表。
-            $this->project->updateProducts($projectID, (array)$this->post->products);                  // 更新关联的项目列表。
+            $this->project->updateProducts($projectID, (array)$this->post->products);                  // 更新关联的产品列表。
             $this->project->updateTeamMembers($newProject, $project, (array)$this->post->teamMembers); // 更新关联的用户信息。
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
