@@ -19,6 +19,7 @@ class collapseBtn extends wg
         return btn
         (
             setClass('btn-link', 'collapse-btn'),
+            set($this->props->skip(array_keys(static::getDefinedProps()))),
             set::icon('angle-down'),
             on::click
             (
