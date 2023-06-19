@@ -3,4 +3,4 @@
 .nav-tabs>.nav-item>a:before {background: none;}
 .nav-tabs>.nav-item>a.active {color: var(--color-primary-500);}
 .nav-tabs>.nav-item>a.active:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px;}
-.tabs .btn-collapse {position: absolute; top: 16px; right: 24px; width: 24px; height: 24px;}
+.tabs .collapse-btn {position: absolute; top: 16px; right: 24px; width: 24px; height: 24px;}

@@ -1355,6 +1355,17 @@ function backBtn(): backBtn
 }
 
 /**
+ * Collapse btn widget.
+ *
+ * string target
+ * string parent
+ */
+function collapseBtn(): collapseBtn
+{
+    return createWg('collapseBtn', func_get_args());
+}
+
+/**
  * Main navbar widget.
  *
  * ?array items

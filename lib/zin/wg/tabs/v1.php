@@ -94,22 +94,10 @@ class tabs extends wg
         $collapse = $this->prop('collapse');
         if(!$collapse) return null;
 
-        return btn
+        return collapseBtn
         (
-            setClass('btn-link', 'btn-collapse'),
-            set::icon('angle-down'),
-            on::click
-            (
-                <<<FUNC
-                    const btn = event.target;
-                    const icon = btn.querySelector('.icon');
-                    const tabs = btn.closest('.tabs');
-                    const tabContent = tabs.querySelector('.tab-content');
-                    if(tabContent) tabContent.classList.toggle('hidden');
-                    icon.classList.toggle('icon-angle-down');
-                    icon.classList.toggle('icon-angle-top');
-                FUNC
-            )
+            set::target('.tab-content'),
+            set::parent('.tabs')
         );
     }
 
