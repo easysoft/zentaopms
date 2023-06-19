@@ -39,10 +39,13 @@ foreach($browserList as $browser)
 }
 
 $mailtoHTML = array();
-$mailtoList = explode(',', str_replace(' ', '', $legendBasic['mailto']['text']));
-foreach($mailtoList as $account)
+if(!empty($legendBasic['mailto']['text']))
 {
-    $mailtoHTML[] = span(zget($users, $account));
+    $mailtoList = explode(',', str_replace(' ', '', $legendBasic['mailto']['text']));
+    foreach($mailtoList as $account)
+    {
+        $mailtoHTML[] = span(zget($users, $account));
+    }
 }
 
 $duplicateLink = $bug->duplicateBug && $canViewBug ? a
