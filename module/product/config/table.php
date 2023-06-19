@@ -119,6 +119,14 @@ $config->product->dtable->fieldList['releases']['type']     = 'number';
 $config->product->dtable->fieldList['releases']['sortType'] = false;
 $config->product->dtable->fieldList['releases']['align']    = 'center';
 
+$config->product->dtable->fieldList['actions']['name']     = 'actions';
+$config->product->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->product->dtable->fieldList['actions']['type']     = 'actions';
+$config->product->dtable->fieldList['actions']['minWidth'] = '60';
+$config->product->dtable->fieldList['actions']['fixed']    = 'right';
+$config->product->dtable->fieldList['actions']['menu']     = array('edit');
+$config->product->dtable->fieldList['actions']['list']     = $config->product->actionList;
+
 /* Default definition of WorkFlow extend fields. */
 $config->product->dtable->extendField['name']     = 'field';
 $config->product->dtable->extendField['title']    = 'name';

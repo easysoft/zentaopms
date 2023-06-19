@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 /* Get column settings of the data table. */
-$cols = array_values($config->product->dtable->fieldList);
+$cols = $config->product->dtable->fieldList;
 
 $extendFieldList = $this->product->getFlowExtendFields();
 foreach($extendFieldList as $field => $name)
@@ -22,45 +22,15 @@ foreach($extendFieldList as $field => $name)
     $extCol['name']  = $field;
     $extCol['title'] = $name;
 
-    $cols[] = $extCol;
+    $cols[$field] = $extCol;
 }
 
 /* Closure function for generating table data. */
+$productStats = initTableData($productStats, $cols, $this->product);
 $fnGenerateTableData = function($productList) use($users, $avatarList)
 {
     $data = array();
-    foreach($productList as $product)
-    {
-        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
-        $totalBugs    = $product->unResolved + $product->fixedBugs;
-
-        $item = new stdClass();
-
-        if(!empty($product->PO))
-        {
-            $item->PO        = zget($users, $product->PO);
-            $item->POAvatar  = $avatarList[$product->PO];
-            $item->POAccount = $product->PO;
-        }
-
-        $item->name              = $product->name;
-        $item->id                = $product->id;
-        $item->type              = 'product';
-        $item->draftStories      = $product->stories['draft'];
-        $item->activeStories     = $product->stories['active'];
-        $item->changingStories   = $product->stories['changing'];
-        $item->reviewingStories  = $product->stories['reviewing'];
-        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-        $item->unResolvedBugs    = $product->unResolved;
-        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
-        $item->plans             = $product->plans;
-        $item->releases          = $product->releases;
-        $item->productLine       = $product->lineName;
-        $item->execution         = $product->executions;
-        $item->testCaseCoverage  = $product->coverage;
-
-        $data[] = $item;
-    }
+    foreach($productList as $product) $data[] = $this->product->formatDataForList($product, $users, $avatarList);
 
     return $data;
 };

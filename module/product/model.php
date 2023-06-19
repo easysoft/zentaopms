@@ -1669,4 +1669,47 @@ class productModel extends model
         $this->delete(TABLE_PRODUCT, $productID);
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
     }
+
+    /**
+     * 格式化数据表格输出数据。
+     * Format data for list.
+     *
+     * @param  object $product
+     * @param  array  $users
+     * @param  array  $avatarList
+     * @access public
+     * @return object
+     */
+    public function formatDataForList(object $product, array $users, array $avatarList): object
+    {
+        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+        $totalBugs    = $product->unResolved + $product->fixedBugs;
+
+        $item = new stdClass();
+        $item->name              = $product->name;
+        $item->id                = $product->id;
+        $item->type              = 'product';
+        $item->draftStories      = $product->stories['draft'];
+        $item->activeStories     = $product->stories['active'];
+        $item->changingStories   = $product->stories['changing'];
+        $item->reviewingStories  = $product->stories['reviewing'];
+        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
+        $item->unResolvedBugs    = $product->unResolved;
+        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
+        $item->plans             = $product->plans;
+        $item->releases          = $product->releases;
+        $item->productLine       = $product->lineName;
+        $item->execution         = $product->executions;
+        $item->testCaseCoverage  = $product->coverage;
+        $item->actions           = zget($product, 'actions', array());
+
+        if(!empty($product->PO))
+        {
+            $item->PO        = zget($users, $product->PO);
+            $item->POAvatar  = zget($avatarList, $product->PO);
+            $item->POAccount = $product->PO;
+        }
+
+        return $item;
+    }
 }
