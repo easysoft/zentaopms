@@ -2309,7 +2309,7 @@ class execution extends control
 
             $response['closeModal'] = true;
             $response['load']       = true;
-            if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
+            if($from == 'kanban') $response['callback'] = "changeStatus('suspended')";
             return $this->sendSuccess($response);
         }
 
@@ -2370,7 +2370,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function close($executionID, $from = 'execution')
+    public function close(int $executionID, string $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -2380,20 +2380,17 @@ class execution extends control
         {
             $this->execution->computeBurn($executionID);
             $this->execution->close($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'close');
 
             $this->executeHooks($executionID);
-            if(isonlybody() and $from == 'kanban')
-            {
-                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('closed')"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
+
+            $response['closeModal'] = true;
+            $response['load']       = true;
+            if($from == 'kanban') $response['callback'] = "changeStatus('closed')";
+            return $this->sendSuccess($response);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;
