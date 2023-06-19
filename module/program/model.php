@@ -1846,26 +1846,27 @@ class programModel extends model
             }
             if(common::hasPriv('project', 'edit')) $actionsMap[] = 'edit';
             if(common::hasPriv('project', 'team')) $actionsMap[] = 'team';
-            if(common::hasPriv('project', 'group'))
-            {
-                $item = new stdclass();
-                $item->name = 'group';
-                if($program->model == 'kanban')
-                {
-                    $item->disabled = true;
-                    $item->hint     = $this->lang->project->tip->group;
-                }
-                $actionsMap[] = $item;
-            }
-
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $more = new stdclass();
                 $more->name  = 'more';
                 $more->items = array();
-                $moreActions = array('manageProducts', 'whitelist', 'delete');
+                $moreActions = array('group', 'manageProducts', 'whitelist', 'delete');
                 foreach($moreActions as $action)
                 {
+                    if($aciton == 'group' && common::hasPriv('project', 'group'))
+                    {
+                        $item = new stdclass();
+                        $item->name = 'group';
+                        if($program->model == 'kanban')
+                        {
+                            $item->disabled = true;
+                            $item->hint     = $this->lang->project->tip->group;
+                        }
+                        $more->items[] = $item;
+                        continue;
+                    }
+
                     if(!common::hasPriv('project', $action)) continue;
 
                     $item = new stdclass();
