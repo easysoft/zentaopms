@@ -449,13 +449,13 @@
 
     function openPage(url, appCode)
     {
-        if(DEBUG) console.log('[APP] ', 'open:', url);
+        if(DEBUG) console.log('[APP] ', 'open:', url, appCode);
         if(!window.config.zin)
         {
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
             return;
         }
-        $.apps.reloadApp(appCode || currentCode, url);
+        $.apps.openApp(url, appCode, true);
     }
 
     function onRenderPage(callback)

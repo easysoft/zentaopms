@@ -81,12 +81,12 @@ function openApp(url, code, forceReload)
         zui.Messager.show('App not found', {type: 'danger', time: 2000});
         return;
     }
-    if(!url) url = app.url;
 
     /* Create iframe for app */
     let openedApp = apps.openedMap[code];
     if(!openedApp)
     {
+        if(!url) url = app.url;
         openedApp = $.extend({opened: true, url: url, zIndex: 0, currentUrl: url}, app);
         forceReload = false;
         apps.openedMap[code] = openedApp;
@@ -118,6 +118,7 @@ function openApp(url, code, forceReload)
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
     }
+    if(!url) url = openedApp.currentUrl;
 
     /* Set tab cookie */
     $.cookie.set('tab', code, {expires: config.cookieLife, path: config.webRoot});
@@ -169,7 +170,7 @@ function openApp(url, code, forceReload)
         $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
     }
 
-    if(debug) console.log('[APPS]', 'open:', code);
+    if(debug) console.log('[APPS]', 'open:', code, {url, forceReload});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     return openedApp;
