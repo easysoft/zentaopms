@@ -3886,6 +3886,21 @@ EOT;
 
         return $returnJson ? json_encode($fieldList) : $fieldList;
     }
+
+    /**
+     * Get DAO to access SQLite.
+     *
+     * @param  object $params
+     * @access public
+     * @return mixed
+     */
+    public function getSqliteDAO($params)
+    {
+        $dao = clone $this->dao;
+        $dao->dbh = $this->app->connectSqlite($params);
+
+        return $dao;
+    }
 }
 
 class common extends commonModel
