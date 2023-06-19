@@ -890,22 +890,7 @@ class baseDAO
         {
             if($this->table) unset(dao::$cache[$this->table]);
             $this->reset();
-
-            $result = $this->dbh->exec($sql);
-
-            if($this->useSqlite)
-            {
-                try
-                {
-                    $this->sqlite->pushToQueue($sql);
-                }
-                catch(PDOException $e)
-                {
-                    $this->sqlError($e);
-                }
-            }
-
-            return $result;
+            return $this->dbh->exec($sql);
         }
         catch (PDOException $e)
         {

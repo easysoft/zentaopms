@@ -180,7 +180,7 @@ class sqlite
      */
     public function exec(string $sql)
     {
-        return $this->dbh->exec($this->formatSQL($sql));
+        return $this->pushToQueue($sql);
     }
 
     /**
