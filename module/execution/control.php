@@ -3007,7 +3007,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function delete($executionID, $confirm = 'no')
+    public function delete(int $executionID, string $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -3043,7 +3043,8 @@ class execution extends control
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
-            return print(js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes")));
+            $tips = $tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]);
+            return $this->send(array('callback' => "confirmDeleteExecution({$executionID}, \"{$tips}\")"));
         }
         else
         {
@@ -3062,7 +3063,7 @@ class execution extends control
             if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'load' => true));
         }
     }
 

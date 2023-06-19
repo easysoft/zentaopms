@@ -210,10 +210,11 @@ $config->execution->actionList['activate']['hint']        = $lang->execution->ac
 $config->execution->actionList['activate']['url']         = helper::createLink('execution', 'activate',"executionID={rawID}");
 $config->execution->actionList['activate']['data-toggle'] = 'modal';
 
-$config->execution->actionList['delete']['icon'] = 'trash';
-$config->execution->actionList['delete']['text'] = $lang->execution->delete;
-$config->execution->actionList['delete']['hint'] = $lang->execution->delete;
-$config->execution->actionList['delete']['url']  = helper::createLink('execution', 'delete',"executionID={rawID}");
+$config->execution->actionList['delete']['icon']  = 'trash';
+$config->execution->actionList['delete']['class'] = 'ajax-submit';
+$config->execution->actionList['delete']['text']  = $lang->execution->delete;
+$config->execution->actionList['delete']['hint']  = $lang->execution->delete;
+$config->execution->actionList['delete']['url']   = helper::createLink('execution', 'delete',"executionID={rawID}");
 
 $config->execution->team = new stdclass();
 $config->execution->team->actionList['unlink']['icon'] = 'unlink';
