@@ -14,7 +14,7 @@ include 'common.html.php';
 
 formPanel
 (
-    setCommonProps($bug, $lang->bug->activate) ,
+    setCommonProps($bug) ,
     formGroup
     (
         set::width('1/3'),

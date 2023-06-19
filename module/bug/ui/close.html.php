@@ -14,7 +14,7 @@ include 'common.html.php';
 
 formPanel
 (
-    setCommonProps($bug, $lang->bug->close),
+    setCommonProps($bug),
     formGroup
     (
         set::label($lang->comment),

@@ -16,7 +16,7 @@ jsVar('page', 'confirm');
 
 formPanel
 (
-    setCommonProps($bug, $lang->bug->confirm),
+    setCommonProps($bug),
     formGroup
     (
         set::width('1/3'),

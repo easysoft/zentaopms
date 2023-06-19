@@ -37,7 +37,7 @@ if(common::hasPriv('build', 'create'))
 /* zin: Define the form in main content. */
 formPanel
 (
-    setCommonProps($bug, $lang->bug->resolve),
+    setCommonProps($bug),
     formGroup
     (
         set::width('1/3'),
