@@ -586,6 +586,160 @@ class bugZen extends bug
     }
 
     /**
+     * 获取BUG详情页面的基本信息列表。
+     * Get bug legend basic info.
+     *
+     * @param  object    $view
+     * @access protected
+     * @return array
+     */
+    protected function getBasicInfoTable(object $view): array
+    {
+        extract((array)$view);
+
+        $this->app->loadLang('product');
+        $canViewProduct = common::hasPriv('project', 'view');
+        $canBrowseBug   = common::hasPriv('bug', 'browse');
+        $canViewPlan    = common::hasPriv('productplan', 'view');
+        $canViewCase    = common::hasPriv('testcase', 'view');
+
+        $moduleTitle = '';
+        if(empty($modulePath))
+        {
+            $moduleTitle .= '/';
+        }
+        else
+        {
+            if($bugModule->branch && isset($branches[$bugModule->branch])) $moduleTitle .= $branches[$bugModule->branch] . '/';
+
+            foreach($modulePath as $key => $module)
+            {
+                $moduleTitle .= $module->name;
+
+                if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
+            }
+        }
+
+        $branchTitle  = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        $fromCaseName = $bug->case ? "#{$bug->case} {$bug->caseTitle}" : '';
+        $productLink  = $bug->product && $canViewProduct ? helper::createLink('product',     'view',   "productID={$bug->product}")                           : '';
+        $branchLink   = $bug->branch  && $canBrowseBug   ? helper::createLink('bug',         'browse', "productID={$bug->product}&branch={$bug->branch}")     : '';
+        $planLink     = $bug->plan    && $canViewPlan    ? helper::createLink('productplan', 'view',   "planID={$bug->plan}&type=bug")                        : '';
+        $fromCaseLink = $bug->case    && $canViewCase    ? helper::createLink('testcase',    'view',   "caseID={$bug->case}&caseVersion={$bug->caseVersion}") : '';
+
+        $legendBasic = array();
+        if(empty($product->shadow))    $legendBasic['product'] = array('name' => $this->lang->bug->product, 'text' => $product->name, 'href' => $productLink, 'attr' => array('data-app' => 'product'));
+        if($product->type != 'normal') $legendBasic['branch']  = array('name' => $branchTitle,        'text' => $branchName,    'href' => $branchLink);
+        $legendBasic['module'] = array('name' => $this->lang->bug->module, 'text' => $moduleTitle);
+        if(empty($product->shadow) || !empty($project->multiple)) $legendBasic['productplan'] = array('name' => $this->lang->bug->plan, 'text' => $bug->planName, 'href' => $planLink);
+        $legendBasic['fromCase']       = array('name' => $this->lang->bug->fromCase,       'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal'));
+        $legendBasic['type']           = array('name' => $this->lang->bug->type,           'text' => zget($this->lang->bug->typeList, $bug->type));
+        $legendBasic['severity']       = array('name' => $this->lang->bug->severity,       'text' => zget($this->lang->bug->severityList, $bug->severity));
+        $legendBasic['pri']            = array('name' => $this->lang->bug->pri,            'text' => zget($this->lang->bug->priList, $bug->pri));
+        $legendBasic['status']         = array('name' => $this->lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
+        $legendBasic['activatedCount'] = array('name' => $this->lang->bug->activatedCount, 'text' => $bug->activatedCount);
+        $legendBasic['activatedDate']  = array('name' => $this->lang->bug->activatedDate,  'text' => $bug->activatedDate);
+        $legendBasic['confirmed']      = array('name' => $this->lang->bug->confirmed,      'text' => $this->lang->bug->confirmedList[$bug->confirmed]);
+        $legendBasic['assignedTo']     = array('name' => $this->lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $this->lang->at . $bug->assignedDate);
+        $legendBasic['deadline']       = array('name' => $this->lang->bug->deadline,       'text' => $bug->deadline . (isset($bug->delay) ? sprintf($this->lang->bug->notice->delayWarning, $bug->delay) : ''));
+        $legendBasic['feedbackBy']     = array('name' => $this->lang->bug->feedbackBy,     'text' => $bug->feedbackBy);
+        $legendBasic['notifyEmail']    = array('name' => $this->lang->bug->notifyEmail,    'text' => $bug->notifyEmail);
+        $legendBasic['os']             = array('name' => $this->lang->bug->os,             'text' => $bug->os);
+        $legendBasic['browser']        = array('name' => $this->lang->bug->browser,        'text' => $bug->browser);
+        $legendBasic['keywords']       = array('name' => $this->lang->bug->keywords,       'text' => $bug->keywords);
+        $legendBasic['mailto']         = array('name' => $this->lang->bug->mailto,         'text' => $bug->mailto);
+
+        return $legendBasic;
+    }
+
+    /**
+     * 获取BUG的一生信息。
+     * Get bug a life data.
+     *
+     * @param  object    $view
+     * @access protected
+     * @return array
+     */
+    protected function getBugLifeTable(object $view): array
+    {
+        extract((array)$view);
+
+        $legendLife  = array();
+        $legendLife['openedBy']      = array('name' => $this->lang->bug->openedBy,      'text' => zget($users, $bug->openedBy) . ($bug->openedDate ? $this->lang->at . $bug->openedDate : ''));
+        $legendLife['openedBuild']   = array('name' => $this->lang->bug->openedBuild,   'text' => $bug->openedBuild);
+        $legendLife['resolvedBy']    = array('name' => $this->lang->bug->lblResolved,   'text' => zget($users, $bug->resolvedBy) . ($bug->resolvedDate ? $this->lang->at . $bug->resolvedDate : ''));
+        $legendLife['resolvedBuild'] = array('name' => $this->lang->bug->resolvedBuild, 'text' => zget($builds, $bug->resolvedBuild));
+        $legendLife['resolution']    = array('name' => $this->lang->bug->resolution,    'text' => '');
+        $legendLife['closedBy']      = array('name' => $this->lang->bug->closedBy,      'text' => zget($users, $bug->closedBy) . ($bug->closedDate ? $this->lang->at . $bug->closedDate : ''));
+        $legendLife['lastEditedBy']  = array('name' => $this->lang->bug->lblLastEdited, 'text' => zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . ($bug->lastEditedDate ? $this->lang->at . $bug->lastEditedDate : ''));
+
+        return $legendLife;
+    }
+
+    /**
+     * 获取BUG的项目、迭代、研发需求、任务信息。
+     * Get bug main related data.
+     *
+     * @param  object    $view
+     * @access protected
+     * @return array
+     */
+    protected function getMainRelatedTable(object $view): array
+    {
+        extract((array)$view);
+
+        $canViewProduct     = common::hasPriv('product', 'view');
+        $canBrowseExecution = common::hasPriv('execution', 'browse');
+        $canViewStory       = common::hasPriv('story', 'view');
+        $canViewTask        = common::hasPriv('task', 'view');
+
+        $executionTitle = isset($project->model) && $project->model == 'kanban' ? $this->lang->bug->kanban : $this->lang->bug->execution;
+        $projectLink    = $bug->project   && $canViewProduct     ? helper::createLink('project',   'view',   "projectID={$bug->project}")     : '';
+        $executionLink  = $bug->execution && $canBrowseExecution ? helper::createLink('execution', 'browse', "executionID={$bug->execution}") : '';
+        $storyLink      = $bug->story     && $canViewStory       ? helper::createLink('story',     'view',   "storyID={$bug->story}")         : '';
+        $taskLink       = $bug->task      && $canViewTask        ? helper::createLink('task',      'view',   "taskID={$bug->task}")           : '';
+
+        $legendExecStoryTask = array();
+        $legendExecStoryTask['project']   = array('name' => $this->lang->bug->project, 'text' => zget($bug, 'projectName', ''), 'href' => $projectLink);
+        $legendExecStoryTask['execution'] = array('name' => $executionTitle,           'text' => $bug->executionName,           'href' => $executionLink);
+        $legendExecStoryTask['story']     = array('name' => $this->lang->bug->story,   'text' => $bug->storyTitle,              'href' => $storyLink, 'attr' => array('data-toggle' => 'modal'));
+        $legendExecStoryTask['task']      = array('name' => $this->lang->bug->task,    'text' => $bug->taskName,                'href' => $taskLink,  'attr' => array('data-toggle' => 'modal'));
+
+        return $legendExecStoryTask;
+    }
+
+    /**
+     * 获取BUG的其他相关信息。
+     * Get bug other related data.
+     *
+     * @param  object    $view
+     * @access protected
+     * @return array
+     */
+    protected function getOtherRelatedTable(object $view): array
+    {
+        extract((array)$view);
+
+        $canViewStory = common::hasPriv('story', 'view');
+        $canViewTask  = common::hasPriv('task', 'view');
+
+        $toStoryName  = $bug->toStory ? "#{$bug->toStory} {$bug->toStoryTitle}" : '';
+        $toTaskName   = $bug->toTask  ? "#{$bug->toTask} {$bug->toTaskTitle}"   : '';
+        $toStoryLink  = $bug->toStory && $canViewStory ? helper::createLink('story', 'view', "storyID={$bug->toStory}") : '';
+        $toTaskLink   = $bug->toTask  && $canViewTask  ? helper::createLink('task',  'view', "taskID={$bug->toTask}")   : '';
+
+        $legendMisc = array();
+        $legendMisc['relatedBug'] = array('name' => $lang->bug->relatedBug, 'text' => isset($bug->linkBugTitles) ? $bug->linkBugTitles : array());
+        $legendMisc['toCase']     = array('name' => $lang->bug->toCase,     'text' => $bug->toCases);
+        $legendMisc['toStory']    = array('name' => $lang->bug->toStory,    'text' => $toStoryName,  'href' => $toStoryLink,  'attr' => array('data-toggle' => 'modal'));
+        $legendMisc['toTask']     = array('name' => $lang->bug->toTask,     'text' => $toTaskName,   'href' => $toTaskLink,   'attr' => array('data-toggle' => 'modal'));
+        $legendMisc['linkMR']     = array('name' => $lang->bug->linkMR,     'text' => $bug->linkMRTitles);
+        $legendMisc['linkCommit'] = array('name' => $lang->bug->linkCommit, 'text' => $linkCommits);
+
+        return $legendMisc;
+    }
+
+    /**
      * 设置浏览页面的 cookie。
      * Set cookie in browse view.
      *

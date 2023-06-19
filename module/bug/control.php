@@ -178,6 +178,10 @@ class bug extends control
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
         $this->view->actionList  = $this->loadModel('bug')->buildOperateMenu($bug, 'view');
         $this->view->actions     = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->legendBasic = $this->bugZen->getBasicInfoTable($this->view);
+        $this->view->legendLife  = $this->bugZen->getBugLifeTable($this->view);
+        $this->view->legendMain  = $this->bugZen->getMainRelatedTable($this->view);
+        $this->view->legendMisc  = $this->bugZen->getOtherRelatedTable($this->view);
         $this->display();
     }
 
