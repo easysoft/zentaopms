@@ -511,39 +511,28 @@ class task extends control
      * Delete estimate.
      *
      * @param  int    $estimateID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteWorkhour($estimateID, $confirm = 'no')
+    public function deleteWorkhour($estimateID)
     {
         $estimate = $this->task->getEffortByID($estimateID);
         $taskID   = $estimate->objectID;
         $task     = $this->task->getById($taskID);
-        if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)
-        {
-            return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes")));
-        }
-        elseif($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
-        {
-            return print(js::confirm($this->lang->task->confirmDeleteLastEstimate, $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes")));
-        }
-        else
-        {
-            $changes = $this->task->deleteWorkhour($estimateID);
-            if(dao::isError()) return print(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
-            $this->action->logHistory($actionID, $changes);
+        $changes = $this->task->deleteWorkhour($estimateID);
+        if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($task->consumed - $estimate->consumed == 0)
-            {
-                $this->action->create('task', $taskID, 'Adjusttasktowait');
-                return print(js::reload('parent.parent'));
-            }
+        $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
+        $this->action->logHistory($actionID, $changes);
 
-            return print(js::reload('parent'));
+        if($task->consumed - $estimate->consumed == 0)
+        {
+            $this->action->create('task', $taskID, 'Adjusttasktowait');
+            return print(js::reload('parent.parent'));
         }
+
+        return print(js::reload('parent'));
     }
 
     /**

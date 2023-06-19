@@ -1805,7 +1805,7 @@ class taskModel extends model
      */
     public function deleteWorkhour($estimateID)
     {
-        $estimate = $this->getEstimateByID($estimateID);
+        $estimate = $this->getEffortByID($estimateID);
         $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
