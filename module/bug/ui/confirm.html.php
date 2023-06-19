@@ -10,11 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'common.html.php';
+
 jsVar('page', 'confirm');
 
 formPanel
 (
-    set::title($bug->title),
+    setCommonProps($bug, $lang->bug->confirm),
     formGroup
     (
         set::width('1/3'),
@@ -68,8 +70,9 @@ formPanel
             set::name('comment'),
             set::value(),
         )
-    ),
+    )
 );
+
 history();
 
 render('modalDialog');

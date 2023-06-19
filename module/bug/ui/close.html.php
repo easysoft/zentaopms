@@ -10,19 +10,22 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($bug->title);
-form
+include 'common.html.php';
+
+formPanel
 (
-    set::actions(array('submit')),
-    set::submitBtnText($lang->bug->close),
-    set::class('pb-6 border-b'),
+    setCommonProps($bug, $lang->bug->close),
     formGroup
     (
         set::label($lang->comment),
         set::name('comment'),
         set::control('editor')
-    )
+    ),
+    set::actions(array('submit')),
+    set::submitBtnText($lang->bug->close),
+    set::class('border-b'),
 );
+
 history();
 
 render('modalDialog');

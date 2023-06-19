@@ -10,28 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'common.html.php';
+
 jsVar('page', 'assignedto');
 
 /* zin: Define the form in main content. */
 formPanel
 (
-    set::title($lang->bug->assignTo),
-    set::shadow(false),
-    set::headingClass('status-heading'),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->bug->assignTo),
-    set::actionsClass('form-group no-label'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($bug->title),
-            set::entityID($bug->id),
-            set::reverse(true),
-        )
-    ),
+    setCommonProps($bug, $lang->bug->assignedTo),
     formGroup
     (
         set::width('1/3'),
@@ -56,6 +42,7 @@ formPanel
         set::rows(6),
     ),
 );
+
 history();
 
 render('modalDialog');

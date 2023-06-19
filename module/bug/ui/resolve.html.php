@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'common.html.php';
+
 jsVar('bugID',     $bug->id);
 jsVar('productID', $bug->product);
 jsVar('page',      'resolve');
@@ -35,23 +37,7 @@ if(common::hasPriv('build', 'create'))
 /* zin: Define the form in main content. */
 formPanel
 (
-    set::title($lang->bug->resolve),
-    set::shadow(false),
-    set::headingClass('status-heading'),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->bug->resolve),
-    set::actionsClass('form-group no-label'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($bug->title),
-            set::entityID($bug->id),
-            set::reverse(true),
-        )
-    ),
+    setCommonProps($bug, $lang->bug->resolve),
     formGroup
     (
         set::width('1/3'),
@@ -162,6 +148,7 @@ formPanel
         set::rows(6),
     ),
 );
+
 history();
 
 render('modalDialog');
