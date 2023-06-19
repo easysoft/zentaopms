@@ -2980,4 +2980,38 @@ class projectModel extends model
         }
         return $actions;
     }
+
+    /**
+     * 格式化要在数据表格打印的数据。
+     * Format data for list.
+     *
+     * @param  object $project
+     * @param  array  $PMList
+     * @access public
+     * @return object
+     */
+    public function formatDataForList(object $project, array $PMList): object
+    {
+        $projectBudget = $this->getBudgetWithUnit($project->budget);
+
+        $project->budget      = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+        $project->statusTitle = $this->processStatus('project', $project);
+        $project->estimate    = $project->hours->totalEstimate . $this->lang->project->workHourUnit;
+        $project->consume     = $project->hours->totalConsumed . $this->lang->project->workHourUnit;
+        $project->surplus     = $project->hours->totalLeft     . $this->lang->project->workHourUnit;
+        $project->progress    = $project->hours->progress;
+        $project->end         = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+        $project->hasProduct  = zget($this->lang->project->projectTypeList, $project->hasProduct);
+        $project->invested    = !empty($this->config->execution->defaultWorkhours) ? round($project->hours->totalConsumed / $this->config->execution->defaultWorkhours, 2) : 0;
+
+        if($project->PM)
+        {
+            $user = zget($PMList, $project->PM, '');
+            $project->PM        = zget($user, 'realname', $project->PM);
+            $project->PMAvatar  = zget($user, 'avatar', '');
+            $project->PMUserID  = zget($user, 'id', 0);
+        }
+
+        return $project;
+    }
 }

@@ -500,23 +500,6 @@ class productZen extends product
     }
 
     /**
-     * Get project PM List
-     *
-     * @param  array     $projectStats
-     * @access protected
-     * @return string[]
-     */
-    protected function getPMList(array $projectStats): array
-    {
-        $accounts = array();
-        foreach($projectStats as $project) $accounts[] = $project->PM;
-        $accounts = array_filter(array_unique($accounts));
-
-        if(empty($accounts)) return array();
-        return $this->user->getListByAccounts($accounts, 'account');
-    }
-
-    /**
      * 创建完成后，做页面跳转。
      * Locate after create product.
      *

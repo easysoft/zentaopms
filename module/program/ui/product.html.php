@@ -33,7 +33,6 @@ dtable
     set::cols($cols),
     set::data($data),
     set::nested(false),
-    //set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),

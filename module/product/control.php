@@ -94,7 +94,7 @@ class product extends control
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->projectStats = $projectStats;
-        $this->view->PMList       = $this->productZen->getPMList($projectStats);
+        $this->view->PMList       = $this->product->getPMList($projectStats);
         $this->view->product      = $product;
         $this->view->projects     = $projects;
         $this->view->status       = $status;

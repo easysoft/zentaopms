@@ -121,22 +121,7 @@ foreach($projectStats as $project)
     if($project->status == 'suspended') $suspendedCount ++;
     if($project->status == 'closed')    $closedCount ++;
 
-    $projectBudget = common::checkNotCN() ? round((float)$project->budget, 2) : round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand;
-    $budgetTitle   = $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
-
-    $project->budget      = $budgetTitle;
-    $project->statusTitle = $this->processStatus('project', $project);
-    $project->estimate    = $project->hours->totalEstimate . $lang->execution->workHourUnit;
-    $project->consume     = $project->hours->totalConsumed . $lang->execution->workHourUnit;
-    $project->progress    = $project->hours->progress;
-    $project->end         = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
-    if($project->PM)
-    {
-        $user = zget($PMList, $project->PM, '');
-        $project->PM        = zget($user, 'realname', $project->PM);
-        $project->PMAvatar  = zget($user, 'avatar', '');
-        $project->PMUserID  = zget($user, 'id', 0);
-    }
+    $project = $this->project->formatDataForList($project, $PMList);
 }
 $summary = sprintf($lang->project->summary, count($projectStats));
 if($status == 'all') $summary = sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount);

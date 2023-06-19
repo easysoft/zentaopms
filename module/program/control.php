@@ -482,12 +482,13 @@ class program extends control
         $allProjectsNum = $this->program->getProjectStats($programID, 'all');
         $this->view->allProjectsNum = $allProjectsNum;
 
-        $this->view->title      = $this->lang->program->project;
+        $this->view->title = $this->lang->program->project;
 
         $this->view->projectStats  = $projectStats;
         $this->view->pager         = $pager;
         $this->view->programID     = $programID;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->PMList        = $this->loadModel('product')->getPMList($projectStats);
         $this->view->browseType    = $browseType;
         $this->view->orderBy       = $orderBy;
         $this->view->showBatchEdit = $this->cookie->showProjectBatchEdit;

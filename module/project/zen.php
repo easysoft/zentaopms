@@ -967,14 +967,7 @@ class projectZen extends project
         $this->loadModel('execution');
         foreach($projectList as $project)
         {
-            $project->from       = 'project';
-            $project->end        = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-            $project->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
-            $project->estimate   = $project->hours->totalEstimate . $this->lang->project->workHourUnit;
-            $project->consume    = $project->hours->totalConsumed . $this->lang->project->workHourUnit;
-            $project->surplus    = $project->hours->totalLeft     . $this->lang->project->workHourUnit;
-            $project->progress   = $project->hours->progress;
-            $project->invested   = !empty($this->config->execution->defaultWorkhours) ? round($project->hours->totalConsumed / $this->config->execution->defaultWorkhours, 2) : 0;
+            $project = $this->project->formatDataForList($project, $userList);
 
             $projectStories = $this->story->getExecutionStoryPairs($project->id);
             $project->storyCount = count($projectStories);
@@ -982,19 +975,7 @@ class projectZen extends project
             $executions = $this->execution->getStatData($project->id, 'all');
             $project->executionCount = count($executions);
 
-            $projectBudget = $this->project->getBudgetWithUnit($project->budget);
-            $project->budget = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
-
-            if($project->PM)
-            {
-                $user = zget($userList, $project->PM, '');
-                if(empty($user)) continue;
-
-                $project->PM        = $user->realname;
-                $project->PMAvatar  = $user->avatar;
-                $project->PMAccount = $project->PM;
-            }
-
+            $project->from    = 'project';
             $project->actions = $this->project->buildActionList($project);
         }
 
