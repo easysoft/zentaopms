@@ -22,15 +22,15 @@ foreach($case->steps as $step)
         $childID = 0;
     }
     $stepClass  = $step->type == 'step' ? 'step-group' : "step-{$step->type}";
-    $stepItemID = $step->type == 'item' ? span(setClass('input-group'), "{$stepID}.{$childID}") : '';
+    $stepItemID = $step->type == 'item' ? span(setClass('input-group pr-1'), "{$stepID}.{$childID}") : '';
 
     $steps[] = h::tr
     (
         setClass("step {$stepClass}"),
-        h::th
+        h::td
         (
-            setClass('step-id'),
-            div
+            setClass('step-id text-center'),
+            span
             (
                 setClass($step->type == 'item' ? 'hidden' : ''),
                 $stepID,
@@ -58,77 +58,6 @@ foreach($case->steps as $step)
 
 $files = '';
 foreach($case->files as $file) $files .= $file->title . ',';
-
-$linkBugs = array();
-$app->loadLang('bug');
-if($case->fromBug)
-{
-    $linkBugs[] = h::tr
-    (
-        h::td
-        (
-            span
-            (
-                setClass('label justify-center rounded-full px-1.5 h-3.5 mr-1.5'),
-                $case->fromBug,
-            ),
-            severityLabel
-            (
-                setClass('mr-1.5'),
-                set::level(zget($lang->bug->severityList, $case->fromBugData->severity)),
-                set::isIcon(true)
-            ),
-            a
-            (
-                set::href(hasPriv('bug', 'view') ? $this->createLink('bug', 'view', "bugID=$case->fromBug") : ''),
-                set('data-toggle', 'modal'),
-                $case->fromBugData->title,
-            ),
-        ),
-        h::td
-        (
-            span
-            (
-                $lang->testcase->openedDate . ':',
-            ),
-            $case->fromBugData->openedDate,
-        ),
-    );
-}
-foreach($case->toBugs as $bugID => $bug)
-{
-    $linkBugs[] = h::tr
-    (
-        h::td
-        (
-            span
-            (
-                setClass('label justify-center rounded-full px-1.5 h-3.5 mr-1.5'),
-                $bugID,
-            ),
-            severityLabel
-            (
-                setClass('mr-1.5'),
-                set::level(zget($lang->bug->severityList, $bug->severity)),
-                set::isIcon(true)
-            ),
-            a
-            (
-                set::href(hasPriv('bug', 'view') ? $this->createLink('bug', 'view', "bugID=$bugID") : ''),
-                set('data-toggle', 'modal'),
-                $bug->title,
-            ),
-        ),
-        h::td
-        (
-            span
-            (
-                $lang->testcase->openedDate . ':',
-            ),
-            $bug->openedDate,
-        ),
-    );
-}
 
 /* Get data in legend of basic information. */
 $app->loadLang('product');
@@ -220,7 +149,7 @@ else
             {
                 $moduleItems[] = $module->name;
             }
-            if(isset($modulePath[$key + 1])) $moduleItems[] = $lang->arrow;
+            if(isset($modulePath[$key + 1])) $moduleItems[] = ' / ';
         }
 
     }
@@ -245,6 +174,7 @@ else
     (
         set::name($lang->testcase->story),
         isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), set('data-toggle', 'modal'), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''),
+        set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
         $confirmStatusChange,
     );
 
@@ -257,9 +187,45 @@ else
 
     $lastRunResultItem = item
     (
-        setClass("result-testcase {$case->lastRunResult}"),
+        setClass("result-testcase status-{$case->lastRunResult}"),
         set::name($lang->testtask->lastRunResult),
         $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted,
+    );
+
+    $linkBugsItem = array();
+    $linkBugs     = array();
+    if($case->fromBug)
+    {
+        $linkBugs[] = entityLabel
+        (
+            set::href($this->createLink('bug', 'view', "bugID={$case->fromBug}")),
+            set::level(4),
+            set::entityID($case->fromBug),
+            set::text($case->fromBugData->title),
+            set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+            set('title', $case->fromBugData->title),
+        );
+    }
+    if($case->toBugs)
+    {
+        foreach($case->toBugs as $bugID => $bug)
+        {
+            $linkBugs[] = entityLabel
+            (
+                set::href($this->createLink('bug', 'view', "bugID={$bugID}")),
+                set::level(4),
+                set::entityID($bugID),
+                set::text($bug->title),
+                set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+                set('title', $bug->title),
+            );
+        }
+    }
+    $linkBugsItem = item
+    (
+        setClass('linkBugTitles'),
+        set::name($lang->testcase->legendLinkBugs),
+        $linkBugs,
     );
 
     $linkCases = array();
@@ -270,9 +236,11 @@ else
             $linkCases[] = a
             (
                 set::href($this->createLink('testcase', 'view', "caseID={$linkCaseID}")),
-                set('data-toggle', 'modal'),
+                set::level(4),
+                set::entityID($linkCaseID),
+                set::text($case->fromBugData->linkCaseTitle),
+                set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
                 set('title', $linkCaseTitle),
-                "#{$linkCaseID} {$linkCaseTitle} <br />",
             );
         }
     }
@@ -365,7 +333,7 @@ detailBody
             set::title($lang->testcase->steps),
             h::table
             (
-                setClass('table table-condensed table-hover table-striped table-bordered'),
+                setClass('table condensed bordered'),
                 set::id('steps'),
                 h::thead
                 (
@@ -399,18 +367,6 @@ detailBody
             set::content(trim($files, ',')),
             set::useHtml(true),
         ),
-        section
-        (
-            setClass(empty($linkBugs) ? 'hidden' : ''),
-            set::title($lang->testcase->linkBug),
-            h::table
-            (
-                setClass('table table-condensed table-hover table-striped table-bordered'),
-                set::id('linkBugs'),
-                h::tbody($linkBugs)
-            ),
-            set::useHtml(true),
-        ),
         history(),
         center
         (
@@ -437,6 +393,7 @@ detailBody
     (
         tabs
         (
+            set::collapse(true),
             tabPane
             (
                 set::key('legendBasicInfo'),
@@ -478,7 +435,6 @@ detailBody
                         set::name($lang->testcase->keywords),
                         $case->keywords,
                     ),
-                    $linkCaseItem,
                 ),
             ),
             tabPane
@@ -509,6 +465,21 @@ detailBody
                     ),
                 )
             )
+        ),
+        tabs
+        (
+            set::collapse(true),
+            tabPane
+            (
+                set::key('otherReleted'),
+                set::title('其他相关'),
+                set::active(true),
+                tableData
+                (
+                    $linkBugsItem,
+                    $linkCaseItem,
+                ),
+            ),
         ),
     ),
 );
