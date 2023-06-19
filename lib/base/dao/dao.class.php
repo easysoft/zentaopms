@@ -45,22 +45,13 @@ class baseDAO
     public $config;
 
     /**
-     * 全局对象$sqlite
-     * The global sqlite object.
-     *
-     * @var object
-     * @access public
-     */
-    public $sqlite = null;
-
-    /**
-     * 是否使用sqlite数据库。
-     * If use sqlite database.
+     * 数据库类型。
+     * The database type.
      *
      * @var bool
      * @access public
      */
-    public $useSqlite = false;
+    public $driver = 'mysql';
 
     /**
      * 全局对象$lang
@@ -196,28 +187,8 @@ class baseDAO
         $this->lang      = $lang;
         $this->dbh       = $dbh;
         $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
-        $this->useSqlite = $this->config->enableSqlite;
-
-        if($this->useSqlite) $this->useSqlite();
 
         $this->reset();
-    }
-
-    /**
-     * 使用sqlite数据库。
-     * Use sqlite database.
-     *
-     * @access public
-     * @return object
-     */
-    public function useSqlite($useSqlite = true)
-    {
-        $this->useSqlite = $useSqlite;
-        if(!$this->useSqlite) return $this;
-
-        if(!$this->sqlite instanceof sqlite) $this->sqlite = $this->app->loadClass('sqlite')->connectSqlite();
-
-        return $this;
     }
 
     /**
@@ -795,7 +766,7 @@ class baseDAO
             }
             else
             {
-                return $this->useSqlite ? $this->sqlite->query($sql) : $this->dbh->rawQuery($sql);
+                return $this->driver == 'sqlite' ? $this->dbh->query($sql) : $this->dbh->rawQuery($sql);
             }
         }
         catch (PDOException $e)
