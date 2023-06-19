@@ -264,7 +264,7 @@ class productModel extends model
      * Get products.
      *
      * @param  int        $programID
-     * @param  string     $status
+     * @param  string     $mode         all|noclosed|involved|review|feedback
      * @param  int        $limit
      * @param  int        $line
      * @param  string|int $shadow       all | 0 | 1
@@ -272,7 +272,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0, $fields = '*')
+    public function getList($programID = 0, $mode = 'all', $limit = 0, $line = 0, $shadow = 0, $fields = '*')
     {
         $fields = explode(',', $fields);
         $fields = trim(implode(',t1.', $fields), ',');
@@ -285,11 +285,11 @@ class productModel extends model
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
-            ->beginIF(strpos($status, 'all') === false && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(strpos($mode, 'feedback') === false && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(in_array($status, array_keys($this->lang->story->statusList)))->andWhere('t1.status')->in($status)->fi()
-            ->beginIF($status == 'involved')
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(in_array($mode, array_keys($this->lang->story->statusList)))->andWhere('t1.status')->in($mode)->fi()
+            ->beginIF($mode == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)
             ->orWhere('t1.QD')->eq($this->app->user->account)
             ->orWhere('t1.RD')->eq($this->app->user->account)
@@ -297,7 +297,7 @@ class productModel extends model
             ->orWhere('t4.account')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->beginIF($status == 'review')
+            ->beginIF($mode == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
