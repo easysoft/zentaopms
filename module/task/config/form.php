@@ -174,6 +174,7 @@ $config->task->form->close['lastEditedBy']   = array('type' => 'string',   'requ
 $config->task->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
 $config->task->form->testTask->create = array();
+$config->task->form->testTask->create['selectTestStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
 $config->task->form->testTask->create['testStory']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->testTask->create['testEstStarted']  = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->testTask->create['testDeadline']    = array('type' => 'array', 'required' => false, 'default' => array());

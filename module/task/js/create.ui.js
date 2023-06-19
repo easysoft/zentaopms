@@ -345,3 +345,30 @@ function setAfter()
         $('input[value="toStoryList"]').removeAttr('disabled');
     }
 }
+
+/**
+ * Add a row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+window.addItem = function(obj)
+{
+    let $tr = $(obj).closest('tr');
+    $tr.after($tr.clone());
+}
+
+
+/**
+ * Remove a row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+window.removeItem = function(obj)
+{
+    if($('#testStoryBox').find('tbody tr').length == 1) return false;
+    $(obj).closest('tr').remove();
+}

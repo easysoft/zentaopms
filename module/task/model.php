@@ -1331,7 +1331,7 @@ class taskModel extends model
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         $task->files = $this->file->getByObject('task', $taskID);
-        if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
+        if($setImgSize && $task->desc) $task->desc = $this->file->setImgSize($task->desc);
 
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
 
