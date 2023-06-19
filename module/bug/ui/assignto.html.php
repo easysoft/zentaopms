@@ -29,10 +29,9 @@ formPanel
     formGroup
     (
         set::label($lang->bug->mailto),
+        set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
         set::name('mailto[]'),
         set::value(str_replace(' ', '', $bug->mailto ?: '')),
-        set::multiple(true),
-        set::items($users),
     ),
     formGroup
     (
