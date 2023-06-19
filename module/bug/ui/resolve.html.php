@@ -37,6 +37,9 @@ formPanel
 (
     set::title($lang->bug->resolve),
     set::headingClass('status-heading'),
+    set::actions(array('submit')),
+    set::submitBtnText($lang->bug->resolve),
+    set::actionsClass('form-group no-label'),
     to::headingActions
     (
         entityLabel
