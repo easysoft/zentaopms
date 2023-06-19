@@ -4123,7 +4123,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '', $param = '')
+    public function importPlanStories(int $executionID, int $planID, int $productID = 0, string $fromMethod = 'story', string $extra = '', string $param = '')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -4190,8 +4190,9 @@ class execution extends control
 
         $haveDraft = sprintf($importPlanStoryTips, $count);
         if(!$execution->multiple or $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
-        if($count != 0) echo js::alert($haveDraft) . js::locate($this->createLink($moduleName, $fromMethod, $param));
-        return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
+        if($count != 0) return $this->sendError($haveDraft);
+
+        return $this->sendSuccess(array('closeModal' => true, 'load' => true));
     }
 
     /**
