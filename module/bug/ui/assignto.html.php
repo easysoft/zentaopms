@@ -17,7 +17,7 @@ jsVar('page', 'assignedto');
 /* zin: Define the form in main content. */
 formPanel
 (
-    setCommonProps($bug, $lang->bug->assignedTo),
+    setCommonProps($bug, $lang->bug->assignTo),
     formGroup
     (
         set::width('1/3'),
