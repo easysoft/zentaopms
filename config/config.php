@@ -25,7 +25,7 @@ $config->webRoot       = '';                   // URL根目录。       The root
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
 $config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 $config->tabSession    = false;                // 是否开启浏览器新标签独立session.
-$config->enableSqlite  = true;                 // 是否开启SQLite数据库。Whether enable SQLite database.
+$config->enableSqlite  = false;                // 是否开启SQLite数据库。Whether enable SQLite database.
 
 /* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';               // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
