@@ -335,6 +335,7 @@ $config->program->browse->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->browse->dtable->fieldList['name']['checkbox']     = true;
 $config->program->browse->dtable->fieldList['name']['sortType']     = true;
 $config->program->browse->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+$config->program->browse->dtable->fieldList['name']['required']     = true;
 $config->program->browse->dtable->fieldList['name']['show']         = true;
 $config->program->browse->dtable->fieldList['name']['group']        = 1;
 
@@ -353,7 +354,7 @@ $config->program->browse->dtable->fieldList['PM']['minWidth'] = 80;
 $config->program->browse->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->program->browse->dtable->fieldList['PM']['sortType'] = true;
 $config->program->browse->dtable->fieldList['PM']['show']     = true;
-$config->program->browse->dtable->fieldList['PM']['group']    = 3;
+$config->program->browse->dtable->fieldList['PM']['group']    = 2;
 
 $config->program->browse->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->browse->dtable->fieldList['budget']['title']    = $lang->program->budget;
@@ -361,7 +362,7 @@ $config->program->browse->dtable->fieldList['budget']['width']    = 90;
 $config->program->browse->dtable->fieldList['budget']['type']     = 'format';
 $config->program->browse->dtable->fieldList['budget']['sortType'] = true;
 $config->program->browse->dtable->fieldList['budget']['show']     = true;
-$config->program->browse->dtable->fieldList['budget']['group']    = 4;
+$config->program->browse->dtable->fieldList['budget']['group']    = 3;
 
 $config->program->browse->dtable->fieldList['invested']['name']     = 'invested';
 $config->program->browse->dtable->fieldList['invested']['title']    = $lang->program->invested;
@@ -369,21 +370,21 @@ $config->program->browse->dtable->fieldList['invested']['minWidth'] = 70;
 $config->program->browse->dtable->fieldList['invested']['type']     = 'format';
 $config->program->browse->dtable->fieldList['invested']['sortType'] = true;
 $config->program->browse->dtable->fieldList['invested']['show']     = true;
-$config->program->browse->dtable->fieldList['invested']['group']    = 4;
+$config->program->browse->dtable->fieldList['invested']['group']    = 3;
 
 $config->program->browse->dtable->fieldList['openedDate']['name']     = 'openedDate';
 $config->program->browse->dtable->fieldList['openedDate']['title']    = $lang->program->openedDate;
 $config->program->browse->dtable->fieldList['openedDate']['type']     = 'date';
 $config->program->browse->dtable->fieldList['openedDate']['sortType'] = true;
 $config->program->browse->dtable->fieldList['openedDate']['minWidth'] = 90;
-$config->program->browse->dtable->fieldList['openedDate']['group']    = 5;
+$config->program->browse->dtable->fieldList['openedDate']['group']    = 4;
 
 $config->program->browse->dtable->fieldList['openedBy']['name']     = 'openedBy';
 $config->program->browse->dtable->fieldList['openedBy']['title']    = $lang->program->openedBy;
 $config->program->browse->dtable->fieldList['openedBy']['type']     = 'user';
 $config->program->browse->dtable->fieldList['openedBy']['sortType'] = true;
 $config->program->browse->dtable->fieldList['openedBy']['minWidth'] = 80;
-$config->program->browse->dtable->fieldList['openedBy']['group']    = 5;
+$config->program->browse->dtable->fieldList['openedBy']['group']    = 4;
 
 $config->program->browse->dtable->fieldList['begin']['name']     = 'begin';
 $config->program->browse->dtable->fieldList['begin']['title']    = $lang->program->begin;
@@ -391,7 +392,7 @@ $config->program->browse->dtable->fieldList['begin']['minWidth'] = 90;
 $config->program->browse->dtable->fieldList['begin']['type']     = 'date';
 $config->program->browse->dtable->fieldList['begin']['sortType'] = true;
 $config->program->browse->dtable->fieldList['begin']['show']     = true;
-$config->program->browse->dtable->fieldList['begin']['group']    = 6;
+$config->program->browse->dtable->fieldList['begin']['group']    = 5;
 
 $config->program->browse->dtable->fieldList['end']['name']     = 'end';
 $config->program->browse->dtable->fieldList['end']['title']    = $lang->program->end;
@@ -399,28 +400,28 @@ $config->program->browse->dtable->fieldList['end']['minWidth'] = 90;
 $config->program->browse->dtable->fieldList['end']['type']     = 'date';
 $config->program->browse->dtable->fieldList['end']['sortType'] = true;
 $config->program->browse->dtable->fieldList['end']['show']     = true;
-$config->program->browse->dtable->fieldList['end']['group']    = 6;
+$config->program->browse->dtable->fieldList['end']['group']    = 5;
 
 $config->program->browse->dtable->fieldList['realBegan']['name']     = 'realBegan';
 $config->program->browse->dtable->fieldList['realBegan']['title']    = $lang->program->realBeganAB;
 $config->program->browse->dtable->fieldList['realBegan']['minWidth'] = 90;
 $config->program->browse->dtable->fieldList['realBegan']['type']     = 'date';
 $config->program->browse->dtable->fieldList['realBegan']['sortType'] = true;
-$config->program->browse->dtable->fieldList['realBegan']['group']    = 7;
+$config->program->browse->dtable->fieldList['realBegan']['group']    = 5;
 
 $config->program->browse->dtable->fieldList['realEnd']['name']     = 'realEnd';
 $config->program->browse->dtable->fieldList['realEnd']['title']    = $lang->program->realEndAB;
 $config->program->browse->dtable->fieldList['realEnd']['minWidth'] = 90;
 $config->program->browse->dtable->fieldList['realEnd']['type']     = 'date';
 $config->program->browse->dtable->fieldList['realEnd']['sortType'] = true;
-$config->program->browse->dtable->fieldList['realEnd']['group']    = 7;
+$config->program->browse->dtable->fieldList['realEnd']['group']    = 5;
 
 $config->program->browse->dtable->fieldList['progress']['name']     = 'progress';
 $config->program->browse->dtable->fieldList['progress']['title']    = $lang->program->progressAB;
 $config->program->browse->dtable->fieldList['progress']['minWidth'] = 100;
 $config->program->browse->dtable->fieldList['progress']['type']     = 'progress';
 $config->program->browse->dtable->fieldList['progress']['show']     = true;
-$config->program->browse->dtable->fieldList['progress']['group']    = 8;
+$config->program->browse->dtable->fieldList['progress']['group']    = 5;
 
 $config->program->browse->dtable->fieldList['actions']['name']       = 'actions';
 $config->program->browse->dtable->fieldList['actions']['title']      = $lang->actions;
