@@ -955,7 +955,7 @@ class execution extends control
                 break;
             }
         }
-        $summary = $this->product->summary($stories);
+        $summary = $this->product->summary($stories, $storyType);
         if($storyType == 'requirement') $summary = str_replace($this->lang->SRCommon, $this->lang->URCommon, $summary);
 
         /* Assign. */
