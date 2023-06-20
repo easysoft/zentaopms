@@ -33,7 +33,7 @@ class context extends \zin\utils\dataset
 
     public function getCSS()
     {
-        return trim(implode('\n', $this->getList('css')));
+        return trim(implode("\n", $this->getList('css')));
     }
 
     public function addJS()
