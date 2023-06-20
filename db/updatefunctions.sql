@@ -1,5 +1,3 @@
-SET global log_bin_trust_function_creators = 1;
-SET global sql_mode = '';
 USE `__TABLE__`;
 
 DROP FUNCTION IF EXISTS `get_monday`;
