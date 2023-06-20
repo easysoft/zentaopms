@@ -40,6 +40,8 @@ $lang->ai->prompts->assignModel      = '指定语言模型';
 $lang->ai->prompts->model            = '语言模型';
 $lang->ai->prompts->role             = '角色';
 $lang->ai->prompts->characterization = '角色描述';
+$lang->ai->prompts->rolePlaceholder  = '“你来扮演 <一个什么角色>”';
+$lang->ai->prompts->charPlaceholder  = '该角色的具体描述信息';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = '全部';

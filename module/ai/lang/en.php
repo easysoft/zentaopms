@@ -40,6 +40,8 @@ $lang->ai->prompts->assignModel      = 'Select Model';
 $lang->ai->prompts->model            = 'Model';
 $lang->ai->prompts->role             = 'Role';
 $lang->ai->prompts->characterization = 'Characterization';
+$lang->ai->prompts->rolePlaceholder  = '"Act as a <role>"';
+$lang->ai->prompts->charPlaceholder  = 'Detailed characterization of this role';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = 'All';

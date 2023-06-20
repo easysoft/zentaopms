@@ -40,11 +40,11 @@
           <h4><?php echo $lang->ai->prompts->assignRole;?></h4>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->role;?></span></div>
-            <div class='input mw-400px'><?php echo html::input('role', $prompt->role, "class='form-control'");?></div>
+            <div class='input mw-400px'><?php echo html::input('role', $prompt->role, "class='form-control' placeholder='{$lang->ai->prompts->rolePlaceholder}'");?></div>
           </div>
           <div class='content-row'>
             <div class='input-label'><span><?php echo $lang->ai->prompts->characterization;?></span></div>
-            <div class='input'><?php echo html::textarea('characterization', $prompt->characterization, "class='form-control'");?></div>
+            <div class='input'><?php echo html::textarea('characterization', $prompt->characterization, "class='form-control'  placeholder='{$lang->ai->prompts->charPlaceholder}'");?></div>
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
