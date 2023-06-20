@@ -40,18 +40,36 @@ class tableData extends wg
     {
         $collapse = $item->prop('collapse');
         if(!$collapse)
+        {
+            return div
+            (
+                setClass('col', 'table-data-tr'),
+                div
+                (
+                    setClass('py-1.5 pr-2 font-normal nowrap table-data-th'),
+                    $item->prop('name'),
+                    new collapseBtn
+                    (
+                        setClass('w-5 h-5 ml-1'),
+                        set::target('.table-data-td'),
+                        set::parent('.table-data-tr')
+                    ),
+                ),
+                div
+                (
+                    setClass('py-1.5 pl-2 table-data-td'),
+                    $item->children()
+                )
+            );
+        }
+
         return div
         (
-            setClass('col', 'table-data-tr'),
+            setClass('flex table-data-tr'),
             div
             (
                 setClass('py-1.5 pr-2 font-normal nowrap table-data-th'),
                 $item->prop('name'),
-                new collapseBtn
-                (
-                    set::target('.table-data-td'),
-                    set::parent('.table-data-tr')
-                ),
             ),
             div
             (
