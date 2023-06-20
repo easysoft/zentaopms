@@ -94,7 +94,7 @@ detailBody
                 item
                 (
                     set::name($lang->design->submission),
-                    empty($design->commit) ? $lang->noData : $design->commit
+                    empty($design->commit) ? $lang->noData : html($design->commit)
                 ),
                 item
                 (
