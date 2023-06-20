@@ -20,6 +20,7 @@ class control extends wg
         'id?: string',           // HTML id 属性
         'value?: string',        // HTML value 属性
         'placeholder?: string',  // HTML placeholder 属性
+        'readonly?: bool',       // HTML readonly 属性
         'required?: bool',       // 是否为必填项
         'disabled?: bool',       // 是否为禁用状态
         'items?: array'          // 表单输入元素子项数据
@@ -45,7 +46,7 @@ class control extends wg
         return div
         (
             set::class('form-control-static'),
-            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items'))),
+            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items', 'required'))),
             set('data-name', $this->prop('name')),
             $this->prop('value')
         );

@@ -20,13 +20,14 @@ class formGroup extends wg
         'strong?: bool',
         'value?: string|array',
         'disabled?: bool',
+        'readonly?: bool',
         'items?: array',
         'placeholder?: string'
     );
 
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder']);
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -41,6 +42,7 @@ class formGroup extends wg
             if($disabled !== null)    $control['disabled']    = $disabled;
             if($items !== null)       $control['items']       = $items;
             if($placeholder !== null) $control['placeholder'] = $placeholder;
+            if($readonly !== null)    $control['readonly']    = $readonly;
         }
 
         return div
