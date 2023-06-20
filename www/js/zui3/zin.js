@@ -37,6 +37,7 @@
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
     const startTime   = performance.now();
+    const timers      = {timeout: [], interval: []};
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
     let historyState  = parent.window.history.state;
@@ -71,8 +72,8 @@
         main:          (data) => $('#main').html(data),
         featureBar:    (data) => $('#featureBar').html(data),
         pageCSS:       (data) => $('#pageCSS').html(data),
-        configJS:      updatePageJS,
-        pageJS:        (data) => $('#pageJS').replaceWith(data),
+        pageJS:        updatePageJS,
+        configJS:      (data) => $('#configJS')[0].text = data,
         activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    activeNav,
         table:         updateTable,
@@ -101,14 +102,29 @@
         zinbar = new zui.Zinbar($bar[0]);
     }
 
+    function registerTimer(callback, time, type)
+    {
+        type = type || 'timeout';
+        const id = type === 'interval' ? setInterval(callback, time) : setTimeout(callback, time);
+        timers[type].push(id);
+        return id;
+    }
+
     function updatePageJS(data)
     {
         if(window.onPageUnmount) window.onPageUnmount();
+
         window.onPageUnmount = null;
         window.beforePageUpdate = null;
         window.afterPageUpdate = null;
         window.onPageRender = null;
-        $('#configJS')[0].text = data;
+
+        if(timers.interval.length) timers.interval.forEach(clearInterval);
+        if(timers.timeout.length) timers.timeout.forEach(clearTimeout);
+        timers.interval = [];
+        timers.timeout = [];
+
+        $('#pageJS').replaceWith(data);
     }
 
     function updateZinbar(perf, errors, basePath)
@@ -652,7 +668,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
