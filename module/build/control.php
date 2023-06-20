@@ -422,7 +422,7 @@ class build extends control
         $builds = $this->build->getBuildPairs($productID, $branch, $type, 0, 'project', $build, false);
         if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
-        return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
+        return print(html::select($varName, $builds, $build, "class='form-control' $extra"));
     }
 
     /**
@@ -465,7 +465,7 @@ class build extends control
         $builds = $this->build->getBuildPairs($productID, $branch, $type, $projectID, 'project', $build, false);
         if(strpos($extra, 'multiple') !== false) $varName .= '[]';
         if($isJsonView) return print(json_encode($builds));
-        return print(html::select($varName, $builds, $build, "class='form-control chosen' $extra"));
+        return print(html::select($varName, $builds, $build, "class='form-control' $extra"));
     }
 
     /**
@@ -520,15 +520,6 @@ class build extends control
             $builds = $this->build->getBuildPairs($productID, $branch, 'noempty,notrunk', $executionID, 'execution', '', false);
             if($isJsonView) return print(json_encode($builds));
 
-            if(empty($builds))
-            {
-                $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-
-                $html  = html::a($this->createLink('build', 'create', "executionID=$executionID&productID=$productID&projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
-                $html .= '&nbsp; ';
-                $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
-                return print($html);
-            }
             return print(html::select('build', array('') + $builds, $build, "class='form-control'"));
         }
         if($varName == 'dropdownList')

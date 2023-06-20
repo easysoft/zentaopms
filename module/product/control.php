@@ -974,9 +974,8 @@ class product extends control
         }
         else
         {
-            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
             $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple $event"));
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $datamultiple"));
         }
     }
 

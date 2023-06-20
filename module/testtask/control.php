@@ -243,7 +243,7 @@ class testtask extends control
             if($this->app->tab == 'project') $link = $this->createLink('project', 'testtask', "projectID=$task->project");
             if($this->app->tab == 'execution') $link = $this->createLink('execution', 'testtask', "executionID=$task->execution");
             if($this->app->tab == 'qa') $link = $this->createLink('testtask', 'browse', "productID=" . $this->post->product);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
         $this->loadModel('project');

@@ -49,13 +49,12 @@ class testtaskModel extends model
             ->checkFlow()
             ->exec();
 
-        if(!dao::isError())
-        {
-            $taskID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
-            $this->file->saveUpload('testtask', $taskID);
-            return $taskID;
-        }
+        if(dao::isError()) return false;
+
+        $taskID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
+        $this->file->saveUpload('testtask', $taskID);
+        return $taskID;
     }
 
     /**
