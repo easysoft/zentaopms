@@ -220,10 +220,10 @@ else
             );
         }
     }
-    $linkBugsItem = item
+    $linkBugItem = item
     (
         setClass('linkBugTitles'),
-        set::collapse(true),
+        !empty($linkBugs) ? set::collapse(true) : '',
         set::name($lang->testcase->legendLinkBugs),
         $linkBugs,
     );
@@ -248,7 +248,7 @@ else
     (
         setClass('linkCaseTitles'),
         set::name($lang->testcase->linkCase),
-        set::collapse(true),
+        !empty($linkCases) ? set::collapse(true) : '',
         $linkCases,
     );
 }
@@ -478,7 +478,7 @@ detailBody
                 tableData
                 (
                     set::useTable(false),
-                    $linkBugsItem,
+                    $linkBugItem,
                     $linkCaseItem,
                 ),
             ),
