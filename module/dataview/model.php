@@ -169,6 +169,37 @@ class dataviewModel extends model
     }
 
     /**
+     * Check that the column of an sql query is unique.
+     *
+     * @param  string $sql
+     * @param  bool   $repeat
+     * @access public
+     * @return bool
+     */
+    public function checkUniColumn($sql, $repeat = false)
+    {
+        $columns = $this->dao->getColumns($sql);
+
+        $isUnique     = true;
+        $columnList   = array();
+        $repeatColumn = array();
+        foreach($columns as $column)
+        {
+            $field = $column['name'];
+            if(isset($columnTypes[$field]))
+            {
+                $isUnique = false;
+                $repeatColumn[$field] = $field;
+            }
+
+            $columnTypes[$field] = $field;
+        }
+
+        if($repeat) return array($isUnique, $repeatColumn);
+        return $isUnique;
+    }
+
+    /**
      * Get type options
      *
      * @param string $objectName
