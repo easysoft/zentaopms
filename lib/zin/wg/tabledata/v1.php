@@ -23,14 +23,15 @@ class tableData extends wg
     {
         return h::tr
         (
+            setClass($item->prop('trClass')),
             h::th
             (
-                setClass('py-1.5 pr-2 font-normal nowrap text-right'),
+                setClass('py-1.5 pr-2 font-normal nowrap text-right', $item->prop('thClass')),
                 $item->prop('name'),
             ),
             h::td
             (
-                setClass('py-1.5 pl-2'),
+                setClass('py-1.5 pl-2', $item->prop('tdClass')),
                 $item->children()
             )
         );
@@ -42,10 +43,10 @@ class tableData extends wg
         {
             return div
             (
-                setClass('col', 'table-data-tr'),
+                setClass('col', 'table-data-tr', $item->prop('trClass')),
                 div
                 (
-                    setClass('py-1.5 pr-2 font-normal nowrap table-data-th'),
+                    setClass('py-1.5 pr-2 font-normal nowrap table-data-th', $item->prop('thClass')),
                     $item->prop('name'),
                     new collapseBtn
                     (
@@ -56,7 +57,7 @@ class tableData extends wg
                 ),
                 div
                 (
-                    setClass('py-1.5 pl-2 table-data-td'),
+                    setClass('py-1.5 pl-2 table-data-td', $item->prop('tdClass')),
                     $item->children()
                 )
             );
@@ -64,15 +65,15 @@ class tableData extends wg
 
         return div
         (
-            setClass('flex table-data-tr'),
+            setClass('flex table-data-tr', $item->prop('trClass')),
             div
             (
-                setClass('py-1.5 pr-2 font-normal nowrap table-data-th'),
+                setClass('py-1.5 pr-2 font-normal nowrap table-data-th', $item->prop('thClass')),
                 $item->prop('name'),
             ),
             div
             (
-                setClass('py-1.5 pl-2 table-data-td'),
+                setClass('py-1.5 pl-2 table-data-td', $item->prop('tdClass')),
                 $item->children()
             )
         );
