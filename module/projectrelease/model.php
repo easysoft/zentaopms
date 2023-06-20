@@ -258,6 +258,8 @@ class projectreleaseModel extends model
         $action = strtolower($action);
 
         if($action == 'notify') return $release->bugs or $release->stories;
+        if($action == 'play')   return $release->status == 'terminate';
+        if($action == 'pause')  return $release->status == 'normal';
         return true;
     }
 
