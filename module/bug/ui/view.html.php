@@ -147,7 +147,7 @@ foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
         {
             if(!common::hasPriv($moduleName, $action)) continue;
         }
-        //if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
+        if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
 
         if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
 
