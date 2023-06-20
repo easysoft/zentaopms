@@ -52,4 +52,6 @@ function render(string $wgName = 'page', string|array $options = null)
 
     /* 渲染并输出 HTML。 Render and display html. */
     $wg->display($options);
+
+    zin::$rendered = true;
 }

@@ -21,6 +21,8 @@ class zin
 
     public static $data = array();
 
+    public static $rendered = false;
+
     public static function getData($namePath, $defaultValue = null)
     {
         return \zin\utils\deepGet(static::$data, $namePath, $defaultValue);

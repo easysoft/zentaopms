@@ -1012,7 +1012,10 @@ class baseControl
         extract(\zin\zin::$data);
 
         ob_start();
+
         include $viewFile;
+        if(!\zin\zin::$rendered) \zin\render();
+
         ob_end_flush();
         echo $output;
 
