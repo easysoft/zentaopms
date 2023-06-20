@@ -47,7 +47,8 @@ class formBatchItem extends wg
         'tipProps?: string',            // 列标题上的提示触发按钮其他属性。
         'ditto?: bool',                 // 是否显示同上按钮。
         'defaultDitto?:string="on"',    // 同上按钮的默认值。
-        'hidden?: bool=false'           // 是否隐藏
+        'hidden?: bool=false',          // 是否隐藏
+        'readonly?: bool=false',        // 是否只读
     );
 
     /**
@@ -58,7 +59,7 @@ class formBatchItem extends wg
      */
     protected function build()
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden'));
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly'));
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -72,6 +73,7 @@ class formBatchItem extends wg
         if($disabled !== null)       $control['disabled']    = $disabled;
         if($items !== null)          $control['items']       = $items;
         if($placeholder !== null)    $control['placeholder'] = $placeholder;
+        if($readonly !== null)       $control['readonly'] = $readonly;
 
         $asIndex = $control['type'] === 'index';
         if($asIndex) $control['type'] = 'static';
