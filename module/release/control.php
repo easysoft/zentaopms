@@ -254,7 +254,6 @@ class release extends control
         $this->view->link          = $link;
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;
-        $this->view->branchName    = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
         $this->view->storyPager    = $storyPager;
         $this->view->bugPager      = $bugPager;
         $this->view->leftBugPager  = $leftBugPager;
