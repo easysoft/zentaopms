@@ -168,11 +168,12 @@ detailHeader
     to::prefix
     (
         backBtn(set::icon('back'), set::type('secondary'), set::url($this->session->productPlanList), $lang->goback),
+        div(setClass('nav-divider')),
         entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title))),
-        span(setClass('label'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
+        span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
     ),
-    (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(set::items($menus))) : null
+    (!$plan->deleted && !isonlybody() && $menus) ? to::suffix(btnGroup(setClass('text-primary'), set::items($menus))) : null
 );
 
 detailBody
@@ -196,6 +197,7 @@ detailBody
                         btn(set::text($lang->story->create), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
                         set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
                         set::trigger('hover'),
+                        set::placement('bottom-end'),
                     ),
                     !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}&browseType=&param={$param}&orderBy={$orderBy}"))),
                 ),
@@ -265,9 +267,9 @@ detailBody
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
                     $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
-                    item(set::name($lang->productplan->desc), $plan->desc),
+                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : $plan->desc),
                 ),
-                h::hr(),
+                h::hr(setClass('border-2 mt-4')),
                 history(),
             ),
         )
