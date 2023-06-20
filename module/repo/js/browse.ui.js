@@ -1,7 +1,7 @@
 var revisionMap = {};
 var checkedIds  = [];
 
-function renderCell(result, {col, row})
+window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {
@@ -28,7 +28,7 @@ function renderCell(result, {col, row})
  * @access public
  * @return void
  */
-function renderCommentCell(result, {col, row})
+window.renderCommentCell = function(result, {col, row})
 {
     if(col.name === 'revision')
     {
@@ -72,7 +72,7 @@ $('#repo-select').on('change', function()
  * @access public
  * @return void
  */
-function checkedChange(changes)
+window.checkedChange = function(changes)
 {
     checkedIds = getCurrentCheckedIds();
 
@@ -93,7 +93,7 @@ function checkedChange(changes)
  * @access public
  * @return void
  */
-function diffClick()
+window.diffClick = function()
 {
     var checkedIds  = getCurrentCheckedIds();
     var newDiffLink = diffLink.replace('{oldRevision}', revisionMap[checkedIds[1]]);
@@ -112,7 +112,7 @@ function diffClick()
  * @access public
  * @return bool
  */
-function canRowCheckable(rowID)
+window.canRowCheckable = function(rowID)
 {
     const dtable = zui.DTable.query('#repo-comments-table');
     var   data   = dtable.$.props.data;
@@ -128,15 +128,6 @@ function canRowCheckable(rowID)
 
     return true;
 }
-
-$(function()
-{
-    /* Checked the first and second row when page loaded. */
-    setTimeout(function()
-    {
-        checkColInCurrentPage()
-    }, 100);
-})
 
 /**
  * 检测revisionMap是否跟当前页面数据一致，不一致重新生成。
@@ -169,12 +160,15 @@ function initRevisionMap(data)
  */
 function checkColInCurrentPage()
 {
-    const dtable   = zui.DTable.query('#repo-comments-table');
-    var checkedIds = $.cookie.get('sideRepoSelected') ? $.cookie.get('sideRepoSelected').split(',') : [];
+    const dtable     = zui.DTable.query('#repo-comments-table');
+    const checkedIds = $.cookie.get('sideRepoSelected') ? $.cookie.get('sideRepoSelected').split(',') : [];
+
 
     var currentCheckedIds = [];
     if(revisionMap[checkedIds[0]]) currentCheckedIds.push(checkedIds[0]);
     if(revisionMap[checkedIds[1]]) currentCheckedIds.push(checkedIds[1]);
+
+    dtable.$.toggleCheckRows(Object.keys(revisionMap), false);
 
     if(currentCheckedIds)
     {
@@ -185,7 +179,7 @@ function checkColInCurrentPage()
         dtable.$.toggleCheckRows(Object.keys(revisionMap).slice(0, 2), true);
     }
 
-    checkedChange();
+    window.checkedChange();
 }
 
 /**
@@ -208,6 +202,7 @@ function getCurrentCheckedIds()
         if(revisionMap[checkedIds[i]]) currentCheckedIds.push(checkedIds[i]);
     }
 
+    if(currentCheckedIds.length > 2) currentCheckedIds = currentCheckedIds.slice(0, 2);
     return currentCheckedIds;
 }
 
@@ -224,3 +219,14 @@ $('.copy-btn').on('click', function()
         $(that).tooltip('hide')
     }, 2000)
 })
+
+/* 此方法在页面被替换时执行。 */
+// function onPageUnmount()
+// {
+//     /* 删除全局变量。 */
+//     delete window.canRowCheckable;
+//     delete window.diffClick;
+//     delete window.checkedChange;
+//     delete window.renderCommentCell;
+//     delete window.renderCell;
+// }
