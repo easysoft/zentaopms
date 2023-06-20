@@ -38,6 +38,8 @@ $lang->caselib->addedBy        = '由谁创建';
 $lang->caselib->addedDate      = '创建时间';
 $lang->caselib->lastEditedBy   = '最后编辑人';
 $lang->caselib->lastEditedDate = '最后编辑时间';
+$lang->caselib->templateType   = '模板类型';
+$lang->caselib->recordNum      = '记录条数';
 
 $lang->caselib->legendDesc = '描述';
 

@@ -51,6 +51,7 @@ toolbar
             setClass('toolbar-item ghost btn btn-default'),
             set::href(createLink('caselib', 'exportTemplate', "libID={$libID}")),
             set('data-toggle', 'modal'),
+            set('data-size', 'sm'),
             icon('export'),
             $lang->caselib->exportTemplate,
         ) : '',
