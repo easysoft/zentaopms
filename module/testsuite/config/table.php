@@ -14,7 +14,6 @@ $config->testsuite->actionList['edit']['icon']        = 'edit';
 $config->testsuite->actionList['edit']['hint']        = $lang->testsuite->edit;
 $config->testsuite->actionList['edit']['text']        = $lang->testsuite->edit;
 $config->testsuite->actionList['edit']['url']         = array('module' => 'testsuite', 'method' => 'edit', 'params' => 'suiteID={id}');
-$config->testsuite->actionList['edit']['data-toggle'] = 'modal';
 $config->testsuite->actionList['edit']['order']       = 5;
 $config->testsuite->actionList['edit']['show']        = 'clickable';
 

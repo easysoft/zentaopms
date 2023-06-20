@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 /**
- * The create view file of testsuite module of ZenTaoPMS.
+ * The edit view file of testsuite module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Mengyi Liu <liumengyi@easycorp.ltd>
+ * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     testsuite
  * @link        https://www.zentao.net
  */
@@ -12,8 +12,7 @@ namespace zin;
 
 formPanel
 (
-    set::id('testsuiteCreateForm'),
-    set::title($lang->testsuite->create),
+    set::title($lang->testsuite->edit),
     formRow
     (
         formGroup
@@ -21,7 +20,7 @@ formPanel
             set::width('1/2'),
             set::name('name'),
             set::label($lang->testsuite->name),
-            set::value(''),
+            set::value($suite->name)
         )
     ),
     formRow
@@ -33,6 +32,7 @@ formPanel
             (
                 set::name('desc'),
                 set::rows('5'),
+                set::value(htmlSpecialString($suite->desc))
             ),
         )
     ),
@@ -47,7 +47,7 @@ formPanel
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->testsuite->authorList),
-                set::value('private'),
+                set::value($suite->type),
             )
         )
     ),
