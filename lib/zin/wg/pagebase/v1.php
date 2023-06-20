@@ -84,7 +84,7 @@ class pageBase extends wg
                 $this->block('headBefore'),
                 $zui ? h::importCss($config->zin->zuiPath . 'zui.zentao.css', set::id('zuiCSS')) : null,
                 $zui ? h::importJs($config->zin->zuiPath . 'zui.zentao.umd.cjs', set::id('zuiJS')) : null,
-                h::jsVar('window.config', $jsConfig, set::id('configJS')),
+                h::jsVar('window.config', $jsConfig, setID('configJS')),
                 $zui ? h::importJs($app->getWebRoot() . 'js/zui3/zin.js', set::id('zinJS')) : null,
                 $head
             ),
@@ -93,9 +93,9 @@ class pageBase extends wg
                 set($bodyProps),
                 set::class($bodyClass),
                 empty($imports) ? null : h::import($imports),
-                h::css($css, set::id('pageCSS')),
+                h::css($css, setClass('zin-page-css')),
                 $body,
-                h::js($js, set::id('pageJS'))
+                h::js($js, setClass('zin-page-js'))
             )
         );
     }

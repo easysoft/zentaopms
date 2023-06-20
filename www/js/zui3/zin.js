@@ -71,7 +71,7 @@
         title:         (data) => document.title = data,
         main:          (data) => $('#main').html(data),
         featureBar:    (data) => $('#featureBar').html(data),
-        pageCSS:       (data) => $('#pageCSS').html(data),
+        pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
         configJS:      (data) => $('#configJS')[0].text = data,
         activeFeature: (data) => activeNav(data, '#featureBar'),
@@ -124,7 +124,7 @@
         timers.interval = [];
         timers.timeout = [];
 
-        $('#pageJS').replaceWith(data);
+        $('script.zin-page-js').replaceWith(data);
     }
 
     function updateZinbar(perf, errors, basePath)
@@ -455,7 +455,7 @@
         }
 
         options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
-        if(!options.selector) options.selector = ($('#main').length ? '#main>*,#pageCSS>*,#pageJS,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
+        if(!options.selector) options.selector = ($('#main').length ? '#main>*,.zin-page-css>*,.zin-page-js,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
         if(!options.id) options.id = options.selector || 'page';
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);

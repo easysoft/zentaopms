@@ -10,9 +10,9 @@ class fragment extends wg
 
         return array
         (
-            h::css($css, set::id('pageCSS')),
+            h::css($css, setClass('zin-page-css')),
             $this->children(),
-            h::js($js, set::id('pageJS'))
+            h::js($js, setClass('zin-page-js'))
         );
     }
 }
