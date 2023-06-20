@@ -334,7 +334,7 @@ class bug extends control
         }
 
         /* Show the variables associated. */
-        $this->view->title   = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
+        $this->view->title   = $this->lang->bug->assignTo;
         $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
         $this->view->users   = $users;
         $this->view->bug     = $oldBug;
@@ -380,7 +380,7 @@ class bug extends control
 
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
-        $this->view->title   = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->confirm;
+        $this->view->title   = $this->lang->bug->confirm;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->assignedTo);
         $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
@@ -437,7 +437,7 @@ class bug extends control
         $this->qa->setMenu($this->products, $oldBug->product, $oldBug->branch);
 
         /* Show the variables associated. */
-        $this->view->title      = $this->products[$oldBug->product] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->title      = $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
@@ -486,7 +486,7 @@ class bug extends control
         $productID = $oldBug->product;
         $this->qa->setMenu($this->products, $productID, $oldBug->branch);
 
-        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $this->view->title   = $this->lang->bug->activate;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $oldBug->branch, 'noempty,noreleased', 0, 'execution', $oldBug->openedBuild);
@@ -524,6 +524,7 @@ class bug extends control
             return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
         }
 
+        $this->view->title   = $this->lang->bug->close;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('bug', $oldBug->id);
