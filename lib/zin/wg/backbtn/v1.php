@@ -50,7 +50,8 @@ class backBtn extends btn
             'testcase'   => 'testcase-browse,project-testcase,my-work',
             'testsuite'  => 'testsuite-browse',
             'testreport' => 'testreport-browse,project-testreport',
-            'doc'        => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace'
+            'doc'        => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace',
+            'design'     => 'design-browse',
         );
 
         $props = parent::getProps();
