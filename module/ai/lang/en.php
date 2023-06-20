@@ -12,8 +12,9 @@ $lang->ai->common = 'AI';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
 $lang->prompt = new stdclass();
-$lang->prompt->name = 'Name';
-$lang->prompt->desc = 'Description';
+$lang->prompt->name  = 'Name';
+$lang->prompt->desc  = 'Description';
+$lang->prompt->model = 'Model';
 
 $lang->ai->nextStep = 'Next';
 
@@ -34,6 +35,11 @@ $lang->ai->prompts->selectDataSource = 'Select Data Source';
 $lang->ai->prompts->setPurpose       = 'Set Purpose';
 $lang->ai->prompts->setTargetForm    = 'Set Target Form';
 $lang->ai->prompts->finalize         = 'Finalize';
+
+$lang->ai->prompts->assignModel      = 'Select Model';
+$lang->ai->prompts->model            = 'Model';
+$lang->ai->prompts->role             = 'Role';
+$lang->ai->prompts->characterization = 'Characterization';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = 'All';

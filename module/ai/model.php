@@ -321,6 +321,22 @@ class aiModel extends model
     }
 
     /**
+     * Get prompt by id.
+     *
+     * TODO: fully implement this.
+     *
+     * @param  int     $id
+     * @access public
+     * @return object
+     */
+    public function getPromptById($id)
+    {
+        return $this->dao->select('*')->from(TABLE_PROMPT)
+            ->where('id')->eq($id)
+            ->fetch();
+    }
+
+    /**
      * Create a prompt.
      *
      * TODO: fully implement this.
@@ -341,5 +357,29 @@ class aiModel extends model
             ->exec();
 
         return dao::isError() ? false : $this->dao->lastInsertID();
+    }
+
+    /**
+     * Update a prompt.
+     *
+     * TODO: fully implement this.
+     *
+     * @param  object    $prompt
+     * @access public
+     * @return bool
+     */
+    public function updatePrompt($prompt)
+    {
+        $prompt->editedDate = helper::now();
+        $prompt->editedBy   = $this->app->user->account;
+
+        $this->dao->update(TABLE_PROMPT)
+            ->data($prompt)
+            ->autoCheck()
+            ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
+            ->where('id')->eq($prompt->id)
+            ->exec();
+
+        return !dao::isError();
     }
 }
