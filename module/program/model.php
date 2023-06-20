@@ -1312,27 +1312,29 @@ class programModel extends model
         $projects = array();
         if($updateTime > date('Y-m-d', strtotime('-14 days')))
         {
-            $projects = $this->dao->select('distinct project')->from(TABLE_ACTION)
-                ->where('date')->ge($updateTime)
-                ->fetchPairs('project');
+            $projects = $this->dao->select('distinct t1.project,t2.model')->from(TABLE_ACTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.`date`')->ge($updateTime)
+                ->fetchAll('project');
             if(empty($projects)) return;
         }
 
         /* 1. Get summary and members of executions to be refreshed. */
-        $summary = $this->dao->select('execution, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->beginIF(!empty($projects))->andWhere('project')->in($projects)->fi()
+        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
+            ->beginIF(!empty($projects))->andWhere('t2.model')->ne('waterfall')->fi()
             ->groupBy('execution')
             ->fetchAll();
 
         $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t1.type')->eq('project')
-            ->beginIF(!empty($projects))->andWhere('t1.root')->in($projects)->fi()
+            ->beginIF(!empty($projects))->andWhere('t1.root')->in(array_keys($projects))->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('t1.root')
             ->fetchPairs('root');
-
 
         /* 2. Get all parents to be refreshed. */
         $executions = array();
@@ -1353,6 +1355,17 @@ class programModel extends model
                 $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
                 $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
             }
+        }
+
+        $this->loadModel('project');
+        foreach($projects as $projectID => $project)
+        {
+            if($project->model != 'waterfall') continue;
+
+            $projectStats = $this->project->getWaterfallPVEVAC($projectID);
+            $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
+            $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
+            $stats[$projectID]['totalLeft']     = $projectStats['left'];
         }
 
         foreach($teamMembers as $projectID => $teamCount)
