@@ -235,10 +235,13 @@ class history extends wg
         global $lang;
 
         $commentUrl = $this->prop('commentUrl');
+        $isInModal  = isAjaxRequest('modal');
+        $px = $isInModal ? 'px-3' : 'px-6';
+        $pb = $isInModal ? 'pb-3' : 'pb-6';
 
         return new section
         (
-            setClass('history', 'pt-4', 'px-6', 'pb-6', 'canvas'),
+            setClass('history', 'pt-4', $px, $pb, 'canvas'),
             set::title($lang->history),
             to::actions
             (
