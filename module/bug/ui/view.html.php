@@ -326,7 +326,7 @@ function buildItems($items)
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 $item['text']
             ) : $item['text'],
-            set::collapse(!empty($item['collapse'])),
+            set::collapse(!empty($item['text'])),
         );
     }
 
