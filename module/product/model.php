@@ -1341,7 +1341,7 @@ class productModel extends model
             ->orWhere("CONCAT(',', t2.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF(!empty($branch) and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
