@@ -58,6 +58,7 @@ $lang->task->copy                = 'Aufgabe kopieren';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->allModule           = 'All Module';
 $lang->task->replace             = 'Replace';
+$lang->task->committed           = 'Committed';
 $lang->task->myEffort            = 'My Effort';
 $lang->task->allEffort           = 'Team Effort';
 $lang->task->teamOrder           = 'Order';

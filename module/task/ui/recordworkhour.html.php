@@ -12,17 +12,51 @@ namespace zin;
 
 jsVar('confirmRecord', $lang->task->confirmRecord);
 
-entityLabel
+to::header
 (
-    setClass('my-3 gap-x-3'),
-    set::level(1),
-    set::text($task->name),
-    set::entityID($task->id),
-    set::reverse(true),
+    $lang->task->addEffort,
+    entityLabel
+    (
+        set::level(1),
+        set::text($task->name),
+        set::entityID($task->id),
+        set::reverse(true),
+    ),
+    span
+    (
+        setClass('flex gap-x-2 mr-3'),
+        $lang->task->estimate,
+        span
+        (
+            setClass('label secondary-pale'),
+            $task->estimate . $lang->task->suffixHour,
+        ),
+    ),
+    span
+    (
+        setClass('flex gap-x-2'),
+        $lang->task->consumed,
+        span
+        (
+            setClass('label warning-pale'),
+            span
+            (
+                setID('totalConsumed'),
+                $task->consumed
+            ),
+            $lang->task->suffixHour,
+        )
+    )
 );
+
 
 if($efforts)
 {
+    div
+    (
+        setClass('table-title'),
+        $lang->task->committed
+    );
     $tableData = initTableData($efforts, $config->task->effortTable->fieldList, $this->task);
     dtable
     (
@@ -35,6 +69,7 @@ formBatchPanel
 (
     set::title($lang->task->addEffort),
     set::shadow(!isonlybody()),
+    set::actions(array('submit')),
     formBatchItem
     (
         set::name('id'),
