@@ -257,7 +257,7 @@ class storyModel extends model
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
 
         $product = $this->loadModel('product')->getById($story->product);
-        if($product->type == 'normal' or $story->type == 'requirement')
+        if($product->type == 'normal' or $product->type == 'branch' or $story->type == 'requirement')
         {
             $this->post->branches = isset($story->branch) ? array($story->branch) : array(0 => 0);
             $this->post->modules  = isset($story->module) ? array($story->module) : array(0 => 0);
