@@ -42,7 +42,13 @@ foreach($allProducts as $productID => $productName)
                 set::value($branchID),
                 set::items($allBranches[$productID]),
                 set::disabled(true),
-            ) : null
+            ) : null,
+            input
+            (
+                set::type('hidden'),
+                set::name("branch[{$index}]"),
+                set::value($branchID),
+            )
         );
 
         if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);
@@ -97,7 +103,7 @@ form
             )
         ),
 
-        $unlinkList ? h::hr(setClass('mt-6')) : null,
+        $unlinkList ? h::hr() : null,
 
         $unlinkList ? section
         (
@@ -109,7 +115,7 @@ form
             )
         ) : null,
 
-        $canModify ? h::hr(setClass('mt-6')) : null,
+        $canModify ? h::hr() : null,
     ),
     $canModify ? set::actions(array('submit')) : null,
 );
