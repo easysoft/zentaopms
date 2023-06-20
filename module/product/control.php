@@ -149,6 +149,7 @@ class product extends control
 
         if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
 
+        if(!is_string($this->cookie->preBranch) and !is_int($this->cookie->preBranch)) $this->cookie->preBranch = (int)$this->cookie->preBranch;
         if($product and $product->type != 'normal')
         {
             $branchPairs = $this->loadModel('branch')->getPairs($productID, 'all');
