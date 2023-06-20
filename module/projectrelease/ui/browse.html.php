@@ -18,16 +18,14 @@ featureBar
 
 toolbar
 (
-    hasPriv('projectrelease', 'create') ? btngroup
-    (
-        btn
-        (
-            setClass('primary'),
-            set::icon('plus'),
-            set::href(createLink('projectrelease', 'create', "projectID={$projectID}")),
-            $lang->release->create
-        )
-    ) : '',
+    hasPriv('projectrelease', 'create') ? item(set
+    ([
+        'text'  => $lang->release->create,
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+        'url'   => $this->createLink('projectrelease', 'create', "projectID={$projectID}"),
+    ])) : '',
+
 );
 
 jsVar('markerTitle', $lang->release->marker);
