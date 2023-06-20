@@ -71,7 +71,7 @@
         main:          (data) => $('#main').html(data),
         featureBar:    (data) => $('#featureBar').html(data),
         pageCSS:       (data) => $('#pageCSS').html(data),
-        configJS:      (data) => $('#configJS')[0].text = data,
+        configJS:      updatePageJS,
         pageJS:        (data) => $('#pageJS').replaceWith(data),
         activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    activeNav,
@@ -99,6 +99,16 @@
 
         $bar = $('<div id="zinbar"></div>').insertAfter('body');
         zinbar = new zui.Zinbar($bar[0]);
+    }
+
+    function updatePageJS(data)
+    {
+        if(window.onPageUnmount) window.onPageUnmount();
+        window.onPageUnmount = null;
+        window.beforePageUpdate = null;
+        window.afterPageUpdate = null;
+        window.onPageRender = null;
+        $('#configJS')[0].text = data;
     }
 
     function updateZinbar(perf, errors, basePath)
@@ -169,18 +179,36 @@
         dtable.render(props);
     }
 
+    function beforeUpdate($target, info, options)
+    {
+        if($target && $target.length) $target.find('[data-zin-events]').off('.on.zin');
+        if(window.beforePageUpdate) window.beforePageUpdate($target, info, options);
+    }
+
+    function afterUpdate($target, info, options)
+    {
+        if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
+    }
+
     function renderPartial(info, options)
     {
-        if(window.config.onRenderPage && window.config.onRenderPage(info)) return;
+        if(window.onPageRender && window.onPageRender(info)) return;
 
-        const render = renderMap[info.name];
-        if(render) return render(info.data, info, options);
+        const render   = renderMap[info.name];
+        const isHtml   = info.type === 'html';
+        const selector = parseSelector(info.selector);
+        const $target  = selector ? $(selector.select) : $target;
+        if(render)
+        {
+            if(isHtml) beforeUpdate($target, info, options);
+            render(info.data, info, options);
+            if(isHtml) afterUpdate($target, info, options);
+            return;
+        }
 
         /* Common render */
-        const selector = parseSelector(info.selector);
         if(!selector) return console.warn('[APP] ', 'cannot render partial content with data', info);
 
-        const $target = $(selector.select);
         if(!$target.length) return console.warn('[APP] ', 'cannot find target element with selector', selector);
         if(selector.first) $target = $target.first();
         if(selector.type === 'json')
@@ -207,8 +235,10 @@
             return;
         }
 
+        beforeUpdate($target, info, options);
         if(selector.inner) $target.html(info.data);
         else $target.replaceWith(info.data);
+        afterUpdate($target, info, options);
     }
 
     function renderPage(list, options)
@@ -458,11 +488,6 @@
         $.apps.openApp(url, appCode, true);
     }
 
-    function onRenderPage(callback)
-    {
-        window.config.onRenderPage = callback;
-    }
-
     /**
      * Search history and go back to specified path.
      *
@@ -627,7 +652,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, onRenderPage: onRenderPage, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>

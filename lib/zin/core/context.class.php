@@ -79,7 +79,7 @@ class context extends \zin\utils\dataset
 
     public function getJsList()
     {
-        return array_merge($this->getList('jsVar'), $this->getList('js'), $this->getEventsBindings(), $this->getList('jsCall'));
+        return array_merge($this->getList('jsVar'), $this->getList('js'), $this->getEventsBindings(), $this->getList('jsCall'), array('if(typeof onPageUnmount === "function") window.onPageUnmount = onPageUnmount;if(typeof beforePageUpdate === "function") window.beforePageUpdate = beforePageUpdate;if(typeof afterPageUpdate === "function") window.afterPageUpdate = afterPageUpdate;if(typeof onPageRender === "function") window.onPageRender = onPageRender;'));
     }
 
     public static $map = array();
