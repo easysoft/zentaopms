@@ -358,22 +358,14 @@ class design extends control
      *
      * @param  int    $designID
      * @param  int    $commitID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function unlinkCommit($designID = 0, $commitID = 0, $confirm = 'no')
+    public function unlinkCommit($designID = 0, $commitID = 0)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->design->confirmUnlink, inlink('unlinkCommit', "designID=$designID&commitID=$commitID&confirm=yes")));
-        }
-        else
-        {
-            $this->design->unlinkCommit($designID, $commitID);
+        $this->design->unlinkCommit($designID, $commitID);
 
-            return print(js::reload('parent'));
-        }
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
@@ -396,9 +388,9 @@ class design extends control
         $pager   = pager::init(0, $recPerPage, $pageID);
 
         $design = $this->design->getCommit($designID, $pager);
+        $this->config->design->viewcommit->dtable->fieldList['actions']['list']['unlinkCommit']['url'] = sprintf($this->config->design->viewcommit->actionList['unlinkCommit']['url'], $designID);
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
-
+        $this->view->title  = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->design = $design;
         $this->view->pager  = $pager;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');

@@ -2,7 +2,15 @@
 global $lang,$app;
 $config->design->dtable = new stdclass();
 $config->design->linkcommit = new stdclass();
+$config->design->viewcommit = new stdclass();
 $config->design->linkcommit->dtable = new stdclass();
+$config->design->viewcommit->dtable = new stdclass();
+
+$config->design->viewcommit->actionList['unlinkCommit']['icon']         = 'unlink';
+$config->design->viewcommit->actionList['unlinkCommit']['hint']         = $lang->design->unlinkCommit;
+$config->design->viewcommit->actionList['unlinkCommit']['url']          = helper::createLink('design', 'unlinkCommit', "designID=%s&commitID={id}");
+$config->design->viewcommit->actionList['unlinkCommit']['class']        = 'ajax-submit';
+$config->design->viewcommit->actionList['unlinkCommit']['data-confirm'] = $lang->design->confirmUnlink;
 
 $config->design->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->design->dtable->fieldList['id']['type']  = 'id';
@@ -54,3 +62,25 @@ $config->design->linkcommit->dtable->fieldList['committer']['sortType'] = false;
 $config->design->linkcommit->dtable->fieldList['comment']['title']    = $lang->repo->comment;
 $config->design->linkcommit->dtable->fieldList['comment']['type']     = 'html';
 $config->design->linkcommit->dtable->fieldList['comment']['sortType'] = false;
+
+$config->design->viewcommit->dtable->fieldList['id']['title']    = $lang->design->submission;
+$config->design->viewcommit->dtable->fieldList['id']['format']   = 'RAWJS<function(val){return `#${val}`;}>RAWJS';
+$config->design->viewcommit->dtable->fieldList['id']['link']     = helper::createLink('design', 'revision', 'repoID={id}');
+$config->design->viewcommit->dtable->fieldList['id']['target']   = '_blank';
+$config->design->viewcommit->dtable->fieldList['id']['sortType'] = false;
+
+$config->design->viewcommit->dtable->fieldList['committer']['title']    = $lang->design->commitBy;
+$config->design->viewcommit->dtable->fieldList['committer']['type']     = 'user';
+$config->design->viewcommit->dtable->fieldList['committer']['sortType'] = false;
+
+$config->design->viewcommit->dtable->fieldList['time']['title']    = $lang->design->commitDate;
+$config->design->viewcommit->dtable->fieldList['time']['type']     = 'date';
+$config->design->viewcommit->dtable->fieldList['time']['sortType'] = false;
+
+$config->design->viewcommit->dtable->fieldList['comment']['title']    = $lang->design->comment;
+$config->design->viewcommit->dtable->fieldList['comment']['type']     = 'html';
+$config->design->viewcommit->dtable->fieldList['comment']['sortType'] = false;
+
+$config->design->viewcommit->dtable->fieldList['actions']['type'] = 'actions';
+$config->design->viewcommit->dtable->fieldList['actions']['menu'] = array('unlinkCommit');
+$config->design->viewcommit->dtable->fieldList['actions']['list'] = $config->design->viewcommit->actionList;

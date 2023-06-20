@@ -10,6 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$canLinkCommit  = hasPriv('design', 'create');
+$linkBtnClass   = empty($design->commit) ? 'ml-4' : 'mb-4';
+$linkCommitItem = $canLinkCommit ? btn(
+    setClass("linkCommitBtn {$linkBtnClass}"),
+    set::icon('plus'),
+    set::text($lang->design->linkCommit),
+    set::type('primary'),
+    set('data-url', createLink('design', 'linkCommit', "designID=$design->id")),
+) : null;
+
 if(empty($design->commit))
 {
     div
@@ -20,18 +30,31 @@ if(empty($design->commit))
             setClass('text-gray'),
             $lang->design->noCommit,
         ),
-        common::hasPriv('design', 'linkCommit') ? btn
-        (
-            setClass('ml-4 linkCommitBtn'),
-            set::icon('plus'),
-            set::text($lang->design->linkCommit),
-            set::type('primary'),
-            set('data-url', createLink('design', 'linkCommit', "designID=$design->id")),
-        ) : '',
+        $linkCommitItem
     );
 }
 else
 {
+    div
+    (
+        setClass('flex justify-end'),
+        $linkCommitItem
+    );
+
+    $tableData = initTableData($design->commit, $config->design->viewcommit->dtable->fieldList);
+    dtable
+    (
+        set::userMap($users),
+        set::cols($config->design->viewcommit->dtable->fieldList),
+        set::data($tableData),
+        set::footPager(
+            usePager(),
+            set::recPerPage($pager->recPerPage),
+            set::recTotal($pager->recTotal),
+            set::linkCreator(helper::createLink('design', 'viewCommit', "designID={$designID}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={pageID}", '', true)),
+        ),
+    );
 }
+
 /* ====== Render page ====== */
 render('modalDialog');

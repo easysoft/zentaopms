@@ -38,10 +38,11 @@ $config->design->actionList['edit']['icon'] = 'alter';
 $config->design->actionList['edit']['hint'] = $lang->design->edit;
 $config->design->actionList['edit']['url']  = helper::createLink('design', 'edit', 'designID={id}');
 
-$config->design->actionList['viewCommit']['icon']        = 'list-alt';
-$config->design->actionList['viewCommit']['hint']        = $lang->design->viewCommit;
-$config->design->actionList['viewCommit']['url']         = helper::createLink('design', 'viewCommit', 'designID={id}');
-$config->design->actionList['viewCommit']['data-toggle'] = 'modal';
+$config->design->actionList['viewCommit']['icon']          = 'list-alt';
+$config->design->actionList['viewCommit']['hint']          = $lang->design->viewCommit;
+$config->design->actionList['viewCommit']['url']           = helper::createLink('design', 'viewCommit', 'designID={id}');
+$config->design->actionList['viewCommit']['data-toggle']   = 'modal';
+$config->design->actionList['viewCommit']['data-position'] = 'center';
 
 $config->design->actionList['delete']['icon']       = 'trash';
 $config->design->actionList['delete']['hint']       = $lang->design->delete;
