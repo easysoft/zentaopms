@@ -41,7 +41,7 @@ formPanel
             set::name('name'),
             set::label($lang->release->name),
         ),
-        formGroup
+        $app->tab != 'project' || empty($product->shadow) ? formGroup
         (
             set::width('1/4'),
             setClass('items-center'),
@@ -52,7 +52,7 @@ formPanel
                 set::text($lang->release->marker),
             ),
             $lastRelease ? '(' . $lang->release->last . ': ' . $lastRelease->name . ')' : ''
-        ),
+        ) : '',
     ),
     $productRow,
     formRow
