@@ -9048,6 +9048,7 @@ class upgradeModel extends model
         $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
         $this->loadModel('pivot');
+        $this->loadModel('dataview');
 
         foreach($reports as $report)
         {
@@ -9181,7 +9182,7 @@ class upgradeModel extends model
                 $data->stage = 'draft';
                 $fieldSettings = array();
             }
-            elseif(!$this->dataview->checkUniColumn($querySQL))
+            elseif(!$this->dataview->checkUniColumn($sql))
             {
                 $data->stage = 'draft';
                 $fieldSettings = array();
