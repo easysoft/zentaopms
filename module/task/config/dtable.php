@@ -158,27 +158,32 @@ $config->task->effortTable->fieldList['id']['title']    = $lang->idAB;
 $config->task->effortTable->fieldList['id']['name']     = 'id';
 $config->task->effortTable->fieldList['id']['checkbox'] = false;
 $config->task->effortTable->fieldList['id']['width']    = '80';
+$config->task->effortTable->fieldList['id']['group']    = '1';
 
 $config->task->effortTable->fieldList['account']['title']    = $lang->task->recordedBy;
 $config->task->effortTable->fieldList['account']['name']     = 'account';
 $config->task->effortTable->fieldList['account']['checkbox'] = false;
 $config->task->effortTable->fieldList['account']['width']    = '120';
+$config->task->effortTable->fieldList['account']['group']    = '1';
 
 $config->task->effortTable->fieldList['work']['title']    = $lang->task->work;
 $config->task->effortTable->fieldList['work']['name']     = 'work';
 $config->task->effortTable->fieldList['work']['checkbox'] = false;
 $config->task->effortTable->fieldList['work']['width']    = '280';
 $config->task->effortTable->fieldList['work']['flex']     = '1';
+$config->task->effortTable->fieldList['work']['group']    = '2';
 
 $config->task->effortTable->fieldList['consumed']['title']    = $lang->task->consumed;
 $config->task->effortTable->fieldList['consumed']['name']     = 'consumed';
 $config->task->effortTable->fieldList['consumed']['checkbox'] = false;
 $config->task->effortTable->fieldList['consumed']['width']    = '80';
+$config->task->effortTable->fieldList['consumed']['group']    = '3';
 
 $config->task->effortTable->fieldList['left']['title']    = $lang->task->left;
 $config->task->effortTable->fieldList['left']['name']     = 'left';
 $config->task->effortTable->fieldList['left']['checkbox'] = false;
 $config->task->effortTable->fieldList['left']['width']    = '80';
+$config->task->effortTable->fieldList['left']['group']    = '3';
 
 $config->task->effortTable->fieldList['actions']['title']    = $lang->actions;
 $config->task->effortTable->fieldList['actions']['name']     = 'actions';
