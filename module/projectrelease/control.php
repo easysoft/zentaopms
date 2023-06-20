@@ -254,36 +254,7 @@ class projectrelease extends control
      */
     public function notify($releaseID)
     {
-        if($_POST)
-        {
-            if(isset($_POST['notify']))
-            {
-                $notify = implode(',', $this->post->notify);
-                $this->dao->update(TABLE_RELEASE)->set('notify')->eq($notify)->where('id')->eq($releaseID)->exec();
-
-                $this->release->sendmail($releaseID);
-            }
-
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $release = $this->release->getByID($releaseID);
-        $project = $this->loadModel('project')->getByID($this->session->project);
-
-        if(!$project->hasProduct)
-        {
-            unset($this->lang->release->notifyList['FB']);
-            unset($this->lang->release->notifyList['PO']);
-            unset($this->lang->release->notifyList['QD']);
-        }
-
-        if(!$project->multiple) unset($this->lang->release->notifyList['ET']);
-
-        $this->view->release    = $release;
-        $this->view->actions    = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->notifyList = $this->lang->release->notifyList;
-        $this->display();
+        echo $this->fetch('release', 'notify', "releaseID={$releaseID}&projectID={$this->session->project}");
     }
 
     /**

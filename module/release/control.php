@@ -281,7 +281,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function notify($releaseID)
+    public function notify(int $releaseID, int $projectID = 0)
     {
         if($_POST)
         {
@@ -294,7 +294,21 @@ class release extends control
                 $this->loadModel('action')->create('release', $releaseID, 'notified');
             }
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
+
+        if($this->app->tab == 'project' && $projectID != 0)
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+
+            if(!$project->hasProduct)
+            {
+                unset($this->lang->release->notifyList['FB']);
+                unset($this->lang->release->notifyList['PO']);
+                unset($this->lang->release->notifyList['QD']);
+            }
+
+            if(!$project->multiple) unset($this->lang->release->notifyList['ET']);
         }
 
         $this->view->release = $this->release->getById($releaseID);
