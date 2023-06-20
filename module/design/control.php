@@ -316,11 +316,7 @@ class design extends control
         if($_POST)
         {
             $this->design->linkCommit($designID, $repoID);
-
-            $result['result']  = 'success';
-            $result['message'] = $this->lang->saveSuccess;
-            $result['locate']  = 'parent';
-            return $this->send($result);
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         /* Linked submission. */
@@ -338,8 +334,10 @@ class design extends control
         $pager     = new pager(count($revisions), $recPerPage, $pageID);
         $revisions = array_chunk($revisions, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
+        $this->config->design->linkcommit->dtable->fieldList['revision']['link'] = sprintf($this->config->design->linkcommit->dtable->fieldList['revision']['link'], $repoID, $design->project);
+        if(empty($repo->SCM) || $repo->SCM != 'Git') unset($this->config->design->linkcommit->dtable->fieldList['commit']);
 
+        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
         $this->view->repos      = $repos;
         $this->view->repoID     = $repoID;
         $this->view->repo       = $repo;

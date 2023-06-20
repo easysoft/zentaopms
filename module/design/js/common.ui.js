@@ -11,7 +11,7 @@ $(function()
  * @access public
  * @return void
  */
-window.loadStory = function()
+function loadStory()
 {
     const productID = $(this).val();
     const link      = $.createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID + '&status=active&hasParent=false');

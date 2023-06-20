@@ -53,10 +53,11 @@ $config->design->actionList['assignTo']['text']        = $lang->design->assignTo
 $config->design->actionList['assignTo']['url']         = helper::createLink('design', 'assignTo', 'designID={id}', '', true);
 $config->design->actionList['assignTo']['data-toggle'] = 'modal';
 
-$config->design->actionList['linkCommit']['icon']        = 'link';
-$config->design->actionList['linkCommit']['text']        = $lang->design->linkCommit;
-$config->design->actionList['linkCommit']['url']         = helper::createLink('design', 'linkCommit', 'designID={id}', '', true);
-$config->design->actionList['linkCommit']['data-toggle'] = 'modal';
+$config->design->actionList['linkCommit']['icon']          = 'link';
+$config->design->actionList['linkCommit']['text']          = $lang->design->linkCommit;
+$config->design->actionList['linkCommit']['url']           = helper::createLink('design', 'linkCommit', 'designID={id}', '', true);
+$config->design->actionList['linkCommit']['data-toggle']   = 'modal';
+$config->design->actionList['linkCommit']['data-position'] = 'center';
 
 $config->design->view->operateList['main']   = array('assignTo', 'linkCommit');
 $config->design->view->operateList['common'] = array('edit', 'delete');

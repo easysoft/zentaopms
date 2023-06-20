@@ -25,6 +25,7 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 $lang->and       = 'and';
+$lang->to        = 'To';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
