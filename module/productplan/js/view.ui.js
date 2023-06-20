@@ -1,6 +1,9 @@
 window.unlinkObject = function(objectType, objectID)
 {
-    if(window.confirm(confirmLang[objectType])) $.get(unlinkURL[objectType].replace('%s', objectID), function(){loadPage(locateURL[objectType])});
+    zui.Modal.confirm({message: confirmLang[objectType], icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.get(unlinkURL[objectType].replace('%s', objectID), function(){loadPage(locateURL[objectType])});
+    });
 };
 
 window.renderStoryCell = function(result, info)
@@ -19,7 +22,10 @@ window.ajaxConfirmLoad = function(obj)
 {
     var $this   = $(obj);
     var action = $this.data('action');
-    if(window.confirm(confirmLang[action])) $.get($this.data('url'), function(){loadPage(locateURL[type])});
+    zui.Modal.confirm({message: confirmLang[action], icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.get($this.data('url'), function(){loadCurrentPage()});
+    });
 };
 
 window.showLink = function(obj)

@@ -1,6 +1,8 @@
 <?php
 namespace zin;
 
+jsVar('confirmDeleteTip', $lang->project->confirmDelete);
+
 featureBar
 (
     set::current($browseType),
