@@ -997,9 +997,7 @@ class baseControl
          * Set zin context data
          */
         \zin\zin::$data = (array)$this->view;
-
         \zin\zin::$data['zinDebug'] = array();
-
         if($this->config->debug && $this->config->debug >= 2)
         {
             \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
@@ -1010,12 +1008,9 @@ class baseControl
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract(\zin\zin::$data);
-
         ob_start();
-
         include $viewFile;
         if(!\zin\zin::$rendered) \zin\render();
-
         ob_end_flush();
         echo $output;
 
