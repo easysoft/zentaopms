@@ -72,7 +72,10 @@ class programTao extends programModel
             if($action == 'close' && (!$canCloseProgram || $program->status != 'doing')) continue;
             if($action == 'activate' && (!$canActivateProgram || $program->status != 'closed')) continue;
 
-            $actionsMap[] = $action;
+            $item = new stdclass();
+            $item->name   = $action;
+            $item->url    = helper::createLink('program', $action, "programID={$program->id}");
+            $actionsMap[] = $item;
             break;
         }
 
@@ -90,6 +93,7 @@ class programTao extends programModel
 
                 $item = new stdclass();
                 $item->name = $action;
+                $item->url  = helper::createLink('program', $action, "programID={$program->id}");
                 if(!static::isClickable($program, $action)) $item->disabled = true;
                 if($action == 'close' && $program->status == 'closed')      $item->hint = $this->lang->program->tip->closed;
                 if($action == 'suspend' && $program->status == 'closed')    $item->hint = $this->lang->program->tip->notSuspend;
@@ -108,6 +112,7 @@ class programTao extends programModel
             if(!common::hasPriv('program', $action)) continue;
             $item = new stdclass();
             $item->name = $action;
+            if($action != 'delete') $item->url  = helper::createLink('program', $action, "programID={$program->id}");
             if($action == 'delete') $item->url = "javascript:confirmDelete({$program->id}, 'program', '{$program->name}')";
             if($action == 'create' and $program->status == 'closed')
             {
@@ -144,7 +149,10 @@ class programTao extends programModel
             if($action == 'close' && (!$canCloseProject || $project->status != 'doing')) continue;
             if($action == 'activate' && (!$canActivateProject || $project->status != 'closed')) continue;
 
-            $actionsMap[] = $action;
+            $item = new stdclass();
+            $item->name   = $action;
+            $item->url    = helper::createLink('project', $action, "projectID={$project->id}");
+            $actionsMap[] = $item;
             break;
         }
 
@@ -162,6 +170,7 @@ class programTao extends programModel
 
                 $item = new stdclass();
                 $item->name = $action;
+                $item->url  = helper::createLink('project', $action, "projectID={$project->id}");
                 if(!projectModel::isClickable($project, $action)) $item->disabled = true;
                 if($action == 'close' && $project->status == 'closed')      $item->hint = $this->lang->project->tip->closed;
                 if($action == 'suspend' && $project->status == 'closed')    $item->hint = $this->lang->project->tip->notSuspend;
@@ -173,8 +182,20 @@ class programTao extends programModel
 
             $actionsMap[] = $other;
         }
-        if(common::hasPriv('project', 'edit')) $actionsMap[] = 'edit';
-        if(common::hasPriv('project', 'team')) $actionsMap[] = 'team';
+        if(common::hasPriv('project', 'edit'))
+        {
+            $item = new stdclass();
+            $item->name   = 'edit';
+            $item->url    = helper::createLink('project', 'edit', "projectID={$project->id}");
+            $actionsMap[] = $item;
+        }
+        if(common::hasPriv('project', 'team'))
+        {
+            $item = new stdclass();
+            $item->name   = 'team';
+            $item->url    = helper::createLink('project', 'team', "projectID={$project->id}");
+            $actionsMap[] = $item;
+        }
         if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
         {
             $more = new stdclass();
@@ -187,6 +208,7 @@ class programTao extends programModel
 
                 $item = new stdclass();
                 $item->name = $action == 'manageProducts' ? 'link' : $action;
+                if($action != 'delete') $item->url = helper::createLink('project', $action, "projectID={$project->id}");
                 if($action == 'delete') $item->url = "javascript:confirmDelete({$project->id}, 'project', '{$project->name}')";
                 if($action == 'whitelist' and $project->acl == 'open')
                 {
