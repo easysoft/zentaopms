@@ -54,8 +54,6 @@ class job extends control
         foreach($jobList as $job)
         {
             $job->canExec = true;
-            $job->engine  = zget($this->lang->job->engineList, $job->engine);
-            $job->frame   = zget($this->lang->job->frameList, $job->frame);
 
             if($job->engine == 'gitlab')
             {
@@ -75,6 +73,8 @@ class job extends control
             $job->lastExec    = $job->lastExec ? $job->lastExec : '';
             $job->triggerType = $this->job->getTriggerConfig($job);
             $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
+            $job->engine      = zget($this->lang->job->engineList, $job->engine);
+            $job->frame       = zget($this->lang->job->frameList, $job->frame);
         }
 
         $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
