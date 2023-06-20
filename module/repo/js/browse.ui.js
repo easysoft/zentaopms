@@ -1,7 +1,7 @@
 var revisionMap = {};
 var checkedIds  = [];
 
-window.renderCell = function(result, {col, row})
+function renderCell(result, {col, row})
 {
     if(col.name === 'name')
     {
@@ -28,7 +28,7 @@ window.renderCell = function(result, {col, row})
  * @access public
  * @return void
  */
-window.renderCommentCell = function(result, {col, row})
+function renderCommentCell(result, {col, row})
 {
     if(col.name === 'revision')
     {
@@ -72,7 +72,7 @@ $('#repo-select').on('change', function()
  * @access public
  * @return void
  */
-window.checkedChange = function(changes)
+function checkedChange(changes)
 {
     checkedIds = getCurrentCheckedIds();
 
@@ -93,7 +93,7 @@ window.checkedChange = function(changes)
  * @access public
  * @return void
  */
-window.diffClick = function()
+function diffClick()
 {
     var checkedIds  = getCurrentCheckedIds();
     var newDiffLink = diffLink.replace('{oldRevision}', revisionMap[checkedIds[1]]);
@@ -112,7 +112,7 @@ window.diffClick = function()
  * @access public
  * @return bool
  */
-window.canRowCheckable = function(rowID)
+function canRowCheckable(rowID)
 {
     const dtable = zui.DTable.query('#repo-comments-table');
     var   data   = dtable.$.props.data;
@@ -185,7 +185,7 @@ function checkColInCurrentPage()
         dtable.$.toggleCheckRows(Object.keys(revisionMap).slice(0, 2), true);
     }
 
-    window.checkedChange();
+    checkedChange();
 }
 
 /**

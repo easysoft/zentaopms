@@ -194,7 +194,7 @@ dtable
 (
     set::cols($config->repo->repoDtable->fieldList),
     set::data($tableData),
-    set::onRenderCell(jsRaw('window.renderCell')),
+    set::onRenderCell(jsRaw('renderCell')),
     set::canRowCheckable(jsRaw('function(rowID){return false;}')),
     set::footPager(),
 );
@@ -216,7 +216,7 @@ $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fie
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
 
-$footToolbar['items'][] = array('text' => $lang->repo->diff, 'class' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
+$footToolbar['items'][] = array('text' => $lang->repo->diff, 'class' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('diffClick'));
 $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAllLink);
 
 sidebar
@@ -228,8 +228,8 @@ sidebar
         set::id('repo-comments-table'),
         set::cols($config->repo->commentDtable->fieldList),
         set::data($commentsTableData),
-        set::onRenderCell(jsRaw('window.renderCommentCell')),
-        set::onCheckChange(jsRaw('window.checkedChange')),
+        set::onRenderCell(jsRaw('renderCommentCell')),
+        set::onCheckChange(jsRaw('checkedChange')),
         set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
