@@ -112,13 +112,44 @@ $steps     = str_replace('<p></p>', '', $steps);
 $files = '';
 foreach($bug->files as $file) $files .= "{$file->title},";
 
+/* build operate menu. */
+$moduleName = $app->moduleName;
+$methodName = $app->methodName;
+foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
+{
+    $$menu = array();
+    foreach($actionList as $action)
+    {
+        $actionData = $config->{$moduleName}->actionList[$action];
+
+        if(!empty($actionData['url']) && is_array($actionData['url']))
+        {
+            $module = $actionData['url']['module'];
+            $method = $actionData['url']['method'];
+            $params = $actionData['url']['params'];
+            if(!common::hasPriv($module, $method)) continue;
+            if(!$this->loadModel($module)->isClickable($$moduleName, $action)) continue;
+            $actionData['url'] = helper::createLink($module, $method, $params);
+        }
+        else
+        {
+            if(!common::hasPriv($moduleName, $action)) continue;
+            if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
+        }
+
+        if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
+
+        $$menu[] = $actionData;
+    }
+}
+
 detailHeader
 (
     to::title
     (
         entityLabel
         (
-            set::entityID(17),
+            set::entityID($bug->id),
             set::level(1),
             set::text($bug->title)
         )
@@ -151,30 +182,14 @@ detailBody
             set::content($files),
             set::useHtml(true)
         ),
-        /* section
-        (
-            set::title($lang->bug->fromCase),
-            set::content($bug->case ? "#$bug->case $bug->caseTitle" : ''),
-            set::useHtml(true)
-        ) */
     ),
     history(),
     floatToolbar
     (
-        set::prefix
-        (
-            array(array('icon' => 'back', 'text' => $lang->goback))
-        ),
-        set::main($actionList),
-        set::suffix
-        (
-            array
-            (
-                array('icon' => 'edit',  'url' => $this->createLink('bug', 'edit',   "bugID={$bug->id}")),
-                array('icon' => 'copy',  'url' => $this->createLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extras=bugID={$bug->id}")),
-                array('icon' => 'trash', 'url' => $this->createLink('bug', 'delete', "bugID={$bug->id}")),
-            )
-        )
+        set::object($bug),
+        to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        set::main($mainActions),
+        set::suffix($suffixActions)
     ),
     detailSide
     (

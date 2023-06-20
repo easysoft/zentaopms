@@ -108,6 +108,7 @@ $lang->bug->index              = '首页';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->create             = '提Bug';
 $lang->bug->batchCreate        = '批量提Bug';
+$lang->bug->createCase         = '创建用例';
 $lang->bug->copy               = '复制Bug';
 $lang->bug->edit               = '编辑Bug';
 $lang->bug->batchEdit          = '批量编辑';

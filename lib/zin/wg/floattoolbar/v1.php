@@ -35,6 +35,8 @@ class floatToolbar extends wg
         $btns = array();
         foreach ($items as &$item)
         {
+            if(!$item) continue;
+
             if(!empty($item['url'])) $item['url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
 
             $btns[] = btn(set($item), setClass('ghost text-white'));

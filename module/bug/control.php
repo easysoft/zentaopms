@@ -176,7 +176,6 @@ class bug extends control
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all');
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bugID, 'bug');
-        $this->view->actionList  = $this->loadModel('bug')->buildOperateMenu($bug, 'view');
         $this->view->actions     = $this->loadModel('action')->getList('bug', $bugID);
         $this->view->legendBasic = $this->bugZen->getBasicInfoTable($this->view);
         $this->view->legendLife  = $this->bugZen->getBugLifeTable($this->view);

@@ -108,6 +108,7 @@ $lang->bug->index              = 'Accueil Bug';
 $lang->bug->browse             = 'Liste des Bugs';
 $lang->bug->create             = 'Signaler un Bug';
 $lang->bug->batchCreate        = 'Signaler par Lot';
+$lang->bug->createCase         = 'Create Case';
 $lang->bug->copy               = 'Copier';
 $lang->bug->edit               = 'Editer Bug';
 $lang->bug->batchEdit          = 'Editer par Lot';

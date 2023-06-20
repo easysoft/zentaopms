@@ -108,6 +108,7 @@ $lang->bug->index              = 'Home';
 $lang->bug->browse             = 'Bugs';
 $lang->bug->create             = 'Bug erstellen';
 $lang->bug->batchCreate        = 'Batch Report Bug';
+$lang->bug->createCase         = 'Create Case';
 $lang->bug->copy               = 'Kopieren';
 $lang->bug->edit               = 'Bearbeiten';
 $lang->bug->batchEdit          = 'Batch Edit';
