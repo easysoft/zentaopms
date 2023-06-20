@@ -1789,7 +1789,7 @@ class project extends control
             /* If no product is selected, prompt error. */
             $postProducts     = $this->post->products;
             $postOtherProduct = $this->post->otherProducts;
-            if(!isset($postProducts) and !isset($postOtherProduct))
+            if(!isset($postProducts) && !isset($postOtherProduct))
             {
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
@@ -1799,9 +1799,7 @@ class project extends control
 
             /* 成功关联产品后，跳转页面。*/
             /* After successfully associating the product, jump to the page. */
-            $locateLink = inLink('manageProducts', "projectID=$projectID");
-            if($from == 'program')  $locateLink = $this->session->projectList;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
         /* Set menu. */
