@@ -38,8 +38,7 @@ class tableData extends wg
 
     private function buildItemWithDiv($item)
     {
-        $collapse = $item->prop('collapse');
-        if(!$collapse)
+        if($item->prop('collapse'))
         {
             return div
             (

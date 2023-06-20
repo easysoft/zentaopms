@@ -192,8 +192,7 @@ else
         $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted,
     );
 
-    $linkBugsItem = array();
-    $linkBugs     = array();
+    $linkBugs = array();
     if($case->fromBug)
     {
         $linkBugs[] = entityLabel
@@ -203,7 +202,6 @@ else
             set::entityID($case->fromBug),
             set::text($case->fromBugData->title),
             set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
-            set::collapse(true),
             set('title', $case->fromBugData->title),
         );
     }
@@ -218,7 +216,6 @@ else
                 set::entityID($bugID),
                 set::text($bug->title),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
-                set::collapse(true),
                 set('title', $bug->title),
             );
         }
@@ -226,6 +223,7 @@ else
     $linkBugsItem = item
     (
         setClass('linkBugTitles'),
+        set::collapse(true),
         set::name($lang->testcase->legendLinkBugs),
         $linkBugs,
     );
@@ -242,7 +240,6 @@ else
                 set::entityID($linkCaseID),
                 set::text($case->fromBugData->linkCaseTitle),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
-                set::collapse(true),
                 set('title', $linkCaseTitle),
             );
         }
@@ -251,6 +248,7 @@ else
     (
         setClass('linkCaseTitles'),
         set::name($lang->testcase->linkCase),
+        set::collapse(true),
         $linkCases,
     );
 }
