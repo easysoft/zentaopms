@@ -10,13 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include 'common.html.php';
+include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
 
 jsVar('page', 'confirm');
 
-formPanel
+form
 (
-    setCommonProps($bug),
     formGroup
     (
         set::width('1/3'),

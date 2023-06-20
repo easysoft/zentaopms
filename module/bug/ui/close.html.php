@@ -10,20 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include 'common.html.php';
+include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
 
-formPanel
+form
 (
-    setCommonProps($bug),
     formGroup
     (
         set::label($lang->comment),
         set::name('comment'),
         set::control('editor')
-    ),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->bug->close),
-    set::class('border-b'),
+    )
 );
 
 history();

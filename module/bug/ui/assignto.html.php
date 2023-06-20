@@ -10,14 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include 'common.html.php';
+include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
 
 jsVar('page', 'assignedto');
 
 /* zin: Define the form in main content. */
-formPanel
+form
 (
-    setCommonProps($bug, $lang->bug->assignTo),
+    set::submitBtnText($lang->bug->assignTo),
     formGroup
     (
         set::width('1/3'),

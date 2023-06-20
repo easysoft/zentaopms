@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include 'common.html.php';
+include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
 
 jsVar('bugID',     $bug->id);
 jsVar('productID', $bug->product);
@@ -35,9 +35,8 @@ if(common::hasPriv('build', 'create'))
 }
 
 /* zin: Define the form in main content. */
-formPanel
+form
 (
-    setCommonProps($bug),
     formGroup
     (
         set::width('1/3'),
