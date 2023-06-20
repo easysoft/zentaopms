@@ -310,7 +310,6 @@ class userModel extends model
     public function create()
     {
         $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword()) return false;
         if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
@@ -325,26 +324,28 @@ class userModel extends model
             ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength')
             ->get();
 
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
-        {
-            dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
-            return false;
-        }
+        $this->checkPassword();
+
+        if(empty($_POST['verifyPassword']) || $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
         if(isset($_POST['new']))
         {
-            if(empty($user->company))
+            if(!empty($user->company))
+            {
+                $company = new stdClass();
+                $company->name = $user->company;
+                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+                $user->company = $this->dao->lastInsertID();
+            }
+            else
             {
                 dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
                 return false;
             }
-
-            $company = new stdClass();
-            $company->name = $user->company;
-            $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
-
-            $user->company = $this->dao->lastInsertID();
         }
+
+        if(dao::isError()) return false;
 
         if($user->type == 'outside')
         {
@@ -864,12 +865,12 @@ class userModel extends model
     {
         $_POST['password1'] = trim($_POST['password1']);
         $_POST['password2'] = trim($_POST['password2']);
-        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password) . '<br/>';
+        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
         if(!empty($_POST['password1']))
         {
-            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword) . '<br/>';
+            if(isset($this->config->safe->mode) && ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword) . '<br/>';
 
-            if(isset($_POST['passwordLength']) and $this->post->passwordLength < 6 and empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword) . '<br/>';
+            if(isset($_POST['passwordLength']) && $this->post->passwordLength < 6 && empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword) . '<br/>';
 
             if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame . '<br/>';
 
