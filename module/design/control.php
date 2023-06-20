@@ -365,7 +365,7 @@ class design extends control
     {
         $this->design->unlinkCommit($designID, $commitID);
 
-        return $this->sendSuccess(array('load' => true));
+        return $this->sendSuccess(array('load' => array('url' => inlink('viewCommit', "designID={$designID}"), 'selector' => '.modal-dialog')));
     }
 
     /**
