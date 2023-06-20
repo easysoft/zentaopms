@@ -150,26 +150,10 @@ function calcPreviewGrowFilter()
     {
         var $nowDom = $filterItems.find('.filter-item-' + index);
         if(canGrowTotal >= index + 1) $nowDom.addClass('filter-item-grow');
-        if(filter.type == 'select' && $nowDom.find('.picker').length) $nowDom.find('.picker').find('.picker-selections').css('width', WIDTH_INPUT);
     });
 
     if(!lineWrap && nowWidth >= 60) $('.query-inside').removeClass('hidden');
     else $('.query-outside').removeClass('visibility-hidden');
-
-    /* Set picker-selection width, default 128px. */
-    waitForRepaint(function()
-    {
-        pivot.filters.forEach(function(filter, index)
-        {
-            var $nowDom = $filterItems.find('.filter-item-' + index);
-            if(filter.type == 'select' && $nowDom.find('.picker').length)
-            {
-                var pickerWidth = $nowDom.hasClass('filter-item-grow') ? $nowDom.find('.picker')[0].getBoundingClientRect().width : WIDTH_INPUT;
-                $nowDom.find('.picker').find('.picker-selections').css('width', pickerWidth);
-            }
-        });
-    });
-
 }
 
 function renderFilters(pivot)
