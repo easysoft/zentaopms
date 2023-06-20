@@ -220,3 +220,5 @@ $config->execution->team = new stdclass();
 $config->execution->team->actionList['unlink']['icon'] = 'unlink';
 $config->execution->team->actionList['unlink']['hint'] = $lang->execution->unlinkMember;
 $config->execution->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{userID}")';
+
+include 'config/dtable.php';
