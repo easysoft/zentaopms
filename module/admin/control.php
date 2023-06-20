@@ -526,9 +526,11 @@ class admin extends control
     public function execSqliteQueue()
     {
         $now = helper::now();
+        $sqlite = $this->app->connectSqlite();
+
         $query = $this->dao->select('*')->from(TABLE_SQLITE_QUEUE)->where('status')->eq('wait')->fetch();
 
-        $this->dao->sqlite->rawExec($query->sql);
+        $sqlite->rawExec($query->sql);
         $this->dao->update(TABLE_SQLITE_QUEUE)->set('status')->eq('done')->set('execDate')->eq($now)->where('id')->eq($query->id)->exec();
         echo 'ok';
     }

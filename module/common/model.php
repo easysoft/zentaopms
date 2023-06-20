@@ -3894,7 +3894,7 @@ EOT;
      * @access public
      * @return mixed
      */
-    public function getSqliteDAO($params)
+    public function getSqliteDAO($params = null)
     {
         $dao = clone $this->dao;
         $dao->reset();
