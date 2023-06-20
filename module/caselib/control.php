@@ -78,7 +78,7 @@ class caselib extends control
             $message = $this->executeHooks($libID);
             if($message) $response['message'] = $message;
 
-            $response['locate']  = inlink('view', "libID=$libID");
+            $response['load'] = inlink('view', "libID=$libID");
             return $this->send($response);
         }
 
