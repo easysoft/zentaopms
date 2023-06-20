@@ -60,7 +60,7 @@ $('#repo-select').on('change', function()
     var index = $('#repo-select').prop('selectedIndex');
     if(menus[index - 1].url != undefined)
     {
-        window.location.href = menus[index - 1].url;
+        openUrl(menus[index - 1].url);
     }
 })
 
@@ -101,7 +101,7 @@ window.diffClick = function()
 
     $.cookie.set('sideRepoSelected', checkedIds.join(','))
 
-    window.location.href = newDiffLink;
+    openUrl(newDiffLink);
 }
 
 /**
