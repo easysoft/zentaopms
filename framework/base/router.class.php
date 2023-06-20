@@ -2880,8 +2880,14 @@ class baseRouter
      * @access public
      * @return object
      */
-    public function connectSqlite($params)
+    public function connectSqlite($params = null)
     {
+        if(empty($params))
+        {
+            $params = new stdclass();
+            $params->file = $this->getTmpRoot() . 'sqlite.db';
+        }
+
         return new sqlite($params);
     }
 
