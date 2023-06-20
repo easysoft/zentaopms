@@ -1,6 +1,10 @@
 <?php
 namespace zin;
 
+$confirmDeleteLang['program'] = $lang->program->confirmDelete;
+$confirmDeleteLang['project'] = $lang->project->confirmDelete;
+jsVar('confirmDeleteLang', $confirmDeleteLang);
+
 $cols = $this->loadModel('datatable')->getSetting('program');
 $data = array();
 foreach($programs as $program)
@@ -45,8 +49,8 @@ foreach($programs as $program)
     $actions          = $this->program->buildActions($program);
     foreach($actions as $action)
     {
-        if(is_object($action)) $action->name = $program->type . '_' . $action->name;
-        else $action = $program->type . '_' . $action;
+        if(is_object($action))  $action->name = $program->type . '_' . $action->name;
+        if(!is_object($action)) $action = $program->type . '_' . $action;
 
         if(isset($action->items)) foreach($action->items as $idx => $item) $action->items[$idx]->name = $program->type . '_' . $item->name;
         $program->actions[] = $action;
