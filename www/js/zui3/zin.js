@@ -682,6 +682,7 @@
         if(options.toggle || $link.hasClass('not-open-url')) return;
 
         const url = options.url || $link.attr('href');
+        if(!url && $link.is('a') && !options.back && !options.load) return;
         if(url && (url.startsWith('javascript:') || url.startsWith('#'))) return;
 
         openUrl(url, options, e);
