@@ -1011,14 +1011,10 @@ class baseControl
          */
         extract(\zin\zin::$data);
 
-        include $viewFile;
-        /*
-        extract((array)$this->view);
         ob_start();
-        if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
-        $this->output .= ob_get_contents();
-        ob_end_clean();
-         */
+        include $viewFile;
+        ob_end_flush();
+        echo $output;
 
         /**
          * 渲染完毕后，再切换回之前的路径。

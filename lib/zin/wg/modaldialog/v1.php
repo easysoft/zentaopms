@@ -14,6 +14,7 @@ class modalDialog extends wg
         'footerActions?: array',
         'footerClass?: string',
         'footerProps?: array',
+        'rawContent?: bool=true'
     );
 
     static $defineBlocks = array(
@@ -81,10 +82,12 @@ class modalDialog extends wg
 
     protected function buildBody()
     {
+        $rawContent = $this->prop('rawContent');
         return div
         (
             setClass('modal-body'),
-            $this->children()
+            $this->children(),
+            $rawContent ? rawContent() : null,
         );
     }
 
@@ -93,7 +96,7 @@ class modalDialog extends wg
         return div
         (
             setClass('modal-dialog'),
-            set($this->props->skip(array_keys(static::getDefinedProps()))),
+            set($this->getRestProps()),
             div
             (
                 setClass('modal-content'),

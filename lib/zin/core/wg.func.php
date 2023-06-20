@@ -280,3 +280,13 @@ function groupWgInList(wg|array $items, string|array $types): array
     $groups[] = $restList;
     return $groups;
 }
+
+/**
+ * Create raw content placeholder.
+ *
+ * @return directive
+ */
+function rawContent(): directive
+{
+    return h::comment('{{RAW_CONTENT}}');
+}

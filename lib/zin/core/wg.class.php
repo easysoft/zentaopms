@@ -156,6 +156,10 @@ class wg
             if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
         }
 
+        $rawContent = ob_get_contents();
+        if(!is_string($rawContent)) $rawContent = '';
+        ob_end_clean();
+
         if(is_object($result))
         {
             if($zinDebug && isset($result['zinDebug'])) $result['zinDebug'] = $zinDebug;
@@ -167,8 +171,10 @@ class wg
             {
                 if(!isset($item['type']) || $item['type'] !== 'html') continue;
 
-                $item['data'] = str_replace('/*{{ZIN_PAGE_CSS}}*/', $css, $item['data']);
-                $item['data'] = str_replace('/*{{ZIN_PAGE_JS}}*/', $js, $item['data']);
+                $item['data'] = str_replace('/*{{ZIN_PAGE_CSS}}*/',     $css,        $item['data']);
+                $item['data'] = str_replace('/*{{ZIN_PAGE_JS}}*/',      $js,         $item['data']);
+                $item['data'] = str_replace('<!-- {{RAW_CONTENT}} -->', $rawContent, $item['data']);
+
                 $result[$name]['data'] = $item['data'];
             }
             if($zinDebug && isset($result['zinDebug'])) $result['zinDebug'] = $zinDebug;
@@ -179,6 +185,7 @@ class wg
             if($zinDebug) $js .= h::createJsVarCode('window.zinDebug', $zinDebug);
             $result = str_replace('/*{{ZIN_PAGE_CSS}}*/', $css, $result);
             $result = str_replace('/*{{ZIN_PAGE_JS}}*/', $js, $result);
+            $result = str_replace('<!-- {{RAW_CONTENT}} -->', $rawContent, $result);
         }
 
         echo $result;

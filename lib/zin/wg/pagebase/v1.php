@@ -13,7 +13,8 @@ class pageBase extends wg
         'bodyClass?: array|string',
         'zui?: bool',
         'lang?: string',
-        'display?: bool'
+        'display?: bool',
+        'rawContent?: bool=true'
     );
 
     static $defaultProps = array
@@ -48,15 +49,16 @@ class pageBase extends wg
         $head = $this->buildHead();
         $body = $this->buildBody();
 
-        $jsConfig  = \js::getJSConfigVars();
-        $bodyProps = $this->prop('bodyProps');
-        $bodyClass = $this->prop('bodyClass');
-        $metas     = $this->prop('metas');
-        $title     = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
-        $attrs     = $this->props->skip(array_keys(static::getDefinedProps()));
-        $css       = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
-        $js        = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
-        $imports   = context::current()->getImportList();
+        $jsConfig   = \js::getJSConfigVars();
+        $bodyProps  = $this->prop('bodyProps');
+        $bodyClass  = $this->prop('bodyClass');
+        $metas      = $this->prop('metas');
+        $rawContent = $this->prop('rawContent');
+        $title      = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
+        $attrs      = $this->props->skip(array_keys(static::getDefinedProps()));
+        $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
+        $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
+        $imports    = context::current()->getImportList();
 
         $jsConfig->zin = true;
         if($config->debug)
@@ -95,6 +97,7 @@ class pageBase extends wg
                 empty($imports) ? null : h::import($imports),
                 h::css($css, setClass('zin-page-css')),
                 $body,
+                $rawContent ? rawContent() : null,
                 h::js($js, setClass('zin-page-js'))
             )
         );
