@@ -1924,8 +1924,8 @@ class docModel extends model
             $buildPairs = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
-            $executionIdList = join(',', $executionIdList);
-            $storyIDList     = join(',', $storyIDList);
+            $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
+            $storyIDList     = $storyIDList ? join(',', $storyIDList) : 0;
         }
         elseif($type == 'execution')
         {
