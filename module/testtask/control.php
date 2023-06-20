@@ -779,7 +779,7 @@ class testtask extends control
             if($message) $this->lang->saveSuccess = $message;
 
             $link = isonlybody() ? 'parent' : $this->session->testtaskList;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
         $this->loadModel('project');

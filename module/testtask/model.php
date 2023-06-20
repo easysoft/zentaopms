@@ -789,6 +789,7 @@ class testtaskModel extends model
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->add('id', $taskID)
+            ->add('product', $oldTask->product)
             ->setDefault('type', '')
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
@@ -807,11 +808,10 @@ class testtaskModel extends model
             ->where('id')->eq($taskID)
             ->exec();
 
-        if(!dao::isError())
-        {
-            $this->file->processFile4Object('testtask', $oldTask, $task);
-            return common::createChanges($oldTask, $task);
-        }
+        if(dao::isError()) return false;
+
+        $this->file->processFile4Object('testtask', $oldTask, $task);
+        return common::createChanges($oldTask, $task);
     }
 
     /**
