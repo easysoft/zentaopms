@@ -187,7 +187,7 @@ else
 
     $lastRunResultItem = item
     (
-        setClass("result-testcase status-{$case->lastRunResult}"),
+        set::tdClass("result-testcase status-{$case->lastRunResult}"),
         set::name($lang->testtask->lastRunResult),
         $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted,
     );
@@ -222,7 +222,7 @@ else
     }
     $linkBugItem = item
     (
-        setClass('linkBugTitles'),
+        set::tdClass('linkBugTitles'),
         !empty($linkBugs) ? set::collapse(true) : '',
         set::name($lang->testcase->legendLinkBugs),
         $linkBugs,
@@ -246,7 +246,7 @@ else
     }
     $linkCaseItem = item
     (
-        setClass('linkCaseTitles'),
+        set::tdClass('linkCaseTitles'),
         set::name($lang->testcase->linkCase),
         !empty($linkCases) ? set::collapse(true) : '',
         $linkCases,
@@ -258,7 +258,7 @@ if($case->stage)
     foreach(explode(',', $case->stage) as $stage)
     {
         if(empty($stage)) continue;
-        $caseStage[] = zget($lang->testcase->stageList, $stage) . '<br />';
+        $caseStage[] = div(zget($lang->testcase->stageList, $stage));
     }
 
 }
