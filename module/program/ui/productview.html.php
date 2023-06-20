@@ -42,7 +42,7 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
         'data-url'    => createLink('product', 'manageLine', $browseType)
     ) : null;
 
-    return inputGroup
+    return btnGroup
     (
         hasPriv('program', 'create') ? btn
         (
@@ -54,8 +54,10 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
         !empty($items) ? dropdown
         (
             setClass('btn primary'),
-            span(setClass('caret')),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
+            set::placement('bottom-end'),
             set::items($items),
+            span(setClass('caret'))
         ) : null
     );
 };
