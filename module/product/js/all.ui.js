@@ -23,12 +23,6 @@ window.programMenuOnClick = function(data, url)
     location.href = url.replace('%d', data.item.key);
 }
 
-onRenderPage(function(info)
-{
-    loadCurrentPage('#mainMenu>*');
-    return false;
-});
-
 /**
  * Submit data to product batch edit page by html form while click on the batch edit button.
  *
