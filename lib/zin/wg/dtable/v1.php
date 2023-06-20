@@ -16,10 +16,12 @@ class dtable extends wg
 
     protected function created()
     {
-        $this->setDefaultProps(array('id' => static::$dtableID ? ('dtable' . static::$dtableID) : 'dtable'));
+        global $app;
+
+        $defaultID = "table-$app->rawModule-$app->rawMethod";
+        $this->setDefaultProps(array('id' => static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID));
         static::$dtableID++;
 
-        global $app;
         if($this->prop('customCols') === true)
         {
             $app->loadLang('datatable');
