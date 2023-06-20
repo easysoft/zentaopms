@@ -459,14 +459,7 @@ class dbh
                 $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
                 $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
 
-                /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
-                preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
-                if(!empty($datetimeMatch))
-                {
-                    foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
-                }
-
-                $sql = $this->convertAlterTableSql($sql);
+                if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
         }
 
         return $sql;
@@ -481,8 +474,15 @@ class dbh
      */
     public function convertAlterTableSql($sql)
     {
-        $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
+        /* If table has datas and sql no default values defined, add default ''/0. */
+        if(strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false)
+        {
+            $default = '';
+            if(strpos($sql, "integer") !== false) $default = 0;
+            $sql = str_replace("NOT NULL", "NOT NULL DEFAULT '" . $default ."'", $sql);
+        }
 
+        $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
         preg_match($pattern, $sql, $matches);
         if(count($matches) != 5) return $sql;
 
@@ -490,13 +490,10 @@ class dbh
         $oldColumnName = $matches[2];
         $newColumnName = $matches[3];
         $params        = str_replace("'", "''", $matches[4]);
-        $tmpColumnName = $newColumnName . '_tmp';
 
         $sql  = 'begin ';
-        $sql .= "execute immediate 'ALTER TABLE $tableName ADD " . '"' . $tmpColumnName . '"' . " $params ';";
-        $sql .= "execute immediate 'UPDATE " . '"' . $tableName  . '"' . ' SET "' . $tmpColumnName . '" = "' . $oldColumnName .'"' . "';";
-        $sql .= "execute immediate 'ALTER TABLE " . '"' . $tableName  . '"' . ' DROP  "' . $oldColumnName .'"' . "';";
-        $sql .= "execute immediate 'ALTER TABLE " . '"' . $tableName  . '"' . ' ALTER  "' . $tmpColumnName .'" RENAME TO "' . $newColumnName .'"' . "';";
+        if($oldColumnName != $newColumnName) $sql .= "execute immediate 'ALTER TABLE $tableName ALTER " . '"' . $oldColumnName . '" RENAME TO "' . $newColumnName . '"' . "';";
+        $sql .= "execute immediate 'ALTER TABLE $tableName MODIFY " . '"' . $newColumnName . '" ' . $params . "';";
         $sql .= 'end;';
 
         return $sql;
