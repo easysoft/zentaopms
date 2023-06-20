@@ -411,10 +411,6 @@ class doc extends control
             $docID = $docResult['id'];
             $files = zget($docResult, 'files', '');
             $lib   = $this->doc->getLibByID($libID);
-            if($docResult['status'] == 'exists')
-            {
-                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
-            }
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
