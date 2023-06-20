@@ -118,18 +118,19 @@ $config->bug->actionList['activate']['hint']        = $lang->bug->activate;
 $config->bug->actionList['activate']['url']         = array('module' => 'bug', 'method' => 'activate', 'params' => 'bugID={id}');
 $config->bug->actionList['activate']['data-toggle'] = 'modal';
 
-$config->bug->actionList['toStory']['icon'] = 'lightbulb';
-$config->bug->actionList['toStory']['id']   = 'toStory';
-$config->bug->actionList['toStory']['text'] = $lang->bug->toStory;
-$config->bug->actionList['toStory']['hint'] = $lang->bug->toStory;
-$config->bug->actionList['toStory']['url']  = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&module=0&story=0&execution=0&bugID={id}');
+$config->bug->actionList['toStory']['icon']         = 'lightbulb';
+$config->bug->actionList['toStory']['id']           = 'toStory';
+$config->bug->actionList['toStory']['text']         = $lang->bug->toStory;
+$config->bug->actionList['toStory']['hint']         = $lang->bug->toStory;
+$config->bug->actionList['toStory']['data-confirm'] = $lang->bug->notice->confirmToStory;
+$config->bug->actionList['toStory']['data-url']     = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&module=0&story=0&execution=0&bugID={id}');
 
 $config->bug->actionList['toTask']['icon']        = 'check';
-$config->bug->actionList['toTask']['id']          = 'toTask';
 $config->bug->actionList['toTask']['text']        = $lang->bug->toTask;
 $config->bug->actionList['toTask']['hint']        = $lang->bug->toTask;
-$config->bug->actionList['toTask']['url']         = '#toTask';
+$config->bug->actionList['toTask']['data-target'] = '#toTask';
 $config->bug->actionList['toTask']['data-toggle'] = 'modal';
+$config->bug->actionList['toTask']['data-size']   = 'sm';
 
 $config->bug->actionList['createCase']['icon'] = 'sitemap';
 $config->bug->actionList['createCase']['text'] = $lang->bug->createCase;

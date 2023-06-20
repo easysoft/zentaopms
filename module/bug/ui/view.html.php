@@ -10,6 +10,11 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+jsVar('bugID',     $bug->id);
+jsVar('productID', $bug->product);
+jsVar('branchID',  $bug->branch);
+jsVar('errorNoExecution', $lang->bug->noExecution);
+jsVar('errorNoProject',   $lang->bug->noProject);
 
 $canCreateBug = hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
@@ -128,14 +133,21 @@ foreach($config->{$moduleName}->actions->{$methodName} as $menu => $actionList)
             $method = $actionData['url']['method'];
             $params = $actionData['url']['params'];
             if(!common::hasPriv($module, $method)) continue;
-            if(!$this->loadModel($module)->isClickable($$moduleName, $action)) continue;
             $actionData['url'] = helper::createLink($module, $method, $params);
+        }
+        else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+        {
+            $module = $actionData['data-url']['module'];
+            $method = $actionData['data-url']['method'];
+            $params = $actionData['data-url']['params'];
+            if(!common::hasPriv($module, $method)) continue;
+            $actionData['data-url'] = helper::createLink($module, $method, $params);
         }
         else
         {
             if(!common::hasPriv($moduleName, $action)) continue;
-            if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
         }
+        //if(!$this->{$moduleName}->isClickable($$moduleName, $action)) continue;
 
         if($menu == 'suffixActions' && !empty($actionData['text'])) $actionData['text'] = '';
 
@@ -237,6 +249,53 @@ detailBody
                 (
                     set::useTable(false),
                     buildItems($legendMisc)
+                )
+            )
+        )
+    )
+);
+
+modal
+(
+    set::id('toTask'),
+    set::modalProps(array('title' => $lang->bug->selectProjects)),
+    to::footer
+    (
+        div
+        (
+            set::class('toolbar gap-4 w-full justify-center'),
+            btn($lang->bug->nextStep, set::id('toTaskButton'), setClass('primary')),
+            btn($lang->cancel, set::id('cancelButton'), set('data-dismiss', 'modal'))
+        )
+    ),
+    form
+    (
+        on::change('#taskProjects', 'changeTaskProjects'),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->bug->selectProjects),
+                set::required(true),
+                set::control('select'),
+                set::name('taskProjects'),
+                set::items($projects),
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->bug->execution),
+                set::required(true),
+                inputGroup
+                (
+                    set('id', 'executionBox'),
+                    select
+                    (
+                        set::name('execution'),
+                        set::items(),
+                    )
                 )
             )
         )

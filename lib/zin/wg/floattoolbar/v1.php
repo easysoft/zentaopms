@@ -37,7 +37,8 @@ class floatToolbar extends wg
         {
             if(!$item) continue;
 
-            if(!empty($item['url'])) $item['url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
+            if(!empty($item['url']))      $item['url']      = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
+            if(!empty($item['data-url'])) $item['data-url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['data-url']);
 
             $btns[] = btn(set($item), setClass('ghost text-white'));
         }
