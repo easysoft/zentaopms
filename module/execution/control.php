@@ -3093,7 +3093,7 @@ class execution extends control
             if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
 
             $this->execution->updateProducts($executionID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($executionID);
@@ -3101,11 +3101,7 @@ class execution extends control
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create($this->objectType, $executionID, 'Managed', '', !empty($_POST['products']) ? implode(',', $_POST['products']) : '');
 
-            if(isonlybody())
-            {
-                unset($_GET['onlybody']);
-                return print(js::locate($this->createLink('build', 'create', "executionID=$executionID&productID=0&projectID=$execution->project"), 'parent'));
-            }
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         /* Set menu. */
@@ -3117,8 +3113,8 @@ class execution extends control
         $position[] = $this->lang->execution->manageProducts;
 
         $branches            = $this->project->getBranchesByProject($executionID);
-        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
-        $allProducts         = $this->product->getProductPairsByProject($execution->project, 'all', $linkedProductIdList);
+        $linkedProductIdList = empty($branches) ? array() : array_keys($branches);
+        $allProducts         = $this->product->getProductPairsByProject($execution->project, 'all', implode(',', $linkedProductIdList));
         $linkedProducts      = $this->product->getProducts($execution->id, 'all', '', true, $linkedProductIdList);
         $linkedBranches      = array();
         $executionStories    = $this->project->getStoriesByProject($executionID);
