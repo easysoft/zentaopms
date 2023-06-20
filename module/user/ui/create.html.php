@@ -27,10 +27,11 @@ foreach($visionList as $key => $label)
 
 formPanel
 (
+    import('/js/md5.js', 'js'),
     on::change('input[name=type]', 'changeType'),
     on::change('#addCompany', 'changeAddCompany'),
     on::change('input[name^=visions]', 'changeVision'),
-    on::change('#password1,#password2', 'changePassword'),
+    on::change('#password1,#password2,#verifyPassword', 'changePassword'),
     on::click('button[type=submit]', 'clickSubmit'),
     set::title($title),
     formRow
@@ -71,6 +72,8 @@ formPanel
                     checkbox
                     (
                         set::id('addCompany'),
+                        set::name('new[]'),
+                        set::value('0'),
                         set::text($lang->company->create),
                     )
                 )

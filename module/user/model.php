@@ -321,7 +321,7 @@ class userModel extends model
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->join('visions', ',')
-            ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength')
+            ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength, verifyRand')
             ->get();
 
         $this->checkPassword();
@@ -362,30 +362,30 @@ class userModel extends model
             ->check('account', 'account')
             ->checkIF($this->post->email != '', 'email', 'email')
             ->exec();
-        if(!dao::isError())
+
+        if(dao::isError()) return false;
+
+        $userID = $this->dao->lastInsertID();
+
+        /* Set usergroup for account. */
+        if(isset($_POST['group']))
         {
-            $userID = $this->dao->lastInsertID();
-
-            /* Set usergroup for account. */
-            if(isset($_POST['group']))
+            foreach($this->post->group as $groupID)
             {
-                foreach($this->post->group as $groupID)
-                {
-                    $data          = new stdclass();
-                    $data->account = $this->post->account;
-                    $data->group   = $groupID;
-                    $data->project = '';
-                    $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
-                }
+                $data          = new stdclass();
+                $data->account = $this->post->account;
+                $data->group   = $groupID;
+                $data->project = '';
+                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
-
-            $this->computeUserView($user->account);
-            $this->loadModel('action')->create('user', $userID, 'Created');
-            $this->loadModel('mail');
-            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
-
-            return $userID;
         }
+
+        $this->computeUserView($user->account);
+        $this->loadModel('action')->create('user', $userID, 'Created');
+        $this->loadModel('mail');
+        if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+
+        return $userID;
     }
 
     /**
