@@ -119,12 +119,7 @@ window.canRowCheckable = function(rowID)
 
     if(data.length == 0) return true;
 
-    if(revisionMap[data[0].id] === undefined)
-    {
-        revisionMap = {};
-        for (var i = 0; i < data.length; i++) revisionMap[data[i].id] = data[i].revision;
-        window.checkedChange();
-    }
+    initRevisionMap(data);
 
     var currentCheckedIds = getCurrentCheckedIds();
 
@@ -144,6 +139,28 @@ $(function()
 })
 
 /**
+ * 检测revisionMap是否跟当前页面数据一致，不一致重新生成。
+ * Regenerate revisionMap when revisionMap is not in current list.
+ *
+ * @param  array
+ * @access public
+ * @return void
+ */
+function initRevisionMap(data)
+{
+    if(revisionMap[data[data.length - 1].id] !== undefined) return;
+
+    revisionMap = {};
+    for (var i = 0; i < data.length; i++) revisionMap[data[i].id] = data[i].revision;
+
+    /* Check rows where id in cookie. */
+    setTimeout(function()
+    {
+        checkColInCurrentPage()
+    }, 100);
+}
+
+/**
  * 选中当前页码对应的行。
  * Select the rows to the current page.
  *
@@ -161,11 +178,11 @@ function checkColInCurrentPage()
 
     if(currentCheckedIds)
     {
-        dtable.$.toggleCheckRows(currentCheckedIds);
+        dtable.$.toggleCheckRows(currentCheckedIds, true);
     }
     else
     {
-        dtable.$.toggleCheckRows(Object.keys(revisionMap).slice(0, 2));
+        dtable.$.toggleCheckRows(Object.keys(revisionMap).slice(0, 2), true);
     }
 
     window.checkedChange();
