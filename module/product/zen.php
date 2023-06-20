@@ -880,8 +880,7 @@ class productZen extends product
         $userFunc = array('treeModel', $createModuleLink);
         $extra    = array('projectID' => $projectID, 'productID' => $productID);
 
-        /* return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType"); */
-        return $this->product->getModuleTree($productID, $branch, $userFunc, $extra);
+        return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType");
     }
 
     /**
