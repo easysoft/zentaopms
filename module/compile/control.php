@@ -52,14 +52,17 @@ class compile extends control
         $this->app->loadLang('job');
         $this->loadModel('ci')->setMenu($repoID);
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
+        $buildList = $this->compile->getList($repoID, $jobID, $orderBy, $pager);
 
+        foreach($buildList as $build) $build->triggerType = $this->loadModel('job')->getTriggerConfig($build);
+
+        $this->view->title     = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
         $this->view->repoID    = $repoID;
         $this->view->jobID     = $jobID;
-        $this->view->buildList = $this->compile->getList($repoID, $jobID, $orderBy, $pager);
+        $this->view->buildList = $buildList;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
         $this->display();
