@@ -29,9 +29,9 @@ class collapseBtn extends wg
                     icon.classList.toggle('icon-angle-down');
                     icon.classList.toggle('icon-angle-top');
 
-                    const parent = btn.closest('$parent');
-                    const target = parent.querySelector('$target');
-                    if(target) target.classList.toggle('hidden');
+                    const parentElm = btn.closest('$parent');
+                    const targetElm = parentElm.querySelector('$target');
+                    if(targetElm) targetElm.classList.toggle('hidden');
                 FUNC
             )
         );
