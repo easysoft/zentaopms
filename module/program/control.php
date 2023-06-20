@@ -913,7 +913,8 @@ class program extends control
         }
 
         $actionURL = $this->createLink('program', 'productview', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
-        $this->product->buildProductSearchForm($param, $actionURL);
+        $this->config->program->search['actionURL'] = $actionURL;
+        $this->loadModel('search')->setSearchParams($this->config->program->search);
 
         $this->view->title              = $this->lang->product->common;
         $this->view->recTotal           = $pager->recTotal;
