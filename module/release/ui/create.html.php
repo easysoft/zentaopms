@@ -10,6 +10,26 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('projectID', isset($projectID) ? $projectID : 0);
+
+$productRow = array();
+if(!empty($projectID))
+{
+    $productRow[] = on::change('#product', 'loadBuilds');
+    $productRow[] = formRow
+    (
+        setClass($product->shadow ? 'hidden' : ''),
+        formGroup
+        (
+            set::width('1/2'),
+            set::name('product'),
+            set::label($lang->release->product),
+            set::items($products),
+            set::value($product->id),
+        ),
+    );
+}
+
 formPanel
 (
     set::title($lang->release->create),
@@ -34,14 +54,20 @@ formPanel
             $lastRelease ? '(' . $lang->release->last . ': ' . $lastRelease->name . ')' : ''
         ),
     ),
+    $productRow,
     formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::name('build[]'),
             set::label($lang->release->includedBuild),
-            set::items($builds),
+            select
+            (
+                set::name('build[]'),
+                set::placeholder($lang->build->placeholder->multipleSelect),
+                set::items($builds),
+                set::multiple(true),
+            ),
         ),
         formGroup
         (

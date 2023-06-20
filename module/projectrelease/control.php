@@ -118,7 +118,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function create($projectID)
+    public function create(int $projectID)
     {
         /* Load module and config. */
         $this->loadModel('build');
@@ -150,12 +150,12 @@ class projectrelease extends control
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
-        $this->view->title          = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->projectID      = $projectID;
-        $this->view->builds         = $builds;
-        $this->view->lastRelease    = $this->projectrelease->getLast($projectID);
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
-        $this->display();
+        $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->projectID   = $projectID;
+        $this->view->builds      = $builds;
+        $this->view->lastRelease = $this->projectrelease->getLast($projectID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->display('release', 'create');
     }
 
     /**
