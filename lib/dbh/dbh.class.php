@@ -467,8 +467,39 @@ class dbh
                 }
 
                 /* If table has datas and sql no default values defined, replace NOT NULL to NULL. */
-                if (strpos($sql, "NOT NULL,") !== false && strpos($sql, "DEFAULT") === false) $sql = str_replace("NOT NULL", "NULL", $sql);
+                if(strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false) $sql = str_replace("NOT NULL", "NULL", $sql);
+                $sql = $this->convertAlterTableSql($sql);
         }
+
+        return $sql;
+    }
+
+    /**
+     * Convert alter table sql.
+     *
+     * @param mixed $sql
+     * @access public
+     * @return void
+     */
+    public function convertAlterTableSql($sql)
+    {
+        $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
+
+        preg_match($pattern, $sql, $matches);
+        if(count($matches) != 5) return $sql;
+
+        $tableName     = $matches[1];
+        $oldColumnName = $matches[2];
+        $newColumnName = $matches[3];
+        $params        = str_replace("'", "''", $matches[4]);
+        $tmpColumnName = $newColumnName . '_tmp';
+
+        $sql  = 'begin ';
+        $sql .= "execute immediate 'ALTER TABLE $tableName ADD " . '"' . $tmpColumnName . '"' . " $params ';";
+        $sql .= "execute immediate 'UPDATE " . '"' . $tableName  . '"' . ' SET "' . $tmpColumnName . '" = "' . $oldColumnName .'"' . "';";
+        $sql .= "execute immediate 'ALTER TABLE " . '"' . $tableName  . '"' . ' DROP  "' . $oldColumnName .'"' . "';";
+        $sql .= "execute immediate 'ALTER TABLE " . '"' . $tableName  . '"' . ' ALTER  "' . $tmpColumnName .'" RENAME TO "' . $newColumnName .'"' . "';";
+        $sql .= 'end;';
 
         return $sql;
     }
