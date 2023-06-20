@@ -165,7 +165,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function edit($releaseID)
+    public function edit(int $releaseID)
     {
         /* Load module and config. */
         $this->loadModel('story');
@@ -223,7 +223,7 @@ class projectrelease extends control
         $this->view->builds     = $builds;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
-        $this->display();
+        $this->display('release', 'edit');
     }
 
     /**

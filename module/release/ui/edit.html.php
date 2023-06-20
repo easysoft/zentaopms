@@ -22,7 +22,7 @@ formPanel
             set::label($lang->release->name),
             set::value($release->name),
         ),
-        formGroup
+        $app->tab != 'project' || empty($product->shadow) ? formGroup
         (
             set::width('1/4'),
             setClass('items-center'),
@@ -33,17 +33,22 @@ formPanel
                 set::checked(!empty($release->marker)),
                 set::text($lang->release->marker),
             ),
-        ),
+        ) : '',
     ),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::name('build[]'),
             set::label($lang->release->includedBuild),
-            set::value($release->build),
-            set::items($builds),
+            select
+            (
+                set::name('build[]'),
+                set::placeholder($lang->build->placeholder->multipleSelect),
+                set::items($builds),
+                set::value($release->build),
+                set::multiple(true),
+            ),
         ),
     ),
     formRow
