@@ -144,8 +144,8 @@ class wg
         $dom     = $this->buildDom();
         $result  = $dom->render();
         $context = context::current();
-        $css     = implode("\n", $context->getCssList());
-        $js      = implode("\n", $context->getJsList());
+        $css     = $context->getCSS();
+        $js      = $context->getJS();
 
         global $app, $config;
         $zinDebug = null;
