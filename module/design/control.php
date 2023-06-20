@@ -296,10 +296,10 @@ class design extends control
      * @access public
      * @return void
      */
-    public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
         $design = $this->design->getById($designID);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, (int)$design->product, $designID);
 
         /* Get project and date. */
         $project = $this->loadModel('project')->getByID($design->project);
@@ -388,10 +388,10 @@ class design extends control
      * @access public
      * @return void
      */
-    public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function viewCommit(int $designID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $design = $this->design->getByID($designID);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, (int)$design->product, $designID);
 
         /* Init pager. */
         $this->app->loadClass('pager', true);

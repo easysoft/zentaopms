@@ -1,6 +1,6 @@
 $(function()
 {
-    $('#mainNavbar .nav a[data-id=' + type + ']').addClass('active');
+    if(typeof type != 'undefined') $('#mainNavbar .nav a[data-id=' + type + ']').addClass('active');
 });
 
 
