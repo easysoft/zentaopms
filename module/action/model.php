@@ -1808,7 +1808,7 @@ class actionModel extends model
         {
             $func = "get$period";
             extract(date::$func());
-            return array('begin' => $begin, 'end' => $end . ' 23:59:59');
+            return array('begin' => $begin, 'end' => $end);
         }
 
         if($period == 'thismonth')  return date::getThisMonth();
