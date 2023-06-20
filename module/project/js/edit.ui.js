@@ -1,5 +1,5 @@
 /* 切换项目管理模型的逻辑. */
-$('body').on('click', '.dropdown-menu .menu-item', function()
+$(document).on('click', '.dropdown-menu .menu-item', function()
 {
     let text  = $(this).find('.model-drop').attr('data-value');
     let model = $(this).find('.model-drop').attr('data-key');
@@ -7,26 +7,20 @@ $('body').on('click', '.dropdown-menu .menu-item', function()
     $('#model').val(model);
 })
 
-$(document).on('click', 'a.addLine', function(){addNewLine($(this));})
-$(document).on('click', 'a.removeLine', function()
-{
-    if(typeof $(this).attr('disabled') == 'undefined') removeLine($(this));
-})
-
 $(document).on('change', '[name*=products]', function()
 {
     loadBranches(this);
 
-    var current    = $(this).val();
-    var last       = $(this).attr('last');
-    var lastBranch = $(this).attr('data-lastBranch');
+    let current    = $(this).val();
+    let last       = $(this).attr('last');
+    let lastBranch = $(this).attr('data-lastBranch');
 
     $(this).attr('data-last', current);
 
-    var $branch = $(this).closest('.has-branch').find("[name^='branch']");
+    let $branch = $(this).closest('.has-branch').find("[name^='branch']");
     if($branch.length)
     {
-        var branchID = $branch.val();
+        let branchID = $branch.val();
         $(this).attr('data-lastBranch', branchID);
     }
     else
@@ -46,7 +40,7 @@ $(document).on('change', '[name*=products]', function()
         }
     }
 
-    var chosenProducts = 0;
+    let chosenProducts = 0;
     $(".productsBox select[name^='products']").each(function()
     {
         if($(this).val() > 0) chosenProducts ++;
@@ -58,18 +52,18 @@ $(document).on('change', '[name*=products]', function()
 
 $(document).on('change', '[name*=branch]', function()
 {
-    var current = $(this).val();
-    var last    = $(this).attr('data-last');
+    let current = $(this).val();
+    let last    = $(this).attr('data-last');
     $(this).attr('data-last', current);
 
-    var $product = $(this).closest('.form-row').find("[name^='products']");
+    let $product = $(this).closest('.form-row').find("[name^='products']");
     $product.attr('data-lastBranch', current);
 
     loadPlans($product, $(this));
 
     if(unmodifiableBranches.includes(last))
     {
-        var productID = $product.val();
+        let productID = $product.val();
         if(unmodifiableBranches.includes(productID))
         {
             if((last == 0 && unmodifiableMainBranches[productID]) || last != 0)
@@ -92,11 +86,11 @@ function loadBranches(product)
     /* When selecting a product, delete a plan that is empty by default. */
     $("#planDefault").remove();
 
-    var chosenProducts = [];
+    let chosenProducts = [];
     $("select[name^='products']").each(function()
     {
-        var $product  = $(product);
-        var productID = $(this).val();
+        let $product  = $(product);
+        let productID = $(this).val();
         if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
@@ -109,9 +103,9 @@ function loadBranches(product)
 
     (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
 
-    var $formRow  = $(product).closest('.form-row');
-    var index     = $formRow.find('select').first().attr('id').match(/\d+/)[0];
-    var oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
+    let $formRow  = $(product).closest('.form-row');
+    let index     = $formRow.find('select').first().attr('id').match(/\d+/)[0];
+    let oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
 
     if(!multiBranchProducts[$(product).val()])
     {
@@ -128,7 +122,7 @@ function loadBranches(product)
             $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index);
         }
 
-        var branch = $('#branch' + index);
+        let branch = $('#branch' + index);
         loadPlans(product, branch);
     });
 }
@@ -143,10 +137,10 @@ function loadBranches(product)
  */
 function loadPlans(product, branch)
 {
-    var productID = $(product).val();
-    var branchID  = $(branch).val() == null ? 0 : '0,' + $(branch).val();
-    var planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
-    var index     = $(product).attr('id').match(/\d+/)[0];
+    let productID = $(product).val();
+    let branchID  = $(branch).val() == null ? 0 : '0,' + $(branch).val();
+    let planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
+    let index     = $(product).attr('id').match(/\d+/)[0];
 
     $.get($.createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
     {
@@ -162,17 +156,22 @@ function loadPlans(product, branch)
 /**
  * Add new line for link product.
  *
- * @param  obj obj
+ * @param  obj e 
  * @access public
  * @return void
  */
-function addNewLine(obj)
+function addNewLine(e)
 {
-    var newLine = $(obj).closest('.form-row').clone();
-    var index   = 0;
+    const obj     = e.target
+    const newLine = $(obj).closest('.form-row').clone();
+    let index = 0;
+
+    newLine.find('.addLine').on('click', addNewLine);
+    newLine.find('.removeLine').on('click', removeLine);
+
     $("select[name^='products']").each(function()
     {
-        var id = $(this).attr('id').replace('products' , '');
+        let id = $(this).attr('id').replace('products' , '');
 
         id = parseInt(id);
         id ++;
@@ -182,29 +181,34 @@ function addNewLine(obj)
 
     newLine.addClass('newLine');
     newLine.find('.form-label').html('');
-    newLine.find('.removeLine').removeAttr('disabled');
+    newLine.find('.removeLine').removeClass('disabled');
     newLine.find('.chosen-container').remove();
     newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index);
     newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]');
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
 
     $(obj).closest('.form-row').after(newLine);
-    var product = newLine.find("select[name^='products']");
-    var branch  = newLine.find("select[name^='branch']");
+    let product = newLine.find("select[name^='products']");
+    let branch  = newLine.find("select[name^='branch']");
 }
 
 /**
  * Remove line for link product.
  *
- * @param  obj obj
+ * @param  obj e 
  * @access public
  * @return void
  */
-function removeLine(obj)
+function removeLine(e)
 {
+    const obj = e.target
+
+    /* Dsiabled btn can't remove line. */
+    if($(obj).closest('.btn').hasClass('disabled')) return false;
+
     $(obj).closest('.form-row').remove();
 
-    var chosenProducts = 0;
+    let chosenProducts = 0;
     $("select[name^='products']").each(function()
     {
       if($(this).val() > 0) chosenProducts ++;

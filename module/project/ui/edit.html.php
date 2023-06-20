@@ -91,15 +91,17 @@ if($linkedProducts)
                 div
                 (
                     setClass('pl-2 flex self-center'),
-                    a
+                    btn
                     (
                         setClass('btn btn-link addLine'),
+                        on::click('addNewLine'),
                         icon('plus')
                     ),
-                    a
+                    btn
                     (
                         setClass('btn btn-link removeLine'),
                         icon('close'),
+                        on::click('removeLine'),
                         $i == 0 ? set::disabled(true) : null
                     ),
                 )
@@ -129,7 +131,8 @@ formPanel
             set::trigger('click'),
             set::placement('bottom'),
             set::menuProps(array('style' => array('color' => 'var(--color-fore)'))),
-            set::items($projectModelItems)
+            set::items($projectModelItems),
+            on::click('changModel')
         )
     )),
     formRow
