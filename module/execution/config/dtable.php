@@ -1,6 +1,6 @@
 <?php
-
 $config->execution->dtable = new stdclass();
+$config->execution->team = new stdclass();
 $config->execution->team->dtable = new stdclass();
 
 $config->execution->dtable->fieldList['rawID']['title']    = $lang->idAB;
@@ -133,6 +133,10 @@ $config->execution->dtable->fieldList['burn']['sortType'] = false;
 $config->execution->dtable->fieldList['burn']['width']    = '88';
 $config->execution->dtable->fieldList['burn']['group']    = '4';
 $config->execution->dtable->fieldList['burn']['show']     = true;
+
+$config->execution->team->actionList['unlink']['icon'] = 'unlink';
+$config->execution->team->actionList['unlink']['hint'] = $lang->execution->unlinkMember;
+$config->execution->team->actionList['unlink']['url']  = 'javascript:deleteMember("{root}", "{userID}")';
 
 $config->execution->team->dtable->fieldList['account']['title']    = $lang->team->account;
 $config->execution->team->dtable->fieldList['account']['name']     = 'realname';

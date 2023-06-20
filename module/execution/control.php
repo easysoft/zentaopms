@@ -1514,8 +1514,6 @@ class execution extends control
      */
     public function team($executionID = 0)
     {
-        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
-
         $execution = $this->commonAction($executionID);
         $deptID    = $this->app->user->admin ? 0 : $this->app->user->dept;
 
