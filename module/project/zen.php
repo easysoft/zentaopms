@@ -910,6 +910,7 @@ class projectZen extends project
      */
     protected function getOtherProducts(array $programProducts, array $branchGroups, array $linkedBranches, array $linkedProducts): array
     {
+        $otherProducts = array();
         foreach($programProducts as $productID => $productName)
         {
             if(!empty($branchGroups[$productID]))
