@@ -17,7 +17,8 @@ $linkCommitItem = $canLinkCommit ? btn(
     set::icon('plus'),
     set::text($lang->design->linkCommit),
     set::type('primary'),
-    set('data-url', createLink('design', 'linkCommit', "designID=$design->id")),
+    set('url', createLink('design', 'linkCommit', "designID=$design->id")),
+    set('data-load', 'modal'),
 ) : null;
 
 if(empty($design->commit))

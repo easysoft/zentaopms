@@ -43,6 +43,7 @@ $config->design->actionList['viewCommit']['hint']          = $lang->design->view
 $config->design->actionList['viewCommit']['url']           = helper::createLink('design', 'viewCommit', 'designID={id}');
 $config->design->actionList['viewCommit']['data-toggle']   = 'modal';
 $config->design->actionList['viewCommit']['data-position'] = 'center';
+$config->design->actionList['viewCommit']['data-id']       = 'viewCommitModal';
 
 $config->design->actionList['delete']['icon']       = 'trash';
 $config->design->actionList['delete']['hint']       = $lang->design->delete;
