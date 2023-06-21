@@ -22,17 +22,16 @@ class form extends formBase
     {
         parent::created();
 
-        if(isAjaxRequest('modal'))
-        {
-            global $app, $lang;
-            $module = $app->getModuleName();
-            $method = $app->getMethodName();
-            $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
+        if(!isAjaxRequest('modal')) return;
 
-            $defaultProps = array();
-            $defaultProps['submitBtnText'] = $text;
-            $defaultProps['class']         = 'px-3 pb-4 border-b';
-        }
+        global $app, $lang;
+        $module = $app->getModuleName();
+        $method = $app->getMethodName();
+        $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
+
+        $defaultProps = array();
+        $defaultProps['submitBtnText'] = $text;
+        $defaultProps['class']         = 'px-3 pb-4 border-b';
 
         $this->setDefaultProps($defaultProps);
     }
