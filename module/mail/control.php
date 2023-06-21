@@ -65,13 +65,13 @@ class mail extends control
 
             if($error) return print(js::alert($error));
 
-            echo "<script>setTimeout(function(){parent.location.href='" . inlink('edit') . "'}, 10000)</script>";
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;
             $mailConfig->domain      = common::getSysURL();
             $this->session->set('mailConfig',  $mailConfig);
 
-            return print(js::locate(inlink('edit'), 'parent'));
+            $response['load'] = inlink('edit');
+            return $this->send($response);
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->detect;
