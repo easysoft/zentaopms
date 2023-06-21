@@ -40,6 +40,8 @@ $lang->caselib->lastEditedBy   = 'Edité par';
 $lang->caselib->lastEditedDate = 'Date Modif';
 $lang->caselib->templateType   = 'Template Type';
 $lang->caselib->recordNum      = 'Record Number';
+$lang->caselib->selectFile     = 'Select File';
+$lang->caselib->encode         = 'Encode';
 
 $lang->caselib->legendDesc = 'Description';
 

@@ -60,6 +60,7 @@ toolbar
             setClass('toolbar-item ghost btn btn-default'),
             set::href(createLink('caselib', 'import', "libID={$libID}")),
             set('data-toggle', 'modal'),
+            set('data-size', 'sm'),
             icon('import'),
             $lang->testcase->fileImport,
         ) : '',
