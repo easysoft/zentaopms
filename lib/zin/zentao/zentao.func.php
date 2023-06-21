@@ -41,6 +41,7 @@ class stdClass extends \stdClass
 
 function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '', $onlybody = false)
 {
+    if(empty($moduleName)) return '';
     return \helper::createLink($moduleName, $methodName, $vars, $viewType, $onlybody);
 }
 
