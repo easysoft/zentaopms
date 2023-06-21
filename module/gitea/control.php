@@ -144,8 +144,8 @@ class gitea extends control
         $actionID = $this->pipeline->delete($giteaID, 'gitea');
         if(!$actionID)
         {
-            $response['result']  = 'fail';
-            $response['message'] = $this->lang->pipeline->delError;
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
             return $this->send($response);
         }
 
