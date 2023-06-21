@@ -36,6 +36,7 @@ class formPanel extends panel
         'class?: string="panel-form rounded-md ring-0 canvas px-4 pb-4 mb-4 mx-auto"', // 类名。
         'size?: string="lg"',                          // 额外尺寸。
         'id?: string="$GID"',                          // ID，如果不指定则自动生成（使用 zin 部件 GID）。
+        'formClass?: string',                          // 表单样式。
         'method?: "get"|"post"="post"',                // 表单提交方式。
         'url?: string',                                // 表单提交地址。
         'actions?: array',                             // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
@@ -81,6 +82,7 @@ class formPanel extends panel
 
         return new form
         (
+            set::class($this->prop('formClass')),
             set($this->props->pick(array_keys(form::getDefinedProps()))),
             $this->children()
         );

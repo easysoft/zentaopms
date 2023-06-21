@@ -12,6 +12,7 @@ namespace zin;
 
 formPanel
 (
+    set::formClass('border-0'),
     set::shadow(false),
     set::title($company->name),
     set::headingClass('modal-heading'),
