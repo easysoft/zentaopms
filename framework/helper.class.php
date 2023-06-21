@@ -460,6 +460,7 @@ function initPageTitle(): string
 
     if(empty($lang->$module)) $app->loadLang($module);
 
+    if(!empty($lang->$module->{$method . 'Action'})) return $lang->$module->{$method . 'Action'};
     if(!empty($lang->$module->$method)) return $lang->$module->$method;
     return zget($lang, $method);
 }
