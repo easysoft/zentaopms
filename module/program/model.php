@@ -1324,7 +1324,6 @@ class programModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
-            ->beginIF(!empty($projects))->andWhere('t2.model')->ne('waterfall')->fi()
             ->groupBy('execution')
             ->fetchAll();
 
