@@ -457,6 +457,15 @@ function goBack(target, url, startState)
     }
 
     if(url) return openApp(url);
+    if(target)
+    {
+        if($.apps.openedMap[target]) return openApp(target);
+        if(target.includes('-'))
+        {
+            const parts = target.split('-');
+            return openApp($.createLink(parts[0], parts[1]));
+        }
+    }
 
     window.history.back();
 }
