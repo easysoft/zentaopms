@@ -23,15 +23,18 @@ require_once __DIR__ . DS . 'zin.class.php';
  * @param  string|array $options
  * @return void
  */
-function render(string $wgName = 'page', string|array $options = null)
+function render(string $wgName = '', string|array $options = null)
 {
     /* 获取全局渲染部件实例和指令。 Get global render widgets and directives. */
     $globalItems = zin::getGlobalRenderList();
 
     /* 决定部件名称，如果是 Ajax 请求则进行特殊处理。 Decide widget name, if is ajax request, then do special process. */
-    list($normalWgName, $ajaxWgName) = array_merge(explode('|', $wgName), array(''));
-    $wgName = (!empty($ajaxWgName) && isAjaxRequest()) ? $ajaxWgName : $normalWgName;
-    if(empty($wgName)) $wgName = 'page';
+    if(empty($wgName))
+    {
+        $wgName = 'page';
+        if(isAjaxRequest() && !isAjaxRequest('zin')) $wgName = 'fragment';
+        if(isAjaxRequest('modal')) $wgName = 'modalDialog';
+    }
 
     /* 判断是否渲染为完整页面。 Check if render in full page. */
     $isFullPage = str_starts_with($wgName, 'page');
