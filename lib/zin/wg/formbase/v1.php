@@ -31,6 +31,13 @@ class formBase extends wg
         'ajax?:array'                          // Ajax 表单选项
     );
 
+    protected function created()
+    {
+        $actions = isAjaxRequest('modal') ? array('submit') : array('submit', 'cancel');
+
+        $this->setDefaultProps(array('actions' => $actions));
+    }
+
     protected function buildActions(): wg|null
     {
         $actions = $this->prop('actions');
