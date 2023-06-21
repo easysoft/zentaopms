@@ -423,16 +423,6 @@ class installModel extends model
                 $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
                 $table = str_replace('zt_', $this->config->db->prefix, $table);
 
-                if($this->config->db->driver != 'mysql')
-                {
-                    /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
-                    preg_match_all('/"[0-9a-zA-Z]+" datetime/', $table, $datetimeMatch);
-                    if(!empty($datetimeMatch))
-                    {
-                        foreach($datetimeMatch[0] as $match) $table = str_replace($match, $match . '(0)', $table);
-                    }
-                }
-
                 $this->dbh->exec($table);
             }
         }

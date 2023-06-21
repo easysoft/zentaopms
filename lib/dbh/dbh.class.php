@@ -459,6 +459,13 @@ class dbh
                 $sql = preg_replace('/\,\s*(unique|fulltext)*\s+key[\_\"0-9a-z ]+\(+[\,\_\"0-9a-z ]+\)+/i', '', $sql);
                 $sql = preg_replace('/ float\s*\(+[\,\_\"0-9a-z ]+\)+/i', ' float', $sql);
 
+                /* Convert "date" datetime to "date" datetime(0) to fix bug 25725, dm database datetime default 6 */
+                preg_match_all('/"[0-9a-zA-Z]+" datetime/', $sql, $datetimeMatch);
+                if(!empty($datetimeMatch))
+                {
+                    foreach($datetimeMatch[0] as $match) $sql = str_replace($match, $match . '(0)', $sql);
+                }
+
                 if(strpos($sql, "ALTER TABLE") !== false) $sql = $this->convertAlterTableSql($sql);
         }
 
