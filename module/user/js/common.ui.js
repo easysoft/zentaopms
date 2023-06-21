@@ -46,3 +46,24 @@ function computePasswordStrength(password)
 
     return strength;
 }
+
+/**
+ * Switch account
+ *
+ * @param  string $account
+ * @param  string $method
+ * @access public
+ * @return void
+ */
+$(document).ready(function()
+{
+    var verifyEncrypted = false;
+    $('#verifyPassword').on('change', function(){verifyEncrypted = false});
+    $('#verifyPassword').closest('form').find('button[type="submit"]').on('click', function()
+    {
+        var password = $('input#verifyPassword').val().trim();
+        var rand     = $('input#verifyRand').val();
+        if(!verifyEncrypted && password) $('input#verifyPassword').val(md5(md5(password) + rand));
+        verifyEncrypted = true;
+    });
+});

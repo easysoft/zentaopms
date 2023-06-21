@@ -82,6 +82,9 @@ $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
 $lang->user->resetTitle       = 'Admin reset the password';
 
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = 'ID';
+
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
 
@@ -233,15 +236,15 @@ $lang->user->placeholder->passwordStrengthCheck[1] = 'The password should be ≥
 $lang->user->placeholder->passwordStrengthCheck[2] = 'The password should be ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account        = "ID %s，account must be >= 3 letters, underline or numbers";
-$lang->user->error->accountDupl    = "ID %s，account is used.";
-$lang->user->error->realname       = "ID %s，must be real name";
-$lang->user->error->visions        = "ID %s，must be version type";
-$lang->user->error->password       = "ID %s，password must be >= 6 characters.";
-$lang->user->error->mail           = "ID %s，enter valid Email address";
-$lang->user->error->reserved       = "ID %s，account is reserved.";
-$lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
-$lang->user->error->dangerPassword = "ID %s，passwords cannot be used with [%s] these commonly used if-passwords.";
+$lang->user->error->account        = 'account must be >= 3 letters, underline or numbers';
+$lang->user->error->accountDupl    = 'account is used.';
+$lang->user->error->realname       = 'must be real name';
+$lang->user->error->visions        = 'must be version type';
+$lang->user->error->password       = 'password must be >= 6 characters.';
+$lang->user->error->mail           = 'enter valid Email address';
+$lang->user->error->reserved       = 'account is reserved.';
+$lang->user->error->weakPassword   = 'the password strength is less than the system setting.';
+$lang->user->error->dangerPassword = "passwords cannot be used with [%s] these commonly used if-passwords.";
 
 $lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
 $lang->user->error->verify           = "Wrong account or password.";

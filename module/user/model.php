@@ -397,54 +397,53 @@ class userModel extends model
      */
     public function batchCreate()
     {
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) helper::end(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
         $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
-        for($i = 1; $i <= $this->config->user->batchCreate; $i++)
+        for($i = 0; $i < $this->config->user->batchCreate; $i++)
         {
             $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
             {
-                if(strtolower($users->account[$i]) == 'guest') helper::end(js::error(sprintf($this->lang->user->error->reserved, $i)));
+                if(strtolower($users->account[$i]) == 'guest') dao::$errors["account{$i}"][] = $this->lang->user->error->reserved;
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
-                if($account) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i)));
-                if(in_array($users->account[$i], $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i)));
-                if(!validater::checkAccount($users->account[$i])) helper::end(js::error(sprintf($this->lang->user->error->account, $i)));
-                if($users->realname[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $i)));
-                if(empty($users->visions[$i])) helper::end(js::error(sprintf($this->lang->user->error->visions, $i)));
-                if($users->email[$i] and !validater::checkEmail($users->email[$i])) helper::end(js::error(sprintf($this->lang->user->error->mail, $i)));
-                $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
-                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) helper::end(js::error(sprintf($this->lang->user->error->password, $i)));
-                $role    = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
-                $visions = in_array('ditto', $users->visions[$i]) ? (isset($prev['visions']) ? $prev['visions'] : array()) : $users->visions[$i];
+                if($account) dao::$errors["account[{$i}]"][] = $this->lang->user->error->accountDupl;
+                if(in_array($users->account[$i], $accounts)) dao::$errors["account[{$i}]"][] = $this->lang->user->error->accountDupl;
+                if(!validater::checkAccount($users->account[$i])) dao::$errors["account[{$i}]"][] = $this->lang->user->error->account;
+
+                if($users->email[$i] and !validater::checkEmail($users->email[$i])) dao::$errors["email[{$i}]"][] = $this->lang->user->error->mail;
+                $users->password[$i] = $this->post->password[$i];
+                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) dao::$errors["password[{$i}]"][] = $this->lang->user->error->password;
 
                 /* Check weak and common weak password. */
-                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) helper::end(js::error(sprintf($this->lang->user->error->weakPassword, $i)));
+                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) dao::$errors["password[{$i}]"][] = $this->lang->user->error->weakPassword;
                 if(!empty($this->config->safe->changeWeak))
                 {
                     if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) helper::end(js::error(sprintf($this->lang->user->error->dangerPassword, $i, $this->config->safe->weak)));
+                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) dao::$errors["password[{$i}]"][] = sprintf($this->lang->user->error->dangerPassword, $this->config->safe->weak);
                 }
 
                 $data[$i] = new stdclass();
                 if($users->userType == 'outside')
                 {
-                    $data[$i]->company    = $users->company[$i] == 'ditto' ? (isset($prev['company']) ? $prev['company'] : 0) : $users->company[$i];
+                    $data[$i]->company    = isset($users->new[$i]) ? $users->newCompany[$i] : $users->company[$i];
                     $data[$i]->newCompany = isset($users->new[$i]) ? true : false;
                     $data[$i]->type       = 'outside';
+                    $data[$i]->dept       = 0;
+                    $data[$i]->join       = null;
                 }
                 else
                 {
-                    $data[$i]->dept = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
-                    $data[$i]->join = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
+                    $data[$i]->dept = $users->dept[$i];
+                    $data[$i]->join = empty($users->join[$i]) ? null : ($users->join[$i]);
                     $data[$i]->type = 'inside';
                 }
                 $data[$i]->account  = $users->account[$i];
                 $data[$i]->realname = $users->realname[$i];
-                $data[$i]->role     = $role;
-                $data[$i]->group    = in_array('ditto', isset($users->group[$i]) ? $users->group[$i] : array()) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
+                $data[$i]->role     = $users->role[$i];
+                $data[$i]->group    = $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
@@ -459,7 +458,7 @@ class userModel extends model
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
-                $data[$i]->visions  = join(',', $visions);
+                $data[$i]->visions  = is_array($users->visions[$i]) ? join(',', $users->visions[$i]) : $users->visions[$i];
 
                 /* Check required fields. */
                 foreach(explode(',', $this->config->user->create->requiredFields) as $field)
@@ -470,7 +469,7 @@ class userModel extends model
                     if(!isset($data[$i]->$field)) continue;
                     if(!empty($data[$i]->$field)) continue;
 
-                    helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                    dao::$errors["{$field}[{$i}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->$field);
                 }
 
                 /* Change for append field, such as feedback. */
@@ -486,18 +485,13 @@ class userModel extends model
                     }
                 }
 
-                $accounts[$i]     = $data[$i]->account;
-                if($users->userType == 'outside') $prev['company']  = $data[$i]->company;
-                $prev['dept']     = $data[$i]->dept;
-                $prev['role']     = $data[$i]->role;
-                $prev['group']    = $data[$i]->group;
-                $prev['visions']  = $visions;
-                $prev['password'] = $users->password[$i];
+                $accounts[$i] = $data[$i]->account;
             }
         }
+        if(dao::isError()) return false;
 
         $this->loadModel('mail');
-        $userIDList = array();
+        $userIdList = array();
         foreach($data as $user)
         {
             if($user->type == 'outside' and $user->newCompany)
@@ -527,24 +521,20 @@ class userModel extends model
                 ->checkIF($user->phone  != '', 'phone',  'phone')
                 ->checkIF($user->mobile != '', 'mobile', 'mobile')
                 ->exec();
+            if(dao::isError()) return false;
 
             /* Fix bug #2941 */
             $userID       = $this->dao->lastInsertID();
-            $userIDList[] = $userID;
+            $userIdList[] = $userID;
             $this->loadModel('action')->create('user', $userID, 'Created');
 
-            if(dao::isError())
-            {
-                echo js::error(dao::getError());
-                helper::end(js::reload('parent'));
-            }
-            else
-            {
-                $this->computeUserView($user->account);
-                if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
-            }
+            if(dao::isError()) return false;
+
+            $this->computeUserView($user->account);
+            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+
         }
-        return $userIDList;
+        return $userIdList;
     }
 
     /**
