@@ -21,6 +21,7 @@ class searchToggle extends wg
         $module = $this->prop('module');
         return popovers
         (
+            set::arrow(true),
             to::trigger
             (
                 btn
