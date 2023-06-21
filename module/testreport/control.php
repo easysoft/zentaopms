@@ -170,10 +170,10 @@ class testreport extends control
         if($_POST)
         {
             $reportID = $this->testreport->create();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('testreport', $reportID, 'Opened');
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $reportID));
-            return print(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "reportID=$reportID"), 'id' => $reportID));
         }
 
         if($objectType == 'testtask')
