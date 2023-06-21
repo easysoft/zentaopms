@@ -635,7 +635,11 @@ class upgradeModel extends model
                 $this->setURSwitchStatus($fromVersion);
                 break;
             case '18_4_beta1':
-                if($this->config->edition != 'open') $this->processDeployStepAction();
+                if($this->config->edition != 'open')
+                {
+                    $this->processDeployStepAction();
+                    $this->updateBISQL();
+                }
                 break;
 
         }
@@ -9323,5 +9327,35 @@ class upgradeModel extends model
     {
         $steps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->fetchAll('id');
         if($steps) $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('deploystep')->andWhere('objectID')->notIN(array_keys($steps))->exec();
+    }
+
+    /**
+     * Update BI SQL for 18.4.stable new function: dataview model.php checkUniColumn().
+     *
+     * @access public
+     * @return void
+     */
+    public function updateBISQL()
+    {
+        $alpha1File = $this->getUpgradeFile('18.4.alpha1');
+        $beta1File  = $this->getUpgradeFile('18.4.beta1');
+
+        $alpha1SQL = explode(";", file_get_contents($alpha1File));
+        $beta1SQL  = explode(";", file_get_contents($beta1File));
+        $execSQL   = array();
+
+        foreach($alpha1SQL as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+        foreach($beta1SQL  as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+
+        /* Update stage to published and update sql. */
+        foreach($execSQL as $sql)
+        {
+            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = trim($sql);
+
+            $statusSQL = "UPDATE `zt_pivot` SET `stage` = 'published'" . substr($sql, strpos($sql, "\nWHERE"));
+            $this->dbh->exec($statusSQL);
+            $this->dbh->exec($sql);
+        }
     }
 }
