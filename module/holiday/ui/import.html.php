@@ -20,6 +20,7 @@ formPanel
     ),
     formRow
     (
+        setClass('hidden'),
         formGroup
         (
             set::label(''),
