@@ -28,7 +28,7 @@
 
 (function()
 {
-    const config      = window.config;
+    let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
     if(isIndexPage) return;
 
@@ -73,9 +73,9 @@
         featureBar:    (data) => $('#featureBar').html(data),
         pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
-        configJS:      (data) => $('#configJS')[0].text = data,
+        configJS:      updateConfigJS,
         activeFeature: (data) => activeNav(data, '#featureBar'),
-        activeMenu:    activeNav,
+        activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
         table:         updateTable,
         fatal:         showFatalError,
@@ -109,6 +109,12 @@
         const id = type === 'interval' ? setInterval(callback, time) : setTimeout(callback, time);
         timers[type].push(id);
         return id;
+    }
+
+    function updateConfigJS(data)
+    {
+        $('#configJS').replaceWith(data);
+        config = window.config;
     }
 
     function updatePageJS(data)
@@ -465,7 +471,18 @@
         }
 
         options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
-        if(!options.selector) options.selector = ($('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS>*,title>*,#heading>*,#navbar>*' : 'body>*,title>*');
+        if(!options.selector)
+        {
+            if($('#main').length)
+            {
+                const isDiffModule = options.url && options.url !== currentAppUrl && config.currentModule !== $.parseLink(options.url).moduleName;
+                options.selector = '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,' + (isDiffModule ? '#heading>*,#navbar>*' : 'activeMenu()');
+            }
+            else
+            {
+                options.selector = 'body>*,title>*,#configJS';
+            }
+        }
         if(!options.id) options.id = options.selector || 'page';
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
