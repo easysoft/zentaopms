@@ -692,8 +692,8 @@ class taskZen extends task
             $task->execution  = $executionID;
             $task->story      = $storyID;
             $task->pri        = $postData->testPri[$key];
-            $task->estStarted = $estStarted;
-            $task->deadline   = $deadline;
+            $task->estStarted = empty($estStarted) ? null : $estStarted;
+            $task->deadline   = empty($deadline) ? null : $deadline;
             $task->assignedTo = $assignedTo;
             $task->estimate   = (float)$postData->testEstimate[$key];
             $task->left       = (float)$postData->testEstimate[$key];

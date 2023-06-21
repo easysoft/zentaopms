@@ -1434,4 +1434,28 @@ class task extends control
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
     }
+
+    /**
+     * AJAX: return stories of test in html select.
+     *
+     * @param  int    $executionID
+     * @param  int    $taskID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetTestStories(int $executionID, int $taskID = 0)
+    {
+        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
+        $testStoryIdList = $this->story->getTestStories(array_keys($stories), $executionID);
+        $testStories     = array();
+        foreach($stories as $testStoryID => $storyTitle)
+        {
+            if(empty($testStoryID) || isset($testStoryIdList[$testStoryID])) continue;
+            $testStories[$testStoryID] = $storyTitle;
+        }
+
+        $this->view->testStories = $testStories;
+        $this->view->task        = $this->task->getByID($taskID);
+        $this->display();
+    }
 }

@@ -82,11 +82,16 @@ function typeChange(e)
  * 根据选择研发需求是否勾选切换相关字段的展示与隐藏。
  * Dynamically control whether task fields are hidden based on selection status of selectTestStory.
  *
+ * @param  int    $execuitonID
  * @access public
  * @return void
  */
-function toggleSelectTestStory()
+function toggleSelectTestStory(executionID)
 {
+    executionID = parseInt(executionID);
+    if(!executionID) executionID = $('#execution').val();
+
+    $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
     if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
     {
         $('#module').closest('.form-group').addClass('hidden');
@@ -150,7 +155,7 @@ function loadAll()
     loadExecutionMembers(executionID);
 
     $('#selectTestStory').prop('checked', false);
-    toggleSelectTestStory();
+    toggleSelectTestStory(executionID);
 }
 
 /**

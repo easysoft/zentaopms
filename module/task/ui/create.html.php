@@ -18,6 +18,7 @@ namespace zin;
 jsVar('toTaskList', !empty($task->id));
 jsVar('blockID', $blockID);
 jsVar('executionID', $execution->id);
+jsVar('taskID', $taskID);
 jsVar('ditto', $lang->task->ditto);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('vision', $config->vision);
@@ -122,144 +123,12 @@ $storyPreviewBtn = span
     ),
 );
 
-$taskTR = array();
-$i      = 0;
-foreach($testStories as $storyID => $storyTitle)
-{
-    $taskTR[] = h::tr
-        (
-            h::td
-            (
-                select
-                (
-                    set::id("testStory{$i}"),
-                    set::name("testStory[$i]"),
-                    set::value($storyID),
-                    set::items(array($storyID => $storyTitle)),
-                ),
-            ),
-            h::td
-            (
-                select
-                (
-                    set::id("testPri{$i}"),
-                    set::name("testPri[$i]"),
-                    set::value($task->pri),
-                    set::items($lang->task->priList),
-                ),
-            ),
-            h::td
-            (
-                input
-                (
-                    set::id("testEstStarted{$i}"),
-                    set::name("testEstStarted[$i]"),
-                    set::type('date'),
-                    set::value($task->estStarted),
-                ),
-            ),
-            h::td
-            (
-                input
-                (
-                    set::id("testDeadline{$i}"),
-                    set::name("testDeadline[$i]"),
-                    set::type('date'),
-                    set::value($task->deadline),
-                ),
-            ),
-            h::td
-            (
-                select
-                (
-                    set::id("testAssignedTo{$i}"),
-                    set::name("testAssignedTo[$i]"),
-                    set::value($task->assignedTo),
-                    set::items($members),
-                ),
-            ),
-            h::td
-            (
-                input
-                (
-                    set::id("testEstimate{$i}"),
-                    set::name("testEstimate[$i]"),
-                ),
-            ),
-            h::td
-            (
-                set::class('center'),
-                btnGroup
-                (
-                    set::items(array(
-                        array('icon' => 'plus', 'onclick' => 'addItem(this)'),
-                        array('icon' => 'close', 'onclick' => 'removeItem(this)'),
-                    ))
-                )
-            )
-        );
-}
-
 $selectStoryRow = '';
 if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
 {
     $selectStoryRow = formRow(
         set::id('testStoryBox'),
         setClass('hidden'),
-        formGroup
-        (
-            set::label($lang->task->selectTestStory),
-            set::labelClass('selectStoryLabel'),
-            h::table
-            (
-                set::class('w-full'),
-                h::thead
-                (
-                    h::tr
-                    (
-                        h::th($lang->task->storyAB),
-                        h::th
-                        (
-                            $lang->task->pri,
-                            set::width('70px'),
-                            setClass(isset($requiredFields['pri']) ? 'required' : '')
-                        ),
-                        h::th
-                        (
-                            $lang->task->estStarted,
-                            set::width('140px'),
-                            setClass(isset($requiredFields['estStarted']) ? 'required' : '')
-                        ),
-                        h::th
-                        (
-                            $lang->task->deadline,
-                            set::width('140px'),
-                            setClass(isset($requiredFields['deadline']) ? 'required' : '')
-                        ),
-                        h::th
-                        (
-                            $lang->task->assignedTo,
-                            set::width('100px')
-                        ),
-                        h::th
-                        (
-                            $lang->task->estimate,
-                            set::width('70px'),
-                            setClass(isset($requiredFields['estimate']) ? 'required' : '')
-                        ),
-                        h::th
-                        (
-                            $lang->actions,
-                            set::width('70px')
-                        ),
-                    )
-                ),
-                h::tbody
-                (
-                    $taskTR
-                )
-            ),
-        )
     );
 }
 
