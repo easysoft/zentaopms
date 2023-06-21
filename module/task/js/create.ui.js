@@ -20,19 +20,17 @@ $(function()
  * @access public
  * @return void
  */
-function showTeamBox()
+function toggleTeam()
 {
     if($('[name^=multiple]').prop('checked'))
     {
-        $('.team-group').removeClass('hidden');
-        $('.modeBox').removeClass('hidden');
-        $('#estimate').attr('readonly', true);
+        $('.add-team').removeClass('hidden');
+        $('#assignedTo').addClass('hidden');
     }
     else
     {
-        $('.team-group').addClass('hidden');
-        $('.modeBox').addClass('hidden');
-        $('#estimate').removeAttr('readonly');
+        $('.add-team').addClass('hidden');
+        $('#assignedTo').removeClass('hidden');
     }
 }
 
@@ -379,4 +377,63 @@ window.removeItem = function(obj)
 {
     if($('#testStoryBox').find('tbody tr').length == 1) return false;
     $(obj).closest('tr').remove();
+}
+
+$('#modalTeam').on('click.saveTeam', '.toolbar-item', function()
+{
+    $('div.assignedToList').html('');
+
+    let team            = [];
+    let totalEstimate   = 0;
+    let error           = false;
+    let mode            = $('[name="mode"]').val();
+    let assignedToList  = '';
+
+    $(this).closest('form').find('select[name^="team"]').each(function(index)
+    {
+        if($(this).val() == '') return;
+
+        const selectObj = $(this)[0];
+
+        let realname = selectObj.options[selectObj.selectedIndex].text;
+        if(!team.includes(realname)) team.push(realname);
+
+        let estimate = parseFloat($(this).closest('tr').find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate) && estimate > 0) totalEstimate += estimate;
+
+        if(realname != '' && (isNaN(estimate) || estimate <= 0))
+        {
+            zui.Modal.alert(realname + ' ' + estimateNotEmpty);
+            error = true;
+            return false;
+        }
+
+        assignedToList += "<span class='label secondary-outline circle'>" + realname + '</span>';
+        assignedToList += '<i class="icon icon-arrow-right"></i>';
+    })
+
+    if(error) return false;
+
+    if(team.length < 2)
+    {
+        bootbox.alert(teamMemberError);
+        return false;
+    }
+    else
+    {
+        $('#estimate').val(totalEstimate);
+    }
+
+    /* 将选中的团队成员展示在指派给后面. */
+    const regex    = /<i class="icon icon-arrow-right"><\/i>(?!.*<i class="icon icon-arrow-right"><\/i>)/;
+    assignedToList = assignedToList.replace(regex, '');
+    $('div.assignedToList').prepend(assignedToList);
+
+    zui.Modal.hide();
+    return false;
+})
+
+function onPageUnmount()
+{
+    $('#modalTeam').off('.saveTeam');
 }

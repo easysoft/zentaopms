@@ -168,6 +168,7 @@ $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Testée';
 $lang->task->teamMember        = 'Team Member';
+$lang->task->addMember         = 'Add Member';
 $lang->task->to                = 'To';
 $lang->task->suffixHour        = 'H';
 

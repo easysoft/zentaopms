@@ -94,7 +94,7 @@ class formBatchItem extends wg
                 (
                     set::class('form-label form-batch-label', $labelClass, $strong ? 'font-bold' : null, $required ? 'required' : null),
                     set($labelProps),
-                    empty($label) ? $name : $label
+                    $label
                 ),
                 empty($tip) ? null : new btn
                 (

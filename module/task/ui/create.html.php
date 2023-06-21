@@ -30,6 +30,7 @@ jsVar('window.lifetimeList', $lifetimeList);
 jsVar('window.attributeList', $attributeList);
 jsVar('hasProduct', $execution->hasProduct);
 jsVar('hideStory', $hideStory);
+
 $requiredFields = array();
 foreach(explode(',', $config->task->create->requiredFields) as $field)
 {
@@ -123,6 +124,136 @@ $storyPreviewBtn = span
     ),
 );
 
+$teamForm = array();
+for($i = 1; $i <= 3; $i ++)
+{
+    $teamForm[] = h::tr
+    (
+        h::td
+        (
+            setClass('text-center'),
+            set::width('40px'),
+            span 
+            (
+                setClass("team-number"),
+                $i
+            ),
+        ),
+        h::td
+        (
+            set::width('240px'),
+            select 
+            (
+                set::name("team[$i]"),
+                set::items($members),
+            ),
+        ),
+        h::td
+        (
+            set::width('135px'),
+            inputControl
+            (
+                input 
+                (
+                    set::name("teamEstimate[$i]"),
+                ),
+                to::suffix($lang->task->suffixHour),
+                set::suffixWidth(20),
+            ),
+        ),
+        h::td
+        (
+            set::width('100px'),
+            setClass('center'),
+            btnGroup
+            (
+                set::items(array(
+                    array('icon' => 'plus', 'class' => 'btn btn-link', 'onclick' => 'addItem(this)'),
+                    array('icon' => 'close', 'class' => 'btn btn-link', 'onclick' => 'removeItem(this)'),
+                ))
+            )
+        )
+    );
+}
+
+$taskTR = array();
+$i      = 0;
+foreach($testStories as $storyID => $storyTitle)
+{
+    $taskTR[] = h::tr
+        (
+            h::td
+            (
+                select
+                (
+                    set::id("testStory{$i}"),
+                    set::name("testStory[$i]"),
+                    set::value($storyID),
+                    set::items(array($storyID => $storyTitle)),
+                ),
+            ),
+            h::td
+            (
+                select
+                (
+                    set::id("testPri{$i}"),
+                    set::name("testPri[$i]"),
+                    set::value($task->pri),
+                    set::items($lang->task->priList),
+                ),
+            ),
+            h::td
+            (
+                input
+                (
+                    set::id("testEstStarted{$i}"),
+                    set::name("testEstStarted[$i]"),
+                    set::type('date'),
+                    set::value($task->estStarted),
+                ),
+            ),
+            h::td
+            (
+                input
+                (
+                    set::id("testDeadline{$i}"),
+                    set::name("testDeadline[$i]"),
+                    set::type('date'),
+                    set::value($task->deadline),
+                ),
+            ),
+            h::td
+            (
+                select
+                (
+                    set::id("testAssignedTo{$i}"),
+                    set::name("testAssignedTo[$i]"),
+                    set::value($task->assignedTo),
+                    set::items($members),
+                ),
+            ),
+            h::td
+            (
+                input
+                (
+                    set::id("testEstimate{$i}"),
+                    set::name("testEstimate[$i]"),
+                ),
+            ),
+            h::td
+            (
+                set::class('center'),
+                btnGroup
+                (
+                    set::items(array(
+                        array('icon' => 'plus', 'onclick' => 'addItem(this)'),
+                        array('icon' => 'close', 'onclick' => 'removeItem(this)'),
+                    ))
+                )
+            )
+        );
+}
+
 $selectStoryRow = '';
 if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
 {
@@ -200,14 +331,32 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
             set::label($lang->task->assignTo),
+            setClass('assignedToBox'),
             select
             (
                 set::id('assignedTo'),
                 set::name('assignedTo[]'),
                 set::value($task->assignedTo),
                 set::items($members),
+            ),
+            div
+            (
+                setClass('assignedToList'),
+            ),
+            btn
+            (
+                set
+                (
+                    array
+                    (
+                        'class' => 'btn primary-pale hidden add-team',
+                        'data-toggle' => 'modal',
+                        'url' => '#modalTeam',
+                        'icon' => 'plus',
+                    ),
+                ),
+                $lang->task->addMember,
             ),
         ),
         formGroup
@@ -219,20 +368,17 @@ formPanel
                 set::name('multiple'),
                 set::text($lang->task->multiple),
                 set::rootClass('ml-4'),
-                on::change('showTeamBox'),
+                on::change('toggleTeam'),
             )
         ),
+    ),
+    formRow
+    (
+        setClass('hidden'),
         formGroup
         (
-            set::width('1/4'),
-            set::class('modeBox hidden'),
-            radioList(
-                set::name('mode'),
-                set::value(!empty($task->mode) ? $task->mode : 'linear'),
-                set::class('ml-4'),
-                set::items($config->task->modeOptions),
-                set::inline(true)
-            )
+            set::control('hidden'),
+            set::name('teamMember'),
         )
     ),
     formRow
@@ -358,7 +504,33 @@ formPanel
         set::name('mailto[]'),
         set::items($users),
     ),
-    $afterRow
+    $afterRow,
+    modalTrigger
+    (
+        modal
+        (
+            set::id('modalTeam'),
+            set::title($lang->task->teamMember),
+            h::table
+            (
+                setClass('table table-form'),
+                $teamForm,
+                h::tr
+                (
+                    h::td
+                    (
+                        setClass('text-center'),
+                        set(array('colspan' => 4)),
+                        btn
+                        (
+                            setClass('btn btn-primary'),
+                            $lang->save
+                        )
+                    )
+                )
+            )
+        )
+    )
 );
 
 
