@@ -48,7 +48,7 @@ class formPanel extends panel
         'grid?: bool=true',                            // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
-        'shadow?: bool=true',                          // 是否显示阴影层。
+        'shadow?: bool=false',                         // 是否显示阴影层。
     );
 
     /**
