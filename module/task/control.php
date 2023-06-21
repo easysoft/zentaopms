@@ -514,11 +514,17 @@ class task extends control
      * @access public
      * @return void
      */
-    public function deleteWorkhour($estimateID)
+    public function deleteWorkhour($estimateID, $confirm = 'no')
     {
         $estimate = $this->task->getEffortByID($estimateID);
         $taskID   = $estimate->objectID;
         $task     = $this->task->getById($taskID);
+
+        if($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
+        {
+            $formUrl = $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({$this->lang->task->confirmDeleteLastEstimate}).then((res) => {if(res) $.ajaxSubmit({url: $formUrl})});"));
+        }
 
         $changes = $this->task->deleteWorkhour($estimateID);
         if(dao::isError()) return print(js::error(dao::getError()));

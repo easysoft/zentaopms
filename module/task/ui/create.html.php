@@ -134,6 +134,11 @@ for($i = 1; $i <= 3; $i ++)
             setClass('team-index'),
             span
             (
+                setClass("line-arrow"),
+                '↓'
+            ) ,
+            span 
+            (
                 setClass("team-number"),
                 $i
             ),
