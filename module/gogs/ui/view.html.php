@@ -11,6 +11,16 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
+detailHeader
+(
+    isAjaxRequest('modal') ? to::prefix() : '',
+    to::title(
+        entityLabel(
+            set(array('entityID' => $gogs->id, 'level' => 1, 'text' => $gogs->name))
+        )
+    ),
+);
+
 detailBody
 (
     sectionList
