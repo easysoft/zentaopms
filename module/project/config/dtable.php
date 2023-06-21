@@ -222,22 +222,22 @@ $config->projectExecution->dtable->fieldList['actions']['task']       = array('s
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['icon']        = 'play';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['hint']        = $lang->task->start;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['url']         = helper::createLink('task', 'start', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['url']         = helper::createLink('task', 'start', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['icon']        = 'checked';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['hint']        = $lang->task->finish;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['url']         = helper::createLink('task', 'finish', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['url']         = helper::createLink('task', 'finish', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['finishTask']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['icon']        = 'off';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['hint']        = $lang->task->close;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['url']         = helper::createLink('task', 'close', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['url']         = helper::createLink('task', 'close', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['closeTask']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['icon'] = 'time';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['hint'] = $lang->task->record;
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']  = helper::createLink('task', 'recordWorkhour', 'taskID={rawID}', '', true);
+$config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['url']  = helper::createLink('task', 'recordWorkhour', 'taskID={rawID}');
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['recordWorkhour']['data-toggle'] = 'modal';
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['editTask']['icon']  = 'edit';

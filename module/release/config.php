@@ -44,7 +44,7 @@ $config->release->actionList['edit']['url']  = helper::createLink('release', 'ed
 
 $config->release->actionList['notify']['icon']        = 'bullhorn';
 $config->release->actionList['notify']['hint']        = $lang->release->notify;
-$config->release->actionList['notify']['url']         = helper::createLink('release', 'notify', 'releaseID={id}', '', true);
+$config->release->actionList['notify']['url']         = helper::createLink('release', 'notify', 'releaseID={id}');
 $config->release->actionList['notify']['data-toggle'] = 'modal';
 
 $config->release->actionList['delete']['icon']         = 'trash';

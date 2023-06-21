@@ -69,13 +69,13 @@ $config->group->actionList['manageMember']['data-toggle'] = 'modal';
 $config->group->actionList['edit']['icon']        = 'edit';
 $config->group->actionList['edit']['text']        = $lang->group->edit;
 $config->group->actionList['edit']['hint']        = $lang->group->edit;
-$config->group->actionList['edit']['url']         = helper::createLink('group', 'edit', 'groupID={id}', '', true);
+$config->group->actionList['edit']['url']         = helper::createLink('group', 'edit', 'groupID={id}');
 $config->group->actionList['edit']['data-toggle'] = 'modal';
 
 $config->group->actionList['copy']['icon']        = 'copy';
 $config->group->actionList['copy']['text']        = $lang->group->copy;
 $config->group->actionList['copy']['hint']        = $lang->group->copy;
-$config->group->actionList['copy']['url']         = helper::createLink('group', 'copy', 'groupID={id}', '', true);
+$config->group->actionList['copy']['url']         = helper::createLink('group', 'copy', 'groupID={id}');
 $config->group->actionList['copy']['data-toggle'] = 'modal';
 
 $config->group->actionList['delete']['icon'] = 'trash';

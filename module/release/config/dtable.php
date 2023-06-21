@@ -59,7 +59,7 @@ $config->release->dtable->story->fieldList['id']['checkbox'] = true;
 $config->release->dtable->story->fieldList['title']['title']       = $lang->story->title;
 $config->release->dtable->story->fieldList['title']['name']        = 'title';
 $config->release->dtable->story->fieldList['title']['type']        = 'title';
-$config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}', '', true);
+$config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}');
 $config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
 
 $config->release->dtable->story->fieldList['pri']['title'] = $lang->priAB;

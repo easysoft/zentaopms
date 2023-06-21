@@ -20,5 +20,5 @@ $config->branch->actionList['activate']['url']  = 'javascript:changeStatus("{id}
 
 $config->branch->actionList['edit']['icon']        = 'edit';
 $config->branch->actionList['edit']['hint']        = $lang->edit;
-$config->branch->actionList['edit']['url']         = helper::createLink('branch', 'edit', 'branchID={id}&productID={product}', '', true);
+$config->branch->actionList['edit']['url']         = helper::createLink('branch', 'edit', 'branchID={id}&productID={product}');
 $config->branch->actionList['edit']['data-toggle'] = 'modal';

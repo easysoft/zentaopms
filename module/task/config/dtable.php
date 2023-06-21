@@ -195,7 +195,7 @@ $config->task->effortTable->fieldList['actions']['menu']     = array('editEffort
 
 $config->task->effortTable->fieldList['actions']['list']['editEffort']['icon']  = 'edit';
 $config->task->effortTable->fieldList['actions']['list']['editEffort']['hint']  = $lang->task->editEffort;
-$config->task->effortTable->fieldList['actions']['list']['editEffort']['url']   = helper::createLink('task', 'editEffort', 'taskID={id}', '', true);
+$config->task->effortTable->fieldList['actions']['list']['editEffort']['url']   = helper::createLink('task', 'editEffort', 'taskID={id}');
 $config->task->effortTable->fieldList['actions']['list']['editEffort']['order'] = 5;
 $config->task->effortTable->fieldList['actions']['list']['editEffort']['show']  = 'clickable';
 
@@ -238,7 +238,7 @@ $config->task->dtable->importTask->fieldList['assignedTo']['title']       = $lan
 $config->task->dtable->importTask->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->task->dtable->importTask->fieldList['assignedTo']['type']        = 'assign';
 $config->task->dtable->importTask->fieldList['assignedTo']['currentUser'] = $app->user->account;
-$config->task->dtable->importTask->fieldList['assignedTo']['assignLink']  = helper::createLink('task', 'assignTo', "executionID={execution}&taskID={id}", '', true);
+$config->task->dtable->importTask->fieldList['assignedTo']['assignLink']  = helper::createLink('task', 'assignTo', "executionID={execution}&taskID={id}");
 $config->task->dtable->importTask->fieldList['assignedTo']['sortType']    = false;
 $config->task->dtable->importTask->fieldList['assignedTo']['group']       = 2;
 

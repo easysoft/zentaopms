@@ -65,7 +65,7 @@ $config->build->story->dtable->fieldList['id']['checkbox'] = true;
 $config->build->story->dtable->fieldList['title']['title']       = $lang->story->title;
 $config->build->story->dtable->fieldList['title']['name']        = 'title';
 $config->build->story->dtable->fieldList['title']['type']        = 'title';
-$config->build->story->dtable->fieldList['title']['link']        = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}', '', true);
+$config->build->story->dtable->fieldList['title']['link']        = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}');
 $config->build->story->dtable->fieldList['title']['data-toggle'] = 'modal';
 
 $config->build->story->dtable->fieldList['pri']['title'] = $lang->priAB;

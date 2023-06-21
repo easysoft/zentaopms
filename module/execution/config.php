@@ -180,13 +180,13 @@ $config->execution->actionList = array();
 $config->execution->actionList['start']['icon']        = 'start';
 $config->execution->actionList['start']['text']        = $lang->execution->start;
 $config->execution->actionList['start']['hint']        = $lang->execution->start;
-$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start',"executionID={rawID}", '', true);
+$config->execution->actionList['start']['url']         = helper::createLink('execution', 'start', "executionID={rawID}");
 $config->execution->actionList['start']['data-toggle'] = 'modal';
 
 $config->execution->actionList['createTask']['icon'] = 'plus';
 $config->execution->actionList['createTask']['text'] = $lang->task->create;
 $config->execution->actionList['createTask']['hint'] = $lang->task->create;
-$config->execution->actionList['createTask']['url']  = helper::createLink('task', 'create',"executionID={rawID}");
+$config->execution->actionList['createTask']['url']  = helper::createLink('task', 'create', "executionID={rawID}");
 
 $config->execution->actionList['createChildStage']['icon'] = 'split';
 $config->execution->actionList['createChildStage']['text'] = $lang->programplan->createSubPlan;
@@ -196,22 +196,22 @@ $config->execution->actionList['createChildStage']['url']  = helper::createLink(
 $config->execution->actionList['edit']['icon'] = 'edit';
 $config->execution->actionList['edit']['text'] = $lang->execution->edit;
 $config->execution->actionList['edit']['hint'] = $lang->execution->edit;
-$config->execution->actionList['edit']['url']  = helper::createLink('execution', 'edit',"executionID={rawID}");
+$config->execution->actionList['edit']['url']  = helper::createLink('execution', 'edit', "executionID={rawID}");
 
 $config->execution->actionList['close']['icon']        = 'off';
 $config->execution->actionList['close']['text']        = $lang->execution->close;
 $config->execution->actionList['close']['hint']        = $lang->execution->close;
-$config->execution->actionList['close']['url']         = helper::createLink('execution', 'close',"executionID={rawID}");
+$config->execution->actionList['close']['url']         = helper::createLink('execution', 'close', "executionID={rawID}");
 $config->execution->actionList['close']['data-toggle'] = 'modal';
 
 $config->execution->actionList['activate']['icon']        = 'magic';
 $config->execution->actionList['activate']['text']        = $lang->execution->activate;
 $config->execution->actionList['activate']['hint']        = $lang->execution->activate;
-$config->execution->actionList['activate']['url']         = helper::createLink('execution', 'activate',"executionID={rawID}");
+$config->execution->actionList['activate']['url']         = helper::createLink('execution', 'activate', "executionID={rawID}");
 $config->execution->actionList['activate']['data-toggle'] = 'modal';
 
 $config->execution->actionList['delete']['icon']  = 'trash';
 $config->execution->actionList['delete']['class'] = 'ajax-submit';
 $config->execution->actionList['delete']['text']  = $lang->execution->delete;
 $config->execution->actionList['delete']['hint']  = $lang->execution->delete;
-$config->execution->actionList['delete']['url']   = helper::createLink('execution', 'delete',"executionID={rawID}");
+$config->execution->actionList['delete']['url']   = helper::createLink('execution', 'delete', "executionID={rawID}");
