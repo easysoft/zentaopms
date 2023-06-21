@@ -215,8 +215,8 @@ class sonarqube extends control
         $actionID = $this->pipeline->delete($sonarqubeID, 'sonarqube');
         if($actionID)
         {
-            $response['result']  = 'fail';
-            $response['message'] = $this->lang->sonarqube->delError;
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->sonarqube->delError);
 
             return $this->send($response);
         }

@@ -170,7 +170,7 @@ function checkColInCurrentPage()
 
     dtable.$.toggleCheckRows(Object.keys(revisionMap), false);
 
-    if(currentCheckedIds)
+    if(currentCheckedIds.length > 0)
     {
         dtable.$.toggleCheckRows(currentCheckedIds, true);
     }
