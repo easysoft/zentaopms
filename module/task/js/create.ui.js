@@ -148,6 +148,9 @@ function loadAll()
     loadModules(executionID);
     loadExecutionStories();
     loadExecutionMembers(executionID);
+
+    $('#selectTestStory').prop('checked', false);
+    toggleSelectTestStory();
 }
 
 /**
