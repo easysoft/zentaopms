@@ -21,9 +21,17 @@ formPanel
     (
         formGroup
         (
-            set::label($lang->release->notifyUsers),
+            setclass('user-title'),
+            $lang->release->notifyUsers,
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
             checkList
             (
+                setClass('flex-wrap'),
                 set::name('notify[]'),
                 set::value('FB'),
                 set::items($lang->release->notifyList),
