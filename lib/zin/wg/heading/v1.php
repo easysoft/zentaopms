@@ -28,7 +28,7 @@ class heading extends wg
             if($tab == 'product')                      $currentMethod = 'all';
         }
 
-        $url = $currentModule && $currentMethod ? createLink($currentModule, $currentMethod) : '';
+        $url = createLink($currentModule, $currentMethod);
         return item
         (
             set::url($url),
