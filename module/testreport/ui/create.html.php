@@ -17,6 +17,7 @@ jsVar('fromCaseBugTip',  $lang->testreport->fromCaseBugTip);
 
 formPanel
 (
+    on::change('#selectTask', 'changeTesttask'),
     set::title($lang->testreport->create),
     formRow
     (
@@ -297,13 +298,17 @@ foreach($lang->bug->priList as $key => $value)
     $color = current($colorList);
     $label = $key == 0 ? $lang->null : $value;
 
-    $chartOption[] = array('name' => $label, 'type' => 'bar', 'data' => array($infoValue[$key]['generated'], $infoValue[$key]['legacy'], $infoValue[$key]['resolved']));
+    $generated = !empty($infoValue[$key]['generated']) ? $infoValue[$key]['generated'] : 0;
+    $legacy    = !empty($infoValue[$key]['legacy'])    ? $infoValue[$key]['legacy']    : 0;
+    $resolved  = !empty($infoValue[$key]['resolved'])  ? $infoValue[$key]['resolved']  : 0;
+
+    $chartOption[] = array('name' => $label, 'type' => 'bar', 'data' => array($generated, $legacy, $resolved));
     $tableTR[] = h::tr
     (
         h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $label),
-        h::td($infoValue[$key]['generated']),
-        h::td($infoValue[$key]['legacy']),
-        h::td($infoValue[$key]['resolved']),
+        h::td($generated),
+        h::td($legacy),
+        h::td($resolved),
     );
     if(!next($colorList)) reset($colorList);
 }
@@ -356,11 +361,12 @@ $tableTR     = array();
 $chartOption = array();
 $xAxisData   = array();
 $beginTime   = isset($report->begin) ? strtotime($report->begin) : strtotime($begin);
-$endTime     = isset($report->end) ? strtotime($report->end) : strtotime($end);
+$endTime     = isset($report->end)   ? strtotime($report->end)   : strtotime($end);
 foreach(array('generated', 'legacy', 'resolved') as $field)
 {
     $chartOption[$field] = array('name' => $lang->testreport->bugStageList[$field], 'type' => 'line', 'data' => array());
 }
+
 for($time = $beginTime; $time <= $endTime; $time += 86400)
 {
     $generated = !empty($infoValue['generated'][$date]) ? $infoValue['generated'][$date] : 0;
@@ -381,8 +387,7 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
         h::td($resolved),
     );
 }
-$chartOption = array_values($chartOption);
-
+$chartOption    = array_values($chartOption);
 $bugHandleChart = div
 (
     div
@@ -426,7 +431,6 @@ $bugHandleChart = div
         )
     )
 );
-
 
 $bugCharts = array();
 foreach($bugInfo as $infoKey => $infoValue)
