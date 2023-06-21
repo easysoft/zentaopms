@@ -465,7 +465,7 @@
         }
 
         options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
-        if(!options.selector) options.selector = ($('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS>*,title>*,activeMenu()' : 'body>*,title>*');
+        if(!options.selector) options.selector = ($('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS>*,title>*,#heading>*,#navbar>*' : 'body>*,title>*');
         if(!options.id) options.id = options.selector || 'page';
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
