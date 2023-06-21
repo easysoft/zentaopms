@@ -194,24 +194,6 @@ class sqlite
     }
 
     /**
-     * Save sql to sqlite queue.
-     *
-     * @param  string $sql
-     * @access public
-     * @return int|null
-     */
-    public function pushSqliteQueue(string $sql): int|null
-    {
-        $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
-        $queue .= " SET `sql` = " . $this->quote($sql);
-        $queue .= ", addDate = " . $this->quote(helper::now());
-        $queue .= ", `status` = 'wait'";
-
-        $this->mysql->exec($queue);
-        return $this->mysql->lastInsertId();
-    }
-
-    /**
      * Quote a var.
      *
      * @param  mixed  $value

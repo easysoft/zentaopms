@@ -78,6 +78,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
+        $this->pushSqliteQueue($sql);
         return $this->pdo->exec($sql);
     }
 
@@ -492,5 +493,23 @@ class dbh
     public function commit()
     {
         return $this->pdo->commit();
+    }
+
+    /**
+     * Save sql to sqlite queue.
+     *
+     * @param  string $sql
+     * @access public
+     * @return int|null
+     */
+    public function pushSqliteQueue(string $sql): int|null
+    {
+        $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
+        $queue .= " SET `sql` = " . $this->quote($sql);
+        $queue .= ", addDate = now()";
+        $queue .= ", `status` = 'wait'";
+
+        $this->pdo->exec($queue);
+        return $this->pdo->lastInsertId();
     }
 }
