@@ -68,7 +68,7 @@ if($efforts)
 formBatchPanel
 (
     set::title($lang->task->addEffort),
-    set::shadow(!isonlybody()),
+    set::shadow(!isAjaxRequest('modal')),
     set::actions(array('submit')),
     formBatchItem
     (

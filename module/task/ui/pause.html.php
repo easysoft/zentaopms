@@ -20,7 +20,7 @@ formPanel
     set::title($lang->task->pauseAction),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
+    set::shadow(!isAjaxRequest('modal')),
     set::actions(array('submit')),
     set::submitBtnText($lang->task->pause),
     to::headingActions

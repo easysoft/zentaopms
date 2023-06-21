@@ -19,7 +19,7 @@ formPanel
     set::title($lang->task->editEffort),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
-    set::shadow(!isonlybody()),
+    set::shadow(!isAjaxRequest('modal')),
     to::headingActions
     (
         entityLabel

@@ -69,7 +69,7 @@ else
         set::title($lang->task->restartAction),
         set::headingClass('status-heading'),
         set::titleClass('form-label .form-grid'),
-        set::shadow(!isonlybody()),
+        set::shadow(!isAjaxRequest('modal')),
         set::actions(array('submit')),
         set::submitBtnText($lang->task->restart),
         to::headingActions

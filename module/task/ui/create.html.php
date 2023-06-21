@@ -265,7 +265,7 @@ if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('req
 
 $afterCreateRow = '';
 /* Ct redirect within pop-ups. */
-if(!isonlybody())
+if(!isAjaxRequest('modal'))
 {
     $afterRow = formGroup
     (
@@ -494,6 +494,4 @@ formPanel
 
 
 /* ====== Render page ====== */
-
-$pageType = isonlybody() ? 'modal' : 'page';
 render();
