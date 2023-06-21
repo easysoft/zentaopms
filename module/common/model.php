@@ -2213,7 +2213,7 @@ EOF;
             $queryObjects = $this->dao->query($sql);
             $objectList   = array();
             $key          = 'id';
-            while($object = $queryObjects->fetch())
+            while($queryObjects && $object = $queryObjects->fetch())
             {
                 if(!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) $key = 'case';
                 $id  = $object->$key;
