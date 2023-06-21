@@ -379,4 +379,4 @@ panel
     )
 );
 
-render('|fragment');
+render();

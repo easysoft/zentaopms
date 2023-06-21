@@ -117,7 +117,7 @@ panel
     )
 );
 
-render('|fragment');
+render();
 
 function getMeasureItem($data)
 {
