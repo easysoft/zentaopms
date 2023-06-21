@@ -639,6 +639,7 @@ class upgradeModel extends model
                 {
                     $this->processDeployStepAction();
                     $this->updateBISQL();
+                    $this->checkPivotSQL();
                 }
                 break;
 
@@ -9354,6 +9355,36 @@ class upgradeModel extends model
             $sql = trim($sql);
 
             $this->dbh->exec($sql);
+        }
+    }
+
+    public function checkPivotSQL()
+    {
+        $this->loadModel('pivot');
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
+        $pivots    = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
+        $pivotList = array_keys($pivots);
+
+        foreach($pivotList as $pivotID)
+        {
+            $pivot   = $this->pivot->getbyID($pivotID);
+            $sql     = $this->chart->parseSqlVars($pivot->sql, $pivot->filters);
+            $stage   = $pivot->stage;
+            if($stage == 'draft') continue;
+
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $stmt = $this->dbh->query($sql);
+            if(!$stmt) /* Fix bug #35559. */
+            {
+                $stage = 'draft';
+            }
+            elseif(!$this->dataview->checkUniColumn($sql))
+            {
+                $stage = 'draft';
+            }
+
+            $this->dao->update(TABLE_PIVOT)->set('stage')->eq($stage)->where('id')->eq($pivotID)->exec();
         }
     }
 }
