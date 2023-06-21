@@ -151,7 +151,3 @@ $config->bug->actionList['delete']['icon'] = 'trash';
 $config->bug->actionList['delete']['text'] = $lang->bug->delete;
 $config->bug->actionList['delete']['hint'] = $lang->bug->delete;
 $config->bug->actionList['delete']['url']  = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');
-
-include 'config/form.php';
-include 'config/table.php';
-include 'config/search.php';

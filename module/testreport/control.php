@@ -330,6 +330,7 @@ class testreport extends control
         $this->view->legacyBugs = $bugSummary['legacyBugs'];
         $this->view->bugSummary = $bugSummary;
 
+        $this->view->caseList   = $caseList;
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
         $this->view->extra      = $extra;
