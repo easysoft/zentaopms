@@ -1012,7 +1012,6 @@ class baseControl
         include $viewFile;
         if(!\zin\zin::$rendered) \zin\render();
         ob_end_flush();
-        echo $output;
 
         /**
          * 渲染完毕后，再切换回之前的路径。
