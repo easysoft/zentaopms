@@ -52,18 +52,6 @@ class formPanel extends panel
     );
 
     /**
-     * The lifecycle method of created.
-     *
-     * Set default title to panel.
-     * @access protected
-     * @return void
-     */
-    protected function created()
-    {
-        $this->setDefaultProps(['title' => data('title')]);
-    }
-
-    /**
      * Build form widget by mode.
      *
      * @access protected
