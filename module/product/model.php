@@ -1676,39 +1676,37 @@ class productModel extends model
      *
      * @param  object $product
      * @param  array  $users
-     * @param  array  $avatarList
      * @access public
      * @return object
      */
-    public function formatDataForList(object $product, array $users, array $avatarList): object
+    public function formatDataForList(object $product, array $users): object
     {
         $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
         $totalBugs    = $product->unResolved + $product->fixedBugs;
 
         $item = new stdClass();
-        $item->name              = $product->name;
-        $item->id                = $product->id;
         $item->type              = 'product';
+        $item->id                = $product->id;
+        $item->name              = $product->name;
+        $item->productLine       = $product->lineName;
+        $item->PO                = !empty($product->PO) ? zget($users, $product->PO) : '';
+        $item->createdDate       = $product->createdDate;
+        $item->createdBy         = $product->createdBy;
         $item->draftStories      = $product->stories['draft'];
         $item->activeStories     = $product->stories['active'];
         $item->changingStories   = $product->stories['changing'];
         $item->reviewingStories  = $product->stories['reviewing'];
+        $item->totalStories      = $totalStories;
         $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-        $item->unResolvedBugs    = $product->unResolved;
-        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
         $item->plans             = $product->plans;
-        $item->releases          = $product->releases;
-        $item->productLine       = $product->lineName;
         $item->execution         = $product->executions;
         $item->testCaseCoverage  = $product->coverage;
-        $item->actions           = zget($product, 'actions', array());
-
-        if(!empty($product->PO))
-        {
-            $item->PO        = zget($users, $product->PO);
-            $item->POAvatar  = zget($avatarList, $product->PO);
-            $item->POAccount = $product->PO;
-        }
+        $item->totalActivatedBugs= $product->activeBugs;
+        $item->totalBugs         = $product->bugs;
+        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
+        $item->releases          = $product->releases;
+        $item->latestReleaseDate = $product->latestReleaseDate;
+        $item->latestRelease     = $product->latestRelease;
 
         return $item;
     }

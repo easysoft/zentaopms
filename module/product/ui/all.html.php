@@ -12,25 +12,31 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* Get column settings of the data table. */
-$cols = $config->product->dtable->fieldList;
-
-$extendFieldList = $this->product->getFlowExtendFields();
-foreach($extendFieldList as $field => $name)
+/* Get field list for data table. */
+$fnGetTableFieldList = function() use ($config)
 {
-    $extCol = $config->product->dtable->extendField;
-    $extCol['name']  = $field;
-    $extCol['title'] = $name;
+    $fieldList = $this->loadModel('datatable') ->getSetting('product');
 
-    $cols[$field] = $extCol;
-}
+    $extendFieldList = $this->product->getFlowExtendFields();
+    foreach($extendFieldList as $field => $name)
+    {
+        $extCol = $config->product->dtable->extendField;
+        $extCol['name']  = $field;
+        $extCol['title'] = $name;
+
+        $fieldList[$field] = $extCol;
+    }
+
+    return $fieldList;
+};
+$cols = $fnGetTableFieldList();
 
 /* Closure function for generating table data. */
 $productStats = initTableData($productStats, $cols, $this->product);
-$fnGenerateTableData = function($productList) use($users, $avatarList)
+$fnGenerateTableData = function($productList) use($users)
 {
     $data = array();
-    foreach($productList as $product) $data[] = $this->product->formatDataForList($product, $users, $avatarList);
+    foreach($productList as $product) $data[] = $this->product->formatDataForList($product, $users);
 
     return $data;
 };
@@ -134,6 +140,8 @@ dtable
 (
     set::cols($cols),
     set::data($fnGenerateTableData($productStats)),
+    set::userMap($users),
+    set::customCols(true),
     set::checkable(common::hasPriv('product', 'batchEdit')),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::footToolbar(array
