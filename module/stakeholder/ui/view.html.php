@@ -65,13 +65,13 @@ detailBody
         (
             section
             (
-                set::title($lang->stakeholder->expect . "($expect->createDate)"),
+                set::title($lang->stakeholder->expect . "($expect->createdDate)"),
                 set::content(!empty($expect->expect) ? $expect->expect : $lang->noDesc),
                 set::useHtml(true)
             ),
             section
             (
-                set::title($lang->stakeholder->progress . "($expect->createDate)"),
+                set::title($lang->stakeholder->progress . "($expect->createdDate)"),
                 set::content(!empty($expect->progress) ? $expect->progress : $lang->noDesc),
                 set::useHtml(true)
             ),
@@ -97,6 +97,12 @@ detailBody
             item(set::name($lang->stakeholder->from),    zget($lang->stakeholder->fromList, $user->from, '')),
         )
     )))
+);
+
+floatPreNextBtn
+(
+    !empty($preAndNext->pre)  ? set::preLink(createLink('stakeholder', 'view', "id={$preAndNext->pre->id}"))   : null,
+    !empty($preAndNext->next) ? set::nextLink(createLink('stakeholder', 'view', "id={$preAndNext->next->id}")) : null
 );
 
 render();

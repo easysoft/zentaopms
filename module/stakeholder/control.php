@@ -15,15 +15,17 @@ class stakeholder extends control
      */
     public function browse($projectID, $browseType = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
         $this->loadModel('project')->setMenu($projectID);
 
+        /* Get stake holders list. */
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
         $stakeholders = $this->stakeholder->getStakeholders($projectID, $browseType, $orderBy, $pager);
 
-        $this->view->title       = $this->lang->stakeholder->browse;
+        /* Save SQL to session for previous and next buttons on the stakeholder detail page. */
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'stakeholder');
 
+        $this->view->title        = $this->lang->stakeholder->browse;
         $this->view->pager        = $pager;
         $this->view->recTotal     = $recTotal;
         $this->view->recPerPage   = $recPerPage;
@@ -349,14 +351,15 @@ class stakeholder extends control
     public function view($userID = 0)
     {
         $user = $this->stakeholder->getByID($userID);
+
         $this->loadModel('project')->setMenu($user->objectID);
         $this->commonAction($userID, 'stakeholder');
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
-
-        $this->view->user    = $user;
-        $this->view->users   = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
-        $this->view->expects = $this->stakeholder->getExpectByUser($userID);
+        $this->view->user       = $user;
+        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
+        $this->view->expects    = $this->stakeholder->getExpectByUser($userID);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('stakeholder', $userID);
 
         $this->display();
     }
