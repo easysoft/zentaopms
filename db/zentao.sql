@@ -1219,7 +1219,7 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `failReason` text NULL,
   PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' COLLATE 'utf8_general_ci';
-CREATE UNIQUE INDEX `objectType_toList_status` ON `zt_notify`(`objectType`,`toList`,`status`);
+CREATE INDEX `objectType_toList_status` ON `zt_notify`(`objectType`,`toList`,`status`);
 
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
