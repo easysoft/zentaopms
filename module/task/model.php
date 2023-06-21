@@ -581,9 +581,9 @@ class taskModel extends model
             $member->task     = $task->id;
             $member->order    = $index;
             $member->account  = $account;
-            $member->estimate = zget($teamData->teamEstimateList, $index, 0);
-            $member->consumed = isset($teamData->teamConsumedList) ? zget($teamData->teamConsumedList, $index, 0) : 0;
-            $member->left     = isset($teamData->teamLeftList) ? zget($teamData->teamLeftList, $index, 0) : 0;
+            $member->estimate = zget($teamData->teamEstimate, $index, 0);
+            $member->consumed = isset($teamData->teamConsumed) ? zget($teamData->teamConsumed, $index, 0) : 0;
+            $member->left     = isset($teamData->teamLeft) ? zget($teamData->teamLeft, $index, 0) : 0;
             $member->status   = 'wait';
             if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
             if($task->status == 'done') $member->left = 0;
@@ -595,7 +595,7 @@ class taskModel extends model
             }
             elseif($task->status == 'doing')
             {
-                $teamSource = zget($teamData->teamSourceList, $index);
+                $teamSource = zget($teamData->teamSource, $index);
                 if(!empty($teamSource) && $teamSource != $account && isset($undoneUsers[$teamSource])) $member->transfer = $teamSource;
                 if(isset($undoneUsers[$account]) && ($mode == 'multi' || ($mode == 'linear' && $minStatus != 'wait'))) $member->status = 'doing';
             }
