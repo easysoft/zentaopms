@@ -223,6 +223,14 @@ function formBatchPanel(): formBatchPanel
 }
 
 /**
+ * Batch actions: add, delete.
+ */
+function batchActions(): batchActions
+{
+    return createWg('batchActions', func_get_args());
+}
+
+/**
  * Control widget.
  * Dynamically create html input.
  *
@@ -1049,6 +1057,16 @@ function productMenu(): productMenu
 function moduleMenu(): moduleMenu
 {
     return createWg('moduleMenu', func_get_args());
+}
+
+/**
+ * Zentao tree widget.
+ *
+ * ?array items
+ */
+function tree(): Tree
+{
+    return createWg('tree', func_get_args());
 }
 
 /**

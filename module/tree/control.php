@@ -491,7 +491,7 @@ class tree extends control
             if(($viewType == 'doc' || $viewType == 'api') and isonlybody()) die(js::reload('parent'));
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
 
-            die(js::reload('parent'));
+            return $this->sendSuccess(array('load' => true));
         }
     }
 

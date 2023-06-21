@@ -1750,7 +1750,7 @@ class treeModel extends model
                 }
                 else
                 {
-                    $order = $this->post->maxOrder + $i * 10;
+                    $order = (int)$this->post->maxOrder + $i * 10;
                     $i ++;
                 }
 
@@ -2241,7 +2241,13 @@ class treeModel extends model
             if(!isset($parent[$module->parent])) $parent[$module->parent] = new stdclass();
 
             if($viewType == 'task')
-            $module->url = helper::createLink('tree', $viewType == 'task' ? 'browsetask' : 'browse', "rootID=$rootID&viewType=$viewType&moduleID=$module->id");
+            {
+                $module->url = helper::createLink('tree', 'browsetask', "rootID=$rootID&productID=0&moduleID=$module->id");
+            }
+            else
+            {
+                $module->url = helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&currentModuleID=$module->id");
+            }
             $parent[$module->parent]->items[] = $module;
         }
 
