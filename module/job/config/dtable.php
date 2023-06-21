@@ -84,10 +84,11 @@ $config->job->actionList['edit']['text'] = $lang->job->edit;
 $config->job->actionList['edit']['hint'] = $lang->job->edit;
 $config->job->actionList['edit']['url']  = helper::createLink('job', 'edit',"jobID={id}");
 
-$config->job->actionList['exec']['icon'] = 'play';
-$config->job->actionList['exec']['text'] = $lang->job->exec;
-$config->job->actionList['exec']['hint'] = $lang->job->exec;
-$config->job->actionList['exec']['url']  = helper::createLink('job', 'exec',"jobID={id}");
+$config->job->actionList['exec']['icon']       = 'play';
+$config->job->actionList['exec']['text']       = $lang->job->exec;
+$config->job->actionList['exec']['hint']       = $lang->job->exec;
+$config->job->actionList['exec']['className']  = 'ajax-submit';
+$config->job->actionList['exec']['url']        = helper::createLink('job', 'exec',"jobID={id}");
 
 $config->job->actionList['delete']['icon']       = 'trash';
 $config->job->actionList['delete']['text']       = $lang->job->delete;

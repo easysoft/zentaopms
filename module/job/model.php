@@ -681,7 +681,7 @@ class jobModel extends model
      * @param  string $action
      * @param  string $module
      * @access public
-     * @return void
+     * @return bool
      */
     public static function isClickable($object, $action, $module = 'job')
     {

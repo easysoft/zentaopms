@@ -105,8 +105,8 @@ class jenkins extends control
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs)
         {
-            $response['result']  = 'fail';
-            $response['message'] = $this->lang->jenkins->error->linkedJob;
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->jenkins->error->linkedJob);
 
             return $this->send($response);
         }

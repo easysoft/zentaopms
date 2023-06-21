@@ -265,7 +265,7 @@ class job extends control
      */
     public function view($jobID, $compileID = 0)
     {
-        $job  = $this->job->getById($jobID);
+        $job = $this->job->getById($jobID);
 
         $this->loadModel('compile');
         if($compileID)
@@ -348,11 +348,15 @@ class job extends control
         if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'callback' => sprintf('zui.Modal.alert("%s");', dao::getError())));
 
         $this->app->loadLang('compile');
         $this->loadModel('action')->create('job', $jobID, 'executed');
-        return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status))));
+
+        $message              = sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status));
+        $response['result']   = 'success';
+        $response['callback'] = sprintf('zui.Modal.alert("%s");', $message);
+        return $this->send($response);
     }
 
     /**
