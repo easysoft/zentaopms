@@ -165,7 +165,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->assignedTo),
-                        $task->assignedTo ? $task->assignedToRealName : $lang->noData
+                        $task->assignedToRealName
                     ),
                     item
                     (
@@ -198,32 +198,32 @@ detailBody
                     item
                     (
                         set::name($lang->task->openedBy),
-                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData
+                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->finishedBy),
-                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData
+                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->canceledBy),
-                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : $lang->noData,
+                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : '',
                     ),
                     item
                     (
                         set::name($lang->task->closedBy),
-                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : $lang->noData,
+                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : '',
                     ),
                     item
                     (
                         set::name($lang->task->closedReason),
-                        $task->closedReason ? $lang->task->reasonList[$task->closedReason] : $lang->noData
+                        $task->closedReason ? $lang->task->reasonList[$task->closedReason] : ''
                     ),
                     item
                     (
                         set::name($lang->task->lastEdited),
-                        $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : $lang->noData
+                        $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : ''
                     ),
                 )
             ),
@@ -321,12 +321,12 @@ detailBody
                     item
                     (
                         set::name($lang->task->linkMR),
-                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData
+                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->linkCommit),
-                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData
+                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : ''
                     )
                 )
             )

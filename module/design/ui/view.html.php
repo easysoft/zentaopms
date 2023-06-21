@@ -84,7 +84,7 @@ detailBody
                 item
                 (
                     set::name($lang->design->product),
-                    empty($design->productName) ? $lang->noData : $design->productName
+                    $design->productName
                 ),
                 item
                 (
@@ -94,7 +94,7 @@ detailBody
                 item
                 (
                     set::name($lang->design->submission),
-                    empty($design->commit) ? $lang->noData : html($design->commit)
+                    html($design->commit)
                 ),
                 item
                 (
