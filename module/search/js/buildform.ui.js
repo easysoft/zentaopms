@@ -12,4 +12,4 @@ window.onDeleteQuery = function(event, queryID)
             if(text === 'success') event.target.closest('div').remove();
             else throw new Error('Failed: ' + text);
         });
-}
+};
