@@ -50,7 +50,6 @@ class formBase extends wg
         $back          = $this->prop('back');
         if(empty($submitBtnText)) $submitBtnText = $lang->save;
         if(empty($cancelBtnText)) $cancelBtnText = $lang->goback;
-        if(empty($backUrl))       $backUrl       = html::getGobackLink();
         foreach($actions as $key => $action)
         {
             if($action === 'submit')     $actions[$key] = array('text' => $submitBtnText, 'btnType' => 'submit', 'type' => 'primary');
