@@ -65,7 +65,7 @@ $config->design->linkcommit->dtable->fieldList['comment']['sortType'] = false;
 
 $config->design->viewcommit->dtable->fieldList['id']['title']    = $lang->design->submission;
 $config->design->viewcommit->dtable->fieldList['id']['format']   = 'RAWJS<function(val){return `#${val}`;}>RAWJS';
-$config->design->viewcommit->dtable->fieldList['id']['link']     = helper::createLink('design', 'revision', 'repoID={id}');
+$config->design->viewcommit->dtable->fieldList['id']['link']     = array('url' => helper::createLink('design', 'revision', 'repoID={id}'), 'target' => '_blank');
 $config->design->viewcommit->dtable->fieldList['id']['target']   = '_blank';
 $config->design->viewcommit->dtable->fieldList['id']['sortType'] = false;
 

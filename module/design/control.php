@@ -136,7 +136,7 @@ class design extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $this->createLink('design', 'browse', "projectID=$projectID&productID=$productID");
+            $response['load']    = $this->createLink('design', 'browse', "projectID={$projectID}&productID={$productID}");
             return $this->send($response);
         }
 
@@ -407,11 +407,10 @@ class design extends control
      * @access public
      * @return void
      */
-    public function revision($repoID = 0, $projectID = 0)
+    public function revision(int $repoID = 0, int $projectID = 0)
     {
-        $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
-        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&objectID=$projectID&revistion=$repo->revision");
-        header("location:" . $repoURL);
+        $repo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
+        $this->locate(helper::createLink('repo', 'revision', "repoID={$repo->repo}&objectID={$projectID}&revistion={$repo->revision}"));
     }
 
     /**
