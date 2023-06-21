@@ -26,11 +26,13 @@ function toggleTeam()
     {
         $('.add-team').removeClass('hidden');
         $('#assignedTo').addClass('hidden');
+        $('.assignedToList').removeClass('hidden');
     }
     else
     {
         $('.add-team').addClass('hidden');
         $('#assignedTo').removeClass('hidden');
+        $('.assignedToList').addClass('hidden');
     }
 }
 

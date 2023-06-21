@@ -12,6 +12,8 @@
 #modalTeam .team-index {text-align: right;}
 .team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}
 
+#multipleBox {min-width: 100px}
+
 .assignedToBox {align-items: center !important}
 .assignedToBox .add-team {margin-bottom: 5px}
 .assignedToList {display: flex; align-items: center; flex-wrap: wrap}

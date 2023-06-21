@@ -340,23 +340,23 @@ formPanel
                 set::value($task->assignedTo),
                 set::items($members),
             ),
-            div
-            (
-                setClass('assignedToList'),
-            ),
             btn
             (
                 set
                 (
                     array
                     (
-                        'class' => 'btn primary-pale hidden add-team',
+                        'class' => 'btn primary-pale hidden add-team mr-3',
                         'data-toggle' => 'modal',
                         'url' => '#modalTeam',
                         'icon' => 'plus',
                     ),
                 ),
                 $lang->task->addMember,
+            ),
+            div
+            (
+                setClass('assignedToList'),
             ),
         ),
         formGroup
