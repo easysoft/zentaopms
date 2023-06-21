@@ -18,7 +18,7 @@ class modalDialog extends wg
     );
 
     static $defineBlocks = array(
-        'header' => array(),
+        'header' => array('map' => 'modalHeader'),
         'actions' => array(),
         'footer' => array('map' => 'toolbar')
     );
