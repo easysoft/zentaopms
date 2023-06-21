@@ -523,22 +523,19 @@ class task extends control
         if($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
         {
             $formUrl = $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes");
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({$this->lang->task->confirmDeleteLastEstimate}).then((res) => {if(res) $.ajaxSubmit({url: $formUrl})});"));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->task->confirmDeleteLastEstimate}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});")
+            );
         }
 
         $changes = $this->task->deleteWorkhour($estimateID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
         $this->action->logHistory($actionID, $changes);
 
-        if($task->consumed - $estimate->consumed == 0)
-        {
-            $this->action->create('task', $taskID, 'Adjusttasktowait');
-            return print(js::reload('parent.parent'));
-        }
+        if($task->consumed - $estimate->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
 
     /**
