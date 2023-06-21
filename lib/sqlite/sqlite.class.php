@@ -178,7 +178,7 @@ class sqlite
      */
     public function exec(string $sql)
     {
-        return $this->pushToQueue($sql);
+        return $this->dbh->exec($sql);
     }
 
     /**
@@ -200,7 +200,7 @@ class sqlite
      * @access public
      * @return int|null
      */
-    public function pushToQueue(string $sql): int|null
+    public function pushSqliteQueue(string $sql): int|null
     {
         $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
         $queue .= " SET `sql` = " . $this->quote($sql);
