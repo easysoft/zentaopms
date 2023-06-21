@@ -10,9 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
-
 jsVar('page', 'assignedto');
+
+modalHeader
+(
+    set::title($lang->bug->assignTo)
+);
 
 /* zin: Define the form in main content. */
 form

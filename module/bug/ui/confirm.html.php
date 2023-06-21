@@ -10,9 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
-
 jsVar('page', 'confirm');
+
+modalHeader();
 
 form
 (

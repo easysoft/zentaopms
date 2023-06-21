@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include $app->getModuleRoot() . 'common/ui/header.modal.html.php';
-
 jsVar('bugID',     $bug->id);
 jsVar('productID', $bug->product);
 jsVar('page',      'resolve');
@@ -33,6 +31,8 @@ if(common::hasPriv('build', 'create'))
         )
     );
 }
+
+modalHeader();
 
 /* zin: Define the form in main content. */
 form
