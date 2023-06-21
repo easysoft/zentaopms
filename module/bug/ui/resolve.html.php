@@ -35,7 +35,7 @@ if(common::hasPriv('build', 'create'))
 modalHeader();
 
 /* zin: Define the form in main content. */
-form
+formPanel
 (
     formGroup
     (

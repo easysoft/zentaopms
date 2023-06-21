@@ -14,7 +14,7 @@ jsVar('page', 'confirm');
 
 modalHeader();
 
-form
+formPanel
 (
     formGroup
     (

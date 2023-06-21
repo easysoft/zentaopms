@@ -18,7 +18,7 @@ modalHeader
 );
 
 /* zin: Define the form in main content. */
-form
+formPanel
 (
     set::submitBtnText($lang->bug->assignTo),
     formGroup
