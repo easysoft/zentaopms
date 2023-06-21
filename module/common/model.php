@@ -3849,6 +3849,38 @@ EOT;
 
         return $color;
     }
+
+    /**
+     * 构建详情操作链接配置。
+     * Build action item.
+     *
+     * @param  string    $module
+     * @param  string    $method
+     * @param  string    $params
+     * @param  object    $object
+     * @param  array  $attrs
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildActionItem(string $module, string $method, string $params, object|null $object = null, array $attrs = array()): array
+    {
+        if(!commonModel::hasPriv($module, $method, $object)) return array();
+
+        global $app;
+        $clickable = true;
+        if(is_object($object))
+        {
+            if($app->getModuleName() != $module) $app->control->loadModel($module);
+            $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable')) $clickable = call_user_func_array(array($modelClass, 'isClickable'), array($object, $method));
+        }
+        if(!$clickable) return array();
+
+        $item['url'] = helper::createLink($module, $method, $params);
+        foreach($attrs as $attr => $value) $item[$attr] = $value;
+        return $item;
+    }
 }
 
 class common extends commonModel
