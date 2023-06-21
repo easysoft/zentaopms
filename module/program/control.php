@@ -53,32 +53,25 @@ class program extends control
 
         $this->program->refreshStats(); // Refresh stats fields of projects.
 
-        if($programType === 'bygrid')
+        if(strtolower($status) == 'bysearch')
         {
-            $programs = $this->program->getProgramStats($status, 20, $orderBy);
+            $programs = $this->program->getListBySearch($orderBy, (int)$param);
         }
         else
         {
-            if(strtolower($status) == 'bysearch')
-            {
-                $programs = $this->program->getListBySearch($orderBy, (int)$param);
-            }
-            else
-            {
-                /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
-                if(!$topObjects) $topObjects = array(0);
-                $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
+            /* Get top programs and projects. */
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+            if(!$topObjects) $topObjects = array(0);
+            $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
 
-                /* Get summary. */
-                $topCount = $indCount = 0;
-                foreach($programs as $program)
-                {
-                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
-                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
-                }
-                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+            /* Get summary. */
+            $topCount = $indCount = 0;
+            foreach($programs as $program)
+            {
+                if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                if($program->type == 'project' and $program->parent == 0) $indCount ++;
             }
+            $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
         }
 
         /* Get PM id list. */
