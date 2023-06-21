@@ -8059,10 +8059,13 @@ class upgradeModel extends model
      *
      * @param  string $type
      * @access public
-     * @return void
+     * @return void|bool
      */
     public function processDataset()
     {
+        $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
+        if(!empty($dataviewData)) return true;
+
         $this->loadModel('dataset');
         $this->loadModel('dataview');
 
@@ -9237,7 +9240,6 @@ class upgradeModel extends model
             $fieldSetting->object = $relatedTable;
             $fieldSetting->field  = $field;
             $fieldSetting->type   = 'string';
-
             $fieldSettings[$field] = $fieldSetting;
         }
 
