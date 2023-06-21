@@ -269,6 +269,8 @@ class compileModel extends model
      */
     public function syncJenkinsBuildList($jenkins, $job)
     {
+        if(empty($jenkins->account)) return;
+
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 
@@ -318,6 +320,8 @@ class compileModel extends model
      */
     public function syncGitlabBuildList($gitlab, $job)
     {
+        if(empty($gitlab->id)) return;
+
         $pipeline  = json_decode($job->pipeline);
         $projectID = isset($pipeline->project) ? $pipeline->project : '';
         $ref       = isset($pipeline->reference) ? $pipeline->reference : '';

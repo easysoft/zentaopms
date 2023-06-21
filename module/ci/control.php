@@ -71,11 +71,15 @@ class ci extends control
 
         if(dao::isError())
         {
-            echo json_encode(dao::getError());
-            return true;
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
+            return $this->send($response);
         }
 
-        echo 'success';
+        $response['load']   = $this->createLink('compile', 'logs', "compileID={$compileID}");
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**
