@@ -25,7 +25,7 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0, $from = '')
+    public function browse(int $rootID, string $viewType, int $currentModuleID = 0, int $branch = 0, string $from = '')
     {
         $this->loadModel('product');
 
@@ -110,10 +110,12 @@ class tree extends control
         {
             /* Set menu.*/
             $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
-            $this->product->saveState($rootID, $products);
+
+            $rootID = $this->product->getAccessableProductID($rootID, $products);
+            $this->session->set('product', $rootID, $this->app->tab);
 
             unset($products[$rootID]);
-            $currentProduct = key($products);
+            $currentProduct = (int)key($products);
 
             $this->lang->modulePageNav  = '';
             $this->view->allProduct     = $products;
@@ -180,7 +182,8 @@ class tree extends control
                 unset($this->lang->product->menu->set['subModule']);
 
                 $products = $this->product->getPairs();
-                $this->product->saveState($productID, $products);
+                $productID = $this->product->getAccessableProductID($productID, $products);
+                $this->session->set('product', $productID, $this->app->tab);
             }
             elseif($from == 'project')
             {

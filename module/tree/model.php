@@ -85,7 +85,7 @@ class treeModel extends model
         if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type  = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
-            return $this->dao->select('*, name AS text')->from(TABLE_MODULE)
+            return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
@@ -602,7 +602,7 @@ class treeModel extends model
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
-                $query = $this->dao->select('*, name AS text')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
                     ->get();
@@ -611,15 +611,15 @@ class treeModel extends model
                 if($branch != 0)
                 {
                     $children = $this->getDataStructure($stmt, 'task', $rootID, $executionModules);
-                    if($children) $branchTrees[] = array('text' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'items' => $children);
+                    if($children) $branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'items' => $children);
                 }
             }
-            if($branchTrees) $productTree[] = array('text' => $this->lang->product->branchName[$productInfo->type], 'root' => $id, 'type' => 'branch', 'actions' => false, 'items' => $branchTrees);
-            $fullTrees[] = array('text' => $productInfo->name, 'root' => $id, 'type' => 'product', 'actions' => false, 'items' => $productTree);
+            if($branchTrees) $productTree[] = array('name' => $this->lang->product->branchName[$productInfo->type], 'root' => $id, 'type' => 'branch', 'actions' => false, 'items' => $branchTrees);
+            $fullTrees[] = array('name' => $productInfo->name, 'root' => $id, 'type' => 'product', 'actions' => false, 'items' => $productTree);
         }
 
         /* Get execution module. */
-        $query = $this->dao->select('*, name AS text')->from(TABLE_MODULE)
+        $query = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('type')->eq('task')
             ->andWhere('deleted')->eq(0)

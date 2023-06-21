@@ -20,7 +20,7 @@ class tree extends wg
         foreach($items as $key => $item)
         {
             $item = (array)$item;
-            $treeItem = array('text' => $item['text'], 'url' => $item['url']);
+            $treeItem = array('text' => $item['name'], 'url' => $item['url']);
             if(isset($item['items'])) $treeItem['items'] = $this->buildTree($item['items']);
 
             $items[$key] = $treeItem;

@@ -18,6 +18,28 @@ foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
 
+    if($newModule and !$productID)
+    {
+        foreach($products as $product)
+        {
+            $moduleRows[] = formRow
+            (
+                formGroup
+                (
+                    setClass('row-module'),
+                    input
+                    (
+                        setClass('col-module'),
+                        set::name("products[id$product->id]"),
+                        set::type('input'),
+                        set::value($product->name),
+                        set::disabled(true),
+                    ),
+                )
+            );
+        }
+    }
+
     $moduleRows[] = formRow
     (
         formGroup
@@ -77,6 +99,13 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::type('input'),
                     set::value(''),
                     set::placeholder($lang->tree->short),
+                ),
+                input
+                (
+                    setClass('hidden'),
+                    set::name("branch[$i]"),
+                    set::value(0),
+                    set::control('hidden'),
                 ),
             ),
             batchActions(),
