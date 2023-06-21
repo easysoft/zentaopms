@@ -86,26 +86,11 @@ if($isMultiple)
     );
 }
 
+modalHeader();
+
 /* ====== Define the page structure with zin widgets ====== */
 formPanel
 (
-    set::title($lang->task->activateAction),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    set::shadow(!isAjaxRequest('modal')),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->task->activate),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($task->name),
-            set::entityID($task->id),
-            set::reverse(true),
-        )
-    ),
     $taskModeBox,
     formRow
     (
@@ -220,8 +205,6 @@ modalTrigger
         ),
     )
 );
-
-h::hr(set::class('mt-6'));
 
 history();
 
