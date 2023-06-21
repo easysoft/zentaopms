@@ -711,8 +711,12 @@
         const $modal = $link.closest('.modal');
         if($modal.length)
         {
-            if(!options.load) options.load   = 'modal';
-            if(options.load === 'modal' && !options.loadId) options.loadId = $modal.attr('id');
+            if(!options.load)        options.load   = 'modal';
+            else if(!options.loadId) options.loadId = $modal.attr('id');
+        }
+        else
+        {
+            if(options.load === 'modal' && !options.loadId) delete options.load;
         }
         if((/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
         if(!url && $link.is('a') && !options.back && !options.load) return;
@@ -723,7 +727,12 @@
     {
         if(!data) return;
         if(data === true) return loadCurrentPage();
-        if(typeof data === 'string') data = {url: data};
+        if(typeof data === 'string')
+        {
+            if(data === 'table') return loadTable();
+            if(data === 'modal') return loadModal();
+            data = {url: data};
+        }
 
         if(data.confirm)
         {
@@ -733,6 +742,7 @@
                 else $(document).trigger('locate.zt', data.cancelled);
             });
         }
+        if(data.load) return openUrl(data);
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data.url, data.selector);
     });
