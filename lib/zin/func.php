@@ -1404,3 +1404,14 @@ function mainNavbar(): mainNavbar
 {
     return createWg('mainNavbar', func_get_args());
 }
+
+/**
+ * Zentao float Pre and Next Button widget.
+ *
+ * ?string  preLink  link of pre-button.
+ * ?string  nextLink link of next-button.
+ */
+function floatPreNextBtn(): floatPreNextBtn
+{
+    return createWg('floatPreNextBtn', func_get_args());
+}
