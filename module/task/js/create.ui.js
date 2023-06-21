@@ -379,7 +379,7 @@ window.removeItem = function(obj)
     $(obj).closest('tr').remove();
 }
 
-$('#modalTeam').on('click.saveTeam', '.toolbar-item', function()
+$('#teamTable').on('click.team', '.toolbar-item', function()
 {
     $('div.assignedToList').html('');
 
@@ -416,7 +416,7 @@ $('#modalTeam').on('click.saveTeam', '.toolbar-item', function()
 
     if(team.length < 2)
     {
-        bootbox.alert(teamMemberError);
+        zui.Modal.alert(teamMemberError);
         return false;
     }
     else
@@ -432,6 +432,61 @@ $('#modalTeam').on('click.saveTeam', '.toolbar-item', function()
     zui.Modal.hide();
     return false;
 })
+
+$('#teamTable').on('click.team', '.btn-add', function()
+{
+    var $newRow = $(this).closest('tr').clone();
+    $(this).closest('tr').after($newRow);
+
+    toggleBtn();
+    setLineIndex();
+})
+
+$('#teamTable').on('click.team', '.btn-delete', function()
+{
+    var $row = $(this).closest('tr').remove();
+    toggleBtn();
+    setLineIndex();
+});
+
+/**
+ * Set line number.
+ *
+ * @access public
+ * @return void
+ */
+function setLineIndex()
+{
+    let index = 1;
+    $('.team-number').each(function()
+    {
+        $(this).text(index);
+        $(this).closest('tr').find('select[name^=team]').attr('name', 'team[' + index + ']');
+        $(this).closest('tr').find('input[name^=teamEstimate]').attr('name', 'teamEstimate[' + index + ']');
+        index ++;
+    });
+
+}
+
+/**
+ * Check delete button hide or not.
+ *
+ * @access public
+ * @return void
+ */
+function toggleBtn()
+{
+    var $deleteBtn = $('#teamTable').find('.btn-delete');
+    if($deleteBtn.length == 1)
+    {
+        $deleteBtn.addClass('hidden');
+    }
+    else
+    {
+        $deleteBtn.removeClass('hidden');
+    }
+
+};
 
 function onPageUnmount()
 {

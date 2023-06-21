@@ -531,12 +531,13 @@ class taskZen extends task
     protected function buildTaskForCreate(int $executionID): object
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-        $team      = !empty($this->post->team) ? array_filter($this->post->team) : array();
+        $team      = $this->post->team ? array_filter($this->post->team) : array();
         $task      = form::data()->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)
+            ->setIF($this->post->mode, 'mode', $this->post->mode)
             ->setIF($this->post->story, 'storyVersion', isset($this->post->story) ? $this->loadModel('story')->getVersion($this->post->story) : 0)
-            ->setIF(empty($this->post->multiple) || count($team) < 1, 'mode', '')
+            ->setIF(!$this->post->multiple || count($team) < 1, 'mode', '')
             ->setIF($this->task->isNoStoryExecution($execution), 'story', 0)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
             ->setIF(!$this->post->estStarted, 'estStarted', null)

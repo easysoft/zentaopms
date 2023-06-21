@@ -131,8 +131,7 @@ for($i = 1; $i <= 3; $i ++)
     (
         h::td
         (
-            setClass('text-center'),
-            set::width('40px'),
+            setClass('team-index'),
             span 
             (
                 setClass("team-number"),
@@ -156,6 +155,7 @@ for($i = 1; $i <= 3; $i ++)
                 input 
                 (
                     set::name("teamEstimate[$i]"),
+                    set::placeholder($lang->task->estimateAB),
                 ),
                 to::suffix($lang->task->suffixHour),
                 set::suffixWidth(20),
@@ -168,8 +168,8 @@ for($i = 1; $i <= 3; $i ++)
             btnGroup
             (
                 set::items(array(
-                    array('icon' => 'plus', 'class' => 'btn btn-link', 'onclick' => 'addItem(this)'),
-                    array('icon' => 'close', 'class' => 'btn btn-link', 'onclick' => 'removeItem(this)'),
+                    array('icon' => 'plus',  'class' => 'btn btn-link btn-add'),
+                    array('icon' => 'trash', 'class' => 'btn btn-link btn-delete'),
                 ))
             )
         )
@@ -513,17 +513,35 @@ formPanel
             set::title($lang->task->teamMember),
             h::table
             (
+                set::id('teamTable'),
+                h::tr
+                (
+                    h::td
+                    (
+                        width('90px'),
+                        $lang->task->mode
+                    ),
+                    h::td
+                    (
+                        select 
+                        (
+                            set::name("mode"),
+                            set::value("linear"),
+                            set::items($lang->task->modeList),
+                        ),
+                    )
+                ),
                 setClass('table table-form'),
                 $teamForm,
                 h::tr
                 (
                     h::td
                     (
-                        setClass('text-center'),
+                        setClass('team-saveBtn'),
                         set(array('colspan' => 4)),
                         btn
                         (
-                            setClass('btn btn-primary'),
+                            setClass('toolbar-item btn primary'),
                             $lang->save
                         )
                     )

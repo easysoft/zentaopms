@@ -59,7 +59,6 @@ class task extends control
         /* Submit the data process after create the task form. */
         if(!empty($_POST))
         {
-            a($_POST);die;
             $taskData = $this->taskZen->buildTaskForCreate($this->post->execution);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -80,7 +79,7 @@ class task extends control
             }
             elseif($this->post->multiple)
             {
-                $teamData   = form::data($config->task->form->team->create)->get();
+                $teamData   = form::data($this->config->task->form->team->create)->get();
                 $taskIdList = $this->task->createMultiTask($taskData, $teamData);
             }
             else
