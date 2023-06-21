@@ -46,4 +46,4 @@ formPanel
     ),
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

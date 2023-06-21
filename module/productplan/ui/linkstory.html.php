@@ -44,4 +44,4 @@ dtable
     set::footPager(usePager()),
 );
 
-render('fragment');
+render();

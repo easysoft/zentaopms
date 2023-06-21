@@ -120,4 +120,4 @@ to::footer
     )
 );
 
-render('modalDialog');
+render();

@@ -30,4 +30,4 @@ detailBody
     history(),
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

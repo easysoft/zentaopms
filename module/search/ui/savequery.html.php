@@ -47,4 +47,4 @@ form
     )
 );
 
-render('modalDialog');
+render();

@@ -226,4 +226,4 @@ h::hr(set::class('mt-6'));
 history();
 
 /* ====== Render page ====== */
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

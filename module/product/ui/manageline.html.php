@@ -108,4 +108,4 @@ div(
     )
 );
 
-render('modalDialog');
+render();

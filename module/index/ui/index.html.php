@@ -99,4 +99,4 @@ div
     setID('apps'),
 );
 
-render('pagebase');
+render();

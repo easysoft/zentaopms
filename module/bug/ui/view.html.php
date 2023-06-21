@@ -303,7 +303,7 @@ modal
     )
 );
 
-render(isAjaxRequest('modal') ? 'modalDialog' : 'page');
+render();
 
 /**
  * Build content of table data.

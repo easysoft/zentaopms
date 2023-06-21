@@ -122,4 +122,4 @@ formBatchPanel
     )
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

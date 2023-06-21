@@ -58,4 +58,4 @@ formPanel
     ),
 );
 /* ====== Render page ====== */
-render('modalDialog');
+render();

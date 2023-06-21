@@ -95,5 +95,5 @@ formPanel
     ),
 );
 
-render('modalDialog');
+render();
 

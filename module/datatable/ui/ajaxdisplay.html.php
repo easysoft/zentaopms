@@ -83,4 +83,4 @@ form
     set::actions(array('submit')),
 );
 
-render('modalDialog');
+render();

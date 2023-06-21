@@ -52,4 +52,4 @@ formPanel
 h::hr(set::class('mt-6'));
 history();
 
-render('modalDialog');
+render();

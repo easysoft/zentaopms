@@ -82,4 +82,4 @@ panel
     history()
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

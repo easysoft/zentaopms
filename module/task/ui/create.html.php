@@ -496,4 +496,4 @@ formPanel
 /* ====== Render page ====== */
 
 $pageType = isonlybody() ? 'modal' : 'page';
-render($pageType);
+render();

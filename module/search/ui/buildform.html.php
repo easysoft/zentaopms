@@ -25,4 +25,4 @@ jsVar('onMenuBar',        $onMenuBar);
 
 js($pageJS);
 
-render('fragment');
+render();

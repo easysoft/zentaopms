@@ -24,4 +24,4 @@ form
 
 history();
 
-render('modalDialog');
+render();

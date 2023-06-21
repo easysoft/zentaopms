@@ -25,4 +25,4 @@ detailBody
     history(),
 );
 
-render('modalDialog');
+render();

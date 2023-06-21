@@ -60,4 +60,4 @@ js
     JAVASCRIPT
 );
 
-render('modalDialog');
+render();

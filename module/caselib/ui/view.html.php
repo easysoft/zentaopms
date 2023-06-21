@@ -47,5 +47,5 @@ detailBody
     ),
 );
 
-render($isInModal ? 'modalDialog' : 'page');
+render();
 

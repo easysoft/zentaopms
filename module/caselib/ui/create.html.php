@@ -33,4 +33,4 @@ $formItems['desc'] = $descGroup;
 
 formPanel($formItems);
 
-render(isAjaxRequest('modal') ? 'modalDialog' : 'page');
+render();

@@ -227,4 +227,4 @@ function onChangeFileName(event)
 JAVASCRIPT
 );
 
-render('modalDialog');
+render();

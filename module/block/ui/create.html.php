@@ -114,4 +114,4 @@ form
     )
 );
 
-render('modalDialog');
+render();

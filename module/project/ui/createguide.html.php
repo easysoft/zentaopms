@@ -66,4 +66,4 @@ div
     ),
 );
 
-render('modalDialog');
+render();

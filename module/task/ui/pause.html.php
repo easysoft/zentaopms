@@ -49,4 +49,4 @@ h::hr(set::class('mt-6'));
 
 history();
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();

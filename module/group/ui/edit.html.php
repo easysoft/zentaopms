@@ -39,4 +39,4 @@ formPanel
     set::actions(array('submit'))
 );
 
-render(isonlybody() ? 'modalDialog' : 'page');
+render();
