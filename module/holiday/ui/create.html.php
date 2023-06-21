@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->holiday->create),
+    set::formClass('border-0'),
     formRow
     (
         formGroup
