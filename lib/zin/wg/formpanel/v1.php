@@ -50,10 +50,6 @@ class formPanel extends panel
         'shadow?: bool=true',                          // 是否显示阴影层。
     );
 
-    protected static $defaultProps = array(
-        'actions' => array('submit', 'cancel')
-    );
-
     /**
      * The lifecycle method of created.
      *

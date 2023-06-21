@@ -18,10 +18,6 @@ class form extends formBase
         'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
     );
 
-    protected static $defaultProps = array(
-        'actions' => array('submit', 'cancel')
-    );
-
     protected function created()
     {
         global $app, $lang;
