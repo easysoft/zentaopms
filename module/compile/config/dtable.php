@@ -61,10 +61,15 @@ $config->compile->actionList['logs']['text'] = $lang->compile->logs;
 $config->compile->actionList['logs']['hint'] = $lang->compile->logs;
 $config->compile->actionList['logs']['url']  = array('module' => 'compile', 'method' => 'logs', 'params' => 'compileID={id}');
 
+$config->compile->actionList['result']['icon'] = 'list-alt';
+$config->compile->actionList['result']['text'] = $lang->compile->result;
+$config->compile->actionList['result']['hint'] = $lang->compile->result;
+$config->compile->actionList['result']['url']  = array('module' => 'testtask', 'method' => 'unitCases', 'params' => 'taskID={testtask}');
+
 $config->compile->dtable->fieldList['actions']['name']     = 'actions';
 $config->compile->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->compile->dtable->fieldList['actions']['type']     = 'actions';
 $config->compile->dtable->fieldList['actions']['sortType'] = false;
 $config->compile->dtable->fieldList['actions']['fixed']    = 'right';
-$config->compile->dtable->fieldList['actions']['menu']     = array('logs');
+$config->compile->dtable->fieldList['actions']['menu']     = array('logs', 'result');
 $config->compile->dtable->fieldList['actions']['list']     = $config->compile->actionList;

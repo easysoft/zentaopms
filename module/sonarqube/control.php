@@ -254,7 +254,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
@@ -353,7 +353,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recPerPage = 100, $pageID = 1)
     {
         if(isset($_POST['keyword']))
         {

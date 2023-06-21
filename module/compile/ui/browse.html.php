@@ -27,6 +27,8 @@ jsVar('sortLink',         helper::createLink('compile', 'browse', "repoID=$repoI
 
 $tableData = initTableData($buildList, $config->compile->dtable->fieldList, $this->compile);
 
+foreach($tableData as $row) if(!$row->testtask) $row->actions[1]['disabled'] = 1;
+
 dtable
 (
     set::cols($config->compile->dtable->fieldList),

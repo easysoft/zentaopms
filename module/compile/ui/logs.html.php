@@ -14,9 +14,12 @@ global $lang;
 detailHeader(
     to::prefix(''),
     to::title($lang->compile->logs),
-    to::suffix(
-        div(
-            $job->engine == 'gitlab' ? btn(
+    to::suffix
+    (
+        div
+        (
+            $job->engine == 'gitlab' ? btn
+            (
                 set::id('refreshBtn'),
                 set::class('mr-3 secondary'),
                 set::icon('eye'),
