@@ -2962,4 +2962,25 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/$projectID/pipelines") . "&ref=$branch";
         return json_decode(commonModel::http($url));
     }
+
+    /**
+     * 更新版本库的代码地址。
+     * Update repo code path.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $repoID
+     * @access public
+     * @return bool
+     */
+    public function updateCodePath(int $gitlabID, int $projectID, int $repoID): bool
+    {
+        $project = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(is_object($project) and !empty($project->web_url))
+        {
+            return $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
+        }
+
+        return false;
+    }
 }

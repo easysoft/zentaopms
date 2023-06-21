@@ -79,7 +79,7 @@ class repo extends control
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList      = $this->repo->getList(0, '', $orderBy, null, true, true);
+        $repoList      = $this->repo->getList(0, '', $orderBy, null, false, true);
         $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
 
         /* Pager. */
@@ -138,8 +138,9 @@ class repo extends control
             if($this->post->SCM == 'Gitlab')
             {
                 /* Add webhook. */
-                $repo = $this->getRepoByID($repoID);
+                $repo = $this->repo->getRepoByID($repoID);
                 $this->loadModel('gitlab')->addPushWebhook($repo);
+                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
@@ -519,6 +520,8 @@ class repo extends control
      */
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch',  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        unset($this->lang->devops->homeMenu);
+
         $repoID                 = $this->repo->saveState($repoID, $objectID);
         $originBranchID         = $branchID;
         if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
