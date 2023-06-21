@@ -448,6 +448,13 @@ class testreport extends control
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
 
+        $caseList = array();
+        foreach($cases as $taskID => $casesList)
+        {
+            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
+        }
+        $this->view->caseList = $caseList;
+
         $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $report->cases, $begin, $end);
         $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $report->cases, $begin, $end);
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);

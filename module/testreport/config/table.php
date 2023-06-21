@@ -7,7 +7,6 @@ $config->testreport->actionList['edit']['icon']        = 'edit';
 $config->testreport->actionList['edit']['hint']        = $lang->testreport->edit;
 $config->testreport->actionList['edit']['text']        = $lang->testreport->edit;
 $config->testreport->actionList['edit']['url']         = array('module' => 'testreport', 'method' => 'edit', 'params' => 'reportID={id}');
-$config->testreport->actionList['edit']['data-toggle'] = 'modal';
 $config->testreport->actionList['edit']['order']       = 5;
 $config->testreport->actionList['edit']['show']        = 'clickable';
 

@@ -17,21 +17,7 @@ jsVar('fromCaseBugTip',  $lang->testreport->fromCaseBugTip);
 
 formPanel
 (
-    on::change('#selectTask', 'changeTesttask'),
-    set::title($lang->testreport->create),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->testtask->common),
-            set::required(true),
-            set::control('select'),
-            set::name('selectTask'),
-            set::items($taskPairs),
-            set::value($objectID),
-        )
-    ),
+    set::title($lang->testreport->edit),
     formRow
     (
         formGroup
@@ -64,25 +50,13 @@ formPanel
             (
                 set::class('hidden'),
                 set::name('execution'),
-                set::value(isset($execution->id) ? $execution->id : 0)
+                set::value($execution->id)
             ),
             input
             (
                 set::class('hidden'),
                 set::name('tasks'),
                 set::value($tasks)
-            ),
-            input
-            (
-                set::class('hidden'),
-                set::name('objectID'),
-                set::value($objectID)
-            ),
-            input
-            (
-                set::class('hidden'),
-                set::name('objectType'),
-                set::value($objectType)
             )
         ),
         formGroup
@@ -92,7 +66,7 @@ formPanel
             set::control('select'),
             set::name('owner'),
             set::items($users),
-            set::value($owner)
+            set::value($report->owner)
         )
     ),
     formRow
@@ -103,7 +77,7 @@ formPanel
             set::control(array('type' => 'select', 'multiple' => true)),
             set::name('members[]'),
             set::items($users),
-            set::value($members)
+            set::value($report->members)
         )
     ),
     formRow
@@ -112,7 +86,7 @@ formPanel
         (
             set::label($lang->testreport->title),
             set::name('title'),
-            set::value($reportTitle)
+            set::value($report->title)
         )
     ),
     !empty($execution->desc) ? formRow
@@ -156,7 +130,7 @@ formPanel
             editor
             (
                 set::name('report'),
-                set::value()
+                set::value($report->report)
             )
         )
     ),
