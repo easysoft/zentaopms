@@ -482,7 +482,7 @@ function initPageEntity(object $object): array
     $idField    = isset($config->action->objectIdFields[$module])   ? $config->action->objectIdFields[$module]   : 'id';
     $titleField = isset($config->action->objectNameFields[$module]) ? $config->action->objectNameFields[$module] : 'title';
 
-    return array('title' => zget($object, $titleField, ''), 'id' => zget($object, $idField, 0));
+    return array(zget($object, $titleField, ''), zget($object, $idField, 0));
 }
 
 /**
