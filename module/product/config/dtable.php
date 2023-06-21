@@ -138,3 +138,146 @@ $config->product->dtable->extendField['border']   = 'left';
 
 $config->productProject = new stdclass();
 $config->productProject->showFields = array('id', 'program', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'estimate', 'consume', 'progress');
+
+/* Fields of product list page. */
+if(!isset($config->product->all)) $config->product->all = new stdclass();
+$config->product->all->dtable = new stdclass();
+
+$config->product->all->dtable->fieldList['name']['name']         = 'name';
+$config->product->all->dtable->fieldList['name']['title']        = $lang->product->name;
+$config->product->all->dtable->fieldList['name']['type']         = 'title';
+$config->product->all->dtable->fieldList['name']['show']         = true;
+$config->product->all->dtable->fieldList['name']['nestedToggle'] = false;
+$config->product->all->dtable->fieldList['name']['checkbox']     = true;
+$config->product->all->dtable->fieldList['name']['link']         = helper::createLink('product', 'browse', "productID={id}");
+$config->product->all->dtable->fieldList['name']['group']        = 'g1';
+
+$config->product->all->dtable->fieldList['productLine']['name']  = 'productLine';
+$config->product->all->dtable->fieldList['productLine']['title'] = $lang->product->belongingLine;
+$config->product->all->dtable->fieldList['productLine']['type']  = 'format';
+$config->product->all->dtable->fieldList['productLine']['show']  = true;
+$config->product->all->dtable->fieldList['productLine']['group'] = 'g2';
+
+$config->product->all->dtable->fieldList['PO']['name']  = 'PO';
+$config->product->all->dtable->fieldList['PO']['title'] = $lang->product->manager;
+$config->product->all->dtable->fieldList['PO']['type']  = 'avatarBtn';
+$config->product->all->dtable->fieldList['PO']['show']  = true;
+$config->product->all->dtable->fieldList['PO']['group'] = 'g3';
+
+$config->product->all->dtable->fieldList['createdDate']['name']     = 'createdDate';
+$config->product->all->dtable->fieldList['createdDate']['title']    = $lang->product->createdDate;
+$config->product->all->dtable->fieldList['createdDate']['type']     = 'datetime';
+$config->product->all->dtable->fieldList['createdDate']['sortType'] = true;
+$config->product->all->dtable->fieldList['createdDate']['group']    = '1';
+
+$config->product->all->dtable->fieldList['createdBy']['name']  = 'createdBy';
+$config->product->all->dtable->fieldList['createdBy']['title'] = $lang->openedByAB;
+$config->product->all->dtable->fieldList['createdBy']['type']  = 'user';
+$config->product->all->dtable->fieldList['createdBy']['group'] = '1';
+
+$config->product->all->dtable->fieldList['draftStories']['name']     = 'draftStories';
+$config->product->all->dtable->fieldList['draftStories']['title']    = $lang->product->draftStory;
+$config->product->all->dtable->fieldList['draftStories']['type']     = 'number';
+$config->product->all->dtable->fieldList['draftStories']['show']     = true;
+$config->product->all->dtable->fieldList['draftStories']['sortType'] = true;
+$config->product->all->dtable->fieldList['draftStories']['group']    = 'g4';
+
+$config->product->all->dtable->fieldList['activeStories']['name']     = 'activeStories';
+$config->product->all->dtable->fieldList['activeStories']['title']    = $lang->product->activeStory;
+$config->product->all->dtable->fieldList['activeStories']['type']     = 'number';
+$config->product->all->dtable->fieldList['activeStories']['show']     = true;
+$config->product->all->dtable->fieldList['activeStories']['sortType'] = true;
+$config->product->all->dtable->fieldList['activeStories']['group']    = 'g4';
+
+$config->product->all->dtable->fieldList['changingStories']['name']     = 'changingStories';
+$config->product->all->dtable->fieldList['changingStories']['title']    = $lang->product->changingStory;
+$config->product->all->dtable->fieldList['changingStories']['type']     = 'number';
+$config->product->all->dtable->fieldList['changingStories']['show']     = true;
+$config->product->all->dtable->fieldList['changingStories']['sortType'] = true;
+$config->product->all->dtable->fieldList['changingStories']['group']    = 'g4';
+
+$config->product->all->dtable->fieldList['reviewingStories']['name']     = 'reviewingStories';
+$config->product->all->dtable->fieldList['reviewingStories']['title']    = $lang->product->reviewingStory;
+$config->product->all->dtable->fieldList['reviewingStories']['type']     = 'number';
+$config->product->all->dtable->fieldList['reviewingStories']['show']     = true;
+$config->product->all->dtable->fieldList['reviewingStories']['sortType'] = true;
+$config->product->all->dtable->fieldList['reviewingStories']['group']    = 'g4';
+
+$config->product->all->dtable->fieldList['totalStories']['name']     = 'totalStories';
+$config->product->all->dtable->fieldList['totalStories']['title']    = $lang->product->totalStories;
+$config->product->all->dtable->fieldList['totalStories']['minWidth'] = 100;
+$config->product->all->dtable->fieldList['totalStories']['type']     = 'number';
+$config->product->all->dtable->fieldList['totalStories']['sortType'] = true;
+$config->product->all->dtable->fieldList['totalStories']['group']    = 'g4';
+
+$config->product->all->dtable->fieldList['storyCompleteRate']['name']     = 'storyCompleteRate';
+$config->product->all->dtable->fieldList['storyCompleteRate']['title']    = $lang->product->completeRate;
+$config->product->all->dtable->fieldList['storyCompleteRate']['type']     = 'progress';
+$config->product->all->dtable->fieldList['storyCompleteRate']['show']     = true;
+$config->product->all->dtable->fieldList['storyCompleteRate']['sortType'] = true;
+$config->product->all->dtable->fieldList['storyCompleteRate']['group']    = 'g4';
+
+$config->product->all->dtable->fieldList['plans']['name']     = 'plans';
+$config->product->all->dtable->fieldList['plans']['title']    = $lang->product->plan;
+$config->product->all->dtable->fieldList['plans']['type']     = 'number';
+$config->product->all->dtable->fieldList['plans']['show']     = true;
+$config->product->all->dtable->fieldList['plans']['sortType'] = true;
+$config->product->all->dtable->fieldList['plans']['group']    = 'g5';
+
+$config->product->all->dtable->fieldList['execution']['name']     = 'execution';
+$config->product->all->dtable->fieldList['execution']['title']    = $lang->execution->common;
+$config->product->all->dtable->fieldList['execution']['type']     = 'number';
+$config->product->all->dtable->fieldList['execution']['show']     = true;
+$config->product->all->dtable->fieldList['execution']['sortType'] = true;
+$config->product->all->dtable->fieldList['execution']['group']    = 'g6';
+
+$config->product->all->dtable->fieldList['testCaseCoverage']['name']     = 'testCaseCoverage';
+$config->product->all->dtable->fieldList['testCaseCoverage']['title']    = $lang->product->testCaseCoverage;
+$config->product->all->dtable->fieldList['testCaseCoverage']['type']     = 'progress';
+$config->product->all->dtable->fieldList['testCaseCoverage']['minWidth'] = 108;
+$config->product->all->dtable->fieldList['testCaseCoverage']['show']     = true;
+$config->product->all->dtable->fieldList['testCaseCoverage']['sortType'] = true;
+$config->product->all->dtable->fieldList['testCaseCoverage']['group']    = 'g7';
+
+$config->product->all->dtable->fieldList['totalActivatedBugs']['name']     = 'totalActivatedBugs';
+$config->product->all->dtable->fieldList['totalActivatedBugs']['title']    = $lang->product->activatedBug;
+$config->product->all->dtable->fieldList['totalActivatedBugs']['minWidth'] = 86;
+$config->product->all->dtable->fieldList['totalActivatedBugs']['type']     = 'number';
+$config->product->all->dtable->fieldList['totalActivatedBugs']['show']     = true;
+$config->product->all->dtable->fieldList['totalActivatedBugs']['sortType'] = true;
+$config->product->all->dtable->fieldList['totalActivatedBugs']['group']    = 'g8';
+
+$config->product->all->dtable->fieldList['totalBugs']['name']     = 'totalBugs';
+$config->product->all->dtable->fieldList['totalBugs']['title']    = $lang->product->totalBugs;
+$config->product->all->dtable->fieldList['totalBugs']['minWidth'] = 86;
+$config->product->all->dtable->fieldList['totalBugs']['type']     = 'number';
+$config->product->all->dtable->fieldList['totalBugs']['sortType'] = true;
+$config->product->all->dtable->fieldList['totalBugs']['group']    = 'g8';
+
+$config->product->all->dtable->fieldList['bugFixedRate']['name']     = 'bugFixedRate';
+$config->product->all->dtable->fieldList['bugFixedRate']['title']    = $lang->product->bugFixedRate;
+$config->product->all->dtable->fieldList['bugFixedRate']['type']     = 'progress';
+$config->product->all->dtable->fieldList['bugFixedRate']['show']     = true;
+$config->product->all->dtable->fieldList['bugFixedRate']['sortType'] = true;
+$config->product->all->dtable->fieldList['bugFixedRate']['group']    = 'g8';
+
+$config->product->all->dtable->fieldList['releases']['name']     = 'releases';
+$config->product->all->dtable->fieldList['releases']['title']    = $lang->product->release;
+$config->product->all->dtable->fieldList['releases']['type']     = 'number';
+$config->product->all->dtable->fieldList['releases']['show']     = true;
+$config->product->all->dtable->fieldList['releases']['sortType'] = true;
+$config->product->all->dtable->fieldList['releases']['group']    = 'g9';
+
+$config->product->all->dtable->fieldList['latestReleaseDate']['name']     = 'latestReleaseDate';
+$config->product->all->dtable->fieldList['latestReleaseDate']['title']    = $lang->product->latestReleaseDate;
+$config->product->all->dtable->fieldList['latestReleaseDate']['minWidth'] = 120;
+$config->product->all->dtable->fieldList['latestReleaseDate']['type']     = 'date';
+$config->product->all->dtable->fieldList['latestReleaseDate']['sortType'] = true;
+$config->product->all->dtable->fieldList['latestReleaseDate']['group']    = 'g9';
+
+$config->product->all->dtable->fieldList['latestRelease']['name']       = 'latestRelease';
+$config->product->all->dtable->fieldList['latestRelease']['title']      = $lang->product->latestRelease;
+$config->product->all->dtable->fieldList['latestRelease']['minWidth']   = 80;
+$config->product->all->dtable->fieldList['latestRelease']['type']       = 'text';
+$config->product->all->dtable->fieldList['latestRelease']['filterType'] = true;
+$config->product->all->dtable->fieldList['latestRelease']['group']      = 'g9';
