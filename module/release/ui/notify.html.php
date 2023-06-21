@@ -41,8 +41,6 @@ formPanel
     )
 );
 
-h::hr(set::class('mt-6'));
-
 history();
 
 /* ====== Render page ====== */
