@@ -718,7 +718,7 @@
         {
             if(options.load === 'modal' && !options.loadId) delete options.load;
         }
-        if((/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
+        if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
         if(!url && $link.is('a') && !options.back && !options.load) return;
 
         openUrl(url, options, e);
