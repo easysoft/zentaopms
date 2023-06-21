@@ -20,18 +20,18 @@ class form extends formBase
 
     protected function created()
     {
-        global $app, $lang;
-        $module = $app->getModuleName();
-        $method = $app->getMethodName();
-        $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
-
-        $defaultProps['submitBtnText'] = $text;
-        $defaultProps['actions']       = array('submit', 'cancel');
+        parent::created();
 
         if(isAjaxRequest('modal'))
         {
-            $defaultProps['class']   = 'px-3 pb-4 border-b';
-            $defaultProps['actions'] = array('submit');
+            global $app, $lang;
+            $module = $app->getModuleName();
+            $method = $app->getMethodName();
+            $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
+
+            $defaultProps = array();
+            $defaultProps['submitBtnText'] = $text;
+            $defaultProps['class']         = 'px-3 pb-4 border-b';
         }
 
         $this->setDefaultProps($defaultProps);
