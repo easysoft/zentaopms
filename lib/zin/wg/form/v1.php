@@ -22,21 +22,22 @@ class form extends formBase
         'actions' => array('submit', 'cancel')
     );
 
-    protected static function getDefaultProps(string|null $wgName = null): array
+    protected function created()
     {
-        $defaultProps = parent::getDefaultProps($wgName);
-        if(!isAjaxRequest('modal')) return $defaultProps;
-
         global $app, $lang;
         $module = $app->getModuleName();
         $method = $app->getMethodName();
         $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
 
         $defaultProps['submitBtnText'] = $text;
-        $defaultProps['class']         = 'px-3 pb-4 border-b';
-        $defaultProps['actions']       = array('submit');
 
-        return $defaultProps;
+        if(isAjaxRequest('modal'))
+        {
+            $defaultProps['class']   = 'px-3 pb-4 border-b';
+            $defaultProps['actions'] = array('submit');
+        }
+
+        $this->setDefaultProps($defaultProps);
     }
 
     public function onBuildItem(item|array $item): wg
