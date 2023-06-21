@@ -253,8 +253,12 @@ $lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
-$lang->product->belongingLine    = 'Product Line';
-$lang->product->testCaseCoverage = 'Case Coverage';
-$lang->product->activatedBug     = 'Activated Bugs';
-$lang->product->completeRate     = 'Completion Rate';
-$lang->product->editLine         = 'Edit Product Line';
+$lang->product->belongingLine     = 'Product Line';
+$lang->product->testCaseCoverage  = 'Case Coverage';
+$lang->product->activatedBug      = 'Activated Bugs';
+$lang->product->completeRate      = 'Completion Rate';
+$lang->product->editLine          = 'Edit Product Line';
+$lang->program->totalBugs         = 'Total Bugs';
+$lang->program->totalStories      = 'Total Stories';
+$lang->program->latestReleaseDate = 'Latest Release Date';
+$lang->program->latestRelease     = 'Latest Release';

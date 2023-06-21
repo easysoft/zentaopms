@@ -253,8 +253,12 @@ $lang->product->featureBar['dynamic']['lastWeek']  = '上周';
 $lang->product->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->product->featureBar['dynamic']['lastMonth'] = '上月';
 
-$lang->product->belongingLine    = '所属产品线';
-$lang->product->testCaseCoverage = '用例覆盖率';
-$lang->product->activatedBug     = 'Bug激活';
-$lang->product->completeRate     = '完成率';
-$lang->product->editLine         = '编辑产品线';
+$lang->product->belongingLine     = '所属产品线';
+$lang->product->testCaseCoverage  = '用例覆盖率';
+$lang->product->activatedBug      = 'Bug激活';
+$lang->product->completeRate      = '完成率';
+$lang->product->editLine          = '编辑产品线';
+$lang->product->totalBugs         = 'Bug总数';
+$lang->product->totalStories      = '需求总数';
+$lang->product->latestReleaseDate = '最新发布时间';
+$lang->product->latestRelease     = '最新发布';
