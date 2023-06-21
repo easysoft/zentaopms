@@ -138,13 +138,16 @@ class holiday extends control
         if(empty($year)) $year = date('Y');
 
         $holidays = $this->holiday->getHolidayByAPI($year);
-        if(helper::isAjaxRequest())
+
+        if(!empty($_POST))
         {
             $this->holiday->batchCreate($holidays);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
+
+        foreach($holidays as $holiday) $holiday->holiday = formatTime($holiday->begin, DT_DATE1) . ' ~ ' . formatTime($holiday->end, DT_DATE1);
 
         $this->view->holidays = $holidays;
         $this->display();

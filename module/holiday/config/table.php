@@ -34,3 +34,12 @@ $config->holiday->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->holiday->dtable->fieldList['actions']['type']  = 'actions';
 $config->holiday->dtable->fieldList['actions']['list']  = $config->holiday->actionList;
 $config->holiday->dtable->fieldList['actions']['menu']  = array_keys($config->holiday->actionList);
+
+$config->holiday->dtable->import = new stdclass();
+$config->holiday->dtable->import->fieldList['name']['name']  = 'name';
+$config->holiday->dtable->import->fieldList['name']['title'] = $lang->holiday->name;
+$config->holiday->dtable->import->fieldList['name']['type']  = 'text';
+
+$config->holiday->dtable->import->fieldList['holiday']['name']  = 'holiday';
+$config->holiday->dtable->import->fieldList['holiday']['title'] = $lang->holiday->holiday;
+$config->holiday->dtable->import->fieldList['holiday']['type']  = 'text';
