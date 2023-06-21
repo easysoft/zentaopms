@@ -1,1 +1,2 @@
 #modalTeam .table tr {border: none;}
+.team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}

@@ -340,6 +340,7 @@ formPanel
             set::id('modalTeam'),
             set::title($lang->task->team),
             set::footerClass('flex-center'),
+            set('data-backdrop', false),
             to::footer
             (
                 btn
