@@ -76,6 +76,7 @@
         configJS:      (data) => $('#configJS')[0].text = data,
         activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    activeNav,
+        navbar:        updateNavbar,
         table:         updateTable,
         fatal:         showFatalError,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
@@ -174,6 +175,15 @@
         window.zin = {config: window.config};
         if(DEBUG) console.log('[ZIN] ', window.zin);
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
+    }
+
+    function updateNavbar(data)
+    {
+        const $navbar = $('#navbar');
+        const $newNav = $(data);
+        if($newNav.text().trim() !== $navbar.text().trim()) return $navbar.empty().append($newNav);
+
+        activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
     }
 
     function activeNav(activeID, nav)
