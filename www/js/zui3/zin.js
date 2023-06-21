@@ -482,6 +482,27 @@
         }, options));
     }
 
+    /**
+     * Load modal content.
+     *
+     * @param {string} [url]
+     * @param {string} [id]
+     * @param {Object} [options]
+     * @returns
+     */
+    function loadModal(url, id, options)
+    {
+        options = $.extend({url}, options);
+        if(!id) return zui.Modal.open(options);
+
+        const $modal = $('#' + id);
+        if(!$modal.length) return;
+
+        const modal = $modal.data('zui.Modal');
+        if(!modal) return;
+        modal.render(options);
+    }
+
     function postAndLoadPage(url, data, selector, options)
     {
         loadPage($.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options));
@@ -555,6 +576,11 @@
                 {
                     if(!options.id && event) options.id = $(event.target).closest('.dtable').attr('id');
                     return loadTable(options.url, options.id, options);
+                }
+                if(load === 'modal')
+                {
+                    if(!options.id && event) options.id = $(event.target).closest('.modal').attr('id');
+                    return loadModal(options.url, options.id, options);
                 }
                 if(load !== 'APP' && typeof load === 'string') options.selector = load;
                 delete options.load;
@@ -668,7 +694,7 @@
         return result;
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal});
 
     /* Transfer click event to parent */
     $(document).on('click', (e) =>
@@ -682,8 +708,14 @@
         if(options.toggle) return;
 
         const url = options.url || $link.attr('href');
+        const $modal = $link.closest('.modal');
+        if($modal.length)
+        {
+            if(!options.load) options.load   = 'modal';
+            if(options.load === 'modal' && !options.loadId) options.loadId = $modal.attr('id');
+        }
+        if((/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
         if(!url && $link.is('a') && !options.back && !options.load) return;
-        if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
 
         openUrl(url, options, e);
         e.preventDefault();
