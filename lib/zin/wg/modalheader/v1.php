@@ -35,7 +35,7 @@ class modalHeader extends wg
     {
         list($title, $entityText, $entityID) = $this->prop(array('title', 'entityText', 'entityID'));
 
-        return array
+        $header = array
         (
             $title ? span
             (
@@ -50,6 +50,14 @@ class modalHeader extends wg
                 set::reverse(true),
             ) : null,
             $this->block('suffix')
+        );
+
+        if(isAjaxRequest('modal')) return $header;
+
+        return div
+        (
+            set::class('modal-header panel-form rounded-md canvas mx-auto'),
+            $header
         );
     }
 }
