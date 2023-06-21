@@ -28,14 +28,14 @@ class floatPreNextBtn extends wg
             (
                 setID('preButton'),
                 set::url($preLink),
-                setClass('float-btn float-left'),
+                setClass('float-btn absolute left-0 float-left'),
                 set::icon('angle-left')
             ) : null,
             !empty($nextLink) ? btn
             (
                 setID('nextButton'),
                 set::url($nextLink),
-                setClass('float-btn float-right'),
+                setClass('float-btn absolute right-0 float-right'),
                 set::icon('angle-right')
             ) : null,
         );
