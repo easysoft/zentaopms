@@ -487,7 +487,6 @@ function toggleBtn()
     {
         $deleteBtn.removeClass('hidden');
     }
-
 };
 
 function onPageUnmount()

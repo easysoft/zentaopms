@@ -657,7 +657,7 @@ class taskZen extends task
             ->setDefault('finishedBy', '')
             ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
             ->setDefault('canceledDate, lastEditedDate', $now)
-            ->setIF(empty($oldTask->finishedDate), 'finishedDate', '')
+            ->setIF(empty($oldTask->finishedDate), 'finishedDate', null)
             ->remove('comment')
             ->get();
 
