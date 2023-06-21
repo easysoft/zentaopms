@@ -9190,11 +9190,6 @@ class upgradeModel extends model
                 $data->stage = 'draft';
                 $fieldSettings = array();
             }
-            elseif(!$this->dataview->checkUniColumn($sql))
-            {
-                $data->stage = 'draft';
-                $fieldSettings = array();
-            }
             else
             {
                 $fieldSettings = $this->getFieldSettings($sql);
