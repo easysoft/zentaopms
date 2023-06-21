@@ -132,7 +132,7 @@ for($i = 1; $i <= 3; $i ++)
         h::td
         (
             setClass('team-index'),
-            span 
+            span
             (
                 setClass("team-number"),
                 $i
@@ -141,7 +141,7 @@ for($i = 1; $i <= 3; $i ++)
         h::td
         (
             set::width('240px'),
-            select 
+            select
             (
                 set::name("team[$i]"),
                 set::items($members),
@@ -152,7 +152,7 @@ for($i = 1; $i <= 3; $i ++)
             set::width('135px'),
             inputControl
             (
-                input 
+                input
                 (
                     set::name("teamEstimate[$i]"),
                     set::placeholder($lang->task->estimateAB),
@@ -174,84 +174,6 @@ for($i = 1; $i <= 3; $i ++)
             )
         )
     );
-}
-
-$taskTR = array();
-$i      = 0;
-foreach($testStories as $storyID => $storyTitle)
-{
-    $taskTR[] = h::tr
-        (
-            h::td
-            (
-                select
-                (
-                    set::id("testStory{$i}"),
-                    set::name("testStory[$i]"),
-                    set::value($storyID),
-                    set::items(array($storyID => $storyTitle)),
-                ),
-            ),
-            h::td
-            (
-                select
-                (
-                    set::id("testPri{$i}"),
-                    set::name("testPri[$i]"),
-                    set::value($task->pri),
-                    set::items($lang->task->priList),
-                ),
-            ),
-            h::td
-            (
-                input
-                (
-                    set::id("testEstStarted{$i}"),
-                    set::name("testEstStarted[$i]"),
-                    set::type('date'),
-                    set::value($task->estStarted),
-                ),
-            ),
-            h::td
-            (
-                input
-                (
-                    set::id("testDeadline{$i}"),
-                    set::name("testDeadline[$i]"),
-                    set::type('date'),
-                    set::value($task->deadline),
-                ),
-            ),
-            h::td
-            (
-                select
-                (
-                    set::id("testAssignedTo{$i}"),
-                    set::name("testAssignedTo[$i]"),
-                    set::value($task->assignedTo),
-                    set::items($members),
-                ),
-            ),
-            h::td
-            (
-                input
-                (
-                    set::id("testEstimate{$i}"),
-                    set::name("testEstimate[$i]"),
-                ),
-            ),
-            h::td
-            (
-                set::class('center'),
-                btnGroup
-                (
-                    set::items(array(
-                        array('icon' => 'plus', 'onclick' => 'addItem(this)'),
-                        array('icon' => 'close', 'onclick' => 'removeItem(this)'),
-                    ))
-                )
-            )
-        );
 }
 
 $selectStoryRow = '';
@@ -523,7 +445,7 @@ formPanel
                     ),
                     h::td
                     (
-                        select 
+                        select
                         (
                             set::name("mode"),
                             set::value("linear"),
