@@ -168,7 +168,7 @@ $config->task->actionList['activate']['data-toggle'] = 'modal';
 $config->task->actionList['assignTo']['icon']        = 'hand-right';
 $config->task->actionList['assignTo']['hint']        = $lang->task->assign;
 $config->task->actionList['assignTo']['text']        = $lang->task->assign;
-$config->task->actionList['assignTo']['url']         = helper::createLink('task', 'assginedTo', 'taskID={id}');
+$config->task->actionList['assignTo']['url']         = helper::createLink('task', 'assginTo', 'taskID={id}');
 $config->task->actionList['assignTo']['data-toggle'] = 'modal';
 
 $config->task->view->operateList['main']   = array('batchCreate', 'assignTo', 'start', 'restart', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
