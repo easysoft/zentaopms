@@ -1,0 +1,55 @@
+<?php
+namespace zin;
+
+class modalHeader extends wg
+{
+    static $defineProps = array(
+        'title?: string',
+        'entityText?: string',
+        'entityID?: int'
+    );
+
+    static $defineBlocks = array(
+        'suffix' => array()
+    );
+
+    protected function created()
+    {
+        $title      = \initPageTitle();
+        $entityText = '';
+        $entityID   = 0;
+
+        global $app;
+        $module = $app->getModuleName();
+        $object = data($module);
+        if(!empty($object))
+        {
+            $entity = \initPageEntity($object);
+            if(!empty($entity)) list($entityText, $entityID) = $entity;
+        }
+
+        $this->setDefaultProps(array('title' => $title, 'entityText' => $entityText, 'entityID' => $entityID));
+    }
+
+    protected function build()
+    {
+        list($title, $entityText, $entityID) = $this->prop(array('title', 'entityText', 'entityID'));
+
+        return array
+        (
+            $title ? span
+            (
+                $title,
+                set::class('pl-3'),
+            ) : null,
+            ($entityText || $entityID) ? entityLabel
+            (
+                set::level(1),
+                $entityText ? set::text($entityText) : null,
+                $entityID ? set::entityID($entityID) : null,
+                set::reverse(true),
+            ) : null,
+            $this->block('suffix')
+        );
+    }
+}

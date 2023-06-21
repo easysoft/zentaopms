@@ -895,6 +895,18 @@ function modalTrigger(): modalTrigger
 }
 
 /**
+ * Modal header widget.
+ *
+ * ?string title
+ * ?string entityText
+ * ?int    entityID
+ */
+function modalHeader(): modalHeader
+{
+    return createWg('modalHeader', func_get_args());
+}
+
+/**
  * Modal dialog widget.
  *
  * ?string         title
