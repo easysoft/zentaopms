@@ -88,11 +88,11 @@ detailBody
         (
             item(set::name($lang->stakeholder->name),    $user->name),
             item(set::name($lang->stakeholder->type),    zget($lang->stakeholder->typeList, $user->type, '')),
-            item(set::name($lang->stakeholder->company), empty($user->companyName) ? $lang->noData :$user->companyName),
-            item(set::name($lang->stakeholder->phone),   empty($user->phone)       ? $lang->noData :$user->phone),
-            item(set::name($lang->stakeholder->qq),      empty($user->qq)          ? $lang->noData :$user->qq),
-            item(set::name($lang->stakeholder->weixin),  empty($user->weixin)      ? $lang->noData :$user->weixin),
-            item(set::name($lang->stakeholder->email),   empty($user->email)       ? $lang->noData :$user->email),
+            item(set::name($lang->stakeholder->company), empty($user->companyName) ? '' :$user->companyName),
+            item(set::name($lang->stakeholder->phone),   empty($user->phone)       ? '' :$user->phone),
+            item(set::name($lang->stakeholder->qq),      empty($user->qq)          ? '' :$user->qq),
+            item(set::name($lang->stakeholder->weixin),  empty($user->weixin)      ? '' :$user->weixin),
+            item(set::name($lang->stakeholder->email),   empty($user->email)       ? '' :$user->email),
             item(set::name($lang->stakeholder->isKey),   zget($lang->stakeholder->keyList, $user->key, '')),
             item(set::name($lang->stakeholder->from),    zget($lang->stakeholder->fromList, $user->from, '')),
         )
