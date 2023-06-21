@@ -26,6 +26,7 @@ class form extends formBase
         $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method);
 
         $defaultProps['submitBtnText'] = $text;
+        $defaultProps['actions']       = array('submit', 'cancel');
 
         if(isAjaxRequest('modal'))
         {
