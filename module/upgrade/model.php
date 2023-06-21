@@ -9353,8 +9353,6 @@ class upgradeModel extends model
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
             $sql = trim($sql);
 
-            $statusSQL = "UPDATE `zt_pivot` SET `stage` = 'published'" . substr($sql, strpos($sql, "\nWHERE"));
-            $this->dbh->exec($statusSQL);
             $this->dbh->exec($sql);
         }
     }
