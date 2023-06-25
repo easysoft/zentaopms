@@ -555,6 +555,8 @@ $lang->execution->featureBar['testcase']['all'] = '全部';
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 
+$lang->execution->featureBar['importbug']['all'] = $lang->execution->importBug;
+
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = "进行中的{$lang->projectCommon}";
 

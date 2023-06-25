@@ -555,6 +555,8 @@ $lang->execution->featureBar['testcase']['all'] = 'All';
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 
+$lang->execution->featureBar['importbug']['all'] = $lang->execution->importBug;
+
 $lang->execution->myExecutions = "J'étais impliqué";
 $lang->execution->doingProject = "Ongoing {$lang->projectCommon}s";
 
