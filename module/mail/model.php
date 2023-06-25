@@ -837,4 +837,23 @@ class mailModel extends model
         }
         return $subject;
     }
+
+    /**
+     * 校验传入项的操作列对应操作按钮是否可点击。
+     * Check if the item is clickable.
+     *
+     * @param  object $queue
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $item, string $method): bool
+    {
+        $hasPriv = common::hasPriv('mail', $method);
+
+        if($method == 'resend' && $item->status == 'fail') return $hasPriv;
+        if($method == 'delete') return $hasPriv;
+
+        return false;
+    }
 }
