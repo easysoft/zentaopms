@@ -496,7 +496,7 @@ class dbh
     }
 
     /**
-     * Save sql to sqlite queue.
+     * Save sql to SQLite queue.
      *
      * @param  string $sql
      * @access public
@@ -504,6 +504,14 @@ class dbh
      */
     public function pushSqliteQueue(string $sql): int|null
     {
+        $allowedActions = array('insert', 'update', 'delete', 'replace');
+
+        $sql       = str_replace(array('\r', '\n'), ' ', trim($sql));
+        $actionPos = strpos($sql, ' ');
+        $action    = strtolower(substr($sql, 0, $actionPos));
+
+        if(!in_array($action, $allowedActions)) return null;
+
         $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
         $queue .= " SET `sql` = " . $this->quote($sql);
         $queue .= ", addDate = now()";
