@@ -26,6 +26,7 @@ jsVar('statusList', $lang->bug->statusList);
 formBatchPanel
 (
     set::mode('edit'),
+    setID('importForm'),
     set::data(array_values($bugs)),
     set::onRenderRowCol(jsRaw('window.handleImportBug')),
     formBatchItem
@@ -33,21 +34,21 @@ formBatchPanel
         set::name('id'),
         set::label(''),
         set::control('checkbox'),
-        set::width('20px')
+        set::width('20px'),
     ),
     formBatchItem
     (
         set::name('id'),
         set::label('ID'),
         set::control('index'),
-        set::width('50px'),
+        set::width('60px'),
     ),
     formBatchItem
     (
         set::name('severity'),
         set::label($lang->bug->abbr->severity),
         set::control('static'),
-        set::width('50px'),
+        set::width('48px'),
     ),
     formBatchItem
     (
@@ -68,7 +69,7 @@ formBatchPanel
         set::label($lang->execution->pri),
         set::control('select'),
         set::required(in_array('pri', $requiredFields)),
-        set::width('50px'),
+        set::width('68px'),
         set::value('3'),
         set::items($lang->bug->priList),
     ),
@@ -78,7 +79,7 @@ formBatchPanel
         set::label($lang->task->assignedTo),
         set::control('picker'),
         set::required(in_array('assignedTo', $requiredFields)),
-        set::width('100px'),
+        set::width('108px'),
         set::items($users),
     ),
     formBatchItem
@@ -87,7 +88,7 @@ formBatchPanel
         set::label($lang->task->estimate),
         set::control('number'),
         set::required(in_array('estimate', $requiredFields)),
-        set::width('80px'),
+        set::width('64px'),
     ),
     formBatchItem
     (
@@ -105,7 +106,20 @@ formBatchPanel
         set::required(in_array('deadline', $requiredFields)),
         set::width('110px'),
     ),
-    set::submitBtnText($lang->import)
+    set::actions(array()),
+    set::footerActions(array(
+        array(
+            'text'    => $lang->import,
+            'icon'    => 'import',
+            'class'   => 'btn secondary toolbar-item batch-btn size-sm',
+            'onClick' => 'window.importBug()'
+        ),
+        array(
+            'text'  => $lang->goback,
+            'class' => 'btn toolbar-item size-sm text-gray ml-2',
+            'url'   => createLink('execution', 'task', "executionID={$execution->id}")
+        )
+    )),
 );
 
 render();

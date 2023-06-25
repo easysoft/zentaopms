@@ -14,3 +14,9 @@ window.handleImportBug = function(element, config, data)
         $(element).html(`<span class='status-${data.status}'>${statusList[data.status]}</span>`);
     }
 }
+
+window.importBug = function()
+{
+    const formData = new FormData($("#importForm")[0]);
+    $.ajaxSubmit({url: $('#importForm').attr('action'), data: formData});
+}
