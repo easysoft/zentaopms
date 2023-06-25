@@ -8,10 +8,10 @@ namespace zin;
  *
  * @param  array  $userSetting
  * @param  string $pagerName
- * @param  string $param
+ * @param  string $extra
  * @return array
  */
-function usePager(array $userSetting = null, string $pagerName = 'pager', string $param = ''): array|null
+function usePager(array $userSetting = null, string $pagerName = 'pager', string $extra = ''): array|null
 {
     $pager = data($pagerName);
     if(empty($pager)) return null;
@@ -39,7 +39,7 @@ function usePager(array $userSetting = null, string $pagerName = 'pager', string
     else
     {
         $setting['items'][] = array('type' => 'info', 'text' => $pager->lang->pager->totalCountAB);
-        if(strpos(',nopagesize,', ",{$param},") === false) $setting['items'][] = array('type' => 'size-menu', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->pageSize)), 'dropdown' => array('placement' => 'top'));
+        if(strpos(',short,', ",{$extra},") === false) $setting['items'][] = array('type' => 'size-menu', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->pageSize)), 'dropdown' => array('placement' => 'top'));
         $setting['items'][] = array('type' => 'link', 'page' => 'first', 'hint' => $pager->lang->pager->firstPage, 'icon' => 'icon-first-page');
         $setting['items'][] = array('type' => 'link', 'page' => 'prev', 'hint' => $pager->lang->pager->previousPage, 'icon' => 'icon-angle-left');
         $setting['items'][] = array('type' => 'info', 'text' => '{page}/{pageTotal}');
