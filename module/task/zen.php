@@ -1464,7 +1464,7 @@ class taskZen extends task
     protected function responseAfterChangeStatus(object $task, string $from): array
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(isonlybody()) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('task', 'view', "taskID={$task->id}"));
     }
 

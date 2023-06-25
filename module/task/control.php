@@ -669,7 +669,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Record task effort. */
-            $effort = $this->buildEffortForStart($task, $taskData);
+            $effort = $this->taskZen->buildEffortForStart($task, $taskData);
             if($this->post->comment) $effort->work = $this->post->comment;
             if($effort->consumed > 0) $effortID = $this->task->addTaskEffort($effort);
             if($task->mode == 'linear' && !empty($effortID)) $this->task->updateEstimateOrder($effortID, $currentTeam->order);

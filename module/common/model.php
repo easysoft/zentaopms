@@ -2078,7 +2078,7 @@ EOF;
         $changes = array();
         foreach($new as $key => $value)
         {
-            if(is_object($value) or is_array($value)) continue;
+            if(is_object($value) || is_array($value) || is_null($value)) continue;
             if(strtolower($key) == 'lastediteddate')  continue;
             if(strtolower($key) == 'lasteditedby')    continue;
             if(strtolower($key) == 'assigneddate')    continue;
