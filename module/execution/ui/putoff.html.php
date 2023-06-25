@@ -12,26 +12,15 @@ namespace zin;
 
 jsVar('weekend', $config->execution->weekend);
 
+modalHeader
+(
+    set::title($lang->execution->putoff . $space . $lang->executionCommon),
+);
+
 $space = common::checkNotCN() ? ' ' : '';
 formPanel
 (
-    set::title($lang->execution->putoff . $space . $lang->executionCommon),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    set::shadow(false),
-    set::actions(array('submit')),
     set::submitBtnText($lang->execution->putoff . $space . $lang->executionCommon),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($execution->name),
-            set::entityID($execution->id),
-            set::reverse(true),
-        )
-    ),
     formRow
     (
         formGroup
@@ -100,5 +89,6 @@ formPanel
         )
     )
 );
+
 /* ====== Render page ====== */
 render();
