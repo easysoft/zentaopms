@@ -1054,9 +1054,10 @@ class testcase extends control
      */
     public function batchEdit($productID = 0, $branch = 0, $type = 'case', $tab = '')
     {
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList = array_unique($this->post->caseIDList);
-        $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIDList);
+        if(!$this->post->caseIdList) return print(js::locate($this->session->caseList));
+
+        $caseIdList = array_unique($this->post->caseIdList);
+        $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIdList);
         if($this->post->title)
         {
             $allChanges = $this->testcase->batchUpdate($testtasks);
@@ -1071,7 +1072,7 @@ class testcase extends control
                 }
             }
 
-            return print(js::locate($this->session->caseList, 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
         }
 
         $branchProduct = false;
@@ -1084,7 +1085,7 @@ class testcase extends control
         if($productID)
         {
             /* Get the edited cases. */
-            $cases = $this->testcase->getByList($caseIDList);
+            $cases = $this->testcase->getByList($caseIdList);
 
             if($type == 'lib')
             {
@@ -1133,7 +1134,6 @@ class testcase extends control
 
                 $this->view->branchTagOption = array($productID => $branchTagOption);
                 $this->view->title           = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
-                $this->view->product         = $product;
             }
         }
         else
@@ -1142,9 +1142,9 @@ class testcase extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.id')->in($caseIDList)
+                ->andWhere('t1.id')->in($caseIdList)
                 ->fetchAll('id');
-            $caseIDList = array_keys($cases);
+            $caseIdList = array_keys($cases);
 
             /* The cases of my. */
             $this->app->loadLang('my');
@@ -1201,7 +1201,7 @@ class testcase extends control
             }
             else
             {
-                $modulePairs[$case->id] = $modules[$caseProduct][0] + $this->tree->getModulesName($case->module);
+                $modulePairs[$case->id] = isset($modules[$caseProduct]) ? $modules[$caseProduct][0] : array() + $this->tree->getModulesName($case->module);
             }
         }
 
@@ -1213,7 +1213,7 @@ class testcase extends control
 
         /* Assign. */
         $this->view->scenePairs     = $scenePairs;
-        $this->view->caseIDList     = $caseIDList;
+        $this->view->caseIdList     = $caseIdList;
         $this->view->productID      = $productID;
         $this->view->branchProduct  = $branchProduct;
         $this->view->priList        = array('ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->priList;
