@@ -259,7 +259,7 @@ class SelectedTitleText extends HTMLSpanElement
     const group  = this.getAttribute('group');
     const count  = Object.keys(window.dataSourceStore.value).length;
 
-    const args = [dataSourceLang[group].common, count]
+    const args = [dataSourceLang[group].common, count];
     this.innerHTML = format.replace(/{(\d+)}/g, ((match, argIndex) =>
     {
       return typeof args[argIndex] !== 'undefined' ? args[argIndex] : match;
