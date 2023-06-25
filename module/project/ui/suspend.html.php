@@ -10,25 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+modalHeader();
 formPanel
 (
-    set::title($lang->project->suspend),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    set::shadow(false),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->project->suspend),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($project->name),
-            set::entityID($project->id),
-            set::reverse(true),
-        )
-    ),
     formGroup
     (
         set::label($lang->comment),
@@ -39,8 +23,6 @@ formPanel
         )
     ),
 );
-
-h::hr(set::class('mt-6'));
 
 history();
 
