@@ -23,26 +23,29 @@ detailHeader
     ),
     to::suffix
     (
-        btngroup
+        toolbar
         (
             common::hasPriv('testsuite', 'linkCase') ? a
             (
                 setClass('ghost btn btn-default'),
                 set::href(createLink('testsuite', 'linkCase', "suiteID={$suite->id}")),
-                icon('link'),
+                icon('link', setClass('text-primary')),
                 $lang->testsuite->linkCase,
             ) : '',
+            div(setClass('toolbar-divider')),
             common::hasPriv('testsuite', 'edit') ? a
             (
                 setClass('ghost btn btn-default'),
                 set::href(createLink('testsuite', 'edit', "suiteID={$suite->id}")),
-                icon('edit'),
+                icon('edit', setClass('text-primary')),
+                $lang->edit,
             ) : '',
             common::hasPriv('testsuite', 'delete') ? a
             (
                 setClass('ghost btn btn-default'),
                 set::href(createLink('testsuite', 'delete', "suiteID={$suite->id}")),
-                icon('trash'),
+                icon('trash', setClass('text-primary')),
+                $lang->delete,
             ) : '',
         ),
     ),
@@ -73,8 +76,9 @@ menu
     ))
 );
 
+$config->testsuite->testcase->dtable->fieldList['module']['map'] = $modules;
 
-$tableData = initTableData($cases, $config->testsuite->testcase->dtable->fieldList, $this->testcase);
+$tableData = initTableData($cases, $config->testsuite->testcase->dtable->fieldList);
 detailBody
 (
     sectionList
@@ -85,9 +89,10 @@ detailBody
             set::data(array_values($tableData)),
             set::checkable($hasCheckbox),
             set::footToolbar($footToolbar),
-            set::footPager(usePager()),
+            set::footPager(usePager(null, 'pager', 'nopagesize')),
         ),
     ),
+    history(),
     detailSide
     (
         sectionList
@@ -95,11 +100,10 @@ detailBody
             section
             (
                 set::title($lang->testsuite->legendDesc),
-                set::content($suite->desc),
+                set::content(!empty($suite->desc) ? $suite->desc : "<span class='text-gray'>{$lang->noDesc}</span>"),
                 set::useHtml(true)
             ),
         ),
-        history(),
     ),
 );
 

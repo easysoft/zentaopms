@@ -167,7 +167,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('testtask');
 

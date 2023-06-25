@@ -72,17 +72,17 @@ $config->testsuite->testcase->actionList['unlinkCase']['text'] = $lang->testtask
 $config->testsuite->testcase->actionList['unlinkCase']['hint'] = $lang->testtask->unlinkCase;
 $config->testsuite->testcase->actionList['unlinkCase']['url']  = array('module' => 'testsuite', 'method' => 'unlinkCase', 'params' => 'suiteID={suite}&caseID={id}&confirm=yes');
 
-$config->testsuite->testcase->actionList['runCase']['icon']       = 'play';
-$config->testsuite->testcase->actionList['runCase']['text']       = $lang->testtask->runCase;
-$config->testsuite->testcase->actionList['runCase']['hint']       = $lang->testtask->runCase;
-$config->testsuite->testcase->actionList['runCase']['url']        = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={id}&version={version}');
-$config->testsuite->testcase->actionList['runCase']['data-width'] = 0.95;
+$config->testsuite->testcase->actionList['runCase']['icon']        = 'play';
+$config->testsuite->testcase->actionList['runCase']['text']        = $lang->testtask->runCase;
+$config->testsuite->testcase->actionList['runCase']['hint']        = $lang->testtask->runCase;
+$config->testsuite->testcase->actionList['runCase']['url']         = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={id}&version={version}');
+$config->testsuite->testcase->actionList['runCase']['data-toggle'] = 'modal';
 
-$config->testsuite->testcase->actionList['runResult']['icon']       = 'list-alt';
-$config->testsuite->testcase->actionList['runResult']['text']       = $lang->testtask->results;
-$config->testsuite->testcase->actionList['runResult']['hint']       = $lang->testtask->results;
-$config->testsuite->testcase->actionList['runResult']['url']        = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={id}');
-$config->testsuite->testcase->actionList['runResult']['data-width'] = 0.95;
+$config->testsuite->testcase->actionList['runResult']['icon']        = 'list-alt';
+$config->testsuite->testcase->actionList['runResult']['text']        = $lang->testtask->results;
+$config->testsuite->testcase->actionList['runResult']['hint']        = $lang->testtask->results;
+$config->testsuite->testcase->actionList['runResult']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={id}');
+$config->testsuite->testcase->actionList['runResult']['data-toggle'] = 'modal';
 
 $config->testsuite->testcase->dtable = new stdclass();
 
@@ -90,52 +90,62 @@ $config->testsuite->testcase->dtable->fieldList['id']['name']  = 'id';
 $config->testsuite->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->testsuite->testcase->dtable->fieldList['id']['type']  = 'checkID';
 
-$config->testsuite->testcase->dtable->fieldList['pri']['name']  = 'pri';
-$config->testsuite->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
-$config->testsuite->testcase->dtable->fieldList['pri']['type']  = 'pri';
-
-$config->testsuite->testcase->dtable->fieldList['module']['name']  = 'module';
-$config->testsuite->testcase->dtable->fieldList['module']['title'] = $lang->testcase->module;
-$config->testsuite->testcase->dtable->fieldList['module']['type']  = 'text';
-
 $config->testsuite->testcase->dtable->fieldList['title']['name']  = 'title';
 $config->testsuite->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
 $config->testsuite->testcase->dtable->fieldList['title']['type']  = 'title';
+
+$config->testsuite->testcase->dtable->fieldList['pri']['name']  = 'pri';
+$config->testsuite->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
+$config->testsuite->testcase->dtable->fieldList['pri']['type']  = 'pri';
+$config->testsuite->testcase->dtable->fieldList['pri']['group'] = '1';
 
 $config->testsuite->testcase->dtable->fieldList['type']['name']     = 'type';
 $config->testsuite->testcase->dtable->fieldList['type']['title']    = $lang->testcase->type;
 $config->testsuite->testcase->dtable->fieldList['type']['type']     = 'category';
 $config->testsuite->testcase->dtable->fieldList['type']['map']      = $lang->testcase->typeList;
 $config->testsuite->testcase->dtable->fieldList['type']['sortType'] = true;
+$config->testsuite->testcase->dtable->fieldList['type']['group']    = '1';
 
 $config->testsuite->testcase->dtable->fieldList['status']['name']     = 'status';
 $config->testsuite->testcase->dtable->fieldList['status']['title']    = $lang->testcase->status;
 $config->testsuite->testcase->dtable->fieldList['status']['type']     = 'category';
 $config->testsuite->testcase->dtable->fieldList['status']['map']      = $lang->testcase->statusList;
 $config->testsuite->testcase->dtable->fieldList['status']['sortType'] = true;
+$config->testsuite->testcase->dtable->fieldList['status']['group']    = '1';
+
+$config->testsuite->testcase->dtable->fieldList['module']['name']  = 'module';
+$config->testsuite->testcase->dtable->fieldList['module']['title'] = $lang->testcase->module;
+$config->testsuite->testcase->dtable->fieldList['module']['type']  = 'text';
+$config->testsuite->testcase->dtable->fieldList['module']['group'] = '2';
 
 $config->testsuite->testcase->dtable->fieldList['lastRunResult']['name']     = 'lastRunResult';
 $config->testsuite->testcase->dtable->fieldList['lastRunResult']['title']    = $lang->testcase->lastRunResult;
 $config->testsuite->testcase->dtable->fieldList['lastRunResult']['type']     = 'text';
+$config->testsuite->testcase->dtable->fieldList['lastRunResult']['map']      = $lang->testcase->resultList;
 $config->testsuite->testcase->dtable->fieldList['lastRunResult']['sortType'] = true;
+$config->testsuite->testcase->dtable->fieldList['lastRunResult']['group']    = '3';
 
 $config->testsuite->testcase->dtable->fieldList['bugs']['name']  = 'bugs';
 $config->testsuite->testcase->dtable->fieldList['bugs']['title'] = $lang->testcase->bugsAB;
 $config->testsuite->testcase->dtable->fieldList['bugs']['type']  = 'text';
+$config->testsuite->testcase->dtable->fieldList['bugs']['group'] = '4';
 
 $config->testsuite->testcase->dtable->fieldList['results']['name']  = 'results';
 $config->testsuite->testcase->dtable->fieldList['results']['title'] = $lang->testcase->resultsAB;
 $config->testsuite->testcase->dtable->fieldList['results']['type']  = 'text';
+$config->testsuite->testcase->dtable->fieldList['results']['group'] = '4';
 
 $config->testsuite->testcase->dtable->fieldList['stepNumber']['name']  = 'stepNumber';
 $config->testsuite->testcase->dtable->fieldList['stepNumber']['title'] = $lang->testcase->stepNumberAB;
 $config->testsuite->testcase->dtable->fieldList['stepNumber']['type']  = 'text';
+$config->testsuite->testcase->dtable->fieldList['stepNumber']['group'] = '4';
 
+$config->testsuite->testcase->dtable->fieldList['actions']['name']     = 'actions';
 $config->testsuite->testcase->dtable->fieldList['actions']['type']     = 'actions';
 $config->testsuite->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testsuite->testcase->dtable->fieldList['actions']['sortType'] = false;
 $config->testsuite->testcase->dtable->fieldList['actions']['list']     = $config->testsuite->testcase->actionList;
-$config->testsuite->testcase->dtable->fieldList['actions']['menu']     = array();
+$config->testsuite->testcase->dtable->fieldList['actions']['menu']     = array_keys($config->testsuite->testcase->actionList);
 
 $config->testsuite->linkcase = new stdclass();
 $config->testsuite->linkcase->dtable = new stdclass();
