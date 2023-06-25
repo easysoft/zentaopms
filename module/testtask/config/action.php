@@ -47,6 +47,7 @@ $config->testtask->actionList['view']['text']        = $lang->testtask->view;
 $config->testtask->actionList['view']['hint']        = $lang->testtask->view;
 $config->testtask->actionList['view']['url']         = array('module' => 'testtask', 'method' => 'view', 'params' => 'taskID={id}');
 $config->testtask->actionList['view']['data-toggle'] = 'modal';
+$config->testtask->actionList['view']['data-size']   = 'lg';
 
 $config->testtask->actionList['edit']['icon'] = 'edit';
 $config->testtask->actionList['edit']['text'] = $lang->testtask->edit;

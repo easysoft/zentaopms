@@ -23,10 +23,10 @@ detailHeader
     ),
 );
 
-$taskBuild = a
+$taskBuild = array
 (
-    set('href', createLink('build', 'view', "buildID=$task->build")),
-    $task->buildName
+    'text' => $task->buildName,
+    'url' => createLink('build', 'view', "buildID=$task->build"),
 );
 if($isInModal)              $taskBuild = $task->buildName;
 if($task->build == 'trunk') $taskBuild = $lang->trunk;
@@ -39,12 +39,6 @@ if($task->mailto)
 {
     foreach(explode(',', str_replace(' ', '', $task->mailto)) as $account) $mailto .= zget($users, $account, $account);
 }
-
-$testReport = !empty($task->testreport) ? a
-(
-    set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
-    $testreportTitle
-) : '';
 
 $actionList  = array();
 $actionCodes = explode(',', $config->testtask->actions->view);
@@ -124,7 +118,7 @@ detailBody
                 item
                 (
                     set::name($lang->testtask->build),
-                    $taskBuild
+                    item(set($taskBuild)),
                 ),
                 item
                 (
@@ -169,11 +163,15 @@ detailBody
                 item
                 (
                     set::name($lang->testtask->testreport),
-                    $testReport
+                    !empty($task->testreport) ? a
+                    (
+                        set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
+                        $testreportTitle
+                    ) : null,
                 )
             )
         )
     )
 );
 
-render();
+render($isInModal ? 'modalDialog' : 'page');
