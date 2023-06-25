@@ -528,10 +528,13 @@ class admin extends control
         $now = helper::now();
         $sqlite = $this->app->connectSqlite();
 
-        $query = $this->dao->select('*')->from(TABLE_SQLITE_QUEUE)->where('status')->eq('wait')->fetch();
+        $querys = $this->dao->select('*')->from(TABLE_SQLITE_QUEUE)->where('status')->eq('wait')->fetchAll();
 
-        $sqlite->rawExec($query->sql);
+        $sqlite->begin();
+        foreach($querys as $query) $sqlite->rawExec($query->sql);
+        $sqlite->commit();
+
         $this->dao->update(TABLE_SQLITE_QUEUE)->set('status')->eq('done')->set('execDate')->eq($now)->where('id')->eq($query->id)->exec();
-        echo 'ok';
+        echo 'success';
     }
 }
