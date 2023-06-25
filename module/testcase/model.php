@@ -1102,47 +1102,47 @@ class testcaseModel extends model
         $allChanges = array();
         $now        = helper::now();
         $data       = fixer::input('post')->get();
-        $caseIDList = $this->post->caseIDList;
+        $caseIdList = array_keys($this->post->caseIdList);
 
         /* Process data if the value is 'ditto'. */
-        foreach($caseIDList as $caseID)
+        foreach($caseIdList as $caseID)
         {
-            if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
-            if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->pri[$caseID]     == 'ditto') $data->pri[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
+            if($data->module[$caseID] == 'ditto')  $data->module[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->scene[$caseID]   == 'ditto') $data->scene[$caseID]   = isset($prev['scene'])  ? $prev['scene']  : 0;
-            if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->story[$caseID]   == '') $data->story[$caseID] = 0;
-            if($data->story[$caseID]   == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
-            if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
+            if($data->type[$caseID]   == 'ditto') $data->type[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
+            if($data->story[$caseID]   == '')      $data->story[$caseID]   = 0;
+            if($data->story[$caseID]   == 'ditto') $data->story[$caseID]   = isset($prev['story']) ? $prev['story'] : 0;
+            if(isset($data->branch[$caseID]) and $data->branch[$caseID] == 'ditto') $data->branch[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
 
-            $prev['pri']    = $data->pris[$caseID];
-            $prev['type']   = $data->types[$caseID];
+            $prev['pri']    = $data->pri[$caseID];
+            $prev['type']   = $data->type[$caseID];
             $prev['story']  = $data->story[$caseID];
-            $prev['module'] = $data->modules[$caseID];
+            $prev['module'] = $data->module[$caseID];
             $prev['scene']  = $data->scene[$caseID];
-            if(isset($data->branches)) $prev['branch'] = $data->branches[$caseID];
+            if(isset($data->branch)) $prev['branch'] = $data->branch[$caseID];
         }
 
         /* Initialize cases from the post data.*/
         $extendFields = $this->getFlowExtendFields();
-        foreach($caseIDList as $caseID)
+        foreach($caseIdList as $caseID)
         {
             $case = new stdclass();
             $case->id             = $caseID;
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
-            $case->pri            = $data->pris[$caseID];
-            $case->module         = $data->modules[$caseID];
+            $case->pri            = $data->pri[$caseID];
+            $case->module         = $data->module[$caseID];
             $case->scene          = $data->scene[$caseID];
-            $case->status         = $data->statuses[$caseID];
+            $case->status         = $data->status[$caseID];
             $case->story          = $data->story[$caseID];
-            $case->color          = $data->color[$caseID];
+            //$case->color          = $data->color[$caseID];
             $case->title          = $data->title[$caseID];
             $case->precondition   = $data->precondition[$caseID];
             $case->keywords       = $data->keywords[$caseID];
-            $case->type           = $data->types[$caseID];
-            $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
-            if(isset($data->branches[$caseID])) $case->branch = $data->branches[$caseID];
+            $case->type           = $data->type[$caseID];
+            $case->stage          = empty($data->stage[$caseID]) ? '' : implode(',', $data->stage[$caseID]);
+            if(isset($data->branch[$caseID])) $case->branch = $data->branch[$caseID];
 
             foreach($extendFields as $extendField)
             {
