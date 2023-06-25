@@ -1200,7 +1200,7 @@ class fileModel extends model
     }
 
     /**
-     * Print file list.
+     * Print file in view/edit page.
      * 
      * @param  object      $file 
      * @param  string      $method 
@@ -1210,7 +1210,7 @@ class fileModel extends model
      * @access public
      * @return string 
      */
-    public function printFiles(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
+    public function printFile(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
     {
         if(!common::hasPriv('file', 'download')) return '';
 

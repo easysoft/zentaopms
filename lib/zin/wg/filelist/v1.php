@@ -45,7 +45,7 @@ class fileList extends wg
             $fileItemView = li
                 (
                     setClass('mb-2'),
-                    html($app->loadTarget('file')->printFiles($file, $method, $showDelete, $showEdit, $object))
+                    html($app->loadTarget('file')->printFile($file, $method, $showDelete, $showEdit, $object))
                 );
 
             $fileListView->add($fileItemView);
