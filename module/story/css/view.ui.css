@@ -1,3 +1,5 @@
 .detail-side .tab-pane{padding-top:8px;}
-.detail-side .tab-pane ul li .label{margin-right:8px;}
-.detail-side .tab-pane ul li .title{margin-right:8px;}
+.detail-side .tab-pane ul li{display:flex; position:relative; padding-right:15px;}
+.detail-side .tab-pane ul li .label{margin-right:8px; min-width:45px;}
+.detail-side .tab-pane ul li .title{margin-right:8px; overflow:hidden; white-space:nowrap;}
+.detail-side .tab-pane ul li .unlink{position:absolute; right:0px; top:2px;}

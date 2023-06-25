@@ -9,12 +9,11 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-$twins[$story->id] = $story;
 
-jsVar('relieveURL',  inlink('ajaxRelieveTwins'));
-jsVar('relieved',    $lang->story->relieved);
 jsVar('relievedTip', $lang->story->relievedTip);
+jsVar('unlinkStoryTip', $lang->story->unlinkStory);
 
+$isInModal  = isAjaxRequest('modal');
 $otherParam = 'storyID=&projectID=';
 $tab        = 'product';
 if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
@@ -99,7 +98,7 @@ foreach($story->tasks as $executionTasks)
         $taskItems[] = h::li
         (
             set::title($task->name),
-            (isset($execution->type) && $execution->type == 'kanban' && isonlybody()) ? span(setClass('muted'), $executionName) : a(set::href($executionLink), setClass('muted'), $executionName),
+            (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted'), $executionName) : a(set::href($executionLink), setClass('muted'), $executionName),
             label(setClass('circle'), $task->id),
             common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
             label(setClass('success'), $this->lang->task->statusList[$task->status]),
@@ -118,7 +117,7 @@ if(empty($story->tasks))
         $taskItems[] = h::li
         (
             set::title($execution->name),
-            ($execution->type == 'kanban' && isonlybody()) ? span(setClass('muted'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted'), $executions[$executionID]),
+            ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted'), $executions[$executionID]),
         );
     }
 }
@@ -154,7 +153,7 @@ detailHeader
         $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null,
     ),
 
-    isonlybody() ? null : to::suffix
+    $isInModal ? null : to::suffix
     (
         btn
         (
@@ -173,13 +172,13 @@ detailBody
         section
         (
             set::title($lang->story->legendSpec),
-            set::content($story->spec),
+            set::content(empty($story->spec) ? $lang->noDesc : $story->spec),
             set::useHtml(true)
         ),
         section
         (
             set::title($lang->story->legendVerify),
-            set::content($story->verify),
+            set::content(empty($story->verify) ? $lang->noDesc : $story->verify),
             set::useHtml(true)
         ),
 //        $this->fetch('file', 'printFiles', array('files' => $story->files, 'section' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false)),
@@ -379,7 +378,7 @@ detailBody
                             label(setClass('circle'), $twin->id),
                             common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
                             label(set::title($stage), $stage),
-                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), icon('unlink')) : null,
+                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), set('data-id', $twin->id), icon('unlink')) : null,
                         );
                     }, $twins))
                 ),
@@ -406,7 +405,7 @@ detailBody
                             $canLinkStory ? a(set('data-url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null,
                         );
                     }, $relations)),
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set::id('linkButton'), setClass('btn secondary size-sm'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story))),
+                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set::id('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story))),
                 )
             ) : null,
             $story->type == 'story' ? tabPane
