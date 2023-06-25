@@ -1,6 +1,13 @@
 <?php
 namespace zin;
 
+jsVar('model', $model);
+jsVar('longTime', $lang->project->longTime);
+jsVar('weekend', $config->execution->weekend);
+jsVar('beginLetterParent', $lang->project->beginLetterParent);
+jsVar('endGreaterParent', $lang->project->endGreaterParent);
+jsVar('ignore', $lang->project->ignore);
+
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
 {
@@ -15,12 +22,7 @@ foreach($lang->project->modelList as $key => $text)
     );
 }
 
-$currency      = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
-$multipleInput = empty($copyProjectID) ? null : formHidden('multiple', $multiple);
-$multipleValue = empty($copyProjectID) ? null : $multiple;
-
-$title = $this->view->title;
-useData('title', null);
+$currency = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
 
 formPanel
 (
@@ -63,7 +65,9 @@ formPanel
             set::width('1/2'),
             set::name('parent'),
             set::label($lang->project->parent),
-            set::items($programList)
+            set::items($programList),
+            set::value($programID),
+            on::change('setParentProgram')
         ),
         formGroup
         (
@@ -90,16 +94,16 @@ formPanel
         set::label($lang->project->code),
         set::strong(true),
     ) : null,
-    ($model == 'waterfall') ? null : formGroup
+    (in_array($model, array('scrum', 'kanban'))) ? formGroup
     (
         set::width('1/2'),
         set::name('multiple'),
         set::label($lang->project->multiple),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
-        set::value($multipleValue),
-        $multipleInput
-    ),
+        set::value('1'),
+        on::change('toggleMultiple')
+    ) : null,
     formGroup
     (
         set::width('1/2'),
@@ -150,7 +154,8 @@ formPanel
             set::width('1/4'),
             set::name('future'),
             set::control(array('type' => 'checkList', 'inline' => true)),
-            set::items(array('1' => $lang->project->future))
+            set::items(array('1' => $lang->project->future)),
+            on::change('toggleBudget')
         )
     ),
     formRow
@@ -170,7 +175,6 @@ formPanel
                     set::value(date('Y-m-d')),
                     set::placeholder($lang->project->begin),
                     set::required(true),
-                    /* TODO associate event */
                     on::change('computeWorkDays')
                 ),
                 $lang->project->to,
@@ -181,8 +185,7 @@ formPanel
                     set::type('date'),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    /* TODO associate event */
-                    on::change('computEndDate(this.value)')
+                    on::change('computeWorkDays')
                 ),
             )
         ),
@@ -201,7 +204,7 @@ formPanel
     formGroup
     (
         set::label($lang->project->days),
-        set::width('1/2'),
+        set::width('1/4'),
         inputGroup
         (
             setClass('has-suffix'),
@@ -217,7 +220,7 @@ formPanel
             )
         )
     ),
-    empty($products) ? null :
+    $products ? null :
     formRow
     (
         formGroup
@@ -271,14 +274,19 @@ formPanel
         set::placeholder($lang->project->editorPlaceholder)
     ),
     /* TODO printExtendFields() */
-    formGroup
+    formRow
     (
-        set::width('1/2'),
-        set::name('acl'),
-        set::label($lang->project->acl),
-        set::control('radioList'),
-        set::items($lang->project->aclList),
-        set::value('open')
+        set::id('aclList'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::name('acl'),
+            set::label($lang->project->acl),
+            set::control('radioList'),
+            $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
+            set::value('private'),
+            on::change('setWhite(this)')
+        )
     ),
     /* TODO add events */
     formGroup
@@ -299,7 +307,5 @@ formPanel
         set::value('extend')
     ),
 );
-
-useData('title', $title);
 
 render();

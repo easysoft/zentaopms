@@ -25,3 +25,16 @@ function setDate()
     const delta = $('input[name=delta]:checked').val();
     computeEndDate(delta);
 }
+
+/**
+ * Set acl list when change program.
+ *
+ * @access public
+ * @return void
+ */
+window.setParentProgram = function()
+{
+    const programID = $('#parent').val();
+    const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
+    loadPage(link, '#aclList');
+}

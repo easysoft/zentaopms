@@ -315,7 +315,7 @@ function outOfDateTip(currentID)
  * @access public
  * @return void
  */
-function ignoreTip(obj, currentID)
+window.ignoreTip = function(obj, currentID)
 {
     var parentID = obj.parentNode.id;
     currentID ? $('#dateTip' + currentID).parent().parent().remove() : $('#' + parentID).parent().parent().remove();

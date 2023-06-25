@@ -708,7 +708,7 @@ class project extends control
             return print(js::closeModal('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
 
         $this->display('group', 'create');
     }

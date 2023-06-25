@@ -268,7 +268,7 @@ class projectZen extends project
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
         $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
         $this->view->allProducts         = $allProducts;
-        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($topProgramID);
+        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->parentProgram       = $parentProgram;
