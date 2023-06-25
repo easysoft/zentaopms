@@ -1510,6 +1510,10 @@ class productplanModel extends model
         if(method_exists($this, 'isClickable')) $isClick = $this->isClickable($data, $method, $module);
 
         $link = helper::createLink($module, $method, $params, '', $onlyBody);
+        if(isset($this->config->productplan->dtable->fieldList['actions']['actionsMap'][$method]['url']))
+        {
+            $link = $this->config->productplan->dtable->fieldList['actions']['actionsMap'][$method]['url'];
+        }
 
         global $lang;
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */

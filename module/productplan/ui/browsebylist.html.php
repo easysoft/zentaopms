@@ -37,7 +37,7 @@ $totalParent      = 0;
 $totalChild       = 0;
 $totalIndependent = 0;
 
-$fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$totalChild, &$totalIndependent, $browseType, $branchOption)
+$fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$totalChild, &$totalIndependent, $browseType, $branchOption, $productID)
 {
     $dataList = array();
 
@@ -47,6 +47,9 @@ $fnGenerateTableData = function($plans) use ($config, $lang, &$totalParent, &$to
 
         $data->id    = sprintf('%03d', $plan->id);
         $data->title = $plan->title;
+
+        $data->planID    = $plan->id;
+        $data->productID = $productID;
 
         /* Parent. */
         $data->parent = '';
@@ -331,5 +334,6 @@ jsVar('checkedSummary',   $this->lang->productplan->checkedSummary);
 jsVar('totalParent',      $totalParent);
 jsVar('totalChild',       $totalChild);
 jsVar('totalIndependent', $totalIndependent);
+jsVar('confirmStart',     $this->lang->productplan->confirmStart);
 
 render();

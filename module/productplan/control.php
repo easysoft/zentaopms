@@ -496,24 +496,26 @@ class productplan extends control
     /**
      * Start a plan.
      *
+     * @param  int    $productID
      * @param  int    $planID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function start($planID, $confirm = 'no')
+    public function start($productID, $planID)
     {
-        if($confirm == 'no')
+        $this->productplan->updateStatus($planID, 'doing', 'started');
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->productplan->updateStatus($planID, 'doing', 'started');
-
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::reload('parent'));
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = helper::createLink('productplan', 'browse', "productID={$productID}");
         }
+        return $this->send($response);
     }
 
     /**

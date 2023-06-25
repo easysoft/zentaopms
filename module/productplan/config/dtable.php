@@ -92,6 +92,7 @@ $config->productplan->dtable->fieldList['actions']['actionsMap']['divider']['car
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['start']['icon'] = 'play';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['start']['hint'] = $this->lang->productplan->startAB;
+$config->productplan->dtable->fieldList['actions']['actionsMap']['start']['url']  = 'javascript:startProductPlan("{productID}", "{planID}")';
 
 $config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['icon'] = 'checked';
 $config->productplan->dtable->fieldList['actions']['actionsMap']['finish']['hint'] = $this->lang->productplan->finishAB;
