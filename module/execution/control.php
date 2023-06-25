@@ -3165,7 +3165,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function manageMembers($executionID = 0, $team2Import = 0, $dept = 0)
+    public function manageMembers(int $executionID = 0, int $team2Import = 0, int $dept = 0)
     {
         if(!empty($_POST))
         {
@@ -3174,7 +3174,7 @@ class execution extends control
 
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             $link = $this->session->teamList ? $this->session->teamList : $this->createLink('execution', 'team', "executionID=$executionID");
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $link));
         }
 
         /* Load model. */
@@ -3191,12 +3191,9 @@ class execution extends control
 
         /* Append users for get users. */
         $appendUsers = array();
-        foreach($currentMembers as $member) $appendUsers[$member->account] = $member->account;
+        foreach($currentMembers as $account => $member) $appendUsers[$account] = $account;
         foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
         foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
-
-        $users = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
-        $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
         $this->execution->setMenu($execution->id);
@@ -3204,22 +3201,16 @@ class execution extends control
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
-        $title      = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
-        $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $position[] = $this->lang->execution->manageMembers;
-
-        $this->view->title          = $title;
-        $this->view->position       = $position;
+        $this->view->title          = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
         $this->view->execution      = $execution;
-        $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
-        $this->view->roles          = $roles;
+        $this->view->users          = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
-        $this->view->currentMembers = $currentMembers;
-        $this->view->members2Import = $members2Import;
         $this->view->teams2Import   = $teams2Import;
         $this->view->team2Import    = $team2Import;
+        $this->view->teamMembers    = $this->executionZen->buildMembers($currentMembers, $members2Import, $deptUsers, $execution->days);
         $this->display();
     }
 

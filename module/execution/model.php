@@ -3599,7 +3599,6 @@ class executionModel extends model
         $executionID   = (int)$executionID;
         $executionType = 'execution';
         $accounts      = array_unique($accounts);
-        $limited       = array_values($limited);
         $oldJoin       = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq($executionType)->fetchPairs();
 
         foreach($accounts as $key => $account)

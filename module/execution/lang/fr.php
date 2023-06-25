@@ -670,3 +670,5 @@ $lang->execution->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->execution->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->execution->featureBar['team']['all'] = 'Members';
+
+$lang->execution->featureBar['managemembers']['all'] = 'Manage Team';

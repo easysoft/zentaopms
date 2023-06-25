@@ -670,3 +670,5 @@ $lang->execution->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->execution->featureBar['dynamic']['lastMonth'] = '上月';
 
 $lang->execution->featureBar['team']['all'] = '团队成员';
+
+$lang->execution->featureBar['managemembers']['all'] = '团队管理';
