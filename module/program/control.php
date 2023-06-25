@@ -645,7 +645,7 @@ class program extends control
                 $program->status   = $this->processStatus('project', $program);
                 $program->model    = zget($this->lang->project->modelList, $program->model);
                 $program->product  = implode(",", $this->dao->select('name')->from(TABLE_PRODUCT)->where('program')->eq($program->id)->fetchPairs('name'));
-                $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
+                $program->budget   = $program->budget . zget($this->lang->project->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
                 {
