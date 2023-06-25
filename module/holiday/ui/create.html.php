@@ -18,7 +18,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1'),
             set::label($lang->holiday->type),
             radioList
             (
@@ -65,7 +65,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/2'),
+            set::width('1'),
             set::label($lang->holiday->desc),
             editor
             (
