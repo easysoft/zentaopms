@@ -1124,6 +1124,7 @@ class baseControl
     {
         $data['result'] = 'success';
         if(empty($data['message'])) $data['message'] = $this->lang->saveSuccess;
+        if(!isset($data['closeModal']) && helper::isAjaxRequest('modal')) $data['closeModal'] = true;
         return $this->send($data);
     }
 
