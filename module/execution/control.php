@@ -459,7 +459,7 @@ class execution extends control
         $toExecution = $execution->id;
         $project     = $this->loadModel('project')->getByID($execution->project);
         $branches    = $this->execution->getBranches($toExecution);
-        $tasks       = $this->execution->getTasks2Imported($toExecution, $branches);
+        $tasks       = $this->execution->getTasks2Imported($toExecution, $branches, $orderBy);
         $executions  = $this->execution->getToImport(array_keys($tasks), $execution->type, $project->model);
         unset($executions[$toExecution]);
         unset($tasks[$toExecution]);
@@ -503,25 +503,24 @@ class execution extends control
      * Import from Bug.
      *
      * @param  int    $executionID
-     * @param  string $orderBy
+     * @param  string $browseType
+     * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importBug($executionID = 0, $browseType = 'all', $param = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importBug(int $executionID = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 30, int $pageID = 1)
     {
         $this->app->loadConfig('task');
 
         if(!empty($_POST))
         {
-            if(dao::isError()) return print(js::error(dao::getError()));
+            $this->execution->importBug($executionID);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            /* If link from no head then reload. */
-            if(isonlybody()) return print(js::reload('parent'));
-
-            return print(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
+            return $this->sendSuccess(array('load' => true));
         }
 
         /* Set browseType, productID, moduleID and queryID. */
