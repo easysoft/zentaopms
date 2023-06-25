@@ -56,6 +56,14 @@ sidebar
         'closeLink' => $closeLink
     )))
 );
+$footToolbar = common::hasPriv('user', 'batchEdit') ? array(
+    'items' => array
+    (
+        array('text' => $lang->edit, 'className' => 'secondary batch-btn', 'data-url' => createLink('user', 'batchEdit')),
+    ),
+    'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
+) : '';
+
 
 $tableData = initTableData($users, $this->config->company->user->dtable->fieldList, $this->loadModel('user'));
 dtable
@@ -63,6 +71,7 @@ dtable
     set::cols($this->config->company->user->dtable->fieldList),
     set::data($tableData),
     set::fixedLeftWidth('0.2'),
+    set::footToolbar($footToolbar),
     set::footPager(usePager()),
 );
 
