@@ -753,7 +753,7 @@ class treeModel extends model
             $extra['productID'] = $productID;
 
             $data = new stdclass();
-            $data->id     = (int) uniqid();
+            $data->id     = uniqid();
             $data->parent = 0;
             $data->name   = is_object($product) ? $product->name : $product;
             $data->url    = helper::createLink($moduleName, $methodName, $param . "productID=$productID");
@@ -855,16 +855,16 @@ class treeModel extends model
     /**
      * Build tree.
      *
-     * @param  object $module
-     * @param  string $type
-     * @param  int    $parent
-     * @param  array  $userFunc
-     * @param  array  $extra
-     * @param  int    $branch
+     * @param  object     $module
+     * @param  string     $type
+     * @param  int|string $parent
+     * @param  array      $userFunc
+     * @param  array      $extra
+     * @param  int        $branch
      * @access public
      * @return object|false
      */
-    public function buildTree(object $module, string $type, int $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
+    public function buildTree(object $module, string $type, int|string $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
     {
         /* Add for task #1945. check the module has case or no. */
         if((isset($extra['rootID']) and isset($extra['branch']) and $branch === 'null') or ($type == 'case' and is_numeric($extra)))
