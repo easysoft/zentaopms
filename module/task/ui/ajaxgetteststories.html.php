@@ -75,10 +75,15 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
-                input
+                inputControl
                 (
-                    set::id("testEstimate{$i}"),
-                    set::name("testEstimate[$i]"),
+                    input
+                    (
+                        set::id("testEstimate{$i}"),
+                        set::name("testEstimate[$i]"),
+                    ),
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20),
                 ),
             ),
             h::td
@@ -101,7 +106,8 @@ formGroup
     set::labelClass('selectStoryLabel'),
     h::table
     (
-        set::class('w-full'),
+        set::class('table table-form'),
+        set::id('testTaskTable'),
         h::thead
         (
             h::tr
@@ -110,7 +116,7 @@ formGroup
                 h::th
                 (
                     $lang->task->pri,
-                    set::width('70px'),
+                    set::width('80px'),
                     setClass(isset($requiredFields['pri']) ? 'required' : '')
                 ),
                 h::th
@@ -133,7 +139,7 @@ formGroup
                 h::th
                 (
                     $lang->task->estimate,
-                    set::width('70px'),
+                    set::width('88px'),
                     setClass(isset($requiredFields['estimate']) ? 'required' : '')
                 ),
                 h::th

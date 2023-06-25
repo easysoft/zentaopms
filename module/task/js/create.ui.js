@@ -103,7 +103,7 @@ function toggleSelectTestStory(executionID)
         $('#testStoryBox').removeClass('hidden');
 
         $('[name^=multiple]').prop('checked', false);
-        showTeamBox();
+        toggleTeam();
     }
     else
     {
