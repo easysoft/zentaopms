@@ -150,22 +150,22 @@ $config->bug->form->batchActivate['lastEditedBy']   = array('required' => false,
 $config->bug->form->batchActivate['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 
 $config->bug->form->batchCreate = common::formConfig('bug', 'batchCreate');
-$config->bug->form->batchCreate['module']      =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['project']     =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['execution']   =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['branch']      =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['laneID']      =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['openedBuild'] =  array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
-$config->bug->form->batchCreate['title']       =  array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
-$config->bug->form->batchCreate['deadline']    =  array('required' => false, 'type' => 'date',   'default' => null);
-$config->bug->form->batchCreate['steps']       =  array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->batchCreate['type']        =  array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->batchCreate['color']       =  array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->batchCreate['pri']         =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['severity']    =  array('required' => false, 'type' => 'int',    'default' => 0);
-$config->bug->form->batchCreate['os']          =  array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
-$config->bug->form->batchCreate['browser']     =  array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
-$config->bug->form->batchCreate['keywords']    =  array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchCreate['module']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['project']     = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['branch']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['laneID']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['openedBuild'] = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchCreate['title']       = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
+$config->bug->form->batchCreate['deadline']    = array('required' => false, 'type' => 'date',   'default' => null);
+$config->bug->form->batchCreate['steps']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchCreate['type']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchCreate['color']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->batchCreate['pri']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['severity']    = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['os']          = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchCreate['browser']     = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchCreate['keywords']    = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->bug->form->batchEdit = common::formConfig('bug', 'batchEdit');
 $config->bug->form->batchEdit['id']             = array('required' => false, 'type' => 'int',    'base' => true);
