@@ -1600,6 +1600,7 @@ class storyTao extends storyModel
         $actions[] = $action;
 
         /* Edit button. */
+        $isClick   = $this->isClickable($story, 'edit');
         $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type");
         $actions[] = array
         (
@@ -1617,9 +1618,9 @@ class storyTao extends storyModel
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
+        $isClick = $this->isClickable($story, 'batchcreate');
         if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
         {
-            $isClick = $this->isClickable($story, 'batchcreate');
             $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
             if(!$isClick && $story->status != 'closed')
             {
