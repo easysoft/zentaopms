@@ -174,7 +174,7 @@ else
     (
         set::name($lang->testcase->story),
         isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), set('data-toggle', 'modal'), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''),
-        set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+        set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
         $confirmStatusChange,
     );
 
@@ -201,7 +201,7 @@ else
             set::level(4),
             set::entityID($case->fromBug),
             set::text($case->fromBugData->title),
-            set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+            set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
             set('title', $case->fromBugData->title),
         );
     }
@@ -215,7 +215,7 @@ else
                 set::level(4),
                 set::entityID($bugID),
                 set::text($bug->title),
-                set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+                set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
                 set('title', $bug->title),
             );
         }
@@ -239,7 +239,7 @@ else
                 set::level(4),
                 set::entityID($linkCaseID),
                 set::text($case->fromBugData->linkCaseTitle),
-                set::labelProps(array('data-toggle' => 'modal', 'data-size' => '1200')),
+                set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
                 set('title', $linkCaseTitle),
             );
         }

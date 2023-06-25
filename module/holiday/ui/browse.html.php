@@ -86,6 +86,7 @@ div
                 set::icon('plus'),
                 set::url(helper::createLink('holiday', 'create')),
                 set('data-toggle', 'modal'),
+                set('data-size', 'sm'),
                 $lang->holiday->create
             ),
         ),
