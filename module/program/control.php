@@ -643,8 +643,8 @@ class program extends control
             {
                 $program->PM       = zget($users, $program->PM);
                 $program->status   = $this->processStatus('project', $program);
-                $program->model    = zget($programLang->modelList, $program->model);
-                $program->product  = zget($programLang->productList, $program->product);
+                $program->model    = zget($this->lang->project->modelList, $program->model);
+                $program->product  = implode(",", $this->dao->select('name')->from(TABLE_PRODUCT)->where('program')->eq($program->id)->fetchPairs('name'));
                 $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
 
                 if($this->post->exportType == 'selected')
