@@ -1415,3 +1415,33 @@ function floatPreNextBtn(): floatPreNextBtn
 {
     return createWg('floatPreNextBtn', func_get_args());
 }
+
+/**
+ * Upload widget.
+ *
+ * string            name
+ * ?string           icon
+ * ?bool             renameBtn=true
+ * ?bool             deleteBtn=true
+ * ?bool             showIcon=true
+ * ?bool             multiple=true
+ * ?string           listPosition="bottom"
+ * ?string           uploadText
+ * ?string           renameText
+ * ?string           deleteText
+ * ?string           confirmText
+ * ?string           cancelText
+ * ?string           tipText
+ * ?string           btnClass
+ * ?callable         onChange
+ * ?callable         onDelete
+ * ?callable         onRename
+ * ?int              limitCount
+ * ?string           accept
+ * ?object[]         defaultFileList
+ * false|string|null limitSize=false
+ */
+function upload(): upload
+{
+    return createWg('upload', func_get_args());
+}
