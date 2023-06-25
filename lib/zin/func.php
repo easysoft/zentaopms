@@ -1361,20 +1361,6 @@ function dragUl(): dragUl
 }
 
 /**
- * Zentao custom table columns widget.
- *
- * ?array  leftItems
- * ?array  flexItems
- * ?array  rightItems
- * string  url
- * ?string method
- */
-function editCols(): editCols
-{
-    return createWg('editCols', func_get_args());
-}
-
-/**
  * Back btn widget.
  *
  * ?string back
