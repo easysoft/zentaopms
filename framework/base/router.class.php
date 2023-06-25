@@ -2991,7 +2991,7 @@ class baseRouter
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');
-        if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
+        if($fh) fwrite($fh, strip_tags(htmlspecialchars_decode($errorLog))) and fclose($fh);
 
         /*
          * 如果debug > 1，直接在页面显示非严重错误。
