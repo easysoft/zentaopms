@@ -2790,10 +2790,11 @@ class executionModel extends model
      *
      * @param  int    $toExecution
      * @param  array  $branches
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getTasks2Imported($toExecution, $branches)
+    public function getTasks2Imported(int $toExecution, array $branches, string $orderBy = 'id_desc'): array
     {
         $execution       = $this->getById($toExecution);
         $project         = $this->loadModel('project')->getById($execution->project);
@@ -2814,6 +2815,7 @@ class executionModel extends model
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . implode("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
+            ->orderBy($orderBy)
             ->fetchGroup('execution', 'id');
         return $tasks;
     }
@@ -2972,8 +2974,10 @@ class executionModel extends model
         $requiredFields = trim($requiredFields, ',');
 
         $bugToTasks = fixer::input('post')->get();
-        $bugs       = $this->bug->getByIdList(array_keys($bugToTasks->import));
-        foreach($bugToTasks->import as $key => $value)
+        if(empty($bugToTasks->id)) return false;
+
+        $bugs = $this->bug->getByIdList(array_keys($bugToTasks->id));
+        foreach($bugToTasks->id as $key => $value)
         {
             $bug = zget($bugs, $key, '');
             if(empty($bug)) continue;
@@ -2989,9 +2993,9 @@ class executionModel extends model
             $task->name         = $bug->title;
             $task->type         = 'devel';
             $task->pri          = $bugToTasks->pri[$key];
-            $task->estStarted   = $bugToTasks->estStarted[$key];
-            $task->deadline     = $bugToTasks->deadline[$key];
-            $task->estimate     = $bugToTasks->estimate[$key];
+            $task->estStarted   = empty($bugToTasks->estStarted[$key]) ? null : $bugToTasks->estStarted[$key];
+            $task->deadline     = empty($bugToTasks->deadline[$key]) ? null : $bugToTasks->deadline[$key];
+            $task->estimate     = (float)$bugToTasks->estimate[$key];
             $task->consumed     = 0;
             $task->assignedTo   = '';
             $task->status       = 'wait';
@@ -3043,17 +3047,13 @@ class executionModel extends model
             if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
             $this->dao->insert(TABLE_TASK)->data($task)->checkIF($task->estimate != '', 'estimate', 'float')->exec();
 
-            if(dao::isError())
-            {
-                echo js::error(dao::getError());
-                return print(js::reload('parent'));
-            }
+            if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
             if($task->story !== false) $this->story->setStage($task->story);
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
             $mails[$key] = new stdClass();
-            $mails[$key]->taskID  = $taskID;
+            $mails[$key]->taskID   = $taskID;
             $mails[$key]->actionID = $actionID;
 
             $this->action->create('bug', $key, 'Totask', '', $taskID);
@@ -3067,12 +3067,12 @@ class executionModel extends model
                 $newBug->lastEditedDate = $now;
                 $newBug->assignedDate   = $now;
                 $newBug->status         = 'active';
-                $newBug->resolvedDate   = '0000-00-00';
+                $newBug->resolvedDate   = null;
                 $newBug->resolution     = '';
                 $newBug->resolvedBy     = '';
                 $newBug->resolvedBuild  = '';
                 $newBug->closedBy       = '';
-                $newBug->closedDate     = '0000-00-00';
+                $newBug->closedDate     = null;
                 $newBug->duplicateBug   = '0';
 
                 $this->dao->update(TABLE_BUG)->data($newBug)->autoCheck()->where('id')->eq($key)->exec();
@@ -3091,7 +3091,8 @@ class executionModel extends model
                 $newBug->assignedTo     = $task->assignedTo;
                 $newBug->assignedDate   = $now;
                 $this->dao->update(TABLE_BUG)->data($newBug)->where('id')->eq($key)->exec();
-                if(dao::isError()) return print(js::error(dao::getError()));
+                if(dao::isError()) return false;
+
                 $changes = common::createChanges($bug, $newBug);
 
                 $actionID = $this->action->create('bug', $key, 'Assigned', '', $newBug->assignedTo);
