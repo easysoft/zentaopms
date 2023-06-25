@@ -12,24 +12,14 @@ declare(strict_types=1);
 
 namespace zin;
 
+modalHeader();
+
 formPanel
 (
-    set::title($lang->productplan->close),
     set::actions(array('submit')),
     set::submitBtnText($lang->productplan->closeAB),
     set::headingClass('status-heading'),
     set::titleClass('form-label .form-grid'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::entityID($productplan->id),
-            set::text($productplan->title),
-            set::level(1),
-            set::reverse(true),
-        )
-    ),
     formGroup
     (
         set::id('closedReasonBox'),
