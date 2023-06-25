@@ -241,6 +241,10 @@ class pivotModel extends model
         }
         $querySQL = $this->chart->parseSqlVars($sql, $filters);
 
+        $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+        $stmt = $this->dbh->query($querySQL);
+        if(!$stmt) return $pivot;
+
         $columns      = $this->dataview->getColumns($querySQL);
         $columnFields = array();
         foreach($columns as $column => $type) $columnFields[$column] = $column;

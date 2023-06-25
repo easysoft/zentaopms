@@ -9363,7 +9363,7 @@ class upgradeModel extends model
 
         foreach($pivotList as $pivotID)
         {
-            $pivot   = $this->pivot->getbyID($pivotID);
+            $pivot   = $this->pivot->getByID($pivotID);
             $sql     = $this->chart->parseSqlVars($pivot->sql, $pivot->filters);
             $stage   = $pivot->stage;
             if($stage == 'draft') continue;
