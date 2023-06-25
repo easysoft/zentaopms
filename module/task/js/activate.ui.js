@@ -196,6 +196,7 @@ function setTeamUser()
 $('#teamTable').on('click.team', '.btn-add', function()
 {
     let $newRow = $(this).closest('tr').clone();
+    $newRow.find('td.required').removeClass('required');
     $newRow.find('select,input').val('');
     $(this).closest('tr').after($newRow);
 
@@ -334,7 +335,7 @@ function checkRemove(removeIndex)
 
 $('#teamTable').on('change', 'select[name^=team]', function()
 {
-    $(this).closest('tr').find('input[name^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
+    $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
 
     disableMembers();
 
@@ -355,5 +356,5 @@ $('#teamTable').on('change', 'select[name^=team]', function()
 
 $('#teamTable').find('select#team:enabled').each(function()
 {
-    $(this).closest('tr').find('input[name^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
+    $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
 });

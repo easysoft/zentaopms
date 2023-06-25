@@ -187,6 +187,7 @@ foreach($task->team as $member)
         ),
         h::td
         (
+            setClass('required'),
             inputControl
             (
                 input
