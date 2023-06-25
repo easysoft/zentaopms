@@ -62,6 +62,9 @@ class DataSourceStore
   reset()
   {
     this.value = {};
+
+    /* Notify listeners. */
+    this.listeners.forEach(l => (l(this.value)));
   }
 
   /* Sync value from form checkboxes. */
@@ -75,7 +78,8 @@ class DataSourceStore
       const items = dataSource.querySelectorAll('input[type="checkbox"]');
       items.forEach(item =>
       {
-        if(item.checked) value[item.getAttribute('prop')] = true;
+        const itemPropName = item.getAttribute('prop');
+        if(item.checked && itemPropName.includes('.')) value[itemPropName] = true;
       });
     });
     this.value = value;
@@ -235,6 +239,46 @@ class DataPropertyCheckbox extends HTMLDivElement
   }
 }
 customElements.define('data-property-checkbox', DataPropertyCheckbox, {extends: 'div'});
+
+/* Selected data column title, dynamically render with current group and selection. */
+class SelectedTitleText extends HTMLSpanElement
+{
+  /* Setup re-render trigger. */
+  constructor()
+  {
+    super();
+    window.dataSourceStore.subscribe(this.render.bind(this));
+  }
+
+  /* Render span from string format. */
+  render()
+  {
+    this.innerHTML = '';
+
+    const format = this.getAttribute('format');
+    const group  = this.getAttribute('group');
+    const count  = Object.keys(window.dataSourceStore.value).length;
+
+    const args = [dataSourceLang[group].common, count]
+    this.innerHTML = format.replace(/{(\d+)}/g, ((match, argIndex) =>
+    {
+      return typeof args[argIndex] !== 'undefined' ? args[argIndex] : match;
+    }));
+  }
+
+  /* Handle attr change, rerender. */
+  attributeChangedCallback(name, oldValue, newValue)
+  {
+    if(name === 'group' && oldValue !== newValue) this.render();
+  }
+
+  /* Define observed attr. */
+  static get observedAttributes()
+  {
+    return ['group'];
+  }
+}
+customElements.define('selected-title-text', SelectedTitleText, {extends: 'span'});
 </script>
 
 <div id='mainMenu' class='clearfix' style='display: flex; flex-direction: row;'>
@@ -276,7 +320,7 @@ customElements.define('data-property-checkbox', DataPropertyCheckbox, {extends: 
           </div>
           <div id='data-selected'>
             <div class='heading'>
-              <h4><?php echo $lang->ai->prompts->selectedFormat;?></h4>
+              <h4><span id='selected-title-text' is='selected-title-text' group='story' format='<?php echo $lang->ai->prompts->selectedFormat;?>'></span></h4>
             </div>
             <div id='data-selected-items'>
               <?php echo html::hidden('datasource');?>
@@ -298,9 +342,13 @@ $(function()
   {
     if($(this).hasClass('active')) return;
 
+    /* Update menu states. */
     $('#data-category-select > ul > li > a').removeClass('active btn-info').addClass('btn-link');
     $(this).addClass('active btn-info').removeClass('btn-link');
+
+    /* Update other component props. */
     $('#data-property-selector').attr('object-group', $(this).parent().attr('data-group-key'));
+    $('#selected-title-text').attr('group', $(this).parent().attr('data-group-key'));
 
     /* Reset selected data. */
     window.dataSourceStore.reset();

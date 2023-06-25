@@ -48,7 +48,7 @@ $lang->ai->prompts->charPlaceholder  = '该角色的具体描述信息';
 /* Data source selecting. */
 $lang->ai->prompts->selectData       = '选择数据';
 $lang->ai->prompts->selectDataTip    = '选择对象后，此处会展示已选对象的数据。';
-$lang->ai->prompts->selectedFormat   = '已选对象为%s，已选 %d 条数据';
+$lang->ai->prompts->selectedFormat   = '已选对象为{0}，已选 {1} 条数据';
 $lang->ai->prompts->nonSelected      = '暂无所选数据。';
 $lang->ai->prompts->sortTip          = '可根据重要性给数据字段排序。';
 
