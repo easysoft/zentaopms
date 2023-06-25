@@ -87,6 +87,7 @@ detailBody
         (
             set::cols(array_values($config->testsuite->testcase->dtable->fieldList)),
             set::data(array_values($tableData)),
+            set::fixedLeftWidth('0.5'),
             set::checkable($hasCheckbox),
             set::footToolbar($footToolbar),
             set::footPager(usePager(null, 'pager', 'nopagesize')),
