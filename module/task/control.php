@@ -523,8 +523,7 @@ class task extends control
         if($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
         {
             $formUrl = $this->createLink('task', 'deleteWorkhour', "estimateID=$estimateID&confirm=yes");
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->task->confirmDeleteLastEstimate}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});")
-            );
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->task->confirmDeleteLastEstimate}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
         }
 
         $changes = $this->task->deleteWorkhour($estimateID);

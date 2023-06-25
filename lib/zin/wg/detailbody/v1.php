@@ -7,7 +7,7 @@ class detailBody extends wg
     protected static $defineBlocks = array(
         'main' => array('map' => 'sectionList'),
         'side' => array('map' => 'detailSide'),
-        'bottom' => array('map' => 'history'),
+        'bottom' => array('map' => 'history,fileList'),
         'floating' => array('map' => 'floatToolbar'),
     );
 

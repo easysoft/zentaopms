@@ -1070,6 +1070,18 @@ function tree(): Tree
 }
 
 /**
+ * Zentao file list widget.
+ *
+ * ?array  files 
+ * ?int    objectID 
+ * ?string objectType 
+ */
+function fileList(): fileList
+{
+    return createWg('fileList', func_get_args());
+}
+
+/**
  * Zentao history records widget.
  *
  * ?array  actions

@@ -916,7 +916,7 @@ class treeModel extends model
             $extra['branchID'] = $branch;
         }
 
-        return call_user_func($userFunc, $type, $module, $extra);
+        return call_user_func($userFunc, $type, $module, $parent, $extra);
     }
 
     /**
@@ -1123,11 +1123,10 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createTaskLink(string $type, object $module, array $extra): object
+    public function createTaskLink(string $type, object $module): object
     {
         $data = new stdclass();
         $data->id     = $parent ? uniqid() : $module->id;

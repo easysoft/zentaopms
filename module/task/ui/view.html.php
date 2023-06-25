@@ -132,6 +132,10 @@ detailBody
             )
         ) : null,
     ),
+    $task->files ? fileList
+    (
+        set::files($task->files),
+    ) : null,
     history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id))),),
     floatToolbar
     (
