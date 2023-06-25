@@ -157,7 +157,7 @@ if(!empty($productID))
     if($canExportTemplate)
     {
         $link = $this->createLink('testcase', 'exportTemplate', "productID=$productID");
-        $exportItems[] = array('text' => $lang->testcase->exportTemplate, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab, 'data-width' => '65%');
+        $exportItems[] = array('text' => $lang->testcase->exportTemplate, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab, 'data-size' => 'sm');
     }
     if($canExportXmind)
     {

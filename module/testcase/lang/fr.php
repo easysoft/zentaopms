@@ -159,7 +159,8 @@ $lang->testcase->autoScript              = 'Script';
 
 $lang->testcase->new = 'Nouveau';
 
-$lang->testcase->num = 'Ligne CasTes:';
+$lang->testcase->num          = 'Ligne CasTes:';
+$lang->testcase->templateType = 'Encoding';
 
 $lang->testcase->deleteStep   = 'Supprimer';
 $lang->testcase->insertBefore = 'Insérer Avant';

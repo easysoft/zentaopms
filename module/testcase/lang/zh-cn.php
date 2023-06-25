@@ -159,7 +159,8 @@ $lang->testcase->autoScript              = '自动化脚本';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num = '用例记录数：';
+$lang->testcase->num          = '用例条数';
+$lang->testcase->templateType = '编码';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';

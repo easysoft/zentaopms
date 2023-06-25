@@ -159,7 +159,8 @@ $lang->testcase->autoScript              = 'Script';
 
 $lang->testcase->new = 'New';
 
-$lang->testcase->num = 'Case Rows:';
+$lang->testcase->num          = 'Case Rows';
+$lang->testcase->templateType = 'Encoding';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
