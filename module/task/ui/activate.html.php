@@ -24,6 +24,7 @@ jsVar('taskMode', $task->mode);
 if($isMultiple) jsVar('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control' disabled"));
 
 /* zin: Set variables to define control for form. */
+modalHeader();
 $taskModeBox = '';
 if($isMultiple)
 {
@@ -363,4 +364,4 @@ formPanel
 history();
 
 /* ====== Render page ====== */
-modalHeader();
+render();

@@ -20,7 +20,7 @@ modalTrigger
         (
             to::headingActions
             (
-                span($lang->task->mode), 
+                span($lang->task->mode),
                 formGroup
                 (
                     set::name('mode'),

@@ -14,6 +14,7 @@ namespace zin;
 
 if(!$canRecordEffort)
 {
+    modalHeader();
     if($task->assignedTo != $app->user->account && $task->mode == 'linear')
     {
         $deniedNotice = sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->finish);
@@ -26,7 +27,7 @@ if(!$canRecordEffort)
     div
     (
         set::class('alert with-icon'),
-        icon('exclamation-sign'),
+        icon('exclamation-sign icon-3x'),
         div
         (
             set::class('content'),
@@ -159,8 +160,7 @@ else
             set::control("editor")
         ),
     );
+    history();
 }
-
-history();
 
 render();
