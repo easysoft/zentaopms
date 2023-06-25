@@ -29,3 +29,11 @@ $(document).on('click', '.unlinkStory', function(e)
         if(res) $.get($this.data('url'), function(){$this.closest('li').remove()});
     });
 });
+
+window.ajaxDelete = function(storyID)
+{
+    zui.Modal.confirm({message: confirmDeleteTip, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.get($.createLink('story', 'delete', 'storyID=' + storyID + '&confirm=yes'), function(data){if(data.result == 'success') loadPage(data.load)});
+    });
+}

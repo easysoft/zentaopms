@@ -908,7 +908,7 @@ class story extends control
             if(isonlybody()) return print(js::reload('parent.parent'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return print(js::locate($locateLink, 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $locateLink));
         }
     }
 

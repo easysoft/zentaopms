@@ -10,8 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$confirmDelete = $this->lang->story->confirmDelete;
+if($story->type == 'requirement') $confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $confirmDelete);
+
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
+jsVar('confirmDeleteTip', $confirmDelete);
 
 $isInModal  = isAjaxRequest('modal');
 $otherParam = 'storyID=&projectID=';
@@ -143,8 +147,23 @@ detailHeader
 (
     to::prefix
     (
-        backBtn(set::icon('back'), set::type('secondary'), $lang->goback),
-        entityLabel(set(array('entityID' => $story->id, 'level' => 1, 'text' => $story->title))),
+        $isInModal ? null : backBtn(set::icon('back'), set::type('secondary'), $lang->goback),
+        div
+        (
+            setClass('entity-label flex items-center gap-x-2'),
+            label(setClass('circle px-1.5 h-3.5'), $story->id),
+            $story->parent > 0 ? label($this->lang->story->childrenAB) : null,
+            span
+            (
+                setClass('article-h1'),
+                $story->parent > 0 && isset($story->parentName) ? span
+                (
+                    a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName),
+                    ' / ',
+                ) : null,
+                $story->title
+            ),
+        ),
         count($versions) > 1 ? dropdown
         (
             btn("#{$version}"),
@@ -181,7 +200,12 @@ detailBody
             set::content(empty($story->verify) ? $lang->noDesc : $story->verify),
             set::useHtml(true)
         ),
-//        $this->fetch('file', 'printFiles', array('files' => $story->files, 'section' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false)),
+        $story->files ? fileList
+        (
+            set::files($story->files),
+            set::showDelete(false),
+            set::object($story),
+        ) : null,
         empty($story->children) ? null : section
         (
             set::title($story->type == 'requirement' ? $lang->story->story : $lang->story->children),
@@ -192,13 +216,13 @@ detailBody
             )
         ),
     ),
-    history(),
+    history(set::commentUrl(helper::createLink('action', 'comment', "objectType=story&objectID=$story->id"))),
     floatToolbar
     (
         set::object($story),
         to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        set::main($menus['mainMenu']),
-        set::suffix($menus['suffixMenu']),
+        $story->deleted ? null : set::main($menus['mainMenu']),
+        $story->deleted ? null : set::suffix($menus['suffixMenu']),
     ),
     detailSide
     (
