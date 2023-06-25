@@ -11,12 +11,53 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('users', $users);
+jsVar('roles', $roles);
+jsVar('team2Import', $team2Import);
+jsVar('executionID', $execution->id);
 
 /* zin: Define the set::module('team') feature bar on main menu. */
+$copyTeamBox = '';
+if(count($teams2Import) != 1)
+{
+    $copyTeamBox = div
+        (
+            setClass('select-team-box ml-4'),
+            span
+            (
+                set::class('flex items-center team-title'),
+                $lang->execution->copyTeam
+            ),
+            select
+            (
+                set::name('execution'),
+                set::value($team2Import),
+                set::items($teams2Import),
+                on::change('choseTeam2Copy'),
+            ),
+        );
+}
 featureBar
 (
     set::current('all'),
     set::linkParams("executionID={$execution->id}"),
+    div
+    (
+        setClass('select-dept-box ml-4'),
+        span
+        (
+            set::class('flex items-center dept-title'),
+            $lang->execution->selectDept
+        ),
+        select
+        (
+            set::id('dept'),
+            set::name('dept'),
+            set::value($dept),
+            set::items($depts),
+            on::change('setDeptUsers'),
+        ),
+        $copyTeamBox,
+    ),
 );
 
 $memberTR = array();
@@ -44,18 +85,19 @@ foreach($teamMembers as $member)
             ) : h::td(
                 select
                 (
-                    set::id("accounts{$i}"),
+                    set::id("account{$i}"),
                     set::name("accounts[$i]"),
                     set::value($member->account),
                     set::items($users),
                     set('data-max-list-count', $config->maxCount),
+                    set('onchange', "setRole(this.value, '{$i}')"),
                 ),
             ),
             h::td
             (
                 input
                 (
-                    set::id("roles{$i}"),
+                    set::id("role{$i}"),
                     set::name("roles[$i]"),
                     set::value($member->role),
                 )
@@ -117,17 +159,18 @@ h::table
         h::td(
             select
             (
-                set::id("accounts{$i}"),
+                set::id("account{$i}"),
                 set::name("accounts[$i]"),
                 set::items($users),
                 set('data-max-list-count', $config->maxCount),
+                set('onchange', "setRole(this.value, '{$i}')"),
             ),
         ),
         h::td
         (
             input
             (
-                set::id("roles{$i}"),
+                set::id("role{$i}"),
                 set::name("roles[$i]"),
             )
         ),

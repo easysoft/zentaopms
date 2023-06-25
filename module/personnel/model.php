@@ -462,10 +462,6 @@ class personnelModel extends model
                 ->orderBy('openedDate_desc')
                 ->limit('10')
                 ->fetchPairs();
-            foreach($objects as $id => &$object)
-            {
-                if($id != $parentID) $object = '&nbsp;&nbsp;&nbsp;' . $object;
-            }
         }
         elseif($objectType == 'project')
         {

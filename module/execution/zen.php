@@ -122,7 +122,7 @@ class executionZen extends execution
         $roles = $this->loadModel('user')->getUserRoles(array_keys($deptUsers));
         foreach($deptUsers as $deptAccount => $userName)
         {
-            if(isset($members2Import[$deptAccount])) continue;
+            if(isset($currentMembers[$deptAccount]) || isset($members2Import[$deptAccount])) continue;
 
             $deptMember = new stdclass();
             $deptMember->memberType = 'dept';
