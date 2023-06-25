@@ -4485,6 +4485,17 @@ class storyModel extends model
      */
     public static function isClickable($story, $action)
     {
+        $action = strtolower($action);
+
+        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
+        if($action == 'close')      return $story->status != 'closed';
+        if($action == 'activate')   return $story->status == 'closed';
+        if($action == 'assignto')   return $story->status != 'closed';
+        if($action == 'batchcreate' and $story->parent > 0) return false;
+        if($action == 'batchcreate' and !empty($story->twins)) return false;
+        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
+
+        global $app, $config;
         static $shadowProducts = array();
         if(empty($shadowProducts[$story->product]))
         {
@@ -4493,29 +4504,18 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        $action = strtolower($action);
-
-        global $app, $config;
-
         if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
+
+        if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
+        /* Adjust code, hide split entry. */
+        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
-
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
         if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
         if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
-        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')      return $story->status != 'closed';
-        if($action == 'activate')   return $story->status == 'closed';
-        if($action == 'assignto')   return $story->status != 'closed';
-        if($action == 'batchcreate' and $story->parent > 0) return false;
-        if($action == 'batchcreate' and !empty($story->twins)) return false;
-        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
-        if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        /* Adjust code, hide split entry. */
-        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         return true;
     }
