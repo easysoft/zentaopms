@@ -14,31 +14,31 @@ $maxOrder = 0;
 
 /* Generate module rows. */
 $moduleRows = array();
+if($newModule and !$productID)
+{
+    foreach($products as $product)
+    {
+        $moduleRows[] = formRow
+        (
+            formGroup
+            (
+                setClass('row-module'),
+                input
+                (
+                    setClass('col-module'),
+                    set::name("products[id$product->id]"),
+                    set::type('input'),
+                    set::value($product->name),
+                    set::disabled(true),
+                ),
+            )
+        );
+    }
+}
+
 foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
-
-    if($newModule and !$productID)
-    {
-        foreach($products as $product)
-        {
-            $moduleRows[] = formRow
-            (
-                formGroup
-                (
-                    setClass('row-module'),
-                    input
-                    (
-                        setClass('col-module'),
-                        set::name("products[id$product->id]"),
-                        set::type('input'),
-                        set::value($product->name),
-                        set::disabled(true),
-                    ),
-                )
-            );
-        }
-    }
 
     $moduleRows[] = formRow
     (

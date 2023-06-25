@@ -844,8 +844,7 @@ class treeModel extends model
                     /* If not manage, ignore unused modules. */
                     if(!isset($executionModules[$module->id])) continue;
 
-                    $treeMenu = $this->buildTree($module, 'story', 0, $userFunc, $extra);
-                    $menu[]   = $treeMenu;
+                    $menu[] = $this->buildTree($module, 'story', 0, $userFunc, $extra);
                 }
             }
         }
@@ -863,9 +862,9 @@ class treeModel extends model
      * @param  array  $extra
      * @param  int    $branch
      * @access public
-     * @return false|object
+     * @return object|false
      */
-    public function buildTree(object $module, string $type, int $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): false|object
+    public function buildTree(object $module, string $type, int $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
     {
         /* Add for task #1945. check the module has case or no. */
         if((isset($extra['rootID']) and isset($extra['branch']) and $branch === 'null') or ($type == 'case' and is_numeric($extra)))
@@ -1103,13 +1102,20 @@ class treeModel extends model
      * @param  object $module
      * @param  array  $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createLineLink($type, $module, $extra)
+    public function createLineLink(string $type, object $module, array $extra): object
     {
         $productID = $extra['productID'];
         $status    = $extra['status'];
-        return html::a(helper::createLink('product', 'all', "productID={$productID}&line={$module->id}&status={$status}"), $module->name, '_self', "id='module{$module->id}'");
+
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('product', 'all', "productID={$productID}&line={$module->id}&status={$status}");
+
+        return $data;
     }
 
     /**
@@ -1119,13 +1125,17 @@ class treeModel extends model
      * @param  object $module
      * @param  array  $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createTaskLink($type, $module, $extra)
+    public function createTaskLink(string $type, object $module, array $extra): object
     {
-        $executionID = $extra['executionID'];
-        $productID   = $extra['productID'];
-        return html::a(helper::createLink('execution', 'task', "executionID={$executionID}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('execution', 'task', "executionID={$executionID}&type=byModule&param={$module->id}");
+
+        return $data;
     }
 
     /**
@@ -1135,30 +1145,44 @@ class treeModel extends model
      * @param  object $module
      * @param  array  $extra
      * @access public
-     * @return string
+     * @return object
      */
-    public function createProjectStoryLink($type, $module, $extra)
+    public function createProjectStoryLink(string $type, object $module, array $extra): object
     {
         $productID = $extra['productID'];
-        return html::a(helper::createLink('projectstory', 'story', "projectID={$extra['executionID']}&productID=$productID&branch=&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('projectstory', 'story', "projectID={$extra['executionID']}&productID=$productID&branch=&browseType=byModule&param={$module->id}");
+
+        return $data;
     }
 
     /**
      * Create link of a doc.
      *
-     * @param  object   $module
+     * @param  string $type
+     * @param  object $module
      * @access public
-     * @return string
+     * @return object
      */
-    public function createDocLink($type, $module, $extra = '')
+    public function createDocLink(string $type, object $module): object
     {
-        return html::a(helper::createLink('doc', 'browse', "libID={$module->root}&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : $module->id;
+        $data->parent = $parent ? $parent : $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('doc', 'browse', "libID={$module->root}&browseType=byModule&param={$module->id}");
+
+        return $data;
     }
 
     /**
      * Create the manage link of a module.
      *
-     * @param  object   $module
+     * @param  object    $module
      * @access public
      * @return string
      */
