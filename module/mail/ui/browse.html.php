@@ -35,6 +35,7 @@ panel
         set::userMap($users),
         set::customCols(true),
         set::checkable($canBatchDelete),
+        set::onRenderCell(jsRaw('window.renderCellActions')),
         $canBatchDelete ? set::footToolbar(array
         (
             'type'  => 'btn-group',

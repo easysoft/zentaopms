@@ -63,7 +63,7 @@ $config->mail->browse->dtable->fieldList['failReason']['group']    = 8;
 
 $config->mail->browse->dtable->fieldList['actions']['name']     = 'actions';
 $config->mail->browse->dtable->fieldList['actions']['title']    = $lang->actions;
-$config->mail->browse->dtable->fieldList['actions']['type']     = 'actions';
+$config->mail->browse->dtable->fieldList['actions']['minWidth'] = 108;
 $config->mail->browse->dtable->fieldList['actions']['required'] = true;
 $config->mail->browse->dtable->fieldList['actions']['fixed']    = 'right';
 $config->mail->browse->dtable->fieldList['actions']['group']    = 9;
@@ -71,6 +71,6 @@ $config->mail->browse->dtable->fieldList['actions']['group']    = 9;
 $config->mail->browse->dtable->fieldList['actions']['menu'] = array('delete', 'resend');
 $config->mail->browse->dtable->fieldList['actions']['list'] = array
 (
-    'delete' => array('icon' => 'trash', 'class' => array('ajax-submit px-1.5'), 'url' => helper::createLink('mail', 'delete', 'id={id}'), 'hint' => $lang->delete),
-    'resend' => array('icon' => 'share', 'class' => array('ajax-submit px-1.5'), 'url' => helper::createLink('mail', 'resend', 'id={id}'), 'hint' => $lang->mail->resend),
+    'delete' => array('icon' => 'trash', 'class' => array('ajax-submit btn text-primary ghost cursor-pointer px-1'), 'url' => helper::createLink('mail', 'delete', 'id={id}'), 'hint' => $lang->delete),
+    'resend' => array('icon' => 'share', 'class' => array('ajax-submit btn text-primary ghost cursor-pointer px-1'), 'url' => helper::createLink('mail', 'resend', 'id={id}'), 'hint' => $lang->mail->resend),
 );
