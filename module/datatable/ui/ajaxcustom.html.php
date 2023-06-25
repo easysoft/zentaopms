@@ -52,7 +52,6 @@ function buildItem(array $item): wg
     );
 }
 
-
 function getDefaultConfig(string $name): array
 {
     global $config;
@@ -87,7 +86,7 @@ function buildBody(array $cols): form
     (
         setClass('col', 'gap-0.5'),
         set::grid(false),
-        set::actions(null),
+        set::actions(array()),
     );
 
     foreach($itemsList as $key => $items)
@@ -95,7 +94,7 @@ function buildBody(array $cols): form
         if(empty($items)) continue;
 
         $ul = dragUl(setClass("{$key}-cols"));
-        foreach ($items as $item) $ul->add(buildItem($item));
+        foreach($items as $item) $ul->add(buildItem($item));
         $body->add($ul);
     }
 
@@ -113,9 +112,13 @@ to::footer
 (
     toolbar
     (
-        item
+        btn
         (
-            set(array('text' => $lang->save, 'type' => 'primary', 'class' => 'w-28', 'data-dismiss' => 'modal', 'id' => 'ajax-save')),
+            setClass('toolbar-item w-28'),
+            setID('ajax-save'),
+            set::type('primary'),
+            on::click('handleEditColsSubmit'),
+            $lang->save
         )
     )
 );

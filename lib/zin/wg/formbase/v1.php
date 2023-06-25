@@ -33,8 +33,9 @@ class formBase extends wg
 
     protected function created()
     {
-        $actions = isAjaxRequest('modal') ? array('submit') : array('submit', 'cancel');
+        if($this->prop('actions') !== null) return;
 
+        $actions = isAjaxRequest('modal') ? array('submit') : array('submit', 'cancel');
         $this->setDefaultProps(array('actions' => $actions));
     }
 
