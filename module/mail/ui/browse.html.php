@@ -25,6 +25,7 @@ foreach($queueList as &$queue)
     }
 }
 
+/* ZIN: layout. */
 panel
 (
     set::title($lang->mail->browse),
