@@ -30,18 +30,60 @@ $lang->ai->prompts->createdDate = '创建时间';
 $lang->ai->prompts->targetForm  = '表单';
 $lang->ai->prompts->funcDesc    = '功能描述';
 
+/* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = '指定角色';
 $lang->ai->prompts->selectDataSource = '选择对象';
 $lang->ai->prompts->setPurpose       = '确认操作';
 $lang->ai->prompts->setTargetForm    = '结果处理';
 $lang->ai->prompts->finalize         = '准备发布';
 
+/* Role assigning. */
 $lang->ai->prompts->assignModel      = '指定语言模型';
 $lang->ai->prompts->model            = '语言模型';
 $lang->ai->prompts->role             = '角色';
 $lang->ai->prompts->characterization = '角色描述';
 $lang->ai->prompts->rolePlaceholder  = '“你来扮演 <一个什么角色>”';
 $lang->ai->prompts->charPlaceholder  = '该角色的具体描述信息';
+
+/* Data source selecting. */
+$lang->ai->prompts->selectData       = '选择数据';
+$lang->ai->prompts->selectDataTip    = '选择对象后，此处会展示已选对象的数据。';
+$lang->ai->prompts->selectedFormat   = '已选对象为%s，已选 %d 条数据';
+$lang->ai->prompts->nonSelected      = '暂无所选数据。';
+$lang->ai->prompts->sortTip          = '可根据重要性给数据字段排序。';
+
+/* Data source definition. */
+$lang->ai->dataSource = array();
+$lang->ai->dataSource['story']['common']     = '需求';
+$lang->ai->dataSource['execution']['common'] = '执行';
+
+$lang->ai->dataSource['story']['story']['common']   = '需求';
+$lang->ai->dataSource['story']['story']['title']    = '需求标题';
+$lang->ai->dataSource['story']['story']['spec']     = '需求描述';
+$lang->ai->dataSource['story']['story']['verify']   = '验收标准';
+$lang->ai->dataSource['story']['story']['product']  = '产品';
+$lang->ai->dataSource['story']['story']['module']   = '模块';
+$lang->ai->dataSource['story']['story']['pri']      = '优先级';
+$lang->ai->dataSource['story']['story']['category'] = '需求类型';
+$lang->ai->dataSource['story']['story']['estimate'] = '预计工时';
+
+$lang->ai->dataSource['execution']['execution']['common']   = '执行';
+$lang->ai->dataSource['execution']['execution']['name']     = '执行名称';
+$lang->ai->dataSource['execution']['execution']['desc']     = '执行描述';
+$lang->ai->dataSource['execution']['execution']['estimate'] = '预计工时';
+
+$lang->ai->dataSource['execution']['tasks']['common']      = '任务列表';
+$lang->ai->dataSource['execution']['tasks']['name']        = '任务名称';
+$lang->ai->dataSource['execution']['tasks']['pri']         = '优先级';
+$lang->ai->dataSource['execution']['tasks']['status']      = '状态';
+$lang->ai->dataSource['execution']['tasks']['estimate']    = '预计工时';
+$lang->ai->dataSource['execution']['tasks']['consumed']    = '已消耗';
+$lang->ai->dataSource['execution']['tasks']['left']        = '剩余';
+$lang->ai->dataSource['execution']['tasks']['progress']    = '进度';
+$lang->ai->dataSource['execution']['tasks']['estStarted']  = '预计开始';
+$lang->ai->dataSource['execution']['tasks']['realStarted'] = '实际开始';
+$lang->ai->dataSource['execution']['tasks']['finishedDate']= '完成日期';
+$lang->ai->dataSource['execution']['tasks']['closedReason']= '关闭原因';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = '全部';

@@ -177,6 +177,16 @@ class ai extends control
      */
     public function promptSelectDataSource($promptID)
     {
+        $prompt = $this->ai->getPromptByID($promptID);
+
+        if($_POST)
+        {
+            // TODO: do stuff.
+        }
+
+        $this->view->activeMenu = 'story';
+        $this->view->dataSource = $this->config->ai->dataSource;
+        $this->view->prompt     = $prompt;
         $this->view->promptID   = $promptID;
         $this->view->title      = $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
         $this->view->position[] = $this->lang->ai->prompts->common;
