@@ -184,12 +184,12 @@ class ai extends control
             // TODO: do stuff.
         }
 
-        $this->view->activeMenu = 'story';
-        $this->view->dataSource = $this->config->ai->dataSource;
-        $this->view->prompt     = $prompt;
-        $this->view->promptID   = $promptID;
-        $this->view->title      = $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
-        $this->view->position[] = $this->lang->ai->prompts->common;
+        $this->view->activeDataSource = 'story';
+        $this->view->dataSource       = $this->config->ai->dataSource;
+        $this->view->prompt           = $prompt;
+        $this->view->promptID         = $promptID;
+        $this->view->title            = $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->position[]       = $this->lang->ai->prompts->common;
         $this->display();
     }
 

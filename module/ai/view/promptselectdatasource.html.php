@@ -300,7 +300,7 @@ customElements.define('selected-title-text', SelectedTitleText, {extends: 'span'
                 <ul>
                   <?php foreach(array_keys($dataSource) as $index => $objectGroupKey):?>
                     <li data-group-key='<?php echo $objectGroupKey;?>'>
-                      <a class='btn btn-block <?php echo $index == 0 ? ' active btn-info' : ' btn-link';?>'>
+                      <a class='btn btn-block <?php echo $objectGroupKey == $activeDataSource ? ' active btn-info' : ' btn-link';?>'>
                         <?php echo $lang->ai->dataSource[$objectGroupKey]['common'];?>
                       </a>
                     </li>
@@ -314,13 +314,13 @@ customElements.define('selected-title-text', SelectedTitleText, {extends: 'span'
                 <small class='text-gray'><?php echo $lang->ai->prompts->selectDataTip;?></small>
               </div>
               <div id='data-property-select'>
-                <div id='data-property-selector' is='data-property-selector' object-group='story'></div>
+                <div id='data-property-selector' is='data-property-selector' object-group='<?php echo $activeDataSource;?>'></div>
               </div>
             </div>
           </div>
           <div id='data-selected'>
             <div class='heading'>
-              <h4><span id='selected-title-text' is='selected-title-text' group='story' format='<?php echo $lang->ai->prompts->selectedFormat;?>'></span></h4>
+              <h4><span id='selected-title-text' is='selected-title-text' group='<?php echo $activeDataSource;?>' format='<?php echo $lang->ai->prompts->selectedFormat;?>'></span></h4>
             </div>
             <div id='data-selected-items'>
               <?php echo html::hidden('datasource');?>
