@@ -28,7 +28,7 @@ $config->company->user->actionList['delete']['url']  = array('module' => 'user',
 $config->company->user->dtable = new stdclass();
 $config->company->user->dtable->fieldList['id']['name']     = 'id';
 $config->company->user->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->company->user->dtable->fieldList['id']['type']     = common::hasPriv('user', 'batchEdit') ? 'checkID' : 'id';
+$config->company->user->dtable->fieldList['id']['type']     = 'id';
 $config->company->user->dtable->fieldList['id']['fixed']    = 'left';
 $config->company->user->dtable->fieldList['id']['sortType'] = true;
 

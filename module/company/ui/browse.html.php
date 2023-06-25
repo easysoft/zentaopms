@@ -64,6 +64,7 @@ $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
 ) : '';
 
+if(common::hasPriv('user', 'batchEdit')) $this->config->company->user->dtable->fieldList['id']['type'] = 'checkID';
 
 $tableData = initTableData($users, $this->config->company->user->dtable->fieldList, $this->loadModel('user'));
 dtable
