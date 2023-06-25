@@ -203,13 +203,13 @@ $lang->testcase->priList[4] = 4;
 
 /* Define the types. */
 $lang->testcase->typeList['']            = '';
-$lang->testcase->typeList['feature']     = 'Feature';
-$lang->testcase->typeList['performance'] = 'Performance';
-$lang->testcase->typeList['config']      = 'Configuration';
-$lang->testcase->typeList['install']     = 'Installation';
-$lang->testcase->typeList['security']    = 'Security';
-$lang->testcase->typeList['interface']   = 'Interface';
 $lang->testcase->typeList['unit']        = 'Unit';
+$lang->testcase->typeList['interface']   = 'Interface';
+$lang->testcase->typeList['feature']     = 'Feature';
+$lang->testcase->typeList['install']     = 'Installation';
+$lang->testcase->typeList['config']      = 'Configuration';
+$lang->testcase->typeList['performance'] = 'Performance';
+$lang->testcase->typeList['security']    = 'Security';
 $lang->testcase->typeList['other']       = 'Others';
 
 $lang->testcase->stageList['']           = '';
