@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-if($parent)
+if(!$parent)
 {
     $title = $lang->productplan->create;
     $parentHidden = formGroup
@@ -69,17 +69,18 @@ formPanel
     on::change('#parent', 'getParentBranches'),
     $formHeader,
     $parentForm,
+    $product->type != 'normal' ?
     formGroup
     (
         set::width("1/2"),
         set::name("branch[]"),
-        set::label($lang->product->branch),
+        set::label(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
         set::required(true),
         set::control('picker'),
         set::multiple(true),
         set::id("branch"),
-        set::items($branches)
-    ),
+        set::items($branches),
+    ) : null,
     formGroup
     (
         set::width("1/2"),

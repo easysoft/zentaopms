@@ -109,6 +109,7 @@ class productplan extends control
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
 
         $this->view->productID       = $productID;
+        $this->view->product         = $product;
         $this->view->lastPlan        = $lastPlan;
         $this->view->branch          = $branchID;
         $this->view->branches        = $branchPairs;
