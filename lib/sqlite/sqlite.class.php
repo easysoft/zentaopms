@@ -183,6 +183,39 @@ class sqlite
     }
 
     /**
+     * Begin transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function beginTransaction()
+    {
+        return $this->dbh->beginTransaction();
+    }
+
+    /**
+     * Roll back if transaction failed.
+     *
+     * @access public
+     * @return bool
+     */
+    public function rollBack()
+    {
+        return $this->dbh->rollBack();
+    }
+
+    /**
+     * Commit transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function commit()
+    {
+        return $this->dbh->commit();
+    }
+
+    /**
      * Execute sql without format.
      *
      * @param  string $sql
