@@ -10,17 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-to::header
-(
-    $lang->testtask->activateAction,
-    entityLabel
-    (
-        set::entityID($testtask->id),
-        set::level(1),
-        set::text($testtask->name),
-        set::reverse(true)
-    )
-);
+modalHeader();
 
 form
 (
