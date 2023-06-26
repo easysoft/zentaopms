@@ -531,10 +531,17 @@ class admin extends control
         $querys = $this->dao->select('*')->from(TABLE_SQLITE_QUEUE)->where('status')->eq('wait')->fetchAll();
 
         $sqlite->begin();
-        foreach($querys as $query) $sqlite->rawExec($query->sql);
+        foreach($querys as $query)
+        {
+            $sqlite->rawExec($query->sql);
+            $this->dao->update(TABLE_SQLITE_QUEUE)
+                ->set('status')->eq('done')
+                ->set('execDate')->eq($now)
+                ->where('id')->eq($query->id)
+                ->exec();
+        }
         $sqlite->commit();
 
-        $this->dao->update(TABLE_SQLITE_QUEUE)->set('status')->eq('done')->set('execDate')->eq($now)->where('id')->eq($query->id)->exec();
         echo 'success';
     }
 }
