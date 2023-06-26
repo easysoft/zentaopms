@@ -4966,11 +4966,10 @@ class storyModel extends model
         $this->loadModel('branch');
 
         $this->replaceURLang($storyType);
-        $storyLang   = $this->lang->story;
-        $storyConfig = $this->config->story;
+        $storyLang = $this->lang->story;
 
         /* Create field lists. */
-        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
+        $fields = !empty($this->post->exportFields) ? $this->post->exportFields : explode(',', $this->config->story->exportFields);
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
