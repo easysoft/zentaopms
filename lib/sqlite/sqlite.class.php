@@ -43,14 +43,6 @@ class sqlite
     public $dbh = null;
 
     /**
-     * Magic quote or not.
-     *
-     * @var bool
-     * @access public
-     */
-    public $magicQuote;
-
-    /**
      * __construct
      *
      * @access public
@@ -225,22 +217,5 @@ class sqlite
     public function rawExec(string $sql)
     {
         return $this->dbh->exec($sql);
-    }
-
-    /**
-     * Quote a var.
-     *
-     * @param  mixed  $value
-     * @access public
-     * @return mixed
-     */
-    public function quote($value, $driver = 'mysql')
-    {
-        if(is_null($value)) return 'NULL';
-
-        if($this->magicQuote) $value = stripslashes($value);
-
-        $dbh = $driver == 'sqlite' ? 'dbh' : 'mysql';
-        return $this->$dbh->quote((string)$value);
     }
 }
