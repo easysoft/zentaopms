@@ -375,7 +375,11 @@
                     else if(data.load === true) loadCurrentPage();
                     else if(typeof data.load === 'object')
                     {
-                        if('confirm' in data.load)
+                        if('back' in data.load)
+                        {
+                            openUrl(data.load);
+                        }
+                        else if('confirm' in data.load)
                         {
                             const confirmed = confirm(data.load.confirm);
                             if(confirmed) loadPage(data.load.confirmed);
