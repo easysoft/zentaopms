@@ -62,7 +62,7 @@ toolbar
     hasPriv('task', 'export') ? item(set(array
     (
         'icon'        => 'export',
-        'class'       => 'ghost',
+        'class'       => 'ghost export',
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,

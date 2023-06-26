@@ -36,4 +36,11 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const url  = $(this).data('url');
     checkedList.forEach((id) => form.append('projectIdList[]', id));
     postAndLoadPage(url, form);
+}).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
+{
+    const dtable = zui.DTable.query($('#table-project-browse'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $.cookie.set('checkedItem', checkedList);
 });

@@ -47,9 +47,11 @@ toolbar
     ))),
     item(set(array
     (
-        'icon'  => 'export',
-        'text'  => $lang->project->export,
-        'class' => "ghost export"
+        'icon'        => 'export',
+        'text'        => $lang->project->export,
+        'class'       => "ghost export",
+        'url'         => createLink('project', 'export', "status={$status}&orderBy={$orderBy}"),
+        'data-toggle' => 'modal'
     ))),
     item(set(array
     (

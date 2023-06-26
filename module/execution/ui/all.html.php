@@ -59,10 +59,11 @@ toolbar
 (
     hasPriv('execution', 'export') ? item(set(array
     (
-        'icon'  => 'export',
-        'text'  => $lang->programplan->exporting,
-        'class' => "ghost export",
-        'url'   => createLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from"),
+        'icon'        => 'export',
+        'text'        => $lang->programplan->exporting,
+        'class'       => "ghost export",
+        'url'         => createLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from"),
+        'data-toggle' => 'modal'
     ))) : null,
     hasPriv('execution', 'create') ? item(set(array
     (
