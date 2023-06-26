@@ -15,6 +15,7 @@ var batchEditDateTips = new Array();
  */
 function changeType(type)
 {
+    if($('.project-type-' + type).hasClass('disabled')) return;
     $('.project-type-1, .project-type-0').removeClass('primary-pale');
     $('.project-type-' + type).addClass('primary-pale');
     $('input[name=hasProduct]').val(type);
@@ -174,7 +175,7 @@ function computeEndDate(delta)
  * 给指定日期加上具体天数，并返回格式化后的日期.
  *
  * @param  string dateString
- * @param  int    days 
+ * @param  int    days
  * @access public
  * @return date
  */
@@ -243,7 +244,7 @@ window.setWhite = function()
 /**
  * If future is checked, disable budget input.
  *
- * @param  object e 
+ * @param  object e
  * @access public
  * @return void
  */
@@ -263,7 +264,7 @@ window.toggleBudget = function(e)
 /**
  * If change multiple, set delta.
  *
- * @param  object e 
+ * @param  object e
  * @access public
  * @return void
  */
@@ -402,7 +403,7 @@ window.ignoreTip = function(obj, currentID)
 /**
  * Add new line for link product.
  *
- * @param  obj e 
+ * @param  obj e
  * @access public
  * @return void
  */
@@ -445,7 +446,7 @@ window.addNewLine = function(e)
 /**
  * Remove line for link product.
  *
- * @param  obj e 
+ * @param  obj e
  * @access public
  * @return void
  */
