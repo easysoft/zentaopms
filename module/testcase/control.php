@@ -2696,18 +2696,20 @@ class testcase extends control
     public function ajaxGetScenesForBC($productID, $branch = 0, $moduleID = 0, $stype = 1, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $number = '', $currentScene = 0)
     {
         $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0, $branch, $currentScene);
-        $optionMenu['ditto'] = $this->lang->testcase->ditto;
 
         if($stype == 1)
         {
+            $optionMenu['ditto'] = $this->lang->testcase->ditto;
             $output = html::select("parent", $optionMenu, "", "class='form-control'");
+            return print($output);
         }
         else
         {
-            $output = html::select("scene" . $number, $optionMenu, array('' => ''), "class='form-control'");
+            $scenes = array();
+            foreach($optionMenu as $sceneID => $sceneName) $scenes[] = array('value' => $sceneID, 'text' => $sceneName);
+            return $this->send($scenes);
         }
 
-        die($output);
     }
 
     /**

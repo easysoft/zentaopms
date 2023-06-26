@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('productID', $productID);
+
 $visibleFields  = array();
 $requiredFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -78,6 +80,34 @@ $items[] = array
     'ditto'    => true,
 );
 
+/* Field of type. */
+$items[] = array
+(
+    'name'     => 'type',
+    'label'    => $lang->testcase->type,
+    'control'  => 'select',
+    'items'    => $lang->testcase->typeList,
+    'value'    => 1,
+    'width'    => '160px',
+    'required' => true,
+    'ditto'    => true,
+);
+
+/* Field of stage. */
+$items[] = array
+(
+    'name'     => 'stage',
+    'label'    => $lang->testcase->stage,
+    'hidden'   => zget($visibleFields, 'stage', true, false),
+    'control'  => array(
+        'type'     => 'select',
+        'items'    => $lang->testcase->stageList,
+        'value'    => '',
+        'multiple' => true,
+    ),
+    'width'    => '160px',
+);
+
 /* Field of story. */
 $items[] = array
 (
@@ -100,19 +130,6 @@ $items[] = array
     'required' => true,
 );
 
-/* Field of type. */
-$items[] = array
-(
-    'name'     => 'type',
-    'label'    => $lang->testcase->type,
-    'control'  => 'select',
-    'items'    => $lang->testcase->typeList,
-    'value'    => 1,
-    'width'    => '160px',
-    'required' => true,
-    'ditto'    => true,
-);
-
 /* Field of pri. */
 $items[] = array
 (
@@ -125,6 +142,19 @@ $items[] = array
     'width'    => '80px',
     'required' => isset($requiredFields['pri']),
     'ditto'   => true,
+);
+
+/* Field of review. */
+$items[] = array
+(
+    'name'     => 'review',
+    'label'    => $lang->testcase->review,
+    'hidden'   => zget($visibleFields, 'review', true, false),
+    'control'  => 'select',
+    'items'    => $lang->testcase->reviewList,
+    'value'    => $needReview,
+    'width'    => '160px',
+    'ditto'    => true,
 );
 
 /* Field of precondition. */
@@ -147,39 +177,11 @@ $items[] = array
     'required' => isset($requiredFields['keywords']),
 );
 
-/* Field of stage. */
-$items[] = array
-(
-    'name'     => 'stage',
-    'label'    => $lang->testcase->stage,
-    'hidden'   => zget($visibleFields, 'stage', true, false),
-    'control'  => array(
-        'type'     => 'select',
-        'items'    => $lang->testcase->stageList,
-        'value'    => '',
-        'multiple' => true,
-    ),
-    'width'    => '160px',
-);
-
-/* Field of review. */
-$items[] = array
-(
-    'name'     => 'review',
-    'label'    => $lang->testcase->review,
-    'hidden'   => zget($visibleFields, 'review', true, false),
-    'control'  => 'select',
-    'items'    => $lang->testcase->reviewList,
-    'value'    => $needReview,
-    'width'    => '160px',
-    'ditto'    => true,
-);
-
 formBatchPanel
 (
     set::items($items),
-    // on::change('[data-name="branch"]', 'setModules'),
-    // on::change('[data-name="module"]', 'onModuleChanged'),
+    on::change('[data-name="branch"]', 'setModules'),
+    on::change('[data-name="module"]', 'onModuleChanged'),
 );
 
 render();

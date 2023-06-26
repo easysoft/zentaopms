@@ -27,29 +27,35 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
  * @access public
  * @return void
  */
-function loadStories(productID, moduleID, num)
+function loadStories(productID, moduleID, num, $currentRow = null)
 {
     var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
-    var branchID     = $(branchIDName + num).val();
-    var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
-    $.get(storyLink, function(stories)
+    var branchID     = config.currentMethod == 'batchcreate' ? $(branchIDName + '_' + num).val() : $(branchIDName + num).val();
+    var storyLink    = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
+    $.getJSON(storyLink, function(stories)
     {
-        if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
         if(config.currentMethod == 'batchcreate')
         {
-            for(var i = num; i <= rowIndex ; i ++)
+            if(!stories) return;
+
+            let $row = $currentRow;
+            while($row.length)
             {
-                if(i != num && $('#module' + i).val() != 'ditto') break;
-                var nowStories = stories.replaceAll('story' + num, 'story' + i);
-                $('#story' + i).replaceWith(nowStories);
-                $('#story' + i + "_chosen").remove();
-                $('#story' + i).next('.picker').remove();
-                $('#story' + i).attr('name', 'story[' + i + ']');
-                $('#story' + i).picker();
+                const $story = $row.find('.form-batch-input[data-name="story"]').empty();
+
+                $.each(stories, function(index, story)
+                {
+                    $story.append('<option value="' + story.value + '">' + story.text + '</option>');
+                });
+
+                $row = $row.next('tr');
+
+                if(!$row.find('td[data-name="story"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length) break;
             }
         }
         else
         {
+            if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
             $('#story' + num).replaceWith(stories);
             $('#story' + num + "_chosen").remove();
             $('#story' + num).next('.picker').remove();
@@ -57,4 +63,43 @@ function loadStories(productID, moduleID, num)
             $('#story' + num).picker();
         }
     });
+}
+
+/**
+ * Set modules.
+ *
+ * @param  int     $branchID
+ * @param  int     $productID
+ * @param  int     $num
+ * @access public
+ * @return void
+ */
+function setModules(event)
+{
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const branchID    = $target.val();
+    const moduleID    = $currentRow.find('.form-batch-input[data-name="module"]').val();
+
+    $.getJSON($.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=case&branch=' + branchID + '&number=0&currentModuleID=' + moduleID), function(data)
+    {
+        if(!data || !data.modules) return;
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $module = $row.find('.form-batch-input[data-name="module"]').empty();
+
+            $.each(data.modules, function(index, module)
+            {
+                $module.append('<option value="' + module.value + '"' + (module.value == data.currentModuleID ? 'selected' : '')  + '>' + module.text + '</option>');
+            });
+
+            $row = $row.next('tr');
+
+            if(!$row.find('td[data-name="module"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length) break;
+        }
+    });
+
+    loadStories(productID, moduleID, 0, $currentRow);
 }

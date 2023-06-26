@@ -658,7 +658,7 @@ class tree extends control
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
         $modules = empty($modules) ? array('' => '/') : $modules;
 
-        if($viewType == 'bug')
+        if($viewType == 'bug' || $viewType == 'case')
         {
             $moduleList = array();
             foreach($modules as $moduleID => $moduleName) $moduleList[] = array('value' => $moduleID, 'text' => $moduleName);
