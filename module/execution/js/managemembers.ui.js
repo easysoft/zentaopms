@@ -32,7 +32,6 @@ window.deleteItem = function(obj)
     $(obj).closest('tr').remove();
 }
 
-
 /**
  * Set dept users.
  *

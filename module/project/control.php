@@ -1402,7 +1402,7 @@ class project extends control
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
             $link = $this->session->teamList ? $this->session->teamList : $this->createLink('project', 'team', "projectID=$projectID");
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $link));
         }
 
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
@@ -1413,19 +1413,17 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
-        $this->view->title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
-
+        $this->view->title          = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $this->view->project        = $project;
         $this->view->users          = $users;
-        $this->view->deptUsers      = $deptUsers;
         $this->view->userInfoList   = $userInfoList;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->currentMembers = $currentMembers;
-        $this->view->members2Import = $members2Import;
         $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
+        $this->view->currentMembers = $currentMembers;
         $this->view->copyProjectID  = $copyProjectID;
+        $this->view->teamMembers    = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
         $this->display();
     }
 

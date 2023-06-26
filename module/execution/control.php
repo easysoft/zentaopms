@@ -3203,7 +3203,6 @@ class execution extends control
 
         $this->view->title          = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
         $this->view->execution      = $execution;
-        $this->view->deptUsers      = $deptUsers;
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;

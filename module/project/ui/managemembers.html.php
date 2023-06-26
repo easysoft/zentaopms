@@ -1,23 +1,25 @@
 <?php
 declare(strict_types=1);
 /**
- * The manageMembers view file of execution module of ZenTaoPMS.
+ * The manageMembers view file of project module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
- * @package     execution
+ * @package     project
  * @link        https://www.zentao.net
  */
 namespace zin;
 
 jsVar('users', $users);
 jsVar('roles', $roles);
-jsVar('team2Import', $team2Import);
-jsVar('executionID', $execution->id);
+jsVar('projectID', $project->id);
+jsVar('copyProjectID', $copyProjectID);
+jsVar('oldAccountList', array_keys($currentMembers));
+jsVar('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
-if(count($teams2Import) != 1)
+if(count($teams2Import) > 1)
 {
     $copyTeamBox = div
         (
@@ -29,18 +31,19 @@ if(count($teams2Import) != 1)
             ),
             select
             (
-                set::name('execution'),
-                set::value($team2Import),
+                set::name('project'),
+                set::value($copyProjectID),
                 set::items($teams2Import),
-                set('data-placeholder', $lang->execution->copyTeamTitle),
+                set('data-placeholder', $lang->project->copyTeamTitle),
                 on::change('choseTeam2Copy'),
             ),
         );
 }
+
 featureBar
 (
     set::current('all'),
-    set::linkParams("executionID={$execution->id}"),
+    set::linkParams("projectID={$project->id}"),
     div
     (
         setClass('select-dept-box ml-4'),
@@ -182,7 +185,7 @@ h::table
             (
                 set::id("days{$i}"),
                 set::name("days[$i]"),
-                set::value($execution->days),
+                set::value($project->days),
             )
         ),
         h::td
@@ -267,7 +270,13 @@ div
             ),
             h::tbody
             (
-                $memberTR
+                $memberTR,
+                input
+                (
+                    set::type('hidden'),
+                    set::name('removeExecution'),
+                    set::value('no'),
+                )
             )
         )
     ),

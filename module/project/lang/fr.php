@@ -468,3 +468,5 @@ $lang->project->executionList['agileplus']     = $lang->projectCommon . ' Sprint
 $lang->project->executionList['waterfallplus'] = $lang->projectCommon . ' Stage';
 
 $lang->project->featureBar['team']['all'] = 'Members';
+
+$lang->project->featureBar['managemembers']['all'] = 'Manage Team';

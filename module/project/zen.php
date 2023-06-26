@@ -1031,4 +1031,64 @@ class projectZen extends project
 
         return array_values($builds);
     }
+
+    /**
+     * 构建项目团队成员信息。
+     * Build project team member information.
+     *
+     * @param  array  $currentMembers
+     * @param  array  $members2Import
+     * @param  array  $deptUsers
+     * @param  int    $days
+     * @access public
+     * @return array
+     */
+    public function buildMembers(array $currentMembers, array $members2Import, array $deptUsers, int $days): array
+    {
+        $teamMembers = array();
+        foreach($currentMembers as $account => $member)
+        {
+            $member->memberType = 'default';
+            $teamMembers[$account] = $member;
+        }
+
+        $roles = $this->loadModel('user')->getUserRoles(array_keys($deptUsers));
+        foreach($deptUsers as $deptAccount => $userName)
+        {
+            if(isset($currentMembers[$deptAccount]) || isset($members2Import[$deptAccount])) continue;
+
+            $deptMember = new stdclass();
+            $deptMember->memberType = 'dept';
+            $deptMember->account    = $deptAccount;
+            $deptMember->role       = zget($roles, $deptAccount, '');
+            $deptMember->days       = $days;
+            $deptMember->hours      = $this->config->execution->defaultWorkhours;
+            $deptMember->limited    = 'no';
+
+            $teamMembers[$deptAccount] = $deptMember;
+        }
+
+        foreach($members2Import as $account => $member2Import)
+        {
+            $member2Import->memberType = 'import';
+            $member2Import->days       = $days;
+            $member2Import->limited    = 'no';
+            $teamMembers[$account] = $member2Import;
+        }
+
+        for($j = 0; $j < 5; $j ++)
+        {
+            $newMember = new stdclass();
+            $newMember->memberType = 'add';
+            $newMember->account    = '';
+            $newMember->role       = '';
+            $newMember->days       = $days;
+            $newMember->hours      = $this->config->execution->defaultWorkhours;
+            $newMember->limited    = 'no';
+
+            $teamMembers[] = $newMember;
+        }
+
+        return $teamMembers;
+    }
 }
