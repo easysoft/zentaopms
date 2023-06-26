@@ -5500,9 +5500,8 @@ class storyModel extends model
      */
     public function formatStoryForList(object $story, array $options = array()): object
     {
-        $story->actions  = $this->buildActionButtonList($story, 'browse');
+        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null));
         $story->estimate = $story->estimate . $this->config->hourUnit;
-        $story->isParent = isset($story->children);
 
         $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
         $story->bugCount  = zget(zget($options, 'storyBugs',  array()), $story->id, 0);
@@ -5515,6 +5514,8 @@ class storyModel extends model
         $story->category     = zget($this->lang->story->categoryList, $story->category);
         $story->closedReason = zget($this->lang->story->reasonList,   $story->closedReason);
 
+        if($story->parent < 0) $story->parent = 0;
+        if(empty($options['execution'])) $story->isParent = isset($story->children);
         if($story->mailto)
         {
             $mailto = '';
@@ -5526,6 +5527,20 @@ class storyModel extends model
                 $mailto .= zget(zget($options, 'users', array()), $account) . ' ';
             }
             $story->mailto = $mailto;
+        }
+
+        /* Rewrite actions by action menus in options. */
+        if(isset($options['actionMenus']))
+        {
+            $actions = array();
+            foreach($options['actionMenus'] as $actionName)
+            {
+                foreach($story->actions as $action)
+                {
+                    if($action['name'] == $actionName) $actions[] = $action;
+                }
+            }
+            $story->actions = $actions;
         }
 
         return $story;

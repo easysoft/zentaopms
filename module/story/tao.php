@@ -1435,219 +1435,129 @@ class storyTao extends storyModel
     {
         global $lang;
 
-        /* If the story cannot be changed, render the close button. */
-        if(!common::canBeChanged('story', $story))
-        {
-            return array(array
-            (
-                'name'        => 'close',
-                'hint'        => $lang->close,
-                'disabled'    => false,
-                'data-toggle' => 'modal',
-                'data-url'    => helper::createLink('story', 'close', $params . "&from=&storyType=$story->type", '', true),
-            ));
-        }
-
-        $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-        if($story->URChanged)
-        {
-            $link = helper::createLink('story', 'processStoryChange', $params, '', true);
-            return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'data-url' => $link));
-        }
-
-        /* Padding data. */
-        if(!isset($story->from)) $story->from = '';
-
-        /* Change button. */
-        $isClick = $this->isClickable($story, 'change');
-        $title   = $isClick ? '' : $this->lang->story->changeTip;
-        $actions[] = array
-        (
-            'name'     => 'change',
-            'url'      => !$isClick ? null : helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type"),
-            'hint'     => $title,
-            'disabled' => !$isClick,
-        );
-
-        /* Submitreview, review, recall buttons. */
         $actSubmitreview = array();
         $actReview       = array();
         $actRecall       = array();
+        $storyReviewer   = isset($story->reviewer) ? $story->reviewer : array();
+        $executionID     = empty($execution) ? 0 : $execution->id;
+        if(!isset($story->from)) $story->from = '';
+
+        $closeLink              = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type");
+        $processStoryChangeLink = helper::createLink('story', 'processStoryChange', $params);
+        $changeLink             = helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type");
+        $submitReviewLink       = helper::createLink('story', 'submitReview', "storyID=$story->id&storyType=$story->type");
+        $reviewLink             = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type");
+        $recallLink             = helper::createLink('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type");
+        $batchCreateStoryLink   = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
+        $editLink               = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type");
+        $createCaseLink         = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
+
+        /* If the story cannot be changed, render the close button. */
+        $canClose = common::hasPriv('story', 'close') && $this->isClickable($story, 'close');
+        if(!common::canBeChanged('story', $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
+        if($story->URChanged) return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'url' => common::hasPriv('story', 'processStoryChange') ? $processStoryChangeLink : null));
+
+        /* Change button. */
+        $canChange = common::hasPriv('story', 'change') && $this->isClickable($story, 'change');
+        $title     = $canChange ? '' : $this->lang->story->changeTip;
+        $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange);
+
+        /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
         {
-            $link            = helper::createLink('story', 'submitReview', "storyID=$story->id&storyType=$story->type", '', true);
-            $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'data-url' => $link);
+            $canSubmitReview = common::hasPriv('story', 'submitReview');
+            $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null);
         }
         else
         {
-            $isClick = $this->isClickable($story, 'review');
-            $title   = $this->lang->story->review;
-            if(!$isClick && $story->status != 'closed')
+            $canReview = common::hasPriv('story', 'review') && $this->isClickable($story, 'review');
+            $title     = $this->lang->story->review;
+            if(!$canReview && $story->status != 'closed')
             {
-                if($story->status == 'active')
-                {
-                    $title = $this->lang->story->reviewTip['active'];
-                }
-                elseif($storyReviewer && in_array($this->app->user->account, $storyReviewer))
-                {
-                    $title = $this->lang->story->reviewTip['reviewed'];
-                }
-                elseif($storyReviewer && !in_array($this->app->user->account, $storyReviewer))
-                {
-                    $title = $this->lang->story->reviewTip['notReviewer'];
-                }
+                if($story->status == 'active') $title = $this->lang->story->reviewTip['active'];
+                if($storyReviewer && in_array($this->app->user->account, $storyReviewer))  $title = $this->lang->story->reviewTip['reviewed'];
+                if($storyReviewer && !in_array($this->app->user->account, $storyReviewer)) $title = $this->lang->story->reviewTip['notReviewer'];
             }
-            $link      = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type", '', true);
-            $actReview = array
-            (
-                'name'     => 'review',
-                'url'      => !$isClick ? null : $link,
-                'hint'     => $title,
-                'disabled' => !$isClick
-            );
+
+            $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview);
         }
 
-        $isClick   = $this->isClickable($story, 'recall');
+        $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-        $title     = $isClick ? $title : $this->lang->story->recallTip['actived'];
-        $link      = helper::createLink('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", '', true);
-        $actRecall = array
-        (
-            'name'        => 'recall',
-            'data-toggle' => !$isClick ? null : 'modal',
-            'data-url'    => !$isClick ? null : $link,
-            'hint'        => $title,
-            'disabled'    => !$isClick
-        );
+        if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
+        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'data-toggle' => $canRecall ? 'modal' : null, 'url' => $canRecall ? $link : null, 'hint' => $title, 'disabled' => !$canRecall);
 
         /* Change the render order. */
         if(!empty($actSubmitreview))
         {
             $actions[] = $actSubmitreview;
-            $actions[] = array('type' => 'dropdown', 'items' => array($actRecall));
+            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall));
+        }
+        elseif($actReview['disabled'] && !$actRecall['disabled'])
+        {
+            $actions[] = $actRecall;
+            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actReview));
         }
         else
         {
-            if($actReview['disabled'] && !$actRecall['disabled'])
-            {
-                $actions[] = $actRecall;
-                $actions[] = array('type' => 'dropdown', 'items' => array($actReview));
-            }
-            else
-            {
-                $actions[] = $actReview;
-                $actions[] = array('type' => 'dropdown', 'items' => array($actRecall));
-            }
+            $actions[] = $actReview;
+            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall));
         }
 
-        /* Close and unlink story buttons. */
-        if($this->app->tab == 'product' && $storyType == 'requirement')
-        {
-            $link      = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type", '', true);
-            $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $link);
-        }
-
-        if(($this->app->rawModule == 'projectstory' || ($this->app->tab != 'product' && $storyType == 'requirement')) && $this->config->vision != 'lite')
-        {
-            $link      = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type", '', true);
-            $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $link);
-
-            /* Unlink story button. */
-            if(!empty($execution) && $execution->hasProduct)
-            {
-                $link      = helper::createLink('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", '', true);
-                $actions[] = array('name' => 'unlinkStory', 'data-toggle' => 'modal', 'data-url' => $link);
-            }
-        }
-
-        if($this->app->tab == 'product' && $storyType == 'story')
-        {
-            $link      = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type", '', true);
-            $actions[] = array('name' => 'close', 'data-toggle' => 'modal', 'data-url' => $link);
-        }
+        $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose);
 
         /* Render divider line. */
-        $vars            = "storyType={$story->type}";
-        $canChange       = common::hasPriv('story', 'change', '', $vars);
-        $canRecall       = common::hasPriv('story', 'recall', '', $vars);
-        $canSubmitReview = (strpos('draft,changing', $story->status) !== false && common::hasPriv('story', 'submitReview', '', $vars));
-        $canReview       = (strpos('draft,changing', $story->status) === false && common::hasPriv('story', 'review', '', $vars));
-        $canEdit         = common::hasPriv('story', 'edit', '', $vars);
-        $canBatchCreate  = ($this->app->tab == 'product' && (common::hasPriv('story', 'batchCreate', '', 'storyType=story')));
-        $canCreateCase   = ($story->type == 'story' && common::hasPriv('testcase', 'create'));
-        $canClose        = common::hasPriv('story', 'close', '', $vars);
-        $canUnlinkStory  = ($this->app->tab == 'project' && common::hasPriv('projectstory', 'unlinkStory'));
-
-        $dividerAction = array('name' => 'divider', 'class'=>'nav-divider', 'type' => 'dropdown', 'icon' => '', 'caret' => false);
-        $action        = null;
-        if(in_array($this->app->tab, array('product', 'project')))
-        {
-            if(($canChange || $canRecall || $canSubmitReview || $canReview || $canEdit) && ($canCreateCase || $canBatchCreate || $canClose || $canUnlinkStory))
-            {
-                $action = $dividerAction;
-            }
-        }
-
-        if($this->app->tab == 'product' && in_array($storyType, array('requirement', 'story')))
-        {
-            if($canClose && ($canBatchCreate || $canCreateCase)) $action = $dividerAction;
-        }
-
-        if(($this->app->rawModule == 'projectstory' || ($this->app->tab != 'product' && $storyType == 'requirement')) && $this->config->vision != 'lite')
-        {
-            if($canCreateCase && ($canClose || $canUnlinkStory)) $action = $dividerAction;
-        }
-        $actions[] = $action;
+        $actions[] = array('name' => 'divider', 'class'=>'nav-divider', 'type' => 'dropdown', 'icon' => '', 'caret' => false);
 
         /* Edit button. */
-        $isClick   = $this->isClickable($story, 'edit');
-        $link      = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type");
-        $actions[] = array
-        (
-            'name'     => 'edit',
-            'url'      => !$isClick ? null : $link,
-            'disabled' => !$isClick
-        );
+        $canEdit = common::hasPriv('story', 'edit') && $this->isClickable($story, 'edit');
+        $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
-        if($story->type != 'requirement' && $this->config->vision != 'lite')
-        {
-            $link      = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
-            $actions[] = array('name' => 'testcase', 'url' => $link);
-        }
+        if($story->type != 'requirement' && $this->config->vision != 'lite') $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') ? $createCaseLink : null, 'disabled' => !common::hasPriv('testcase', 'create'));
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-        $isClick = $this->isClickable($story, 'batchcreate');
+        $canBatchCreateStory = $this->app->tab == 'product' && (common::hasPriv('story', 'batchCreate', '', 'storyType=story')) && $this->isClickable($story, 'batchcreate');
         if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
         {
-            $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-            if(!$isClick && $story->status != 'closed')
+            $title = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
+            if(!$canBatchCreateStory && $story->status != 'closed')
             {
-                if($story->parent > 0)
-                {
-                    $title = $this->lang->story->subDivideTip['subStory'];
-                }
-                elseif(!empty($story->twins))
-                {
-                    $title = $this->lang->story->subDivideTip['twinsSplit'];
-                }
-                else
-                {
-                    if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
-                    if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
-                }
+                if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
+                if($story->parent > 0)    $title = $this->lang->story->subDivideTip['subStory'];
             }
 
-            $executionID = empty($execution) ? 0 : $execution->id;
-            $link        = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
-            $actions[]   = array
-            (
-                'name'     => 'batchCreate',
-                'url'      => !$isClick ? null : $link,
-                'hint'     => $title,
-                'disabled' => !$isClick
-            );
+            $actions[] = array('name' => 'batchCreate', 'url' => !$canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);
+        }
+
+        if(!empty($execution))
+        {
+            if($execution->type != 'project')
+            {
+                $createTaskLink      = helper::createLink('task', 'create', "executionID={$execution->id}&storyID={$story->id}");
+                $batchCreateTaskLink = helper::createLink('task', 'batchCreate', "executionID={$execution->id}&storyID={$story->id}");
+                $storyEstimateLink   = helper::createLink('execution', 'storyEstimate', "executionID={$execution->id}&storyID={$story->id}");
+
+                $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active';
+                $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active';
+                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate');
+
+                $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask);
+                $actions[] = array('name' => 'batchCreateTask', 'url' => $canBatchCreateTask ? $batchCreateTaskLink : null, 'disabled' => !$canBatchCreateTask);
+                $actions[] = array('name' => 'storyEstimate',   'url' => $canStoryEstimate   ? $storyEstimateLink   : null, 'disabled' => !$canStoryEstimate);
+            }
+
+            if($execution->hasProduct)
+            {
+                $unlinkModule    = $execution->type == 'project' ? 'projectstory' : 'execution';
+                $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
+                $unlinkStoryLink = helper::createLink($unlinkModule, 'unlinkStory', "projectID={$execution->id}&$params&confirm=yes");
+                $unlinkStoryTip  = $unlinkModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
+                $actions[]       = array('name' => 'unlink', 'class' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => !$canUnlinkStory);
+            }
         }
 
         return $actions;

@@ -356,24 +356,15 @@ foreach($setting as $col)
 
 /* DataTable data. */
 $data = array();
+$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink');
+$options     = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus);
 foreach($stories as $story)
 {
-    $story->taskCount = $storyTasks[$story->id];
-    $story->actions   = $this->story->buildActionButtonList($story, 'browse');
-    $story->plan      = isset($story->planTitle) ? $story->planTitle : $plans[$story->plan];
-
-    $data[] = $story;
-
+    $data[] = $this->story->formatStoryForList($story, $options);
     if(!isset($story->children)) continue;
 
     /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->taskCount = $storyTasks[$child->id];
-        $child->actions   = $this->story->buildActionButtonList($child, 'browse', $execution);
-
-        $data[] = $child;
-    }
+    foreach($story->children as $key => $child) $data[] = $this->story->formatStoryForList($child, $options);
 }
 
 jsVar('cases', $storyCases);
