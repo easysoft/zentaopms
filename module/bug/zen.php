@@ -2254,8 +2254,8 @@ class bugZen extends bug
     protected function extractObjectFromExtras(object $bug, array $output): object
     {
         extract($output);
-        $resultID = (int)$resultID;
-        $caseID   = (int)$caseID;
+        if(isset($resultID)) $resultID = (int)$resultID;
+        if(isset($caseID))   $caseID   = (int)$caseID;
 
         /* 获取用例的标题、步骤、所属需求、所属模块、版本、所属执行。 */
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
