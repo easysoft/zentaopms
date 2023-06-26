@@ -188,7 +188,7 @@ featureBar
 toolbar
 (
     item(set(array('text' => $lang->project->report, 'icon' => 'bar-chart', 'class' => 'ghost'))),
-    item(set(array('text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType")))),
+    item(set(array('text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
     item(set(array('text' => $lang->import, 'icon' => 'import', 'class' => 'ghost', 'url' => helper::createLink('story', 'import', "productID=$productID")))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
