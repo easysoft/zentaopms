@@ -118,6 +118,7 @@ $lang->testcase->deleteAction            = "删除用例";
 $lang->testcase->view                    = "用例详情";
 $lang->testcase->review                  = "评审";
 $lang->testcase->reviewAB                = "评审";
+$lang->testcase->reviewAction            = "评审用例";
 $lang->testcase->batchReview             = "批量评审";
 $lang->testcase->edit                    = "编辑用例";
 $lang->testcase->batchEdit               = "批量编辑 ";

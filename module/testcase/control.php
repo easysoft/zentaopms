@@ -1229,7 +1229,7 @@ class testcase extends control
         if($_POST)
         {
             $changes = $this->testcase->review($caseID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(is_array($changes))
             {
@@ -1239,13 +1239,14 @@ class testcase extends control
 
                 $this->executeHooks($caseID);
 
-                return print(js::reload('parent.parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             }
         }
 
-        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->case    = $this->testcase->getById($caseID);
-        $this->view->actions = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->testcase = $this->testcase->getByID($caseID);
+        $this->view->users    = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->case     = $this->testcase->getById($caseID);
+        $this->view->actions  = $this->loadModel('action')->getList('case', $caseID);
         $this->display();
     }
 

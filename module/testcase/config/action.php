@@ -26,10 +26,11 @@ $config->testcase->actionList['edit']['text'] = $lang->testcase->edit;
 $config->testcase->actionList['edit']['hint'] = $lang->testcase->edit;
 $config->testcase->actionList['edit']['url']  = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={id}&comment=false&executionID=%executionID%');
 
-$config->testcase->actionList['review']['icon'] = 'glasses';
-$config->testcase->actionList['review']['text'] = $lang->testcase->review;
-$config->testcase->actionList['review']['hint'] = $lang->testcase->review;
-$config->testcase->actionList['review']['url']  = array('module' => 'testcase', 'method' => 'review', 'params' => 'caseID={id}');
+$config->testcase->actionList['review']['icon']        = 'glasses';
+$config->testcase->actionList['review']['text']        = $lang->testcase->review;
+$config->testcase->actionList['review']['hint']        = $lang->testcase->review;
+$config->testcase->actionList['review']['url']         = array('module' => 'testcase', 'method' => 'review', 'params' => 'caseID={id}');
+$config->testcase->actionList['review']['data-toggle'] = 'modal';
 
 $config->testcase->actionList['createBug']['icon'] = 'bug';
 $config->testcase->actionList['createBug']['text'] = $lang->testcase->createBug;

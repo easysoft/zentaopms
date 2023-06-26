@@ -1,0 +1,64 @@
+<?php
+declare(strict_types=1);
+/**
+ * The review view file of testcase module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Tingting Dai <daitingting@easycorp.ltd>
+ * @package     testcase
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+modalHeader();
+
+form
+(
+    formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->testcase->reviewedDateAB),
+        input
+        (
+            set::name('reviewedDate'),
+            set::type('date'),
+            set::value(helper::today()),
+        )
+    ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->testcase->reviewResultAB),
+        set::required(true),
+        select
+        (
+            set::name('result'),
+            set::items($lang->testcase->reviewResultList),
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->testcase->reviewedByAB),
+        select
+        (
+            set::name('reviewedBy[]'),
+            set::value($app->user->account),
+            set::items($users),
+            set::multiple(true),
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->comment),
+        editor
+        (
+            set::name('comment'),
+            set::rows(8)
+        )
+    ),
+    set::actions(array('submit')),
+);
+
+history();
+
+render('modalDialog');

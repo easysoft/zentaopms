@@ -118,6 +118,7 @@ $lang->testcase->deleteAction            = "Supprimer CasTest";
 $lang->testcase->view                    = "Détail CasTest";
 $lang->testcase->review                  = "Doit être validé";
 $lang->testcase->reviewAB                = "Validation";
+$lang->testcase->reviewAction            = "Review Case";
 $lang->testcase->batchReview             = "Validation par Lot";
 $lang->testcase->edit                    = "Modifier CasTest";
 $lang->testcase->batchEdit               = "Modifier par Lot ";

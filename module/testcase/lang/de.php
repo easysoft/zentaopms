@@ -118,6 +118,7 @@ $lang->testcase->deleteAction            = "Löschen Case";
 $lang->testcase->view                    = "Übersicht";
 $lang->testcase->review                  = "Prüfung";
 $lang->testcase->reviewAB                = "Prüfung";
+$lang->testcase->reviewAction            = "Review Case";
 $lang->testcase->batchReview             = "Mehrere Prüfungfen";
 $lang->testcase->edit                    = "Bearbeiten";
 $lang->testcase->batchEdit               = "Mehrere bearbeiten ";
