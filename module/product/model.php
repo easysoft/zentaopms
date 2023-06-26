@@ -1393,27 +1393,26 @@ class productModel extends model
      * @param  object $product
      * @param  string $type
      * @access public
-     * @return string
+     * @return array
      */
-    public function buildOperateMenu(object $product, $type = 'view'): string
+    public function buildOperateMenu(object $product, string $type = 'view'): array
     {
-        $menu    = '';
-        $params  = "product=$product->id";
-        $divider = "<div class='divider'></div>";
+        /* Declare menu list. */
+        $menuList = array
+        (
+            'main'   => array(),
+            'suffix' => array()
+        );
 
-        if($type == 'view')
-        {
-            $menu .= $divider . $this->buildFlowMenu('product', $product, $type, 'direct') . $divider;
+        $params = "product=$product->id";
 
-            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
-            $menu .= $divider;
-        }
+        if($type == 'view') $menuList['main'][] = $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
 
-        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+        $menuList['suffix'][] = $this->buildMenu('product', 'edit', $params, $product, $type);
 
-        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        if($type == 'view') $menuList['suffix'][] = $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
 
-        return $menu;
+        return $menuList;
     }
 
     /**
@@ -1779,9 +1778,25 @@ class productModel extends model
 
         if(!$returnHtml) return $enabled;
 
-        $html = '';
-        $type = $type == 'browse' ? 'list' : 'button';
-        $html = common::buildIconButton($module, $method, $params, $data, $type, $icon, $target, $class, $onlyBody, $misc, $title, '', $enabled);
-        return $html;
+        global $lang, $app;
+        if(!$icon) $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
+        if(empty($title))
+        {
+            $title = $method;
+            if($method == 'create' && $icon == 'copy') $method = 'copy';
+            if(isset($lang->$method) && is_string($lang->$method)) $title = $lang->$method;
+            if((isset($lang->$module->$method) || $app->loadLang($module)) && isset($lang->$module->$method))
+            {
+                $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+            }
+        }
+
+        return array
+        (
+            'icon' => $icon,
+            'text' => in_array($method, array('edit', 'delete')) ? '' : $title,
+            'hint' => $title,
+            'url'  => helper::createLink($module, $method, $params, '', $onlyBody)
+        );
     }
 }

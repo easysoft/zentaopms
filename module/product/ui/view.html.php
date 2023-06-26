@@ -218,16 +218,17 @@ div
             /* Extend Fields. */
         ),
         /* Float action toolbar. */
-        div
+        floatToolbar
         (
-            setClass('flex justify-center'),
-            toolbar(
-                isonlybody() ? null : btn(
-                    set::icon('back'),
-                    set::url($goBackLink),
-                    $lang->goback
-                )
-            )
+            set(array_merge
+            (
+                array('prefix' => isonlybody() ? null : array(array(
+                    'icon' => 'back',
+                    'url'  => ($goBackLink),
+                    'text' => $lang->goback
+                ))),
+                $this->product->buildOperateMenu($product, 'view')
+            ))
         )
     ),
     /* Action list. */
