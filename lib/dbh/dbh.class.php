@@ -512,10 +512,12 @@ class dbh
 
         if(!in_array($action, $allowedActions)) return null;
 
-        $queue  = "INSERT INTO" . TABLE_SQLITE_QUEUE;
-        $queue .= " SET `sql` = " . $this->quote($sql);
-        $queue .= ", addDate = now()";
-        $queue .= ", `status` = 'wait'";
+        $table  = TABLE_SQLITE_QUEUE;
+        $sql    = $this->quote($sql);
+        $now    = "now()";
+        $action = $this->getLastAction();
+
+        $queue = "INSERT INTO $table SET `sql` = $sql, `addDate` = $now, `status` = 'wait', `action` = $action";
 
         $this->pdo->exec($queue);
         return $this->pdo->lastInsertId();
