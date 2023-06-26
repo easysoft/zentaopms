@@ -357,7 +357,7 @@
                     if(!isInAppTab && config.zin) return;
                     data = [{name: data.includes('Fatal error') ? 'fatal' : 'html', data: data}];
                 }
-                if(options.partial) currentAppUrl = url;
+                if(!options.partial) currentAppUrl = url;
                 if(Array.isArray(data))
                 {
                     data.forEach((item, idx) => item.selector = selectors[idx]);
@@ -474,7 +474,6 @@
         }
 
         options  = $.extend({url: currentAppUrl, id: options.selector || 'page'}, options);
-        if(options.selector && options.partial === undefined) options.partial = true;
         if(!options.selector)
         {
             if($('#main').length)
