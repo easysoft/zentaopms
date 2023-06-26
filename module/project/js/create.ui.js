@@ -1,42 +1,60 @@
-/**
- * 处理项目类型改变的交互。
- * Handle project type change style.
- *
- * @param  string $type
- * @access public
- * @return void
- */
-function changeType(type)
+window.addProduct = function(e)
 {
-    $('.project-type-1, .project-type-0').removeClass('primary-pale');
-    $('.project-type-' + type).addClass('primary-pale');
-    $('input[name=hasProduct]').val(type);
+    if($(e.target).prop('checked'))
+    {
+        $('.productBox').addClass('hidden');
+        $('#addProductBox').removeClass('hidden');
+        $("[name^='newProduct']").prop('checked', true);
+    }
+    else
+    {
+        $('.productBox').removeClass('hidden');
+        $('#addProductBox').addClass('hidden');
+        $("[name^='newProduct']").prop('checked', false);
+    }
 }
 
-/**
- * 设置计划结束时间。
- * Set plan end date.
- *
- * @access public
- * @return void
- */
-function setDate()
+window.productChange = function(e)
 {
-    const delta = $('input[name=delta]:checked').val();
-    computeEndDate(delta);
+    loadBranches(e.target);
+
+    let current    = $(e.target).val();
+    let last       = $(e.target).attr('last');
+    let lastBranch = $(e.target).attr('data-lastBranch');
+
+    $(e.target).attr('data-last', current);
+
+    let $branch = $(e.target).closest('.has-branch').find("[name^='branch']");
+    if($branch.length)
+    {
+        let branchID = $branch.val();
+        $(e.target).attr('data-lastBranch', branchID);
+    }
+    else
+    {
+        $(e.target).removeAttr('data-lastBranch');
+    }
+
+    let chosenProducts = 0;
+    $(".productsBox select[name^='products']").each(function()
+    {
+        if($(e.target).val() > 0) chosenProducts ++;
+    });
+
+    if(chosenProducts > 1)  $('.stageBy').removeClass('hide');
+    if(chosenProducts <= 1) $('.stageBy').addClass('hide');
 }
 
-/**
- * Set acl list when change program.
- *
- * @access public
- * @return void
- */
-window.setParentProgram = function()
+window.branchChange = function(e)
 {
-    const programID = $('#parent').val();
-    const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
-    loadPage(link, '#aclList');
+    let current = $(e.target).val();
+    let last    = $(e.target).attr('data-last');
+    $(e.target).attr('data-last', current);
+
+    let $product = $(e.target).closest('.form-row').find("[name^='products']");
+    $product.attr('data-lastBranch', current);
+
+    loadPlans($product, $(e.target));
 }
 
 $(document).on('click', '#copyProjects button', function()

@@ -2,7 +2,58 @@ window.ignoreTips = {
     'beyondBudgetTip' : false,
     'dateTip'         : false
 };
+
 var batchEditDateTips = new Array();
+
+/**
+ * 处理项目类型改变的交互。
+ * Handle project type change style.
+ *
+ * @param  string $type
+ * @access public
+ * @return void
+ */
+function changeType(type)
+{
+    $('.project-type-1, .project-type-0').removeClass('primary-pale');
+    $('.project-type-' + type).addClass('primary-pale');
+    $('input[name=hasProduct]').val(type);
+
+    if(type == 0)
+    {
+        $('.productBox').addClass('hidden');
+    }
+    else
+    {
+        $('.productBox').removeClass('hidden');
+    }
+}
+
+/**
+ * 设置计划结束时间。
+ * Set plan end date.
+ *
+ * @access public
+ * @return void
+ */
+function setDate()
+{
+    const delta = $('input[name=delta]:checked').val();
+    computeEndDate(delta);
+}
+
+/**
+ * Set acl list when change program.
+ *
+ * @access public
+ * @return void
+ */
+window.setParentProgram = function()
+{
+    const programID = $('#parent').val();
+    const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
+    loadPage(link, '#aclList');
+}
 
 /**
  * 计算两个时间的天数。
@@ -346,4 +397,151 @@ window.ignoreTip = function(obj, currentID)
     if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
     if(parentID == 'dateTip' + currentID) batchEditDateTips.push(currentID);
     if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
+}
+
+/**
+ * Add new line for link product.
+ *
+ * @param  obj e 
+ * @access public
+ * @return void
+ */
+window.addNewLine = function(e)
+{
+    const obj     = e.target
+    const newLine = $(obj).closest('.form-row').clone();
+    let index = 0;
+
+    newLine.find('.addLine').on('click', addNewLine);
+    newLine.find('.removeLine').on('click', removeLine);
+    newLine.find("select[name^='products']").on('change', productChange);
+    newLine.find("select[name^='branch']").on('change', branchChange);
+
+    $("select[name^='products']").each(function()
+    {
+        let id = $(this).attr('name').replace(/[^\d]/g, '');
+
+        id = parseInt(id);
+        id ++;
+
+        index = id > index ? id : index;
+    })
+
+    newLine.addClass('newLine');
+    newLine.find('.form-label').html('');
+    newLine.find('.removeLine').removeClass('disabled');
+    newLine.find('[name="newProduct"]').closest('div.items-center').remove();
+    newLine.find('.chosen-container').remove();
+    newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('');
+    newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').val('');
+    newLine.find("select[name^='branch']").val('');
+    newLine.find("div[id^='plan']").attr('id', 'plan' + index);
+
+    $(obj).closest('.form-row').after(newLine);
+    let product = newLine.find("select[name^='products']");
+    let branch  = newLine.find("select[name^='branch']");
+}
+
+/**
+ * Remove line for link product.
+ *
+ * @param  obj e 
+ * @access public
+ * @return void
+ */
+window.removeLine = function(e)
+{
+    const obj = e.target
+
+    /* Dsiabled btn can't remove line. */
+    if($(obj).closest('.btn').hasClass('disabled')) return false;
+
+    $(obj).closest('.form-row').remove();
+
+    let chosenProducts = 0;
+    $("select[name^='products']").each(function()
+    {
+      if($(this).val() > 0) chosenProducts ++;
+    });
+
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
+}
+
+/**
+ * Load branches.
+ *
+ * @param  int $product
+ * @access public
+ * @return void
+ */
+window.loadBranches = function(product)
+{
+    /* When selecting a product, delete a plan that is empty by default. */
+    $("#planDefault").remove();
+
+    let chosenProducts = [];
+    $("select[name^='products']").each(function()
+    {
+        let $product  = $(product);
+        let productID = $(this).val();
+        if(productID > 0 && chosenProducts.indexOf(productID) == -1) chosenProducts.push(productID);
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
+        {
+            zui.Modal.alert(errorSameProducts);
+            $product.val(0);
+            $product.trigger("chosen:updated");
+            return false;
+        }
+    });
+
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
+
+    let $formRow  = $(product).closest('.form-row');
+    let index     = $formRow.find('select').first().attr('name').match(/\d+/)[0];
+    let oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
+
+    if(!multiBranchProducts[$(product).val()])
+    {
+        $formRow.find('.form-group').last().find('select').val('').trigger('chosen:updated');
+        $formRow.find('.form-group').eq(1).addClass('hidden');
+    }
+
+    $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
+    {
+        if(data)
+        {
+            $formRow.find("select[name^='branch']").replaceWith(data);
+            $formRow.find('.form-group').eq(1).removeClass('hidden');
+            $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index);
+        }
+
+        let branch = $('#branch' + index);
+        loadPlans(product, branch);
+    });
+}
+
+/**
+ * Load plans.
+ *
+ * @param  obj $product
+ * @param  obj $branchID
+ * @access public
+ * @return void
+ */
+window.loadPlans = function(product, branch)
+{
+    let productID = $(product).val();
+    let branchID  = $(branch).val() == null ? 0 : '0,' + $(branch).val();
+    let planID    = $(product).attr('data-plan') !== undefined ? $(product).attr('data-plan') : 0;
+    let index     = $(product).attr('name').match(/\d+/)[0];
+
+    $.get($.createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent,multiple'), function(data)
+    {
+        if(data)
+        {
+            $("div#plan" + index).find("select[name^='plans']").replaceWith(data);
+            $("div#plan" + index).find('.chosen-container').remove();
+            $("div#plan" + index).find('select').attr('name', 'plans[' + productID + ']' + '[]').attr('id', 'plans' + productID);
+        }
+    });
 }

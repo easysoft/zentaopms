@@ -1,6 +1,9 @@
 <?php
 namespace zin;
 
+jsVar('model', $project->model);
+jsVar('longTime', $lang->project->longTime);
+jsVar('weekend', $config->execution->weekend);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
@@ -36,6 +39,7 @@ if($linkedProducts)
         $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
         $productGroup[] = formRow
         (
+            setClass('productBox'),
             formGroup
             (
                 set::width('1/2'),
@@ -52,6 +56,7 @@ if($linkedProducts)
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
+                            on::change('productChange')
                         )
                     ),
                 )
@@ -68,6 +73,7 @@ if($linkedProducts)
                         set::name("branch[$i][]"),
                         set::items($branches),
                         set::value(join(',', $product->branches)),
+                        on::change('branchChange')
                     )
                 ),
             ),
@@ -143,7 +149,8 @@ formPanel
             set::name('parent'),
             set::value($project->parent),
             set::label($lang->project->parent),
-            set::items($programList)
+            set::items($programList),
+            on::change('setParentProgram')
         ),
         formGroup
         (

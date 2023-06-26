@@ -7,6 +7,8 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('beginLetterParent', $lang->project->beginLetterParent);
 jsVar('endGreaterParent', $lang->project->endGreaterParent);
 jsVar('ignore', $lang->project->ignore);
+jsVar('multiBranchProducts', $multiBranchProducts);
+jsVar('errorSameProducts', $lang->project->errorSameProducts);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -226,6 +228,7 @@ formPanel
     $products ? null :
     formRow
     (
+        setClass('productBox'),
         formGroup
         (
             set::width('1/2'),
@@ -240,7 +243,8 @@ formPanel
                     (
                         set::name('products[0]'),
                         set::items($allProducts),
-                        set::multiple(false)
+                        set::multiple(false),
+                        on::change('productChange')
                     )
                 ),
                 div
@@ -249,22 +253,83 @@ formPanel
                     checkbox
                     (
                         set::name('newProduct'),
-                        set::text($lang->project->newProduct)
+                        set::text($lang->project->newProduct),
+                        on::change('addProduct')
                     )
                 )
             )
         ),
         formGroup
         (
+            set::width('1/3'),
+            setClass('hidden'),
+            inputGroup
+            (
+                $lang->product->branchName['branch'],
+                select
+                (
+                    set::name("branch[0][]"),
+                    on::change('branchChange')
+                )
+            ),
+        ),
+        formGroup
+        (
             set::width('1/2'),
             inputGroup
             (
+                set::id("plan0"),
                 $lang->project->associatePlan,
                 select
                 (
-                    set::name('plans[][]'),
+                    set::name('plans[0][]'),
                     set::items(null),
                     set::multiple(false)
+                )
+            )
+        ),
+        formGroup
+        (
+            div
+            (
+                setClass('pl-2 flex self-center'),
+                btn
+                (
+                    setClass('btn btn-link addLine'),
+                    on::click('addNewLine'),
+                    icon('plus')
+                ),
+                btn
+                (
+                    setClass('btn btn-link removeLine'),
+                    icon('close'),
+                    on::click('removeLine'),
+                    $i == 0 ? set::disabled(true) : null
+                ),
+            )
+        )
+    ),
+    formGroup
+    (
+        setClass('hidden'),
+        set::id('addProductBox'),
+        set::width('1/2'),
+        set::label($lang->project->addProduct),
+        inputGroup
+        (
+            div
+            (
+                setClass('grow'),
+                input(set::name('productName')),
+            ),
+            div
+            (
+                setClass('flex items-center pl-2'),
+                checkbox
+                (
+                    set::name('newProduct'),
+                    set::text($lang->project->newProduct),
+                    on::change('addProduct')
                 )
             )
         )
