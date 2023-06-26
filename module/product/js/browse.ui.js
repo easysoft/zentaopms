@@ -18,3 +18,14 @@ $(document).on('click', '.batch-btn', function()
         $.ajaxSubmit({"url": $this.data('formaction'), "data": postData, "callback": loadCurrentPage()});
     }
 });
+
+/* Put the checked stories to cookie for exporting. */
+$(document).on('click', '.has-checkbox', function()
+{
+    const $this  = $(this);
+    const dtable = zui.DTable.query($this);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $.cookie.set('checkedItem', checkedList);
+})
