@@ -789,8 +789,11 @@ class baseControl
         $this->app->setControlFile();
 
         if(!is_array($params)) parse_str($params, $params);
-        $defaultParams     = $this->app->getDefaultParams();
-        $this->app->params = $this->app->mergeParams($defaultParams, $params);
+        $defaultParams = $this->app->getDefaultParams();
+        if(empty($defaultParams))
+            $this->app->params = array();
+        else
+            $this->app->params = $this->app->mergeParams($defaultParams, $params);
 
         /*
          * 设置要fetch的方法的参数类型。
