@@ -11,6 +11,7 @@
 class sqlite
 {
     /**
+     * 全局$app对象。
      * The global app object.
      *
      * @var object
@@ -19,6 +20,7 @@ class sqlite
     public $app;
 
     /**
+     * 全局$config对象。
      * The global config object.
      *
      * @var object
@@ -27,6 +29,7 @@ class sqlite
     public $config;
 
     /**
+     * 全局$mysql对象。
      * The global mysql object.
      *
      * @var object
@@ -35,6 +38,7 @@ class sqlite
     public $mysql;
 
     /**
+     * 全局$sqlite对象。
      * The global sqlite object.
      *
      * @var object
@@ -43,12 +47,12 @@ class sqlite
     public $dbh = null;
 
     /**
-     * __construct
+     * __construct.
      *
      * @access public
      * @return void
      */
-    public function __construct($params)
+    public function __construct(object $params): void
     {
         global $app, $config, $dbh;
         $this->app        = $app;
@@ -60,7 +64,8 @@ class sqlite
     }
 
     /**
-     * Connect to sqlite database.
+     * 使用PDO连接SQLite数据库。
+     * Connect to sqlite database by PDO.
      *
      * @param  string $sqliteFile
      * @access public
@@ -84,7 +89,8 @@ class sqlite
     }
 
     /**
-     * Convert mysql sql to sqlite sql.
+     * 将MySQL数据类型转化为SQLite数据类型。
+     * Convert MySQL attr to SQLite attr.
      *
      * @param  string $sql
      * @access public
@@ -118,26 +124,28 @@ class sqlite
     }
 
     /**
+     * 处理SQL语句。
      * Format sql.
      *
      * @param  string $sql
      * @access public
      * @return string
      */
-    public function formatSQL($sql)
+    public function formatSQL(string $sql): string
     {
         $sql = $this->formatAttr($sql);
         return $sql;
     }
 
     /**
+     * 尝试从SQLite中执行查询语句，如果抛出异常，则从MySQL中执行查询语句。
      * Query sql by SQLite, if throw exception, query sql by MySQL.
      *
      * @param  string $sql
      * @access public
      * @return PDOStatement|false
      */
-    public function query($sql)
+    public function query(string $sql): PDOStatement|false
     {
         try
         {
@@ -150,58 +158,63 @@ class sqlite
     }
 
     /**
+     * 执行查询语句。
      * Query sql without format.
      *
      * @param  string $sql
      * @access public
      * @return PDOStatement|false
      */
-    public function rawQuery($sql)
+    public function rawQuery($sql): PDOStatement|false
     {
         return $this->dbh->query($sql);
     }
 
     /**
+     * 执行SQL语句，返回受影响的行数。
      * Execute sql.
      *
      * @param  string $sql
      * @access public
-     * @return mixed
+     * @return int|false
      */
-    public function exec(string $sql)
+    public function exec(string $sql): int|false
     {
         return $this->dbh->exec($sql);
     }
 
     /**
+     * 开始事务。
      * Begin transaction.
      *
      * @access public
      * @return bool
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return $this->dbh->beginTransaction();
     }
 
     /**
+     * 回滚事务。
      * Roll back if transaction failed.
      *
      * @access public
      * @return bool
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->dbh->rollBack();
     }
 
     /**
+     * 提交事务。
      * Commit transaction.
      *
      * @access public
      * @return bool
      */
-    public function commit()
+    public function commit(): bool
     {
         return $this->dbh->commit();
     }

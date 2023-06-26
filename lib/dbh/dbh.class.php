@@ -496,6 +496,7 @@ class dbh
     }
 
     /**
+     * 将SQL语句保存到队列中。
      * Save sql to SQLite queue.
      *
      * @param  string $sql
@@ -515,7 +516,7 @@ class dbh
         $table  = TABLE_SQLITE_QUEUE;
         $sql    = $this->quote($sql);
         $now    = "now()";
-        $action = $this->getLastAction() + 1;
+        $action = $this->getLastActionID() + 1;
 
         $queue = "INSERT INTO $table SET `sql` = $sql, `addDate` = $now, `status` = 'wait', `action` = $action";
 
@@ -524,12 +525,13 @@ class dbh
     }
 
     /**
+     * 获取最后一条动态的id。
      * Get last action id.
      *
      * @access public
      * @return int|false
      */
-    public function getLastAction(): int|false
+    public function getLastActionID(): int|false
     {
         $table = TABLE_ACTION;
         $sql = "SELECT id FROM $table ORDER BY id desc limit 1";
