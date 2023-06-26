@@ -180,7 +180,7 @@ $items[] = array
 formBatchPanel
 (
     set::title($lang->testcase->batchCreate),
-    to::headingActions(array(nav(btn(setClass('primary-pale bd-primary'), $lang->pasteText)))),
+    set::pasteField('title'),
     set::items($items),
     on::change('[data-name="branch"]', 'setModules'),
     on::change('[data-name="module"]', 'onModuleChanged'),
