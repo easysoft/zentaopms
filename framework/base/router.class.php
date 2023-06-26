@@ -1545,13 +1545,13 @@ class baseRouter
     }
 
     /**
-     * 设置要被调用方法的参数。
-     * Set the params of method calling.
+     * 获取要被调用的方法的参数和类型。
+     * Get the default valve and param type of the method calling.
      *
      * @access public
      * @return void
      */
-    public function setParams()
+    public function getDefaultParams()
     {
         try
         {
@@ -1650,6 +1650,26 @@ class baseRouter
 
                 $defaultParams[$name] = array('default' => $default, 'type' => $type);
             }
+            return $defaultParams;
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            return array();
+        }
+    }
+
+    /**
+     * 设置要被调用方法的参数。
+     * Set the params of method calling.
+     *
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        try
+        {
+            $defaultParams = $this->getDefaultParams();
 
             /**
              * 根据PATH_INFO或者GET方式设置请求的参数。
