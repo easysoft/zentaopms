@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $confirmDelete = $this->lang->story->confirmDelete;
-if($story->type == 'requirement') $confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $confirmDelete);
+if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
 
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
@@ -145,28 +145,20 @@ if(!empty($story->children))
 
 detailHeader
 (
-    to::prefix
+    to::title
     (
-        $isInModal ? null : backBtn(set::icon('back'), set::type('secondary'), $lang->goback),
-        div
+        entityLabel
         (
-            setClass('entity-label flex items-center gap-x-2'),
-            label(setClass('circle px-1.5 h-3.5'), $story->id),
-            $story->parent > 0 ? label($this->lang->story->childrenAB) : null,
-            span
-            (
-                setClass('article-h1'),
-                $story->parent > 0 && isset($story->parentName) ? span
-                (
-                    a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName),
-                    ' / ',
-                ) : null,
-                $story->title
-            ),
+            set::entityID($story->id),
+            set::style(array('color' => $story->color)),
+            set::level(1),
+            $story->parent > 0 ? label($lang->story->childrenAB) : null,
+            $story->parent > 0 && isset($story->parentName) ? span(a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName), ' / ') : null,
+            $story->title,
         ),
         count($versions) > 1 ? dropdown
         (
-            btn("#{$version}"),
+            btn(setClass('btn-link'), "#{$version}"),
             set::items($versions),
         ) : null,
         $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null,
@@ -262,6 +254,7 @@ detailBody
                             $items   = array();
                             $items[] = common::hasPriv('productplan', 'view') ? a(set::href(helper::createLink('productplan', 'view', "planID={$planID}"), $planTitle)) : $planTitle;
                             $items[] = h::br();
+                            return $items;
                         }, array_keys($story->planTitle), array_values($story->planTitle)))
                     ) : null,
                     item

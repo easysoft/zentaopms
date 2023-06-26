@@ -14,6 +14,7 @@ class entityLabel extends wg
         'textClass?: string',    // 文本样式类
         'idClass?: string',      // 编号样式类
         'href?: string',         // 实体链接
+        'titlePrefix?: array',   // 标题前缀
         'labelProps?: array'     // 标签属性
     );
 
@@ -33,6 +34,11 @@ class entityLabel extends wg
             $this->props->set('text', $child);
             return false;
         }
+        else
+        {
+            $this->props->addToList('titlePrefix', $child);
+            return false;
+        }
     }
 
     private function buildEntityID(): ?wg
@@ -50,11 +56,12 @@ class entityLabel extends wg
 
     private function buildEntityName(): wg
     {
-        $text       = $this->prop('text');
-        $level      = $this->prop('level');
-        $className  = $this->prop('textClass');
-        $href       = $this->prop('href');
-        $labelProps = $this->prop('labelProps');
+        $text        = $this->prop('text');
+        $level       = $this->prop('level');
+        $className   = $this->prop('textClass');
+        $href        = $this->prop('href');
+        $labelProps  = $this->prop('labelProps');
+        $titlePrefix = $this->prop('titlePrefix');
 
         $titleClass = empty($level)
             ? "article-content"
@@ -64,6 +71,7 @@ class entityLabel extends wg
         (
             setClass($titleClass, $className),
             set($labelProps),
+            $titlePrefix,
             $text
         );
 
@@ -72,6 +80,7 @@ class entityLabel extends wg
             setClass($titleClass, $className),
             set::href($href),
             set($labelProps),
+            $titlePrefix,
             $text
         );
     }
