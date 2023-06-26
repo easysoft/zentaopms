@@ -11,12 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('automationTip', $lang->zanode->automationTips);
-js
-(
-    <<<JAVASCRIPT
-    new zui.Tooltip('#automationTip', {title: automationTip, trigger: 'hover', placement: 'bottom', type: 'black', 'className': 'border border-light'});
-    JAVASCRIPT
-);
 
 to::header
 (
@@ -58,7 +52,7 @@ form
             (
                 set::name('node'),
                 set::items($nodeList),
-                set::value(zget($automation, 'node', '')),
+                set::value(!empty($automation->node) ? $automation->node : ''),
             ),
             div
             (
@@ -78,7 +72,7 @@ form
         set::label($lang->zanode->scriptPath),
         set::required(true),
         set::name('scriptPath'),
-        set::value(zget($automation, 'scriptPath', '')),
+        set::value(!empty($automation->scriptPath) ? $automation->scriptPath : ''),
         set::placeholder($lang->zanode->scriptTips),
     ),
     formGroup
@@ -87,7 +81,7 @@ form
         editor
         (
             set::name('shell'),
-            set::value(zget($automation, 'shell', '')),
+            set::value(!empty($automation->shell) ? $automation->shell : ''),
             set::rows(6),
             set::placeholder($lang->zanode->shellTips),
         )

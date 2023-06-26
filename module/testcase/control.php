@@ -2426,7 +2426,7 @@ class testcase extends control
         {
             $this->zanode->setAutomationSetting();
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             // if(!empty($_POST['syncToZentao']))
             //     $this->zanode->syncCasesToZentao($_POST['scriptPath']);
@@ -2434,10 +2434,7 @@ class testcase extends control
             // $nodeID = $_POST['node'];
             // $node   = $this->zanode->getNodeByID($_POST['node']);
 
-            $locatelink = $this->createLink('testcase', 'browse', "productID={$_POST['product']}");
-            $locatelink = str_replace(array('?onlybody=yes', '&onlybody=yes'), '', $locatelink);
-
-            return print(js::locate($locatelink, 'parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testcase', 'browse', "productID={$this->post->product}")));
         }
 
         $this->view->title      = $this->lang->zanode->automation;
