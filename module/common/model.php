@@ -2514,7 +2514,8 @@ EOF;
         }
         catch(EndResponseException $endResponseException)
         {
-            helper::end($endResponseException->getContent());
+            echo $endResponseException->getContent();
+            helper::end();
         }
     }
 
