@@ -335,5 +335,7 @@ jsVar('totalParent',      $totalParent);
 jsVar('totalChild',       $totalChild);
 jsVar('totalIndependent', $totalIndependent);
 jsVar('confirmStart',     $this->lang->productplan->confirmStart);
+jsVar('confirmFinish',    $this->lang->productplan->confirmFinish);
+jsVar('confirmDelete',    $this->lang->productplan->confirmDelete);
 
 render();

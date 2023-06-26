@@ -55,10 +55,26 @@ window.renderProductPlanList = function(result, {col, row, value})
     return result;
 }
 
-window.startProductPlan = function(productID, planID)
+window.startProductPlan = function(planID)
 {
     zui.Modal.confirm({message: confirmStart, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
-        if(res) $.ajaxSubmit({url: $.createLink('productplan', 'start', 'productID=' + productID + '&planID=' + planID)});
+        if(res) $.ajaxSubmit({url: $.createLink('productplan', 'start', 'planID=' + planID)});
+    });
+}
+
+window.finishProductPlan = function(planID)
+{
+    zui.Modal.confirm({message: confirmFinish, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.ajaxSubmit({url: $.createLink('productplan', 'finish', 'planID=' + planID)});
+    });
+}
+
+window.deleteProductPlan = function(planID)
+{
+    zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.ajaxSubmit({url: $.createLink('productplan', 'delete', 'planID=' + planID)});
     });
 }

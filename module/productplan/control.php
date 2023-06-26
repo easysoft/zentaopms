@@ -253,45 +253,44 @@ class productplan extends control
      * Delete a plan.
      *
      * @param  int    $planID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($planID, $confirm = 'no')
+    public function delete($planID)
     {
+        $response = array();
+        $response['result']  = 'fail';
+        $response['message'] = '';
+
         $plan = $this->productplan->getById($planID);
-        if($plan->parent < 0) return print(js::alert($this->lang->productplan->cannotDeleteParent));
-
-        if($confirm == 'no')
+        if($plan->parent < 0)
         {
-            return print(js::confirm($this->lang->productplan->confirmDelete, $this->createLink('productPlan', 'delete', "planID=$planID&confirm=yes")));
+            $response['message'] = $this->lang->productplan->cannotDeleteParent;
+            return $this->send($response);
         }
-        else
-        {
-            $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
-            if($plan->parent > 0) $this->productplan->changeParentField($planID);
-            $message = $this->executeHooks($planID);
-            if($message) $this->lang->saveSuccess = $message;
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
+        $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
+        if($plan->parent > 0) $this->productplan->changeParentField($planID);
+        $message = $this->executeHooks($planID);
+        if($message) $this->lang->saveSuccess = $message;
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
             {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
+                $response['message'] = dao::getError();
             }
-
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            return print(js::reload('parent'));
+            else
+            {
+                $response['result']  = 'success';
+                $response['load']    = array('back' => true);
+            }
+            return $this->send($response);
         }
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        return $this->send($response);
     }
 
     /**
@@ -497,12 +496,11 @@ class productplan extends control
     /**
      * Start a plan.
      *
-     * @param  int    $productID
      * @param  int    $planID
      * @access public
      * @return void
      */
-    public function start($productID, $planID)
+    public function start($planID)
     {
         $this->productplan->updateStatus($planID, 'doing', 'started');
         if(dao::isError())
@@ -514,7 +512,7 @@ class productplan extends control
         {
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load']    = helper::createLink('productplan', 'browse', "productID={$productID}");
+            $response['load']    = array('back' => true);
         }
         return $this->send($response);
     }
@@ -523,23 +521,24 @@ class productplan extends control
      * Finish a plan.
      *
      * @param  int    $planID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function finish($planID, $confirm = 'no')
+    public function finish($planID)
     {
-        if($confirm == 'no')
+        $this->productplan->updateStatus($planID, 'done', 'finished');
+        if(dao::isError())
         {
-            return print(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes")));
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
         else
         {
-            $this->productplan->updateStatus($planID, 'done', 'finished');
-
-            if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::reload('parent'));
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = array('back' => 'true');
         }
+        return $this->send($response);
     }
 
     /**
