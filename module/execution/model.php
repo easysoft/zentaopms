@@ -3607,12 +3607,12 @@ class executionModel extends model
 
             if(!empty($execution->days) and (int)$days[$key] > $execution->days)
             {
-                dao::$errors['message'][] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
+                dao::$errors['days'] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
                 return false;
             }
             if((float)$hours[$key] > 24)
             {
-                dao::$errors['message'][] = $this->lang->execution->errorHours;
+                dao::$errors['hours'] = $this->lang->execution->errorHours;
                 return false;
             }
         }
