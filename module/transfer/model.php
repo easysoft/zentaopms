@@ -50,8 +50,8 @@ class transferModel extends model
             $this->loadModel($model);
             $this->modelConfig     = $this->config->$model;
             $this->modelLang       = $this->lang->$model;
-            $this->modelFieldList  = $this->config->$model->datatable->fieldList;
-            $this->modelListFields = explode(',', $this->config->$model->listFields);
+            $this->modelFieldList  = $this->config->$model->datatable->fieldList ?? array();
+            $this->modelListFields = explode(',', $this->config->$model->listFields ?? '');
         }
     }
 
@@ -251,11 +251,11 @@ class transferModel extends model
     /**
      * Init FieldList.
      *
-     * @param  int    $model
+     * @param  string $model
      * @param  string $fields
-     * @param  int    $withKey
+     * @param  bool   $withKey
      * @access public
-     * @return void
+     * @return array
      */
     public function initFieldList($model, $fields = '', $withKey = true)
     {
@@ -620,13 +620,15 @@ class transferModel extends model
     /**
      * Get ExportDatas.
      *
-     * @param  int    $fieldList
+     * @param  array  $fieldList
      * @param  array  $rows
      * @access public
-     * @return void
+     * @return array
      */
     public function getExportDatas($fieldList, $rows = array())
     {
+        if(empty($fieldList)) return array();
+
         $exportDatas    = array();
         $dataSourceList = array();
 
@@ -673,7 +675,7 @@ class transferModel extends model
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if($value == '0' or substr($value, 0, 4) == '0000') $rows[$id]->$field = '';
+                if($value == '0' or empty($value) or  substr($value, 0, 4) == '0000') $rows[$id]->$field = '';
             }
         }
 
@@ -734,6 +736,7 @@ class transferModel extends model
             $listFields = $this->modelListFields;
             foreach($listFields as $field)
             {
+                if(empty($field)) continue;
                 $listName = $field . 'List';
                 if(!empty($_POST[$listName])) continue;
                 if(!empty($fieldList[$field]))
@@ -800,12 +803,12 @@ class transferModel extends model
     /**
      * Get Rows.
      *
-     * @param  int    $model
-     * @param  int    $fieldList
+     * @param  string        $model
+     * @param  object|string|array $fieldList
      * @access public
      * @return void
      */
-    public function getRows($model, $fieldList)
+    public function getRows(string $model, object|string|array $fieldList)
     {
         $modelDatas = $this->getQueryDatas($model);
 
@@ -893,6 +896,7 @@ class transferModel extends model
         {
             $table = zget($this->config->objectTables, $model);
             if(isset($this->config->$model->transfer->table)) $table = $this->config->$model->transfer->table;
+            if($model == 'story') $queryCondition = str_replace('story', 'id', $queryCondition);
             $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
                 ->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()

@@ -4970,6 +4970,7 @@ class storyModel extends model
 
         /* Create field lists. */
         $fields = !empty($this->post->exportFields) ? $this->post->exportFields : explode(',', $this->config->story->exportFields);
+        if(empty($this->post->exportFields)) $this->post->exportFields = $this->config->story->exportFields;
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
