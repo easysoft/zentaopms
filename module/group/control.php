@@ -251,7 +251,6 @@ class group extends control
             $privs = $this->group->transformPrivLang($privs);
             $privs = $this->group->getCustomPrivs($menu, $privs);
 
-
             $privList           = $modules;
             $privMethods        = array();
             $selectPrivs        = array();
