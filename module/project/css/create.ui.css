@@ -1,1 +1,8 @@
 .panel-actions {display: flex; align-items: center;}
+#copyProjectModal .copy-title {min-width: 120px;}
+#copyProjectModal #projectName {width: 32%;}
+#copyProjectModal .project-block {flex: 0 1 30%; padding: 20px 10px; margin: 4px 12px; overflow: hidden;}
+#copyProjects .btn:not(button.success-outline):hover {--tw-ring-color: var(--color-primary-500); background-color: #E9F2FB;}
+#copyProjects .btn:before {background: none;}
+#copyProjects button.success-outline {background-color: var(--color-success-50);}
+#copyProjects button.success-outline:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}

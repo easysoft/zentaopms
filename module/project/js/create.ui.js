@@ -38,3 +38,42 @@ window.setParentProgram = function()
     const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
     loadPage(link, '#aclList');
 }
+
+$(document).on('click', '#copyProjects button', function()
+{
+    const copyProjectID = $(this).hasClass('success-outline') ? 0 : $(this).data('id');
+    setCopyProject(copyProjectID);
+    zui.Modal.hide();
+});
+
+/**
+ * Set copy project.
+ *
+ * @param  int $copyProjectID
+ * @access public
+ * @return void
+ */
+function setCopyProject(copyProjectID)
+{
+    const programID = $('#parent').val();
+    loadPage($.createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID));
+}
+
+/**
+ * Fuzzy search projects by project name.
+ *
+ * @access public
+ * @return void
+ */
+$(document).on('keyup', '#projectName', function()
+{
+    var name = $(this).val();
+    name = name.replace(/\s+/g, '');
+    $('#copyProjects .project-block').hide();
+
+    if(!name) $('#copyProjects .project-block').show();
+    $('#copyProjects .project-block').each(function()
+    {
+        if($(this).text().includes(name) || $(this).data('pinyin').includes(name)) $(this).show();
+    });
+});

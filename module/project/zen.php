@@ -270,6 +270,7 @@ class projectZen extends project
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
+        $this->view->copyPinyinList      = common::convert2Pinyin($this->view->copyProjects);
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->parentProgram       = $parentProgram;
         $this->view->programList         = $this->program->getParentPairs();

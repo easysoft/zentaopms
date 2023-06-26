@@ -55,6 +55,9 @@ formPanel
         (
             setClass('primary-pale'),
             set::icon('copy'),
+            set::url('#copyProjectModal'),
+            set('data-destoryOnHide', true),
+            set('data-toggle', 'modal'),
             $lang->project->copy
         )
     ),
@@ -306,6 +309,53 @@ formPanel
         set::items($lang->project->authList),
         set::value('extend')
     ),
+);
+
+$copyProjectsBox = array();
+foreach($copyProjects as $id => $name)
+{
+    $copyProjectsBox[] = btn(
+        setClass('project-block justify-start'),
+        setClass($copyProjectID == $id ? 'success-outline' : ''),
+        set('data-id', $id),
+        set('data-pinyin', zget($copyPinyinList, $name, '')),
+        icon
+        (
+            setClass('text-gray'),
+            $lang->icons['project']
+        ),
+        span($name),
+    );
+}
+
+modalTrigger
+(
+    modal
+    (
+        set::id('copyProjectModal'),
+        to::header
+        (
+            span
+            (
+                h4
+                (
+                    set::class('copy-title'),
+                    $lang->project->copyTitle
+                )
+            ),
+            input
+            (
+                set::name('projectName'),
+                set::placeholder($lang->project->searchByName),
+            ),
+        ),
+        div
+        (
+            set::id('copyProjects'),
+            setClass('flex items-center flex-wrap'),
+            $copyProjectsBox
+        )
+    )
 );
 
 render();

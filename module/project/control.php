@@ -123,31 +123,6 @@ class project extends control
     }
 
     /**
-     * 获取可复制看板项目通过页面检索。
-     * Ajax retrieve cloneable Kanban projects based on search.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxRetrieveCloneableProject()
-    {
-        /* 获取可复制的看板项目键值对。*/
-        /* Get cloneable kanban project pairs by model. */
-        $projectKeys = $this->project->getCopyProjectPairs($this->post->name, $this->post->model);
-        $projects    = $this->project->getPairsByModel('', 0, '', $projectKeys);
-
-        /* 页面渲染出可复制的项目。*/
-        /* Rendering cloneable projects on page. */
-        $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
-        foreach($projects as $id => $name)
-        {
-            $active = $this->post->cpoyProjectID == $id ? 'active' : '';
-            $html  .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . '</a></div>';
-        }
-        echo $html;
-    }
-
-    /**
      * 移除项目团队成员时进行提示。
      * Ajax prompts when removing project team members.
      *
