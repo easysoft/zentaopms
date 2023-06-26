@@ -34,7 +34,7 @@ class detailHeader extends wg
         $title  = $this->block('title');
         $suffix = $this->block('suffix');
 
-        if(empty($prefix)) $prefix = $this->backBtn();
+        if(empty($prefix) && !isAjaxRequest('modal')) $prefix = $this->backBtn();
 
         return div
         (
