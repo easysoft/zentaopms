@@ -105,7 +105,7 @@ foreach($story->tasks as $executionTasks)
             (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
             label(setClass('circle size-sm'), $task->id),
             common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
-            label(setClass('success'), $this->lang->task->statusList[$task->status]),
+            label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status]),
         );
     }
 }
@@ -391,10 +391,10 @@ detailBody
                         return h::li
                         (
                             setClass('twins'),
-                            $branch ? label(setClass($labelClass . ' circle size-sm'), set::title($branch), $branch) : null,
+                            $branch ? label(setClass($labelClass . ' circle branch size-sm'), set::title($branch), $branch) : null,
                             label(setClass('circle size-sm'), $twin->id),
                             common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
-                            label(set::title($stage), $stage),
+                            label(setClass('size-sm'), set::title($stage), $stage),
                             common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), set('data-id', $twin->id), icon('unlink')) : null,
                         );
                     }, $twins))
@@ -466,7 +466,7 @@ detailBody
                                     set::title($bug->title),
                                     label(setClass('circle size-sm'), $bug->id),
                                     common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), set('data-toggle', 'modal'), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
-                                    label(setClass("status-{$bug->status}"), $lang->bug->statusList[$bug->status])
+                                    label(setClass("status-{$bug->status} size-sm"), $lang->bug->statusList[$bug->status])
                                 );
                             }, $bugs))
                         )
