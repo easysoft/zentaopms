@@ -67,10 +67,10 @@ class formBatchPanel extends formPanel
         {
             global $lang;
 
-            if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
+            if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale bd-primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
             if($pasteField)
             {
-                $headingActions[] = array('class' => 'btn primary', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
+                $headingActions[] = array('class' => 'btn primary-pale bd-primary', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
 
                 $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
             }
