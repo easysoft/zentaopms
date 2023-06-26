@@ -5,11 +5,14 @@ class dtable extends wg
 {
     static $defineProps = array(
         'className?:string="shadow rounded"', // 表格样式。
-        'id?:string',                            // ID。
-        'customCols?: bool|array',               // 是否支持自定义列。
-        'cols?:array',                           // 表格列配置
-        'data?:array',                           // 表格数据源
-        'module?:string',                        // 模块信息，主要是获取语言项
+        'id?:string',                         // ID。
+        'customCols?: bool|array',            // 是否支持自定义列。
+        'cols?:array',                        // 表格列配置
+        'data?:array',                        // 表格数据源
+        'module?:string',                     // 模块信息，主要是获取语言项
+        'emptyTip?:string',                   // 表格数据源为空时显示的文本
+        'createLink?:array|string',           // 表格数据源为空时的创建链接
+        'createTip?:string',                  // 表格数据源为空时显示的文本
     );
 
     static $dtableID = 0;
@@ -108,6 +111,31 @@ class dtable extends wg
 
     protected function build()
     {
+        if(empty($this->prop('data')))
+        {
+            global $lang;
+            $createLink = !empty($this->prop('createLink')) ? $this->getLink($this->prop('createLink')) : '';
+            return div
+            (
+                setClass('canvas text-center py-8'),
+                p
+                (
+                    setClass('py-8 my-8'),
+                    span
+                    (
+                        setClass('text-gray'),
+                        !empty($this->prop('emptyTip')) ? $this->prop('emptyTip'): $lang->noData,
+                    ),
+                    !empty($createLink) ? a
+                    (
+                        setClass('btn primary-pale bd-primary ml-0.5'),
+                        set::href($createLink),
+                        icon('plus'),
+                        !empty($this->prop('createTip')) ? $this->prop('createTip') : $lang->create,
+                    ) : '',
+                )
+            );
+        }
         return zui::dtable(inherit($this));
     }
 }
