@@ -138,7 +138,7 @@ if($canBatchChangeModule)
 
 if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
 {
-    zui::menu
+    menu
     (
         set::id('navActions'),
         set::class('menu dropdown-menu'),
