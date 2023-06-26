@@ -37,10 +37,15 @@
   .obj-view-header.checkbox-inline, .obj-view-item.checkbox-inline {margin: 4px; cursor: unset;}
   .obj-view-item.checkbox-inline+.obj-view-item.checkbox-inline {margin-left: 4px; margin-top: 4px;}
   .checkbox-inline > label, .checkbox-inline > input {cursor: pointer;}
-  #selected-data-sorter > ol {padding: 0; margin: 0; list-style: none; overflow: hidden;}
-  #selected-data-sorter > ol > li {padding: 8px;}
-  #selected-data-sorter > ol > li::before {content: counter(list-item); display: inline-block; width: 2ch;}
-  #selected-data-sorter > ol > li.drag-shadow::before {content: '';}
+  #selected-data-sorter .list-group {padding: 0; margin: 0; list-style: none; overflow-x: hidden;}
+  #selected-data-sorter .list-group-item {padding: 8px 16px; display: flex; align-items: center; cursor: move; transition: background-color 0.2s ease-in-out;}
+  #selected-data-sorter .list-group-item > span {flex-grow: 1;}
+  #selected-data-sorter .list-group-item:hover {background-color: #eef5ff;}
+  #selected-data-sorter .list-group-item .drag-icon {padding-right: 8px; opacity: 0; transition: opacity 0.2s ease-in-out;}
+  #selected-data-sorter .list-group-item:hover .drag-icon {opacity: 1;}
+  #selected-data-sorter .list-group-item::before {content: counter(list-item); counter-increment: list-item; display: inline-block; width: 2ch; padding-right: 28px;}
+  #selected-data-sorter .list-group-item.drag-shadow::before {content: '';}
+  #selected-data-sorter .list-group-item .remove-icon {cursor: pointer; padding: 2px;}
 </style>
 
 <script>
@@ -316,8 +321,25 @@ class SelectedDataSorter extends HTMLDivElement
       const item = document.createElement('li');
       item.classList.add('list-group-item');
       item.setAttribute('prop', prop);
+
+      const dragIcon = document.createElement('i');
+      dragIcon.classList.add('icon', 'icon-move', 'text-gray', 'drag-icon');
+      item.appendChild(dragIcon);
+
       const [source, propName] = prop.split('.');
-      item.appendChild(document.createTextNode(`${dataSourceLang[group][source].common} / ${dataSourceLang[group][source][propName]}`));
+      const itemText = document.createElement('span');
+      itemText.appendChild(document.createTextNode(`${dataSourceLang[group][source].common} / ${dataSourceLang[group][source][propName]}`));
+      item.appendChild(itemText);
+
+      const itemRemove = document.createElement('i');
+      itemRemove.classList.add('icon', 'icon-close', 'text-gray', 'remove-icon');
+      itemRemove.addEventListener('click', (() =>
+      {
+        window.dataSourceStore.value = window.dataSourceStore.value.filter(p => p !== prop);
+        document.querySelector(`.obj-view-item input[type="checkbox"][prop="${prop}"]`).click();
+      }).bind(this));
+      item.appendChild(itemRemove);
+
       listView.appendChild(item);
     });
     this.appendChild(listView);
