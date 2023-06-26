@@ -35,7 +35,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 }).on('click', '.nav-tabs .nav-item a', function()
 {
     window.appendLinkBtn();
-}).on('click', '.linkObjectBtn', function()
+}).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
 {
     const type   = $(this).data('type');
     const dtable = zui.DTable.query($(this));
@@ -47,15 +47,15 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
     $.ajaxSubmit({"url": $(this).data('url'), "data": postData, "callback": loadPage($.createLink('release', 'view', `releaseID=${releaseID}&type=${type}`))});
-}).on('click', '.link-story', function()
+}).off('click','.link-story').on('click', '.link-story', function()
 {
     $(this).hide();
     $('#finishedStory').load($(this).data('url'));
-}).on('click', '.link-bug', function()
+}).off('click','.link-bug').on('click', '.link-bug', function()
 {
     $(this).hide();
     $('#resolvedBug').load($(this).data('url'));
-}).on('click', '.link-left-bug', function()
+}).off('click','.link-left-bug').on('click', '.link-left-bug', function()
 {
     $(this).hide();
     $('#leftBug').load($(this).data('url'));
