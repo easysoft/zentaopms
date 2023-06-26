@@ -37,13 +37,17 @@
   .obj-view-header.checkbox-inline, .obj-view-item.checkbox-inline {margin: 4px; cursor: unset;}
   .obj-view-item.checkbox-inline+.obj-view-item.checkbox-inline {margin-left: 4px; margin-top: 4px;}
   .checkbox-inline > label, .checkbox-inline > input {cursor: pointer;}
+  #selected-data-sorter > ol {padding: 0; margin: 0; list-style: none; overflow: hidden;}
+  #selected-data-sorter > ol > li {padding: 8px;}
+  #selected-data-sorter > ol > li::before {content: counter(list-item); display: inline-block; width: 2ch;}
+  #selected-data-sorter > ol > li.drag-shadow::before {content: '';}
 </style>
 
 <script>
 /* Store and sync value of datasource input, change by checkbox changes. */
 class DataSourceStore
 {
-  value = {};
+  value = [];
   listeners = [];
 
   /* Get store value. */
@@ -61,7 +65,7 @@ class DataSourceStore
   /* Reset store value. */
   reset()
   {
-    this.value = {};
+    this.value = [];
 
     /* Notify listeners. */
     this.listeners.forEach(l => (l(this.value)));
@@ -71,7 +75,7 @@ class DataSourceStore
   sync()
   {
     const dataSources = document.querySelectorAll('#data-property-selector');
-    const value = {};
+    const value = this.value;
     dataSources.forEach(dataSource =>
     {
       const group = dataSource.getAttribute('object-group');
@@ -79,7 +83,14 @@ class DataSourceStore
       items.forEach(item =>
       {
         const itemPropName = item.getAttribute('prop');
-        if(item.checked && itemPropName.includes('.')) value[itemPropName] = true;
+        if(itemPropName.includes('.'))
+        {
+          if(item.checked)
+          {
+            if(!value.includes(itemPropName)) value.push(itemPropName);
+          }
+          else if(value.includes(itemPropName)) value.splice(value.indexOf(itemPropName), 1);
+        }
       });
     });
     this.value = value;
@@ -257,7 +268,7 @@ class SelectedTitleText extends HTMLSpanElement
 
     const format = this.getAttribute('format');
     const group  = this.getAttribute('group');
-    const count  = Object.keys(window.dataSourceStore.value).length;
+    const count  = window.dataSourceStore.value.length;
 
     const args = [dataSourceLang[group].common, count];
     this.innerHTML = format.replace(/{(\d+)}/g, ((match, argIndex) =>
@@ -279,6 +290,64 @@ class SelectedTitleText extends HTMLSpanElement
   }
 }
 customElements.define('selected-title-text', SelectedTitleText, {extends: 'span'});
+
+/* Sortable selected data column list, dynamically render with current selection. */
+class SelectedDataSorter extends HTMLDivElement
+{
+  /* Setup re-render trigger. */
+  constructor()
+  {
+    super();
+    window.dataSourceStore.subscribe(this.render.bind(this));
+  }
+
+  /* Render sortable list from current selection. */
+  render()
+  {
+    this.innerHTML = '';
+
+    const group = this.getAttribute('group');
+    const props = window.dataSourceStore.value;
+
+    const listView = document.createElement('ol');
+    listView.classList.add('list-group');
+    props.forEach(prop =>
+    {
+      const item = document.createElement('li');
+      item.classList.add('list-group-item');
+      item.setAttribute('prop', prop);
+      const [source, propName] = prop.split('.');
+      item.appendChild(document.createTextNode(`${dataSourceLang[group][source].common} / ${dataSourceLang[group][source][propName]}`));
+      listView.appendChild(item);
+    });
+    this.appendChild(listView);
+
+    /* Setup sortable on this list. */
+    $(listView).sortable(
+    {
+      handle: '.list-group-item',
+      finish: () =>
+      {
+        const props = [];
+        for(const item of listView.querySelectorAll('.list-group-item')) props.push(item.getAttribute('prop'));
+        window.dataSourceStore.value = props;
+      }
+    });
+  }
+
+  /* Handle attr change, rerender. */
+  attributeChangedCallback(name, oldValue, newValue)
+  {
+    if(name === 'group' && oldValue !== newValue) this.render();
+  }
+
+  /* Define observed attr. */
+  static get observedAttributes()
+  {
+    return ['group'];
+  }
+}
+customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div'});
 </script>
 
 <div id='mainMenu' class='clearfix' style='display: flex; flex-direction: row;'>
@@ -323,6 +392,7 @@ customElements.define('selected-title-text', SelectedTitleText, {extends: 'span'
               <h4><span id='selected-title-text' is='selected-title-text' group='<?php echo $activeDataSource;?>' format='<?php echo $lang->ai->prompts->selectedFormat;?>'></span></h4>
             </div>
             <div id='data-selected-items'>
+              <div id='selected-data-sorter' is='selected-data-sorter' group='<?php echo $activeDataSource;?>'></div>
               <?php echo html::hidden('datasource');?>
             </div>
           </div>
@@ -342,6 +412,9 @@ $(function()
   {
     if($(this).hasClass('active')) return;
 
+    /* Reset selected data. */
+    window.dataSourceStore.reset();
+
     /* Update menu states. */
     $('#data-category-select > ul > li > a').removeClass('active btn-info').addClass('btn-link');
     $(this).addClass('active btn-info').removeClass('btn-link');
@@ -349,9 +422,7 @@ $(function()
     /* Update other component props. */
     $('#data-property-selector').attr('object-group', $(this).parent().attr('data-group-key'));
     $('#selected-title-text').attr('group', $(this).parent().attr('data-group-key'));
-
-    /* Reset selected data. */
-    window.dataSourceStore.reset();
+    $('#selected-data-sorter').attr('group', $(this).parent().attr('data-group-key'));
   });
 
   /* Disable checkboxes to prevent them getting posted as form data. */
