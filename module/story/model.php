@@ -5130,15 +5130,20 @@ class storyModel extends model
                 }
             }
 
-            $story->mailto = trim(trim($story->mailto), ',');
-            $mailtos = explode(',', $story->mailto);
-            $story->mailto = '';
-            foreach($mailtos as $mailto)
+            if(!empty($story->mailto))
             {
-                $mailto = trim($mailto);
-                if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+                $story->mailto = trim(trim($story->mailto), ',');
+                $mailtos = explode(',', $story->mailto);
+                $story->mailto = '';
+                foreach($mailtos as $mailto)
+                {
+                    $mailto = trim($mailto);
+                    if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+                }
+                $story->mailto = rtrim($story->mailto, ',');
             }
-            $story->mailto = rtrim($story->mailto, ',');
+            else
+                $story->mailto = '';
 
             $story->reviewedBy = trim(trim($story->reviewedBy), ',');
             $reviewedBys = explode(',', $story->reviewedBy);
