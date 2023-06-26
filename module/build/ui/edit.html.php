@@ -162,9 +162,11 @@ formPanel
     (
         formGroup
         (
-            set::name('files[]'),
             set::label($lang->build->files),
-            set::control('file')
+            upload
+            (
+                set::name('files'),
+            )
         ),
     ),
     formRow

@@ -58,6 +58,10 @@ detailBody
             set::useHtml(true)
         ),
     ),
+    $design->files ? fileList
+    (
+        set::files($design->files),
+    ) : null,
     history(),
     floatToolbar
     (

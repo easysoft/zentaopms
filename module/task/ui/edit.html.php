@@ -128,8 +128,10 @@ formPanel
             ),
             formGroup
             (
-                set::name('files[]'),
-                set::control('file')
+                upload
+                (
+                    set::name('files'),
+                )
             ),
             h::hr(setClass('my-3')),
             history

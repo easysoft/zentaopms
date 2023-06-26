@@ -149,9 +149,11 @@ else
         formGroup
         (
             set::width('2/3'),
-            set::name('files[]'),
             set::label($lang->story->files),
-            set::control('file')
+            upload
+            (
+                set::name('files'),
+            )
         ),
         formGroup
         (

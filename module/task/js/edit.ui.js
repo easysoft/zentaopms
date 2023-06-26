@@ -121,7 +121,7 @@ $(document).ready(function()
     });
 });
 
-$('#confirmButton').click(function()
+$(document).on('click', '#confirmButton', function()
 {
     var memberCount   = '';
     var totalEstimate = 0;

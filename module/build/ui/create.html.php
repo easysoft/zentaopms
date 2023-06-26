@@ -116,6 +116,7 @@ formPanel
             set::name('builds[]'),
             set::label($lang->build->builds),
             set::items(array()),
+            set::multiple(true),
         ),
         formGroup
         (
@@ -196,9 +197,11 @@ formPanel
     (
         formGroup
         (
-            set::name('files[]'),
             set::label($lang->build->files),
-            set::control('file')
+            upload
+            (
+                set::name('files'),
+            )
         ),
     ),
     formRow

@@ -259,10 +259,10 @@ detailBody
                     ),
                     section
                     (
-                        set::title($lang->files),
-                        setClass('pt-5'),
-                        set::content(implode(',', array_column($release->files, 'title'))),
-                        set::useHtml(true)
+                        $release->files ? fileList
+                        (
+                            set::files($release->files),
+                        ) : null,
                     ),
                     h::hr(set::class('mt-6')),
                     history()

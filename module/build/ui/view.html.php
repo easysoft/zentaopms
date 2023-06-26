@@ -273,9 +273,10 @@ detailBody
                     h::hr(set::class('mt-6')),
                     section
                     (
-                        set::title($lang->files),
-                        set::content(''),
-                        set::useHtml(true)
+                        $build->files ? fileList
+                        (
+                            set::files($build->files),
+                        ) : null,
                     ),
                     h::hr(set::class('mt-6')),
                     history()

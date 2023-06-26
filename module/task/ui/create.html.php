@@ -137,7 +137,7 @@ for($i = 1; $i <= 3; $i ++)
                 setClass("line-arrow"),
                 '↓'
             ) ,
-            span 
+            span
             (
                 setClass("team-number"),
                 $i
@@ -398,9 +398,11 @@ formPanel
     ),
     formGroup
     (
-        set::name('files[]'),
         set::label($lang->story->files),
-        set::control('file')
+        upload
+        (
+            set::name('files'),
+        )
     ),
     formGroup
     (
