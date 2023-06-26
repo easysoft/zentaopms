@@ -1,3 +1,4 @@
+.entity-label .label.child{background-color: rgba(var(--color-primary-100-rgb), 0.7); color: var(--color-primary-600); margin-right:5px;}
 .detail-side .tab-pane{padding-top:8px;}
 .detail-side .tab-pane ul li{display:flex; position:relative; padding-bottom:5px;}
 .detail-side .tab-pane ul li.twins{padding-right:15px;}
