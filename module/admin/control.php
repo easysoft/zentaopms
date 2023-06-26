@@ -518,12 +518,13 @@ class admin extends control
     }
 
     /**
+     * 将队列中的SQL语句同步到SQLite中。
      * Execute sql from SQLite queue.
      *
      * @access public
-     * @return mixed
+     * @return void
      */
-    public function execSqliteQueue()
+    public function execSqliteQueue(): void
     {
         $now = helper::now();
         $sqlite = $this->app->connectSqlite();

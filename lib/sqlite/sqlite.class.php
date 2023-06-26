@@ -52,7 +52,7 @@ class sqlite
      * @access public
      * @return void
      */
-    public function __construct(object $params): void
+    public function __construct(object $params)
     {
         global $app, $config, $dbh;
         $this->app        = $app;
