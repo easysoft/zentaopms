@@ -1,7 +1,32 @@
 $(function()
 {
     setWhite();
+    if(copyProjectID > 0)
+    {
+        $('#name').addClass('has-info')
+        $('#name').after('<div id="nameLabelInfo" class="text-info text-warning">' + nameTips + '</div>')
+        $('#code').addClass('has-info')
+        $('#code').after('<div id="codeLabelInfo" class="text-info text-warning">' + codeTips + '</div>')
+        $('#end').addClass('has-info')
+        $('#end').parent().after('<div id="endLabelInfo" class="text-info text-warning">' + endTips + '</div>')
+        $('#days').addClass('has-info')
+        $('#days').parent().after('<div id="daysLabelInfo" class="text-info text-warning">' + daysTips + '</div>')
+    }
+
 });
+
+$(document).on('click', 'button[type=submit]', function()
+{
+    /* Remove init tips. */
+    $('#name').removeClass('has-info');
+    $('#nameLabelInfo').remove();
+    $('#code').removeClass('has-info');
+    $('#codeLabelInfo').remove();
+    $('#end').removeClass('has-info');
+    $('#endLabelInfo').remove();
+    $('#days').removeClass('has-info');
+    $('#daysLabelInfo').remove();
+})
 
 window.addProduct = function(e)
 {
@@ -100,4 +125,29 @@ $(document).on('keyup', '#projectName', function()
     {
         if($(this).text().includes(name) || $(this).data('pinyin').includes(name)) $(this).show();
     });
+});
+
+/* Click remove tips.  */
+$(document).on('click', '#name', function()
+{
+    $('#name').removeClass('has-info');
+    $('#nameLabelInfo').remove();
+});
+
+$(document).on('click', '#code', function()
+{
+    $('#code').removeClass('has-info');
+    $('#codeLabelInfo').remove();
+});
+
+$(document).on('click', '#end', function()
+{
+    $('#end').removeClass('has-info');
+    $('#endLabelInfo').remove();
+});
+
+$(document).on('click', '#days', function()
+{
+    $('#days').removeClass('has-info');
+    $('#daysLabelInfo').remove();
 });

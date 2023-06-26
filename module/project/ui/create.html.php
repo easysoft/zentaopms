@@ -9,6 +9,11 @@ jsVar('endGreaterParent', $lang->project->endGreaterParent);
 jsVar('ignore', $lang->project->ignore);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
+jsVar('copyProjectID', $copyProjectID);
+jsVar('nameTips', $lang->project->copyProject->nameTips);
+jsVar('codeTips', $lang->project->copyProject->codeTips);
+jsVar('endTips', $lang->project->copyProject->endTips);
+jsVar('daysTips', $lang->project->copyProject->daysTips);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -387,7 +392,7 @@ foreach($copyProjects as $id => $name)
 {
     $copyProjectsBox[] = btn(
         setClass('project-block justify-start'),
-        setClass($copyProjectID == $id ? 'success-outline' : ''),
+        setClass($copyProjectID == $id ? 'primary-outline' : ''),
         set('data-id', $id),
         set('data-pinyin', zget($copyPinyinList, $name, '')),
         icon
