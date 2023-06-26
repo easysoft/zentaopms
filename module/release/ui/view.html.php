@@ -257,12 +257,9 @@ detailBody
                             ),
                         )
                     ),
-                    section
+                    fileList
                     (
-                        $release->files ? fileList
-                        (
-                            set::files($release->files),
-                        ) : null,
+                        set::files($release->files),
                     ),
                     h::hr(set::class('mt-6')),
                     history()
