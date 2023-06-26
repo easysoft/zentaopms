@@ -12,14 +12,17 @@ namespace zin;
 
 $items = array();
 $items[] = array('name' => 'serviceProject', 'hidden' => true);
-$items[] = array('name' => 'name_with_namespace', 'label' => $lang->repo->gitlabList, 'control' => 'static');
+$items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px');
+$items[] = array('name' => 'name_with_namespace', 'label' => $lang->repo->gitlabList, 'control' => 'static', 'width' => '264px');
 $items[] = array('name' => 'name', 'label' => $lang->repo->importName);
 $items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('type' => 'picker', 'multiple' => true), 'items' => $products);
 $items[] = array('name' => 'projects', 'label' => $lang->repo->projects, 'control' => array('type' => 'picker', 'multiple' => true), 'items' => $projects);
 
+$no = 1;
 foreach($repoList as $repo)
 {
     $repo->serviceProject = $repo->id;
+    $repo->no             = $no ++;
 }
 
 featureBar
@@ -30,25 +33,22 @@ featureBar
         set::href($this->createLink('repo', 'import')),
         $lang->repo->batchCreate,
     ),
-    inputGroup
+    select
     (
         setClass('ml-3'),
-        $lang->repo->importServer,
-        select
-        (
-            on::change('selectServer()'),
-            set::name('servers'),
-            set::id('servers'),
-            set::items($gitlabPairs),
-            set::value($gitlab->id)
-        )
-    )
+        width('200px'),
+        on::change('selectServer()'),
+        set::name('servers'),
+        set::id('servers'),
+        set::items(array('' => $lang->repo->importServer) + $gitlabPairs),
+        set::value($gitlab->id)
+    ),
 );
 
 formBatchPanel
 (
     set::id('repoList'),
-    set::mode('add'),
+    set::mode(count($repoList) == 0 ? 'edit' : 'add'),
     set::addRowIcon('false'),
     set::items($items),
     set::data($repoList),

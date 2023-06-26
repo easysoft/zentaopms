@@ -361,13 +361,15 @@ $lang->testcase->case      = '用例';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 
-$lang->devops->compile  = '流水线';
-$lang->devops->mr       = '合并请求';
-$lang->devops->repo     = '代码库';
-$lang->devops->rules    = '指令';
-$lang->devops->settings = '合并请求设置';
-$lang->devops->platform = '平台';
-$lang->devops->set      = '设置';
+$lang->devops->compile     = '流水线';
+$lang->devops->mr          = '合并请求';
+$lang->devops->repo        = '代码库';
+$lang->devops->rules       = '指令';
+$lang->devops->settings    = '合并请求设置';
+$lang->devops->platform    = '平台';
+$lang->devops->set         = '设置';
+$lang->devops->WIPs        = '制品库';
+$lang->devops->environment = '环境';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';

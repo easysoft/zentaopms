@@ -27,7 +27,7 @@ function checkItem()
 function selectServer()
 {
     var server = $('#servers').val();
-    window.location.href = $.createLink('repo', 'import', 'server=' + server);
+    if(server) window.location.href = $.createLink('repo', 'import', 'server=' + server);
 }
 
 function loadProductProjects(event)

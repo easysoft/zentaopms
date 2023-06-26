@@ -520,8 +520,6 @@ class repo extends control
      */
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch',  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        unset($this->lang->devops->homeMenu);
-
         $repoID                 = $this->repo->saveState($repoID, $objectID);
         $originBranchID         = $branchID;
         if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
@@ -1729,7 +1727,7 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
-        $productIds = $postData->products;
+        $productIds = explode(',', $postData->products);
         if(empty($productIds))
         {
             $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');

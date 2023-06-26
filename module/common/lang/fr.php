@@ -357,12 +357,14 @@ $lang->testcase->case      = 'Test Case';
 $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
-$lang->devops->compile  = 'Pipelines';
-$lang->devops->mr       = 'Merge Request';
-$lang->devops->repo     = 'Repo';
-$lang->devops->rules    = 'Rule';
-$lang->devops->settings = 'Setting Merge Request';
-$lang->devops->set      = 'Set';
+$lang->devops->compile     = 'Pipelines';
+$lang->devops->mr          = 'Merge Request';
+$lang->devops->repo        = 'Repo';
+$lang->devops->rules       = 'Rule';
+$lang->devops->settings    = 'Setting Merge Request';
+$lang->devops->set         = 'Set';
+$lang->devops->WIPs        = 'WIPs';
+$lang->devops->environment = 'Environment';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

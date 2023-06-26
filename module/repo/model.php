@@ -61,7 +61,7 @@ class repoModel extends model
             if(count($repos) > 1) $this->lang->switcherMenu = $this->getSwitcher($repoID);
         }
 
-        common::setMenuVars('devops', $repoID);
+        if(!in_array($this->app->methodName, array('maintain', 'create', 'edit','import'))) common::setMenuVars('devops', $repoID);
         if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();
@@ -2174,6 +2174,7 @@ class repoModel extends model
             if($getCodePath) $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
 
             $repo->path     = (!$repo->path && $service) ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : $repo->path;
+            $repo->apiPath  = sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject);
             $repo->client   = $service ? $service->url : '';
             $repo->password = $service ? $service->token : '';
             $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
