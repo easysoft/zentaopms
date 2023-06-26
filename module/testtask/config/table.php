@@ -101,3 +101,41 @@ $config->testtask->linkcase->dtable->fieldList['lastRunner']    = $config->testc
 $config->testtask->linkcase->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
 $config->testtask->linkcase->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
 unset($config->testtask->linkcase->dtable->fieldList['title']['nestedToggle']);
+
+$config->testtask->browseUnits = new stdclass();
+$config->testtask->browseUnits->dtable = new stdclass();
+$config->testtask->browseUnits->dtable->fieldList['id']    = $config->testtask->dtable->fieldList['id'];
+
+$config->testtask->browseUnits->dtable->fieldList['title'] = $config->testtask->dtable->fieldList['title'];
+$config->testtask->browseUnits->dtable->fieldList['title']['title'] = $lang->testtask->unitName;
+
+$config->testtask->browseUnits->dtable->fieldList['execution'] = $config->testtask->dtable->fieldList['execution'];
+$config->testtask->browseUnits->dtable->fieldList['build']     = $config->testtask->dtable->fieldList['build'];
+
+$config->testtask->browseUnits->dtable->fieldList['owner'] = $config->testtask->dtable->fieldList['owner'];
+$config->testtask->browseUnits->dtable->fieldList['execTime']['name']  = 'execTime';
+$config->testtask->browseUnits->dtable->fieldList['execTime']['title'] = $lang->testtask->execTime;
+$config->testtask->browseUnits->dtable->fieldList['execTime']['type']  = 'datetime';
+$config->testtask->browseUnits->dtable->fieldList['execTime']['group'] = 'user';
+
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['name']  = 'caseCount';
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['title'] = $lang->testtask->caseCount;
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['type']  = 'number';
+$config->testtask->browseUnits->dtable->fieldList['caseCount']['group'] = 'number';
+
+$config->testtask->browseUnits->dtable->fieldList['passCount']['name']  = 'passCount';
+$config->testtask->browseUnits->dtable->fieldList['passCount']['title'] = $lang->testtask->passCount;
+$config->testtask->browseUnits->dtable->fieldList['passCount']['type']  = 'number';
+$config->testtask->browseUnits->dtable->fieldList['passCount']['group'] = 'number';
+
+$config->testtask->browseUnits->dtable->fieldList['failCount']['name']  = 'failCount';
+$config->testtask->browseUnits->dtable->fieldList['failCount']['title'] = $lang->testtask->failCount;
+$config->testtask->browseUnits->dtable->fieldList['failCount']['type']  = 'number';
+$config->testtask->browseUnits->dtable->fieldList['failCount']['group'] = 'number';
+
+$config->testtask->browseUnits->dtable->fieldList['actions']['name']     = 'actions';
+$config->testtask->browseUnits->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->testtask->browseUnits->dtable->fieldList['actions']['type']     = 'actions';
+$config->testtask->browseUnits->dtable->fieldList['actions']['sortType'] = false;
+$config->testtask->browseUnits->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
+$config->testtask->browseUnits->dtable->fieldList['actions']['menu']     = array('unitCases', 'edit', 'delete');

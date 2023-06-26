@@ -49,6 +49,11 @@ $config->testtask->actionList['view']['url']         = array('module' => 'testta
 $config->testtask->actionList['view']['data-toggle'] = 'modal';
 $config->testtask->actionList['view']['data-size']   = 'lg';
 
+$config->testtask->actionList['unitCases']['icon'] = 'list-alt';
+$config->testtask->actionList['unitCases']['text'] = $lang->testtask->unitCases;
+$config->testtask->actionList['unitCases']['hint'] = $lang->testtask->unitCases;
+$config->testtask->actionList['unitCases']['url']  = array('module' => 'testtask', 'method' => 'unitcases', 'params' => 'taskID={id}');
+
 $config->testtask->actionList['edit']['icon'] = 'edit';
 $config->testtask->actionList['edit']['text'] = $lang->testtask->edit;
 $config->testtask->actionList['edit']['hint'] = $lang->testtask->edit;

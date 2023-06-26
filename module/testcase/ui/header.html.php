@@ -40,7 +40,8 @@ $canCreate          = $canCreateCase || $canBatchCreateCase || $canCreateScene;
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
 
-if($rawMethod == 'zerocase') $caseType = '';
+if($rawMethod == 'zerocase')    $caseType = '';
+if($rawMethod == 'browseunits') $caseType = 'unit';
 
 if($canSwitchCaseType)
 {
@@ -90,10 +91,11 @@ if($canDisplaySuite)
 
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
+if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browse', "productID=$productID&browseType={key}");
 featureBar
 (
-    set::linkParams($rawMethod == 'zerocase' ? null : $linkParams),
-    set::link($rawMethod == 'zerocase' ? $browseLink : null),
+    set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
+    set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
     $canSwitchCaseType ? to::before
     (
         productMenu
@@ -102,7 +104,7 @@ featureBar
             set::items($caseTypeItems)
         )
     ) : null,
-    $canBrowseZeroCase ? li
+    $canBrowseZeroCase && $rawMethod != 'browseunits' ? li
     (
         set::class('nav-item'),
         a
@@ -114,7 +116,7 @@ featureBar
             $lang->testcase->zeroCase
         )
     ) : null,
-    $canDisplaySuite ? dropdown
+    $canDisplaySuite && $rawMethod != 'browseunits' ? dropdown
     (
         btn
         (
@@ -123,18 +125,18 @@ featureBar
         ),
         set::items($suiteItems)
     ) : null,
-    li
+    $rawMethod != 'browseunits' ? li
     (
         set::class('nav-item'),
         a($lang->testcase->onlyAutomated)
-    ),
-    li
+    ) : null,
+    $rawMethod != 'browseunits' ? li
     (
         set::class('nav-item'),
         a($lang->testcase->onlyScene)
-    ),
-    li(searchToggle(set::open($browseType == 'bysearch'))),
-    li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort))
+    ) : null,
+    $rawMethod != 'browseunits' ? (searchToggle(set::open($browseType == 'bysearch'))) : null,
+    $rawMethod != 'browseunits' ? li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort)) : null
 );
 
 $viewItems   = array(array('text' => $lang->testcase->listView, 'active' => true));
@@ -220,7 +222,7 @@ toolbar
         set::items($viewItems),
         set::placement('bottom-end'),
     ) : null,
-    $canAutomation ? btn
+    $canAutomation && $rawMethod != 'browseunits' ? btn
     (
         set
         (
@@ -237,7 +239,7 @@ toolbar
         set::items($exportItems),
         set::placement('bottom-end'),
     ) : null,
-    $importItems ? dropdown
+    $importItems && $rawMethod != 'browseunits'? dropdown
     (
         btn
         (
@@ -247,7 +249,7 @@ toolbar
         set::items($importItems),
         set::placement('bottom-end'),
     ) : null,
-    $canCreate ? btngroup
+    $canCreate && $rawMethod != 'browseunits' ? btngroup
     (
         btn
         (
@@ -265,7 +267,7 @@ toolbar
     ) : null,
 );
 
-if($rawMethod != 'zerocase')
+if($rawMethod != 'zerocase' && $rawMethod != 'browseunits')
 {
     $settingLink = $canManageModule ? createLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$app->tab}") : '';
     $closeLink   = $browseType == 'bymodule' ? createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';

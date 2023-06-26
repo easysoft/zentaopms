@@ -201,6 +201,8 @@ class testtask extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
+        $this->lang->testcase->featureBar['browseunits'] = $this->lang->testtask->unitTag;
+
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
