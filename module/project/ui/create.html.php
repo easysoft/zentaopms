@@ -90,6 +90,7 @@ formPanel
         set::width('1/2'),
         set::name('name'),
         set::label($lang->project->name),
+        set::value($copyProjectID ? $copyProject->name : ''),
         set::strong(true),
     ),
     (!isset($config->setCode) or $config->setCode == 1) ? formGroup
@@ -97,6 +98,7 @@ formPanel
         set::width('1/2'),
         set::name('code'),
         set::label($lang->project->code),
+        set::value($copyProjectID ? $copyProject->code : ''),
         set::strong(true),
     ) : null,
     (in_array($model, array('scrum', 'kanban'))) ? formGroup
@@ -106,8 +108,10 @@ formPanel
         set::label($lang->project->multiple),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
+        set::disabled($copyProjectID),
         set::value('1'),
-        on::change('toggleMultiple')
+        on::change('toggleMultiple'),
+        $copyProjectID ? formHidden('multiple', $copyProject->multiple) : null,
     ) : null,
     formGroup
     (
@@ -120,15 +124,17 @@ formPanel
             (
                 setClass('primary-pale project-type-1'),
                 on::click('changeType(1)'),
+                set::disabled($copyProjectID),
                 $lang->project->projectTypeList[1]
             ),
             btn(
                 setClass('project-type-0'),
                 on::click('changeType(0)'),
+                set::disabled($copyProjectID),
                 $lang->project->projectTypeList[0]
             )
         ),
-        formHidden('hasProduct', 1)
+        formHidden('hasProduct', $copyProjectID ? $copyProject->hasProduct : 1)
     ),
     formGroup
     (
@@ -352,7 +358,7 @@ formPanel
             set::label($lang->project->acl),
             set::control('radioList'),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
-            set::value('private'),
+            set::value($copyProjectID ? $copyProject->acl : 'private'),
             on::change('setWhite(this)')
         )
     ),
@@ -372,7 +378,7 @@ formPanel
         set::label($lang->project->auth),
         set::control('radioList'),
         set::items($lang->project->authList),
-        set::value('extend')
+        set::value($copyProjectID ? $copyProject->auth : 'extend')
     ),
 );
 

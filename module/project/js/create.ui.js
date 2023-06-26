@@ -1,5 +1,11 @@
+$(function()
+{
+    setWhite();
+});
+
 window.addProduct = function(e)
 {
+    if($('.project-type-' + type).hasClass('disabled')) return;
     if($(e.target).prop('checked'))
     {
         $('.productBox').addClass('hidden');
