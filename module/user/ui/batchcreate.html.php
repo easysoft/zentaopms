@@ -75,14 +75,12 @@ formBatchPanel
                 set::name('company'),
                 set::items($companies),
                 set::value(''),
-                width('135px'),
             ),
             input
             (
                 set::name('newCompany'),
                 set::value(''),
                 setClass('hidden'),
-                width('135px'),
             ),
             checkbox
             (
@@ -90,7 +88,8 @@ formBatchPanel
                 set::name('new'),
                 set::value(0),
                 set::text($lang->company->create),
-                set::rootClass('ml-4'),
+                set::rootClass('btn'),
+                width('96px'),
             ),
         ),
     ),
