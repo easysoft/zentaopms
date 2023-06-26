@@ -2513,11 +2513,10 @@ EOF;
          * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
          * Ignore safari browser when there is HTTP_REFERER request header, because safari browser will not send HTTP_SEC_FETCH_DEST request header correctly.
          */
-        if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
-        {
-            $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
-        }
+        if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) return;
+
+        $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
 
         /**
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
