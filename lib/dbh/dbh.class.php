@@ -515,7 +515,7 @@ class dbh
         $table  = TABLE_SQLITE_QUEUE;
         $sql    = $this->quote($sql);
         $now    = "now()";
-        $action = $this->getLastAction();
+        $action = $this->getLastAction() + 1;
 
         $queue = "INSERT INTO $table SET `sql` = $sql, `addDate` = $now, `status` = 'wait', `action` = $action";
 
