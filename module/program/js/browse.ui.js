@@ -50,3 +50,14 @@ $(document).on('click', '.batch-btn', function()
     checkedList.forEach((id) => postData.append('projectIdList[]', id));
     postAndLoadPage($(this).data('url'), postData);
 })
+
+/* Put the checked projects to cookie for exporting. */
+$(document).on('click', '.has-checkbox', function()
+{
+    const $this  = $(this);
+    const dtable = zui.DTable.query($this);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $.cookie.set('checkedItem', checkedList);
+})
