@@ -88,11 +88,12 @@ $config->release->dtable->story->fieldList['stage']['name']  = 'stage';
 $config->release->dtable->story->fieldList['stage']['type']  = 'category';
 $config->release->dtable->story->fieldList['stage']['map']   = $lang->story->stageList;
 
-$config->release->dtable->story->fieldList['actions']['title'] = $lang->actions;
-$config->release->dtable->story->fieldList['actions']['name']  = 'actions';
-$config->release->dtable->story->fieldList['actions']['type']  = 'actions';
-$config->release->dtable->story->fieldList['actions']['menu']  = array('unlinkStory');
-$config->release->dtable->story->fieldList['actions']['list']  = $config->release->actionList;
+$config->release->dtable->story->fieldList['actions']['title']    = $lang->actions;
+$config->release->dtable->story->fieldList['actions']['name']     = 'actions';
+$config->release->dtable->story->fieldList['actions']['type']     = 'actions';
+$config->release->dtable->story->fieldList['actions']['minWidth'] = 60;
+$config->release->dtable->story->fieldList['actions']['menu']     = array('unlinkStory');
+$config->release->dtable->story->fieldList['actions']['list']     = $config->release->actionList;
 
 $config->release->dtable->bug->fieldList['id']['title']    = $lang->idAB;
 $config->release->dtable->bug->fieldList['id']['name']     = 'id';
@@ -138,11 +139,12 @@ $config->release->dtable->bug->fieldList['resolvedDate']['title'] = $lang->bug->
 $config->release->dtable->bug->fieldList['resolvedDate']['name']  = 'resolvedDate';
 $config->release->dtable->bug->fieldList['resolvedDate']['type']  = 'date';
 
-$config->release->dtable->bug->fieldList['actions']['title'] = $lang->actions;
-$config->release->dtable->bug->fieldList['actions']['name']  = 'actions';
-$config->release->dtable->bug->fieldList['actions']['type']  = 'actions';
-$config->release->dtable->bug->fieldList['actions']['menu']  = array('unlinkBug');
-$config->release->dtable->bug->fieldList['actions']['list']  = $config->release->actionList;
+$config->release->dtable->bug->fieldList['actions']['title']    = $lang->actions;
+$config->release->dtable->bug->fieldList['actions']['name']     = 'actions';
+$config->release->dtable->bug->fieldList['actions']['type']     = 'actions';
+$config->release->dtable->bug->fieldList['actions']['minWidth'] = 60;
+$config->release->dtable->bug->fieldList['actions']['menu']     = array('unlinkBug');
+$config->release->dtable->bug->fieldList['actions']['list']     = $config->release->actionList;
 
 $config->release->dtable->leftBug = $config->release->dtable->bug;
 $config->release->dtable->leftBug->fieldList['severity']['name'] = 'severityOrder';
