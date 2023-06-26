@@ -475,8 +475,7 @@
         {
             if($('#main').length)
             {
-                const isDiffModule = options.url && options.url !== currentAppUrl && config.currentModule !== $.parseLink(options.url).moduleName;
-                options.selector = '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,' + (isDiffModule ? '#heading>*,#navbar>*' : 'activeMenu()');
+                options.selector = '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*';
             }
             else
             {
