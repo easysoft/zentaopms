@@ -982,6 +982,11 @@ function panel(): panel
     return createWg('panel', func_get_args());
 }
 
+function pasteDialog(): pasteDialog
+{
+    return createWg('pasteDialog', func_get_args());
+}
+
 /**
  * Tooltip widget.
  */
@@ -1072,9 +1077,9 @@ function tree(): Tree
 /**
  * Zentao file list widget.
  *
- * ?array  files 
- * ?int    objectID 
- * ?string objectType 
+ * ?array  files
+ * ?int    objectID
+ * ?string objectType
  */
 function fileList(): fileList
 {
