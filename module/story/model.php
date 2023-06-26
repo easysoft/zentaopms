@@ -4497,10 +4497,12 @@ class storyModel extends model
 
         global $app, $config;
         static $shadowProducts = array();
-        if(empty($shadowProducts[$story->product]))
+        static $hasShadow      = true;
+        if($hasShadow and empty($shadowProducts[$story->product]))
         {
             global $dbh;
             $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            if(empty($stmt)) $hasShadow = false;
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
