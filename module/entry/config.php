@@ -1,9 +1,9 @@
 <?php
 $config->entry->create = new stdclass();
-$config->entry->create->requiredFields = 'name, code, account, key';
+$config->entry->create->requiredFields = 'name,code,account,key';
 
 $config->entry->edit = new stdclass();
-$config->entry->edit->requiredFields = 'name, code, account, key';
+$config->entry->edit->requiredFields = 'name,code,account,key';
 
 $config->entry->errcode['PARAM_CODE_MISSING']    = 401;
 $config->entry->errcode['PARAM_TOKEN_MISSING']   = 401;

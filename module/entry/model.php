@@ -90,6 +90,7 @@ class entryModel extends model
         $entry = fixer::input('post')
             ->setDefault('ip', '*')
             ->setIF($this->post->allIP, 'ip', '*')
+            ->setIF($this->post->freePasswd == '1', 'account', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('allIP')
