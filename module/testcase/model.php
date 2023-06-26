@@ -951,8 +951,6 @@ class testcaseModel extends model
      */
     public function review($caseID)
     {
-        if($this->post->result == false) return print(js::alert($this->lang->testcase->mustChooseResult));
-
         $oldCase = $this->getById($caseID);
 
         $now    = helper::now();

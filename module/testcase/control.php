@@ -1228,6 +1228,8 @@ class testcase extends control
     {
         if($_POST)
         {
+            if($this->post->result == false) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->mustChooseResult));
+
             $changes = $this->testcase->review($caseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
