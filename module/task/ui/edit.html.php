@@ -118,7 +118,18 @@ formPanel
             h::strong
             (
                 $lang->files,
-                setClass('leading-8')
+                setClass('leading-8'),
+            ),
+            fileList
+            (
+                set::files($task->files),
+                set::fieldset(false),
+                set::method('edit'),
+            ),
+            formGroup
+            (
+                set::name('files[]'),
+                set::control('file')
             ),
             h::hr(setClass('my-3')),
             history

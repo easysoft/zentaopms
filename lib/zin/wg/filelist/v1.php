@@ -71,7 +71,7 @@ class fileList extends wg
             (
                 icon('paper-clip'),
             ),
-            div(setClass('mt-3'), $this->fileList()),
-        ) : div(setClass('mt-3'), $this->fileList());
+            div($this->fileList()),
+        ) : div($this->fileList());
     }
 }
