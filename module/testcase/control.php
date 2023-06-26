@@ -653,19 +653,9 @@ class testcase extends control
         if(!empty($_POST))
         {
             $caseIDList = $this->testcase->batchCreate($productID, $branch, $storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(isonlybody())
-            {
-                $execution = $this->loadModel('execution')->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban')
-                {
-                    return print(js::closeModal('parent.parent', ''));
-                }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this'));
-                }
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 
@@ -673,12 +663,12 @@ class testcase extends control
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&caseType=&orderBy=id_desc"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}&browseType=all&param=0&caseType=&orderBy=id_desc")));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         /* Set productID and currentModuleID. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveVisitState($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch;
         if($storyID and empty($moduleID))
         {
@@ -693,7 +683,7 @@ class testcase extends control
         /* Set story list. */
         $story       = $storyID ? $this->story->getByID($storyID) : '';
         $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
-        $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
+        $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
 
         /* Set custom. */
         $product = $this->product->getById($productID);

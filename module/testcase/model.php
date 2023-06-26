@@ -104,12 +104,6 @@ class testcaseModel extends model
 
         $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID}");
         $cases  = $result['data'];
-
-        foreach($cases->title as $i => $title)
-        {
-            if(!empty($cases->title[$i]) and empty($cases->type[$i])) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
-        }
-
         $module = 0;
         $scene  = 0;
         $story  = 0;
@@ -117,22 +111,6 @@ class testcaseModel extends model
         $pri    = 3;
         foreach($cases->title as $i => $title)
         {
-            if(empty($title) and $this->common->checkValidRow('testcase', $cases, $i))
-            {
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
-                return false;
-            }
-
-            $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
-            $scene  = $cases->scene[$i] == 'ditto'  ? $scene  : $cases->scene[$i];
-            $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
-            $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
-            $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
-            $cases->module[$i] = (int)$module;
-            $cases->scene[$i]  = (int)$scene;
-            $cases->story[$i]  = !empty($storyID) ? $storyID : (int)$story;
-            $cases->type[$i]   = $type;
-            $cases->pri[$i]    = $pri;
         }
 
         $this->loadModel('story');
@@ -147,14 +125,14 @@ class testcaseModel extends model
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
             if($this->app->tab == 'project') $data[$i]->project = $this->session->project;
-            $data[$i]->branch       = isset($cases->branch[$i]) ? $cases->branch[$i] : '0';
+            $data[$i]->branch       = isset($cases->branch[$i]) ? (int)$cases->branch[$i] : '0';
             $data[$i]->module       = $cases->module[$i];
-            $data[$i]->scene        = $cases->scene[$i];
+            $data[$i]->scene        = (int)$cases->scene[$i];
             $data[$i]->type         = $cases->type[$i];
             $data[$i]->pri          = $cases->pri[$i];
-            $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
-            $data[$i]->story        = $cases->story[$i];
-            $data[$i]->color        = $cases->color[$i];
+            $data[$i]->stage        = is_array($cases->stage[$i]) ? implode(',', $cases->stage[$i]) : zget($cases->stage, $i);
+            $data[$i]->story        = (int)$cases->story[$i];
+            $data[$i]->color        = isset($cases->color) ? $cases->color[$i] : '';
             $data[$i]->title        = $cases->title[$i];
             $data[$i]->precondition = $cases->precondition[$i];
             $data[$i]->keywords     = $cases->keywords[$i];
@@ -182,9 +160,10 @@ class testcaseModel extends model
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($data[$i]->$field)) return helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
+                if($field && empty($data[$i]->{$field})) dao::$errors["{$field}[{$i}]"][] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
             }
         }
+        if(dao::isError()) return false;
 
         $caseIDList = array();
         foreach($data as $i => $case)
@@ -195,11 +174,7 @@ class testcaseModel extends model
                 ->checkFlow()
                 ->exec();
 
-            if(dao::isError())
-            {
-                echo js::error(dao::getError());
-                return print(js::reload('parent'));
-            }
+            if(dao::isError()) return false;
 
             $caseID       = $this->dao->lastInsertID();
             $caseIDList[] = $caseID;
