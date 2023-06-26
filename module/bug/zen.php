@@ -1770,7 +1770,8 @@ class bugZen extends bug
             }
         }
 
-        $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
+        $uid = $this->post->uid ? $this->post->uid : '';
+        $this->loadModel('file')->updateObjectID($uid, $bugID, 'bug');
         $this->file->saveUpload('bug', $bugID);
 
         return !dao::isError();
