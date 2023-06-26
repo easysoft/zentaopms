@@ -4989,7 +4989,8 @@ class storyModel extends model
             }
             else
             {
-                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
+                $queryCondition = str_replace('story', 'id', $this->session->storyQueryCondition);
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
             }
         }
         else
