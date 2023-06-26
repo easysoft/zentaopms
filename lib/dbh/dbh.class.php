@@ -520,4 +520,19 @@ class dbh
         $this->pdo->exec($queue);
         return $this->pdo->lastInsertId();
     }
+
+    /**
+     * Get last action id.
+     *
+     * @access public
+     * @return int
+     */
+    public function getLastAction(): int
+    {
+        $table = TABLE_ACTION;
+        $sql = "SELECT id FROM $table ORDER BY id desc limit 1";
+
+        $lastAction = $this->pdo->query($sql)->fetch();
+        return (int)$lastAction->id;
+    }
 }
