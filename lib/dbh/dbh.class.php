@@ -527,14 +527,14 @@ class dbh
      * Get last action id.
      *
      * @access public
-     * @return int
+     * @return int|false
      */
-    public function getLastAction(): int
+    public function getLastAction(): int|false
     {
         $table = TABLE_ACTION;
         $sql = "SELECT id FROM $table ORDER BY id desc limit 1";
 
         $lastAction = $this->pdo->query($sql)->fetch();
-        return (int)$lastAction->id;
+        return $lastAction ? (int)$lastAction->id : false;
     }
 }
