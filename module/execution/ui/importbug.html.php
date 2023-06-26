@@ -15,111 +15,98 @@ namespace zin;
 featureBar
 (
     set::current('all'),
-    set::linkParams("toExecution={$execution->id}"),
+    set::linkParams("executionID={$execution->id}"),
     li
     (
         searchToggle(set::module('bug'))
     )
 );
 
-jsVar('statusList', $lang->bug->statusList);
-formBatchPanel
+formBase
 (
-    set::mode('edit'),
     setID('importForm'),
-    set::data(array_values($bugs)),
-    set::onRenderRowCol(jsRaw('window.handleImportBug')),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label(''),
-        set::control('checkbox'),
-        set::width('20px'),
-    ),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label('ID'),
-        set::control('index'),
-        set::width('60px'),
-    ),
-    formBatchItem
-    (
-        set::name('severity'),
-        set::label($lang->bug->abbr->severity),
-        set::control('static'),
-        set::width('48px'),
-    ),
-    formBatchItem
-    (
-        set::name('title'),
-        set::label($lang->bug->title),
-        set::control('static'),
-    ),
-    formBatchItem
-    (
-        set::name('status'),
-        set::label($lang->bug->status),
-        set::control('static'),
-        set::width('80px')
-    ),
-    formBatchItem
-    (
-        set::name('pri'),
-        set::label($lang->execution->pri),
-        set::control('select'),
-        set::required(in_array('pri', $requiredFields)),
-        set::width('68px'),
-        set::value('3'),
-        set::items($lang->bug->priList),
-    ),
-    formBatchItem
-    (
-        set::name('assignedTo'),
-        set::label($lang->task->assignedTo),
-        set::control('picker'),
-        set::required(in_array('assignedTo', $requiredFields)),
-        set::width('108px'),
-        set::items($users),
-    ),
-    formBatchItem
-    (
-        set::name('estimate'),
-        set::label($lang->task->estimate),
-        set::control('number'),
-        set::required(in_array('estimate', $requiredFields)),
-        set::width('64px'),
-    ),
-    formBatchItem
-    (
-        set::name('estStarted'),
-        set::label($lang->task->estStarted),
-        set::control('date'),
-        set::required(in_array('estStarted', $requiredFields)),
-        set::width('110px'),
-    ),
-    formBatchItem
-    (
-        set::name('deadline'),
-        set::label($lang->task->deadline),
-        set::control('date'),
-        set::required(in_array('deadline', $requiredFields)),
-        set::width('110px'),
-    ),
+    set::action(createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param={$param}")),
     set::actions(array()),
-    set::footerActions(array(
-        array(
-            'text'    => $lang->import,
-            'icon'    => 'import',
-            'class'   => 'btn secondary toolbar-item batch-btn size-sm',
-            'onClick' => 'window.importBug()'
-        ),
-        array(
-            'text'  => $lang->goback,
-            'class' => 'btn toolbar-item size-sm text-gray ml-2',
-            'url'   => createLink('execution', 'task', "executionID={$execution->id}")
+    dtable
+    (
+        set::userMap($users),
+        set::cols($config->execution->importBug->dtable->fieldList),
+        set::data($bugs),
+        set::checkable(true),
+        set::showToolbarOnChecked(false),
+        set::onRenderCell(jsRaw('window.handleImportBug')),
+        set::onRenderRow(jsRaw('window.onRenderRow')),
+        set::footToolbar(array(
+            'items' => array(
+                array(
+                    'text'  => $lang->import,
+                    'class' => 'btn secondary import-bug-btn size-sm',
+                ),
+                array(
+                    'text'  => $lang->goback,
+                    'class' => 'btn size-sm text-gray',
+                    'url'   => createLink('execution', 'task', "executionID={$execution->id}")
+                )
+            )
+        )),
+        set::footPager(
+            usePager(),
+            set::recPerPage($recPerPage),
+            set::recTotal($recTotal),
+            set::linkCreator(helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))
         )
-    )),
+    )
+);
+
+jsVar('executionBegin', $execution->begin);
+div
+(
+    setClass('hidden'),
+    setID('priSelect'),
+    select
+    (
+        setClass('select-pri w-12'),
+        set::name('pri[]'),
+        set::items($lang->task->priList),
+        set::value(3)
+    )
+);
+
+div
+(
+    setClass('hidden'),
+    setID('userSelect'),
+    select
+    (
+        setClass('select-user w-24'),
+        set::name('assignedTo[]'),
+        set::items($users)
+    )
+);
+
+div
+(
+    setClass('hidden'),
+    setID('numInput'),
+    control
+    (
+        set::type('number'),
+        set::min('0'),
+        setClass('input-num w-12'),
+        set::name('estimate[]'),
+    )
+);
+
+div
+(
+    setClass('hidden'),
+    setID('dateInput'),
+    control
+    (
+        set::type('date'),
+        setClass('input-date w-26'),
+        set::name('deadline[]'),
+    )
 );
 
 render();

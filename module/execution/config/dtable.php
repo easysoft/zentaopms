@@ -168,3 +168,56 @@ $config->execution->team->dtable->fieldList['limited']['sortType'] = false;
 $config->execution->team->dtable->fieldList['actions']['type']       = 'actions';
 $config->execution->team->dtable->fieldList['actions']['minWidth']   = 60;
 $config->execution->team->dtable->fieldList['actions']['actionsMap'] = $config->execution->team->actionList;
+
+global $app;
+$app->loadLang('bug');
+$app->loadLang('task');
+$config->execution->importBug = new stdclass();
+$config->execution->importBug->dtable = new stdclass();
+$config->execution->importBug->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->execution->importBug->dtable->fieldList['id']['type']     = 'checkID';
+$config->execution->importBug->dtable->fieldList['id']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['severity']['title']    = $lang->bug->abbr->severity;
+$config->execution->importBug->dtable->fieldList['severity']['type']     = 'severity';
+$config->execution->importBug->dtable->fieldList['severity']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['severity']['fixed']    = 'left';
+
+$config->execution->importBug->dtable->fieldList['pri']['title']    = $lang->execution->pri;
+$config->execution->importBug->dtable->fieldList['pri']['type']     = 'pri';
+$config->execution->importBug->dtable->fieldList['pri']['sortType'] = false;
+$config->execution->importBug->dtable->fieldList['pri']['fixed']    = 'left';
+
+$config->execution->importBug->dtable->fieldList['title']['title']       = $lang->bug->title;
+$config->execution->importBug->dtable->fieldList['title']['type']        = 'shortNestedTitle';
+$config->execution->importBug->dtable->fieldList['title']['sortType']    = false;
+$config->execution->importBug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->execution->importBug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
+
+$config->execution->importBug->dtable->fieldList['status']['title']     = $lang->bug->status;
+$config->execution->importBug->dtable->fieldList['status']['type']      = 'status';
+$config->execution->importBug->dtable->fieldList['status']['sortType']  = false;
+$config->execution->importBug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
+
+$config->execution->importBug->dtable->fieldList['taskPri']['title']    = $lang->bug->pri;
+$config->execution->importBug->dtable->fieldList['taskPri']['name']     = 'pri';
+$config->execution->importBug->dtable->fieldList['taskPri']['type']     = 'html';
+$config->execution->importBug->dtable->fieldList['taskPri']['width']    = 68;
+$config->execution->importBug->dtable->fieldList['taskPri']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['assignedTo']['title']    = $lang->bug->assignedTo;
+$config->execution->importBug->dtable->fieldList['assignedTo']['type']     = 'html';
+$config->execution->importBug->dtable->fieldList['assignedTo']['width']    = 108;
+$config->execution->importBug->dtable->fieldList['assignedTo']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['estimate']['title']    = $lang->task->estimate;
+$config->execution->importBug->dtable->fieldList['estimate']['type']     = 'number';
+$config->execution->importBug->dtable->fieldList['estimate']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['estStarted']['title']    = $lang->task->estStarted;
+$config->execution->importBug->dtable->fieldList['estStarted']['type']     = 'datetime';
+$config->execution->importBug->dtable->fieldList['estStarted']['sortType'] = false;
+
+$config->execution->importBug->dtable->fieldList['deadline']['title']    = $lang->task->deadline;
+$config->execution->importBug->dtable->fieldList['deadline']['type']     = 'datetime';
+$config->execution->importBug->dtable->fieldList['deadline']['sortType'] = false;
