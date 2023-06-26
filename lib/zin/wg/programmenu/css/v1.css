@@ -1,6 +1,7 @@
 .program-menu {width: 200px; max-height: 100%; margin: -5px 0;}
 .program-menu .tree[data-zin-id] {border: 1px solid #E6EAF1; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); overflow-y: auto; width: 200px !important; background-color: #fff; padding-bottom: 20px;}
 .program-menu .tree-item.tree-heading {padding: 16px 10px; font-size: 12px; color: var(--color-slate-600)}
+.program-menu .tree-item .tree-item-content span {cursor: pointer;}
 
 .program-menu .icon-container      {width: 20px; height: 20px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1px solid #0066fa;}
 .program-menu .icon-container.down {background-color: inherit;}

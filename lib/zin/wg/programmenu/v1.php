@@ -10,7 +10,8 @@ class programMenu extends wg
         'activeClass?: string="active"',
         'activeIcon?: string="check"',
         'activeKey?: string',
-        'closeLink?: string'
+        'closeLink?: string',
+        'onClickItem?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -34,8 +35,15 @@ class programMenu extends wg
             if(isset($child->icon)) $item['icon'] = $child->icon;
 
             $items = $this->buildMenuTree($item['items'], $child->id);
-            if(count($items) !== 0) $item['items'] = $items;
-            else                    unset($item['items']);
+
+            if(count($items) !== 0)
+            {
+                $item['items'] = $items;
+            }
+            else
+            {
+                unset($item['items']);
+            }
 
             $parent[] = $item;
         }
@@ -64,7 +72,13 @@ class programMenu extends wg
     {
         $items = $this->buildMenuTree(array(), 0);
         array_unshift($items, array('type' => 'heading', 'text' => '筛选项目集'));
-        return array('items' => $items);
+        $props = array('items' => $items);
+
+        /* Attach click event function. */
+        $onClickItem = $this->prop('onClickItem');
+        if($onClickItem) $props['onClickItem'] = $onClickItem;
+
+        return $props;
     }
 
     private function closeBtn()
