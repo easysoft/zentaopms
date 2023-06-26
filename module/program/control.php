@@ -659,7 +659,7 @@ class program extends control
             $this->post->set('fields', $fields);
             $this->post->set('rows', $programs);
             $this->post->set('kind', 'program');
-            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+            $this->fetch('file', 'export2' . $this->post->fileType);
         }
 
         $this->display();
