@@ -118,6 +118,8 @@ if($execution->type == 'kanban')
 
 formBatchPanel
 (
+    set::title($lang->task->batchCreate),
+    set::pasteField('name'),
     formBatchItem
     (
         set::name('id'),
