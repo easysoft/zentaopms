@@ -54,7 +54,6 @@ class sqlite
         $this->app        = $app;
         $this->mysql      = $dbh;
         $this->config     = $config;
-        $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
 
         $file = empty($params) || !isset($params->file) ? '' : $params->file;
         $this->connectSqlite($file);
@@ -205,17 +204,5 @@ class sqlite
     public function commit()
     {
         return $this->dbh->commit();
-    }
-
-    /**
-     * Execute sql without format.
-     *
-     * @param  string $sql
-     * @access public
-     * @return mixed
-     */
-    public function rawExec(string $sql)
-    {
-        return $this->dbh->exec($sql);
     }
 }
