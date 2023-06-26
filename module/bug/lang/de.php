@@ -178,8 +178,7 @@ $lang->bug->lblAssignedTo = 'Bearbeiter';
 $lang->bug->lblMailto     = 'Mail an';
 $lang->bug->lblLastEdited = 'Letzte Bearbeitung';
 $lang->bug->lblResolved   = 'Gelöst von';
-$lang->bug->allUsers      = 'Alle Benutzer laden';
-$lang->bug->allBuilds     = 'Alle';
+$lang->bug->loadAll       = 'Load All';
 $lang->bug->createBuild   = 'Neu';
 
 global $config;

@@ -1158,6 +1158,7 @@ class bugZen extends bug
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
+        $this->view->contactList           = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
     }
 
     /**

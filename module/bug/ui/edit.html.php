@@ -187,7 +187,7 @@ panel
                             (
                                 set('id', 'allUsers'),
                                 set('href', 'javascript:;'),
-                                $lang->bug->allUsers
+                                $lang->bug->loadAll
                             )
                         )
                     )
@@ -323,7 +323,7 @@ panel
                             (
                                 set('id', 'allBuilds'),
                                 set('href', 'javascript:;'),
-                                $lang->bug->allBuilds
+                                $lang->bug->loadAll
                             )
                         )
                     )
@@ -364,7 +364,7 @@ panel
                             (
                                 set('id', 'allBuilds'),
                                 set('href', 'javascript:;'),
-                                $lang->bug->allBuilds
+                                $lang->bug->loadAll
                             )
                         )
                     )

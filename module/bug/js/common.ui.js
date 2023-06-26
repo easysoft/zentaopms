@@ -99,10 +99,44 @@ function changeModule(event)
     loadProductStories(productID, storyID, executionID, moduleID);
 }
 
-function clickRefresh(event)
+function changeRegion(event)
+{
+    const regionID = $(event.target).val();
+    const url = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lane');
+    $.get(url, function(lane)
+    {
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
+        $('#lane').replaceWith(lane);
+    });
+}
+
+function changeContact(event)
+{
+    const contactID = $(event.target).val();
+    setMailto(contactID);
+}
+
+function refreshModule(event)
 {
     const productID = $('#product').val();
     loadProductModules(productID);
+}
+
+function refreshContact(event)
+{
+    loadContacts();
+}
+
+function refreshProductBuild(event)
+{
+    const productID = $('#product').val();
+    loadProductBuilds(productID);
+}
+
+function refreshExecutionBuild(event)
+{
+    const executionID = $('#execution').val();
+    loadExecutionBuilds(executionID);
 }
 
 function loadProductBranches(productID)
@@ -295,6 +329,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
             $.get(link, function(data)
             {
                 $('#openedBuild').replaceWith(data);
+                loadBuildActions();
             })
         }
     }
@@ -328,6 +363,7 @@ function loadExecutionBuilds(executionID, num)
     let branch           = $('#branch' + num).val();
     let productID        = $('#product' + num).val();
     const oldOpenedBuild = $('#openedBuild' + num).val() ? $('#openedBuild' + num).val() : 0;
+
     if(typeof(branch) == 'undefined')    branch    = 0;
     if(typeof(productID) == 'undefined') productID = 0;
 
@@ -338,6 +374,7 @@ function loadExecutionBuilds(executionID, num)
         {
             $('#openedBuild').replaceWith(data);
             $('#openedBuild').val(oldOpenedBuild);
+            loadBuildActions();
         })
     }
     else
@@ -557,4 +594,61 @@ function setBranchRelated(event)
         });
         $.ajaxSettings.async = true;
     }
+}
+
+function loadBuildActions()
+{
+    if(config.currentMethod == 'edit') return;
+    $('#buildBoxActions').empty().hide();
+    let itemCount = $('#openedBuild').find('option').length;
+    if($('#openedBuild').attr('data-items') != undefined) itemCount = $('#openedBuild').attr('data-items');
+    if(itemCount <= 1)
+    {
+        let html = '';
+        if($('#execution').length == 0 || $('#execution').val() == 0)
+        {
+            let branch    = $('#branch').val();
+            let projectID = $('#project').val();
+
+            if(typeof(branch)    == 'undefined') branch    = 0;
+            if(typeof(projectID) == 'undefined') projectID = 0;
+
+            let link = $.createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
+            if(projectID > 0) link = $.createLink('projectrelease', 'create', 'projectID=' + projectID);
+
+            html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createRelease + '</a> ';
+            html += '<a href="javascript:;" id="refreshProductBuild">' + refresh + '</a>';
+        }
+        else
+        {
+            const executionID = $('#execution').val();
+            const productID   = $('#product').val();
+            const projectID   = $('#project').val();
+            let link = $.createLink('build', 'create','executionID=' + executionID + '&productID=' + productID + '&projectID=' + projectID);
+            link += link.indexOf('?') >= 0 ? '&onlybody=yes' : '?onlybody=yes';
+            html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createBuild + '</a> ';
+            html += '<a href="javascript:;" id="refreshExecutionBuild">' + refresh + '</a>';
+        }
+        $('#buildBoxActions').html(html).show();
+    }
+}
+
+function loadContacts()
+{
+    const link = $.createLink('user', 'ajaxGetContactList', 'dropdownName=mailto');
+    $.get(link, function(contacts)
+    {
+        if(!contacts) return false;
+        $('#contactBox').html(contacts)
+    });
+}
+
+function setMailto(contactID)
+{
+    const oldUsers = $('#mailto').val();
+    const link     = $.createLink('user', 'ajaxGetContactUsers', 'listID=' + contactID + '&dropdownName=mailto&oldUsers=' + oldUsers);
+    $.get(link, function(users)
+    {
+        $('#mailto').replaceWith(users);
+    });
 }
