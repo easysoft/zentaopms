@@ -90,7 +90,7 @@ detailBody
             set::fixedLeftWidth('0.5'),
             set::checkable($hasCheckbox),
             set::footToolbar($footToolbar),
-            set::footPager(usePager(null, 'pager', 'nopagesize')),
+            set::footPager(usePager(null, 'pager', 'short')),
         ),
     ),
     history(),
