@@ -167,58 +167,49 @@ function generateOtherInfoItemList($product, $lang)
 }
 
 /* Layout. */
-div
+detailBody
 (
-    setClass('flex w-full'),
-    /* Product information. */
-    cell
+    sectionList
     (
-        set::width('70%'),
-        panel
+        section
         (
-            /* Title. */
-            div
+            entityLabel
             (
-                setClass('detail'),
-                div
-                (
-                    setClass('detail-title'),
-                    span(setClass('label-id'), $product->id),
-                    $hiddenCode ? ' ' : span(setClass('item-label'), $product->code),
-                    $product->name
-                )
+                set::entityID($product->id),
+                set::level(1),
+                set::text($product->name)
             ),
-            /* Platform and branches list. */
-            generatePlatformDetail($product, $branches, $lang),
-            /* Manager list. */
-            div
-            (
-                setClass('detail'),
-                div
-                (
-                    setClass('detail-title'),
-                    $lang->product->manager
-                ),
-                generateManagerInfoItemList($product, $lang, $users, $reviewers)
-            ),
-            /* Base information. */
-            div
-            (
-                setClass('detail w-full'),
-                div(setClass('detail-title'), $lang->product->basicInfo),
-                generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
-            ),
-            /* Other information. */
-            div
-            (
-                setClass('detail w-full'),
-                div(setClass('detail-title'), $lang->product->otherInfo),
-                generateOtherInfoItemList($product, $lang)
-            )
-            /* Extend Fields. */
         ),
+        /* Platform and branches list. */
+        generatePlatformDetail($product, $branches, $lang),
+        /* Manager list. */
+        div
+        (
+            setClass('detail'),
+            div
+            (
+                setClass('detail-title'),
+                $lang->product->manager
+            ),
+            generateManagerInfoItemList($product, $lang, $users, $reviewers)
+        ),
+        /* Base information. */
+        div
+        (
+            setClass('detail w-full'),
+            div(setClass('detail-title'), $lang->product->basicInfo),
+            generateBasicInfoItemList($product, $lang, $hiddenCode, $users, $groups)
+        ),
+        /* Other information. */
+        div
+        (
+            setClass('detail w-full'),
+            div(setClass('detail-title'), $lang->product->otherInfo),
+            generateOtherInfoItemList($product, $lang)
+        ),
+        /* Extend Fields. */
         /* Float action toolbar. */
-        floatToolbar
+        center(floatToolbar
         (
             set(array_merge
             (
@@ -229,32 +220,14 @@ div
                 ))),
                 $this->product->buildOperateMenu($product, 'view')
             ))
-        )
+        ))
     ),
-    /* Action list. */
-    cell
+    detailSide
     (
-        setClass('px-4'),
-        set::width('30%'),
         history
         (
-            setClass('shadow canvas'),
-            set::actions($actions)
-        ),
-        modal
-        (
-            set::id('comment-dialog'),
-            set::title($lang->action->create),
-            form
-            (
-                set::url(createLink('action', 'comment', "objectType=product&objectID=$product->id&zin=1")),
-                formGroup
-                (
-                    set::width('full'),
-                    set::name('comment'),
-                    set::control('editor')
-                )
-            )
+            set::actions($actions),
+            set::commentUrl(createLink('action', 'comment', "objectType=product&objectID=$product->id&zin=1")),
         )
     )
 );
