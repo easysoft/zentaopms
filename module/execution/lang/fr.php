@@ -79,6 +79,7 @@ $lang->execution->release             = 'Release';
 $lang->execution->acl                 = "Contrôle d'accès";
 $lang->execution->auth                = 'Privileges';
 $lang->execution->teamname            = "Nom de l'équipe";
+$lang->execution->teamSetting         = 'Team Setting';
 $lang->execution->updateOrder         = 'Rank';
 $lang->execution->order               = "Rang du {$lang->executionCommon}";
 $lang->execution->orderAB             = "Rang";

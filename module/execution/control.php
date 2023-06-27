@@ -1828,7 +1828,7 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
         $this->view->project             = $project;
-        $this->view->stageBy             = $project->stageBy;
+        $this->view->stageBy             = empty($project->stageBy) ? '' : $project->stageBy;
         $this->view->type                = $type;
         $this->display();
     }
