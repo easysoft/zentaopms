@@ -1452,3 +1452,14 @@ function upload(): upload
 {
     return createWg('upload', func_get_args());
 }
+
+/**
+ * Burn widget.
+ *
+ * ?string|array data
+ * ?bool         referenceLine
+ */
+function burn(): burn
+{
+    return createWg('burn', func_get_args());
+}
