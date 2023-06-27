@@ -14,6 +14,7 @@ jsVar('nameTips', $lang->project->copyProject->nameTips);
 jsVar('codeTips', $lang->project->copyProject->codeTips);
 jsVar('endTips', $lang->project->copyProject->endTips);
 jsVar('daysTips', $lang->project->copyProject->daysTips);
+jsVar('programTip', $lang->program->tips);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -86,7 +87,12 @@ formPanel
             (
                 setClass('pl-2 flex self-center'),
                 setStyle(['color' => 'var(--form-label-color)']),
-                icon('help')
+                icon
+                (
+                    'help',
+                    set('data-toggle', 'tooltip'),
+                    set('id', 'programHover'),
+                )
             )
         )
     ),
