@@ -788,29 +788,35 @@ class baseControl
         $this->app->setMethodName($methodName);
         $this->app->setControlFile();
 
-        if(!is_array($params)) parse_str($params, $params);
-        $defaultParams = $this->app->getDefaultParams();
-        if(empty($defaultParams))
-            $this->app->params = array();
-        else
-            $this->app->params = $this->app->mergeParams($defaultParams, $params);
-
-        /*
-         * 设置要fetch的方法的参数类型。
-         * Set fetch method param type.
-         */
-        $paramKeys   = array_keys($this->app->params);
-        $keyIndex    = 0;
         $fetchParams = array();
-        foreach($params as $param => $value)
+        if(!is_array($params))
         {
-            if(empty($paramKeys[$keyIndex])) break;
+            parse_str($params, $params);
+            $defaultParams     = $this->app->getDefaultParams();
+            $this->app->params = empty($defaultParams) ? array() : $this->app->mergeParams($defaultParams, $params);
 
-            $paramKey = $paramKeys[$keyIndex];
-            settype($value, gettype($this->app->params[$paramKey]));
+            /*
+             * 设置要fetch的方法的参数类型。
+             * Set fetch method param type.
+             */
+            $paramKeys = array_keys($this->app->params);
+            $keyIndex  = 0;
+            foreach($params as $param => $value)
+            {
+                if(empty($paramKeys[$keyIndex])) break;
 
-            $fetchParams[] = $value;
-            $keyIndex ++;
+                $paramKey = $paramKeys[$keyIndex];
+                settype($value, gettype($this->app->params[$paramKey]));
+
+                $fetchParams[] = $value;
+                $keyIndex ++;
+            }
+        }
+        else
+        {
+            $params            = array_values($params);
+            $fetchParams       = $params;
+            $this->app->params = $params;
         }
 
         $currentPWD = getcwd();
