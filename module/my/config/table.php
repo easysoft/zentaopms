@@ -388,7 +388,7 @@ $config->my->story->actionList['recall']['url']  = array('module' => 'story', 'm
 $config->my->story->actionList['edit']['icon']        = 'edit';
 $config->my->story->actionList['edit']['text']        = $lang->story->edit;
 $config->my->story->actionList['edit']['hint']        = $lang->story->edit;
-$config->my->story->actionList['edit']['url']         = array('module' => 'stroy', 'method' => 'edit', 'params' => 'storyID={id}');
+$config->my->story->actionList['edit']['url']         = array('module' => 'story', 'method' => 'edit', 'params' => 'storyID={id}');
 $config->my->story->actionList['edit']['data-toggle'] = 'modal';
 
 $config->my->story->actionList['create']['icon']        = 'sitemap';
