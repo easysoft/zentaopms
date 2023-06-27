@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
+
 $visionList       = $this->user->getVisionList();
 $showVisionList   = count($visionList) > 1;
 $passwordStrength = zget($lang->user->placeholder->passwordStrength, !empty($config->safe->mode) ? $config->safe->mode : 0, '');
@@ -108,9 +111,22 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->password),
-            set::control('password'),
-            set::name('password1'),
-            set::value(''),
+            inputGroup
+            (
+                input
+                (
+                    on::keyup('checkPassword'),
+                    set::id('password1'),
+                    set::name('password1'),
+                    set::value(''),
+                    set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
+                ),
+                span
+                (
+                    setClass('input-group-addon hidden'),
+                    set::id('passwordStrength'),
+                ),
+            ),
             set::tip($passwordStrength),
             set::tipClass('form-tip')
         )
