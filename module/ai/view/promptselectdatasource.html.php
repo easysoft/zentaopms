@@ -99,7 +99,7 @@ class DataSourceStore
       });
     });
     this.value = value;
-    document.querySelector('#datasource').value = JSON.stringify(this.value);
+    document.querySelector('#datasource').value = value.join(',');
 
     /* Notify listeners. */
     this.listeners.forEach(l => (l(this.value)));
@@ -353,6 +353,7 @@ class SelectedDataSorter extends HTMLDivElement
         const props = [];
         for(const item of listView.querySelectorAll('.list-group-item')) props.push(item.getAttribute('prop'));
         window.dataSourceStore.value = props;
+        window.dataSourceStore.sync();
       }
     });
   }
@@ -415,11 +416,12 @@ customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div
             </div>
             <div id='data-selected-items'>
               <div id='selected-data-sorter' is='selected-data-sorter' group='<?php echo $activeDataSource;?>'></div>
-              <?php echo html::hidden('datasource');?>
             </div>
           </div>
         </div>
         <div style='display: flex; flex-grow: 1; flex-direction: column-reverse;'>
+          <?php echo html::hidden('datasource', $prompt->source);?>
+          <?php echo html::hidden('datagroup', $activeDataSource);?>
           <div style='display: flex; justify-content: center;'><?php echo html::submitButton($lang->ai->nextStep, 'disabled');?></div>
         </div>
       </div>
@@ -441,10 +443,15 @@ $(function()
     $('#data-category-select > ul > li > a').removeClass('active btn-info').addClass('btn-link');
     $(this).addClass('active btn-info').removeClass('btn-link');
 
+    var currentGroup = $(this).parent().attr('data-group-key');
+
     /* Update other component props. */
-    $('#data-property-selector').attr('object-group', $(this).parent().attr('data-group-key'));
-    $('#selected-title-text').attr('group', $(this).parent().attr('data-group-key'));
-    $('#selected-data-sorter').attr('group', $(this).parent().attr('data-group-key'));
+    $('#data-property-selector').attr('object-group', currentGroup);
+    $('#selected-title-text').attr('group', currentGroup);
+    $('#selected-data-sorter').attr('group', currentGroup);
+
+    /* Update hidden form fields. */
+    $('input[name="datagroup"]').val(currentGroup);
   });
 
   /* Disable checkboxes to prevent them getting posted as form data. */
@@ -458,6 +465,14 @@ $(function()
   {
     $('#submit').attr('disabled', !value.length);
   });
+
+  <?php if($prompt->source):?>
+    /* Init checkboxes states. */
+    '<?php echo $prompt->source;?>'.split(',').filter(function(p) {return p;}).forEach(function(prop)
+    {
+      $('#data-property-selector input[type="checkbox"][prop="' + prop + '"]').click();
+    });
+  <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

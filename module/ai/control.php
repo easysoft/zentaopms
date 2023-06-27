@@ -181,10 +181,18 @@ class ai extends control
 
         if($_POST)
         {
-            // TODO: do stuff.
+            $data = fixer::input('post')->get();
+
+            $prompt->module = $data->datagroup;
+            $prompt->source = ",$data->datasource,";
+
+            $this->ai->updatePrompt($prompt);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
         }
 
-        $this->view->activeDataSource = 'story';
+        $this->view->activeDataSource = empty($prompt->module) ? 'story' : $prompt->module;
         $this->view->dataSource       = $this->config->ai->dataSource;
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
