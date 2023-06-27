@@ -3888,14 +3888,16 @@ EOT;
     }
 
     /**
-     * Get DAO to access SQLite.
+     * Get DAO to access SQLite or MySQL.
      *
      * @param  object $params
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function getSqliteDAO($params = null)
+    public function getDAO($params = null)
     {
+        if(!$this->config->db->enableSqlite) return $this->dao;
+
         $dao = clone $this->dao;
         $dao->reset();
 
