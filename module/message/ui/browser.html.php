@@ -14,6 +14,7 @@ formPanel
 (
     set::title($lang->message->setting),
     set::formClass('border-0'),
+    set::actions(array('submit')),
     formRow
     (
         formGroup
