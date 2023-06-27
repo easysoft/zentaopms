@@ -25,7 +25,7 @@ $fnGenerateTitleSuffix = function() use($todo)
 };
 
 /* Render modal for creating story. */
-$fnRenderCreateStoryModal = function() use ($lang)
+$fnRenderCreateStoryModal = function() use ($lang, $products)
 {
     modal
     (
@@ -258,7 +258,6 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects,$
     {
         $actionList[] = array('url' => '#navActions', 'text' => $lang->more, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
     }
-    $actionList[] = array('url' => '#navActions', 'text' => $lang->more, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
 
     /* Popup menu of more button. */
     $storyTarget = $canCreateStory && $config->vision == 'lite' ? '#projectModal' : '#productModal';
@@ -333,6 +332,39 @@ $fnGenerateFrom = function() use ($app, $lang, $config, $todo)
 };
 list($fromItem, $fromItemData) = $fnGenerateFrom();
 
+/* Generate cycle configuration information. */
+$fnGenerateCycleCfg = function() use ($lang, $todo)
+{
+    $todo->config = json_decode($todo->config);
+
+    $cfg = '';
+
+    if($todo->config->type == 'day')
+    {
+        if(isset($todo->config->day)) $cfg .= $lang->todo->every . $todo->config->day . $lang->day;
+
+        if(isset($todo->config->specifiedDate))
+        {
+            $specifiedNotes = $lang->todo->specify;
+            if(isset($todo->config->cycleYear)) $specifiedNotes .= $lang->todo->everyYear;
+            $specifiedNotes .= zget($lang->datepicker->monthNames, $todo->config->specify->month) . $todo->config->specify->day . $lang->todo->day;
+            $cfg .= $specifiedNotes;
+        }
+    }
+    elseif($todo->config->type == 'week')
+    {
+        foreach(explode(',', $todo->config->week) as $week) $cfg .= $lang->todo->dayNames[$week] . ' ';
+    }
+    elseif($todo->config->type == 'month')
+    {
+        foreach(explode(',', $todo->config->month) as $month) $cfg .= $month . ' ';
+    }
+    $cfg .= '<br />';
+    if($todo->config->beforeDays) $cfg .= sprintf($lang->todo->lblBeforeDays, $todo->config->beforeDays);
+
+    return $cfg;
+};
+
 /* ZIN: layout. */
 detailHeader
 (
@@ -356,75 +388,53 @@ detailBody
         section
         (
             set::title($lang->todo->desc),
-            to::actions($fnGenerateTitleSuffix()),
             set::content(nl2br($todo->desc)),
             set::useHtml(true),
+            to::actions($fnGenerateTitleSuffix()),
         ),
         $fromItemData,
         history(set::commentUrl(createLink('action', 'comment', "objectType=todo&objectID=$todo->id"))),
 
         /* Render float toolbar. */
-        center
-        (
-            $actionList ? floatToolbar(set::main($actionList)) : null
-        )
+        $actionList ? center(floatToolbar(set::main($actionList))) : null
     ),
     detailSide
     (
-        tabs
+        /* Basic information. */
+        tabs(tabPane
         (
-            tabPane
+            set::key('legendBasic'),
+            set::title($lang->todo->legendBasic),
+            set::active(true),
+            tableData
             (
-                set::key('legendBasic'),
-                set::title($lang->todo->legendBasic),
-                set::active(true),
-                tableData
-                (
-                    item
-                    (
-                        set::name($lang->todo->pri),
-                        priLabel(zget($lang->todo->priList, $todo->pri)),
-                    ),
-                    item
-                    (
-                        set::name($lang->todo->status),
-                        zget($lang->todo->statusList, $todo->status),
-                    ),
-                    item
-                    (
-                        set::name($lang->todo->type),
-                        zget($lang->todo->typeList, $todo->type),
-                    ),
-                    $fromItem,
-                    item
-                    (
-                        set::name($lang->todo->account),
-                        zget($users, $todo->account),
-                    ),
-                    item
-                    (
-                        set::name($lang->todo->date),
-                        $todo->date,
-                    ),
-                    item
-                    (
-                        set::name($lang->todo->beginAndEnd),
-                        isset($times[$todo->begin]) ? $times[$todo->begin] : '',
-                        isset($times[$todo->end]) ?  ' ~ ' . $times[$todo->end] : '',
-                    ),
-                    item
-                    (
-                        set::name($lang->todo->assignTo),
-                        zget($users, $todo->assignedTo),
-                    ),
-                    item
-                    (
-                        set::name($lang->todo->assignedDate),
-                        $todo->assignedDate,
-                    ),
-                ),
-            ),
-        ),
+                item(set::name($lang->todo->pri),    priLabel(zget($lang->todo->priList, $todo->pri))),
+                item(set::name($lang->todo->status), zget($lang->todo->statusList, $todo->status)),
+                item(set::name($lang->todo->type),   zget($lang->todo->typeList, $todo->type)),
+
+                $fromItem,
+
+                item(set::name($lang->todo->account),     zget($users, $todo->account)),
+                item(set::name($lang->todo->date),        $todo->date),
+                item(set::name($lang->todo->beginAndEnd), isset($times[$todo->begin]) ? $times[$todo->begin] : '', isset($times[$todo->end]) ?  ' ~ ' . $times[$todo->end] : ''),
+
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedTo),zget($users, $todo->assignedTo)),
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedBy),zget($users, $todo->assignedBy)),
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedDate), $todo->assignedDate),
+            )
+        )),
+        /* Cycle information. */
+        $todo->cycle ? tabs(tabPane
+        (
+            set::key('cycle'),
+            set::title($lang->todo->cycle),
+            set::active(true),
+            tableData
+            (
+                item(set::name($lang->todo->beginAndEnd), $todo->config->begin . " ~ " . $todo->config->end),
+                item(set::name($lang->todo->cycleConfig), html($fnGenerateCycleCfg())),
+            )
+        )) : null
     ),
 );
 
