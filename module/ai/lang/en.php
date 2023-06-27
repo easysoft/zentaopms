@@ -30,18 +30,60 @@ $lang->ai->prompts->createdDate = 'Created Date';
 $lang->ai->prompts->targetForm  = 'Target Form';
 $lang->ai->prompts->funcDesc    = 'Function Description';
 
+/* Steps of prompt creation. */
 $lang->ai->prompts->assignRole       = 'Assign Role';
 $lang->ai->prompts->selectDataSource = 'Select Data Source';
 $lang->ai->prompts->setPurpose       = 'Set Purpose';
 $lang->ai->prompts->setTargetForm    = 'Set Target Form';
 $lang->ai->prompts->finalize         = 'Finalize';
 
+/* Role assigning. */
 $lang->ai->prompts->assignModel      = 'Select Model';
 $lang->ai->prompts->model            = 'Model';
 $lang->ai->prompts->role             = 'Role';
 $lang->ai->prompts->characterization = 'Characterization';
 $lang->ai->prompts->rolePlaceholder  = '"Act as a <role>"';
 $lang->ai->prompts->charPlaceholder  = 'Detailed characterization of this role';
+
+/* Data source selecting. */
+$lang->ai->prompts->selectData       = 'Select data';
+$lang->ai->prompts->selectDataTip    = 'Select an object and its fields will be shown below.';
+$lang->ai->prompts->selectedFormat   = 'Selecting data from {0}, {1} fields selected.';
+$lang->ai->prompts->nonSelected      = 'No data selected.';
+$lang->ai->prompts->sortTip          = 'Sorting fields by priority is suggested.';
+
+/* Data source definition. */
+$lang->ai->dataSource = array();
+$lang->ai->dataSource['story']['common']     = 'Story';
+$lang->ai->dataSource['execution']['common'] = 'Execution';
+
+$lang->ai->dataSource['story']['story']['common']   = 'Story';
+$lang->ai->dataSource['story']['story']['title']    = 'Title';
+$lang->ai->dataSource['story']['story']['spec']     = 'Description';
+$lang->ai->dataSource['story']['story']['verify']   = 'Acceptance criteria';
+$lang->ai->dataSource['story']['story']['product']  = 'Product';
+$lang->ai->dataSource['story']['story']['module']   = 'Module';
+$lang->ai->dataSource['story']['story']['pri']      = 'Priority';
+$lang->ai->dataSource['story']['story']['category'] = 'Category';
+$lang->ai->dataSource['story']['story']['estimate'] = 'Estimated hours';
+
+$lang->ai->dataSource['execution']['execution']['common']   = 'Execution';
+$lang->ai->dataSource['execution']['execution']['name']     = 'Name';
+$lang->ai->dataSource['execution']['execution']['desc']     = 'Description';
+$lang->ai->dataSource['execution']['execution']['estimate'] = 'Estimated hours';
+
+$lang->ai->dataSource['execution']['tasks']['common']      = 'Task List';
+$lang->ai->dataSource['execution']['tasks']['name']        = 'Name';
+$lang->ai->dataSource['execution']['tasks']['pri']         = 'Priority';
+$lang->ai->dataSource['execution']['tasks']['status']      = 'Status';
+$lang->ai->dataSource['execution']['tasks']['estimate']    = 'Estimated hours';
+$lang->ai->dataSource['execution']['tasks']['consumed']    = 'Consumed hours';
+$lang->ai->dataSource['execution']['tasks']['left']        = 'Remaining hours';
+$lang->ai->dataSource['execution']['tasks']['progress']    = 'Progress';
+$lang->ai->dataSource['execution']['tasks']['estStarted']  = 'Estimated start date';
+$lang->ai->dataSource['execution']['tasks']['realStarted'] = 'Actual start date';
+$lang->ai->dataSource['execution']['tasks']['finishedDate']= 'Finished date';
+$lang->ai->dataSource['execution']['tasks']['closedReason']= 'Closing reason';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses[''] = 'All';
