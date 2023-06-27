@@ -12,10 +12,11 @@ namespace zin;
 
 formPanel
 (
+    set::target('_self'),
     set::title($lang->release->export),
     formGroup
     (
-        set::label($lang->setFileName),
+        set::label($lang->release->fileName),
         set::required(true),
         input(set::name('fileName'))
     ),
@@ -27,7 +28,8 @@ formPanel
         set::items($lang->release->exportTypeList),
         set::required(true),
     ),
-    set::submitBtnText($lang->export)
+    set::submitBtnText($lang->export),
+    set::formClass('border-0')
 );
 
 /* ====== Render page ====== */
