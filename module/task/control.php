@@ -1324,14 +1324,18 @@ class task extends control
                 }
 
                 if($task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
-                if(!empty($task->team))   $task->name = '[' . $taskLang->multipleAB . '] ' . $task->name;
+                if(!empty($task->team))
+                {
+                    $task->name = '[' . $taskLang->multipleAB . '] ' . $task->name;
+                    unset($task->team);
+                }
 
-                $task->openedDate     = substr($task->openedDate,     0, 10);
-                $task->assignedDate   = substr($task->assignedDate,   0, 10);
-                $task->finishedDate   = substr($task->finishedDate,   0, 10);
-                $task->canceledDate   = substr($task->canceledDate,   0, 10);
-                $task->closedDate     = substr($task->closedDate,     0, 10);
-                $task->lastEditedDate = substr($task->lastEditedDate, 0, 10);
+                $task->openedDate     = helper::isZeroDate($task->openedDate) ? '' : substr($task->openedDate,     0, 10);
+                $task->assignedDate   = helper::isZeroDate($task->assignedDate) ? '' : substr($task->assignedDate,   0, 10);
+                $task->finishedDate   = helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate,   0, 10);
+                $task->canceledDate   = helper::isZeroDate($task->canceledDate) ? '' : substr($task->canceledDate,   0, 10);
+                $task->closedDate     = helper::isZeroDate($task->closedDate) ? '' : substr($task->closedDate,     0, 10);
+                $task->lastEditedDate = helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 0, 10);
                 $task->estimate       = $task->estimate . $this->lang->execution->workHourUnit;
                 $task->consumed       = $task->consumed . $this->lang->execution->workHourUnit;
                 $task->left           = $task->left     . $this->lang->execution->workHourUnit;
