@@ -56,28 +56,29 @@ $teamOptions            = $members;
 
 /* ====== Define the page structure with zin widgets ====== */
 
-/* zin: Define the form in main content */
-formPanel
+detailHeader
 (
-    set::title(''),
-    entityLabel
+    to::prefix(null),
+    to::title
     (
-        set::entityID($task->id),
-        set::level(1),
-        set::text($task->name),
-    ),
-    setStyle(['max-width' => '100%']),
-    div
-    (
-        setClass('flex'),
-        cell
+        entityLabel
         (
-            set('width', '2/3'),
-            h::strong
-            (
-                $lang->task->name,
-                setClass('leading-8')
-            ),
+            set::entityID($task->id),
+            set::level(1),
+            set::text($task->name),
+            set::reverse(true),
+        )
+    ),
+);
+
+detailBody
+(
+    set::isForm(true),
+    sectionList
+    (
+        section
+        (
+            set::title($lang->task->name),
             input
             (
                 set::label($lang->task->name),
@@ -88,206 +89,192 @@ formPanel
                 set::required(true),
                 set::autofocus(true),
             ),
-            h::hr(setClass('my-5')),
-            h::strong
-            (
-                $lang->task->desc,
-                setClass('leading-8')
-            ),
+        ),
+        section
+        (
+            set::title($lang->task->desc),
             textarea
             (
                 set::label($lang->task->desc),
                 set::name('desc'),
                 set::value(htmlSpecialString($task->desc)),
                 set::control('textarea'),
-            ),
-            h::hr(setClass('my-3')),
-            h::strong
-            (
-                $lang->comment,
-                setClass('leading-8')
-            ),
+            )
+        ),
+        section
+        (
+            set::title($lang->comment),
             textarea
             (
                 set::label($lang->comment),
                 set::name('comment'),
                 set::value(''),
                 set::control('textarea'),
-            ),
-            h::hr(setClass('my-3')),
-            h::strong
-            (
-                $lang->files,
-                setClass('leading-8'),
-            ),
-            fileList
-            (
-                set::files($task->files),
-                set::fieldset(false),
-                set::method('edit'),
-            ),
-            formGroup
-            (
-                upload
-                (
-                    set::name('files'),
-                )
-            ),
-            h::hr(setClass('my-3')),
-            history
-            (
-                set::actions($actions),
-                set::users($users),
-                set::methodName($methodName),
             )
         ),
-        cell
+        section
         (
-            set('width', '1/3'),
-            setClass('pl-5'),
-            h::strong
+            set::title($lang->files),
+            upload
             (
-                $lang->task->legendBasic,
-                setClass('leading-8')
-            ),
-            formGroup
+                set::name('files'),
+            )
+        ),
+    ),
+    history
+    (
+        set::actions($actions),
+        set::users($users),
+        set::methodName($methodName),
+    ),
+    detailSide
+    (
+        tableData
+        (
+            set::title($lang->task->legendBasic),
+            item
             (
-                set::name("execution"),
-                set::label($lang->task->execution),
-                set::required(true),
-                set::value($task->execution),
-                set::control("picker"),
-                set::strong(true),
-                set::items($executionOptions),
-                on::change('loadAll(this.value)'),
-            ),
-            formRow
-            (
-                formGroup
+                set::name($lang->task->execution),
+                select
                 (
-                    set::label($lang->task->module),
-                    set::strong(true),
-                    inputGroup
-                    (
-                        control(set(array
-                        (
-                            'name' => "module",
-                            'value' => $task->module,
-                            'type' => "picker",
-                            'items' => $moduleOptions
-                        ))),
-                    )
-                ),
-                formGroup
-                (
-                    set::width('1/5'),
-                    set::name('showAllModule'),
-                    set::value($showAllModule ? '1' : ''),
-                    set::control(array('type' => 'checkList', 'inline' => true)),
-                    set::items(array('1' => $lang->all))
+                    set::name('execution'),
+                    set::required(true),
+                    set::value($task->execution),
+                    set::items($executionOptions),
+                    on::change('loadAll(this.value)'),
                 )
             ),
-            formGroup
+            item
             (
-                set::name("story"),
-                set::label($lang->task->story),
-                set::value($task->story),
-                set::control("picker"),
-                set::strong(true),
-                set::items($storyOptions)
-            ),
-            ($task->parent >= 0 and empty($task->team)) ? formGroup
-            (
-                set::name("parent"),
-                set::label($lang->task->parent),
-                set::value($task->parent),
-                set::control("picker"),
-                set::strong(true),
-                set::items($tasks)
-            ) : null,
-            (empty($modeText)) ? formGroup
-            (
-                set::name("mode"),
-                set::label($lang->task->mode),
-                set::value($task->mode),
-                set::control("picker"),
-                set::strong(true),
-                set::items($modeOptions),
-                on::change('changeMode(this.value)')
-            ) : formGroup
-            (
-                set::label($lang->task->mode),
-                set::strong(true),
-                inputGroup
-                (
-                    $modeText
-                )
-            ),
-            formGroup
-            (
-                set::label($lang->task->assignedTo),
-                set::strong(true),
-                inputGroup
+                set::name($lang->task->module),
+                row
                 (
                     control(set(array
                     (
-                        'name' => "assignedTo",
-                        'id' => "assignedTo",
+                        'name' => 'module',
+                        'value' => $task->module,
+                        'type' => 'picker',
+                        'items' => $moduleOptions
+                    ))),
+                    checkList
+                    (
+                        set::name('showAllModule'),
+                        set::items(array('1' => $lang->all)),
+                        set::value($showAllModule ? '1' : ''),
+                        set::inline(true),
+                    ),
+                )
+            ),
+            item
+            (
+                set::name($lang->task->story),
+                select
+                (
+                    set::name('story'),
+                    set::value($task->story),
+                    set::items($storyOptions)
+                ),
+            ),
+            ($task->parent >= 0 and empty($task->team))
+                ? item
+                (
+                    set::name($lang->task->parent),
+                    select
+                    (
+                        set::name('parent'),
+                        set::value($task->parent),
+                        set::items($tasks)
+                    ),
+                )
+                : null,
+            empty($modeText)
+                ? item
+                (
+                    set::name($lang->task->mode),
+                    select
+                    (
+                        set::name('mode'),
+                        set::value($task->mode),
+                        set::items($modeOptions),
+                        on::change('changeMode(this.value)')
+                    )
+                )
+                : item
+                (
+                    set::name($lang->task->mode),
+                    inputGroup
+                    (
+                        $modeText
+                    )
+                ),
+            item
+            (
+                set::name($lang->task->assignedTo),
+                row
+                (
+                    control(set(array
+                    (
+                        'name' => 'assignedTo',
+                        'id' => 'assignedTo',
                         'value' => $task->assignedTo,
                         'disabled' => !empty($task->team) && $task->mode == 'linear',
-                        'type' => "picker",
+                        'type' => 'picker',
                         'items' => $assignedToOptions
                     ))),
                     $task->mode != ''
-                    ? btn(set(array
-                    (
-                        'type' => "btn",
-                        'text' => $lang->task->team,
-                        'class' => "input-group-btn team-group"
-                    )))
-                    : null
+                        ? btn(set(array
+                        (
+                            'type' => 'btn',
+                            'text' => $lang->task->team,
+                            'class' => 'input-group-btn team-group'
+                        )))
+                        : null
                 )
             ),
-            formGroup
+            item
             (
-                set::name("type"),
-                set::label($lang->task->type),
-                set::required(true),
-                set::value($task->type),
-                set::control("picker"),
-                set::strong(true),
-                set::items($typeOptions)
+                set::name($lang->task->type),
+                select
+                (
+                    set::name('type'),
+                    set::required(true),
+                    set::value($task->type),
+                    set::items($typeOptions)
+                ),
             ),
-            empty($task->children) ? formGroup
+            empty($task->children)
+                ? item
+                (
+                    set::name($lang->task->status),
+                    select
+                    (
+                        set::name('status'),
+                        set::value($task->status),
+                        set::items($statusOptions)
+                    ),
+                )
+                : null,
+            item
             (
-                set::name("status"),
-                set::label($lang->task->status),
-                set::value($task->status),
-                set::control("picker"),
-                set::strong(true),
-                set::items($statusOptions)
-            ) : null,
-            formGroup
-            (
-                set::name("pri"),
-                set::label($lang->task->pri),
-                set::value($task->pri),
-                set::control("picker"),
-                set::strong(true),
-                set::items($priOptions)
+                set::name($lang->task->pri),
+                select
+                (
+                    set::name('pri'),
+                    set::value($task->pri),
+                    set::items($priOptions)
+                )
             ),
-            formGroup
+            item
             (
-                set::label($lang->task->mailto),
-                set::strong(true),
+                set::name($lang->task->mailto),
                 inputGroup
                 (
                     control(set(array
                     (
-                        'name' => "mailto[]",
-                        'id' => "mailto",
+                        'name' => 'mailto[]',
+                        'id' => 'mailto',
                         'value' => $task->mailto,
-                        'type' => "picker",
+                        'type' => 'picker',
                         'items' => $mailtoOptions,
                         'multiple' => true
                     ))),
@@ -295,174 +282,186 @@ formPanel
                     (
                         setStyle('width', '30%'),
                         set::name('contactListMenu'),
-                        set::type("picker"),
+                        set::type('picker'),
                         set::items($contactListMenuOptions),
                         on::change('setMailto')
                     ),
                 )
             ),
-            h::strong
+        ),
+        tableData
+        (
+            set::title($lang->task->legendEffort),
+            item
             (
-                $lang->task->legendEffort,
-                setClass('leading-8')
-            ),
-            formGroup
-            (
-                set::name("estStarted"),
-                set::label($lang->task->estStarted),
-                set::value($task->estStarted),
-                set::strong(true),
-                set::control("date")
-            ),
-            formGroup
-            (
-                set::name("deadline"),
-                set::label($lang->task->deadline),
-                set::value($task->deadline),
-                set::strong(true),
-                set::control("date")
-            ),
-            formGroup
-            (
-                set::name("estimate"),
-                set::label($lang->task->estimate),
-                set::value($task->estimate),
-                set::strong(true),
-                set::control("text")
-            ),
-            formGroup
-            (
-                set::label($lang->task->consumed),
-                set::strong(true),
-                span
+                set::name($lang->task->estStarted),
+                control
                 (
-                    setClass('span-text'),
-                    $task->consumed,
-                ),
-                h::a
+                    set::name('estStarted'),
+                    set::value($task->estStarted),
+                    set::type('date')
+                )
+            ),
+            item
+            (
+                set::name($lang->task->deadline),
+                control
                 (
-                    setClass('span-text'),
-                    icon
+                    set::name('deadline'),
+                    set::value($task->deadline),
+                    set::type('date')
+                )
+            ),
+            item
+            (
+                set::name($lang->task->estimate),
+                control
+                (
+                    set::name('estimate'),
+                    set::value($task->estimate),
+                    set::type('text')
+                )
+            ),
+            item
+            (
+                set::name($lang->task->consumed),
+                row
+                (
+                    span
                     (
-                        'time'
+                        setClass('span-text'),
+                        $task->consumed,
+                    ),
+                    h::a
+                    (
+                        setClass('span-text'),
+                        icon('time')
                     )
                 )
             ),
-            formGroup
+            item
             (
-                set::name("left"),
-                set::label($lang->task->left),
-                set::value($task->left),
-                set::strong(true),
-                set::control("text")
-            ),
-            h::strong
-            (
-                $lang->task->legendLife,
-                setClass('leading-8')
-            ),
-            formGroup
-            (
-                set::name("realStarted"),
-                set::label($lang->task->realStarted),
-                set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted),
-                set::strong(true),
-                set::control("datetime")
-            ),
-            formGroup
-            (
-                set::name("finishedBy"),
-                set::label($lang->task->finishedBy),
-                set::value($task->finishedBy),
-                set::control("picker"),
-                set::strong(true),
-                set::items($finishedByOptions)
-            ),
-            formGroup
-            (
-                set::name("finishedDate"),
-                set::label($lang->task->finishedDate),
-                set::value($task->finishedDate),
-                set::strong(true),
-                set::control("datetime")
-            ),
-            formGroup
-            (
-                set::name("canceledBy"),
-                set::label($lang->task->canceledBy),
-                set::value($task->canceledBy),
-                set::control("picker"),
-                set::strong(true),
-                set::items($canceledByOptions)
-            ),
-            formGroup
-            (
-                set::name("canceledDate"),
-                set::label($lang->task->canceledDate),
-                set::value($task->canceledDate),
-                set::strong(true),
-                set::control("datetime")
-            ),
-            formGroup
-            (
-                set::name("closedBy"),
-                set::label($lang->task->closedBy),
-                set::value($task->closedBy),
-                set::control("picker"),
-                set::strong(true),
-                set::items($closedByOptions)
-            ),
-            formGroup
-            (
-                set::name("closedReason"),
-                set::label($lang->task->closedReason),
-                set::value($task->closedReason),
-                set::control("picker"),
-                set::strong(true),
-                set::items($closedReasonOptions)
-            ),
-            formGroup
-            (
-                set::name("closedDate"),
-                set::label($lang->task->closedDate),
-                set::value($task->closedDate),
-                set::strong(true),
-                set::control("datetime")
-            ),
-            formRow
-            (
-                set::hidden(true),
-                formGroup
+                set::name($lang->task->left),
+                control
                 (
-                    set::name("lastEditedDate"),
+                    set::name('left'),
+                    set::value($task->left),
+                    set::control('text')
+                )
+            ),
+        ),
+        tableData
+        (
+            set::title($lang->task->legendLife),
+            item
+            (
+                set::name($lang->task->realStarted),
+                control
+                (
+                    set::name('realStarted'),
+                    set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted),
+                    set::type('datetime-local')
+                )
+            ),
+            item
+            (
+                set::name($lang->task->finishedBy),
+                control
+                (
+                    set::name('finishedBy'),
+                    set::value($task->finishedBy),
+                    set::type('picker'),
+                    set::items($finishedByOptions)
+                )
+            ),
+            item
+            (
+                set::name($lang->task->finishedDate),
+                control
+                (
+                    set::name('finishedDate'),
+                    set::value($task->finishedDate),
+                    set::type('datetime-local')
+                ),
+            ),
+            item
+            (
+                set::name($lang->task->canceledBy),
+                control
+                (
+                    set::name('canceledBy'),
+                    set::value($task->canceledBy),
+                    set::type('picker'),
+                    set::items($canceledByOptions)
+                )
+            ),
+            item
+            (
+                set::name($lang->task->canceledDate),
+                control
+                (
+                    set::name('canceledDate'),
+                    set::value($task->canceledDate),
+                    set::type('datetime-local')
+                )
+            ),
+            item
+            (
+                set::name($lang->task->closedBy),
+                control
+                (
+                    set::name('closedBy'),
+                    set::value($task->closedBy),
+                    set::type('picker'),
+                    set::items($closedByOptions)
+                )
+            ),
+            item
+            (
+                set::name($lang->task->closedReason),
+                control
+                (
+                    set::name('closedReason'),
+                    set::value($task->closedReason),
+                    set::type('picker'),
+                    set::items($closedReasonOptions)
+                )
+            ),
+            item
+            (
+                set::name($lang->task->closedDate),
+                control
+                (
+                    set::name('closedDate'),
+                    set::value($task->closedDate),
+                    set::type('datetime-local')
+                )
+            ),
+            item
+            (
+                set::trClass('hidden'),
+                control
+                (
+                    set::name('lastEditedDate'),
                     set::value($task->lastEditedDate),
-                    set::control("input"),
-                    set::id("lastEditedDate"),
+                    set::type('datetime-local'),
+                    set::id('lastEditedDate'),
                 )
             ),
-            formRow
+            item
             (
-                set::hidden(true),
-                formGroup
+                set::trClass('hidden'),
+                control
                 (
-                    set::name("team[]"),
-                    set::control("picker"),
-                    set::id("team"),
-                    set::strong(true),
+                    set::name('team[]'),
+                    set::type('picker'),
+                    set::id('team'),
                     set::items($teamOptions)
-                ),
-                formGroup
-                (
-                    inputGroup
-                    (
-
-                    )
                 )
             ),
         )
     )
 );
-
 /* ====== Render page ====== */
 
 render();
