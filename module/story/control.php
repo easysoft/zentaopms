@@ -1547,7 +1547,7 @@ class story extends control
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban($kanbanData)", 'closeModal' => true));
                 }
                 elseif($from == 'taskkanban')
                 {
@@ -1556,14 +1556,14 @@ class story extends control
                     $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban('$executionLaneType', $kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban('$executionLaneType', $kanbanData)", 'closeModal' => true));
                 }
                 else
                 {
-                    return print(js::reload('parent.parent'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         /* Get story and product. */

@@ -26,7 +26,7 @@ formPanel
         set::value($story->assignedTo),
         set::items($users),
     ),
-    !empty($story->twins) ? null : formGroup
+    empty($story->twins) ? null : formGroup
     (
         set::width('full'),
         set::label(' '),

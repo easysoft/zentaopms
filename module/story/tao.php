@@ -1530,7 +1530,7 @@ class storyTao extends storyModel
                 if($story->parent > 0)    $title = $this->lang->story->subDivideTip['subStory'];
             }
 
-            $actions[] = array('name' => 'batchCreate', 'url' => !$canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);
+            $actions[] = array('name' => 'batchCreate', 'url' => $canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);
         }
 
         if(!empty($execution))
