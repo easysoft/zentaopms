@@ -1463,3 +1463,17 @@ function burn(): burn
 {
     return createWg('burn', func_get_args());
 }
+
+/**
+ * Monaco widget.
+ *
+ * string  id
+ * ?string action
+ * ?string options
+ * ?string diffContent
+ * ?string onMouseDown
+ */
+function monaco(): monaco
+{
+    return createWg('monaco', func_get_args());
+}
