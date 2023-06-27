@@ -393,6 +393,7 @@ class repo extends control
         $this->view->file     = $file;
         $this->view->entry    = $entry;
         $this->view->pathInfo = $pathInfo;
+
         $this->display();
     }
 
@@ -423,7 +424,7 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
         $repo = $this->repo->getRepoByID($repoID);
-        if($browser['name'] != 'ie' and $repo->SCM == 'Gitlab') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
+        if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
         if($_POST)
         {
@@ -612,7 +613,6 @@ class repo extends control
         foreach($infos as $info)
         {
             $infoPath       = trim(urldecode($path) . '/' . $info->name, '/');
-            $info->comment  = htmlSpecialString($info->comment, ENT_QUOTES);
             $info->revision = $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);
             if($info->kind == 'dir')
             {

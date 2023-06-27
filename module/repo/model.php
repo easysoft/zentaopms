@@ -2552,7 +2552,7 @@ class repoModel extends model
     {
         $files = array();
         $id    = 0;
-        foreach($allFiles as $key => $file)
+        foreach($allFiles as $file)
         {
             $fileName = explode('/', $file);
             $parent   = '';
@@ -2567,36 +2567,18 @@ class repoModel extends model
                     $id++;
 
                     $files[$parent] = array(
-                        'id'     => $id,
+                        'id'     => str_replace('=', '-', base64_encode(urlencode($parent))),
                         'parent' => $parentID,
                         'name'   => $path,
                         'path'   => $parent,
-                        'key'    => $key,
+                        'key'    => base64_encode(urlencode($parent)),
                     );
                 }
             }
         }
         sort($files);
-        $fileTree = $this->buildTree($files);
 
-        $html  = '<ul data-name="filesTree" data-ride="tree" data-initial-state="preserve" id="modules" class="tree">';
-        foreach($fileTree as $file)
-        {
-            $html .= "<li class='open' data-id='{$file['id']}'>";
-            if(isset($file['children']))
-            {
-                $html .= "<i class='icon icon-folder'></i> {$file['name']}";
-                $html .= $this->getFrontFiles($file['children']);
-            }
-            else
-            {
-                $html .= "<span class='item doc-title text-ellipsis'><i class='icon icon-file-text-alt'></i> " . html::a('#filePath' . $file['key'], $file['name'], '', "class='repoFileName' data-path='{$file['path']}' title='{$file['path']}'") . '</span>';
-            }
-            $html .= '</li>';
-        }
-        $html .= '</ul>';
-
-        return $html;
+        return $this->buildTree($files);
     }
 
     /**
@@ -2627,7 +2609,7 @@ class repoModel extends model
 
                 if($children)
                 {
-                    $treeList[$key]['children'] = $children;
+                    $treeList[$key]['items'] = $children;
                     $fileName[$key] = '';
                     $pathName[$key] = $file['path'];
                 }
