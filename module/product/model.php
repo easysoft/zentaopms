@@ -1894,23 +1894,24 @@ class productModel extends model
     /**
      * Get product stats.
      *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $status
-     * @param  int    $line
-     * @param  string $storyType requirement|story
-     * @param  int    $programID
-     * @param  int    $param
+     * @param string $orderBy
+     * @param mixed $pager
+     * @param string $status
+     * @param int $line
+     * @param string $storyType
+     * @param int $programID
+     * @param int $param
+     * @param int $shadow
      * @access public
-     * @return array
+     * @return void
      */
-    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0)
+    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0, $shadow = 0)
     {
         $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line, 0, 'id');
+        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line, $shadow, 'id');
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
