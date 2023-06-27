@@ -206,10 +206,12 @@ formPanel
             btn
             (
                 $project->hasProduct ? setClass("$primaryLabel project-type-1") : setClass('project-type-1'),
+                on::click('changeType(1)'),
                 $lang->project->projectTypeList[1]
             ),
             btn(
                 !$project->hasProduct ? setClass("$primaryLabel project-type-0") : setClass('project-type-0'),
+                on::click('changeType(0)'),
                 $lang->project->projectTypeList[0]
             )
         ),

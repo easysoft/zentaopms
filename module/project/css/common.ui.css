@@ -1,2 +1,5 @@
 .items-center {align-items: center !important;}
 #ignore {text-decoration: underline; cursor: pointer; color: #ef7b0f;}
+
+.productBox .input-group-addon {background: #fff}
+.productBox .form-group.no-label {padding-left: 1px}
