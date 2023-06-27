@@ -19,6 +19,21 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 });
 
 /**
+ * 切换显示所有用例和自动化用例。
+ * Toggles between displaying all cases and automation cases.
+ *
+ * @param  event $event
+ * @access public
+ * @return void
+ */
+function toggleOnlyAutoCase(event)
+{
+    const onlyAutoCase = $(event.target).prop('checked') ? 1 : 0;
+    $.cookie.set('onlyAutoCase', onlyAutoCase, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+}
+
+/**
  * 移除场景名称的链接。
  * Remove link of scene's title.
  *
