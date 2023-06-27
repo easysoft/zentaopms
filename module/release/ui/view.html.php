@@ -80,9 +80,10 @@ if(common::hasPriv('release', 'export') && ($summary || count($bugs) || count($l
     $rightMenus[] = array(
         'text'        => $lang->release->export,
         'icon'        => 'export',
-        'url'         => inlink('export'),
+        'url'         => inlink('export', "releaseID={$release->id}"),
         'class'       => 'btn ghost',
-        'data-toggle' => 'modal'
+        'data-size'   => 'sm',
+        'data-toggle' => 'modal',
     );
 }
 
