@@ -63,3 +63,22 @@ window.setStatistics = function(element, checks)
 
     return pageSummary;
 }
+
+/**
+ * Get selected case id list.
+ *
+ * @access public
+ * @return void
+ */
+function getCheckedCaseIdList()
+{
+    let caseIdList = '';
+
+    const dtable = zui.DTable.query('#table-testcase-browse');
+    $.each(dtable.$.getChecks(), function(index, caseID)
+    {
+        if(index > 0) caseIdList += ',';
+        caseIdList += caseID;
+    });
+    $('#caseIdList').val(caseIdList);
+}

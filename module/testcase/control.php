@@ -2366,12 +2366,12 @@ class testcase extends control
      */
     public function importToLib($caseID = 0)
     {
-        if($this->server->request_method == 'POST')
+        if(!empty($_POST))
         {
             $this->testcase->importToLib($caseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true, 'closeModal' => true));
         }
         $this->view->libraries = $this->loadModel('caselib')->getLibraries();
         $this->display();

@@ -44,7 +44,7 @@ $footToolbar = $canBatchAction ? array('items' => array
     )),
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'btnType' => 'primary', 'url' => '#navScene','data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
-    $canImportToLib ? array('text' => $lang->testcase->importToLib, 'btnType' => 'primary', 'data-toggle' => 'modal', 'data-url' => '#importToLib') : null,
+    $canImportToLib ? array('text' => $lang->testcase->importToLib, 'btnType' => 'primary', 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
 )) : null;
 
 if($canBatchReview)
@@ -144,6 +144,39 @@ dtable
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
+);
+
+modal
+(
+    on::click('button[type="submit"]', 'getCheckedCaseIdList'),
+    set::id('importToLib'),
+    set::modalProps(array('title' => $lang->testcase->importToLib)),
+    form
+    (
+        set::url(createLink('testcase', 'importToLib')),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->testcase->import),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->testcase->selectLibAB),
+                set::name('lib'),
+                set::items($libraries),
+                set::value(''),
+                set::required(true),
+            ),
+        ),
+        formRow
+        (
+            setClass('hidden'),
+            formGroup
+            (
+                set::name('caseIdList'),
+                set::value(''),
+            ),
+        ),
+    ),
 );
 
 render();
