@@ -26,7 +26,7 @@ if(!$this->story->checkForceReview())
     );
 }
 
-modalHeader();
+modalHeader(set::title($lang->story->submitReview));
 formPanel
 (
     formGroup

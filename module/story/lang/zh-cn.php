@@ -24,7 +24,6 @@ $lang->story->changed            = "{$lang->SRCommon}变更";
 $lang->story->assignTo           = '指派';
 $lang->story->review             = '评审';
 $lang->story->submitReview       = "提交评审";
-$lang->story->submitreview       = $lang->story->submitReview;
 $lang->story->recall             = '撤销评审';
 $lang->story->recallChange       = '撤销变更';
 $lang->story->recallAction       = '撤销';

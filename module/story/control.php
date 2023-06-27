@@ -674,7 +674,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->activate($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
@@ -695,14 +695,14 @@ class story extends control
                     $kanbanData        = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $executionGroupBy, $taskSearchValue);
                     $kanbanData        = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "updateKanban($kanbanData)", 'closeModal' => true));
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this'));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->commonAction($storyID);
@@ -1528,7 +1528,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->assign($storyID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
