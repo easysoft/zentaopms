@@ -140,6 +140,7 @@ function loadBranches(e)
     if(!multiBranchProducts[$product.val()])
     {
         $formRow.find('.form-group').last().find('select').val('');
+        $formRow.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
         $formRow.find('.form-group').eq(1).addClass('hidden');
     }
 
