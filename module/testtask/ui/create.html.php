@@ -15,6 +15,8 @@ jsVar('multiple', isset($moMultipleExecutionID) ? false : true);
 
 formPanel
 (
+    set::title($lang->testtask->create),
+
     on::change('#product', isset($executionID) ? 'loadProductRelated' : 'loadTestReports(this.value)'),
     on::change('#execution', 'loadExecutionRelated'),
     formGroup
