@@ -28,7 +28,7 @@ detailHeader
             )
         )
     ),
-    common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
+    !isAjaxRequest('modal') && common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
 );
 
 /* Construct suitable actions for the current task. */

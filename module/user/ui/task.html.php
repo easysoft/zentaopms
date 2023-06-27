@@ -29,6 +29,8 @@ $cols = array();
 foreach($config->user->defaultFields['task'] as $field) $cols[$field] = $config->my->task->dtable->fieldList[$field];
 $cols['id']['checkbox']       = false;
 $cols['name']['nestedToggle'] = false;
+$cols['name']['data-toggle']  = 'modal';
+$cols['name']['data-size']    = 'lg';
 
 $cols = array_map(function($col)
 {

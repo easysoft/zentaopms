@@ -168,13 +168,13 @@ detailHeader
     ),
     to::suffix
     (
-        btn
+        !isAjaxRequest('modal') && $canCreateBug ?  btn
         (
             set::icon('plus'),
             set::type('primary'),
             set::text($lang->bug->create),
-            $canCreateBug ? set::url($this->createLink('bug', 'create', "productID={$product->id}")) : null
-        )
+            set::url($this->createLink('bug', 'create', "productID={$product->id}"))
+        ) : null
     )
 );
 

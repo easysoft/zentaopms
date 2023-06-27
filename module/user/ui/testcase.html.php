@@ -20,7 +20,9 @@ $cols = array();
 foreach($config->user->defaultFields['testcase'] as $field) $cols[$field] = $config->testcase->dtable->fieldList[$field];
 $cols['id']['checkbox']        = false;
 $cols['title']['nestedToggle'] = false;
-$cols['status']['statusMap']['changed'] = $lang->story->changed;;
+$cols['title']['data-toggle']  = 'modal';
+$cols['title']['data-size']    = 'lg';
+$cols['status']['statusMap']['changed'] = $lang->story->changed;
 
 $cols = array_map(function($col)
 {

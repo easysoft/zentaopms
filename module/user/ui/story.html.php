@@ -23,6 +23,8 @@ $cols = array();
 foreach($config->user->defaultFields['story'] as $field) $cols[$field] = $config->my->story->dtable->fieldList[$field];
 $cols['id']['checkbox']        = false;
 $cols['title']['nestedToggle'] = false;
+$cols['title']['data-toggle']  = 'modal';
+$cols['title']['data-size']    = 'lg';
 $cols['plan']['name']          = 'planTitle';
 $cols['product']['name']       = 'productTitle';
 if($storyType == 'requirement' || $this->config->vision == 'lite') unset($cols['plan']);

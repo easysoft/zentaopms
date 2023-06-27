@@ -21,6 +21,8 @@ if(isset($bugNavs[$type])) $bugNavs[$type]['active'] = true;
 $cols = array();
 foreach($config->user->defaultFields['bug'] as $field) $cols[$field] = $config->bug->dtable->fieldList[$field];
 $cols['id']['checkbox'] = false;
+$cols['title']['data-toggle'] = 'modal';
+$cols['title']['data-size']   = 'lg';
 
 $cols = array_map(function($col)
 {
