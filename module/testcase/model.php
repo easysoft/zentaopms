@@ -219,7 +219,7 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->ne('auto')->fi()
+            ->beginIF($this->cookie->onlyAutoCase)->andWhere('t1.auto')->eq('auto')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
@@ -257,7 +257,7 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
-            ->beginIF(!$this->cookie->showAutoCase)->andWhere('t2.auto')->ne('auto')->fi()
+            ->beginIF($this->cookie->onlyAutoCase)->andWhere('t2.auto')->eq('auto')->fi()
             ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
@@ -495,7 +495,7 @@ class testcaseModel extends model
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
         $group      = $this->lang->navGroup->testcase;
-        $auto       = $this->cookie->showAutoCase ? 'auto' : $auto;
+        $auto       = $this->cookie->onlyAutoCase ? 'auto' : $auto;
 
         /* By module or all cases. */
         $cases = array();
@@ -525,7 +525,7 @@ class testcaseModel extends model
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
-                ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->ne('auto')->fi()
+                ->beginIF($this->cookie->onlyAutoCase)->andWhere('t1.auto')->eq('auto')->fi()
                 ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
                 ->orderBy($sort)
                 ->page($pager, 't1.id')

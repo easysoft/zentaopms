@@ -301,7 +301,7 @@ $filter->project->task->cookie['windowWidth']            = 'int';
 $filter->project->export->cookie['checkedItem']          = 'reg::checked';
 $filter->project->execution->cookie['pagerExecutionAll'] = 'int';
 $filter->project->execution->cookie['showTask']          = 'code';
-$filter->project->testcase->cookie['showAutoCase']       = 'int';
+$filter->project->testcase->cookie['onlyAutoCase']       = 'int';
 
 $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
@@ -336,13 +336,13 @@ $filter->execution->all->cookie['showExecutionBatchEdit'] = 'int';
 $filter->testcase->browse->cookie['caseModule']      = 'int';
 $filter->testcase->browse->cookie['caseSuite']       = 'int';
 $filter->testcase->browse->cookie['preBranch']       = 'reg::word';
-$filter->testcase->browse->cookie['showAutoCase']    = 'int';
+$filter->testcase->browse->cookie['onlyAutoCase']    = 'int';
 $filter->testcase->create->cookie['lastCaseModule']  = 'int';
 $filter->testcase->default->cookie['lastProduct']    = 'int';
 $filter->testcase->default->cookie['preProductID']   = 'int';
 $filter->testcase->export->cookie['checkedItem']     = 'reg::checked';
 $filter->testcase->groupcase->cookie['preBranch']    = 'reg::word';
-$filter->testcase->groupcase->cookie['showAutoCase'] = 'int';
+$filter->testcase->groupcase->cookie['onlyAutoCase'] = 'int';
 
 $filter->testreport->default->cookie['lastProduct']  = 'int';
 $filter->testreport->default->cookie['lastProject']  = 'int';
