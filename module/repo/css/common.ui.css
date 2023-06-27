@@ -1,3 +1,8 @@
-.directory {background-image:url('theme/default/images/repo/dir.png');}
-.file {background-image:url('theme/default/images/repo/txt.png');}
-.mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom;margin-right: 2px;}
+#fileTabs .nav-tabs {overflow: hidden;position: relative;height: 35px;background: #efefef;}
+#fileTabs .nav-tabs > li.nav-item > a {z-index: 1; background: none;}
+#fileTabs .nav-tabs > li > a::after {content: ''; position: absolute; top: 2px; left: 10px; width: 85%; right: 6px; bottom: 0; background: #f8f8f8; border: none; border-radius: 10px 10px 0 0; height: 70%; transform: perspective(4px)scale(1.1, 1.3) rotateX(5deg); z-index: -1;}
+#fileTabs .nav-tabs > li > a.active::after {background: #fff;}
+#fileTabs > .nav-tabs {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px; background: #efefef;}
+#fileTabs > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
+#fileTabs .monaco-close{margin-right: 18px;}
+#fileTabs .nav-tabs > li > a > span{margin-left: 18px;font-weight: 700;color: #313c52!important;}
