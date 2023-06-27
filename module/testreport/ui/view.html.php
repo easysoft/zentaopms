@@ -31,6 +31,298 @@ detailHeader
 $members = '';
 foreach(explode(',', $report->members) as $member) $members .= zget($users, $member) . ' ';
 
+$caseCharts = array();
+foreach($charts as $chartType => $chartOption)
+{
+    $chartData   = $datas[$chartType];
+    $chartOption = array();
+    $tableTR     = array();
+    $colorList   = array('#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC');
+    foreach($chartData as $key => $data)
+    {
+        $color = current($colorList);
+        $chartOption[] = array('name' => $data->name, 'value' => $data->value);
+        $tableTR[] = h::tr
+        (
+            h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
+            h::td($data->value),
+            h::td(($data->percent * 100) . '%')
+        );
+        if(!next($colorList)) reset($colorList);
+    }
+
+    $caseCharts[] = div
+    (
+        set::class('mt-6'),
+        div
+        (
+            set::class('flex border'),
+            cell
+            (
+                set::width('50%'),
+                set::class('border-r'),
+                div(set::class('center text-base font-bold py-2'), $lang->testtask->report->charts[$chartType]),
+                echarts
+                (
+                    set::color($colorList),
+                    set::series
+                    (
+                        array
+                        (
+                            array
+                            (
+                                'data' => $chartOption,
+                                'type' => 'pie'
+                            )
+                        )
+                    )
+                )->size('100%', 300),
+            ),
+            cell
+            (
+                set::width('50%'),
+                h::table
+                (
+                    set::class('table'),
+                    h::tr
+                    (
+                        h::th($lang->report->item),
+                        h::th(set::width('100px'), $lang->report->value),
+                        h::th(set::width('120px'), $lang->report->percent)
+                    ),
+                    $tableTR
+                )
+            )
+        )
+    );
+}
+
+$tableTR     = array();
+$colorList   = array('#D5D9DF', '#D50000', '#FF9800', '#2098EE', '#009688');
+$chartOption = array();
+foreach($lang->bug->priList as $key => $value)
+{
+    $color = current($colorList);
+    $label = $key == 0 ? $lang->null : $value;
+
+    $generated = !empty($infoValue[$key]['generated']) ? $infoValue[$key]['generated'] : 0;
+    $legacy    = !empty($infoValue[$key]['legacy'])    ? $infoValue[$key]['legacy']    : 0;
+    $resolved  = !empty($infoValue[$key]['resolved'])  ? $infoValue[$key]['resolved']  : 0;
+
+    $chartOption[] = array('name' => $label, 'type' => 'bar', 'data' => array($generated, $legacy, $resolved));
+    $tableTR[] = h::tr
+    (
+        h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $label),
+        h::td($generated),
+        h::td($legacy),
+        h::td($resolved),
+    );
+    if(!next($colorList)) reset($colorList);
+}
+
+$bugStageChart = div
+(
+    set::class('mt-6'),
+    div
+    (
+        set::class('flex border'),
+        cell
+        (
+            set::width('50%'),
+            set::class('border-r'),
+            div(set::class('center text-base font-bold py-2'), $lang->testreport->bugStageGroups),
+            echarts
+            (
+                set::color($colorList),
+                set::xAxis
+                (
+                    array
+                    (
+                        'type' => 'category',
+                        'data' => array($lang->testreport->bugStageList['generated'], $lang->testreport->bugStageList['legacy'], $lang->testreport->bugStageList['resolved'])
+                    )
+                ),
+                set::yAxis(array('type' => 'value')),
+                set::series($chartOption)
+            )->size('100%', 300),
+        ),
+        cell
+        (
+            set::width('50%'),
+            h::table
+            (
+                set::class('table'),
+                h::tr
+                (
+                    h::th($lang->bug->pri),
+                    h::th($lang->testreport->bugStageList['generated']),
+                    h::th($lang->testreport->bugStageList['legacy']),
+                    h::th($lang->testreport->bugStageList['resolved'])
+                ),
+                $tableTR
+            )
+        )
+    )
+);
+
+$tableTR     = array();
+$chartOption = array();
+$xAxisData   = array();
+$beginTime   = isset($report->begin) ? strtotime($report->begin) : strtotime($begin);
+$endTime     = isset($report->end)   ? strtotime($report->end)   : strtotime($end);
+foreach(array('generated', 'legacy', 'resolved') as $field)
+{
+    $chartOption[$field] = array('name' => $lang->testreport->bugStageList[$field], 'type' => 'line', 'data' => array());
+}
+
+for($time = $beginTime; $time <= $endTime; $time += 86400)
+{
+    $generated = !empty($infoValue['generated'][$date]) ? $infoValue['generated'][$date] : 0;
+    $legacy    = !empty($infoValue['legacy'][$date])    ? $infoValue['legacy'][$date]    : 0;
+    $resolved  = !empty($infoValue['resolved'][$date])  ? $infoValue['resolved'][$date]  : 0;
+
+    $chartOption['generated']['data'][] = $generated;
+    $chartOption['legacy']['data'][]    = $legacy;
+    $chartOption['resolved']['data'][]  = $resolved;
+
+    $date         = date('m-d', $time);
+    $xAxisData[]  = $date;
+    $tableTR[]    = h::tr
+    (
+        h::td($date),
+        h::td($generated),
+        h::td($legacy),
+        h::td($resolved),
+    );
+}
+$chartOption    = array_values($chartOption);
+$bugHandleChart = div
+(
+    set::class('mt-6'),
+    div
+    (
+        set::class('flex border'),
+        cell
+        (
+            set::width('50%'),
+            set::class('border-r'),
+            div(set::class('center text-base font-bold py-2'), $lang->testreport->bugHandleGroups),
+            echarts
+            (
+                set::color(array('#FF9800', '#2098EE', '#009688')),
+                set::xAxis
+                (
+                    array
+                    (
+                        'type' => 'category',
+                        'data' => $xAxisData
+                    )
+                ),
+                set::yAxis(array('type' => 'value')),
+                set::series($chartOption)
+            )->size('100%', 300),
+        ),
+        cell
+        (
+            set::width('50%'),
+            h::table
+            (
+                set::class('table'),
+                h::tr
+                (
+                    h::th($lang->testreport->date),
+                    h::th(label(set::class('label-dot mr-2'), set::style(array('background-color' => '#FF9800', '--tw-ring-color' => '#FF9800'))), $lang->testreport->bugStageList['generated']),
+                    h::th(label(set::class('label-dot mr-2'), set::style(array('background-color' => '#2098EE', '--tw-ring-color' => '#2098EE'))), $lang->testreport->bugStageList['legacy']),
+                    h::th(label(set::class('label-dot mr-2'), set::style(array('background-color' => '#009688', '--tw-ring-color' => '#009688'))), $lang->testreport->bugStageList['resolved'])
+                ),
+                $tableTR
+            )
+        )
+    )
+);
+
+$bugCharts = array();
+foreach($bugInfo as $infoKey => $infoValue)
+{
+    if($infokey == 'bugStageGroups' || $infoKey == 'bugHandleGroups') continue;
+    $list = $infoValue;
+    if($infoKey == 'bugSeverityGroups')   $list = $lang->bug->severityList;
+    if($infoKey == 'bugStatusGroups')     $list = $lang->bug->statusList;
+    if($infoKey == 'bugResolutionGroups') $list = $lang->bug->resolutionList;
+
+    $chartOption = array();
+    $tableTR     = array();
+    $colorList   = array('#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC');
+    $sum         = 0;
+    foreach($infoValue as $value) $sum += $value->value;
+    foreach($list as $listKey => $listValue)
+    {
+        $color = current($colorList);
+        $name  = $listValue;
+        $value = 0;
+        if(isset($infoValue[$listKey]))
+        {
+            $name  = $infoValue[$listKey]->name;
+            $value = $infoValue[$listKey]->value;
+        }
+        if(empty($name) && empty($value)) continue;
+
+        $chartOption[] = array('name' => $name, 'value' => $value);
+        $tableTR[]     = h::tr
+        (
+            h::td(label(set::class('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $name),
+            h::td($value),
+            h::td(($sum ? round(($value / $sum * 100), 2) : '0') . '%')
+        );
+        if(!next($colorList)) reset($colorList);
+    }
+
+    $bugCharts[] = div
+    (
+        set::class('mt-6'),
+        div
+        (
+            set::class('flex border'),
+            cell
+            (
+                set::width('50%'),
+                set::class('border-r'),
+                div(set::class('center text-base font-bold py-2'), $lang->testreport->{$infoKey}),
+                echarts
+                (
+                    set::color($colorList),
+                    set::series
+                    (
+                        array
+                        (
+                            array
+                            (
+                                'data' => $chartOption,
+                                'type' => 'pie'
+                            )
+                        )
+                    )
+                )->size('100%', 300),
+            ),
+            cell
+            (
+                set::width('50%'),
+                h::table
+                (
+                    set::class('table'),
+                    h::tr
+                    (
+                        h::th($lang->report->item),
+                        h::th(set::width('100px'), $lang->report->value),
+                        h::th(set::width('120px'), $lang->report->percent)
+                    ),
+                    $tableTR
+                )
+            )
+        )
+    );
+}
+
 div
 (
     set::class('detail-body rounded flex gap-1'),
@@ -96,48 +388,71 @@ div
             (
                 set::key('storyAndBug'),
                 set::title($lang->testreport->legendStoryAndBug),
-                tableData
+                dtable
                 (
+                    set::cols($config->testreport->story->dtable->fieldList),
+                    set::data(array_values($stories)),
+                    set::userMap($users)
+                ),
+                div(set::class('my-6')),
+                dtable
+                (
+                    set::cols($config->testreport->bug->dtable->fieldList),
+                    set::data(array_values($bugs)),
+                    set::userMap($users)
                 )
+
             ),
             tabPane
             (
                 set::key('tabBuild'),
                 set::title($lang->testreport->legendBuild),
-                tableData
+                dtable
                 (
+                    set::cols($config->testreport->build->dtable->fieldList),
+                    set::data(array_values($builds)),
+                    set::userMap($users)
                 )
             ),
             tabPane
             (
                 set::key('tabCase'),
                 set::title($lang->testreport->legendCase),
-                tableData
+                dtable
                 (
+                    set::cols($config->testreport->testcase->dtable->fieldList),
+                    set::data(array_values($caseList)),
+                    set::userMap($users)
                 )
             ),
             tabPane
             (
                 set::key('tabLegacyBugs'),
                 set::title($lang->testreport->legendLegacyBugs),
-                tableData
+                dtable
                 (
+                    set::cols($config->testreport->bug->dtable->fieldList),
+                    set::data(array_values($legacyBugs)),
+                    set::userMap($users)
                 )
             ),
             tabPane
             (
                 set::key('tabReport'),
                 set::title($lang->testreport->legendReport),
-                tableData
-                (
-                )
+                $caseCharts,
+                $bugStageChart,
+                $bugHandleChart,
+                $bugCharts
             ),
             tabPane
             (
                 set::key('legendMore'),
-                set::title($lang->testreport->tabMore),
-                tableData
+                set::title($lang->testreport->legendMore),
+                div
                 (
+                    set::class('py-4'),
+                    $lang->testreport->moreNotice
                 )
             )
         )

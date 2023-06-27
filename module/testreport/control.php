@@ -540,6 +540,13 @@ class testreport extends control
             foreach($tasks as $task) $this->setChartDatas($task->id);
         }
 
+        $cases    = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
+        $caseList = array();
+        foreach($cases as $taskID => $casesList)
+        {
+            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
+        }
+
         $this->view->title      = $report->title;
         $this->view->browseLink = $browseLink;
 
@@ -550,7 +557,7 @@ class testreport extends control
         $this->view->stories   = $stories;
         $this->view->bugs      = $report->bugs ? $this->bug->getByIdList($report->bugs) : array();
         $this->view->builds    = $builds;
-        $this->view->cases     = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
+        $this->view->caseList  = $caseList;
         $this->view->users     = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('testreport', $reportID);
 
