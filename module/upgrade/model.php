@@ -8514,6 +8514,13 @@ class upgradeModel extends model
 
             if($chart)
             {
+                if($chart->sql)
+                {
+                    $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+                    $stmt = $this->dbh->query($chart->sql);
+                    if(!$stmt) continue;
+                }
+
                 $settings = $chart->settings;
                 if($type == 'chart') $chartType = $chart->builtin ? $chart->type : $settings[0]['type'];
                 if($type == 'pivot') $chartType = 'table';
