@@ -11,6 +11,12 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('methodTip', $lang->execution->agileplusMethodTip);
+jsVar('projectID', $projectID);
+jsVar('weekend', $config->execution->weekend);
+jsVar('errorSameProducts', $lang->execution->errorSameProducts);
+jsVar('isStage', $isStage);
+jsVar('copyExecutionID', $copyExecutionID);
+jsVar('multiBranchProducts', $multiBranchProducts);
 
 $methodBox = null;
 if(!empty($project->model) && $project->model == 'agileplus')
@@ -24,6 +30,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
             set::label($lang->execution->method),
             set::items($lang->execution->typeList),
             set::value($type),
+            on::change('setType'),
         ),
         formGroup
         (
@@ -53,6 +60,7 @@ if((empty($project) or $project->model != 'kanban') and $type != 'kanban')
             set::label($showExecutionExec ? $lang->execution->execType : $lang->execution->type),
             select
             (
+                set::id($isStage ? 'attribute' : 'lifetime'),
                 set::name($isStage ? 'attribute' : 'lifetime'),
                 set::items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList),
                 set::required(true),
@@ -92,11 +100,11 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
 
         $productsBox[] = formRow
         (
-            setClass('productBox'),
+            setClass('productsBox'),
             formGroup
             (
-                set::width('1/2'),
-                set('id', 'linkProduct'),
+                set::width($hasBranch ? '1/4' : '1/2'),
+                setClass('linkProduct'),
                 $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                 inputGroup
                 (
@@ -105,13 +113,14 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
                         setClass('grow'),
                         select
                         (
+                            set::id("products{$i}"),
                             set::name("products[$i]"),
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
                             set::disabled($isStage && $project->stageBy == 'project'),
                             set::required(true),
-                            on::change('productChange'),
+                            on::change('loadBranches'),
                             $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                         )
                     ),
@@ -119,18 +128,20 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
             ),
             formGroup
             (
-                set::width('1/3'),
+                set::width('1/4'),
+                setClass('ml-px'),
                 $hasBranch ? null : setClass('hidden'),
                 inputGroup
                 (
                     $lang->product->branchName['branch'],
                     select
                     (
+                        set::id("branch{$i}"),
                         set::name("branch[$i][]"),
                         set::items($branches),
                         set::value($branchIdList),
                         set::disabled($isStage && $project->stageBy == 'project'),
-                        on::change('branchChange')
+                        on::change("loadPlans('#products{$i}', this)")
                     )
                 ),
             ),
@@ -151,7 +162,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
             ),
             $isStage && $project->stageBy == 'project' ? null : formGroup
             (
-                set::width('1/10'),
+                set::width('1/6'),
                 div
                 (
                     setClass('pl-2 flex self-center'),
@@ -161,9 +172,10 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
                         on::click('addNewLine'),
                         icon('plus')
                     ),
-                    $i == 0 ? null : btn
+                    btn
                     (
                         setClass('btn btn-link removeLine'),
+                        setClass($i == 0 ? 'hidden' : ''),
                         icon('trash'),
                         on::click('removeLine'),
                     ),
@@ -197,30 +209,34 @@ else
 {
     $productsBox [] = formRow
     (
-        setClass('productBox'),
+        setClass('productsBox'),
         formGroup
         (
             set::width('1/2'),
-            set('id', 'linkProduct'),
+            setClass('linkProduct'),
             set::label($lang->project->manageProducts),
             select
             (
+                set::id('products0'),
                 set::name('products[0]'),
                 set::items($allProducts),
-                on::change('productChange')
+                set::required(true),
+                on::change('loadBranches')
             )
         ),
         formGroup
         (
-            set::width('1/3'),
-            setClass('hidden'),
+            set::width('1/4'),
+            setClass('hidden ml-px'),
             inputGroup
             (
                 $lang->product->branchName['branch'],
                 select
                 (
+                    set::id('branch0'),
                     set::name('branch[0][]'),
-                    on::change('branchChange')
+                    set::control('select'),
+                    on::change("loadPlans('#products0', this)")
                 )
             ),
         ),
@@ -241,7 +257,7 @@ else
         ),
         $isStage && $project->stageBy == 'product' ? null : formGroup
         (
-            set::width('1/10'),
+            set::width('1/6'),
             div
             (
                 setClass('pl-2 flex self-center'),
@@ -250,6 +266,13 @@ else
                     setClass('btn btn-link addLine'),
                     on::click('addNewLine'),
                     icon('plus')
+                ),
+                btn
+                (
+                    setClass('btn btn-link removeLine'),
+                    setClass('hidden'),
+                    icon('trash'),
+                    on::click('removeLine'),
                 ),
             ),
         )
@@ -279,9 +302,11 @@ formPanel
     (
         set::width('1/2'),
         set::name('project'),
+        set::required(true),
         set::label($lang->execution->projectName),
         set::items($allProjects),
         set::value($projectID),
+        on::change('refreshPage'),
     ),
     $methodBox,
     formGroup

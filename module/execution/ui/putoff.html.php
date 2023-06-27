@@ -55,7 +55,7 @@ formPanel
             set::width('1/2'),
             radioList
             (
-                set::name('dayOptions'),
+                set::name('delta'),
                 set::items($lang->execution->endList),
                 set::inline(true),
                 on::change('computeEndDate'),
