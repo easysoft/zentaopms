@@ -9,25 +9,27 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->release->create           = "Erstellen";
-$lang->release->edit             = "Bearbeiten";
-$lang->release->linkStory        = "Story verknüpfen";
-$lang->release->linkBug          = "Bug verknüpfen";
-$lang->release->delete           = "Löschen";
+$lang->release->create           = 'Erstellen';
+$lang->release->edit             = 'Bearbeiten';
+$lang->release->linkStory        = 'Story verknüpfen';
+$lang->release->linkBug          = 'Bug verknüpfen';
+$lang->release->delete           = 'Löschen';
 $lang->release->deleted          = 'Gelöscht';
-$lang->release->view             = "Übersicht";
-$lang->release->browse           = "Durchsuchen";
-$lang->release->changeStatus     = "Status ändern";
-$lang->release->batchUnlink      = "Mehrere entfernen";
-$lang->release->batchUnlinkStory = "Mehrere Storys entfernen";
-$lang->release->batchUnlinkBug   = "Mehrere Bugs entfernen";
+$lang->release->view             = 'Übersicht';
+$lang->release->browse           = 'Durchsuchen';
+$lang->release->changeStatus     = 'Status ändern';
+$lang->release->batchUnlink      = 'Mehrere entfernen';
+$lang->release->batchUnlinkStory = 'Mehrere Storys entfernen';
+$lang->release->batchUnlinkBug   = 'Mehrere Bugs entfernen';
 
-$lang->release->confirmDelete      = "Möchten Sie dieses Releas löschen?";
-$lang->release->syncFromBuilds     = "Link the stories completed in the version and the bugs solved to the release";
-$lang->release->confirmUnlinkStory = "Möchten Sie diese Story löschen?";
-$lang->release->confirmUnlinkBug   = "Möchten Sie diesen Bug löschen?";
+$lang->release->confirmDelete      = 'Möchten Sie dieses Releas löschen?';
+$lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';
+$lang->release->confirmUnlinkStory = 'Möchten Sie diese Story löschen?';
+$lang->release->confirmUnlinkBug   = 'Möchten Sie diesen Bug löschen?';
 $lang->release->existBuild         = '『Build』『%s』 existiert bereits. Sie können den 『name』 ändern oder ein anderes 『build』 wählen.';
 $lang->release->noRelease          = 'Keine Releases. ';
+$lang->release->confirmActivate    = 'Do you want to activate this release?';
+$lang->release->confirmTerminate   = 'Do you want to pause this release?';
 $lang->release->errorDate          = 'The release date should not be greater than today.';
 
 $lang->release->basicInfo = 'Basis Info';
