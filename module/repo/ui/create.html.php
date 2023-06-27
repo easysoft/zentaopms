@@ -10,6 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('pathGitTip', $lang->repo->example->path->git);
+jsVar('pathSvnTip', $lang->repo->example->path->svn);
+jsVar('clientGitTip', $lang->repo->example->client->git);
+jsVar('clientSvnTip', $lang->repo->example->client->svn);
+
 formPanel
 (
     on::change('#product', 'onProductChange'),
@@ -19,28 +24,23 @@ formPanel
     set::title($lang->repo->createAction),
     formGroup
     (
-        set::width("1/2"),
         set::name("product[]"),
         set::label($lang->story->product),
         set::required(true),
         set::control(array("type" => "picker","multiple" => true)),
-        set::id("product"),
         set::items($products),
         set::value(empty($objectID) ? '' : array_keys($products))
     ),
     formGroup
     (
-        set::width("1/2"),
         set::name("projects[]"),
         set::label($lang->repo->projects),
         set::control(array("type" => "picker","multiple" => true)),
-        set::id("projects"),
         set::items($projects),
         set::value($relatedProjects)
     ),
     formGroup
     (
-        set::width("1/2"),
         set::name("SCM"),
         set::label($lang->product->typeAB),
         set::required(true),
@@ -53,7 +53,6 @@ formPanel
         setClass('service hide'),
         formGroup
         (
-            set::width("1/2"),
             set::name("serviceHost"),
             set::label($lang->repo->serviceHost),
             set::required(true),
@@ -67,7 +66,6 @@ formPanel
         setClass('service hide'),
         formGroup
         (
-            set::width("1/2"),
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
             set::required(true),
@@ -76,7 +74,6 @@ formPanel
     ),
     formGroup
     (
-        set::width("1/2"),
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
@@ -87,28 +84,27 @@ formPanel
         setClass('hide-service hide-git'),
         formGroup
         (
-            set::width("1/2"),
             set::name("path"),
             set::label($lang->repo->path),
             set::required(true),
-            set::control("text")
+            set::control("text"),
+            set::placeholder($lang->repo->example->path->git),
         ),
     ),
     formGroup
     (
-        set::width("1/2"),
         set::name("encoding"),
         set::label($lang->repo->encoding),
         set::required(true),
         set::value("utf-8"),
-        set::control("text")
+        set::control("text"),
+        set::placeholder($lang->repo->encodingsTips),
     ),
     formRow
     (
         setClass('hide-service'),
         formGroup
         (
-            set::width("1/2"),
             set::name("client"),
             set::label($lang->repo->client),
             set::required(true),
@@ -120,7 +116,6 @@ formPanel
         setClass('account-fields hide-service'),
         formGroup
         (
-            set::width("1/2"),
             set::name("account"),
             set::label($lang->user->account),
             set::control("text")
@@ -131,7 +126,6 @@ formPanel
         setClass('account-fields hide-service'),
         formGroup
         (
-            set::width("1/2"),
             set::label($lang->user->password),
             inputGroup
             (
@@ -155,11 +149,11 @@ formPanel
     ),
     formGroup
     (
-        set::width("1/2"),
         set::label($lang->repo->acl),
         inputGroup
         (
             $lang->repo->group,
+            width('full'),
             control(set(array
             (
                 'name' => "acl[groups][]",
@@ -187,7 +181,6 @@ formPanel
     ),
     formGroup
     (
-        set::width("2/3"),
         set::name("desc"),
         set::label($lang->story->spec),
         set::control("editor")

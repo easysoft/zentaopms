@@ -10,8 +10,7 @@ function onProductChange(event)
     var products = $('#product').val();
     $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
     {
-        $('#projectContainer').html('').append(response);
-        $('#projects').chosen().trigger("chosen:updated");
+        $('#projects').replaceWith(response);
     });
 }
 
@@ -47,14 +46,14 @@ function onScmChange()
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
         $('.account-fields').hide();
-        $('.tips-git').removeClass('hidden');
-        $('.tips-svn').addClass('hidden');
+        $('#path').attr('placeholder', pathGitTip);
+        $('#client').attr('placeholder', clientGitTip);
     }
     else
     {
         $('.account-fields').show();
-        $('.tips-git').addClass('hidden');
-        $('.tips-svn').removeClass('hidden');
+        $('#path').attr('placeholder', pathSvnTip);
+        $('#client').attr('placeholder', clientSvnTip);
     }
 
     if(scm == 'Git' || scm == 'Subversion')
