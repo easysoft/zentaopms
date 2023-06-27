@@ -387,7 +387,9 @@ $fnGenerateCycleCfg = function() use ($lang, $todo)
 };
 
 /* ZIN: layout. */
-detailHeader
+$isInModal && modalHeader();
+
+!$isInModal && detailHeader
 (
     $isInModal ? to::prefix('') : '',
     to::title
