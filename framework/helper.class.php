@@ -429,6 +429,18 @@ function isonlybody(): bool
 }
 
 /**
+ * 检查页面是否是弹窗中。
+ * Check page is modal.
+ *
+ * @access public
+ * @return bool
+ */
+function isInModal(): bool
+{
+    return helper::isAjaxRequest('modal');
+}
+
+/**
  * Format time.
  *
  * @param  string|null $time

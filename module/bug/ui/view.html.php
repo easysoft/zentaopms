@@ -199,7 +199,7 @@ detailBody
     floatToolbar
     (
         set::object($bug),
-        to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($mainActions),
         set::suffix($suffixActions)
     ),

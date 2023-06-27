@@ -875,8 +875,10 @@ class story extends control
 
         if($confirm == 'no')
         {
-            if($storyType == 'requirement') $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->confirmDelete);
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
+            if($story->type == 'requirement') $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->confirmDelete);
+            $confirmURL = $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->story->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
+            //return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
         }
         else
         {
@@ -902,13 +904,11 @@ class story extends control
                 $kanbanType        = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                 $kanbanData        = $kanbanData[$kanbanType];
                 $kanbanData        = json_encode($kanbanData);
-                return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
             }
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
-
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return $this->send(array('result' => 'success', 'load' => $locateLink));
+            return $this->send(array('result' => 'success', 'load' => array('back' => $locateLink), 'closeModal' => true));
         }
     }
 

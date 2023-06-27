@@ -17,7 +17,7 @@ jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
 
-$isInModal  = isAjaxRequest('modal');
+$isInModal  = isInModal();
 $otherParam = 'storyID=&projectID=';
 $tab        = 'product';
 if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
@@ -212,7 +212,7 @@ detailBody
     floatToolbar
     (
         set::object($story),
-        to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        $isInModal ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         $story->deleted ? null : set::main($menus['mainMenu']),
         $story->deleted ? null : set::suffix($menus['suffixMenu']),
     ),

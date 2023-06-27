@@ -3781,7 +3781,7 @@ class storyModel extends model
 
             $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit'));
             $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy', 'data-toggle' => 'modal'));
-            if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => "javascript:ajaxDelete($story->id)", 'icon' => 'trash');
+            if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => helper::createLink('story', 'delete', $params), 'class' => 'ajax-submit', 'icon' => 'trash');
         }
 
         return array('mainMenu' => array_values(array_filter($mainMenu)), 'suffixMenu' => array_values(array_filter($suffixMenu)), 'dropMenus' => $dropMenus);

@@ -83,14 +83,7 @@ function isFieldRequired($name)
  */
 function isAjaxRequest(string|null $type = null): bool
 {
-    $isAjax = \helper::isAjaxRequest();
-    if($isAjax === false) return false;
-
-    if($type === 'zin') return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
-
-    if($type === 'modal') return isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true;
-
-    return $isAjax;
+    return \helper::isAjaxRequest($type);
 }
 
 /**

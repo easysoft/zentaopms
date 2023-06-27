@@ -139,7 +139,7 @@ detailBody
     history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id))),),
     floatToolbar
     (
-        to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($operateMenus),
         set::suffix($commonActions),
         set::object($task)

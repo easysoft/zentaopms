@@ -688,15 +688,22 @@ class baseHelper
      * 检查是否是AJAX请求。
      * Check is ajax request.
      *
+     * @param  string|null $type   zin|modal
      * @static
      * @access public
      * @return bool
      */
-    public static function isAjaxRequest()
+    public static function isAjaxRequest(string|null $type = null): bool
     {
-        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') return true;
-        if(isset($_GET['HTTP_X_REQUESTED_WITH'])    && $_GET['HTTP_X_REQUESTED_WITH']    == 'XMLHttpRequest') return true;
-        return false;
+        $isAjax = false;
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') $isAjax = true;
+        if(isset($_GET['HTTP_X_REQUESTED_WITH'])    && $_GET['HTTP_X_REQUESTED_WITH']    == 'XMLHttpRequest') $isAjax = true;
+        if($isAjax === false) return false;
+
+        if($type === 'zin')   return array_key_exists('HTTP_X_ZIN_OPTIONS', $_SERVER);
+        if($type === 'modal') return isset($_SERVER['HTTP_X_ZUI_MODAL']) && $_SERVER['HTTP_X_ZUI_MODAL'] == true;
+
+        return $isAjax;
     }
 
     /**
