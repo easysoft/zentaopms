@@ -485,3 +485,5 @@ $config->featureGroup->other         = array('devops', 'kanban');
 
 $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
+
+$config->db->sqliteBlacklist = array('sqlite_queue', 'cron');

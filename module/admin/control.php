@@ -524,7 +524,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function execSqliteQueue(): void
+    public function execSqliteQueue()
     {
         $now = helper::now();
         $sqlite = $this->app->connectSqlite();

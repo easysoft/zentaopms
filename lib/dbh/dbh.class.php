@@ -513,6 +513,12 @@ class dbh
 
         if(!in_array($action, $allowedActions)) return null;
 
+        foreach($this->config->sqliteBlacklist as $table)
+        {
+            $tableName = $this->config->prefix . $table;
+            if(stripos($sql, $tableName) !== false) return null;
+        }
+
         $table  = TABLE_SQLITE_QUEUE;
         $sql    = $this->quote($sql);
         $now    = "now()";
