@@ -49,6 +49,7 @@ class formPanel extends panel
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
         'shadow?: bool=false',                         // 是否显示阴影层。
+        'width?: string'                               // 最大宽度。
     );
 
     /**
@@ -84,9 +85,13 @@ class formPanel extends panel
      */
     protected function buildProps(): array
     {
+        list($width, $batch, $shadow) = $this->prop(array('width', 'batch', 'shadow'));
         $props = parent::buildProps();
-        if($this->prop('batch'))  $props[] = setCssVar('--zt-page-form-max-width', 'auto');
-        if($this->prop('shadow')) $props[] = setClass('shadow');
+
+        if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
+        elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($shadow)    $props[] = setClass('shadow');
+
         return $props;
     }
 
