@@ -125,6 +125,15 @@ featureBar
         ),
         set::items($suiteItems)
     ) : null,
+    li
+    (
+        set::class('nav-item'),
+        a
+        (
+            set::href(str_replace('{key}', 'onlyScene', $browseLink)),
+            $lang->testcase->onlyScene
+        )
+    ),
     $rawMethod != 'browseunits' ? li
     (
         set::class('nav-item'),
@@ -135,11 +144,6 @@ featureBar
             on::change('toggleOnlyAutoCase'),
             $lang->testcase->onlyAutomated
         )
-    ) : null,
-    $rawMethod != 'browseunits' ? li
-    (
-        set::class('nav-item'),
-        a($lang->testcase->onlyScene)
     ) : null,
     $rawMethod != 'browseunits' ? (searchToggle(set::open($browseType == 'bysearch'))) : null,
     $rawMethod != 'browseunits' ? li(btn(setClass('ghost'), set::icon('unfold-all'), $lang->sort)) : null
