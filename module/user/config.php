@@ -4,7 +4,7 @@ $config->user->create = new stdclass();
 $config->user->edit   = new stdclass();
 
 $config->user->create->requiredFields = 'account,realname,visions,password,password1,password2';
-$config->user->edit->requiredFields   = 'account,realname,visions';
+$config->user->edit->requiredFields   = 'account,realname,visions,verifyPassword';
 
 $config->user->availableBatchCreateFields = 'dept,email,gender,commiter,join,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 $config->user->availableBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';

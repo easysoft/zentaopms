@@ -67,3 +67,24 @@ $(document).ready(function()
         verifyEncrypted = true;
     });
 });
+
+/**
+ * Check password strength.
+ *
+ * @param  event  $event
+ * @access public
+ * @return void
+ */
+function checkPassword(event)
+{
+    let password = $(event.target).val();
+    $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);
+    if(password == '')
+    {
+        $('#passwordStrength').addClass('hidden');
+    }
+    else
+    {
+        $('#passwordStrength').removeClass('hidden');
+    }
+}

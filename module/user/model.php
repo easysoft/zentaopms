@@ -559,7 +559,7 @@ class userModel extends model
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->join('visions', ',')
-            ->remove('new, password1, password2, groups,verifyPassword, passwordStrength,passwordLength')
+            ->remove('new, password1, password2, group, verifyPassword, passwordStrength,passwordLength, verifyRand, newCompany')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -570,14 +570,14 @@ class userModel extends model
 
         if(isset($_POST['new']))
         {
-            if(empty($user->company))
+            if(empty($_POST['newCompany']))
             {
-                dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
+                dao::$errors['newCompany'][] = $this->lang->user->error->companyEmpty;
                 return false;
             }
 
             $company = new stdClass();
-            $company->name = $user->company;
+            $company->name = $_POST['newCompany'];
             $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
 
             $user->company = $this->dao->lastInsertID();
@@ -616,7 +616,7 @@ class userModel extends model
         }
 
         $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
-        $newGroups = zget($_POST, 'groups', array());
+        $newGroups = zget($_POST, 'group', array());
         sort($oldGroups);
         sort($newGroups);
 
@@ -627,9 +627,9 @@ class userModel extends model
             $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
 
             /* Set usergroup for account. */
-            if(isset($_POST['groups']))
+            if(isset($_POST['group']))
             {
-                foreach($this->post->groups as $groupID)
+                foreach($this->post->group as $groupID)
                 {
                     $data          = new stdclass();
                     $data->account = $this->post->account;
