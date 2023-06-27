@@ -641,10 +641,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
     const url = $link.attr('href') || $link.data('url');
     if(url && url.includes('onlybody=yes')) return;
-    if(openApp(url, $link.data('app'), !$link.hasClass('show-in-app')))
-    {
-        e.preventDefault();
-    }
+    if(openApp(url, $link.data('app'), !$link.hasClass('show-in-app'))) e.preventDefault();
 }).on('contextmenu', '.open-in-app,.show-in-app', function(event)
 {
     const $btn  = $(this);
