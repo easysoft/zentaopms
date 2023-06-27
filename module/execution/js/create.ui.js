@@ -1,6 +1,21 @@
 $(function()
 {
     if($('#methodHover').length) new zui.Tooltip('#methodHover', {title: methodTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light methodTip'});
+
+    if(isStage)
+    {
+        $(document).on('change', '#attribute', function(e)
+        {
+            let attribute = $(this).val();
+            hidePlanBox(attribute);
+        })
+
+        $('#attribute').change();
+    }
+
+    if(copyExecutionID != 0 || projectID != 0) loadMembers();
+
+    setWhite();
 });
 
 /**
@@ -45,3 +60,29 @@ function showLifeTimeTips()
         $('#lifeTimeTips').addClass('hidden');
     }
 }
+
+/**
+ * Load team members.
+ *
+ * @access public
+ * @return void
+ */
+function loadMembers()
+{
+    $.get($.createLink('execution', 'ajaxGetTeamMembers', 'objectID=' + $('#teams').val()), function(data)
+    {
+        $('#teamMembers').replaceWith(data);
+    });
+}
+
+$(document).on('change', '#begin', function()
+{
+    $("#end,#days").val('');
+    $("input[name='delta']").prop('checked', false);
+});
+
+$(document).on('change', '#end', function(e)
+{
+    $("input[name='delta']").prop('checked', false);
+    computeWorkDays();
+});

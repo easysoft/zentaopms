@@ -14,6 +14,7 @@ window.createSortLink = function(col)
 function computeWorkDays(currentID)
 {
     isBactchEdit = false;
+    currentID    = parseInt(currentID);
     if(currentID)
     {
         index = currentID.replace(/\w*\[|\]/g, '');
@@ -244,4 +245,46 @@ function removeLine(e)
 {
     const obj = e.target;
     $(obj).closest('.form-row').remove();
+}
+
+/**
+ * Hide plan box by stage's attribute.
+ *
+ * @param  string    attribute
+ * @access public
+ * @return void
+ */
+function hidePlanBox(attribute)
+{
+    if(attribute == 'request' || attribute == 'review')
+    {
+        $('.productsBox .planBox').addClass('hide');
+        $('.productsBox .planBox select').attr('disabled', 'disabled');
+        $('#productTitle').text(manageProductsLang);
+
+        $('#plansBox').closest('.form-row').addClass('hide');
+        $('#plansBox').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('.productsBox .planBox').removeClass('hide');
+        $('.productsBox .planBox select').attr('disabled', '');
+        $('#productTitle').text(manageProductPlanLang);
+
+        $('#plansBox').closest('.form-row').removeClass('hide');
+        $('#plansBox').attr('disabled', '');
+    }
+}
+
+/**
+ * Set white.
+ *
+ * @param  string  $acl
+ * @access public
+ * @return void
+ */
+function setWhite()
+{
+    const acl = $("[name^='acl']:checked").val();
+    acl != 'open' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
 }

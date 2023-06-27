@@ -14,9 +14,12 @@ jsVar('methodTip', $lang->execution->agileplusMethodTip);
 jsVar('projectID', $projectID);
 jsVar('weekend', $config->execution->weekend);
 jsVar('errorSameProducts', $lang->execution->errorSameProducts);
+jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('multiBranchProducts', $multiBranchProducts);
+jsVar('manageProductsLang', $lang->project->manageProducts);
+jsVar('manageProductPlanLang', $lang->project->manageProductPlan);
 
 $methodBox = null;
 if(!empty($project->model) && $project->model == 'agileplus')
@@ -149,6 +152,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
             (
                 set::width('1/2'),
                 set::label($lang->project->associatePlan),
+                set::class('planBox'),
                 inputGroup
                 (
                     set::id("plan{$i}"),
@@ -195,6 +199,7 @@ elseif(!empty($project) and empty($project->hasProduct) and !in_array($project->
             set::width('1/2'),
             set::label($lang->execution->linkPlan),
             set('id', 'plansBox'),
+            set::class('planBox'),
             select
             (
                 set::name("plans[{$planProductID}][]"),
@@ -244,6 +249,7 @@ else
         (
             set::width('1/2'),
             set::label($lang->project->associatePlan),
+            set::class('planBox'),
             inputGroup
             (
                 set::id("plan0"),
@@ -414,11 +420,13 @@ formPanel
         set::label($lang->execution->copyTeam),
         select
         (
+            set::id('teams'),
             set::name('teams'),
             set::items($teams),
             set::value(empty($copyExecution) ? $projectID : $copyExecutionID),
             set::required(true),
             set('data-placeholder', $lang->execution->copyTeamTip),
+            on::change('loadMembers'),
         )
     ),
     formRow
@@ -500,11 +508,13 @@ formPanel
             set::control('radioList'),
             set::items($lang->execution->aclList),
             set::value($acl),
+            on::change('setWhite(this.value)'),
         )
     ),
     formGroup
     (
         set::label($lang->whitelist),
+        set::id('whitelistBox'),
         select
         (
             set::name('whitelist[]'),
