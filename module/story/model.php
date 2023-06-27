@@ -2326,21 +2326,16 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function batchAssignTo(string $assignedTo = '')
+    public function batchAssignTo(array $storyIdList, string $assignedTo = '')
     {
-        $now         = helper::now();
-        $allChanges  = array();
-        $storyIdList = $this->post->storyIdList;
-        $oldStories  = $this->getByList($storyIdList);
-        $ignoreStories = '';
+        $now           = helper::now();
+        $allChanges    = array();
+        $oldStories    = $this->getByList($storyIdList);
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->status == 'closed')
-            {
-                $ignoreStories .= "#{$storyID},";
-                continue;
-            }
+
+            if($oldStory->status == 'closed') continue;
             if($assignedTo == $oldStory->assignedTo) continue;
 
             $story = new stdclass();
@@ -2350,14 +2345,7 @@ class storyModel extends model
             $story->assignedDate   = $now;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-
             $allChanges[$storyID] = common::createChanges($oldStory, $story);
-        }
-
-        if($ignoreStories)
-        {
-            $ignoreStories = trim($ignoreStories, ',');
-            echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
         }
 
         return $allChanges;

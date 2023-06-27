@@ -1329,18 +1329,19 @@ class story extends control
      */
     public function batchChangeModule($moduleID, $storyType = 'story')
     {
-        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        $storyIdList = array_unique($this->post->storyIdList);
         $allChanges  = $this->story->batchChangeModule($storyIdList, $moduleID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -1409,18 +1410,19 @@ class story extends control
      */
     public function batchChangePlan($planID, $oldPlanID = 0)
     {
-        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        $storyIdList = array_unique($this->post->storyIdList);
         $allChanges  = $this->story->batchChangePlan($storyIdList, $planID, $oldPlanID);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -1496,12 +1498,11 @@ class story extends control
      */
     public function batchChangeStage($stage)
     {
-        $storyIdList = $this->post->storyIdList;
-        if(empty($storyIdList)) return print(js::locate($this->session->storyList, 'parent'));
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($storyIdList);
+        $storyIdList = array_unique($this->post->storyIdList);
         $allChanges  = $this->story->batchChangeStage($storyIdList, $stage);
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $action = $stage == 'verified' ? 'Verified' : 'Edited';
         foreach($allChanges as $storyID => $changes)
@@ -1509,8 +1510,8 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, $action);
             $this->action->logHistory($actionID, $changes);
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -1588,35 +1589,50 @@ class story extends control
      */
     public function batchAssignTo(string $storyType = 'story', string $assignedTo = '')
     {
-        if(!empty($_POST) && isset($_POST['storyIdList']))
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        if(!$assignedTo) $assignedTo = $this->post->assignedTo;
+        $storyIdList = array_unique($this->post->storyIdList);
+        $oldStories  = $this->story->getByList($storyIdList);
+
+        $allChanges = $this->story->batchAssignTo($storyIdList, $assignedTo);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+
+
+        if($ignoreStories)
         {
-            if(!$assignedTo) $assignedTo = $this->post->assignedTo;
+            $ignoreStories = trim($ignoreStories, ',');
+            echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
+        }
 
-            $allChanges = $this->story->batchAssignTo($assignedTo);
-            if(dao::isError()) return print(js::error(dao::getError()));
+        $ignoreStories = array();
+        $assignedTwins = array();
+        foreach($allChanges as $storyID => $changes)
+        {
+            $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
+            $this->action->logHistory($actionID, $changes);
 
-            $assignedTwins = array();
-            $oldStories       = $this->story->getByList($this->post->storyIdList);
-            foreach($allChanges as $storyID => $changes)
+            $oldStory = $oldStories[$storyID];
+            if($oldStory->status == 'closed') $ignoreStories[] = "#{$storyID}";
+
+            /* Sync twins. */
+            if(!empty($oldStory->twins))
             {
-                $actionID = $this->action->create('story', $storyID, 'Assigned', '', $assignedTo);
-                $this->action->logHistory($actionID, $changes);
-
-                /* Sync twins. */
-                if(!empty($oldStories[$storyID]->twins))
+                $twins = $oldStory->twins;
+                foreach(explode(',', $twins) as $twinID)
                 {
-                    $twins = $oldStories[$storyID]->twins;
-                    foreach(explode(',', $twins) as $twinID)
-                    {
-                        if(in_array($twinID, $this->post->storyIdList) or isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
-                    }
-                    $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
-                    foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
+                    if(in_array($twinID, $storyIdList) || isset($assignedTwins[$twinID])) $twins = str_replace(",$twinID,", ',', $twins);
                 }
+                $this->story->syncTwins($storyID, trim($twins, ','), $changes, 'Assigned');
+                foreach(explode(',', trim($twins, ',')) as $assignedID) $assignedTwins[$assignedID] = $assignedID;
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::locate($this->session->storyList, 'parent');
+        $this->loadModel('score')->create('ajax', 'batchOther');
+
+        $response = array('result' => 'success', 'load' => true);
+        if($ignoreStories) $response['ignoreMessage'] = sprintf($this->lang->story->ignoreClosedStory, implode(',', $ignoreStories));
+        return $this->send($response);
     }
 
     /**
