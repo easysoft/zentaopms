@@ -70,6 +70,7 @@ $lang->release->storyList      = '<p style="margin-left: 30px;">Story List：%s�
 $lang->release->bugList        = '<p style="margin-left: 30px;">Bug List：%s。</p>';
 $lang->release->pageAllSummary = 'Total releases: <strong>%total%</strong>, Normal: <strong>%normal%</strong>, Terminate: <strong>%terminate%</strong>.';
 $lang->release->pageSummary    = "Total releases: <strong>%s</strong>.";
+$lang->release->fileName       = 'File name';
 $lang->release->exportRange    = 'Data to export';
 
 $lang->release->storyTitle = 'Story Name';
