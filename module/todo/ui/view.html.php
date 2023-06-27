@@ -217,8 +217,27 @@ $fnRenderCreateBugModal = function() use ($lang, $projects, $projectProducts)
     );
 };
 
+/* Generate goback url. */
+$fnGenerateGoBackUrl = function() use ($app, $todo, $user)
+{
+    if($this->session->todoList)
+    {
+        $browseLink = empty($todo->deleted) ? $this->session->todoList : $this->createLink('action', 'trash');
+    }
+    elseif($todo->account == $app->user->account)
+    {
+        $browseLink = $this->createLink('my', 'todo');
+    }
+    else
+    {
+        $browseLink = $this->createLink('user', 'todo', "userID=$user->id");
+    }
+
+    return $browseLink;
+};
+
 /* Generate action buttons and related menus within float toolbar. */
-$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects,$fnRenderCreateStoryModal, $fnRenderCreateTaskModal, $fnRenderCreateBugModal)
+$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, $fnGenerateGoBackUrl, $fnRenderCreateStoryModal, $fnRenderCreateTaskModal, $fnRenderCreateBugModal)
 {
     /* Deleted item without action buttons. */
     if($todo->deleted) return array();
@@ -234,19 +253,21 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects,$
     $canEdit     = hasPriv('todo', 'edit');
     $canDelete   = hasPriv('todo', 'delete');
 
-    $actionList = array();
+    $actionList = array('prefix' => array(), 'main' => array(), 'suffix' => array());
+
+    $actionList['prefix'][] = array('icon' => 'back', 'url' => $fnGenerateGoBackUrl(), 'hint' => $lang->goback . $lang->backShortcutKey, 'text' => $lang->goback);
 
     /* Common action buttons. */
-    $canStart    && $status == 'wait'                          ? $actionList[] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'text' => $lang->todo->abbr->start) : null;
-    $canActivate && ($status == 'done' || $status == 'closed') ? $actionList[] = array('icon' => 'magic', 'url' => createLink('todo', 'activate', "todoID={$todo->id}"), 'text' => $lang->activate) : null;
-    $canClose    && $status == 'done'                          ? $actionList[] = array('icon' => 'off',   'url' => createLink('todo', 'close',    "todoID={$todo->id}"), 'text' => $lang->close) : null;
-    $canEdit                                                   ? $actionList[] = array('icon' => 'edit',  'url' => createLink('todo', 'edit',     "todoID={$todo->id}"), 'text' => $lang->edit) : null;
-    $canDelete                                                 ? $actionList[] = array('icon' => 'trash', 'url' => createLink('todo', 'delete',   "todoID={$todo->id}"), 'text' => $lang->delete) : null;
+    $canStart    && $status == 'wait'                          ? $actionList['main'][] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'text' => $lang->todo->abbr->start) : null;
+    $canActivate && ($status == 'done' || $status == 'closed') ? $actionList['main'][] = array('icon' => 'magic', 'url' => createLink('todo', 'activate', "todoID={$todo->id}"), 'text' => $lang->activate) : null;
+    $canClose    && $status == 'done'                          ? $actionList['main'][] = array('icon' => 'off',   'url' => createLink('todo', 'close',    "todoID={$todo->id}"), 'text' => $lang->close) : null;
+    $canEdit                                                   ? $actionList['main'][] = array('icon' => 'edit',  'url' => createLink('todo', 'edit',     "todoID={$todo->id}"), 'text' => $lang->edit) : null;
+    $canDelete                                                 ? $actionList['main'][] = array('icon' => 'trash', 'url' => createLink('todo', 'delete',   "todoID={$todo->id}"), 'text' => $lang->delete) : null;
 
     /* The status is 'done' or 'closed' without more action buttons. */
     if($status == 'done' || $status == 'closed') return $actionList;
 
-    $actionList[] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'text' => $lang->todo->abbr->finish);
+    $actionList['main'][] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'text' => $lang->todo->abbr->finish);
 
     $canCreateStory = hasPriv('story', 'create');
     $canCreateTask  = hasPriv('task',  'create');
@@ -256,7 +277,7 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects,$
     /* Render more button. */
     if($printBtn && ($canCreateStory || $canCreateTask || $canCreateBug))
     {
-        $actionList[] = array('url' => '#navActions', 'text' => $lang->more, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
+        $actionList['suffix'][] = array('url' => '#navActions', 'text' => $lang->todo->transform, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
     }
 
     /* Popup menu of more button. */
@@ -396,12 +417,12 @@ detailBody
         history(set::commentUrl(createLink('action', 'comment', "objectType=todo&objectID=$todo->id"))),
 
         /* Render float toolbar. */
-        $actionList ? center(floatToolbar(set::main($actionList))) : null
+        $actionList ? center(floatToolbar(set($actionList))) : null
     ),
     detailSide
     (
         /* Basic information. */
-        tabs(tabPane
+        tabs(set::collapse(true), tabPane
         (
             set::key('legendBasic'),
             set::title($lang->todo->legendBasic),
@@ -415,16 +436,16 @@ detailBody
                 $fromItem,
 
                 item(set::name($lang->todo->account),     zget($users, $todo->account)),
-                item(set::name($lang->todo->date),        $todo->date),
+                item(set::name($lang->todo->date),        formatTime($todo->date, DT_DATE1)),
                 item(set::name($lang->todo->beginAndEnd), isset($times[$todo->begin]) ? $times[$todo->begin] : '', isset($times[$todo->end]) ?  ' ~ ' . $times[$todo->end] : ''),
 
-                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedTo),zget($users, $todo->assignedTo)),
-                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedBy),zget($users, $todo->assignedBy)),
-                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedDate), $todo->assignedDate),
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedTo),   zget($users, $todo->assignedTo)),
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedBy),   zget($users, $todo->assignedBy)),
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedDate), formatTime($todo->assignedDate, DT_DATE1)),
             )
         )),
         /* Cycle information. */
-        $todo->cycle ? tabs(tabPane
+        $todo->cycle ? tabs(set::collapse(true), tabPane
         (
             set::key('cycle'),
             set::title($lang->todo->cycle),
