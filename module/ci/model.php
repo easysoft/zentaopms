@@ -24,7 +24,7 @@ class ciModel extends model
             $this->session->set('repoID', $repoID);
             session_write_close();
         }
-        common::setMenuVars('devops', $this->session->repoID);
+        if(!in_array("{$this->app->moduleName}-{$this->app->methodName}", array('gitlab-browse', 'gogs-browse', 'gitea-browse', 'jenkins-browse', 'sonarqube-browse'))) common::setMenuVars('devops', $this->session->repoID);
 
         if($this->session->repoID)
         {
