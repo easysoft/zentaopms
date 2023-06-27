@@ -91,7 +91,7 @@ window.branchChange = function(e)
 
 $(document).on('click', '#copyProjects button', function()
 {
-    const copyProjectID = $(this).hasClass('success-outline') ? 0 : $(this).data('id');
+    const copyProjectID = $(this).hasClass('primary-outline') ? 0 : $(this).data('id');
     setCopyProject(copyProjectID);
     zui.Modal.hide();
 });

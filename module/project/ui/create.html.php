@@ -30,6 +30,97 @@ foreach($lang->project->modelList as $key => $text)
     );
 }
 
+$productsBox = array();
+if(!empty($products))
+{
+    $i = 0;
+    foreach($products as $product)
+    {
+        $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
+        $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
+        $plans     = isset($copyProject->productPlans[$product->id]) ? $copyProject->productPlans[$product->id] : array();
+        $productsBox[] = formRow
+        (
+            setClass('productBox'),
+            formGroup
+            (
+                set::width('1/2'),
+                set('id', 'linkProduct'),
+                $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
+                inputGroup
+                (
+                    div
+                    (
+                        setClass('grow'),
+                        select
+                        (
+                            set::name("products[$i]"),
+                            set::value($product->id),
+                            set::items($allProducts),
+                            set::last($product->id),
+                            set::required(true),
+                            on::change('productChange')
+                        )
+                    ),
+                )
+            ),
+            formGroup
+            (
+                set::width('1/3'),
+                $hasBranch ? null : setClass('hidden'),
+                inputGroup
+                (
+                    $lang->product->branchName['branch'],
+                    select
+                    (
+                        set::name("branch[$i][]"),
+                        set::items($branches),
+                        set::value(implode(',', $product->branches)),
+                        on::change('branchChange')
+                    )
+                ),
+            ),
+            formGroup
+            (
+                set::width('1/2'),
+                inputGroup
+                (
+                    set::id("plan{$i}"),
+                    $lang->project->associatePlan,
+                    select
+                    (
+                        set::name("plans[$product->id][]"),
+                        set::items($plans),
+                        set::value($product->plans)
+                    )
+                )
+            ),
+            formGroup
+            (
+                div
+                (
+                    setClass('pl-2 flex self-center'),
+                    btn
+                    (
+                        setClass('btn btn-link addLine'),
+                        on::click('addNewLine'),
+                        icon('plus')
+                    ),
+                    btn
+                    (
+                        setClass('btn btn-link removeLine'),
+                        icon('close'),
+                        on::click('removeLine'),
+                        $i == 0 ? set::disabled(true) : null
+                    ),
+                )
+            )
+        );
+
+        $i ++;
+    }
+}
+
 $currency = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
 
 formPanel
@@ -242,7 +333,7 @@ formPanel
             )
         )
     ),
-    $products ? null :
+    $products ? $productsBox :
     formRow
     (
         setClass('productBox'),

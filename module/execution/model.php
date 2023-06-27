@@ -2771,7 +2771,7 @@ class executionModel extends model
                 $data = new stdclass();
                 $data->project = $executionID;
                 $data->product = $productID;
-                $data->branch  = $branchID;
+                $data->branch  = (int)$branchID;
                 $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
                 $data->plan    = trim($data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
