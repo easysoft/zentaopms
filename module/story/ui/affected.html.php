@@ -11,7 +11,7 @@ function getAffectedTabs($story, $users)
     {
         $teams = '';
         foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member) . ' ';
-        $affectedTaskCount += count($story->tasks[$executionID]);
+        $affectedTaskCount += count(zget($story->tasks, $executionID, array()));
         $affectedProjects[] = h6
         (
             $execution->name,
@@ -20,7 +20,7 @@ function getAffectedTabs($story, $users)
         $affectedProjects[] = dtable
         (
             set::cols($config->story->affect->projects->fields),
-            set::data(array_values($story->tasks[$executionID]))
+            set::data(array_values(zget($story->tasks, $executionID, array())))
         );
     }
 

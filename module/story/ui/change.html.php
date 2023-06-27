@@ -145,7 +145,6 @@ modalHeader();
 formPanel
 (
     set::id('dataform'),
-    set::title(''),
     set::actions(false),
     $formTitle,
     $formItems,

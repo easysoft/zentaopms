@@ -878,7 +878,6 @@ class story extends control
             if($story->type == 'requirement') $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->confirmDelete);
             $confirmURL = $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType");
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->story->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
-            //return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
         }
         else
         {
@@ -998,7 +997,8 @@ class story extends control
         if($confirm == 'no')
         {
             $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
-            return print(js::confirm($confirmTips, $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType")));
+            $confirmURL  = $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$confirmTips}').then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
         else
         {
@@ -1028,11 +1028,11 @@ class story extends control
                     $method = 'view';
                     $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
                 }
-                return print(js::locate($this->createLink($module, $method, $params), 'parent'));
+                return $this->send(array('result' => 'success', 'load' => $this->createLink($module, $method, $params)));
             }
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            return print(js::locate($locateLink, 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $locateLink));
         }
     }
 
@@ -1058,7 +1058,7 @@ class story extends control
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType")));
         }
 
         /* Get story and product. */

@@ -3744,7 +3744,7 @@ class storyModel extends model
             if(str_contains('draft,changing', $story->status)) $mainMenu[] = commonModel::buildActionItem('story', 'submitReview', $params . "&storyType=$story->type", $story, array('icon' => 'confirm', 'text' => $this->lang->story->submitReview, 'data-toggle' => 'modal'));
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-            $mainMenu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'class' => 'ajaxRequest'));
+            $mainMenu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'class' => 'ajax-submit'));
             $mainMenu[] = commonModel::buildActionItem('story', 'review', $params . "&from={$this->app->tab}&storyType={$story->type}", $story, array('icon' => 'search', 'text' => $this->lang->story->review));
 
             $executionID = empty($execution) ? 0 : $execution->id;
