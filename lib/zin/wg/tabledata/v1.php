@@ -94,7 +94,7 @@ class tableData extends wg
 
         return h::caption
         (
-            setClass('font-normal article-h2 text-left mb-2'),
+            setClass('article-h1 text-left mb-2'),
             $title
         );
     }
