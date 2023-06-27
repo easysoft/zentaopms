@@ -90,9 +90,9 @@ $lang->testreport->hiddenCase      = "隐藏 %s 个用例";
 $lang->testreport->goalTip         = "该版本所属{$lang->execution->common}的描述信息";
 
 $lang->testreport->bugSummary = <<<EOD
-共发现<strong>%s</strong>个Bug <i class='icon icon-help text-warning' data-toggle='tooltip' id='foundBugTip'></i>，
-遗留<strong>%s</strong>个Bug <i class='icon icon-help text-warning' data-toggle='tooltip' id='legacyBugTip'></i>。
-重新激活<strong>%s</strong>个Bug <i class='icon icon-help text-warning' data-toggle='tooltip' id='activatedBugTip'></i>。
-用例执行产生<strong>%s</strong>个Bug <i class='icon icon-help text-warning' data-toggle='tooltip' id='fromCaseBugTip'></i>。
+共发现<strong>%s</strong>个Bug <i class='icon icon-help text-light' data-toggle='tooltip' id='foundBugTip'></i>，
+遗留<strong>%s</strong>个Bug <i class='icon icon-help text-light' data-toggle='tooltip' id='legacyBugTip'></i>。
+重新激活<strong>%s</strong>个Bug <i class='icon icon-help text-light' data-toggle='tooltip' id='activatedBugTip'></i>。
+用例执行产生<strong>%s</strong>个Bug <i class='icon icon-help text-light' data-toggle='tooltip' id='fromCaseBugTip'></i>。
 有效Bug率（方案为已解决或延期 / 状态为已解决或已关闭）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 发现Bug数）：<strong>%s</strong>
 EOD;

@@ -128,7 +128,7 @@ formPanel
                     'help',
                     set('data-toggle', 'tooltip'),
                     set('id', 'goalTip'),
-                    set('class', 'text-warning')
+                    set('class', 'text-light')
                 ),
                 $execution->desc
             )
