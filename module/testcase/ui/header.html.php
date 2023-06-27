@@ -128,7 +128,13 @@ featureBar
     $rawMethod != 'browseunits' ? li
     (
         set::class('nav-item'),
-        a($lang->testcase->onlyAutomated)
+        checkbox
+        (
+            setID('onlyAutoCase'),
+            set::checked($this->cookie->onlyAutoCase),
+            on::change('toggleOnlyAutoCase'),
+            $lang->testcase->onlyAutomated
+        )
     ) : null,
     $rawMethod != 'browseunits' ? li
     (
