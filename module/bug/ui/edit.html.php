@@ -16,19 +16,30 @@ jsVar('confirmChangeProduct', $lang->bug->notice->confirmChangeProduct);
 jsVar('moduleID',             $moduleID);
 jsVar('tab',                  $this->app->tab);
 jsVar('released',             $lang->build->released);
+jsVar('confirmUnlinkBuild',   sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 
-div($lang->bug->edit);
-
+entityLabel
+(
+    set::entityID($bug->id),
+    set::level(1),
+    set::text($lang->bug->edit),
+    set::reverse(true),
+    to::suffix($bug->title)
+);
 form
 (
-    on::change('#product',   'changeProduct'),
-    on::change('#branch',    'changeBranch'),
-    on::change('#project',   'changeProject'),
-    on::change('#execution', 'changeExecution'),
-    on::change('#module',    'changeModule'),
-    on::click('#refresh',    'clickRefresh'),
-    on::click('#allBuilds',  'loadAllBuilds'),
-    on::click('#allUsers',   'loadAllUsers'),
+    on::change('#product',       'changeProduct'),
+    on::change('#branch',        'changeBranch'),
+    on::change('#project',       'changeProject'),
+    on::change('#execution',     'changeExecution'),
+    on::change('#module',        'changeModule'),
+    on::change('#resolvedBuild', 'changeResolvedBuild'),
+    on::change('#resolution',    'changeResolution'),
+    on::click('#linkBug',        'linkBug'),
+    on::click('#refresh',        'clickRefresh'),
+    on::click('#allBuilds',      'loadAllBuilds'),
+    on::click('#allUsers',       'loadAllUsers'),
+    on::click('#refreshMailto',  'refreshContact'),
     detailBody
     (
         sectionList
@@ -63,7 +74,20 @@ form
                     set::control('file')
                 ),
             ),
+            section
+            (
+                set::title($lang->bug->legendComment),
+                formGroup
+                (
+                    editor
+                    (
+                        set::name('comment'),
+                        set::value()
+                    )
+                )
+            )
         ),
+        history(),
         detailSide
         (
             sectionList
@@ -75,6 +99,7 @@ form
                     (
                         formGroup
                         (
+                            set::class($product->shadow ? 'hidden' : ''),
                             set::label($lang->bug->product),
                             inputGroup
                             (
@@ -133,6 +158,7 @@ form
                     (
                         formGroup
                         (
+                            set::class($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                             set::label($lang->bug->plan),
                             inputGroup
                             (
@@ -222,6 +248,7 @@ form
                             (
                                 select
                                 (
+                                    set::disabled($bug->status == 'closed' ? true : false),
                                     set::name('assignedTo'),
                                     set::items($assignedToList),
                                     set::value($bug->assignedTo)
@@ -306,6 +333,35 @@ form
                             set::control(array('type' => 'select', 'items' => $users, 'multiple' => true)),
                             set::name('mailto[]'),
                             set::value($bug->mailto)
+                        ),
+                        span
+                        (
+                            set('id', 'contactBox'),
+                            set('class', 'input-group-addon'),
+                            $contactList ? select
+                            (
+                                set::class('width', 'w-20'),
+                                set::name('contactListMenu'),
+                                set::items($contactList),
+                                set::value()
+                            ) : a
+                            (
+                                set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
+                                set('title', $lang->user->contacts->manage),
+                                set('data-toggle', 'modal'),
+                                icon('cog'),
+                            )
+                        ),
+                        span
+                        (
+                            set('class', 'input-group-addon'),
+                            a
+                            (
+                                set('id', 'refreshMailto'),
+                                set('class', 'text-black'),
+                                set('href', 'javascript:void(0)'),
+                                icon('refresh')
+                            )
                         )
                     ),
                 ),
@@ -333,6 +389,7 @@ form
                     (
                         formGroup
                         (
+                            set::class($execution && !$execution->multiple ? 'hidden' : ''),
                             set::label($lang->bug->execution),
                             inputGroup
                             (
@@ -454,10 +511,9 @@ form
                                 set('id', 'resolvedBuildBox'),
                                 select
                                 (
-                                    set::name('resolvedBuild[]'),
+                                    set::name('resolvedBuild'),
                                     set::items($resolvedBuilds),
                                     set::value($bug->resolvedBuild),
-                                    set::multiple(true)
                                 ),
                                 span
                                 (
@@ -480,6 +536,18 @@ form
                             set::control(array('type' => 'select', 'items' => $lang->bug->resolutionList)),
                             set::name('resolution'),
                             set::value($bug->resolution)
+                        )
+                    ),
+                    formRow
+                    (
+                        set::id('duplicateBugBox'),
+                        set('style', $bug->resolution != 'duplicate' ? array('display' => 'none') : null),
+                        formGroup
+                        (
+                            set::label($lang->bug->duplicateBug),
+                            set::control(array('type' => 'select', 'items' => $productBugs)),
+                            set::name('duplicateBug'),
+                            set::value($bug->duplicateBug)
                         )
                     ),
                     formRow
@@ -522,7 +590,7 @@ form
                                     set::name('relatedBug[]'),
                                     set::items($bug->relatedBugTitles)
                                 ),
-                                span
+                                common::hasPriv('bug', 'linkBugs') ? span
                                 (
                                     set('class', 'input-group-addon'),
                                     a
@@ -531,7 +599,7 @@ form
                                         set('href', 'javascript:;'),
                                         $lang->bug->linkBugs
                                     )
-                                )
+                                ) : null
                             )
                         )
                     ),

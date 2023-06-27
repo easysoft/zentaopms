@@ -1230,6 +1230,8 @@ class bugZen extends bug
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->cases            = array('') + $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
         $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->actions          = $this->loadModel('action')->getList('bug', $bug->id);
+        $this->view->contactList      = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
     }
 
     /**

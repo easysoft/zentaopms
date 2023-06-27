@@ -323,7 +323,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
 
     if(config.currentMethod == 'create')
     {
-        if(buildBox == 'all' || buildBox == 'openedBuildBox')
+        if(buildBox == 'all' || buildBox == 'openedBuild')
         {
             const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch + '&index=0&type=' + type);
             $.get(link, function(data)
@@ -335,7 +335,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     }
     else
     {
-        if(buildBox == 'all' || buildBox == 'openedBuildBox')
+        if(buildBox == 'all' || buildBox == 'openedBuild')
         {
             const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + branch + '&index=0&type=' + type);
             $('#openedBuildBox').load(openedLink, function()
@@ -344,7 +344,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
             });
         }
 
-        if(buildBox == 'all' || buildBox == 'resolvedBuildBox')
+        if(buildBox == 'all' || buildBox == 'resolvedBuild')
         {
             const oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
             const resolvedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=' + type);
@@ -466,7 +466,7 @@ function loadTestTasks(productID, executionID)
 function loadAllBuilds(event)
 {
     const productID = $('#product').val();
-    const buildBox  = $(event.target).prev().attr('id');
+    const buildBox  = $(event.target).closest('.input-group').find('select').attr('id');
     loadProductBuilds(productID, 'all', buildBox);
 }
 
