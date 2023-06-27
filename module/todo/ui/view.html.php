@@ -24,272 +24,260 @@ $fnGenerateTitleSuffix = function() use($todo)
     if($todo->type == 'story') return btn(set::url(createLink('story', 'view', "id={$todo->objectID}")), set::text('  STORY#' . $todo->objectID), setClass('ghost'));
 };
 
-/* Generate action buttons and related menus within float toolbar. */
-$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $executions, $projects, $projectProducts)
+/* Render modal for creating story. */
+$fnRenderCreateStoryModal = function() use ($lang)
 {
+    modal
+    (
+        setID('productModal'),
+        set::modalProps(array('title' => $lang->product->select)),
+        empty($products) ? div
+        (
+            setClass('text-center', 'pb-8'),
+            span($lang->product->noProduct),
+            btn
+            (
+                $lang->product->create,
+                set
+                (
+                    array(
+                        'url'   => createLink('product', 'create'),
+                        'id'    => 'createProduct',
+                        'class' => 'secondary-pale',
+                        'icon'  => 'plus'
+                    )
+                )
+            )
+        ) : form
+        (
+            formGroup
+            (
+                inputGroup
+                (
+                    select
+                    (
+                        on::change('getProgramByProduct(this)'),
+                        set
+                        (
+                            array(
+                                'id'       => 'product',
+                                'class'    => 'form-control',
+                                'name'     => 'product',
+                                'items'    => $products,
+                                'required' => true
+                            )
+                        )
+                    ),
+                    input
+                    (
+                        set::type('hidden'),
+                        set::name('productProgram'),
+                        set::value(0)
+                    ),
+                    btn
+                    (
+                        on::click('toStory'),
+                        set
+                        (
+                            array(
+                                'id'    => 'toStoryButton',
+                                'class' => 'primary',
+                                'text'  => $lang->todo->reasonList['story']
+                            )
+                        )
+                    )
+                )
+            ),
+            set::actions(array()),
+            setClass('pb-6')
+        ),
+    );
+};
+
+/* Render modal for creating task. */
+$fnRenderCreateTaskModal = function() use ($lang, $projects, $executions)
+{
+    modal
+    (
+        setID('executionModal'),
+        set::modalProps(array('title' => $lang->execution->selectExecution)),
+        form
+        (
+            setClass('text-center', 'pb-4'),
+            set::actions(array()),
+            formGroup
+            (
+                set::label($lang->todo->project),
+                select
+                (
+                    on::change('getExecutionByProject(this)'),
+                    set
+                    (
+                        array(
+                            'id'       => 'project',
+                            'name'     => 'project',
+                            'items'    => $projects,
+                            'required' => true
+                        )
+                    )
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->todo->execution),
+                select
+                (
+                    set
+                    (
+                        array(
+                            'id'       => 'execution',
+                            'name'     => 'execution',
+                            'items'    => $executions,
+                            'required' => true
+                        )
+                    )
+                )
+            ),
+            btn
+            (
+                $lang->todo->reasonList['task'],
+                on::click('toTask'),
+                set
+                (
+                    array(
+                        'id'    => 'toTaskButton',
+                        'class' => array('primary', 'text-center')
+                    )
+                )
+            )
+        )
+    );
+};
+
+/* Render modal for creating bug. */
+$fnRenderCreateBugModal = function() use ($lang, $projects, $projectProducts)
+{
+    modal
+    (
+        setID('projectProductModal'),
+        set::modalProps(array('title' => $lang->product->select)),
+        form
+        (
+            setClass('text-center', 'pb-4'),
+            set::actions(array()),
+            formGroup
+            (
+                set::label($lang->todo->project),
+                select
+                (
+                    on::change('getProductByProject(this)'),
+                    set
+                    (
+                        array(
+                            'id'       => 'bugProject',
+                            'name'     => 'bugProject',
+                            'items'    => $projects,
+                            'required' => true
+                        )
+                    )
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->todo->product),
+                select
+                (
+                    set
+                    (
+                        array(
+                            'id'       => 'bugProduct',
+                            'name'     => 'bugProduct',
+                            'items'    => $projectProducts,
+                            'required' => true
+                        )
+                    )
+                )
+            ),
+            btn
+            (
+                $lang->todo->reasonList['bug'],
+                on::click('toBug'),
+                set
+                (
+                    array(
+                        'id'    => 'toBugButton',
+                        'class' => array('primary', 'text-center'),
+                        // 'data-backdrop' => false,
+                        'data-toggle' => 'modal',
+                        // 'data-type' => 'html',
+                    )
+                )
+            )
+        )
+    );
+};
+
+/* Generate action buttons and related menus within float toolbar. */
+$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects,$fnRenderCreateStoryModal, $fnRenderCreateTaskModal, $fnRenderCreateBugModal)
+{
+    /* Deleted item without action buttons. */
+    if($todo->deleted) return array();
+
+    /* Verify privilege of current account. */
+    if(!$this->app->user->admin && $this->app->user->account != $todo->account && $this->app->user->account != $todo->assignedTo) return array();
+
+    /* Prepare variables for verifying. */
+    $status      = $todo->status;
+    $canStart    = hasPriv('todo', 'start');
+    $canActivate = hasPriv('todo', 'activate');
+    $canClose    = hasPriv('todo', 'close');
+    $canEdit     = hasPriv('todo', 'edit');
+    $canDelete   = hasPriv('todo', 'delete');
+
     $actionList = array();
 
-    if($todo->deleted) return $actionList;
+    /* Common action buttons. */
+    $canStart    && $status == 'wait'                          ? $actionList[] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'text' => $lang->todo->abbr->start) : null;
+    $canActivate && ($status == 'done' || $status == 'closed') ? $actionList[] = array('icon' => 'magic', 'url' => createLink('todo', 'activate', "todoID={$todo->id}"), 'text' => $lang->activate) : null;
+    $canClose    && $status == 'done'                          ? $actionList[] = array('icon' => 'off',   'url' => createLink('todo', 'close',    "todoID={$todo->id}"), 'text' => $lang->close) : null;
+    $canEdit                                                   ? $actionList[] = array('icon' => 'edit',  'url' => createLink('todo', 'edit',     "todoID={$todo->id}"), 'text' => $lang->edit) : null;
+    $canDelete                                                 ? $actionList[] = array('icon' => 'trash', 'url' => createLink('todo', 'delete',   "todoID={$todo->id}"), 'text' => $lang->delete) : null;
 
-    if($todo->status == 'wait' && common::hasPriv('todo', 'start'))
-    {
-        $actionList[] = array
-        (
-            'icon' => 'play',
-            'url'  => createLink('todo', 'start', "todoID={$todo->id}"),
-            'text' => $lang->todo->abbr->start
-        );
-    }
-    if(($todo->status == 'done' || $todo->status == 'closed') && common::hasPriv('todo', 'activate'))
-    {
-        $actionList[] = array
-        (
-            'icon' => 'magic',
-            'url'  => createLink('todo', 'activate', "todoID={$todo->id}"),
-            'text' => $lang->activate
-        );
-    }
-    if($todo->status == 'done' && common::hasPriv('todo', 'close'))
-    {
-        $actionList[] = array
-        (
-            'icon' => 'off',
-            'url'  => createLink('todo', 'close', "todoID={$todo->id}"),
-            'text' => $lang->close
-        );
-    }
-    if(common::hasPriv('todo', 'edit'))
-    {
-        $actionList[] = array
-        (
-            'icon' => 'edit',
-            'url'  => createLink('todo', 'edit', "todoID={$todo->id}"),
-            'text' => $lang->edit
-        );
-    }
-    if(common::hasPriv('todo', 'delete'))
-    {
-        $actionList[] = array
-        (
-            'icon' => 'trash',
-            'url'  => createLink('todo', 'delete', "todoID={$todo->id}"),
-            'text' => $lang->delete
-        );
-    }
-    if($todo->status != 'done' && $todo->status != 'closed')
-    {
-        $actionList[] = array
-        (
-            'icon' => 'checked',
-            'url'  => createLink('todo', 'finish', "todoID={$todo->id}"),
-            'text' => $lang->todo->abbr->finish
-        );
-        $createStoryPriv = common::hasPriv('story', 'create');
-        $createTaskPriv  = common::hasPriv('task', 'create');
-        $createBugPriv   = common::hasPriv('bug', 'create');
-        $printBtn        = $config->vision == 'lite' && empty($projects);
-        if($printBtn && ($createStoryPriv || $createTaskPriv || $createBugPriv))
-        {
-            $actionList[] = array
-            (
-                'url'            => '#navActions',
-                'text'           => $lang->more,
-                'data-toggle'    => 'dropdown',
-                'data-placement' => 'top-end',
-            );
-        }
-        $storyTarget = $createStoryPriv && $config->vision == 'lite' ? '#projectModal' : '#productModal';
-        menu
-        (
-            set::id('navActions'),
-            setClass('menu dropdown-menu'),
-            set::items(array
-            (
-                array('text' => $lang->todo->reasonList['story'],  'id' => 'toStoryLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => $storyTarget, 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center'),
-                array('text' => $lang->todo->reasonList['task'],  'id' => 'toTaskLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#executionModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center'),
-                array('text' => $lang->todo->reasonList['bug'],  'id' => 'toBugLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#projectProductModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center'),
-            ))
-        );
-        modal
-        (
-            setID('productModal'),
-            set::modalProps(array('title' => $lang->product->select)),
-            empty($products) ? div
-            (
-                setClass('text-center', 'pb-8'),
-                span($lang->product->noProduct),
-                btn
-                (
-                    $lang->product->create,
-                    set
-                    (
-                        array(
-                            'url'   => createLink('product', 'create'),
-                            'id'    => 'createProduct',
-                            'class' => 'secondary-pale',
-                            'icon'  => 'plus'
-                        )
-                    )
-                )
-            ) : form
-            (
-                formGroup
-                (
-                    inputGroup
-                    (
-                        select
-                        (
-                            on::change('getProgramByProduct(this)'),
-                            set
-                            (
-                                array(
-                                    'id'       => 'product',
-                                    'class'    => 'form-control',
-                                    'name'     => 'product',
-                                    'items'    => $products,
-                                    'required' => true
-                                )
-                            )
-                        ),
-                        input
-                        (
-                            set::type('hidden'),
-                            set::name('productProgram'),
-                            set::value(0)
-                        ),
-                        btn
-                        (
-                            on::click('toStory'),
-                            set
-                            (
-                                array(
-                                    'id'    => 'toStoryButton',
-                                    'class' => 'primary',
-                                    'text'  => $lang->todo->reasonList['story']
-                                )
-                            )
-                        )
-                    )
-                ),
-                set::actions(array()),
-                setClass('pb-6')
-            ),
-        );
-        modal
-        (
-            setID('executionModal'),
-            set::modalProps(array('title' => $lang->execution->selectExecution)),
-            form
-            (
-                setClass('text-center', 'pb-4'),
-                set::actions(array()),
-                formGroup
-                (
-                    set::label($lang->todo->project),
-                    select
-                    (
-                        on::change('getExecutionByProject(this)'),
-                        set
-                        (
-                            array(
-                                'id'       => 'project',
-                                'name'     => 'project',
-                                'items'    => $projects,
-                                'required' => true
-                            )
-                        )
-                    )
-                ),
-                formGroup
-                (
-                    set::label($lang->todo->execution),
-                    select
-                    (
-                        set
-                        (
-                            array(
-                                'id'       => 'execution',
-                                'name'     => 'execution',
-                                'items'    => $executions,
-                                'required' => true
-                            )
-                        )
-                    )
-                ),
-                btn
-                (
-                    $lang->todo->reasonList['task'],
-                    on::click('toTask'),
-                    set
-                    (
-                        array(
-                            'id'    => 'toTaskButton',
-                            'class' => array('primary', 'text-center')
-                        )
-                    )
-                )
-            )
-        );
+    /* The status is 'done' or 'closed' without more action buttons. */
+    if($status == 'done' || $status == 'closed') return $actionList;
 
-        modal
-        (
-            setID('projectProductModal'),
-            set::modalProps(array('title' => $lang->product->select)),
-            form
-            (
-                setClass('text-center', 'pb-4'),
-                set::actions(array()),
-                formGroup
-                (
-                    set::label($lang->todo->project),
-                    select
-                    (
-                        on::change('getProductByProject(this)'),
-                        set
-                        (
-                            array(
-                                'id'       => 'bugProject',
-                                'name'     => 'bugProject',
-                                'items'    => $projects,
-                                'required' => true
-                            )
-                        )
-                    )
-                ),
-                formGroup
-                (
-                    set::label($lang->todo->product),
-                    select
-                    (
-                        set
-                        (
-                            array(
-                                'id'       => 'bugProduct',
-                                'name'     => 'bugProduct',
-                                'items'    => $projectProducts,
-                                'required' => true
-                            )
-                        )
-                    )
-                ),
-                btn
-                (
-                    $lang->todo->reasonList['bug'],
-                    on::click('toBug'),
-                    set
-                    (
-                        array(
-                            'id'    => 'toBugButton',
-                            'class' => array('primary', 'text-center'),
-                            // 'data-backdrop' => false,
-                            'data-toggle' => 'modal',
-                            // 'data-type' => 'html',
-                        )
-                    )
-                )
-            )
-        );
+    $actionList[] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'text' => $lang->todo->abbr->finish);
+
+    $canCreateStory = hasPriv('story', 'create');
+    $canCreateTask  = hasPriv('task',  'create');
+    $canCreateBug   = hasPriv('bug',   'create');
+    $printBtn       = $config->vision == 'lite' && empty($projects);
+
+    /* Render more button. */
+    if($printBtn && ($canCreateStory || $canCreateTask || $canCreateBug))
+    {
+        $actionList[] = array('url' => '#navActions', 'text' => $lang->more, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
     }
+    $actionList[] = array('url' => '#navActions', 'text' => $lang->more, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
+
+    /* Popup menu of more button. */
+    $storyTarget = $canCreateStory && $config->vision == 'lite' ? '#projectModal' : '#productModal';
+    menu
+    (
+        set::id('navActions'),
+        setClass('menu dropdown-menu'),
+        set::items(array
+        (
+            $canCreateStory ? array('text' => $lang->todo->reasonList['story'], 'id' => 'toStoryLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => $storyTarget,           'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center') : null,
+            $canCreateTask  ? array('text' => $lang->todo->reasonList['task'],  'id' => 'toTaskLink',  'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#executionModal',      'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center') : null,
+            $canCreateBug   ? array('text' => $lang->todo->reasonList['bug'],   'id' => 'toBugLink',   'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#projectProductModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center') : null,
+        ))
+    );
+
+    /* Render popup modal for each more buttons. */
+    $canCreateStory && $fnRenderCreateStoryModal();
+    $canCreateTask  && $fnRenderCreateTaskModal();
+    $canCreateBug   && $fnRenderCreateBugModal();
 
     return $actionList;
 };
