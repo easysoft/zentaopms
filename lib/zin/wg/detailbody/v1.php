@@ -49,16 +49,24 @@ class detailBody extends wg
             setStyle('height', 'calc(100vh - 120px)'),
             div
             (
-                setClass('flex flex-auto of-y-auto'),
+                setClass('flex-auto of-y-auto'),
                 div
                 (
-                    setClass('col grow border-r-4'),
-                    setStyle('border-color', 'var(--zt-page-bg)'),
-                    $main,
-                    $bottom,
+                    setClass('flex'),
+                    div
+                    (
+                        setClass('col grow'),
+                        $main,
+                        $bottom,
+                    ),
+                    div
+                    (
+                        setClass('w-1'),
+                        setStyle('background', 'var(--zt-page-bg)'),
+                    ),
+                    $side,
                 ),
-                $side,
-            ),
+            )
         );
     }
 }
