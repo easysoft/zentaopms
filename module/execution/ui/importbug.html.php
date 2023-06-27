@@ -68,7 +68,7 @@ div
         setClass('select-pri w-12'),
         set::name('pri[]'),
         set::items($lang->task->priList),
-        set::value(3)
+        set::required(true),
     )
 );
 

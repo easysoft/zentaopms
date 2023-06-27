@@ -42,12 +42,25 @@ window.handleImportBug = function(result, data)
 const today = zui.formatDate(new Date(), 'yyyy-MM-dd');
 window.onRenderRow = function({row})
 {
-    $(`.dtable-row[data-id="${row.id}"]`).find('.select-pri').val(row.data.pri);
-    $(`.dtable-row[data-id="${row.id}"]`).find('.select-user').val(row.data.assignedTo);
-
-    if(row.data.deadline > executionBegin && row.data.deadline > today)
+    const $priSelect = $(`.dtable-row[data-id="${row.id}"]`).find('select[name^=pri]');
+    if(!$priSelect.hasClass('inited'))
     {
-        $(`.dtable-row[data-id="${row.id}"]`).find('input[name^=deadline]').val(row.data.deadline);
+        $priSelect.val(row.data.pri);
+        $priSelect.addClass('inited');
+    }
+
+    const $userSelect = $(`.dtable-row[data-id="${row.id}"]`).find('.select-user');
+    if(!$userSelect.hasClass('inited'))
+    {
+        $userSelect.val(row.data.assignedTo);
+        $userSelect.addClass('inited');
+    }
+
+    const $dateInput = $(`.dtable-row[data-id="${row.id}"]`).find('input[name^=deadline]');
+    if(!$dateInput.hasClass('inited') && row.data.deadline > executionBegin && row.data.deadline > today)
+    {
+        $dateInput.val(row.data.deadline);
+        $dateInput.addClass('inited');
     }
 }
 
