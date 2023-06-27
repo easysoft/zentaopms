@@ -281,7 +281,7 @@ class branch extends control
         $name = $multiple == 'multiple' ? 'branch[]' : 'branch';
 
         if($isTwins == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
-        return print(html::select($name, $branchTagOption, $oldBranch, "class='form-control' $multiple onchange='loadBranch(this)' data-last='{$oldBranch}'"));
+        return print(html::select($name, $branchTagOption, $oldBranch, "class='form-control' $multiple' data-last='{$oldBranch}'"));
     }
 
     /**

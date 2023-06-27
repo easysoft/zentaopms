@@ -9,6 +9,7 @@ jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('linkedProjectsTip', $linkedProjectsTip);
 jsVar('multiBranchProducts', $multiBranchProducts);
+jsVar('errorSameProducts', $lang->project->errorSameProducts);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)

@@ -513,7 +513,7 @@ window.loadBranches = function(product)
         {
             $formRow.find("select[name^='branch']").replaceWith(data);
             $formRow.find('.form-group').eq(1).removeClass('hidden');
-            $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index);
+            $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).on('change', branchChange);
         }
 
         let branch = $('#branch' + index);
