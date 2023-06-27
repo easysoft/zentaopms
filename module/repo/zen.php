@@ -355,6 +355,12 @@ class repoZen extends repo
             $infos = unserialize(file_get_contents($cacheFile));
         }
 
+        foreach($infos as $info)
+        {
+            $info->originalComment = $info->comment;
+            $info->comment         = $this->repo->replaceCommentLink($info->comment);
+        }
+
         return $infos;
     }
 }

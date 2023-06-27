@@ -222,7 +222,6 @@ $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAll
 sidebar
 (
     set::side('right'),
-    cell(set::class('sidebar-comments')),
     dtable
     (
         set::id('repo-comments-table'),

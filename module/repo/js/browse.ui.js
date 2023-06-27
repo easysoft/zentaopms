@@ -11,7 +11,7 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name === 'comment')
+    if(col.name === 'originalComment')
     {
         result[0] = {html:'<span class="repo-comment">' + row.data.comment + '</span>', style:{flexDirection:"column"}};
 
@@ -39,7 +39,7 @@ window.renderCommentCell = function(result, {col, row})
 
     if(col.name === 'originalComment')
     {
-        result[0] = {html:'<span class="repo-comment">' + row.data.originalComment + '</span>', style:{flexDirection:"column"}};
+        result[0] = {html:'<span class="repo-comment">' + row.data.comment + '</span>', style:{flexDirection:"column"}};
 
         return result;
     }
@@ -211,6 +211,8 @@ $('.copy-btn').on('click', function()
     var copyText = $(this).parent().parent().find('input');
     copyText[0].select();
     document.execCommand("Copy");
+    copyText[0].selectionStart = copyText[0].selectionEnd;
+    copyText[0].blur();
 
     $(this).tooltip('show');
     var that = this;

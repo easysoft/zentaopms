@@ -92,7 +92,7 @@ $config->repo->repoDtable->fieldList['committer']['sortType'] = false;
 $config->repo->repoDtable->fieldList['committer']['type']     = 'user';
 $config->repo->repoDtable->fieldList['committer']['hint']     = true;
 
-$config->repo->repoDtable->fieldList['comment']['name']     = 'comment';
+$config->repo->repoDtable->fieldList['comment']['name']     = 'originalComment';
 $config->repo->repoDtable->fieldList['comment']['title']    = $lang->repo->comment;
 $config->repo->repoDtable->fieldList['comment']['sortType'] = false;
 $config->repo->repoDtable->fieldList['comment']['type']     = 'text';
