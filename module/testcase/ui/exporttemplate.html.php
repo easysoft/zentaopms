@@ -25,7 +25,7 @@ form
     ),
     formGroup
     (
-        set::label($lang->testcase->templateType),
+        set::label($lang->testcase->encoding),
         set::name('encode'),
         set::value('utf-8'),
         set::control(array('type' => 'select', 'items' => $config->charsets[$this->cookie->lang])),

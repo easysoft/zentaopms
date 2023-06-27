@@ -139,6 +139,7 @@ $lang->testcase->import                  = "导入";
 $lang->testcase->importAction            = "导入用例";
 $lang->testcase->importCaseAction        = "导入用例";
 $lang->testcase->fileImport              = "导入CSV";
+$lang->testcase->importFile              = "导入文件";
 $lang->testcase->importFromLib           = "从用例库中导入";
 $lang->testcase->showImport              = "显示导入内容";
 $lang->testcase->exportTemplate          = "导出模板";
@@ -160,8 +161,8 @@ $lang->testcase->autoScript              = '自动化脚本';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num          = '用例条数';
-$lang->testcase->templateType = '编码';
+$lang->testcase->num      = '用例条数';
+$lang->testcase->encoding = '编码';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';

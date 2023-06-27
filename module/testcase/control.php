@@ -2022,7 +2022,7 @@ class testcase extends control
 
             $this->session->set('fileImport', $fileName);
 
-            return print(js::locate(inlink('showImport', "productID=$productID&branch=$branch"), 'parent.parent'));
+            return $this->send(array('load' => inlink('showImport', "productID=$productID&branch=$branch"), 'closeModal' => true));
         }
 
         $this->display();
