@@ -1443,6 +1443,10 @@ function floatPreNextBtn(): floatPreNextBtn
  * ?string           accept
  * ?object[]         defaultFileList
  * false|string|null limitSize=false
+ * ?bool             draggable
+ * ?string           duplicatedHint
+ * ?string           exceededSizeHint
+ * ?string           exceededCountHint
  */
 function upload(): upload
 {
