@@ -44,7 +44,7 @@ if(!empty($products))
             setClass('productBox'),
             formGroup
             (
-                set::width('1/2'),
+                set::width($hasBranch ? '1/4' : '1/2'),
                 set('id', 'linkProduct'),
                 $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                 inputGroup
@@ -66,7 +66,8 @@ if(!empty($products))
             ),
             formGroup
             (
-                set::width('1/3'),
+                set::width('1/4'),
+                setClass('ml-px'),
                 $hasBranch ? null : setClass('hidden'),
                 inputGroup
                 (
@@ -97,6 +98,7 @@ if(!empty($products))
             ),
             formGroup
             (
+                set::width('1/6'),
                 div
                 (
                     setClass('pl-2 flex self-center'),
@@ -109,7 +111,7 @@ if(!empty($products))
                     btn
                     (
                         setClass('btn btn-link removeLine'),
-                        icon('close'),
+                        icon('trash'),
                         on::click('removeLine'),
                         $i == 0 ? set::disabled(true) : null
                     ),
@@ -369,7 +371,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             setClass('hidden'),
             inputGroup
             (
@@ -398,6 +400,7 @@ formPanel
         ),
         formGroup
         (
+            set::width('1/6'),
             div
             (
                 setClass('pl-2 flex self-center'),
@@ -410,7 +413,7 @@ formPanel
                 btn
                 (
                     setClass('btn btn-link removeLine'),
-                    icon('close'),
+                    icon('trash'),
                     on::click('removeLine'),
                     $i == 0 ? set::disabled(true) : null
                 ),

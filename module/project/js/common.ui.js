@@ -440,6 +440,7 @@ window.addNewLine = function(e)
     newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').val('');
     newLine.find("select[name^='branch']").val('');
     newLine.find("select[name^='plans']").empty();
+    newLine.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
     newLine.find('.form-group').eq(1).addClass('hidden');
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
 
@@ -509,6 +510,7 @@ window.loadBranches = function(product)
     if(!multiBranchProducts[$(product).val()])
     {
         $formRow.find('.form-group').last().find('select').val('').trigger('chosen:updated');
+        $formRow.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
         $formRow.find('.form-group').eq(1).addClass('hidden');
     }
 
@@ -517,6 +519,7 @@ window.loadBranches = function(product)
         if(data)
         {
             $formRow.find("select[name^='branch']").replaceWith(data);
+            $formRow.find('.form-group').eq(0).addClass('w-1/4').removeClass('w-1/2');
             $formRow.find('.form-group').eq(1).removeClass('hidden');
             $formRow.find("select[name^='branch']").attr('multiple', '').attr('name', 'branch[' + index + '][]').attr('id', 'branch' + index).on('change', branchChange);
         }
