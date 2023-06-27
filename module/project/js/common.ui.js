@@ -54,6 +54,7 @@ window.setParentProgram = function()
     const programID = $('#parent').val();
     const link = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
     loadPage(link, '#aclList');
+    $('#whitelist').closest('.form-row').removeClass('hidden')
 }
 
 /**
@@ -235,11 +236,13 @@ window.confirmDelete = function(projectID, projectName)
  * @access public
  * @return void
  */
-window.setWhite = function()
+function setWhite()
 {
     const acl = $("input[name='acl']:checked").val();
     acl != 'open' ? $('#whitelist').closest('.form-row').removeClass('hidden') : $('#whitelist').closest('.form-row').addClass('hidden');
 }
+
+$(document).on('change', "input[name='acl']", setWhite);
 
 /**
  * If future is checked, disable budget input.

@@ -461,7 +461,6 @@ formPanel
             set::control('radioList'),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
             set::value($copyProjectID ? $copyProject->acl : 'private'),
-            on::change('setWhite(this)')
         )
     ),
     /* TODO add events */
