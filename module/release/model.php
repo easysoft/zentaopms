@@ -812,10 +812,11 @@ class releaseModel extends model
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
 
             $menu[] = array(
-                'text'  => $this->lang->release->changeStatusList[$changedStatus],
-                'icon'  => $release->status == 'normal' ? 'pause' : 'play',
-                'url'   => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "releaseID={$release->id}&status={$changedStatus}"),
-                'class' => 'btn ghost ajax-submit',
+                'text'         => $this->lang->release->changeStatusList[$changedStatus],
+                'icon'         => $release->status == 'normal' ? 'pause' : 'play',
+                'url'          => helper::createLink($this->app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', "releaseID={$release->id}&status={$changedStatus}"),
+                'class'        => 'btn ghost ajax-submit',
+                'data-confirm' => $release->status == 'normal' ? $this->lang->release->confirmTerminate : $this->lang->release->confirmActivate
             );
         }
 
