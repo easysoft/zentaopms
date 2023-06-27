@@ -60,7 +60,7 @@ class message extends control
                 return $this->send($response);
             }
 
-            $response['locate'] = $this->createLink('message', 'browser');
+            $response['load'] = true;
             return $this->send($response);
         }
 
