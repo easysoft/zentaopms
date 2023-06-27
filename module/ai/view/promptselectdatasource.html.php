@@ -375,7 +375,7 @@ customElements.define('selected-data-sorter', SelectedDataSorter, {extends: 'div
 <div id='mainMenu' class='clearfix' style='display: flex; flex-direction: row;'>
   <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> $lang->goback", '', 'btn btn-info');?>
   <?php include 'promptdesignprogressbar.html.php';?>
-  <?php echo html::submitButton("<i class='icon icon-save icon-sm'></i> $lang->save", '', 'btn btn-primary');?>
+  <?php echo html::commonButton("<i class='icon icon-save icon-sm'></i> $lang->save", '', 'btn btn-primary');?>
 </div>
 <div id='mainContent' class='main-content' style='height: calc(100vh - 120px);'>
   <form class='load-indicator main-form form-ajax' method='post' style='height: 100%;'>
@@ -451,6 +451,12 @@ $(function()
   $('form').submit(function()
   {
     $('#data-property-selector input[type="checkbox"]').each(function() {$(this).attr('disabled', 'disabled');});
+  });
+
+  /* Toggle disabled submit button. */
+  window.dataSourceStore.subscribe(function(value)
+  {
+    $('#submit').attr('disabled', !value.length);
   });
 });
 </script>
