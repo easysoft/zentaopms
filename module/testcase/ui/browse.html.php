@@ -68,7 +68,7 @@ if($canBatchCaseTypeChange)
 
 if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange)
 {
-    zui::menu
+    menu
     (
         set::id('navActions'),
         set::class('menu dropdown-menu'),
