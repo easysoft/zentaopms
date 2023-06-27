@@ -1598,14 +1598,6 @@ class story extends control
         $allChanges = $this->story->batchAssignTo($storyIdList, $assignedTo);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-
-
-        if($ignoreStories)
-        {
-            $ignoreStories = trim($ignoreStories, ',');
-            echo js::alert(sprintf($this->lang->story->ignoreClosedStory, $ignoreStories));
-        }
-
         $ignoreStories = array();
         $assignedTwins = array();
         foreach($allChanges as $storyID => $changes)

@@ -536,7 +536,7 @@ detailBody
                             array_values(array_map(function($storyID, $storyTitle) use($storyProducts, $story)
                             {
                                 global $app;
-                                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},"));
+                                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$storyID]},"));
                                 return h::li
                                 (
                                     set::title($storyTitle),
