@@ -21,25 +21,6 @@ jsVar('storyType', $story->type);
 jsVar('rawModule', $this->app->rawModule);
 jsVar('page', $this->app->rawMethod);
 
-$formTitle = div
-(
-    span
-    (
-        setClass('form-label'),
-        $lang->story->changed
-    ),
-    div
-    (
-        setClass('form-group form-title'),
-        $story->title,
-        span
-        (
-            setClass('label text-gray size-sm'),
-            $story->id
-        )
-    ),
-);
-
 $formItems = array();
 $formItems['reviewer'] = formGroup
 (
@@ -157,9 +138,10 @@ $formActions = formRow
     setClass('form-actions form-group no-label'),
     btn(setClass('primary'), set::id('saveButton'), $lang->save),
     btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->doNotSubmit),
-    btn(set::url('javascript:history.go(-1)'), $lang->goback),
+    backBtn($lang->goback),
 );
 
+modalHeader();
 formPanel
 (
     set::id('dataform'),
@@ -169,6 +151,7 @@ formPanel
     $formItems,
     $formActions,
     h::hr(),
-    history()
+    history(),
 );
+
 render();

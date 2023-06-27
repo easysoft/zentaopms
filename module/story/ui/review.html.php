@@ -17,25 +17,6 @@ jsVar('rawModule', $this->app->rawModule);
 jsVar('isMultiple', count($reviewers) > 1);
 jsVar('isLastOne', $isLastOne);
 
-$formTitle = div
-(
-    span
-    (
-        setClass('form-label'),
-        $lang->story->reviewAction
-    ),
-    div
-    (
-        setClass('form-group form-title'),
-        $story->title,
-        span
-        (
-            setClass('label text-gray size-sm'),
-            $story->id
-        )
-    ),
-);
-
 $formItems = array();
 foreach($fields as $field => $attr)
 {
@@ -69,15 +50,11 @@ $formItems['estimate']->add(set::id('estimateBox'))->add(set::hidden(true));
 $formItems['childStories']->add(set::id('childStoriesBox'))->add(set::hidden(true));
 $formItems['status']->add(set::hidden(true));
 
+modalHeader();
 panel
 (
     setClass('panel-form mx-auto'),
-    set::title(''),
-    form
-    (
-        $formTitle,
-        $formItems,
-    ),
+    form($formItems),
     h::hr(set::class('mt-6 mb-6')),
     history()
 );

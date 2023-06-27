@@ -1485,7 +1485,7 @@ class storyTao extends storyModel
         $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
-        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'data-toggle' => $canRecall ? 'modal' : null, 'url' => $canRecall ? $link : null, 'hint' => $title, 'disabled' => !$canRecall);
+        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'data-toggle' => $canRecall ? 'modal' : null, 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
 
         /* Change the render order. */
         if(!empty($actSubmitreview))
@@ -1504,7 +1504,7 @@ class storyTao extends storyModel
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall));
         }
 
-        $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose);
+        $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal', 'disabled' => !$canClose);
 
         /* Render divider line. */
         $actions[] = array('name' => 'divider', 'class'=>'nav-divider', 'type' => 'dropdown', 'icon' => '', 'caret' => false);

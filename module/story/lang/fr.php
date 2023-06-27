@@ -24,6 +24,7 @@ $lang->story->changed            = 'Changée';
 $lang->story->assignTo           = 'Affecter';
 $lang->story->review             = 'Valider';
 $lang->story->submitReview       = "Submit Review";
+$lang->story->submitreview       = $lang->story->submitReview;
 $lang->story->recall             = 'Revoke';
 $lang->story->recallChange       = 'Undo Changes';
 $lang->story->recallAction       = 'Undo';

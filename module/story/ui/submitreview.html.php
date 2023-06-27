@@ -26,23 +26,9 @@ if(!$this->story->checkForceReview())
     );
 }
 
+modalHeader();
 formPanel
 (
-    set::title($lang->story->submitReview),
-    set::actions(array('submit')),
-    set::headingClass('status-heading'),
-    set::titleClass('form-label .form-grid'),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::entityID($story->id),
-            set::text($story->title),
-            set::level(1),
-            set::reverse(true),
-        )
-    ),
     formGroup
     (
         set::label($lang->story->reviewedBy),
@@ -63,7 +49,6 @@ formPanel
     ),
 );
 
-h::hr(set::class('mt-6'));
 history();
 
 render();
