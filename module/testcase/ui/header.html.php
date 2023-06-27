@@ -104,6 +104,15 @@ featureBar
             set::items($caseTypeItems)
         )
     ) : null,
+    $canDisplaySuite && $rawMethod != 'browseunits' ? dropdown
+    (
+        btn
+        (
+            setClass('ghost'),
+            $currentSuiteName
+        ),
+        set::items($suiteItems)
+    ) : null,
     $canBrowseZeroCase && $rawMethod != 'browseunits' ? li
     (
         set::class('nav-item'),
@@ -115,15 +124,6 @@ featureBar
             set('class', $rawMethod == 'zerocase' ? 'active' : ''),
             $lang->testcase->zeroCase
         )
-    ) : null,
-    $canDisplaySuite && $rawMethod != 'browseunits' ? dropdown
-    (
-        btn
-        (
-            setClass('ghost'),
-            $currentSuiteName
-        ),
-        set::items($suiteItems)
     ) : null,
     li
     (
