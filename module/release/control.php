@@ -366,9 +366,11 @@ class release extends control
     {
         if(!empty($_POST))
         {
-            $type = $this->post->type;
-            $html = '';
+            $type     = $this->post->type;
+            $fileName = $this->post->fileName;
+            if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));
 
+            $html = '';
             if($type == 'story' or $type == 'all')
             {
                 $html .= "<h3>{$this->lang->release->stories}</h3>";
@@ -456,8 +458,8 @@ class release extends control
                 $html .= '</table>';
             }
 
-            $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
-            return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
+            $html = "<html><head><meta charset='utf-8'><title>{$fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
+            $this->loadModel('file')->sendDownHeader($fileName, 'html', $html);
         }
 
         $this->display();
