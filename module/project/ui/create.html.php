@@ -123,8 +123,8 @@ if(!empty($products))
     }
 }
 
-$currency = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
-
+$currency   = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
+$labelClass = $config->project->labelClass[$model];
 formPanel
 (
     to::heading(div
@@ -136,7 +136,7 @@ formPanel
             btn
             (
                 set::id('project-model'),
-                setClass('secondary-outline h-5 px-2'),
+                setClass("$labelClass h-5 px-2"),
                 zget($lang->project->modelList, $model, '')
             ),
             set::trigger('click'),

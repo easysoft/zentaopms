@@ -2,6 +2,7 @@
 namespace zin;
 
 jsVar('model', $project->model);
+jsVar('labelClass', $config->project->labelClass);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
@@ -121,6 +122,7 @@ if($linkedProducts)
 
 useData('title', null);
 
+$labelClass = $config->project->labelClass[$model];
 formPanel
 (
     to::heading(div
@@ -132,7 +134,7 @@ formPanel
             btn
             (
                 set::id('project-model'),
-                setClass('secondary-outline h-5 px-2'),
+                setClass("$labelClass h-5 px-2"),
                 zget($lang->project->modelList, $model, '')
             ),
             set::trigger('click'),
