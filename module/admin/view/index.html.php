@@ -20,13 +20,13 @@
         <?php foreach($lang->admin->menuList as $menuKey => $menu):?>
         <?php if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;?>
         <div class="setting-box" <?php if($menu['disabled']) echo "title={$lang->admin->noPriv}";?> data-id="<?php echo $menuKey;?>">
-          <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?> data-link='<?php echo $menu['link'];?>'>
+          <button class="btn shadow-primary-hover" <?php if($menu['disabled']) echo 'disabled';?>  onclick="openUrl('<?php echo $menu['link']?>');">
             <h4 class="flex align-center w-full">
               <div class="flex align-center">
                 <img src="static/svg/admin-<?php echo $menuKey;?>.svg"/>
                 <?php echo $menu['name'];?>
               </div>
-              <?php echo html::a($config->admin->helpURL[$menuKey], "<i title='{$lang->help}' class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help"');?>
+              <?php echo html::a($config->admin->helpURL[$menuKey], "<i title='{$lang->help}' class='icon icon-help'></i> ", '_blank', 'class="text-muted setting-help" onclick="window.event.cancelBubble=true;"');?>
             </h4>
             <p class="text-muted setting-desc" title="<?php echo $menu['desc'];?>"><?php echo $menu['desc'];?></p>
           </button>
@@ -44,7 +44,7 @@
       <div class="plugin-list" <?php if($langNotCN) echo 'style="flex-wrap: nowrap"';?>>
         <?php foreach($zentaoData->plugins as $plugin):?>
         <?php $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));?>
-        <div class="plugin-item shadow-primary-hover" data-link='<?php echo $plugin->viewLink;?>'>
+        <div class="plugin-item shadow-primary-hover" onclick="window.open('<?php echo $plugin->viewLink;?>')">
           <span class='ext-download'><i class='icon icon-download-alt text-primary bg-primary-100 pd-3'></i></span>
           <h4 class="plug-title" title="<?php echo $plugin->name;?>"><?php echo $plugin->name;?></h4>
           <p class='extension-desc text-muted' title="<?php echo $pluginDesc;?>"><?php echo $pluginDesc;?></p>
