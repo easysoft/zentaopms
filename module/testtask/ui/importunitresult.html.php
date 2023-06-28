@@ -114,6 +114,7 @@ formPanel
         formGroup
         (
             set::label($lang->testtask->owner),
+            set::width('1/3'),
             select
             (
                 set::name('owner'),
@@ -124,6 +125,7 @@ formPanel
         formGroup
         (
             set::label($lang->testtask->pri),
+            set::width('160px'),
             select
             (
                 zui::width('80px'),
