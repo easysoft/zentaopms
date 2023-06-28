@@ -412,29 +412,59 @@ formPanel
             )
         ),
     ),
-    formGroup
+    formRow
     (
-        setClass('hidden'),
         set::id('addProductBox'),
-        set::width('1/2'),
-        set::label($lang->project->addProduct),
-        inputGroup
+        setClass('hidden'),
+        formGroup
         (
-            div
+            set::width('1/2'),
+            set::label($lang->project->addProduct),
+            inputGroup
             (
-                setClass('grow'),
-                input(set::name('productName')),
-            ),
-            div
-            (
-                setClass('flex items-center pl-2'),
-                checkbox
+                div
                 (
-                    set::name('newProduct'),
-                    set::text($lang->project->newProduct),
-                    on::change('addProduct')
+                    setClass('grow'),
+                    input(set::name('productName')),
+                ),
+                div
+                (
+                    setClass('flex items-center pl-2'),
+                    checkbox
+                    (
+                        set::name('newProduct'),
+                        set::text($lang->project->newProduct),
+                        on::change('addProduct')
+                    )
                 )
             )
+        )
+    ),
+    formRow
+    (
+        setClass('stageBy hidden'),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->project->stageBy),
+            inputGroup
+            (
+                set::seg(true),
+                btn(
+                    setClass('primary-pale project-stageBy-0'),
+                    on::click('changeStageBy(0)'),
+                    set::disabled($copyProjectID),
+                    $lang->project->stageByList[0]
+                ),
+                btn
+                (
+                    setClass('project-stageBy-1'),
+                    on::click('changeStageBy(1)'),
+                    set::disabled($copyProjectID),
+                    $lang->project->stageByList[1]
+                ),
+            ),
+            formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : '0')
         )
     ),
     formGroup

@@ -31,6 +31,22 @@ function changeType(type)
 }
 
 /**
+ * 处理阶段类型改变的交互。
+ * Handle stage by change style.
+ *
+ * @param  string $type
+ * @access public
+ * @return void
+ */
+function changeStageBy(type)
+{
+    if($('.project-stageBy-' + type).hasClass('disabled')) return;
+    $('.project-stageBy-1, .project-stageBy-0').removeClass('primary-pale');
+    $('.project-stageBy-' + type).addClass('primary-pale');
+    $('input[name=stageBy]').val(type);
+}
+
+/**
  * 设置计划结束时间。
  * Set plan end date.
  *
@@ -468,10 +484,10 @@ window.removeLine = function(e)
     let chosenProducts = 0;
     $("select[name^='products']").each(function()
     {
-      if($(this).val() > 0) chosenProducts ++;
+        if($(this).val() > 0) chosenProducts ++;
     });
 
-    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hidden') : $('.stageBy').addClass('hidden');
 }
 
 /**
@@ -501,7 +517,7 @@ window.loadBranches = function(product)
         }
     });
 
-    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hide') : $('.stageBy').addClass('hide');
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.stageBy').removeClass('hidden') : $('.stageBy').addClass('hidden');
 
     let $formRow  = $(product).closest('.form-row');
     let index     = $formRow.find('select').first().attr('name').match(/\d+/)[0];
@@ -553,71 +569,4 @@ window.loadPlans = function(product, branch)
             $("div#plan" + index).find('select').attr('name', 'plans[' + productID + ']' + '[]').attr('id', 'plans' + productID);
         }
     });
-}
-
-window.productChange = function(e)
-{
-    loadBranches(e.target);
-
-    let current    = $(e.target).val();
-    let last       = $(e.target).attr('last');
-    let lastBranch = $(e.target).attr('data-lastBranch');
-
-    $(e.target).attr('data-last', current);
-
-    let $branch = $(e.target).closest('.has-branch').find("[name^='branch']");
-    if($branch.length)
-    {
-        let branchID = $branch.val();
-        $(e.target).attr('data-lastBranch', branchID);
-    }
-    else
-    {
-        $(e.target).removeAttr('data-lastBranch');
-    }
-
-    if(current != last && unmodifiableProducts.includes(last))
-    {
-        if(lastBranch != 0)
-        {
-            if(unmodifiableBranches.includes(lastBranch)) zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
-        }
-        else
-        {
-            zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[last]));
-        }
-    }
-
-    let chosenProducts = 0;
-    $(".productsBox select[name^='products']").each(function()
-    {
-        if($(e.target).val() > 0) chosenProducts ++;
-    });
-
-    if(chosenProducts > 1)  $('.stageBy').removeClass('hide');
-    if(chosenProducts <= 1) $('.stageBy').addClass('hide');
-}
-
-window.branchChange = function(e)
-{
-    let current = $(e.target).val();
-    let last    = $(e.target).attr('data-last');
-    $(e.target).attr('data-last', current);
-
-    let $product = $(e.target).closest('.form-row').find("[name^='products']");
-    $product.attr('data-lastBranch', current);
-
-    loadPlans($product, $(e.target));
-
-    if(unmodifiableBranches.includes(last))
-    {
-        let productID = $product.val();
-        if(unmodifiableBranches.includes(productID))
-        {
-            if((last == 0 && unmodifiableMainBranches[productID]) || last != 0)
-            {
-                zui.Modal.alert(unLinkProductTip.replace("%s", branchGroups[productID][last]));
-            }
-        }
-    }
 }

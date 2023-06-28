@@ -68,13 +68,13 @@ window.productChange = function(e)
     }
 
     let chosenProducts = 0;
-    $(".productsBox select[name^='products']").each(function()
+    $(".productBox select[name^='products']").each(function()
     {
-        if($(e.target).val() > 0) chosenProducts ++;
+        if($(this).val() > 0) chosenProducts ++;
     });
 
-    if(chosenProducts > 1)  $('.stageBy').removeClass('hide');
-    if(chosenProducts <= 1) $('.stageBy').addClass('hide');
+    if(chosenProducts > 1)  $('.stageBy').removeClass('hidden');
+    if(chosenProducts <= 1) $('.stageBy').addClass('hidden');
 }
 
 window.branchChange = function(e)
