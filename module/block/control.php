@@ -43,19 +43,46 @@ class block extends control
             $formData->account   = $this->app->user->account;
             $formData->vision    = $this->config->vision;
             $formData->params    = json_encode($formData->params);
+            if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title     = $this->lang->block->createBlock;
-        $this->view->dashboard = $dashboard;
-        $this->view->module    = $module;
-        $this->view->code      = $code;
-        $this->view->modules   = $this->blockZen->getAvailableModules($dashboard);
-        $this->view->codes     = $this->blockZen->getAvailableCodes($dashboard, $module);
-        $this->view->params    = $this->blockZen->getAvailableParams($module, $code);
+        $modules = $this->blockZen->getAvailableModules($dashboard);
+        unset($modules['']);
+        if(empty($module) && !empty($modules)) $module = current(array_keys($modules));
+
+        $codes = $this->blockZen->getAvailableCodes($dashboard, $module);
+        $params = $this->blockZen->getAvailableParams($module, $code);
+        if($module == 'scrumtest' && $code != 'all')
+        {
+            $blockTitle = zget($codes, $code);
+        }
+        else
+        {
+            $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
+            $blockTitle  = zget($codes, $code);
+            if(!empty($typeOptions))
+            {
+                $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
+                $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
+            }
+        }
+        $widths       = !empty($this->config->block->size[$module][$code]) ? array_keys($this->config->block->size[$module][$code]) : array('1', '2');
+        $widthOptions = array();
+        foreach($widths as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
+
+        $this->view->title        = $this->lang->block->createBlock;
+        $this->view->dashboard    = $dashboard;
+        $this->view->module       = $module;
+        $this->view->code         = $code;
+        $this->view->modules      = $modules;
+        $this->view->codes        = $codes;
+        $this->view->params       = $params;
+        $this->view->blockTitle   = $blockTitle ?: '';
+        $this->view->widthOptions = $widthOptions;
         $this->display();
     }
 
