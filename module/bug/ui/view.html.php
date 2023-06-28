@@ -271,7 +271,7 @@ modal
     form
     (
         on::change('#taskProjects', 'changeTaskProjects'),
-        set::actions(),
+        set::actions(''),
         formRow
         (
             formGroup
