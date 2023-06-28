@@ -103,7 +103,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
 
         $productsBox[] = formRow
         (
-            setClass('productsBox'),
+            set::id('productsBox'),
             formGroup
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
@@ -214,7 +214,7 @@ else
 {
     $productsBox [] = formRow
     (
-        setClass('productsBox'),
+        set::id('productsBox'),
         formGroup
         (
             set::width('1/2'),
@@ -401,12 +401,15 @@ formPanel
         set::required(true),
     ) : null,
     $productsBox,
-    formGroup
+    formRow
     (
-        set::label($lang->execution->teamSetting),
-        set::strong(true),
+        setClass('border-b border-b-1'),
+        div
+        (
+            setClass('bg-lighter font-black px-3 py-1'),
+            $lang->execution->teamSetting
+        ),
     ),
-    h::hr(set::class('team-hr')),
     formGroup
     (
         set::width('1/2'),
