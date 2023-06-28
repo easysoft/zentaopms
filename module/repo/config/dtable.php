@@ -126,3 +126,28 @@ $config->repo->commentDtable->fieldList['comment']   = $config->repo->repoDtable
 
 $config->repo->commentDtable->fieldList['comment']['name']   = 'originalComment';
 $config->repo->commentDtable->fieldList['committer']['name'] = 'committer';
+
+$config->repo->logDtable = new stdclass();
+
+$config->repo->logDtable->fieldList['id']['title']    = '';
+$config->repo->logDtable->fieldList['id']['name']     = '';
+$config->repo->logDtable->fieldList['id']['type']     = 'checkID';
+$config->repo->logDtable->fieldList['id']['sortType'] = false;
+$config->repo->logDtable->fieldList['id']['checkbox'] = true;
+$config->repo->logDtable->fieldList['id']['width']    = '40';
+
+$config->repo->logDtable->fieldList['revision']['type']  = 'revision';
+$config->repo->logDtable->fieldList['revision']['width'] = '100';
+
+$config->repo->logDtable->fieldList['commit']['type']     = 'number';
+$config->repo->logDtable->fieldList['commit']['width']    = '50';
+$config->repo->logDtable->fieldList['commit']['sortType'] = false;
+
+$config->repo->logDtable->fieldList['date']['name']     = 'time';
+$config->repo->logDtable->fieldList['date']['type']     = 'datetime';
+$config->repo->logDtable->fieldList['date']['sortType'] = false;
+
+$config->repo->logDtable->fieldList['committer']['name'] = 'committer';
+
+$config->repo->logDtable->fieldList['comment']['type'] = 'html';
+$config->repo->logDtable->fieldList['comment']['width'] = '600';

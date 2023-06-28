@@ -202,7 +202,7 @@ class repo extends control
         }
 
         $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $linkedProducts     = $this->loadModel('product')->getByIdList($repo->product);
+        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
         $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
 
@@ -680,6 +680,7 @@ class repo extends control
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager->recPerPage = $recPerPage;
 
         if($_POST)
         {
