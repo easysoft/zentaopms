@@ -46,6 +46,7 @@ if(!empty($products))
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
                 set('id', 'linkProduct'),
+                set::required(true),
                 $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                 inputGroup
                 (
@@ -340,6 +341,7 @@ formPanel
             set::width('1/2'),
             set('id', 'linkProduct'),
             set::label($lang->project->manageProducts),
+            set::required(true),
             inputGroup
             (
                 div
@@ -440,7 +442,7 @@ formPanel
             )
         )
     ),
-    formRow
+    ($model == 'waterfall' || $model == 'waterfallplus') ? formRow
     (
         setClass('stageBy hidden'),
         formGroup
@@ -466,7 +468,7 @@ formPanel
             ),
             formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : '0')
         )
-    ),
+    ) : null,
     formGroup
     (
         set::name('desc'),

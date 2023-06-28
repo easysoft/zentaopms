@@ -19,26 +19,25 @@ window.productChange = function(e)
 
     let current    = $(e.target).val();
     let last       = $(e.target).attr('last');
-    let lastBranch = $(e.target).attr('data-lastBranch');
+    let lastBranch = $(e.target).attr('lastBranch');
 
     $(e.target).attr('data-last', current);
 
-    let $branch = $(e.target).closest('.has-branch').find("[name^='branch']");
-    if($branch.length)
+    let $branch = $(e.target).closest('.productBox').find("[name^='branch']");
+    if($branch.val())
     {
-        let branchID = $branch.val();
-        $(e.target).attr('data-lastBranch', branchID);
+        $(e.target).attr('lastBranch', $branch.val());
     }
     else
     {
-        $(e.target).removeAttr('data-lastBranch');
+        $(e.target).removeAttr('lastBranch');
     }
 
-    if(current != last && unmodifiableProducts.includes(last))
+    if(current != last && unmodifiableProducts.includes(Number(last)))
     {
         if(lastBranch != 0)
         {
-            if(unmodifiableBranches.includes(lastBranch)) zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
+            if(unmodifiableBranches.includes(Number(lastBranch))) zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
         }
         else
         {
@@ -63,7 +62,7 @@ window.branchChange = function(e)
     $(e.target).attr('data-last', current);
 
     let $product = $(e.target).closest('.form-row').find("[name^='products']");
-    $product.attr('data-lastBranch', current);
+    $product.attr('lastBranch', current);
 
     loadPlans($product, $(e.target));
 

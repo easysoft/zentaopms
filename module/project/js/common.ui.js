@@ -527,7 +527,7 @@ window.loadBranches = function(product)
     {
         $formRow.find('.form-group').last().find('select').val('').trigger('chosen:updated');
         $formRow.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
-        $formRow.find('.form-group').eq(1).addClass('hidden');
+        $formRow.find('.form-group').eq(1).addClass('hidden').find('select').val('');
     }
 
     $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)

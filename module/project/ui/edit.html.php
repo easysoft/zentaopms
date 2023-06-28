@@ -11,6 +11,12 @@ jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('linkedProjectsTip', $linkedProjectsTip);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
+jsVar('beginLetterParent', $lang->project->beginLetterParent);
+jsVar('endGreaterParent', $lang->project->endGreaterParent);
+jsVar('ignore', $lang->project->ignore);
+jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
+jsVar('allProducts', $allProducts);
+jsVar('branchGroups', $branchGroups);
 
 $projectModelItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -27,8 +33,16 @@ foreach($lang->project->modelList as $key => $text)
     );
 }
 
-$currency     = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
-$primaryLabel = 'primary-pale';
+$currency       = $parentProgram ? $parentProgram->budgetUnit : $config->project->defaultCurrency;
+$labelClass     = $config->project->labelClass[$model];
+$stageByClass   = ($project->stageBy == 'product' and count($linkedProducts) < 2) ? 'hidden' : '';
+$disableStageBy = !empty($executions) ? true : false;
+$disableParent  = false;
+if(!isset($programList[$project->parent]))
+{
+    $disableParent = true;
+    $programList   = array($project->parent => $program->name);
+}
 
 /* Build linked products and plans form row. */
 if($linkedProducts)
@@ -44,8 +58,10 @@ if($linkedProducts)
             setClass('productBox'),
             formGroup
             (
-                set::width('1/2'),
+                set::width($hasBranch ? '1/4' : '1/2'),
                 set('id', 'linkProduct'),
+                set::required(true),
+                $hasBranch ? setClass('has-branch') : null,
                 $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                 inputGroup
                 (
@@ -58,6 +74,7 @@ if($linkedProducts)
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
+                            $hasBranch ? set::lastBranch(join(',', $product->branches)) : null,
                             on::change('productChange')
                         )
                     ),
@@ -65,7 +82,7 @@ if($linkedProducts)
             ),
             formGroup
             (
-                set::width('1/3'),
+                set::width('1/4'),
                 $hasBranch ? null : setClass('hidden'),
                 inputGroup
                 (
@@ -122,13 +139,19 @@ if($linkedProducts)
 
 useData('title', null);
 
-$labelClass = $config->project->labelClass[$model];
 formPanel
 (
     to::heading(div
     (
         setClass('panel-title text-lg'),
         $title,
+        $disableModel ?
+        btn
+        (
+            set::id('project-model'),
+            setClass("$labelClass h-5 px-2"),
+            zget($lang->project->modelList, $model, '')
+        ) :
         dropdown
         (
             btn
@@ -152,9 +175,11 @@ formPanel
             set::name('parent'),
             set::value($project->parent),
             set::label($lang->project->parent),
+            set::disabled($disableParent),
             set::items($programList),
             on::change('setParentProgram')
         ),
+        $disableParent ? formHidden('parent', $project->parent) : null,
         formGroup
         (
             set::width('1/2'),
@@ -207,13 +232,14 @@ formPanel
             set::seg(true),
             btn
             (
-                $project->hasProduct ? setClass("$primaryLabel project-type-1") : setClass('project-type-1'),
-                on::click('changeType(1)'),
+                $project->hasProduct ? setClass("primary-pale project-type-1") : setClass('project-type-1'),
+                set::disabled(true),
                 $lang->project->projectTypeList[1]
             ),
-            btn(
-                !$project->hasProduct ? setClass("$primaryLabel project-type-0") : setClass('project-type-0'),
-                on::click('changeType(0)'),
+            btn
+            (
+                !$project->hasProduct ? setClass("primary-pale project-type-0") : setClass('project-type-0'),
+                set::disabled(true),
                 $lang->project->projectTypeList[0]
             )
         ),
@@ -284,7 +310,7 @@ formPanel
                     set::placeholder($lang->project->end),
                     set::required(true),
                     /* TODO associate event */
-                    on::change('computEndDate(this.value)')
+                    on::change('computeWorkDays')
                 ),
             )
         ),
@@ -321,6 +347,34 @@ formPanel
         )
     ),
     empty($linkedProducts) ? null : $productGroup,
+    ($model == 'waterfall' || $model == 'waterfallplus') ? formRow
+    (
+        setClass("stageBy $stageByClass"),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->project->stageBy),
+            inputGroup
+            (
+                set::seg(true),
+                btn
+                (
+                    setClass('primary-pale project-stageBy-0'),
+                    on::click('changeStageBy(0)'),
+                    set::disabled($disableStageBy),
+                    $lang->project->stageByList[0]
+                ),
+                btn
+                (
+                    setClass('project-stageBy-1'),
+                    on::click('changeStageBy(1)'),
+                    set::disabled($disableStageBy),
+                    $lang->project->stageByList[1]
+                ),
+            ),
+            formHidden('stageBy', $project->stageBy)
+        )
+    ) : null,
     formGroup
     (
         set::name('desc'),
