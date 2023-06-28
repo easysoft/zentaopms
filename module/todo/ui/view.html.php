@@ -237,7 +237,7 @@ $fnGenerateGoBackUrl = function() use ($app, $todo, $user)
 };
 
 /* Generate action buttons and related menus within float toolbar. */
-$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, $fnGenerateGoBackUrl, $fnRenderCreateStoryModal, $fnRenderCreateTaskModal, $fnRenderCreateBugModal)
+$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, $isInModal, $fnGenerateGoBackUrl, $fnRenderCreateStoryModal, $fnRenderCreateTaskModal, $fnRenderCreateBugModal)
 {
     /* Deleted item without action buttons. */
     if($todo->deleted) return array();
@@ -255,7 +255,7 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
 
     $actionList = array('prefix' => array(), 'main' => array(), 'suffix' => array());
 
-    $actionList['prefix'][] = array('icon' => 'back', 'url' => $fnGenerateGoBackUrl(), 'hint' => $lang->goback . $lang->backShortcutKey, 'text' => $lang->goback);
+    !$isInModal && $actionList['prefix'][] = array('icon' => 'back', 'url' => $fnGenerateGoBackUrl(), 'hint' => $lang->goback . $lang->backShortcutKey, 'text' => $lang->goback);
 
     /* Common action buttons. */
     $canStart    && $status == 'wait'                          ? $actionList['main'][] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'text' => $lang->todo->abbr->start) : null;
