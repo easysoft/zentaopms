@@ -13,52 +13,54 @@ namespace zin;
 
 panel
 (
+    set::title($block->title),
+    set::bodyClass('pt-0'),
     div
     (
-        set('class', 'flex block-base'),
+        setClass('flex block-base'),
         col
         (
-            set('class', 'text-center w-1/3'),
+            setClass('text-center w-1/3'),
             set::justify('center'),
             a
             (
-                set('href', $this->createLink('product', 'all', 'browseType=all')),
-                set('class', 'text-2xl font-bold leading-relaxed'),
+                setClass('text-2xl font-bold leading-relaxed'),
+                set::href($this->createLink('product', 'all', 'browseType=all')),
                 $totalProductCount
             ),
             span
             (
-                set('class', 'text-light'),
+                setClass('text-light'),
                 $lang->block->productoverview->totalProductCount
             )
         ),
         col
         (
-            set('class', 'text-center w-1/3'),
+            setClass('text-center w-1/3'),
             set::justify('center'),
             span
             (
-                set('class', 'text-2xl font-bold leading-relaxed'),
+                setClass('text-2xl font-bold leading-relaxed'),
                 $productReleasedThisYear
             ),
             span
             (
-                set('class', 'text-light'),
+                setClass('text-light'),
                 $lang->block->productoverview->productReleasedThisYear
             )
         ),
         col
         (
-            set('class', 'text-center w-1/3'),
+            setClass('text-center w-1/3'),
             set::justify('center'),
             span
             (
-                set('class', 'text-2xl font-bold text-important leading-relaxed'),
+                setClass('text-2xl font-bold text-important leading-relaxed'),
                 $releaseCount
             ),
             span
             (
-                set('class', 'text-light'),
+                setClass('text-light'),
                 $lang->block->productoverview->releaseCount
             )
         )
