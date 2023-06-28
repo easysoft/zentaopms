@@ -472,6 +472,7 @@ class productModel extends model
      */
     public function create(object $product, string $lineName = ''): int|false
     {
+        /* Insert product and get the product ID. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
@@ -493,7 +494,8 @@ class productModel extends model
 
         /* Update and create linked data. */
         $this->loadModel('action')->create('product', $productID, 'opened');
-        $this->loadModel('file')->updateObjectID($this->post->uid, $productID, 'product');
+        $uid = empty($this->post->uid) ? '' : $this->post->uid;
+        $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
