@@ -1186,7 +1186,7 @@ class commonModel extends model
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
                 $executionID = $menuItem->link['vars'];
-                commonModel::buildMoreButton($executionID, $printHtml);
+                commonModel::buildMoreButton((int)$executionID, $printHtml);
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {

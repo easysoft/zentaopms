@@ -1551,7 +1551,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
+    public function create(string $projectID = '', int $executionID = 0, string $copyExecutionID = '', int $planID = 0, string $confirm = 'no', int $productID = 0, string $extra = '')
     {
         $projectID = (int)$projectID;
 
@@ -1808,7 +1808,8 @@ class execution extends control
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
-        $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
+        $this->view->copyProjectID       = $copyProjectID;
+        $this->view->copyExecutions      = $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
@@ -4327,13 +4328,15 @@ class execution extends control
      * Ajax get copy project executions.
      *
      * @param  int    $projectID
+     * @param  int    $copyExecutionID
      * @access public
      * @return void
      */
-    public function ajaxGetCopyProjectExecutions($projectID = 0)
+    public function ajaxGetCopyProjectExecutions(int $projectID = 0, int $copyExecutionID = 0)
     {
-        $executions = $this->execution->getList($projectID, 'all', 'all', 0, 0, 0, null, false);
-        echo json_encode($executions);
+        $this->view->executions      = $this->execution->getList($projectID, 'all', 'all', 0, 0, 0, null, false);
+        $this->view->copyExecutionID = $copyExecutionID;
+        $this->display();
     }
 
     /**

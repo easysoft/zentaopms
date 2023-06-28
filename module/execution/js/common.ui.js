@@ -258,21 +258,19 @@ function hidePlanBox(attribute)
 {
     if(attribute == 'request' || attribute == 'review')
     {
-        $('.productsBox .planBox').addClass('hide');
-        $('.productsBox .planBox select').attr('disabled', 'disabled');
-        $('#productTitle').text(manageProductsLang);
+        $('#productsBox .planBox').addClass('hidden');
+        $('#productsBox .planBox select').attr('disabled', 'disabled');
 
-        $('#plansBox').closest('.form-row').addClass('hide');
+        $('#plansBox').closest('.form-row').addClass('hidden');
         $('#plansBox').attr('disabled', 'disabled');
     }
     else
     {
-        $('.productsBox .planBox').removeClass('hide');
-        $('.productsBox .planBox select').attr('disabled', '');
-        $('#productTitle').text(manageProductPlanLang);
+        $('#productsBox .planBox').removeClass('hidden');
+        $('#productsBox .planBox select').removeAttr('disabled');
 
-        $('#plansBox').closest('.form-row').removeClass('hide');
-        $('#plansBox').attr('disabled', '');
+        $('#plansBox').closest('.form-row').removeClass('hidden');
+        $('#plansBox').removeAttr('disabled');
     }
 }
 

@@ -1,5 +1,7 @@
 $(function()
 {
+    loadProjectExecutions(copyProjectID);
+
     if($('#methodHover').length) new zui.Tooltip('#methodHover', {title: methodTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light methodTip'});
 
     if(isStage)
@@ -9,8 +11,6 @@ $(function()
             let attribute = $(this).val();
             hidePlanBox(attribute);
         })
-
-        $('#attribute').change();
     }
 
     if(copyExecutionID != 0 || projectID != 0) loadMembers();
@@ -118,3 +118,36 @@ $(document).on('change', '#end', function(e)
     $("input[name='delta']").prop('checked', false);
     computeWorkDays();
 });
+
+/**
+ * Load copy executions box.
+ *
+ * @access public
+ * @return void
+ */
+function loadProjectExecutions(projectID)
+{
+    projectID = parseInt(projectID) ? projectID : $(this).val();
+    $('#copyExecutions').load($.createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&copyExecutionID=' + copyExecutionID));
+}
+
+$(document).off('click', '#copyExecutions button.execution-block').on('click', '#copyExecutions button.execution-block', function(e)
+{
+    $(this).toggleClass('primary-outline');
+    $('.execution-block').not(this).removeClass('primary-outline');
+});
+
+/**
+ * Set copy execution.
+ *
+ * @access public
+ * @return void
+ */
+function setCopyExecution()
+{
+    const executionID = $('.execution-block').hasClass('primary-outline') ? $('.execution-block.primary-outline').data('id') : 0;
+    if(!executionID) projectID = 0;
+
+    loadPage($.createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=' + executionID));
+    zui.Modal.hide();
+}

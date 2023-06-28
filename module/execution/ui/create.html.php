@@ -11,15 +11,14 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('methodTip', $lang->execution->agileplusMethodTip);
-jsVar('projectID', $projectID);
+jsVar('+projectID', $projectID);
+jsVar('copyProjectID', $copyProjectID);
 jsVar('weekend', $config->execution->weekend);
 jsVar('errorSameProducts', $lang->execution->errorSameProducts);
 jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('multiBranchProducts', $multiBranchProducts);
-jsVar('manageProductsLang', $lang->project->manageProducts);
-jsVar('manageProductPlanLang', $lang->project->manageProductPlan);
 
 $methodBox = null;
 if(!empty($project->model) && $project->model == 'agileplus')
@@ -54,7 +53,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
 }
 
 $typeBox = null;
-if((empty($project) or $project->model != 'kanban') and $type != 'kanban')
+if((empty($project) || $project->model != 'kanban') and $type != 'kanban')
 {
     $typeBox = formRow(
         formGroup
@@ -186,7 +185,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
         $i ++;
     }
 }
-elseif(!empty($project) and empty($project->hasProduct) and !in_array($project->model, array('waterfall', 'kanban', 'waterfallplus')))
+elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->model, array('waterfall', 'kanban', 'waterfallplus')))
 {
     $planProductID = current(array_keys($allProducts));
     $productsBox[] = formRow(
@@ -291,7 +290,7 @@ formPanel
         (
             setClass('primary-pale'),
             set::icon('copy'),
-            set::url('#copyProjectModal'),
+            set::url('#copyExecutionModal'),
             set('data-destoryOnHide', true),
             set('data-toggle', 'modal'),
             $showExecutionExec ? $lang->execution->copyExec : $lang->execution->copy
@@ -518,6 +517,49 @@ formPanel
             set::multiple(true),
         )
     ),
+);
+
+modalTrigger
+(
+    modal
+    (
+        set::id('copyExecutionModal'),
+        set::footerClass('justify-center'),
+        to::header
+        (
+            span
+            (
+                h4
+                (
+                    set::class('copy-title'),
+                    $lang->execution->copyTitle
+                )
+            ),
+            select
+            (
+                set::class('selectProject'),
+                set::name('project'),
+                set::items($copyProjects),
+                set::value($projectID),
+                set::required(true),
+                on::change('loadProjectExecutions'),
+            ),
+        ),
+        to::footer
+        (
+            btn
+            (
+                setClass('primary btn-wide hidden confirmBtn'),
+                set::text($lang->confirm),
+                on::click('setCopyExecution'),
+            )
+        ),
+        div
+        (
+            set::id('copyExecutions'),
+            setClass('flex items-center flex-wrap'),
+        )
+    )
 );
 
 /* ====== Render page ====== */
