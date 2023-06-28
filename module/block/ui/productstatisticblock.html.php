@@ -27,7 +27,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
     $selected = key($products);
     $navTabs[] = li
     (
-        set('class', 'nav-item of-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
+        set('class', 'nav-item overflow-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
         a(icon(set('size', '24'), 'angle-left'))
     );
     foreach($products as $product)
@@ -63,7 +63,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
     }
     $navTabs[] = li
     (
-        set('class', 'nav-item of-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
+        set('class', 'nav-item overflow-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
         a(icon(set('size', '24'), 'angle-right'))
     );
     return $navTabs;
@@ -326,11 +326,11 @@ panel
     ),
     div
     (
-        set('class', "flex h-full of-hidden " . ($longBlock ? '' : 'col')),
+        set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
         cell
         (
             set('width', '25%'),
-            set('class', $longBlock ? 'bg-secondary-pale of-y-auto of-x-hidden' : ''),
+            set('class', $longBlock ? 'bg-secondary-pale overflow-y-auto overflow-x-hidden' : ''),
             ul
             (
                 set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),

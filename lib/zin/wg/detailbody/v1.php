@@ -48,12 +48,12 @@ class detailBody extends wg
         return formBase
         (
             set::actionsClass('h-14 flex flex-none items-center justify-center shadow'),
-            setClass('detail-body rounded col of-y-hidden bg-white'),
+            setClass('detail-body rounded col overflow-y-hidden bg-white'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             setStyle('height', 'calc(100vh - 120px)'),
             div
             (
-                setClass('flex-auto of-y-auto'),
+                setClass('flex-auto overflow-y-auto'),
                 div
                 (
                     setClass('flex'),

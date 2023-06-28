@@ -148,7 +148,7 @@ class moduleMenu extends wg
             ),
             h::main
             (
-                setClass('col flex-auto of-y-auto of-x-hidden pl-4 pr-1'),
+                setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
                 zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'))))
             ),
             $this->buildBtns(),

@@ -359,11 +359,11 @@ panel
     ),
     div
     (
-        set('class', 'flex h-full of-hidden'),
+        set('class', 'flex h-full overflow-hidden'),
         cell
         (
             set('width', '25%'),
-            set('class', 'bg-secondary-pale of-y-auto of-x-hidden'),
+            set('class', 'bg-secondary-pale overflow-y-auto overflow-x-hidden'),
             ul
             (
                 set('class', 'nav nav-tabs nav-stacked'),
