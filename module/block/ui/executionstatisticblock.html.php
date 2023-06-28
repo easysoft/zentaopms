@@ -28,10 +28,10 @@ function getExecutionTabs($executions, $blockNavCode): array
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item' . ($execution->id == $selected ? ' active' : '')),
+            set('class', 'nav-item'),
             a
             (
-                set('class', 'ellipsis'),
+                set('class', 'ellipsis title ' . ($execution->id == $selected ? 'active' : '')),
                 set('data-toggle', 'tab'),
                 set('href', "#tab3{$blockNavCode}Content{$execution->id}"),
                 $execution->name

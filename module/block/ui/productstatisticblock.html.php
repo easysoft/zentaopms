@@ -34,10 +34,10 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item nav-switch w-full' . ($product->id == $selected ? ' active' : '')),
+            set('class', 'nav-item nav-switch w-full'),
             a
             (
-                set('class', 'ellipsis text-dark'),
+                set('class', 'ellipsis text-dark title ' . ($product->id == $selected ? ' active' : '')),
                 $longBlock ? set('data-toggle', 'tab') : null,
                 set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
                 $product->name

@@ -28,10 +28,10 @@ function getProjectTabs($projects, $blockNavCode): array
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item' . ($project->id == $selected ? ' active' : '')),
+            set('class', 'nav-item'),
             a
             (
-                set('class', 'ellipsis'),
+                set('class', 'ellipsis title ' . ($project->id == $selected ? ' active' : '')),
                 set('data-toggle', 'tab'),
                 set('href', "#tab3{$blockNavCode}Content{$project->id}"),
                 $project->name

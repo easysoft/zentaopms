@@ -3,16 +3,6 @@
 .guide-block .tab-content {width: 100%;}
 .guide-block .tab-pane {padding: 0;}
 .guide-block .bg-secondary-pale {background: #F3F6FA;}
-
-.guide-block .nav-tabs .nav-item {height:36px; line-height: 36px;}
-.guide-block .nav-tabs .nav-item:hover {background-color: #FCFDFE;}
-.guide-block .nav-tabs .nav-item > a {color: #5E626D;}
-.guide-block .nav-tabs .nav-item > a:before {background: transparent;}
-.guide-block .nav-tabs .nav-item > a.active {color: #0B0F18;border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
-.guide-block .nav-tabs .nav-item > a:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
-.guide-block .nav-tabs .nav-item:hover > a {color: #0B0F18;}
-.guide-block .nav-tabs .nav-item:hover > span.link {display: flex!important;}
-
 .guide-block .mode-switch img {height: 180px; margin: auto; object-fit: cover;}
 .guide-block .vision-switch img {height: 180px; margin: auto; object-fit: cover;}
 

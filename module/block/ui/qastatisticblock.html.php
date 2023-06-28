@@ -28,10 +28,10 @@ function getProductTabs($products, $blockNavCode): array
     {
         $navTabs[] = li
         (
-            set('class', 'nav-item' . ($product->id == $selected ? ' active' : '')),
+            set('class', 'nav-item'),
             a
             (
-                set('class', 'ellipsis'),
+                set('class', 'ellipsis title ' . ($product->id == $selected ? 'active' : '')),
                 set('data-toggle', 'tab'),
                 set('href', "#tab3{$blockNavCode}Content{$product->id}"),
                 $product->name

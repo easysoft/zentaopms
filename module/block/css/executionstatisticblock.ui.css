@@ -8,17 +8,6 @@
 .executionstatistic-block .chart {margin: auto;}
 .executionstatistic-block .story-num {margin: auto;}
 
-.executionstatistic-block.block-long .nav-tabs .nav-item {height:36px; line-height: 36px;}
-.executionstatistic-block.block-long .nav-tabs .nav-item:hover {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
-.executionstatistic-block.block-long .nav-tabs .nav-item.active {border-left: 2px solid #2E7FFF; background-color: #FCFDFE;}
-.executionstatistic-block.block-long .nav-tabs .nav-item > a {color: #5E626D;}
-.executionstatistic-block.block-long .nav-tabs .nav-item > a:before {background: transparent;}
-.executionstatistic-block.block-long .nav-tabs .nav-item.active > a {color: #0B0F18;}
-.executionstatistic-block.block-long .nav-tabs .nav-item:hover > a {color: #0B0F18;}
-.executionstatistic-block.block-long .nav-tabs .nav-item:hover > a.link {display: flex!important;}
-.executionstatistic-block.block-long .nav-tabs .nav-item.nav-prev {display: none}
-.executionstatistic-block.block-long .nav-tabs .nav-item.nav-next {display: none}
-
 .executionstatistic-block.block-sm .nav-tabs .nav-item.active {display: flex!important;}
 .executionstatistic-block.block-sm .nav-tabs .nav-item > a {width: 100%;}
 .executionstatistic-block.block-sm .nav-tabs .nav-item {display: none}
