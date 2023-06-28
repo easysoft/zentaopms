@@ -9,7 +9,7 @@ $(function()
 
         if(picker) picker.destroy();
 
-        var options = $.extend({}, originOptions, {searchDelay : 1000});
+        var options = $.extend({}, originOptions, {searchDelay: 1000});
         $element.picker(options);
     };
 
@@ -59,7 +59,7 @@ function renderBuilds()
         $('#openedBuild').data('zui.picker').setValue(oldOpenedBuild);
         var resolvedBuilds = data.resolvedBuilds;
         $('#resolvedBuild').data('zui.picker').destroy();
-        $('#resolvedBuild').picker({list: resolvedBuilds});
+        $('#resolvedBuild').picker({list: resolvedBuilds, allowSingleDeselect: 'true'});
         $('#resolvedBuild').data('zui.picker').setValue(oldResolvedBuild);
 
         resolution = $('#resolution').val();
@@ -93,7 +93,7 @@ function renderTestTasks()
     $.get(createLink('bug', 'ajaxGetTestTasks', 'bugID=' + bugID), function(data)
     {
         $('#testtask').data('zui.picker').destroy();
-        $('#testtask').picker({list: data});
+        $('#testtask').picker({list: data, allowSingleDeselect: 'true'});
         $('#testtask').data('zui.picker').setValue(bugTestTask);
     }, 'json');
 }

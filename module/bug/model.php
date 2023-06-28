@@ -3796,4 +3796,19 @@ class bugModel extends model
 
         return $index;
     }
+
+    /**
+     * Convert array to object array.
+     *
+     * @param  int    $data
+     * @access public
+     * @return array
+     */
+    public function convertArrayToObjectArray($data)
+    {
+        return array_map(function($key, $value)
+        {
+            return (object) array('value' => $key, 'text' => $value);
+        }, array_keys($data), array_values($data));
+    }
 }
