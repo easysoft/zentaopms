@@ -511,6 +511,7 @@ $lang->block->productstatistic->news            = 'Latest product advancements';
 $lang->block->productstatistic->newPlan         = 'Latest Plan';
 $lang->block->productstatistic->newExecution    = 'Latest Execution';
 $lang->block->productstatistic->newRelease      = 'Latest Release';
+$lang->block->productstatistic->deliveryRate    = 'Delivery Rate';
 
 $lang->block->projectstatistic = new stdclass();
 $lang->block->projectstatistic->story       = 'Story';

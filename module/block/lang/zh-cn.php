@@ -511,6 +511,7 @@ $lang->block->productstatistic->news            = '产品最新推进';
 $lang->block->productstatistic->newPlan         = '最新计划';
 $lang->block->productstatistic->newExecution    = '最新执行';
 $lang->block->productstatistic->newRelease      = '最新发布';
+$lang->block->productstatistic->deliveryRate    = '需求交付率';
 
 $lang->block->projectstatistic = new stdclass();
 $lang->block->projectstatistic->story       = '需求';

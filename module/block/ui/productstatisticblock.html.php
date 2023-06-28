@@ -108,8 +108,31 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                             set('class', 'p-4'),
                             div
                             (
-                                set('class', 'py-6'),
-                                div(set('class', 'bg-primary aspect-square w-28 chart'))
+                                set('class', 'py-6 pie-chart'),
+                                echarts
+                                (
+                                    set::color(array('#2B80FF', '#E3E4E9')),
+                                    set::series
+                                    (
+                                        array
+                                        (
+                                            array
+                                            (
+                                                'type'   => 'pie',
+                                                'radius' => array('80%', '90%'),
+                                                'itemStyle' => array('borderRadius' => '40'),
+                                                'label'  => array('show' => false),
+                                                'data'   => array(69.9, 100-69.9)
+                                            )
+                                        )
+                                    )
+                                )->size('100%', 120),
+                                div
+                                (
+                                    set::class('pie-chart-title text-center'),
+                                    div(span(set::class('text-2xl font-bold'), '69.9%')),
+                                    div(span(set::class('text-sm text-gray'), $lang->block->productstatistic->deliveryRate, icon('help', set('data-toggle', 'tooltip'), set('id', 'storyTip'), set('class', 'text-light'))))
+                                )
                             ),
                             div
                             (
@@ -220,10 +243,31 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                 div
                                 (
                                     set('class', 'px-4 py-2'),
-                                    div
+                                    echarts
                                     (
-                                        set('class', 'bg-primary h-44 w-full'),
-                                    )
+                                        set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
+                                        set::legend(array('show' => true, 'right' => '0')),
+                                        set::xAxis(array('type' => 'category', 'data' => array('1月', '2月', '3月', '4月', '5月', '本月'), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
+                                        set::yAxis(array('type' => 'value', 'name' => '个', 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+                                        set::series
+                                        (
+                                            array
+                                            (
+                                                array
+                                                (
+                                                    'type' => 'line',
+                                                    'name' => 'line',
+                                                    'data' => array(1, 2, 3, 4, 5, 6)
+                                                ),
+                                                array
+                                                (
+                                                    'type' => 'line',
+                                                    'name' => 'line2',
+                                                    'data' => array(6, 5, 4, 3, 2, 1)
+                                                )
+                                            )
+                                        )
+                                    )->size('100%', 170),
                                 )
                             )
                         )
@@ -329,7 +373,7 @@ panel
         set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
         cell
         (
-            set('width', '25%'),
+            set('width', '22%'),
             set('class', $longBlock ? 'bg-secondary-pale overflow-y-auto overflow-x-hidden' : ''),
             ul
             (
@@ -345,5 +389,4 @@ panel
         )
     )
 );
-
 render();
