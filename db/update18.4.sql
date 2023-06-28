@@ -6,3 +6,6 @@ INSERT INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `de
 (2107, 'priv', 'fr',    'traincourse-cloudImport', '', ''),
 (2107, 'priv', 'zh-cn', 'traincourse-cloudImport', '', ''),
 (2107, 'priv', 'zh-tw', 'traincourse-cloudImport', '', '');
+
+ALTER TABLE `zt_traincourse` ADD `importedStatus` enum('wait','doing','done') NOT NULL DEFAULT 'wait' AFTER `desc`;
+ALTER TABLE `zt_traincourse` ADD `lastUpdatedTime` int UNSIGNED NOT NULL DEFAULT 0 AFTER `importedStatus`;
