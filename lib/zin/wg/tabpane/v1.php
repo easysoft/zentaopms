@@ -12,6 +12,7 @@ class tabPane extends wg
     protected static $defineBlocks = array(
         'prefix' => array(),
         'suffix' => array(),
+        'divide' => false,
     );
 
     protected function build()

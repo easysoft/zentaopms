@@ -76,7 +76,7 @@ foreach($charts as $chartType => $chartOption)
                             )
                         )
                     )
-                )->size('100%', 300),
+                )->size('100%', 300)
             ),
             cell
             (
@@ -334,6 +334,7 @@ div
             tabPane
             (
                 set::key('basic'),
+                to::divide(true),
                 set::title($lang->testreport->view),
                 set::active(true),
                 sectionList
@@ -387,58 +388,75 @@ div
             tabPane
             (
                 set::key('storyAndBug'),
+                to::prefix(icon('search')),
                 set::title($lang->testreport->legendStoryAndBug),
-                dtable
+                sectionList
                 (
-                    set::cols($config->testreport->story->dtable->fieldList),
-                    set::data(array_values($stories)),
-                    set::userMap($users)
-                ),
-                div(set::class('my-6')),
-                dtable
-                (
-                    set::cols($config->testreport->bug->dtable->fieldList),
-                    set::data(array_values($bugs)),
-                    set::userMap($users)
+                    dtable
+                    (
+                        set::cols($config->testreport->story->dtable->fieldList),
+                        set::data(array_values($stories)),
+                        set::userMap($users)
+                    ),
+                    div(set::class('my-6')),
+                    dtable
+                    (
+                        set::cols($config->testreport->bug->dtable->fieldList),
+                        set::data(array_values($bugs)),
+                        set::userMap($users)
+                    )
                 )
-
             ),
             tabPane
             (
                 set::key('tabBuild'),
+                to::prefix(icon('search')),
                 set::title($lang->testreport->legendBuild),
-                dtable
+                sectionList
                 (
-                    set::cols($config->testreport->build->dtable->fieldList),
-                    set::data(array_values($builds)),
-                    set::userMap($users)
+                    dtable
+                    (
+                        set::cols($config->testreport->build->dtable->fieldList),
+                        set::data(array_values($builds)),
+                        set::userMap($users)
+                    )
                 )
             ),
             tabPane
             (
                 set::key('tabCase'),
+                to::prefix(icon('sitemap')),
                 set::title($lang->testreport->legendCase),
-                dtable
+                sectionList
                 (
-                    set::cols($config->testreport->testcase->dtable->fieldList),
-                    set::data(array_values($caseList)),
-                    set::userMap($users)
+                    dtable
+                    (
+                        set::cols($config->testreport->testcase->dtable->fieldList),
+                        set::data(array_values($caseList)),
+                        set::userMap($users)
+                    )
                 )
             ),
             tabPane
             (
                 set::key('tabLegacyBugs'),
+                to::prefix(icon('bug')),
+                to::divide(true),
                 set::title($lang->testreport->legendLegacyBugs),
-                dtable
+                sectionList
                 (
-                    set::cols($config->testreport->bug->dtable->fieldList),
-                    set::data(array_values($legacyBugs)),
-                    set::userMap($users)
+                    dtable
+                    (
+                        set::cols($config->testreport->bug->dtable->fieldList),
+                        set::data(array_values($legacyBugs)),
+                        set::userMap($users)
+                    )
                 )
             ),
             tabPane
             (
                 set::key('tabReport'),
+                to::divide(true),
                 set::title($lang->testreport->legendReport),
                 $caseCharts,
                 $bugStageChart,
@@ -449,9 +467,8 @@ div
             (
                 set::key('legendMore'),
                 set::title($lang->testreport->legendMore),
-                div
+                sectionList
                 (
-                    set::class('py-4'),
                     $lang->testreport->moreNotice
                 )
             )

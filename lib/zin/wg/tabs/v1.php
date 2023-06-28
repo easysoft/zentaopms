@@ -113,7 +113,11 @@ class tabs extends wg
         $contentViews = array();
         foreach($this->tabPanes as $tabPane)
         {
-            $titleViews[]   = $this->buildTitleView($tabPane);
+            $titleViews[] = $this->buildTitleView($tabPane);
+
+            $divide = $tabPane->block('divide');
+            if($divide) $titleViews[] = div(set::class('divide'));
+
             $contentViews[] = $tabPane;
         }
 
