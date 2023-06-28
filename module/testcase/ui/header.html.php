@@ -35,6 +35,7 @@ $canImportXmind     = hasPriv('testcase', 'importXmind');
 $canCreateCase      = hasPriv('testcase', 'create');
 $canBatchCreateCase = hasPriv('testcase', 'batchCreate');
 $canCreateScene     = hasPriv('testcase', 'createScene');
+$canImportUnitResult = hasPriv('testtask', 'importUnitResult');
 $canCreate          = $canCreateCase || $canBatchCreateCase || $canCreateScene;
 
 $lang->testcase->typeList[''] = $lang->testcase->allType;
@@ -75,7 +76,7 @@ if($canDisplaySuite)
     $suiteItems       = array();
     if(empty($suiteList))
     {
-        if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
+        if($canCreateSuite && (empty($productID) || $canModify))
         {
             $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
         }
@@ -274,6 +275,13 @@ toolbar
             set::items($createItems),
             set::placement('bottom-end'),
         ) : null,
+    ) : null,
+    $rawMethod == 'browseunits' && (empty($productID) || $canModify) && $canImportUnitResult ? btn
+    (
+        set::class('btn primary'),
+        set::icon('import'),
+        set::url(createLink('testtask', 'importUnitResult', "product=$productID")),
+        $lang->testtask->importUnitResult,
     ) : null,
 );
 
