@@ -20,8 +20,8 @@ foreach($crons as $cron)
     if(!empty($cron->command) and common::hasPriv('cron', 'edit'))   $actionsHtml .= html::a(inlink('edit', "id=$cron->id"), $lang->edit, '', "class='primary-500'");
     if($cron->buildin == 0 and common::hasPriv('cron', 'delete'))    $actionsHtml .= html::a('###', $lang->delete, '', "class='primary-500 ajaxDelete' data-id={$cron->id}");
 
-    $cron->actions  = $actionsHtml;
-    $cron->lastTime = substr($cron->lastTime, 2, 17);
+    $cron->actions = $actionsHtml;
+    if($cron->lastTime) $cron->lastTime = substr($cron->lastTime, 2, 17);
 }
 
 panel

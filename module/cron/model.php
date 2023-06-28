@@ -76,7 +76,7 @@ class cronModel extends model
                 }
             }
         }
-        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('lastTime')->eq('0000-00-00 00:00:00')->andWhere('status')->ne('stop')->exec();
+        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('`lastTime` IS NULL')->andWhere('status')->ne('stop')->exec();
         return $parsedCrons;
     }
 
@@ -171,7 +171,7 @@ class cronModel extends model
      */
     public function checkChange()
     {
-        $updatedCron = $this->dao->select('*')->from(TABLE_CRON)->where('lastTime')->eq('0000-00-00 00:00:00')->andWhere('status')->ne('stop')->fetch();
+        $updatedCron = $this->dao->select('*')->from(TABLE_CRON)->where('`lastTime` IS NULL')->andWhere('status')->ne('stop')->fetch();
         return $updatedCron ? true : false;
     }
 
@@ -185,7 +185,6 @@ class cronModel extends model
     {
         $cron = fixer::input('post')
             ->add('status', 'normal')
-            ->add('lastTime', '0000-00-00 00:00:00')
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
 
@@ -217,7 +216,7 @@ class cronModel extends model
     public function update($cronID)
     {
         $cron = fixer::input('post')
-            ->add('lastTime', '0000-00-00 00:00:00')
+            ->add('lastTime', NULL)
             ->skipSpecial('m,h,dom,mon,dow,command')
             ->get();
 
