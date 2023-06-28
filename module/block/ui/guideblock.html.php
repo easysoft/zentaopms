@@ -35,10 +35,10 @@ function getGuideTabs(string $blockNavCode): array
 
         $navTabs[] = li
         (
-            set('class', 'nav-item w-full' . ($tab == $selected ? ' active' : '')),
+            set('class', 'nav-item w-full'),
             a
             (
-                set('class', 'ellipsis guide-tab text-dark'),
+                set('class', 'ellipsis guide-tab text-dark' . ($tab == $selected ? ' active' : '')),
                 set('data-tab', $tab),
                 set('data-toggle', 'tab'),
                 set('href', "#tab{$blockNavCode}Content{$tab}"),
