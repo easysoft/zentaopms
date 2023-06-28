@@ -92,7 +92,7 @@ if($canDisplaySuite)
 
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
-if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browse', "productID=$productID&browseType={key}");
+if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
 featureBar
 (
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
