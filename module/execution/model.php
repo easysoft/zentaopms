@@ -3253,7 +3253,7 @@ class executionModel extends model
             $data->branch  = $storyList[$storyID]->branch;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
-            $data->order   = $lastOrder;
+            $data->order   = (int)$lastOrder;
             $this->dao->replace(TABLE_PROJECTSTORY)->data($data)->exec();
 
             $this->story->setStage($storyID);
@@ -3318,8 +3318,6 @@ class executionModel extends model
 
         $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         $this->session->set('project', $projectID);
-
-        if(!empty($plans)) return false;
 
         $stories      = array();
         $planProducts = array();
