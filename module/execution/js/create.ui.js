@@ -23,7 +23,7 @@ $(function()
         let existedBranch = false;
 
         /* Determine whether the products of the same branch are linked. */
-        $("#productsBox select[name^='products']").each(function()
+        $(".productsBox select[name^='products']").each(function()
         {
             let productID = $(this).val();
             if(typeof(products[productID]) == 'undefined') products[productID] = new Array();

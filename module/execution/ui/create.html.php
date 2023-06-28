@@ -102,7 +102,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
 
         $productsBox[] = formRow
         (
-            set::id('productsBox'),
+            set::class('productsBox'),
             formGroup
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
@@ -159,7 +159,8 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
                     (
                         set::name("plans[$product->id][]"),
                         set::items($plans),
-                        set::value($planID)
+                        set::value($planID),
+                        set::multiple(true)
                     )
                 ),
                 $isStage && $project->stageBy == 'project' ? null : div
@@ -209,7 +210,7 @@ else
 {
     $productsBox [] = formRow
     (
-        set::id('productsBox'),
+        set::class('productsBox'),
         formGroup
         (
             set::width('1/2'),
