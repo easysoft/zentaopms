@@ -32,6 +32,7 @@ js::set('isClosedBug'            , $bug->status == 'closed');
 js::set('projectExecutionPairs'  , $projectExecutionPairs);
 js::set('productID'              , $product->id);
 js::set('released'               , $lang->build->released);
+js::set('bugTestTask'            , $bug->testtask);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -313,7 +314,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->testtask;?></th>
-                  <td id='testtaskBox'><?php echo html::select('testtask', $testtasks, $bug->testtask, 'class="form-control chosen"');?></td>
+                  <td id='testtaskBox'><?php echo html::select('testtask', array(), '', 'class="form-control picker-select"');?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>

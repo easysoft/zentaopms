@@ -1189,7 +1189,6 @@ class bug extends control
         $this->view->branchOption          = $branchOption;
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
-        $this->view->testtasks             = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->assignedToList        = $assignedToList;
         $this->view->cases                 = array('' => '') + $cases;
@@ -1253,6 +1252,17 @@ class bug extends control
 
         $builds->resolvedBuildName = zget($resolvedBuilds, $bug->resolvedBuild);
         echo json_encode($builds);
+    }
+
+    public function ajaxGetTestTasks($bugID)
+    {
+        $bug       = $this->bug->getById($bugID);
+        $testTasks = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
+        $testTasks = array_map(function($key, $value)
+        {
+            return (object) array('value' => $key, 'text' => $value);
+        }, array_keys($testTasks), array_values($testTasks));
+        echo json_encode($testTasks);
     }
 
     /**

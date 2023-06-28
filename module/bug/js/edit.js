@@ -15,7 +15,8 @@ $(function()
 
     initPicker($('#case'));
     initPicker($('#duplicateBug'));
-    getAllBuilds();
+    renderBuilds();
+    renderTestTasks();
 
     $('#duplicateBug').picker(
     {
@@ -48,7 +49,7 @@ $(function()
  * @access public
  * @return void
  */
-function getAllBuilds()
+function renderBuilds()
 {
     $.get(createLink('bug', 'ajaxGetAllBuilds', 'bugID=' + bugID), function(data)
     {
@@ -78,6 +79,22 @@ function getAllBuilds()
                 }
             });
         }
+    }, 'json');
+}
+
+/**
+ * render testTasks.
+ *
+ * @access public
+ * @return void
+ */
+function renderTestTasks()
+{
+    $.get(createLink('bug', 'ajaxGetTestTasks', 'bugID=' + bugID), function(data)
+    {
+        $('#testtask').data('zui.picker').destroy();
+        $('#testtask').picker({list: data});
+        $('#testtask').data('zui.picker').setValue(bugTestTask);
     }, 'json');
 }
 
