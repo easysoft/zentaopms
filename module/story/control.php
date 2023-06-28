@@ -1466,7 +1466,7 @@ class story extends control
         $this->view->hiddenURS  = false;
         if(!empty($product->shadow))
         {
-            $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $projectInfo = $this->dao->select('t2.model, t2.multiple, t2.id')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($product->id)
                 ->andWhere('t2.type')->eq('project')
@@ -1483,6 +1483,7 @@ class story extends control
             }
 
             if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
+            $this->loadModel('project')->setMenu($projectInfo->id);
         }
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
