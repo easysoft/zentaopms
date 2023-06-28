@@ -131,7 +131,11 @@ $formItems['whitelist'] = formRow
     )
 );
 
-formPanel($formItems);
+formPanel
+(
+    set::title($title),
+    $formItems
+);
 
 /* ====== Render page ====== */
 render();
