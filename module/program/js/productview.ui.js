@@ -38,7 +38,7 @@ window.iconRenderProductView = function(value, row)
  * @access public
  * @return void
  */
-onClickBatchEdit = function(event)
+window.onClickBatchEdit = function(event)
 {
     event.stopPropagation();
     event.preventDefault();

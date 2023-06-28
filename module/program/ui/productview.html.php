@@ -20,27 +20,9 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 {
     $items = array();
 
-    hasPriv('program', 'create') ? $items[] = array
-    (
-        'text' => $lang->program->create,
-        'icon' => 'plus',
-        'url'  => createLink('program', 'create')
-    ) : null;
-
-    hasPriv('product', 'create') ? $items[] = array
-    (
-        'text' => $lang->program->createProduct,
-        'icon' => 'plus',
-        'url'  => createLink('product', 'create')
-    ) : null;
-
-    hasPriv('product', 'manageLine') ? $items[] = array
-    (
-        'text'        => $lang->program->manageLine,
-        'icon'        => 'edit',
-        'data-toggle' => 'modal',
-        'data-url'    => createLink('product', 'manageLine', $browseType)
-    ) : null;
+    hasPriv('program', 'create')     && $items[] = array('text' => $lang->program->create,        'icon' => 'plus', 'url'      => createLink('program', 'create'));
+    hasPriv('product', 'create')     && $items[] = array('text' => $lang->program->createProduct, 'icon' => 'plus', 'url'      => createLink('product', 'create'));
+    hasPriv('product', 'manageLine') && $items[] = array('text' => $lang->program->manageLine,    'icon' => 'edit', 'data-url' => createLink('product', 'manageLine', $browseType), 'data-toggle' => 'modal' );
 
     return btnGroup
     (
@@ -279,19 +261,6 @@ featureBar
 
 toolbar
 (
-    item(set(array(
-        'text' => $lang->program->export,
-        'icon' => 'export',
-        'class'=> 'ghost',
-        'url'  => createLink('program', 'exportTable')
-    ))),
-    div(setClass('nav-divider')),
-    item(set(array(
-        'text' => $lang->program->edit,
-        'icon' => 'edit',
-        'class'=> 'ghost',
-        'url'  => createLink('program', 'exportTable')
-    ))),
     $fnGenerateCreateProgramBtns()
 );
 
@@ -316,7 +285,7 @@ dtable
                 'text'    => $lang->edit,
                 'btnType' => 'secondary',
                 'url'     => createLink('product', 'batchEdit'),
-                'onClick' => jsRaw('onClickBatchEdit')
+                'onClick' => jsRaw('window.onClickBatchEdit')
             ) : null
         )
     )),
