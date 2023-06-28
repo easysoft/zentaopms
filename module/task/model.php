@@ -3777,17 +3777,29 @@ class taskModel extends model
      * @param string $mode
      * @param bool   $child
      * @param bool   $showBranch
+     * @param array  $privs
      *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false)
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false, $privs = array())
     {
-        $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
-        $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
-        $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
-        $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
-        $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+        if(!empty($privs))
+        {
+            $canBatchEdit         = $privs['canBatchEdit'];
+            $canBatchClose        = $privs['canBatchClose'];
+            $canBatchCancel       = $privs['canBatchCancel'];
+            $canBatchChangeModule = $privs['canBatchChangeModule'];
+            $canBatchAssignTo     = $privs['canBatchAssignTo'];
+        }
+        else
+        {
+            $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
+            $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
+            $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
+            $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
+            $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+        }
 
         $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
         $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));
