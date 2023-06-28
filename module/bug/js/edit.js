@@ -15,23 +15,7 @@ $(function()
 
     initPicker($('#case'));
     initPicker($('#duplicateBug'));
-
-    resolution = $('#resolution').val();
-    if(resolution == 'fixed')
-    {
-        $('#resolvedBuildBox').change(function()
-        {
-            if($('#resolvedBuild').val() != oldResolvedBuild)
-            {
-                confirmResult = confirm(confirmUnlinkBuild);
-                if(!confirmResult)
-                {
-                    var resolvedBuildPicker = $('#resolvedBuild').data('zui.picker');
-                    resolvedBuildPicker.setValue(oldResolvedBuild);
-                }
-            }
-        });
-    }
+    getAllBuilds();
 
     $('#duplicateBug').picker(
     {
@@ -57,6 +41,45 @@ $(function()
     var $pkResolvedBuild = $('#pk_resolvedBuild-search');
     $pkResolvedBuild.closest('.picker').css('width', $pkResolvedBuild.closest('td').width() - $pkResolvedBuild.closest('td').find('.input-group-btn').width());
 });
+
+/**
+ * Get all builds and set confirm string.
+ *
+ * @access public
+ * @return void
+ */
+function getAllBuilds()
+{
+    $.get(createLink('bug', 'ajaxGetAllBuilds', 'bugID=' + bugID), function(data)
+    {
+        var openedBuilds   = data.openedBuilds;
+        $('#openedBuild').data('zui.picker').destroy();
+        $('#openedBuild').picker({list: openedBuilds});
+        $('#openedBuild').data('zui.picker').setValue(oldOpenedBuild);
+        var resolvedBuilds = data.resolvedBuilds;
+        $('#resolvedBuild').data('zui.picker').destroy();
+        $('#resolvedBuild').picker({list: resolvedBuilds});
+        $('#resolvedBuild').data('zui.picker').setValue(oldResolvedBuild);
+
+        resolution = $('#resolution').val();
+        if(resolution == 'fixed')
+        {
+            $('#resolvedBuildBox').change(function()
+            {
+                if($('#resolvedBuild').val() != oldResolvedBuild)
+                {
+                    confirmUnlinkBuild = confirmUnlinkBuild.replace('%s', data.resolvedBuildName);
+                    confirmResult = confirm(confirmUnlinkBuild);
+                    if(!confirmResult)
+                    {
+                        var resolvedBuildPicker = $('#resolvedBuild').data('zui.picker');
+                        resolvedBuildPicker.setValue(oldResolvedBuild);
+                    }
+                }
+            });
+        }
+    }, 'json');
+}
 
 /**
  * Set duplicate field.

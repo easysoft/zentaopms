@@ -1093,34 +1093,6 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->edit;
 
-        /* Assign. */
-        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
-        if($executionID)
-        {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $executionID, 'execution');
-        }
-        elseif($projectID)
-        {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $projectID, 'project');
-        }
-        else
-        {
-            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
-        }
-
-        /* Set the openedBuilds list. */
-        $oldOpenedBuilds = array();
-        $bugOpenedBuilds = explode(',', $bug->openedBuild);
-        foreach($bugOpenedBuilds as $buildID)
-        {
-            if(isset($allBuilds[$buildID])) $oldOpenedBuilds[$buildID] = $allBuilds[$buildID];
-        }
-        $openedBuilds = $openedBuilds + $oldOpenedBuilds;
-
-        /* Set the resolvedBuilds list. */
-        $oldResolvedBuild = array();
-        if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
-
         $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
 
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
@@ -1221,11 +1193,66 @@ class bug extends control
         $this->view->users                 = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->assignedToList        = $assignedToList;
         $this->view->cases                 = array('' => '') + $cases;
-        $this->view->openedBuilds          = $openedBuilds;
-        $this->view->resolvedBuilds        = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions               = $this->action->getList('bug', $bugID);
 
         $this->display();
+    }
+
+    /**
+     * Ajax get opened and resolved builds.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return mixed
+     */
+    public function ajaxGetAllBuilds($bugID)
+    {
+        $bug         = $this->bug->getById($bugID);
+        $productID   = $bug->product;
+        $executionID = $bug->execution;
+        $projectID   = $bug->project;
+
+        $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
+        if($executionID)
+        {
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $executionID, 'execution');
+        }
+        elseif($projectID)
+        {
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $projectID, 'project');
+        }
+        else
+        {
+            $openedBuilds = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+        }
+
+        /* Set the openedBuilds list. */
+        $oldOpenedBuilds = array();
+        $bugOpenedBuilds = explode(',', $bug->openedBuild);
+        foreach($bugOpenedBuilds as $buildID)
+        {
+            if(isset($allBuilds[$buildID])) $oldOpenedBuilds[$buildID] = $allBuilds[$buildID];
+        }
+        $openedBuilds = $openedBuilds + $oldOpenedBuilds;
+
+        /* Set the resolvedBuilds list. */
+        $oldResolvedBuild = array();
+        if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
+
+        $builds = new stdclass();
+        $builds->openedBuilds = array_map(function($key, $value)
+        {
+            return (object) array('value' => $key, 'text' => $value);
+        }, array_keys($openedBuilds), array_values($openedBuilds));
+
+        $resolvedBuilds = $openedBuilds + $oldResolvedBuild;
+        $builds->resolvedBuilds = array_map(function($key, $value)
+        {
+            return (object) array('value' => $key, 'text' => $value);
+        }, array_keys($resolvedBuilds), array_values($resolvedBuilds));
+
+        $builds->resolvedBuildName = zget($resolvedBuilds, $bug->resolvedBuild);
+        echo json_encode($builds);
     }
 
     /**

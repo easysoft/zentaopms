@@ -24,7 +24,7 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+js::set('confirmUnlinkBuild'     , $lang->bug->confirmUnlinkBuild);
 js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
@@ -242,7 +242,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->openedBuild;?></th>
                   <td>
                     <div id='openedBuildBox' class='input-group'>
-                      <?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class="picker-select form-control"');?>
+                      <?php echo html::select('openedBuild[]', array(), '', 'size=4 multiple=multiple class="picker-select form-control"');?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
@@ -259,7 +259,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->resolvedBuild;?></th>
                   <td>
                     <div id='resolvedBuildBox' class='input-group'>
-                      <?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control picker-select'");?>
+                      <?php echo html::select('resolvedBuild', array(), '', "class='form-control picker-select'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
