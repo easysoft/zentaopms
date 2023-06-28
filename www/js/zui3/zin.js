@@ -505,7 +505,11 @@
      */
     function loadTable(url, id, options)
     {
-        id  = id || $('.dtable').attr('id') || 'dtable';
+        if(!id)
+        {
+            const urlInfo = $.parseLink(url);
+            id = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
+        }
         loadPage($.extend(
         {
             url: url,
