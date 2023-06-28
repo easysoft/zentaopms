@@ -19,24 +19,14 @@ class searchToggle extends wg
     {
         global $lang;
         $module = $this->prop('module');
-        return popovers
+        return btn
         (
-            to::trigger
-            (
-                btn
-                (
-                    set::class('ghost search-form-toggle'),
-                    set::icon('search'),
-                    set::text($lang->searchAB),
-                    set('data-module', $this->prop('module')),
-                    on::click("window.toggleSearchForm('$module');"),
-                    $this->prop('open') ? h::jsCall('~window.toggleSearchForm', $module) : null
-                )
-            ),
-            to::target
-            (
-                div(setID('searchFormPanel'))
-            ),
+            set::class('ghost search-form-toggle'),
+            set::icon('search'),
+            set::text($lang->searchAB),
+            set('data-module', $this->prop('module')),
+            on::click("window.toggleSearchForm('$module');"),
+            $this->prop('open') ? h::jsCall('~window.toggleSearchForm', $module) : null
         );
     }
 }
