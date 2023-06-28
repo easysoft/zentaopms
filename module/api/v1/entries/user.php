@@ -395,7 +395,7 @@ class userEntry extends entry
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
-        $fields = 'dept,realname,role,join,type,visions,mobile,phone,qq,dingding,weixin,skype,whatsapp,slack,address,address,email,commiter,gender,groups,passwordStrength,locked,fails,birthday';
+        $fields = 'dept,realname,role,join,type,visions,mobile,phone,qq,dingding,weixin,skype,whatsapp,slack,address,address,email,commiter,gender,`groups`,passwordStrength,locked,fails,birthday';
         $this->batchSetPost($fields, $oldUser);
         $this->setPost('account', $oldUser->account);
 
