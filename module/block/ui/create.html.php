@@ -83,7 +83,7 @@ div
     ) : '',
     cell
     (
-        width('calc(100% - 130px)'),
+        width('calc(100% - ' . ($showModules ? '130' : '2') .  'px)'),
         form
         (
             setClass('border-b-0'),
@@ -95,7 +95,7 @@ div
                 formGroup
                 (
                     set::name('module'),
-                    set::value($module),
+                    set::value($app->tab == 'my' ? $module : $dashboard),
                 )
             ),
             formRow
