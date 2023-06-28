@@ -155,6 +155,7 @@ zentaoxx:
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
+	find zentaoxx/extension/xuan/ -name '*.php' -exec sed -i -r 's|->ne(["'\'']0000-00-00 00:00:00["'\''])|->notZeroDatetime()|g; s|["'\'']\)->eq\(["'\'']0000-00-00( 00:00:00)?| is null|g; s|([=!]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|([^!=]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|(["'\''])(,.*)\)->eq\(["'\'']0000-00-00( 00:00:00)?["'\'']| is null\1\2|g; s|["'\'']0000-00-00 00:00:00["'\'']|null|g' {} +
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../
 	rm -rf zentaoxx/tools
