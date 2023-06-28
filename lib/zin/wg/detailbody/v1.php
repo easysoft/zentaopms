@@ -13,8 +13,12 @@ class detailBody extends wg
         'side' => array('map' => 'detailSide'),
         'bottom' => array('map' => 'history,fileList'),
         'floating' => array('map' => 'floatToolbar'),
-        'fixedActions' => array(),
     );
+
+    public static function getPageJS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
 
     protected function build()
     {
@@ -41,9 +45,9 @@ class detailBody extends wg
             );
         }
 
-        return form
+        return formBase
         (
-            set::actionsClass('h-14 flex flex-auto items-center justify-center shadow'),
+            set::actionsClass('h-14 flex flex-none items-center justify-center shadow'),
             setClass('detail-body rounded col of-y-hidden bg-white'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
             setStyle('height', 'calc(100vh - 120px)'),
@@ -53,6 +57,7 @@ class detailBody extends wg
                 div
                 (
                     setClass('flex'),
+                    setStyle('min-height', '100%'),
                     div
                     (
                         setClass('col grow'),
