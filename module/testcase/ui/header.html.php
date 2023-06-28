@@ -133,6 +133,7 @@ featureBar
         a
         (
             set::href(str_replace('{key}', 'onlyScene', $browseLink)),
+            set('class', $browseType == 'onlyscene' ? 'active' : ''),
             $lang->testcase->onlyScene
         )
     ),
