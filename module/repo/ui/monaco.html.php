@@ -67,3 +67,5 @@ sidebar
         set::onClickItem(jsRaw('window.treeClick')),
     )
 );
+
+a(set::class('iframe'), setData('width', '90%'), setData('toggle', 'modal'), set::id('linkObject'));

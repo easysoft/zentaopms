@@ -7,7 +7,6 @@ function loadProductBranchesNew(productID)
 {
     $('#branch').remove();
 
-    console.log(1111, caseBranch)
     var param     = page == 'create' ? 'active' : 'all';
     var oldBranch = page == 'edit' ? caseBranch : 0;
     var param     = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + param;

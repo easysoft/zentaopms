@@ -6,17 +6,21 @@ var parentTree = [];
 /* Close tab. */
 $('#monacoTabs').on('click', '.monaco-close', function()
 {
-    var eleId = $(this).parent().attr('href');
-    if($(this).parent().hasClass('active')) $(this).parent().parent().parent().children().first().find('a').trigger('click');
+    var eleId    = $(this).parent().attr('href');
+    var tabsEle  = $(this).parent().parent().parent();
+    var isActive = $(this).parent().hasClass('active');
+
     $(this).parent().parent().remove();
     $(eleId).remove();
     $('#' + eleId.substring(5)).parent().removeClass('selected');
+    if(isActive) tabsEle.children().last().find('a').trigger('click');
 });
 
 window.afterPageUpdate = function()
 {
     setTimeout(function()
     {
+        var fileAsId = file.replace(/=/g, '-');
         /* Resize moaco height. */
         $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
         /* Init tab template. */
@@ -24,17 +28,18 @@ window.afterPageUpdate = function()
         
         /* Load default tab content. */
         var height = getIframeHeight();
-        $('#tab-' + file).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', file)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
+        $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', fileAsId)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
         
         /* Select default tree item. */
-        const currentElement = findItemInTreeItems(tree, file, 0);
+        const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         $('#' + currentElement.id).parent().addClass('selected');
         expandTree();
-    }, 100);
+    }, 200);
 };
 
 
 /**
+ * 点击左侧菜单打开详情tab。
  * Open new tab when click tree item.
  *
  * @access public
@@ -48,6 +53,7 @@ window.treeClick = function(info)
 }
 
 /**
+ * 打开新tab。
  * Open new tab.
  *
  * @access public
@@ -77,6 +83,7 @@ function openTab(entry, name)
 }
 
 /**
+ * 查找选中元素所有的父元素及选中元素的id。
  * Find parent nodes and item id of selected tree item.
  *
  * @access public
@@ -104,6 +111,7 @@ function findItemInTreeItems(list, key, level) {
 }
 
 /**
+ * 展开树状结构。
  * Expand tree node.
  *
  * @access public
@@ -113,13 +121,11 @@ function expandTree()
 {
     const treeObj = $('#monacoTree').parent().data('zui.Tree');
 
-    for (const key of parentTree)
-    {
-        treeObj.$.expand(key);
-    }
+    for (const key of parentTree) treeObj.$.expand(key);
 }
 
 /**
+ * 获取tabs内容高度。
  * Get tab-content height.
  *
  * @access public
@@ -140,12 +146,13 @@ function getIframeHeight()
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
     mainMenuHeight     = mainMenuHeight ? mainMenuHeight : 0;
     mainNavbar         = mainNavbar ? mainNavbar : 0;
-    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar;
+    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - 8;
 
     return iframeHeight;
 }
 
 /**
+ * 获取左侧边栏高度。
  * Get sidebar height.
  *
  * @access public
@@ -168,4 +175,18 @@ function getSidebarHeight()
     sidebarHeight  = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar;
 
     return sidebarHeight;
+}
+
+/**
+ * 在当前页面用modal加载链接。
+ * Load link object page.
+ *
+ * @param  string $link
+ * @access public
+ * @return void
+ */
+window.loadLinkPage = function(link)
+{
+    $('#linkObject').attr('href', link);
+    $('#linkObject').trigger('click');
 }

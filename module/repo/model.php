@@ -2566,12 +2566,13 @@ class repoModel extends model
                 {
                     $id++;
 
+                    $id = str_replace('=', '-', base64_encode(urlencode($parent)));
                     $files[$parent] = array(
-                        'id'     => str_replace('=', '-', base64_encode(urlencode($parent))),
+                        'id'     => $id,
                         'parent' => $parentID,
                         'name'   => $path,
                         'path'   => $parent,
-                        'key'    => base64_encode(urlencode($parent)),
+                        'key'    => $id,
                     );
                 }
             }

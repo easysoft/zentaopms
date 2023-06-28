@@ -6,3 +6,10 @@
 #fileTabs > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
 #fileTabs .monaco-close{margin-right: 18px;}
 #fileTabs .nav-tabs > li > a > span{margin-left: 18px;font-weight: 700;color: #313c52!important;}
+#related .btn-right, #related .btn-left {padding-top: 9px;}
+#log .action-btn {margin-top: -7px;}
+.repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
+#related .btn-right, #related .btn-left {padding-top: 9px;}
+.btn-left, .btn-right {display: none;}
+#linkObject{display: none;}
+#related .btn-right, #related .btn-left {padding-top: 9px;}
