@@ -94,14 +94,10 @@ if(!empty($products))
                         set::items($plans),
                         set::value($product->plans)
                     )
-                )
-            ),
-            formGroup
-            (
-                set::width('1/6'),
+                ),
                 div
                 (
-                    setClass('pl-2 flex self-center'),
+                    setClass('pl-2 flex self-center line-btn'),
                     btn
                     (
                         setClass('btn btn-link addLine'),
@@ -116,7 +112,7 @@ if(!empty($products))
                         $i == 0 ? set::disabled(true) : null
                     ),
                 )
-            )
+            ),
         );
 
         $i ++;
@@ -371,7 +367,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/4'),
             setClass('hidden'),
             inputGroup
             (
@@ -396,14 +392,10 @@ formPanel
                     set::items(null),
                     set::multiple(false)
                 )
-            )
-        ),
-        formGroup
-        (
-            set::width('1/6'),
+            ),
             div
             (
-                setClass('pl-2 flex self-center'),
+                setClass('pl-2 flex self-center line-btn'),
                 btn
                 (
                     setClass('btn btn-link addLine'),
@@ -418,7 +410,7 @@ formPanel
                     $i == 0 ? set::disabled(true) : null
                 ),
             )
-        )
+        ),
     ),
     formGroup
     (

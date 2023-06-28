@@ -162,14 +162,10 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
                         set::items($plans),
                         set::value($planID)
                     )
-                )
-            ),
-            $isStage && $project->stageBy == 'project' ? null : formGroup
-            (
-                set::width('1/6'),
-                div
+                ),
+                $isStage && $project->stageBy == 'project' ? null : div
                 (
-                    setClass('pl-2 flex self-center'),
+                    setClass('pl-2 flex self-center line-btn'),
                     btn
                     (
                         setClass('btn btn-link addLine'),
@@ -184,7 +180,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
                         on::click('removeLine'),
                     ),
                 )
-            )
+            ),
         );
 
         $i ++;
@@ -259,14 +255,10 @@ else
                     set::items($productPlan),
                     set::multiple(true)
                 )
-            )
-        ),
-        $isStage && $project->stageBy == 'product' ? null : formGroup
-        (
-            set::width('1/6'),
-            div
+            ),
+            $isStage && $project->stageBy == 'product' ? null : div
             (
-                setClass('pl-2 flex self-center'),
+                setClass('pl-2 flex self-center line-btn'),
                 btn
                 (
                     setClass('btn btn-link addLine'),
@@ -281,12 +273,13 @@ else
                     on::click('removeLine'),
                 ),
             ),
-        )
+        ),
     );
 }
 
 formPanel
 (
+    set::class('createPanel'),
     to::heading(div
     (
         setClass('panel-title text-lg'),
