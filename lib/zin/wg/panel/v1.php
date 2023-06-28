@@ -64,7 +64,8 @@ class panel extends wg
     {
         return div
         (
-            setClass('panel-body'),
+            setClass('panel-body ' . $this->prop('bodyClass')),
+            set($this->prop('bodyProps')),
             $this->children()
         );
     }
