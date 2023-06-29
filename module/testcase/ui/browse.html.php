@@ -123,7 +123,7 @@ if($canBatchChangeScene)
     );
 }
 
-$cols = $this->loadModel('datatable')->getSetting('testcase');
+$cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
 {
     $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
@@ -155,7 +155,7 @@ foreach($scenes as $scene)
 
 dtable
 (
-    set::customCols(true),
+    set::customCols(!$isOnlyScene),
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($scenes)),
