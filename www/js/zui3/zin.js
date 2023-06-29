@@ -752,7 +752,11 @@
         {
             if(!options.load) options.load   = 'modal';
             if(options.load === 'modal' && !options.loadId) options.loadId = $modal.attr('id');
-            if(options.load === 'table' && !options.url) options.url = $modal.data('zui.Modal').options.url;
+            if(options.load === 'table')
+            {
+                options.partial = true;
+                if(!options.url) options.url = $modal.data('zui.Modal').options.url;
+            }
         }
         else
         {
