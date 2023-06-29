@@ -1703,6 +1703,7 @@ class baseRouter
                     $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
                 }
             }
+            $this->rawParams = $this->params;
             return true;
         }
         catch(EndResponseException $endResponseException)

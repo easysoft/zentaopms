@@ -687,7 +687,6 @@ class router extends baseRouter
         /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */
         unset($passedParams['display']);
 
-        $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
-        return $this->rawParams;
+        return parent::mergeParams($defaultParams, $passedParams);
     }
 }
