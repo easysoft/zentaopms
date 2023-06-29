@@ -184,6 +184,7 @@ div
     )
 );
 
+/* History list. */
 div
 (
     setID('historyBlock'),
@@ -194,4 +195,201 @@ div
         history()
     )
 );
+
+/* Basic info. */
+$programDom = null;
+if($project->grade > 1)
+{
+    foreach($programList as $programID => $name)
+    {
+        if(common::hasPriv('program', 'product'))
+        {
+            $programList[$programID] = html::a
+            (
+                $this->createLink('program', 'product', "programID={$programID}"),
+                $name
+            );
+        }
+    }
+
+    $programDom = div
+    (
+        icon('program mr-2'),
+        html(implode('/ ', $programList))
+    );
+}
+
+$productsDom = array();
+if(!empty($project->hasProduct))
+{
+    foreach($products as $productID => $product)
+    {
+        foreach($product->branches as $branchID)
+        {
+            $branchName    = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';
+            $productsDom[] = div
+            (
+                setClass('flex-initial w-1/2 py-1'),
+                a
+                (
+                    set::href(createLink('product', 'browse', "productID=$productID&branch=$branchID")),
+                    icon('product'),
+                    span($product->name . $branchName)
+                )
+            );
+        }
+    }
+}
+
+$basicInfo = null;
+if(empty($project->hasProduct) && !empty($config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
+{
+    $basicInfo = tableData
+    (
+        set::useTable(false),
+        item
+        (
+            set::name($lang->story->common),
+            $statData->storyCount
+        ),
+        item
+        (
+            set::name($lang->requirement->common),
+            $statData->requirementCount
+        ),
+        item
+        (
+            set::name($lang->task->common),
+            $statData->taskCount
+        ),
+        item
+        (
+            set::name($lang->bug->common),
+            $statData->bugCount
+        ),
+        item
+        (
+            set::name($lang->project->budget),
+            $statData->budget
+        ),
+    );
+}
+else
+{
+    $basicInfo = tableData
+    (
+        set::useTable(false),
+        item
+        (
+            set::name($lang->story->common),
+            $statData->storyCount
+        ),
+        item
+        (
+            set::name($lang->task->common),
+            $statData->taskCount
+        ),
+        item
+        (
+            set::name($lang->bug->common),
+            $statData->bugCount
+        ),
+        item
+        (
+            set::name($lang->project->budget),
+            $statData->budget
+        ),
+    );
+}
+
+$aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;
+div
+(
+    setID('basicBlock'),
+    setClass('hidden'),
+    sectionList
+    (
+        section
+        (
+            setClass('border-b pb-4'),
+            div
+            (
+                label
+                (
+                    setClass('text-dark'),
+                    $project->id
+                ),
+                !empty($config->setCode) ? label
+                (
+                    setClass('dark-outline text-dark mx-2'),
+                    $project->code
+                ) : null,
+                span(setClass('article-h2'), $project->name),
+            ),
+            div
+            (
+                setClass('mt-4'),
+                $config->vision == 'rnd' ? label
+                (
+                    setClass('secondary-pale ring-secondary text-primary'),
+                    zget($lang->project->projectTypeList, $project->hasProduct)
+                ) : null,
+                $project->deleted ? label
+                (
+                    setClass('danger-outline text-danger ml-2'),
+                    $lang->project->deleted
+                ) : null,
+                $project->lifetime ? label
+                (
+                    setClass('secondary-outline text-primary ml-2'),
+                    zget($lang->execution->lifeTimeList, $project->lifetime, '')
+                ) : null,
+                isset($project->delay) ? label
+                (
+                    setClass('danger-outline text-danger ml-2'),
+                    $lang->project->delayed
+                ) : null,
+                label
+                (
+                    setClass("status-{$project->status} ml-2"),
+                    $this->processStatus('project', $project)
+                ),
+            )
+        ),
+        section
+        (
+            setClass('border-b pb-4'),
+            set::title($lang->project->parent),
+            $programDom
+        ),
+        !empty($project->hasProduct) ? section
+        (
+            setClass('border-b pb-4 linked-products'),
+            set::title($lang->project->manageProducts),
+            to::actions(btn
+            (
+                setClass('ghost text-gray'),
+                set::url(createLink('project', 'manageproducts', "projectID={$project->id}")),
+                $lang->more
+            )),
+            div
+            (
+                setClass('flex flex-wrap'),
+                $productsDom
+            )
+        ) : null,
+        section
+        (
+            setClass('border-b pb-4 project-basic-info'),
+            set::title($lang->execution->basicInfo),
+            $basicInfo
+        ),
+        section
+        (
+            set::title($lang->project->acl),
+            p($aclList[$project->acl])
+        )
+    )
+);
+
 render();
