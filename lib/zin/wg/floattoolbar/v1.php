@@ -57,7 +57,14 @@ class floatToolbar extends wg
         if(empty($btns) && empty($block)) return null;
         if(empty($block)) return $btns;
 
-        foreach($block[0]->children() as $blockBtn) $blockBtn->add(setClass('ghost', 'text-white'));
+        if($block[0] instanceof btn)
+        {
+            $block[0]->add(setClass('ghost', 'text-white'));
+        }
+        else
+        {
+            foreach($block[0]->children() as $blockBtn) $blockBtn->add(setClass('ghost', 'text-white'));
+        }
         if(empty($btns)) return $block;
 
         if(!is_array($block)) $block = array($block);
