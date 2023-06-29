@@ -159,3 +159,44 @@ $config->testcase->zerocase->dtable->fieldList['actions']['list']     = $config-
 $config->testcase->zerocase->dtable->fieldList['actions']['menu']     = array('change', 'review', 'close', 'edit', 'createcase');
 $config->testcase->zerocase->dtable->fieldList['actions']['required'] = true;
 $config->testcase->zerocase->dtable->fieldList['actions']['group']    = '7';
+
+$config->scene->dtable = new stdclass();
+$config->scene->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->scene->dtable->fieldList['id']['type']     = 'checkID';
+$config->scene->dtable->fieldList['id']['fixed']    = 'left';
+$config->scene->dtable->fieldList['id']['sortType'] = true;
+$config->scene->dtable->fieldList['id']['required'] = true;
+$config->scene->dtable->fieldList['id']['group']    = 1;
+
+$config->scene->dtable->fieldList['title']['title']        = $lang->testcase->sceneTitle;
+$config->scene->dtable->fieldList['title']['type']         = 'title';
+$config->scene->dtable->fieldList['title']['fixed']        = 'left';
+$config->scene->dtable->fieldList['title']['nestedToggle'] = true;
+$config->scene->dtable->fieldList['title']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.isCase == 2) return \'icon-folder-open-o text-gray\'; return \'\';}>RAWJS';
+$config->scene->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+$config->scene->dtable->fieldList['title']['required']     = true;
+$config->scene->dtable->fieldList['title']['group']        = 1;
+
+$config->scene->dtable->fieldList['openedBy']['title'] = $lang->testcase->openedByAB;
+$config->scene->dtable->fieldList['openedBy']['type']  = 'user';
+$config->scene->dtable->fieldList['openedBy']['show']  = true;
+$config->scene->dtable->fieldList['openedBy']['group'] = 2;
+
+$config->scene->dtable->fieldList['openedDate']['title'] = $lang->testcase->openedDate;
+$config->scene->dtable->fieldList['openedDate']['type']  = 'date';
+$config->scene->dtable->fieldList['openedDate']['group'] = 2;
+
+$config->scene->dtable->fieldList['lastEditedBy']['title'] = $lang->testcase->lastEditedBy;
+$config->scene->dtable->fieldList['lastEditedBy']['type']  = 'user';
+$config->scene->dtable->fieldList['lastEditedBy']['group'] = 3;
+
+$config->scene->dtable->fieldList['lastEditedDate']['title'] = $lang->testcase->lastEditedDate;
+$config->scene->dtable->fieldList['lastEditedDate']['type']  = 'date';
+$config->scene->dtable->fieldList['lastEditedDate']['group'] = 3;
+
+$config->scene->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->scene->dtable->fieldList['actions']['type']     = 'actions';
+$config->scene->dtable->fieldList['actions']['list']     = $config->scene->actionList;
+$config->scene->dtable->fieldList['actions']['menu']     = $config->scene->menu;
+$config->scene->dtable->fieldList['actions']['required'] = true;
+$config->scene->dtable->fieldList['actions']['group']    = 4;

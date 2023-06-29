@@ -64,3 +64,13 @@ $config->testcase->actionList['deleteScene']['url']  = array('module' => 'testca
 
 $config->scene = new stdclass();
 $config->scene->menu = array('editScene', 'deleteScene');
+
+$config->scene->actionList['editScene']['icon'] = 'edit';
+$config->scene->actionList['editScene']['text'] = $lang->testcase->editScene;
+$config->scene->actionList['editScene']['hint'] = $lang->testcase->editScene;
+$config->scene->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}&executionID=%executionID%');
+
+$config->scene->actionList['deleteScene']['icon'] = 'trash';
+$config->scene->actionList['deleteScene']['text'] = $lang->testcase->deleteScene;
+$config->scene->actionList['deleteScene']['hint'] = $lang->testcase->deleteScene;
+$config->scene->actionList['deleteScene']['url']  = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
