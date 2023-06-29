@@ -57,6 +57,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({html: data.title}); // 添加不带链接的场景名称
             if(data.parent > 0) result.unshift({html: '<span class="label lighter rounded-full">' + children + '</span>'}); // 添加子场景标签
             result.unshift({html: '<span class="label light-outline text-gray rounded-full">' + scene + '</span>'}); // 添加场景标签
+            if(browseType != 'onlyscene' && caseScenes[data.id] === undefined) result.push({html: '<span class="text-gray">(' + noCase + ')</span>'});
         }
     }
     return result;

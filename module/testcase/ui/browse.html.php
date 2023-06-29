@@ -12,9 +12,12 @@ namespace zin;
 
 include 'header.html.php';
 
+$caseScenes    = array_flip(array_filter(array_map(function($scene){if($scene->isCase == 1 && $scene->scene > 0) return $scene->scene;}, $scenes)));
 $topSceneCount = count(array_filter(array_map(function($scene){return $scene->isCase == 2 && $scene->grade == 1;}, $scenes)));
 $topCaseCount  = count(array_filter(array_map(function($scene){return $scene->isCase == 1 && $scene->scene == 0;}, $scenes)));
 $pageSummary   = sprintf($isOnlyScene ? $lang->testcase->summaryScene : $lang->testcase->summary, $topSceneCount, $topCaseCount);
+
+jsVar('caseScenes', $caseScenes);
 
 $canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
 $canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;

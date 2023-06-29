@@ -10,10 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('browseType', strtolower($browseType));
 jsVar('scene', $lang->testcase->sceneb);
 jsVar('automated', $lang->testcase->automated);
 jsVar('children', $lang->childrenAB);
 jsVar('checkedSummary', $lang->testcase->checkedSummary);
+jsVar('noCase', $lang->scene->noCase);
 
 $isOnlyScene   = strtolower($browseType) == 'onlyscene';
 $isProjectApp  = $this->app->tab == 'project';
