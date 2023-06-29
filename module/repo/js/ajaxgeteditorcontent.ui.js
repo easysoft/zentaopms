@@ -145,7 +145,8 @@ function getRelationTabHeight()
  * @access public
  * @return void
  */
-function updateEditorInline(display){
+window.updateEditorInline = function(display)
+{
     modifiedEditor.updateOptions({renderSideBySide: display});
 }
 
