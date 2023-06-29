@@ -68,10 +68,11 @@ $cols = $this->loadModel('datatable')->getSetting('stakeholder');
 
 /* Set list and menu of actions to customize the actions of stakeholder in program module. */
 $cols['actions']['list'] = array('unlinkStakeholder' => array(
-    "icon" => 'unlink',
-    "text" => $lang->program->unlinkStakeholder,
-    "hint" => $lang->program->unlinkStakeholder,
-    "url"  => $this->createLink('program', 'unlinkStakeholder', "id={id}&programID={$programID}&confirm=no"
+    'icon'  => 'unlink',
+    'class' => 'ajax-submit',
+    'text'  => $lang->program->unlinkStakeholder,
+    'hint'  => $lang->program->unlinkStakeholder,
+    'url'   => $this->createLink('program', 'unlinkStakeholder', "id={id}&programID={$programID}&confirm=no"
     )
 ));
 $cols['actions']['menu'] = array('unlinkStakeholder');
@@ -92,17 +93,17 @@ dtable
     set::cols($cols),
     set::data($data),
     set::footPager(usePager()),
-    set::showToolbarOnChecked(true),
+    set::checkable(true),
     set::footToolbar(array(
-        'items' => array(
-            array(
-                'text'  => $lang->unlink,
-                'class' => 'btn secondary toolbar-item batch-btn size-sm',
-                'data-url'   => createLink('program', 'batchUnlinkStakeholders', "programID={$programID}")
-            )
-        )
+        'type'  => 'btn-group',
+        'items' => array(array
+        (
+            'text'      => $lang->unlink,
+            'class'     => 'btn secondary toolbar-item batch-btn size-sm ajax-submit',
+            'onClick'   => jsRaw('onClickBatchUnlink'),
+            'data-href' => createLink('program', 'batchUnlinkStakeholders', "programID={$programID}&stakeholderIDList=%s")
+        ))
     )),
-    set::footer(jsRaw('function() {return window.footerGenerator.call(this);}')),
 );
 
 render();

@@ -551,18 +551,17 @@ class program extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->confirmUnlink, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+            $actionUrl = $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->program->confirmUnlink, 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmUnlink}', '$actionUrl')"));
         }
-        else
-        {
-            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
-            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
 
-            $this->loadModel('user')->updateUserView($programID, 'program', array($account));
-            $this->updateChildUserView($programID, $account);
+        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->fetch('user');
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->eq($stakeholderID)->exec();
 
-            return print(js::reload('parent'));
-         }
+        $this->loadModel('user')->updateUserView($programID, 'program', array($account));
+        $this->updateChildUserView($programID, $account);
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -580,18 +579,17 @@ class program extends control
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->confirmBatchUnlink, $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes")));
+            $actionUrl = $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->program->confirmBatchUnlink, 'callback' => "unlinkStakeholderConfirm('{$this->lang->program->confirmBatchUnlink}', '$actionUrl')"));
         }
-        else
-        {
-            $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
-            $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
 
-            $this->loadModel('user')->updateUserView($programID, 'program', $account);
-            $this->updateChildUserView($programID, $account);
+        $account = $this->dao->select('user')->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->fetchPairs('user');
+        $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('id')->in($stakeholderIDList)->exec();
 
-            return print(js::reload('parent'));
-        }
+        $this->loadModel('user')->updateUserView($programID, 'program', $account);
+        $this->updateChildUserView($programID, $account);
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
