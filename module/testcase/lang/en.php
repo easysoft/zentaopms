@@ -348,4 +348,5 @@ $lang->testcase->dragModalChangeOrder = 'Reorder';
 $lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
 
 $lang->scene = new stdclass();
-$lang->scene->title = 'Scene Name';
+$lang->scene->title  = 'Scene Name';
+$lang->scene->noCase = 'No case';
