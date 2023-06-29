@@ -107,6 +107,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
             (
                 set::width($hasBranch ? '1/4' : '1/2'),
                 setClass('linkProduct'),
+                set::required(true),
                 $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                 inputGroup
                 (
@@ -169,13 +170,13 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                     setClass('pl-2 flex self-center line-btn'),
                     btn
                     (
-                        setClass('btn btn-link addLine'),
+                        setClass('btn btn-link text-gray addLine'),
                         on::click('addNewLine'),
                         icon('plus')
                     ),
                     btn
                     (
-                        setClass('btn btn-link removeLine'),
+                        setClass('btn btn-link text-gray removeLine'),
                         setClass($i == 0 ? 'hidden' : ''),
                         icon('trash'),
                         on::click('removeLine'),
@@ -217,6 +218,7 @@ else
         (
             set::width('1/2'),
             setClass('linkProduct'),
+            set::required(true),
             set::label($lang->project->manageProducts),
             select
             (
@@ -263,13 +265,13 @@ else
                 setClass('pl-2 flex self-center line-btn'),
                 btn
                 (
-                    setClass('btn btn-link addLine'),
+                    setClass('btn btn-link text-gray addLine'),
                     on::click('addNewLine'),
                     icon('plus')
                 ),
                 btn
                 (
-                    setClass('btn btn-link removeLine'),
+                    setClass('btn btn-link text-gray removeLine'),
                     setClass('hidden'),
                     icon('trash'),
                     on::click('removeLine'),

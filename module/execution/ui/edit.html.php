@@ -16,12 +16,16 @@ jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('unmodifiableProducts',$unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('multiBranchProducts', $multiBranchProducts);
+jsVar('linkedStoryIDList', $linkedStoryIDList);
 jsVar('confirmSync', $lang->execution->confirmSync);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('typeTip', $lang->execution->typeTip);
 jsVar('projectID', $execution->project);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
+jsVar('isWaterfall', isset($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'));
+jsVar('executionAttr', $execution->attribute);
+jsVar('window.lastProjectID', $execution->project);
 
 $projectBox = null;
 if(isset($project))
@@ -145,6 +149,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     (
                         set::width($hasBranch ? '1/4' : '1/2'),
                         setClass('linkProduct'),
+                        set::required(true),
                         $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                         inputGroup
                         (
@@ -158,9 +163,10 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                     set::value($product->id),
                                     set::items($allProducts),
                                     set::last($product->id),
+                                    $hasBranch ? set::lastBranch(join(',', $product->branches)) : null,
                                     set::disabled($execution->type == 'stage' && $project->stageBy == 'project'),
                                     set::required(true),
-                                    on::change('loadBranches'),
+                                    on::change('productChange'),
                                     $execution->type == 'stage' && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
                                 )
                             ),
@@ -181,7 +187,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                 set::items($branches),
                                 set::value(implode(',', $product->branches)),
                                 set::multiple(true),
-                                on::change("loadPlans('#products{$i}', this)")
+                                on::change("branchChange")
                             )
                         ),
                     ),
@@ -203,16 +209,16 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         ),
                         $isStage && $project->stageBy == 'project' ? null : div
                         (
-                            setClass('pl-2 flex self-center line-btn'),
+                            setClass('pl-2 flex self-center text-gray line-btn'),
                             btn
                             (
-                                setClass('btn btn-link addLine'),
+                                setClass('btn btn-link text-gray addLine'),
                                 on::click('addNewLine'),
                                 icon('plus')
                             ),
                             btn
                             (
-                                setClass('btn btn-link removeLine'),
+                                setClass('btn btn-link text-gray removeLine'),
                                 setClass($i == 0 ? 'hidden' : ''),
                                 icon('trash'),
                                 on::click('removeLine'),
@@ -254,6 +260,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                 (
                     set::width('1/2'),
                     setClass('linkProduct'),
+                    set::required(true),
                     set::label($lang->project->manageProducts),
                     select
                     (
@@ -261,7 +268,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         set::name('products[0]'),
                         set::items($allProducts),
                         set::required(true),
-                        on::change('loadBranches')
+                        on::change('productChange')
                     )
                 ),
                 formGroup
@@ -277,7 +284,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             set::name('branch[0][]'),
                             set::control('select'),
                             set::multiple(true),
-                            on::change("loadPlans('#products0', this)")
+                            on::change('branchChange')
                         )
                     ),
                 ),
@@ -301,13 +308,13 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         setClass('pl-2 flex self-center line-btn'),
                         btn
                         (
-                            setClass('btn btn-link addLine'),
+                            setClass('btn btn-link text-gray addLine'),
                             on::click('addNewLine'),
                             icon('plus')
                         ),
                         btn
                         (
-                            setClass('btn btn-link removeLine'),
+                            setClass('btn btn-link text-gray removeLine'),
                             setClass('hidden'),
                             icon('trash'),
                             on::click('removeLine'),
@@ -331,6 +338,7 @@ else
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
                     setClass('linkProduct'),
+                    set::required(true),
                     $i == 0 ? set::label($lang->project->manageProducts) : set::label(''),
                     inputGroup
                     (
@@ -344,9 +352,10 @@ else
                                 set::value($product->id),
                                 set::items($allProducts),
                                 set::last($product->id),
+                                $hasBranch ? set::lastBranch(join(',', $product->branches)) : null,
                                 set::disabled($project->model == 'waterfall' || $project->model == 'waterfallplus'),
                                 set::required(true),
-                                on::change('loadBranches'),
+                                on::change('productChange'),
                                 $project->model == 'waterfall' || $project->model == 'waterfallplus' ? formHidden("products[$i]", $product->id) : null,
                             )
                         ),
@@ -368,7 +377,7 @@ else
                             set::value(isset($product->branches) ? implode(',', $product->branches) : ''),
                             set::disabled($project->model == 'waterfall' || $project->model == 'waterfallplus'),
                             set::multiple(true),
-                            on::change("loadPlans('#products{$i}', this)")
+                            on::change('branchChange')
                         )
                     ),
                 ),
@@ -456,7 +465,7 @@ formPanel
                 set::name('delta'),
                 set::inline(true),
                 set::items($lang->execution->endList),
-                set::value((strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1),
+                set::value((strtotime($execution->end) - strtotime($execution->begin)) / 3600 / 24 + 1),
                 on::change('computeEndDate'),
             )
         ),

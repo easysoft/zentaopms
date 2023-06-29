@@ -221,7 +221,7 @@ function addNewLine(e)
     newLine.find("select[name^='branch']").on('change', "loadPlan('#products" + index + "', this)");
 
     newLine.addClass('newLine');
-    newLine.find('.linkProduct > .form-label').html('');
+    newLine.find('.linkProduct > .form-label').html('').removeClass('required');
     newLine.find('.removeLine').removeClass('hidden');
     newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('');
     newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]');
