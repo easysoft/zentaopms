@@ -32,8 +32,8 @@ featureBar();
 $dropMenus = array();
 if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID=$repoID&path=$currentEntry&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'target' => '_blank');
 
-$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'inline', 'id' => 'inline', 'class' => 'inline-appose');
-$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'appose', 'id' => 'appose', 'class' => 'inline-appose');
+$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
+$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
 div(
     set::id('fileTabs'),
     tabs
