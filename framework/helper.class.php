@@ -540,6 +540,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
         $model  = $app->control->loadModel($module);
     }
 
+    $maxActionCount = 0;
     foreach($items as $item)
     {
         $item->actions = array();
@@ -602,7 +603,10 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
             $item->parent   = 0;
             $item->isParent = true;
         }
+
+        if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
     }
+    if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
 
     return array_values($items);
 }
