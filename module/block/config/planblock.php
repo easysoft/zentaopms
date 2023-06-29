@@ -8,7 +8,7 @@ $config->block->plan->dtable->fieldList = array();
 $config->block->plan->dtable->fieldList['id']      = array('name' => 'id',      'title' => $lang->idAB,                 'type' => 'id',     'sortType' => 1);
 $config->block->plan->dtable->fieldList['title']   = array('name' => 'title',   'title' => $lang->productplan->title,   'type' => 'title',  'sortType' => 1, 'flex'     => 1);
 $config->block->plan->dtable->fieldList['product'] = array('name' => 'product', 'title' => $lang->productplan->product, 'type' => 'text',   'sortType' => 1, 'minWidth' => 100);
-$config->block->plan->dtable->fieldList['hour']    = array('name' => 'hour',    'title' => $lang->productplan->hour,    'type' => 'count',  'sortType' => 1);
+$config->block->plan->dtable->fieldList['hour']    = array('name' => 'hour',    'title' => $lang->productplan->hour,    'type' => 'text',   'sortType' => 1, 'align'    => 'right');
 $config->block->plan->dtable->fieldList['bugs']    = array('name' => 'bugs',    'title' => $lang->productplan->bugs,    'type' => 'number', 'sortType' => 1);
 $config->block->plan->dtable->fieldList['begin']   = array('name' => 'begin',   'title' => $lang->productplan->begin,   'type' => 'date',   'sortType' => 1);
 $config->block->plan->dtable->fieldList['end']     = array('name' => 'end',     'title' => $lang->productplan->end,     'type' => 'date',   'sortType' => 1);

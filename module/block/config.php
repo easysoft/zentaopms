@@ -303,3 +303,4 @@ $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspac
 $config->block->size = array();
 $config->block->size['product']['list']  = array('2' => '6', '1' => '6');
 $config->block->size['product']['story'] = array('2' => '6', '1' => '6');
+$config->block->size['product']['plan']  = array('2' => '6', '1' => '6');
