@@ -373,10 +373,7 @@ detailBody
         (
             floatToolbar
             (
-                !$isInModal ? set::prefix
-                (
-                    array(array('icon' => 'back', 'text' => $lang->goback))
-                ) : null,
+                $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::class('ghost text-white'), $lang->goback)),
                 set::main($this->testcase->buildOperateMenu($case, 'view')),
                 set::suffix
                 (
