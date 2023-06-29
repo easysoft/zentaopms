@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$isOnlyScene   = strtolower($browseType) == 'onlyscene';
 $isProjectApp  = $this->app->tab == 'project';
 $currentModule = $isProjectApp ? 'project'  : 'testcase';
 $currentMethod = $isProjectApp ? 'testcase' : 'browse';
@@ -134,7 +135,7 @@ featureBar
         a
         (
             set::href(str_replace('{key}', 'onlyScene', $browseLink)),
-            set('class', strtolower($browseType) == 'onlyscene' ? 'active' : ''),
+            set('class', $isOnlyScene ? 'active' : ''),
             set('data-load', $load),
             $lang->testcase->onlyScene
         )
