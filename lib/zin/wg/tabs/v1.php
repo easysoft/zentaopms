@@ -54,11 +54,14 @@ class tabs extends wg
     protected function buildTabHeader(array $titleViews): wg
     {
         $isVertical = $this->prop('direction') === 'v';
+        $collapse   = $this->prop('collapse');
+
         return ul
         (
-            setClass('nav nav-tabs gap-x-5'),
+            setClass('nav nav-tabs gap-x-5', $collapse ? 'relative' : null),
             $isVertical ? setClass('nav-stacked') : null,
-            $titleViews
+            $titleViews,
+            $this->buildCollapseBtn(),
         );
     }
 
@@ -105,7 +108,6 @@ class tabs extends wg
     protected function build(): wg
     {
         $isVertical = $this->prop('direction') === 'v';
-        $collapse   = $this->prop('collapse');
 
         $this->filterChildren();
 
@@ -123,12 +125,11 @@ class tabs extends wg
 
         return div
         (
-            setClass('tabs', $isVertical ? 'flex' : null, $collapse ? 'relative' : null),
+            setClass('tabs', $isVertical ? 'flex' : null),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
 
             $this->buildTabHeader($titleViews),
             $this->buildTabBody($contentViews),
-            $this->buildCollapseBtn(),
             $this->children
         );
     }
