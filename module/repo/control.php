@@ -295,7 +295,7 @@ class repo extends control
         $this->view->suffix      = 'c';
         $this->view->blames      = array();
         $this->view->showEditor  = true;
-        $this->display('repo', 'ajaxGetEditorContent');
+        $this->display('repo', 'ajaxgeteditorcontent');
     }
 
     /**
@@ -725,20 +725,13 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function revision($repoID, $objectID = 0, $revision = '', $root = '', $type = 'dir')
+    public function revision($repoID, $objectID = 0, $revision = '')
     {
-        $this->repo->setBackSession();
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo = $this->repo->getRepoByID($repoID);
 
-        /* Save session. */
-        $this->session->set('revisionList', $this->app->getURI(true), 'repo');
-
-        $this->commonAction($repoID, $objectID);
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
-        $log[0]->comment = $this->repo->replaceCommentLink($log[0]->comment);
-        $log[0]->commit  = '';
 
         $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
         if($history)
@@ -754,8 +747,6 @@ class repo extends control
             {
                 $oldRevision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->lt($history->revision)->andWhere('repo')->eq($repoID)->orderBy('revision_desc')->limit(1)->fetch('revision');
             }
-
-            $log[0]->commit = $history->commit;
         }
 
         if(empty($oldRevision))
@@ -764,53 +755,7 @@ class repo extends control
             if($history and in_array($repo->SCM, $this->config->repo->gitTypeList)) $oldRevision = "{$history->revision}^";
         }
 
-        $changes  = array();
-        $viewPriv = common::hasPriv('repo', 'view');
-        $diffPriv = common::hasPriv('repo', 'diff');
-        foreach($log[0]->change as $path => $change)
-        {
-            if($repo->prefix) $path = str_replace($repo->prefix, '', $path);
-            $encodePath = $this->repo->encodePath($path);
-            if($change['kind'] == '' or $change['kind'] == 'file')
-            {
-                $change['view'] = $viewPriv ? html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision"), $this->lang->repo->viewA, '', "data-app='{$this->app->tab}'") : '';
-                if($change['action'] == 'M') $change['diff'] = $diffPriv ? html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$encodePath&oldRevision=$oldRevision&newRevision=$revision"), $this->lang->repo->diffAB, '', "data-app='{$this->app->tab}'") : '';
-            }
-            else
-            {
-                $change['view'] = $viewPriv ? html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=$encodePath&revision=$revision"), $this->lang->repo->browse, '', "data-app='{$this->app->tab}'") : '';
-                if($change['action'] == 'M') $change['diff'] = $diffPriv ? html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$encodePath&oldRevision=$oldRevision&newRevision=$revision"), $this->lang->repo->diffAB, '', "data-app='{$this->app->tab}'") : '';
-            }
-            $changes[$path] = $change;
-        }
-
-        $root   = $this->repo->decodePath($root);
-        $parent = '';
-        if($type == 'file')
-        {
-            $parent = $this->dao->select('parent')->from(TABLE_REPOFILES)
-                ->where('revision')->eq($history->id)
-                ->andWhere('path')->eq('/' . $root)
-                ->fetch('parent');
-        }
-
-        $this->view->title       = $this->lang->repo->common;
-        $this->view->log         = $log[0];
-        $this->view->repo        = $repo;
-        $this->view->path        = $root;
-        $this->view->type        = $type;
-        $this->view->changes     = $changes;
-        $this->view->repoID      = $repoID;
-        $this->view->branchID    = $this->cookie->repoBranch;
-        $this->view->objectID    = $objectID;
-        $this->view->revision    = $log[0]->revision;
-        $this->view->parentDir   = $parent;
-        $this->view->oldRevision = $oldRevision;
-        $this->view->preAndNext  = $this->repo->getPreAndNext($repo, $root, $revision, $type, 'revision');
-
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->viewRevision;
-
-        $this->display();
+        $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$log[0]->revision}"));
     }
 
     /**

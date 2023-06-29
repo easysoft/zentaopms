@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The monaco view file of repo module of ZenTaoPMS.
+ * The ajaxgeteditorcontent view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -22,6 +22,7 @@ jsVar('unlinkTitle', $this->lang->repo->unlink);
 jsVar('canUnlinkObject', $canUnlinkObject);
 jsVar('fileExt', $this->config->repo->fileExt);
 jsVar('file', $pathInfo);
+jsVar('filePath', $entry);
 jsVar('blameTmpl', $lang->repo->blameTmpl);
 jsVar('repoID', $repoID);
 jsVar('showEditor', $showEditor);
@@ -66,18 +67,30 @@ elseif($suffix == 'binary')
 }
 else
 {
+    $options = array(
+        'value'                => $content,
+        'language'             => $lang,
+        'readOnly'             => true,
+        'autoIndent'           => true,
+        'contextmenu'          => true,
+        'automaticLayout'      => true,
+        'EditorMinimapOptions' => array('enabled' => false),
+    );
+    if($type == 'diff') $options = array(
+        'language'             => $lang,
+        'readOnly'             => true,
+        'autoIndent'           => true,
+        'contextmenu'          => true,
+        'automaticLayout'      => true,
+        'renderSideBySide'     => false,
+        'EditorMinimapOptions' => array('enabled' => false),
+    );
     $wg = monaco
     (
         set::id('codeContainer'),
-        set::options(array(
-            'value'                => $content,
-            'language'             => $lang,
-            'readOnly'             => true,
-            'autoIndent'           => true,
-            'contextmenu'          => true,
-            'automaticLayout'      => true,
-            'EditorMinimapOptions' => array('enabled' => false),
-        )),
+        set::options($options),
+        set::action($type == 'diff' ? 'diff' : 'create'),
+        $type == 'diff' ? set::diffContent(jsRaw('parent.getDiffs(filePath)')) : null,
         set::onMouseDown('window.onMouseDown')
     );
 }
