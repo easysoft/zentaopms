@@ -9,7 +9,7 @@ window.customSubmit = function(e)
     var $this = $(e.target);
     if($this.prop('tagName') != 'BUTTON') $this = $this.closest('button');
 
-    var storyStatus = !$('#reviewer').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
+    var storyStatus = !$('#reviewer').val().join(',') || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
     if($this.attr('id') == 'saveDraftButton')
     {
         storyStatus = 'draft';
