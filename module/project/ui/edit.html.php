@@ -321,6 +321,7 @@ formPanel
             (
                 on::change('setDate'),
                 set::name('delta'),
+                set::value((strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1),
                 set::inline(true),
                 set::items($lang->project->endList)
             )
