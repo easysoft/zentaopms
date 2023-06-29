@@ -9,6 +9,7 @@ INSERT INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `de
 
 ALTER TABLE `zt_traincourse` ADD `importedStatus` enum('wait','doing','done') NOT NULL DEFAULT 'wait' AFTER `desc`;
 ALTER TABLE `zt_traincourse` ADD `lastUpdatedTime` int UNSIGNED NOT NULL DEFAULT 0 AFTER `importedStatus`;
+ALTER TABLE `zt_traincourse` MODIFY COLUMN `code` varchar(255) DEFAULT '' NOT NULL;
 
 UPDATE `zt_im_chat`               SET `createdDate`    = NULL WHERE `createdDate`    = '0000-00-00 00:00:00';
 UPDATE `zt_im_chat`               SET `editedDate`     = NULL WHERE `editedDate`     = '0000-00-00 00:00:00';
