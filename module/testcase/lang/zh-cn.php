@@ -318,7 +318,7 @@ $lang->testcase->updateOrder      = "拖动排序";
 $lang->testcase->differentProduct = "所属产品不同";
 
 $lang->testcase->newScene           = "建场景";
-$lang->testcase->sceneTitle         = '场景标题';
+$lang->testcase->sceneTitle         = '场景名称';
 $lang->testcase->parentScene        = "父场景";
 $lang->testcase->scene              = "所属场景";
 $lang->testcase->summary            = '本页共 %d 个顶级场景，%d 个独立用例。';
@@ -349,4 +349,4 @@ $lang->testcase->dragModalChangeOrder = '调整排序';
 $lang->testcase->confirmBatchDeleteSceneCase = '您确认要批量删除这些场景或测试用例吗？';
 
 $lang->scene = new stdclass();
-$lang->scene->title = '场景标题';
+$lang->scene->title = '场景名称';

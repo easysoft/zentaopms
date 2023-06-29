@@ -317,7 +317,7 @@ $lang->testcase->updateOrder      = "Drag Sort";
 $lang->testcase->differentProduct = "Different product";
 
 $lang->testcase->newScene           = "Add Scene";
-$lang->testcase->sceneTitle         = 'Scene Title';
+$lang->testcase->sceneTitle         = 'Scene Name';
 $lang->testcase->parentScene        = "Parent Scene";
 $lang->testcase->scene              = "Scene";
 $lang->testcase->summary            = 'Total %d Top Scene，%d Independent test case.';
@@ -348,4 +348,4 @@ $lang->testcase->dragModalChangeOrder = 'Reorder';
 $lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
 
 $lang->scene = new stdclass();
-$lang->scene->title = 'Scene Title';
+$lang->scene->title = 'Scene Name';
