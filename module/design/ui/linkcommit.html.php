@@ -14,6 +14,7 @@ jsVar('designID', $designID);
 jsVar('type', strtolower($type));
 jsVar('errorDate', $lang->design->errorDate);
 
+modalHeader(set::title($lang->design->linkCommit));
 if(empty($repoID))
 {
     div

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+modalHeader(set::title($lang->design->viewCommit));
+
 $canLinkCommit  = hasPriv('design', 'create');
 $linkBtnClass   = empty($design->commit) ? 'ml-4' : 'mb-4';
 $linkCommitItem = $canLinkCommit ? btn(
