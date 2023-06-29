@@ -105,10 +105,11 @@ class block extends control
             $formData = form::data($this->config->block->form->edit)->get();
             $formData->id     = $blockID;
             $formData->params = helper::jsonEncode($formData->params);
+            if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
 
             $this->block->update($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($this->app->tab, 'index'), 'closeModal' => true));
         }
 
         /* 如果没传 $code 说明是首次进入页面，直接使用待编辑 $block 的 $code。 */
@@ -116,7 +117,31 @@ class block extends control
         $block  = $this->block->getByID($blockID);
         $module = $module ? $module : $block->module;
         $code   = $code ? $code : $block->code;
-        $codes  = $this->blockZen->getAvailableCodes($block->dashboard, $module);
+
+        $codes      = $this->blockZen->getAvailableCodes($block->dashboard, $module);
+        $params     = $this->blockZen->getAvailableParams($module, $code);
+        $blockTitle = $block->title;
+        if($module != $block->module || $code != $block->code)
+        {
+            if($module == 'scrumtest' && $code != 'all')
+            {
+                $blockTitle = zget($codes, $code);
+            }
+            else
+            {
+                $typeOptions = isset($params['type']['options']) ? $params['type']['options'] : array();
+                $blockTitle  = zget($codes, $code);
+                if(!empty($typeOptions))
+                {
+                    $typeName   = empty($typeOptions) ? '' : $typeOptions[array_keys($typeOptions)[0]];
+                    $blockTitle = vsprintf($this->lang->block->blockTitle, array($typeName, $blockTitle));
+                }
+            }
+        }
+
+        $widths       = !empty($this->config->block->size[$module][$code]) ? array_keys($this->config->block->size[$module][$code]) : array('1', '2');
+        $widthOptions = array();
+        foreach($widths as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
 
         $this->view->title     = $this->lang->block->editBlock;
         $this->view->block     = $block;
@@ -126,8 +151,10 @@ class block extends control
         $this->view->codes     = $codes;
         /* $codes 包含 $code 时，页面才选中对应的 $code，否则为空。 */
         /* Only when $codes have a value and contain $code, the corresponding $code is selected on the page, otherwise it is $blank. */
-        $this->view->code      = in_array($code, array_keys($codes)) ? $code : '';
-        $this->view->params    = $this->blockZen->getAvailableParams($this->view->module, $this->view->code);
+        $this->view->code         = in_array($code, array_keys($codes)) ? $code : '';
+        $this->view->params       = $params;
+        $this->view->widthOptions = $widthOptions;
+        $this->view->blockTitle   = $blockTitle;
         $this->display();
     }
 

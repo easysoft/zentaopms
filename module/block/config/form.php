@@ -18,5 +18,5 @@ $config->block->form->edit = array();
 $config->block->form->edit['module'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->block->form->edit['code']   = array('type' => 'string', 'required' => false, 'default' => '');
 $config->block->form->edit['title']  = array('type' => 'string', 'required' => false, 'default' => '');
-$config->block->form->edit['grid']   = array('type' => 'int',    'required' => false, 'default' => '4');
+$config->block->form->edit['width']  = array('type' => 'int',    'required' => false, 'default' => '2');
 $config->block->form->edit['params'] = array('type' => 'array',  'required' => false, 'default' => array());
