@@ -13,6 +13,7 @@ namespace zin;
 jsVar('scene', $lang->testcase->sceneb);
 jsVar('automated', $lang->testcase->automated);
 jsVar('children', $lang->childrenAB);
+jsVar('checkedSummary', $lang->testcase->checkedSummary);
 
 $isOnlyScene   = strtolower($browseType) == 'onlyscene';
 $isProjectApp  = $this->app->tab == 'project';

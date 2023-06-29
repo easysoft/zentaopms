@@ -10,13 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include 'header.html.php';
+
 $topSceneCount = count(array_filter(array_map(function($scene){return $scene->isCase == 2 && $scene->grade == 1;}, $scenes)));
 $topCaseCount  = count(array_filter(array_map(function($scene){return $scene->isCase == 1 && $scene->scene == 0;}, $scenes)));
-
-jsVar('pageSummary', sprintf($lang->testcase->summary, $topSceneCount, $topCaseCount));
-jsVar('checkedSummary', $lang->testcase->checkedSummary);
-
-include 'header.html.php';
+$pageSummary   = sprintf($isOnlyScene ? $lang->testcase->summaryScene : $lang->testcase->summary, $topSceneCount, $topCaseCount);
 
 $canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
 $canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
@@ -163,7 +161,8 @@ dtable
     set::checkable($canBatchAction),
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::defaultSummary($pageSummary)
 );
 
 modal

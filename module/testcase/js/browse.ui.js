@@ -86,7 +86,7 @@ window.setStatistics = function(element, checks)
         });
     }
 
-    return pageSummary;
+    return element.options.defaultSummary;
 }
 
 /**
