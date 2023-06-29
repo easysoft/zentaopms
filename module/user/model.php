@@ -1841,7 +1841,7 @@ class userModel extends model
             if($stakeholders === null)
             {
                 $stakeholders = array();
-                $stmt         = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->query();
+                $stmt         = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)->where('deleted')->eq('0')->query();
                 while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
             }
 
