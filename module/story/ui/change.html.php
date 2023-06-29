@@ -144,6 +144,8 @@ $formActions = formRow
 modalHeader();
 formPanel
 (
+    on::click('#saveButton', 'customSubmit'),
+    on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
     set::actions(false),
     $formTitle,

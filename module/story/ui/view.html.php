@@ -171,7 +171,7 @@ detailHeader
             set::icon('plus'),
             set::type('primary'),
             set::text($lang->story->create),
-            common::hasPriv('story', 'create') ? set::href($createStoryLink) : null,
+            common::hasPriv('story', 'create') ? set::url($createStoryLink) : null,
         )
     )
 );
@@ -212,7 +212,7 @@ detailBody
     floatToolbar
     (
         set::object($story),
-        $isInModal ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        $isInModal ? null : to::prefix(backBtn(setClass('btn-default ghost text-white'), set::icon('back'), $lang->goback)),
         $story->deleted ? null : set::main($menus['mainMenu']),
         $story->deleted ? null : set::suffix($menus['suffixMenu']),
     ),

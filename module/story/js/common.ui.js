@@ -1,87 +1,66 @@
-$(function()
+window.customSubmit = function(e)
 {
-    var $saveButton      = $('#saveButton');
-    var $saveDraftButton = $('#saveDraftButton');
-    $(document).on('click', '#saveButton', function(e)
+    const $saveButton      = $('#saveButton');
+    const $saveDraftButton = $('#saveDraftButton');
+
+    $saveButton.attr('disabled', 'disabled');
+    $saveDraftButton.attr('disabled', 'disabled');
+
+    var $this = $(e.target);
+    if($this.prop('tagName') != 'BUTTON') $this = $this.closest('button');
+
+    var storyStatus = !$('#reviewer').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
+    if($this.attr('id') == 'saveDraftButton')
     {
-        $saveButton.attr('disabled', 'disabled');
-        $saveDraftButton.attr('disabled', 'disabled');
-
-        var storyStatus = !$('#reviewer').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
-        if($('#dataform #status').length == 0) $('<input />').attr('type', 'hidden').attr('name', 'status').attr('id', 'status').attr('value', storyStatus).appendTo('#dataform .form-actions');
-        $('#dataform #status').val(storyStatus);
-
-        $dataform = $('#dataform');
-        $.ajaxSubmit(
-        {
-            data: new FormData($dataform[0]),
-            url:$dataform.attr('action'),
-            onSuccess: function(result)
-            {
-                location.href = result.load;
-            },
-        });
-
-        e.preventDefault();
-
-        setTimeout(function()
-        {
-            if($saveButton.attr('disabled') == 'disabled')
-            {
-                setTimeout(function()
-                {
-                    $saveButton.removeAttr('disabled');
-                    $saveDraftButton.removeAttr('disabled');
-                }, 10000);
-            }
-            else
-            {
-                $saveDraftButton.removeAttr('disabled');
-            }
-        }, 100);
-    })
-
-
-    $(document).on('click', '#saveDraftButton', function(e)
-    {
-        $saveButton.attr('disabled', 'disabled');
-        $saveDraftButton.attr('disabled', 'disabled');
-
         storyStatus = 'draft';
-        if(typeof(page) != 'undefined' && page == 'change') storyStatus = 'changing';
-        if(typeof(page) !== 'undefined' && page == 'edit' && $('#status').val() == 'changing') storyStatus = 'changing';
-        if($('#dataform #status').length == 0) $('<input />').attr('type', 'hidden').attr('name', 'status').attr('id', 'status').attr('value', storyStatus).appendTo('#dataform .form-actions');
-        $('#dataform #status').val(storyStatus);
+        if(config.currentMethod == 'change') storyStatus = 'changing';
+        if(config.currentMethod == 'edit' && $('#status').val() == 'changing') storyStatus = 'changing';
+    }
+    if($('#dataform #status').length == 0) $('<input />').attr('type', 'hidden').attr('name', 'status').attr('id', 'status').attr('value', storyStatus).appendTo('#dataform .form-actions');
+    $('#dataform #status').val(storyStatus);
 
-        $dataform = $('#dataform');
-        $.ajaxSubmit(
+    $dataform = $('#dataform');
+    $.ajaxSubmit(
+    {
+        data: new FormData($dataform[0]),
+        url: $dataform.attr('action'),
+        onSuccess: function(result) {loadPage(result.load)},
+        onMessage: function(message) {showMessage(message)},
+        onFail: function(result)
         {
-            data: new FormData($dataform[0]),
-            url:$dataform.attr('action'),
-            onSuccess: function(result)
-            {
-                location.href = result.load;
-            },
-        });
-
-        e.preventDefault();
-
-        setTimeout(function()
-        {
-            if($saveDraftButton.attr('disabled') == 'disabled')
-            {
-                setTimeout(function()
-                {
-                    $saveButton.removeAttr('disabled');
-                    $saveDraftButton.removeAttr('disabled');
-                }, 10000);
-            }
-            else
+            setTimeout(function()
             {
                 $saveButton.removeAttr('disabled');
-            }
-        }, 100);
+                $saveDraftButton.removeAttr('disabled');
+            }, 500);
+        },
     });
-})
 
+    e.stopPropagation();
+    e.preventDefault();
 
+    setTimeout(function()
+    {
+        $saveButton.removeAttr('disabled');
+        $saveDraftButton.removeAttr('disabled');
+    }, 10000);
+};
+
+function showMessage(message)
+{
+    var varType = typeof message;
+    if(varType === 'object')
+    {
+        for(id in message)
+        {
+            var $this = $('#' + id);
+            if($this.length == 0) return zui.Messager.show({"content": message[id], "type": "success circle"});
+
+            $('#' + id + 'Tip').remove();
+            $this.addClass('has-error');
+            $this.after("<div class='form-tip ajax-form-tip text-danger' id='" + id + "Tip'>" + message[id] + '</div>');
+            document.getElementById(id).focus();
+        }
+    }
+    if(varType === 'string') zui.Messager.show({"content": message, "type": "success circle"});
+}

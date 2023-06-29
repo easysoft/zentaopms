@@ -18,14 +18,18 @@ $params = $app->getParams();
 array_shift($params);
 jsVar('createParams', http_build_query($params));
 jsVar('storyType', $type);
+jsVar('feedbackSource', $config->story->feedbackSource);
 
 formPanel
 (
+    on::click('#saveButton', 'customSubmit'),
+    on::click('#saveDraftButton', 'customSubmit'),
+    set::id('dataform'),
     set::title($lang->story->create),
     set::actions(false),
     to::headingActions
     (
-        $forceReview ? checkbox(set::id('needNotReview'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview)) : null,
+        $forceReview ? checkbox(set::id('needNotReview'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,
     ),
     formRow
     (
@@ -46,7 +50,6 @@ formPanel
         isset($fields['branch']) && $type == 'story' ? formGroup
         (
             set::id('assignedToBox'),
-            setClass('switchBranch'),
             set::label($lang->story->assignedTo),
             set::width('1/2'),
             set::name('assignedTo'),
@@ -72,44 +75,67 @@ formPanel
     (
         setClass('switchBranch'),
         set::label($lang->product->branchName[$product->type]),
-        inputGroup
+        cell
         (
-            set::id('branchBox'),
-            sprintf($lang->product->branch, $lang->product->branchName[$product->type]),
-            select
+            set::width('200px'),
+            inputGroup
             (
-                set::name('branches[0]'),
-                set::items($fields['branches']['options']),
-                set::value($fields['branches']['default']),
-                set('data-index', '0'),
-                set('data-on', 'change'),
-                set('data-call', 'loadBranchRelation'),
-            )
+                set::id('branchBox'),
+                sprintf($lang->product->branch, $lang->product->branchName[$product->type]),
+                select
+                (
+                    set::name('branches[0]'),
+                    set::items($fields['branches']['options']),
+                    set::value($fields['branches']['default']),
+                    set('data-index', '0'),
+                    set('data-on', 'change'),
+                    set('data-call', 'loadBranchRelation'),
+                    set('data-params', 'event'),
+                )
+            ),
         ),
-        inputGroup
+        cell
         (
-            $lang->story->module,
-            span
+            set::width('240px'),
+            inputGroup
             (
-                set::id('moduleIdBox'),
-                select(set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
-            )
+                $lang->story->module,
+                span
+                (
+                    set::id('moduleIdBox'),
+                    select(set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
+                )
+            ),
         ),
-        inputGroup
+        cell
         (
-            $lang->story->plan,
-            span
+            set::grow('1'),
+            inputGroup
             (
-                set::id('planIdBox'),
-                select(set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
-            )
+                $lang->story->plan,
+                span
+                (
+                    set::id('planIdBox'),
+                    select(set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
+                )
+            ),
         ),
-        count($branches) > 1 ? btngroup
+        count($branches) > 1 ? cell
         (
+            set::width(80),
             setClass('c-actions'),
-            btn(setClass('btn-link'), set('data-on', 'click'), set('data-call', 'addBranchesBox'), set::title(sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])), icon('plus')),
+            btn(setClass('btn-link addNewLine'), set('data-on', 'click'), set('data-call', 'addBranchesBox'), set('data-params', 'event'), set::title(sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])), icon('plus')),
         ) : null,
-        div(set::id('storyNoticeBranch'), setClass('hidden'), icon('exclamation-sign'), $lang->story->notice->branch),
+    ) : null,
+    isset($fields['branches']) && $type == 'story' ? formRow
+    (
+        set::id('storyNoticeBranch'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label(' '),
+            div(icon('exclamation-sign'), $lang->story->notice->branch),
+        )
     ) : null,
     !isset($fields['branch']) && $type == 'story' ? formRow
     (
@@ -148,7 +174,8 @@ formPanel
             set::name('source'),
             set::control('select'),
             set::items($fields['source']['options']),
-            set::value($fields['source']['default'])
+            set::value($fields['source']['default']),
+            on::change('toggleFeedback(e.target)'),
         ),
         formGroup
         (
@@ -194,14 +221,12 @@ formPanel
         formGroup
         (
             set::width('1/4'),
-            setClass('sourceBox'),
             set::label($lang->story->source),
             select(set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['value']))
         ),
         formGroup
         (
             set::width('1/4'),
-            setClass('sourceBox'),
             set::label($lang->story->sourceNote),
             input(set::name('sourceNote'), set::value($fields['sourceNote']['value']))
         ),
@@ -210,6 +235,7 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->story->reviewedBy),
+        set::required($forceReview),
         inputGroup
         (
             set::id('reviewerBox'),
@@ -219,7 +245,6 @@ formPanel
                 set::multiple(true),
                 set::items($fields['reviewer']['options']),
                 set::value($fields['reviewer']['default']),
-                set::required($forceReview),
             ),
         ),
         $forceReview ? null : formHidden('needNotReview', 1),
@@ -232,8 +257,8 @@ formPanel
             set::label($lang->story->requirement),
             inputGroup
             (
-                select(set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['value'])),
-                btn(set('data-on', 'click'), set('data-call', 'loadURS'), set('data-params', true), $lang->story->loadAllStories),
+                span(setClass('URSBox'), select(set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['value']))),
+                btn(set('data-on', 'click'), set('data-call', 'loadURS'), set('data-params', 'allURS'), $lang->story->loadAllStories),
             )
         ),
         formGroup
@@ -324,14 +349,13 @@ formPanel
     formGroup
     (
         set::label($lang->story->legendAttatch),
-        upload(set::name('files')),
+        upload(set::name('files[]')),
     ),
     formGroup
     (
         set::label($lang->story->mailto),
         set::name('mailto[]'),
-        set::control('select'),
-        set::multiple(true),
+        set::control(array('type' => 'select', 'multiple' => true)),
         set::items($fields['mailto']['options']),
         set::value($fields['mailto']['default']),
     ),
@@ -352,47 +376,53 @@ formPanel
     ),
 );
 
-isset($fields['branches']) && $type == 'story' ? div
+isset($fields['branches']) && $type == 'story' ? formRow
 (
     set::id('addBranchesBox'),
     setClass('hidden'),
-    inputGroup
+    formGroup
     (
-        set::id('branchBox'),
-        sprintf($lang->product->branch, $lang->product->branchName[$product->type]),
-        select
+        set::label(' '),
+        cell
         (
-            set::name('branches[%i%]'),
-            set::items($fields['branches']['options']),
-            set::value($fields['branches']['default']),
-            set('data-index', '%i%'),
-            set('data-on', 'change'),
-            set('data-call', 'loadBranchRelation'),
-        )
-    ),
-    inputGroup
-    (
-        $lang->story->module,
-        span
+            set::width('200px'),
+            inputGroup
+            (
+                set::id('branchBox'),
+                sprintf($lang->product->branch, $lang->product->branchName[$product->type]),
+                select
+                (
+                    set::name('branches[%i%]'),
+                    set::items($fields['branches']['options']),
+                    set::value($fields['branches']['default']),
+                )
+            ),
+        ),
+        cell
         (
-            set::id('moduleIdBox'),
-            select(set::name('modules[%i%]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']))
-        )
-    ),
-    inputGroup
-    (
-        $lang->story->plan,
-        span
+            set::width('240px'),
+            inputGroup
+            (
+                $lang->story->module,
+                span(set::id('moduleIdBox'), select(set::name('modules[%i%]'), set::items($fields['modules']['options']), set::value($fields['modules']['default'])))
+            ),
+        ),
+        cell
         (
-            set::id('planIdBox'),
-            select(set::name('plans[%i%]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
-        )
-    ),
-    btngroup
-    (
-        setClass('c-actions'),
-        btn(setClass('btn-link'), set('data-on', 'click'), set('data-call', 'addBranchesBox'),    set::title(sprintf($lang->story->addBranch,    $lang->product->branchName[$product->type])), icon('plus')),
-        btn(setClass('btn-link'), set('data-on', 'click'), set('data-call', 'deleteBranchesBox'), set::title(sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])), icon('close')),
+            set::grow('1'),
+            inputGroup
+            (
+                $lang->story->plan,
+                span(set::id('planIdBox'), select(set::name('plans[%i%]'), set::items($fields['plans']['options']), set::value($fields['plans']['default'])))
+            ),
+        ),
+        cell
+        (
+            set::width(80),
+            setClass('c-actions'),
+            btn(setClass('btn-link addNewLine'),    set::title(sprintf($lang->story->addBranch,    $lang->product->branchName[$product->type])), icon('plus')),
+            btn(setClass('btn-link removeNewLine'), set::title(sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])), icon('close')),
+        ),
     ),
 ) : null;
 

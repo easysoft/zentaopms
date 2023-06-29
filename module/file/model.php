@@ -1201,14 +1201,14 @@ class fileModel extends model
 
     /**
      * Print file in view/edit page.
-     * 
-     * @param  object      $file 
-     * @param  string      $method 
-     * @param  bool        $showDelete 
-     * @param  bool        $showEdit 
-     * @param  object|null $object 
+     *
+     * @param  object      $file
+     * @param  string      $method
+     * @param  bool        $showDelete
+     * @param  bool        $showEdit
+     * @param  object|null $object
      * @access public
-     * @return string 
+     * @return string
      */
     public function printFile(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
     {
@@ -1279,16 +1279,16 @@ class fileModel extends model
 
     /**
      * Build file actions.
-     * 
+     *
      * @param  string      $html
      * @param  string      $downloadLink
      * @param  bool        $showEdit
-     * @param  bool        $showEdit 
-     * @param  bool        $showDelete 
+     * @param  bool        $showEdit
+     * @param  bool        $showDelete
      * @param  object      $file
      * @param  object|null $object
      * @access public
-     * @return string 
+     * @return string
      */
     public function buildFileActions(string $html, string $downloadLink, int $imageWidth, bool $showEdit, bool $showDelete, object $file, object|null $object): string
     {
