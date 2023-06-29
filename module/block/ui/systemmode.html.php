@@ -25,7 +25,7 @@ function printSystemMode()
             set('class', 'flex-1 block mr-4 ' . ($usedMode == $mode ? 'active' : 'state')),
             $usedMode != $mode && $mode == 'light' && !empty($config->programs) ? modalTrigger
             (
-                to::trigger(div
+                div
                 (
                     set('class', 'w-full'),
                     img
@@ -39,7 +39,7 @@ function printSystemMode()
                         div(set('class', 'pb-2'), span(set('class', 'font-bold'), $modeName)),
                         span(set('class', 'text-sm text-gray'), $lang->block->customModeTip->{$mode})
                     )
-                )),
+                ),
                 set('size', '550'),
                 modal
                 (
@@ -60,7 +60,7 @@ function printSystemMode()
                         (
                             set::value($config->programID),
                             set::label($lang->custom->defaultProgram),
-                            set::name('defaultProgram'),
+                            set::name('program'),
                             set::control(array
                             (
                                 'type'  => 'select',
