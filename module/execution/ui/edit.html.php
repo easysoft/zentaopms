@@ -406,10 +406,11 @@ else
     $productsBox[] = formHidden('branch', json_encode(array_values($linkedBranches)));
 }
 
+if(helper::isAjaxRequest('modal')) modalHeader(set::title($lang->execution->edit));
 formPanel
 (
     set::class('editPanel'),
-    modalHeader(set::title($lang->execution->edit)),
+    !helper::isAjaxRequest('modal') ? modalHeader(set::title($lang->execution->edit)) : null,
     $projectBox,
     formGroup
     (

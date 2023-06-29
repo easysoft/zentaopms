@@ -193,10 +193,11 @@ $config->execution->actionList['createChildStage']['text'] = $lang->programplan-
 $config->execution->actionList['createChildStage']['hint'] = $lang->programplan->createSubPlan;
 $config->execution->actionList['createChildStage']['url']  = helper::createLink('programplan', 'create', "executionID={rawID}");
 
-$config->execution->actionList['edit']['icon'] = 'edit';
-$config->execution->actionList['edit']['text'] = $lang->execution->edit;
-$config->execution->actionList['edit']['hint'] = $lang->execution->edit;
-$config->execution->actionList['edit']['url']  = helper::createLink('execution', 'edit', "executionID={rawID}");
+$config->execution->actionList['edit']['icon']        = 'edit';
+$config->execution->actionList['edit']['text']        = $lang->execution->edit;
+$config->execution->actionList['edit']['hint']        = $lang->execution->edit;
+$config->execution->actionList['edit']['url']         = helper::createLink('execution', 'edit', "executionID={rawID}");
+$config->execution->actionList['edit']['data-toggle'] = 'modal';
 
 $config->execution->actionList['close']['icon']        = 'off';
 $config->execution->actionList['close']['text']        = $lang->execution->close;

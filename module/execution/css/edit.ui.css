@@ -2,3 +2,4 @@
 .items-center {align-items: center !important;}
 #lifeTimeTips {padding-left: 1rem; align-items: center;}
 .productsBox .line-btn {width: 48px; margin-right: 32px;}
+.productsBox div[id^=plan] {flex: 1 1;}

@@ -1842,11 +1842,12 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $action
      * @param  string $extra
-     *
+     * @param  string $newPlans
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function edit($executionID, $action = 'edit', $extra = '', $newPlans = '', $confirm = 'no')
+    public function edit(int $executionID, string $action = 'edit', string $extra = '', string $newPlans = '', string $confirm = 'no')
     {
         /* Load language files and get browseExecutionLink. */
         $this->loadModel('product');
@@ -1864,7 +1865,7 @@ class execution extends control
             $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
             $this->loadModel('productplan')->linkProject($executionID, $newPlans);
             $this->productplan->linkProject($projectID, $newPlans);
-            return $this->send(array('result' => 'success', 'locate' => inlink('view', "executionID=$executionID")));
+            return $this->send(array('result' => 'success', 'load' => inlink('view', "executionID=$executionID")));
         }
         elseif(!empty($newPlans))
         {
@@ -1881,7 +1882,9 @@ class execution extends control
 
             $importEditPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
 
-            return print(js::confirm($importEditPlanStoryTips, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
+            $confirmURL = inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes");
+            $cancelURL  = inlink('view', "executionID=$executionID");
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => $importEditPlanStoryTips, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
         }
 
         /* Set menu. */
@@ -1937,7 +1940,7 @@ class execution extends control
             if(!empty($newPlans))
             {
                 $newPlans = implode(',', $newPlans);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
             }
 
             $message = $this->executeHooks($executionID);
@@ -1946,9 +1949,9 @@ class execution extends control
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
 
             /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => 'parent'));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "executionID=$executionID")));
         }
 
         $executions = array('' => '') + $this->executions;
