@@ -93,6 +93,7 @@ $lang->agilePlusModel     = 'Agile Plus';
 $lang->waterfallPlusModel = 'Waterfall Plus';
 $lang->all                = 'All';
 $lang->viewDetails        = 'View Details';
+$lang->childrenAB         = 'C';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Reset';
