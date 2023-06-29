@@ -55,7 +55,7 @@ $config->testcase->actionList['showScript']['url']  = array('module' => 'testcas
 $config->testcase->actionList['editScene']['icon'] = 'edit';
 $config->testcase->actionList['editScene']['text'] = $lang->testcase->editScene;
 $config->testcase->actionList['editScene']['hint'] = $lang->testcase->editScene;
-$config->testcase->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}&executionID={session_execution}');
+$config->testcase->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}&executionID=%executionID%');
 
 $config->testcase->actionList['deleteScene']['icon'] = 'trash';
 $config->testcase->actionList['deleteScene']['text'] = $lang->testcase->deleteScene;

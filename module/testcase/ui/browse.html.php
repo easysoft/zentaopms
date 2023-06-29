@@ -109,14 +109,19 @@ if($canBatchChangeScene)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('testcase');
+if(!empty($cols['actions']['list']))
+{
+    $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
+    foreach($cols['actions']['list'] as $method => $methodParams)
+    {
+        if(!isset($methodParams['url'])) continue;
 
-$executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
-$url         = $cols['actions']['list']['edit']['url'];
-$url         = str_replace('%executionID%', (string)$executionID, $url);
+        $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
+    }
+}
 
-if(isset($cols['actions'])) $cols['actions']['list']['edit']['url'] = $url;
-if(isset($cols['title']))   $cols['title']['nestedToggle'] = $topSceneCount > 0;
-if(isset($cols['story']))   $cols['story']['map']          = $stories;
+if(isset($cols['title'])) $cols['title']['nestedToggle'] = $topSceneCount > 0;
+if(isset($cols['story'])) $cols['story']['map']          = $stories;
 
 foreach($scenes as $scene)
 {
