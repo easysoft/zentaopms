@@ -286,3 +286,22 @@ function setWhite()
     const acl = $("[name^='acl']:checked").val();
     acl != 'open' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
 }
+
+/**
+ * Show lifetime tips.
+ *
+ * @access public
+ * @return void
+ */
+function showLifeTimeTips()
+{
+    const lifetime = $('#lifetime').val();
+    if(lifetime == 'ops')
+    {
+        $('#lifeTimeTips').removeClass('hidden');
+    }
+    else
+    {
+        $('#lifeTimeTips').addClass('hidden');
+    }
+}

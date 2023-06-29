@@ -75,25 +75,6 @@ function setType()
 }
 
 /**
- * Show lifetime tips.
- *
- * @access public
- * @return void
- */
-function showLifeTimeTips()
-{
-    const lifetime = $('#lifetime').val();
-    if(lifetime == 'ops')
-    {
-        $('#lifeTimeTips').removeClass('hidden');
-    }
-    else
-    {
-        $('#lifeTimeTips').addClass('hidden');
-    }
-}
-
-/**
  * Load team members.
  *
  * @access public

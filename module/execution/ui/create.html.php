@@ -53,7 +53,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
 }
 
 $typeBox = null;
-if((empty($project) || $project->model != 'kanban') and $type != 'kanban')
+if((empty($project) || $project->model != 'kanban') && $type != 'kanban')
 {
     $typeBox = formRow(
         formGroup
@@ -80,7 +80,7 @@ if((empty($project) || $project->model != 'kanban') and $type != 'kanban')
 }
 
 $productsBox = null;
-if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
+if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
 {
     $i = 0;
     foreach($products as $product)
@@ -143,6 +143,7 @@ if(isset($project->hasProduct) and !empty($project->hasProduct) and $products)
                         set::items($branches),
                         set::value($branchIdList),
                         set::disabled($isStage && $project->stageBy == 'project'),
+                        set::multiple(true),
                         on::change("loadPlans('#products{$i}', this)")
                     )
                 ),
@@ -200,6 +201,7 @@ elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->mo
             (
                 set::name("plans[{$planProductID}][]"),
                 set::items(isset($productPlan) ? $productPlan : array()),
+                set::multiple(true),
                 formHidden('products[]', $planProductID),
                 formHidden('branch[0][0]', 0),
             )
@@ -236,7 +238,7 @@ else
                 (
                     set::id('branch0'),
                     set::name('branch[0][]'),
-                    set::control('select'),
+                    set::multiple(true),
                     on::change("loadPlans('#products0', this)")
                 )
             ),
