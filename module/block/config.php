@@ -301,6 +301,7 @@ $config->block->modules['doc']->moreLinkList->productdoc      = 'doc|productspac
 $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspace|';
 
 $config->block->size = array();
-$config->block->size['product']['list']  = array('2' => '6', '1' => '6');
-$config->block->size['product']['story'] = array('2' => '6', '1' => '6');
-$config->block->size['product']['plan']  = array('2' => '6', '1' => '6');
+$config->block->size['product']['list']    = array('2' => '6', '1' => '6');
+$config->block->size['product']['story']   = array('2' => '6', '1' => '6');
+$config->block->size['product']['plan']    = array('2' => '6', '1' => '6');
+$config->block->size['product']['release'] = array('2' => '6', '1' => '6');

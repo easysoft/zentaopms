@@ -10,4 +10,4 @@ $config->block->release->dtable->fieldList['name']        = array('name' => 'nam
 $config->block->release->dtable->fieldList['productName'] = array('name' => 'productName', 'title' => $lang->release->product, 'type' => 'text',   'sortType' => true, 'minWidth' => '100');
 $config->block->release->dtable->fieldList['buildName']   = array('name' => 'buildName',   'title' => $lang->release->build,   'type' => 'text',   'sortType' => true, 'minWidth' => '100');
 $config->block->release->dtable->fieldList['date']        = array('name' => 'date',        'title' => $lang->release->date,    'type' => 'date',   'sortType' => true);
-$config->block->release->dtable->fieldList['status']      = array('name' => 'status',      'title' => $lang->release->status,  'type' => 'status', 'sortType' => true);
+$config->block->release->dtable->fieldList['status']      = array('name' => 'status',      'title' => $lang->release->status,  'type' => 'status', 'sortType' => true, 'statusMap' => $lang->release->statusList);

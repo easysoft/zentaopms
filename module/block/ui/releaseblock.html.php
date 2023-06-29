@@ -11,17 +11,21 @@ declare(strict_types=1);
 
 namespace zin;
 
-foreach($releases as $release)
+if(!$longBlock)
 {
-    $release->status = zget($lang->release->statusList, $release->status);
+    unset($config->block->release->dtable->fieldList['id']);
+    unset($config->block->release->dtable->fieldList['productName']);
+    unset($config->block->release->dtable->fieldList['buildName']);
 }
 
 panel
 (
+    setClass('p-0'),
+    set::title($block->title),
+    set::bodyClass('p-0 no-shadow border-t'),
     dtable
     (
-        set::width('100%'),
-        set::height('auto'),
+        set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
         set::cols(array_values($config->block->release->dtable->fieldList)),
         set::data(array_values($releases))
     )
