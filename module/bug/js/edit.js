@@ -9,7 +9,7 @@ $(function()
 
         if(picker) picker.destroy();
 
-        var options = $.extend({}, originOptions, {searchDelay : 1000});
+        var options = $.extend({}, originOptions, {searchDelay: 1000});
         $element.picker(options);
     };
 
@@ -17,6 +17,7 @@ $(function()
     initPicker($('#duplicateBug'));
     renderBuilds();
     renderTestTasks();
+    renderStories();
 
     $('#duplicateBug').picker(
     {
@@ -59,7 +60,7 @@ function renderBuilds()
         $('#openedBuild').data('zui.picker').setValue(oldOpenedBuild);
         var resolvedBuilds = data.resolvedBuilds;
         $('#resolvedBuild').data('zui.picker').destroy();
-        $('#resolvedBuild').picker({list: resolvedBuilds});
+        $('#resolvedBuild').picker({list: resolvedBuilds, allowSingleDeselect: 'true'});
         $('#resolvedBuild').data('zui.picker').setValue(oldResolvedBuild);
 
         resolution = $('#resolution').val();
@@ -93,8 +94,24 @@ function renderTestTasks()
     $.get(createLink('bug', 'ajaxGetTestTasks', 'bugID=' + bugID), function(data)
     {
         $('#testtask').data('zui.picker').destroy();
-        $('#testtask').picker({list: data});
+        $('#testtask').picker({list: data, allowSingleDeselect: 'true'});
         $('#testtask').data('zui.picker').setValue(bugTestTask);
+    }, 'json');
+}
+
+/**
+ * render stories.
+ *
+ * @access public
+ * @return void
+ */
+function renderStories()
+{
+    $.get(createLink('bug', 'ajaxGetStories', 'bugID=' + bugID), function(data)
+    {
+        $('#story').data('zui.picker').destroy();
+        $('#story').picker({list: data, allowSingleDeselect: 'true'});
+        $('#story').data('zui.picker').setValue(oldStoryID);
     }, 'json');
 }
 

@@ -3073,7 +3073,7 @@ CREATE TABLE IF NOT EXISTS `zt_deployscope` (
 -- DROP TABLE IF EXISTS `zt_traincourse`;
 CREATE TABLE IF NOT EXISTS `zt_traincourse` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
-  `code` varchar(50) NOT NULL DEFAULT '',
+  `code` varchar(255) NOT NULL DEFAULT '',
   `category` mediumint(8) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT '',

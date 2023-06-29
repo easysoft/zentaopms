@@ -1185,7 +1185,6 @@ class bug extends control
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->currentModuleID       = $currentModuleID;
         $this->view->executions            = $executions;
-        $this->view->stories               = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->branchOption          = $branchOption;
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->tasks                 = $this->task->getExecutionTaskPairs($bug->execution);
@@ -1202,7 +1201,7 @@ class bug extends control
      *
      * @param  int    $bugID
      * @access public
-     * @return mixed
+     * @return int
      */
     public function ajaxGetAllBuilds($bugID)
     {
@@ -1239,30 +1238,47 @@ class bug extends control
         if(($bug->resolvedBuild) and isset($allBuilds[$bug->resolvedBuild])) $oldResolvedBuild[$bug->resolvedBuild] = $allBuilds[$bug->resolvedBuild];
 
         $builds = new stdclass();
-        $builds->openedBuilds = array_map(function($key, $value)
-        {
-            return (object) array('value' => $key, 'text' => $value);
-        }, array_keys($openedBuilds), array_values($openedBuilds));
+        $builds->openedBuilds = $this->bug->convertArrayToObjectArray($openedBuilds);
 
         $resolvedBuilds = $openedBuilds + $oldResolvedBuild;
-        $builds->resolvedBuilds = array_map(function($key, $value)
-        {
-            return (object) array('value' => $key, 'text' => $value);
-        }, array_keys($resolvedBuilds), array_values($resolvedBuilds));
+        $builds->resolvedBuilds = $this->bug->convertArrayToObjectArray($resolvedBuilds);
 
         $builds->resolvedBuildName = zget($resolvedBuilds, $bug->resolvedBuild);
-        echo json_encode($builds);
+
+        return print(helper::jsonEncode($builds));
     }
 
+    /**
+     * Ajax get testTasks.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return int
+     */
     public function ajaxGetTestTasks($bugID)
     {
         $bug       = $this->bug->getById($bugID);
-        $testTasks = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $testTasks = array_map(function($key, $value)
-        {
-            return (object) array('value' => $key, 'text' => $value);
-        }, array_keys($testTasks), array_values($testTasks));
-        echo json_encode($testTasks);
+        $testTasks = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask, 'noempty');
+        $testTasks = $this->bug->convertArrayToObjectArray($testTasks);
+
+        return print(helper::jsonEncode($testTasks));
+    }
+
+    /**
+     * Ajax get stories.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return int
+     */
+    public function ajaxGetStories($bugID)
+    {
+        $bug     = $this->bug->getById($bugID);
+        $stories = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        if(isset($stories[0])) unset($stories[0]);
+        $stories = $this->bug->convertArrayToObjectArray($stories);
+
+        return print(helper::jsonEncode($stories));
     }
 
     /**
