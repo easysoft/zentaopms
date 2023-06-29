@@ -44,6 +44,7 @@ class block extends control
             $formData->vision    = $this->config->vision;
             $formData->params    = json_encode($formData->params);
             if(!empty($this->config->block->size[$formData->module][$formData->code][$formData->width])) $formData->height = $this->config->block->size[$formData->module][$formData->code][$formData->width];
+            $formData->top       = $this->block->getNewTop($dashboard);
 
             $this->block->create($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

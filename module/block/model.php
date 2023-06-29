@@ -392,4 +392,16 @@ class blockModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * Get new block top.
+     *
+     * @param  string $dashboard
+     * @access public
+     * @return int
+     */
+    public function getNewTop($dashboard): int
+    {
+        return $this->dao->select('max(`top` + `height`) AS top')->from(TABLE_BLOCK)->where('dashboard')->eq($dashboard)->andWhere('hidden')->eq('0')->fetch('top');
+    }
 }

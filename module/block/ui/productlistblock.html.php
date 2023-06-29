@@ -13,27 +13,29 @@ namespace zin;
 
 if(!$longBlock)
 {
-    unset($config->block->product->dtable->fieldList['unclosedFeedback']);
-    unset($config->block->product->dtable->fieldList['storyCompleteRate']);
-    unset($config->block->product->dtable->fieldList['plan']);
-    unset($config->block->product->dtable->fieldList['activatedBug']);
+    unset($config->block->product->dtable->fieldList['progress']);
+    unset($config->block->product->dtable->fieldList['plans']);
+    unset($config->block->product->dtable->fieldList['activeBugs']);
 }
 
 foreach($productStats as $product)
 {
     if(!empty($product->PO))
     {
-        $product->po        = $product->PO;
-        $product->poName    = zget($users, $product->PO);
-        $product->poAvatar  = zget($userAvatars, $product->PO);
-        $product->poAccount = $product->PO;
+        $product->PO        = zget($users, $product->PO);
+        $product->POAvatar  = zget($userAvatars, $product->PO);
+        $product->POAccount = $product->PO;
     }
 }
 
 panel
 (
+    setClass('p-0'),
+    set::title($block->title),
+    set::bodyClass('p-0 no-shadow'),
     dtable
     (
+        set::shadow(false),
         set::cols(array_values($config->block->product->dtable->fieldList)),
         set::data(array_values($productStats))
     )

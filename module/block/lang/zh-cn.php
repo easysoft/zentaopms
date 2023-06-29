@@ -348,7 +348,7 @@ $lang->block->typeList->story['reviewedBy'] = '我评审过';
 $lang->block->typeList->story['closedBy']   = '由我关闭';
 
 $lang->block->typeList->product['noclosed'] = '未关闭';
-$lang->block->typeList->product['closed']   = '已关闭';
+$lang->block->typeList->product['closed']   = '结束';
 $lang->block->typeList->product['all']      = '全部';
 $lang->block->typeList->product['involved'] = '我参与';
 
