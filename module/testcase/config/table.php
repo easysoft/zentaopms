@@ -12,7 +12,6 @@ $config->testcase->dtable->fieldList['title']['title']        = $lang->testcase-
 $config->testcase->dtable->fieldList['title']['type']         = 'title';
 $config->testcase->dtable->fieldList['title']['fixed']        = 'left';
 $config->testcase->dtable->fieldList['title']['nestedToggle'] = true;
-$config->testcase->dtable->fieldList['title']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.isCase == 2) return \'icon-folder-open-o text-gray\'; return \'\';}>RAWJS';
 $config->testcase->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 $config->testcase->dtable->fieldList['title']['required']     = true;
 $config->testcase->dtable->fieldList['title']['group']        = 1;
@@ -172,8 +171,6 @@ $config->scene->dtable->fieldList['title']['title']        = $lang->testcase->sc
 $config->scene->dtable->fieldList['title']['type']         = 'title';
 $config->scene->dtable->fieldList['title']['fixed']        = 'left';
 $config->scene->dtable->fieldList['title']['nestedToggle'] = true;
-$config->scene->dtable->fieldList['title']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.isCase == 2) return \'icon-folder-open-o text-gray\'; return \'\';}>RAWJS';
-$config->scene->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 $config->scene->dtable->fieldList['title']['required']     = true;
 $config->scene->dtable->fieldList['title']['group']        = 1;
 
