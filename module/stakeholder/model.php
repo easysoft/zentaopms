@@ -58,7 +58,7 @@ class stakeholderModel extends model
 
                 if(!$companyID)
                 {
-                    $elementName = $this->post->new ? 'company' : 'companySelect';
+                    $elementName = $data->new ? 'company' : 'companySelect';
                     dao::$errors[$elementName] = $this->lang->stakeholder->companyEmpty;
                     return false;
                 }
@@ -101,12 +101,14 @@ class stakeholderModel extends model
 
         if(!dao::isError())
         {
-            $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $stakeholder->user);
+            $userList = empty($stakeholder->user) ? array() : array($stakeholder->user);
+
+            $this->loadModel('user')->updateUserView($stakeholder->objectID, $stakeholder->objectType, $userList);
 
             /* Update linked products view. */
             if($stakeholder->objectType == 'project' and $stakeholder->objectID)
             {
-                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
+                $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $userList);
             }
 
             if($stakeholder->objectType == 'program' and $stakeholder->objectID)
