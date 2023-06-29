@@ -361,7 +361,7 @@ class storyZen extends story
         $fields['plan']['options']     = $plans;
         $fields['plans']['options']    = $plans;
         $fields['reviewer']['options'] = $reviewers;
-        $fields['parent']['options']   = $stories;
+        $fields['parent']['options']   = array_filter($stories);
 
         /* 设置默认值。 */
         foreach($initStory as $field => $defaultValue)
@@ -584,10 +584,6 @@ class storyZen extends story
                 if($project->model === 'kanban') $hiddenURS  = true;
             }
         }
-        if($hiddenParent)         unset($fields['parent']);
-        if($hiddenPlan)           unset($fields['plan']);
-        if(!$showFeedback)        unset($fields['feedbackBy'], $fields['notifyEmail']);
-        if($storyType == 'story') unset($fields['branch']);
         if($storyType != 'story') unset($fields['region'], $fields['lane'], $fields['branches'], $fields['modules'], $fields['plans']);
         if($storyType != 'story' || !$this->config->URSR || $hiddenURS) unset($fields['URS']);
         if($hiddenProduct)
@@ -598,12 +594,14 @@ class storyZen extends story
         }
 
         /* Set Custom. */
-        $customFields = explode(',', $this->config->story->list->customCreateFields);
-        $showFields   = trim($this->config->story->custom->createFields, ',');
-        foreach($customFields as $field)
-        {
-            if(!str_contains($showFields, $field)) unset($fields[$field]);
-        }
+        //$customFields = explode(',', $this->config->story->list->customCreateFields);
+        //$showFields   = trim($this->config->story->custom->createFields, ',');
+        //foreach($customFields as $field)
+        //{
+        //    if(!str_contains($showFields, $field)) unset($fields[$field]);
+        //}
+
+        $this->view->hiddenParent = $hiddenParent;
 
         return $fields;
     }

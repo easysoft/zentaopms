@@ -9,6 +9,7 @@ $config->story->form->create['plan']        = array('type' => 'int',     'contro
 $config->story->form->create['assignedTo']  = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => 'users');
 $config->story->form->create['source']      = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => $lang->story->sourceList);
 $config->story->form->create['sourceNote']  = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->story->form->create['feedbackBy']  = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->create['notifyEmail'] = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->create['reviewer']    = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '', 'options' => 'users');
 $config->story->form->create['URS']         = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '', 'options' => array());
@@ -18,7 +19,7 @@ $config->story->form->create['lane']        = array('type' => 'int',     'contro
 $config->story->form->create['title']       = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 $config->story->form->create['color']       = array('type' => 'string',  'control' => 'color',        'required' => false, 'default' => '');
 $config->story->form->create['category']    = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'feature', 'options' => $lang->story->categoryList);
-$config->story->form->create['pri']         = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 3,         'options' => $lang->story->priList);
+$config->story->form->create['pri']         = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 3,         'options' => array_filter($lang->story->priList));
 $config->story->form->create['estimate']    = array('type' => 'float',   'control' => 'text',         'required' => false, 'default' => 0);
 $config->story->form->create['spec']        = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->create['verify']      = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
