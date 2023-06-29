@@ -26,17 +26,21 @@ jsVar('openedFiles', array($entry));
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&revision=$revision&showBug=$showBug&encoding=$encoding");
 
 featureBar();
+
+$dropMenus = array();
+if(common::hasPriv('repo', 'blame'))    $dropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'url' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$file&revision=$revision&encoding=$encoding"));
+if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID=$repoID&path=$file&fromRevision=$revision"), 'target' => '_blank');
 div(
     set::id('fileTabs'),
     tabs
     (
         set::id('monacoTabs'),
+        set::class('relative'),
         tabPane
         (
             set::title($pathInfo['basename']),
             set::active(true),
             set::key('tab-' . str_replace('=', '-', $file)),
-            set('data-prevent', false),
             to::suffix
             (
                 icon
@@ -45,10 +49,22 @@ div(
                     set::class('monaco-close'),
                 )
             ),
-            tableData
+            div(set::id('tab-' . $file)),
+        ),
+        dropdown
+        (
+            set::arrow(false),
+            set::staticMenu(true),
+            set::class('absolute top-0 right-0 z-10 monaco-dropmenu'),
+            btn
             (
-                div(set::id('tab-' . $file))
-            )
+                setClass('ghost text-black pull-right'),
+                set::icon('ellipsis-v rotate-90'),
+            ),
+            set::items
+            (
+                $dropMenus
+            ),
         ),
     )
 );
