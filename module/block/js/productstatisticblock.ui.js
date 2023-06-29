@@ -7,7 +7,7 @@ function switchNav(event)
     if($switch.length) $switch.find('a[data-toggle=tab]').trigger('click');
 }
 
-$('.nav.nav-tabs').on('show', function(event, info)
+$('.productstatistic-block .nav.nav-tabs').on('show', function(event, info)
 {
     $('#' + info[1] + ' .chart').each(function()
     {
