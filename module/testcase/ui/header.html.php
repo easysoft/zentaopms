@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('browseType', strtolower($browseType));
 jsVar('scene', $lang->testcase->sceneb);
 jsVar('automated', $lang->testcase->automated);
 jsVar('children', $lang->childrenAB);

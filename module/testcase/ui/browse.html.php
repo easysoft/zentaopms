@@ -17,8 +17,6 @@ $topSceneCount = count(array_filter(array_map(function($scene){return $scene->is
 $topCaseCount  = count(array_filter(array_map(function($scene){return $scene->isCase == 1 && $scene->scene == 0;}, $scenes)));
 $pageSummary   = sprintf($isOnlyScene ? $lang->testcase->summaryScene : $lang->testcase->summary, $topSceneCount, $topCaseCount);
 
-jsVar('caseScenes', $caseScenes);
-
 $canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
 $canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
 $canBatchReview             = hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
@@ -165,7 +163,7 @@ dtable
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::defaultSummary($pageSummary)
+    set::customData(array('isOnlyScene' => $isOnlyScene, 'caseScenes' => $caseScenes, 'pageSummary' => $pageSummary))
 );
 
 modal
