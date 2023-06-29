@@ -23,13 +23,15 @@ class zui extends wg
         '_name:string',
         '_to?:string',
         '_tag:string="div"',
-        '_toProps?: array',
-        '_size?: array'
+        '_props?: array',
+        '_size?: array',
+        '_id?: string',
+        '_class?: string'
     );
 
     protected function build()
     {
-        list($name, $target, $tagName, $targetProps, $size) = $this->prop(array('_name', '_to', '_tag', '_toProps', '_size'));
+        list($name, $target, $tagName, $targetProps, $size, $id, $class) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class'));
         list($width, $height) = $size;
         $selector = empty($target) ? "[data-zin-id='$this->gid']" : $target;
         $options = $this->props->skip(array_keys(static::getDefinedProps()));
@@ -39,6 +41,8 @@ class zui extends wg
             (
                 $tagName,
                 set($targetProps),
+                setClass($class),
+                setID($id),
                 set('data-zin-id', $this->gid),
                 setStyle('width', $width),
                 setStyle('height', $height),
