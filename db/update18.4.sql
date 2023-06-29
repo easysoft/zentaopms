@@ -1,11 +1,20 @@
 INSERT INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('traincourse', 'cloudImport', '125', ',biz,max,ipd,', ',rnd,', '1', '10');
+INSERT INTO `zt_priv` (`module`, `method`, `parent`, `edition`, `vision`, `system`, `order`) VALUES ('dataview', 'export', '650', ',biz,max,ipd,', ',rnd,', '1', '30');
 
 INSERT INTO `zt_privlang` (`objectID`, `objectType`, `lang`, `key`, `value`, `desc`) VALUES
 (2107, 'priv', 'de',    'traincourse-cloudImport', '', ''),
 (2107, 'priv', 'en',    'traincourse-cloudImport', '', ''),
 (2107, 'priv', 'fr',    'traincourse-cloudImport', '', ''),
 (2107, 'priv', 'zh-cn', 'traincourse-cloudImport', '', ''),
-(2107, 'priv', 'zh-tw', 'traincourse-cloudImport', '', '');
+(2107, 'priv', 'zh-tw', 'traincourse-cloudImport', '', ''),
+(2108, 'priv', 'de',    'dataview-export', '', ''),
+(2108, 'priv', 'en',    'dataview-export', '', ''),
+(2108, 'priv', 'fr',    'dataview-export', '', ''),
+(2108, 'priv', 'zh-cn', 'dataview-export', '', ''),
+(2108, 'priv', 'zh-tw', 'dataview-export', '', '');
+
+INSERT INTO zt_privmanager (id, parent, code, `type`, edition, vision, `order`) VALUES (650, 445, '', 'package', ',biz,max,ipd,', ',rnd,', 20);
+INSERT INTO zt_privlang (objectID, objectType, lang, `key`, value, `desc`) VALUES(650, 'manager', 'zh-cn', '', '导出数据表', '');
 
 ALTER TABLE `zt_traincourse` ADD `importedStatus` enum('wait','doing','done') NOT NULL DEFAULT 'wait' AFTER `desc`;
 ALTER TABLE `zt_traincourse` ADD `lastUpdatedTime` int UNSIGNED NOT NULL DEFAULT 0 AFTER `importedStatus`;
