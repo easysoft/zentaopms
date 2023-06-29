@@ -510,6 +510,8 @@
             const urlInfo = $.parseLink(url);
             id = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
+        if(!$(`#${id}`).length) return loadPage({id: id, url: url});
+
         loadPage($.extend(
         {
             url: url,
@@ -748,8 +750,9 @@
         const $modal = $link.closest('.modal');
         if($modal.length)
         {
-            if(!options.load)        options.load   = 'modal';
-            else if(!options.loadId) options.loadId = $modal.attr('id');
+            if(!options.load) options.load   = 'modal';
+            if(options.load === 'modal' && !options.loadId) options.loadId = $modal.attr('id');
+            if(options.load === 'table' && !options.url) options.url = $modal.data('zui.Modal').options.url;
         }
         else
         {
