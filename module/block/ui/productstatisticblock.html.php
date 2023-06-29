@@ -146,7 +146,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     (
                                         common::hasPriv('product', 'browse') ? a
                                         (
-                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory-0-story")),
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory&param=0&storyType=story")),
                                             set('class', 'text-black'),
                                             $stories ? $stories['total'] : 0
                                         ) : span
@@ -171,7 +171,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     (
                                         common::hasPriv('product', 'browse') ? a
                                         (
-                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory-0-story")),
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory&param=0&storyType=story")),
                                             set('class', 'text-black'),
                                             $stories ? $stories['closed'] : 0
                                         ) : span
@@ -196,7 +196,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                     (
                                         common::hasPriv('product', 'browse') ? a
                                         (
-                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed-0-story")),
+                                            set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed&param=0&storyType=story")),
                                             set('class', 'text-black'),
                                             $stories ? $stories['notClosed'] : 0
                                         ) : span
@@ -369,6 +369,16 @@ panel
         (
             set('class', 'panel-title'),
             span($block->title),
+        )
+    ),
+    to::headingActions
+    (
+        a
+        (
+            set('class', 'text-gray'),
+            set('href', createLink('product', 'all', 'browseType=' . $block->params->type)),
+            $lang->more,
+            icon('caret-right')
         )
     ),
     div
