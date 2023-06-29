@@ -60,7 +60,7 @@ foreach($charts as $chartType => $chartOption)
             cell
             (
                 set::width('50%'),
-                set::class('border-r'),
+                set::class('border-r chart'),
                 div(set::class('center text-base font-bold py-2'), $lang->testtask->report->charts[$chartType]),
                 echarts
                 (
@@ -129,7 +129,7 @@ $bugStageChart = div
         cell
         (
             set::width('50%'),
-            set::class('border-r'),
+            set::class('border-r chart'),
             div(set::class('center text-base font-bold py-2'), $lang->testreport->bugStageGroups),
             echarts
             (
@@ -205,7 +205,7 @@ $bugHandleChart = div
         cell
         (
             set::width('50%'),
-            set::class('border-r'),
+            set::class('border-r chart'),
             div(set::class('center text-base font-bold py-2'), $lang->testreport->bugHandleGroups),
             echarts
             (
@@ -286,7 +286,7 @@ foreach($bugInfo as $infoKey => $infoValue)
             cell
             (
                 set::width('50%'),
-                set::class('border-r'),
+                set::class('border-r chart'),
                 div(set::class('center text-base font-bold py-2'), $lang->testreport->{$infoKey}),
                 echarts
                 (
@@ -334,7 +334,7 @@ div
             tabPane
             (
                 set::key('basic'),
-                to::divide(true),
+                to::divider(true),
                 set::title($lang->testreport->view),
                 set::active(true),
                 sectionList
@@ -441,7 +441,7 @@ div
             (
                 set::key('tabLegacyBugs'),
                 to::prefix(icon('bug')),
-                to::divide(true),
+                to::divider(true),
                 set::title($lang->testreport->legendLegacyBugs),
                 sectionList
                 (
@@ -456,7 +456,7 @@ div
             tabPane
             (
                 set::key('tabReport'),
-                to::divide(true),
+                to::divider(true),
                 set::title($lang->testreport->legendReport),
                 $caseCharts,
                 $bugStageChart,

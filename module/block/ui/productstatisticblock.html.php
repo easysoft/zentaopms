@@ -39,6 +39,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
             (
                 set('class', 'ellipsis text-dark title ' . ($product->id == $selected ? ' active' : '')),
                 $longBlock ? set('data-toggle', 'tab') : null,
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', $longBlock ? "#tab3{$blockNavCode}Content{$product->id}" : helper::createLink('product', 'browse', "productID=$product->id")),
                 $product->name
 
@@ -47,6 +48,7 @@ function getProductTabs(array $products, string $blockNavCode, bool $longBlock):
             (
                 set('class', 'hidden'),
                 set('data-toggle', 'tab'),
+                set('data-name', "tab3{$blockNavCode}Content{$product->id}"),
                 set('href', "#tab3{$blockNavCode}Content{$product->id}"),
             ) : null,
             a
@@ -126,7 +128,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                             )
                                         )
                                     )
-                                )->size(120, 120),
+                                )->size('100%', 120),
                                 div
                                 (
                                     set::class('pie-chart-title text-center'),

@@ -115,8 +115,8 @@ class tabs extends wg
         {
             $titleViews[] = $this->buildTitleView($tabPane);
 
-            $divide = $tabPane->block('divide');
-            if($divide) $titleViews[] = div(set::class('divide'));
+            $divider = $tabPane->block('divider');
+            if($divider) $titleViews[] = div(set::class('divider'));
 
             $contentViews[] = $tabPane;
         }
