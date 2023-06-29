@@ -34,8 +34,8 @@ function toggleOnlyAutoCase(event)
 }
 
 /**
- * 移除场景名称的链接。
- * Remove link of scene's title.
+ * 标题列显示额外的内容。
+ * Display extra content in the title column.
  *
  * @param  object result
  * @param  object info
@@ -44,10 +44,20 @@ function toggleOnlyAutoCase(event)
  */
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && row.data.isCase == 2 && col.name == 'title')
+    if(result && col.name == 'title')
     {
-        result.pop();
-        result.push({html: row.data.title});
+        const data = row.data;
+        if(data.isCase == 1 && data.auto == 'auto')
+        {
+            result.unshift({html: '<span class="label lighter rounded-full">' + automated + '</span>'}); // 添加自动化标签
+        }
+        else if(data.isCase == 2)
+        {
+            result.pop(); // 移除带链接的场景名称
+            result.push({html: data.title}); // 添加不带链接的场景名称
+            if(data.parent > 0) result.unshift({html: '<span class="label lighter rounded-full">' + children + '</span>'}); // 添加子场景标签
+            result.unshift({html: '<span class="label light-outline text-gray rounded-full">' + scene + '</span>'}); // 添加场景标签
+        }
     }
     return result;
 }

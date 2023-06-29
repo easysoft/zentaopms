@@ -10,6 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('scene', $lang->testcase->sceneb);
+jsVar('automated', $lang->testcase->automated);
+jsVar('children', $lang->childrenAB);
+
 $isOnlyScene   = strtolower($browseType) == 'onlyscene';
 $isProjectApp  = $this->app->tab == 'project';
 $currentModule = $isProjectApp ? 'project'  : 'testcase';
