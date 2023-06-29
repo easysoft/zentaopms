@@ -10,7 +10,6 @@ class stakeholderModel extends model
      */
     public function create($objectID = 0)
     {
-        $stakeholder = new stdclass();
         $data = fixer::input('post')
             ->setDefault('objectType', $this->app->tab)
             ->setDefault('objectID', $objectID)
@@ -18,10 +17,10 @@ class stakeholderModel extends model
             ->setDefault('createdDate', helper::today())
             ->stripTags($this->config->stakeholder->editor->create['id'], $this->config->allowedTags)
             ->remove('uid')
+            ->remove('companySelect')
             ->get();
 
         $account = isset($data->user) ? $data->user : '';
-        $stakeholder->user = $account;
         if($data->from != 'outside')
         {
             if(!$account)
@@ -59,7 +58,8 @@ class stakeholderModel extends model
 
                 if(!$companyID)
                 {
-                    dao::$errors[] = $this->lang->stakeholder->companyEmpty;
+                    $elementName = $this->post->new ? 'company' : 'companySelect';
+                    dao::$errors[$elementName] = $this->lang->stakeholder->companyEmpty;
                     return false;
                 }
 
@@ -80,10 +80,11 @@ class stakeholderModel extends model
                 $userID  = $this->dao->lastInsertID();
                 $account = 'u' . $userID;
                 $this->dao->update(TABLE_USER)->set('account')->eq($account)->where('id')->eq($userID)->exec();
-                $stakeholder->user = $account;
             }
         }
 
+        $stakeholder = new stdclass();
+        $stakeholder->user        = $account;
         $stakeholder->objectType  = $data->objectType;
         $stakeholder->objectID    = $data->objectID;
         $stakeholder->key         = $data->key;

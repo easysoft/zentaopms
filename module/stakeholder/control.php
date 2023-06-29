@@ -93,6 +93,7 @@ class stakeholder extends control
         $this->view->programID  = $this->app->tab == 'program' ? $objectID : 0;
         $this->view->projectID  = $this->app->tab == 'project' ? $objectID : 0;
         $this->view->members    = $members;
+        $this->view->objectID   = $objectID;
 
         $this->display();
     }
