@@ -32,13 +32,13 @@ window.programMenuOnClick = function(data, url)
  */
 window.onClickBatchEdit = function(event)
 {
-    const dtable      = zui.DTable.query(event.target);
-    const checkedList = dtable.$.getChecks();
+    const dtable = zui.DTable.query(event.target);
 
+    const checkedList = dtable.$.getChecks();
     if(checkedList.length === 0) return;
 
     const postData = new FormData();
     checkedList.forEach((id) => postData.append('productIDList[]', id));
 
-    postAndLoadPage($(event.target).data('url'), postData);
+    postAndLoadPage($(event.target).parents('button').data('url'), postData);
 };
