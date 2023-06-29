@@ -16,6 +16,7 @@ $currentMethod = $isProjectApp ? 'testcase' : 'browse';
 $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
 $initModule    = isset($moduleID) ? (int)$moduleID : 0;
 $rawMethod     = $app->rawMethod;
+$load          = $rawMethod !== 'browse' ? null : 'table';
 
 $canModify          = common::canModify('product', $product);
 $canSwitchCaseType  = $this->app->tab == 'qa';
@@ -97,7 +98,7 @@ featureBar
 (
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
-    set::load($rawMethod !== 'browse' ? null : 'table'),
+    set::load($load),
     $canSwitchCaseType ? to::before
     (
         productMenu
@@ -134,6 +135,7 @@ featureBar
         (
             set::href(str_replace('{key}', 'onlyScene', $browseLink)),
             set('class', strtolower($browseType) == 'onlyscene' ? 'active' : ''),
+            set('data-load', $load),
             $lang->testcase->onlyScene
         )
     ),
