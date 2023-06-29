@@ -1,5 +1,11 @@
 $(function()
 {
+    if(executionID)
+    {
+        triggerTips();
+        return false;
+    }
+
     loadProjectExecutions(copyProjectID);
 
     if($('#methodHover').length) new zui.Tooltip('#methodHover', {title: methodTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light methodTip'});
@@ -131,4 +137,12 @@ function setCopyExecution()
 
     loadPage($.createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=' + executionID));
     zui.Modal.hide();
+}
+
+window.triggerTips = function()
+{
+    const modal = zui.Modal.open({
+        url: $.createLink('execution', 'tips', 'executionID=' + executionID),
+        id: 'tipsModal',
+    });
 }

@@ -1660,13 +1660,8 @@ class execution extends control
             if(!empty($projectID) and $execution->type == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'load' => $this->createLink('project', 'index', "projectID=$projectID")));
             if(!empty($projectID) and $execution->type == 'kanban') return $this->send(array('result' => 'success', 'load' => inlink('kanban', "executionID=$executionID")));
 
-            $this->execution->setMenu($executionID); // Fix bug #22897.
-
             $this->view->title       = $this->lang->execution->tips;
-            $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
-            $this->view->projectID   = $projectID;
-            $this->view->project     = $project;
             return $this->display();
         }
 
@@ -3663,7 +3658,7 @@ class execution extends control
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->projectID   = $projectID;
-        $this->display('execution', 'tips');
+        $this->display();
     }
 
     /**

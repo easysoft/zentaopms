@@ -19,6 +19,7 @@ jsVar('errorSameBranches', $lang->execution->errorSameBranches);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('multiBranchProducts', $multiBranchProducts);
+jsVar('executionID', $executionID);
 
 $methodBox = null;
 if(!empty($project->model) && $project->model == 'agileplus')
@@ -565,6 +566,11 @@ modalTrigger
             setClass('flex items-center flex-wrap'),
         )
     )
+);
+
+modalTrigger
+(
+    modal (set::id('tipsModal'))
 );
 
 /* ====== Render page ====== */
