@@ -42,6 +42,7 @@ $footToolbar = $canBatchAction ? array('items' => array
         $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
         ($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange) ? array('caret' => 'up', 'btnType' => 'primary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     )),
+    $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'btnType' => 'primary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'primary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'btnType' => 'primary', 'url' => '#navScene','data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'btnType' => 'primary', 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
@@ -79,6 +80,19 @@ if($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchCon
             $canBatchCaseTypeChange ? array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems) : null,
             $canBatchConfirmStoryChange ? array('text' => $lang->testcase->confirmStoryChange, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID")) : null,
         ))
+    );
+}
+
+if($canBatchChangeBranch)
+{
+    $branchItems = array();
+    foreach($branchTagOption as $branchID => $branchName) $branchItems[] = array('text' => $module, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('testcase', 'batchChangeBranch', "branchID=$branchId"));
+
+    menu
+    (
+        set::id('navBranch'),
+        set::class('dropdown-menu'),
+        set::items($branchItems)
     );
 }
 
