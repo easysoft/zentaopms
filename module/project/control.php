@@ -416,10 +416,11 @@ class project extends control
 
         if($_POST)
         {
-            $postData  = form::data($this->config->project->form->create);
-            $project   = $this->projectZen->prepareCreateExtras($postData);
-            $projectID = $this->project->create($project, $postData);
+            $postData = form::data($this->config->project->form->create);
+            $project  = $this->projectZen->prepareCreateExtras($postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $projectID = $this->project->create($project, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($project->model == 'kanban') $this->project->addTeamMembers($projectID, $project, (array)$this->post->teamMembers);
             $this->loadModel('action')->create('project', $projectID, 'opened');
@@ -441,8 +442,8 @@ class project extends control
                 if($model == 'waterfall' or $model == 'waterfallplus')
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', '', $projectID), 'project');
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', '', $projectID)));
+                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID), 'project');
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
                 }
 
                 $parent     = (int)$project->parent;

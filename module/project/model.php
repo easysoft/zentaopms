@@ -1152,7 +1152,7 @@ class projectModel extends model
 
         /* Save order. */
         $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
-        $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+        $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project');
         $this->loadModel('program')->setTreePath($projectID);
 
         /* Add project admin. */

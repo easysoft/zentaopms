@@ -42,9 +42,9 @@ class projectZen extends project
         /* Lean mode relation defaultProgram. */
         if($this->config->systemMode == 'light') $project->parent = $this->config->global->defaultProgram;
 
-        if(!$this->checkProductAndBranch($project, $this->post))  return false;
-        if(!$this->checkDaysAndBudget($project, $this->post))     return false;
-        if(!$this->checkProductNameUnqiue($project, $this->post)) return false;
+        if(!$this->checkProductAndBranch($project, (object)$_POST))  return false;
+        if(!$this->checkDaysAndBudget($project, (object)$_POST))     return false;
+        if(!$this->checkProductNameUnqiue($project, (object)$_POST)) return false;
 
         return $project;
     }
@@ -125,13 +125,13 @@ class projectZen extends project
 
         if($rawdata->products)
         {
-            $topProgramID     = $this->loadModel('program')->getTopByID($project->parent);
+            $topProgramID     = (int)$this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
                 if(isset($multipleProducts[$productID]) && empty($rawdata->branch[$index]))
                 {
-                    dao::$errors[] = $this->lang->project->error->emptyBranch;
+                    dao::$errors['branch[0]'] = $this->lang->project->error->emptyBranch;
                     return false;
                 }
             }
@@ -140,7 +140,7 @@ class projectZen extends project
         /* Judge products not empty. */
         if($project->parent && $project->hasProduct && empty($linkedProductsCount) && !isset($rawdata->newProduct))
         {
-            dao::$errors['products0'] = $this->lang->project->error->productNotEmpty;
+            dao::$errors['products[0]'] = $this->lang->project->error->productNotEmpty;
             return false;
         }
 
