@@ -2341,7 +2341,7 @@ class productModel extends model
             }
             else
             {
-                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : ''));
+                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . ($extra ? "&extras=$extra" : ''));
             }
         }
         else if($module == 'productplan' || $module == 'release')
