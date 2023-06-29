@@ -103,3 +103,101 @@ function setModules(event)
 
     loadStories(productID, moduleID, 0, $currentRow);
 }
+
+/**
+ * Load module related items when the module changed.
+ *
+ * @access public
+ * @return void
+ */
+function loadModuleRelated()
+{
+    setStories();
+    setScene();
+}
+
+/**
+ * Set story field.
+ *
+ * @access public
+ * @return void
+ */
+function setStories()
+{
+    const moduleID  = $('#module').val();
+    const productID = $('#product').val();
+    var branch      = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+    const link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
+
+    $.get(link, function(stories)
+    {
+        const value = $('#story').val();
+
+        if(!stories) stories = '<select id="story" name="story"></select>';
+
+        $('#story').replaceWith(stories);
+
+        $('#story').val(value);
+    });
+}
+
+function setScenes()
+{
+    const moduleID  = $('#module').val();
+    const productID = $('#product').val();
+    var branch      = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+    const link = createLink('testcase', 'ajaxGetModuleScenes', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&stype=2&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1');
+
+    $('#sceneIdBox').load(link);
+}
+
+function loadProductRelated()
+{
+    loadProductBranches();
+    loadProductModules();
+    if(config.currentMethod == 'create' || config.currentMethod == 'edit') setStories();
+}
+
+function loadProductBranches()
+{
+    $('#branch').remove();
+
+    const productID = $('#product').val();
+    var param     = config.currentMethod == 'create' ? 'active' : 'all';
+    var oldBranch = caseBranch !== 'undefined' ? caseBranch : 0;
+    var param     = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + param;
+    if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
+    $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
+    {
+        if(data)
+        {
+            $('#product').closest('.input-group').append(data);
+            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '95px');
+        }
+    })
+}
+
+function loadProductModules()
+{
+    const productID = $('#product').val();
+    var branch      = $('#branch').val();
+    const moduleID  = config.currentMethod == 'edit' ? $('#module').val() : 0;
+
+    if(!branch) branch = 0;
+
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + moduleID);
+    $('#moduleIdBox').load(link, function()
+    {
+        var $inputGroup = $(this);
+        if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>");
+    });
+}
+
+function loadBranchRelated()
+{
+    loadProductModules();
+
+    if(config.currentMethod == 'create' || config.currentMethod == 'edit') setStories();
+}
