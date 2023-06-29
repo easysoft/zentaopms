@@ -18,7 +18,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode=doc&type={key}&param={$param}"),
-    li(searchToggle())
+    li(searchToggle(set::module('doc')))
 );
 
 if($type == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);
