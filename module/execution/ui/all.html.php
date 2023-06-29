@@ -51,6 +51,7 @@ $tableData  = initTableData($executions, $config->execution->dtable->fieldList, 
 featureBar
 (
     set::current($status),
+    set::linkParams("status={key}"),
     li(searchToggle())
 );
 
