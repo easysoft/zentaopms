@@ -1,0 +1,4 @@
+#mainContent  h2 {font-size: 16px; font-weight: 600}
+#burnYUnit {position: absolute; color: #CBD0DB; top: 85px; left: 185px;}
+#burnXUnit {position: absolute; color: #CBD0DB; bottom: 70px; right: 165px;}
+#featureBar .btn .icon {color: #fff !important} 

@@ -3979,14 +3979,17 @@ class executionModel extends model
 
         foreach($dateList as $date)
         {
-            if(!isset($burnData[$date]) && ($showDelay ? $date >= $execution->end : $date <= $execution->end))
+            if(!isset($burnData[$date]))
             {
-                $set = new stdclass();
-                $set->name    = $date;
-                $set->value   = 'null';
-                $set->$burnBy = 0;
+                if(($showDelay and $date < $execution->end) or (!$showDelay and $date > $execution->end))
+                {
+                    $set = new stdClass();
+                    $set->name    = $date;
+                    $set->value   = 'null';
+                    $set->$burnBy = 0;
 
-                $burnData[$date] = $set;
+                    $burnData[$date] = $set;
+                }
             }
         }
 
@@ -4783,24 +4786,22 @@ class executionModel extends model
 
         $sets      = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
         $firstBurn = empty($sets) ? 0 : reset($sets);
-        $firstTime = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : 0;
-        $firstTime = !$firstTime && !empty($firstBurn->value) ? $firstBurn->value : 0;
+        $firstTime = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
         $firstTime = $firstTime == 'null' ? 0 : $firstTime;
 
         /* If the $executionEnd  is passed, the guide should end of execution. */
-        $days         = $executionEnd ? array_search($executionEnd, $dateList) : count($dateList) - 1;
-        $rate         = $days ? $firstTime / $days : '';
-        $baselineJSON = '[';
+        $days     = $executionEnd ? array_search($executionEnd, $dateList) : count($dateList) - 1;
+        $rate     = $days ? $firstTime / $days : '';
+        $baseline = array();
         foreach($dateList as $i => $date)
         {
-            $value = ($i > $days ? 0 : round(($days - $i) * (float)$rate, 3)) . ',';
-            $baselineJSON .= $value;
+            $value = ($i > $days ? 0 : round(($days - $i) * (float)$rate, 3));
+            $baseline[] = $value;
         }
-        $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
-        $chartData['baseLine'] = $baselineJSON;
+        $chartData['baseLine'] = $baseline;
 
         $execution = $this->getById($executionID);
 
