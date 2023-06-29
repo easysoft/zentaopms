@@ -1,6 +1,7 @@
 <?php
-$lang->dataview->id   = '编号';
-$lang->dataview->name = '名称';
+$lang->dataview->id     = '编号';
+$lang->dataview->name   = '名称';
+$lang->dataview->export = '导出';
 
 $lang->dataview->common         = '数据表';
 $lang->dataview->id             = '编号';

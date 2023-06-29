@@ -54,11 +54,15 @@
       <div class='detail-title'>
         <div class='dataview-title' title='<?php echo $dataTitle;?>'><?php echo $dataTitle;?></div>
         <div class='actions pull-right'>
+          <?php if($selectedTable):?>
+            <?php if(common::hasPriv('dataview', 'export')) echo html::a($this->createLink('dataview', 'export', "type=$type&table=$selectedTable", '', true), "<i class='icon icon-export'></i> {$lang->dataview->export}", '', "class='iframe'");?>
+          <?php endif;?>
           <?php if($selectedTable and isset($dataview)):?>
           <?php
             $designTitle  = $lang->dataview->design;
             $editTitle    = $lang->dataview->edit;
             $deleteTitle  = $lang->dataview->delete;
+
             if(common::hasPriv('dataview', 'query') and $type == 'view') echo html::a('#', "<i class='icon icon-design'></i> {$lang->dataview->design}", '', "class='query-view' title='{$designTitle}'");
             if(common::hasPriv('dataview', 'edit') and $type == 'view') echo html::a($this->createLink('dataview', 'edit', "id=$selectedTable", '', true), "<i class='icon icon-edit'></i> {$lang->dataview->edit}", '', "class='iframe' title='{$editTitle}' data-width='480'");
             if(common::hasPriv('dataview', 'delete') and $type == 'view') echo html::a($this->createLink('dataview', 'delete', "id=$selectedTable"), "<i class='icon icon-trash'></i> {$lang->dataview->delete}", 'hiddenwin', "class='query-delete' title='{$deleteTitle}'");

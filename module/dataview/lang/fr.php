@@ -1,6 +1,7 @@
 <?php
-$lang->dataview->id   = 'ID';
-$lang->dataview->name = 'Name';
+$lang->dataview->id     = 'ID';
+$lang->dataview->name   = 'Name';
+$lang->dataview->export = 'Export';
 
 $lang->dataview->common         = 'Data Table';
 $lang->dataview->id             = 'ID';
