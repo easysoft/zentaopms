@@ -31,6 +31,7 @@ formBatchPanel
     set::headingClass('user-batchcreate-heading'),
     set::title($lang->user->batchCreate),
     on::change('[data-name="new"]', 'toggleNew'),
+    on::keyup('[data-name="password"]', 'togglePasswordStrength'),
     to::headingActions
     (
         radioList
@@ -158,7 +159,20 @@ formBatchPanel
     (
         set::name('password'),
         set::label($lang->user->password),
-        set::control('input'),
+        set::control('inputGroup'),
+        inputGroup
+        (
+            input
+            (
+                set::name('password'),
+                set::value(''),
+                set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
+            ),
+            span
+            (
+                setClass('input-group-addon passwordStrength hidden'),
+            ),
+        ),
         set::width('200px'),
     ),
     formBatchItem

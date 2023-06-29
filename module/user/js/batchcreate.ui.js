@@ -37,3 +37,29 @@ function toggleNew(event)
         $newCompany.addClass('hidden');
     }
 }
+
+/**
+ * Toggle checkbox and check password strength.
+ *
+ * @param  event  $event
+ * @access public
+ * @return void
+ */
+function togglePasswordStrength(event)
+{
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const password    = $target.val();
+
+    let $passwordStrength = $currentRow.find('.passwordStrength');
+    if(password == '')
+    {
+        $passwordStrength.addClass('hidden');
+        $passwordStrength.html('');
+    }
+    else
+    {
+        $passwordStrength.html(passwordStrengthList[computePasswordStrength(password)]);
+        $passwordStrength.removeClass('hidden');
+    }
+}
