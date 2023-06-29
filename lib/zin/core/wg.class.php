@@ -341,7 +341,19 @@ class wg
 
     public function block($name)
     {
-        return isset($this->blocks[$name]) ? $this->blocks[$name] : array();
+        $list = array();
+        if(isset($this->blocks[$name]))
+        {
+            $blocks = $this->blocks[$name];
+            foreach($blocks as $block)
+            {
+                $isWg = $block instanceof wg && $block->shortType() === 'wg';
+                $block = $isWg ? $block->children() : $block;
+                if(is_array($block)) $list = array_merge($list, $block);
+                else                 $list[] = $block;
+            }
+        }
+        return $list;
     }
 
     public function hasBlock($name)
