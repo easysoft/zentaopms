@@ -18,6 +18,10 @@ if(!$longBlock)
     unset($config->block->story->dtable->fieldList['estimate']);
     unset($config->block->story->dtable->fieldList['stage']);
 }
+else
+{
+    foreach($stories as $story) $story->estimate .= $config->hourUnit;
+}
 
 $method = $block->params->type == 'assignedTo' ? 'work' : 'contribute';
 
@@ -25,7 +29,7 @@ panel
 (
     setClass('p-0'),
     set::title($block->title),
-    set::bodyClass('p-0 no-shadow'),
+    set::bodyClass('p-0 no-shadow border-t'),
     to::headingActions
     (
         hasPriv('my', $method) && $block->params->type != 'reviewBy' ? h::nav

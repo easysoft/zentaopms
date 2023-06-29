@@ -32,7 +32,7 @@ panel
 (
     setClass('p-0'),
     set::title($block->title),
-    set::bodyClass('p-0 no-shadow'),
+    set::bodyClass('p-0 no-shadow border-t'),
     to::headingActions
     (
         hasPriv('product', 'all') ? h::nav
