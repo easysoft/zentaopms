@@ -108,7 +108,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                             set('class', 'p-4'),
                             div
                             (
-                                set('class', 'py-6 pie-chart'),
+                                set('class', 'py-6 chart pie-chart'),
                                 echarts
                                 (
                                     set::color(array('#2B80FF', '#E3E4E9')),
@@ -126,7 +126,7 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                             )
                                         )
                                     )
-                                )->size('100%', 120),
+                                )->size(120, 120),
                                 div
                                 (
                                     set::class('pie-chart-title text-center'),
@@ -242,9 +242,10 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                 ),
                                 div
                                 (
-                                    set('class', 'px-4 py-2'),
+                                    set('class', 'px-4 py-2 chart'),
                                     echarts
                                     (
+                                        set::color(array('#2B80FF', '#17CE97')),
                                         set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                                         set::legend(array('show' => true, 'right' => '0')),
                                         set::xAxis(array('type' => 'category', 'data' => array('1月', '2月', '3月', '4月', '5月', '本月'), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
@@ -256,13 +257,13 @@ function getProductInfo(array $products, string $blockNavID, bool $longBlock): a
                                                 array
                                                 (
                                                     'type' => 'line',
-                                                    'name' => 'line',
+                                                    'name' => $lang->block->productstatistic->opened,
                                                     'data' => array(1, 2, 3, 4, 5, 6)
                                                 ),
                                                 array
                                                 (
                                                     'type' => 'line',
-                                                    'name' => 'line2',
+                                                    'name' => $lang->block->productstatistic->done,
                                                     'data' => array(6, 5, 4, 3, 2, 1)
                                                 )
                                             )

@@ -16,5 +16,6 @@
 .productstatistic-block.block-sm .nav-tabs .nav-item.nav-next {display: flex}
 .productstatistic-block.block-sm .nav-tabs .nav-item.nav-next > a {padding: 0;}
 
+.productstatistic-block .chart > div {margin: auto;}
 .productstatistic-block .pie-chart {position: relative;}
-.productstatistic-block .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -35px}
+.productstatistic-block .pie-chart .pie-chart-title {position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -35px}

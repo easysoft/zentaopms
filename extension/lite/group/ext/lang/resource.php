@@ -41,9 +41,9 @@ $lang->moduleOrder[215] = 'message';
 /* Backup xuan related stuff. */
 if(isset($config->xuanxuan))
 {
-    $imResource      = $lang->resource->im;
-    $clientResource  = $lang->resource->client;
-    $settingResource = $lang->resource->setting;
+    $imResource      = !empty($lang->resource->im) ? $lang->resource->im : '';
+    $clientResource  = !empty($lang->resource->client) ? $lang->resource->client : '';
+    $settingResource = !empty($lang->resource->setting) ? $lang->resource->setting : '';
 }
 
 /* Reset resource. */
@@ -55,8 +55,8 @@ if(isset($config->xuanxuan))
     $lang->resource->im      = $imResource;
     $lang->resource->client  = $clientResource;
     $lang->resource->setting = $settingResource;
-    $lang->admin->methodOrder[26]   = 'xuanxuan';
-    $lang->setting->methodOrder[26] = 'xuanxuan';
+    if(isset($lang->admin->methodOrder[26]))   $lang->admin->methodOrder[26]   = 'xuanxuan';
+    if(isset($lang->setting->methodOrder[26])) $lang->setting->methodOrder[26] = 'xuanxuan';
 }
 
 /* Index module. */

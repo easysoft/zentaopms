@@ -19,34 +19,22 @@ $lang->block->story = 'Target';
 
 $lang->block->storyCount = 'Target Count';
 
-/* unset contribute and projectteam. */
-unset($lang->block->default['full']['my']['9']);
-unset($lang->block->default['full']['my']['6']);
+$lang->block->default['full']['my'][] = array('title' => 'Kanban List', 'module' => 'execution', 'code' => 'scrumlist', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '45', 'params' => array('type' => 'doing', 'orderBy' => 'id_desc', 'count' => '15'));
 
-$lang->block->default['full']['my']['5']['title']  = 'Kanban List';
-$lang->block->default['full']['my']['5']['block']  = 'scrumlist';
-$lang->block->default['full']['my']['5']['source'] = 'execution';
+$lang->block->modules['kanban'] = new stdclass();
+$lang->block->modules['kanban']->availableBlocks['scrumoverview']  = "{$lang->projectCommon} Overview";
+$lang->block->modules['kanban']->availableBlocks['scrumlist']      = $lang->executionCommon . ' List';
+$lang->block->modules['kanban']->availableBlocks['sprint']         = $lang->executionCommon . ' Overview';
+$lang->block->modules['kanban']->availableBlocks['projectdynamic'] = 'Dynamics';
 
-$lang->block->default['full']['my']['5']['params']['type']    = 'doing';
-$lang->block->default['full']['my']['5']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['5']['params']['count']   = '15';
-
-$lang->block->modules['kanban']['index'] = new stdclass();
-$lang->block->modules['kanban']['index']->availableBlocks = new stdclass();
-$lang->block->modules['kanban']['index']->availableBlocks->scrumoverview  = "{$lang->projectCommon} Overview";
-$lang->block->modules['kanban']['index']->availableBlocks->scrumlist      = $lang->executionCommon . ' List';
-$lang->block->modules['kanban']['index']->availableBlocks->sprint         = $lang->executionCommon . ' Overview';
-$lang->block->modules['kanban']['index']->availableBlocks->projectdynamic = 'Dynamics';
-
-$lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project = "{$lang->projectCommon} List";
+$lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks['project'] = "{$lang->projectCommon} List";
 
 $lang->block->modules['execution'] = new stdclass();
-$lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . ' Statistics';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . ' Overview';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . ' List';
-$lang->block->modules['execution']->availableBlocks->task      = 'Task List';
+$lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . ' Statistics';
+$lang->block->modules['execution']->availableBlocks['overview']  = $lang->execution->common . ' Overview';
+$lang->block->modules['execution']->availableBlocks['list']      = $lang->execution->common . ' List';
+$lang->block->modules['execution']->availableBlocks['task']      = 'Task List';
 
 unset($lang->block->moduleList['product']);
 unset($lang->block->moduleList['qa']);

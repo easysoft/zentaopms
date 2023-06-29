@@ -14,7 +14,7 @@ function switchVision(vision)
     })
 }
 
-$('.mode-switch .block').on('click', '.mode-block.state', function()
+$('.mode-switch .block.state').on('click', '.mode-block', function()
 {
     const mode = $(this).data('mode');
     zui.Modal.confirm({message: changeModeTips, onResult: function(result)
@@ -23,17 +23,16 @@ $('.mode-switch .block').on('click', '.mode-block.state', function()
     }});
 })
 
-$('.vision-switch .block').on('click', '.vision-block.state', function()
+$('.vision-switch .block.state').on('click', '.vision-block', function()
 {
     const vision = $(this).data('vision');
     switchVision(vision);
 })
 
-$('.theme-switch .block').on('click', '.theme-block.state', function()
+$('.theme-switch .block.state').on('click', '.theme-block', function()
 {
     selectTheme($(this).attr('data-theme'));
 })
-
 
 $('.guide-block').on('click', '.guide-tab', function()
 {
@@ -46,4 +45,3 @@ if(localStorage.getItem('guideblock'))
     const tab = localStorage.getItem('guideblock');
     $('.guide-block a.guide-tab[data-tab=' + tab + ']').trigger('click');;
 }
-

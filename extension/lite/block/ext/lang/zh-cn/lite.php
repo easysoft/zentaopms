@@ -19,34 +19,22 @@ $lang->block->story = '目标';
 
 $lang->block->storyCount = '目标数';
 
-/* unset contribute and projectteam. */
-unset($lang->block->default['full']['my']['9']);
-unset($lang->block->default['full']['my']['6']);
+$lang->block->default['full']['my'][] = array('title' => '看板列表', 'module' => 'execution', 'code' => 'scrumlist', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '45', 'params' => array('type' => 'doing', 'orderBy' => 'id_desc', 'count' => '15'));
 
-$lang->block->default['full']['my']['5']['title']  = '看板列表';
-$lang->block->default['full']['my']['5']['block']  = 'scrumlist';
-$lang->block->default['full']['my']['5']['source'] = 'execution';
+$lang->block->modules['kanban'] = new stdclass();
+$lang->block->modules['kanban']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
+$lang->block->modules['kanban']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
+$lang->block->modules['kanban']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
+$lang->block->modules['kanban']->availableBlocks['projectdynamic'] = '最新动态';
 
-$lang->block->default['full']['my']['5']['params']['type']    = 'doing';
-$lang->block->default['full']['my']['5']['params']['orderBy'] = 'id_desc';
-$lang->block->default['full']['my']['5']['params']['count']   = '15';
-
-$lang->block->modules['kanban']['index'] = new stdclass();
-$lang->block->modules['kanban']['index']->availableBlocks = new stdclass();
-$lang->block->modules['kanban']['index']->availableBlocks->scrumoverview  = "{$lang->projectCommon}概况";
-$lang->block->modules['kanban']['index']->availableBlocks->scrumlist      = $lang->executionCommon . '列表';
-$lang->block->modules['kanban']['index']->availableBlocks->sprint         = $lang->executionCommon . '总览';
-$lang->block->modules['kanban']['index']->availableBlocks->projectdynamic = '最新动态';
-
-$lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project = "{$lang->projectCommon}列表";
+$lang->block->modules['project'] = new stdclass();
+$lang->block->modules['project']->availableBlocks['project'] = "{$lang->projectCommon}列表";
 
 $lang->block->modules['execution'] = new stdclass();
-$lang->block->modules['execution']->availableBlocks = new stdclass();
-$lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . '统计';
-$lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . '总览';
-$lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . '列表';
-$lang->block->modules['execution']->availableBlocks->task      = '任务列表';
+$lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execution->common . '统计';
+$lang->block->modules['execution']->availableBlocks['overview']  = $lang->execution->common . '总览';
+$lang->block->modules['execution']->availableBlocks['list']      = $lang->execution->common . '列表';
+$lang->block->modules['execution']->availableBlocks['task']      = '任务列表';
 
 unset($lang->block->moduleList['product']);
 unset($lang->block->moduleList['qa']);

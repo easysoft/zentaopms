@@ -507,6 +507,8 @@ $lang->block->productstatistic->notClosed       = '未关闭';
 $lang->block->productstatistic->storyStatistics = '需求统计';
 $lang->block->productstatistic->monthDone       = '本月完成 <span class="text-success font-bold">%s</span>';
 $lang->block->productstatistic->monthOpened     = '本月新增 <span class="text-black font-bold">%s</span>';
+$lang->block->productstatistic->opened          = '新增';
+$lang->block->productstatistic->done            = '完成';
 $lang->block->productstatistic->news            = '产品最新推进';
 $lang->block->productstatistic->newPlan         = '最新计划';
 $lang->block->productstatistic->newExecution    = '最新执行';
