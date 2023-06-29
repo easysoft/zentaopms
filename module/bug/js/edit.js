@@ -17,6 +17,7 @@ $(function()
     initPicker($('#duplicateBug'));
     renderBuilds();
     renderTestTasks();
+    renderStories();
 
     $('#duplicateBug').picker(
     {
@@ -95,6 +96,22 @@ function renderTestTasks()
         $('#testtask').data('zui.picker').destroy();
         $('#testtask').picker({list: data, allowSingleDeselect: 'true'});
         $('#testtask').data('zui.picker').setValue(bugTestTask);
+    }, 'json');
+}
+
+/**
+ * render stories.
+ *
+ * @access public
+ * @return void
+ */
+function renderStories()
+{
+    $.get(createLink('bug', 'ajaxGetStories', 'bugID=' + bugID), function(data)
+    {
+        $('#story').data('zui.picker').destroy();
+        $('#story').picker({list: data, allowSingleDeselect: 'true'});
+        $('#story').data('zui.picker').setValue(oldStoryID);
     }, 'json');
 }
 

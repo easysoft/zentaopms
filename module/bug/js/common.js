@@ -319,7 +319,7 @@ function loadProductStories(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleId=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen();});
+    $('#storyIdBox').load(link, function(){$('#story').picker();});
 }
 
 /**
@@ -773,7 +773,7 @@ function setStories(moduleID, productID, storyID)
         $('#story').replaceWith(stories);
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
-        $("#story").chosen();
+        $("#story").picker();
     });
 }
 
