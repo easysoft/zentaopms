@@ -99,7 +99,7 @@ class programMenu extends wg
 
     protected function build()
     {
-        $this->programs = $this->prop('programs');
+        $this->programs = (array)$this->prop('programs');
         $activeKey      = $this->prop('activeKey');
 
         return div

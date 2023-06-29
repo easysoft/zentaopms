@@ -26,7 +26,9 @@ class popovers extends wg
     protected function build()
     {
         $trigger = $this->block('trigger')[0]->children()[0];
-        $target  = $this->block('target')[0]->children()[0];
+        $target  = $this->block('target')[0];
+        if(!($target instanceof \zin\zui)) $target = $target->children()[0];
+
         $trigger->setProp('data-zin-id', $trigger->gid);
         $trigger->setProp('data-target', "[data-zin-id='{$target->gid}']");
         $target->setProp('data-zin-id', $target->gid);
