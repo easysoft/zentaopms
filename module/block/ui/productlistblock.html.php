@@ -33,9 +33,24 @@ panel
     setClass('p-0'),
     set::title($block->title),
     set::bodyClass('p-0 no-shadow'),
+    to::headingActions
+    (
+        hasPriv('product', 'all') ? h::nav
+        (
+            setClass('toolbar'),
+            btn
+            (
+                setClass('ghost toolbar-item size-sm z-10'),
+                set::url(createLink('product', 'all', "browseType={$block->params->type}")),
+                $lang->more,
+                span(setClass('caret-right')),
+            )
+        ) : '',
+    ),
     dtable
     (
         set::shadow(false),
+        set::fixedLeftWidth('0.25'),
         set::cols(array_values($config->block->product->dtable->fieldList)),
         set::data(array_values($productStats))
     )

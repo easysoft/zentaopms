@@ -5,7 +5,7 @@ $app->loadLang('product');
 $config->block->product = new stdclass();
 $config->block->product->dtable = new stdclass();
 $config->block->product->dtable->fieldList = array();
-$config->block->product->dtable->fieldList['name']              = array('name' => 'name',              'title' => $lang->product->name,                         'type' => 'title',     'sortType' => 1, 'flex' => 1);
+$config->block->product->dtable->fieldList['name']              = array('name' => 'name',              'title' => $lang->product->name,                         'type' => 'title',     'sortType' => 1, 'flex' => 1, 'link' => array('module' => 'product', 'method' => 'browse', 'params' => 'productID={id}'));
 $config->block->product->dtable->fieldList['PO']                = array('name' => 'PO',                'title' => $lang->product->manager,                      'type' => 'avatarBtn', 'sortType' => 1);
 if($config->edition != 'open') $config->block->product->dtable->fieldList['unclosedFeedback'] = array('name' => 'unclosedFeedback',  'title' => $lang->block->productlist->unclosedFeedback,  'type' => 'number',    'sortType' => 1);
 $config->block->product->dtable->fieldList['activeStories']     = array('name' => 'activeStories',     'title' => $lang->block->productlist->activatedStory,    'type' => 'number',    'sortType' => 1);

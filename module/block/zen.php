@@ -603,7 +603,7 @@ class blockZen extends block
         $productStats = $this->product->getStats(array_keys($products), 'order_desc', $this->viewType != 'json' ? $pager : '');
         $this->view->productStats = $productStats;
 
-        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->avatarList = $this->user->getAvatarPairs();
     }
 
