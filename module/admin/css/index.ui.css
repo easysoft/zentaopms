@@ -1,0 +1,105 @@
+/* atomic class */
+.flex {display: flex;}
+.align-center {align-items: center;}
+.justify-between {justify-content: space-between;}
+.title-color {color: #313C52}
+.font-13 {font-size: 13px;}
+.border-gray {border: 1px solid #E3E4E9;}
+.h-56 {height: 56px;}
+.h-40 {height: 40px;}
+.pl-16 {padding-left: 16px;}
+.px-16 {padding: 0 16px;}
+.mb-16 {margin-bottom: 16px;}
+.mr-16 {margin-right: 16px;}
+.mx-16 {margin: 0 16px;}
+.pd-3 {padding: 3px;}
+.pb-3 {padding-bottom: 3px;}
+.pr-4 {padding-right: 4px;}
+.mt-6 {margin-top: 6px;}
+.font-18 {font-size: 18px;}
+.font-20 {font-size: 20px;}
+.font-24 {font-size: 24px;}
+.radius-4 {border-radius: 4px;}
+.white-nowrap {white-space: nowrap;}
+.w-full {width: 100%;}
+
+#notice {margin: -20px -20px 20px; padding: 20px;}
+#zentaoLinks {margin-top: 20px;}
+#zentaoLinks .panel .panel-heading {padding: 6px 10px;}
+.main-content.admin {padding: 0;}
+.admin {display: flex; background: unset; box-shadow: none;}
+.admin h4 {color: #0B0F18;}
+.admin > .main {flex: 1 1 70%;}
+.admin > .side {flex: 1 1 30%; margin-left: 16px; padding-right: 16px;}
+.panel-title {padding: 10px 0px;}
+.panel {padding-left: 16px;}
+.settings.panel, .plug.panel {margin-bottom: 16px;}
+.main > .panel {padding-right: 8px;}
+
+.settings-list {display: flex; flex-wrap: wrap; padding: 0 4px 16px 4px;}
+.settings-list > .setting-box {border: unset; flex: 0 1 20%; padding: 8px;}
+.settings-list > .setting-box > button.btn {padding: 5px 10px; height: 100%; width: 100%; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; white-space: unset; text-align: unset; border: 1px solid rgba(227, 228, 233, 0.6)}
+.settings-list > .setting-box > .btn:hover {background: unset;}
+.settings-list > .setting-box > .btn[disabled] {cursor: not-allowed; pointer-events: unset;}
+.settings-list > .setting-box > .btn[disabled] > a,
+.settings-list > .setting-box > .btn[disabled] a.setting-help,
+.settings-list > .setting-box > .btn[disabled] p.setting-desc {pointer-events: none;}
+.settings-list > .setting-box > .btn > h4 {padding-right: 5px;}
+.settings-list > .setting-box > .btn > h4  > div {gap: 3px;}
+.settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
+.settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; line-height: 25px; height: 50px; overflow: hidden;}
+.settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
+
+.plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
+.plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px; cursor: pointer;}
+.plugin-list > .plugin-item .ext-download {float: right; padding: 6px 0px;}
+.plugin-list > .plugin-item > .plug-title {height: 16px; overflow: hidden;}
+.plugin-list > .plugin-item .extension-desc {overflow: hidden; height: 16px;}
+
+.bottom.flex > .panel, .side.panel {margin-bottom: 0;}
+.bottom.flex > .official {flex: 1 1 30%; margin-right: 16px; padding: 40px 16px 16px 16px; display: flex; flex-direction: column; position: relative;}
+.bottom.flex > .publicClass {flex: 1 1 60%;}
+
+.official {justify-content: center;}
+.official > .panel-title {position: absolute; top: 0px;}
+.official-img {background-image: url('static/images/wechat.jpg'); background-repeat: no-repeat; background-size: contain; flex: 1 1 30%; aspect-ratio: 1 / 1; background-position: center;}
+.official-content {flex: 0 0 60%; display: flex; flex-direction: column; padding-left: 10px; padding-top: 15px;}
+.official-content > .content {color: #838A9D; font-size: 12px; line-height: 22px; padding-top: 6px;}
+.official-content > .title {color: #313C52; font-size: 13px; line-height: 14px;}
+.panel-link {color: #313c52; padding-left: 10px; font-size: 13px;}
+.panel-link > a {border-bottom: 1px solid;}
+
+.classList > .classItem {flex: 1 1 30%; margin: 5px 5px 16px 5px; border: 1px solid rgba(227, 228, 233, 0.6); border-radius: 4px; padding-bottom: 5px; align-items: center;}
+.classItem > .imgBack {flex: 1 1 50%;}
+.classItem > .imgBack > .classImg {background-repeat: no-repeat; background-size: contain; aspect-ratio: 16 / 9; background-position: center; margin: 0; border-top-left-radius: 4px; border-top-right-radius: 4px;}
+.classItem > .classContent {flex: 1 1 50%; padding: 5px; font-size: 14px; color: #0B0F18; text-align: center; overflow: hidden; height: 24px; margin-bottom: 6px; font-weight: 700;}
+.more {float: right; padding-right: 12px; font-weight: normal; color: #9EA3B0;}
+.panel.publicClass {padding: 0 10px;}
+.icon.follow-us {font-size: 20px; padding-left: 10px;}
+
+.setting-help {color: #9EA3B0; padding-left: 5px;}
+.setting-help > a {font-size: 15px;}
+[lang^='zh'] .setting-help {padding-top: 0;}
+.pointer-none {pointer-events: none;}
+
+/* css for without internet */
+.main.without-internet {display: flex; flex-wrap: wrap;}
+.main.without-internet > .plug.panel {flex: 1 1 60%; margin-bottom: unset; margin-right: 16px;}
+.main.without-internet > .bottom {flex: 1 1 30%;}
+.main.without-internet > .bottom > .official.panel {margin-right: unset;}
+.main.without-internet > .bottom > .official.panel > .main-panel {flex-direction: row-reverse;}
+
+/* css in side */
+#mainContent > .side.panel {height: 100%;}
+.time-block {background: #EDEEF2; padding:2px 4px; border-radius: 4px; color: #0B0F18; font-size: 15px; margin: 0 4px;}
+.dynamic-block {height: 74px; padding: 12px 16px; display: flex; justify-content: space-between; position: relative; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.dynamic-content {height: 50px; line-height: 25px; overflow: hidden;}
+.dynamic-time {white-space: nowrap; position: absolute; right: 12px; bottom: 12px; padding-left: 10px; padding-right: 12px; background: white; color: #5E626D;}
+.time-count {letter-spacing: 1px;}
+
+.patch-block {padding: 10px 16px 12px; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.patch-content {height: 40px; overflow: hidden;}
+
+.upgrade-block {padding: 6px 16px; line-height: 20px; border-top: 1px solid #E3E4E9;}
+.upgrade-content {height: 20px; padding-left: 20px; position: relative; margin: 5px 0;}
+.upgrade-content:before {content: ' '; width: 8px; height: 8px; background: #E3E4E9; border-radius: 50%; position: absolute; left: 0px; top: 5px;}
