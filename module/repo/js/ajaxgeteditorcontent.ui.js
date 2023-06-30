@@ -21,6 +21,7 @@ function showBlameAndRelation(line)
     if(pageType == 'diff') line = diffContent.line.new[line -1];
 
     var blame = blames[line];
+
     if(!blame) return;
 
     var p_line = parseInt(line);

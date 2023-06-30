@@ -26,11 +26,24 @@ else
 jsVar('link',         $link);
 jsVar('browseLink',   $browseLink);
 jsVar('syncComplete', $lang->repo->notice->syncComplete);
-
-div(
-    set::class('content'),
-    h3($lang->repo->notice->syncing),
-    p($lang->repo->notice->syncedCount, span($version, set::id('commits')))
+div
+(
+    setClass('sync-main-content'),
+    div
+    (
+        set::class('sync-content'),
+        div
+        (
+            setClass('alert light-pale flex items-center'),
+            icon(setClass('icon icon-info-sign icon-2x alert-icon'), 'check-sign'),
+            div
+            (
+                h3($lang->repo->notice->syncing),
+                div(setClass('sync-line')),
+                p($lang->repo->notice->syncedCount, span($version, set::id('commits')))
+            )
+        )
+    )
 );
 
 render();
