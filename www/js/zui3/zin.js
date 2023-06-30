@@ -77,6 +77,7 @@
         activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
+        heading:       updateHeading,
         table:         updateTable,
         fatal:         showFatalError,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
@@ -194,6 +195,24 @@
         if($newNav.text().trim() !== $navbar.text().trim()) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
+    }
+
+    function updateHeading(data)
+    {
+        const $data = $(data);
+        const $heading = $('#heading');
+        const $dropmenu = $heading.find('#dropmenu');
+        const $nextDropmenu = $data.filter('#dropmenu');
+        if($dropmenu.dataset('fetcher') === $nextDropmenu.dataset('fetcher'))
+        {
+            const $toolbar = $heading.find('.toolbar');
+            const $nextToolbar = $data.filter('.toolbar');
+            if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
+        }
+        else
+        {
+            $heading.html(data);
+        }
     }
 
     function activeNav(activeID, nav)
