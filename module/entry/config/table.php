@@ -12,10 +12,12 @@ $config->entry->actionList['edit']['text'] = '';
 $config->entry->actionList['edit']['hint'] = $lang->entry->edit;
 $config->entry->actionList['edit']['url']  = array('module' => 'entry', 'method' => 'edit', 'params' => 'entryID={id}');
 
-$config->entry->actionList['delete']['icon'] = 'trash';
-$config->entry->actionList['delete']['text'] = '';
-$config->entry->actionList['delete']['hint'] = $lang->entry->delete;
-$config->entry->actionList['delete']['url']  = array('module' => 'entry', 'method' => 'delete', 'params' => 'entryID={id}');
+$config->entry->actionList['delete']['icon']         = 'trash';
+$config->entry->actionList['delete']['text']         = '';
+$config->entry->actionList['delete']['hint']         = $lang->entry->delete;
+$config->entry->actionList['delete']['url']          = array('module' => 'entry', 'method' => 'delete', 'params' => 'entryID={id}');
+$config->entry->actionList['delete']['class']        = 'btn ghost toolbar-item text-primary square size-sm ajax-submit';
+$config->entry->actionList['delete']['data-confirm'] = $lang->entry->confirmDelete;
 
 $config->entry->dtable = new stdclass();
 $config->entry->dtable->fieldList['id']['name']     = 'id';
