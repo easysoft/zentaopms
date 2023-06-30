@@ -27,13 +27,13 @@ $load          = $rawMethod !== 'browse' ? null : 'table';
 
 $canModify          = common::canModify('product', $product);
 $canSwitchCaseType  = $this->app->tab == 'qa';
-$canDisplaySuite    = $this->app->tab == 'qa';
+$canDisplaySuite    = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
 $canManageModule    = hasPriv('tree', 'browse') && !empty($productID);
 $canCreateSuite     = hasPriv('testsuite', 'create');
 $canBrowseUnits     = hasPriv('testtask', 'browseunits');
-$canBrowseZeroCase  = hasPriv('testcase', 'zerocase');
+$canBrowseZeroCase  = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';
 $canBrowseGroupCase = hasPriv('testcase', 'groupcase');
-$canAutomation      = hasPriv('testcase', 'automation') && !empty($productID);
+$canAutomation      = hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
 $canExport          = hasPriv('testcase', 'export');
 $canExportTemplate  = hasPriv('testcase', 'exportTemplate');
 $canExportXmind     = hasPriv('testcase', 'exportXmind');
@@ -114,7 +114,7 @@ featureBar
             set::items($caseTypeItems)
         )
     ) : null,
-    $canDisplaySuite && $rawMethod != 'browseunits' ? dropdown
+    $canDisplaySuite ? dropdown
     (
         btn
         (
@@ -123,7 +123,7 @@ featureBar
         ),
         set::items($suiteItems)
     ) : null,
-    $canBrowseZeroCase && $rawMethod != 'browseunits' ? li
+    $canBrowseZeroCase ? li
     (
         set::class('nav-item'),
         a
@@ -135,7 +135,7 @@ featureBar
             $lang->testcase->zeroCase
         )
     ) : null,
-    li
+    $rawMethod != 'zerocase' ? li
     (
         set::class('nav-item'),
         a
@@ -145,8 +145,8 @@ featureBar
             set('data-load', $load),
             $lang->testcase->onlyScene
         )
-    ),
-    $rawMethod != 'browseunits' ? li
+    ) : null,
+    $rawMethod != 'browseunits' && $rawMethod != 'zerocase' ? li
     (
         set::class('nav-item'),
         checkbox
@@ -244,7 +244,7 @@ toolbar
         set::items($viewItems),
         set::placement('bottom-end'),
     ) : null,
-    $canAutomation && $rawMethod != 'browseunits' ? btn
+    $canAutomation ? btn
     (
         set
         (
