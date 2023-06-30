@@ -80,7 +80,7 @@ class mainNavbar extends nav
      * Override the build method.
      *
      * @access protected
-     * @return array
+     * @return wg
      */
     protected function build(): wg
     {

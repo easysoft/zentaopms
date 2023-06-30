@@ -755,6 +755,20 @@ function navbar(): navbar
 }
 
 /**
+ * Dropmenu widget.
+ *
+ * ?string   url      // 异步获取下拉菜单选项数据的 URL。
+ * ?string   text     // 选择按钮上显示的文本。
+ * ?string   objectID // 当前选中项的 ID。
+ * ?bool|int cache    // 是否启用缓存。
+ * ?array    data     // 手动指定数据。
+ */
+function dropmenu(): navbar
+{
+    return createWg('dropmenu', func_get_args());
+}
+
+/**
  * Main widget.
  *
  * ====== blocks ======
