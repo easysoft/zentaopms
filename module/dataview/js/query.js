@@ -1,6 +1,7 @@
 $(function()
 {
-    var exportModal = new $.zui.ModalTrigger({url: createLink('dataview', 'export', 'type=query', '', true), type: 'iframe', width: 900});
+    var fileName = dataview != '' ? dataview.name : '';
+    var exportModal = new $.zui.ModalTrigger({url: createLink('dataview', 'export', 'type=query&table=&fileName=' + fileName, '', true), type: 'iframe', width: 900});
     document.getElementById('export').addEventListener('click', function(e)
     {
         tryQuery(e);
