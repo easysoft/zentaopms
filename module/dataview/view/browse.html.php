@@ -17,6 +17,9 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('dev');?></div>
   <div class="btn-toolbar pull-right">
+    <?php if($selectedTable):?>
+      <?php if(common::hasPriv('dataview', 'export')) echo html::a($this->createLink('dataview', 'export', "type=$type&table=$selectedTable", '', true), "<i class='icon icon-export'></i> {$lang->dataview->export}", '', "class='iframe btn btn-link'");?>
+    <?php endif;?>
     <?php if(common::hasPriv('dataview', 'create')) echo html::a($this->createLink('dataview', 'create'), "<i class='icon icon-plus'></i><span class='text'>" . $lang->dataview->create . "</span>", '', "class='btn btn-secondary'");?>
   </div>
 </div>
@@ -54,9 +57,6 @@
       <div class='detail-title'>
         <div class='dataview-title' title='<?php echo $dataTitle;?>'><?php echo $dataTitle;?></div>
         <div class='actions pull-right'>
-          <?php if($selectedTable):?>
-            <?php if(common::hasPriv('dataview', 'export')) echo html::a($this->createLink('dataview', 'export', "type=$type&table=$selectedTable", '', true), "<i class='icon icon-export'></i> {$lang->dataview->export}", '', "class='iframe'");?>
-          <?php endif;?>
           <?php if($selectedTable and isset($dataview)):?>
           <?php
             $designTitle  = $lang->dataview->design;
