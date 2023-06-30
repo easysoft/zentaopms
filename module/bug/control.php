@@ -1122,7 +1122,7 @@ class bug extends control
         if($bug->case)
         {
             $case  = $this->loadModel('testcase')->getByID($bug->case);
-            $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
+            $cases = array($case->id => $case->id . $case->title);
         }
 
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bugID}");
