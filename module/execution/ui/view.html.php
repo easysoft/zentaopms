@@ -10,38 +10,72 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$blocks = array(
-    array(
-        'id'    => 1,
-        'size'  => 'sm',
-        'domID' => 'burnBlock'
-    ),
-    array(
-        'id'    => 2,
-        'size'  => 'sm',
-        'domID' => 'dynamicBlock'
-    ),
-    array(
-        'id'   => 3,
-        'size' => 'xl',
-        'domID' => 'basicBlock'
-    ),
-    array(
-        'id'    => 4,
-        'size'  => 'sm',
-        'domID' => 'memberBlock'
-    ),
-    array(
-        'id'    => 5,
-        'size'  => 'sm',
-        'domID' => 'docBlock'
-    ),
-    array(
-        'id'    => 6,
-        'size'  => 'smWide',
-        'domID' => 'historyBlock',
-    )
-);
+if(isset($execution->type) && $execution->type != 'kanban')
+{
+    $blocks = array(
+        array(
+            'id'    => 1,
+            'size'  => 'sm',
+            'fetch' => createLink('execution', 'ajaxGetBurn', "executionID={$execution->id}")
+        ),
+        array(
+            'id'    => 2,
+            'size'  => 'sm',
+            'domID' => 'dynamicBlock'
+        ),
+        array(
+            'id'   => 3,
+            'size' => 'xl',
+            'domID' => 'basicBlock'
+        ),
+        array(
+            'id'    => 4,
+            'size'  => 'sm',
+            'domID' => 'memberBlock'
+        ),
+        array(
+            'id'    => 5,
+            'size'  => 'sm',
+            'domID' => 'docBlock'
+        ),
+        array(
+            'id'    => 6,
+            'size'  => 'smWide',
+            'domID' => 'historyBlock',
+        )
+    );
+}
+else
+{
+    $blocks = array(
+        array(
+            'id'    => 1,
+            'size'  => 'sm',
+            'domID' => 'cfdBlock'
+        ),
+        array(
+            'id'    => 2,
+            'size'  => 'sm',
+            'domID' => 'memberBlock'
+        ),
+        array(
+            'id'   => 3,
+            'size' => 'xl',
+            'domID' => 'basicBlock'
+        ),
+        array(
+            'id'    => 4,
+            'size'  => 'smWide',
+            'domID' => 'dynamicBlock'
+        ),
+        array(
+            'id'    => 5,
+            'size'  => 'smWide',
+            'domID' => 'historyBlock',
+        )
+    );
+}
+
 jsVar('blocks', $blocks);
 
 dashboard
@@ -51,6 +85,32 @@ dashboard
     set::blockMenu(false)
 );
 
+div
+(
+    setID('cfdBlock'),
+    setClass('hidden'),
+    panel
+    (
+        to::heading
+        (
+            div
+            (
+                set('class', 'panel-title'),
+                $execution->name . $lang->execution->CFD,
+            )
+        ),
+        to::headingActions
+        (
+            common::hasPriv('execution', 'cfd') ? btn
+            (
+                setClass('ghost text-gray'),
+                set::url(createLink('execution', 'cfd', "executionID={$execution->id}")),
+                $lang->more
+            ) : null
+        ),
+
+    )
+);
 /* Dynamic list. */
 $dynamicDom = array();
 foreach($dynamics as $action)
@@ -191,6 +251,72 @@ div
         ),
         set::bodyClass('flex flex-wrap pt-0'),
         $membersDom
+    )
+);
+
+$docsDom = null;
+if(common::hasPriv('execution', 'doc'))
+{
+    $docLibCount = 0;
+    foreach($docLibs as $libID => $docLib)
+    {
+        if($docLibCount > 8) break;
+        $docsDom[] = div
+            (
+                setClass('flex-initial w-1/2 py-1'),
+                icon('folder', setClass('mr-2 text-warning')),
+                a
+                (
+                    $docLib->name,
+                    set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}")),
+                )
+            );
+
+        $docLibCount ++;
+    }
+}
+
+if($canBeChanged && common::hasPriv('doc', 'createLib'))
+{
+    $docsDom[] = div
+    (
+        setClass('flex-initial w-1/2 py-1'),
+        a
+        (
+            setClass('ghost text-gray'),
+            icon('plus', setClass('bg-primary-50 text-primary mr-2')),
+            span($lang->doc->createLib),
+            set::href(createLink('doc', 'createLib', "type=execution&objectID={$execution->id}")),
+            set('data-toggle', 'modal'),
+        )
+    );
+}
+
+div
+(
+    setID('docBlock'),
+    setClass('hidden'),
+    panel
+    (
+        to::heading
+        (
+            div
+            (
+                set('class', 'panel-title'),
+                $lang->execution->doclib
+            )
+        ),
+        to::headingActions
+        (
+            common::hasPriv('execution', 'doc') ? btn
+            (
+                setClass('ghost text-gray'),
+                set::url(createLink('execution', 'doc', "executionID={$execution->id}")),
+                $lang->more
+            ) : null
+        ),
+        set::bodyClass('flex flex-wrap pt-0'),
+        $docsDom
     )
 );
 
@@ -414,7 +540,7 @@ div
                 ) : null,
                 isset($execution->delay) ? label
                 (
-                    setClass('danger-outline text-danger ml-2'),
+                    setClass('danger-pale ring-danger ml-2'),
                     $lang->execution->delayed
                 ) : label
                 (

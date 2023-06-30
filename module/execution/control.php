@@ -2453,25 +2453,6 @@ class execution extends control
             $this->view->begin = helper::safe64Encode(urlencode($begin));
             $this->view->end   = helper::safe64Encode(urlencode($end));
         }
-        else
-        {
-            $type = 'noweekend';
-            if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-                or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-                or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-                and strpos($type, 'delay') === false)
-            {
-                $type .= ',withdelay';
-            }
-
-            $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-            $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-            $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
-            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-
-            $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
-        }
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -2492,7 +2473,6 @@ class execution extends control
         $this->view->teamMembers  = $this->execution->getTeamMembers($executionID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('execution', $executionID);
         $this->view->statData     = $this->execution->statRelatedData($executionID);
-        $this->view->chartData    = $chartData;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->type         = $type;
         $this->view->features     = $this->execution->getExecutionFeatures($execution);
@@ -4357,5 +4337,36 @@ class execution extends control
             $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
             echo json_encode($kanbanData);
         }
+    }
+
+    /**
+     * AJAX: Get brun kanban html.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBurn(int $executionID)
+    {
+        $execution = $this->execution->getById($executionID, true);
+        $type      = 'noweekend';
+        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+            and strpos($type, 'delay') === false)
+        {
+            $type .= ',withdelay';
+        }
+
+        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+        $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
+        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
+
+        $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
+        $this->view->chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
+        $this->view->execution = $execution;
+
+        $this->display();
     }
 }
