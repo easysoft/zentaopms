@@ -14,7 +14,7 @@ class pageBase extends wg
         'zui?: bool',
         'lang?: string',
         'display?: bool',
-        'rawContent?: bool=true'
+        'rawContent?: bool'
     );
 
     static $defaultProps = array
@@ -53,7 +53,7 @@ class pageBase extends wg
         $bodyProps  = $this->prop('bodyProps');
         $bodyClass  = $this->prop('bodyClass');
         $metas      = $this->prop('metas');
-        $rawContent = $this->prop('rawContent');
+        $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
         $title      = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
         $attrs      = $this->props->skip(array_keys(static::getDefinedProps()));
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
@@ -68,7 +68,7 @@ class pageBase extends wg
         }
         else
         {
-            $js[] = h::createJsVarCode('window.zin', []);
+            $js[] = h::createJsVarCode('window.zin', array());
         }
 
         $currentLang = $this->props->get('lang');

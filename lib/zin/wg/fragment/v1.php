@@ -5,14 +5,14 @@ class fragment extends wg
 {
     static $defineProps = array
     (
-        'rawContent?: bool=true'
+        'rawContent?: bool'
     );
 
     protected function build()
     {
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
         $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
-        $rawContent = $this->prop('rawContent');
+        $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
 
         return array
         (

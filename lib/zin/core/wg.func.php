@@ -289,5 +289,7 @@ function groupWgInList(wg|array $items, string|array $types): array
  */
 function rawContent(): rawContent
 {
+    zin::$rawContentCalled = true;
+
     return new rawContent();
 }

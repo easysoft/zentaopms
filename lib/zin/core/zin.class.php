@@ -23,6 +23,8 @@ class zin
 
     public static $rendered = false;
 
+    public static $rawContentCalled = false;
+
     public static function getData($namePath, $defaultValue = null)
     {
         return \zin\utils\deepGet(static::$data, $namePath, $defaultValue);
