@@ -149,5 +149,21 @@ $config->repo->logDtable->fieldList['date']['sortType'] = false;
 
 $config->repo->logDtable->fieldList['committer']['name'] = 'committer';
 
-$config->repo->logDtable->fieldList['comment']['type'] = 'html';
+$config->repo->logDtable->fieldList['comment']['type']  = 'html';
 $config->repo->logDtable->fieldList['comment']['width'] = '600';
+
+$config->repo->blameDtable = new stdclass();
+
+$config->repo->blameDtable->fieldList['revision']['type'] = 'revision';
+
+$config->repo->blameDtable->fieldList['commit']['type']     = 'number';
+$config->repo->blameDtable->fieldList['commit']['sortType'] = false;
+
+$config->repo->blameDtable->fieldList['committer']['name'] = 'committer';
+
+$config->repo->blameDtable->fieldList['line']['type']     = 'number';
+$config->repo->blameDtable->fieldList['line']['sortType'] = false;
+
+$config->repo->blameDtable->fieldList['content']['title'] = $lang->repo->code;
+$config->repo->blameDtable->fieldList['content']['type']  = 'html';
+$config->repo->blameDtable->fieldList['content']['width'] = '600';
