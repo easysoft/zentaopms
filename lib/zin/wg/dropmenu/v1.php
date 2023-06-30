@@ -32,9 +32,8 @@ class dropmenu extends wg
         'method?:   string,',       // 方法名。
         'objectID?: string,',       // 对象 ID。
         'extra?:    string,',       // 额外参数。
-        'url?:      string',        // 异步获取下拉菜单选项数据的 URL。
+        'url?:      string',        // 异步获取下拉菜单选项数据的 URL，如果已经指定 module， method，objectID，extra 等参数则可以忽略。
         'text?:     string',        // 选择按钮上显示的文本。
-        'objectID?: string',        // 当前选中项的 ID。
         'cache?:    bool|int=true', // 是否启用缓存。
         'data?:     array',         // 手动指定数据。
     );
@@ -69,6 +68,7 @@ class dropmenu extends wg
 
         return zui::dropmenu
         (
+            set('_id', "dropmenu-$module"),
             set(array('fetcher' => $url, 'text' => $text, 'value' => $objectID, 'cache' => $cache)),
             set($this->getRestProps())
         );
