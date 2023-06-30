@@ -79,40 +79,6 @@ div
     )
 );
 
-/* Dynamic list. */
-$dynamicDom = array();
-foreach($dynamics as $action)
-{
-    $dynamicDom[] = li
-    (
-        setClass($action->major ? 'active': ''),
-        div
-        (
-            span(
-                setClass('timeline-tag'),
-                $action->date
-            ),
-            span(
-                setClass('timeline-text clip'),
-                zget($users, $action->actor),
-                span
-                (
-                    setClass('text-gray'),
-                    " {$action->actionLabel} "
-                ),
-                span(" {$action->objectLabel} "),
-                a
-                (
-                    setClass('clip'),
-                    set::href($action->objectLink),
-                    set::title($action->objectName),
-                    $action->objectName
-                )
-            )
-        )
-    );
-}
-
 div
 (
     setID('dynamicBlock'),
@@ -136,12 +102,8 @@ div
                 $lang->more
             ) : null
         ),
-        set::bodyClass('pt-0 overflow-x-hidden'),
-        ul
-        (
-            setClass('timeline timeline-tag-left no-margin'),
-            $dynamicDom
-        )
+        set::bodyClass('pt-0'),
+        dynamic()
     )
 );
 
