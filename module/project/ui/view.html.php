@@ -230,10 +230,10 @@ if(!empty($project->hasProduct))
             $productsDom[] = div
             (
                 setClass('flex-initial w-1/2 py-1'),
+                icon('product mr-2'),
                 a
                 (
                     set::href(createLink('product', 'browse', "productID=$productID&branch=$branchID")),
-                    icon('product'),
                     span($product->name . $branchName)
                 )
             );
