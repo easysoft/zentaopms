@@ -2924,9 +2924,8 @@ class testcase extends control
 
             setcookie('caseModule', $scene->module, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            if(!$scene->module) return print(js::locate($this->createLink('testcase', 'browse', "productID=$product"), 'parent'));
-
-            return print(js::locate($this->createLink('testcase', 'browse', "root=$product&branch=0&type=byModule&param={$scene->module}"), 'parent'));
+            $loadLink = $this->createLink('testcase', 'browse', "root={$product}" . ($scene->module ? "&branch=0&type=byModule&param={$scene->module}" : ''));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $loadLink, 'closeModal' => true));
         }
 
         /* Get scene. */
