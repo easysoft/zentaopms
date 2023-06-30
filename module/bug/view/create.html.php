@@ -54,8 +54,8 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-110px'><?php echo $product->shadow ? $lang->bug->module : $lang->bug->product;?></th>
-            <td class="<?php if($product->shadow) echo 'hidden';?>">
+            <th class='w-110px'><?php echo ($product->shadow and $this->app->tab != 'feedback') ? $lang->bug->module : $lang->bug->product;?></th>
+            <td class="<?php if($product->shadow and $this->app->tab != 'feedback') echo 'hidden';?>">
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
                 <?php if($product->type != 'normal' and isset($products[$productID])):?>
@@ -65,7 +65,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
             <td>
               <div class='input-group' id='moduleIdBox'>
-              <?php if(!$product->shadow):?>
+              <?php if(!$product->shadow or $this->app->tab == 'feedback'):?>
               <span class="input-group-addon"><?php echo $lang->bug->module?></span>
               <?php endif;?>
                 <?php
