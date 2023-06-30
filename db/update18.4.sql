@@ -43,3 +43,5 @@ UPDATE `zt_im_conferenceaction`   SET `date`           = NULL WHERE `date`      
 UPDATE `zt_im_userdevice`         SET `validUntil`     = NULL WHERE `validUntil`     = '0000-00-00 00:00:00';
 UPDATE `zt_im_userdevice`         SET `lastLogin`      = NULL WHERE `lastLogin`      = '0000-00-00 00:00:00';
 UPDATE `zt_im_userdevice`         SET `lastLogout`     = NULL WHERE `lastLogout`     = '0000-00-00 00:00:00';
+
+CREATE INDEX `project`  ON `zt_project` (`project`);
