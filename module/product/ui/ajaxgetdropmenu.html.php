@@ -38,8 +38,10 @@ foreach($products as $programID => $programProducts)
     $programItem = array();
     $programItem['id']    = $programID;
     $programItem['type']  = 'program';
-    $programItem['text']  = zget($programs, $programID);
+    $programItem['text']  = $programID ? zget($programs, $programID) : $lang->product->emptyProgram;
     $programItem['items'] = array();
+
+    if(!$programID) $programItem['label'] = '';
 
     foreach($programProducts as $index => $product)
     {
