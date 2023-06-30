@@ -114,14 +114,19 @@ featureBar
             set::items($caseTypeItems)
         )
     ) : null,
-    $canDisplaySuite ? dropdown
+    $canDisplaySuite ? li
     (
-        btn
+        set::class('nav-item'),
+        dropdown
         (
-            setClass('ghost'),
-            $currentSuiteName
-        ),
-        set::items($suiteItems)
+            a
+            (
+                setClass('ghost' . ($browseType == 'bysuite' ? ' active' : '')),
+                $currentSuiteName,
+                span(setClass('caret'))
+            ),
+            set::items($suiteItems)
+        )
     ) : null,
     $canBrowseZeroCase ? li
     (
