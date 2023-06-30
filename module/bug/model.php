@@ -745,6 +745,7 @@ class bugModel extends model
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkBug, 'linkBug', '')
             ->setIF($this->post->case === '', 'case', 0)
+            ->setIF($this->post->testtask === '', 'testtask', 0)
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
