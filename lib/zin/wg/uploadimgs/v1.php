@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-class upload extends wg
+class uploadImgs extends wg
 {
     protected static $defineProps = array(
         'name: string',                    // 字段名
@@ -34,17 +34,15 @@ class upload extends wg
         'duplicatedHint?: string',         // 文件名重复提示
         'exceededSizeHint?: string',       // 上传超出大小限制提示
         'exceededCountHint?: string',      // 上传超出个数限制提示
+        'commentText?: string',            // 备注文本
+        'addImgsText?: string',            // 添加图片文本
+        'toUploadText?: string',           // 待上传文本
+        'totalSizeText?: string',          // 总大小文本
+        'handleUpload?: callable',         // 处理上传函数
     );
-
-    private function setDefaultText()
-    {
-        global $lang;
-        $this->setDefaultProps(array());
-    }
 
     protected function build()
     {
-        // $this->setDefaultText();
-        return zui::upload(inherit($this));
+        return zui::uploadImgs(inherit($this));
     }
 }

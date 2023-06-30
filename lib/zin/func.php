@@ -1454,6 +1454,14 @@ function upload(): upload
 }
 
 /**
+ * Upload images widget.
+ */
+function uploadImgs(): uploadImgs
+{
+    return createWg('uploadImgs', func_get_args());
+}
+
+/**
  * Burn widget.
  *
  * ?string|array data
