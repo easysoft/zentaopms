@@ -335,10 +335,10 @@ $config->project->actionList['edit']['icon'] = 'edit';
 $config->project->actionList['edit']['hint'] = $lang->project->edit;
 $config->project->actionList['edit']['url']  = array('module' => 'project', 'method' => 'edit', 'params' => 'projectID={id}');
 
-$config->project->actionList['pause']['icon']        = 'pause';
-$config->project->actionList['pause']['hint']        = $lang->project->suspend;
-$config->project->actionList['pause']['url']         = helper::createLink('project', 'suspend', 'projectID={id}');
-$config->project->actionList['pause']['data-toggle'] = 'modal';
+$config->project->actionList['suspend']['icon']        = 'pause';
+$config->project->actionList['suspend']['hint']        = $lang->project->suspend;
+$config->project->actionList['suspend']['url']         = helper::createLink('project', 'suspend', 'projectID={id}');
+$config->project->actionList['suspend']['data-toggle'] = 'modal';
 
 $config->project->actionList['group']['icon'] = 'group';
 $config->project->actionList['group']['hint'] = $lang->project->team;
@@ -359,3 +359,7 @@ $config->project->actionList['whitelist']['url']  = array('module' => 'project',
 $config->project->actionList['delete']['icon'] = 'trash';
 $config->project->actionList['delete']['hint'] = $lang->project->delete;
 $config->project->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
+
+$config->project->view = new stdclass();
+$config->project->view->operateList['main']   = array('start', 'activate', 'suspend', 'close');
+$config->project->view->operateList['common'] = array('edit', 'delete');
