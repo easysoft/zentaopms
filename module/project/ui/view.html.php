@@ -14,17 +14,17 @@ $blocks = array(
     array(
         'id'    => 1,
         'size'  => 'sm',
-        'domID' => 'dynamicBlock'
+        'domID' => 'dynamicBlock',
     ),
     array(
         'id'    => 2,
         'size'  => 'sm',
-        'domID' => 'memberBlock'
+        'domID' => 'memberBlock',
     ),
     array(
         'id'   => 3,
         'size' => 'xl',
-        'domID' => 'basicBlock'
+        'domID' => 'basicBlock',
     ),
     array(
         'id'    => 4,
@@ -32,13 +32,51 @@ $blocks = array(
         'domID' => 'historyBlock',
     )
 );
+
 jsVar('blocks', $blocks);
+jsVar('confirmDeleteTip', $lang->project->confirmDelete);
+
+/* Construct suitable actions for the current project. */
+$operateMenus = array();
+foreach($config->project->view->operateList['main'] as $operate)
+{
+    if(!common::hasPriv('project', $operate)) continue;
+    if(!$this->project->isClickable($project, $operate)) continue;
+
+    $action = $config->project->actionList[$operate];
+    $action['text'] = $action['hint'];
+    $operateMenus[] = $action;
+}
+
+/* Construct common actions for project. */
+$commonActions = array();
+foreach($config->project->view->operateList['common'] as $operate)
+{
+    if(!common::hasPriv('project', $operate)) continue;
+
+    $settings = $config->project->actionList[$operate];
+    $settings['text'] = '';
+
+    $commonActions[] = $settings;
+}
 
 dashboard
 (
     setID('projectDashBoard'),
     set::blocks($blocks),
-    set::blockMenu(false)
+    set::blockMenu(false),
+);
+
+div
+(
+    setClass('w-2/3 text-center fixed actions-menu'),
+    floatToolbar
+    (
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        set::main($operateMenus),
+        set::suffix($commonActions),
+        set::object($project)
+    )
 );
 
 /* Dynamic list. */
@@ -191,7 +229,6 @@ div
     setClass('hidden'),
     div
     (
-        setClass('overflow-y-auto h-full'),
         history()
     )
 );
@@ -237,6 +274,34 @@ if(!empty($project->hasProduct))
                     span($product->name . $branchName)
                 )
             );
+        }
+    }
+}
+
+$plansDom = array();
+foreach($products as $productID => $product)
+{
+    foreach($product->plans as $planIDList)
+    {
+        $planIDList = explode(',', $planIDList);
+        foreach($planIDList as $planID)
+        {
+            if(isset($planGroup[$productID][$planID]))
+            {
+                $plansDom[] = div
+                (
+                    setClass('mt-2 clip'),
+                    hasPriv('productplan', 'view') ? a
+                    (
+                        set::href(createLink('productplan', 'view', "planID={$planID}")),
+                        icon('calendar text-gray mr-1'),
+                        $product->name . '/' . $planGroup[$productID][$planID]
+                    ) : span
+                    (
+                        $product->name . '/' . $planGroup[$productID][$planID]
+                    )
+                );
+            }
         }
     }
 }
@@ -302,6 +367,17 @@ else
     );
 }
 
+$totalEstimate = $workhour->totalConsumed + $workhour->totalLeft;
+$progress      = 0;
+if($project->model == 'waterfall')
+{
+    $progress = $this->project->getWaterfallProgress($project->id);
+}
+elseif($totalEstimate > 0)
+{
+    $progress = floor($workhour->totalConsumed / $totalEstimate * 1000) / 1000 * 100;
+}
+
 $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;
 div
 (
@@ -326,9 +402,14 @@ div
                 ) : null,
                 span(setClass('article-h2'), $project->name),
             ),
+            $project->desc ? div
+            (
+                setClass('mt-2'),
+                $project->desc
+            ) : null,
             div
             (
-                setClass('mt-4'),
+                setClass('mt-2'),
                 $config->vision == 'rnd' ? label
                 (
                     setClass('secondary-pale ring-secondary text-primary'),
@@ -380,7 +461,86 @@ div
         ) : null,
         section
         (
-            setClass('border-b pb-4 project-basic-info'),
+            setClass('border-b pb-4'),
+            set::title($lang->execution->linkPlan),
+            $plansDom
+        ),
+        section
+        (
+            setClass('border-b pb-4'),
+            set::title($lang->execution->lblStats),
+            div
+            (
+                setClass('flex flex-nowrap items-center'),
+                span($lang->project->progress . ' ' . $progress . $lang->percent),
+                div
+                (
+                    setClass('progress flex-auto ml-2 h-2'),
+                    div
+                    (
+                        setClass('progress-bar'),
+                        set('role', 'progressbar'),
+                        setStyle(['width' => $progress . $lang->percent]),
+                    )
+                )
+            ),
+            div
+            (
+                setClass('pt-1 project-info'),
+                tableData
+                (
+                    set::useTable(false),
+                    item
+                    (
+                        set::name($lang->project->begin),
+                        $project->begin
+                    ),
+                    item
+                    (
+                        set::name($lang->project->realBeganAB),
+                        helper::isZeroDate($project->realBegan) ? '' : $project->realBegan
+                    ),
+                    item
+                    (
+                        set::name($lang->project->end),
+                        $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end
+                    ),
+                    item
+                    (
+                        set::name($lang->project->realEndAB),
+                        helper::isZeroDate($project->realEnd) ? '' : $project->realEnd
+                    ),
+                    item
+                    (
+                        set::name($lang->execution->totalEstimate),
+                        (float)$workhour->totalEstimate . $lang->execution->workHour
+                    ),
+                    item
+                    (
+                        set::name($lang->execution->totalDays),
+                        (float)$project->days . $lang->execution->day
+                    ),
+                    item
+                    (
+                        set::name($lang->execution->totalConsumed),
+                        (float)$workhour->totalConsumed . $lang->execution->workHour
+                    ),
+                    item
+                    (
+                        set::name($lang->execution->totalHours),
+                        (float)$workhour->totalHours . $lang->execution->workHour
+                    ),
+                    item
+                    (
+                        set::name($lang->execution->totalLeft),
+                        (float)$workhour->totalLeft . $lang->execution->workHour
+                    ),
+                )
+            )
+        ),
+        section
+        (
+            setClass('border-b pb-4 project-info'),
             set::title($lang->execution->basicInfo),
             $basicInfo
         ),

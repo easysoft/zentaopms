@@ -14,5 +14,8 @@ $(function()
 
         const $dashboard = $('#projectDashBoard').data('zui.Dashboard')
         $dashboard.render({blocks: blocks});
+
+        $('#projectDashBoard .dashboard-block').attr('draggable', false);
+        $('#projectDashBoard .dashboard-block-header').hide();
     }, 10);
 });
