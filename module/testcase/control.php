@@ -98,16 +98,16 @@ class testcase extends control
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->app->tab != 'project' ? $this->product->saveVisitState($productID, $this->products) : $productID;
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie('preProductID', $productID);
+        helper::setcookie('preBranch', $branch);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            helper::setcookie('caseModule', 0);
         }
-        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        if($browseType == 'bymodule') helper::setcookie('caseModule', (int)$param);
+        if($browseType == 'bysuite')  helper::setcookie('caseSuite', (int)$param);
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
@@ -663,7 +663,7 @@ class testcase extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            helper::setcookie('caseModule', 0);
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
@@ -2509,7 +2509,7 @@ class testcase extends control
         if(!empty($_POST))
         {
             $response['result'] = 'success';
-            setcookie('lastCaseScene', (int)$this->post->parent, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            helper::setcookie('lastCaseScene', (int)$this->post->parent);
 
             $sceneResult = $this->testcase->createScene();
             if(!$sceneResult or dao::isError())
@@ -2922,7 +2922,7 @@ class testcase extends control
             $product = $scene->product;
             $this->executeHooks($product);
 
-            setcookie('caseModule', $scene->module, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            helper::setcookie('caseModule', $scene->module);
 
             $loadLink = $this->createLink('testcase', 'browse', "root={$product}" . ($scene->module ? "&branch=0&type=byModule&param={$scene->module}" : ''));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $loadLink, 'closeModal' => true));
