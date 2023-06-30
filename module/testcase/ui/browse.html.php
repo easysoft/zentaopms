@@ -38,9 +38,9 @@ $footToolbar = $canBatchAction ? array('items' => array
 (
     $canGroupBatch ? array('type' => 'btn-group', 'items' => array
     (
-        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
-        ($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange) ? array('caret' => 'up', 'btnType' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
+        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
+        ($canBatchReview || $canBatchDelete || $canBatchCaseTypeChange || $canBatchConfirmStoryChange) ? array('caret' => 'up', 'className' => 'secondary', 'url' => '#navActions', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     )) : null,
     $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'btnType' => 'secondary', 'url' => '#navBranch', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'btnType' => 'secondary', 'url' => '#navModule', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start') : null,
