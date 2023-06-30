@@ -2,12 +2,21 @@
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'dropmenu' . DS . 'v1.php';
 
 class heading extends wg
 {
-    static $defineProps = array(
-        'items?:array',
-        'showAppName?:bool=true'
+    static $defineProps = array
+    (
+        'items?: array',            // 标题上显示的按钮。
+        'showAppName?: bool=true',  // 是否自动显示当前应用名称。
+        'dropmenu?: array'          // 1.5 级导航配置。
+    );
+
+    static $defineBlocks = array
+    (
+        'toolbar'  => array('map' => 'toolbar'),
+        'dropmenu' => array('map' => 'dropmenu')
     );
 
     protected function buildAppName()
@@ -40,6 +49,34 @@ class heading extends wg
     }
 
     /**
+     * Build dropmenu.
+     *
+     * @access protected
+     * @return dropmenu
+     */
+    protected function buildDropmenu(): dropmenu|array|null
+    {
+       if($this->hasBlock('dropmenu')) return $this->block('dropmenu');
+
+       $dropmenuProps = $this->prop('dropmenu');
+       if(empty($dropmenuProps)) return null;
+       return new dropmenu(set($dropmenuProps));
+    }
+
+    protected function buildToolbar()
+    {
+        $showAppName = $this->prop('showAppName');
+        if($this->hasBlock('toolbar')) $this->prop('toolbar');
+        return new toolbar
+        (
+            $showAppName ? $this->buildAppName() : null,
+            set::btnClass('primary'),
+            set::items($this->prop('items')),
+            $this->children()
+        );
+    }
+
+    /**
      * Build.
      *
      * @access protected
@@ -52,13 +89,8 @@ class heading extends wg
         return div
         (
             set::id('heading'),
-            new toolbar
-            (
-                $showAppName ? $this->buildAppName() : null,
-                set::btnClass('primary'),
-                set::items($this->prop('items')),
-                $this->children()
-            )
+            $this->buildToolbar(),
+            $this->buildDropmenu()
         );
     }
 }

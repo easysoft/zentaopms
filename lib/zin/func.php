@@ -763,7 +763,7 @@ function navbar(): navbar
  * ?bool|int cache    // 是否启用缓存。
  * ?array    data     // 手动指定数据。
  */
-function dropmenu(): navbar
+function dropmenu(): dropmenu
 {
     return createWg('dropmenu', func_get_args());
 }
