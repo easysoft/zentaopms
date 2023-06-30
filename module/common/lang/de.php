@@ -114,6 +114,7 @@ $lang->addFiles        = 'Hinzufügen ';
 $lang->files           = 'Datei ';
 $lang->pasteText       = 'Einfügen';
 $lang->uploadImages    = 'Hochladen';
+$lang->uploadImagesTip = 'The program will have a file name as the title and an image as the content.';
 $lang->timeout         = 'Timeout. Bitte prüfen Sie Ihre Netzwerkverbindung oder versuchen Sie es erneut!';
 $lang->repairTable     = 'Die Datenbank scheint koruppt zu sein. Bitte prüfen Sie die Datenbank.';
 $lang->duplicate       = '%s existiert bereits.';

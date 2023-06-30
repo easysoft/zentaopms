@@ -114,6 +114,7 @@ $lang->addFiles        = 'Fichiers ajoutés ';
 $lang->files           = 'Fichiers ';
 $lang->pasteText       = 'Collage Multi-lignes';
 $lang->uploadImages    = 'Upload Multi-images';
+$lang->uploadImagesTip = 'The program will have a file name as the title and an image as the content.';
 $lang->timeout         = 'Timeout. Vérifier votre connexion réseau, ou réessayez !';
 $lang->repairTable     = 'La Base de données est peut-être endommagée. Exécutez phpmyadmin ou myisamchk pour corriger.';
 $lang->duplicate       = '%s a le même titre que le fichier existant.';

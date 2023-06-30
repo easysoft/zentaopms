@@ -114,6 +114,7 @@ $lang->addFiles        = '上传了附件 ';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';
 $lang->uploadImages    = '多图上传 ';
+$lang->uploadImagesTip = '程序会以文件名为标题，以图片作为内容。';
 $lang->timeout         = '连接超时，请检查网络环境，或重试！';
 $lang->repairTable     = '数据库表可能损坏，请用phpmyadmin或myisamchk检查修复。';
 $lang->duplicate       = '已有相同标题的%s';
