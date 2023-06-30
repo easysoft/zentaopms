@@ -164,15 +164,15 @@ class testcase extends control
         }
 
         $queryCondition = '';
-        $topObjects     = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+        $topObjects     = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
 
         /* Get children cases and scenes.*/
-        $scenes = $this->testcase->getList($productParam, $branch,$moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
+        $scenes = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
         if(empty($topObjects) and $pageID > 1)
         {
             $pager      = pager::init(0, $recPerPage, 1);
-            $topObjects = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, $pager,'top',array(),$browseType);
-            $scenes     = $this->testcase->getList($productParam,$branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects),$browseType, $queryCondition);
+            $topObjects = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+            $scenes     = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
         }
 
         /* save session .*/
