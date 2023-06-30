@@ -1,18 +1,18 @@
 $(function()
 {
-    if(rawMethod !== 'create') return;
-    var createModal = new $.zui.ModalTrigger({url: createLink('dataview', 'create', 'step=create', '', true), type: 'iframe', width: 480});
     var exportModal = new $.zui.ModalTrigger({url: createLink('dataview', 'export', 'type=query', '', true), type: 'iframe', width: 900});
-    document.getElementById('saveButton').addEventListener('click', function(e)
-    {
-        tryQuery(e);
-        showModel(createModal);
-    });
-
     document.getElementById('export').addEventListener('click', function(e)
     {
         tryQuery(e);
         showModel(exportModal);
+    });
+
+    if(rawMethod !== 'create') return;
+    var createModal = new $.zui.ModalTrigger({url: createLink('dataview', 'create', 'step=create', '', true), type: 'iframe', width: 480});
+    document.getElementById('saveButton').addEventListener('click', function(e)
+    {
+        tryQuery(e);
+        showModel(createModal);
     });
 });
 
