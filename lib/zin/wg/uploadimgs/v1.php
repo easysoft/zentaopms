@@ -34,11 +34,7 @@ class uploadImgs extends wg
         'duplicatedHint?: string',         // 文件名重复提示
         'exceededSizeHint?: string',       // 上传超出大小限制提示
         'exceededCountHint?: string',      // 上传超出个数限制提示
-        'commentText?: string',            // 备注文本
-        'addImgsText?: string',            // 添加图片文本
-        'toUploadText?: string',           // 待上传文本
-        'totalSizeText?: string',          // 总大小文本
-        'handleUpload?: callable',         // 处理上传函数
+        'totalCountText?: string',         // 文件数量文本
     );
 
     protected function build()
