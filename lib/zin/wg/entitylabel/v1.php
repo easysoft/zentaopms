@@ -19,6 +19,7 @@ class entityLabel extends wg
     );
 
     protected static $defineBlocks = array(
+        'prefix' => array(),
         'suffix' => array()
     );
 
@@ -88,6 +89,7 @@ class entityLabel extends wg
     protected function build(): wg
     {
         $reverse    = $this->prop('reverse');
+        $prefix     = $this->block('prefix');
         $suffix     = $this->block('suffix');
         $entityID   = $this->buildEntityID();
         $entityName = $this->buildEntityName();
@@ -95,6 +97,7 @@ class entityLabel extends wg
         (
             setClass('entity-label', 'flex', 'items-center', 'gap-x-2'),
             set($this->props->skip(array_keys(static::getDefinedProps()))),
+            $prefix,
             $reverse ? array($entityName, $entityID) : array($entityID, $entityName),
             $suffix
         );
