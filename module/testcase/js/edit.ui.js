@@ -5,3 +5,24 @@ function loadLibModules()
 
     $('#moduleIdBox').load(link);
 }
+
+function checkScript()
+{
+    $('.autoScript').toggleClass('hidden', !$('#auto').prop('checked'));
+}
+
+function readScriptContent()
+{
+    $uploadBtnLabel = $('#scriptFile').next();
+
+    $uploadBtnLabel.toggle($('#scriptFile').parents('td').find('.file-list').length < 1);
+
+    var reader = new FileReader();
+    reader.readAsText($('#scriptFile')[0].files[0], 'UTF-8');
+    reader.onload = function(evt){$('#script').val(evt.target.result);}
+}
+
+function showUploadScriptBtn()
+{
+    $('#scriptFile').next().show();
+}

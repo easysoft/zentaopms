@@ -39,6 +39,8 @@ $config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,s
 
 $config->testcase->excludeCheckFileds = ',pri,type,stage,needReview,story,branch,';
 
+$config->testcase->scriptAcceptFileTypes = '.php,.py,.js,.go,.sh,.bat,.lua,.rb,.tcl,.pl';
+
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
 $config->testcase->search['fields']['title']          = $lang->testcase->title;

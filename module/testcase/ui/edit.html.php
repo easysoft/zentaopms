@@ -62,7 +62,10 @@ detailBody
     on::change('#product', 'loadProductRelated()'),
     on::change('#module', 'loadModuleRelated'),
     on::change('#branch', 'loadBranchRelated'),
+    on::change('#scriptFile', 'readScriptContent'),
     on::click('.refresh', $isCaseLib ? 'loadLibModules' : 'loadProductModules'),
+    on::click('#auto', 'checkScript'),
+    on::click('.autoScript .file-delete', 'showUploadScriptBtn'),
     sectionList
     (
         section
@@ -115,8 +118,10 @@ detailBody
             ) : null,
             formGroup
             (
-                set::name('files[]'),
-                set::control('file'),
+                upload
+                (
+                    set::name('files'),
+                ),
             )
         ),
         section
@@ -152,7 +157,7 @@ detailBody
             ) : item
             (
                 set::name($lang->testcase->product),
-                set::hidden($product->shadow),
+                set::trClass($product->shadow ? 'hidden' : ''),
                 inputGroup
                 (
                     select
@@ -240,9 +245,19 @@ detailBody
             ),
             item
             (
-                set::class('autoScript'),
-                set::hidden(true),
+                set::trClass('hidden autoScript'),
                 set::name($lang->testcase->autoScript),
+                upload
+                (
+                    set::name('scriptFile'),
+                    set::accept($config->testcase->scriptAcceptFileTypes),
+                    set::limitCount(1)
+                ),
+                input
+                (
+                    set::type('hidden'),
+                    set::name('script'),
+                )
             ),
             item
             (
@@ -284,7 +299,7 @@ detailBody
                     set::value($case->keywords)
                 )
             ),
-            ($isLibCase && hasPriv('testcase', 'linkCases')) ? item
+            (!$isLibCase && hasPriv('testcase', 'linkCases')) ? item
             (
                 set::name($lang->testcase->linkCase),
                 a
@@ -294,14 +309,14 @@ detailBody
                     $lang->testcase->linkCases,
                 )
             ) : null,
-            ($isLibCase && hasPriv('testcase', 'linkCases')) ? item
+            (!$isLibCase && hasPriv('testcase', 'linkCases')) ? item
             (
-                set::hidden(!isset($case->linkCaseTitles)),
+                set::trClass(!isset($case->linkCaseTitles) ? 'hidden' : ''),
                 control
                 (
                     set::type('checkList'),
                     set::name('linkCase[]'),
-                    set::value(array_keys($case->linkCaseTitles)),
+                    set::value(isset($case->linkCaseTitles) ? array_keys($case->linkCaseTitles) : ''),
                     set::items($linkCaseItems),
                 ),
                 span
@@ -309,7 +324,7 @@ detailBody
                     set::id('linkCaseBox'),
                 )
             ) : null,
-            ($isLibCase && hasPriv('testcase', 'linkBugs')) ? item
+            (!$isLibCase && hasPriv('testcase', 'linkBugs')) ? item
             (
                 set::name($lang->testcase->linkBug),
                 a
@@ -319,9 +334,9 @@ detailBody
                     $lang->testcase->linkBugs,
                 )
             ) : null,
-            ($isLibCase && hasPriv('testcase', 'linkBugs')) ? item
+            (!$isLibCase && hasPriv('testcase', 'linkBugs')) ? item
             (
-                set::hidden(!isset($case->toBugs)),
+                set::trClass(!isset($case->toBugs) ? 'hidden' : ''),
                 control
                 (
                     set::type('checkList'),
