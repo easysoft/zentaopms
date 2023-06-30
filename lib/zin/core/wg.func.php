@@ -14,6 +14,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once __DIR__ . DS . 'props.class.php';
 require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'rawContent.class.php';
 require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'context.func.php';
 
@@ -284,9 +285,9 @@ function groupWgInList(wg|array $items, string|array $types): array
 /**
  * Create raw content placeholder.
  *
- * @return directive
+ * @return rawContent
  */
-function rawContent(): directive
+function rawContent(): rawContent
 {
-    return h::comment('{{RAW_CONTENT}}');
+    return new rawContent();
 }
