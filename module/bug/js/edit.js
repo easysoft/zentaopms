@@ -57,7 +57,7 @@ function renderBuilds()
         var openedBuilds   = data.openedBuilds;
         $('#openedBuild').data('zui.picker').destroy();
         $('#openedBuild').picker({list: openedBuilds});
-        $('#openedBuild').data('zui.picker').setValue(oldOpenedBuild);
+        $('#openedBuild').data('zui.picker').setValue('' + oldOpenedBuild);
         var resolvedBuilds = data.resolvedBuilds;
         $('#resolvedBuild').data('zui.picker').destroy();
         $('#resolvedBuild').picker({list: resolvedBuilds, allowSingleDeselect: 'true'});
