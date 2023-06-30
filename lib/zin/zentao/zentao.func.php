@@ -103,3 +103,17 @@ function bind(string $name, string|array $callback, array $options = null): dire
 
     return setData($data);
 }
+
+/**
+ * Render data to json.
+ *
+ * @param mixed $data   data.
+ * @param int   $flags  json encode flags.
+ * @return void
+ */
+function renderJson(mixed $data, int $flags = 0)
+{
+    ob_end_flush();
+    zin::$rendered = true;
+    echo json_encode($data, $flags);
+}
