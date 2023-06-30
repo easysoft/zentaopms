@@ -99,7 +99,7 @@ div
     ),
     div
     (
-        setClass('flex-center'),
+        setClass('flex-center mt-2'),
         div
         (
             setClass('table-import shadow-sm'),

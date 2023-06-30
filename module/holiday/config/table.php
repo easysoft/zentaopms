@@ -7,10 +7,12 @@ $config->holiday->actionList['edit']['hint']        = $lang->holiday->edit;
 $config->holiday->actionList['edit']['url']         = array('module' => 'holiday', 'method' => 'edit', 'params' => 'holidayID={id}');
 $config->holiday->actionList['edit']['data-toggle'] = 'modal';
 
-$config->holiday->actionList['delete']['icon'] = 'close';
-$config->holiday->actionList['delete']['text'] = '';
-$config->holiday->actionList['delete']['hint'] = $lang->holiday->delete;
-$config->holiday->actionList['delete']['url']  = array('module' => 'holiday', 'method' => 'delete', 'params' => 'holidayID={id}');
+$config->holiday->actionList['delete']['icon']         = 'trash';
+$config->holiday->actionList['delete']['text']         = '';
+$config->holiday->actionList['delete']['hint']         = $lang->holiday->delete;
+$config->holiday->actionList['delete']['url']          = array('module' => 'holiday', 'method' => 'delete', 'params' => 'holidayID={id}');
+$config->holiday->actionList['delete']['class']        = 'btn ghost toolbar-item text-primary square size-sm ajax-submit';
+$config->holiday->actionList['delete']['data-confirm'] = $lang->holiday->confirmDelete;
 
 $config->holiday->dtable = new stdclass();
 $config->holiday->dtable->fieldList['name']['name']  = 'name';
