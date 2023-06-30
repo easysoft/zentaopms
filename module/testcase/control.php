@@ -186,14 +186,12 @@ class testcase extends control
         $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
 
         /* Get summary. */
-        $indCount   = 0;
-        $topCount   = 0;
-        $casesCount = 0;
+        $indCount = 0;
+        $topCount = 0;
         foreach($scenes as $scene)
         {
             if($scene->isCase == '2' and $scene->parent == 0) $topCount ++;
             if($scene->isCase == '1' and $scene->parent == 0) $indCount ++;
-            if($scene->isCase == '1') $casesCount ++;
         }
 
         if($browseType == 'onlyscene')
@@ -282,7 +280,6 @@ class testcase extends control
         $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
         $this->view->automation      = $this->loadModel('zanode')->getAutomationByProduct($productID);
         $this->view->scenes          = $scenes;
-        $this->view->casesCount      = $casesCount;
         $this->view->stories         = array('') + $this->loadModel('story')->getPairs($productID);
 
         $this->display();
