@@ -1007,46 +1007,25 @@ class testtask extends control
      * Delete a test task.
      *
      * @param  int    $taskID
-     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function delete($taskID, $confirm = 'no')
+    public function delete($taskID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->testtask->confirmDelete, inlink('delete', "taskID=$taskID&confirm=yes")));
-        }
-        else
-        {
-            $task = $this->testtask->getByID($taskID);
-            $this->testtask->delete(TABLE_TESTTASK, $taskID);
+        $task = $this->testtask->getByID($taskID);
+        $this->testtask->delete(TABLE_TESTTASK, $taskID);
 
-            $message = $this->executeHooks($taskID);
-            if($message) $response['message'] = $message;
+        $message = $this->executeHooks($taskID);
+        if($message) $response['message'] = $message;
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
+        if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
 
-            $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
-            if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
-            if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($browseList, 'parent'));
-        }
+        $browseList = $this->createLink('testtask', 'browse', "productID=$task->product");
+        if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
+        if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->app->methodName == 'view' ? $browseList : true));
     }
 
     /**

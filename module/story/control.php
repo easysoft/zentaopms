@@ -975,9 +975,10 @@ class story extends control
         $storyIdList = array_unique($storyIdList);
         $this->story->batchReview($storyIdList, $result, $reason);
 
-        if(dao::isError()) return print(js::error(dao::getError()));
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        echo js::reload('parent');
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

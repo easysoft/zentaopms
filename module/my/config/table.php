@@ -178,11 +178,12 @@ $config->my->task->actionList['close']['hint']        = $lang->task->close;
 $config->my->task->actionList['close']['url']         = array('module' => 'task', 'method' => 'close', 'params' => 'taskID={id}');
 $config->my->task->actionList['close']['data-toggle'] = 'modal';
 
-$config->my->task->actionList['record']['icon']        = 'time';
-$config->my->task->actionList['record']['text']        = $lang->task->logEfforts;
-$config->my->task->actionList['record']['hint']        = $lang->task->logEfforts;
-$config->my->task->actionList['record']['url']         = array('module' => 'task', 'method' => 'recordEstimate', 'params' => 'taskID={id}');
-$config->my->task->actionList['record']['data-toggle'] = 'modal';
+$config->my->task->actionList['record']['icon']          = 'time';
+$config->my->task->actionList['record']['text']          = $lang->task->logEfforts;
+$config->my->task->actionList['record']['hint']          = $lang->task->logEfforts;
+$config->my->task->actionList['record']['url']           = array('module' => 'task', 'method' => 'recordWorkhour', 'params' => 'taskID={id}');
+$config->my->task->actionList['record']['data-toggle']   = 'modal';
+$config->my->task->actionList['record']['data-position'] = 'center';
 
 $config->my->task->actionList['edit']['icon']          = 'edit';
 $config->my->task->actionList['edit']['text']          = $lang->task->edit;
