@@ -1382,7 +1382,7 @@ class execution extends control
     public function computeBurn($reload = 'no')
     {
         $this->view->burns = $this->execution->computeBurn();
-        if($reload == 'yes') return print(js::reload('parent'));
+        if($reload == 'yes') return $this->send(array('load' => true, 'result' => 'success'));
         $this->display();
     }
 
@@ -1489,7 +1489,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function fixFirst($executionID)
+    public function fixFirst(int $executionID)
     {
         if($_POST)
         {
@@ -1500,7 +1500,7 @@ class execution extends control
         $execution = $this->execution->getById($executionID);
 
         $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->fetch();
-        $this->view->execution   = $execution;
+        $this->view->execution = $execution;
         $this->display();
     }
 

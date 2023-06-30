@@ -11,6 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('workHour', $lang->execution->workHour);
+$weekend      = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
+$delay        = strpos($type, 'withdelay') !== false ? 'nodelay' : 'withdelay';
+$weekendParam = $delay == 'withdelay' ? "nodelay,{$weekend}" : "withdelay,{$weekend}";
+$delayParam   = $weekend == 'noweekend' ? "withweekend,{$delay}" : "noweekend,{$delay}";
 featureBar
 (
     btn
@@ -19,8 +23,8 @@ featureBar
         (
             array
             (
-                'class' => 'btn primary mr-5',
-                'url' => '#',
+                'class' => 'btn primary mr-5 ajax-submit',
+                'url' => createLink('execution', 'computeBurn', 'reload=yes'),
                 'icon' => 'refresh',
             ),
         ),
@@ -32,8 +36,8 @@ featureBar
         a
         (
             set::id('weekend'),
-            set::href('#'),
-            $lang->execution->withweekend
+            set::href(createLink('execution', 'burn', "executionID={$execution->id}&type={$weekendParam}")),
+            $lang->execution->{$weekend}
         )
     ),
     li
@@ -42,28 +46,26 @@ featureBar
         a
         (
             set::id('delay'),
-            set::href('#'),
-            $lang->execution->withdelay
+            set::href(createLink('execution', 'burn', "executionID={$execution->id}&type={$delayParam}")),
+            $lang->execution->{$delay}
         )
     ),
-    li
+    common::canModify('execution', $execution) ? li
     (
         setClass('nav-item'),
         a
         (
-            set::id('delay'),
             set
             (
                 array
                 (
-                    'id'  => 'delay',
-                    'url' => $this->createLink('execution', 'fixFirst', "id=$execution->id"),
+                    'href' => createLink('execution', 'fixFirst', "id={$execution->id}"),
                     'data-toggle' => 'modal',
                 ),
             ),
             $lang->execution->fixFirst
         )
-    ),
+    ) : null,
     li
     (
         setClass('nav-item'),
@@ -182,7 +184,7 @@ panel
                         )
                     ),
                 ),
-                array
+                strpos($type, 'withdelay') !== false ? array
                 (
                     'data' => $chartData['delayLine'],
                     'type' => 'line',
@@ -206,7 +208,7 @@ panel
                             'borderWidth' => 2
                         )
                     ),
-                ),
+                ) : null,
             )
         ),
     )->size('100%', 500),
