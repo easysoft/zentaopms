@@ -1499,3 +1499,15 @@ function monaco(): monaco
 {
     return createWg('monaco', func_get_args());
 }
+
+/**
+ * Dynamic widget.
+ *
+ * ?array  dynamics
+ * ?array  users
+ * ?string className
+ */
+function dynamic(): dynamic
+{
+    return createWg('dynamic', func_get_args());
+}
