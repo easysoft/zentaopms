@@ -216,3 +216,17 @@ $config->execution->actionList['delete']['class'] = 'ajax-submit';
 $config->execution->actionList['delete']['text']  = $lang->execution->delete;
 $config->execution->actionList['delete']['hint']  = $lang->execution->delete;
 $config->execution->actionList['delete']['url']   = helper::createLink('execution', 'delete', "executionID={rawID}");
+
+$config->execution->actionList['suspend']['icon']        = 'pause';
+$config->execution->actionList['suspend']['text']        = $lang->execution->suspend;
+$config->execution->actionList['suspend']['url']         = helper::createLink('execution', 'suspend', "executionID={rawID}");
+$config->execution->actionList['suspend']['data-toggle'] = 'modal';
+
+$config->execution->actionList['putoff']['icon']        = 'calendar';
+$config->execution->actionList['putoff']['text']        = $lang->execution->putoff;
+$config->execution->actionList['putoff']['url']         = helper::createLink('execution', 'putoff', "executionID={rawID}");
+$config->execution->actionList['putoff']['data-toggle'] = 'modal';
+
+$config->execution->view = new stdclass();
+$config->execution->view->operateList['main']   = array('putoff', 'start', 'activate', 'suspend', 'close');
+$config->execution->view->operateList['common'] = array('edit', 'delete');

@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+jsVar('workHour', $lang->execution->workHour);
 panel
 (
     div
@@ -65,6 +67,10 @@ panel
             array
             (
                 'trigger' => 'axis',
+                'axisPointer' => array(
+                    'type' => 'none'
+                ),
+                'formatter' => "RAWJS<function(rowDatas){return window.randTipInfo(rowDatas);}>RAWJS"
             )
         ),
         set::series
@@ -73,44 +79,88 @@ panel
             (
                 array
                 (
-                    'data' => $chartData['burnLine'],
-                    'type' => 'line',
-                    'name' => $lang->execution->charts->burn->graph->actuality
-                ),
-                array
-                (
                     'data' => $chartData['baseLine'],
                     'type' => 'line',
                     'name' => $lang->execution->charts->burn->graph->reference,
+                    'symbolSize' => 8,
+                    'symbol' => 'circle',
                     'itemStyle' => array
                     (
                         'normal' => array
                         (
-                            'color' => '#ddd',
+                            'color' => '#D8D8D8',
                             'lineStyle' => array
                             (
-                                'type'  => 'dashed',
-                                'color' => '#ddd',
+                                'width' => 3,
+                                'color' => '#F1F1F1',
                             )
+                        ),
+                        'emphasis' => array
+                        (
+                            'color' => '#FFF',
+                            'borderColor' => '#D8D8D8',
+                            'borderWidth' => 2,
                         )
-                    )
+                    ),
+                    'emphasis' => array
+                    (
+                        'lineStyle' => array
+                        (
+                            'width' => 3,
+                            'color' => '#F1F1F1',
+                        )
+                    ),
+                ),
+                array
+                (
+                    'data' => $chartData['burnLine'],
+                    'type' => 'line',
+                    'name' => $lang->execution->charts->burn->graph->actuality,
+                    'symbolSize' => 8,
+                    'symbol' => 'circle',
+                    'itemStyle' => array
+                    (
+                        'normal' => array
+                        (
+                            'color' => '#006AF1',
+                            'lineStyle' => array
+                            (
+                                'width' => 3,
+                                'color' => '#2B7DFE',
+                            )
+                        ),
+                        'emphasis' => array
+                        (
+                            'color' => '#fff',
+                            'borderColor' => '#006AF1',
+                            'borderWidth' => 2
+                        )
+                    ),
                 ),
                 array
                 (
                     'data' => $chartData['delayLine'],
                     'type' => 'line',
                     'name' => $lang->execution->charts->burn->graph->delay,
+                    'symbolSize' => 8,
+                    'symbol' => 'circle',
                     'itemStyle' => array
                     (
                         'normal' => array
                         (
-                            'color' => '#f00',
+                            'color' => '#F00',
                             'lineStyle' => array
                             (
-                                'color' => '#f00',
+                                'color' => '#F00',
                             )
+                        ),
+                        'emphasis' => array
+                        (
+                            'color' => '#fff',
+                            'borderColor' => '#F00',
+                            'borderWidth' => 2
                         )
-                    )
+                    ),
                 ),
             )
         ),

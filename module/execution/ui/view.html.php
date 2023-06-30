@@ -76,6 +76,30 @@ else
     );
 }
 
+/* Construct suitable actions for the current execution. */
+$execution->rawID = $execution->id;
+$operateMenus = array();
+foreach($config->execution->view->operateList['main'] as $operate)
+{
+    if(!common::hasPriv('execution', $operate)) continue;
+    if(!$this->execution->isClickable($execution, $operate)) continue;
+
+    $operateMenus[] = $config->execution->actionList[$operate];
+}
+
+/* Construct common actions for execution. */
+$commonActions = array();
+foreach($config->execution->view->operateList['common'] as $operate)
+{
+    if(!common::hasPriv('execution', $operate)) continue;
+
+    $settings = $config->execution->actionList[$operate];
+    $settings['text'] = '';
+    if($operate == 'edit') unset($settings['data-toggle']);
+
+    $commonActions[] = $settings;
+}
+
 jsVar('blocks', $blocks);
 
 dashboard
@@ -83,6 +107,18 @@ dashboard
     setID('executionDashBoard'),
     set::blocks($blocks),
     set::blockMenu(false)
+);
+
+div
+(
+    setClass('w-2/3 text-center fixed actions-menu'),
+    floatToolbar
+    (
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
+        set::main($operateMenus),
+        set::suffix($commonActions),
+        set::object($execution)
+    )
 );
 
 div
@@ -111,39 +147,6 @@ div
 
     )
 );
-/* Dynamic list. */
-$dynamicDom = array();
-foreach($dynamics as $action)
-{
-    $dynamicDom[] = li
-    (
-        setClass($action->major ? 'active': ''),
-        div
-        (
-            span(
-                setClass('timeline-tag'),
-                $action->date
-            ),
-            span(
-                setClass('timeline-text clip'),
-                zget($users, $action->actor),
-                span
-                (
-                    setClass('text-gray'),
-                    " {$action->actionLabel} "
-                ),
-                span(" {$action->objectLabel} "),
-                a
-                (
-                    setClass('clip'),
-                    set::href($action->objectLink),
-                    set::title($action->objectName),
-                    $action->objectName
-                )
-            )
-        )
-    );
-}
 
 div
 (
@@ -168,12 +171,8 @@ div
                 $lang->more
             ) : null
         ),
-        set::bodyClass('pt-0 overflow-x-hidden'),
-        ul
-        (
-            setClass('timeline timeline-tag-left no-margin'),
-            $dynamicDom
-        )
+        set::bodyClass('pt-0'),
+        dynamic()
     )
 );
 
@@ -411,13 +410,14 @@ $hoursDom = div
     (
         div
         (
+            setClass('flex flex-nowrap items-center'),
             span($lang->execution->progress . ' ' . $progress . $lang->percent),
             div
             (
-                set('class', 'progress'),
+                setClass('progress flex-auto ml-2 h-2'),
                 div
                 (
-                    set('class', 'progress-bar'),
+                    setClass('progress-bar'),
                     set('role', 'progressbar'),
                     setStyle(['width' => $progress . $lang->percent]),
                 )
