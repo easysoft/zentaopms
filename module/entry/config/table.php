@@ -56,3 +56,20 @@ $config->entry->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->entry->dtable->fieldList['actions']['type']  = 'actions';
 $config->entry->dtable->fieldList['actions']['list']  = $config->entry->actionList;
 $config->entry->dtable->fieldList['actions']['menu']  = array_keys($config->entry->actionList);
+
+$config->entry->log = new stdclass();
+$config->entry->log->dtable = new stdclass();
+$config->entry->log->dtable->fieldList['id']['name']     = 'id';
+$config->entry->log->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->entry->log->dtable->fieldList['id']['type']     = 'id';
+$config->entry->log->dtable->fieldList['id']['sortType'] = true;
+
+$config->entry->log->dtable->fieldList['date']['name']     = 'date';
+$config->entry->log->dtable->fieldList['date']['title']    = $lang->entry->date;
+$config->entry->log->dtable->fieldList['date']['type']     = 'text';
+$config->entry->log->dtable->fieldList['date']['sortType'] = true;
+
+$config->entry->log->dtable->fieldList['url']['name']     = 'url';
+$config->entry->log->dtable->fieldList['url']['title']    = $lang->entry->url;
+$config->entry->log->dtable->fieldList['url']['type']     = 'text';
+$config->entry->log->dtable->fieldList['url']['sortType'] = true;
