@@ -148,12 +148,13 @@ class testcase extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
         /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
 
+        $cases      = array();
         $caseIdList = array();
-        if(!empty($cases))
+        if($browseType != 'onlyscene')
         {
-            foreach($cases as $case) $caseIdList[] = $case->id;
+            $cases      = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
+            $caseIdList = array_column($cases, 'id');
         }
         /* Get top level cases and scenes.*/
         $productParam = $productID;
