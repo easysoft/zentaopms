@@ -18,6 +18,8 @@ $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 $branchType        = $showBranch ? $product->type : '';
 
+dropmenu();
+
 /* Generate sidebar to display module tree menu. */
 $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branchID, $branchType)
 {
