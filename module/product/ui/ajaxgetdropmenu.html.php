@@ -49,7 +49,7 @@ foreach($products as $programID => $programProducts)
         $item = array();
         $item['id']    = $product->id;
         $item['text']  = $product->name;
-        $item['keys']  = zget(common::convert2Pinyin(array($product->name), $product->name), '');
+        $item['keys']  = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
 
         if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
         $data[$group][$programID]['items'][] = $item;
