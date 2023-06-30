@@ -16,11 +16,3 @@ $config->mobile->todoBar  = array('today', 'yesterday', 'thisWeek', 'lastWeek', 
 $config->mobile->taskBar  = array('assignedTo', 'openedBy');
 $config->mobile->bugBar   = array('assignedTo', 'openedBy', 'resolvedBy');
 $config->mobile->storyBar = array('assignedTo', 'openedBy', 'reviewedBy');
-
-global $lang,$app;
-$config->my->audit = new stdclass();
-$config->my->audit->actionList = array();
-$config->my->audit->actionList['review']['icon']        = 'glasses';
-$config->my->audit->actionList['review']['text']        = $lang->review->common;
-$config->my->audit->actionList['review']['hint']        = $lang->review->common;
-$config->my->audit->actionList['review']['data-toggle'] = 'modal';

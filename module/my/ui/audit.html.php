@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('viewLink', createLink('{module}', 'view', 'id={id}'));
+jsVar('viewLink',   createLink('{module}', 'view',   'id={id}'));
+jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 
 $rawMethod = $this->app->rawMethod;
 if($rawMethod != 'audit') $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];

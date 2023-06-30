@@ -546,6 +546,14 @@ $config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-toggle
 $config->my->testcase->dtable->fieldList['actions']['list']['edit']['data-size']   = 'lg';
 $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'edit', 'createBug', 'create');
 
+$config->my->audit = new stdclass();
+$config->my->audit->actionList = array();
+$config->my->audit->actionList['review']['icon']        = 'search';
+$config->my->audit->actionList['review']['text']        = $lang->review->common;
+$config->my->audit->actionList['review']['hint']        = $lang->review->common;
+$config->my->audit->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}');
+$config->my->audit->actionList['review']['data-toggle'] = 'modal';
+
 $config->my->audit->dtable = new stdclass();
 $config->my->audit->dtable->fieldList['id']['name']  = 'id';
 $config->my->audit->dtable->fieldList['id']['title'] = $lang->idAB;
