@@ -156,6 +156,7 @@ class testcase extends control
             $cases      = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
             $caseIdList = array_column($cases, 'id');
         }
+
         /* Get top level cases and scenes.*/
         $productParam = $productID;
         if(intval($productID) <= 0)
@@ -190,7 +191,7 @@ class testcase extends control
             if($scene->isCase == '1') $casesCount ++;
         }
 
-        if($this->cookie->onlyScene)
+        if($browseType == 'onlyscene')
         {
             $summary = sprintf($this->lang->testcase->summaryScene, $topCount);
         }

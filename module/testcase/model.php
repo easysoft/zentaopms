@@ -3355,7 +3355,7 @@ class testcaseModel extends model
             ->beginIF(!is_array($productID) and intval($productID) > 0)->andWhere('product')->eq($productID)->fi()
             ->andWhere('id')->in($sceneIdArr)
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
+            ->beginIF($browseType == 'onlyscene')->andWhere('isCase')->eq(2)->fi()
             ->orderBy('id_asc')
             ->fetchPairs('id');
 
@@ -3378,9 +3378,9 @@ class testcaseModel extends model
         $orderBy = 'product_desc,sort_asc';
 
         /* Get sql for batch execution. */
-        if($executionSql !== null) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
+        if($executionSql !== null) $executionSql = $this->buildQuery($modules, $type, $objectIdList, $branch, $browseType)->andWhere('isCase')->eq(1)->orderBy($orderBy)->get();
 
-        return $this->buildQuery($modules, $type, $objectIdList, $branch)->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->buildQuery($modules, $type, $objectIdList, $branch, $browseType)->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**
@@ -3390,17 +3390,18 @@ class testcaseModel extends model
      * @param  string $type
      * @param  string $objectIdList
      * @param  string $branch
+     * @param  string $browseType
      * @access public
      * @return object
      */
-    private function buildQuery($modules, $type, $objectIdList, $branch)
+    private function buildQuery($modules, $type, $objectIdList, $branch, $browseType)
     {
         $this->dao->reset();
         $rawMethod = $this->app->rawMethod;
         $rawModule = $this->app->rawModule;
         return $this->dao->select('*')->from(VIEW_SCENECASE)
             ->where('deleted')->eq(0)
-            ->beginIF($this->cookie->onlyScene)->andWhere('isCase')->eq(2)->fi()
+            ->beginIF($browseType == 'onlyscene')->andWhere('isCase')->eq(2)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->andWhere('id')->in($objectIdList)->fi()
             ->beginIF($rawMethod == 'browse' and $type === 'child')->andWhere('id')->in($objectIdList)->fi()
