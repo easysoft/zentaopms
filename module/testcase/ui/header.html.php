@@ -135,7 +135,7 @@ featureBar
             $lang->testcase->zeroCase
         )
     ) : null,
-    $rawMethod != 'zerocase' ? li
+    $rawMethod == 'browse' ? li
     (
         set::class('nav-item'),
         a
