@@ -1,0 +1,18 @@
+.dynamic > li {position: relative; list-style: none}
+.dynamic > li:before, .dynamic > li > a:after, .dynamic > li > div:after {position: absolute; left: -20px; display: block; width: 15px; height: 15px; content: ' '; border-radius: 50%}
+.dynamic > li:before {top: 12px; left: -16px; z-index: 3; width: 7px; height: 7px; background-color: #c4c4c4; border: none; border: 1px solid #c4c4c4}
+.dynamic > li > a:after, .dynamic > li > div:after {top: 11px; left: -17px; z-index: 3; width: 9px; height: 9px; background-color: #2e7fff; border-radius: 50%; opacity: 0}
+.dynamic > li + li:after {position: absolute; top: -12px; bottom: 20px; left: -13px; z-index: 1; display: block; content: ' '; border-left: 1px solid #eee}
+.dynamic > li.active > a:after, .dynamic > li.active > div:after {opacity: 1}
+.dynamic > li.active:before {top: 8px; left: -20px; width: 15px; height: 15px; background-color: rgba(46,127,255, .2); border: none}
+.dynamic > li > a, .dynamic > li > div {display: block; padding: 5px; line-height: 20px}
+.dynamic > li.active > a {color: #313c52}
+
+.dynamic-tag {position: absolute; top: 5px; left: -115px; font-size: 12px}
+.dynamic-tag-left {padding-left: 115px}
+
+.dynamic-sm {font-size: 12px}
+.dynamic-sm > li:before, .dynamic-sm > li > a:after, .dynamic-sm > li > div:after {top: 10px; left: -20px; width: 11px; height: 11px}
+.dynamic-sm > li.active:before, .dynamic-sm > li:before {top: 10px; left: -18px; width: 11px; height: 11px; background: 0 0; border: 1px solid #eee}
+.dynamic-sm > li > a, .dynamic-sm > li > div {line-height: 20px}
+.dynamic-sm > li > a:after, .dynamic-sm > li > div:after {top: 13px; left: -15px; width: 5px; height: 5px}
