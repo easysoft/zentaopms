@@ -28,6 +28,10 @@ class dropmenu extends wg
      */
     protected static $defineProps = array
     (
+        'module?:   string,',       // 模块名。
+        'method?:   string,',       // 方法名。
+        'objectID?: string,',       // 对象 ID。
+        'extra?:    string,',       // 额外参数。
         'url?:      string',        // 异步获取下拉菜单选项数据的 URL。
         'text?:     string',        // 选择按钮上显示的文本。
         'objectID?: string',        // 当前选中项的 ID。
@@ -43,7 +47,26 @@ class dropmenu extends wg
      */
     protected function build(): wg
     {
-        list($url, $text, $objectID, $cache) = $this->prop(array('url', 'text', 'objectID', 'cache'));
+        list($url, $text, $objectID, $cache, $module, $method, $objectID, $extra) = $this->prop(array('url', 'text', 'objectID', 'cache', 'module', 'method', 'objectID', 'extra'));
+
+        $app = data('app');
+
+        if(empty($module))   $module = $app->moduleName;
+        if(empty($method))   $method = $app->methodName;
+        if(empty($extra))    $extra  = '';
+        if(empty($objectID)) $objectID = data($module . 'ID');
+
+        if(empty($url))
+        {
+            $url = createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
+        }
+
+        if(empty($text) && !empty($module))
+        {
+            $object = $app->control->loadModel($module)->getByID($objectID);
+            $text   = $object->name;
+        }
+
         return zui::dropmenu
         (
             set(array('fetcher' => $url, 'text' => $text, 'value' => $objectID, 'cache' => $cache)),
