@@ -575,20 +575,18 @@ class tree extends control
             }
             else
             {
-                $changeFunc = '';
-                if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
                 $field = $fieldID !== '' ? "modules[$fieldID]" : 'module';
 
                 $currentModule   = $this->tree->getById($currentModuleID);
                 $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
-                $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
+                $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control'");
                 if(count($optionMenu) == 1 and $needManage !== 'false' and $viewType != 'task')
                 {
                     $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     $output .= '&nbsp; ';
-                    $output .= html::a("javascript:void(0)", $this->lang->refreshIcon, '', "id='refreshModule' class='refresh' onclick='loadProductModules($rootID)'");
+                    $output .= html::a("javascript:void(0)", $this->lang->refreshIcon, '', "id='refreshModule' class='refresh'");
                     $output .= '</span>';
                 }
             }
