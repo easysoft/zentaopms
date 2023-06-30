@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 ?>
-<div class='main-table'>
+<div class='main-table bg-white'>
   <?php if(!empty($investList)):?>
   <table class="table has-sort-head table-fixed table-bordered text-center">
     <thead>
@@ -85,7 +85,7 @@ namespace zin;
     </tbody>
   </table>
   <?php else:?>
-  <div class="text-center bg-white px-2 py-8">
+  <div class="text-center px-2 py-8">
     <p>
       <span class="text-muted"><?php echo $lang->noData;?></span>
     </p>
