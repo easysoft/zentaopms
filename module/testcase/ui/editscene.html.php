@@ -13,10 +13,17 @@ namespace zin;
 jsVar('tab', $this->app->tab);
 jsVar('caseModule', $lang->testcase->module);
 
+
 formPanel
 (
-    set::title($lang->testcase->editScene),
-
+    entityLabel
+    (
+        to::suffix($scene->title),
+        set::entityID($scene->id),
+        set::level(1),
+        set::text($lang->testcase->editScene),
+        set::reverse(true),
+    ),
     on::change('#product', 'loadProductBranch'),
     on::change('#branch', 'loadProductModule'),
     on::change('#module', 'loadModuleRelatedNew'),
