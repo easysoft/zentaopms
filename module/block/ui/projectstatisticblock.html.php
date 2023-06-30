@@ -362,7 +362,7 @@ panel
         set('class', 'flex h-full overflow-hidden'),
         cell
         (
-            set('width', '25%'),
+            set('width', '22%'),
             set('class', 'bg-secondary-pale overflow-y-auto overflow-x-hidden'),
             ul
             (
@@ -373,7 +373,7 @@ panel
         cell
         (
             set('class', 'tab-content'),
-            set('width', '75%'),
+            set('width', '78%'),
             getProjectInfo($projects, $blockNavCode)
         )
     )
