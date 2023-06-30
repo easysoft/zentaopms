@@ -22,4 +22,5 @@
 .project-info .table-data-body {display: flex; flex-wrap: wrap;}
 .project-info .table-data-body .table-data-tr {flex: 0 1 50%;}
 .project-info .table-data .table-data-th {min-width: 36px;}
+.project-statitic-hours .table-data .table-data-th {min-width: 60px; text-align: right;}
 .actions-menu {bottom: 12px;}

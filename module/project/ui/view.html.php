@@ -448,7 +448,7 @@ div
             ),
             div
             (
-                setClass('pt-1 project-info'),
+                setClass('pt-1 project-info project-statitic-hours'),
                 tableData
                 (
                     set::useTable(false),
