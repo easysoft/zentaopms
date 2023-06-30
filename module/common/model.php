@@ -2551,11 +2551,17 @@ EOF;
         }
 
         /**
+         * 忽略所有方法名以 ajax 开头的请求。
+         * Ignore all requests which it's method name starts with 'ajax'.
+         */
+        $method = $this->app->getMethodName();
+        if(strpos($method, 'ajax') === 0) return true;
+
+        /**
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module    = $this->app->getModuleName();
-        $method    = $this->app->getMethodName();
         $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|';
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
