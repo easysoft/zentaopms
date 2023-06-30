@@ -16,6 +16,7 @@
 
 #queryTable .titleResult {padding:20px 0px 10px 20px;}
 .fieldSettings {margin: -8px 10px; border: none;}
+.dataview-export {margin: -8px 0px; border: none;}
 #edit select[name^='relatedTable'] + div .picker-selections:first-child {border-right: none;}
 #edit select[name^='relatedTable'] + div.picker-focus .picker-selections {border-right: 1px solid #2e7fff;}
 

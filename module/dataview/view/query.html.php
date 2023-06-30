@@ -31,7 +31,6 @@ window.DataStorage = initStorage(
     </div>
   </div>
   <div class="create-action pull-right">
-    <?php if(common::hasPriv('dataview', 'export')) echo html::a('#', "<i class='icon icon-export'></i> {$lang->dataview->export}", '', "id='export' class='hidden btn btn-link'");?>
     <?php if($app->rawMethod == 'create') echo html::a($saveLink, '<i class="icon icon-save"></i> ' . $lang->save, '', "class='btn btn-primary' id='saveButton'");?>
     <?php if($app->rawMethod != 'create') echo '<button type="button" class="btn btn-primary" id="save"><i class="icon icon-save"></i> ' . $lang->save. '</button>';?>
   </div>
