@@ -43,29 +43,6 @@ window.loadProduct = function(e)
     loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams))
 };
 
-window.loadBranch = function(e)
-{
-    var branch    = $('#branch').val();
-    var productID = $('#product').val();
-    if(typeof(branch) == 'undefined') branch = 0;
-
-    loadProductModules(productID, branch);
-    loadProductPlans(productID, branch);
-};
-
-window.loadProductModules = function(productID, branch)
-{
-    if(typeof(branch) == 'undefined') branch = $('#branch').val();
-    if(!branch) branch = 0;
-
-    var currentModule = 0;
-    if(config.currentMethod == 'edit') currentModule = $('#module').val();
-
-    var moduleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + currentModule);
-    var $moduleIdBox = $('#moduleIdBox');
-    $moduleIdBox.load(moduleLink, function(){$moduleIdBox. find('#module').chosen()});
-};
-
 window.loadBranchRelation = function(e)
 {
     const $this       = $(e.target);
@@ -165,19 +142,6 @@ window.loadProductPlans = function(productID, branch)
     {
         //$planIdBox.find('#plan').chosen();
     });
-};
-
-window.loadURS = function(allURS)
-{
-    var productID       = $('#product').val();
-    var branchID        = $('#branch').val();
-    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
-    var requirementList = $('#URS').val();
-    requirementList     = requirementList ? requirementList.join(',') : '';
-    if(typeof(branchID) == 'undefined') branchID = 0;
-
-    var link = $.createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
-    $('.URSBox').load(link);
 };
 
 window.setLane = function(e)

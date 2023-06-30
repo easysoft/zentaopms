@@ -1485,7 +1485,7 @@ class storyTao extends storyModel
         $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
-        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'class' => 'ajax-submit', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
+        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'className' => 'ajax-submit', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
 
         /* Change the render order. */
         if(!empty($actSubmitreview))
@@ -1556,7 +1556,7 @@ class storyTao extends storyModel
                 $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
                 $unlinkStoryLink = helper::createLink($unlinkModule, 'unlinkStory', "projectID={$execution->id}&$params&confirm=yes");
                 $unlinkStoryTip  = $unlinkModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-                $actions[]       = array('name' => 'unlink', 'class' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => !$canUnlinkStory);
+                $actions[]       = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => !$canUnlinkStory);
             }
         }
 

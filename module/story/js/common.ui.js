@@ -64,3 +64,78 @@ function showMessage(message)
     }
     if(varType === 'string') zui.Messager.show({"content": message, "type": "success circle"});
 }
+
+window.unlinkTwins = function(e)
+{
+    const $this    = $(e.target).closest('li').find('.relievedTwins');
+    const postData = new FormData();
+    postData.append('twinID', $this.data('id'));
+    zui.Modal.confirm({message: relievedTip, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    {
+        if(res) $.post($.createLink('story', 'ajaxRelieveTwins'), postData, function(){$this.closest('li').remove()});
+    });
+};
+
+window.toggleFeedback = function(obj)
+{
+    if(storyType == 'requirement') return false;
+
+    const $this  = $(obj);
+    const source = $this.val();
+    $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
+}
+
+window.loadURS = function(allURS)
+{
+    var productID       = $('#product').val();
+    var branchID        = $('#branch').val();
+    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
+    var requirementList = $('#URS').val();
+    requirementList     = requirementList ? requirementList.join(',') : '';
+    if(typeof(branchID) == 'undefined') branchID = 0;
+
+    var link = $.createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
+    $('.URSBox').load(link);
+};
+
+window.loadProductModules = function(productID, branch)
+{
+    if(typeof(branch) == 'undefined') branch = $('#branch').val();
+    if(!branch) branch = 0;
+
+    var currentModule = 0;
+    if(config.currentMethod == 'edit') currentModule = $('#module').val();
+
+    var moduleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=nodeleted&currentModuleID=' + currentModule);
+    var $moduleIdBox = $('#moduleIdBox');
+    $moduleIdBox.load(moduleLink, function()
+    {
+        //$moduleIdBox.find('#module').chosen()
+    });
+};
+
+window.loadProductPlans = function(productID, branch)
+{
+    if(typeof(branch) == 'undefined') branch = 0;
+    if(!branch) branch = 0;
+
+    var param      = config.currentMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
+    var expired    = config.currentMethod == 'create' ? 'unexpired' : '';
+    var planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
+    var $planIdBox = $('#planIdBox');
+
+    $planIdBox.load(planLink, function()
+    {
+        //$planIdBox.find('#plan').chosen();
+    });
+};
+
+window.loadBranch = function()
+{
+    var branch    = $('#branch').val();
+    var productID = $('#product').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    loadProductModules(productID, branch);
+    loadProductPlans(productID, branch);
+};

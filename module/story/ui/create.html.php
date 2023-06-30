@@ -371,7 +371,7 @@ formPanel
     (
         setClass('form-actions form-group no-label'),
         btn(setClass('primary'), set::id('saveButton'), $lang->save),
-        btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->doNotSubmit),
+        btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->saveDraft),
         backBtn($lang->goback),
     ),
 );

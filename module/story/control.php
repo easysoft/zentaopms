@@ -264,7 +264,7 @@ class story extends control
                         $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                         $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $executionLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
                         $kanbanData    = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
                     }
                     else
                     {
@@ -273,17 +273,17 @@ class story extends control
                         $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
                         $kanbanData      = $kanbanData[$kanbanType];
                         $kanbanData      = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)"));
                     }
                 }
                 else
                 {
-                    return print(js::reload('parent.parent'));
+                    return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
             $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'view', $params), 'closeModal' => true, 'message' => $this->lang->saveSuccess));
         }
 
         /* Sort products. */
