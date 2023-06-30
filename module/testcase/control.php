@@ -149,12 +149,15 @@ class testcase extends control
         $sort  = common::appendOrder($orderBy);
         /* Get test cases. */
 
+        $queryCondition = '';
+
         $cases      = array();
         $caseIdList = array();
         if($browseType != 'onlyscene')
         {
-            $cases      = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
-            $caseIdList = array_column($cases, 'id');
+            $cases          = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, null);
+            $queryCondition = $this->dao->get();
+            $caseIdList     = array_column($cases, 'id');
         }
 
         /* Get top level cases and scenes.*/
@@ -165,17 +168,19 @@ class testcase extends control
             if(count($productParam) > 1) unset($productParam[0]);
         }
 
-        $queryCondition = '';
-        $topObjects     = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+        $topObjects = array();
+        if(!$this->cookie->onlyAutoCase)
+        {
+            $topObjects = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+            if(empty($topObjects) && $pageID > 1)
+            {
+                $pager      = pager::init(0, $recPerPage, 1);
+                $topObjects = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
+            }
+        }
 
         /* Get children cases and scenes.*/
         $scenes = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
-        if(empty($topObjects) and $pageID > 1)
-        {
-            $pager      = pager::init(0, $recPerPage, 1);
-            $topObjects = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, $pager, 'top', array(), $browseType);
-            $scenes     = $this->testcase->getList($productParam, $branch, $moduleID, $caseIdList, null, 'child', array_keys($topObjects), $browseType, $queryCondition);
-        }
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($queryCondition, 'testcase', false);
