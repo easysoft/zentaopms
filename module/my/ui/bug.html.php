@@ -67,6 +67,11 @@ menu
 );
 
 $cols = $this->loadModel('datatable')->getSetting('my');
+$cols['actions']['list']['edit']['data-toggle'] = 'modal';
+$cols['actions']['list']['edit']['data-size']   = 'lg';
+$cols['actions']['list']['copy']['data-toggle'] = 'modal';
+$cols['actions']['list']['copy']['data-size']   = 'lg';
+
 $bugs = initTableData($bugs, $cols, $this->bug);
 
 dtable
