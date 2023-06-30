@@ -49,6 +49,8 @@ class dtable extends wg
             {
                 foreach($config['actionsMap'] as &$action)
                 {
+                    if(isset($action['data-toggle']) && !isset($action['data-position'])) $action['data-position'] = 'center';
+
                     if(!empty($action['ajaxSubmit']))
                     {
                         if(empty($action['class']))         $action['class']        = 'ajax-submit';
