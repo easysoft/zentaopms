@@ -6,6 +6,8 @@ $(function()
 function changeProduct(event)
 {
     const productID = $(event.target).val();
+    if(!productID) return false;
+
     if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
     {
         zui.Modal.confirm({message: confirmChangeProduct, onResult: function(result)
