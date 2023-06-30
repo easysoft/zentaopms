@@ -91,12 +91,4 @@ function clickSubmit()
         password1Encrypted = true;
         password2Encrypted = true;
     }
-
-    const password = $('input#verifyPassword').val().trim();
-    if(!verifyEncrypted && password)
-    {
-        var rand = $('input#verifyRand').val();
-        $('input#verifyPassword').val(md5(md5(password) + rand));
-        verifyEncrypted = true;
-    }
 }

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+import('/js/md5.js', 'js');
+
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 
 $visionList       = $this->user->getVisionList();
@@ -30,7 +32,6 @@ foreach($visionList as $key => $label)
 
 formPanel
 (
-    import('/js/md5.js', 'js'),
     on::change('input[name=type]', 'changeType'),
     on::change('#addCompany', 'changeAddCompany'),
     on::change('input[name^=visions]', 'changeVision'),
