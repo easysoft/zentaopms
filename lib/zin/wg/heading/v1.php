@@ -59,7 +59,13 @@ class heading extends wg
        if($this->hasBlock('dropmenu')) return $this->block('dropmenu');
 
        $dropmenuProps = $this->prop('dropmenu');
+
+       /**
+        * 如果需要根据配置自动添加 dropmenu 就在这里进行处理。
+        * If need to automatically add a dropmenu based on the configuration, handle it here.
+        */
        if(empty($dropmenuProps)) return null;
+
        return new dropmenu(set($dropmenuProps));
     }
 
